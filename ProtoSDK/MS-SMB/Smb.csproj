@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb.xml</DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;$(DevEnvDir)\..\..\Team Tools\Static Analysis Tools\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;$(DevEnvDir)\..\..\Team Tools\Static Analysis Tools\FxCop\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;$(DevEnvDir)\..\..\Team Tools\Static Analysis Tools\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;$(DevEnvDir)\..\..\Team Tools\Static Analysis Tools\FxCop\Rules</CodeAnalysisRuleDirectories>
+  </PropertyGroup>
+  <Import Project="$(EnvironmentConfig)" Condition="'$(BUILD_COREXT)'=='1'" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C3C96860-5D29-4797-A311-CC568CC8B699}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb</RootNamespace>
+    <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb.xml</DocumentationFile>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRules>
+    </CodeAnalysisRules>
+    <CodeAnalysisRuleSet>Sdl7.0.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ServiceModel" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Client\SmbClientTransport.cs" />
+    <Compile Include="Messages\SmbNtTransactCreateRequestPacket.cs" />
+    <Compile Include="Messages\SmbNtTransactCreateResponsePacket.cs" />
+    <Compile Include="Messages\SmbNtTransactIoctlResponsePacket.cs" />
+    <Compile Include="Messages\SmbNegotiateImplicitNtlmResponsePacket.cs" />
+    <Compile Include="Messages\SmbErrorResponsePacket.cs" />
+    <Compile Include="Client\SmbClientOpen.cs" />
+    <Compile Include="Client\SmbClientSession.cs" />
+    <Compile Include="Client\SmbClientContext.cs" />
+    <Compile Include="Client\SmbClientConnection.cs" />
+    <Compile Include="Client\SmbClientDecodePacket.cs" />
+    <Compile Include="Client\SmbClient.cs" />
+    <Compile Include="Client\SmbClientCapability.cs" />
+    <Compile Include="Client\SmbClientTreeConnect.cs" />
+    <Compile Include="Messages\SmbTrans2SetPathInformationRequestPacket.cs" />
+    <Compile Include="Messages\SmbTrans2SetPathInformationResponsePacket.cs" />
+    <Compile Include="Server\SmbServerTransport.cs" />
+    <Compile Include="Server\SmbFsEndpointManager.cs" />
+    <Compile Include="Server\SmbServerTreeConnect.cs" />
+    <Compile Include="Server\SmbServerOpen.cs" />
+    <Compile Include="Server\SmbServerSession.cs" />
+    <Compile Include="SmbCapability.cs" />
+    <Compile Include="Messages\SmbDirectTcpPacket.cs" />
+    <Compile Include="Messages\SmbCloseRequestPacket.cs" />
+    <Compile Include="Messages\SmbCloseResponsePacket.cs" />
+    <Compile Include="Messages\SmbLogoffAndxRequestPacket.cs" />
+    <Compile Include="Messages\SmbLogoffAndxResponsePacket.cs" />
+    <Compile Include="Messages\SmbNegotiateRequestPacket.cs" />
+    <Compile Include="Messages\SmbNegotiateResponsePacket.cs" />
+    <Compile Include="Messages\SmbNtCreateAndxRequestPacket.cs" />
+    <Compile Include="Messages\SmbNtCreateAndxResponsePacket.cs" />
+    <Compile Include="Messages\SmbNtTransRenameRequestPacket.cs" />
+    <Compile Include="Messages\SmbNtTransRenameResponsePacket.cs" />
+    <Compile Include="Messages\SmbNtTransFsctlSrvCopyChunkRequestPacket.cs" />
+    <Compile Include="Messages\SmbNtTransFsctlSrvCopyChunkResponsePacket.cs" />
+    <Compile Include="Messages\SmbNtTransFsctlSrvEnumerateSnapshotsRequestPacket.cs" />
+    <Compile Include="Messages\SmbNtTransFsctlSrvEnumerateSnapshotsResponsePacket.cs" />
+    <Compile Include="Messages\SmbNtTransFsctlSrvRequestResumeKeyRequestPacket.cs" />
+    <Compile Include="Messages\SmbNtTransFsctlSrvRequestResumeKeyResponsePacket.cs" />
+    <Compile Include="Messages\SmbNtTransQueryQuotaRequestPacket.cs" />
+    <Compile Include="Messages\SmbNtTransQueryQuotaResponsePacket.cs" />
+    <Compile Include="Messages\SmbNtTransSetQuotaRequestPacket.cs" />
+    <Compile Include="Messages\SmbNtTransSetQuotaResponsePacket.cs" />
+    <Compile Include="Messages\SmbOpenAndxRequestPacket.cs" />
+    <Compile Include="Messages\SmbOpenAndxResponsePacket.cs" />
+    <Compile Include="Messages\SmbReadAndxRequestPacket.cs" />
+    <Compile Include="Messages\SmbReadAndxResponsePacket.cs" />
+    <Compile Include="Messages\SmbSessionSetupAndxRequestPacket.cs" />
+    <Compile Include="Messages\SmbSessionSetupAndxResponsePacket.cs" />
+    <Compile Include="Messages\SmbSessionSetupImplicitNtlmAndxRequestPacket.cs" />
+    <Compile Include="Messages\SmbSessionSetupImplicitNtlmAndxResponsePacket.cs" />
+    <Compile Include="Messages\SmbTrans2FindFirst2RequestPacket.cs" />
+    <Compile Include="Messages\SmbTrans2FindFirst2ResponsePacket.cs" />
+    <Compile Include="Messages\SmbTrans2FindNext2RequestPacket.cs" />
+    <Compile Include="Messages\SmbTrans2FindNext2ResponsePacket.cs" />
+    <Compile Include="Messages\SmbTrans2GetDfsReferralResponsePacket.cs" />
+    <Compile Include="Messages\SmbTrans2GetDfsReferralRequestPacket.cs" />
+    <Compile Include="Messages\SmbTrans2QueryFileInformationRequestPacket.cs" />
+    <Compile Include="Messages\SmbTrans2QueryFileInformationResponsePacket.cs" />
+    <Compile Include="Messages\SmbTrans2QueryFsInformationRequestPacket.cs" />
+    <Compile Include="Messages\SmbTrans2QueryFsInformationResponsePacket.cs" />
+    <Compile Include="Messages\SmbTrans2QueryPathInformationRequestPacket.cs" />
+    <Compile Include="Messages\SmbTrans2QueryPathInformationResponsePacket.cs" />
+    <Compile Include="Messages\SmbTrans2SetFileInformationRequestPacket.cs" />
+    <Compile Include="Messages\SmbTrans2SetFileInformationResponsePacket.cs" />
+    <Compile Include="Messages\SmbTrans2SetFsInformationRequestPacket.cs" />
+    <Compile Include="Messages\SmbTrans2SetFsInformationResponsePacket.cs" />
+    <Compile Include="Messages\SmbTransCallNmpipeRequestPacket.cs" />
+    <Compile Include="Messages\SmbTransCallNmpipeResponsePacket.cs" />
+    <Compile Include="Messages\SmbTransMailslotWriteRequestPacket.cs" />
+    <Compile Include="Messages\SmbTransMailslotWriteResponsePacket.cs" />
+    <Compile Include="Messages\SmbTransPeekNmpipeRequestPacket.cs" />
+    <Compile Include="Messages\SmbTransPeekNmpipeResponsePacket.cs" />
+    <Compile Include="Messages\SmbTransQueryNmpipeInfoRequestPacket.cs" />
+    <Compile Include="Messages\SmbTransQueryNmpipeInfoResponsePacket.cs" />
+    <Compile Include="Messages\SmbTransQueryNmpipeStateRequestPacket.cs" />
+    <Compile Include="Messages\SmbTransQueryNmpipeStateResponsePacket.cs" />
+    <Compile Include="Messages\SmbTransRapRequestPacket.cs" />
+    <Compile Include="Messages\SmbTransRapResponsePacket.cs" />
+    <Compile Include="Messages\SmbTransRawReadNmpipeRequestPacket.cs" />
+    <Compile Include="Messages\SmbTransRawReadNmpipeResponsePacket.cs" />
+    <Compile Include="Messages\SmbTransReadNmpipeRequestPacket.cs" />
+    <Compile Include="Messages\SmbTransReadNmpipeResponsePacket.cs" />
+    <Compile Include="Messages\SmbTransSetNmpipeStateRequestPacket.cs" />
+    <Compile Include="Messages\SmbTransSetNmpipeStateResponsePacket.cs" />
+    <Compile Include="Messages\SmbTransTransactNmpipeRequestPacket.cs" />
+    <Compile Include="Messages\SmbTransTransactNmpipeResponsePacket.cs" />
+    <Compile Include="Messages\SmbTransWaitNmpipeRequestPacket.cs" />
+    <Compile Include="Messages\SmbTransWaitNmpipeResponsePacket.cs" />
+    <Compile Include="Messages\SmbTransWriteNmpipeRequestPacket.cs" />
+    <Compile Include="Messages\SmbTransWriteNmpipeResponsePacket.cs" />
+    <Compile Include="Messages\SmbTreeConnectAndxRequestPacket.cs" />
+    <Compile Include="Messages\SmbTreeConnectAndxResponsePacket.cs" />
+    <Compile Include="Messages\SmbTreeDisconnectRequestPacket.cs" />
+    <Compile Include="Messages\SmbTreeDisconnectResponsePacket.cs" />
+    <Compile Include="Messages\SmbWriteAndxRequestPacket.cs" />
+    <Compile Include="Messages\SmbWriteAndxResponsePacket.cs" />
+    <Compile Include="Server\SmbServerCapability.cs" />
+    <Compile Include="Server\SmbServer.cs" />
+    <Compile Include="Server\SmbServerContext.cs" />
+    <Compile Include="Server\SmbServerDecodePacket.cs" />
+    <Compile Include="Server\SmbServerConnection.cs" />
+    <Compile Include="Server\SmbServerShare.cs" />
+    <Compile Include="SmbMessageUtils.cs" />
+    <Compile Include="SmbMessage.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{FE653643-6342-4300-871E-683C7BA31494}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FileAccessService\FileAccessService.csproj">
+      <Project>{AB191B32-B12D-42CB-976D-CEA2C5BAD8BE}</Project>
+      <Name>FileAccessService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Messages\Messages.csproj">
+      <Project>{75544419-3F4E-4308-A676-165F45C1462E}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MS-NLMP\Nlmp.csproj">
+      <Project>{5E53E71E-52D1-4BF0-99C0-608437EC446C}</Project>
+      <Name>Nlmp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sspi\Sspi.csproj">
+      <Project>{D0CB354B-2CD3-49C1-8ECA-2F6EBADBCCEE}</Project>
+      <Name>Sspi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TransportStack\TransportStack.csproj">
+      <Project>{F8CDC462-0754-4BEA-B048-33AC1A5855C4}</Project>
+      <Name>TransportStack</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MS-CIFS\Cifs.csproj">
+      <Project>{0129B48E-2977-4E87-ADB0-A024A69C1CCC}</Project>
+      <Name>Cifs</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />
+  </Target>
+</Project>

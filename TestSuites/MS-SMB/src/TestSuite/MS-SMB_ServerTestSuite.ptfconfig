@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+  <Properties>
+    <Property name="TestName" value="MS-SMB" />
+    <Property name="FeatureName" value="MS-SMB" />
+    <Property name="ServerComputerName" value="SUT01" />
+  </Properties>
+  <Adapters>
+    <Adapter xsi:type="interactive" name="ISutInteractiveAdapter" />
+    <Adapter xsi:type="managed" name="IServerSetupAdapter" adaptertype="Microsoft.Protocol.TestSuites.Smb.SutSetupAdapterCallPs" />
+    <Adapter xsi:type="managed" name="ISmbAdapter" adaptertype="Microsoft.Protocol.TestSuites.Smb.SmbAdapter" />
+    <Adapter xsi:type="managed" name="ISmbTransactionAdapter" adaptertype="Microsoft.Protocol.TestSuites.Smb.SmbTransactionAdapter" />
+    <Adapter xsi:type="managed" name="ISmbNtTransactionAdapter" adaptertype="Microsoft.Protocol.TestSuites.Smb.SmbNtTransactionAdapter" />
+    <Adapter xsi:type="managed" name="ISmbTransaction2Adapter" adaptertype="Microsoft.Protocol.TestSuites.Smb.SmbTransaction2Adapter" />
+    <Adapter xsi:type="managed" name="ISmbDeltaTestAdapter" adaptertype="Microsoft.Protocol.TestSuites.Smb.SmbWin7ChangedAdapter" />
+    <Adapter xsi:type="managed" name="IDeleteFilesInteractiveAdapter" adaptertype="Microsoft.Protocol.TestSuites.Smb.ISutInteractiveAdapter" />
+    <Adapter xsi:type="managed" name="IConfigSignStateInteractiveAdapter" adaptertype="Microsoft.Protocol.TestSuites.Smb.ISutInteractiveAdapter" />
+    <Adapter xsi:type="powershell" name="IDeleteFilesAdapter" scriptdir=".\"/>
+    <Adapter xsi:type="powershell" name="IConfigSignStateAdapter" scriptdir=".\"/>
+  </Adapters>
+  <TestLog defaultprofile="Verbose">
+    <Sinks>
+      <File id="Debug" directory=".\" file="SMBdebug.xml" format="xml" />
+      <File id="FileLog" directory=".\" file="MS-SMB_Log.xml" format="xml" />
+      <Sink id="Beacon" type="Microsoft.Protocols.TestTools.Logging.BeaconLogSink" assembly="Microsoft.Protocols.TestTools" />
+    </Sinks>
+    <Profiles>
+      <Profile name="Verbose" extends="Error">
+        <!-- Show on Console -->
+        <Rule kind="EnterMethod" sink="Console" />
+        <Rule kind="ExitMethod" sink="Console" />
+        <Rule kind="CheckSucceeded" sink="Console" />
+        <Rule kind="Comment" sink="Console" />
+        <Rule kind="Checkpoint" sink="Console" />
+        <!-- Show for debugging -->
+        <Rule kind="CheckSucceeded" sink="Debug" />
+        <Rule kind="Comment" sink="Debug" />
+        <Rule kind="Debug" sink="Debug" />
+        <Rule kind="Checkpoint" sink="Debug" />
+        <Rule kind="CheckSucceeded" sink="FileLog" delete="false" />
+        <Rule kind="Comment" sink="FileLog" delete="false" />
+        <Rule kind="Debug" sink="FileLog" delete="false" />
+        <Rule kind="Checkpoint" sink="FileLog" delete="false" />
+        <Rule kind="Checkpoint" sink="Beacon" delete="false" />
+      </Profile>
+    </Profiles>
+  </TestLog>
+</TestSite>

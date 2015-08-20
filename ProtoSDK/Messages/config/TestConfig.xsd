@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig" 
+            xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+            xmlns:tc="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig" 
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+  <!-- Adapter base type, interactive, script, managed, rpc and user defined adapter types must derive from this type. -->
+  <xs:complexType name="adapterBase">
+    <!-- Name of adapter that coincides with the name of the adapter interface. -->
+    <xs:attribute name="name" type="xs:string" use="required"/>
+  </xs:complexType>
+
+  <!-- Interactive adapter -->
+  <xs:complexType name="interactive">
+    <xs:complexContent>
+      <xs:extension base="tc:adapterBase" />
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- RPC adapter, not officially supported in Sprint 2. -->
+  <xs:complexType name="rpc">
+    <xs:complexContent>
+    <xs:extension base="tc:adapterBase" />
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="transportbinding">
+    <xs:complexContent>
+      <xs:extension base="tc:adapterBase" />
+    </xs:complexContent>
+  </xs:complexType>
+  
+  <!-- Script adapter -->
+	<xs:complexType name="script">
+		<xs:complexContent>
+			<xs:extension base="tc:adapterBase">
+        <!-- Attribute scriptdir is the scripts location. -->
+				<xs:attribute name="scriptdir" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+  
+  <!-- Managed adapter -->
+	<xs:complexType name="managed">
+		<xs:complexContent>
+			<xs:extension base="tc:adapterBase">
+        <!-- Attribute adaptertype is the class type which implements the interface of your adapter. -->
+				<xs:attribute name="adaptertype" type="xs:string" use="required"/>
+        <!-- Assembly attribute specifies the assembly which contains the type. 
+        If it is being ignored, PTF will find it in the whole loaded assemblies in the current AppDomain. -->
+        <xs:attribute name="assembly" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+  
+  <!-- Root element, attributes of this element should not be changed. -->
+	<xs:element name="TestSite">
+		<xs:complexType>
+			<xs:sequence>
+        
+        <!-- Any Property element listed below maps to ITestSite.Properties[“xxxx”]. Xxxx is the property name. -->
+				<xs:element name="Properties">
+					<xs:complexType>
+						<xs:sequence>
+              <!-- General properties of ITestSite, including TestName, FeatureName, Version, EmulatedOSPlatform, 
+              EmulatedOSServicePack, EmulatedOSVersion, server and port. -->
+              <!-- "TestName" required, represents the name of the test suite. 
+              Normally, it is the name of the executing test which maps to ITestSite.TestName. -->
+              <!-- "FeatureName" required, represents the name of the test suite. 
+              Normally, it is the name of a being tested protocolwhich maps to ITestSite.FeatureName. -->
+              <!-- "Version" required, represents the version of the protocol TD. -->
+              <!-- "EmulatedOSPlatform" required, represents the emulated OS information mapped to ITestSite.EmulatedOSVersion. -->
+              <!-- "EmulatedOSServicePack" optional, represents the emulated OS SP version mapped to ITestSite.EmulatedOSVersion. -->
+              <!-- "EmulatedOSVersion" required, represents the emulated OS version mapped to ITestSite.EmulatedOSVersion. -->
+              <xs:element name="Property" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+                  <!-- Property name -->
+									<xs:attribute name="name" type="xs:string" use="required"/>
+                  <!-- Property value -->
+									<xs:attribute name="value" use="required"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+        <!-- List adapter description under this element. Only four types are supported by default. 
+        And these four are interactive, script, managed and rpc types which must be specified in the xsi:type attribute of Adapter element in XML. 
+        Adapter types can be extended by user. -->
+				<xs:element name="Adapters">
+					<xs:complexType>
+						<xs:sequence>
+              <!-- Adapter type must derive from tc:adapterBase type. -->
+							<xs:element name="Adapter" type="tc:adapterBase" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+        <!-- TestLog section contains log sinks and log rules information that are used in test logging. -->
+				<xs:element name="TestLog">
+					<xs:complexType>
+						<xs:sequence>
+              <!-- Log sinks should be described under this element. Every sink should begin with an element name being Console, 
+              Sink or File indicating the sink type. -->
+							<xs:element name="Sinks">
+								<xs:complexType>
+                  <!-- Sink, Console and File sink types do NOT have to config in sequence. -->
+									<xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <!-- User defined sink -->
+										<xs:element name="Sink" minOccurs="0" maxOccurs="unbounded">
+											<xs:complexType>
+                        <!-- Sink name -->
+												<xs:attribute name="id" type="xs:ID" use="required"/>
+                        <!-- Class of the sink type -->
+												<xs:attribute name="type" type="xs:string" use="required"/>
+                        <!-- Attribute assembly specifies the assembly that contains the sink, no “.dll” suffix is needed. -->
+                        <xs:attribute name="assembly" type="xs:string" use="required"/>
+											</xs:complexType>
+										</xs:element>
+                    <!--Console sink is defined in the default config XML file, so user config XML file should not have Console sink item. -->
+										<xs:element name="Console" minOccurs="0">
+											<xs:complexType>
+                        <!--Sink name, default is "Console". -->
+                      <xs:attribute name="id" type="xs:ID"/>
+                    </xs:complexType>
+										</xs:element>
+                    <!-- File log sink -->
+										<xs:element name="File" minOccurs="0" maxOccurs="unbounded">
+											<xs:complexType>
+                        <!-- Sink name -->
+												<xs:attribute name="id" type="xs:ID" use="required"/>
+                        <!-- The directory that log will stored in -->
+												<xs:attribute name="directory" type="xs:string" use="required"/>
+                        <!-- File name of log -->
+												<xs:attribute name="file" type="xs:string" use="required"/>
+                        <!-- The format of the file, must be "text" in config XML. -->
+                        <xs:attribute name="format" type="xs:string" use="required"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:choice>
+								</xs:complexType>
+							</xs:element>
+              <!-- The profiles describe the mapping relations of log kind and sink. -->
+							<xs:element name="Profiles">
+								<xs:complexType>
+									<xs:sequence>
+                    <!-- Profile contains log rules that specifies what log kind message logs to what sink. -->
+										<xs:element name="Profile" minOccurs="0" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:sequence>
+                          <!-- Log rules, the same kind of log messages can be logged to different sinks. -->
+													<xs:element name="Rule" maxOccurs="unbounded">
+														<xs:complexType>
+                              <!-- The log kind that will be logged as -->
+															<xs:attribute name="kind" type="xs:string" use="required"/>
+                              <!-- The log sink that will be logged to -->
+															<xs:attribute name="sink" type="xs:IDREF" use="required"/>
+                              <!-- Attribute delete, being false indicates adding a rule, and being true indicates deleting one. -->
+															<xs:attribute name="delete" type="xs:string" use="optional"/>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+                        <!-- Name of the profile -->
+												<xs:attribute name="name" type="xs:string" use="required"/>
+                        <!-- Attribute extends indicates the profile that will be included. -->
+												<xs:attribute name="extends" type="xs:string" use="optional"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+            <!-- The defaultprofile attribute is the default profile name which must be defined by Profile element. -->
+						<xs:attribute name="defaultprofile" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+        
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

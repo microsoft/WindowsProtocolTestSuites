@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="TESTSUITE_BATCH_DIR">
+            <Component Id="cmp0F6090799D202F9C3743BE9EA91A598F" Guid="{1A58B75E-DE4F-495D-9519-EABEF9715428}">
+                <File Id="filFD9CD31699FE84EA9B080A476F073958" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RunAllMBTTestCases.cmd" />
+            </Component>
+            <Component Id="cmp524A3D5B76F1DDD42C964F083F6CCAC3" Guid="{3FC47093-CC01-499C-9ECF-8AC3D103F7C6}">
+                <File Id="fil7A0D52FB487F1579DF980A211EDC8F5A" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RunAllTestCases.cmd" />
+            </Component>
+            <Component Id="cmpD361D07C3E8A2A6612C382504A01FA25" Guid="{30FD6050-DE85-4A69-A22F-1F329C0013DC}">
+                <File Id="filF19C4C665DDB31EBEC3F82319EE8DDF4" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RunAllTraditionalTestCases.cmd" />
+            </Component>
+            <Component Id="cmp30C95C78CD517606552ED218E2205554" Guid="{4CF7638A-FCC5-4DAF-83D4-B2E239FC030A}">
+                <File Id="filF5AABADF9DCD9FB07FBE9FDBDE4FB74E" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RunTestCasesByCategory.cmd" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="TESTSUITE_BATCH_FILES">
+            <ComponentRef Id="cmp0F6090799D202F9C3743BE9EA91A598F" />
+            <ComponentRef Id="cmp524A3D5B76F1DDD42C964F083F6CCAC3" />
+            <ComponentRef Id="cmpD361D07C3E8A2A6612C382504A01FA25" />
+            <ComponentRef Id="cmp30C95C78CD517606552ED218E2205554" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

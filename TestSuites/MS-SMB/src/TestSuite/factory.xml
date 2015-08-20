@@ -1,0 +1,19 @@
+<objects>
+  <object id="TCP" type="Microsoft.Protocol.TestSuites.Stack.Framework.ProtocolFactory, MS-SMB_SharedMicrosoft.Protocol.TestSuites.Stack.Framework">
+    <property name="Protocol" ref="TCPImpl"/>
+  </object>
+  <object id="TCPImpl" type="Microsoft.Protocol.TestSuites.Stack.TCP.TCPProtocolImpl, MS-SMB_SharedMicrosoft.Protocol.TestSuites.Stack.TCP">
+    <property name="ServerAddress" value="192.168.0.1"/>
+    <property name="ServerPort" value="445"/>
+  </object>
+  <object id="SMB" type="Microsoft.Protocol.TestSuites.Stack.Framework.ProtocolFactory, MS-SMB_SharedMicrosoft.Protocol.TestSuites.Stack.Framework">
+    <property name="Protocol" ref="SMBImpl"/>
+  </object>
+  <object id="SMBImpl" type="Microsoft.Protocol.TestSuites.Stack.SMB.SMBProtocolImpl, MS-SMB_SharedMicrosoft.Protocol.TestSuites.Stack.SMB">
+    <property name="PacketFactory" ref="SMBPacketFactory"/>
+  </object>
+  <object id="SMBPacketFactory" type="Microsoft.Protocol.TestSuites.Stack.SMB.SMBPacketFactory, MS-SMB_SharedMicrosoft.Protocol.TestSuites.Stack.SMB">
+  </object>
+  <object id="ProtocolStack" type="Microsoft.Protocol.TestSuites.Stack.Framework.ProtocolStack, MS-SMB_SharedMicrosoft.Protocol.TestSuites.Stack.Framework">
+  </object>
+</objects>

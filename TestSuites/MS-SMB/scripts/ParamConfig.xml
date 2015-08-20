@@ -1,0 +1,11 @@
+<Parameters>  
+  <Parameter Name="domainInVM" Value="contoso.com" Comment="" />
+  <Parameter Name="IPVersion" Value="IPv4" Comment="" />
+  <Parameter Name="logFile" Value="..\TestResults\Config-Server.ps1.log" Comment="If no log file path specified, this value should be used." />
+  <Parameter Name="logPath" Value="..\TestResults" Comment="" />
+  <Parameter Name="serverComputerName" Value="SUT01" Comment="" />  
+  <Parameter Name="userNameInVM" Value="administrator" Comment="" />
+  <Parameter Name="userPwdInVM" Value="Password01!" Comment="" />
+  <Parameter Name="runonREFS" Value="false" Comment="" />
+  <Parameter Name="workgroupDomain" Value="Domain" Comment="" />
+</Parameters>

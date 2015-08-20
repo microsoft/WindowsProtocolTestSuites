@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="TESTSUITE_COMMON_DIR">
+            <Directory Id="dir417144092D6CA0DDCE9E50151B425BFC" Name="Capture">
+                <Component Id="cmp5D6B45F3D8569ACD91A7121671818D2B" Guid="{DAEA242D-65A4-48BB-9223-A898FA244868}">
+                    <File Id="filFE13292BBE39D7907E5E726307328FDC" KeyPath="yes" Source="!(wix.TESTSUITE_COMMON_DIR)\Capture\MS_FSCCCaptureCode.cs" />
+                </Component>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="TESTSUITE_COMMON_FILES">
+            <ComponentRef Id="cmp5D6B45F3D8569ACD91A7121671818D2B" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="TESTSUITE_SCRIPTS_DIR">
+            <Component Id="cmp3A1AE11D68D79F4E88986F87322E844E" Guid="{8552CE9C-81B9-4E19-8A2E-4126A4928076}">
+                <File Id="filA6C72CEEAFB61E4C3A25356AFB87A1C7" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Add-Printer.ps1" />
+            </Component>
+            <Component Id="cmpD162C3EA8320CFDAD64F69DFE4F9D866" Guid="{FBB4F3E4-F80D-49E3-9F80-55D8A263F059}">
+                <File Id="fil6C5CDD44C29F37714693859F2D0A9C4B" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Config-Client.ps1" />
+            </Component>
+            <Component Id="cmpD474FC4A02D1D0875FB6A82D1FE23B67" Guid="{46E86618-BD05-435D-B51B-20C9EC1D9D9A}">
+                <File Id="filCD8A2C69ADA26B860B1BCB8E9E4F9BD7" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Config-FileSharing.ps1" />
+            </Component>
+            <Component Id="cmpC29664C0691E50DB2F28F241998503DC" Guid="{BC82FEF5-CDC8-4C55-AF9B-A5BBD6E8FDD2}">
+                <File Id="filAC23A885E318A340D3995D50F7FD2437" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Config-Server.ps1" />
+            </Component>
+            <Component Id="cmp21875911221F816CF46569E2E43C270C" Guid="{ACE68F0E-CB08-4541-B6A3-6AA94D0940BF}">
+                <File Id="filBD11540FB5B8381A3F76182610F26A0E" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Create-DFSNamespace.ps1" />
+            </Component>
+            <Component Id="cmp8399FBB21BACEDEC2ECD09E8CD3E4E6E" Guid="{C0E0C6A9-06C2-4BB9-8F29-8782ED85FE13}">
+                <File Id="fil40B270ED4E324BF96B4D18DABAA8A54E" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Create-Folder.ps1" />
+            </Component>
+            <Component Id="cmp1F1980EC6F0C25BF43C9922008F28EA7" Guid="{05CAA772-4B26-4FB1-98CA-F1F75A7345C0}">
+                <File Id="fil9B75FA26357B65D951DB4862CF523AE0" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Create-ShadowCopy.ps1" />
+            </Component>
+            <Component Id="cmpA86FC19010BE7206820AA20D63779CBA" Guid="{72DC60C5-0882-4068-B9D8-02A204F9E86B}">
+                <File Id="fil87E91909CD39D3F58E4E3F38DA8CE2C1" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\diskpart_script2K8.txt" />
+            </Component>
+            <Component Id="cmp30B4D9CAA34F32557358CD9E1663BA6F" Guid="{F946711E-9D16-41A3-A40D-DBEF9C4BFCE8}">
+                <File Id="fil5A24F07C6ECA51B060830159BE71B2E1" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\diskpart_script2k8_2.txt" />
+            </Component>
+            <Component Id="cmp8B0241E84F4B427A30FC4114FB47CDD1" Guid="{F8A0A601-4182-469A-B4B7-138E9A83547C}">
+                <File Id="fil167DB6A0118659CD5DA1C2C59553D3DE" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Get-Parameter.ps1" />
+            </Component>
+            <Component Id="cmp8F960361D317B00AF53E3D9C92E30CA4" Guid="{5EFAB359-B48B-4590-8894-F581357F8C83}">
+                <File Id="fil4736471892294958504297C5E5FC8219" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Install-DFSComponent.ps1" />
+            </Component>
+            <Component Id="cmp5BCE15890AC54432CA6426BC4E558D69" Guid="{E5E6322F-EF95-40BE-947B-FE83F4EDE8A4}">
+                <File Id="filDAE53E773F9A66691EEC36F664B5D397" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Modify-ConfigFileNode.ps1" />
+            </Component>
+            <Component Id="cmpBE54976D0AB10263BC1B59EC92707B7D" Guid="{18E95D3E-6109-4793-8D0F-D31CA1F5BDBC}">
+                <File Id="fil37D2351C7786523EB0BD004C567D2575" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\ParamConfig.xml" />
+            </Component>
+            <Component Id="cmp4B6C97A580F7A1B81B42B0CEF0E1CA81" Guid="{ECEEDE79-ED04-4B47-A738-449FD3D8EF3B}">
+                <File Id="fil3C95F41B7FA45C933F21ADFA2DFE1EDC" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Set-Parameter.ps1" />
+            </Component>
+            <Component Id="cmp292B647E935E43710EC07EA72C8677E4" Guid="{8D796FA6-29BA-4FDA-8AD5-B61E53A5601C}">
+                <File Id="fil510C327540DCAF2E37AFBEA750336E31" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Share-Folder.ps1" />
+            </Component>
+            <Component Id="cmp74891FEA55126937F5813E33BD16B2A0" Guid="{CF214BBF-E9B7-40CA-88B2-A8F67BE549E5}">
+                <File Id="fil1D67C65935B765C887C6C102259893D0" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Write-Log.ps1" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="TESTSUITE_SCRIPTS_FILES">
+            <ComponentRef Id="cmp3A1AE11D68D79F4E88986F87322E844E" />
+            <ComponentRef Id="cmpD162C3EA8320CFDAD64F69DFE4F9D866" />
+            <ComponentRef Id="cmpD474FC4A02D1D0875FB6A82D1FE23B67" />
+            <ComponentRef Id="cmpC29664C0691E50DB2F28F241998503DC" />
+            <ComponentRef Id="cmp21875911221F816CF46569E2E43C270C" />
+            <ComponentRef Id="cmp8399FBB21BACEDEC2ECD09E8CD3E4E6E" />
+            <ComponentRef Id="cmp1F1980EC6F0C25BF43C9922008F28EA7" />
+            <ComponentRef Id="cmpA86FC19010BE7206820AA20D63779CBA" />
+            <ComponentRef Id="cmp30B4D9CAA34F32557358CD9E1663BA6F" />
+            <ComponentRef Id="cmp8B0241E84F4B427A30FC4114FB47CDD1" />
+            <ComponentRef Id="cmp8F960361D317B00AF53E3D9C92E30CA4" />
+            <ComponentRef Id="cmp5BCE15890AC54432CA6426BC4E558D69" />
+            <ComponentRef Id="cmpBE54976D0AB10263BC1B59EC92707B7D" />
+            <ComponentRef Id="cmp4B6C97A580F7A1B81B42B0CEF0E1CA81" />
+            <ComponentRef Id="cmp292B647E935E43710EC07EA72C8677E4" />
+            <ComponentRef Id="cmp74891FEA55126937F5813E33BD16B2A0" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

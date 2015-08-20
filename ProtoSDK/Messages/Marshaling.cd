@@ -1,0 +1,312 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Font Name="Segoe UI" Size="9" />
+  <Class Name="Microsoft.Protocols.TestTools.Messages.RpcAdapterProxy" Collapsed="true">
+    <Position X="0.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>RpcAdapterProxy.cs</FileName>
+      <HashCode>AIAACAAAAHAIBQAAAAAAAAAAABAAAABAAAAGBAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.LengthAttribute" Collapsed="true">
+    <Position X="8.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.SizeAttribute" Collapsed="true">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.StaticSizeAttribute" Collapsed="true">
+    <Position X="8.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.SwitchAttribute" Collapsed="true">
+    <Position X="10.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.CaseAttribute" Collapsed="true">
+    <Position X="12.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.CaseDefaultAttribute" Collapsed="true">
+    <Position X="12.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.RangeAttribute" Collapsed="true">
+    <Position X="10.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.StringAttribute" Collapsed="true">
+    <Position X="8.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.UniqueAttribute" Collapsed="true">
+    <Position X="12.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.HandleAttribute" Collapsed="true">
+    <Position X="10.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.UnionAttribute" Collapsed="true">
+    <Position X="12.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.IndirectAttribute" Collapsed="true">
+    <Position X="10.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.CustomMarshalerAttribute" Collapsed="true">
+    <Position X="12.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.MarshalingConfiguration">
+    <Position X="0.5" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>ABIAAIAAABAAABAAAAACAAAAAACAEAEABAAADAEGABA=</HashCode>
+    </TypeIdentifier>
+    <Members>
+      <Method Name="ClearCache" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.NativeMarshalingConfiguration">
+    <Position X="0.5" Y="3.75" Width="2.25" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <InheritanceLine Type="Microsoft.Protocols.TestTools.Messages.Marshaling.MarshalingConfiguration" FixedFromPoint="true">
+      <Path>
+        <Point X="1.625" Y="3.017" />
+        <Point X="1.625" Y="3.75" />
+      </Path>
+    </InheritanceLine>
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.Marshaler" BaseTypeListCollapsed="true">
+    <Position X="3.25" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>ICCDAAQCACAFIxCAUqGAAgBAAQBKmEAkcQAABAAAWhA=</HashCode>
+    </TypeIdentifier>
+    <Members>
+      <Field Name="allocatedRegions" Hidden="true" />
+      <Method Name="CheckSpace" Hidden="true" />
+      <Field Name="config" Hidden="true" />
+      <Method Name="GetAlignment" Hidden="true" />
+      <Method Name="IEvaluationContext.ReportError" Hidden="true" />
+      <Field Name="outerContexts" Hidden="true" />
+      <Field Name="outerRegions" Hidden="true" />
+      <Method Name="Pad" Hidden="true" />
+      <Field Name="region" Hidden="true" />
+      <Field Name="regionOffs" Hidden="true" />
+      <Field Name="regionSize" Hidden="true" />
+      <Field Name="symbolStore" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <NestedTypes>
+      <Struct Name="Microsoft.Protocols.TestTools.Messages.Marshaling.Marshaler.SavedContext" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Marshaling.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="Microsoft.Protocols.TestTools.Messages.Marshaling.Marshaler.SavedRegion" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Marshaling.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <Lollipop Orientation="Left" Position="0.1" Collapsed="true" />
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.ByteMarshaler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>ACAAAAAAAAAAAACAAAAAAAAAAAAIgAAAAAAABAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.Int16Marshaler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>ACAAAAAAAAAAAACAAAAAAAAAAAAIgAAAAAAABAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Orientation="Bottom" Position="0.1" Collapsed="true" />
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.Int32Marshaler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6.25" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>ACAAAAAAAAAAAACAAAAAAAAAAAAIgAAAAAAABAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.Int64Marshaler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>ACAAAAAAAAAAAACAAAAAAAAAAAAIgAAAAAAABAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.IntPtrMarshaler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>ACAAAAAAAAAAAACAAAAAAAAAAAAIgAAAAAAABAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.StringUTF16Marshaler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>ACAAAAAAAAAAAACAAAAAAAAAAAAIgAAAAAAABAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.StructMarshaler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>ACAAACAAAAAAAACAAAAAAAAAAAAIgACAAAAABAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.UnionMarshaler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>ACAAACAAAACAAACAAAAAAAAAEAAIgAAAAAAABAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.GenericIndirectMarshaler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <NestedTypes>
+      <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.GenericIndirectMarshaler.IndirectMarshaler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Marshaling.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+    </NestedTypes>
+    <Lollipop Orientation="Left" Position="0.1" Collapsed="true" />
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.GenericArrayMarshaler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.GenericSequenceMarshaler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Struct Name="Microsoft.Protocols.TestTools.Messages.Marshaling.MarshalingDescriptor">
+    <Position X="6" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>AAAAAAAAAAAEABAEAgCAAAAQAAAAAAAAAQAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Members>
+      <Field Name="emptyAttributeProvider" Hidden="true" />
+      <Method Name="HasAttribute" Hidden="true" />
+      <Method Name="MarshalingDescriptor" Hidden="true" />
+      <Method Name="ToString" Hidden="true" />
+      <Method Name="TryGetAttribute" Hidden="true" />
+      <Method Name="TryGetAttributeWithString" Hidden="true" />
+    </Members>
+    <NestedTypes>
+      <Class Name="Microsoft.Protocols.TestTools.Messages.Marshaling.MarshalingDescriptor.EmptyAttributeProvider" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Marshaling.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+    </NestedTypes>
+  </Struct>
+  <Interface Name="Microsoft.Protocols.TestTools.Messages.IRpcAdapter" Collapsed="true">
+    <Position X="0.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>IRpcAdapter.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Microsoft.Protocols.TestTools.Messages.IRpcImplicitHandleAdapter">
+    <Position X="0.75" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>IRpcAdapter.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Microsoft.Protocols.TestTools.Messages.Marshaling.ITypeMarshaler">
+    <Position X="6" Y="3.75" Width="1.75" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>ACAAAAAAAAAAAACAAAAAAAAAAAAIgAAAAAAABAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Microsoft.Protocols.TestTools.Messages.Marshaling.IGenericTypeMarshaler">
+    <Position X="6" Y="2.5" Width="1.75" />
+    <TypeIdentifier>
+      <FileName>Marshaling.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Interface>
+</ClassDiagram>

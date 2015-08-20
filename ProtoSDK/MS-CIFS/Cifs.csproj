@@ -1,0 +1,438 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0129B48E-2977-4E87-ADB0-A024A69C1CCC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs</RootNamespace>
+    <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRules>
+    </CodeAnalysisRules>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Debug\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>Sdl7.0.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.ServiceModel" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Messages\Trans\SmbTransRapRequestPacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransRapResponsePacket.cs" />
+    <Compile Include="Server\CifsServer.cs" />
+    <Compile Include="Server\CifsServerContext.cs" />
+    <Compile Include="Server\CifsServerDecodePacket.cs" />
+    <Compile Include="Client\CifsClientTransport.cs" />
+    <Compile Include="CifsMessageUtil.cs" />
+    <Compile Include="Client\CifsClient.cs" />
+    <Compile Include="Client\CifsClientConfig.cs" />
+    <Compile Include="Client\CifsClientContext.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Client\CifsClientDecodePacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Client\CifsClientPerConnection.cs" />
+    <Compile Include="Client\CifsClientPerOpenFile.cs" />
+    <Compile Include="Client\CifsClientPerSession.cs" />
+    <Compile Include="Client\CifsClientPerTreeConnect.cs" />
+    <Compile Include="Client\CifsClientPerOpenSearch.cs" />
+    <Compile Include="Client\CifsClientCollection.cs" />
+    <Compile Include="Messages\SmbBatchedResponsePacket.cs" />
+    <Compile Include="Messages\SmbBatchedRequestPacket.cs" />
+    <Compile Include="Messages\SmbSingleResponsePacket.cs" />
+    <Compile Include="Messages\SmbSingleRequestPacket.cs" />
+    <Compile Include="Messages\NtTrans\SmbNtTransactCreateRequestPacket.cs" />
+    <Compile Include="Messages\NtTrans\SmbNtTransactCreateResponsePacket.cs" />
+    <Compile Include="Messages\NtTrans\SmbNtTransactIoctlRequestPacket.cs" />
+    <Compile Include="Messages\NtTrans\SmbNtTransactIoctlResponsePacket.cs" />
+    <Compile Include="Messages\NtTrans\SmbNtTransactNotifyChangeRequestPacket.cs" />
+    <Compile Include="Messages\NtTrans\SmbNtTransactNotifyChangeResponsePacket.cs" />
+    <Compile Include="Messages\NtTrans\SmbNtTransactQuerySecurityDescRequestPacket.cs" />
+    <Compile Include="Messages\NtTrans\SmbNtTransactQuerySecurityDescResponsePacket.cs" />
+    <Compile Include="Messages\NtTrans\SmbNtTransactRenameRequestPacket.cs" />
+    <Compile Include="Messages\NtTrans\SmbNtTransactRenameResponsePacket.cs" />
+    <Compile Include="Messages\NtTrans\SmbNtTransactSetSecurityDescRequestPacket.cs" />
+    <Compile Include="Messages\NtTrans\SmbNtTransactSetSecurityDescResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbCheckDirectoryRequestPacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbCheckDirectoryResponsePacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbCloseAndTreeDiscRequestPacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbCloseAndTreeDiscResponsePacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbClosePrintFileRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbClosePrintFileResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbCloseRequestPacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbCloseResponsePacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbCopyRequestPacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbCopyResponsePacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbCreateDirectoryRequestPacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbCreateDirectoryResponsePacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbCreateNewRequestPacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbCreateNewResponsePacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbCreateRequestPacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbCreateResponsePacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbCreateTemporaryRequestPacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbCreateTemporaryResponsePacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbDeleteDirectoryRequestPacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbDeleteDirectoryResponsePacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbDeleteRequestPacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbDeleteResponsePacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbEchoRequestPacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbEchoResponsePacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbFindClose2RequestPacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbFindClose2ResponsePacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbFindCloseRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbFindCloseResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbFindNotifyCloseRequestPacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbFindNotifyCloseResponsePacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbFindRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbFindResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbFindUniqueRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbFindUniqueResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbFlushRequestPacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbFlushResponsePacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbGetPrintQueueRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbGetPrintQueueResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbInvalidRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbInvalidResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbIoctlRequestPacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbIoctlResponsePacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbIoctlSecondaryRequestPacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbIoctlSecondaryResponsePacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbLockAndReadRequestPacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbLockAndReadResponsePacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbLockByteRangeRequestPacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbLockByteRangeResponsePacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbLockingAndxRequestPacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbLockingAndxResponsePacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbLogoffAndxRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbLogoffAndxResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbMoveRequestPacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbMoveResponsePacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbNegotiateRequestPacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbNegotiateResponsePacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbNoAndxCommandRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbNoAndxCommandResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbNtCancelRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbNtCreateAndxRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbNtCreateAndxResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbNtRenameRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbNtRenameResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbNtTransactInterimResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbNtTransactRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbNtTransactSecondaryRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbNtTransactSuccessResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbOpenPrintFileRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbOpenPrintFileResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbQueryInformationDiskRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbQueryInformationDiskResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbReadBulkRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbReadBulkResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbSearchRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbSearchResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbSecurityPackageAndxRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbSecurityPackageAndxResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbSessionSetupAndxRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbSessionSetupAndxResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbTreeConnectAndxRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbTreeConnectAndxResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbWriteBulkDataRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbWriteBulkDataResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbWriteBulkRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbWriteBulkResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbWritePrintFileRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbWritePrintFileResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbWriteRawFinalResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbTransactionSuccessResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbTransactionInterimResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbTransaction2FinalResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbNewFileSizeRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbNewFileSizeResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbOpenAndxRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbOpenAndxResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbOpenRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbOpenResponsePacket.cs" />
+    <Compile Include="Messages\SmbPacket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\Com\SmbProcessExitRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbProcessExitResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbQueryInformation2RequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbQueryInformation2ResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbQueryInformationRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbQueryInformationResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbQueryServerRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbQueryServerResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbReadAndxRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbReadAndxResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbReadMpxRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbReadMpxResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbReadMpxSecondaryRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbReadMpxSecondaryResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbReadRawRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbReadRawResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbReadRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbReadResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbRenameRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbRenameResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbSeekRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbSeekResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbSetInformation2RequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbSetInformation2ResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbSetInformationRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbSetInformationResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbTransaction2RequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbTransaction2InterimResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbTransaction2SecondaryRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbTransactionRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbTransactionSecondaryRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbTreeConnectRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbTreeConnectResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbTreeDisconnectRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbTreeDisconnectResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbUnlockByteRangeRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbUnlockByteRangeResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbWriteAndCloseRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbWriteAndCloseResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbWriteAndUnlockRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbWriteAndUnlockResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbWriteAndxRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbWriteAndxResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbWriteMpxRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbWriteMpxResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbWriteMpxSecondaryRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbWriteMpxSecondaryResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbWriteRawRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbWriteRawInterimResponsePacket.cs" />
+    <Compile Include="Messages\Com\SmbWriteRequestPacket.cs" />
+    <Compile Include="Messages\Com\SmbWriteResponsePacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2FindFirst2FinalResponsePacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2FindFirst2RequestPacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2FindNext2FinalResponsePacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2FindNext2RequestPacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2FindNotifyFirstFinalResponsePacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2FindNotifyFirstRequestPacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2FindNotifyNextFinalResponsePacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2FindNotifyNextRequestPacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2FsctlFinalResponsePacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2FsctlRequestPacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2GetDfsReferalFinalResponsePacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2GetDfsReferalRequestPacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2Ioctl2FinalResponsePacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2Ioctl2RequestPacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2Open2FinalResponsePacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2Open2RequestPacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2QueryFileInformationFinalResponsePacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2QueryFileInformationRequestPacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2QueryFsInformationFinalResponsePacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2QueryFsInformationRequestPacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2QueryPathInformationFinalResponsePacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2QueryPathInformationRequestPacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2ReportDfsInconsistencyFinalResponsePacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2ReportDfsInconsistencyRequestPacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2SessionSetupFinalResponsePacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2SessionSetupRequestPacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2SetFileInformationFinalResponsePacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2SetFileInformationRequestPacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2SetFsInformationFinalResponsePacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2SetFsInformationRequestPacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2SetPathInformationFinalResponsePacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2SetPathInformationRequestPacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2CreateDirectoryFinalResponsePacket.cs" />
+    <Compile Include="Messages\Trans2\SmbTrans2CreateDirectoryRequestPacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransCallNmpipeRequestPacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransCallNmpipeSuccessResponsePacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransMailslotWriteRequestPacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransMailslotWriteSuccessResponsePacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransPeekNmpipeRequestPacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransPeekNmpipeSuccessResponsePacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransQueryNmpipeInfoRequestPacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransQueryNmpipeInfoSuccessResponsePacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransQueryNmpipeStateRequestPacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransQueryNmpipeStateSuccessResponsePacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransRawReadNmpipeRequestPacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransRawReadNmpipeSuccessResponsePacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransRawWriteNmpipeRequestPacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransRawWriteNmpipeSuccessResponsePacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransReadNmpipeRequestPacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransReadNmpipeSuccessResponsePacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransSetNmpipeStateRequestPacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransSetNmpipeStateSuccessResponsePacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransTransactNmpipeRequestPacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransTransactNmpipeSuccessResponsePacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransWaitNmpipeRequestPacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransWaitNmpipeSuccessResponsePacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransWriteNmpipeRequestPacket.cs" />
+    <Compile Include="Messages\Trans\SmbTransWriteNmpipeSuccessResponsePacket.cs" />
+    <Compile Include="CifsMessage.cs" />
+    <Compile Include="Server\CifsServerPerConnection.cs" />
+    <Compile Include="Server\CifsServerPerOpenFile.cs" />
+    <Compile Include="Server\CifsServerPerOpenSearch.cs" />
+    <Compile Include="Server\CifsServerPerSession.cs" />
+    <Compile Include="Server\CifsServerPerTreeConnect.cs" />
+    <Compile Include="Server\CifsServerTransport.cs" />
+    <Compile Include="Server\CifsServerGlobalTables.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{FE653643-6342-4300-871E-683C7BA31494}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FileAccessService\FileAccessService.csproj">
+      <Project>{AB191B32-B12D-42CB-976D-CEA2C5BAD8BE}</Project>
+      <Name>FileAccessService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Messages\Messages.csproj">
+      <Project>{75544419-3F4E-4308-A676-165F45C1462E}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MS-NLMP\Nlmp.csproj">
+      <Project>{5E53E71E-52D1-4BF0-99C0-608437EC446C}</Project>
+      <Name>Nlmp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sspi\Sspi.csproj">
+      <Project>{D0CB354B-2CD3-49C1-8ECA-2F6EBADBCCEE}</Project>
+      <Name>Sspi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TransportStack\TransportStack.csproj">
+      <Project>{F8CDC462-0754-4BEA-B048-33AC1A5855C4}</Project>
+      <Name>TransportStack</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />
+  </Target>
+</Project>

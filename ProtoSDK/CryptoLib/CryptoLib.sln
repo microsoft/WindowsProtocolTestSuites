@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoLib", "CryptoLib.csproj", "{BF6AFAF0-7592-467F-AD5C-18429D854057}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "..\Common\Common.csproj", "{FE653643-6342-4300-871E-683C7BA31494}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messages", "..\Messages\Messages.csproj", "{75544419-3F4E-4308-A676-165F45C1462E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BF6AFAF0-7592-467F-AD5C-18429D854057}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF6AFAF0-7592-467F-AD5C-18429D854057}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF6AFAF0-7592-467F-AD5C-18429D854057}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF6AFAF0-7592-467F-AD5C-18429D854057}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE653643-6342-4300-871E-683C7BA31494}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE653643-6342-4300-871E-683C7BA31494}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE653643-6342-4300-871E-683C7BA31494}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE653643-6342-4300-871E-683C7BA31494}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75544419-3F4E-4308-A676-165F45C1462E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75544419-3F4E-4308-A676-165F45C1462E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75544419-3F4E-4308-A676-165F45C1462E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75544419-3F4E-4308-A676-165F45C1462E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,416 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+  <Properties>
+    <!--Protocol Section begins. All the property elements for the Protocol information should be in this section.-->
+    <Group name="PTF">
+      <Group name="NetworkCapture">
+        <Property name="Enabled" value="false">
+          <Choice>true,false</Choice>
+          <Description>
+            If it is true, enable the auto-capture feature.
+          </Description>
+        </Property>
+        <Property name="CaptureFileFolder" value="C:\MS-SMB_CaptureFileDirectory">
+          <Description>
+            The path to put the capture files. Old files will be overwritten.
+          </Description>
+        </Property>
+        <Property name="StopRunningOnError" value="false">
+          <Choice>true,false</Choice>
+          <Description>
+            If it is true, fail the test case when error happens in running network capture commands. Otherwise, ignore the error.
+          </Description>
+        </Property>
+      </Group>
+    </Group>
+    
+    <!-- The default protocol short name.-->
+    <Property name="ProtocolShortName" value="MS-SMB" />
+    <!--Protocol Section ends.-->
+
+
+    <!--SUT Section begins. All the property elements for the SUT information should be in this section.-->
+    <!--The SUT's OS, the value can be set to 
+        "NonWindows", "WinNt", "Win2K", "Win2K3", "Win2K8", "Win2K8R2", "Win2K3R2", "Win2K3Sp1".-->
+    <Property name="SutPlatformOS" value="Win2K8R2" />
+
+    <!--The SUT's name.-->
+    <Property name="SutMachineName" value="SUT01" />
+
+    <!--The port exposed by SUT.-->
+    <Property name="SutPort" value="445" />
+
+    <!--The administrator's name of SUT. Use administrator Domain Account when testing in Domain.-->
+    <Property name="SutLoginAdminUserName" value="administrator" />
+
+    <!--The full path name of administrator on SUT.-->
+    <Property name="SutLoginAdminUserFullPathName" value="SUT01\administrator" />
+
+    <!--The administrator's password of SUT. Use administrator password of Domain Account when testing in Domain.-->
+    <Property name="SutLoginAdminPwd" value="Password01!" />
+
+    <!--The guest's name of SUT. Use guest Domain Account when testing in Domain.-->
+    <Property name="SutLoginGuestUserName" value="guest" />
+
+    <!--The guest's password of SUT. Use guest password of Domain Account when testing in Domain.-->
+    <Property name="SutLoginGuestPwd" value="Password01!" />
+
+    <!--The domain of SUT. This value is mandatory when SMBSecurityPackage is Kerberos. Please ignore this property if testing in workgroup environment.-->
+    <Property name="SutLoginDomain" value="CONTOSO" />
+
+    <!--Type:bool! Usage: Whether the InteractiveAdapter is used or not.
+        If used, set it true, otherwise false.-->
+    <Property name ="SutInteractiveAdapterIsUsed" value="false"/>
+
+    <!--The specified disk share on SUT which the file system type is NTFS.-->
+    <Property name="SutNtfsShare1" value="Sharefolder1" />
+    <Property name="SutNtfsShare2" value="Sharefolder2" />
+
+    <!--The full path name of specified disk share on SUT which the file system type is NTFS.-->
+    <Property name="SutNtfsShare1FullName" value="\\SUT01\Sharefolder1" />
+    <Property name="SutNtfsShare2FullName" value="\\SUT01\Sharefolder2" />
+    <!--The full path name of specified disk share on SUT which the file system type is NTFS and grant guest user the full control permission.-->
+    <Property name="SutNtfsQuotaShareFullName" value="\\SUT01\QuotaShare" />
+
+    <!--The specified disk share on SUT which the file system type is FAT.-->
+    <Property name="SutFatShare1" value="Sharefolder3" />
+    <Property name="SutFatShare2" value="Sharefolder4" />
+
+    <!--The full path name of specified disk share on SUT which the file system type is FAT.-->
+    <Property name="SutFatShare1FullName" value="\\SUT01\Sharefolder3" />
+    <Property name="SutFatShare2FullName" value="\\SUT01\Sharefolder4" />
+
+    <!--The specified created file's name.-->
+    <Property name="SutShareTest1" value="Test1.txt" />
+    <Property name="SutShareTest2" value="Test2.txt" />
+
+    <!--The new name after renaming.-->
+    <Property name="SutShareNewName" value="NewName.txt" />
+
+    <!--DFS share tree connect path.-->
+    <Property name="SutShareDfsTreeConnect" value="\\SUT01\DfsNameSpace" />
+
+    <!--The file thst is created before runing.-->
+    <Property name="SutShareExistFile" value="ExistTest.txt" />
+
+    <!-- The printer on SUT-->
+    <Property name="SutSharePrinter" value="SMBPrinter" />
+
+    <!-- The full path name of printer on SUT-->
+    <Property name="SutSharePrinterFullName" value="\\SUT01\SMBPrinter" />
+
+    <!--The message mode named pipe created on SUT.-->
+    <Property name="SutShareMessagePipe" value="smbpipe1" />
+
+    <!--The stream mode named pipe created on SUT.-->
+    <Property name="SutShareStreamPipe" value="smbpipe2" />
+
+    <!-- The full path name of shared namepipe on SUT-->
+    <Property name="SutNamedPipeFullName" value="\\SUT01\IPC$" />
+    <!--SUT Section ends.-->
+
+
+    <!--Adapter Section begins. All the property elements for the Adapter information should be in this section.-->
+    <!--This field is used to store the actual value of PreviousVersion for a specific volume, 
+        its value must follow the template <(int)Key,(string)Value;> -->
+    <Property name="SmbTestCasePreviousVersion" value="1,@GMT-2010.08.02-11.56.42;" />
+
+    <!-- This is an non existent GMT token used for test case.-->
+    <Property name="SmbTestCaseBadGmt" value="@GMT-2008.05.28-08.02.19" />
+
+    <!--The time out value for the waiting time expecting a packet from server-->
+    <Property name="SmbTimeoutMillisec" value="60000"/>
+
+    <!--The Client's OS, the value can be set to 
+        "NonWindows", "WinXP", "WinVista", "Win7".-->
+    <Property name="SmbClientOS" value="Win7" />
+
+    <!--Check whether the file ID and volume GUID are zero when SUT's OS belongs to windows series.-->
+    <Property name="SmbIsFileIdZeroAndIsVolumnGuidZero" value="false" />
+
+    <!--The Package for security, its value can be: "Negotiate", "Kerberos", "NTLM".-->
+    <Property name="SmbSecurityPackageType" value="NTLM" />
+
+    <!--The version of implicit NLMP, its value can be: "PlainTextPassword", "NtlmVersion1", "NtlmVersion2".-->
+    <Property name="SmbSecurityPackageNlmpVersion" value="NtlmVersion1" />
+
+    <!--The version of IP, its value can be: "Ipv4", "Ipv6" or "Any" -->
+    <Property name="SmbTransportIpVersion" value="Ipv4" />
+
+    <!--The size of buffer.-->
+    <Property name="SmbTransportBufferSize" value="4096" />
+
+    <!--The maximum number of bytes that the client will accept in the Data buffer of the response.
+        For this request, it MUST be greater than or equal to 0.-->
+    <Property name="TransportMaxDataCount" value="4096" />
+
+    <!--The flags in TRANS2_FIND_FIRST2.
+        This bit field contains flags used to request
+        that the server manage the state of the transaction based on 
+        how the client wishes to traverse the results.
+        Its value can be get from Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs.Trans2FindFlags.-->
+    <Property name="SmbTransportFindFlags" value="8" />
+
+    <!--The SUT MUST NOT return more entries than indicated by the value of this field.-->
+    <Property name="SmbTransportSearchCount" value="1" />
+
+    <!--The max read data size to call named pipe.-->
+    <Property name="SmbTransportMaxReadDataCount" value="4096" />
+
+    <!--File attributes to apply as a constraint to the file search.
+        Its value can be get from Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs.SmbFileAttributes.-->
+    <Property name="SmbTransportSearchFileAttributes" value="16" />
+
+    <!--This field specifies if the find is searching for directories or for files.
+        This field MUST be one of two values. Its value can be get from 
+        Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs.Trans2FindFirst2SearchStorageType.-->
+    <Property name="SmbTransportSearchStorageType" value="1" />
+
+    <!--The ShareAccess in subcommand of NtTransact. Available value is one of below:
+        0: None
+        1: Read
+        2: Write
+        3: Read | Write
+        4: Delete
+        5: Read | Delete
+        6: Write | Delete
+        7: Read | Write | Delete
+        -->
+    <Property name="SmbTransportShareAccess" value="3" />
+
+    <!--The offset where the read start in a file. Its value must be equal or greater than zero.-->
+    <Property name="SmbTransportReadOffset" value="0" />
+
+    <!--The offset where the write start in a file. Its value must be equal or greater than zero.-->
+    <Property name="SmbTransportWriteOffset" value="0" />
+    <!--Adapter Section ends.-->
+
+
+    <!--SHOULDMAY Section begins. All the switch property elements of the SHOULD/MAY should be in this section.
+        These properties are to specified that if requirements are implemented. If the requirement is implemented,
+        the value of the property should be set to true, otherwise set to false.-->
+    <!--Type:bool! Usage: Is implemented or not!-->
+    <Property name="SHOULDMAYR4Implementation" value="true" />
+    <Property name="SHOULDMAYR77Implementation" value="true" />
+    <Property name="SHOULDMAYR105227Implementation" value="true" />
+    <Property name="SHOULDMAYR9024Implementation" value="true" />
+    <Property name="SHOULDMAYR14840Implementation" value="true" />
+    <Property name="SHOULDMAYR4980Implementation" value="true" />
+    <Property name="SHOULDMAYR134Implementation" value="true" />
+    <Property name="SHOULDMAYR138Implementation" value="true" />
+    <Property name="SHOULDMAYR5430Implementation" value="true" />
+    <Property name="SHOULDMAYR109215Implementation" value="true" />
+    <Property name="SHOULDMAYR9216Implementation" value="true" />
+    <Property name="SHOULDMAYR505644Implementation" value="true" />
+    <Property name="SHOULDMAYR19248Implementation" value="true" />
+    <Property name="SHOULDMAYR539Implementation" value="true" />
+    <Property name="SHOULDMAYR502Implementation" value="true" />
+    <Property name="SHOULDMAYR9410Implementation" value="true" />
+    <Property name="SHOULDMAYR9418Implementation" value="true" />
+    <Property name="SHOULDMAYR9421Implementation" value="true" />
+    <Property name="SHOULDMAYR30066Implementation" value="false" />
+    <Property name="SHOULDMAYR9497Implementation" value="true" />
+    <Property name="SHOULDMAYR9255Implementation" value="true" />
+    <Property name="SHOULDMAYR9975Implementation" value="true" />
+    <Property name="SHOULDMAYR11132Implementation" value="true" />
+    <Property name="SHOULDMAYR3991Implementation" value="true" />
+    <Property name="SHOULDMAYR2299Implementation" value="false" />
+    <Property name="SHOULDMAYR4984Implementation" value ="true" />
+    <Property name="SHOULDMAYR5229Implementation" value ="true" />
+    <Property name="SHOULDMAYR2322Implementation" value="true" />
+    <Property name="SHOULDMAYR2073Implementation" value ="true" />
+    <Property name="SHOULDMAYR2076Implementation" value ="true" />
+    <Property name="SHOULDMAYR357Implementation" value="true" />
+    <!--SHOULDMAY Section ends.-->
+
+    <!--TDI/Q Switch Section starts. All the switch property elements of the TDI/Q should be in this section.
+        These properties are to specified that if TDI or TDQ are fixed. If the TDI or TDQ is fixed,
+        the value of the property should be set to true, otherwise set to false.-->
+    <!--Type:bool! Usage: Is fixed or not!-->
+    <Property name="IsTDI33006Fixed" value="false" />
+    <Property name="IsTDI50461Fixed" value="false" />
+    <Property name="IsTDI33008Fixed" value="false" />
+    <Property name="IsTDI33017Fixed" value="false" />
+    <Property name="IsTDQ33005Fixed" value="false" />
+    <Property name="IsTDQ49846Fixed" value="false" />
+    <Property name="IsTDQ33010Fixed" value="false" />
+    <Property name="IsTDQ33015Fixed" value="false" />
+    <Property name="IsTDQ33016Fixed" value="false" />
+    <Property name="IsTDQ33049Fixed" value="false" />
+    <!-- TDI/Q Fix Section ends.-->
+    
+    <!--Capture Section begins. All the configuration property elements for capture should be in this section.-->
+    <!--Whether the first GSS token (or fragment thereof) produced by the GSS authentication protocol is 
+        configured to be used by the SUT.-->
+    <Property name="IsTokenConfiguredToUsed" value="false" />
+
+    <!--Whether Implementations support the notion of a guest account.-->
+    <Property name="IsNotionSupported" value="false" />
+
+    <!--Whether the SHI1005_FLAGS_ALLOW_NAMESPACE_CACHING bit is set for the share.-->
+    <Property name="IsShi1005Set" value="true" />
+
+    <!--Whether NoAliasingOnFilesystem registry key is set to 1.-->
+    <Property name="IsNoAliasingSet" value="true" />
+
+    <!--Whether short file name generation is disabled in the file system.-->
+    <Property name="IsShortFileNameDisabled" value="true" />
+
+    <!--The access allowed for the guest account.-->
+    <Property name="AllowedGuestAccess" value="0" />
+
+    <!--Whether Implementations support the notion of a guest account.-->
+    <Property name="IsNotionSupportedForCreate" value="true" />
+
+    <!--Whether the SUT wants the client to leverage the new capabilities.-->
+    <Property name="IsSerWantCliLeverageNewCap" value="true" />
+
+    <!--Whether the path contained in the message contains long names.-->
+    <Property name="IsPathContainsLongNames" value="false" />
+
+    <!--Whether dynamic re-authentication is supported.-->
+    <Property name="IsReAuthentSupported" value="true" />
+
+    <!--The computed MaximalShareAccessRights.-->
+    <Property name="ComputedMaxRights" value="2032127" />
+
+    <!--The computed server share OptionalSupport.-->
+    <Property name="ComputedOptionalSupport" value="33" />
+
+    <!--If the system support the guest account.-->
+    <Property name="IsGuestAccountSupported" value="false" />
+
+    <!--The minimum number of returned Bytes.-->
+    <Property name="MinNumberOfBytesToReturn" value="16" />
+
+    <!--The expected SnapShots number.-->
+    <Property name="ExpectedSnapShotsCount" value="10" />
+
+    <!--The expected SnapShots returned number.-->
+    <Property name="ExpectedSnapshotsReturnedCount" value="10" />
+
+    <!--Whether the SUT support challenge/response authentication or not.-->
+    <Property name="IsAuthenticationSupported" value="true" />
+
+    <!--The number of the quota information for all SIDs.-->
+    <Property name="QuotaInfoCount" value="2" />
+
+    <!--The computed MaximalAccessRights.-->
+    <Property name="ComputedMaximalAccessRights" value="6" />
+
+    <!--The computed GuestMaximalAccessRights.-->
+    <Property name="ComputedGuestMaximalAccessRights" value="6" />
+
+    <!--The index of the dialect selected by the server from the list presented in the request.
+        If DialectIndex is 5, it means NT LAN Manager or later is negotiated for the SMB dialect.-->
+    <Property name="NtLanManagerNegotiated" value="5" />
+
+    <!--The length before SecurityBlob.-->
+    <Property name="LengthFromStart" value="192" />
+    <!--Capture Section ends.-->
+
+    <!--FSCC FS info-->
+    <!--Indicates if file or directory closed for Fscc.-->
+    <Property name="isFileOrDirectoryClosedFSCC" value="true" />
+    
+    <!--Indicates if the per user qutas ued for Fscc.-->
+    <Property name="IsPerUserQuotasUsedForFscc" value="true" />
+
+    <!--The expected total free allocation units for fscc.-->
+    <Property name="ExpectedTotalFreeAllocationUnitsForFscc" value="6" />
+
+    <!--The type of file system for fscc.-->
+    <Property name="TypeOfFileSystemForFscc" value="NTFS" />
+
+    <!--The volumn serial number.-->
+    <Property name="VolumeSerialNumberForFSCC" value="111814825" />
+
+    <!--Indicate if support OO file system object.-->
+    <Property name="IsSupportsOOFileSysObj" value="true" />
+
+    <!--The sectors per allocation unit-->
+    <Property name="SectorsPerAllocationUnitFprFSCC" value="8" />
+
+    <!--The byte number of per sector-->
+    <Property name="BytesPerSectorForFSCC" value="512" />
+
+    <!--The maximum file name coponent length-->
+    <Property name="MaximumFileNameComponentLengthForFscc" value="255" />
+
+    <!--FSCC Path info-->
+    <!--The number of file attribute-->
+    <Property name="FileAttributesForFSCC" value="32" />
+
+    <!--Indicates if support file reference number-->
+    <Property name="IsSupportFileReferenceNumForFscc" value="true" />
+
+    <!--Indicates if file deletion is requested-->
+    <Property name="IsFileDeletionRequestedForFscc" value="false" />
+
+    <!--Indicates if is director-->
+    <Property name="IsDirectorForFscc" value="false" />
+
+    <!--Indicates if there is other entries following-->
+    <Property name="IsNoOtherEntriesFollowForFSCC" value="true" />
+
+    <!--Indicates if multiple entries present-->
+    <Property name="IsMultipleEntriesPresentForFSCC" value="true" />
+
+    <!--Indicates if is deleted file-->
+    <Property name="IsDeleteFileForFscc" value="false" />
+
+    <!--The length of EA-->
+    <Property name="EAlengthForFscc" value="0" />
+
+    <!--The compressed file size-->
+    <Property name="CompressedFileSizeForFSCC" value="6" />
+
+    <!--The fom pression format-->
+    <Property name="FompressionFormatForFSCC" value="0" />
+
+    <!--The chunk shift number-->
+    <Property name="ChunkShiftForFSCC" value="0" />
+
+    <!--The cluster shift number-->
+    <Property name="ClusterShiftForFSCC" value="0" />
+
+    <!--The cluster size-->
+    <Property name="ClusterSizeForFSCC" value="0" />
+
+    <!--The expected initialized cluster shift-->
+    <Property name="ExpectedInitializedClusterShiftForFscc" value="0" />
+
+    <!--The allocation size-->
+    <Property name="AllocationSizeForFSCC" value="0" />
+    <!--FSCC FS info end-->
+    
+    <!--FSCC FSCTLName-->
+    <!--Indicates if the objectId is supported-->
+    <Property name="IsUseofObjectIDSupported" value="true" />
+
+    <!--Indicates if the USN change is supported-->
+    <Property name="IsUSNChangeSupportForFSCC" value="true" />
+
+    <!--Indicates if the file system contain the spec file-->
+    <Property name="IsFileSysContainSpecFileForFSCC" value="false" />
+
+    <!--Indicates if the directory support object ID-->
+    <Property name="IsDirectoryNotSupportObjectIdUseForFSCC" value="false" />
+
+    <!--Indicates if the usn changing Joural record has been logged-->
+    <Property name="IsUsnChangeJournalRecordLoggedForFSCC" value="true" />
+
+    <!--FSCC Both Directory Info-->
+    <!--Indicates if BS no other entries following-->
+    <Property name="BsNoOtherEntriesFollowForFSCC" value="true" />
+
+  </Properties>
+  <Adapters>
+  </Adapters>
+  <TestLog defaultprofile="Verbose">
+    <Sinks>
+    </Sinks>
+    <Profiles>
+    </Profiles>
+  </TestLog>
+</TestSite>
