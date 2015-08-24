@@ -4,6 +4,7 @@ Originally developed for in-house testing of the Microsoft Open Specifications, 
 A Test Suite evaluates whether a protocol implementation meets certain interoperability requirements.
 Test Suites do not cover every protocol requirement and in no way certify an implementation, even if all tests pass. 
 However, each test suite provides users with a useful indication of interoperability.
+
 Windows Protocol Test Suites provide interoperability testing against an implementation of the Windows open specifications including SMB2&3, Active Directory, RDP, Kerberos and etc.
 
 * **SMB Protocol Test Suite**. It covers requirements documented in [MS-SMB], [MS-FSCC] as well [MS-CIFS] dependencies referred to in [MS-SMB].
@@ -40,7 +41,7 @@ Run buildall.cmd
 buildall.cmd
 ```
 
-After the build succeeds, the MSI (installer package) files of every test suite should be generated in the folder *WindowsProtocolTestSuite\drop\TestSuites\<TestSuiteName>\Installer\.*
+After the build succeeds, the MSI (installer package) files of every test suite should be generated in the folder *WindowsProtocolTestSuite\drop\TestSuites\\[TestSuiteName]\Installer\.*
 Take SMB test suite as an example, **MS-SMB-TestSuite-ServerEP.msi** should be generated in the folder *WindowsProtocolTestSuite\drop\TestSuites\MS-SMB\Installer\.*
 
 You can also run **build.cmd** for protocol SDK and every test suite separately.
