@@ -14,12 +14,12 @@ This is a one time job. Once you have signed a CLA for any project sponsored by 
 The basic rule is following the coding style of the existing code. 
 
 ## Test
-Every time you make changes to Protocol SDK, you should run **buildall.cmd** to make sure the change you made will not effect other test suites.
+Every time you make changes to Protocol SDK, you must run **buildall.cmd** to make sure the change you made will not effect other test suites.
 
-Every time you make changes to a Test Suite, you should run all cases of the test suite and make sure they can all pass. 
+Every time you make changes to a Test Suite, you must run all the impacted cases of the test suite and make sure they can all pass and be compitable with Windows.
 
 ## Documentation
-If a new test case is added to a test suite, the corresponding test design spec should be updated.
+If a new test case is added to a test suite, the corresponding test design spec must be updated.
 
-If a new configuration is added to a test suite, the corresponding user guide should be updated.
+If a new configuration is added to a test suite, the corresponding user guide must be updated.
 
