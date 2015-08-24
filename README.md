@@ -1,31 +1,31 @@
 # Windows Protocol Test Suites
 
 Originally developed for in-house testing of the Microsoft Open Specifications, Microsoft Protocol Test Suites have been used extensively during plugfests and interoperability labs to test partner implementations.
-A Test Suite evaluates whether a protocol implementation meets certain interoperability requirements.
+A Test Suite evaluates whether a protocol or protocol family implementation meets certain interoperability requirements.
 Test Suites do not cover every protocol requirement and in no way certify an implementation, even if all tests pass. 
 However, each test suite provides users with a useful indication of interoperability.
 
-Windows Protocol Test Suites provide interoperability testing against an implementation of the Windows open specifications including SMB2&3, Active Directory, RDP, Kerberos and etc.
+Windows Protocol Test Suites provide interoperability testing against the implementation of Windows open specifications including File Services, Identity Management, Remote Desktop and etc.
 
 * **SMB Protocol Test Suite**. It covers requirements documented in [MS-SMB], [MS-FSCC] as well [MS-CIFS] dependencies referred to in [MS-SMB].
 
 ## Components
 Windows Protocol Test Suites contain three components:
 
-* **CommonScripts**. Common scripts used by every test suite.
+* **CommonScripts**. Common scripts used by every test suite. Normally they're used to configure the environment.
 * **ProtoSDK**. Protocol SDK is the protocol library used by every test suite. It provides the data structures of the protocol messages, the methods to encode and decode the messages, the methods to send and recieve messages and etc.
-* **TestSuites**. All Test Suites code are saved here, categorized by folder.
+* **TestSuites**. All Test Suites code and documents are saved here and categorized by folder representing each test suite.
 
 
 ## Prerequisites
-The Test Suites are based on Windows platform.
+The Test Suites are developed and must be installed on Windows platform.
 You should install the following list of software in order to build Test Suites from source code.
 
 * .Net framework 4.0 or higher
 * Wix toolset v3.7 or higher
 * Visual Studio or Visual Studio test agent, version 2012 or higher
-* [Protocol Test Framework](https://github.com/microsoft/protocoltestframework)
-* [Spec Explorer](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/). It is only required for the test suites that contain Model Based Test cases.
+* [Protocol Test Framework](https://github.com/microsoft/protocoltestframework). You can use a released package or build a installer package of Protocol Test Framework from source code.
+* [Spec Explorer](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/). It is only required for the test suites that contain Model Based Test cases. If you want to regenarate Model Based Test cases, you must install Visual Studio 2012, otherwise higher versions of Visual Studio are supported.
 
 ## Build
 
