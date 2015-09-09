@@ -750,7 +750,7 @@ Common steps of all the traditional test cases:
 
 <empty>  |<empty>  
 -------|-----
-__Test ID__|Traditional_TraditionalTestCase_IgnoreFields_Create_01
+__Test ID__|TraditionalTestCase_IgnoreFields_Create_01
 __Description__|The test case is to test the requirements that the client sets the unused or reserved fields of SMB_COM_NT_CREATE_ANDX and the server ignores and replies the same.
 __Prerequisites__|There is a share in the sever side.
 __Scenario__ |SMB_S08_Ignore
