@@ -167,7 +167,7 @@ __Protocol Adapter__
 
 __Interactive Adapter__
 
-As on some platforms, the SUT Control Adapter can°Øt be configured automatically, an Interactive adapter is added for avoiding this issue.
+As on some platforms, the SUT Control Adapter can‚Äôt be configured automatically, an Interactive adapter is added for avoiding this issue.
 The Interactive Adapter is implemented by PowerShell scripts, and the functionalities are the same as SUT Control Adapter functionalities, which are:
 
 * The adapter provides interfaces through which test cases can perform configurations on the server.
@@ -274,7 +274,7 @@ The test suite uses a hybrid testing approach including MBT and Traditional Test
 
 __System Under Test (SUT)__
 
-From the third party°Øs point of view, the SUT is an implementation of MS-SMB.
+From the third party‚Äôs point of view, the SUT is an implementation of MS-SMB.
 On a Windows platform, the SUT is SMB server.
 
 ![](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/master/TestSuites/MS-SMB/docs/images/TestSuite.png) 
@@ -352,13 +352,13 @@ In SMB models, there are 7 classes abstracted to simulate the state of both clie
 * Check OS Version Pattern
 	* The MS-SMB model checks the SUT OS version on which the requirements are to be verified and stores this information as a variable for further use.            
 * Check Return Value Pattern
-	* The MS-SMB model verifies protocol model actions°Ø return values to cover the related requirements. For example, the model will verify the enumeration MessageStatus in the responses.
+	* The MS-SMB model verifies protocol model actions‚Äô return values to cover the related requirements. For example, the model will verify the enumeration MessageStatus in the responses.
 * Helper File Pattern:
 	* The MS-SMB model adds a new file ModelHelper.cs in Model project, and designs the capture requirement method in ModelHelper.cs file.
 
 ##### <a name="2.2.2.3"/>2.2.2.3	States in Model	
 
-* Before establishing the session: Global variable °∞smbState°± is used for binding the model logic and state transfer.
+* Before establishing the session: Global variable ‚ÄúsmbState‚Äù is used for binding the model logic and state transfer.
 * After establishing the session, all the abstracted data defined in connection are used for state transfer.
 * Two accepting conditions are defined in model program:
 	* The session is closed because of error response;
@@ -400,7 +400,7 @@ The protocol SDK will be used for message generation and parse for SMB test suit
 
 __Interactive Adapter__
 
-As on some platforms, the SUT Control Adapter can°Øt be configured automatically, an Interactive adapter is added for avoiding this issue.
+As on some platforms, the SUT Control Adapter can‚Äôt be configured automatically, an Interactive adapter is added for avoiding this issue.
 
 The Interactive Adapter is implemented by PowerShell scripts, and the functionalities are the same as SUT Control Adapter functionalities, which are:
 
@@ -423,7 +423,7 @@ Note: There are more than 300 machines, so only 2 machines are listed for each t
 
 No.	|Name	|Machine	|Covered Operation
 ----|-------|-----------|-----------------
-1	|Windows 7--Windows Server 2008	|°≠	|°≠
+1	|Windows 7--Windows Server 2008	|‚Ä¶	|‚Ä¶
 	|	|NoSignSET_QUERY_PATHModelProgram_Win7_Win2K8	|SmbConnectionResponse
 |||ServerSetup
 |||NegotiateRequest
@@ -449,8 +449,8 @@ No.	|Name	|Machine	|Covered Operation
 |||Trans2SetPathInfoResponse
 |||Trans2QueryPathInfoRequest
 |||Trans2QueryPathInfoResponse
-	||	°≠	|°≠
-2	|Windows 7--Windows Server 2008 R2	|°≠	|°≠
+	||	‚Ä¶	|‚Ä¶
+2	|Windows 7--Windows Server 2008 R2	|‚Ä¶	|‚Ä¶
 	|	|SET_QUERY_FILEModelProgram_Win7_Win2K8R2	|SmbConnectionResponse
 |||ServerSetup
 |||NegotiateRequest
@@ -478,8 +478,8 @@ No.	|Name	|Machine	|Covered Operation
 |||Trans2QueryFileInfoResponse
 |||Trans2QueryFileInfoRequest
 |||Trans2QueryFileInfoResponse
-	|	|°≠	|°≠
-3	|Windows Vista --Windows Server 2008	|°≠	|°≠
+	|	|‚Ä¶	|‚Ä¶
+3	|Windows Vista --Windows Server 2008	|‚Ä¶	|‚Ä¶
 	|	|NoSignSET_QUERY_FILEModelProgram_WinVista_Win2K8_InvalidLevel	|SmbConnectionResponse
 |||ServerSetup
 |||NegotiateRequest
@@ -501,8 +501,8 @@ No.	|Name	|Machine	|Covered Operation
 |||CreateRequest
 |||CreateResponse
 |||Trans2QueryFileInfoRequest
-	|	|°≠	|°≠
-4	|Windows Vista --Windows Server 2008 R2	|°≠	|°≠
+	|	|‚Ä¶	|‚Ä¶
+4	|Windows Vista --Windows Server 2008 R2	|‚Ä¶	|‚Ä¶
 	|	|SET_QUERY_FILEModelProgram_WinVista_Win2K8R2	|SmbConnectionResponse
 |||ServerSetup
 |||NegotiateRequest
@@ -530,7 +530,7 @@ No.	|Name	|Machine	|Covered Operation
 |||Trans2QueryFileInfoResponse
 |||Trans2QueryFileInfoRequest
 |||Trans2QueryFileInfoResponse
-	|	|°≠	|°≠
+	|	|‚Ä¶	|‚Ä¶
 
 Common Steps:
 
@@ -605,13 +605,13 @@ The MS-SMB model consists of 12 classes: 1 model class, 7 abstract data model cl
 	* 3 actions related to NT_TRANSACT_SET_QUOTA, which are Trans2SetFsInfoRequestAdditional, Trans2SetFsInfoResponseAdditional and ErrorTrans2SetFsInfoResponseAdditional.
 	* 3 actions related to Session setup, which are SessionSetupRequestAdditional,SessionSetupResponseAdditional and ErrorSessionSetupResponseAdditional.
 	All the above actions are implemented in the same manner: The client sends one request to the server and the server will return two kinds of response, which are successful response or failed response.  
-	For example, there are 3 actions related to the operation °∞SMB_COM_WRITE_ANDX°±, which are WriteRequest, WriteResponse and ErrorWriteResponse. 
+	For example, there are 3 actions related to the operation ‚ÄúSMB_COM_WRITE_ANDX‚Äù, which are WriteRequest, WriteResponse and ErrorWriteResponse. 
 	WriteRequest is used to send a request to server to write data to a file or a named pipe. If the operation succeeds, the WriteResponse will be called to receive the successful respone from server. 
 	If the operation is failed, the ErrorWriteResponse will be called to receive the failed respone from server.
 * 6 actions are defined by the test suite:
 	* ServerSetup: This action sets up the server side environment, including message signing requirement and maximum read/write size.
 	* ServerSetupResponse: The response to the ServerSetup action.
-	* CreatePipeAndMailslot£∫This action creates a named pipe or mailslot at the server side, in order to enable client create its instances. 
+	* CreatePipeAndMailslotÔºöThis action creates a named pipe or mailslot at the server side, in order to enable client create its instances. 
 	* CheckPreviousVersion: This action checks the previous version for the designated file identifier.
 * The 7 abstract data model classes are SmbConnection class, SmbFile class, SmbPipe class, SmbSession class, SmbShare class, SmbTree and SmbMailslot as specified in section 2.2.2. 
 
@@ -623,7 +623,7 @@ Further explanation of the helper classes:
 
 * The class Parameters helps to set up the environment and the initial values of the model.
 * Each time a request or a response is processed, model must validate the messages and update the model state. The 2 classes Checker and ModelHelper guarantee that the model follows the logics specified in the protocol.
-	* Checker: Each request has its own validation procedure with °∞Condition.isTrue()°± statements. And there are common procedures which can be extracted as a uniform method. MessageChecks is used to do all common message validation. Responses are validated by method CheckReponse in this class.
+	* Checker: Each request has its own validation procedure with ‚ÄúCondition.isTrue()‚Äù statements. And there are common procedures which can be extracted as a uniform method. MessageChecks is used to do all common message validation. Responses are validated by method CheckReponse in this class.
 	* ModelHelper is used to capture code.
 * The class Update is responsible for updating all local data structures after a request is sent or a response is received.
 
@@ -631,16 +631,16 @@ __Global Variables__
 
 12 global variables are designed in the model. 
 
-* The enumeration variable °∞smbState°± is used to indicate the initial state of SMB model.
-* The class variable °∞connection°± is used to indicate the network connection between the client and the server. As described before, there is only one connection in the Test Suite.
-* The enumeration variable °∞smbRequest°± is used to save subclass object.
-* If the Boolean variable °∞isSendBufferSizeExceedMaxBufferSize°± is set, it indicates the maximum server buffer size of bytes it writes can exceed the MaxBufferSize field. 
-* If the Boolean variable °∞isWriteBufferSizeExceedMaxBufferSize°± is set, it indicates the maximum server buffer size of bytes it writes can exceed the MaxBufferSize field.
-* The int variable °∞quotaUsed°± is used to record quota information.
-* The int variable °∞fIdUsed°± is used to define fid used for setting quota.
-* The Boolean variable °∞isQuotaSet°± is used to record whether quota has been set by client
-* The string variable °∞resumeKey°± is used to define resumeKey.
-* The int variable °∞copychunkSourceFid°± is used to set copychunkSourceFid to 0.
+* The enumeration variable ‚ÄúsmbState‚Äù is used to indicate the initial state of SMB model.
+* The class variable ‚Äúconnection‚Äù is used to indicate the network connection between the client and the server. As described before, there is only one connection in the Test Suite.
+* The enumeration variable ‚ÄúsmbRequest‚Äù is used to save subclass object.
+* If the Boolean variable ‚ÄúisSendBufferSizeExceedMaxBufferSize‚Äù is set, it indicates the maximum server buffer size of bytes it writes can exceed the MaxBufferSize field. 
+* If the Boolean variable ‚ÄúisWriteBufferSizeExceedMaxBufferSize‚Äù is set, it indicates the maximum server buffer size of bytes it writes can exceed the MaxBufferSize field.
+* The int variable ‚ÄúquotaUsed‚Äù is used to record quota information.
+* The int variable ‚ÄúfIdUsed‚Äù is used to define fid used for setting quota.
+* The Boolean variable ‚ÄúisQuotaSet‚Äù is used to record whether quota has been set by client
+* The string variable ‚ÄúresumeKey‚Äù is used to define resumeKey.
+* The int variable ‚ÄúcopychunkSourceFid‚Äù is used to set copychunkSourceFid to 0.
 
 __Requirement Verification Strategy in the Model__
 
@@ -659,22 +659,22 @@ The following diagram shows the state transitions in MS-SMB test suite.
 
 As shown in the figure above, the state transitions in MS-SMB test suite are implemented as follows:
 
-1.	State variable is initialized to °∞Init°±
-2.	When °∞SmbConnectionRequest°± is called, the state will be transited to °∞ConnectionRequest°±.
-3.	When °∞SmbConnectionResponse°± is returned, the state will be transited to °±ConnectionSuccess°±.
-4.	When °∞ServerSetup°± is called, the state will be transited to °∞SeverSetupRequest°±.
-5.	When °∞ServerSetupResponse°± is returned, the state will be transited to°± ServerSetupSuccess°±.
-6.	When °∞CreateNamePipeAndMailslot°± is called, the state will be transited to °∞CreateNamePipeAndMailslotSuccess°±.
-7.	When °∞NegotiateRequest°± is called, the state will be transited to °∞NegotiateSent°±.
-8.	If °∞NegotiateResponse°± is returned, the state will be transited to °∞NegotiateSuccess°±
-	If °∞ErrorResponse°± is returned, the state will be transited to °∞Closed°±.
-9.	When °∞SessionSetupRequest°± is called, the state will be transited to °∞SessionSetup Success°±.
-10.	If °∞SessionSetupResponse°± is returned, the state will be transited to °∞SessionSetup Success°±.
-	If °∞ErrorResponse°± is returned, the state will be transited to °∞Closed°±.
-11.	When °∞TreeConnectRequest°± is called, the state will be transited to °∞TreeConnectSent°±.
-12.	If °∞TreeConnectResponse°± is returned, the state will be transited to °∞TreeConnectionSuccess°±.
-	If °∞ErrorResponse°± is returned, the state will be transited to °∞Closed°±.
-13.	When the client sends requests for SMB operations, such as sending request for°∞SMB_COM_NT_CREATE_ANDX°±, if the operation succeeds, the state will be returned to °∞TreeConnectionSuccess°±, if the operation is failed, the state will be transited to °∞End°±.
+1.	State variable is initialized to ‚ÄúInit‚Äù
+2.	When ‚ÄúSmbConnectionRequest‚Äù is called, the state will be transited to ‚ÄúConnectionRequest‚Äù.
+3.	When ‚ÄúSmbConnectionResponse‚Äù is returned, the state will be transited to ‚ÄùConnectionSuccess‚Äù.
+4.	When ‚ÄúServerSetup‚Äù is called, the state will be transited to ‚ÄúSeverSetupRequest‚Äù.
+5.	When ‚ÄúServerSetupResponse‚Äù is returned, the state will be transited to‚Äù ServerSetupSuccess‚Äù.
+6.	When ‚ÄúCreateNamePipeAndMailslot‚Äù is called, the state will be transited to ‚ÄúCreateNamePipeAndMailslotSuccess‚Äù.
+7.	When ‚ÄúNegotiateRequest‚Äù is called, the state will be transited to ‚ÄúNegotiateSent‚Äù.
+8.	If ‚ÄúNegotiateResponse‚Äù is returned, the state will be transited to ‚ÄúNegotiateSuccess‚Äù
+	If ‚ÄúErrorResponse‚Äù is returned, the state will be transited to ‚ÄúClosed‚Äù.
+9.	When ‚ÄúSessionSetupRequest‚Äù is called, the state will be transited to ‚ÄúSessionSetup Success‚Äù.
+10.	If ‚ÄúSessionSetupResponse‚Äù is returned, the state will be transited to ‚ÄúSessionSetup Success‚Äù.
+	If ‚ÄúErrorResponse‚Äù is returned, the state will be transited to ‚ÄúClosed‚Äù.
+11.	When ‚ÄúTreeConnectRequest‚Äù is called, the state will be transited to ‚ÄúTreeConnectSent‚Äù.
+12.	If ‚ÄúTreeConnectResponse‚Äù is returned, the state will be transited to ‚ÄúTreeConnectionSuccess‚Äù.
+	If ‚ÄúErrorResponse‚Äù is returned, the state will be transited to ‚ÄúClosed‚Äù.
+13.	When the client sends requests for SMB operations, such as sending request for‚ÄúSMB_COM_NT_CREATE_ANDX‚Äù, if the operation succeeds, the state will be returned to ‚ÄúTreeConnectionSuccess‚Äù, if the operation is failed, the state will be transited to ‚ÄúEnd‚Äù.
 
 __The Principle of Scenario Machine Design__
 
@@ -700,13 +700,19 @@ machine NoSignInvalidTokenTraditional_Model_Win7_Win2K8R2() : Main
 	NegotiateResponse;
 	SessionSetupRequest;
 	SessionSetupResponse;
-	TreeConnectRequest;
-	TreeConnectResponse;
-	CreateRequest;
-	CreateResponse;
-	WriteRequest;
-	(WriteResponse|(ErrorWriteResponse;SessionClose*));
+    TreeConnectRequest;
+    TreeConnectResponse;
+    CreateRequest;
+    CreateResponse;
+	(
+    Trans2FindFirst2RequestInvalidDirectoryToken|
+    Trans2FindFirst2RequestInvalidFileToken
+    );
+    ErrorResponse;
+    SessionClose*;
 ) 
+|| NoSignInvalidTokenTraditional_Win7_Win2K8R2
+}
 ```
 
 ### <a name="3.2"/>3.2	Test Cases 
@@ -772,32 +778,32 @@ __Description__|The test case is to test the requirements that the client sets t
 __Prerequisites__|There is a share in the sever side.
 __Scenario__ |SMB_S08_Ignore
 __Test Execution Steps__|1.	Execute all common steps. 
-|2.	The client sends a SMB_COM_NT_CREATE_ANDX request to open a directory:
-|-	CreateDisposition field set to FILE_OPEN.
-|-	Other fields set according to TD.
-|3.	The server returns a successful SMB_COM_NT_CREATE_ANDX response.
-|4.	The client sends a TRANS2_FIND_FIRST2 request to retrieve an enumeration of files.
-|-	The bits unlisted in TD 2.2.1.2.2 of SearchAttributes field set to 0.
-|-	The Reserved bit in SearchAttributes field set to 0.
-|-	InformationLevel field set to SMB_INFO_STANDARD.
-|-	Other fields set according to TD.
-|5.	The server returns a successful TRANS2_FIND_FIRST2 response.
-|6.	The client sends a TRANS2_FIND_NEXT2 request to continue the file enumeration.
-|-	InformationLevel field set to SMB_INFO_STANDARD.
-|-	Other fields set according to TD.
-|7.	The server returns a successful TRANS2_FIND_NEXT2 response.
-|8.	The client sends a TRANS2_FIND_FIRST2 request to retrieve an enumeration of files again under the directory.
-|-	The bits unlisted in TD 2.2.1.2.2 of SearchAttributes field set to 1.
-|-	The Reserved bit in SearchAttributes field set to 1.
-|-	InformationLevel field set to SMB_INFO_STANDARD.
-|-	Other fields set according to TD and the same with step 4.
-|9.	The server returns a successful TRANS2_FIND_FIRST2 response.
-|10.	The client sends a TRANS2_FIND_NEXT2 request to continue the file enumeration.
-|-	InformationLevel field set to SMB_INFO_STANDARD.
-|-	Other fields set according to TD.
-|11.	The server returns a successful TRANS2_FIND_NEXT2 response.
-|12.	Compare the responses in step 7 and step 11, if they are the same, verify R109033 and R109056.
-|13.	Disconnect the tree, session and connection.
+ |2.	The client sends a SMB_COM_NT_CREATE_ANDX request to open a directory:
+ |-	CreateDisposition field set to FILE_OPEN.
+ |-	Other fields set according to TD.
+ |3.	The server returns a successful SMB_COM_NT_CREATE_ANDX response.
+ |4.	The client sends a TRANS2_FIND_FIRST2 request to retrieve an enumeration of files.
+ |-	The bits unlisted in TD 2.2.1.2.2 of SearchAttributes field set to 0.
+ |-	The Reserved bit in SearchAttributes field set to 0.
+ |-	InformationLevel field set to SMB_INFO_STANDARD.
+ |-	Other fields set according to TD.
+ |5.	The server returns a successful TRANS2_FIND_FIRST2 response.
+ |6.	The client sends a TRANS2_FIND_NEXT2 request to continue the file enumeration.
+ |-	InformationLevel field set to SMB_INFO_STANDARD.
+ |-	Other fields set according to TD.
+ |7.	The server returns a successful TRANS2_FIND_NEXT2 response.
+ |8.	The client sends a TRANS2_FIND_FIRST2 request to retrieve an enumeration of files again under the directory.
+ |-	The bits unlisted in TD 2.2.1.2.2 of SearchAttributes field set to 1.
+ |-	The Reserved bit in SearchAttributes field set to 1.
+ |-	InformationLevel field set to SMB_INFO_STANDARD.
+ |-	Other fields set according to TD and the same with step 4.
+ |9.	The server returns a successful TRANS2_FIND_FIRST2 response.
+ |10.	The client sends a TRANS2_FIND_NEXT2 request to continue the file enumeration.
+ |-	InformationLevel field set to SMB_INFO_STANDARD.
+ |-	Other fields set according to TD.
+ |11.	The server returns a successful TRANS2_FIND_NEXT2 response.
+ |12.	Compare the responses in step 7 and step 11, if they are the same, verify R109033 and R109056.
+ |13.	Disconnect the tree, session and connection.
 __Cleanup__                 |N/A
 
 
@@ -808,20 +814,20 @@ __Description__ |The test case is to test the requirements that the client sets 
 __Prerequisites__|There is a share in the sever side.
 __Scenario__|SMB_S08_Ignore
 __Test Execution Steps__|1.	The client sends a SMB_COM_NEGOTIATE request to server to initiate an SMB session between the client and the server.
-|-	Unused bits in Flags2 field set to 0.
-|-	SMB_FLAGS2_SMB_SECURITY_SIGNATURE_REQUIRED bit in Flags2 field set to 0.
-|-	Other fields set according to TD.
-|2.	The server replies a successful SMB_COM_NEGOTIATE response.
-|3.	Disconnect.
-|4.	The client sends a SMB_COM_NEGOTIATE request again to server to initiate an SMB session between the client and the server.
-|-	Unused bits in Flags2 field set to 1.
-|-	SMB_FLAGS2_SMB_SECURITY_SIGNATURE_REQUIRED bit in Flags2 field set to 1.
-|-	Other fields set according to TD and the same with step 1.
-|5.	The server replies a successful SMB_COM_NEGOTIATE response.
-|6.	Check the follows:
-|-	Compare all the fields of the responses in step 2 and step 5 except for unused bits in Flags2, if they are the same, verify R5277 and R5298.
-|-	Compare the value in Unused bits in Flags2 of the client request and the server response, if they are the same, verify R108.
-|7.	Disconnect
+ |-	Unused bits in Flags2 field set to 0.
+ |-	SMB_FLAGS2_SMB_SECURITY_SIGNATURE_REQUIRED bit in Flags2 field set to 0.
+ |-	Other fields set according to TD.
+ |2.	The server replies a successful SMB_COM_NEGOTIATE response.
+ |3.	Disconnect.
+ |4.	The client sends a SMB_COM_NEGOTIATE request again to server to initiate an SMB session between the client and the  server.
+ |-	Unused bits in Flags2 field set to 1.
+ |-	SMB_FLAGS2_SMB_SECURITY_SIGNATURE_REQUIRED bit in Flags2 field set to 1.
+ |-	Other fields set according to TD and the same with step 1.
+ |5.	The server replies a successful SMB_COM_NEGOTIATE response.
+ |6.	Check the follows:
+ |-	Compare all the fields of the responses in step 2 and step 5 except for unused bits in Flags2, if they are the same, verify R5277 and R5298.
+ |-	Compare the value in Unused bits in Flags2 of the client request and the server response, if they are the same,  verify R108.
+ |7.	Disconnect
 __Cleanup__|N/A
 
 
@@ -832,16 +838,16 @@ __Description__|The test case is to test the requirements that the client sets t
 __Prerequisites__|There is a share in the sever side.
 __Scenario__|SMB_S08_Ignore
 __Test Execution Steps__|1.	Execute Common Step 1~6.
-|2.	The client sends a SMB_COM_NT_CREATE_ANDX request to create a file:
-|-	The bits not listed in TD 2.2.4.7.1 of Flags field set to 0.
-|-	Other fields set according to TD.
-|3.	The server returns a successful SMB_COM_NT_CREATE_ANDX response.
-|4.	The client sends a SMB_COM_NT_CREATE_ANDX request to open the file in step 2.
-|-	The bits not listed in TD 2.2.4.7.1 of Flags field set to 1.
-|-	Other fields set according to TD and the same with step 2.
-|5.	The server returns a successful SMB_COM_NT_CREATE_ANDX response.
-|6.	Compare the responses in step 3 and step 5, if they are the same, verify R5596.
-|7.	Disconnect the tree, session and connection.
+ |2.	The client sends a SMB_COM_NT_CREATE_ANDX request to create a file:
+ |-	The bits not listed in TD 2.2.4.7.1 of Flags field set to 0.
+ |-	Other fields set according to TD.
+ |3.	The server returns a successful SMB_COM_NT_CREATE_ANDX response.
+ |4.	The client sends a SMB_COM_NT_CREATE_ANDX request to open the file in step 2.
+ |-	The bits not listed in TD 2.2.4.7.1 of Flags field set to 1.
+ |-	Other fields set according to TD and the same with step 2.
+ |5.	The server returns a successful SMB_COM_NT_CREATE_ANDX response.
+ |6.	Compare the responses in step 3 and step 5, if they are the same, verify R5596.
+ |7.	Disconnect the tree, session and connection.
 __Cleanup__|N/A
 
 
@@ -852,16 +858,16 @@ __Description__|The test case is to test the requirements that the client sets t
 __Prerequisites__|There is a share in the sever side.
 __Scenario__|SMB_S08_Ignore
 __Test Execution Steps__|1.	Execute Common Step 1~6.
-|2.	The client sends a SMB_COM_NT_CREATE_ANDX request to create a file:
-|-	The bits not listed in TD 2.2.4.7.1 of Flags field set to 0.
-|-	Other fields set according to TD.
-|3.	The server returns a successful SMB_COM_NT_CREATE_ANDX response.
-|4.	The client sends a SMB_COM_NT_CREATE_ANDX request to open the file in step 2.
-|-	The bits not listed in TD 2.2.4.7.1 of Flags field set to 1.
-|-	Other fields set according to TD and the same with step 2.
-|5.	The server returns a successful SMB_COM_NT_CREATE_ANDX response.
-|6.	Compare the responses in step 3 and step 5, if they are the same, verify R5596.
-|7.	Disconnect the tree, session and connection.
+ |2.	The client sends a SMB_COM_NT_CREATE_ANDX request to create a file:
+ |-	The bits not listed in TD 2.2.4.7.1 of Flags field set to 0.
+ |-	Other fields set according to TD.
+ |3.	The server returns a successful SMB_COM_NT_CREATE_ANDX response.
+ |4.	The client sends a SMB_COM_NT_CREATE_ANDX request to open the file in step 2.
+ |-	The bits not listed in TD 2.2.4.7.1 of Flags field set to 1.
+ |-	Other fields set according to TD and the same with step 2.
+ |5.	The server returns a successful SMB_COM_NT_CREATE_ANDX response.
+ |6.	Compare the responses in step 3 and step 5, if they are the same, verify R5596.
+ |7.	Disconnect the tree, session and connection.
 __Cleanup__|N/A
 
 
@@ -872,22 +878,22 @@ __Description__|The test case is to test the requirements that the client sets t
 __Prerequisites__|There is a share in the sever side.
 __Scenario__|SMB_S08_Ignore
 __Test Execution Steps__|1.	Execute all common steps.
-|2.	The client sends a SMB_COM_NT_CREATE_ANDX request to open a file:
-|-	CreateDisposition field set to FILE_OPEN.
-|-	Other fields set according to TD.
-|3.	The server returns a successful SMB_COM_NT_CREATE_ANDX response.
-|4.	The client sends a NT_TRANSACT_QUERY_QUOTA request to query quota information.
-|-	StartSidLength field set to 0.
-|-	StartSidOffset field set to 0.
-|-	Other fields set according to TD.
-|5.	The server returns a successful NT_TRANSACT_QUERY_QUOTA response.
-|6.	The client sends a NT_TRANSACT_QUERY_QUOTA request to again query quota information.
-|-	StartSidLength field set to 0.
-|-	StartSidOffset field set to 1.
-|-	Other fields set according to TD and the same with step 4.
-|7.	The server returns a successful NT_TRANSACT_QUERY_QUOTA response.
-|8.	Compare the responses in step 5 and step 7, if they are the same, verify R109446.
-|9.	Disconnect the tree, session and connection.
+ |2.	The client sends a SMB_COM_NT_CREATE_ANDX request to open a file:
+ |-	CreateDisposition field set to FILE_OPEN.
+ |-	Other fields set according to TD.
+ |3.	The server returns a successful SMB_COM_NT_CREATE_ANDX response.
+ |4.	The client sends a NT_TRANSACT_QUERY_QUOTA request to query quota information.
+ |-	StartSidLength field set to 0.
+ |-	StartSidOffset field set to 0.
+ |-	Other fields set according to TD.
+ |5.	The server returns a successful NT_TRANSACT_QUERY_QUOTA response.
+ |6.	The client sends a NT_TRANSACT_QUERY_QUOTA request to again query quota information.
+ |-	StartSidLength field set to 0.
+ |-	StartSidOffset field set to 1.
+ |-	Other fields set according to TD and the same with step 4.
+ |7.	The server returns a successful NT_TRANSACT_QUERY_QUOTA response.
+ |8.	Compare the responses in step 5 and step 7, if they are the same, verify R109446.
+ |9.	Disconnect the tree, session and connection.
 __Cleanup__|N/A
 
 <empty>  |<empty>  
@@ -897,22 +903,22 @@ __Description__|The test case is to test the requirements that the client sets t
 __Prerequisites__|There is a share in the sever side.
 __Scenario__|SMB_S08_Ignore
 __Test Execution Steps__|1.	Execute all Common steps.
-|2.	The client sends a SMB_COM_NT_CREATE_ANDX request to create a named pipe.
-|-	CreateDisposition field set to FILE_OPEN_IF.
-|-	Other fields set according to TD.
-|3.	The server returns a successful SMB_COM_NT_CREATE_ANDX response.
-|4.	The client sends a TRANS2_SET_FILE_INFORMATION request to open the named pipe.
-|-	InformationLevel field set to FILE_LINK_INFORMATION.
-|-	Reserved field in FILE_LINK_INFORMATION structure set to 0
-|-	Other fields set according to TD.
-|5.	The server returns a successful TRANS2_SET_FILE_INFORMATION response.
-|6.	The client sends a TRANS2_SET_FILE_INFORMATION request to open the named pipe.
-|-	InformationLevel field set to FILE_LINK_INFORMATION.
-|-	Reserved field in FILE_LINK_INFORMATION structure set to 0
-|-	Other fields set according to TD.
-|7.	The server returns a successful TRANS2_SET_FILE_INFORMATION response.
-|8.	Compare the responses in step 5 and step 7, if they are the same, verify R109590.
-|9.	Disconnect the tree, session and connection.
+ |2.	The client sends a SMB_COM_NT_CREATE_ANDX request to create a named pipe.
+ |-	CreateDisposition field set to FILE_OPEN_IF.
+ |-	Other fields set according to TD.
+ |3.	The server returns a successful SMB_COM_NT_CREATE_ANDX response.
+ |4.	The client sends a TRANS2_SET_FILE_INFORMATION request to open the named pipe.
+ |-	InformationLevel field set to FILE_LINK_INFORMATION.
+ |-	Reserved field in FILE_LINK_INFORMATION structure set to 0
+ |-	Other fields set according to TD.
+ |5.	The server returns a successful TRANS2_SET_FILE_INFORMATION response.
+ |6.	The client sends a TRANS2_SET_FILE_INFORMATION request to open the named pipe.
+ |-	InformationLevel field set to FILE_LINK_INFORMATION.
+ |-	Reserved field in FILE_LINK_INFORMATION structure set to 0
+ |-	Other fields set according to TD.
+ |7.	The server returns a successful TRANS2_SET_FILE_INFORMATION response.
+ |8.	Compare the responses in step 5 and step 7, if they are the same, verify R109590.
+ |9.	Disconnect the tree, session and connection.
 __Cleanup__|N/A
 
 
@@ -923,19 +929,19 @@ __Description__|The test case is to test the requirements that the client Sends 
 __Prerequisites__|There is a share in the sever side.
 __Scenario__|N/A
 __Test Execution Steps__|1.	Execute all common steps.
-|In SMB_COM_SESSION_SETUP_ANDX request, set the Capabilities to 0xC000.
-|2.	The client sends a SMB_COM_NT_CREATE_ANDX request to create a named pipe.
-|-	CreateDisposition field is set to FILE_OPEN_IF.
-|-	CreateOptions field is set to FILE_OPEN_REPARSE_POINT, FILE_SEQUENTIAL_ONLY, and FILE_NON_DIRECTORY_FILE.
-|-	Other fields are set according to the TD.
-|3.	The server returns a successful SMB_COM_NT_CREATE_ANDX response.
-|4.	The client sends a SMB_COM_WRITE_ANDX request to write bytes to a file.
-|5.	The server returns a successful SMB_COM_WRITE_ANDX response.
-|6.	Check the count in the SmbParameters of the response, to verify requirement 9207.
-|7.	The client sends a SMB_COM_READ_ANDX request to query quota information.
-|8.	The server returns a successful SMB_COM_READ_ANDX response.
-|9.	Check the ByteCount in the SmbData of the response, to verify requirements R9957, R5402, R206932, and R106932.
-|10.	Disconnect the tree, session and connection.
+ |In SMB_COM_SESSION_SETUP_ANDX request, set the Capabilities to 0xC000.
+ |2.	The client sends a SMB_COM_NT_CREATE_ANDX request to create a named pipe.
+ |-	CreateDisposition field is set to FILE_OPEN_IF.
+ |-	CreateOptions field is set to FILE_OPEN_REPARSE_POINT, FILE_SEQUENTIAL_ONLY, and FILE_NON_DIRECTORY_FILE.
+ |-	Other fields are set according to the TD.
+ |3.	The server returns a successful SMB_COM_NT_CREATE_ANDX response.
+ |4.	The client sends a SMB_COM_WRITE_ANDX request to write bytes to a file.
+ |5.	The server returns a successful SMB_COM_WRITE_ANDX response.
+ |6.	Check the count in the SmbParameters of the response, to verify requirement 9207.
+ |7.	The client sends a SMB_COM_READ_ANDX request to query quota information.
+ |8.	The server returns a successful SMB_COM_READ_ANDX response.
+ |9.	Check the ByteCount in the SmbData of the response, to verify requirements R9957, R5402, R206932, and R106932.
+ |10.	Disconnect the tree, session and connection.
 __Cleanup__|N/A
 
 
@@ -946,20 +952,20 @@ __Description__|The test case is to test the requirements that the client sets t
 __Prerequisites__|There is a tree connect with specified TID in the SMB header of the request.
 __Scenario__|N/A
 __Test Execution Steps__|1.	Execute all common steps.
-|2.	The client sends a SMB_COM_NT_CREATE_ANDX request to create a named pipe.
-|- CreateDisposition field is set to FILE_OPEN_IF.
-|- FILE_WRITE_THROUGH, FILE_SYNCHRONOUS_IO_ALERT bits of CreateOptions field is set to 0.
-|- FILE_SYNCHRONOUS_IO_NONALERT bit of CreateOptions field is set to 1.
-|- Other fields are set according to the TD.
-|3.	The server returns a successful SMB_COM_NT_CREATE_ANDX response.
-|4.	The client sends a NT_TRANSACT_QUERY_QUOTA request to query quota information from a server.
-|- SidListLength filed is set to 0.
-|- StartSidLength field is set to 0.
-|- StartSidOffset field is set to 90.
-|- Other fields are set according to the TD.
-|5.	The server returns a successful NT_TRANSACT_QUERY_QUOTA response.
-|6.	Check the Flags field in the SMB header of NT_TRANSACT_QUERY_QUOTA request, if it contains TREE_CONNECT_ANDX_DISCONNECT_TID bit, then verify the requirement 10357.
-|7.	Disconnect the connection.
+ |2.	The client sends a SMB_COM_NT_CREATE_ANDX request to create a named pipe.
+ |- CreateDisposition field is set to FILE_OPEN_IF.
+ |- FILE_WRITE_THROUGH, FILE_SYNCHRONOUS_IO_ALERT bits of CreateOptions field is set to 0.
+ |- FILE_SYNCHRONOUS_IO_NONALERT bit of CreateOptions field is set to 1.
+ |- Other fields are set according to the TD.
+ |3.	The server returns a successful SMB_COM_NT_CREATE_ANDX response.
+ |4.	The client sends a NT_TRANSACT_QUERY_QUOTA request to query quota information from a server.
+ |- SidListLength filed is set to 0.
+ |- StartSidLength field is set to 0.
+ |- StartSidOffset field is set to 90.
+ |- Other fields are set according to the TD.
+ |5.	The server returns a successful NT_TRANSACT_QUERY_QUOTA response.
+ |6.	Check the Flags field in the SMB header of NT_TRANSACT_QUERY_QUOTA request, if it contains  TREE_CONNECT_ANDX_DISCONNECT_TID bit, then verify the requirement 10357.
+ |7.	Disconnect the connection.
 __Cleanup__|N/A
 
 ### <a name="3.3"/>3.3	Adapter Design
