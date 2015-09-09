@@ -41,7 +41,7 @@ Server Message Block (SMB) Protocol supports the sharing of files, print service
 It defines extensions to the existing Common Internet File System (CIFS), and extends the CIFS with additional security, file, and disk management support. 
 These extensions introduce new structures, new information levels, and extensions of CIFS request and response messages.
 
-![](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/master/TestSuites/MS-SMB/docs/images/share.png) 
+![](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/master/TestSuites/MS-SMB/docs/images/sharetype.png) 
 
 The SMB Protocol provides support for the following features:
 
@@ -231,7 +231,8 @@ SMB NT Transaction Operations (5 operations)	|NT_TRANSACT_QUERY_QUOTA
 	|FSCTL_SRV_COPYCHUNK
 
 * The test suite is designed to cover all the requirements of MS-SMB on a generic file system. 
-* The test suite is going to test requirements of [MS-FSCC] (File System Control Codes) that are related to [MS-SMB].
+* The test suite is going to test requirements of [MS-FSCC] that are related to [MS-SMB].
+
 	__Further explanation__
 	
 	[MS-FSCC] provides the information of structures and flags related to file system. The test suite will verify structures and flags of [MS-FSCC] that are documented explicitly in or referenced by [MS-SMB]. 
@@ -425,111 +426,111 @@ No.	|Name	|Machine	|Covered Operation
 ----|-------|-----------|-----------------
 1	|Windows 7--Windows Server 2008	|…	|…
 	|	|NoSignSET_QUERY_PATHModelProgram_Win7_Win2K8	|SmbConnectionResponse
-|||ServerSetup
-|||NegotiateRequest
-|||SessionSetupRequest
-|||TreeConnectRequest
-|||CreateRequest
-|||Trans2SetPathInfoRequest
-|||Trans2QueryPathInfoRequest
-	||	NoSignSET_QUERY_PATH_Win7_Win2K8	|SmbConnectionRequest
-|||SmbConnectionResponse
-|||ServerSetup
-|||ServerSetupResponse
-|||CreatePipeAndMailslot
-|||NegotiateRequest
-|||NegotiateResponse
-|||SessionSetupRequest
-|||SessionSetupResponse
-|||TreeConnectRequest
-|||TreeConnectResponse
-|||CreateRequest
-|||CreateResponse CheckPreviousVersion
-|||Trans2SetPathInfoRequest
-|||Trans2SetPathInfoResponse
-|||Trans2QueryPathInfoRequest
-|||Trans2QueryPathInfoResponse
-	||	…	|…
+ | | |ServerSetup
+ | | |NegotiateRequest
+ | | |SessionSetupRequest
+ | | |TreeConnectRequest
+ | | |CreateRequest
+ | | |Trans2SetPathInfoRequest
+ | | |Trans2QueryPathInfoRequest
+	| |	NoSignSET_QUERY_PATH_Win7_Win2K8	|SmbConnectionRequest
+ | | |SmbConnectionResponse
+ | | |ServerSetup
+ | | |ServerSetupResponse
+ | | |CreatePipeAndMailslot
+ | | |NegotiateRequest
+ | | |NegotiateResponse
+ | | |SessionSetupRequest
+ | | |SessionSetupResponse
+ | | |TreeConnectRequest
+ | | |TreeConnectResponse
+ | | |CreateRequest
+ | | |CreateResponse CheckPreviousVersion
+ | | |Trans2SetPathInfoRequest
+ | | |Trans2SetPathInfoResponse
+ | | |Trans2QueryPathInfoRequest
+ | | |Trans2QueryPathInfoResponse
+	| |	…	|…
 2	|Windows 7--Windows Server 2008 R2	|…	|…
 	|	|SET_QUERY_FILEModelProgram_Win7_Win2K8R2	|SmbConnectionResponse
-|||ServerSetup
-|||NegotiateRequest
-|||SessionSetupRequest
-|||TreeConnectRequest
-|||CreateRequest
-|||Trans2SetFileInfoRequest
-|||Trans2QueryFileInfoRequest
+ | | |ServerSetup
+ | | |NegotiateRequest
+ | | |SessionSetupRequest
+ | | |TreeConnectRequest
+ | | |CreateRequest
+ | | |Trans2SetFileInfoRequest
+ | | |Trans2QueryFileInfoRequest
 	|	|SET_QUERY_FILE_Win7_Win2K8R2	|SmbConnectionRequest
-|||SmbConnectionResponse
-|||ServerSetup
-|||ServerSetupResponse
-|||CreatePipeAndMailslot
-|||NegotiateRequest
-|||NegotiateResponse
-|||SessionSetupRequest
-|||SessionSetupResponse
-|||TreeConnectRequest
-|||TreeConnectResponse
-|||CreateRequest
-|||CreateResponse
-|||Trans2SetFileInfoRequest
-|||Trans2SetFileInfoResponse
-|||Trans2QueryFileInfoRequest
-|||Trans2QueryFileInfoResponse
-|||Trans2QueryFileInfoRequest
-|||Trans2QueryFileInfoResponse
+ | | |SmbConnectionResponse
+ | | |ServerSetup
+ | | |ServerSetupResponse
+ | | |CreatePipeAndMailslot
+ | | |NegotiateRequest
+ | | |NegotiateResponse
+ | | |SessionSetupRequest
+ | | |SessionSetupResponse
+ | | |TreeConnectRequest
+ | | |TreeConnectResponse
+ | | |CreateRequest
+ | | |CreateResponse
+ | | |Trans2SetFileInfoRequest
+ | | |Trans2SetFileInfoResponse
+ | | |Trans2QueryFileInfoRequest
+ | | |Trans2QueryFileInfoResponse
+ | | |Trans2QueryFileInfoRequest
+ | | |Trans2QueryFileInfoResponse
 	|	|…	|…
 3	|Windows Vista --Windows Server 2008	|…	|…
 	|	|NoSignSET_QUERY_FILEModelProgram_WinVista_Win2K8_InvalidLevel	|SmbConnectionResponse
-|||ServerSetup
-|||NegotiateRequest
-|||SessionSetupRequest
-|||TreeConnectRequest
-|||CreateRequest
-|||Trans2QueryFileInfoRequest
+ | | |ServerSetup
+ | | |NegotiateRequest
+ | | |SessionSetupRequest
+ | | |TreeConnectRequest
+ | | |CreateRequest
+ | | |Trans2QueryFileInfoRequest
 	|	|NoSignSET_QUERY_FILE_WinVista_Win2K8_InvalidLevel	|SmbConnectionRequest
-|||SmbConnectionResponse
-|||ServerSetup
-|||ServerSetupResponse
-|||CreatePipeAndMailslot
-|||NegotiateRequest
-|||NegotiateResponse
-|||SessionSetupRequest
-|||SessionSetupResponse
-|||TreeConnectRequest
-|||TreeConnectResponse
-|||CreateRequest
-|||CreateResponse
-|||Trans2QueryFileInfoRequest
+ | | |SmbConnectionResponse
+ | | |ServerSetup
+ | | |ServerSetupResponse
+ | | |CreatePipeAndMailslot
+ | | |NegotiateRequest
+ | | |NegotiateResponse
+ | | |SessionSetupRequest
+ | | |SessionSetupResponse
+ | | |TreeConnectRequest
+ | | |TreeConnectResponse
+ | | |CreateRequest
+ | | |CreateResponse
+ | | |Trans2QueryFileInfoRequest
 	|	|…	|…
 4	|Windows Vista --Windows Server 2008 R2	|…	|…
 	|	|SET_QUERY_FILEModelProgram_WinVista_Win2K8R2	|SmbConnectionResponse
-|||ServerSetup
-|||NegotiateRequest
-|||SessionSetupRequest
-|||TreeConnectRequest
-|||CreateRequest
-|||Trans2SetFileInfoRequest
-|||Trans2QueryFileInfoRequest
+ | | |ServerSetup
+ | | |NegotiateRequest
+ | | |SessionSetupRequest
+ | | |TreeConnectRequest
+ | | |CreateRequest
+ | | |Trans2SetFileInfoRequest
+ | | |Trans2QueryFileInfoRequest
 	|	|SET_QUERY_FILE_WinVista_Win2K8R2	|SmbConnectionRequest
-|||SmbConnectionResponse
-|||ServerSetup
-|||ServerSetupResponse
-|||CreatePipeAndMailslot
-|||NegotiateRequest
-|||NegotiateResponse
-|||SessionSetupRequest
-|||SessionSetupResponse
-|||TreeConnectRequest
-|||TreeConnectResponse
-|||CreateRequest
-|||CreateResponse
-|||Trans2SetFileInfoRequest
-|||Trans2SetFileInfoResponse
-|||Trans2QueryFileInfoRequest
-|||Trans2QueryFileInfoResponse
-|||Trans2QueryFileInfoRequest
-|||Trans2QueryFileInfoResponse
+ | | |SmbConnectionResponse
+ | | |ServerSetup
+ | | |ServerSetupResponse
+ | | |CreatePipeAndMailslot
+ | | |NegotiateRequest
+ | | |NegotiateResponse
+ | | |SessionSetupRequest
+ | | |SessionSetupResponse
+ | | |TreeConnectRequest
+ | | |TreeConnectResponse
+ | | |CreateRequest
+ | | |CreateResponse
+ | | |Trans2SetFileInfoRequest
+ | | |Trans2SetFileInfoResponse
+ | | |Trans2QueryFileInfoRequest
+ | | |Trans2QueryFileInfoResponse
+ | | |Trans2QueryFileInfoRequest
+ | | |Trans2QueryFileInfoResponse
 	|	|…	|…
 
 Common Steps:
