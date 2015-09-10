@@ -147,7 +147,7 @@ The minimum requirements for the driver computer are as follows.
 
 * __[Protocol Test Framework](https://github.com/microsoft/protocoltestframework)__
 
-	You can use a released package or build a installer package of Protocol Test Framework from source code.
+    You can use a released package or build a installer package of Protocol Test Framework from source code.
 
 * __Windows PowerShell 3.0__
 
@@ -155,7 +155,7 @@ The minimum requirements for the driver computer are as follows.
 
 * __Microsoft Message Analyzer__
 
-	You can download the latest Message Analyzer from below website. 
+    You can download the latest Message Analyzer from below website. 
     
     [http://connect.microsoft.com/site216](http://connect.microsoft.com/site216)
 
@@ -216,9 +216,7 @@ To check the connection from the driver computer
 2.  Click the Start button, and then click Run. 
 3.  In the Run dialog box, type cmd and then click OK.
 4.  At the command prompt, type ping followed by the hostname or IP address of the SUT, and then press Enter. The following example checks the connection to a SUT named "SUT01":
-
 		> ping SUT01
-		
 5.  Repeat these steps until you confirm connectivity between all computers in the test environment.
 
 Do not proceed with the configuration of the test suite until connectivity is confirmed. Any issues with network connectivity must be resolved before you configure the test suite.
@@ -252,7 +250,8 @@ This section describes how to set up the driver computer.
 
 ![](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/master/TestSuites/MS-SMB/docs/images/important.png) Important
 
-	Microsoft Visual Studio 2012, Protocol Test Framework, and Spec Explorer must be installed on the driver computer before you run the test suite installer.
+	Microsoft Visual Studio 2012, Protocol Test Framework, and Spec Explorer must be installed on the driver computer
+	before you run the test suite installer.
 		
 __To set up the driver computer__
 
@@ -290,9 +289,9 @@ File or Folder|	Description
 --------------|-------------
 Batch|Command files you can use to run individual test cases or all test cases.
 Bin|Test suite binaries and configuration files.
-Docs|__[MS-SMB].pdf__ ¨C The version of the technical document that this test suite is based on. 
-    |__MS-SMB_ServerUserGuide.md__ ¨C A user guide that explains how to install and configure the driver computer, the SUT and the DC, as well as how to run test cases. 
-    |__MS-SMB_ServerTestDesignSpecification.md__ ¨C An overview document containing conceptual information about a protocol including probable use, relationships to other protocols, message flow, state diagrams, a short list of properties, and a test approach describing justification and adapter approach.
+Docs|__[MS-SMB].pdf__ Â¨C The version of the technical document that this test suite is based on. 
+    |__MS-SMB_ServerUserGuide.md__ Â¨C A user guide that explains how to install and configure the driver computer, the SUT and the DC, as well as how to run test cases. 
+    |__MS-SMB_ServerTestDesignSpecification.md__ Â¨C An overview document containing conceptual information about a protocol including probable use, relationships to other protocols, message flow, state diagrams, a short list of properties, and a test approach describing justification and adapter approach.
 Scripts   |Scripts that are used to set up and configure the driver computer and the Windows-based SUT, and the Windows-based DC.
 LICENSE.rtf|The End User License Agreement.
 
@@ -318,7 +317,8 @@ For general information about configuring computers that are not based on Window
 
 ![](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/master/TestSuites/MS-SMB/docs/images/note.png) Note
 
-	For domain environment, add the driver computer and SUT to the existing domain that is created on the DC before starting to configure Windows-based Computers.
+	For domain environment, add the driver computer and SUT to the existing domain that is created on the DC 
+	before starting to configure Windows-based Computers.
 	
 ### <a name="7.1.1"/>Configure the Driver Computer
 
@@ -341,7 +341,6 @@ __To configure the driver computer__
     userNameInVM| The local administrator account that is used to log on to the VMs. The default value is "administrator".
     userPwdInVM| The password that is used to log on to the local administrator account. The default value is "Password01!"
     workgroupDomain| The test environment. If it is in domain environment, set the value to "Domain"; if it is in workgroup environment, set the value to "Workgroup". The default value is "Domain".
-
 4.	Start Windows? PowerShell? by right-clicking on the Windows PowerShell icon, and then click Run as Administrator or, from a Windows PowerShell command window, type:
 Start-process powershell -verb runAs
 5.	At the command prompt, type Set-ExecutionPolicy Unrestricted -F, and press Enter.
@@ -369,7 +368,6 @@ __To configure the SUT__
     userNameInVM| The local administrator account that is used to log on to the VMs. The default value is "administrator".
     userPwdInVM| The password that is used to log on to the local administrator account. The default value is "Password01!"
     workgroupDomain| The test environment. If it is in domain environment, set the value to "Domain"; if it is in workgroup environment, set the value to "Workgroup". The default value is "Domain".
-
 4.	Start Windows PowerShell by right-clicking on the Windows PowerShell icon, and then click Run as Administrator or, from a Windows PowerShell command window, type:
 	Start-process powershell -verb runAs
 5.	At the command prompt, type Set-ExecutionPolicy Unrestricted -F, and press __Enter__.
