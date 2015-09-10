@@ -67,7 +67,8 @@ This section describes the requirements for the test environment that are used t
 
 ![](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/master/TestSuites/MS-SMB/docs/images/note.png) Note
 
-	The requirements in this section apply only to the Windows-based computers in the test environment. Note that the driver computer must use a Windows-based operating system.
+	The requirements in this section apply only to the Windows-based computers in the test environment. 
+	Note that the driver computer must use a Windows-based operating system.
 	
 ![](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/master/TestSuites/MS-SMB/docs/images/note.png) Note
 
@@ -250,8 +251,8 @@ This section describes how to set up the driver computer.
 
 ![](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/master/TestSuites/MS-SMB/docs/images/important.png) Important
 
-	Microsoft Visual Studio 2012, Protocol Test Framework, and Spec Explorer must be installed on the driver computer
-	before you run the test suite installer.
+	Microsoft Visual Studio 2012, Protocol Test Framework, and Spec Explorer must be installed on the driver 
+	computer before you run the test suite installer.
 		
 __To set up the driver computer__
 
@@ -329,7 +330,6 @@ __To configure the driver computer__
 1.	Log on to the driver computer as domain administrator for domain environment; log on as local administrator for workgroup environment. 
 2.	Go to C:\MicrosoftProtocolTests\MS-SMB\Server-Endpoint\<version#>\Scripts, and open the ParamConfig.xml file.
 3.	Edit the properties as shown in the following table.
-
     Property	|Description
     ------------|-------------
     domainInVM|	The domain Name, the value will be ignored in Workgroup test environment. The default value is "contoso.com"
@@ -356,7 +356,6 @@ __To configure the SUT__
 1.	Log on to the SUT as domain administrator for domain environment; log on as local administrator for workgroup environment.
 2.	Go to C:\MicrosoftProtocolTests\MS-SMB\Server-Endpoint\<version#>\Scripts, and open the ParamConfig.xml file. 
 3.	Edit the properties as shown in the following table.
-
     Property| Description
     --------|-------------
     domainInVM|	The domain Name, the value will be ignored in Workgroup test environment. The default value is "contoso.com"
