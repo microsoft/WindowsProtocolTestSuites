@@ -217,6 +217,7 @@ To check the connection from the driver computer
 2.  Click the Start button, and then click Run. 
 3.  In the Run dialog box, type cmd and then click OK.
 4.  At the command prompt, type ping followed by the hostname or IP address of the SUT, and then press Enter. The following example checks the connection to a SUT named "SUT01":
+
 		> ping SUT01
 5.  Repeat these steps until you confirm connectivity between all computers in the test environment.
 
@@ -330,6 +331,7 @@ __To configure the driver computer__
 1.	Log on to the driver computer as domain administrator for domain environment; log on as local administrator for workgroup environment. 
 2.	Go to C:\MicrosoftProtocolTests\MS-SMB\Server-Endpoint\<version#>\Scripts, and open the ParamConfig.xml file.
 3.	Edit the properties as shown in the following table.
+
     Property	|Description
     ------------|-------------
     domainInVM|	The domain Name, the value will be ignored in Workgroup test environment. The default value is "contoso.com"
@@ -356,6 +358,7 @@ __To configure the SUT__
 1.	Log on to the SUT as domain administrator for domain environment; log on as local administrator for workgroup environment.
 2.	Go to C:\MicrosoftProtocolTests\MS-SMB\Server-Endpoint\<version#>\Scripts, and open the ParamConfig.xml file. 
 3.	Edit the properties as shown in the following table.
+
     Property| Description
     --------|-------------
     domainInVM|	The domain Name, the value will be ignored in Workgroup test environment. The default value is "contoso.com"
