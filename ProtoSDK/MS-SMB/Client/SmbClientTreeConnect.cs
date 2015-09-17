@@ -74,7 +74,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// The MaximalShareAccessRights value as returned in 
         /// the SMB_COM_TREE_CONNECT_ANDX server response (section 2.2.7).
         /// </summary>
-        [CLSCompliant(false)]
         public uint MaximalShareAccessRights
         {
             get
@@ -92,7 +91,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// The GuestMaximalShareAccessRights value as returned in the 
         /// SMB_COM_TREE_CONNECT_ANDX server response (section 2.2.7).
         /// </summary>
-        [CLSCompliant(false)]
         public uint GuestMaximalShareAccessRights
         {
             get

@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
     /// <summary>
     /// the empty packet of nlmp
     /// </summary>
-    [CLSCompliant(false)]
     public class NlmpEmptyPacket : NlmpPacket
     {
         /// <summary>

@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// error packet of fscc, provide a uint status value.
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccErrorPacket : FsccPacket
     {
         #region Properties

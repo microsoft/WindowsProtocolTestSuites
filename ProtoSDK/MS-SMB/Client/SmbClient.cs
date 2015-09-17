@@ -469,7 +469,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <exception cref="InvalidOperationException">
         /// The transport is null for not connected to server. Please invoke Connect() first.
         /// </exception>
-        [CLSCompliant(false)]
         public virtual void SendPacket(SmbPacket smbPacket)
         {
             if (smbPacket == null)
@@ -517,7 +516,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// The transport is null for not connected to server. Please invoke Connect() first.
         /// </exception>
         /// <exception cref="InvalidOperationException">Unknown object received from transport.</exception>
-        [CLSCompliant(false)]
         public virtual SmbPacket ExpectPacket(TimeSpan timeout)
         {
             if (this.transport == null)
@@ -584,7 +582,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <exception cref = "InvalidOperationException">
         /// the packet, at least the first packet must be a batched packet 
         /// </exception>
-        [CLSCompliant(false)]
         public SmbBatchedRequestPacket CreateCompoundedRequestPacket(params SmbPacket[] packets)
         {
             if (packets == null)
@@ -641,7 +638,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <returns>a smb negotiate packet. </returns>
         /// <remarks>the SmbMessageUtils.isMessageSigned will be set, when server response. </remarks>
         /// <exception cref="ArgumentNullException">the dialectName can not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbNegotiateRequestPacket CreateNegotiateRequest(SignState clientSignState, string[] dialectName)
         {
             if (dialectName == null)
@@ -684,7 +680,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "userName">the name of user credential </param>
         /// <param name = "password">the password of user credential </param>
         /// <returns>A session setup packet. </returns>
-        [CLSCompliant(false)]
         public virtual SmbSessionSetupAndxRequestPacket CreateFirstSessionSetupRequest(
             SmbSecurityPackage securityPackage,
             string serverName,
@@ -706,7 +701,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "securityPackage">the package name of security.  </param>
         /// <returns>A session setup packet. </returns>
         /// <exception cref = "ArgumentException">this method only accepts the security package </exception>
-        [CLSCompliant(false)]
         public virtual SmbSessionSetupAndxRequestPacket CreateSecondSessionSetupRequest(
             ushort sessionUid,
             SmbSecurityPackage securityPackage
@@ -732,7 +726,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "userName">the name of user credential </param>
         /// <param name = "password">the password of user credential </param>
         /// <returns>A session setup packet. </returns>
-        [CLSCompliant(false)]
         public virtual SmbSessionSetupImplicitNtlmAndxRequestPacket CreateSessionSetupImplicitNtlmRequest(
             ImplicitNtlmVersion implicitNtlmVersion,
             string domainName,
@@ -768,7 +761,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name="sessionUid">the valid session id, must be same as that of the response to the session setup request. </param>
         /// <param name="path">the share name to treeconnect to server </param>
         /// <returns>a tree connect request packet. </returns>
-        [CLSCompliant(false)]
         public virtual SmbTreeConnectAndxRequestPacket CreateTreeConnectRequest(
             ushort sessionUid,
             string path
@@ -796,7 +788,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name="path">the share name to treeconnect to server </param>
         /// <param name="treeConnectFlags">the option to modify the SMB_COM_TREE_CONNECT_ANDX request.</param>
         /// <returns>a tree connect request packet. </returns>
-        [CLSCompliant(false)]
         public virtual SmbTreeConnectAndxRequestPacket CreateTreeConnectRequest(
             ushort sessionUid,
             string path,
@@ -818,7 +809,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </summary>
         /// <param name = "treeId">the valid tree id to disconnect </param>
         /// <returns>a tree disconnect request packet. </returns>
-        [CLSCompliant(false)]
         public virtual SmbTreeDisconnectRequestPacket CreateTreeDisconnectRequest(
             ushort treeId
             )
@@ -839,7 +829,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </summary>
         /// <param name = "sessionUid">the session id to logoff </param>
         /// <returns>a log off packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbLogoffAndxRequestPacket CreateLogoffRequest(
             ushort sessionUid
             )
@@ -873,7 +862,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// A 32-bit field containing a set of options that specify the security tracking mode. 
         /// </param>
         /// <returns>a create packet </returns>
-        [CLSCompliant(false)]
         public SmbNtCreateAndxRequestPacket CreateCreateRequest(
             ushort treeId,
             string fileName,
@@ -903,7 +891,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </summary>
         /// <param name = "fileId">the id of file to close </param>
         /// <returns>a close request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbCloseRequestPacket CreateCloseRequest(ushort fileId)
         {
             return CreateCloseRequest(this.MessageId,
@@ -928,7 +915,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </param>
         /// <param name = "extFileAttributes">the extend file attributes </param>
         /// <returns>a open request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbOpenAndxRequestPacket CreateOpenRequest(
             ushort treeId,
             string shareName,
@@ -963,7 +949,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </param>
         /// <returns>a write request packet. </returns>
         /// <exception cref="ArgumentException">the data is too large, it must less that or equal to 0xFFFE</exception>
-        [CLSCompliant(false)]
         public SmbWriteAndxRequestPacket CreateWriteRequest(
             ushort fileId,
             uint offset,
@@ -993,7 +978,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <exception cref="ArgumentException">
         /// the data is too large, it must be less that or equal to 0xFFFE
         /// </exception>
-        [CLSCompliant(false)]
         public SmbWriteAndxRequestPacket CreateWriteRequest(
             ushort fileId,
             uint offset,
@@ -1024,7 +1008,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "maxCount">the max count to read </param>
         /// <param name = "offset">the offset to write to file </param>
         /// <returns>a read request packet. </returns>
-        [CLSCompliant(false)]
         public virtual SmbReadAndxRequestPacket CreateReadRequest(
             ushort fileId,
             ushort maxCount,
@@ -1066,7 +1049,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// set to 0 when this message is sent. The server MUST ignore the unused bits when the message is received 
         /// </param>
         /// <returns>a set named pipe state request packet. </returns>
-        [CLSCompliant(false)]
         public virtual SmbTransSetNmpipeStateRequestPacket CreateTransSetNamedPipeStateRequest(
             ushort fileId,
             TransSmbParametersFlags transactOptions,
@@ -1093,7 +1075,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// client MAY set either or both of the following bit flags 
         /// </param>
         /// <returns>a query named pipe request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbTransQueryNmpipeStateRequestPacket CreateTransQueryNamedPipeStateRequest(
             ushort fileId,
             TransSmbParametersFlags transactOptions)
@@ -1121,7 +1102,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// This value MUST be the number of bytes that the client requests to read from the named pipe. 
         /// </param>
         /// <returns>a raw read named pipe request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbTransRawReadNmpipeRequestPacket CreateTransRawReadNamedPipeRequest(
             ushort fileId,
             TransSmbParametersFlags transactOptions,
@@ -1152,7 +1132,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// queried for the pipe. The only supported value is 0x0001. 
         /// </param>
         /// <returns>a query named pipe information request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbTransQueryNmpipeInfoRequestPacket CreateTransQueryNamedPipeInfoRequest(
             ushort fileId,
             TransSmbParametersFlags transactOptions,
@@ -1183,7 +1162,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// request, it MUST be greater than or equal to 0. 
         /// </param>
         /// <returns>a peek named pipe request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbTransPeekNmpipeRequestPacket CreateTransPeekNamedPipeRequest(
             ushort fileId,
             TransSmbParametersFlags transactOptions,
@@ -1216,7 +1194,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// This value MUST be the number of bytes to read from the named pipe as part of the transaction. 
         /// </param>
         /// <returns>a transact named pipe request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbTransTransactNmpipeRequestPacket CreateTransTransactNamedPipeRequest(
             ushort fileId,
             TransSmbParametersFlags transactOptions,
@@ -1245,7 +1222,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </param>
         /// <param name = "maxReadDataCount">The max read data size. </param>
         /// <returns>a read named pipe request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbTransReadNmpipeRequestPacket CreateTransReadNamedPipeRequest(
             ushort fileId,
             TransSmbParametersFlags transactOptions,
@@ -1273,7 +1249,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </param>
         /// <param name = "writeData">The data to write to named pipe. </param>
         /// <returns>a write named pipe request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbTransWriteNmpipeRequestPacket CreateTransWriteNamedPipeRequest(
             ushort fileId,
             TransSmbParametersFlags transactOptions,
@@ -1307,7 +1282,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// supplied identifier that provides a name for the transaction. 
         /// </param>
         /// <returns>a wait named pipe request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbTransWaitNmpipeRequestPacket CreateTransWaitNamedPipeRequest(
             ushort treeId,
             TransSmbParametersFlags transactOptions,
@@ -1343,7 +1317,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// supplied identifier that provides a name for the transaction. 
         /// </param>
         /// <returns>a call named pipe request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbTransCallNmpipeRequestPacket CreateTransCallNamedPipeRequest(
             ushort treeId,
             TransSmbParametersFlags transactOptions,
@@ -1382,7 +1355,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// values. 
         /// </param>
         /// <returns>a write mailslot request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbTransMailslotWriteRequestPacket CreateTransMailslotWriteRequest(
             ushort treeId,
             string mailslotName,
@@ -1438,7 +1410,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// NetPrintJobSetInfoRequest command. This field cannot be present in any other command.
         /// </param>
         /// <returns>a named rap request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbTransRapRequestPacket CreateTransNamedRapRequest(
             ushort treeId,
             TransSmbParametersFlags transactOptions,
@@ -1484,7 +1455,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// This field MUST contain an array of extended file attribute name value pairs. 
         /// </param>
         /// <returns>a query file information request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbTrans2QueryFileInformationRequestPacket CreateTrans2QueryFileInformationRequest(
             ushort fileId,
             Trans2SmbParametersFlags transactOptions,
@@ -1522,7 +1492,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "maxDataCount">The max size to query path information. </param>
         /// <param name = "isReparsePath">If true, the path in the request MUST contain an @GMT token. </param>
         /// <returns>a query path information request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbTrans2QueryPathInformationRequestPacket CreateTrans2QueryPathInformationRequest(
             ushort treeId,
             string fileName,
@@ -1565,7 +1534,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </param>
         /// <param name = "data">the information data to be set. </param>
         /// <returns>a set file information request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbTrans2SetFileInformationRequestPacket CreateTrans2SetFileInformationRequest(
             ushort fileId,
             Trans2SmbParametersFlags transactOptions,
@@ -1601,7 +1569,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "isReparsePath">If true, the path in the request MUST contain an @GMT token. </param>
         /// <param name = "data">the information data to be set. </param>
         /// <returns>a set path information request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbTrans2SetPathInformationRequestPacket CreateTrans2SetPathInformationRequest(
             ushort treeId,
             string fileName,
@@ -1645,7 +1612,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// the client's request. 
         /// </param>
         /// <returns>a query file system information request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbTrans2QueryFsInformationRequestPacket CreateTrans2QueryFileSystemInformationRequest(
             ushort treeId,
             ushort maxDataCount,
@@ -1678,7 +1644,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </param>
         /// <param name = "data">the information data to be set. </param>
         /// <returns>a set file information request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbTrans2SetFsInformationRequestPacket CreateTrans2SetFileSystemInformationRequest(
             ushort fileId,
             Trans2SmbParametersFlags transactOptions,
@@ -1728,7 +1693,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// the client's request. 
         /// </param>
         /// <returns>a find file for the first request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbTrans2FindFirst2RequestPacket CreateTrans2FindFirst2Request(
             ushort treeId,
             string fileName,
@@ -1794,7 +1758,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// the client's request. 
         /// </param>
         /// <returns>a find file the next request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbTrans2FindNext2RequestPacket CreateTrans2FindNext2Request(
             ushort treeId,
             string fileName,
@@ -1843,7 +1806,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "dfsPathName">use to indicate the REQ_GET_DFS_REFERRAL([MS-DFSC] section 2.2.2). </param>
         /// <param name = "referralRequest">This field MUST be a properly formatted DFS referral request </param>
         /// <returns>a get dfs referral request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbTrans2GetDfsReferralRequestPacket CreateTrans2GetDFSReferralRequest(
             ushort treeId,
             Trans2SmbParametersFlags transactOptions,
@@ -1890,7 +1852,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// The list of extended attributes that SHOULD be applied to the new file.
         /// </param>
         /// <returns>a nt transaction create request packet</returns>
-        [CLSCompliant(false)]
         public virtual SmbNtTransactCreateRequestPacket CreateNtTransCreateRequest(
             ushort treeId,
             string fileName,
@@ -1937,7 +1898,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </param>
         /// <param name = "newFileName">The new name of file. </param>
         /// <returns>a nt transaction rename request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbNtTransRenameRequestPacket CreateNTTransRenameRequest(
             ushort fileId,
             bool isReplaceIfExists,
@@ -1973,7 +1933,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// Supplies the offset, in bytes, to the StartSid in the Parameter buffer 
         /// </param>
         /// <returns>a nt transaction query quota request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbNtTransQueryQuotaRequestPacket CreateNTTransQueryQuotaRequest(
             ushort fileId,
             bool isReturnSingleEntry,
@@ -2021,7 +1980,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// for a search handle. 
         /// </param>
         /// <returns>a nt transaction set quota request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbNtTransSetQuotaRequestPacket CreateNTTransSetQuotaRequest(
             ushort fileId,
             uint nextEntryOffset,
@@ -2066,7 +2024,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// through the request. A server that receives an unexpected FSCTL or IOCTL SHOULD fail the operation by  
         /// returning STATUS_NOT_SUPPORTED. 
         /// </remarks>
-        [CLSCompliant(false)]
         public virtual SmbNtTransactIoctlRequestPacket CreateNTTransIOCtlRequest(
             ushort fileId,
             bool isFsctl,
@@ -2100,7 +2057,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </param>
         /// <param name = "maxDataCount">The max size of data to query. </param>
         /// <returns>a nt transaction IO control to enumerate snap shots request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbNtTransFsctlSrvEnumerateSnapshotsRequestPacket CreateNTTransIOCtlEnumerateSnapShotsRequest(
             ushort fileId,
             bool isFsctl,
@@ -2131,7 +2087,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         ///  System (DFS) type 
         /// </param>
         /// <returns>a nt transaction IO control to resume key request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbNtTransFsctlSrvRequestResumeKeyRequestPacket CreateNTTransIOCtlRequestResumeKeyRequest(
             ushort fileId,
             bool isFsctl,
@@ -2169,7 +2124,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// A concatenated list of copychunk blocks. This field is as specified in section 2.2.14.7.3.1. 
         /// </param>
         /// <returns>a nt transaction rename request packet </returns>
-        [CLSCompliant(false)]
         public virtual SmbNtTransFsctlSrvCopyChunkRequestPacket CreateNTTransIOCtlCopyChunkRequest(
             ushort fileId,
             bool isFsctl,

@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// Packets for SmbWriteAndx Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbWriteAndxRequestPacket : Cifs.SmbWriteAndxRequestPacket
     {
         #region Properties

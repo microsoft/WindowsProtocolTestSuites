@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FSCTL_PIPE_TRANSCEIVE 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlPipeTransceiveResponsePacket : FsccStandardPacket<FSCTL_PIPE_TRANSCEIVE>
     {
         #region Properties

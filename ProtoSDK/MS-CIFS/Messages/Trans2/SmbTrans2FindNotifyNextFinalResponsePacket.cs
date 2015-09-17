@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbTrans2FindNotifyNextFinal Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTrans2FindNotifyNextFinalResponsePacket : SmbTransaction2FinalResponsePacket
     {
         #region Fields

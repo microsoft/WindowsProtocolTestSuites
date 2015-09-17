@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     ///  Packets for SmbWriteRawFinal Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbWriteRawFinalResponsePacket : SmbSingleResponsePacket 
     {
         #region Fields

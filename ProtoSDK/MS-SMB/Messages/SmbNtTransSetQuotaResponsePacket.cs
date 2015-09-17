@@ -10,7 +10,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// Packets for SmbNtTransSetQuota Response 
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbNtTransSetQuotaResponsePacket : SmbNtTransactSuccessResponsePacket
     {
         #region Fields

@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FileFsVolumeFlagsInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileFsVolumeFlagsInformationRequestPacket : FsccEmptyPacket
     {
         #region Properties

@@ -132,7 +132,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Valid �C The session is valid and a session key and Uid are available for this session.
         /// Expired �C The Kerberos ticket for this session has expired and the session needs to be re-established.
         /// </summary>
-        [CLSCompliant(false)]
         public SessionStateValue SessionState
         {
             get
@@ -151,7 +150,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// the SMB header of session setup response. All subsequent SMB requests 
         /// for this user on this connection must use this Uid
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SessionUid
         {
             get
@@ -172,7 +170,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The maximum size, in bytes, of the largest SMB message that the client can receive.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxBufferSize
         {
             get
@@ -190,7 +187,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The maximum number of pending multiplexed requests supported by the client. This value MUST be
         /// less than or equal to the MaxMpxCount value provided by the server in the SMB_COM_NEGOTIATE response.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxMpxCount
         {
             get
@@ -207,7 +203,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The number of this VC (virtual circuit) between the client and the server.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort VcNumber
         {
             get
@@ -225,7 +220,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The client MUST set this to be equal to the SessionKey field in the SMB_COM_NEGOTIATE response
         /// for this SMB connection.
         /// </summary>
-        [CLSCompliant(false)]
         public uint SessionKeyOfNegotiated
         {
             get
@@ -243,7 +237,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// A 32-bit field providing a set of client capability indicators. The client uses this field to report its
         /// own set of capabilities to the server. 
         /// </summary>
-        [CLSCompliant(false)]
         public Capabilities Capabilities
         {
             get
@@ -312,7 +305,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// A 16-bit field which indicates the authentication actions. 
         /// </summary>
-        [CLSCompliant(false)]
         public ActionValues Action
         {
             get

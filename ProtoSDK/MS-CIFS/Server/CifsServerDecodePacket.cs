@@ -11,7 +11,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// the server decode packet, export for smb using.
     /// </summary>
-    [CLSCompliant(false)]
     public class CifsServerDecodePacket
     {
         #region Fields
@@ -91,7 +90,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="messageBytes">bytes contains packet</param>
         /// <param name="consumedLength">the bytes length which are consumed when decode.</param>
         /// <returns>the decoded packet from the bytes array. if failed, return null.</returns>
-        [CLSCompliant(false)]
         protected SmbPacket DecodeSmbRequestFromBytes(
             byte[] messageBytes,
             out int consumedLength)
@@ -140,7 +138,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="channel">the channel of bytes to read</param>
         /// <param name="smbBatchedRequest">the batched request</param>
         /// <returns>the consumed length of batched response packet</returns>
-        [CLSCompliant(false)]
         protected virtual int DecodeBatchedRequest(
             Channel channel, SmbBatchedRequestPacket smbBatchedRequest)
         {
@@ -160,7 +157,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// the new request packet. 
         /// the null means that the utility don't know how to create the request.
         /// </returns>
-        [CLSCompliant(false)]
         protected virtual SmbPacket CreateSmbRequestPacket(byte[] messageBytes)
         {
             SmbPacket smbRequest = null;

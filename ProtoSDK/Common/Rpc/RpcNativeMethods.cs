@@ -14,7 +14,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
     /// The SEC_WINNT_AUTH_IDENTITY structure enables passing a particular username and password to 
     /// the run-time library for the purpose of authentication. The structure is defined in Rpcdce.h
     /// </summary>
-    [CLSCompliant(false)]
     public struct SEC_WINNT_AUTH_IDENTITY
     {
         #region Variables
@@ -120,7 +119,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum SEC_WINNT_AUTH_IDENTITY_FLAGS : uint
     {
         /// <summary>
@@ -140,7 +138,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
     /// such as NTLMSSP, Kerberos, or SChannel.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum RPC_C_AUTHN : uint
     {
         /// <summary>
@@ -210,7 +207,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
     /// Each level includes the protection provided by the previous levels.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum RPC_C_AUTHN_LEVEL : uint
     {
         /// <summary>
@@ -257,7 +253,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
     /// type of inquiry to perform on the endpoint map.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum RPC_C_EP : uint
     {
         /// <summary>
@@ -291,7 +286,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum RPC_C_VERS : uint
     {
         /// <summary>
@@ -350,7 +344,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <returns> RPC Return Values</returns>
         [SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible")]
         [DllImport("rpcrt4.dll")]
-        [CLSCompliant(false)]
         public static extern uint RpcStringBindingCompose(
             string ObjUuid,
             string Protseq,
@@ -369,7 +362,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <returns>RPC Return Values</returns>
         [SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible")]
         [DllImport("rpcrt4.dll")]
-        [CLSCompliant(false)]
         public static extern uint RpcBindingFromStringBinding(
             IntPtr StringBinding,
             out IntPtr Binding);
@@ -392,7 +384,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <returns>RPC Return Values</returns>
         [SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible")]
         [DllImport("rpcrt4.dll")]
-        [CLSCompliant(false)]
         public static extern uint RpcBindingSetAuthInfo(
             IntPtr Binding,
             string ServerPrincName,
@@ -424,7 +415,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <returns>RPC Return Values.</returns>
         [SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible")]
         [DllImport("rpcrt4.dll")]
-        [CLSCompliant(false)]
         public static extern uint RpcMgmtEpEltInqBegin(
             IntPtr EpBinding,
             RPC_C_EP InquiryType,
@@ -448,7 +438,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <returns>RPC Return Values.</returns>
         [SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible")]
         [DllImport("rpcrt4.dll")]
-        [CLSCompliant(false)]
         public static extern uint RpcMgmtEpEltInqNext(
             IntPtr InquiryContext,
             ref RPC_IF_ID IfId,
@@ -465,7 +454,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <returns>RPC Return Values.</returns>
         [SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible")]
         [DllImport("rpcrt4.dll")]
-        [CLSCompliant(false)]
         public static extern uint RpcMgmtEpEltInqDone(
              ref IntPtr InquiryContext);
 
@@ -480,7 +468,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <returns>RPC Return Values.</returns>
         [SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible")]
         [DllImport("rpcrt4.dll")]
-        [CLSCompliant(false)]
         public static extern uint RpcBindingToStringBinding(
             IntPtr Binding,
             out IntPtr StringBinding);
@@ -508,7 +495,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <returns></returns>
         [SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible")]
         [DllImport("rpcrt4.dll")]
-        [CLSCompliant(false)]
         public static extern uint RpcStringBindingParse(
             IntPtr StringBinding,
             out IntPtr ObjectUuid,
@@ -525,7 +511,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <returns> RPC Return Values</returns>
         [SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible")]
         [DllImport("rpcrt4.dll")]
-        [CLSCompliant(false)]
         public static extern uint RpcStringFree(
             ref IntPtr String);
 
@@ -537,7 +522,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <returns> RPC Return Values</returns>
         [SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible")]
         [DllImport("rpcrt4.dll")]
-        [CLSCompliant(false)]
         public static extern uint RpcBindingFree(
             ref IntPtr Binding);
     }

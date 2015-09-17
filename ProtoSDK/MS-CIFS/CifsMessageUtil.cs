@@ -213,7 +213,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="bytes">a byte array</param>
         /// <param name="smbFlags2">The smbFlags2 of the SmbHeader to which this bytes belong to</param>
         /// <returns>the string</returns>
-        [CLSCompliant(false)]
         public static string ToString(byte[] bytes, SmbFlags2 smbFlags2)
         {
             if (bytes == null)
@@ -390,7 +389,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         ///  various client and server capabilities.
         /// </param>
         /// <returns>smb header</returns>
-        [CLSCompliant(false)]
         public static SmbHeader CreateSmbHeader(
             SmbCommand command,
             uint pid,
@@ -433,7 +431,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="flags">it describes various features in effect for the message.</param>
         /// <param name="flags2">it represents various features in effect for the message.</param>
         /// <returns>smb header</returns>
-        [CLSCompliant(false)]
         public static SmbHeader CreateSmbHeader(
             SmbCommand command,
             ushort mid,
@@ -453,7 +450,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="request">the request packet</param>
         /// <returns>smb header</returns>
         /// <exception cref="KeyNotFoundException">The request is not pending in this connection.</exception>
-        [CLSCompliant(false)]
         public static SmbHeader CreateSmbHeader(
             CifsServerPerConnection connection,
             SmbPacket request)
@@ -1646,7 +1642,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="request">the SessionSetup request.</param>
         /// <param name="accountCredentials">All the available users</param>
         /// <returns>the account name</returns>
-        [CLSCompliant(false)]
         public static string PlainTextAuthenticate(
             SmbSessionSetupAndxRequestPacket request,
              Collection<AccountCredential> accountCredentials)
@@ -1690,7 +1685,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="nlmpServerSecurityContexts">all the users' security contexts.</param>
         /// <param name="systemTime">The server system time.</param>
         /// <returns>return the user's security context if passed, return null if failed.</returns>
-        [CLSCompliant(false)]
         public static NlmpServerSecurityContext NTLMAuthenticate(
             SmbSessionSetupAndxRequestPacket request,
             Collection<NlmpServerSecurityContext> nlmpServerSecurityContexts,
@@ -1731,7 +1725,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="sessionKey">the session key</param>
         /// <param name="sequenceNumber">the sequence number</param>
         /// <returns>return true if passed, return false if failed.</returns>
-        [CLSCompliant(false)]
         public static bool VerifySignature(SmbPacket packet, byte[] sessionKey, uint sequenceNumber)
         {
             return VerifySignature(packet, sessionKey, sequenceNumber, new byte[0]);
@@ -1746,7 +1739,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="sequenceNumber">the sequence number</param>
         /// <param name="challengeResponse">the challenge response.</param>
         /// <returns>return true if passed, return false if failed.</returns>
-        [CLSCompliant(false)]
         public static bool VerifySignature(SmbPacket packet, byte[] sessionKey, uint sequenceNumber, 
             byte[] challengeResponse)
         {

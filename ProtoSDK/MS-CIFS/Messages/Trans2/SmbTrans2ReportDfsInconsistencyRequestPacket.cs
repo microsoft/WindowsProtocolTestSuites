@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     ///  Packets for SmbTrans2ReportDfsInconsistency Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTrans2ReportDfsInconsistencyRequestPacket : SmbTransaction2RequestPacket
     {
         #region Fields

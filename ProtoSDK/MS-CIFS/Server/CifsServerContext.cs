@@ -102,7 +102,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The set of Capabilities (as described in section 1.7 and defined in section 2.2.4.52.2) supported by the
         /// server.
         /// </summary>
-        [CLSCompliant(false)]
         public Capabilities Capabilities
         {
             get
@@ -303,7 +302,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// GlobalSessionTable indexed by fileGlobalId.
         /// </summary>
-        [CLSCompliant(false)]
         public ReadOnlyDictionary<int, CifsServerPerOpenFile> GlobalOpenTable
         {
             get
@@ -319,7 +317,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// GlobalOpenSearchTable indexed by searchGlobalId.
         /// </summary>
-        [CLSCompliant(false)]
         public ReadOnlyDictionary<int, CifsServerPerOpenSearch> GlobalOpenSearchTable
         {
             get
@@ -336,7 +333,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// GlobalSessionTable indexed by treeGlobalId.
         /// </summary>
-        [CLSCompliant(false)]
         public ReadOnlyDictionary<int, CifsServerPerTreeConnect> GlobalTreeConnectTable
         {
             get
@@ -352,7 +348,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// GlobalSessionTable indexed by sessionGlobalId.
         /// </summary>
-        [CLSCompliant(false)]
         public ReadOnlyDictionary<int, CifsServerPerSession> GlobalSessionTable
         {
             get
@@ -368,7 +363,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// A list of all open connections on the server, indexed by the identify.
         /// </summary>
-        [CLSCompliant(false)]
         public ReadOnlyDictionary<object, CifsServerPerConnection> ConnectionTable
         {
             get
@@ -400,7 +394,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// Nlmp Server Security Contexts
         /// </summary>
-        [CLSCompliant(false)]
         public Collection<NlmpServerSecurityContext> NlmpServerSecurityContexts
         {
             get
@@ -518,7 +511,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <param name="connection">The connection between client and server.</param>
         /// <param name="packet">The sent or received packet in stack transport.</param>
-        [CLSCompliant(false)]
         public virtual void UpdateRoleContext(CifsServerPerConnection connection, SmbPacket packet)
         {
             if (connection == null || packet == null)
@@ -570,7 +562,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <param name="connection">the connection on which to remove the request and sequence</param>
         /// <param name="response">the response for which to remove the request and sequence</param>
-        [CLSCompliant(false)]
         protected virtual void RemoveRequestAndSequence(CifsServerPerConnection connection, SmbPacket response)
         {
             if (response is SmbWriteRawInterimResponsePacket
@@ -591,7 +582,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <param name="connection">The connection between client and server.</param>
         /// <param name="requestPacket">The received packet in stack transport.</param>
-        [CLSCompliant(false)]
         protected virtual void UpdateRequestRoleConext(
             CifsServerPerConnection connection,
             SmbPacket requestPacket)
@@ -671,7 +661,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">The connection between client and server.</param>
         /// <param name="requestPacket">The request packet associated with this packet.</param>
         /// <param name="responsePacket">The response packet.</param>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         protected virtual void UpdateResponseRoleContext(

@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbFindClose2 Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbFindClose2RequestPacket : SmbSingleRequestPacket
     {
         #region Fields

@@ -14,7 +14,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     ///  Packets for SmbNtTransactIoctlResponsePacket
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbNtTransactIoctlResponsePacket : Cifs.SmbNtTransactIoctlResponsePacket
     {
         #region Convert from base class

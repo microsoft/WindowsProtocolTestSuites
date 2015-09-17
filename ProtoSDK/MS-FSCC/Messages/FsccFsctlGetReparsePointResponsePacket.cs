@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FSCTL_GET_REPARSE_POINT 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlGetReparsePointResponsePacket : FsccStandardBytesPacket
     {
         #region Properties

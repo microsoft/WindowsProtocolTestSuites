@@ -12,7 +12,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     ///  Packets for SmbNtTransactNotifyChange Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbNtTransactNotifyChangeResponsePacket : SmbNtTransactSuccessResponsePacket
     {
         #region Fields

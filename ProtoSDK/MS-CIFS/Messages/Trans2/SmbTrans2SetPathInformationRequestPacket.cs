@@ -12,7 +12,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     ///  Packets for SmbTrans2SetPathInformation Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTrans2SetPathInformationRequestPacket : SmbTransaction2RequestPacket
     {
         #region Fields

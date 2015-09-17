@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// Packets for SmbClose Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbCloseResponsePacket : Cifs.SmbCloseResponsePacket
     {
         #region Convert from base class

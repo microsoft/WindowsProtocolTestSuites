@@ -50,7 +50,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <summary>
         /// A numeric value that uniquely identifies a tree connect represented as a TID in the SMB header.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort TreeId
         {
             get

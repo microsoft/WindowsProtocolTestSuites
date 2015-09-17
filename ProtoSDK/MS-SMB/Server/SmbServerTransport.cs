@@ -17,7 +17,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// Used by upper layer protocol to comunicate.
     /// </summary>
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-    [CLSCompliant(false)]
     public class SmbServerTransport : FileServiceServerTransport, IDisposable
     {
         #region Fields
@@ -226,7 +225,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name="listenPort">the port for serverto listen </param>
         /// <param name="credential">Credential to accept a connection.</param>
         /// <param name="ipAddress">server's ipAddress</param>
-        [CLSCompliant(false)]
         public override void Start(ushort listenPort, AccountCredential credential, IPAddress ipAddress)
         {
             this.maxBufferSizeInNegotiateResponse = TCP_RECEIVE_BUFFER_SIZE;
@@ -1718,7 +1716,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name="connection">the connection between server and client</param>
         /// <param name="status">error code</param>
         /// <param name="requestPacket">the request packet to send the error response</param>
-        [CLSCompliant(false)]
         public override void SendErrorResponse(
             IFileServiceServerConnection connection,
             uint status,
@@ -1781,7 +1778,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// stop the server, disconnect all client and dispose server.
         /// </summary>
         /// <param name="listenPort">the port for serverto listen </param>
-        [CLSCompliant(false)]
         public override void Stop(ushort listenPort)
         {
             this.smbServer.Stop(listenPort);

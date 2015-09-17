@@ -137,7 +137,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// 3.3.1.11, the Mid and the Pid refer to the corresponding values obtained from the SMB header of the message
         /// sent by the client.
         /// </summary>
-        [CLSCompliant(false)]
         public ReadOnlyCollection<SmbPacket> RequestList
         {
             get
@@ -253,7 +252,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <summary>
         /// Sequence number for the next signed request being received
         /// </summary>
-        [CLSCompliant(false)]
         public uint ServerNextReceiveSequenceNumber
         {
             get
@@ -290,7 +288,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <summary>
         /// GssApi 
         /// </summary>
-        [CLSCompliant(false)]
         public ServerSecurityContext GssApi
         {
             get
@@ -308,7 +305,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// The time of server system. Must response with the NtlmEncryptionKey when implicit ntlm session setup.
         /// This field is set by nlmp sdk, the output field of NTLM-challenge packet.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong SystemTime
         {
             get
@@ -325,7 +321,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <summary>
         /// The following new OptionalSupport field flags are the new extensions added to the CIFS protocol 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort OptionalSupport
         {
             get
@@ -343,7 +338,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// This field MUST specify the maximum rights the guest account has on this share based on the security 
         /// enforced by the share 
         /// </summary>
-        [CLSCompliant(false)]
         public uint GuestMaximalShareAccessRights
         {
             get
@@ -361,7 +355,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// This field MUST specify the maximum rights the guest account has on this share based on the security 
         /// enforced by the share 
         /// </summary>
-        [CLSCompliant(false)]
         public uint MaximalShareAccessRights
         {
             get
@@ -378,7 +371,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <summary>
         /// the message id.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MessageId
         {
             get
@@ -395,7 +387,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <summary>
         /// the process id.
         /// </summary>
-        [CLSCompliant(false)]
         public uint ProcessId
         {
             get
@@ -473,7 +464,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// A list of the expected sequence numbers for the responses of outstanding signed requests,
         /// indexed by PID/MID pair.
         /// </summary>
-        [CLSCompliant(false)]
         public Dictionary<ServerSendSequenceNumberKey, uint> ServerSendSequenceNumber
         {
             get

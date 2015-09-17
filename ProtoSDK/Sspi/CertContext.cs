@@ -19,7 +19,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// Type of encoding used. It is always acceptable to specify both the certificate and message encoding 
         /// types by combining them with a bitwise-OR operation.
         /// </summary>
-        [CLSCompliant(false)]
         public uint CertEncodingType;
 
         /// <summary>

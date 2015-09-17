@@ -11,7 +11,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
     /// some protocols such as ms-rap use 16 bits length error code
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum Win32ErrorCode_16 : ushort
     {
         /// <summary>

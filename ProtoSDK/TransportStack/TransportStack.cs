@@ -1181,7 +1181,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         /// <exception cref="ArgumentException">
         /// thrown when maxCount is negative.
         /// </exception>
-        [CLSCompliant(false)]
         public virtual byte[] ExpectBytes(TimeSpan timeout, int maxCount, object remoteEndPoint)
         {
             if (disposed)
@@ -1227,7 +1226,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         /// <exception cref="InvalidOperationException">
         /// thrown when the underlayer transport is not TcpServer and NetbiosServer.
         /// </exception>
-        [CLSCompliant(false)]
         public virtual StackPacket ExpectPacket(TimeSpan timeout, object remoteEndPoint)
         {
             if (disposed)
@@ -1278,7 +1276,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         /// <exception cref="ArgumentException">
         /// thrown when maxCount is negative.
         /// </exception>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1007:UseGenericsWhereAppropriate")]
         public virtual byte[] ExpectBytes(
             TimeSpan timeout, int maxCount, object localEndPoint, out object remoteEndPoint)
@@ -1325,7 +1322,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         /// <exception cref="InvalidOperationException">
         /// thrown when the underlayer transport is not UdpServer
         /// </exception>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1007:UseGenericsWhereAppropriate")]
         public virtual StackPacket ExpectPacket(TimeSpan timeout, object localEndPoint, out object remoteEndPoint)
         {

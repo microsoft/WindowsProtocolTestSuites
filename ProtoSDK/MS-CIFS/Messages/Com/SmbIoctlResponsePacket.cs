@@ -11,7 +11,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbIoctl Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbIoctlResponsePacket : SmbSingleResponsePacket
     {
         #region Fields

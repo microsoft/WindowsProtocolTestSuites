@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FSCTL_READ_FILE_USN_DATA 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlReadFileUsnDataResponsePacket : FsccStandardPacket<FSCTL_READ_FILE_USN_DATA_Reply>
     {
         #region Properties

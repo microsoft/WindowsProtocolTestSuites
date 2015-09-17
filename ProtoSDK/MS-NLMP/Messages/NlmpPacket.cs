@@ -10,7 +10,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
     /// <summary>
     /// the base packet of nlmp
     /// </summary>
-    [CLSCompliant(false)]
     public abstract class NlmpPacket : StackPacket
     {
         #region Attributes
@@ -160,7 +159,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// set the negotiate flags
         /// </summary>
         /// <param name="negotiateFlags">the new flags</param>
-        [CLSCompliant(false)]
         public abstract void SetNegotiateFlags(
             NegotiateTypes negotiateFlags
             );

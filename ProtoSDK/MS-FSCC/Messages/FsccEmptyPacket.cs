@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// fscc empty packet, no payload. 
     /// </summary>
-    [CLSCompliant(false)]
     public abstract class FsccEmptyPacket : FsccPacket
     {
         #region Constructors

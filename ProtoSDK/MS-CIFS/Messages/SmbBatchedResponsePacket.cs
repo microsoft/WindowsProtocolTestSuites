@@ -12,7 +12,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// the basic packet of SMB batched response.
     /// defined common method of all SMB batched response packets
     /// </summary>
-    [CLSCompliant(false)]
     public abstract class SmbBatchedResponsePacket : SmbPacket
     {
         #region fields
@@ -30,7 +29,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// get or set the andx packet.
         /// </summary>
-        [CLSCompliant(false)]
         public SmbPacket AndxPacket
         {
             get
@@ -48,7 +46,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Get the type of the packet: Request or Response, and Single or Compounded.
         /// </summary>
         /// <returns>the type of the packet.</returns>
-        [CLSCompliant(false)]
         public override SmbPacketType PacketType
         {
             get

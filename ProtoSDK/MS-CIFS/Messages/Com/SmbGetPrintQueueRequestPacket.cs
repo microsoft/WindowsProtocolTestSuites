@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbGetPrintQueue Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbGetPrintQueueRequestPacket : SmbSingleRequestPacket
     {
         #region Fields

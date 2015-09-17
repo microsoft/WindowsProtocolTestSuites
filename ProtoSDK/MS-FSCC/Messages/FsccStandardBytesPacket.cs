@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// fscc standard packet, has payload 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccStandardBytesPacket : FsccPacket
     {
         #region Properties

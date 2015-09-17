@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FSCTL_GET_RETRIEVAL_POINTERS 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlGetRetrievalPointersRequestPacket : FsccStandardPacket<FSCTL_GET_RETRIEVAL_POINTERS_Request>
     {
         #region Properties

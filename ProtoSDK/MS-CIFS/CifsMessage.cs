@@ -18,7 +18,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// in the local time zone of the server. This field names below are provided 
     /// for reference only.
     /// </summary>
-    [CLSCompliant(false)]
     public enum SmbDateBitMask : ushort
     {
         /// <summary>
@@ -59,7 +58,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <exception cref="System.ArgumentOutOfRangeException">
         /// The Year should be in range of [1980, 2099].</exception>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow")]
         public ushort Year
         {
@@ -79,7 +77,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <exception cref="System.ArgumentOutOfRangeException">
         /// The Month should be in range of [1, 12].</exception>
-        [CLSCompliant(false)]
         public ushort Month
         {
             get
@@ -98,7 +95,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <exception cref="System.ArgumentOutOfRangeException">
         /// The day should be in range of [1, 31].</exception>
-        [CLSCompliant(false)]
         public ushort Day
         {
             get
@@ -160,7 +156,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST contain the length in bytes of the ValueName field.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ValueNameLengthInBytes;
 
         /// <summary>
@@ -209,7 +204,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// an error message, as defined in [MS-ERRREF] Section 2.3), or as an SMBSTATUS value (as defined below).
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    [CLSCompliant(false)]
     public struct SmbStatus
     {
         /// <summary>
@@ -245,7 +239,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// </summary>
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
-    [CLSCompliant(false)]
     public enum SmbFileAttributes : ushort
     {
         /// <summary>
@@ -314,7 +307,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// An unsigned 32-bit field that defines the basic file attributes supported by the SMB protocol
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum SmbFileAttributes32 : uint
     {
         /// <summary>
@@ -371,7 +363,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// as follows. This field names below are provided for reference only. The time is 
     /// represented in the local time zone of the server.
     /// </summary>
-    [CLSCompliant(false)]
     public enum SmbTimeBitMask : ushort
     {
         /// <summary>
@@ -413,7 +404,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <exception cref="System.ArgumentOutOfRangeException">
         /// The hour should be in range of [0, 23].</exception>
-        [CLSCompliant(false)]
         public ushort Hour
         {
             get
@@ -432,7 +422,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <exception cref="System.ArgumentOutOfRangeException">
         /// The Minutes should be in range of [0, 59].</exception>
-        [CLSCompliant(false)]
         public ushort Minutes
         {
             get
@@ -451,7 +440,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <exception cref="System.ArgumentOutOfRangeException">
         /// The Seconds should be in range of [0, 59].</exception>
-        [CLSCompliant(false)]
         public ushort Seconds
         {
             get
@@ -499,7 +487,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// Jan 1, 1970, 00:00:00.0.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    [CLSCompliant(false)]
     public struct UTime
     {
         /// <summary>
@@ -538,7 +525,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The number of 100-nanosecond intervals that have elapsed since January 1, 1601, in Coordinated 
         /// Universal Time (UTC) format.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong Time;
     }
 
@@ -546,7 +532,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// The SMB_FEA_LIST data structure is used to send a concatenated list of SMB_FEA (section 2.2.1.2.2) structures.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    [CLSCompliant(false)]
     public struct SMB_FEA_LIST
     {
         /// <summary>
@@ -565,7 +550,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// The SMB_GEA_LIST data structure is used to send a concatenated list of SMB_GEA (section 2.2.1.2.1) structures.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    [CLSCompliant(false)]
     public struct SMB_GEA_LIST
     {
         /// <summary>
@@ -1001,7 +985,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// 2.2.2.2   	Transaction Subcommand Codes
     /// </summary>
-    [CLSCompliant(false)]
     public enum TransSubCommand : ushort
     {
         /// <summary>
@@ -1083,7 +1066,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// Transaction Codes used with SMB_COM_TRANSACTION2
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
-    [CLSCompliant(false)]
     public enum Trans2SubCommand : ushort
     {
         /// <summary>
@@ -1181,7 +1163,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Transaction codes used with SMB_COM_NT_TRANSACT
     /// </summary>
-    [CLSCompliant(false)]
     public enum NtTransSubCommand : ushort
     {
         /// <summary>
@@ -1228,7 +1209,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// This field determines the information contained in the response.
     /// </summary>
-    [CLSCompliant(false)]
     public enum FindInformationLevel : ushort
     {
         /// <summary>
@@ -1276,7 +1256,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// This field determines the information contained in the response.
     /// </summary>
-    [CLSCompliant(false)]
     public enum QueryFSInformationLevel : ushort
     {
         /// <summary>
@@ -1322,7 +1301,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// The client specifies the information it is requesting through the use of the InformationLevel 
     /// field in the subcommand request data. The available information levels are as follows. 
     /// </summary>
-    [CLSCompliant(false)]
     public enum QueryInformationLevel : ushort
     {
         /// <summary>
@@ -1405,7 +1383,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// The client specifies the information it is requesting through the use of the InformationLevel 
     /// field in the subcommand request data. The available information levels are as follows. 
     /// </summary>
-    [CLSCompliant(false)]
     public enum SetInformationLevel : ushort
     {
         /// <summary>
@@ -1450,7 +1427,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// InformationLevel used in SMB_NT_RENAME.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
-    [CLSCompliant(false)]
     public enum NtRenameInformationLevel : ushort
     {
         /// <summary>
@@ -1516,7 +1492,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// SUCCESS Class 
     /// </summary>
-    [CLSCompliant(false)]
     public enum SmbErrorCodeOfSUCCESS : ushort
     {
         /// <summary>
@@ -1530,7 +1505,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// ERRDOS Class 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
-    [CLSCompliant(false)]
     public enum SmbErrorCodeOfERRDOS : ushort
     {
         /// <summary>
@@ -1723,7 +1697,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// ERRSRV Class 
     /// </summary>
-    [CLSCompliant(false)]
     public enum SmbErrorCodeOfERRSRV : ushort
     {
         /// <summary>
@@ -1913,7 +1886,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// ERRHRD Class 
     /// </summary>
-    [CLSCompliant(false)]
     public enum SmbErrorCodeOfERRHRD : ushort
     {
         /// <summary>
@@ -2021,7 +1993,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// NTSTATUS codes used in the NT LAN Manager dialect.
     /// </summary>
-    [CLSCompliant(false)]
     public enum NTSTATUS : uint
     {
         /// <summary>
@@ -2626,7 +2597,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// In the earliest available SMB documentation,
         /// this field is defined as a one byte message type (0xFF) followed by a three byte server type identifier.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Protocol;
 
         /// <summary>
@@ -2637,7 +2607,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// 32-bit field used to communicate error messages from the server to the client.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Status;
 
         /// <summary>
@@ -2649,57 +2618,48 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// A 16-bit field of 1-bit flags that represent various features in effect for the message.
         /// Unspecified bits are reserved and MUST be zero
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFlags2 Flags2;
 
         /// <summary>
         /// If set to a non-zero value, this field represents the high-order
         /// bytes of a process identifier (PID). It is combined with the PIDLow field below to form a full PID.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort PidHigh;
 
         /// <summary>
         /// UCHAR This 8-byte field has three possible interpretations. 
         /// </summary>
-        [CLSCompliant(false)]
         public ulong SecurityFeatures;
 
         /// <summary>
         /// This field is reserved and MUST be zero
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved;
 
         /// <summary>
         /// A tree identifier (TID).
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Tid;
 
         /// <summary>
         /// The lower 16-bits of the PID.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort PidLow;
 
         /// <summary>
         /// A user identifier (UID).
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Uid;
 
         /// <summary>
         /// A multiplex identifier (MID).
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Mid;
 
         #region properties
         /// <summary>
         /// Access pid as uint.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Pid
         {
             get
@@ -2739,7 +2699,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The size of this field MUST be (2 x WordCount) bytes. If WordCount is 0, this field is not included
         /// </summary>
         [Size("WordCount")]
-        [CLSCompliant(false)]
         public ushort[] Words;
     }
 
@@ -2757,7 +2716,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Words field is unaligned and the SMB_Data.ByteCount field is two bytes in size, 
         /// the first byte of SMB_Data.Bytes is also unaligned.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -2846,7 +2804,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// are reserved and MUST be zero
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum SmbFlags2 : ushort
     {
         /// <summary>
@@ -2933,19 +2890,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// An encryption key used for validating a messages over connectionless transports.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Key;
 
         /// <summary>
         /// A session identifier (SID).
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Sid;
 
         /// <summary>
         /// A number used to identify the sequence of a message over connectionless transports.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SequenceNumber;
     }
 
@@ -2972,7 +2926,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// independent of any other size parameters or offsets within the command. This offset MAY point to a
         /// location past the end of the current block pair.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort AndXOffset;
     }
 
@@ -3005,7 +2958,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 2.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -3044,7 +2996,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -3074,7 +3025,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 2
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -3113,7 +3063,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -3136,14 +3085,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// A 16-bit field for encoding the requested access mode
         /// </summary>
-        [CLSCompliant(false)]
         public ushort AccessMode;
 
         /// <summary>
         /// Specifies the type of file desired. This field is used as a search mask.
         /// Both the FileName and the SearchAttributes of a file MUST match for the file to be opened. 
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes SearchAttributes;
     }
 
@@ -3157,7 +3104,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 2.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -3187,33 +3133,28 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The FID returned for the open file
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
         /// The set of attributes currently assigned to the file. 
         /// This field is formatted in the same way as the SearchAttributes field in the request.
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes FileAttrs;
 
         /// <summary>
         /// Time of the last modification to the opened file
         /// </summary>
-        [CLSCompliant(false)]
         public UTime LastModified;
 
         /// <summary>
         /// The current size of the opened file in bytes
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileSize;
 
         /// <summary>
         /// A 16-bit field for encoding the granted access mode.
         /// This field is formatted in the same way as the Request equivalent
         /// </summary>
-        [CLSCompliant(false)]
         public ushort AccessMode;
     }
 
@@ -3227,7 +3168,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -3250,14 +3190,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// A 16-bit field of 1-bit flags that represent the file attributes to assign to the file if it is created
         /// successfully.
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes FileAttributes;
 
         /// <summary>
         /// The time the file was created on the client represented as the number of seconds since 
         /// Jan 1, 1970, 00:00:00.0. Server support of this field is OPTIONAL.
         /// </summary>
-        [CLSCompliant(false)]
         public UTime CreationTime;
     }
 
@@ -3271,7 +3209,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// USHORT This field MUST be greater than or equal to 2
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -3304,7 +3241,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This value MUST be supplied in the FID field of the SMB Header in subsequent requests that manipulate 
         /// the file
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
     }
 
@@ -3318,7 +3254,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -3340,7 +3275,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The FID of the object to be closed
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
@@ -3349,7 +3283,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// A value of 0 or 0xFFFFFF results in the server using the default value. The server is NOT REQUIRED to 
         /// support this request
         /// </summary>
-        [CLSCompliant(false)]
         public UTime LastTimeModified;
     }
 
@@ -3363,7 +3296,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -3390,7 +3322,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -3413,7 +3344,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The FID of the file to be flushed. If this field is set to 0xFFFF (-1) all files opened by
         /// the same PID within the SMB connection are to be flushed
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
     }
 
@@ -3427,7 +3357,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -3454,7 +3383,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -3480,7 +3408,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// are matched in addition to the normal files.  Read-only files MAY NOT be deleted.  
         /// The read-only attribute of the file MUST be cleared before the file MAY be deleted.
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes SearchAttributes;
     }
 
@@ -3494,7 +3421,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 2
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -3528,7 +3454,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -3554,7 +3479,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// addition to the normal files. Read-only files MAY NOT be renamed. The read-only attribute of the file MUST
         /// be cleared before it can be renamed.
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes SearchAttributes;
     }
 
@@ -3568,7 +3492,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 2
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -3617,7 +3540,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -3647,7 +3569,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 2.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -3678,27 +3599,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field is a 16 bit unsigned bit field encoded as SMB_FILE_ATTRIBUTES
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes FileAttributes;
 
         /// <summary>
         /// The time of the last write to the file.
         /// </summary>
-        [CLSCompliant(false)]
         public UTime LastWriteTime;
 
         /// <summary>
         /// This field contains the size of the file in bytes. 
         /// Since this size is limited to 32 bits this command is inappropriate for files whose size is too large
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileSize;
 
         /// <summary>
         /// Array of USHORT This field is reserved and MUST be 0.
         /// </summary>
         [StaticSize(5, StaticSizeMode.Elements)]
-        [CLSCompliant(false)]
         public ushort[] Reserved;
     }
 
@@ -3712,7 +3629,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -3734,20 +3650,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field is a 16 bit unsigned bit field encoded as SMB_FILE_ATTRIBUTES 
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes FileAttributes;
 
         /// <summary>
         /// The time of the last write to the file
         /// </summary>
-        [CLSCompliant(false)]
         public UTime LastWriteTime;
 
         /// <summary>
         /// This field is reserved and MUST be set to 0
         /// </summary>
         [StaticSize(5, StaticSizeMode.Elements)]
-        [CLSCompliant(false)]
         public ushort[] Reserved;
     }
 
@@ -3761,7 +3674,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 2
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -3800,7 +3712,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -3822,14 +3733,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be a valid 16-bit signed integer indicating the file from which the data MUST be read
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
         /// This field is a 16-bit unsigned integer indicating the number of bytes to be read from the file.
         /// The client MUST ensure that the amount of data requested will fit in the negotiated maximum buffer size.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort CountOfBytesToRead;
 
         /// <summary>
@@ -3838,7 +3747,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The client MUST ensure that the amount of data requested fits in the negotiated maximum buffer size.
         /// Because this field is limited to 32-bits this command is inappropriate for files having 64-bit offsets.
         /// </summary>
-        [CLSCompliant(false)]
         public uint ReadOffsetInBytes;
 
         /// <summary>
@@ -3846,7 +3754,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// to read from the file. 
         /// This is an advisory field and MAY be zero.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort EstimateOfRemainingBytesToBeRead;
     }
 
@@ -3860,7 +3767,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -3881,14 +3787,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This MUST be equal to CountOfBytesToRead unless the end of file was reached before reading
         /// CoutOfBytesToRead bytes or the ReadOffsetInBytes pointed at or beyond the end of file.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort CountOfBytesReturned;
 
         /// <summary>
         /// Reserved and MUST be 0.
         /// </summary>
         [StaticSize(4, StaticSizeMode.Elements)]
-        [CLSCompliant(false)]
         public ushort[] Reserved;
     }
 
@@ -3902,7 +3806,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 3 + CountOfBytesRead
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -3913,7 +3816,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The number of bytes read that are contained in the following array of bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort CountOfBytesRead;
 
         /// <summary>
@@ -3941,14 +3843,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be a valid 16-bit signed integer indicating the file to which the data MUST be written
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
         /// This field is a 16-bit unsigned integer indicating the number of bytes to be written to the file. 
         /// The client MUST ensure that the amount of data sent can fit in the negotiated maximum buffer size
         /// </summary>
-        [CLSCompliant(false)]
         public ushort CountOfBytesToWrite;
 
         /// <summary>
@@ -3957,7 +3857,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// in the negotiated maximum buffer size. Because this field is limited to 32-bits this command is
         /// inappropriate for files having 64-bit offsets.
         /// </summary>
-        [CLSCompliant(false)]
         public uint WriteOffsetInBytes;
 
         /// <summary>
@@ -3965,7 +3864,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// anticipates to write to the file. This is an advisory field and MAY be zero. This information MAY
         /// be used by the server to optimize cache behavior.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort EstimateOfRemainingBytesToBeWritten;
     }
 
@@ -3979,7 +3877,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// CountOfBytesToWrite + 3
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -3990,7 +3887,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST match 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataLength;
 
         /// <summary>
@@ -4018,7 +3914,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// bytes written differs from the number requested and no error is indicated, then the server has 
         /// no resources available to satisfy the complete write
         /// </summary>
-        [CLSCompliant(false)]
         public ushort CountOfBytesWritten;
     }
 
@@ -4032,7 +3927,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -4054,13 +3948,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be a valid 16-bit signed integer indicating the file from which the data MUST be read
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
         /// This field is a 32-bit unsigned integer indicating the number of contiguous bytes to be locked.
         /// </summary>
-        [CLSCompliant(false)]
         public uint CountOfBytesToLock;
 
         /// <summary>
@@ -4068,7 +3960,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// the lock. Because this field is limited to 32-bits this command is inappropriate for files having 
         /// 64-bit offsets
         /// </summary>
-        [CLSCompliant(false)]
         public uint LockOffsetInBytes;
     }
 
@@ -4082,7 +3973,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -4109,7 +3999,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -4131,13 +4020,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be a valid 16-bit signed integer indicating the file from which the data MUST be read.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
         /// This field is a 32-bit unsigned integer indicating the number of contiguous bytes to be unlocked.
         /// </summary>
-        [CLSCompliant(false)]
         public uint CountOfBytesToUnlock;
 
         /// <summary>
@@ -4145,7 +4032,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// from which to begin the unlock. Because this field is limited to 32-bits this command is inappropriate
         /// for files having 64-bit offsets
         /// </summary>
-        [CLSCompliant(false)]
         public uint UnlockOffsetInBytes;
     }
 
@@ -4159,7 +4045,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -4186,7 +4071,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -4208,14 +4092,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field SHOULD be ignored by the server. 
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes FileAttributes;
 
         /// <summary>
         /// The time the file was created on the client represented as the number of seconds 
         /// since Jan 1, 1970, 00:00:00.0. Server support of this field is OPTIONAL
         /// </summary>
-        [CLSCompliant(false)]
         public UTime CreationTime;
     }
 
@@ -4229,7 +4111,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 2
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -4262,7 +4143,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This value MUST be supplied in the FID field of the SMB Header in subsequent requests which manipulate
         /// the file
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
     }
 
@@ -4276,7 +4156,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 2
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -4310,14 +4189,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// A 16-bit field of 1-bit flags that represent the
         /// file attributes to assign to the file if it is created successfully
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes FileAttributes;
 
         /// <summary>
         /// The time the file was created on the client 
         /// represented as the number of seconds since Jan 1, 1970, 00:00:00.0
         /// </summary>
-        [CLSCompliant(false)]
         public UTime CreationTime;
     }
 
@@ -4331,7 +4208,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 2
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -4363,7 +4239,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The FID representing the file on the server. 
         /// This value MUST be supplied in subsequent requests that manipulate the file
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
     }
 
@@ -4377,7 +4252,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -4407,7 +4281,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 2
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -4445,7 +4318,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be zero. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -4475,7 +4347,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// MUST be zero. No data bytes are sent
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -4502,7 +4373,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// MUST be zero. No data bytes are returned
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -4524,13 +4394,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The File ID of the open file within which to seek
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
         /// The seek mode.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Mode;
 
         /// <summary>
@@ -4551,7 +4419,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be zero. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -4571,7 +4438,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// A 32-bit unsigned value indicating the absolute file position, relative to the start of the file, 
         /// at which the file pointer is currently set. The value of Offset ranges from 0 to 4TB (0 to 232 - 1 bytes).
         /// </summary>
-        [CLSCompliant(false)]
         public uint Offset;
     }
 
@@ -4585,7 +4451,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -4629,14 +4494,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be a valid 16-bit signed integer indicating the file from which the data MUST be read
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
         /// This field is a 16-bit unsigned integer indicating the number of bytes to be read from the file. 
         /// The client MUST ensure that the amount of data requested will fit in the negotiated maximum buffer size
         /// </summary>
-        [CLSCompliant(false)]
         public ushort CountOfBytesToRead;
 
         /// <summary>
@@ -4645,14 +4508,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The client MUST ensure that the amount of data requested fits in the negotiated maximum buffer size.
         /// Because this field is limited to 32-bits this command is inappropriate for files having 64-bit offsets.
         /// </summary>
-        [CLSCompliant(false)]
         public uint ReadOffsetInBytes;
 
         /// <summary>
         /// This field is a 16-bit unsigned integer indicating the remaining number 
         /// of bytes that the client expects to read from the file. This is an advisory field and MAY be zero.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort EstimateOfRemainingBytesToBeRead;
     }
 
@@ -4666,7 +4527,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -4687,14 +4547,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This MUST be equal to CountOfBytesToRead unless the end of file was reached before reading 
         /// CoutOfBytesToRead bytes or the ReadOffsetInBytes pointed at or beyond the end of file.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort CountOfBytesReturned;
 
         /// <summary>
         /// Reserved and MUST be zero
         /// </summary>
         [StaticSize(4, StaticSizeMode.Elements)]
-        [CLSCompliant(false)]
         public ushort[] Reserved;
     }
 
@@ -4708,7 +4566,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 3 + CountOfBytesRead
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -4719,7 +4576,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The number of bytes read which are contained in the following array of bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort CountOfBytesRead;
 
         /// <summary>
@@ -4748,14 +4604,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This field MUST be a valid 16-bit signed integer 
         /// indicating the file to which the data MUST be written
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
         /// This field is a 16-bit unsigned integer indicating the number of bytes to be written to the file. 
         /// The client MUST ensure that the amount of data sent can fit in the negotiated maximum buffer size
         /// </summary>
-        [CLSCompliant(false)]
         public ushort CountOfBytesToWrite;
 
         /// <summary>
@@ -4764,7 +4618,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// can fit in the negotiated maximum buffer size. 
         /// Because this field is limited to 32-bits this command is inappropriate for files having 64-bit offsets.
         /// </summary>
-        [CLSCompliant(false)]
         public uint WriteOffsetInBytes;
 
         /// <summary>
@@ -4773,7 +4626,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This is an advisory field and MAY be zero. This information can be used by the server to optimize 
         /// cache behavior.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort EstimateOfRemainingBytesToBeWritten;
     }
 
@@ -4787,7 +4639,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// CountOfBytesToWrite + 3
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -4798,7 +4649,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be CountOfBytesToWrite
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataLength;
 
         /// <summary>
@@ -4826,7 +4676,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// If the number of bytes written differs from the number requested and no error is indicated, 
         /// then the server has no resources available to satisfy the complete write
         /// </summary>
-        [CLSCompliant(false)]
         public ushort CountOfBytesWritten;
     }
 
@@ -4840,7 +4689,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -4862,21 +4710,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be a valid 16-bit signed integer indicating the file from which the data MUST be read
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
         /// The offset in bytes from the start of the file at which the read MUST begin. 
         /// This is the lower 32 bits of a 64 bit value if the WordCount is 10
         /// </summary>
-        [CLSCompliant(false)]
         public uint Offset;
 
         /// <summary>
         /// The requested maximum number of bytes to read from the file and return to the client.
         /// The value MAY exceed the negotiated buffer size
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxCountOfBytesToReturn;
 
         /// <summary>
@@ -4884,7 +4729,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This field is used only when reading from a named pipe or a device. It is ignored when reading from
         /// a standard file.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MinCountOfBytesToReturn;
 
         /// <summary>
@@ -4892,13 +4736,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// i/o device. It does not apply when reading from a regular file. If Timeout is 0 or the server does
         /// not support Timeout and no data is currently available, the server MUST send a zero byte response. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Timeout;
 
         /// <summary>
         /// This field SHOULD be set to 0
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved;
 
         /// <summary>
@@ -4906,7 +4748,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// of the offset in bytes from the start of the file at which the read MUST start. This field allows 
         /// the client request to specify 64 bit file offsets
         /// </summary>
-        [CLSCompliant(false)]
         public uint OffsetHigh;
     }
 
@@ -4920,7 +4761,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The length in bytes of the remaining SMB_Data. This field MUST be 0.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -4957,20 +4797,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be a valid 16-bit signed integer indicating the file from which the data MUST be read
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
         /// The offset in bytes from the start of the file at which the read begins
         /// </summary>
-        [CLSCompliant(false)]
         public uint Offset;
 
         /// <summary>
         /// The requested maximum number of bytes to read from the file and return to the client. 
         /// The value MAY exceed the negotiated buffer size
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxCountOfBytesToReturn;
 
         /// <summary>
@@ -4978,7 +4815,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This field is used only when reading from a named pipe or a device. 
         /// It MUST be ignored when reading from a standard file
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MinCountOfBytesToReturn;
 
         /// <summary>
@@ -4995,13 +4831,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// MinCountOfBytesToReturn are read, the server MUST send a response with the Error field set to 
         /// indicate that the Timeout occurred along with any bytes already read.  
         /// </summary>
-        [CLSCompliant(false)]
         public uint Timeout;
 
         /// <summary>
         /// This field SHOULD be set to zero
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved;
     }
 
@@ -5015,7 +4849,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be zero. No data is sent by this message.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -5034,7 +4867,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The offset in bytes from the start of the file at which the read occurred.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Offset;
 
         /// <summary>
@@ -5047,7 +4879,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// at or after the end of file; in this case only one response MUST be generated. The value of the field
         /// MAY (and usually does) exceed the negotiated buffer size.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Count;
 
         /// <summary>
@@ -5055,19 +4886,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// of bytes remaining to be  read from the file after the bytes returned in the response were de-queued.
         /// Servers MAY support this function and SHOULD return -1 if they do not support it
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Remaining;
 
         /// <summary>
         /// Not used and MUST be zero
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataCompactionMode;
 
         /// <summary>
         /// This field MUST be set to zero
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved;
 
         /// <summary>
@@ -5075,14 +4903,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The value of this field MUST NOT cause the message to exceed the client's maximum buffer size as
         /// specified in MaxBufferSize of the COM_SESSION_SETUP_AND_X client request SMB.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataLength;
 
         /// <summary>
         /// The offset in bytes from the beginning of the SMB header to the start of the Buffer field in the
         /// SMB Data
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataOffset;
     }
 
@@ -5097,7 +4923,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The length in bytes of the remaining SMB_Data. The length MUST be between DataLength and 
         /// DataLength + 3
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -5136,27 +4961,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This field MUST be a valid 16-bit unsigned integer indicating the file, named pipe, 
         /// or device to which the data MUST be written.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
         /// The total number of bytes to be written to file during the entire dialog. 
         /// The value MAY exceed the maximum buffer size (MaxBufferSize) established for the session.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort CountOfBytes;
 
         /// <summary>
         /// This field is reserved and MUST be ignored by the server.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved1;
 
         /// <summary>
         /// The offset in bytes from the start of the file at which the write SHOULD begin. If WordCount is
         /// 14 this is the lower 32-bits of a 64-bit value.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Offset;
 
         /// <summary>
@@ -5172,7 +4993,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// elapse before all of the bytes are written, the server MUST send a response with the Error field set to
         /// indicate that the Timeout occurred along with the count of any bytes already written. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Timeout;
 
         /// <summary>
@@ -5186,19 +5006,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The total number of bytes successfully written MUST also be returned in  the SMB_Parameters.Count field
         /// of the response.
         /// </summary>
-        [CLSCompliant(false)]
         public WriteMode WriteMode;
 
         /// <summary>
         /// This field MUST be 0
         /// </summary>
-        [CLSCompliant(false)]
         public uint Reserved2;
 
         /// <summary>
         /// This field is the number of bytes included in the SMB_Data block that are to be written to the file.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataLength;
 
         /// <summary>
@@ -5206,14 +5023,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// is to be written to the file, the Data[] field. Specifying this offset allows the client to efficiently
         /// align the data buffer
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataOffset;
 
         /// <summary>
         /// ULONG If WordCount is 14, this is the upper 32 bits of the 64-bit offset in bytes from the start of
         /// the file at which the write MUST start. Support of this field is OPTIONAL.
         /// </summary>
-        [CLSCompliant(false)]
         public uint OffsetHigh;
     }
 
@@ -5227,7 +5042,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 0.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -5260,7 +5074,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This field indicates the number of bytes remaining to be read after the requested write was completed. 
         /// If the client wrote to a disk file, this field MUST be set to -1 (0xFFFF).
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Available;
     }
 
@@ -5274,7 +5087,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -5293,7 +5105,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field contains the total number of bytes written to the file by the server.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Count;
     }
 
@@ -5307,7 +5118,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -5316,7 +5126,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// A 16-bit field containing flags defined as follows. The flag names below are provided for reference only
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum WriteMode : ushort
     {
         /// <summary>
@@ -5365,19 +5174,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be a valid 16-bit signed integer indicating the file to which the data should be written
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
         /// The requested total number of bytes to write to the file. The value MAY exceed the negotiated buffer size
         /// </summary>
-        [CLSCompliant(false)]
         public ushort TotalByteCount;
 
         /// <summary>
         /// The server MUST ignore this value
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved;
 
         /// <summary>
@@ -5385,13 +5191,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// indicates the offset at which to write the data contained in the SMB_Data.Bytes.Buffer field of
         /// the same message
         /// </summary>
-        [CLSCompliant(false)]
         public uint ByteOffsetToBeginWrite;
 
         /// <summary>
         /// This field MUST be ignored by the server. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Timeout;
 
         /// <summary>
@@ -5404,26 +5208,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// If WritethroughMode is set the server MUST receive the data, write it to disk and then send a final
         /// response indicating the result of the write
         /// </summary>
-        [CLSCompliant(false)]
         public WriteMpxWriteMode WriteMode;
 
         /// <summary>
         /// This field is a bit mask indicating this SMB request's identity to the server. The server's response 
         /// MUST contain the logical OR of all of the RequestMask values received. This response MUST be generated
         /// </summary>
-        [CLSCompliant(false)]
         public uint RequestMask;
 
         /// <summary>
         /// This field value is the number of data bytes included in this request.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataLength;
 
         /// <summary>
         /// This field value is the offset in bytes from the start of the SMB header to the start of the data buffer. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataOffset;
     }
 
@@ -5437,7 +5237,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 1.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -5469,7 +5268,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This response contains the accumulated ResponseMask from all successfully received requests. The client
         /// uses the ResponseMask received to determine which packets, if any, MUST be retransmitted.
         /// </summary>
-        [CLSCompliant(false)]
         public uint ResponseMask;
     }
 
@@ -5483,7 +5281,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -5492,7 +5289,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// A 16-bit field containing flags defined as follows
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum WriteMpxWriteMode : ushort
     {
         /// <summary>
@@ -5546,7 +5342,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This is the FID representing the file for which attributes are to be set
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
@@ -5590,7 +5385,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -5617,7 +5411,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -5640,7 +5433,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This field MUST be a valid FID that the client has obtained through
         /// a previous SMB command which successfully opened the file. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
     }
 
@@ -5654,7 +5446,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// field MUST be 0. No data is sent by this message.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -5704,20 +5495,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This field contains the number of bytes in the file in bytes. Since this size 
         /// is limited to 32, bits this command is inappropriate for files whose size is too large. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileDataSize;
 
         /// <summary>
         /// This field contains the allocation size of the file in bytes. Since this size 
         /// is limited to 32, bits this command is inappropriate for files whose size is too large.
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileAllocationSize;
 
         /// <summary>
         /// This field is a 16 bit unsigned bit field encoding the attributes of the file.
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes FileAttributes;
     }
 
@@ -5731,7 +5519,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -5767,14 +5554,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// of the WordCount field in the next SMB command in this packet. This field is valid only if the
         /// AndXCommand field is not set to 0xFF. If AndXCommand is 0xFF, this field MUST be ignored by the server.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort AndXOffset;
 
         /// <summary>
         /// SHORT This field MUST be a valid 16-bit signed integer indicating the file from which the data SHOULD
         /// be read.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
@@ -5827,19 +5612,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// milliseconds to wait for all Locks lock ranges specified to become available and be locked by
         /// this request. Server support of this field is OPTIONAL. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Timeout;
 
         /// <summary>
         /// This field is a 16-bit unsigned integer value containing the number of entries in the Unlocks array
         /// </summary>
-        [CLSCompliant(false)]
         public ushort NumberOfRequestedUnlocks;
 
         /// <summary>
         /// This field is a 16-bit unsigned integer value containing the number of entries in the Locks array.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort NumberOfRequestedLocks;
     }
 
@@ -5853,7 +5635,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 0
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -5904,7 +5685,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// only if the AndXCommand field is not set to 0xFF. 
         /// If AndXCommand is 0xFF, this field MUST be ignored by the client.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort AndXOffset;
     }
 
@@ -5918,7 +5698,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -5932,21 +5711,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The PID of the process requesting the locking change
         /// </summary>
-        [CLSCompliant(false)]
         public ushort PID;
 
         /// <summary>
         /// The 32-bit unsigned integer value that is the offset into the file at which the locking change
         /// MUST begin
         /// </summary>
-        [CLSCompliant(false)]
         public uint ByteOffset;
 
         /// <summary>
         /// The 32-bit unsigned integer value that is the number of bytes beginning at OffsetInBytes that
         /// MUST be locked or unlocked
         /// </summary>
-        [CLSCompliant(false)]
         public uint LengthInBytes;
     }
 
@@ -5960,41 +5736,35 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The PID of the process requesting the locking change
         /// </summary>
-        [CLSCompliant(false)]
         public ushort PID;
 
         /// <summary>
         /// This field pads the structure to DWORD alignment and MUST be zero (0).
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Pad;
 
         /// <summary>
         /// The 32-bit unsigned integer value that is the high 32-bits of a 64-bit offset into the file at
         /// which the locking change MUST begin
         /// </summary>
-        [CLSCompliant(false)]
         public uint ByteOffsetHigh;
 
         /// <summary>
         /// The 32-bit unsigned integer value that is the low 32-bits of a 64-bit offset into the file at
         /// which the locking change MUST begin
         /// </summary>
-        [CLSCompliant(false)]
         public uint ByteOffsetLow;
 
         /// <summary>
         /// The 32-bit unsigned integer value that is the high 32-bits o
         /// f a 64-bit value specifying the number of bytes that MUST be locked or unlocked
         /// </summary>
-        [CLSCompliant(false)]
         public uint LengthInBytesHigh;
 
         /// <summary>
         /// The 32-bit unsigned integer value that is the low 32-bits of a 64-bit value specifying 
         /// the number of bytes that MUST be locked or unlocked
         /// </summary>
-        [CLSCompliant(false)]
         public uint LengthInBytesLow;
     }
 
@@ -6084,7 +5854,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// SMB_COM_TRANSACTION_SECONDARY, by setting ParameterCount (see below) to be less than
         /// TotalParameterCount.See SMB_COM_TRANSACTION_SECONDARY for more information
         /// </summary>
-        [CLSCompliant(false)]
         public ushort TotalParameterCount;
 
         /// <summary>
@@ -6099,7 +5868,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// data, and thus at least one SMB_COM_TRANSACTION_SECONDARY, by setting DataCount (see below)
         /// to be less than TotalDataCount. See SMB_COM_TRANSACTION_SECONDARY for more information
         /// </summary>
-        [CLSCompliant(false)]
         public ushort TotalDataCount;
 
         /// <summary>
@@ -6107,14 +5875,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// transaction response. The server MUST NOT return more than this number of bytes in the
         /// SMB_Data.Trans_Parameters field of the response.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxParameterCount;
 
         /// <summary>
         /// The maximum number of SMB_Data.Trans_Data bytes that the client accepts  in the transaction
         /// response. The server MUST NOT return more than this number of bytes in the SMB_Data.Trans_Data field
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxDataCount;
 
         /// <summary>
@@ -6135,7 +5901,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// set to zero by the client sending the request, and MUST be ignored by the server receiving the 
         /// request. The client MAY set either or both of the following bit flags
         /// </summary>
-        [CLSCompliant(false)]
         public TransSmbParametersFlags Flags;
 
         /// <summary>
@@ -6146,14 +5911,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// operation does not complete within the specified time, the server MAY abort the request and send
         /// a failure response. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Timeout;
 
         /// <summary>
         /// Reserved. This field MUST be zero in the client request. The server MUST ignore the contents 
         /// of this field.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved2;
 
         /// <summary>
@@ -6168,7 +5931,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// SMB_Data.Trans_Parameters bytes. The ParameterCount field MUST be used to determine the number
         /// of transaction SMB_Data.Trans_Parameters bytes contained within the SMB_COM_TRANSACTION message.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ParameterCount;
 
         /// <summary>
@@ -6176,7 +5938,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// SMB_Data.Trans_Parameters field. Server implementations MUST use this value to locate the
         /// transaction parameter block within the request.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ParameterOffset;
 
         /// <summary>
@@ -6191,7 +5952,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// transaction SMB_Data.Trans_Data bytes. The DataCount field MUST be used to determine 
         /// the number of transaction SMB_Data.Trans_Data bytes contained within the SMB_COM_TRANSACTION message.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataCount;
 
         /// <summary>
@@ -6199,7 +5959,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// start of the SMB_Data.Trans_Data field. 
         /// Server implementations MUST use this value to locate the transaction data block within the request
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataOffset;
 
         /// <summary>
@@ -6219,7 +5978,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The size and content of the array are specific to individual subcommands
         /// </summary>
         [Size("SetupCount")]
-        [CLSCompliant(false)]
         public ushort[] Setup;
     }
 
@@ -6233,7 +5991,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The number of bytes in the Bytes array that follows
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -6288,7 +6045,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// this files MUST be zero
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -6317,7 +6073,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The server indicates to the client to expect additional parameters in at least one more
         /// SMB_COM_TRANSACTION response by setting ParameterCount (see below) to be less than TotalParameterCount
         /// </summary>
-        [CLSCompliant(false)]
         public ushort TotalParameterCount;
 
         /// <summary>
@@ -6331,14 +6086,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// session setup. The server indicates to the client to expect additional data in at least one
         /// more SMB_COM_TRANSACTION response, by setting DataCount (see below) to be less than TotalDataCount.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort TotalDataCount;
 
         /// <summary>
         /// Reserved. This field MUST be zero in the client request. The server MUST ignore the contents
         /// of this field.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved1;
 
         /// <summary>
@@ -6348,7 +6101,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// be equal to the smallest TotalParameterCount value reported by the server. The ParameterCount
         /// field MUST be used to determine the number of transaction parameter bytes contained within the response
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ParameterCount;
 
         /// <summary>
@@ -6356,7 +6108,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// SMB_Data.Trans_Parameters field.
         /// Client implementations MUST use this value to locate the transaction parameter block within the response.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ParameterOffset;
 
         /// <summary>
@@ -6365,7 +6116,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// correctly reassemble the transaction response parameters when the response messages are received
         /// out of order
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ParameterDisplacement;
 
         /// <summary>
@@ -6376,7 +6126,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// than the value of TotalDataCount, then at least one additional SMB_COM_TRANSACTION response MUST
         /// be used to transfer the remaining data bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataCount;
 
         /// <summary>
@@ -6384,7 +6133,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// of the SMB_Data.Trans_Data field.
         /// Client implementations MUST use this value to locate the transaction data block within the response
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataOffset;
 
         /// <summary>
@@ -6392,7 +6140,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// at which this block of data bytes SHOULD be placed. This value MUST be used by the client to
         /// correctly reassemble the transaction data when the response messages are received out of order.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataDisplacement;
 
         /// <summary>
@@ -6412,7 +6159,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The size and content of the array are specific to individual subprotocol subcommands.
         /// </summary>
         [Size("SetupCount")]
-        [CLSCompliant(false)]
         public ushort[] Setup;
     }
 
@@ -6426,7 +6172,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The number of bytes in the SMB_Data.Bytes array that follows
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -6459,7 +6204,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// the server receiving the request. The client MAY set either or both of the following bit flags
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum TransSmbParametersFlags : ushort
     {
         /// <summary>
@@ -6503,7 +6247,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// that are part of the same transaction. This value represents transaction parameter bytes, 
         /// not SMB parameter words
         /// </summary>
-        [CLSCompliant(false)]
         public ushort TotalParameterCount;
 
         /// <summary>
@@ -6511,7 +6254,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This value MAY be less than or equal to the TotalDataCount in preceding request messages that are part 
         /// of the same transaction. This value represents transaction data bytes, not SMB data bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort TotalDataCount;
 
         /// <summary>
@@ -6520,7 +6262,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// in a transaction MUST be equal to the TotalParameterCount
         /// reported in the last request message of the transaction.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ParameterCount;
 
         /// <summary>
@@ -6530,7 +6271,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Bytes.Trans_Parameters field. Server implementations MUST use this value to locate the transaction
         /// parameter block within the SMB message.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ParameterOffset;
 
         /// <summary>
@@ -6538,7 +6278,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// at which this block of parameter bytes MUST be placed. This value can be used by the server to
         /// correctly reassemble the transaction parameters even if the SMB request messages are received out of order
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ParameterDisplacement;
 
         /// <summary>
@@ -6547,7 +6286,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The sum of the DataCount values across all of the request messages in a transaction MUST be equal
         /// to the smallest TotalDataCount value reported to the server
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataCount;
 
         /// <summary>
@@ -6557,7 +6295,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Bytes.Trans_Data field. 
         /// Server implementations MUST use this value to locate the transaction data block within the SMB message.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataOffset;
 
         /// <summary>
@@ -6565,7 +6302,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// which this block of parameter bytes MUST be placed. This value can be used by the server to correctly
         /// reassemble the transaction data block even if the SMB request messages are received out of order.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataDisplacement;
     }
 
@@ -6579,7 +6315,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The number of bytes in the SMB_Data.Bytes array, which follows.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -6625,19 +6360,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The Fid of the device or file to which the IOCTL is to be sent
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
         /// The implementation dependent device category for the request.
         /// </summary>
-        [CLSCompliant(false)]
         public IoctlCategory Category;
 
         /// <summary>
         /// The implementation dependent device function for the request
         /// </summary>
-        [CLSCompliant(false)]
         public IoctlFunction Function;
 
         /// <summary>
@@ -6645,7 +6377,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Parameter bytes for an IOCTL are carried within the SMB_Data.Parameters field of the SMB_COM_IOCTL
         /// request. This value MUST be the same as ParameterCount. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort TotalParameterCount;
 
         /// <summary>
@@ -6653,21 +6384,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// for an IOCTL are carried within the SMB_Data.Data field of the SMB_COM_IOCTL request. This value MUST
         /// be the same as DataCount. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort TotalDataCount;
 
         /// <summary>
         /// The maximum number of SMB_Data.Parameters bytes that the client accepts in the IOCTL response.
         /// The server MUST NOT return more than this number of bytes in the SMB_Data.Parameter field of the response.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxParameterCount;
 
         /// <summary>
         /// The maximum number of SMB_Data.Data bytes that the client accepts in the IOCTL response. The server
         /// MUST NOT return more than this number of bytes in the SMB_Data.Data field.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxDataCount;
 
         /// <summary>
@@ -6678,14 +6406,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// If the operation does not complete within the specified time, the server MAY abort the request
         /// and send a failure response
         /// </summary>
-        [CLSCompliant(false)]
         public uint Timeout;
 
         /// <summary>
         /// Reserved. This field MUST be zero in the client request. The server MUST ignore the contents 
         /// of this field. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved;
 
         /// <summary>
@@ -6693,13 +6419,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Parameter bytes for an IOCTL are carried within the SMB_Data.Parameters field of the SMB_COM_IOCTL
         /// request. This value MUST be the same as TotalParameterCount.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ParameterCount;
 
         /// <summary>
         /// The client SHOULD set the value of this field to 0. The server MUST ignore the value of this field.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ParameterOffset;
 
         /// <summary>
@@ -6707,13 +6431,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// for an IOCTL are carried within the SMB_Data.Data field of the SMB_COM_IOCTL request. This value MUST
         /// be the same as TotalDataCount
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataCount;
 
         /// <summary>
         /// The client SHOULD set the value of this field to 0. The server MUST ignore the value of this field.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataOffset;
     }
 
@@ -6727,7 +6449,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The number of bytes in the Bytes array that follows
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -6769,7 +6490,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// request. This value MUST be the same as ParameterCount and this value MUST be less than or equal
         /// to the MaxParameterCount field value in the client's request
         /// </summary>
-        [CLSCompliant(false)]
         public ushort TotalParameterCount;
 
         /// <summary>
@@ -6778,7 +6498,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This value MUST be the same as DataCount and this value MUST be less than or equal to the
         /// MaxDataCount field value in the client's request.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort TotalDataCount;
 
         /// <summary>
@@ -6787,7 +6506,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// request. This value MUST be the same as TotalParameterCount and this value MUST be less than or
         /// equal to the MaxParameterCount field value in the client's request.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ParameterCount;
 
         /// <summary>
@@ -6795,13 +6513,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// SMB_Data.Parameters field. 
         /// Client implementations MUST use this value to locate the IOCTL parameter block within the response
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ParameterOffset;
 
         /// <summary>
         /// The server SHOULD set the value of this field to 0. The client MUST ignore the value of this field.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ParameterDisplacement;
 
         /// <summary>
@@ -6810,7 +6526,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This value MUST be the same as TotalDataCount and this value MUST be less than or equal to the
         /// MaxDataCount field value of the client's request
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataCount;
 
         /// <summary>
@@ -6818,13 +6533,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// start of the SMB_Data.Data field.
         /// Client implementations MUST use this value to locate the IOCTL data block within the response
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataOffset;
 
         /// <summary>
         /// The server SHOULD set the value of this field to 0. The client MUST ignore the value of this field
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataDisplacement;
     }
 
@@ -6838,7 +6551,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The number of bytes in the SMB_Data.Bytes array, which follows.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -6867,7 +6579,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// the device category.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
-    [CLSCompliant(false)]
     public enum IoctlCategory : ushort
     {
         /// <summary>
@@ -6896,7 +6607,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// the device function.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
-    [CLSCompliant(false)]
     public enum IoctlFunction : ushort
     {
         /// <summary>
@@ -7020,7 +6730,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// the baud rate
         /// </summary>
-        [CLSCompliant(false)]
         public ushort BaudRate;
     }
 
@@ -7062,13 +6771,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// the write timeout
         /// </summary>
-        [CLSCompliant(false)]
         public ushort WriteTimeout;
 
         /// <summary>
         /// the read timeout
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ReadTimeout;
 
         /// <summary>
@@ -7117,7 +6824,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// the error value
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Error;
     }
 
@@ -7144,7 +6850,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// the print job id
         /// </summary>
-        [CLSCompliant(false)]
         public ushort JobId;
 
         /// <summary>
@@ -7186,7 +6891,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The number of times the server SHOULD echo the contents of the SMB_Data.Data field.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort EchoCount;
     }
 
@@ -7200,7 +6904,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to zero, indicating the number of bytes of data.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -7225,7 +6928,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The sequence number of this echo response message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SequenceNumber;
     }
 
@@ -7239,7 +6941,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be the same as it was in the request
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -7267,7 +6968,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be a valid 16-bit signed integer indicating the file to which the data SHOULD be written
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
@@ -7276,7 +6976,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// If the value of this field is zero (0), the server MUST truncate or extend the file to match the
         /// WriteOffsetInBytes
         /// </summary>
-        [CLSCompliant(false)]
         public ushort CountOfBytesToWrite;
 
         /// <summary>
@@ -7285,7 +6984,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The client MUST ensure that the amount of data sent can fit in the negotiated maximum buffer size. 
         /// Because this field is limited to 32-bits, this command is inappropriate for files having 64-bit offsets.
         /// </summary>
-        [CLSCompliant(false)]
         public uint WriteOffsetInBytes;
 
         /// <summary>
@@ -7294,7 +6992,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// value is zero (0), the server SHOULD use the current local time of the server to set the value.
         /// Failure to set the time MUST not result in an error response from the server.
         /// </summary>
-        [CLSCompliant(false)]
         public UTime LastWriteTime;
 
         /// <summary>
@@ -7302,7 +6999,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// 12 word version of the request
         /// </summary>
         [StaticSize(3, StaticSizeMode.Elements)]
-        [CLSCompliant(false)]
         public uint[] Reserved;
     }
 
@@ -7316,7 +7012,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 1 + CountOfBytesToWrite
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -7350,7 +7045,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// from the number requested and no error is indicated, then the server has no resources available
         /// with which to satisfy the complete write.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort CountOfBytesWritten;
     }
 
@@ -7364,7 +7058,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -7400,20 +7093,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// WordCount field in the next SMB command in this packet. This field is valid only if the AndXCommand 
         /// field is not set to 0xFF. If AndXCommand is 0xFF, this field MUST be ignored by the server
         /// </summary>
-        [CLSCompliant(false)]
         public ushort AndXOffset;
 
         /// <summary>
         /// A 16-bit field of flags for requesting attribute data and locking
         /// </summary>
-        [CLSCompliant(false)]
         public Flags Flags;
 
         /// <summary>
         /// A 16-bit field for encoding the requested access mode. See section 3.2.4.5.1 for a discussion on
         /// sharing modes.
         /// </summary>
-        [CLSCompliant(false)]
         public AccessMode AccessMode;
 
         /// <summary>
@@ -7421,47 +7111,40 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// If none of the attribute bytes are set, the file attributes MUST refer to a regular file. 
         /// <WB> The Windows NT server ALWAYS ignores SearchAttrs in open requests. </WB>
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes SearchAttrs;
 
         /// <summary>
         /// The set of attributes that the file is to have if the file needs to be created. If none of the
         /// attribute bytes are set, the file attributes MUST refer to a regular file.
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes FileAttrs;
 
         /// <summary>
         /// 32-bit integer time value to be assigned to the file as a time of creation if the file is to be created. 
         /// </summary>
-        [CLSCompliant(false)]
         public UTime CreationTime;
 
         /// <summary>
         /// A 16-bit field that controls the way a file SHOULD be treated when it is opened for use by certain
         /// extended SMB requests. 
         /// </summary>
-        [CLSCompliant(false)]
         public OpenMode OpenMode;
 
         /// <summary>
         /// The number of bytes to reserve on file creation or truncation. This field MAY be ignored by the server
         /// </summary>
-        [CLSCompliant(false)]
         public uint AllocationSize;
 
         /// <summary>
         /// This field is a 32-bit unsigned integer value containing the number of milliseconds to wait on a blocked 
         /// open request before returning without successfully opening the file.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Timeout;
 
         /// <summary>
         /// This field is reserved and MUST be zero
         /// </summary>
         [StaticSize(2, StaticSizeMode.Elements)]
-        [CLSCompliant(false)]
         public ushort[] Reserved;
     }
 
@@ -7475,7 +7158,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 2
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -7514,63 +7196,53 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// WordCount field in the next SMB command response in this packet. This field is valid only if the
         /// AndXCommand field is not set to 0xFF. If AndXCommand is 0xFF, this field MUST be ignored by the client
         /// </summary>
-        [CLSCompliant(false)]
         public ushort AndXOffset;
 
         /// <summary>
         /// A valid FID representing the open instance of the file.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
         /// The actual file system attributes of the file. If none of the attribute bytes are set,
         /// the file attributes MUST refer to a regular file
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes FileAttrs;
 
         /// <summary>
         /// 32-bit integer time value of last modification to the file
         /// </summary>
-        [CLSCompliant(false)]
         public UTime LastWriteTime;
 
         /// <summary>
         /// The number of bytes in the file. This field is advisory and MAY be used.
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileDataSize;
 
         /// <summary>
         /// A 16-bit field that shows granted access rights to the file
         /// </summary>
-        [CLSCompliant(false)]
         public AccessRightsValue AccessRights;
 
         /// <summary>
         /// A 16-bit field that shows the resource type opened.
         /// </summary>
-        [CLSCompliant(false)]
         public ResourceTypeValue ResourceType;
 
         /// <summary>
         /// A 16-bit field that shows the status of the named pipe if the resource type opened is a named pipe
         /// </summary>
-        [CLSCompliant(false)]
         public SMB_NMPIPE_STATUS NMPipeStatus;
 
         /// <summary>
         /// A 16-bit field that shows the results of the open operation
         /// </summary>
-        [CLSCompliant(false)]
         public OpenResultsValues OpenResults;
 
         /// <summary>
         /// This field MUST be zero
         /// </summary>
         [StaticSize(3, StaticSizeMode.Elements)]
-        [CLSCompliant(false)]
         public ushort[] Reserved;
     }
 
@@ -7584,7 +7256,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -7593,7 +7264,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// A 16-bit field of flags for requesting attribute data and locking
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum Flags : ushort
     {
         /// <summary>
@@ -7624,7 +7294,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// A 16-bit field for encoding the requested access mode. See section 3.2.4.5.1 for a discussion on
     /// sharing modes.
     /// </summary>
-    [CLSCompliant(false)]
     public enum AccessMode : ushort
     {
         /// <summary>
@@ -7655,7 +7324,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [Flags()]
-    [CLSCompliant(false)]
     public enum OpenMode : ushort
     {
         /// <summary>
@@ -7693,7 +7361,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// A 16-bit field that shows granted access rights to the file.
     /// </summary>
-    [CLSCompliant(false)]
     public enum AccessRightsValue : ushort
     {
         /// <summary>
@@ -7716,7 +7383,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// A 16-bit field that shows the resource type opened.
     /// </summary>
-    [CLSCompliant(false)]
     public enum ResourceTypeValue : ushort
     {
         /// <summary>
@@ -7758,7 +7424,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// </summary>
     [SuppressMessage("Microsoft.Usage", "CA2217:DoNotMarkEnumsWithFlags")]
     [Flags()]
-    [CLSCompliant(false)]
     public enum SMB_NMPIPE_STATUS : ushort
     {
         /// <summary>
@@ -7807,7 +7472,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// </summary>
     [SuppressMessage("Microsoft.Usage", "CA2217:DoNotMarkEnumsWithFlags")]
     [Flags()]
-    [CLSCompliant(false)]
     public enum OpenResultsValues : ushort
     {
         /// <summary>
@@ -7865,13 +7529,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// AndXCommand field is not set to 0xFF. 
         /// If AndXCommand is 0xFF, this field MUST be ignored by the server
         /// </summary>
-        [CLSCompliant(false)]
         public ushort AndXOffset;
 
         /// <summary>
         /// This field MUST be a valid FID indicating the file from which the data MUST be read.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
@@ -7879,7 +7541,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// of where the read MUST start relative to the beginning of the file. If WordCount is 12 this 
         /// field represents the lower 32 bits of a 64-bit offset.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Offset;
 
         /// <summary>
@@ -7888,14 +7549,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// buffer size the server MUST return the number of bytes that fit within the maximum negotiated
         /// buffer size
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxNumberOfBytesToReturn;
 
         /// <summary>
         /// The requested minimum number of bytes to return. This field is used only when reading from a named
         /// pipe or a device. It is ignored when reading from a standard file.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MinNumberOfBytesToReturn;
 
         /// <summary>
@@ -7904,14 +7563,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// reading from a regular file. Support for this field is optional.Two values have special meaning in 
         /// this field: 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Timeout;
 
         /// <summary>
         /// Count of bytes remaining to satisfy client's read request. This field is not used in the NT LAN 
         /// Manager dialect. Clients MUST set this field to zero and servers MUST ignore it.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Remaining;
 
         /// <summary>
@@ -7919,7 +7576,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// If WordCount is 12 this field represents the upper 32 bits of a 64-bit offset, measured
         /// in bytes, of where the read SHOULD start relative to the beginning of the file.
         /// </summary>
-        [CLSCompliant(false)]
         [MarshalingCondition("IsOffsetHighPresent")]
         public uint OffsetHigh;
 
@@ -7947,7 +7603,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -7981,7 +7636,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This field is valid only if the AndXCommand field is  not set to 0xFF. If AndXCommand
         /// is 0xFF, this field MUST be ignored by the client
         /// </summary>
-        [CLSCompliant(false)]
         public ushort AndXOffset;
 
         /// <summary>
@@ -7989,19 +7643,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// the number of bytes remaining to be read after the requested read was completed. If the
         /// client read from a disk file, this field MUST be set to -1 (0xFFFF). 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Available;
 
         /// <summary>
         /// Reserved and SHOULD be 0
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataCompactionMode;
 
         /// <summary>
         /// This field MUST be 0
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved1;
 
         /// <summary>
@@ -8009,13 +7660,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// is less than the value in the Request.SMB_Parameters.MaxCountOfBytesToReturn field it 
         /// indicates that the read operation has reached the end of the file (EOF).
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataLength;
 
         /// <summary>
         /// The offset in bytes from the header of the read data
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataOffset;
 
         /// <summary>
@@ -8023,7 +7672,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// to make the SMB_COM_READ_ANDX Response the same size as the SMB_COM_WRITE_ANDX Response.
         /// </summary>
         [StaticSize(5, StaticSizeMode.Elements)]
-        [CLSCompliant(false)]
         public ushort[] Reserved2;
     }
 
@@ -8037,7 +7685,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 0
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -8085,13 +7732,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// the WordCount field in the next SMB command in this packet. This field is valid only if the
         /// AndXCommand field is not set to 0xFF. If AndXCommand is 0xFF, this field MUST be ignored by the server.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort AndXOffset;
 
         /// <summary>
         /// This field MUST be a valid FID indicating the file to which the data SHOULD be written.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
@@ -8099,7 +7744,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// SHOULD start relative to the beginning of the file. 
         /// If WordCount is 14 this field represents the lower 32 bits of a 64-bit offset.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Offset;
 
         /// <summary>
@@ -8108,13 +7752,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// writing to a disk file. Support for this field is optional.
         /// Two values have special meaning in this field: 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Timeout;
 
         /// <summary>
         /// A 16-bit field containing flags
         /// </summary>
-        [CLSCompliant(false)]
         public WriteAndxWriteMode WriteMode;
 
         /// <summary>
@@ -8123,26 +7765,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// to be written by this request. The server MAY either ignore this field or use it to perform 
         /// optimizations.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Remaining;
 
         /// <summary>
         /// This field MUST be 0
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved;
 
         /// <summary>
         /// This field is the number of bytes included in the SMB_Data that are to be written to the file.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataLength;
 
         /// <summary>
         /// The offset in bytes from the start of the SMB header to the start of the data that is to be written to 
         /// the file. Specifying this offset allows a client to efficiently align the data buffer.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataOffset;
 
         /// <summary>
@@ -8150,7 +7788,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// If WordCount is 14 this field represents the upper 32 bits of a 64-bit offset, measured in
         /// bytes, of where the write SHOULD start relative to the beginning of the file
         /// </summary>
-        [CLSCompliant(false)]
         [MarshalingCondition("IsOffsetHighPresent")]
         public uint OffsetHigh;
 
@@ -8178,7 +7815,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 1
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -8223,13 +7859,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This field is valid only if the AndXCommand field is not 
         /// set to 0xFF. If AndXCommand is 0xFF, this field MUST be ignored by the client. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort AndXOffset;
 
         /// <summary>
         /// The number of bytes written to the file
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Count;
 
         /// <summary>
@@ -8237,13 +7871,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// the number of bytes remaining to be read after the requested write was completed. 
         /// If the client wrote to a disk file, this field MUST be set to -1 (0xFFFF). 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Available;
 
         /// <summary>
         /// This field MUST be 0.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Reserved;
     }
 
@@ -8257,7 +7889,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -8266,7 +7897,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// A 16-bit field containing flags defined as follows
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum WriteAndxWriteMode : ushort
     {
         /// <summary>
@@ -8331,7 +7961,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// parameter words. Transaction parameter bytes are carried within in the SMB_Data block of the
         /// SMB_COM_TRANSACTION2 request.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort TotalParameterCount;
 
         /// <summary>
@@ -8340,21 +7969,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// that are part of the same transaction. This value represents transaction  data bytes,
         /// not SMB data bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort TotalDataCount;
 
         /// <summary>
         /// The maximum number of parameter bytes that the client will accept in the transaction reply.
         /// The server MUST NOT return more than this number of parameter bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxParameterCount;
 
         /// <summary>
         /// USHORT The maximum number of data bytes that the client will accept in the transaction reply.
         /// The server MUST NOT return more than this number of data bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxDataCount;
 
         /// <summary>
@@ -8375,21 +8001,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// MUST be set to zero by the client sending the request, and MUST be ignored by the server
         /// receiving the request. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Flags;
 
         /// <summary>
         /// The number of milliseconds the server SHOULD wait for completion of the transaction before
         /// generating a timeout. A value of zero indicates that the operation MUST NOT block.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Timeout;
 
         /// <summary>
         /// Reserved. This field MUST be zero in the client request. The server MUST ignore the contents
         /// of this field
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved2;
 
         /// <summary>
@@ -8404,7 +8027,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The ParameterCount field MUST be used to determine the number of transaction
         /// parameter bytes contained within the SMB_COM_TRANSACTION2 message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ParameterCount;
 
         /// <summary>
@@ -8414,7 +8036,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Server implementations MUST use this value to locate the 
         /// transaction parameter block within the SMB message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ParameterOffset;
 
         /// <summary>
@@ -8427,7 +8048,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// value of TotalDataCount, then at least one SMB_COM_TRANSACTION2_SECONDARY
         /// message MUST be used to transfer the remaining data bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataCount;
 
         /// <summary>
@@ -8437,7 +8057,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Server implementations MUST use this value to locate the transaction
         /// data block within the SMB message.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataOffset;
 
         /// <summary>
@@ -8462,7 +8081,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// and Parameter bytes that did not fit in the initial message.
         /// </summary>
         [Size("SetupCount")]
-        [CLSCompliant(false)]
         public ushort[] Setup;
     }
 
@@ -8476,7 +8094,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The number of bytes in the SMB_Data.Bytes array
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -8535,7 +8152,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         ///  ByteCount fields MUST be zero.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -8561,7 +8177,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// bytes, not SMB parameter words. Transaction parameter bytes are 
         /// carried within in the SMB_data block
         /// </summary>
-        [CLSCompliant(false)]
         public ushort TotalParameterCount;
 
         /// <summary>
@@ -8571,14 +8186,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// transaction. This value represents transaction data bytes, 
         /// not SMB data bytes
         /// </summary>
-        [CLSCompliant(false)]
         public ushort TotalDataCount;
 
         /// <summary>
         /// Reserved. This field MUST be zero in the client request. 
         /// The server MUST ignore the contents of this field
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved1;
 
         /// <summary>
@@ -8591,7 +8204,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// used to determine the number of transaction parameter bytes 
         /// contained within the SMB message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ParameterCount;
 
         /// <summary>
@@ -8601,7 +8213,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Parameters field. Server implementations MUST use this value to locate
         /// the transaction parameter block within the SMB message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ParameterOffset;
 
         /// <summary>
@@ -8611,7 +8222,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// correctly reassemble the transaction parameters even if the SMB 
         /// response messages are received out of order
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ParameterDisplacement;
 
         /// <summary>
@@ -8621,7 +8231,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// the sum of the DataCount values in the transaction response
         /// messages MUST be equal to the smallest TotalDataCount value reported by the server.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataCount;
 
         /// <summary>
@@ -8631,7 +8240,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Data field. Server implementations MUST use this value to
         /// locate the transaction data block within the SMB message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataOffset;
 
         /// <summary>
@@ -8641,7 +8249,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// reassemble the transaction data even if the SMB response
         /// messages are received out of order.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataDisplacement;
 
         /// <summary>
@@ -8661,7 +8268,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The size and content of the array are specific to individual subcommands.
         /// </summary>
         [Size("SetupCount")]
-        [CLSCompliant(false)]
         public ushort[] Setup;
     }
 
@@ -8675,7 +8281,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The number of bytes in the SMB_Data.Bytes array, which follows.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -8709,7 +8314,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// receiving the request. The client MAY set either or both of the following bit flags
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum Trans2SmbParametersFlags : ushort
     {
         /// <summary>
@@ -8754,7 +8358,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// messages that are part of the same transaction. This value represents 
         /// transaction parameter bytes, not SMB parameter words. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort TotalParameterCount;
 
         /// <summary>
@@ -8764,7 +8367,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// are part of the same transaction. This value represents transaction 
         /// data bytes, not SMB data bytes
         /// </summary>
-        [CLSCompliant(false)]
         public ushort TotalDataCount;
 
         /// <summary>
@@ -8774,7 +8376,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// messages in a transaction MUST be equal to the TotalParameterCount 
         /// reported in the last request message of the transaction.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ParameterCount;
 
         /// <summary>
@@ -8785,7 +8386,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Server implementations MUST use this value to locate the 
         /// transaction parameter block within the SMB message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ParameterOffset;
 
         /// <summary>
@@ -8795,7 +8395,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// correctly reassemble the transaction parameters even if the SMB request 
         /// messages are received out of order.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ParameterDisplacement;
 
         /// <summary>
@@ -8805,7 +8404,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// in a transaction MUST be equal to the smallest TotalDataCount
         /// value reported to the server
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataCount;
 
         /// <summary>
@@ -8816,7 +8414,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Server implementations MUST use this value to locate the
         /// transaction data block within the SMB message.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataOffset;
 
         /// <summary>
@@ -8826,7 +8423,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This value MAY be used by the server to correctly reassemble the transaction 
         /// data block even if the SMB request messages are received out of order.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataDisplacement;
 
         /// <summary>
@@ -8836,7 +8432,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// See the individual descriptions of the Trans2 subcommands
         /// for specific information on the use of this field.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
     }
 
@@ -8850,7 +8445,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The number of bytes in the SMB_Data.Bytes array, which follows.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -8897,7 +8491,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// value returned in the initial TRANS2_FIND_FIRST2 
         /// subcommand request
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SearchHandle;
     }
 
@@ -8911,7 +8504,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -8938,7 +8530,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -8971,7 +8562,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 6
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -9034,7 +8624,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// the size of the SMB header, parameter, and data blocks. This 
         /// size MUST not include any transport-layer framing or other transport-layer data.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxBufferSize;
 
         /// <summary>
@@ -9044,7 +8633,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// a valid TID, whether the resource is password protected or not.
         /// The value 0xFFFF is reserved; the server MUST NOT return a TID value of 0xFFFF.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort TID;
     }
 
@@ -9058,7 +8646,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -9088,7 +8675,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -9115,7 +8701,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -9145,7 +8730,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 2
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -9176,7 +8760,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// first entry in the list has been selected. If the server does not
         /// support any of the listed dialects, it MUST return a DialectIndex of 0XFFFF. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DialectIndex;
     }
 
@@ -9190,7 +8773,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The value of this field is variable, depending upon the dialect selected.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -9213,7 +8795,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// entry in the list. If the server does not support any of the 
         /// listed dialects, it MUST return a DialectIndex of 0XFFFF.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DialectIndex;
 
         /// <summary>
@@ -9230,14 +8811,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// MUST be greater than zero. This parameter has no specific 
         /// relationship to the SMB_COM_READ_MPX and SMB_COM_WRITE_MPX commands. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxMpxCount;
 
         /// <summary>
         /// The maximum number of virtual circuits that MAY be established between
         /// the client and the server as part of the same SMB session. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxNumberVcs;
 
         /// <summary>
@@ -9258,7 +8837,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// is a multiple of four (4). The MaxBufferSize can be configured through the following registry setting:  
         /// HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters\SizeReqBuf</WBN>
         /// </summary>
-        [CLSCompliant(false)]
         public uint MaxBufferSize;
 
         /// <summary>
@@ -9268,7 +8846,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// maximum message size that the server MUST not exceed when sending an 
         /// SMB_COM_READ_RAW response. This value is only significant if CAP_RAW_MODE is negotiated.
         /// </summary>
-        [CLSCompliant(false)]
         public uint MaxRawSize;
 
         /// <summary>
@@ -9280,7 +8857,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// connections to be bound together to form a single logical SMB
         /// connection.
         /// </summary>
-        [CLSCompliant(false)]
         public uint SessionKey;
 
         /// <summary>
@@ -9290,7 +8866,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// the following table is unused. The server MUST set the unused
         /// bits to 0 in a response, and the client MUST ignore these bits
         /// </summary>
-        [CLSCompliant(false)]
         public Capabilities Capabilities;
 
         /// <summary>
@@ -9325,7 +8900,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// field MUST be greater than or equal to 2
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -9432,7 +9006,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// AndXCommand field is not set to 0xFF. If AndXCommand is 0xFF, this 
         /// field MUST be ignored by the server.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort AndXOffset;
 
         /// <summary>
@@ -9442,7 +9015,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// includes the size of the SMB header, parameter, and data blocks. This
         /// size MUST not include any transport-layer framing or other transport-layer data.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxBufferSize;
 
         /// <summary>
@@ -9450,7 +9022,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// by the client. This value MUST be less than or equal to the MaxMpxCount
         /// value provided by the server in the SMB_COM_NEGOTIATE response
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxMpxCount;
 
         /// <summary>
@@ -9459,32 +9030,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// virtual circuit between the client and the server and it 
         /// SHOULD be set to a unique nonzero value for additional virtual circuit.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort VcNumber;
 
         /// <summary>
         /// The client MUST set this to be equal to the SessionKey field
         /// in the SMB_COM_NEGOTIATE response for this SMB connection
         /// </summary>
-        [CLSCompliant(false)]
         public uint SessionKey;
 
         /// <summary>
         /// The length, in bytes, of the contents of the SMB_Data.OEMPassword field.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort OEMPasswordLen;
 
         /// <summary>
         /// The length, in bytes, of the contents of the SMB_Data.UnicodePassword field.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort UnicodePasswordLen;
 
         /// <summary>
         /// Reserved. This field MUST be zero. The server MUST ignore the contents of this field.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Reserved;
 
         /// <summary>
@@ -9492,7 +9058,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The client uses this field to report its own set of capabilities to
         /// the server. The client capabilities are a subset of the server capabilities
         /// </summary>
-        [CLSCompliant(false)]
         public Capabilities Capabilities;
     }
 
@@ -9506,7 +9071,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// USHORT
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -9607,13 +9171,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// only if the AndXCommand field is not set to 0xFF. 
         /// If AndXCommand is 0xFF, this field MUST be ignored by the client. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort AndXOffset;
 
         /// <summary>
         /// A 16-bit field. The two lowest order bits have been defined
         /// </summary>
-        [CLSCompliant(false)]
         public ActionValues Action;
     }
 
@@ -9627,7 +9189,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// USHORT
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -9678,7 +9239,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// the server. The client capabilities are a subset of the server capabilities
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum Capabilities : uint
     {
         /// <summary>
@@ -9782,7 +9342,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// A 16-bit field which indicates the authentication actions. The two lowest-order bits have been defined.
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum ActionValues : ushort
     {
         /// <summary>
@@ -9837,7 +9396,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// command in this packet. This field is valid only if the AndXCommand
         /// field is not set to 0xFF
         /// </summary>
-        [CLSCompliant(false)]
         public ushort AndXOffset;
     }
 
@@ -9851,7 +9409,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -9886,7 +9443,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// command in this packet. This field is valid only if the AndXCommand 
         /// field is not set to 0xFF
         /// </summary>
-        [CLSCompliant(false)]
         public ushort AndXOffset;
     }
 
@@ -9900,7 +9456,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -9939,7 +9494,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// field is not set to 0xFF. If AndXCommand is 0xFF, this field MUST be
         /// ignored by the server.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort AndXOffset;
 
         /// <summary>
@@ -9947,13 +9501,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The client MUST set reserved values to 0, and the server MUST
         /// ignore them.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Flags;
 
         /// <summary>
         /// This field MUST be the length, in bytes, of the SMB_Data.Bytes.Password field.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort PasswordLength;
     }
 
@@ -9967,7 +9519,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The value of this field MUST be 3 or greater
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -10039,7 +9590,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// only if the AndXCommand field is not set to 0xFF. If AndXCommand 
         /// is 0xFF, this field MUST be ignored by the client
         /// </summary>
-        [CLSCompliant(false)]
         public ushort AndXOffset;
 
         /// <summary>
@@ -10048,7 +9598,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// All undefined values are considered reserved. The server SHOULD set
         /// them to 0, and the client MUST ignore them
         /// </summary>
-        [CLSCompliant(false)]
         public ushort OptionalSupport;
     }
 
@@ -10062,7 +9611,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The value of this field MUST be greater than or equal to 2
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -10104,7 +9652,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// ignore them.
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum TreeConnectAndxFlags : ushort
     {
         /// <summary>
@@ -10159,7 +9706,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this command.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -10179,34 +9725,29 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This field is a 16 bit unsigned value that represents the total 
         /// count of logical allocation units available on the volume
         /// </summary>
-        [CLSCompliant(false)]
         public ushort TotalUnits;
 
         /// <summary>
         /// This field is a 16 bit unsigned value that represents the number
         /// of blocks per allocation unit for the volume
         /// </summary>
-        [CLSCompliant(false)]
         public ushort BlocksPerUnit;
 
         /// <summary>
         /// This field is a 16 bit unsigned value that represents the size
         /// in bytes of each allocation unit for the volume
         /// </summary>
-        [CLSCompliant(false)]
         public ushort BlockSize;
 
         /// <summary>
         /// This field is a 16 bit unsigned value that represents the total
         /// number of free allocation units available on the volume
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FreeUnits;
 
         /// <summary>
         /// This field is a 16 bit unsigned field and is reserved. The client SHOULD ignore this field.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved;
     }
 
@@ -10220,7 +9761,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -10244,7 +9784,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// the maximum number of entries across the entirety 
         /// of the search, not just the initial response. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxCount;
 
         /// <summary>
@@ -10256,7 +9795,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// or Hidden attributes are specified, then those entries are 
         /// returned in addition to the normal files. 
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes SearchAttributes;
     }
 
@@ -10270,7 +9808,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 5 or greater
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -10300,7 +9837,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// the continuation of a previous search, and the next 
         /// field MUST contain a ResumeKey previously returned by the server.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ResumeKeyLength;
 
         /// <summary>
@@ -10331,7 +9867,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This value MUST be less than or equal to the value 
         /// of MaxCount in the initial request.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Count;
     }
 
@@ -10345,7 +9880,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 3
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -10357,7 +9891,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The size, in bytes, of the DirectoryInformationData array, which follows. This field MUST be equal
         /// to 43 times the value of SMB_Parameters. Count.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataLength;
 
         /// <summary>
@@ -10432,7 +9965,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// A server-specific index used to continue the search at the correct
         /// place in the remote directory
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileIndex;
     }
 
@@ -10474,7 +10006,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// bytes in size then the server SHOULD return the least 
         /// significant 32 bits of the file size
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileSize;
 
         /// <summary>
@@ -10508,7 +10039,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// represents the maximum number of entries across
         /// the entirety of the search, not just the initial response. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxCount;
 
         /// <summary>
@@ -10520,7 +10050,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// or Hidden attributes are specified, then those entries MUST be
         /// returned in addition to the normal files. 
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes SearchAttributes;
     }
 
@@ -10534,7 +10063,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 5 or greater
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -10564,7 +10092,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// continuation of a previous search, and the next field MUST contain
         /// a ResumeKey previously returned by the server
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ResumeKeyLength;
 
         /// <summary>
@@ -10595,7 +10122,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// response message. This value MUST be less than or
         /// equal to the value of MaxCount in the initial request.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Count;
     }
 
@@ -10609,7 +10135,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 3.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -10622,7 +10147,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// which follows. This field MUST be equal to 43 times the value of
         /// SMB_Parameters.Words.Count.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataLength;
 
         /// <summary>
@@ -10653,7 +10177,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The maximum number of directory entries to return
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxCount;
 
         /// <summary>
@@ -10665,7 +10188,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// are specified, then those entries MUST be returned in addition to the normal
         /// files
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes SearchAttributes;
     }
 
@@ -10679,7 +10201,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 5 or greater
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -10705,7 +10226,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// the SMB_COM_FIND_UNIQUE request. If the server receives an SMB_COM_FIND_UNIQUE
         /// request with a non-zero ResumeKeyLength, it MUST ignore this field
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ResumeKeyLength;
 
         /// <summary>
@@ -10732,7 +10252,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// message. This value MUST be less than or equal to the value 
         /// of MaxCount in the initial request.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Count;
     }
 
@@ -10746,7 +10265,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 3
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -10759,7 +10277,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This field MUST be equal to 43 times the value of 
         /// SMB_Parameters.Words.Count.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataLength;
 
         /// <summary>
@@ -10791,14 +10308,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This field has no meaning in this context. It SHOULD be set 
         /// to zero by the client and MUST be ignored by the server. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxCount;
 
         /// <summary>
         /// This field has no meaning in this context. It SHOULD be set 
         /// to zero by the client and MUST be ignored by the server
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SearchAttributes;
     }
 
@@ -10812,7 +10327,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 26
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -10834,7 +10348,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 21
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ResumeKeyLength;
 
         /// <summary>
@@ -10861,7 +10374,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The server SHOULD set this field to zero, and the client MUST 
         /// ignore the value of this field. No entries are returned in the response.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Count;
     }
 
@@ -10875,7 +10387,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 3.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -10886,7 +10397,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be zero. No DirectoryInformationData records are returned.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataLength;
     }
 
@@ -10916,7 +10426,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Two padding bytes. This field MUST be zero. This field is used to
         /// align the next field to a 32-bit boundary.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved1;
 
         /// <summary>
@@ -10928,7 +10437,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// carried within in the SMB_Data block of the SMB_COM_NT_TRANSACT request
         /// or subsequent SMB_COM_NT_TRANSACT_SECONDARY requests.
         /// </summary>
-        [CLSCompliant(false)]
         public uint TotalParameterCount;
 
         /// <summary>
@@ -10938,7 +10446,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// of the same transaction. This value represents transaction data bytes,
         /// not SMB data bytes
         /// </summary>
-        [CLSCompliant(false)]
         public uint TotalDataCount;
 
         /// <summary>
@@ -10946,7 +10453,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// in the transaction reply. The server MUST NOT return more than 
         /// this number of parameter bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public uint MaxParameterCount;
 
         /// <summary>
@@ -10954,7 +10460,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// in the transaction reply. The server MUST NOT return more than
         /// this number of data bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public uint MaxDataCount;
 
         /// <summary>
@@ -10971,7 +10476,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// transaction parameter bytes contained within the SMB_COM_NT_TRANSACT
         /// message
         /// </summary>
-        [CLSCompliant(false)]
         public uint ParameterCount;
 
         /// <summary>
@@ -10981,7 +10485,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Parameters field. Server implementations MUST use this value to locate
         /// the transaction parameter block within the SMB message
         /// </summary>
-        [CLSCompliant(false)]
         public uint ParameterOffset;
 
         /// <summary>
@@ -10994,7 +10497,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// value of TotalDataCount, then at least one SMB_COM_NT_TRANSACT_SECONDARY
         /// message MUST be used to transfer the remaining data bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public uint DataCount;
 
         /// <summary>
@@ -11004,7 +10506,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Server implementations MUST use this value to locate the transaction
         /// data block within the SMB message
         /// </summary>
-        [CLSCompliant(false)]
         public uint DataOffset;
 
         /// <summary>
@@ -11016,7 +10517,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The transaction subcommand code. The subcommand code is used to 
         /// identify the operation to be performed by the server.
         /// </summary>
-        [CLSCompliant(false)]
         public NtTransSubCommand Function;
 
         /// <summary>
@@ -11025,7 +10525,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// individual subcommands.
         /// </summary>
         [Size("SetupCount")]
-        [CLSCompliant(false)]
         public ushort[] Setup;
     }
 
@@ -11037,13 +10536,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// specify the types of operations to monitor.
         /// </summary>
-        [CLSCompliant(false)]
         public CompletionFilter filter;
 
         /// <summary>
         /// The FID of the directory to monitor.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Fid;
 
         /// <summary>
@@ -11067,7 +10564,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The number of bytes in the SMB_Data.Bytes array, which follows.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -11116,7 +10612,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// ByteCount Fields must be zero
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -11149,7 +10644,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// bytes, not SMB parameter words. Transaction parameter bytes are 
         /// carried within in the SMB_data block
         /// </summary>
-        [CLSCompliant(false)]
         public uint TotalParameterCount;
 
         /// <summary>
@@ -11159,7 +10653,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// transaction. This value represents transaction data bytes, 
         /// not SMB data bytes
         /// </summary>
-        [CLSCompliant(false)]
         public uint TotalDataCount;
 
         /// <summary>
@@ -11172,7 +10665,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The ParameterCount field MUST be used to determine the number of
         /// transaction parameter bytes contained within the SMB message
         /// </summary>
-        [CLSCompliant(false)]
         public uint ParameterCount;
 
         /// <summary>
@@ -11182,7 +10674,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Parameters field. Server implementations MUST use this value to 
         /// locate the transaction parameter block within the SMB message
         /// </summary>
-        [CLSCompliant(false)]
         public uint ParameterOffset;
 
         /// <summary>
@@ -11192,7 +10683,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// reassemble the transaction parameters even if the SMB response messages are
         /// received out of order.
         /// </summary>
-        [CLSCompliant(false)]
         public uint ParameterDisplacement;
 
         /// <summary>
@@ -11202,7 +10692,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// of the DataCount values in the transaction response messages MUST be
         /// equal to the smallest TotalDataCount value reported by the server.
         /// </summary>
-        [CLSCompliant(false)]
         public uint DataCount;
 
         /// <summary>
@@ -11212,7 +10701,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Server implementations MUST use this value to locate the transaction 
         /// data block within the SMB message.
         /// </summary>
-        [CLSCompliant(false)]
         public uint DataOffset;
 
         /// <summary>
@@ -11222,7 +10710,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// used by the client to correctly reassemble the transaction
         /// data even if the SMB response messages are received out of order. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint DataDisplacement;
 
         /// <summary>
@@ -11236,7 +10723,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// subcommand.
         /// </summary>
         [Size("SetupCount")]
-        [CLSCompliant(false)]
         public ushort[] Setup;
     }
 
@@ -11250,7 +10736,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 0
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -11309,7 +10794,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// same transaction. This value represents transaction parameter 
         /// bytes, not SMB parameter words
         /// </summary>
-        [CLSCompliant(false)]
         public uint TotalParameterCount;
 
         /// <summary>
@@ -11319,7 +10803,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// messages that are part of the same transaction. This value represents 
         /// transaction data bytes, not SMB data bytes
         /// </summary>
-        [CLSCompliant(false)]
         public uint TotalDataCount;
 
         /// <summary>
@@ -11329,7 +10812,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// a transaction MUST be equal to the TotalParameterCount reported in the
         /// last request message of the transaction
         /// </summary>
-        [CLSCompliant(false)]
         public uint ParameterCount;
 
         /// <summary>
@@ -11340,7 +10822,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// implementations MUST use this value to locate the transaction
         /// parameter block within the SMB message.
         /// </summary>
-        [CLSCompliant(false)]
         public uint ParameterOffset;
 
         /// <summary>
@@ -11350,7 +10831,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// correctly reassemble the transaction parameters even if the SMB request 
         /// messages are received out of order
         /// </summary>
-        [CLSCompliant(false)]
         public uint ParameterDisplacement;
 
         /// <summary>
@@ -11360,7 +10840,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// MUST be equal to the smallest TotalDataCount value reported to 
         /// the server
         /// </summary>
-        [CLSCompliant(false)]
         public uint DataCount;
 
         /// <summary>
@@ -11370,7 +10849,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// the SMB_Data.Bytes.Data field. Server implementations MUST use this 
         /// value to locate the transaction data block within the SMB message.
         /// </summary>
-        [CLSCompliant(false)]
         public uint DataOffset;
 
         /// <summary>
@@ -11380,7 +10858,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// reassemble the transaction data block even if the SMB request messages
         /// are received out of order.
         /// </summary>
-        [CLSCompliant(false)]
         public uint DataDisplacement;
 
         /// <summary>
@@ -11399,7 +10876,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The number of bytes in the SMB_Data.Bytes array, which follows.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -11461,7 +10937,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// is not set to 0xFF. If AndXCommand is 0xFF, this field MUST be ignored
         /// by the server
         /// </summary>
-        [CLSCompliant(false)]
         public ushort AndXOffset;
 
         /// <summary>
@@ -11473,7 +10948,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be the length of the FileName field (see below) in bytes. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort NameLength;
 
         /// <summary>
@@ -11481,7 +10955,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Unused bit fields SHOULD be set to 0 by the client when sending
         /// a message and MUST be ignored when received by the server
         /// </summary>
-        [CLSCompliant(false)]
         public uint Flags;
 
         /// <summary>
@@ -11491,7 +10964,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// field MUST be handled as relative to the root of the share (the TID). 
         /// The RootDirectoryFID MUST have been acquired in a previous message exchange.
         /// </summary>
-        [CLSCompliant(false)]
         public uint RootDirectoryFID;
 
         /// <summary>
@@ -11501,7 +10973,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// to an object. If this value is 0, it represents a request to query 
         /// the attributes without access the file
         /// </summary>
-        [CLSCompliant(false)]
         public uint DesiredAccess;
 
         /// <summary>
@@ -11513,7 +10984,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// number of bytes to be allocated represented as a 64 bit integer 
         /// value
         /// </summary>
-        [CLSCompliant(false)]
         public ulong AllocationSize;
 
         /// <summary>
@@ -11525,7 +10995,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// attribute value causes the ATTR_NORMAL value to be ignored. Any combination 
         /// of the flag values (see below) is acceptable. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint ExtFileAttributes;
 
         /// <summary>
@@ -11536,14 +11005,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// the server SHOULD ignore these values. The value MUST be 
         /// FILE_SHARE_NONE or some combination of the other values
         /// </summary>
-        [CLSCompliant(false)]
         public uint ShareAccess;
 
         /// <summary>
         /// A 32-bit value that represents the action to take if the file 
         /// already exists or if the file is a new file and does not already exist
         /// </summary>
-        [CLSCompliant(false)]
         public uint CreateDisposition;
 
         /// <summary>
@@ -11555,7 +11022,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// behavior. Windows server implementations SHOULD reserve all bits
         /// not specified in the following definitions. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint CreateOptions;
 
         /// <summary>
@@ -11563,7 +11029,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// when executing the command on behalf of the client. Value names 
         /// are provided for convenience only
         /// </summary>
-        [CLSCompliant(false)]
         public uint ImpersonationLevel;
 
         /// <summary>
@@ -11597,7 +11062,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// this field has a minimum value of 2. This field MUST be the 
         /// total length of the Name field plus any padding added for alignment
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
 
@@ -11655,7 +11119,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// AndXCommand field is not set to 0xFF. If AndXCommand is 0xFF, 
         /// this field MUST be ignored by the client
         /// </summary>
-        [CLSCompliant(false)]
         public ushort AndXOffset;
 
         /// <summary>
@@ -11666,14 +11129,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// A FID representing the file or directory that was created or opened
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
         /// A 32-bit value that represents the action to take if the file already exists or if the file is a new
         /// file and does not already exist.
         /// </summary>
-        [CLSCompliant(false)]
         public NtTransactCreateDisposition CreateDisposition;
 
         /// <summary>
@@ -11708,25 +11169,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This value provides the attributes the server assigned
         /// to the file or directory as a result of the command.
         /// </summary>
-        [CLSCompliant(false)]
         public SMB_EXT_FILE_ATTR ExtFileAttributes;
 
         /// <summary>
         /// The number of bytes allocated to the file by the server. 
         /// </summary>
-        [CLSCompliant(false)]
         public ulong AllocationSize;
 
         /// <summary>
         /// The end of file offset value. 
         /// </summary>
-        [CLSCompliant(false)]
         public ulong EndOfFile;
 
         /// <summary>
         /// The file type.
         /// </summary>
-        [CLSCompliant(false)]
         public FileTypeValue ResourceType;
 
         /// <summary>
@@ -11736,7 +11193,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// SHOULD be set to 0 by the server when sending a response and MUST 
         /// be ignored when received by the client
         /// </summary>
-        [CLSCompliant(false)]
         public SMB_NMPIPE_STATUS NMPipeStatus;
 
         /// <summary>
@@ -11757,7 +11213,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -11809,7 +11264,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// The file type. This field MUST be interpreted as follows.
     /// </summary>
-    [CLSCompliant(false)]
     public enum FileTypeValue : ushort
     {
         /// <summary>
@@ -11864,7 +11318,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data are sent by this request
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -11891,19 +11344,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// then only normal files are renamed or linked. If the system file or hidden attributes are specified,
         /// then the rename is inclusive of both special types.
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes SearchAttributes;
 
         /// <summary>
         /// This field MUST be one of the three values shown in the following table.
         /// </summary>
-        [CLSCompliant(false)]
         public NtRenameInformationLevel InformationLevel;
 
         /// <summary>
         /// This field SHOULD be set to 0x00000000 by the client and MUST be ignored by the server.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Reserved;
     }
 
@@ -11917,7 +11367,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 0x0004.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -11966,7 +11415,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data are sent by this Response
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -11990,13 +11438,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// be included as the first part of the spool file. The server MUST pass 
         /// this initial portion of the spool file to the printer unmodified. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SetupLength;
 
         /// <summary>
         /// A 16-bit field that contains a flag which specifies the print file mode.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Mode;
     }
 
@@ -12010,7 +11456,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 2
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -12044,7 +11489,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// close operations on the spool file. When the spool file is closed, 
         /// the file is queued and printed.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
     }
 
@@ -12058,7 +11502,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -12066,7 +11509,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// A 16-bit field that contains a flag which specifies the print file mode.
     /// </summary>
-    [CLSCompliant(false)]
     public enum OpenPrintFileMode : ushort
     {
         /// <summary>
@@ -12100,7 +11542,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be a valid FID, creating using the SMB_COM_OPEN_PRINT_FILE command
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
     }
 
@@ -12114,7 +11555,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be greater than or equal to 3.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
 
         /// <summary>
@@ -12125,7 +11565,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// Length, in bytes, of the following data block
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DataLength;
 
         /// <summary>
@@ -12158,7 +11597,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -12182,7 +11620,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Following successful execution of this command,
         /// this FID MUST be invalidated.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
     }
 
@@ -12196,7 +11633,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -12223,7 +11659,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be 0. No data is sent by this message
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ByteCount;
     }
 
@@ -12278,7 +11713,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// to 0 when this message is sent. The server MUST ignore the 
         /// unused bits when the message is received
         /// </summary>
-        [CLSCompliant(false)]
         public PipeState PipeState;
     }
 
@@ -12292,7 +11726,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// </summary>
     [SuppressMessage("Microsoft.Usage", "CA2217:DoNotMarkEnumsWithFlags")]
     [Flags()]
-    [CLSCompliant(false)]
     public enum PipeState : ushort
     {
         /// <summary>
@@ -12368,7 +11801,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// and SHOULD be set to 0 when this message is sent. The client MUST ignore 
         /// the unused bits when the message is received
         /// </summary>
-        [CLSCompliant(false)]
         public SMB_NMPIPE_STATUS NMPipeStatus;
     }
 
@@ -12389,7 +11821,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// receives any other value, it MUST fail the request with a status of 
         /// STATUS_INVALID_PARAMETER (ERRDOS/ERRinvalidparam).
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Level;
     }
 
@@ -12403,13 +11834,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be the actual size of the buffer for outgoing (server) I/O.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort OutputBufferSize;
 
         /// <summary>
         /// This field MUST be the actual size of the buffer for incoming (client) I/O.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort InputBufferSize;
 
         /// <summary>
@@ -12467,7 +11896,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field contains the total number of bytes available to be read from the pipe.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ReadDataAvailable;
 
         /// <summary>
@@ -12477,13 +11905,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// If the entire message was read, this value is 0. 
         /// If the named pipe is a stream mode pipe, this value MUST be set to 0.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MessageBytesLength;
 
         /// <summary>
         /// The status of the named pipe.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort NamedPipeState;
     }
 
@@ -12558,7 +11984,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be set to the number of bytes written to the pipe.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort BytesWritten;
     }
 
@@ -12609,7 +12034,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be set to the number of bytes written to the pipe. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort BytesWritten;
     }
 
@@ -12675,53 +12099,45 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This 16-bit field of flags is used to request that the server take certain actions.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Flags;
 
         /// <summary>
         /// A 16-bit field for encoding the requested access mode. See section 3.2.4.5.1
         /// for a discussion on sharing modes.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort AccessMode;
 
         /// <summary>
         /// This field MUST be set to zero (0) and be ignored by the server
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved1;
 
         /// <summary>
         /// ATTRIBUTES Attributes to apply to the file if it needs to be created.
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes FileAttributes;
 
         /// <summary>
         /// A time value expressed in seconds past Jan 1, 1970 00:00:00:00 to apply 
         /// to the file's attributes if the file is created
         /// </summary>
-        [CLSCompliant(false)]
         public uint CreationTime;
 
         /// <summary>
         /// A 16-bit field that controls the way a file SHOULD be treated when it is
         /// opened for use by certain extended SMB requests
         /// </summary>
-        [CLSCompliant(false)]
         public ushort OpenMode;
 
         /// <summary>
         /// The number of bytes to reserve for the file if the file is being created or truncated. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint AllocationSize;
 
         /// <summary>
         /// This field MUST be set to zero (0).
         /// </summary>
         [StaticSize(5, StaticSizeMode.Elements)]
-        [CLSCompliant(false)]
         public ushort[] Reserved;
 
         /// <summary>
@@ -12741,7 +12157,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// A list of extended file attribute name / value pairs that are to be assigned to the file.
         /// </summary>
-        [CLSCompliant(false)]
         public SMB_FEA_LIST ExtendedAttributeList;
     }
 
@@ -12755,57 +12170,48 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field contains the FID of the opened file.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Fid;
 
         /// <summary>
         /// The file attributes assigned to the file after the open or create has occurred.
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes FileAttributes;
 
         /// <summary>
         /// The creation time assigned to the file by the server expressed as the number 
         /// of seconds since Jan 1, 1970 00:00:00:00.
         /// </summary>
-        [CLSCompliant(false)]
         public uint CreationTime;
 
         /// <summary>
         /// The current size of the file in bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileDataSize;
 
         /// <summary>
         /// The access that the server granted as a result of the request. See DesiredAccess
         /// above for the encoding of the access rights.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort AccessMode;
 
         /// <summary>
         /// The type of file that was opened or created as a result of the request.
         /// </summary>
-        [CLSCompliant(false)]
         public FileTypeValue ResourceType;
 
         /// <summary>
         /// The state of the IPC device and is valid only if FileType is a named pipe.
         /// </summary>
-        [CLSCompliant(false)]
         public SMB_NMPIPE_STATUS NMPipeStatus;
 
         /// <summary>
         /// The state of the IPC device and is valid only if FileType is a named pipe.
         /// </summary>
-        [CLSCompliant(false)]
         public OpenResultsValues OpenResults;
 
         /// <summary>
         /// This field SHOULD be set to zero (0) and MUST be ignored by the server.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Reserved;
 
         /// <summary>
@@ -12813,13 +12219,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// then this field contains the offset in bytes to the specific List[] 
         /// entry that caused the error.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ExtendedAttributeErrorOffset;
 
         /// <summary>
         /// The total size of the extended attributes for the opened file.
         /// </summary>
-        [CLSCompliant(false)]
         public uint ExtendedAttributeLength;
     }
 
@@ -12828,7 +12232,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// This 16-bit field of flags is used to request that the server take certain actions.
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum Trans2Open2Flags : ushort
     {
         /// <summary>
@@ -12867,7 +12270,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Usage", "CA2217:DoNotMarkEnumsWithFlags")]
     [Flags()]
-    [CLSCompliant(false)]
     public enum Trans2Open2DesiredAccess : ushort
     {
         /// <summary>
@@ -12995,13 +12397,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// File attributes to apply as a constraint to the file search.
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes SearchAttributes;
 
         /// <summary>
         /// The server MUST NOT return more entries than indicated by the value of this field.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SearchCount;
 
         /// <summary>
@@ -13009,7 +12409,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// the state of the transaction based on how the client wishes to 
         /// traverse the results
         /// </summary>
-        [CLSCompliant(false)]
         public Trans2FindFlags Flags;
 
         /// <summary>
@@ -13021,13 +12420,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// than SMB_INFO_STANDARD, the server MUST return an error of NT_STATUS of 
         /// STATUS_INVALID_PARAMETER or SMB error of ERRDOS/ERRinvalidparam.
         /// </summary>
-        [CLSCompliant(false)]
         public FindInformationLevel InformationLevel;
 
         /// <summary>
         /// This field specifies if the find is searching for directories or for files.
         /// </summary>
-        [CLSCompliant(false)]
         public Trans2FindFirst2SearchStorageType SearchStorageType;
 
         /// <summary>
@@ -13047,7 +12444,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// A list of extended attribute (EA) names. The value of the AttributeName fields MUST be used by the server
         /// to query the set of extended attributes that match the set of AttributeName values provided in this list.
         /// </summary>
-        [CLSCompliant(false)]
         public SMB_GEA_LIST GetExtendedAttributeList;
     }
 
@@ -13062,13 +12458,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The server generated search identifier for this transaction.
         /// It MUST be provided in TRANS2_FIND_NEXT2 transactions
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SID;
 
         /// <summary>
         /// The number of entries returned by the search
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SearchCount;
 
         /// <summary>
@@ -13076,7 +12470,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// using the TRANS2_FIND_NEXT2 transaction. This field MUST be zero (0)
         /// if this response is the last and the find has reached the end of the search results
         /// </summary>
-        [CLSCompliant(false)]
         public ushort EndOfSearch;
 
         /// <summary>
@@ -13089,7 +12482,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// which identifies the extended attribute that caused the error
         /// or zero (0) if no error was encountered.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort EaErrorOffset;
 
         /// <summary>
@@ -13100,7 +12492,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// MAY be used in the Trans2_Parameters of the request to continue
         /// a search. See TRANS2_FINDNEXT2 for more information
         /// </summary>
-        [CLSCompliant(false)]
         public ushort LastNameOffset;
     }
 
@@ -13133,7 +12524,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// If the SMB_FIND_RETURN_RESUME_KEYS bit is not set, 
         /// then the server MUST NOT include this field
         /// </summary>
-        [CLSCompliant(false)]
         public uint ResumeKey;
 
         /// <summary>
@@ -13169,19 +12559,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field contains the file size in filesystem allocation units
         /// </summary>
-        [CLSCompliant(false)]
         public uint DataSize;
 
         /// <summary>
         /// This field contains the size of the filesystem allocation unit in bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public uint AllocationSize;
 
         /// <summary>
         /// This field contains the file attributes.
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes Attributes;
 
         /// <summary>
@@ -13211,7 +12598,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// to continue the search. If the SMB_FIND_RETURN_RESUME_KEYS 
         /// bit is not set, then the server MUST NOT include this field
         /// </summary>
-        [CLSCompliant(false)]
         public uint ResumeKey;
 
         /// <summary>
@@ -13247,25 +12633,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field contains the file attributes.
         /// </summary>
-        [CLSCompliant(false)]
         public uint DataSize;
 
         /// <summary>
         /// This field contains the size of the file's extended attribute information in bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public uint AllocationSize;
 
         /// <summary>
         /// This field contains the file attributes.
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes Attributes;
 
         /// <summary>
         /// This field contains the size of the file's extended attribute information in bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public uint EaSize;
 
         /// <summary>
@@ -13295,7 +12677,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// to continue the search. If the SMB_FIND_RETURN_RESUME_KEYS bit 
         /// is not set, then the server MUST NOT include this field
         /// </summary>
-        [CLSCompliant(false)]
         public uint ResumeKey;
 
         /// <summary>
@@ -13331,25 +12712,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field contains the file size in filesystem allocation units
         /// </summary>
-        [CLSCompliant(false)]
         public uint DataSize;
 
         /// <summary>
         /// This field contains the size of the filesystem allocation unit in bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public uint AllocationSize;
 
         /// <summary>
         /// This field contains the file attributes
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes Attributes;
 
         /// <summary>
         /// This field contains the size of the file's extended attribute information in bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public uint EaSize;
 
         /// <summary>
@@ -13382,7 +12759,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// to the next entry in the list. If there are no additional
         /// entries the value MUST be zero (0).
         /// </summary>
-        [CLSCompliant(false)]
         public uint NextEntryOffset;
 
         /// <summary>
@@ -13392,7 +12768,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// directory is not fixed and can be changed at any time to maintain
         /// sort order
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileIndex;
 
         /// <summary>
@@ -13419,7 +12794,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This field contains the offset in bytes to the start of the
         /// file to the first byte after the end of the file.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong EndOfFile;
 
         /// <summary>
@@ -13427,19 +12801,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// this value is a multiple of the sector or cluster size of the underlying
         /// physical device.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong AllocationSize;
 
         /// <summary>
         /// This field contains file attribute information flags encoded as follows.
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes32 FileAttributes;
 
         /// <summary>
         /// This field contains the length of the FileName field in bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileNameLength;
 
         /// <summary>
@@ -13461,7 +12832,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// list to the next entry in the list. If there are no additional entries 
         /// the value MUST be zero (0).
         /// </summary>
-        [CLSCompliant(false)]
         public uint NextEntryOffset;
 
         /// <summary>
@@ -13470,7 +12840,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// in which the position of a file within the parent directory is
         /// not fixed and can be changed at any time to maintain sort order
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileIndex;
 
         /// <summary>
@@ -13497,7 +12866,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This field contains the offset in bytes to the start of the file 
         /// to the first byte after the end of the file.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong EndOfFile;
 
         /// <summary>
@@ -13505,25 +12873,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// this value is a multiple of the sector or cluster size
         /// of the underlying physical device.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong AllocationSize;
 
         /// <summary>
         /// This field contains file attribute information flags encoded as follows.
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes32 ExtFileAttributes;
 
         /// <summary>
         /// This field contains the length of the FileName field in bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileNameLength;
 
         /// <summary>
         /// This field contains the length of the ExtendedAttributeList in bytes
         /// </summary>
-        [CLSCompliant(false)]
         public uint EaSize;
 
         /// <summary>
@@ -13545,7 +12909,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// the next entry in the list. If there are no additional entries the
         /// value MUST be zero (0).
         /// </summary>
-        [CLSCompliant(false)]
         public uint NextEntryOffset;
 
         /// <summary>
@@ -13554,7 +12917,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// in which the position of a file within the parent directory is not
         /// fixed and can be changed at any time to maintain sort order
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileIndex;
 
         /// <summary>
@@ -13584,32 +12946,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// byte in the file. In other words, EndOfFile is the offset to the
         /// byte immediately following the last valid byte in the file. 
         /// </summary>
-        [CLSCompliant(false)]
         public ulong EndOfFile;
 
         /// <summary>
         /// This field contains the file allocation size, in bytes. Usually,
         /// this value is a multiple of the sector or cluster size of the underlying physical device
         /// </summary>
-        [CLSCompliant(false)]
         public ulong AllocationSize;
 
         /// <summary>
         /// ULONG This field contains file attribute information flags encoded as follows.
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes32 FileAttributes;
 
         /// <summary>
         /// This field MUST contain the length of the FileName field in bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileNameLength;
 
         /// <summary>
         /// This field MUST contain the length of the ExtendedAttributeList in bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public uint EaSize;
 
         /// <summary>
@@ -13626,7 +12983,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This field MUST contain the 8.3 name of the file in Unicode format.
         /// </summary>
         [StaticSize(24, StaticSizeMode.Elements)]
-        [CLSCompliant(false)]
         public byte[] ShortName;
 
         /// <summary>
@@ -13648,7 +13004,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// list to the next entry in the list. If there are no additional 
         /// entries the value MUST be zero (0).
         /// </summary>
-        [CLSCompliant(false)]
         public uint NextEntryOffset;
 
         /// <summary>
@@ -13657,13 +13012,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// of a file within the parent directory is not fixed and can be
         /// changed at any time to maintain sort order.
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileIndex;
 
         /// <summary>
         /// This field MUST contain the length of the FileName field in bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileNameLength;
 
         /// <summary>
@@ -13681,7 +13034,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// wishes to traverse the results
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum Trans2FindFlags : ushort
     {
         /// <summary>
@@ -13722,7 +13074,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
-    [CLSCompliant(false)]
     public enum Trans2FindFirst2SearchStorageType : uint
     {
         /// <summary>
@@ -13749,13 +13100,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be the search identifier (SID) returned in TRANS2_FIND_FIRST2 response
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SID;
 
         /// <summary>
         /// This field MUST be the maximum number of entries to return in the response.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SearchCount;
 
         /// <summary>
@@ -13768,14 +13117,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// than SMB_INFO_STANDARD the server MUST return an error of
         /// STATUS_INVALID_PARAMETER or ERRDOS/ERRinvalidparam
         /// </summary>
-        [CLSCompliant(false)]
         public FindInformationLevel InformationLevel;
         /// <summary>
         /// This field MUST be the value of a ResumeKey field returned
         /// in the response from a TRANS2_FIND_FIRST2 or TRANS2_FIND_NEXT2 that is
         /// part of the same search (same SID).
         /// </summary>
-        [CLSCompliant(false)]
         public uint ResumeKey;
 
         /// <summary>
@@ -13783,7 +13130,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// the state of the transaction based on how the client wishes to traverse
         /// the results
         /// </summary>
-        [CLSCompliant(false)]
         public Trans2FindFlags Flags;
 
         /// <summary>
@@ -13808,7 +13154,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// conditions through supplying ValueName values. The ValueName field
         /// SHOULD be ignored by the server.
         /// </summary>
-        [CLSCompliant(false)]
         public SMB_GEA_LIST GetExtendedAttributeList;
     }
 
@@ -13822,7 +13167,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The number of entries returned by the search
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SearchCount;
 
         /// <summary>
@@ -13830,7 +13174,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// using the TRANS2_FIND_NEXT2 transaction. This field MUST be zero (0)
         /// if this response is the last and the find has reached the end of the search results
         /// </summary>
-        [CLSCompliant(false)]
         public ushort EndOfSearch;
 
         /// <summary>
@@ -13843,7 +13186,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// which identifies the extended attribute that caused the error
         /// or zero (0) if no error was encountered.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort EaErrorOffset;
 
         /// <summary>
@@ -13854,7 +13196,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// MAY be used in the Trans2_Parameters of the request to continue
         /// a search. See TRANS2_FINDNEXT2 for more information
         /// </summary>
-        [CLSCompliant(false)]
         public ushort LastNameOffset;
     }
 
@@ -13888,7 +13229,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The response formats are found later in this section. See the individual 
         /// response formats below for detailed information.
         /// </summary>
-        [CLSCompliant(false)]
         public QueryFSInformationLevel InformationLevel;
     }
 
@@ -13916,31 +13256,26 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// ULONG  This field contains a file system identifier.
         /// Windows servers always return zero (0).
         /// </summary>
-        [CLSCompliant(false)]
         public uint idFileSystem;
 
         /// <summary>
         /// This field contains the number of sectors per allocation unit.
         /// </summary>
-        [CLSCompliant(false)]
         public uint cSectorUnit;
 
         /// <summary>
         /// This field contains the total number of allocation units.
         /// </summary>
-        [CLSCompliant(false)]
         public uint cUnit;
 
         /// <summary>
         /// This field contains the total number of available allocation units.
         /// </summary>
-        [CLSCompliant(false)]
         public uint cUnitAvailable;
 
         /// <summary>
         /// This field contains the number of bytes per sector
         /// </summary>
-        [CLSCompliant(false)]
         public ushort cbSector;
     }
 
@@ -13954,7 +13289,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field contains the serial number of the volume
         /// </summary>
-        [CLSCompliant(false)]
         public uint ulVolSerialNbr;
 
         /// <summary>
@@ -13984,26 +13318,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field contains the serial number of the volume
         /// </summary>
-        [CLSCompliant(false)]
         public uint SerialNumber;
 
         /// <summary>
         /// This field contains the size of the VolumeLabel field in bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public uint VolumeLabelSize;
 
         /// <summary>
         /// 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved;
 
         /// <summary>
         /// This field contains the Unicode encoded volume label.
         /// </summary>
         [Size("VolumeLabelSize/2")]
-        [CLSCompliant(false)]
         public ushort[] VolumeLabel;
     }
 
@@ -14017,25 +13347,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field contains the total number of allocation assigned to the volume.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong TotalAllocationUnits;
 
         /// <summary>
         /// This field contains the total number of unallocated or free allocation units.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong TotalFreeAllocationUnits;
 
         /// <summary>
         /// This field contains the number of sectors per allocation unit.
         /// </summary>
-        [CLSCompliant(false)]
         public uint SectorsPerAllocationUnit;
 
         /// <summary>
         /// This field contains the bytes per sector.
         /// </summary>
-        [CLSCompliant(false)]
         public uint BytesPerSector;
     }
 
@@ -14054,13 +13380,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// for device types that are inaccessible over the network MAY be
         /// redefined to be just reserved at some date in the future.
         /// </summary>
-        [CLSCompliant(false)]
         public DeviceType DeviceType;
 
         /// <summary>
         /// This 16-bit field of flags contains the device's characteristics.
         /// </summary>
-        [CLSCompliant(false)]
         public DeviceCharacteristics DeviceCharacteristics;
     }
 
@@ -14073,7 +13397,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// inaccessible over the network MAY be redefined to be just reserved 
     /// at some date in the future.
     /// </summary>
-    [CLSCompliant(false)]
     public enum DeviceType : uint
     {
         /// <summary>
@@ -14307,7 +13630,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// This 16-bit field of flags contains the device's characteristics. The individual flags are as follows
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum DeviceCharacteristics : uint
     {
         /// <summary>
@@ -14361,26 +13683,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This 16-bit field of flags contains the file system's attributes.
         /// </summary>
-        [CLSCompliant(false)]
         public FileSystemAttributes FileSystemAttributes;
 
         /// <summary>
         /// This field contains the maximum size in bytes of a file name on the file system.
         /// </summary>
-        [CLSCompliant(false)]
         public uint MaxFileNameLengthInBytes;
 
         /// <summary>
         /// This field contains the size in bytes of the FileSystemName field.
         /// </summary>
-        [CLSCompliant(false)]
         public uint LengthOfFileSystemName;
 
         /// <summary>
         /// This field contains the Unicode encoded name of the file system.
         /// </summary>
         [Size("LengthOfFileSystemName/2")]
-        [CLSCompliant(false)]
         public ushort[] FileSystemName;
     }
 
@@ -14389,7 +13707,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// This 16-bit field of flags contains the file system's attributes. The individual flags are as follows:
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum FileSystemAttributes : uint
     {
         /// <summary>
@@ -14453,13 +13770,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// than SMB_INFO_STANDARD, the server MUST return an error of 
         /// NT_STATUS of STATUS_INVALID_PARAMETER or SMB error of ERRDOS/ERRinvalidparam
         /// </summary>
-        [CLSCompliant(false)]
         public QueryInformationLevel InformationLevel;
 
         /// <summary>
         /// This field is reserved and MUST be zero (0).
         /// </summary>
-        [CLSCompliant(false)]
         public uint Reserved;
 
         /// <summary>
@@ -14483,7 +13798,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// the name value pairs in this array MUST be ignored by the server.
         /// The client SHOULD provide nullvalues for the values in the array.
         /// </summary>
-        [CLSCompliant(false)]
         public SMB_GEA_LIST GetExtendedAttributeList;
     }
 
@@ -14503,7 +13817,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// ExtendedAttributesList that caused the error or zero (0) if no error was
         /// encountered.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort EaErrorOffset;
     }
 
@@ -14560,19 +13873,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field contains the file size in filesystem allocation units
         /// </summary>
-        [CLSCompliant(false)]
         public uint DataSize;
 
         /// <summary>
         /// This field contains the size of the filesystem allocation unit in bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public uint AllocationSize;
 
         /// <summary>
         /// This field contains the file attributes.
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes Attributes;
     }
 
@@ -14616,25 +13926,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// field contains the file size in filesystem allocation units
         /// </summary>
-        [CLSCompliant(false)]
         public uint DataSize;
 
         /// <summary>
         /// This field contains the size of the filesystem allocation unit in bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public uint AllocationSize;
 
         /// <summary>
         /// This field contains the file attributes
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Attributes;
 
         /// <summary>
         /// This field contains the size of the file's extended attribute information in bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public uint EaSize;
     }
 
@@ -14648,7 +13954,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST contain the total size of the FileExtendedAttributeList.
         /// </summary>
-        [CLSCompliant(false)]
         public uint SizeOfListInBytes;
 
         /// <summary>
@@ -14668,7 +13973,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST contain the total size of the FileExtendedAttributeList.
         /// </summary>
-        [CLSCompliant(false)]
         public uint SizeOfListInBytes;
 
         /// <summary>
@@ -14707,7 +14011,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field contains the file attributes.
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes FileAttributes;
     }
 
@@ -14721,20 +14024,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field contains the number of bytes that are allocated to the file.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong AllocationSize;
 
         /// <summary>
         /// This field contains the offset in bytes to the start of the file to the
         /// first byte after the end of the file.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong EndOfFile;
 
         /// <summary>
         /// field contains the number of hard links to the file.
         /// </summary>
-        [CLSCompliant(false)]
         public uint NumberOfLinks;
 
         /// <summary>
@@ -14758,7 +14058,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST contain the length of a file's list of extended attributes in bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public uint EaSize;
     }
 
@@ -14772,14 +14071,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST contain the length of the FileName field in bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileNameLength;
 
         /// <summary>
         /// This field contains the name of the file.
         /// </summary>
         [Size("FileNameLength/2")]
-        [CLSCompliant(false)]
         public ushort[] FileName;
     }
 
@@ -14813,32 +14110,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field contains the file attributes
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes32 FileAttributes;
 
         /// <summary>
         /// Reserved field
         /// </summary> 
-        [CLSCompliant(false)]
         public uint Reserved1;
 
         /// <summary>
         /// This field contains the number of bytes that are allocated to the file.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong AllocationSize;
 
         /// <summary>
         /// This field contains the offset in bytes to the start of the file to the 
         /// first byte after the end of the file.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong EndOfFile;
 
         /// <summary>
         /// This field contains the number of hard links to the file.
         /// </summary>
-        [CLSCompliant(false)]
         public uint NumberOfLinks;
 
         /// <summary>
@@ -14854,26 +14146,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// Reserved field
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved2;
 
         /// <summary>
         /// This field MUST contain the length of a file's list of extended attributes in bytes. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint EaSize;
 
         /// <summary>
         /// This field MUST contain the length in bytes of the FileName field.
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileNameLength;
 
         /// <summary>
         /// This field contains the name of the file.
         /// </summary>
         [Size("FileNameLength/2")]
-        [CLSCompliant(false)]
         public ushort[] FileName;
     }
 
@@ -14881,7 +14169,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// This field MUST be one of the following values
     /// </summary>
-    [CLSCompliant(false)]
     public enum AlignmentRequirement : uint
     {
         /// <summary>
@@ -14945,14 +14232,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field contains the length in bytes of the FileName field.
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileNameLength;
 
         /// <summary>
         /// This field contains the 8.3 name of the file in Unicode. The string is NOT null terminated.
         /// </summary>
         [Size("FileNameLength / 2")]
-        [CLSCompliant(false)]
         public ushort[] FileName;
     }
 
@@ -14972,20 +14257,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// (if multiple entries are present in a buffer), and MUST NOT assume that 
         /// the value of NextEntryOffset is the same as the size of the current entry.
         /// </summary>
-        [CLSCompliant(false)]
         public uint NextEntryOffset;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the length, in bytes, of the stream name string.
         /// </summary>
-        [CLSCompliant(false)]
         public uint StreamNameLength;
 
         /// <summary>
         /// A 64-bit signed integer that contains the size, in bytes, of the stream.
         /// The value of this field MUST be greater than or equal to 0.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong StreamSize;
 
         /// <summary>
@@ -14994,7 +14276,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// or cluster size of the underlying physical device. The value of 
         /// this field MUST be greater than or equal to 0.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong StreamAllocationSize;
 
         /// <summary>
@@ -15009,7 +14290,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// sequence of StreamNameLength bytes
         /// </summary>
         [Size("StreamNameLength / 2")]
-        [CLSCompliant(false)]
         public ushort[] StreamName;
     }
 
@@ -15024,7 +14304,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// A 64-bit signed integer that contains the size, in bytes, of 
         /// the compressed file. This value MUST be greater than or equal to 0.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong CompressedFileSize;
 
         /// <summary>
@@ -15036,7 +14315,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// compressed data does not travel across the wire in the context
         /// of this transaction. The following compression formats are valid only for NTFS.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort CompressionFormat;
 
         /// <summary>
@@ -15098,13 +14376,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// or SMB error of ERRDOS/ERRinvalidparam.
         /// Name Value
         /// </summary>
-        [CLSCompliant(false)]
         public SetInformationLevel InformationLevel;
 
         /// <summary>
         /// This field is reserved and MUST be zero (0).
         /// </summary>
-        [CLSCompliant(false)]
         public uint Reserved;
 
         /// <summary>
@@ -15138,7 +14414,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// that identifies the attribute which caused an error. 
         /// This field is only meaningful when the InformationLevel is set to SMB_INFO_QUERY_EA_FROM_LIST
         /// </summary>
-        [CLSCompliant(false)]
         public ushort EaErrorOffset;
     }
 
@@ -15196,7 +14471,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST contain the total size of the ExtendedAttributeList.
         /// </summary>
-        [CLSCompliant(false)]
         public uint SizeOfListInBytes;
 
         /// <summary>
@@ -15263,13 +14537,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// A 32-bit unsigned integer that contains the file attributes to be set.
         /// </summary>
-        [CLSCompliant(false)]
         public SmbFileAttributes32 FileAttributes;
 
         /// <summary>
         /// A 32-bit field. This field is reserved. This field can be set to any value, and MUST be ignored.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Reserved;
     }
 
@@ -15301,7 +14573,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This value MUST be greater than or equal to 0.
         /// All unused allocation (beyond EOF) is freed.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong AllocationSize;
     }
 
@@ -15321,7 +14592,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// bytes appended to the file are to be written. 
         /// The value of this field MUST be greater than or equal to 0.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong EndOfFile;
     }
 
@@ -15338,14 +14608,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST contain a valid FID returned from a previously successful SMB open command
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
         /// This field determines the information contained in the response.
         /// See TRANS2_QUERY_PATH_INFORMATION for complete details
         /// </summary>
-        [CLSCompliant(false)]
         public QueryInformationLevel InformationLevel;
     }
 
@@ -15362,20 +14630,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST contain a valid FID returned from a previously successful SMB open command.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
         /// This field determines the information contained in the response.
         /// See TRANS2_SET_PATH_INFORMATION for complete details
         /// </summary>
-        [CLSCompliant(false)]
         public SetInformationLevel InformationLevel;
 
         /// <summary>
         /// Reserved, but not implemented.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved;
     }
 
@@ -15429,7 +14694,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field is reserved and MUST be zero (0).
         /// </summary>
-        [CLSCompliant(false)]
         public uint Reserved;
 
         /// <summary>
@@ -15449,7 +14713,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// A list of extended file attribute name value pairs where the AttributeName
         /// field values match those that were provided in the request
         /// </summary>
-        [CLSCompliant(false)]
         public SMB_FEA_LIST ExtendedAttributeList;
     }
 
@@ -15465,7 +14728,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// that identifies the attribute that caused an error. 
         /// This field is only meaningful when the request included Trans2_Data
         /// </summary>
-        [CLSCompliant(false)]
         public ushort EaErrorOffset;
     }
 
@@ -15517,7 +14779,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// A 16-bit integer that indicates the highest DFS referral version understood by the client.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxReferralLevel;
 
         /// <summary>
@@ -15546,14 +14807,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// in the prefix of the referral request path that is matched 
         /// in the referral response.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort PathConsumed;
 
         /// <summary>
         /// A 16-bit integer indicating the number of referral entries
         /// immediately following the referral header
         /// </summary>
-        [CLSCompliant(false)]
         public ushort NumberOfReferrals;
 
         /// <summary>
@@ -15563,7 +14822,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The other bits MUST be set to 0 by the server and
         /// ignored upon receipt by the client
         /// </summary>
-        [CLSCompliant(false)]
         public ReferralHeaderFlags ReferralHeaderFlags;
 
         /// <summary>
@@ -15579,7 +14837,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// used. The other bits MUST be set to 0 by the server and ignored upon receipt by the client
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum ReferralHeaderFlags : uint
     {
         /// <summary>
@@ -15621,13 +14878,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// A 16-bit integer indicating the version number of the
         /// referral entry. MUST always be 0x0001 for DFS_REFERRAL_V1.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort VersionNumber;
 
         /// <summary>
         /// A 16-bit integer indicating the total size of the referral entry in bytes.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Size;
 
         /// <summary>
@@ -15636,13 +14891,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// and to 0x0000 otherwise. Note that sysvol targets are not DFS root 
         /// targets; the field MUST be set to 0x0000 for a sysvol referral response.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ServerType;
 
         /// <summary>
         /// A series of bit flags. MUST be set to 0x0000 and ignored on receipt.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ReferralEntryFlags;
 
         /// <summary>
@@ -15663,13 +14916,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// A 16-bit integer indicating the version number of the referral entry.
         /// MUST always be 0x0002 for DFS_REFERRAL_V2
         /// </summary>
-        [CLSCompliant(false)]
         public ushort VersionNumber;
 
         /// <summary>
         /// A 16-bit integer indicating the total size of the referral entry in bytes
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Size;
 
         /// <summary>
@@ -15679,19 +14930,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// targets; the field MUST be set to 0x0000 for a sysvol referral 
         /// response.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ServerType;
 
         /// <summary>
         /// MUST be set to 0x0000 by the server and ignored on receipt by the client.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ReferralEntryFlags;
 
         /// <summary>
         /// MUST be set to 0x00000000 by the server and ignored by the client
         /// </summary>
-        [CLSCompliant(false)]
         public uint Proximity;
 
         /// <summary>
@@ -15702,7 +14950,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// When there is more than one referral entry, the TimeToLive
         /// of each referral entry MUST be the same
         /// </summary>
-        [CLSCompliant(false)]
         public uint TimeToLive;
 
         /// <summary>
@@ -15710,7 +14957,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// the beginning of this referral entry to the DFS path that corresponds to 
         /// the DFS root or the DFS link for which target information is returned.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DFSPathOffset;
 
         /// <summary>
@@ -15720,7 +14966,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// path as pointed to by the DFSPathOffset field or be an 8.3 name. In the former case, 
         /// the string referenced MAY be the same as that in the DFSPathOffset field or a duplicate copy.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort DFSAlternatePathOffset;
 
         /// <summary>
@@ -15728,7 +14973,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// referral entry to the DFS target path that correspond 
         /// to this entry.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort NetworkAddressOffset;
 
         /// <summary>
@@ -15773,7 +15017,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// request. Unused bits SHOULD be set to 0 by the client when sending
         /// a message and MUST be ignored when received by the server. 
         /// </summary>
-        [CLSCompliant(false)]
         public NtTransactFlags Flags;
 
         /// <summary>
@@ -15783,7 +15026,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// be handled as relative to the root of the share (the TID). 
         /// The FID MUST have been acquired in a previous message exchange
         /// </summary>
-        [CLSCompliant(false)]
         public uint RootDirectoryFID;
 
         /// <summary>
@@ -15795,7 +15037,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// the attributes without access the file. If the value is not 0, the bits 
         /// represent requests for the following types of access:
         /// </summary>
-        [CLSCompliant(false)]
         public NtTransactDesiredAccess DesiredAccess;
 
         /// <summary>
@@ -15807,7 +15048,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// This is the number of bytes to be allocated represented as a 64 bit
         /// integer value
         /// </summary>
-        [CLSCompliant(false)]
         public ulong AllocationSize;
 
         /// <summary>
@@ -15819,7 +15059,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// attribute value causes the ATTR_NORMAL value to be ignored.
         /// Any combination of the flag values (see below) is acceptable
         /// </summary>
-        [CLSCompliant(false)]
         public SMB_EXT_FILE_ATTR ExtFileAttributes;
 
         /// <summary>
@@ -15828,14 +15067,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// reference use only. The value MUST be FILE_SHARE_NONE or some
         /// combination of the other values
         /// </summary>
-        [CLSCompliant(false)]
         public NtTransactShareAccess ShareAccess;
 
         /// <summary>
         /// A 32-bit value that represents the action to take if the file
         /// already exists or if the file is a new file and does not already exist
         /// </summary>
-        [CLSCompliant(false)]
         public NtTransactCreateDisposition CreateDisposition;
 
         /// <summary>
@@ -15846,25 +15083,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// received by the server. Below is a list of the valid values and 
         /// their associated behavior
         /// </summary>
-        [CLSCompliant(false)]
         public NtTransactCreateOptions CreateOptions;
 
         /// <summary>
         /// Length of Security Descriptor in bytes
         /// </summary>
-        [CLSCompliant(false)]
         public uint SecurityDescriptorLength;
 
         /// <summary>
         /// Length of Extended Attributes in bytes
         /// </summary>
-        [CLSCompliant(false)]
         public uint EALength;
 
         /// <summary>
         /// Length of the file name in characters
         /// </summary>
-        [CLSCompliant(false)]
         public uint NameLength;
 
         /// <summary>
@@ -15872,7 +15105,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// when executing the command on behalf of the client. 
         /// Value names are provided for convenience only. Supported values are: 
         /// </summary>
-        [CLSCompliant(false)]
         public NtTransactImpersonationLevel ImpersonationLevel;
 
         /// <summary>
@@ -15933,7 +15165,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// 4-byte aligned integer that contains the byte offset from the beginning of this entry, at which the next
         /// FILE_FULL_EA_INFORMATION entry is located
         /// </summary>
-        [CLSCompliant(false)]
         public uint NextEntryOffset;
 
         /// <summary>
@@ -15951,7 +15182,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// A 16-bit unsigned integer that contains the length, in bytes, of the extended attribute value in the
         /// EaValue field.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort EaValueLength;
 
         /// <summary>
@@ -16007,20 +15237,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The file ID value representing the file or directory that was created or opened.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
         /// A 32-bit value that represents the action to take if the file already exists or if the file is a new file
         /// and does not already exist.
         /// </summary>
-        [CLSCompliant(false)]
         public NtTransactCreateActionValues CreateAction;
 
         /// <summary>
         /// Offset of the extended attribute that caused an error if an error occurred with an extended attribute.
         /// </summary>
-        [CLSCompliant(false)]
         public uint EAErrorOffset;
 
         /// <summary>
@@ -16057,25 +15284,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// value provides the attributes the server assigned to the file or directory as a
         /// result of the command
         /// </summary>
-        [CLSCompliant(false)]
         public SMB_EXT_FILE_ATTR ExtFileAttributes;
 
         /// <summary>
         /// The number of bytes allocated to the file by the server.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong AllocationSize;
 
         /// <summary>
         /// The end of file offset value
         /// </summary>
-        [CLSCompliant(false)]
         public ulong EndOfFile;
 
         /// <summary>
         /// The file type
         /// </summary>
-        [CLSCompliant(false)]
         public FileTypeValue ResourceType;
 
         /// <summary>
@@ -16085,7 +15308,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// SHOULD be set to 0 by the server when sending a response and
         /// MUST be ignored when received by the client. 
         /// </summary>
-        [CLSCompliant(false)]
         public SMB_NMPIPE_STATUS NMPipeStatus;
 
         /// <summary>
@@ -16109,7 +15331,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// Windows NT device or file system control code
         /// </summary>
-        [CLSCompliant(false)]
         public uint FunctionCode;
 
         /// <summary>
@@ -16118,7 +15339,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// or a file system control device. The type of FID being supplied 
         /// is specified by IsFctl
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
@@ -16158,13 +15378,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// A 16-bit unsigned integer value containing the type of file system.
         /// This field MUST contain one of the following values.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FileSystemType;
 
         /// <summary>
         /// A 16-bit unsigned integer value containing the version. This field MUST contain 0x00000001.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Version;
 
         /// <summary>
@@ -16172,81 +15390,68 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// file system-specific structure that follows this structure, rounded up to a multiple of 64, and then
         /// multiplied by the number of processors.
         /// </summary>
-        [CLSCompliant(false)]
         public uint SizeOfCompleteStructure;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number of read operations on user files.
         /// </summary>
-        [CLSCompliant(false)]
         public uint UserFileReads;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number of bytes read from user files.
         /// </summary>
-        [CLSCompliant(false)]
         public uint UserFileReadBytes;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number of read operations on user files that went to the
         /// disk rather than the cache. This value includes sub-read operations.
         /// </summary>
-        [CLSCompliant(false)]
         public uint UserDiskReads;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number of write operations on user files.
         /// </summary>
-        [CLSCompliant(false)]
         public uint UserFileWrites;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number of bytes written to user files.
         /// </summary>
-        [CLSCompliant(false)]
         public uint UserFileWriteBytes;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number of write operations on user files that went to disk
         /// rather than the cache.
         /// </summary>
-        [CLSCompliant(false)]
         public uint UserDiskWrites;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number of read operations on metadata files.
         /// </summary>
-        [CLSCompliant(false)]
         public uint MetaDataReads;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number of bytes read from metadata files.
         /// </summary>
-        [CLSCompliant(false)]
         public uint MetaDataReadBytes;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number of read operations on metadata files.
         /// </summary>
-        [CLSCompliant(false)]
         public uint MetaDataDiskReads;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number of write operations on metadata files.
         /// </summary>
-        [CLSCompliant(false)]
         public uint MetaDataWrites;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number of bytes written to metadata files.
         /// </summary>
-        [CLSCompliant(false)]
         public uint MetaDataWriteBytes;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number of write operations on metadata files
         /// </summary>
-        [CLSCompliant(false)]
         public uint MetaDataDiskWrites;
     }
 
@@ -16278,13 +15483,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// File identifier or handle of the target file
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
         /// Reserved. This value MUST be 0
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved;
 
         /// <summary>
@@ -16293,7 +15496,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// several descriptors in one request. The server MUST set only 
         /// the descriptors requested by SecurityInformation
         /// </summary>
-        [CLSCompliant(false)]
         public NtTransactSecurityInformation SecurityInformation;
     }
 
@@ -16325,13 +15527,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// A 64-bit field of flags that specify the types of operations to monitor.
         /// </summary>
-        [CLSCompliant(false)]
         public uint CompletionFilter;
 
         /// <summary>
         /// The FID of the directory to monitor
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
@@ -16381,19 +15581,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// be 4-byte aligned, so NextEntryOffset MUST be a multiple
         /// of 4. If this is the last entry in the list, the value is 0.
         /// </summary>
-        [CLSCompliant(false)]
         public uint NextEntryOffset;
 
         /// <summary>
         /// Action taken for the specified file name.
         /// </summary>
-        [CLSCompliant(false)]
         public FILE_ACTION Action;
 
         /// <summary>
         /// Length, in bytes, of the name of the changed file
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileNameLength;
 
         /// <summary>
@@ -16411,7 +15608,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// Action taken for the specified file name.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
-    [CLSCompliant(false)]
     public enum FILE_ACTION : uint
     {
         /// <summary>
@@ -16476,13 +15672,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Fid of the target file. The Fid MUST have been obtained through 
         /// a previously successful SMB open request
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
 
         /// <summary>
         /// Reserved. This value MUST be 0.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved;
 
         /// <summary>
@@ -16494,7 +15688,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// values returned for descriptors who's bit was not included in this
         /// field as part of the request.
         /// </summary>
-        [CLSCompliant(false)]
         public NtTransactSecurityInformation SecurityInfoFields;
     }
 
@@ -16508,7 +15701,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The length of the returned SecurityDescriptor field.
         /// </summary>
-        [CLSCompliant(false)]
         public uint LengthNeeded;
     }
 
@@ -16524,7 +15716,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// form of a SECURITY_DESCRIPTOR is returned.
         /// See section 2.4.6 SECURITY_DESCRIPTOR of [MS-DTYPE] for complete details.
         /// </summary>
-        [CLSCompliant(false)]
         public RawSecurityDescriptor SecurityInformation;
     }
 
@@ -16544,7 +15735,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// This field MUST be set to the transaction subcommand value 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Subcommand;
 
         /// <summary>
@@ -16555,7 +15745,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// SMB_COM_CREATE_NEW, SMB_COM_OPEN_ANDX, SMB_COM_NT_CREATE_ANDX, 
         /// and SMB_COM_NT_TRANSACT with subcommand NT_TRANSACT_CREATE. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FID;
     }
 
@@ -16564,19 +15753,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// Array of USHORT in subcommand of Transaction
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    [CLSCompliant(false)]
     public struct Trans_Wait_Call_Setup
     {
         /// <summary>
         /// This field MUST be set to the transaction subcommand value 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Subcommand;
 
         /// <summary>
         /// This field MUST be in the range of 0 to 9. The larger value being the higher priority. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Priority;
     }
 
@@ -16587,7 +15773,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// a message and MUST be ignored when received by the server. 
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum NtTransactFlags : uint
     {
         /// <summary>
@@ -16615,7 +15800,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// the DesiredAccess in subcommand of NtTransact
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum NtTransactDesiredAccess : uint
     {
         /// <summary>
@@ -16739,7 +15923,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// The action type taken in establishing the open.
     /// </summary>
-    [CLSCompliant(false)]
     public enum NtTransactCreateActionValues : uint
     {
         /// <summary>
@@ -16768,7 +15951,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// A 32-bit field containing encoded file attribute values and file access behavior flag values.
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum SMB_EXT_FILE_ATTR : uint
     {
         /// <summary>
@@ -16878,7 +16060,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// the ShareAccess in subcommand of NtTransact
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum NtTransactShareAccess : uint
     {
         /// <summary>
@@ -16908,7 +16089,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// A 32-bit value that represents the action to take if the file already exists or if the file is a new file
     /// and does not already exist.
     /// </summary>
-    [CLSCompliant(false)]
     public enum NtTransactCreateDisposition : uint
     {
         /// <summary>
@@ -16961,7 +16141,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// the CreateOptions in subcommand of NtTransact
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum NtTransactCreateOptions : uint
     {
         /// <summary>
@@ -17095,7 +16274,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// the ImpersonationLevel  in subcommand of NtTransact
     /// </summary>
-    [CLSCompliant(false)]
     public enum NtTransactImpersonationLevel : uint
     {
         /// <summary>
@@ -17150,7 +16328,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// the SecurityInformation  in subcommand of NtTransact
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum NtTransactSecurityInformation : uint
     {
         /// <summary>
@@ -17184,7 +16361,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// the NotifyChangeSetup  in subcommand of NtTransact
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    [CLSCompliant(false)]
     public struct NtTransactNotifyChangeSetup
     {
         /// <summary>
@@ -17213,7 +16389,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// A 64-bit field of flags that specify the types of operations to monitor.
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum CompletionFilter : uint
     {
         /// <summary>
@@ -17404,7 +16579,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// the const values in the request of Transaction.
     /// </summary>
-    [CLSCompliant(false)]
     public static class SmbComTransactionPacket
     {
         /// <summary>
@@ -17422,7 +16596,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Fixed size of all three kinds of EA structures
     /// </summary>
-    [CLSCompliant(false)]
     public static class EA
     {
         /// <summary>
@@ -17449,7 +16622,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// the type of SMB Packet: Request/Response, Single/Batched.
     /// </summary>
-    [CLSCompliant(false)]
     public enum SmbPacketType : uint
     {
         /// <summary>
@@ -17483,7 +16655,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// Message signing policy.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
-    [CLSCompliant(false)]
     public enum SignStateValue : uint
     {
         /// <summary>
@@ -17507,7 +16678,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// The session states.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
-    [CLSCompliant(false)]
     public enum SessionStateValue : uint
     {
         /// <summary>
@@ -17653,7 +16823,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Contains the default parameters used by packet api in client CIFS role.
     /// </summary>
-    [CLSCompliant(false)]
     public struct ClientDefaultParameters
     {
         /// <summary>
@@ -17704,7 +16873,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// MUST ignore them.
     /// </summary>
     [Flags()]
-    [CLSCompliant(false)]
     public enum OptionalSupport : ushort
     {
         /// <summary>

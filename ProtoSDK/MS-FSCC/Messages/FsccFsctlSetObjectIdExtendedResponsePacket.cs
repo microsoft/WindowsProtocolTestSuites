@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FSCTL_SET_OBJECT_ID_EXTENDED 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlSetObjectIdExtendedResponsePacket : FsccStandardPacket<FsctlSetObjectIdExtendedReplyStatus>
     {
         #region Properties

@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FileFsSizeInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileFsSizeInformationResponsePacket : FsccStandardPacket<FileFsSizeInformation>
     {
         #region Properties

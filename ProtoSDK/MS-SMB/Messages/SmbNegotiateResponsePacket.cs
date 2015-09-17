@@ -13,7 +13,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// Packets for SmbNegotiate Response.  Do not support LM Negotiate response. 
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbNegotiateResponsePacket : Cifs.SmbSingleResponsePacket
     {
         #region Fields

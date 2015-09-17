@@ -49,39 +49,33 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <summary>
         /// Specifies access to delete an object.
         /// </summary>
-        [CLSCompliant(false)]
         public const uint ACCESS_MASK_DELETE = 0x00010000;
 
         /// <summary>
         /// Specifies access to read the security descriptor of an object.
         /// </summary>
-        [CLSCompliant(false)]
         public const uint ACCESS_MASK_READ_CONTROL = 0x00020000;
 
         /// <summary>
         /// Specifies access to change the discretionary access control list of the security descriptor 
         /// of an object.
         /// </summary>
-        [CLSCompliant(false)]
         public const uint ACCESS_MASK_WRITE_DAC = 0x00040000;
 
         /// <summary>
         /// Specifies access to change the owner of the object as listed in the security descriptor.
         /// </summary>
-        [CLSCompliant(false)]
         public const uint ACCESS_MASK_WRITE_OWNER = 0x00080000;
 
         /// <summary>
         /// Specifies access to the object sufficient to synchronize or wait on the object.
         /// </summary>
-        [CLSCompliant(false)]
         public const uint ACCESS_MASK_SYNCHRONIZE = 0x00100000;
 
         /// <summary>
         ///  When used in an Access Request operation: When requested, this bit grants the requestor the
         ///  right to change the SACL of an object.
         /// </summary>
-        [CLSCompliant(false)]
         public const uint ACCESS_MASK_ACCESS_SYSTEM_SECURITY = 0x01000000;
 
         /// <summary>
@@ -90,7 +84,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// When used to set the Security Descriptor on an object: Specifying the Maximum Allowed bit in
         /// the SECURITY_DESCRIPTOR has no meaning. 
         /// </summary>
-        [CLSCompliant(false)]
         public const uint ACCESS_MASK_MAXIMAL_ALLOWED = 0x02000000;
 
         /// <summary>
@@ -101,7 +94,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         ///  that is to be attached to an object, it is translated into a combination of bits, which 
         ///  are usually set in the lower 16 bits of the ACCESS_MASK_        
         /// </summary>
-        [CLSCompliant(false)]
         public const uint ACCESS_MASK_GENERIC_ALL = 0x10000000;
 
         /// <summary>
@@ -112,7 +104,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         ///  that is to be attached to an object, it is translated into a combination of bits, which
         ///  are usually set in the lower 16 bits of the ACCESS_MASK_ 
         /// </summary>
-        [CLSCompliant(false)]
         public const uint ACCESS_MASK_GENERIC_EXECUTE = 0x20000000;
 
         /// <summary>
@@ -123,7 +114,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         ///  that is to be attached to an object, it is translated into a combination of bits, which are
         ///  usually set in the lower 16 bits of the ACCESS_MASK_
         /// </summary>
-        [CLSCompliant(false)]
         public const uint ACCESS_MASK_GENERIC_WRITE = 0x40000000;
 
         /// <summary>
@@ -133,19 +123,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         ///  that is to be attached to an object, it is translated into a combination of bits, which are 
         ///  usually set in the lower 16 bits of the ACCESS_MASK_
         /// </summary>
-        [CLSCompliant(false)]
         public const uint ACCESS_MASK_GENERIC_READ = 0x80000000;
 
         /// <summary>
         /// All bits of the standard rights.
         /// </summary>
-        [CLSCompliant(false)]
         public const uint ACCESS_MASK_STANDARD_RIGHTS_ALL = 0x001F0000;
 
         /// <summary>
         /// All bits of the protocol specific rights.
         /// </summary>
-        [CLSCompliant(false)]
         public const uint ACCESS_MASK_SPECIFIC_RIGHTS_ALL = 0x0000FFFF;
 
         /// <summary>
@@ -155,7 +142,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// The DateTime object used to initialize the value of the new instance.
         /// </param>
         /// <returns>A FILETIME.</returns>
-        [CLSCompliant(false)]
         public static _FILETIME ToFileTime(DateTime dateTime)
         {
             _FILETIME retVal;
@@ -188,7 +174,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <param name="fileTime">FILETIME to convert.</param>
         /// <returns>A DateTime object that represents a UTC time equivalent to the date
         /// and time represented by the fileTime parameter.</returns>
-        [CLSCompliant(false)]
         public static DateTime ToDateTime(_FILETIME fileTime)
         {
             long fileTimeLong = (((long)fileTime.dwHighDateTime) << 32) | fileTime.dwLowDateTime;
@@ -309,7 +294,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// Throw when domain is invalid.
         /// </exception>
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
-        [CLSCompliant(false)]
         public static _SID GetWellKnownSid(WellKnownSid type, uint[] domain)
         {
             switch (type)
@@ -506,7 +490,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <exception cref="ArgumentException">
         /// Throw when domain is invalid.
         /// </exception>
-        [CLSCompliant(false)]
         public static _RPC_SID GetWellKnownRpcSid(WellKnownSid type, uint[] domain)
         {
             _SID sid = GetWellKnownSid(type, domain);
@@ -569,7 +552,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <exception cref="ArgumentException">
         /// Thrown when length of identifierAuthority is not 6 bytes.
         /// </exception>
-        [CLSCompliant(false)]
         public static _SID CreateSid(
             byte[] identifierAuthority,
             params uint[] subAuthorities)
@@ -615,7 +597,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <exception cref="ArgumentException">
         /// Thrown when length of identifierAuthority is not 6 bytes.
         /// </exception>
-        [CLSCompliant(false)]
         public static _RPC_SID CreateRpcSid(
             byte[] identifierAuthority,
             params uint[] subAuthorities)
@@ -651,7 +632,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// If it's null, Length and maximumLength is 0, Buffer is NULL.
         /// </param>
         /// <returns>Created RPC_UNICODE_STRING structure.</returns>
-        [CLSCompliant(false)]
         public static _RPC_UNICODE_STRING ToRpcUnicodeString(string s)
         {
             _RPC_UNICODE_STRING rpcUnicodeString = new _RPC_UNICODE_STRING();
@@ -684,7 +664,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <exception cref="ArgumentException">
         /// Thrown when s is invalid.
         /// </exception>
-        [CLSCompliant(false)]
         public static string ToString(_RPC_UNICODE_STRING s)
         {
             if (s.Length == 0 && s.MaximumLength == 0 && s.Buffer == null)
@@ -707,7 +686,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// </summary>
         /// <param name="value">A int64 value.</param>
         /// <returns>Created OLD_LARGE_INTEGER structure.</returns>
-        [CLSCompliant(false)]
         public static _OLD_LARGE_INTEGER ToOldLargeInteger(long value)
         {
             _OLD_LARGE_INTEGER integer = new _OLD_LARGE_INTEGER();
@@ -722,7 +700,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// </summary>
         /// <param name="value">A _OLD_LARGE_INTEGER structure.</param>
         /// <returns>The value in the structure.</returns>
-        [CLSCompliant(false)]
         public static long ToInt64(_OLD_LARGE_INTEGER value)
         {
             return ((long)value.HighPart << 32) + (long)value.LowPart;
@@ -736,7 +713,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// If it's null, Length and maximumLength is 0, Buffer is NULL.
         /// </param>
         /// <returns>Converted _RPC_STRING</returns>    
-        [CLSCompliant(false)]
         public static _RPC_STRING ToRpcString(string input)
         {
             _RPC_STRING rpcString = new _RPC_STRING();
@@ -767,7 +743,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// Thrown when the length of identifierAuthority is not 6 bytes.
         /// Thrown when the IdentifierAuthority field of sid is null.
         /// </exception>
-        [CLSCompliant(false)]
         public static string ToSddlString(_SID sid)
         {
             //
@@ -845,7 +820,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <exception cref="ArgumentNullException">
         /// Thrown when identifierAuthority is null.
         /// </exception>
-        [CLSCompliant(false)]
         public static string ToSddlString(_RPC_SID rpcSid)
         {
             _SID sid = CreateSid(rpcSid.IdentifierAuthority.Value, rpcSid.SubAuthority);
@@ -858,7 +832,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// </summary>
         /// <param name="securityDescriptor">_SECURITY_DESCRIPTOR to convert.</param>
         /// <returns>SDDL string.</returns>
-        [CLSCompliant(false)]
         public static string ToSddlString(_SECURITY_DESCRIPTOR securityDescriptor)
         {
             byte[] securityDescriptorBytes = DtypUtility.EncodeSecurityDescriptor(securityDescriptor);
@@ -873,7 +846,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <param name="sddlString">SDDL string to convert.</param>
         /// <returns>Converted SID.</returns>
         ///<exception cref="ArgumentException">Throw when the given sddl string is invalid</exception>
-        [CLSCompliant(false)]
         public static _SID ToSid(string sddlString)
         {
             byte[] identifierAuthority = new byte[6];
@@ -920,7 +892,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// </summary>
         /// <param name="sddlString">SDDL string to convert.</param>
         /// <returns>_SECURITY_DESCRIPTOR</returns>
-        [CLSCompliant(false)]
         public static _SECURITY_DESCRIPTOR ToSecurityDescriptor(string sddlString)
         {
             RawSecurityDescriptor rawSecurityDescriptor = new RawSecurityDescriptor(sddlString);
@@ -969,7 +940,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// Thrown when the well-known SID PRINCIPAL_SELF, if passed as SidToTest, but 
         /// principalSelfSubstitute does't exist.
         /// </exception>
-        [CLSCompliant(false)]
         public static bool SidInToken(
             Token token,
             _SID sidToTest,
@@ -1032,7 +1002,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// The function returns TRUE if the first SID dominates the second SID or is equal to the second SID, 
         /// or FALSE if the first SID is subordinate to the second SID.
         /// </returns>
-        [CLSCompliant(false)]
         public static bool SidDominates(_SID sid1, _SID sid2)
         {
             //Described in MS-DTYP Section 2.5.3.1.2 SidDominates:
@@ -1082,7 +1051,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <param name="lowPart">Low-order 32 bits.</param>
         /// <param name="highPart">High-order 32 bits.</param>
         /// <returns>Created LUID structure.</returns>
-        [CLSCompliant(false)]
         public static _LUID CreateLuid(uint lowPart, int highPart)
         {
             _LUID luid = new _LUID();
@@ -1100,7 +1068,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// Thrown when privilegeName is invalid.
         /// </exception>
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
-        [CLSCompliant(false)]
         public static _LUID GetPrivilegeLuid(PrivilegeName privilegeName)
         {
             switch (privilegeName)
@@ -1420,7 +1387,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// Thrown when the Dacl field of securityDescriptor doesn't exist, but the DACLPresent flag is set.
         /// Thrown when the Revision field of securityDescriptor is invalid
         /// </exception>
-        [CLSCompliant(false)]
         public static bool AccessCheck(
             _SECURITY_DESCRIPTOR securityDescriptor,
             Token token,
@@ -1630,7 +1596,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// SECURITY_DESCRIPTOR structure that is assigned to the object
         /// </param>
         /// <returns>True if check is done successfully; otherwise, false</returns>
-        [CLSCompliant(false)]
         public static bool MandatoryIntegrityCheck(
             _SID tokenIntegritySID,
             _SID aceIntegritySID,
@@ -1803,7 +1768,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <param name="sacl">The SACL of the object.</param>
         /// <param name="dacl">The DACL of the object.</param>
         /// <returns> Output security descriptor for the object.</returns>
-        [CLSCompliant(false)]
         public static _SECURITY_DESCRIPTOR CreateSecurityDescriptor(
             SECURITY_DESCRIPTOR_Control control,
             _SID? ownerSid,
@@ -1885,7 +1849,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// Thrown when the Dacl field of parentDescriptor doesn't exist, but the DACLPresent flag is set.
         /// Thrown when the Sacl field of parentDescriptor doesn't exist, but the SP flag is set.
         /// </exception>
-        [CLSCompliant(false)]
         public static _SECURITY_DESCRIPTOR CreateSecurityDescriptor(
             _SECURITY_DESCRIPTOR? parentDescriptor,
             _SECURITY_DESCRIPTOR? creatorDescriptor,
@@ -2132,7 +2095,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <param name="token">Token for default values.</param>
         /// <param name="computedControl">ComputedControl</param>
         /// <returns>Computed ACL</returns>
-        [CLSCompliant(false)]
         public static _ACL? ComputeACL(
             AclComputeType computeType,
             _ACL? parentAcl,
@@ -2404,7 +2366,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// </summary>
         /// <param name="acl">ACL</param>
         /// <returns>Return TRUE if contains inheritable ACE; otherwise, FALSE.</returns>
-        [CLSCompliant(false)]
         public static bool ContainsInheritableACEs(_ACL acl)
         {
             //FOR each ACE in ACL DO
@@ -2526,7 +2487,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <returns>
         /// The computed ACL that also includes the inherited ACEs.
         /// </returns>
-        [CLSCompliant(false)]
         public static _ACL ComputeInheritedACLfromParent(
             _ACL acl,
             bool isContainerObject,
@@ -2738,7 +2698,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <returns>
         /// The computed ACL that also includes the inherited ACEs.
         /// </returns>
-        [CLSCompliant(false)]
         public static _ACL ComputeInheritedACLfromCreator(
             _ACL acl,
             bool isContainerObject,
@@ -2860,7 +2819,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <returns>
         /// Processed ACL.
         /// </returns>
-        [CLSCompliant(false)]
         public static _ACL PreProcessACLfromCreator(_ACL acl)
         {
             //Initialize NewACL to Empty ACL
@@ -2907,7 +2865,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <returns>
         /// The computed ACL with the SID substitutions performed.
         /// </returns>
-        [CLSCompliant(false)]
         public static _ACL PostProcessACL(
             _ACL acl,
             CopyFilter copyFilter,
@@ -3232,7 +3189,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <exception cref="ArgumentException">
         /// Thrown when The type of ace is invalid.
         /// </exception>
-        [CLSCompliant(false)]
         public static byte[] EncodeAcl(_ACL acl)
         {
             List<byte> byteArray = new List<byte>();
@@ -3338,7 +3294,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <exception cref="ArgumentException">
         /// Thrown when The type of ace is invalid.
         /// </exception>
-        [CLSCompliant(false)]
         public static _ACL DecodeAcl(byte[] buffer)
         {
             if (buffer == null || buffer.Length < ACL_HEADER_LENGTH)
@@ -3451,7 +3406,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// </summary>
         /// <param name="securityDescriptor">The security descriptor to be updated.</param>
         /// <returns>The encoded byte array.</returns>
-        [CLSCompliant(false)]
         public static void UpdateSecurityDescriptor(ref _SECURITY_DESCRIPTOR sd)
         {
             // Revision (1 byte) + Sbz1 (1 byte) + Control (2 bytes) + OffsetOwner (4 bytes) + OffsetGroup (4 bytes) + 
@@ -3501,7 +3455,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// </summary>
         /// <param name="securityDescriptor">The security descriptor to be retrieved.</param>
         /// <returns>The encoded byte array.</returns>
-        [CLSCompliant(false)]
         public static byte[] EncodeSecurityDescriptor(_SECURITY_DESCRIPTOR securityDescriptor)
         {
             if ((securityDescriptor.Control & SECURITY_DESCRIPTOR_Control.SelfRelative) == 0)
@@ -3546,7 +3499,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// </summary>
         /// <param name="buffer">The byte array to be decoded.</param>
         /// <returns>The _SECURITY_DESCRIPTOR structure.</returns>
-        [CLSCompliant(false)]
         public static _SECURITY_DESCRIPTOR DecodeSecurityDescriptor(byte[] buffer)
         {
             int offset = 0;
@@ -3614,7 +3566,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <param name="domainName">The name of the domain. </param>
         /// <param name="accountName">The name of the account.</param>
         /// <returns>The SID of the user</returns>
-        [CLSCompliant(false)]
         public static _SID GetSidFromAccount(string domainName, string accountName)
         {
             NTAccount account = new NTAccount(domainName, accountName);
@@ -3632,7 +3583,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <param name="mask">An ACCESS_MASK that specifies the user rights allowed by this ACE.</param>
         /// <param name="flags">ACE type-specific control flags in the ACE header.</param>
         /// <returns>The constructed ACCESS_ALLOWED_ACE structure</returns>
-        [CLSCompliant(false)]
         public static _ACCESS_ALLOWED_ACE CreateAccessAllowedAce(_SID sid, uint mask, ACE_FLAGS flags = ACE_FLAGS.None)
         {
             _ACE_HEADER aceHeader = new _ACE_HEADER
@@ -3660,7 +3610,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <param name="mask">An ACCESS_MASK that specifies the user rights denied by this ACE.</param>
         /// <param name="flags">ACE type-specific control flags in the ACE header.</param>
         /// <returns>The constructed ACCESS_DENIED_ACE structure</returns>
-        [CLSCompliant(false)]
         public static _ACCESS_DENIED_ACE CreateAccessDeniedAce(_SID sid, uint mask, ACE_FLAGS flags = ACE_FLAGS.None)
         {
             _ACE_HEADER aceHeader = new _ACE_HEADER
@@ -3687,7 +3636,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <param name="attributeName">Name of the claim security attribute.</param>
         /// <param name="values">Claim security attribute values</param>
         /// <returns>A SYSTEM_RESOURCE_ATTRIBUTE_ACE with specified Attribute Name and Values</returns>
-        [CLSCompliant(false)]
         public static SystemResourceAttributeAce CreateSystemResourceAttributeAce(string attributeName, long[] values)
         {
             return new SystemResourceAttributeAce(attributeName, values);
@@ -3699,7 +3647,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <param name="attributeName">Name of the claim security attribute.</param>
         /// <param name="values">Claim security attribute values</param>
         /// <returns>A SYSTEM_RESOURCE_ATTRIBUTE_ACE with specified Attribute Name and Values</returns>
-        [CLSCompliant(false)]
         public static SystemResourceAttributeAce CreateSystemResourceAttributeAce(string attributeName, ulong[] values)
         {
             return new SystemResourceAttributeAce(attributeName, values);
@@ -3711,7 +3658,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <param name="attributeName">Name of the claim security attribute.</param>
         /// <param name="values">Claim security attribute values</param>
         /// <returns>A SYSTEM_RESOURCE_ATTRIBUTE_ACE with specified Attribute Name and Values</returns>
-        [CLSCompliant(false)]
         public static SystemResourceAttributeAce CreateSystemResourceAttributeAce(string attributeName, string[] values)
         {
             return new SystemResourceAttributeAce(attributeName, values);
@@ -3723,7 +3669,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <param name="sid">A SID that identifies a central access policy.</param>
         /// <param name="flags">An unsigned 8-bit integer that specifies a set of ACE type-specific control flags. </param>
         /// <returns>Return the ACE.</returns>
-        [CLSCompliant(false)]
         public static _SYSTEM_SCOPED_POLICY_ID_ACE CreateSystemScopedPolicyIdAce(_SID sid,
             ACE_FLAGS flags = ACE_FLAGS.OBJECT_INHERIT_ACE | ACE_FLAGS.CONTAINER_INHERIT_ACE)
         {
@@ -3752,7 +3697,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <param name="isDACL">Whether it is DACL or SACL</param>
         /// <param name="acl">The ACL to be added to.</param>
         /// <param name="aces">The ACE(s) to be added.</param>
-        [CLSCompliant(false)]
         public static void AddAceToAcl(ref _ACL acl, bool isDACL, params object[] aces)
         {
             if (aces == null || aces.Length == 0)
@@ -3812,7 +3756,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <param name="isDACL">Whether it is DACL or SACL</param>
         /// <param name="aces">The ACE(s) to be put into the ACL.</param>
         /// <returns>The constructed ACL structure.</returns>
-        [CLSCompliant(false)]
         public static _ACL CreateAcl(bool isDACL, params object[] aces)
         {
             _ACL acl = new _ACL
@@ -4006,7 +3949,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// standard access rights for an object. When a client application requests generic access to
     /// an object, that request is mapped to the access rights defined in this structure.
     /// </summary>
-    [CLSCompliant(false)]
     public struct GenericMapping
     {
         /// <summary>
@@ -4059,7 +4001,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// If a bit is not set, the server MUST ignore the associated field.
     /// </summary>
     [Flags]
-    [CLSCompliant(false)]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [SuppressMessage("Microsoft.Usage", "CA2217:DoNotMarkEnumsWithFlags")]
     public enum USER_ALL : uint
@@ -4279,7 +4220,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// a logical OR with any other value.
     /// </summary>
     [Flags]
-    [CLSCompliant(false)]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     public enum GROUP_TYPE : uint
     {

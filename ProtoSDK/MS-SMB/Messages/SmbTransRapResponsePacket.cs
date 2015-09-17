@@ -13,7 +13,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// rap packet. 
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTransRapResponsePacket : SmbTransactionSuccessResponsePacket
     {
         #region Fields

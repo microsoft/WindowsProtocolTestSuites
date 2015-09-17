@@ -310,7 +310,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <exception cref="InvalidOperationException">
         /// The transport is null for not started. Please invoke Start() first
         /// </exception>
-        [CLSCompliant(false)]
         public virtual void SendPacket(SmbPacket packet, SmbServerConnection connection)
         {
             if (packet == null)
@@ -365,7 +364,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// The transport is null for not started. Please invoke Start() first
         /// </exception>
         /// <exception cref="InvalidOperationException">Unknown object received from transport.</exception>
-        [CLSCompliant(false)]
         public virtual SmbPacket ExpectPacket(TimeSpan timeout, out SmbServerConnection connection)
         {
             if (this.transport == null)
@@ -475,7 +473,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "command">The operation code that this SMB is requesting or responding to </param>
         /// <returns>The CreateSmbErrorResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbErrorResponsePacket CreateSmbErrorResponse(
             SmbServerConnection connection,
             uint status,
@@ -531,7 +528,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <returns>a smb negotiate response packet </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
         /// <exception cref="NotImplementedException">the security package is invalid</exception>
-        [CLSCompliant(false)]
         public virtual SmbNegotiateResponsePacket CreateSmbComNegotiateResponse(
             SmbServerConnection connection,
             SecurityModes securityMode,
@@ -629,7 +625,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </param>
         /// <returns>a smb implicit ntlm negotiate response packet </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbNegotiateImplicitNtlmResponsePacket CreateSmbComNegotiateImplicitNtlmResponse(
             SmbServerConnection connection,
             SecurityModes securityMode,
@@ -702,7 +697,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "action">A 16-bit field. The two lowest order bits have been defined </param>
         /// <returns>The SmbSessionSetupAndXResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbSessionSetupAndxResponsePacket CreateSmbComSessionSetupResponse(
             SmbServerConnection connection,
             ushort uid,
@@ -803,7 +797,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "action">A 16-bit field. The two lowest order bits have been defined </param>
         /// <returns>The SmbSessionSetupAndXResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbSessionSetupImplicitNtlmAndxResponsePacket CreateSmbComSessionSetupImplicitNtlmResponse(
             SmbServerConnection connection,
             ushort uid,
@@ -882,7 +875,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </param>
         /// <returns>The SmbTreeConnectAndXResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTreeConnectAndxResponsePacket CreateSmbComTreeConnectResponse(
             SmbServerConnection connection,
             ushort treeId,
@@ -951,7 +943,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name="connection">the connection identified the client</param>
         /// <returns>a SMB_COM_TREE_DISCONNECT packet </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTreeDisconnectResponsePacket CreateSmbComTreeDisconnectResponse(SmbServerConnection connection)
         {
             if (connection == null)
@@ -999,7 +990,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name="connection">the connection identified the client</param>
         /// <returns>a SMB_COM_LOGOFF_ANDX packet </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbLogoffAndxResponsePacket CreateSmbComLogoffResponse(SmbServerConnection connection)
         {
             if (connection == null)
@@ -1059,7 +1049,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </param>
         /// <returns>The SmbNtCreateAndXResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbNtCreateAndxResponsePacket CreateSmbComNtCreateResponse(
             SmbServerConnection connection,
             ushort fileId,
@@ -1145,7 +1134,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "data">The actual bytes read in response to the request </param>
         /// <returns>SmbReadAndXResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbReadAndxResponsePacket CreateSmbComReadResponse(
             SmbServerConnection connection,
             ushort available,
@@ -1224,7 +1212,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "writtenCount">The number of bytes written to the file </param>
         /// <returns>SmbWriteAndXResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbWriteAndxResponsePacket CreateSmbComWriteResponse(
             SmbServerConnection connection,
             ushort isAvailable,
@@ -1290,7 +1277,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </param>
         /// <returns>The SmbOpenAndXResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbOpenAndxResponsePacket CreateSmbComOpenResponse(
             SmbServerConnection connection,
             ushort fileId,
@@ -1356,7 +1342,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name="connection">the connection identified the client</param>
         /// <returns>a SMB_COM_CLOSE packet </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbCloseResponsePacket CreateSmbComCloseResponse(SmbServerConnection connection)
         {
             if (connection == null)
@@ -1408,7 +1393,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name="connection">the connection identified the client</param>
         /// <returns>The SmbTransSetNmpipeStateResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTransSetNmpipeStateResponsePacket CreateTransSetNmpipeStateResponse(SmbServerConnection connection)
         {
             if (connection == null)
@@ -1461,7 +1445,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </param>
         /// <returns>The SmbTransRawReadNmpipeResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTransRawReadNmpipeResponsePacket CreateTransRawReadNmpipeResponse(
             SmbServerConnection connection,
             byte[] dataBuffer)
@@ -1530,7 +1513,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "pipeState">indicate the state of the named pipe </param>
         /// <returns>The SmbTransQueryNmpipeStateResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTransQueryNmpipeStateResponsePacket CreateTransQueryNmpipeStateResponse(
             SmbServerConnection connection,
             PipeState pipeState)
@@ -1602,7 +1584,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </param>
         /// <returns>The SmbTransQueryNmpipeInfoResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTransQueryNmpipeInfoResponsePacket CreateTransQueryNmpipeInfoResponse(
             SmbServerConnection connection,
             ushort outputBufferSize,
@@ -1680,7 +1661,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "peekedData">The data buffer contains the data read from the named pipe </param>
         /// <returns>The SmbTransPeekNmpipeResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTransPeekNmpipeResponsePacket CreateTransPeekNmpipeResponse(
             SmbServerConnection connection,
             ushort readDataAvailable,
@@ -1750,7 +1730,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "data">The Data buffer that contains the data read from the named pipe </param>
         /// <returns>The SmbTransTransactNmpipeResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTransTransactNmpipeResponsePacket CreateTransTransactNmpipeResponse(
             SmbServerConnection connection,
             byte[] data)
@@ -1809,7 +1788,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "data">The Data buffer that contains the bytes read from the named pipe </param>
         /// <returns>The SmbTransReadNmpipeResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTransReadNmpipeResponsePacket CreateTransReadNmpipeResponse(
             SmbServerConnection connection,
             byte[] data)
@@ -1868,7 +1846,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name="bytesWritten">This value MUST be set to the number of bytes written to the pipe.</param>
         /// <returns>The SmbTransWriteNmpipeResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTransWriteNmpipeResponsePacket CreateTransWriteNmpipeResponse(
             SmbServerConnection connection,
             ushort bytesWritten)
@@ -1926,7 +1903,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name="connection">the connection identified the client</param>
         /// <returns>The SmbTransWaitNmpipeResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTransWaitNmpipeResponsePacket CreateTransWaitNmpipeResponse(SmbServerConnection connection)
         {
             if (connection == null)
@@ -1977,7 +1953,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "data">The Data buffer that contains the data read from the named pipe </param>
         /// <returns>The SmbTransCallNmpipeResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTransCallNmpipeResponsePacket CreateTransCallNmpipeResponse(
             SmbServerConnection connection,
             byte[] data)
@@ -2043,7 +2018,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </param>
         /// <returns>a mailslot write response </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTransMailslotWriteResponsePacket CreateTransMailSlotWriteResponse(
             SmbServerConnection connection,
             ushort operationStatus)
@@ -2123,7 +2097,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </param>
         /// <returns>a Named Rap write response </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTransRapResponsePacket CreateTransNamedRapResponse(
             SmbServerConnection connection,
             ushort win32ErrorCode,
@@ -2195,7 +2168,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "data">data specified by [CIFS] </param>
         /// <returns>The SmbTrans2QueryFileInformationResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTrans2QueryFileInformationResponsePacket CreateTrans2QueryFileInformationResponse(
             SmbServerConnection connection,
             object data)
@@ -2258,7 +2230,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "data">The Data buffer that contains the information bytes requested </param>
         /// <returns>The SmbTrans2QueryPathInformationResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTrans2QueryPathInformationResponsePacket CreateTrans2QueryPathInformationResponse(
             SmbServerConnection connection,
             object data)
@@ -2320,7 +2291,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name="connection">the connection identified the client</param>
         /// <returns>The SmbTrans2SetFileInformationResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTrans2SetFileInformationResponsePacket CreateTrans2SetFileInformationResponse(
             SmbServerConnection connection)
         {
@@ -2375,7 +2345,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name="connection">the connection identified the client</param>
         /// <returns>The SmbTrans2SetPathInformationResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTrans2SetPathInformationResponsePacket CreateTrans2SetPathInformationResponse(SmbServerConnection connection)
         {
             if (connection == null)
@@ -2430,7 +2399,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "data">data specified by [CIFS] </param>
         /// <returns>The SmbTrans2QueryFileInformationResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTrans2QueryFsInformationResponsePacket CreateTrans2QueryFsInformationResponse(
             SmbServerConnection connection,
             object data)
@@ -2488,7 +2456,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name="connection">the connection identified the client</param>
         /// <returns>The SmbTrans2SetFsInformationResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTrans2SetFsInformationResponsePacket CreateTrans2SetFsInformationResponse(
             SmbServerConnection connection)
         {
@@ -2550,7 +2517,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "data">data specified by [FSCC] </param>
         /// <returns>The SmbTrans2FindFirst2ResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTrans2FindFirst2ResponsePacket CreateTrans2FindFirst2Response(
             SmbServerConnection connection,
             ushort sid,
@@ -2628,7 +2594,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "data">data specified by [CIFS] </param>
         /// <returns>The SmbTrans2FindNext2ResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTrans2FindNext2ResponsePacket CreateTrans2FindNext2Response(
             SmbServerConnection connection,
             ushort searchCount,
@@ -2702,7 +2667,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </param>
         /// <returns>The SmbTrans2GetDfsReferralResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbTrans2GetDfsReferralResponsePacket CreateTrans2GetDfsRefferralResponse(
             SmbServerConnection connection,
             RESP_GET_DFS_REFERRAL data)
@@ -2773,7 +2737,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </param>
         /// <returns>The SmbNtTransactCreateResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbNtTransactCreateResponsePacket CreateNtTransCreateResponse(
             SmbServerConnection connection,
             ushort fileId,
@@ -2843,7 +2806,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name="connection">the connection identified the client</param>
         /// <returns>The SmbNtTransRenameResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbNtTransRenameResponsePacket CreateNtTransRenameResponse(SmbServerConnection connection)
         {
             if (connection == null)
@@ -2896,7 +2858,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "quotaInfo">quota information </param>
         /// <returns>The SmbNtTransQueryQuotaResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbNtTransQueryQuotaResponsePacket CreateNtTransQueryQuotaResponse(
             SmbServerConnection connection,
             params NT_TRANSACT_QUERY_QUOTA_Response_NT_Trans_Data[] quotaInfo)
@@ -2969,7 +2930,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name="connection">the connection identified the client</param>
         /// <returns>The SmbNtTransSetQuotaResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbNtTransSetQuotaResponsePacket CreateNtTransSetQuotaResponse(SmbServerConnection connection)
         {
             if (connection == null)
@@ -3022,7 +2982,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name="data">the data to response to client</param>
         /// <returns>The SmbNtTransactIoctlResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbNtTransactIoctlResponsePacket CreateNtTransIoCtlResponse(
             SmbServerConnection connection, byte[] data)
         {
@@ -3085,7 +3044,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </param>
         /// <returns>The SmbNtTransFsctlSrvEnumerateSnapshotsResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbNtTransFsctlSrvEnumerateSnapshotsResponsePacket CreateFsctlSrvEnumerateSnapshotsResponse(
             SmbServerConnection connection,
             uint numberOfSnapShots,
@@ -3161,7 +3119,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </param>
         /// <returns>The SmbNtTransFsctlSrvRequestResumeKeyResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbNtTransFsctlSrvRequestResumeKeyResponsePacket CreateFsctlSrvRequestResumeKeyResponse(
             SmbServerConnection connection, byte[] resumeKey)
         {
@@ -3231,7 +3188,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </param>
         /// <returns>The SmbNtTransFsctlSrvCopyChunkResponsePacket </returns>
         /// <exception cref="ArgumentNullException">connection must not be null</exception>
-        [CLSCompliant(false)]
         public virtual SmbNtTransFsctlSrvCopyChunkResponsePacket CreateFsctlSrvCopyChunkResponse(
             SmbServerConnection connection,
             uint chucksWritten,

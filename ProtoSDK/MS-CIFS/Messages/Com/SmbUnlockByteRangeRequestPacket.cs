@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbUnlockByteRange Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbUnlockByteRangeRequestPacket : SmbSingleRequestPacket
     {
         #region Fields

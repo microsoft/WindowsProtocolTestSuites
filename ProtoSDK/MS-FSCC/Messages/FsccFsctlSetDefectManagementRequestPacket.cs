@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FSCTL_SET_DEFECT_MANAGEMENT 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlSetDefectManagementRequestPacket : FsccStandardPacket<FSCTL_SET_DEFECT_MANAGEMENT_Request>
     {
         #region Properties

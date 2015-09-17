@@ -70,7 +70,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The security context of the user that established the session, as obtained from the authentication
         /// subsystem after successful authentication.
         /// </summary>
-        [CLSCompliant(false)]
         public ServerSecurityContext SecurityContext
         {
             get
@@ -182,7 +181,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Remove a tree connect file from this TreeConnectTable.
         /// </summary>
         /// <param name="treeId">The tree id.</param>
-        [CLSCompliant(false)]
         public void RemoveTreeConnect(ushort treeId)
         {
             lock (this.treeConnectTable)
@@ -196,7 +194,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Get the tree connect from this TreeConnectTable.
         /// </summary>
         /// <param name="treeId">The tree id.</param>
-        [CLSCompliant(false)]
         public CifsServerPerTreeConnect GetTreeConnect(ushort treeId)
         {
             lock (this.treeConnectTable)
@@ -225,7 +222,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="userName">The name of the user who established the session.</param>
         /// <param name="sessionGlobalId">A numeric 32-bit value obtained by registration with the Server Service Remote
         /// Protocol.</param>
-        [CLSCompliant(false)]
         public CifsServerPerSession(
             IFileServiceServerConnection connection,
             long sessionId,

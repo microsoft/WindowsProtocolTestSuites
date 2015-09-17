@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbTrans2FindNotifyNext Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTrans2FindNotifyNextRequestPacket : SmbTransaction2RequestPacket
     {
         #region Fields

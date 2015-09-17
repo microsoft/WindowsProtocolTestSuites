@@ -164,7 +164,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// A variable-length byte-array that contains the value defined for this AV pair entry. This param can be null.
         /// </param>
         /// <exception cref="ArgumentNullException">the param avPairs can not be null</exception>
-        [CLSCompliant(false)]
         public static void AddAVPair(
             ICollection<AV_PAIR> avPairs,
             AV_PAIR_IDs avId,
@@ -241,7 +240,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// </summary>
         /// <param name="bytes">the bytes array to concatenation</param>
         /// <returns>return the concatenation of bytes array</returns>
-        [CLSCompliant(false)]
         public static byte[] ConcatenationOf(
             params byte[][] bytes
             )
@@ -370,7 +368,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// ticks elapsed since midnight of January 1st, 1601 (UTC).
         /// </summary>
         /// <returns>return current time</returns>
-        [CLSCompliant(false)]
         public static ulong CurrentTime()
         {
             return (ulong)DateTime.Now.ToFileTimeUtc();
@@ -444,7 +441,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// not null, return the avpair which hole the MsvAvTimestamp.
         /// </param>
         /// <returns>the current time</returns>
-        [CLSCompliant(false)]
         public static ulong GetTime(
             ICollection<AV_PAIR> challengeTargetInfo
             )
@@ -609,7 +605,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <param name="lmChallengeResponse">The LM response to the server challenge. Computed by the client.</param>
         /// <param name="sessionBaseKey">A session key calculated from the user's password.</param>
         /// <param name="version">the version of NTLM</param>
-        [CLSCompliant(false)]
         public static void ComputeResponse(
             NlmpVersion version,
             NegotiateTypes negotiateFlags,
@@ -652,7 +647,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <param name="ntChallengeResponse">The NT response to the server challenge. Computed by the client.</param>
         /// <param name="lmChallengeResponse">The LM response to the server challenge. Computed by the client.</param>
         /// <param name="sessionBaseKey">A session key calculated from the user's password.</param>
-        [CLSCompliant(false)]
         public static void ComputeResponseV1(
             NegotiateTypes negotiateFlags,
             byte[] responseKeyNT,
@@ -714,7 +708,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <param name="ntChallengeResponse">The NT response to the server challenge. Computed by the client.</param>
         /// <param name="lmChallengeResponse">The LM response to the server challenge. Computed by the client.</param>
         /// <param name="sessionBaseKey">A session key calculated from the user's password.</param>
-        [CLSCompliant(false)]
         public static void ComputeResponseV2(
             byte[] responseKeyNT,
             byte[] responseKeyLM,
@@ -779,7 +772,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// </param>
         /// <param name="keyExchangeKey">hold the results of calling KXKEY.</param>
         /// <param name="version">the version of NTLM</param>
-        [CLSCompliant(false)]
         public static void GetEncryptedRandomSessionKey(
             NlmpVersion version,
             NegotiateTypes negotiateFlags,
@@ -828,7 +820,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
             "Microsoft.Design",
             "CA1011:ConsiderPassingBaseTypesAsParameters"
             )]
-        [CLSCompliant(false)]
         public static byte[] GetMic(
             byte[] exportedSessionKey,
             NlmpNegotiatePacket negotiate,
@@ -876,7 +867,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <param name="responseKeyLM">hold the results of calling LMOWF().</param>
         /// <param name="version">the version of NTLM</param>
         /// <returns>KeyExchangeKey - The Key Exchange Key.</returns>
-        [CLSCompliant(false)]
         public static byte[] KXKey(
             NlmpVersion version,
             byte[] sessionBaseKey,
@@ -914,7 +904,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// or "Server.
         /// </param>
         /// <returns>the generated seal key</returns>
-        [CLSCompliant(false)]
         public static byte[] SealKey(
             NegotiateTypes negotiateFlags,
             byte[] randomSessionKey,
@@ -997,7 +986,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// or "Server.
         /// </param>
         /// <returns>the generated sign key</returns>
-        [CLSCompliant(false)]
         public static byte[] SignKey(
             NegotiateTypes negotiateFlags,
             byte[] randomSessionKey,
@@ -1042,7 +1030,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <param name="message">The message being sent between the client and server.</param>
         /// <param name="version">the version of NTLM</param>
         /// <returns>Signed message</returns>
-        [CLSCompliant(false)]
         public static byte[] Sign(
             NlmpVersion version,
             NegotiateTypes negotiateFlags,
@@ -1069,7 +1056,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <param name="sealedMessage">The encrypted message</param>
         /// <param name="signature">The checksum of the Sealed message</param>
         /// <param name="version">the version of NTLM</param>
-        [CLSCompliant(false)]
         public static void Seal(
             NlmpVersion version,
             NegotiateTypes negotiateFlags,
@@ -1099,7 +1085,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <param name="message">The message being sent between the client and server.</param>
         /// <param name="signature">The checksum of the Sealed message</param>
         /// <param name="version">the version of NTLM</param>
-        [CLSCompliant(false)]
         public static void UnSeal(
             NlmpVersion version,
             NegotiateTypes negotiateFlags,
@@ -1128,7 +1113,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <param name="message">The message being sent between the client and server.</param>
         /// <param name="version">the version of NTLM</param>
         /// <returns>the signature</returns>
-        [CLSCompliant(false)]
         public static byte[] Mac(
             NlmpVersion version,
             NegotiateTypes negotiateFlags,
@@ -1162,7 +1146,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <exception cref="InvalidOperationException">
         /// if the data is corrupt, we can not decode the packet,we will throw this exception.
         /// </exception>
-        [CLSCompliant(false)]
         public static NlmpPacket DecodePacket(
             byte[] nlmpPacketBytesData
             )

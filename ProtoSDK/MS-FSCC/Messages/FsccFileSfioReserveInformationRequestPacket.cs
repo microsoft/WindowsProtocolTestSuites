@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FileSfioReserveInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileSfioReserveInformationRequestPacket : FsccStandardPacket<FileSfioReserveInformation>
     {
         #region Properties

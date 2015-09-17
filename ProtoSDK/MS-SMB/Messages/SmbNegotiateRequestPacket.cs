@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     ///  Packets for SmbNegotiate Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbNegotiateRequestPacket : Cifs.SmbNegotiateRequestPacket
     {
         #region Convert from base class

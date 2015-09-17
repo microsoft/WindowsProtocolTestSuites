@@ -171,13 +171,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         /// <summary>
         /// Message type
         /// </summary>
-        [CLSCompliant(false)]
         public LspMessageType messageType;
 
         /// <summary>
         /// Message length
         /// </summary>
-        [CLSCompliant(false)]
         public int messageLen;
     }
 
@@ -190,13 +188,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         /// <summary>
         /// Addresss family
         /// </summary>
-        [CLSCompliant(false)]
         public int af;
 
         /// <summary>
         /// IP address in dot format
         /// </summary>
-        [CLSCompliant(false)]
         [StringAttribute(StringEncoding.ASCII)]
         [StaticSize(AddressSize, StaticSizeMode.Elements)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = AddressSize)]
@@ -205,13 +201,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         /// <summary>
         /// IP port
         /// </summary>
-        [CLSCompliant(false)]
         public ushort port;
 
         /// <summary>
         /// Padding
         /// </summary>
-        [CLSCompliant(false)]
         public ushort padding;
 
         //ip address size, not included when marshal the struct
@@ -285,7 +279,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         /// <summary>
         /// type of the message.
         /// </summary>
-        [CLSCompliant(false)]
         protected LspMessageType messageType;
 
 

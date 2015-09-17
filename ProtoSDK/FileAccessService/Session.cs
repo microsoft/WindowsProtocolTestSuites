@@ -64,7 +64,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// connection over which the session was established. This value, transformed into a 64-bit 
         /// number, is typically sent to clients as the SessionId in the SMB2 header.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong SessionId
         {
             get
@@ -98,7 +97,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// The current activity state of this session. This value MUST be either InProgress, Valid, 
         /// or Expired.
         /// </summary>
-        [CLSCompliant(false)]
         public uint State
         {
             get
@@ -200,7 +198,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// </summary>
         /// <param name="connectionId">the connection identity of the session.</param>
         /// <param name="sessionId">the session identity of the session.</param>
-        [CLSCompliant(false)]
         public Session(int connectionId, ulong sessionId)
         {
             this.GlobalIndex = 0;

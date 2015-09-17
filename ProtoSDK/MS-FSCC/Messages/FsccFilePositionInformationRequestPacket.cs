@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FilePositionInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFilePositionInformationRequestPacket : FsccStandardPacket<FILE_POSITION_INFORMATION>
     {
         #region Properties

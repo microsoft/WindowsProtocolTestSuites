@@ -27,7 +27,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The search handle (SID) identifying a search opened using the TRANS2_FIND_FIRST2 subcommand.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SearchID
         {
             get

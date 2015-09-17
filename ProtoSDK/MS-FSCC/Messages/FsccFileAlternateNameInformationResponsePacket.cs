@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FileAlternateNameInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileAlternateNameInformationResponsePacket : FsccStandardPacket<FileAlternateNameInformation>
     {
         #region Properties

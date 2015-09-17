@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbCloseAndTreeDisc Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbCloseAndTreeDiscRequestPacket : SmbSingleRequestPacket
     {
         #region Fields

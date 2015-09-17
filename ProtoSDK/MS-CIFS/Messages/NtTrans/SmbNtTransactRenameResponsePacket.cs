@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbNtTransactRename Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbNtTransactRenameResponsePacket : SmbNtTransactSuccessResponsePacket
     {
         #region Fields

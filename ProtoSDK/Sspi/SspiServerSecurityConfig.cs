@@ -48,7 +48,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <summary>
         /// Account name of the client
         /// </summary>
-        [CLSCompliant(false)]
         public string AccountName
         {
             get
@@ -101,7 +100,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <summary>
         /// Client SecurityContext Attributes
         /// </summary>
-        [CLSCompliant(false)]
         public ServerSecurityContextAttribute SecurityAttributes
         {
             get
@@ -114,7 +112,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// The data representation, such as byte ordering, on the target. 
         /// This parameter can be either SECURITY_NATIVE_DREP or SECURITY_NETWORK_DREP.
         /// </summary>
-        [CLSCompliant(false)]
         public SecurityTargetDataRepresentation TargetDataRep
         {
             get
@@ -131,7 +128,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <param name="serverPrincipal">Server principal.</param>
         /// <param name="contextAttributes">Server security context attributes.</param>
         /// <param name="targetDataRep">The data representation, such as byte ordering, on the target.</param>
-        [CLSCompliant(false)]
         public SspiServerSecurityConfig(
             AccountCredential clientCredential,
             string serverPrincipal,

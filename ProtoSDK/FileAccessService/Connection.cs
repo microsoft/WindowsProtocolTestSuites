@@ -106,7 +106,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// The capabilities of the client of this connection in a form that MUST follow the syntax as
         /// specified in section 2.2.5.
         /// </summary>
-        [CLSCompliant(false)]
         public uint ClientCapabilities
         {
             get

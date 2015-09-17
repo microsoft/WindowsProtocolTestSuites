@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FSCTL_SET_SPARSE 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlSetSparseRequestPacket : FsccStandardPacket<byte>
     {
         #region Properties

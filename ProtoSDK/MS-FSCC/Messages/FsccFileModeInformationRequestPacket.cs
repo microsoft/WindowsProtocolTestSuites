@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FileModeInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileModeInformationRequestPacket : FsccStandardPacket<FILE_MODE_INFORMATION>
     {
         #region Properties

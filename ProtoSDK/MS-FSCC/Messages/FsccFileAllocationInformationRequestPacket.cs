@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FileAllocationInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileAllocationInformationRequestPacket : FsccStandardPacket<FILE_ALLOCATION_INFORMATION>
     {
         #region Properties

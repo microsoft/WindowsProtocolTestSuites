@@ -75,7 +75,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// </param>
         /// <param name="port">the port on SUT machine to provide SUT control service.</param>
         /// <exception cref="ArgumentNullException">sutAddress is null</exception>
-        [CLSCompliant(false)]
         public SutControlProxy(string sutAddress, uint port)
         {
             AssertIsNotNull("sutAddress", sutAddress);

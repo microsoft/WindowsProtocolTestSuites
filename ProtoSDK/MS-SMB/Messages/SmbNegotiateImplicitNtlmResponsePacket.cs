@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     ///  Packets for SmbNegotiate implicit ntlm response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbNegotiateImplicitNtlmResponsePacket : Cifs.SmbNegotiateResponsePacket
     {
         #region Convert from base class

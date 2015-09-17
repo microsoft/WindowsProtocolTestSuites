@@ -61,7 +61,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The search handle (SID) identifying a search opened using the TRANS2_FIND_FIRST2 subcommand.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FindSID
         {
             get
@@ -74,7 +73,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The Multiplex ID (MID) of the client process that opened the search.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MID
         {
             get
@@ -87,7 +85,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The Process ID (PID) of the client process that opened the search.
         /// </summary>
-        [CLSCompliant(false)]
         public uint PID
         {
             get
@@ -99,7 +96,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The TreeConnect ID (TID) of the tree connect within which the search takes place.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort TID
         {
             get
@@ -112,7 +108,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The Session identified by the User ID (UID) that initiated the search.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort UID
         {
             get
@@ -125,7 +120,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// A numeric value obtained by registration with the Server Service Remote Protocol.
         /// </summary>
-        [CLSCompliant(false)]
         public int SearchGlobalId
         {
             get
@@ -141,7 +135,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// Constructor.
         /// </summary>
-        [CLSCompliant(false)]
         public CifsServerPerOpenSearch(
             IFileServiceServerTreeConnect treeConnect,
             ushort findSid,

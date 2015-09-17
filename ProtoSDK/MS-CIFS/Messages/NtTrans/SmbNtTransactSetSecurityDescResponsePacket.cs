@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbNtTransactSetSecurityDesc Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbNtTransactSetSecurityDescResponsePacket : SmbNtTransactSuccessResponsePacket
     {
         #region Fields

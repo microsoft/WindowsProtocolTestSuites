@@ -135,7 +135,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The unique (per connection) 32-bit PID provided in the client request that created this open. The PID is
         /// described in section 2.2.1.6.3.
         /// </summary>
-        [CLSCompliant(false)]
         public uint PID
         {
             get
@@ -148,7 +147,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The access granted on this open.
         /// </summary>
-        [CLSCompliant(false)]
         public uint GrantedAccess
         {
             get
@@ -175,7 +173,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </param>
         /// <param name="pid">The unique (per connection) 32-bit PID provided in the client request that created this
         /// open.</param>
-        [CLSCompliant(false)]
         public CifsServerPerOpenFile(
             IFileServiceServerTreeConnect treeConnect,
             string pathName,

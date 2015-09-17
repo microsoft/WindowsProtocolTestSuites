@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbProcessExit Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbProcessExitRequestPacket : SmbSingleRequestPacket
     {
         #region Fields

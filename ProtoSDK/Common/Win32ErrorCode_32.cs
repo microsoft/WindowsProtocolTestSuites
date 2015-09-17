@@ -11,7 +11,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
     /// most protocols use this version of win32 error
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum Win32ErrorCode_32 : uint
     {
         /// <summary>

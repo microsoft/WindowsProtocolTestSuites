@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FSCTL_SET_ENCRYPTION 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlSetEncryptionResponsePacket : FsccStandardPacket<FsctlSetEncryptionReplyStatus>
     {
         #region Properties

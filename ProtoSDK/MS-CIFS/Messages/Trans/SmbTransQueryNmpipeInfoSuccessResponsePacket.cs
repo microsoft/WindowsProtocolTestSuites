@@ -11,7 +11,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     ///  Packets for SmbTransQueryNmpipeInfo SuccessResponse
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTransQueryNmpipeInfoSuccessResponsePacket : SmbTransactionSuccessResponsePacket
     {
         #region Fields

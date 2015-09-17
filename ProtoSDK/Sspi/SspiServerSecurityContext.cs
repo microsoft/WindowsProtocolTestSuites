@@ -13,7 +13,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
     /// Accept client token to get server token.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
-    [CLSCompliant(false)]
     public class SspiServerSecurityContext : ServerSecurityContext, IDisposable
     {
         /// <summary>
@@ -29,13 +28,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <summary>
         /// Security package type.
         /// </summary>
-        [CLSCompliant(false)]
         protected SecurityPackageType packageType;
 
         /// <summary>
         /// Whether continue to process.
         /// </summary>
-        [CLSCompliant(false)]
         protected bool needContinueProcessing = true;
 
         /// <summary>
@@ -46,7 +43,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <summary>
         /// Sequence number for Verify, Encrypt and Decrypt message.
         /// </summary>
-        [CLSCompliant(false)]
         protected uint sequenceNumber;
 
         /// <summary>
@@ -62,13 +58,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <summary>
         /// Bit flags that indicate requests for the context.
         /// </summary>
-        [CLSCompliant(false)]
         protected ServerSecurityContextAttribute securityContextAttributes;
 
         /// <summary>
         /// The data representation, such as byte ordering, on the target.
         /// </summary>
-        [CLSCompliant(false)]
         protected SecurityTargetDataRepresentation targetDataRepresentaion;
 
         /// <summary>
@@ -99,7 +93,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// the context</param>
         /// <param name="targetDataRep">The data representation, such as byte ordering, on the target. This parameter 
         /// can be either SECURITY_NATIVE_DREP or SECURITY_NETWORK_DREP.</param>
-        [CLSCompliant(false)]
         [SecurityPermission(SecurityAction.Demand)]
         public SspiServerSecurityContext(
             SecurityPackageType packageType,
@@ -132,7 +125,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// the context</param>
         /// <param name="targetDataRep">The data representation, such as byte ordering, on the target. This parameter 
         /// can be either SECURITY_NATIVE_DREP or SECURITY_NETWORK_DREP.</param>
-        [CLSCompliant(false)]
         [SecurityPermission(SecurityAction.Demand)]
         public SspiServerSecurityContext(
             SecurityPackageType packageType,
@@ -377,7 +369,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// Gets or sets sequence number for Verify, Encrypt and Decrypt message.
         /// For Digest SSP, it must be 0.
         /// </summary>
-        [CLSCompliant(false)]
         public override uint SequenceNumber
         {
             get

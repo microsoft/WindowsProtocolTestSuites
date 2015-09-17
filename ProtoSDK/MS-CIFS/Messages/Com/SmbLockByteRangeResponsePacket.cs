@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbLockByteRange Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbLockByteRangeResponsePacket : SmbSingleResponsePacket 
     {
         #region Fields

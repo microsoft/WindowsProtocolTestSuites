@@ -285,7 +285,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 32-bit unsigned integer that specifies support for  DBCS characters in short names. 
         /// </summary>
-        [CLSCompliant(false)]
         public FSCTL_SET_SHORT_NAME_BEHAVIOR_Request_Flags_Values Flags;
     }
 
@@ -295,7 +294,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FSCTL_SET_SHORT_NAME_BEHAVIOR_Request_Flags_Values : uint
     {
 
@@ -328,21 +326,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer that contains the size, in  bytes, of the SourceFileName element, including a  
         /// terminating-Unicode  NULL character. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint SourceFileNameLength;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the size in  bytes of the DestinationFileName element, including   
         /// a terminating-Unicode NULL character. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint DestinationFileNameLength;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains zero or more  of the following flag values. Flag values not  
         /// specified  in the following table SHOULD be set to 0, and MUST  be ignored. 
         /// </summary>
-        [CLSCompliant(false)]
         public FSCTL_SIS_COPYFILE_Request_Flags_Values Flags;
 
         /// <summary>
@@ -366,7 +361,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// </summary>
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FSCTL_SIS_COPYFILE_Request_Flags_Values : uint
     {
 
@@ -400,37 +394,31 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer value containing the number  of exceptions generated due to the log file being  
         /// full. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint LogFileFullExceptions;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of other exceptions generated. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint OtherExceptions;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of read operations on the Master File Table (MFT). 
         /// </summary>
-        [CLSCompliant(false)]
         public uint MftReads;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of bytes read from the MFT. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint MftReadBytes;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of write operations on the MFT. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint MftWrites;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of bytes written to the MFT. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint MftWriteBytes;
 
         /// <summary>
@@ -443,40 +431,34 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 16-bit unsigned integer containing the number of flushes  of the MFT performed because the log file was  
         /// full. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MftWritesFlushForLogFileFull;
 
         /// <summary>
         /// A 16-bit unsigned integer containing the number of MFT  write operations performed by the lazy writer  
         /// thread. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MftWritesLazyWriter;
 
         /// <summary>
         /// A 16-bit unsigned integer which is reserved. This contains  the sum of the four fields in the  
         /// MftWritesUserLevel  structure. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MftWritesUserRequest;
 
         /// <summary>
         /// A 2-byte field that is unused and MUST be ignored. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Padding;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of write operations on the master file table mirror 
         ///   (MFT2). 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Mft2Writes;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of bytes written to the MFT2. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Mft2WriteBytes;
 
         /// <summary>
@@ -489,63 +471,53 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 16-bit unsigned integer containing the number of flushes  of the MFT2 performed because the log file was 
         ///  full. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Mft2WritesFlushForLogFileFull;
 
         /// <summary>
         /// A 16-bit unsigned integer containing the number of MFT2  write operations performed by the lazy writer  
         /// thread. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Mft2WritesLazyWriter;
 
         /// <summary>
         /// A 16-bit unsigned integer that contains the sum of the  four fields in the Mft2WritesUserLevel structure. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Mft2WritesUserRequest;
 
         /// <summary>
         /// A 2-byte field that is unused and MUST be ignored. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Padding1;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of read operations on the root index. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint RootIndexReads;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of bytes read from the root index. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint RootIndexReadBytes;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of write operations on the root index. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint RootIndexWrites;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of bytes written to the root index. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint RootIndexWriteBytes;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of read operations on the cluster allocation  
         /// bitmap. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint BitmapReads;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of bytes read from the cluster allocation bitmap. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint BitmapReadBytes;
 
         /// <summary>
@@ -553,34 +525,29 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// bitmap.  This is the sum of the BitmapWritesFlushForLogFileFull,  BitmapWritesLazyWriter and  
         /// BitmapWritesUserRequest  fields. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint BitmapWrites;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of bytes written to the cluster allocation bitmap. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint BitmapWriteBytes;
 
         /// <summary>
         /// A 16-bit unsigned integer containing the number of flushes  of the bitmap performed because the log file  
         /// was full. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort BitmapWritesFlushForLogFileFull;
 
         /// <summary>
         /// A 16-bit unsigned integer containing the number of bitmap  write operations performed by the lazy writer  
         /// thread. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort BitmapWritesLazyWriter;
 
         /// <summary>
         /// A 16-bit unsigned integer which is reserved. This is  the sum of the fields in the BitmapWritesUserLevel   
         /// structure. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort BitmapWritesUserRequest;
 
         /// <summary>
@@ -592,13 +559,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of read operations on the MFT bitmap. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint MftBitmapReads;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of bytes read from the MFT bitmap. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint MftBitmapReadBytes;
 
         /// <summary>
@@ -606,34 +571,29 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// is  the sum of the MftBitmapWritesFlushForLogFileFull,  MftBitmapWritesLazyWriter and  
         /// MftBitmapWritesUserRequest  fields. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint MftBitmapWrites;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of bytes written to the MFT bitmap. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint MftBitmapWriteBytes;
 
         /// <summary>
         /// A 16-bit unsigned integer containing the number of flushes  of the MFT bitmap performed because the log  
         /// file was  full. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MftBitmapWritesFlushForLogFileFull;
 
         /// <summary>
         /// A 16-bit unsigned integer value containing the number  of MFT bitmap write operations performed by the  
         /// lazy  writer thread. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MftBitmapWritesLazyWriter;
 
         /// <summary>
         /// A 16-bit unsigned integer which is reserved. This value  is the sum of all the fields in the  
         /// MftBitmapWritesUserLevel  structure. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MftBitmapWritesUserRequest;
 
         /// <summary>
@@ -645,55 +605,46 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 2-byte field that is unused and MUST be ignored. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Padding2;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of read operations on the user index. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint UserIndexReads;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of bytes read from user indices. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint UserIndexReadBytes;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of write operations on user indices. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint UserIndexWrites;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of bytes written to user indices. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint UserIndexWriteBytes;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of read operations on the log file. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint LogFileReads;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of bytes read from the log file. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint LogFileReadBytes;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of write operations on the log file. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint LogFileWrites;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of bytes written to the log file. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint LogFileWriteBytes;
 
         /// <summary>
@@ -762,7 +713,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// An unsigned 32-bit integer that specifies the length,  in bytes, of the PathName data element. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint PathNameLength;
 
         /// <summary>
@@ -785,25 +735,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 16-bit unsigned integer containing the number of MFT  writes due to a write operation. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Write;
 
         /// <summary>
         /// A 16-bit unsigned integer containing the number of MFT  writes due to a create operation. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Create;
 
         /// <summary>
         /// A 16-bit unsigned integer containing the number of MFT  writes due to a set file information operation. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SetInfo;
 
         /// <summary>
         /// A 16-bit unsigned integer containing the number of MFT  writes due to a flush operation. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Flush;
     }
 
@@ -827,13 +773,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 16-bit unsigned integer value containing the type  of file system. This field MUST contain one of the   
         /// following values. 
         /// </summary>
-        [CLSCompliant(false)]
         public FileSystemType_Values FileSystemType;
 
         /// <summary>
         /// 16-bit unsigned integer value containing the version.  This field MUST contain 0x00000001. 
         /// </summary>
-        [CLSCompliant(false)]
         public Version_Values Version;
 
         /// <summary>
@@ -844,83 +788,70 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///  is the sum of the sizes  of the NTFS_STATISTICS structure and the FILESYSTEM_STATISTICS  structure,  
         /// rounded up to a multiple of 64, and multiplied  by the number of processors. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint SizeOfCompleteStructure;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of read operations on user files. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint UserFileReads;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of bytes read from user files. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint UserFileReadBytes;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of read operations on user files that went to the  
         /// disk  rather than the cache. This value includes sub-read  operations. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint UserDiskReads;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of write operations on user files. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint UserFileWrites;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of bytes written to user files. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint UserFileWriteBytes;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of write operations on user files that went to disk 
         ///   rather than the cache. This value includes sub-write  operations. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint UserDiskWrites;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of read operations on metadata files. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint MetaDataReads;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of bytes read from metadata files. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint MetaDataReadBytes;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of read operations on metadata files. This value  
         /// includes  sub-read operations. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint MetaDataDiskReads;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of write operations on metadata files. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint MetaDataWrites;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of bytes written to metadata files. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint MetaDataWriteBytes;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of write operations on metadata files. This value  
         /// includes  sub-write operations. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint MetaDataDiskWrites;
     }
 
@@ -930,7 +861,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// </summary>
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FileSystemType_Values : ushort
     {
 
@@ -958,7 +888,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum Version_Values : ushort
     {
 
@@ -998,7 +927,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer that MUST contain the number  of bytes needed to hold all available names. This  
         /// field  MUST NOT be 0. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint BytesNeeded;
 
         /// <summary>
@@ -1007,7 +935,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///  memory.  A value of 0 indicates that there is not enough available  memory to return any entry. The error 
         ///  STATUS_BUFFER_OVERFLOW  (0x80000005) indicates that not all available entries  were returned. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint EntriesReturned;
 
         /// <summary>
@@ -1030,25 +957,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 16-bit unsigned integer containing the number of MFT2  writes due to a write operation. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Write;
 
         /// <summary>
         /// A 16-bit unsigned integer containing the number of MFT2  writes due to a create operation. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Create;
 
         /// <summary>
         /// A16-bit unsigned integer containing the number of MFT2  writes due to a set file information operation. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SetInfo;
 
         /// <summary>
         /// A 16-bit unsigned integer containing the number of MFT2  writes due to a flush operation. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Flush;
     }
 
@@ -1058,7 +981,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// </summary>
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum Mode_Values : uint
     {
 
@@ -1103,7 +1025,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum DeviceType_Values : uint
     {
         /// <summary>
@@ -1123,7 +1044,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// </summary>
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum Characteristics_Values : uint
     {
 
@@ -1202,7 +1122,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// One of the following standard values MUST be returned. 
         /// </summary>
-        [CLSCompliant(false)]
         public CompressionState_Values CompressionState;
     }
 
@@ -1212,7 +1131,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum CompressionState_Values : ushort
     {
 
@@ -1248,7 +1166,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// An unsigned 32-bit integer that indicates the type of  file system on which the file is hosted on the  
         /// destination  computer. This value MUST be one of the following. 
         /// </summary>
-        [CLSCompliant(false)]
         public Type_Values Type;
 
         /// <summary>
@@ -1264,7 +1181,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum Type_Values : uint
     {
 
@@ -1306,13 +1222,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 64-bit unsigned integer that contains the file handle  for the directory where the link is to be  
         /// created.  For network operations, this value MUST be zero. 
         /// </summary>
-        [CLSCompliant(false)]
         public FileLinkInformation_RootDirectory_Values RootDirectory;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the length,  in bytes, of the FileName field. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileNameLength;
 
         /// <summary>
@@ -1331,7 +1245,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// For network operations, this value MUST be zero. 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FileLinkInformation_RootDirectory_Values : ulong
     {
 
@@ -1686,27 +1599,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 32-bit unsigned integer referring to the current state  of the pipe. Allowed values are defined below: 
         /// </summary>
-        [CLSCompliant(false)]
         public NamedPipeState_Values NamedPipeState;
 
         /// <summary>
         /// A 32-bit unsigned integer that specifies the size, in  bytes, of the data available to read from the pipe. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint ReadDataAvailable;
 
         /// <summary>
         /// A 32-bit unsigned integer that specifies the number  of messages available in the pipe if the pipe has  
         /// been  created as a message-type pipe. Otherwise, this field  is 0. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NumberOfMessages;
 
         /// <summary>
         /// A 32-bit unsigned integer that specifies the length  of the first message available in the pipe if the  
         /// pipe  has been created as a message-type pipe. Otherwise,  this field is 0. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint MessageLength;
 
         /// <summary>
@@ -1735,7 +1644,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// </summary>
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum NamedPipeState_Values : uint
     {
 
@@ -1775,14 +1683,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 64-bit signed integer that contains the file offset  of the start of the range to set to zeros in bytes. 
         ///   The value of this field MUST be greater than or equal  to 0. 
         /// </summary>
-        [CLSCompliant(false)]
         public long FileOffset;
 
         /// <summary>
         /// A 64-bit signed integer that contains the byte offset  of the first byte beyond the last zeroed byte. The  
         ///  value of this field MUST be greater than or equal to  0. 
         /// </summary>
-        [CLSCompliant(false)]
         public long BeyondFinalZero;
     }
 
@@ -1800,7 +1706,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// The size of a sparing packet and the underlying error  check and correction (ECC) block size of the  
         /// volume. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint SparingUnitBytes;
 
         /// <summary>
@@ -1811,13 +1716,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// The total number of blocks allocated for sparing. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint TotalSpareBlocks;
 
         /// <summary>
         /// The number of blocks available for sparing. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FreeSpareBlocks;
     }
 
@@ -1852,7 +1755,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// (for all other  Extents array elements) is the length in clusters of  the current extent. The length is an 
         ///  input to the FSCTL_MOVE_FILE  request. 
         /// </summary>
-        [CLSCompliant(false)]
         public ulong NextVcn;
 
         /// <summary>
@@ -1863,7 +1765,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// 16-cluster unit compresses  to fit in, for example, 9 clusters, there will be a  7-cluster extent of the  
         /// file with an LCN of -1. 
         /// </summary>
-        [CLSCompliant(false)]
         public ulong Lcn;
     }
 
@@ -1882,7 +1783,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 16-bit unsigned integer value containing the size  of the file name in bytes. This size MUST NOT include 
         ///   the NULL character. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FileNameLength;
 
         /// <summary>
@@ -1932,7 +1832,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// MUST be one of the following standard values. 
         /// </summary>
-        [CLSCompliant(false)]
         public FSCTL_SET_COMPRESSION_Request_CompressionState_Values CompressionState;
     }
 
@@ -1942,7 +1841,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FSCTL_SET_COMPRESSION_Request_CompressionState_Values : ushort
     {
 
@@ -1981,7 +1879,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///  location of the  next entry (if multiple entries are present in a buffer),  and MUST NOT assume that the  
         /// value of NextEntryOffset  is the same as the size of the current entry. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NextEntryOffset;
 
         /// <summary>
@@ -2012,57 +1909,48 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of create operations. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint CreateHits;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of successful create operations. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint SuccessfulCreates;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of failed create operations. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FailedCreates;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of read operations that were not cached. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NonCachedReads;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of bytes read from a file that were not cached. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NonCachedReadBytes;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of write operations that were not cached. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NonCachedWrites;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of bytes written to a file that were not cached. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NonCachedWriteBytes;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of read operations that were not cached. This value 
         ///   includes sub-read operations. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NonCachedDiskReads;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of write operations that were not cached. This  
         /// value  includes sub-write operations. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NonCachedDiskWrites;
     }
 
@@ -2082,13 +1970,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// Fid of the file from which to obtain link tracking information.  For Fid type, see [MS-SMB] section . 
         /// </summary>
-        [CLSCompliant(false)]
         public uint TargetFileObject;
 
         /// <summary>
         /// Length of the TargetLinkTrackingInformationBuffer. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint TargetLinkTrackingInformationLength;
 
         /// <summary>
@@ -2110,7 +1996,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// </summary>
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum TxInfoFlags_Values : uint
     {
 
@@ -2147,57 +2032,48 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of create operations. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint CreateHits;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of successful create operations. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint SuccessfulCreates;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of failed create operations. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FailedCreates;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of read operations that were not cached. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NonCachedReads;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of bytes read from a file that were not cached. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NonCachedReadBytes;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of write operations that were not cached. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NonCachedWrites;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of bytes written to a file that were not cached. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NonCachedWriteBytes;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of read operations that were not cached. This value 
         ///   includes sub-read operations. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NonCachedDiskReads;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of write operations that were not cached. This  
         /// value  includes sub-write operations. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NonCachedDiskWrites;
     }
 
@@ -2215,7 +2091,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// An unsigned 32-bit integer that indicates the type of  file system on which the file is hosted on the  
         /// destination  computer. MUST be one of the following. 
         /// </summary>
-        [CLSCompliant(false)]
         public TARGET_LINK_TRACKING_INFORMATION_Buffer_2_Type_Values Type;
 
         /// <summary>
@@ -2244,7 +2119,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum TARGET_LINK_TRACKING_INFORMATION_Buffer_2_Type_Values : uint
     {
 
@@ -2273,7 +2147,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer that contains the total length  of the update sequence number (USN) record in  
         /// bytes. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint RecordLength;
 
         /// <summary>
@@ -2282,7 +2155,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// version  number is 2 for file systems created on windows_2000,  windows_xp, windows_server_2003,  
         /// windows_vista, and  windows_server_2008. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MajorVersion;
 
         /// <summary>
@@ -2291,7 +2163,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// minor  version number is 0 for file systems created on windows_2000,  windows_xp, windows_server_2003,  
         /// windows_vista, and  windows_server_2008. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MinorVersion;
 
         /// <summary>
@@ -2305,7 +2176,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// same  FileReferenceNumber as a file on that volume had in  the past; however, this is an unlikely  
         /// scenario. 
         /// </summary>
-        [CLSCompliant(false)]
         public ulong FileReferenceNumber;
 
         /// <summary>
@@ -2314,7 +2184,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// value (unique  within the volume on which the file is stored) that  associates a journal record with a  
         /// parent directory. 
         /// </summary>
-        [CLSCompliant(false)]
         public ulong ParentFileReferenceNumber;
 
         /// <summary>
@@ -2341,7 +2210,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// Possible values for the reason code are as follows  (all unused bits are reserved for future use and MUST  
         ///  NOT be used). 
         /// </summary>
-        [CLSCompliant(false)]
         public Reason_Values Reason;
 
         /// <summary>
@@ -2351,7 +2219,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// applications to filter out USN records  that are set only by a known source, for example, an  antivirus  
         /// filter. This flag MUST contain one of the  following values. 
         /// </summary>
-        [CLSCompliant(false)]
         public SourceInfo_Values SourceInfo;
 
         /// <summary>
@@ -2359,7 +2226,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///  directory associated with this record. This index is  internal to the underlying object store and MUST be 
         ///   ignored. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint SecurityId;
 
         /// <summary>
@@ -2367,7 +2233,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///   Attributes of streams associated with the file or directory  are excluded. Valid file attributes are  
         /// specified in  section . 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileAttributes;
 
         /// <summary>
@@ -2375,14 +2240,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// record  in bytes. The FileName member contains this name. Use  this member to determine file name length  
         /// rather than  depending on a trailing NULL to delimit the file name  in FileName. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FileNameLength;
 
         /// <summary>
         /// A 16-bit unsigned integer that contains the offset in  bytes of the FileName member from the beginning of  
         ///  the structure. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FileNameOffset;
 
         /// <summary>
@@ -2405,7 +2268,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// </summary>
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum Reason_Values : uint
     {
 
@@ -2533,7 +2395,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// </summary>
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum SourceInfo_Values : uint
     {
 
@@ -2595,64 +2456,54 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of individual calls to allocate clusters. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Calls;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of clusters allocated. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Clusters;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of times a hint was specified when trying to  
         /// determine  which clusters to allocate. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Hints;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of runs used to satisfy all the requests. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint RunsReturned;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of times the starting LCN hint was used to  
         /// determine  which clusters to allocate. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint HintsHonored;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of clusters allocated via the starting LCN hint. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint HintsClusters;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of times the run length cache was useful. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Cache;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of clusters allocated via the run length cache. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint CacheClusters;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of times the cache was not useful and the bitmapped 
         ///   had to be scanned for free clusters. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint CacheMiss;
 
         /// <summary>
         /// A 32-bit unsigned integer value containing the number  of clusters allocated by scanning the bitmap. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint CacheMissClusters;
     }
 
@@ -2672,20 +2523,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer value containing the reparse  point tag that uniquely identifies the owner of  
         /// the  reparse point. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint ReparseTag;
 
         /// <summary>
         /// A 16-bit unsigned integer value containing the size,  in bytes, of the reparse data in the DataBuffer  
         /// member. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ReparseDataLength;
 
         /// <summary>
         /// A 16-bit field. This field SHOULD be set to 0 by the  client, and MUST be ignored by the server. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved;
 
         /// <summary>
@@ -2718,25 +2566,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 64-bit signed integer that contains the serial number  of the volume. This is a unique number assigned  
         /// to  the volume media by the operating system when the volume  is formatted. 
         /// </summary>
-        [CLSCompliant(false)]
         public _LARGE_INTEGER VolumeSerialNumber;
 
         /// <summary>
         /// A 64-bit signed integer that contains the number of  sectors in the specified volume. 
         /// </summary>
-        [CLSCompliant(false)]
         public _LARGE_INTEGER NumberSectors;
 
         /// <summary>
         /// A 64-bit signed integer that contains the total number  of clusters in the specified volume. 
         /// </summary>
-        [CLSCompliant(false)]
         public _LARGE_INTEGER TotalClusters;
 
         /// <summary>
         /// A 64-bit signed integer that contains the number of  free clusters in the specified volume. 
         /// </summary>
-        [CLSCompliant(false)]
         public _LARGE_INTEGER FreeClusters;
 
         /// <summary>
@@ -2745,63 +2589,53 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///  either  the master file table grows beyond its allocated space  (the volume has a large number of small  
         /// files) or the  volume becomes full (the volume has a small number  of large files). 
         /// </summary>
-        [CLSCompliant(false)]
         public _LARGE_INTEGER TotalReserved;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the number of  bytes in a sector on the specified volume. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint BytesPerSector;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the number of  bytes in a cluster on the specified volume. This  
         /// value  is also known as the cluster factor. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint BytesPerCluster;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the number of  bytes in a file record segment. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint BytesPerFileRecordSegment;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the number of  clusters in a file record segment. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint ClustersPerFileRecordSegment;
 
         /// <summary>
         /// A 64-bit signed integer that contains the size of the  master file table in bytes. 
         /// </summary>
-        [CLSCompliant(false)]
         public _LARGE_INTEGER MftValidDataLength;
 
         /// <summary>
         /// A 64-bit signed integer that contains the starting logical  cluster number of the master file table. 
         /// </summary>
-        [CLSCompliant(false)]
         public _LARGE_INTEGER MftStartLcn;
 
         /// <summary>
         /// A 64-bit signed integer that contains the starting logical  cluster number of the master file table  
         /// mirror. 
         /// </summary>
-        [CLSCompliant(false)]
         public _LARGE_INTEGER Mft2StartLcn;
 
         /// <summary>
         /// A 64-bit signed integer that contains the starting logical  cluster number of the master file table zone. 
         /// </summary>
-        [CLSCompliant(false)]
         public _LARGE_INTEGER MftZoneStart;
 
         /// <summary>
         /// A 64-bit signed integer that contains the ending logical  cluster number of the master file table zone. 
         /// </summary>
-        [CLSCompliant(false)]
         public _LARGE_INTEGER MftZoneEnd;
     }
 
@@ -3041,7 +2875,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///   is, the implementer of the filter driver associated  with this ReparseTag) of the reparse point. This  
         /// value  MUST be 0xA000000C, a reparse point tag assigned to  Microsoft. 
         /// </summary>
-        [CLSCompliant(false)]
         public ReparseTag_Values ReparseTag;
 
         /// <summary>
@@ -3049,13 +2882,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// common  portion of the REPARSE_DATA_BUFFER element. This value  is the length of the data starting at the  
         /// SubstituteNameOffset  field (or the size of the PathBuffer field, in bytes,  plus 12). 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ReparseDataLength;
 
         /// <summary>
         /// A 16-bit field. This field is not used. It SHOULD be  set to 0 and MUST be ignored. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved;
 
         /// <summary>
@@ -3063,14 +2894,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// PathBuffer  array, computed as an offset from byte 0 of PathBuffer.  Note that this offset must be divided 
         ///  by 2 to get the  array index. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SubstituteNameOffset;
 
         /// <summary>
         /// A 16-bit unsigned integer that contains the length,  in bytes, of the substitute name string. If this  
         /// string  is NULL-terminated, SubstituteNameLength does not include  the Unicode NULL character. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SubstituteNameLength;
 
         /// <summary>
@@ -3078,14 +2907,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///  array, computed as an offset from byte 0 of PathBuffer.  Note that this offset must be divided by 2 to 
         /// get  the  array index. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort PrintNameOffset;
 
         /// <summary>
         /// A 16-bit unsigned integer that contains the length,  in bytes, of the print name string. If this string   
         /// is NULL-terminated, PrintNameLength does not include  the Unicode NULL character. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort PrintNameLength;
 
         /// <summary>
@@ -3093,7 +2920,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// name  relative to the directory containing the symbolic link.   This field contains one of the values in  
         /// the following  table. 
         /// </summary>
-        [CLSCompliant(false)]
         public Symbolic_Link_Reparse_Data_Buffer_Flags_Values Flags;
 
         /// <summary>
@@ -3114,7 +2940,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum ReparseTag_Values : uint
     {
 
@@ -3132,7 +2957,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum Symbolic_Link_Reparse_Data_Buffer_Flags_Values : uint
     {
 
@@ -3169,13 +2993,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer that contains the number of  EXTENTS data elements in the Extents array. This  
         /// number  can be zero if there are no clusters allocated at (or  beyond) the specified StartingVcn. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint ExtentCount;
 
         /// <summary>
         /// Reserved for alignment. This field can contain any value  and MUST be ignored. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Unused;
 
         /// <summary>
@@ -3233,7 +3055,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer value that indicates the operation  to be performed. The valid values are as  
         /// follows. 
         /// </summary>
-        [CLSCompliant(false)]
         public EncryptionOperation_Values EncryptionOperation;
 
         /// <summary>
@@ -3254,7 +3075,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// </summary>
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum EncryptionOperation_Values : uint
     {
 
@@ -3307,20 +3127,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer value containing the reparse  point tag that uniquely identifies the owner of  
         /// the  reparse point. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint ReparseTag;
 
         /// <summary>
         /// A 16-bit unsigned integer value containing the size,  in bytes, of the reparse data in the DataBuffer  
         /// member. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ReparseDataLength;
 
         /// <summary>
         /// A 16-bit field. This field is reserved. This field SHOULD  be set to 0, and MUST be ignored. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved;
 
         /// <summary>
@@ -3350,7 +3167,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///   is, the implementer of the filter driver associated  with this ReparseTag) of the reparse point. This  
         /// value  MUST be 0xA0000003, a reparse point tag assigned to  Microsoft. 
         /// </summary>
-        [CLSCompliant(false)]
         public Mount_Point_Reparse_Data_Buffer_ReparseTag_Values ReparseTag;
 
         /// <summary>
@@ -3358,13 +3174,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// common  portion of the REPARSE_DATA_BUFFER element. This value  is the length of the data starting at the  
         /// SubstituteNameOffset  field (or the size of the PathBuffer field, in bytes,  plus 8). 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ReparseDataLength;
 
         /// <summary>
         /// A 16-bit field. This field is not used. It SHOULD be  set to 0, and MUST be ignored. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved;
 
         /// <summary>
@@ -3372,14 +3186,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// PathBuffer  array, computed as an offset from byte 0 of PathBuffer.  Note that this offset must be divided 
         ///  by 2 to get the  array index. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SubstituteNameOffset;
 
         /// <summary>
         /// A 16-bit unsigned integer that contains the length,  in bytes, of the substitute name string. If this  
         /// string  is NULL-terminated, SubstituteNameLength does not include  the Unicode NULL character. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SubstituteNameLength;
 
         /// <summary>
@@ -3387,14 +3199,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///  array, computed as an offset from byte 0 of PathBuffer.  Note that this offset must be divided by 2 to 
         /// get  the  array index. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort PrintNameOffset;
 
         /// <summary>
         /// A 16-bit unsigned integer that contains the length,  in bytes, of the print name string. If this string   
         /// is NULL-terminated, PrintNameLength does not include  the Unicode NULL character. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort PrintNameLength;
 
         /// <summary>
@@ -3415,7 +3225,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum Mount_Point_Reparse_Data_Buffer_ReparseTag_Values : uint
     {
 
@@ -3432,7 +3241,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum ReadMode_Values : uint
     {
 
@@ -3453,7 +3261,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum CompletionMode_Values : uint
     {
 
@@ -3513,26 +3320,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 16-bit unsigned integer containing the number of MFT  bitmap write operations due to a write operation. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Write;
 
         /// <summary>
         /// A 16-bit unsigned integer containing the number of MFT  bitmap write operations due to a create operation. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Create;
 
         /// <summary>
         /// A 16-bit unsigned integer containing the number of MFT  bitmap write operations due to a set file  
         /// information  operation. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SetInfo;
 
         /// <summary>
         /// A 16-bit unsigned integer containing the number of MFT  bitmap write operations due to a flush operation. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Flush;
     }
 
@@ -3542,7 +3345,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum NamedPipeType_Values : uint
     {
 
@@ -3563,7 +3365,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum NamedPipeConfiguration_Values : uint
     {
 
@@ -3590,7 +3391,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// </summary>
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FilePipeLocalInformation_NamedPipeState_Values : uint
     {
 
@@ -3622,7 +3422,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum NamedPipeEnd_Values : uint
     {
 
@@ -3647,7 +3446,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// </summary>
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FileSystemControlFlags_Values : uint
     {
 
@@ -3717,7 +3515,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// so that  the search starts from the root. For subsequent calls,  this member SHOULD be zero so that the  
         /// search resumes  at the point where it stopped. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Restart;
 
         /// <summary>
@@ -3759,7 +3556,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// </summary>
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FileSystemAttributes_Values : uint
     {
         /// <summary>
@@ -3899,7 +3695,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 32-bit unsigned integer that specifies the size, in  bytes, of the named pipe Name field. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NameLength;
 
         /// <summary>
@@ -4002,7 +3797,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FileInformationCommand : ushort
     {
         /// <summary>
@@ -4286,7 +4080,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A DWORD that MUST contain values specified in ACCESS_MASK  of [MS-DTYP]. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint AccessFlags;
     }
     #endregion
@@ -4365,7 +4158,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 32-bit unsigned integer that MUST contain one of the  following values. 
         /// </summary>
-        [CLSCompliant(false)]
         public AlignmentRequirement_Values AlignmentRequirement;
     }
 
@@ -4376,7 +4168,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     [SuppressMessage("Microsoft.Usage", "CA2217:DoNotMarkEnumsWithFlags")]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum AlignmentRequirement_Values : uint
     {
         /// <summary>
@@ -4470,7 +4261,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 32-bit unsigned integer that contains the length in  bytes of the FileName member. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileNameLength;
 
         /// <summary>
@@ -4499,7 +4289,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer that contains the file attributes.  Valid file attributes are as specified in  
         /// section . 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileAttributes;
 
         /// <summary>
@@ -4507,7 +4296,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///   FILE_ATTRIBUTE_REPARSE_POINT attribute flag, this member  specifies the reparse tag. Otherwise, this  
         /// member SHOULD  be set to 0, and MUST be ignored. Section  contains  more details on reparse tags. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint ReparseTag;
     }
 
@@ -4593,13 +4381,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer that contains the file attributes.  Valid file attributes are specified in  
         /// section . 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileAttributes;
 
         /// <summary>
         /// A 32-bit field. This field is reserved. This field can  be set to any value, and MUST be ignored. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Reserved;
     }
 
@@ -4624,7 +4410,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// the location of the  next entry (if multiple entries are present in a buffer),  and MUST NOT assume that  
         /// the value of NextEntryOffset  is the same as the size of the current entry. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NextEntryOffset;
 
         /// <summary>
@@ -4635,7 +4420,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// windows_2000, windows_xp, windows_server_2003,  windows_vista, and windows_server_2008 set this value  to  
         /// 0 for files on NTFS file systems. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileIndex;
 
         /// <summary>
@@ -4683,21 +4467,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer that contains the file attributes.  Valid file attributes are specified in  
         /// section . 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileAttributes;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the length,  in bytes, of the FileName field. The NULL termination 
         ///   of the string, if present, is not included in the FileNameLength  count. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileNameLength;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the combined  length, in bytes, of the extended attributes (EA)  
         /// for  the file. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint EaSize;
 
         /// <summary>
@@ -4717,7 +4498,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// NULL-terminated. 
         /// </summary>
         [StaticSize(12, StaticSizeMode.Elements)]
-        [CLSCompliant(false)]
         public ushort[] ShortName;
 
         /// <summary>
@@ -4746,7 +4526,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum CompressionFormat_Values : ushort
     {
 
@@ -4792,7 +4571,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// information, see [UASDC].  COMPRESSION_FORMAT_DEFAULT is therefore equivalent  to  
         /// COMPRESSION_FORMAT_LZNT1. 
         /// </summary>
-        [CLSCompliant(false)]
         public CompressionFormat_Values CompressionFormat;
 
         /// <summary>
@@ -4855,7 +4633,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// determine the location of the  next entry (if multiple entries are present in a buffer),  and MUST NOT  
         /// assume that the value of NextEntryOffset  is the same as the size of the current entry. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NextEntryOffset;
 
         /// <summary>
@@ -4866,7 +4643,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// windows_2000, windows_xp, windows_server_2003,  windows_vista, and windows_server_2008 set this value  to  
         /// 0 for files on NTFS file systems. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileIndex;
 
         /// <summary>
@@ -4914,13 +4690,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer that contains the file attributes.  Valid attributes are as specified in section 
         ///  . 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileAttributes;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the length,  in bytes, of the FileName field. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileNameLength;
 
         /// <summary>
@@ -4975,7 +4749,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer that contains the combined  length, in bytes, of the extended attributes (EA)  
         /// for  the file. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint EaSize;
     }
 
@@ -5024,7 +4797,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// the location of the  next entry (if multiple entries are present in a buffer),  and MUST NOT assume that  
         /// the value of NextEntryOffset  is the same as the size of the current entry. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NextEntryOffset;
 
         /// <summary>
@@ -5035,7 +4807,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// time. windows_2000,  windows_xp, windows_server_2003, windows_vista, and  windows_server_2008 set this  
         /// value to 0 for files on  NTFS file systems. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileIndex;
 
         /// <summary>
@@ -5088,20 +4859,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer that contains the file attributes.  For a list of valid file attributes, see  
         /// section . 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileAttributes;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the length,  in bytes, of the FileName field. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileNameLength;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the combined  length, in bytes, of the extended attributes (EA)  
         /// for  the file. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint EaSize;
 
         /// <summary>
@@ -5134,7 +4902,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// value to  determine the location of the next entry (if multiple  entries are present in a buffer), and  
         /// MUST NOT assume  that the value of NextEntryOffset field is the same  as the size of the current entry. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NextEntryOffset;
 
         /// <summary>
@@ -5152,7 +4919,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 16-bit unsigned integer that contains the length,  in bytes, of the extended attribute value in the  
         /// EaValue  field. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort EaValueLength;
 
         /// <summary>
@@ -5207,7 +4973,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// FILE_LINK_ENTRY_INFORMATION  structure to the next FILE_LINK_ENTRY_INFORMATION structure.  A value of 0  
         /// indicates this is the last entry structure. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NextEntryOffset;
 
         /// <summary>
@@ -5219,7 +4984,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer that MUST specify the length,  in characters, of the FileName for the given  
         /// link. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileNameLength;
 
         /// <summary>
@@ -5250,7 +5014,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// determine the location of the  next entry (if multiple entries are present in a buffer),  and MUST NOT  
         /// assume that the value of NextEntryOffset  is the same as the size of the current entry. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NextEntryOffset;
 
         /// <summary>
@@ -5261,7 +5024,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// windows_2000, windows_xp, windows_server_2003,  windows_vista, and windows_server_2008 set this value  to  
         /// 0 for files on NTFS file systems. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileIndex;
 
         /// <summary>
@@ -5315,20 +5077,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer that contains the file attributes.  Valid attributes are as specified in section 
         ///  . 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileAttributes;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the length,  in bytes, of the FileName field. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileNameLength;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the combined  length, in bytes, of the extended attributes (EA)  
         /// for  the file. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint EaSize;
 
         /// <summary>
@@ -5345,13 +5104,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A NULL-terminated 12-character Unicode string containing  the short file name (8.3 name). 
         /// </summary>
         [StaticSize(12, StaticSizeMode.Elements)]
-        [CLSCompliant(false)]
         public ushort[] ShortName;
 
         /// <summary>
         /// MUST be ignored by the receiver. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved2;
 
         /// <summary>
@@ -5393,7 +5150,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// determine the location of the  next entry (if multiple entries are present in a buffer),  and MUST NOT  
         /// assume that the value of NextEntryOffset  is the same as the size of the current entry. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NextEntryOffset;
 
         /// <summary>
@@ -5404,7 +5160,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// windows_2000, windows_xp, windows_server_2003,  windows_vista, and windows_server_2008 set this value  to  
         /// 0 for files on NTFS file systems. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileIndex;
 
         /// <summary>
@@ -5457,26 +5212,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer that contains the file attributes.  Valid attributes are as specified in section 
         ///  . 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileAttributes;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the length,  in bytes, of the FileName field. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileNameLength;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the combined  length, in bytes, of the extended attributes (EA)  
         /// for  the file. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint EaSize;
 
         /// <summary>
         /// Reserved for alignment. This field can contain any value  and MUST be ignored. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Reserved;
 
         /// <summary>
@@ -5484,7 +5235,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// file system.  For file systems which do not support FileId, this  field MUST be set to 0, and MUST be  
         /// ignored. 
         /// </summary>
-        [CLSCompliant(false)]
         public _LARGE_INTEGER FileId;
 
         /// <summary>
@@ -5521,7 +5271,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// determine the location of the  next entry (if multiple entries are present in a buffer)  and MUST NOT  
         /// assume that the value of NextEntryOffset  is the same as the size of the current entry. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NextEntryOffset;
 
         /// <summary>
@@ -5529,7 +5278,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///  systems  in which the position of a file within the parent directory  is not fixed and can be changed at  
         /// any time to maintain  sort order, this field SHOULD be set to 0 and MUST  be ignored. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileIndex;
 
         /// <summary>
@@ -5576,13 +5324,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer that contains the file attributes.  Valid attributes are as specified in section 
         ///  . 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileAttributes;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the length,  in bytes, of the FileName field. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileNameLength;
 
         /// <summary>
@@ -5608,7 +5354,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// other than FILE_ID_GLOBAL_TX_DIR_INFO_FLAG_WRITELOCKED  are set,  
         /// FILE_ID_GLOBAL_TX_DIR_INFO_FLAG_WRITELOCKED  MUST be set. 
         /// </summary>
-        [CLSCompliant(false)]
         public TxInfoFlags_Values TxInfoFlags;
 
         /// <summary>
@@ -5747,27 +5492,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer that contains the maximum  size of a single message that can be written to the   
         /// mailslot in bytes. To specify that the message can  be of any size, set this value to zero. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint MaximumMessageSize;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the quota in  bytes for the mailslot. The mailslot quota specifies 
         ///   the in-memory pool quota that is reserved for writes  to this mailslot. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint MailslotQuota;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the next message  size in bytes. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NextMessageSize;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the total number  of messages waiting to be read from the  
         /// mailslot. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint MessagesAvailable;
 
         /// <summary>
@@ -5821,7 +5562,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A ULONG that MUST specify on file creation or file open  how the file will subsequently be accessed. 
         /// </summary>
-        [CLSCompliant(false)]
         public Mode_Values Mode;
     }
 
@@ -5842,7 +5582,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 32-bit unsigned integer that contains the length,  in bytes, of the FileName field. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileNameLength;
 
         /// <summary>
@@ -5874,7 +5613,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// the  location of the  next entry (if multiple entries are present in a buffer),  and MUST NOT assume that 
         /// the  value of NextEntryOffset  is the same as the size of the current entry. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NextEntryOffset;
 
         /// <summary>
@@ -5885,13 +5623,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// windows_2000, windows_xp, windows_server_2003,  windows_vista, and windows_server_2008 set this value  to  
         /// 0 for files on NTFS file systems. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileIndex;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the length,  in bytes, of the FileName field. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileNameLength;
 
         /// <summary>
@@ -5970,13 +5706,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer that contains the file attributes.  Valid attributes are as specified in section 
         ///  . 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileAttributes;
 
         /// <summary>
         /// A 32-bit field. This field is reserved. This field can  be set to any value, and MUST be ignored. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Reserved;
     }
 
@@ -5998,7 +5732,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// number and  assigns it to the file automatically when the file  is created. The file reference number is  
         /// unique within  the volume on which the file exists. 
         /// </summary>
-        [CLSCompliant(false)]
         public ulong FileReferenceNumber;
 
         /// <summary>
@@ -6046,7 +5779,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// number and  assigns it to the file automatically when the file  is created. The file reference number is  
         /// unique within  the volume on which the file exists. 
         /// </summary>
-        [CLSCompliant(false)]
         public ulong FileReferenceNumber;
 
         /// <summary>
@@ -6081,13 +5813,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 32-bit unsigned integer that MUST contain one of the  following values. 
         /// </summary>
-        [CLSCompliant(false)]
         public ReadMode_Values ReadMode;
 
         /// <summary>
         /// A 32-bit unsigned integer that MUST contain one of the  following values. 
         /// </summary>
-        [CLSCompliant(false)]
         public CompletionMode_Values CompletionMode;
     }
 
@@ -6108,64 +5838,54 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 32-bit unsigned integer that contains the named pipe  type. MUST be one of the following. 
         /// </summary>
-        [CLSCompliant(false)]
         public NamedPipeType_Values NamedPipeType;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the named pipe  configuration. MUST be one of the following. 
         /// </summary>
-        [CLSCompliant(false)]
         public NamedPipeConfiguration_Values NamedPipeConfiguration;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the maximum  number of instances that can be created for this  
         /// pipe.  The first instance of the pipe MUST specify this value. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint MaximumInstances;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the number of  current named pipe instances. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint CurrentInstances;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the inbound  quota in bytes for the named pipe. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint InboundQuota;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the bytes of  data available to be read from the named pipe. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint ReadDataAvailable;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains outbound quota  in bytes for the named pipe. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint OutboundQuota;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the write quota  in bytes for the named pipe. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint WriteQuotaAvailable;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the named pipe  state that specifies the connection status for the 
         ///   named pipe. MUST be one of the following. 
         /// </summary>
-        [CLSCompliant(false)]
         public FilePipeLocalInformation_NamedPipeState_Values NamedPipeState;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the type of  the named pipe end, which specifies whether this is   
         /// the client or the server side of a named pipe. MUST  be one of the following. 
         /// </summary>
-        [CLSCompliant(false)]
         public NamedPipeEnd_Values NamedPipeEnd;
     }
 
@@ -6188,14 +5908,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A LARGE_INTEGER that MUST contain the maximum amount  of time counted in 100-nanosecond intervals that  
         /// will  elapse before transmission of data from the client  machine to the server. 
         /// </summary>
-        [CLSCompliant(false)]
         public _LARGE_INTEGER CollectDataTime;
 
         /// <summary>
         /// A ULONG that MUST contain the maximum size in bytes  of data that will be collected on the client machine  
         ///  before transmission to the server. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint MaximumCollectionCount;
     }
 
@@ -6217,7 +5935,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A LARGE_INTEGER that MUST contain the offset, in bytes,  of the file pointer from the beginning of the  
         /// file. 
         /// </summary>
-        [CLSCompliant(false)]
         public _LARGE_INTEGER CurrentByteOffset;
     }
 
@@ -6243,13 +5960,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///  location of the  next entry (if multiple entries are present in a buffer),  and MUST NOT assume that the  
         /// value of NextEntryOffset  is the same as the size of the current entry. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NextEntryOffset;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the length,  in bytes, of the SID data element. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint SidLength;
 
         /// <summary>
@@ -6312,13 +6027,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// determine the location of the  next entry (if multiple entries are present in a buffer),  and MUST NOT  
         /// assume that the value of NextEntryOffset  is the same as the size of the current entry. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NextEntryOffset;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the length,  in bytes, of the Sid data element. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint SidLength;
 
         /// <summary>
@@ -6360,14 +6073,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer that contains the file handle  for the root directory. For network operations,  
         /// this  value MUST always be zero. 
         /// </summary>
-        [CLSCompliant(false)]
         public RootDirectory_Values RootDirectory;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the length in  bytes of the new name for the file, including the  
         /// trailing  NULL if present. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileNameLength;
 
         /// <summary>
@@ -6386,7 +6097,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     ///  value MUST always be zero. 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum RootDirectory_Values : uint
     {
 
@@ -6423,14 +6133,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 64-bit unsigned integer that contains the file handle  for the root directory. For network operations,  
         /// this  value MUST always be zero. 
         /// </summary>
-        [CLSCompliant(false)]
         public FileRenameInformation_SMB2_RootDirectory_Values RootDirectory;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the length in  bytes of the new name for the file, including the  
         /// trailing  NULL if present. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileNameLength;
 
         /// <summary>
@@ -6449,7 +6157,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     ///  value MUST always be zero. 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FileRenameInformation_SMB2_RootDirectory_Values : ulong
     {
 
@@ -6485,7 +6192,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer value containing the reparse  point tag that uniquely identifies the owner of  
         /// the  reparse point. Section  contains more details on reparse  tags. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Tag;
     }
 
@@ -6509,14 +6215,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///   specified in the Period field. When setting bandwidth  reservation, a value of 0 indicates to the file  
         /// system  that it MUST free any existing reserved bandwidth. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint RequestsPerPeriod;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the period for  reservation, which is the time from which I/O is  
         /// issued  to the kernel until the time the I/O should be completed,  specified in milliseconds. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Period;
 
         /// <summary>
@@ -6540,7 +6244,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// issued  by an application using bandwidth reservation. When  setting reservations, this field MUST be  
         /// ignored by  servers and SHOULD be set to 0 by clients. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint RequestSize;
 
         /// <summary>
@@ -6548,7 +6251,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///   at any time. When setting reservations, this field  MUST be ignored by servers and SHOULD be set to 0 by 
         ///   clients. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NumOutstandingRequests;
     }
 
@@ -6570,7 +6272,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 32-bit unsigned integer that contains the length,  in bytes, of the FileName field. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint FileNameLength;
 
         /// <summary>
@@ -6617,7 +6318,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 32-bit unsigned integer that contains the number of  non-deleted links to this file. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NumberOfLinks;
 
         /// <summary>
@@ -6654,14 +6354,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 32-bit unsigned integer that contains the number of  non-deleted links to this file. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NumberOfAccessibleLinks;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the total number  of links to this file, including links marked  
         /// for delete. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint TotalNumberOfLinks;
 
         /// <summary>
@@ -6705,20 +6403,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// the location of the  next entry (if multiple entries are present in a buffer),  and MUST NOT assume that  
         /// the value of NextEntryOffset  is the same as the size of the current entry. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint NextEntryOffset;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the length,  in bytes, of the stream name string. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint StreamNameLength;
 
         /// <summary>
         /// A 64-bit signed integer that contains the size, in bytes,  of the stream. The value of this field MUST be  
         /// greater  than or equal to 0. 
         /// </summary>
-        [CLSCompliant(false)]
         public ulong StreamSize;
 
         /// <summary>
@@ -6784,7 +6479,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsInformationCommand : ushort
     {
         /// <summary>
@@ -6877,7 +6571,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///  more of the following with the exception that FS_FILE_COMPRESSION  and FS_VOL_IS_COMPRESSED cannot both 
         /// be  set. Any flag  values not explicitly mentioned here can be set to  any value, and MUST be ignored. 
         /// </summary>
-        [CLSCompliant(false)]
         public FileSystemAttributes_Values FileSystemAttributes;
 
         /// <summary>
@@ -6892,7 +6585,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// FileSystemName  field. The value of this field MUST be greater than  0. 
         /// </summary>
         [PossibleValueRange("0", "4294967295")]
-        [CLSCompliant(false)]
         public uint FileSystemNameLength;
 
         /// <summary>
@@ -6966,7 +6658,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// defined  in the following table SHOULD be set to 0, and MUST  be ignored.windows sets flags not defined  
         /// below to  zero. Logging makes an entry in the windows application  event log. 
         /// </summary>
-        [CLSCompliant(false)]
         public FileSystemControlFlags_Values FileSystemControlFlags;
 
         /// <summary>
@@ -7005,7 +6696,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 32-bit unsigned integer that contains the length of  the DriverName string. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint DriverNameLength;
 
         /// <summary>
@@ -7063,13 +6753,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 32-bit unsigned integer that contains the number of  sectors in each allocation unit. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint SectorsPerAllocationUnit;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the number of  bytes in each sector. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint BytesPerSector;
     }
 
@@ -7091,7 +6779,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 32-bit unsigned integer that contains the length,  in bytes, including the trailing NULL, if present,   
         /// of the name for the volume. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint VolumeLabelLength;
 
         /// <summary>
@@ -7250,13 +6937,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 32-bit unsigned integer that contains the number of  sectors in each allocation unit. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint SectorsPerAllocationUnit;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the number of  bytes in each sector. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint BytesPerSector;
     }
 
@@ -7288,14 +6973,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///  number  for the device on which the file system is located.  No specific format or content of this field  
         /// is required  for protocol interoperation. This value is not required  to be unique. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint VolumeSerialNumber;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the length,  in bytes, including the trailing NULL, if present,   
         /// of the name of the volume. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint VolumeLabelLength;
 
         /// <summary>
@@ -7337,14 +7020,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// This identifies the type of given volume. It MUST be  one of the following. 
         /// </summary>
-        [CLSCompliant(false)]
         public DeviceType_Values DeviceType;
 
         /// <summary>
         /// A bit field which identifies various characteristics  about a given volume. The following are valid bit  
         /// values. 
         /// </summary>
-        [CLSCompliant(false)]
         public Characteristics_Values Characteristics;
     }
 
@@ -7360,7 +7041,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlCreateOrGetObjectIdReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlCreateOrGetObjectIdReplyStatus : uint
     {
         /// <summary>
@@ -7384,7 +7064,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlDeleteObjectIdReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlDeleteObjectIdReplyStatus : uint
     {
         /// <summary>
@@ -7413,7 +7092,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlDeleteReparsePointReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlDeleteReparsePointReplyStatus : uint
     {
         /// <summary>
@@ -7465,7 +7143,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlFilesystemGetStatisticsReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlFilesystemGetStatisticsReplyStatus : uint
     {
         /// <summary>
@@ -7488,7 +7165,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlFindFilesBySidReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlFindFilesBySidReplyStatus : uint
     {
         /// <summary>
@@ -7514,7 +7190,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlGetCompressionReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlGetCompressionReplyStatus : uint
     {
         /// <summary>
@@ -7537,7 +7212,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlGetNtfsVolumeDataReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlGetNtfsVolumeDataReplyStatus : uint
     {
         /// <summary>
@@ -7560,7 +7234,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlGetObjectIdReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlGetObjectIdReplyStatus : uint
     {
         /// <summary>
@@ -7589,7 +7262,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlGetReparsePointReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlGetReparsePointReplyStatus : uint
     {
         /// <summary>
@@ -7627,7 +7299,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of 2.3.20FsctlGetRetrievalPointersReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlGetRetrievalPointersReplyStatus : uint
     {
         /// <summary>
@@ -7662,7 +7333,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlLmrSetLinkTrackingInformationReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlLmrSetLinkTrackingInformationReplyStatus : uint
     {
         /// <summary>
@@ -7680,7 +7350,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlPipePeekReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlPipePeekReplyStatus : uint
     {
         /// <summary>
@@ -7729,7 +7398,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlPipeWaitReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlPipeWaitReplyStatus : uint
     {
         /// <summary>
@@ -7763,7 +7431,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlPipeTransceiveReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlPipeTransceiveReplyStatus : uint
     {
         /// <summary>
@@ -7811,7 +7478,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlQueryAllocatedRangesReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlQueryAllocatedRangesReplyStatus : uint
     {
         /// <summary>
@@ -7846,7 +7512,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlQueryFatBpbReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlQueryFatBpbReplyStatus : uint
     {
         /// <summary>
@@ -7869,7 +7534,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlQueryOnDiskVolumeInfoReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlQueryOnDiskVolumeInfoReplyStatus : uint
     {
         /// <summary>
@@ -7897,7 +7561,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlQuerySparingInfoReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlQuerySparingInfoReplyStatus : uint
     {
         /// <summary>
@@ -7915,7 +7578,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlReadFileUsnDataReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlReadFileUsnDataReplyStatus : uint
     {
         /// <summary>
@@ -7948,7 +7610,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlRecallFileReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlRecallFileReplyStatus : uint
     {
         /// <summary>
@@ -7981,7 +7642,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlSetCompressionReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlSetCompressionReplyStatus : uint
     {
         /// <summary>
@@ -8010,7 +7670,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlSetDefectManagementReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlSetDefectManagementReplyStatus : uint
     {
         /// <summary>
@@ -8060,7 +7719,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlSetEncryptionReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlSetEncryptionReplyStatus : uint
     {
         /// <summary>
@@ -8115,7 +7773,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlSetObjectIdReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlSetObjectIdReplyStatus : uint
     {
         /// <summary>
@@ -8149,7 +7806,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlSetObjectIdExtendedReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlSetObjectIdExtendedReplyStatus : uint
     {
         /// <summary>
@@ -8183,7 +7839,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlSetReparsePointReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlSetReparsePointReplyStatus : uint
     {
         /// <summary>
@@ -8214,7 +7869,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlSetSparseReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlSetSparseReplyStatus : uint
     {
         /// <summary>
@@ -8238,7 +7892,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlSetZeroDataReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlSetZeroDataReplyStatus : uint
     {
         /// <summary>
@@ -8263,7 +7916,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlSetZeroOnDeallocationReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlSetZeroOnDeallocationReplyStatus : uint
     {
         /// <summary>
@@ -8282,7 +7934,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlSisCopyfileReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlSisCopyfileReplyStatus : uint
     {
         /// <summary>
@@ -8334,7 +7985,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// Status of FsctlWriteUsnCloseRecordReply 
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsctlWriteUsnCloseRecordReplyStatus : uint
     {
         /// <summary>
@@ -8409,7 +8059,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///  IdentifierAuthority. Its length is determined by SubAuthorityCount. 
         /// </summary>
         [Size("SubAuthorityCount")]
-        [CLSCompliant(false)]
         public uint[] SubAuthority;
     }
 
@@ -8461,19 +8110,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 16-bit unsigned integer containing the number of bitmap  writes due to a write operation. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Write;
 
         /// <summary>
         /// A 16-bit unsigned integer containing the number of bitmap  writes due to a create operation. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Create;
 
         /// <summary>
         /// A 16-bit unsigned integer containing the number of bitmap  writes due to a set file information operation. 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SetInfo;
     }
 
@@ -8490,13 +8136,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 32-bit unsigned integer that contains the low-order  bits of the file time. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint dwLowDateTime;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the high-order  bits of the file time. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint dwHighDateTime;
     }
 
@@ -8506,7 +8150,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     //  <remarks>
     //   ms-dtyp\e904b1ba-f774-4203-ba1b-66485165ab1a.xml
     //  </remarks>
-    [CLSCompliant(false)]
     public partial struct _LARGE_INTEGER
     {
 

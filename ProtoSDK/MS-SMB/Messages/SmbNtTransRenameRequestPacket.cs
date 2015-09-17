@@ -11,7 +11,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// query quota. 
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbNtTransRenameRequestPacket : Cifs.SmbNtTransactRenameRequestPacket
     {
         #region Fields

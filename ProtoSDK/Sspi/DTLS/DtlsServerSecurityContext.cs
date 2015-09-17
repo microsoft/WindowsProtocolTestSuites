@@ -58,7 +58,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// the context</param>
         /// <param name="targetDataRep">The data representation, such as byte ordering, on the target. This parameter 
         /// can be either SECURITY_NATIVE_DREP or SECURITY_NETWORK_DREP.</param>
-        [CLSCompliant(false)]
         [SecurityPermission(SecurityAction.Demand)]
         public DtlsServerSecurityContext(
             SecurityPackageType packageType,

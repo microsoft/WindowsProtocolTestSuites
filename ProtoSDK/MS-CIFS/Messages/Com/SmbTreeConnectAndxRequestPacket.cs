@@ -12,7 +12,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbTreeConnectAndx Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTreeConnectAndxRequestPacket : SmbBatchedRequestPacket
     {
         #region Fields
@@ -72,7 +71,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// Set the AndXOffset from batched request
         /// </summary>
-        [CLSCompliant(false)]
         protected override ushort AndXOffset
         {
             get

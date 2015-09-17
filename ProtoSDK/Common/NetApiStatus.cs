@@ -11,7 +11,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
     /// defined at http://msdn.microsoft.com/en-us/library/aa370674(VS.85).aspx
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum NetApiStatus : uint
     {
         /// <summary>

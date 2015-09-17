@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FileNormalizedNameInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileNormalizedNameInformationRequestPacket : FsccEmptyPacket
     {
         #region Properties

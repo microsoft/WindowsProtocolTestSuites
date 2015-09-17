@@ -79,7 +79,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// to run an exe, the commandLine is like “c:\test.exe –a –b”;</param>
         /// <param name="outputResult">The standard and error output text of the command. </param>
         /// <returns>Return the result of the command. 0 means successful.</returns>
-        [CLSCompliant(false)]
         public uint SyncExecute(string args, out string outputResult)
         {
             uint returnValue = 1;
@@ -111,7 +110,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <param name="args">The command to be executed. For example, 
         /// to run an exe, the commandLine is like “c:\test.exe –a –b”</param>
         /// <returns>The processId of the process.if the execute fails, return processId=0</returns>
-        [CLSCompliant(false)]
         public uint AsynExecute(string args)
         {
             UInt32 processId;
@@ -150,7 +148,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// return 1 means the process is not end.
         /// return 2 means the given processId never exists 
         /// </returns>
-        [CLSCompliant(false)]
         public uint GetRunningResult(uint processId, out string outputResult)
         {
             uint result = 1;

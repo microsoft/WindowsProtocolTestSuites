@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbInvalid Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbInvalidRequestPacket : SmbSingleRequestPacket
     {
         #region Fields

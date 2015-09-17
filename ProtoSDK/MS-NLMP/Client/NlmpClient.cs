@@ -107,7 +107,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <exception cref="ArgumentException">
         /// when version is required, the domainName and workstationName must be string.Empty
         /// </exception>
-        [CLSCompliant(false)]
         public NlmpNegotiatePacket CreateNegotiatePacket(
             NegotiateTypes negotiateFlags,
             VERSION version,
@@ -230,7 +229,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <exception cref="System.ArgumentNullException">
         /// when LM is using, the ntChallengeResponse should be null!
         /// </exception>
-        [CLSCompliant(false)]
         public NlmpAuthenticatePacket CreateAuthenticatePacket(
             NegotiateTypes negotiateFlags,
             VERSION version,

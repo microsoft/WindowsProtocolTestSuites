@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
     /// <summary>
     /// the challenge packet of nlmp
     /// </summary>
-    [CLSCompliant(false)]
     public class NlmpChallengePacket : NlmpPacket
     {
         /// <summary>

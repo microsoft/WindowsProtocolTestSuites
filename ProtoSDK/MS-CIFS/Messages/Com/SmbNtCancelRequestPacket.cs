@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// packet of SmbNtCancel Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbNtCancelRequestPacket : SmbSingleRequestPacket
     {
         #region Fields

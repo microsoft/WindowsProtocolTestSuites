@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbCreateTemporary Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbCreateTemporaryRequestPacket : SmbSingleRequestPacket
     {
         #region Fields

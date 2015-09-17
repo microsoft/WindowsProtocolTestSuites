@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbWriteAndUnlock Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbWriteAndUnlockRequestPacket : SmbSingleRequestPacket
     {
         #region Fields

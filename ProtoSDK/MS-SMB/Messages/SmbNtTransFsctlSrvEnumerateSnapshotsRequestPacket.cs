@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// enumerate snap shots. 
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbNtTransFsctlSrvEnumerateSnapshotsRequestPacket : Cifs.SmbNtTransactIoctlRequestPacket
     {
         #region Convert from base class

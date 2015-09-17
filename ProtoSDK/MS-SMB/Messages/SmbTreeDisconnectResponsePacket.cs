@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// Packets for SmbTreeDisconnect Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTreeDisconnectResponsePacket : Cifs.SmbTreeDisconnectResponsePacket
     {
         #region Convert from base class

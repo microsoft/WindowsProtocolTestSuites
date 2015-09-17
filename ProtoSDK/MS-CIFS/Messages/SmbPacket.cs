@@ -12,7 +12,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// the basic packet of SMB
     /// defined common method of all SMB packets
     /// </summary>
-    [CLSCompliant(false)]
     public abstract class SmbPacket : SmbFamilyPacket
     {
         #region fields
@@ -55,7 +54,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Get the type of the packet: Request or Response, and Single or Compounded.
         /// </summary>
         /// <returns>the type of the packet.</returns>
-        [CLSCompliant(false)]
         public abstract SmbPacketType PacketType
         {
             get;
@@ -78,7 +76,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Direct TCP Transport Header
         /// Auto filled when ToBytes(), if not explicitly set.
         /// </summary>
-        [CLSCompliant(false)]
         public TransportHeader TransportHeader
         {
             get
@@ -95,7 +92,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The SMB Header.
         /// </summary>
-        [CLSCompliant(false)]
         public SmbHeader SmbHeader
         {
             get
@@ -128,7 +124,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The SMB Parameters.
         /// </summary>
-        [CLSCompliant(false)]
         protected internal SmbParameters SmbParametersBlock
         {
             get
@@ -145,7 +140,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The SMB Data.
         /// </summary>
-        [CLSCompliant(false)]
         protected internal SmbData SmbDataBlock
         {
             get
@@ -436,7 +430,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="sessionKey">the session key.</param>
         /// <exception cref="System.ArgumentException">
         /// the ClientNextSendSequenceNumber of Connection must be initialized to 2.</exception>
-        [CLSCompliant(false)]
         public void Sign(ulong clientNextSendSequenceNumber, byte[] sessionKey)
         {
             this.Sign(clientNextSendSequenceNumber, sessionKey, new byte[0]);
@@ -452,7 +445,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="challengeResponse">the challenge response.</param>
         /// <exception cref="System.ArgumentException">
         /// the ClientNextSendSequenceNumber of Connection must be initialized to 2.</exception>
-        [CLSCompliant(false)]
         public void Sign(ulong clientNextSendSequenceNumber, byte[] sessionKey, byte[] challengeResponse)
         {
             if (clientNextSendSequenceNumber < 2)

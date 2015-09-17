@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbTreeDisconnect Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTreeDisconnectRequestPacket : SmbSingleRequestPacket
     {
         #region Fields

@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FileQuotaInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileQuotaInformationResponsePacket : FsccStandardPacket<FILE_QUOTA_INFORMATION>
     {
         #region Properties

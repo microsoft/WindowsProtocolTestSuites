@@ -10,7 +10,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbWriteAndx Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbWriteAndxResponsePacket : SmbBatchedResponsePacket
     {
         #region Fields
@@ -70,7 +69,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// Set the AndXOffset from batched request
         /// </summary>
-        [CLSCompliant(false)]
         protected override ushort AndXOffset
         {
             get

@@ -88,7 +88,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// the password of user. sdk can not retrieve the password from any user account database. sdk just accept a
         /// user password as the public password for all user.
         /// </summary>
-        [CLSCompliant(false)]
         public NlmpClientCredential ClientCredential
         {
             get
@@ -126,7 +125,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// The set of server configuration flags (section 2.2.2.5) that specify the full set of capabilities of the
         /// server.
         /// </summary>
-        [CLSCompliant(false)]
         public NegotiateTypes CfgFlg
         {
             get

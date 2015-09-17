@@ -11,7 +11,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbReadMpx Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbReadMpxResponsePacket : SmbSingleResponsePacket
     {
         #region Fields

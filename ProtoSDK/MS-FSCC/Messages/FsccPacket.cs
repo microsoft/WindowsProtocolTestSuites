@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the base packet class for all fscc packet. 
     /// </summary>
-    [CLSCompliant(false)]
     public abstract class FsccPacket : StackPacket
     {
         #region Properties
@@ -16,7 +15,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// the command of fscc packet 
         /// </summary>
-        [CLSCompliant(false)]
         public abstract uint Command
         {
             get;

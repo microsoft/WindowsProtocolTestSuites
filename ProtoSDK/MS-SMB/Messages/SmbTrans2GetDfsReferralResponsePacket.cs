@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// Packets for SmbTrans2GetDfsReferral Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTrans2GetDfsReferralResponsePacket : Cifs.SmbTrans2GetDfsReferalFinalResponsePacket
     {
         #region Convert from base class

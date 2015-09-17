@@ -25,7 +25,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// A 32-bit unsigned integer that indicates the message type. 
         /// This field MUST be set to 0x00000001.
         /// </summary>
-        [CLSCompliant(false)]
         public MessageType_Values MessageType;
     }
 
@@ -40,7 +39,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         "Microsoft.Design",
         "CA1028:EnumStorageShouldBeInt32"
         )]
-    [CLSCompliant(false)]
     public enum MessageType_Values : uint
     {
         /// <summary>
@@ -68,20 +66,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <summary>
         /// A 16-bit unsigned integer that defines the size, in bytes, of Field in Payload.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Len;
 
         /// <summary>
         /// A 16-bit unsigned integer that SHOULD be set to the value of Len and MUST be ignored on receipt.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxLen;
 
         /// <summary>
         /// A 32-bit unsigned integer that defines the offset, in bytes, from the beginning of the MESSAGE to Field 
         /// in Payload.
         /// </summary>
-        [CLSCompliant(false)]
         public uint BufferOffset;
     }
 
@@ -97,7 +92,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// flags to indicate options it 
         /// supports.
         /// </summary>
-        [CLSCompliant(false)]
         public NegotiateTypes NegotiateFlags;
 
         /// <summary>
@@ -153,20 +147,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// flags to indicate options it supports or, if there has been a NEGOTIATE_MESSAGE (section 2.2.1.1), the 
         /// choices it has made from the options offered by the client.
         /// </summary>
-        [CLSCompliant(false)]
         public NegotiateTypes NegotiateFlags;
 
         /// <summary>
         /// A 64-bit value that contains the NTLM challenge. The challenge is a 64-bit nonce. The processing of the 
         /// ServerChallenge is specified in sections 3.1.5 and 3.2.5.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong ServerChallenge;
 
         /// <summary>
         /// An 8-byte array whose elements MUST be 0x00 and MUST be ignored on receipt.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong Reserved;
 
         /// <summary>
@@ -243,7 +234,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// offered in the CHALLENGE_MESSAGE. In connection-oriented mode, a NEGOTIATE structure that contains the set
         /// of bit flags (section 2.2.2.5) negotiated in the previous messages.
         /// </summary>
-        [CLSCompliant(false)]
         public NegotiateTypes NegotiateFlags;
 
         /// <summary>
@@ -310,13 +300,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// MUST be one of the values from the following table. The corresponding Value field in this AV_PAIR MUST 
         /// contain the information specified in the description of that AvId.
         /// </summary>
-        [CLSCompliant(false)]
         public AV_PAIR_IDs AvId;
 
         /// <summary>
         /// A 16-bit unsigned integer that defines the length, in bytes, of Value.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort AvLen;
 
         /// <summary>
@@ -335,7 +323,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         "Microsoft.Design",
         "CA1028:EnumStorageShouldBeInt32"
         )]
-    [CLSCompliant(false)]
     public enum AV_PAIR_IDs : ushort
     {
         /// <summary>
@@ -418,25 +405,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <summary>
         /// A 32-bit unsigned integer that defines the length, in bytes, of AV_PAIR Value.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Size;
 
         /// <summary>
         /// A 32-bit integer value containing 0x00000000.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Z4;
 
         /// <summary>
         /// Indicates an integrity level is present in SubjectIntegrityLevel.
         /// </summary>
-        [CLSCompliant(false)]
         public uint IntegrityLevel;
 
         /// <summary>
         /// A 32-bit integer value indicating an integrity level of the client.
         /// </summary>
-        [CLSCompliant(false)]
         public uint SubjectIntegrityLevel;
 
         /// <summary>
@@ -479,7 +462,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// An 8-byte array of unsigned char that contains the client's ClientChallenge, as defined in section 
         /// 3.1.5.1.2.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong ChallengeFromClient;
     }
 
@@ -493,7 +475,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         "Microsoft.Design",
         "CA1028:EnumStorageShouldBeInt32"
         )]
-    [CLSCompliant(false)]
     public enum NegotiateTypes : uint
     {
         /// <summary>
@@ -765,32 +746,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <summary>
         /// A 16-bit unsigned integer that SHOULD be 0x0000 and MUST be ignored on receipt.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Reserved1;
 
         /// <summary>
         /// A 32-bit unsigned integer that SHOULD be 0x00000000 and MUST be ignored on receipt.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Reserved2;
 
         /// <summary>
         /// A 64-bit unsigned integer that contains the current system time, represented as the number of 100 
         /// nanosecond ticks elapsed since midnight of January 1, 1601 (UTC).
         /// </summary>
-        [CLSCompliant(false)]
         public ulong TimeStamp;
 
         /// <summary>
         /// An 8-byte array of unsigned char that contains the client's ClientChallenge (section 3.1.5.1.2).
         /// </summary>
-        [CLSCompliant(false)]
         public ulong ChallengeFromClient;
 
         /// <summary>
         /// A 32-bit unsigned integer that SHOULD be 0x00000000 and MUST be ignored on receipt.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Reserved3;
 
         /// <summary>
@@ -831,25 +807,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <summary>
         /// A 32-bit unsigned integer that contains the signature version. This field MUST be 0x00000001.
         /// </summary>
-        [CLSCompliant(false)]
         public SignatureVersion_Values Version;
 
         /// <summary>
         /// A 4-byte array that contains the random pad for the message.
         /// </summary>
-        [CLSCompliant(false)]
         public uint RandomPad;
 
         /// <summary>
         /// A 4-byte array that contains the checksum for the message.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Checksum;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the NTLM sequence number for this application message.
         /// </summary>
-        [CLSCompliant(false)]
         public uint SeqNum;
     }
 
@@ -864,7 +836,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         "Microsoft.Design",
         "CA1028:EnumStorageShouldBeInt32"
         )]
-    [CLSCompliant(false)]
     public enum SignatureVersion_Values : uint
     {
         /// <summary>
@@ -884,19 +855,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <summary>
         /// A 32-bit unsigned integer that contains the signature version. This field MUST be 0x00000001.
         /// </summary>
-        [CLSCompliant(false)]
         public ExtendedSignatureVersion_Values Version;
 
         /// <summary>
         /// An 8-byte array that contains the checksum for the message.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong Checksum;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the NTLM sequence number for this application message.
         /// </summary>
-        [CLSCompliant(false)]
         public uint SeqNum;
     }
 
@@ -911,7 +879,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         "Microsoft.Design",
         "CA1028:EnumStorageShouldBeInt32"
         )]
-    [CLSCompliant(false)]
     public enum ExtendedSignatureVersion_Values : uint
     {
         /// <summary>
@@ -945,7 +912,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// A 16-bit unsigned integer that contains the build number of the Windows operating system in use. This 
         /// field MUST be set to any 16-bit quantity that identifies the operating system build number.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ProductBuild;
 
         /// <summary>
@@ -1135,7 +1101,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <summary>
         /// validation status
         /// </summary>
-        [CLSCompliant(false)]
         public NtStatus status;
 
         /// <summary>
@@ -1150,7 +1115,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
     /// <param name="nlmpAuthenticatePacket">nlmp authenticate packet</param>
     /// <param name="serverChallenge">server challenge</param>
     /// <returns>DC validation info</returns>
-    [CLSCompliant(false)]
     public delegate DcValidationInfo VerifyAuthenticatePacketInDcMethod(
        NlmpAuthenticatePacket nlmpAuthenticatePacket,
         ulong serverChallenge);

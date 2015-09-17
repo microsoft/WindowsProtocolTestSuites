@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FSCTL_QUERY_FAT_BPB 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlQueryFatBpbRequestPacket : FsccEmptyPacket
     {
         #region Properties

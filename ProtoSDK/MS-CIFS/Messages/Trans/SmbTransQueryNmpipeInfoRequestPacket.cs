@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     ///  Packets for SmbTransQueryNmpipeInfo Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTransQueryNmpipeInfoRequestPacket : SmbTransactionRequestPacket
     {
         #region Fields

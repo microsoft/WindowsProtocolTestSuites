@@ -179,7 +179,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
         [SuppressMessage("Microsoft.Maintainability", "CA1505:AvoidUnmantainableCode")]
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        [CLSCompliant(false)]
         protected virtual void UpdateRoleContext(CifsClientPerConnection connection, SmbPacket packet)
         {
             // request packet:
@@ -224,7 +223,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection object.</param>
         /// <param name="packet">the sent or received packet in stack transport.</param>
         /// <param name="isAndxPacket">the packet is andx packet or not.</param>
-        [CLSCompliant(false)]
         protected virtual void RequestPacketUpdateRoleContext(CifsClientPerConnection connection, SmbPacket packet, bool isAndxPacket)
         {
             int connectionId = connection.ConnectionId;
@@ -288,7 +286,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="response">the sent or received packet in stack transport.</param>
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
-        [CLSCompliant(false)]
         protected virtual void ResponsePacketUpdateRoleContext(
             CifsClientPerConnection connection,
             SmbPacket request,
@@ -856,7 +853,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <param name="connection">the connection object.</param>
         /// <param name="packet">the sent or received packet in stack transport.</param>
-        [CLSCompliant(false)]
         protected virtual void ResponsePacketUpdateRoleContextRegular(Connection connection, SmbPacket packet)
         {
             int connectionId = connection.ConnectionId;
@@ -889,7 +885,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connectionId">the connection identity.</param>
         /// <returns>if the connection exists, returns min usable MessageId of the connection. otherwise
         /// 0.</returns>
-        [CLSCompliant(false)]
         public ushort GetMessageId(int connectionId)
         {
             lock (this.contextCollection)
@@ -984,7 +979,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <param name="connectionId">the connection identity.</param>
         /// <param name="packet">the Outstanding Request.</param>
-        [CLSCompliant(false)]
         public void AddOutstandingRequest(int connectionId, SmbPacket packet)
         {
             if (packet == null)
@@ -1011,7 +1005,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <param name="connectionId">the connection identity.</param>
         /// <param name="mid">the messageId of the request to be removed.</param>
-        [CLSCompliant(false)]
         public void RemoveOutstandingRequest(int connectionId, ulong mid)
         {
             lock (this.contextCollection)
@@ -1034,7 +1027,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <param name="connectionId">the connection identity.</param>
         /// <returns>a copy of the outstanding request will be returned.</returns>
-        [CLSCompliant(false)]
         public Collection<SmbPacket> GetOutstandingRequests(int connectionId)
         {
             lock (this.contextCollection)
@@ -1059,7 +1051,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="mid">the messageId of the request to get.</param>
         /// <returns>if found, a copy of the outstanding request will be returned. 
         /// otherwise, null will be returned.</returns>
-        [CLSCompliant(false)]
         public SmbPacket GetOutstandingRequest(int connectionId, ulong mid)
         {
             lock (this.contextCollection)
@@ -1416,7 +1407,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <param name="connectionId">the connectionId of the session to be removed.</param>
         /// <param name="sessionId">the sessionId of the session to be removed.</param>
-        [CLSCompliant(false)]
         public void RemoveSession(int connectionId, ulong sessionId)
         {
             lock (this.contextCollection)
@@ -1585,7 +1575,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connectionId">the connectionId of the session to get.</param>
         /// <param name="sessionId">the sessionId of the session to get.</param>
         /// <returns>A snapshot of the found session will be returned.</returns>
-        [CLSCompliant(false)]
         public CifsClientPerSession GetSession(int connectionId, ulong sessionId)
         {
             lock (this.contextCollection)
@@ -1841,7 +1830,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <param name="connectionId">the connectionId of the TreeConnect to be removed.</param>
         /// <param name="sessionId">the sessionId of the TreeConnect to be removed.</param>
-        [CLSCompliant(false)]
         public void RemoveTreeConnects(int connectionId, ulong sessionId)
         {
             lock (this.contextCollection)
@@ -1914,7 +1902,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connectionId">the connectionId of the TreeConnect to be removed.</param>
         /// <param name="sessionId">the sessionId of the TreeConnect to be removed.</param>
         /// <param name="treeId">the treeId of the TreeConnect to be removed.</param>
-        [CLSCompliant(false)]
         public void RemoveTreeConnect(int connectionId, ulong sessionId, ulong treeId)
         {
             lock (this.contextCollection)
@@ -2107,7 +2094,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connectionId">the connectionId of the treeConnect to get.</param>
         /// <param name="sessionId">the sessionId of the treeConnect to get.</param>
         /// <returns>A snapshot of the found treeConnects will be returned.</returns>
-        [CLSCompliant(false)]
         public ReadOnlyCollection<CifsClientPerTreeConnect> GetTreeConnects(int connectionId, ulong sessionId)
         {
             Collection<CifsClientPerTreeConnect> ret = new Collection<CifsClientPerTreeConnect>();
@@ -2133,7 +2119,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="sessionId">the sessionId of the treeConnect to get.</param>
         /// <param name="treeId">the treeId of the treeConnect to get.</param>
         /// <returns>A snapshot of the found treeConnect will be returned.</returns>
-        [CLSCompliant(false)]
         public CifsClientPerTreeConnect GetTreeConnect(int connectionId, ulong sessionId, ulong treeId)
         {
             lock (this.contextCollection)
@@ -2380,7 +2365,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <param name="connectionId">the connectionId of the open to be removed.</param>
         /// <param name="sessionId">the sessionId of the open to be removed.</param>
-        [CLSCompliant(false)]
         public void RemoveOpenFiles(int connectionId, ulong sessionId)
         {
             lock (this.contextCollection)
@@ -2443,7 +2427,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connectionId">the connectionId of the open to be removed.</param>
         /// <param name="sessionId">the sessionId of the open to be removed.</param>
         /// <param name="treeId">the treeId of the open to be removed.</param>
-        [CLSCompliant(false)]
         public void RemoveOpenFiles(int connectionId, ulong sessionId, ulong treeId)
         {
             lock (this.contextCollection)
@@ -2515,7 +2498,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="sessionId">the sessionId of the open to be removed.</param>
         /// <param name="treeId">the treeId of the open to be removed.</param>
         /// <param name="fileHandle">the fileHandle of the open to be removed.</param>
-        [CLSCompliant(false)]
         public void RemoveOpenFile(int connectionId, ulong sessionId, ulong treeId, ushort fileHandle)
         {
             lock (this.contextCollection)
@@ -2688,7 +2670,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connectionId">the connectionId of the Open to get.</param>
         /// <param name="sessionId">the sessionId of the Open to get.</param>
         /// <returns>A snapshot of the found Opens will be returned.</returns>
-        [CLSCompliant(false)]
         public ReadOnlyCollection<CifsClientPerOpenFile> GetOpenFiles(int connectionId, ulong sessionId)
         {
             Collection<CifsClientPerOpenFile> ret = new Collection<CifsClientPerOpenFile>();
@@ -2715,7 +2696,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="sessionId">the sessionId of the Open to get.</param>
         /// <param name="treeId">the treeId of the Open to get.</param>
         /// <returns>A snapshot of the found Opens will be returned.</returns>
-        [CLSCompliant(false)]
         public ReadOnlyCollection<CifsClientPerOpenFile> GetOpenFiles(int connectionId, ulong sessionId, ulong treeId)
         {
             Collection<CifsClientPerOpenFile> ret = new Collection<CifsClientPerOpenFile>();
@@ -2743,7 +2723,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="treeId">the treeId of the Open to get.</param>
         /// <param name="fileHandle">the fileHandle of the Open to get.</param>
         /// <returns>A snapshot of the found Open will be returned.</returns>
-        [CLSCompliant(false)]
         public CifsClientPerOpenFile GetOpenFile(int connectionId, ulong sessionId, ulong treeId, ushort fileHandle)
         {
             lock (this.contextCollection)
@@ -2989,7 +2968,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <param name="connectionId">the connectionId of the open to be removed.</param>
         /// <param name="sessionId">the sessionId of the open to be removed.</param>
-        [CLSCompliant(false)]
         public void RemoveOpenSearchs(int connectionId, ulong sessionId)
         {
             lock (this.contextCollection)
@@ -3052,7 +3030,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connectionId">the connectionId of the open to be removed.</param>
         /// <param name="sessionId">the sessionId of the open to be removed.</param>
         /// <param name="treeId">the treeId of the open to be removed.</param>
-        [CLSCompliant(false)]
         public void RemoveOpenSearchs(int connectionId, ulong sessionId, ulong treeId)
         {
             lock (this.contextCollection)
@@ -3124,7 +3101,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="sessionId">the sessionId of the open to be removed.</param>
         /// <param name="treeId">the treeId of the open to be removed.</param>
         /// <param name="searchId">the searchId of the open to be removed.</param>
-        [CLSCompliant(false)]
         public void RemoveOpenSearch(int connectionId, ulong sessionId, ulong treeId, ushort searchId)
         {
             lock (this.contextCollection)
@@ -3297,7 +3273,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connectionId">the connectionId of the Open to get.</param>
         /// <param name="sessionId">the sessionId of the Open to get.</param>
         /// <returns>A snapshot of the found Opens will be returned.</returns>
-        [CLSCompliant(false)]
         public ReadOnlyCollection<CifsClientPerOpenSearch> GetOpenSearchs(int connectionId, ulong sessionId)
         {
             Collection<CifsClientPerOpenSearch> ret = new Collection<CifsClientPerOpenSearch>();
@@ -3324,7 +3299,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="sessionId">the sessionId of the Open to get.</param>
         /// <param name="treeId">the treeId of the Open to get.</param>
         /// <returns>A snapshot of the found Opens will be returned.</returns>
-        [CLSCompliant(false)]
         public ReadOnlyCollection<CifsClientPerOpenSearch> GetOpenSearchs(int connectionId, ulong sessionId, ulong treeId)
         {
             Collection<CifsClientPerOpenSearch> ret = new Collection<CifsClientPerOpenSearch>();
@@ -3352,7 +3326,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="treeId">the treeId of the Open to get.</param>
         /// <param name="searchId">the searchId of the Open to get.</param>
         /// <returns>A snapshot of the found Open will be returned.</returns>
-        [CLSCompliant(false)]
         public CifsClientPerOpenSearch GetOpenSearch(int connectionId, ulong sessionId, ulong treeId, ushort searchId)
         {
             lock (this.contextCollection)

@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     ///  Packets for SmbSessionSetupAndx Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbSessionSetupImplicitNtlmAndxResponsePacket : Cifs.SmbSessionSetupAndxResponsePacket
     {
         #region Convert from base class

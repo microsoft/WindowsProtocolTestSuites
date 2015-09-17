@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// Packets for SmbTrans2QueryFileInformation Request 
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTrans2QueryFileInformationRequestPacket : Cifs.SmbTrans2QueryFileInformationRequestPacket
     {
         #region Fields

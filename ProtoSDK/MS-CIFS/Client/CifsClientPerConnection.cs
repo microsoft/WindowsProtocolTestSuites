@@ -176,7 +176,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// A value that indicates the signing policy of the server. 
         /// This value can be Disabled, Enabled, or Required.
         /// </summary>
-        [CLSCompliant(false)]
         public SignStateValue ServerSigningState
         {
             get
@@ -193,7 +192,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// A sequence number for the next signed request being sent.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong ClientNextSendSequenceNumber
         {
             get
@@ -246,7 +244,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         ///  The capabilities of the server, as specified in section 2.2.3. 
         ///  The capabilities indirectly reflect the negotiated dialect for this connection.
         /// </summary>
-        [CLSCompliant(false)]
         public Capabilities ServerCapabilities
         {
             get
@@ -281,7 +278,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The negotiated maximum size, in bytes, for SMB messages sent between 
         /// the client and the server.
         /// </summary>
-        [CLSCompliant(false)]
         public uint MaxBufferSize
         {
             get
@@ -300,7 +296,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// identifier; a server-unique identifier for the connection between the client and 
         /// the server.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SessionID
         {
             get
@@ -356,7 +351,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The maximum number of outstanding SMB operations the server supports.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxMpxCount
         {
             get
@@ -374,7 +368,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The maximum number of virtual circuits that MAY be established between the client and the server
         /// as part of the same SMB session.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxNumberVcs
         {
             get
@@ -393,7 +386,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// message size that the client MUST not exceed when sending an SMB_COM_WRITE_RAW client request, and 
         /// the maximum message size that the server MUST not exceed when sending an SMB_COM_READ_RAW response.
         /// </summary>
-        [CLSCompliant(false)]
         public uint MaxRawSize
         {
             get
@@ -412,7 +404,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// connection. If the client needs to create an additional virtual circuit and attach it to the same 
         /// SMB connection, the client MUST provide the SessionKey in the SMB_COM_SESSION_SETUP_ANDX.
         /// </summary>
-        [CLSCompliant(false)]
         public uint SessionKey
         {
             get
@@ -430,7 +421,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The number of 100-nanosecond intervals that have elapsed since January 1, 1601,
         /// in Coordinated Universal Time (UTC) format.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong SystemTime
         {
             get
@@ -465,7 +455,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// An array of unsigned bytes that MUST be ChallengeLength bytes long and MUST represent the server 
         /// challenge. This array MUST NOT be null-terminated..
         /// </summary>
-        [CLSCompliant(false)]
         public ulong Challenge
         {
             get
@@ -505,7 +494,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The table MUST be uniquely indexed by Session.SessionId, and MUST support enumeration of 
         /// every entry in the table.
         /// </summary>
-        [CLSCompliant(false)]
         protected internal Collection<Session> SessionTable
         {
             get
@@ -571,7 +559,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// get the min MessageId in sequence window. If the secquence has been consumed out, 
         /// the return is the max consumed messageId added 1.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MessageId
         {
             get
@@ -861,7 +848,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <param name="msg">the last request packet.</param>
         /// <exception cref="System.InvalidOperationException">the msg should be request.</exception>
-        [CLSCompliant(false)]
         public void UpdateSequenceNumber(SmbPacket msg)
         {
             // only request can be used to UpdateSequenceNumber:
@@ -895,7 +881,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <param name="msg">the last response packet.</param>
         /// <exception cref="System.InvalidOperationException">the msg should be response.</exception>
-        [CLSCompliant(false)]
         public void RemoveSequenceNumber(SmbPacket msg)
         {
             // only response can be used to RemoveSequenceNumber:

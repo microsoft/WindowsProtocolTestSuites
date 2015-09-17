@@ -12,7 +12,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// the basic packet of SMB single response.
     /// defined common method of all SMB single response packets
     /// </summary>
-    [CLSCompliant(false)]
     public abstract class SmbSingleResponsePacket : SmbPacket
     {
         #region fields

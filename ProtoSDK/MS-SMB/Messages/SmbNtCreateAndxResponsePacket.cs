@@ -13,7 +13,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// Packets for SmbNtCreateAndx Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbNtCreateAndxResponsePacket : Cifs.SmbNtCreateAndxResponsePacket
     {
         #region Const

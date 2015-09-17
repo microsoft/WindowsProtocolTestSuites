@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FilePipeRemoteInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFilePipeRemoteInformationRequestPacket : FsccStandardPacket<FilePipeRemoteInformation>
     {
         #region Properties

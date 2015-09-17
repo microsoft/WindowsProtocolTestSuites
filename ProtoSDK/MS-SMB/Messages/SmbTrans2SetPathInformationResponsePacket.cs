@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// Packets for SmbTrans2SetPathInformation Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTrans2SetPathInformationResponsePacket : Cifs.SmbTrans2SetPathInformationFinalResponsePacket
     {
         #region Convert from base class

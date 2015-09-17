@@ -24,7 +24,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// This attribute can be queried from the context handle before the setup is complete, such as when ISC 
         /// returns SEC_I_CONTINUE_NEEDED.
         /// </summary>
-        [CLSCompliant(false)]
         public uint NegotiationState;
 
         /// <summary>

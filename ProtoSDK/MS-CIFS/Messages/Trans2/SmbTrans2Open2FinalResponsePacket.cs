@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbTrans2Open2Final Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTrans2Open2FinalResponsePacket : SmbTransaction2FinalResponsePacket
     {
         #region Fields

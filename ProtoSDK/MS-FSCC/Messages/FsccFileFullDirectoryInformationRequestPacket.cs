@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FileFullDirectoryInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileFullDirectoryInformationRequestPacket : FsccEmptyPacket
     {
         #region Properties

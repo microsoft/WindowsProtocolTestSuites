@@ -11,7 +11,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// the basic packet of SMB single request.
     /// defined common method of all SMB single request packets
     /// </summary>
-    [CLSCompliant(false)]
     public abstract class SmbSingleRequestPacket : SmbPacket
     {
         #region fields

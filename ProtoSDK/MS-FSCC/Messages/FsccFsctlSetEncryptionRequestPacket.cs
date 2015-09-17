@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FSCTL_SET_ENCRYPTION 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlSetEncryptionRequestPacket : FsccStandardPacket<ENCRYPTION_BUFFER>
     {
         #region Properties

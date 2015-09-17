@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbLockingAndx Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbLockingAndxResponsePacket : SmbBatchedResponsePacket
     {
         #region Fields

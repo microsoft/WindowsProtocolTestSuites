@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbWriteRawInterim Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbWriteRawInterimResponsePacket : SmbSingleResponsePacket 
     {
         #region Fields

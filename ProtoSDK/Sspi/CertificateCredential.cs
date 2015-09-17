@@ -14,7 +14,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <summary>
         /// Store a certificate
         /// </summary>
-        [CLSCompliant(false)]
         protected X509Certificate certificate;
 
         /// <summary>
@@ -55,7 +54,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <summary>
         /// Gets stored X509Certificate.
         /// </summary>
-        [CLSCompliant(false)]
         public X509Certificate Certificate
         {
             get

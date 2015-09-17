@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FileEndOfFileInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileEndOfFileInformationRequestPacket : FsccStandardPacket<FileEndOfFileInformation>
     {
         #region Properties

@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// Packets for SmbReadAndx Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbReadAndxResponsePacket : Cifs.SmbReadAndxResponsePacket
     {
         #region Properties

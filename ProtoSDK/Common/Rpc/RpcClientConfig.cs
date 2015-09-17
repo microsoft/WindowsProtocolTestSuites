@@ -114,7 +114,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// Binding. For a list of the RPC-supported authentication levels.
         /// It is used in RpcBindingSetAuthInfo.
         /// </summary>
-        [CLSCompliant(false)]
         public RPC_C_AUTHN_LEVEL AuthenticationLevel
         {
             get
@@ -128,7 +127,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// Authentication service to use.
         /// It is used in RpcBindingSetAuthInfo.
         /// </summary>
-        [CLSCompliant(false)]
         public RPC_C_AUTHN AuthenticationService
         {
             get
@@ -143,7 +141,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// credentials appropriate for the selected authentication and authorization service.
         /// It is used in RpcBindingSetAuthInfo.
         /// </summary>
-        [CLSCompliant(false)]
         public SEC_WINNT_AUTH_IDENTITY AuthenticationIdentity
         {
             get
@@ -157,7 +154,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// Authorization service implemented by the server for the interface of interest.
         /// It is used in RpcBindingSetAuthInfo.
         /// </summary>
-        [CLSCompliant(false)]
         public RPC_C_AUTHN AuthorizationService
         {
             get
@@ -189,7 +185,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// authorization credentials appropriate for the selected authentication and authorization service.</param>
         /// <param name="authorizationService">Authorization service implemented by the server for the interface of
         /// interest.</param>
-        [CLSCompliant(false)]
         public RpcClientConfig(
             Guid? clientGuid,
             String serverComputerName,

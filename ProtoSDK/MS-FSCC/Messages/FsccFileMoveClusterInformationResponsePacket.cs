@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FileMoveClusterInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileMoveClusterInformationResponsePacket : FsccEmptyPacket
     {
         #region Properties

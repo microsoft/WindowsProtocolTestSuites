@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FSCTL_FILE_SYSTEM_GET_STATISTICS 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlFileSystemGetStatisticsResponsePacket : FsccStandardBytesPacket
     {
         #region Properties

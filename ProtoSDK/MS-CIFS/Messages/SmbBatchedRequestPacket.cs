@@ -12,7 +12,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// the basic packet of SMB batched request.
     /// defined common method of all SMB batched request packets
     /// </summary>
-    [CLSCompliant(false)]
     public abstract class SmbBatchedRequestPacket : SmbPacket
     {
         #region fields
@@ -30,7 +29,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// get or set the andx packet.
         /// </summary>
-        [CLSCompliant(false)]
         public SmbPacket AndxPacket
         {
             get
@@ -48,7 +46,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Get the type of the packet: Request or Response, and Single or Compounded.
         /// </summary>
         /// <returns>the type of the packet.</returns>
-        [CLSCompliant(false)]
         public override SmbPacketType PacketType
         {
             get
@@ -70,7 +67,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// Used to set the AndXOffset field of child class
         /// </summary>
-        [CLSCompliant(false)]
         protected abstract ushort AndXOffset
         {
             get;
@@ -125,7 +121,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// to encode the SmbParameters and SmbDada into bytes.
         /// </summary>
         /// <returns>the bytes array of SmbParameters, SmbDada, and AndX if existed.</returns>
-        [CLSCompliant(false)]
         protected byte[] GetBytesWithoutHeader(bool isHeaderRequest, ushort andXOffset)
         {
             this.AndXOffset = (ushort)(this.ParametersSize + this.DataSize + andXOffset);

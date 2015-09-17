@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbDeleteDirectory Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbDeleteDirectoryResponsePacket : SmbSingleResponsePacket 
     {
         #region Fields

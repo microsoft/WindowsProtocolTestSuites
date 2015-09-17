@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FSCTL_SET_ZERO_ON_DEALLOCATION 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlSetZeroOnDeallocationRequestPacket : FsccEmptyPacket
     {
         #region Properties

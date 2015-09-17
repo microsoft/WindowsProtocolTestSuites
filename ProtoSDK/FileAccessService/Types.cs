@@ -26,7 +26,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// <summary>
         /// the message identity.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong MessageId
         {
             get
@@ -75,7 +74,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// </summary>
         /// <param name="messageId">the message identity.</param>
         /// <param name="isComsumed">true: the messageId has been used in request packet.</param>
-        [CLSCompliant(false)]
         public MessageIdStatus(ulong messageId, bool isComsumed)
         {
             this.MessageId = messageId;
@@ -104,7 +102,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
     /// The ImpersonationLevel used FileServiceBaseTransport.Connect()
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsImpersonationLevel : uint
     {
         /// <summary>
@@ -236,7 +233,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
     /// The CreateDisposition used FileServiceBaseTransport.Connect()
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsCreateDisposition : uint
     {
         /// <summary>
@@ -281,7 +277,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
     /// </summary>
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum FsCreateOption : uint
     {
         /// <summary>
@@ -424,7 +419,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
     /// This can be used in DesiredAccess parameter of FileServiceBaseTransport.Connect()
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32"), Flags()]
-    [CLSCompliant(false)]
     public enum FsDirectoryDesiredAccess : uint
     {
         /// <summary>
@@ -565,7 +559,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
     /// This can be used in DesiredAccess parameter of FileServiceBaseTransport.Connect()
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32"), Flags()]
-    [CLSCompliant(false)]
     public enum FsFileDesiredAccess : uint
     {
         /// <summary>
@@ -702,7 +695,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
     /// Fs_Ctl code, defined in [MS-FSCC] section 2.3
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
-    [CLSCompliant(false)]
     public enum FsCtlCode : uint
     {
         /// <summary>
@@ -938,7 +930,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// <summary>
         /// The operation code for the particular operation. For more information on valid operation codes, see 2.5.4.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort RapOPCode;
 
         /// <summary>
@@ -989,7 +980,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// Remote Administration Protocol command. The following table lists error codes that have particular meaning
         /// to the Remote Administration Protocol, as indicated in this specification.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Win32ErrorCode;
 
         /// <summary>
@@ -997,7 +987,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// contained in the low 16 bits of a variable-length field in the Remote Administration Protocol response
         /// buffer. This is to derive the actual byte offset from the start of the response buffer for that field.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Converter;
 
         /// <summary>
@@ -1049,7 +1038,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// <summary>
         /// it uniquely identifies this packet
         /// </summary>
-        [CLSCompliant(false)]
         public ushort messageId;
 
         /// <summary>

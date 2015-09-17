@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// fscc standard packet, has payload 
     /// </summary>
     /// <typeparam name = "PayloadType">the type of the fscc packet payload </typeparam>
-    [CLSCompliant(false)]
     public class FsccStandardPacket<PayloadType> : FsccPacket where PayloadType : struct
     {
         #region Properties

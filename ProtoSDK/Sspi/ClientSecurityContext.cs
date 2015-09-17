@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
     /// <summary>
     /// Abstract base class for client SecurityContext, SecurityContext used by client must be derived from this class.
     /// </summary>
-    [CLSCompliant(false)]
     public abstract class ClientSecurityContext : SecurityContext
     {
         /// <summary>

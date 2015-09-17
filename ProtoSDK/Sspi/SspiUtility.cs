@@ -106,7 +106,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <exception cref="ArgumentNullException">
         /// Thrown when securityBuffers is null.
         /// </exception>
-        [CLSCompliant(false)]
         public static byte[] ConcatenateSecurityBuffers(SecurityBuffer[] securityBuffers, params SecurityBufferType[] targetTypes)
         {
             if (securityBuffers == null || securityBuffers.Length == 0)
@@ -134,7 +133,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <exception cref="ArgumentNullException">
         /// Thrown when securityBuffers is null.
         /// </exception>
-        [CLSCompliant(false)]
         public static byte[] ConcatenateReadWriteSecurityBuffers(
             SecurityBuffer[] securityBuffers, 
             params SecurityBufferType[] targetTypes)
@@ -171,7 +169,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <exception cref="SspiException">
         /// Total length of security buffers is not enough.
         /// </exception>
-        [CLSCompliant(false)]
         public static void UpdateSecurityBuffers(SecurityBuffer[] securityBuffers, SecurityBufferType targetType, byte[] buffer)
         {
             UpdateSecurityBuffers(securityBuffers, new SecurityBufferType[] { targetType }, buffer);
@@ -194,7 +191,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <exception cref="SspiException">
         /// Total length of security buffers is not enough.
         /// </exception>
-        [CLSCompliant(false)]
         public static void UpdateSecurityBuffers(SecurityBuffer[] securityBuffers, SecurityBufferType[] targetTypes, byte[] buffer)
         {
             if (securityBuffers == null || securityBuffers.Length == 0)

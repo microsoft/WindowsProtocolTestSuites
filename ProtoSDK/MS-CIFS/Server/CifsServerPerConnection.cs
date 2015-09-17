@@ -49,7 +49,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The Capabilities flags of the client
         /// </summary>
-        [CLSCompliant(false)]
         public Capabilities ClientCapabilites
         {
             get
@@ -66,7 +65,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The identification to the connection.
         /// </summary>
-        [CLSCompliant(false)]
         public object Identity
         {
             get
@@ -266,7 +264,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// A sequence number for the next signed request being sent.
         /// </summary>
-        [CLSCompliant(false)]
         public uint ServerNextReceiveSequenceNumber
         {
             get
@@ -284,7 +281,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// A list of the expected sequence numbers for the responses of outstanding signed requests, indexed by
         /// multiplex Id.
         /// </summary>
-        [CLSCompliant(false)]
         public ReadOnlyDictionary<ushort, ulong> ServerSendSequenceNumbers
         {
             get
@@ -318,7 +314,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The negotiated maximum size, in bytes, for SMB messages sent between 
         /// the client and the server.
         /// </summary>
-        [CLSCompliant(false)]
         public uint ClientMaxBufferSize
         {
             get
@@ -335,7 +330,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The multiplex id.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MultiplexId
         {
             get
@@ -371,7 +365,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// The maximum number of outstanding SMB operations the server supports.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ClientMaxMpxCount
         {
             get
@@ -392,7 +385,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <param name="request">the last request packet.</param>
         /// <exception cref="System.InvalidOperationException">the msg should be request.</exception>
-        [CLSCompliant(false)]
         public void UpdateSequenceNumber(SmbPacket request)
         {
             // only request can be used to UpdateSequenceNumber:
@@ -425,7 +417,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <param name="response">the last response packet.</param>
         /// <exception cref="System.InvalidOperationException">the msg should be response.</exception>
-        [CLSCompliant(false)]
         public void RemoveSequenceNumber(SmbPacket response)
         {
             this.serverSendSequenceNumbers.Remove(response.SmbHeader.Mid);
@@ -439,7 +430,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// A UID(UserId) represents an authenticated SMB session.
         /// </summary>
         /// <returns>The UserId</returns>
-        [CLSCompliant(false)]
         public ushort GenerateUID()
         {
             return ++this.nextSessionId;
@@ -450,7 +440,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// A file handle represents an open file on the server.
         /// </summary>
         /// <returns>The FID</returns>
-        [CLSCompliant(false)]
         public ushort GenerateFID()
         {
             return ++this.nextFileId;
@@ -461,7 +450,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// A search handle represents an open file on the server.
         /// </summary>
         /// <returns>The SID</returns>
-        [CLSCompliant(false)]
         public ushort GenerateSID()
         {
             return ++this.nextFileId;
@@ -472,7 +460,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// A TID represents an open connection to a share, otherwise known as a tree connect.
         /// </summary>
         /// <returns>The TID</returns>
-        [CLSCompliant(false)]
         public ushort GenerateTID()
         {
             return ++this.nextTreeId;
@@ -501,7 +488,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Remove a session from this SessionTable.
         /// </summary>
         /// <param name="sessionId">The session Id.</param>
-        [CLSCompliant(false)]
         public void RemoveSession(ushort sessionId)
         {
             lock (this.sessionTable)
@@ -515,7 +501,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Get the session from this SessionTables.
         /// </summary>
         /// <param name="sessionId">The session id.</param>
-        [CLSCompliant(false)]
         public CifsServerPerSession GetSession(ushort sessionId)
         {
             lock (this.sessionTable)
@@ -538,7 +523,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="request">The request to add.</param>
         /// <exception cref="System.ArgumentNullException">the request is null</exception>
         /// <exception cref="System.ArgumentException">the request already exists</exception>
-        [CLSCompliant(false)]
         public void AddPendingRequest(SmbPacket request)
         {
             lock (this.pendingRequestTable)
@@ -552,7 +536,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Remove a pending request from this PendingRequestTable.
         /// </summary>
         /// <param name="mid">The multiplex Id of the request to remove.</param>
-        [CLSCompliant(false)]
         public void RemovePendingRequest(ushort mid)
         {
             lock (this.pendingRequestTable)
@@ -567,7 +550,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <param name="mid">The multiplex Id of the request to query.</param>
         /// <returns>Return the request packet per mid. If not exist, return null.</returns>
-        [CLSCompliant(false)]
         public SmbPacket GetPendingRequest(ushort mid)
         {
             lock (this.pendingRequestTable)

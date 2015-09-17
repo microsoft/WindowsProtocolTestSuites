@@ -29,7 +29,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <summary>
         /// Least significant digits.
         /// </summary>
-        [CLSCompliant(false)]
         public uint LowPart;
 
         /// <summary>
@@ -67,32 +66,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <summary>
         /// Specifies the size, in bytes, of the header portion. If zero, no header is used.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Header;
 
         /// <summary>
         /// Specifies the maximum size, in bytes, of the trailer portion. If zero, no trailer is used.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Trailer;
 
         /// <summary>
         /// Specifies the size, in bytes, of the largest message that can be encapsulated.
         /// </summary>
-        [CLSCompliant(false)]
         public uint MaximumMessage;
 
         /// <summary>
         /// Specifies the number of buffers to pass.
         /// </summary>
-        [CLSCompliant(false)]
         public uint Buffers;
 
         /// <summary>
         /// Specifies the preferred integral size of the messages. For example, eight indicates that messages should be
         /// of size zero mod eight for optimal performance. Messages other than this block size can be padded.
         /// </summary>
-        [CLSCompliant(false)]
         public uint BlockSize;
     }
 
@@ -870,45 +864,38 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <summary>
         /// Protocol used to establish this connection. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Protocol;
 
         /// <summary>
         /// Algorithm identifier (ALG_ID) for the bulk encryption cipher used by this connection
         /// </summary>
-        [CLSCompliant(false)]
         public uint Cipher;
 
         /// <summary>
         /// Strength of the bulk encryption cipher, in bits. Can be one of the following values: 0, 40, 56, 128, 168,
         /// or 256.
         /// </summary>
-        [CLSCompliant(false)]
         public uint CipherStrength;
 
         /// <summary>
         /// ALG_ID indicating the hash used for generating Message Authentication Codes (MACs). 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Hash;
 
         /// <summary>
         /// Strength of the hash, in bits: 128 or 160.
         /// </summary>
-        [CLSCompliant(false)]
         public uint HashStrength;
 
         /// <summary>
         /// ALG_ID indicating the key exchange algorithm used to generate the shared master secret
         /// </summary>
-        [CLSCompliant(false)]
         public uint Exch;
 
         /// <summary>
         /// Strength of the key exchange, in bits. Typically, this member contains one of the following values: 512,
         /// 768, 1024, or 2048.
         /// </summary>
-        [CLSCompliant(false)]
         public uint ExchStrength;
     }
 

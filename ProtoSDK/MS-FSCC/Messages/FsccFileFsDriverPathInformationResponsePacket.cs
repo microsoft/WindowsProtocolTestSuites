@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FileFsDriverPathInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileFsDriverPathInformationResponsePacket : FsccStandardPacket<FileFsDriverPathInformation>
     {
         #region Properties

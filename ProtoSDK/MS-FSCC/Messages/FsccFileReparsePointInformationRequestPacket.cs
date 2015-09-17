@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FileReparsePointInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileReparsePointInformationRequestPacket : FsccEmptyPacket
     {
         #region Properties

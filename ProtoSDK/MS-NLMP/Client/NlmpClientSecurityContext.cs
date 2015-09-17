@@ -13,7 +13,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
     /// this class provide the Gss Api interfaces, such as Sign/Verify/Encrypt/Decrypt.
     /// it will invoke the NlmpUtility and NlmpClient to implement the features.
     /// </summary>
-    [CLSCompliant(false)]
     public class NlmpClientSecurityContext : ClientSecurityContext
     {
         #region Fields
@@ -163,7 +162,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// Gets or sets sequence number for Verify, Encrypt and Decrypt message.
         /// For Digest SSP, it must be 0.
         /// </summary>
-        [CLSCompliant(false)]
         public override uint SequenceNumber
         {
             get
@@ -180,7 +178,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <summary>
         /// Package type
         /// </summary>
-        [CLSCompliant(false)]
         public override SecurityPackageType PackageType
         {
             get
@@ -193,7 +190,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <summary>
         /// Queries the sizes of the structures used in the per-message functions.
         /// </summary>
-        [CLSCompliant(false)]
         public override SecurityPackageContextSizes ContextSizes
         {
             get
@@ -296,7 +292,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// it can contain none or some token security buffer, in which the signature will be stored.
         /// </param>
         /// <exception cref="ArgumentNullException">the securityBuffers must not be null</exception>
-        [CLSCompliant(false)]
         public override void Encrypt(params SecurityBuffer[] securityBuffers)
         {
             NlmpUtility.UpdateSealingKeyForConnectionlessMode(
@@ -323,7 +318,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// </param>
         /// <returns>the encrypt result, if verify, it's the verify result.</returns>
         /// <exception cref="ArgumentNullException">the securityBuffers must not be null</exception>
-        [CLSCompliant(false)]
         public override bool Decrypt(params SecurityBuffer[] securityBuffers)
         {
             NlmpUtility.UpdateSealingKeyForConnectionlessMode(
@@ -350,7 +344,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// </param>
         /// <exception cref="ArgumentNullException">the securityBuffers must not be null</exception>
         /// <exception cref="ArgumentException">securityBuffers must contain signature to store signature</exception>
-        [CLSCompliant(false)]
         public override void Sign(params SecurityBuffer[] securityBuffers)
         {
             NlmpUtility.UpdateSealingKeyForConnectionlessMode(
@@ -377,7 +370,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// </param>
         /// <exception cref="ArgumentNullException">the securityBuffers must not be null</exception>
         /// <exception cref="ArgumentException">securityBuffers must contain signature to verify</exception>
-        [CLSCompliant(false)]
         public override bool Verify(params SecurityBuffer[] securityBuffers)
         {
             NlmpUtility.UpdateSealingKeyForConnectionlessMode(
@@ -420,7 +412,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
             "Microsoft.Maintainability",
             "CA1500:VariableNamesShouldNotMatchFieldNames"
             )]
-        [CLSCompliant(false)]
         public void GetSecurityToken(
             NlmpVersion ntlmVersion,
             string domainName,

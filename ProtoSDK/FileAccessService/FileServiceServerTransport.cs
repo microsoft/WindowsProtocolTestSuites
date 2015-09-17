@@ -10,7 +10,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
     /// <summary>
     /// The transport of FileService Server
     /// </summary>
-    [CLSCompliant(false)]
     public abstract class FileServiceServerTransport
     {
         #region Property
@@ -45,7 +44,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// <param name="listenPort">the port for serverto listen </param>
         /// <param name="credential">Credential to accept a connection.</param>
         /// <param name="ipAddress">server's ipAddress</param>
-        [CLSCompliant(false)]
         public abstract void Start(ushort listenPort, AccountCredential credential, IPAddress ipAddress);
         #endregion
 
@@ -259,7 +257,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// <param name="connection">the connection between server and client</param>
         /// <param name="status">error code</param>
         /// <param name="requestPacket">the request packet to send the error response</param>
-        [CLSCompliant(false)]
         public abstract void SendErrorResponse(
             IFileServiceServerConnection connection, 
             uint status,
@@ -284,7 +281,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// stop the server, disconnect all client and dispose server.
         /// </summary>
         /// <param name="listenPort">the port for serverto listen </param>
-        [CLSCompliant(false)]
         public abstract void Stop(ushort listenPort);
 
 

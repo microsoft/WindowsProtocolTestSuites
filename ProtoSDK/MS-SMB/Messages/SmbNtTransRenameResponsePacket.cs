@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// Packets for SmbNtTransactRename Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbNtTransRenameResponsePacket : Cifs.SmbNtTransactRenameResponsePacket
     {
         #region Convert from base class

@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FSCTL_IS_PATHNAME_VALID 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlIsPathnameValidRequestPacket : FsccStandardPacket<FSCTL_IS_PATHNAME_VALID_Request>
     {
         #region Properties

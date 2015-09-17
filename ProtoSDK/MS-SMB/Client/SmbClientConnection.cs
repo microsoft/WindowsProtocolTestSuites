@@ -124,7 +124,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <summary>
         /// GssApi 
         /// </summary>
-        [CLSCompliant(false)]
         public ClientSecurityContext GssApi
         {
             get

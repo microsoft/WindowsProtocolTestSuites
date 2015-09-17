@@ -12,7 +12,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbWriteMpxSecondary Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbWriteMpxSecondaryRequestPacket : SmbSingleRequestPacket
     {
         #region Fields

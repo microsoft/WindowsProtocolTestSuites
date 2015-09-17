@@ -13,7 +13,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// packet decoder
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbServerDecodePacket : CifsServerDecodePacket
     {
         /// <summary>
@@ -54,7 +53,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name = "consumedLength">the length of message bytes consumed by decoder. </param>
         /// <param name = "expectedLength">the length of message bytes the decoder expects to receive. </param>
         /// <returns>the stack packets decoded from the received message bytes. </returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
         public SmbPacket[] DecodePacket(
             object endPointIdentity, byte[] messageBytes, out int consumedLength, out int expectedLength)
@@ -187,7 +185,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name="channel">the channel of bytes to read</param>
         /// <param name="smbBatchedRequest">the batched request</param>
         /// <returns>the consumed length of batched request packet</returns>
-        [CLSCompliant(false)]
         protected override int DecodeBatchedRequest(Channel channel, SmbBatchedRequestPacket smbBatchedRequest)
         {
             // do not process batched request.
@@ -203,7 +200,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// the new request packet. 
         /// the null means that the utility don't know how to create the request.
         /// </returns>
-        [CLSCompliant(false)]
         protected override SmbPacket CreateSmbRequestPacket(byte[] messageBytes)
         {
             SmbPacket smbRequest = null;

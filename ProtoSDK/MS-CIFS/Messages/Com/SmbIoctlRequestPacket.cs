@@ -12,7 +12,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbIoctl Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbIoctlRequestPacket : SmbSingleRequestPacket
     {
         #region Fields

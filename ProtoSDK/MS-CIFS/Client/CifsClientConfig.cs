@@ -49,7 +49,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// the buffer size in NCB to send or receive data.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort NcbBufferSize
         {
             get
@@ -138,7 +137,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="buffSize">the buffer size in NCB to send or receive data</param>
         /// <param name="maxSessions">the max sessions(ncb_callname[0]) used in NCBRESET.</param>
         /// <param name="maxNames">the max names(ncb_callname[2]) used in NCBRESET.</param>
-        [CLSCompliant(false)]
         public CifsClientConfig(
             ushort buffSize,
             byte maxSessions,

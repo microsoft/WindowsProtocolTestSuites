@@ -199,7 +199,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     //  <remarks>
     //   .\TD\MS-LSAD\b9f30c12-96d8-459e-80c3-66c4ceabccb2.xml
     //  </remarks>
-    [CLSCompliant(false)]
     public partial struct _LUID
     {
         /// <summary>
@@ -220,7 +219,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [Flags]
-    [CLSCompliant(false)]
     public enum TokenMandatoryPolicyValue : uint
     {
         /// <summary>
@@ -249,7 +247,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// The authorization context, also referred to as a Token, is a collection of the groups associated
     /// with the client principal, as well as additional optional policy information.
     /// </summary>
-    [CLSCompliant(false)]
     public class Token
     {
         /// <summary>

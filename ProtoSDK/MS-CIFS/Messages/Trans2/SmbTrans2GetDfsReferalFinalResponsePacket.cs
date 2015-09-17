@@ -13,7 +13,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbTrans2GetDfsReferalFinal Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTrans2GetDfsReferalFinalResponsePacket : SmbTransaction2FinalResponsePacket
     {
         #region Fields

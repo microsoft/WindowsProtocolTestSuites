@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbNtTransactError Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbNtTransactInterimResponsePacket : SmbSingleResponsePacket 
     {
         #region Fields

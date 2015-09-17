@@ -51,7 +51,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// The set of client configuration flags (section 2.2.2.5) that specify the full set of capabilities of the
         /// client.
         /// </summary>
-        [CLSCompliant(false)]
         public NegotiateTypes ClientConfigFlags
         {
             get

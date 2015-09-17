@@ -73,7 +73,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// The unique 16-bit SMB Fid identifying this Open, as described in [CIFS] section 4.2.1. The FID MUST be 
         /// unique on this connection.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort SmbFid
         {
             get
@@ -156,7 +155,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <summary>
         /// A variable-length string that contains the Unicode path name that the Open is performed.
         /// </summary>
-        [CLSCompliant(false)]
         public NtTransactDesiredAccess GrantedAccess
         {
             get

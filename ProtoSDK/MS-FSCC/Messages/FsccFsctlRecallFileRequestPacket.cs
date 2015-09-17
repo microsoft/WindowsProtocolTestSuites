@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FSCTL_RECALL_FILE 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlRecallFileRequestPacket : FsccEmptyPacket
     {
         #region Properties

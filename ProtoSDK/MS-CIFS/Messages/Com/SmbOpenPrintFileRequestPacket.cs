@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbOpenPrintFile Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbOpenPrintFileRequestPacket : SmbSingleRequestPacket
     {
         #region Fields

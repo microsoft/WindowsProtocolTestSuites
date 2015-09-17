@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FileTrackingInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileTrackingInformationRequestPacket : FsccEmptyPacket
     {
         #region Properties

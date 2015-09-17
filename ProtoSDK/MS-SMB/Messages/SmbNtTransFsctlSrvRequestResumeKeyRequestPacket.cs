@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// resume key 
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbNtTransFsctlSrvRequestResumeKeyRequestPacket : Cifs.SmbNtTransactIoctlRequestPacket
     {
         #region Convert from base class

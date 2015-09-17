@@ -14,7 +14,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
     /// The security context of nlmp server sspi. This class is used to provide sspi APIs, specified in GSS-API, such
     /// as functions Accept/Sign/Verify/Encrypt/Decrypt.
     /// </summary>
-    [CLSCompliant(false)]
     public class NlmpServerSecurityContext : ServerSecurityContext
     {
         #region Consts
@@ -182,7 +181,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// Gets or sets sequence number for Verify, Encrypt and Decrypt message.
         /// For Digest SSP, it must be 0.
         /// </summary>
-        [CLSCompliant(false)]
         public override uint SequenceNumber
         {
             get
@@ -199,7 +197,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <summary>
         /// Package type
         /// </summary>
-        [CLSCompliant(false)]
         public override SecurityPackageType PackageType
         {
             get
@@ -212,7 +209,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <summary>
         /// Queries the sizes of the structures used in the per-message functions.
         /// </summary>
-        [CLSCompliant(false)]
         public override SecurityPackageContextSizes ContextSizes
         {
             get
@@ -240,7 +236,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <param name="isDomainJoined">whether the server joined to domain</param>
         /// <param name="netbiosDomainName">the netbios domain name of server</param>
         /// <param name="netbiosMachineName">the netbios machine name of server</param>
-        [CLSCompliant(false)]
         public NlmpServerSecurityContext(
             NegotiateTypes flags,
             NlmpClientCredential clientCredential,
@@ -270,7 +265,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <param name="verifyAuthenticatePacketInDcMethod">
         /// the delegate method used to verify authentication packet in AD/Account Database;        
         /// </param>
-        [CLSCompliant(false)]
         public NlmpServerSecurityContext(
             NegotiateTypes flags,
             bool isDomainJoined,
@@ -341,7 +335,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// it can contain none or some token security buffer, in which the signature will be stored.
         /// </param>
         /// <exception cref="ArgumentNullException">the securityBuffers must not be null</exception>
-        [CLSCompliant(false)]
         public override void Encrypt(params SecurityBuffer[] securityBuffers)
         {
             NlmpUtility.UpdateSealingKeyForConnectionlessMode(
@@ -368,7 +361,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// </param>
         /// <returns>the encrypt result, if verify, it's the verify result.</returns>
         /// <exception cref="ArgumentNullException">the securityBuffers must not be null</exception>
-        [CLSCompliant(false)]
         public override bool Decrypt(params SecurityBuffer[] securityBuffers)
         {
             NlmpUtility.UpdateSealingKeyForConnectionlessMode(
@@ -395,7 +387,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// </param>
         /// <exception cref="ArgumentNullException">the securityBuffers must not be null</exception>
         /// <exception cref="ArgumentException">securityBuffers must contain signature to store signature</exception>
-        [CLSCompliant(false)]
         public override void Sign(params SecurityBuffer[] securityBuffers)
         {
             NlmpUtility.UpdateSealingKeyForConnectionlessMode(
@@ -422,7 +413,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// </param>
         /// <exception cref="ArgumentNullException">the securityBuffers must not be null</exception>
         /// <exception cref="ArgumentException">securityBuffers must contain signature to verify</exception>
-        [CLSCompliant(false)]
         public override bool Verify(params SecurityBuffer[] securityBuffers)
         {
             NlmpUtility.UpdateSealingKeyForConnectionlessMode(

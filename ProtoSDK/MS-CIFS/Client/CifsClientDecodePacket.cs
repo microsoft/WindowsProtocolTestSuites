@@ -119,7 +119,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="messageBytes">bytes contains packet</param>
         /// <param name="consumedLength">the bytes length which are consumed when decode.</param>
         /// <returns>the decoded packet from the bytes array. if failed, return null.</returns>
-        [CLSCompliant(false)]
         protected SmbPacket DecodeSmbResponseFromBytes(
             int connectId,
             byte[] messageBytes,
@@ -218,7 +217,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="request">the request of the response.</param>
         /// <param name="smbBatchedResponse">the batched response</param>
         /// <returns>the consumed length of batched response packet</returns>
-        [CLSCompliant(false)]
         protected virtual int DecodeBatchedRequest(
             Channel channel,
             SmbPacket request, SmbBatchedResponsePacket smbBatchedResponse)
@@ -241,7 +239,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// the new response packet. 
         /// the null means that the utility don't know how to create the response.
         /// </returns>
-        [CLSCompliant(false)]
         protected virtual SmbPacket CreateSmbResponsePacket(
             SmbPacket request,
             SmbHeader smbHeader,

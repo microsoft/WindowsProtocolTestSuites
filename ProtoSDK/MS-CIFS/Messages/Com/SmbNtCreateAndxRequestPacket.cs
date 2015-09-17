@@ -11,7 +11,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbNtCreateAndx Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbNtCreateAndxRequestPacket : SmbBatchedRequestPacket
     {
         #region Fields

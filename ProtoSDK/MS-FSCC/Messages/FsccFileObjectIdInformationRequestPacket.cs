@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FileObjectIdInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileObjectIdInformationRequestPacket : FsccEmptyPacket
     {
         #region Properties

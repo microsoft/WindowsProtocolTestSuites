@@ -12,7 +12,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     ///  Packets for SmbTransaction Request
     /// </summary>
-    [CLSCompliant(false)]
     public abstract class SmbTransactionRequestPacket : SmbSingleRequestPacket
     {
         #region Fields

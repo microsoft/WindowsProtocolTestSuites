@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FSCTL_OFFLOAD_WRITE
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlOffloadWriteResponsePacket : FsccStandardPacket<FSCTL_OFFLOAD_WRITE_OUTPUT>
     {
         #region Properties

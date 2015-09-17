@@ -13,7 +13,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbNtTransactCreate Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbNtTransactCreateRequestPacket : SmbNtTransactRequestPacket
     {
         #region Fields

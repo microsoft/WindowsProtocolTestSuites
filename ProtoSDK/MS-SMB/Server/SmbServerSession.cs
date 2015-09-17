@@ -78,7 +78,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <summary>
         /// The UID associated with this Session.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Uid
         {
             get
@@ -95,7 +94,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <summary>
         /// Session Id of the Session.
         /// </summary>
-        [CLSCompliant(false)]
         public long SessionId
         {
             get

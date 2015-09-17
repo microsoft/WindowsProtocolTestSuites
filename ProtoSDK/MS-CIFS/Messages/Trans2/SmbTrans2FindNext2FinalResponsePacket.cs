@@ -13,7 +13,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbTrans2FindNext2Final Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTrans2FindNext2FinalResponsePacket : SmbTransaction2FinalResponsePacket
     {
         #region Fields
@@ -24,7 +23,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// the information level
         /// </summary>
-        [CLSCompliant(false)]
         protected FindInformationLevel informationLevel;
 
         private bool isResumeKeyExisted;
@@ -111,7 +109,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// Constructor: Create a request directly from a buffer.
         /// </summary>
-        [CLSCompliant(false)]
         public SmbTrans2FindNext2FinalResponsePacket(FindInformationLevel informationLevel,
             bool isResumeKeyExisted)
         {

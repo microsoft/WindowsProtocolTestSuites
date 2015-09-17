@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FileFullEaInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileFullEaInformationRequestPacket : FsccStandardPacket<FileFullEaInformation>
     {
         #region Properties

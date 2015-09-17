@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FSCTL_GET_COMPRESSION 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlGetCompressionResponsePacket : FsccStandardPacket<FSCTL_GET_COMPRESSION_Reply>
     {
         #region Properties

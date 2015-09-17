@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbNoAndxCommand Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbNoAndxCommandResponsePacket : SmbSingleResponsePacket 
     {
         #region Fields

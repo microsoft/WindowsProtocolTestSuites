@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// Packets for SmbLogoffAndx Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbLogoffAndxResponsePacket : Cifs.SmbLogoffAndxResponsePacket
     {
         #region Convert from base class

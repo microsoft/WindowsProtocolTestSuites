@@ -14,7 +14,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Used as transport layer of MS-DFSC protocol
     /// </summary>
-    [CLSCompliant(false)]
     public class CifsClientTransport : FileServiceClientTransport
     {
         #region Fields
@@ -261,7 +260,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="payload">RESP_GET_DFS_REFERRAL structure in byte array</param>
         /// <param name="timeout">The pending time to get server's response</param> 
         /// <exception cref="System.InvalidOperationException">The transport is not connected</exception>
-        [CLSCompliant(false)]
         public override void ExpectDfscPayload(TimeSpan timeout, out uint status, out byte[] payload)
         {
             if (this.cifsClient == null)
@@ -390,7 +388,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// specified in the name field already exists</param>
         /// <param name="createOption">Specifies the options to be applied when creating or opening the file</param>
         /// <exception cref="System.InvalidOperationException">Thrown if there is any error occurred</exception>
-        [CLSCompliant(false)]
         public override void Create(string fileName, FsFileDesiredAccess desiredAccess, FsImpersonationLevel impersonationLevel,
             FsFileAttribute fileAttribute, FsCreateDisposition createDisposition, FsCreateOption createOption)
         {
@@ -410,7 +407,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// specified in the name field already exists</param>
         /// <param name="createOption">Specifies the options to be applied when creating or opening the file</param>
         /// <exception cref="System.InvalidOperationException">Thrown if there is any error occurred</exception>
-        [CLSCompliant(false)]
         public override void Create(string directoryName, FsDirectoryDesiredAccess desiredAccess, FsImpersonationLevel impersonationLevel,
             FsFileAttribute fileAttribute, FsCreateDisposition createDisposition, FsCreateOption createOption)
         {
@@ -429,7 +425,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// a uint value that specifies the status of response packet.
         /// </returns>
         /// <exception cref="System.InvalidOperationException">Thrown if there is any error occurred</exception>
-        [CLSCompliant(false)]
         public override uint Write(TimeSpan timeout, ulong offset, byte[] data)
         {
             throw new NotImplementedException();
@@ -447,7 +442,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// a uint value that specifies the status of response packet.
         /// </returns>
         /// <exception cref="System.InvalidOperationException">Thrown if there is any error occurred</exception>
-        [CLSCompliant(false)]
         public override uint Read(TimeSpan timeout, ulong offset, uint length, out byte[] data)
         {
             throw new NotImplementedException();
@@ -466,7 +460,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// a uint value that specifies the status of response packet.
         /// </returns>
         /// <exception cref="System.InvalidOperationException">Thrown if there is any error occurred</exception>
-        [CLSCompliant(false)]
         public override uint IoControl(TimeSpan timeout, uint controlCode, byte[] input, out byte[] output)
         {
             throw new NotImplementedException();
@@ -488,7 +481,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// a uint value that specifies the status of response packet.
         /// </returns>
         /// <exception cref="System.InvalidOperationException">Thrown if there is any error occurred</exception>
-        [CLSCompliant(false)]
         public override uint IoControl(TimeSpan timeout, uint controlCode, byte[] input, out byte[] inputResponse,
             out byte[] outputResponse, uint maxInputResponse, uint maxOutputResponse)
         {
@@ -507,7 +499,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// a uint value that specifies the status of response packet.
         /// </returns>
         /// <exception cref="System.InvalidOperationException">Thrown if there is any error occurred</exception>
-        [CLSCompliant(false)]
         public override uint IoControl(TimeSpan timeout, FsCtlCode controlCode, byte[] input, out byte[] output)
         {
             throw new NotImplementedException();
@@ -528,7 +519,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// a uint value that specifies the status of response packet.
         /// </returns>
         /// <exception cref="System.InvalidOperationException">Thrown if there is any error occurred</exception>
-        [CLSCompliant(false)]
         public override uint IoControl(TimeSpan timeout, FsCtlCode controlCode, byte[] input, out byte[] inputResponse,
             out byte[] outputResponse, uint maxInputResponse, uint maxOutputResponse)
         {

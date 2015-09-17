@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     ///   Packets for SmbTransMailslotWrite Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTransMailslotWriteSuccessResponsePacket : SmbTransactionSuccessResponsePacket
     {
         #region Fields

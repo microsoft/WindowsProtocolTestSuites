@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
     /// <summary>
     /// NTLM server SecurityContext configuration
     /// </summary>
-    [CLSCompliant(false)]
     public class NlmpServerSecurityConfig : SecurityConfig
     {
         /// <summary>
@@ -134,7 +133,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <summary>
         /// Negotiation flags
         /// </summary>
-        [CLSCompliant(false)]
         public NegotiateTypes NegotiateFlags
         {
             get
@@ -152,7 +150,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <param name="isDomainJoined">Joined in a domain or not</param>
         /// <param name="netbiosDomainName">Netbios domain name.</param>
         /// <param name="netbiosMachineName">Netbios machine name.</param>
-        [CLSCompliant(false)]
         public NlmpServerSecurityConfig(
             NegotiateTypes flags,
             NlmpClientCredential clientCredential,

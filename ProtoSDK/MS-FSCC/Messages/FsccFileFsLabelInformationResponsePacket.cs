@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FileFsLabelInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileFsLabelInformationResponsePacket : FsccEmptyPacket
     {
         #region Properties

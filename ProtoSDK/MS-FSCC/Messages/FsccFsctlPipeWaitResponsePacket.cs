@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FSCTL_PIPE_WAIT 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlPipeWaitResponsePacket : FsccStandardPacket<FsctlPipeWaitReplyStatus>
     {
         #region Properties

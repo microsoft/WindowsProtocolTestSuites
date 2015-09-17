@@ -11,7 +11,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
     /// <summary>
     /// An abstract class to store security context used in SSPI.
     /// </summary>
-    [CLSCompliant(false)]
     public abstract class SecurityContext
     {
 
@@ -263,7 +262,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// Gets or sets sequence number for Verify, Encrypt and Decrypt message.
         /// For Digest SSP, it must be 0.
         /// </summary>
-        [CLSCompliant(false)]
         public abstract uint SequenceNumber
         {
             get;

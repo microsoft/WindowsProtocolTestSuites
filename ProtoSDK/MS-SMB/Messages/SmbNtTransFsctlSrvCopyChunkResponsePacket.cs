@@ -10,7 +10,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// copy chunk. 
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbNtTransFsctlSrvCopyChunkResponsePacket : Cifs.SmbNtTransactIoctlResponsePacket
     {
         #region Fields

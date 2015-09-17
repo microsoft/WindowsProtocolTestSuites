@@ -10,7 +10,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// Packets for SmbTrans2FindNext2 Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTrans2FindNext2ResponsePacket : Cifs.SmbTrans2FindNext2FinalResponsePacket
     {
         #region Convert from base class

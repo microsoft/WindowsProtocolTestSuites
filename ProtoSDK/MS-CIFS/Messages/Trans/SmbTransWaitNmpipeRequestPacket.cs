@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbTransWaitNmpipe Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTransWaitNmpipeRequestPacket : SmbTransactionRequestPacket
     {
         #region Fields

@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// Packets for SmbTrans2FindNext2 Request 
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTrans2FindNext2RequestPacket : Cifs.SmbTrans2FindNext2RequestPacket
     {
         #region Fields

@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FileValidDataLengthInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileValidDataLengthInformationResponsePacket : FsccEmptyPacket
     {
         #region Properties

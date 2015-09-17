@@ -19,7 +19,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// And a context about CIFS with exposed.
     /// </summary>
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-    [CLSCompliant(false)]
     public class CifsClient : IDisposable
     {
         #region Const values used in CifsClient

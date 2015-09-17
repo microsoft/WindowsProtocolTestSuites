@@ -10,7 +10,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
     /// NTSTATUS
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum NtStatus : uint
     {
         /// <summary>

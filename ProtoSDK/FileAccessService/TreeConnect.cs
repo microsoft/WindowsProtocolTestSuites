@@ -48,7 +48,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// over which it was established. This value is typically represented as a 32-bit TreeId 
         /// in the SMB2 header.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong TreeId
         {
             get
@@ -65,7 +64,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// <summary>
         /// A pointer to the authenticated session that established this tree connect.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong SessionId
         {
             get
@@ -134,7 +132,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// <param name="connectionId">the connectionId of the treeconnect.</param>
         /// <param name="sessionId">the sessionId of the treeconnect.</param>
         /// <param name="treeId">the treeId of the treeconnect.</param>
-        [CLSCompliant(false)]
         public TreeConnect(int connectionId, ulong sessionId, ulong treeId)
         {
             this.GlobalIndex = 0;

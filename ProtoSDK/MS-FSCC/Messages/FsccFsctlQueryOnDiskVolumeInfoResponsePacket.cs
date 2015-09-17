@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FSCTL_QUERY_ON_DISK_VOLUME_INFO 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlQueryOnDiskVolumeInfoResponsePacket : FsccStandardPacket<FSCTL_QUERY_ON_DISK_VOLUME_INFO_Reply>
     {
         #region Properties

@@ -14,7 +14,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Used as transport layer of MS-DFSC protocol
     /// </summary>
-    [CLSCompliant(false)]
     public class CifsServerTransport : FileServiceServerTransport, IDisposable
     {
         #region Fields
@@ -97,7 +96,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="credential">Credential to accept a connection.</param>
         /// <param name="ipAddress">server's ipAddress</param>
         /// <exception cref="NotSupportedException">does not support this method.</exception>
-        [CLSCompliant(false)]
         public override void Start(ushort listenPort, AccountCredential credential, IPAddress ipAddress)
         {
             throw new NotSupportedException("does not support this method.");
@@ -125,7 +123,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <param name="listenPort">the port for serverto listen </param>
         /// <exception cref="NotSupportedException">does not support this method.</exception>
-        [CLSCompliant(false)]
         public override void Stop(ushort listenPort)
         {
             throw new NotSupportedException("does not support this method.");
@@ -713,7 +710,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection between server and client</param>
         /// <param name="status">error code</param>
         /// <param name="requestPacket">the request packet to send the error response</param>
-        [CLSCompliant(false)]
         public override void SendErrorResponse(
             IFileServiceServerConnection connection,
             uint status,

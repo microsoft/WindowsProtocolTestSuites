@@ -10,7 +10,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
     /// <summary>
     /// this class holds the credential of nlmp, such as the domain, username, password and so on.
     /// </summary>
-    [CLSCompliant(false)]
     public class NlmpClientCredential : AccountCredential
     {
         #region Fields

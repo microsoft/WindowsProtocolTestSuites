@@ -60,7 +60,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// with Open.DurableFileId as described below, combine to form the SMB2_FILEID described in 
         /// section 2.2.14.1. This value is the volatile portion of the identifier.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong Persistent
         {
             get
@@ -80,7 +79,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         ///  of this value combined with Open.FileId, as described above, form the SMB2_FILEID described 
         ///  in section 2.2.14.1. This value is the persistent portion of the identifier.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong Volatile
         {
             get
@@ -97,7 +95,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// <summary>
         /// A reference to the treeconnect.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong TreeConnectId
         {
             get
@@ -115,7 +112,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// A reference to the authenticated session, as specified in section 3.3.1.8, over which this open 
         /// was performed. If the file is not attached to a session at this time, its value MUST be 0.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong SessionId
         {
             get
@@ -150,7 +146,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// An open of a file or named pipe in the underlying local resource that is used to perform the 
         /// local operations, such as reading or writing, to the underlying object.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong LocalOpen
         {
             get
@@ -168,7 +163,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// The access granted on this open, as defined in section 2.2.13.1.
         /// </summary>
         /// 
-        [CLSCompliant(false)]
         public ulong GrantedAccess
         {
             get
@@ -202,7 +196,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// <summary>
         /// The current oplock state of the file. This value MUST be Held, Breaking, or None.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong OplockState
         {
             get
@@ -220,7 +213,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// The time-out value that indicates when an oplock that is breaking and has not received 
         /// an acknowledgment from the client will be acknowledged by the server.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong OplockTimeout
         {
             get
@@ -248,7 +240,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// A time-out value that indicates when a handle that has been preserved for durability 
         /// will be closed by the system if a client has not reclaimed it.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong DurableOpenTimeout
         {
             get
@@ -266,7 +257,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// A security descriptor that holds the original opener of the file. This allows the server 
         /// to determine if a caller that is trying to reestablish a durable open is allowed to do so.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong DurableOwner
         {
             get

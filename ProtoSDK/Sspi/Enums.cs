@@ -68,7 +68,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
     /// Reference: http://msdn.microsoft.com/en-us/library/aa375506(VS.85).aspx
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32"), Flags]
-    [CLSCompliant(false)]
     public enum ClientSecurityContextAttribute : uint
     {
         /// <summary>
@@ -172,7 +171,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
     /// Reference: http://msdn.microsoft.com/en-us/library/aa374703(VS.85).aspx
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32"), Flags]
-    [CLSCompliant(false)]
     public enum ServerSecurityContextAttribute : uint
     {
         /// <summary>
@@ -262,7 +260,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32"), 
     SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
-    [CLSCompliant(false)]
     public enum SecurityTargetDataRepresentation : uint
     {
         /// <summary>
@@ -280,7 +277,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
     /// Bit flags that indicate the type of buffer.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum SecurityBufferType : uint
     {
         /// <summary>
@@ -381,7 +377,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
     /// FQOP parameter type of EncryptMessage method
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum SECQOP_WRAP : uint
     {
         /// <summary>

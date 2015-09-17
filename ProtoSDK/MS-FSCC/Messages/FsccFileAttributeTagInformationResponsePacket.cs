@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FileAttributeTagInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileAttributeTagInformationResponsePacket : FsccStandardPacket<FileAttributeTagInformation>
     {
         #region Properties

@@ -14,7 +14,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// The OLD_LARGE_INTEGER structure is used to represent 
     /// a 64-bit signed integer value as two 32-bit integers.
     /// </summary>
-    [CLSCompliant(false)]
     public partial struct _OLD_LARGE_INTEGER
     {
         /// <summary>
@@ -35,7 +34,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     //  <remarks>
     //   MS-DTYP\e904b1ba-f774-4203-ba1b-66485165ab1a.xml
     //  </remarks>
-    [CLSCompliant(false)]
     public partial struct _LARGE_INTEGER
     {
 
@@ -50,7 +48,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// that contains a sequence of null-terminated strings, terminated by an 
     /// empty string (\0) so that the last two characters are both null terminators.
     /// </summary>
-    [CLSCompliant(false)]
     public partial struct _MULTI_SZ
     {
         /// <summary>
@@ -73,7 +70,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     //  <remarks>
     //   MS-DTYP\94a16bb6-c610-4cb9-8db6-26f15f560061.xml
     //  </remarks>
-    [CLSCompliant(false)]
     public partial struct _RPC_UNICODE_STRING
     {
 
@@ -111,7 +107,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// the number of 100-nanosecond intervals that have elapsed 
     /// since January 1,1601,Coordinated Universal Time(UTC).
     /// </summary>
-    [CLSCompliant(false)]
     public partial struct _FILETIME
     {
         /// <summary>
@@ -131,7 +126,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// structure members for the month,day,year,day of week,hour,
     /// minute,second and millisecond.
     /// </summary>
-    [CLSCompliant(false)]
     public partial struct _SYSTEMTIME
     {
         /// <summary>
@@ -179,7 +173,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// The UINT128 structure is intended to hold 128-bit unsigned 
     /// intergers, such as an IPv6 destination address.
     /// </summary>
-    [CLSCompliant(false)]
     public partial struct _UINT128
     {
         /// <summary>
@@ -197,7 +190,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// The ULARGE_INTEGER structure is used to represent
     /// a 64-bit unsigned integer value.
     /// </summary>
-    [CLSCompliant(false)]
     public partial struct _ULARGE_INTEGER
     {
         /// <summary>
@@ -211,7 +203,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// The SID_IDENTIFIER_AUTHORITY structure represents the top-level 
     /// authority of a security identifier (SID).
     /// </summary>
-    [CLSCompliant(false)]
     public struct _SID_IDENTIFIER_AUTHORITY
     {
         /// <summary>
@@ -232,7 +223,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     //  <remarks>
     //   MS-DTYP\d7e6e5a5-437c-41e5-8ba1-bdfd43e96cbc.xml
     //  </remarks>
-    [CLSCompliant(false)]
     public partial struct _RPC_SID_IDENTIFIER_AUTHORITY
     {
 
@@ -252,7 +242,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// The agent can be a Windows local system or domain. The agent generates 
     /// the SID when the security principal is created.
     /// </summary>
-    [CLSCompliant(false)]
     public struct _SID
     {
         /// <summary>
@@ -293,7 +282,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     //  <remarks>
     //   MS-DTYP\5cb97814-a1c2-4215-b7dc-76d1f4bfad01.xml
     //  </remarks>
-    [CLSCompliant(false)]
     public partial struct _RPC_SID
     {
 
@@ -326,7 +314,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [Flags]
-    [CLSCompliant(false)]
     public enum SECURITY_DESCRIPTOR_Control : ushort
     {
         /// <summary>
@@ -431,7 +418,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// logging should be applied to the object; and what kind of restrictions
     /// apply to the use of the security descriptor.
     /// </summary>
-    [CLSCompliant(false)]
     public partial struct _SECURITY_DESCRIPTOR
     {
         /// <summary>
@@ -529,7 +515,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// logging should be applied to the object; and what kind of restrictions
     /// apply to the use of the security descriptor.
     /// </summary>
-    [CLSCompliant(false)]
     public partial struct _RPC_SECURITY_DESCRIPTOR
     {
         /// <summary>
@@ -587,7 +572,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     ///  The RPC_STRING structure holds a counted string encoded
     ///  in the OEM code page.
     /// </summary>
-    [CLSCompliant(false)]
     public partial struct _RPC_STRING
     {
         /// <summary>
@@ -616,7 +600,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [Flags()]
-    [CLSCompliant(false)]
     public enum SECURITY_INFORMATION : uint
     {
         /// <summary>
@@ -852,7 +835,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// <summary>
     /// The ACE_HEADER structure defines the type and size of an access control entry (ACE).
     /// </summary>
-    [CLSCompliant(false)]
     public struct _ACE_HEADER
     {
         /// <summary>
@@ -884,7 +866,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// An access-allowed ACE allows access to an object for a specific trustee 
     /// identified by a security identifier (SID).
     /// </summary>
-    [CLSCompliant(false)]
     public struct _ACCESS_ALLOWED_ACE
     {
         /// <summary>
@@ -910,7 +891,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [Flags]
-    [CLSCompliant(false)]
     public enum ACCESS_OBJECT_ACE_Mask : uint
     {
         /// <summary>
@@ -961,7 +941,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [Flags]
-    [CLSCompliant(false)]
     public enum ACCESS_OBJECT_ACE_Flags : uint
     {
         /// <summary>
@@ -990,7 +969,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// The ACE also contains a GUID and a set of flags that control inheritance of 
     /// the ACE by child objects.
     /// </summary>
-    [CLSCompliant(false)]
     public partial struct _ACCESS_ALLOWED_OBJECT_ACE
     {
         /// <summary>
@@ -1055,7 +1033,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// The ACE also contains a GUID and a set of flags that control inheritance of 
     /// the ACE by child objects.
     /// </summary>
-    [CLSCompliant(false)]
     public partial struct _ACCESS_DENIED_OBJECT_ACE
     {
         /// <summary>
@@ -1117,7 +1094,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// controls access to an object. An access-denied ACE denies access 
     /// to an object for a specific trustee identified by a SID.
     /// </summary>
-    [CLSCompliant(false)]
     public struct _ACCESS_DENIED_ACE
     {
         /// <summary>
@@ -1143,7 +1119,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// that controls access to an object. An access-allowed ACE allows access 
     /// to an object for a specific trustee identified by a SID.
     /// </summary>
-    [CLSCompliant(false)]
     public partial struct _ACCESS_ALLOWED_CALLBACK_ACE
     {
         /// <summary>
@@ -1176,7 +1151,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// that controls access to an object. An access-denied ACE denies access 
     /// to an object for a specific trustee identified by a SID.
     /// </summary>
-    [CLSCompliant(false)]
     public partial struct _ACCESS_DENIED_CALLBACK_ACE
     {
         /// <summary>
@@ -1212,7 +1186,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// will grant access. The ACE also contains a GUID and a set of flags that 
     /// control inheritance of the ACE by child objects.
     /// </summary>
-    [CLSCompliant(false)]
     public partial struct _ACCESS_ALLOWED_CALLBACK_OBJECT_ACE
     {
         /// <summary>
@@ -1276,7 +1249,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// system will deny access. The ACE also contains a GUID and a set of 
     /// flags that control inheritance of the ACE by child objects.
     /// </summary>
-    [CLSCompliant(false)]
     public partial struct _ACCESS_DENIED_CALLBACK_OBJECT_ACE
     {
         /// <summary>
@@ -1339,7 +1311,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// to be logged when a specified trustee attempts to gain access to an object. 
     /// The trustee is identified by a SID.
     /// </summary>
-    [CLSCompliant(false)]
     public struct _SYSTEM_AUDIT_ACE
     {
         /// <summary>
@@ -1374,7 +1345,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// audit access. The ACE also contains a GUID and a set of flags that control 
     /// inheritance of the ACE by child objects.
     /// </summary>
-    [CLSCompliant(false)]
     public partial struct _SYSTEM_AUDIT_OBJECT_ACE
     {
         /// <summary>
@@ -1434,7 +1404,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// A system-audit ACE causes an audit message to be logged when a specified 
     /// trustee attempts to gain access to an object. The trustee is identified by a SID.
     /// </summary>
-    [CLSCompliant(false)]
     public partial struct _SYSTEM_AUDIT_CALLBACK_ACE
     {
         /// <summary>
@@ -1474,7 +1443,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [Flags]
-    [CLSCompliant(false)]
     public enum SYSTEM_MANDATORY_LABEL_ACE_Mask : uint
     {
         /// <summary>
@@ -1498,7 +1466,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// The SYSTEM_MANDATORY_LABEL_ACE structure defines an ACE for the SACL 
     /// that specifies the mandatory access level and policy for a securable object.
     /// </summary>
-    [CLSCompliant(false)]
     public struct _SYSTEM_MANDATORY_LABEL_ACE
     {
         /// <summary>
@@ -1539,7 +1506,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// trustee for whom the system will audit access. The ACE also contains a 
     /// GUID and a set of flags that control inheritance of the ACE by child objects.
     /// </summary>
-    [CLSCompliant(false)]
     public partial struct _SYSTEM_AUDIT_CALLBACK_OBJECT_ACE
     {
         /// <summary>
@@ -1598,7 +1564,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// The CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1 structure defines a resource attribute 
     /// that is defined in contiguous memory for persistence within a serialized Security Descriptor.
     /// </summary>
-    [CLSCompliant(false)]
     public struct CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1
     {
         /// <summary>
@@ -1723,7 +1688,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// The SYSTEM_RESOURCE_ATTRIBUTE_ACE structure defines an ACE for the specification of a resource attribute associated with an object. 
     /// A SYSTEM_RESOURCE_ATTRIBUTE_ACE is used in conditional ACEs in specifying access or audit policy for the resource.
     /// </summary>
-    [CLSCompliant(false)]
     public class SystemResourceAttributeAce
     {
         /// <summary>
@@ -1992,7 +1956,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// The SYSTEM_SCOPED_POLICY_ID_ACE structure defines an ACE for the purpose of applying a 
     /// central access policy to the resource.
     /// </summary>
-    [CLSCompliant(false)]
     public struct _SYSTEM_SCOPED_POLICY_ID_ACE
     {
         /// <summary>
@@ -2016,7 +1979,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// The access control list (ACL), is used to specify a list of 
     /// individual access control entries (ACEs).
     /// </summary>
-    [CLSCompliant(false)]
     public struct _ACL
     {
         /// <summary>
@@ -2064,7 +2026,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// The access control list (ACL), is used to specify a list of 
     /// individual access control entries (ACEs).
     /// </summary>
-    [CLSCompliant(false)]
     public struct _RPC_ACL
     {
         /// <summary>

@@ -68,7 +68,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// </summary>
         /// <param name="message">Message text</param>
         /// <param name="errorCode">Error code</param>
-        [CLSCompliant(false)]
         public SspiException(string message, uint errorCode)
             : base(message)
         {
@@ -98,7 +97,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <summary>
         /// Error Code is returned by SSPI.
         /// </summary>
-        [CLSCompliant(false)]
         public uint ErrorCode
         {
             get

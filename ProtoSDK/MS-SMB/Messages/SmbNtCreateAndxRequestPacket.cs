@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// Packets for SmbNtCreateAndx Request
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbNtCreateAndxRequestPacket : Cifs.SmbNtCreateAndxRequestPacket
     {
         #region Convert from base class

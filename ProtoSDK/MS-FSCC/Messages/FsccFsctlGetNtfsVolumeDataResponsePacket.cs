@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FSCTL_GET_NTFS_VOLUME_DATA 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlGetNtfsVolumeDataResponsePacket : FsccStandardPacket<NTFS_VOLUME_DATA_BUFFER_Reply>
     {
         #region Properties

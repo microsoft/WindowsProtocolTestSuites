@@ -203,7 +203,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// The set of configuration flags (section 2.2.2.5) that specifies the negotiated capabilities of the client
         /// and server for the current NTLM session.
         /// </summary>
-        [CLSCompliant(false)]
         public NegotiateTypes NegFlg
         {
             get

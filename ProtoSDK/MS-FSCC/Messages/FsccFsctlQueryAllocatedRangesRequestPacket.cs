@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FSCTL_QUERY_ALLOCATED_RANGES 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlQueryAllocatedRangesRequestPacket : FsccStandardPacket<FSCTL_QUERY_ALLOCATED_RANGES_Request>
     {
         #region Properties

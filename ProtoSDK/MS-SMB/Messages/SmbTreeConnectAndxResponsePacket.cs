@@ -10,7 +10,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// Packets for SmbTreeConnectAndx Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTreeConnectAndxResponsePacket : Cifs.SmbTreeConnectAndxResponsePacket
     {
         #region Fields

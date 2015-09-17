@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FSCTL_CREATE_OR_GET_OBJECT_ID 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlCreateOrGetObjectIdRequestPacket : FsccEmptyPacket
     {
         #region Properties

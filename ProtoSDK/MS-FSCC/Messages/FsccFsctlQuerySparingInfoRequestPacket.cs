@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FSCTL_QUERY_SPARING_INFO 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlQuerySparingInfoRequestPacket : FsccEmptyPacket
     {
         #region Properties

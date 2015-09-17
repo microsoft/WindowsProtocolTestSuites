@@ -116,7 +116,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// server. This table MUST be uniquely indexed by TreeConnect.TreeId and MUST allow enumeration of all
         /// entries in the table.
         /// </summary>
-        [CLSCompliant(false)]
         public ReadOnlyCollection<SmbClientTreeConnect> TreeConnectTable
         {
             get

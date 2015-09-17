@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbReadRaw Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbReadRawResponsePacket : SmbSingleResponsePacket 
     {
         #region Fields

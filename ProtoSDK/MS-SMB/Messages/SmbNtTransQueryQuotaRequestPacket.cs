@@ -10,7 +10,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// query quota. 
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbNtTransQueryQuotaRequestPacket : Cifs.SmbNtTransactRequestPacket
     {
         #region Fields

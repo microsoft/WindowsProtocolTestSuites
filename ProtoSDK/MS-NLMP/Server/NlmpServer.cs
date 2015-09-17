@@ -62,7 +62,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// </param>
         /// <returns>the NlmpChallengePacket</returns>
         /// <noException></noException>
-        [CLSCompliant(false)]
         public NlmpChallengePacket CreateChallengePacket(
             NegotiateTypes negotiateFlags,
             VERSION version,

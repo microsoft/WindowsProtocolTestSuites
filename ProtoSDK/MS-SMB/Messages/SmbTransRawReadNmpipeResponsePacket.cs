@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     ///  Packets for SmbTransRawReadNmpipe Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTransRawReadNmpipeResponsePacket : Cifs.SmbTransRawReadNmpipeSuccessResponsePacket
     {
         #region Convert from base class

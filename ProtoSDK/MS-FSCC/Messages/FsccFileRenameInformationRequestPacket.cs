@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FileRenameInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileRenameInformationRequestPacket : FsccStandardBytesPacket
     {
         #region Properties

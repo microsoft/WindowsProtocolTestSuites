@@ -379,7 +379,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <summary>
         /// the flags of smb header. 
         /// </summary>
-        [CLSCompliant(false)]
         public SmbHeader_Flags_Values Flag
         {
             get
@@ -396,7 +395,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <summary>
         /// default max parameter count 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxParameterCount
         {
             get
@@ -413,7 +411,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <summary>
         /// default max data count 
         /// </summary>
-        [CLSCompliant(false)]
         public ushort MaxDataCount
         {
             get
@@ -446,7 +443,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <summary>
         /// default timeout 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Timeout
         {
             get
@@ -477,7 +473,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// on the native Windows  NT information level requested. The specific format of the data block in the server 
         /// response is  based on the native Windows NT information level, as specified in [MS-FSCC] section 2.4. 
         /// </summary>
-        [CLSCompliant(false)]
         public const ushort CONST_SMB_INFO_PASSTHROUGH = 0x03e8;
 
         /// <summary>

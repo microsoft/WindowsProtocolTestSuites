@@ -106,7 +106,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </summary>
         /// <param name="connection">the connection object.</param>
         /// <param name="packet">the sent or received packet in stack transport.</param>
-        [CLSCompliant(false)]
         protected override void UpdateRoleContext(CifsClientPerConnection connection, SmbPacket packet)
         {
             // Do nothing if no connection is found or the packet is not SmbPacket:
@@ -364,7 +363,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </summary>
         /// <param name="sessionUid">the id of session</param>
         /// <returns>the session object</returns>
-        [CLSCompliant(false)]
         public SmbClientSession GetSession(ushort sessionUid)
         {
             SmbClientConnection connection = Connection;
@@ -383,7 +381,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </summary>
         /// <param name="tid">the id of treeconnect</param>
         /// <returns>the treeconnect object</returns>
-        [CLSCompliant(false)]
         public SmbClientTreeConnect GetTreeConnect(ushort tid)
         {
             SmbClientConnection connection = Connection;
@@ -411,7 +408,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </summary>
         /// <param name="fid">the id of file</param>
         /// <returns>the file object</returns>
-        [CLSCompliant(false)]
         public SmbClientOpen GetOpenFile(ushort fid)
         {
             SmbClientConnection connection = Connection;

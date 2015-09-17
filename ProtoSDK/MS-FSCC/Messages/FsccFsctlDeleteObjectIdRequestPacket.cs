@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FSCTL_DELETE_OBJECT_ID 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlDeleteObjectIdRequestPacket : FsccEmptyPacket
     {
         #region Properties

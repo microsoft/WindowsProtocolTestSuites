@@ -30,7 +30,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Several SMB commands (including SMB_COM_OPEN_ANDX and SMB_COM_NT_CREATE_ANDX)
         /// can be used to open a file, directory, or device.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort FileHandle
         {
             get

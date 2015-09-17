@@ -10,7 +10,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// Packets for Smb Error Response.
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbErrorResponsePacket : Cifs.SmbSingleResponsePacket
     {
         #region Fields

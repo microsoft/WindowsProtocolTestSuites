@@ -32,7 +32,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <returns>
         /// A 32-bit unsigned integer equal to the value of this instance.
         /// </returns>
-        [CLSCompliant(false)]
         public uint ToUInt32()
         {
             unchecked
@@ -60,7 +59,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <returns>
         /// A 64-bit unsigned integer equal to the value of this instance.
         /// </returns>
-        [CLSCompliant(false)]
         public ulong ToUInt64()
         {
             unchecked
@@ -137,7 +135,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// </summary>
         /// <param name="num">A 32-bit unsigned integer.</param>
         /// <returns>An Int3264.</returns>
-        [CLSCompliant(false)]
         public static implicit operator Int3264(uint num)
         {
             Int3264 ret = new Int3264();
@@ -167,7 +164,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// </summary>
         /// <param name="num">A 64-bit unsigned integer.</param>
         /// <returns>An Int3264.</returns>
-        [CLSCompliant(false)]
         public static implicit operator Int3264(ulong num)
         {
             Int3264 ret = new Int3264();

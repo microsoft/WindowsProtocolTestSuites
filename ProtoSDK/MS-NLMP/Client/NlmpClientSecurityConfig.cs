@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
     /// <summary>
     /// NTLM client SecurityContext configuration
     /// </summary>
-    [CLSCompliant(false)]
     public class NlmpClientSecurityConfig : SecurityConfig
     {
         /// <summary>
@@ -84,7 +83,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// </summary>
         /// <param name="account">Client account credential.</param>
         /// <param name="target">Target name.</param>
-        [CLSCompliant(false)]
         public NlmpClientSecurityConfig(
                 AccountCredential account,
                 string target)

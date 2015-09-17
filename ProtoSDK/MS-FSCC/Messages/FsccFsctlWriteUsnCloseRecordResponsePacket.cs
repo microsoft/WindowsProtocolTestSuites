@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FSCTL_WRITE_USN_CLOSE_RECORD 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlWriteUsnCloseRecordResponsePacket : FsccStandardPacket<long>
     {
         #region Properties

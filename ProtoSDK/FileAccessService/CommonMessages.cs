@@ -13,7 +13,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
     /// for reference only.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum SmbDateBitMask : ushort
     {
         /// <summary>
@@ -56,7 +55,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// </summary>
         /// <exception cref="System.ArgumentOutOfRangeException">
         /// The Year should be in range of [1980, 2099].</exception>
-        [CLSCompliant(false)]
         public ushort Year
         {
             get
@@ -82,7 +80,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// </summary>
         /// <exception cref="System.ArgumentOutOfRangeException">
         /// The Month should be in range of [1, 12].</exception>
-        [CLSCompliant(false)]
         public ushort Month
         {
             get
@@ -108,7 +105,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// </summary>
         /// <exception cref="System.ArgumentOutOfRangeException">
         /// The day should be in range of [1, 31].</exception>
-        [CLSCompliant(false)]
         public ushort Day
         {
             get
@@ -135,7 +131,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// <param name="year">the year</param>
         /// <param name="month">the month</param>
         /// <param name="day">the day</param>
-        [CLSCompliant(false)]
         public SmbDate(ushort year, ushort month, ushort day)
             : this()
         {
@@ -166,7 +161,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// The number of 100-nanosecond intervals that have elapsed since January 1, 1601, in Coordinated 
         /// Universal Time (UTC) format.
         /// </summary>
-        [CLSCompliant(false)]
         public ulong Time;
     }
 
@@ -179,7 +173,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
     /// represented in the local time zone of the server.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [CLSCompliant(false)]
     public enum SmbTimeBitMask : ushort
     {
         /// <summary>
@@ -223,7 +216,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// </summary>
         /// <exception cref="System.ArgumentOutOfRangeException">
         /// The hour should be in range of [0, 23].</exception>
-        [CLSCompliant(false)]
         public ushort Hour
         {
             get
@@ -249,7 +241,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// </summary>
         /// <exception cref="System.ArgumentOutOfRangeException">
         /// The Minutes should be in range of [0, 59].</exception>
-        [CLSCompliant(false)]
         public ushort Minutes
         {
             get
@@ -275,7 +266,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// </summary>
         /// <exception cref="System.ArgumentOutOfRangeException">
         /// The Seconds should be in range of [0, 59].</exception>
-        [CLSCompliant(false)]
         public ushort Seconds
         {
             get
@@ -302,7 +292,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// <param name="hour">the hour</param>
         /// <param name="minutes">the minutes</param>
         /// <param name="seconds">the seconds</param>
-        [CLSCompliant(false)]
         public SmbTime(ushort hour, ushort minutes, ushort seconds)
             : this()
         {

@@ -11,7 +11,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// Rap request packet. 
     /// Cifs is not responsible for defining detailed TransParameters and TransData.
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTransRapRequestPacket : SmbTransactionRequestPacket
     {
         #region Constructor

@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
     /// <summary>
     /// FileServiceClientTransport is the base class for file access family transport
     /// </summary>
-    [CLSCompliant(false)]
     public abstract class FileServiceClientTransport : IDisposable
     {
         #region fields
@@ -149,7 +148,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// <param name="payload">RESP_GET_DFS_REFERRAL structure in byte array</param>
         /// <param name="timeout">The pending time to get server's response</param>
         /// <exception cref="System.InvalidOperationException">The transport is not connected</exception>
-        [CLSCompliant(false)]
         public abstract void ExpectDfscPayload(TimeSpan timeout, out uint status, out byte[] payload);
 
 
@@ -221,7 +219,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// specified in the name field already exists</param>
         /// <param name="createOption">Specifies the options to be applied when creating or opening the file</param>
         /// <exception cref="System.InvalidOperationException">Thrown if there is any error occurred</exception>
-        [CLSCompliant(false)]
         public abstract void Create(string fileName, FsFileDesiredAccess desiredAccess, FsImpersonationLevel impersonationLevel,
             FsFileAttribute fileAttribute, FsCreateDisposition createDisposition, FsCreateOption createOption);
 
@@ -238,7 +235,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// specified in the name field already exists</param>
         /// <param name="createOption">Specifies the options to be applied when creating or opening the file</param>
         /// <exception cref="System.InvalidOperationException">Thrown if there is any error occurred</exception>
-        [CLSCompliant(false)]
         public abstract void Create(string directoryName, FsDirectoryDesiredAccess desiredAccess, FsImpersonationLevel impersonationLevel,
             FsFileAttribute fileAttribute, FsCreateDisposition createDisposition, FsCreateOption createOption);
 
@@ -254,7 +250,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// a uint value that specifies the status of response packet.
         /// </returns>
         /// <exception cref="System.InvalidOperationException">Thrown if there is any error occurred</exception>
-        [CLSCompliant(false)]
         public abstract uint Write(TimeSpan timeout, ulong offset, byte[] data);
 
 
@@ -269,7 +264,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// a uint value that specifies the status of response packet.
         /// </returns>
         /// <exception cref="System.InvalidOperationException">Thrown if there is any error occurred</exception>
-        [CLSCompliant(false)]
         public abstract uint Read(TimeSpan timeout, ulong offset, uint length, out byte[] data);
 
 
@@ -285,7 +279,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// a uint value that specifies the status of response packet.
         /// </returns>
         /// <exception cref="System.InvalidOperationException">Thrown if there is any error occurred</exception>
-        [CLSCompliant(false)]
         public abstract uint IoControl(TimeSpan timeout, uint controlCode, byte[] input, out byte[] output);
 
 
@@ -304,7 +297,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// a uint value that specifies the status of response packet.
         /// </returns>
         /// <exception cref="System.InvalidOperationException">Thrown if there is any error occurred</exception>
-        [CLSCompliant(false)]
         public abstract uint IoControl(TimeSpan timeout, uint controlCode, byte[] input, out byte[] inputResponse,
             out byte[] outputResponse, uint maxInputResponse, uint maxOutputResponse);
 
@@ -320,7 +312,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// a uint value that specifies the status of response packet.
         /// </returns>
         /// <exception cref="System.InvalidOperationException">Thrown if there is any error occurred</exception>
-        [CLSCompliant(false)]
         public abstract uint IoControl(TimeSpan timeout, FsCtlCode controlCode, byte[] input, out byte[] output);
 
 
@@ -338,7 +329,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
         /// a uint value that specifies the status of response packet.
         /// </returns>
         /// <exception cref="System.InvalidOperationException">Thrown if there is any error occurred</exception>
-        [CLSCompliant(false)]
         public abstract uint IoControl(TimeSpan timeout, FsCtlCode controlCode, byte[] input, out byte[] inputResponse,
             out byte[] outputResponse, uint maxInputResponse, uint maxOutputResponse);
 

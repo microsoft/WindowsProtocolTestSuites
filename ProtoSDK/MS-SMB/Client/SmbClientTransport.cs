@@ -11,7 +11,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// Used as transport layer of MS-DFSC protocol
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbClientTransport : FileServiceClientTransport
     {
         #region Fields

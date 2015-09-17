@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FileStandardLinkInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileStandardLinkInformationResponsePacket : FsccStandardPacket<FileStandardLinkInformation>
     {
         #region Properties

@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FSCTL_PIPE_PEEK 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlPipePeekResponsePacket : FsccStandardPacket<FSCTL_PIPE_PEEK>
     {
         #region Properties

@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FSCTL_FIND_FILES_BY_SID 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlFindFilesBySidRequestPacket : FsccStandardPacket<FSCTL_FIND_FILES_BY_SID_Request>
     {
         #region Properties

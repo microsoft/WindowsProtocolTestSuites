@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FileShortNameInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileShortNameInformationRequestPacket : FsccStandardPacket<FileShortNameInformation>
     {
         #region Properties

@@ -10,7 +10,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
     /// <summary>
     /// Packets for SmbTrans2SetFsInformation Request 
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbTrans2SetFsInformationRequestPacket : Cifs.SmbTrans2SetFsInformationRequestPacket
     {
         #region Fields

@@ -21,7 +21,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <param name="connection">the connection on which the response will be sent.</param>
     /// <param name="request">the corresponding request</param>
     /// <returns>the default response to the request.</returns>
-    [CLSCompliant(false)]
     public delegate SmbPacket CreateDefaultResponseCallBack(CifsServerPerConnection connection, SmbPacket request);
 
 
@@ -288,7 +287,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <exception cref="InvalidOperationException">
         /// The transport is not started. Please invoke Start() first
         /// </exception>
-        [CLSCompliant(false)]
         public virtual void SendPacket(SmbPacket packet, CifsServerPerConnection connection)
         {
             if (packet == null)
@@ -339,7 +337,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// The transport is not started. Please invoke Start() first
         /// </exception>
         /// <exception cref="InvalidCastException">Unknown object received from transport.</exception>
-        [CLSCompliant(false)]
         public virtual SmbPacket ExpectPacket(TimeSpan timeout, out CifsServerPerConnection connection)
         {
             if (this.isRunning == false)
@@ -429,7 +426,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a CreateDirectory response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbCreateDirectoryResponsePacket CreateCreateDirectoryResponse(
@@ -449,7 +445,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>the DeleteDirectory response packet.</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbDeleteDirectoryResponsePacket CreateDeleteDirectoryResponse(
             CifsServerPerConnection connection,
@@ -470,7 +465,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="fileSize">The current size of the opened file, in bytes.</param>
         /// <param name="lastModified">The time of the last modification to the opened file.</param>
         /// <returns> to create an Open response packet.</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbOpenResponsePacket CreateOpenResponse(
             CifsServerPerConnection connection,
@@ -503,7 +497,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a Open response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbCreateResponsePacket CreateCreateResponse(
             CifsServerPerConnection connection,
@@ -528,7 +521,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a Close response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbCloseResponsePacket CreateCloseResponse(
             CifsServerPerConnection connection,
@@ -547,7 +539,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a Flush response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbFlushResponsePacket CreateFlushResponse(
             CifsServerPerConnection connection,
@@ -566,7 +557,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a Delete response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbDeleteResponsePacket CreateDeleteResponse(
             CifsServerPerConnection connection,
@@ -585,7 +575,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a Rename response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbRenameResponsePacket CreateRenameResponse(
             CifsServerPerConnection connection,
@@ -609,7 +598,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="fileSize">This field contains the size of the file in bytes. Since this size is limited to 32
         /// bits this command is inappropriate for files whose size is too large</param>
         /// <returns>a QueryInformation response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbQueryInformationResponsePacket CreateQueryInformationResponse(
             CifsServerPerConnection connection,
@@ -639,7 +627,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a SetInformation response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbSetInformationResponsePacket CreateSetInformationResponse(
             CifsServerPerConnection connection,
@@ -659,7 +646,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="request">the corresponding request</param>
         /// <param name="bytes">The actual bytes read from the file.</param>
         /// <returns>a Read response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbReadResponsePacket CreateReadResponse(
             CifsServerPerConnection connection,
@@ -694,7 +680,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a Write response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbWriteResponsePacket CreateWriteResponse(
             CifsServerPerConnection connection,
@@ -719,7 +704,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a LockByteRange response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbLockByteRangeResponsePacket CreateLockByteRangeResponse(
             CifsServerPerConnection connection,
@@ -738,7 +722,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a UnlockByteRange response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbUnlockByteRangeResponsePacket CreateUnlockByteRangeResponse(
             CifsServerPerConnection connection,
@@ -759,7 +742,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="temporaryFileName">A null-terminated string that contains the temporary file name generated by
         /// the server.</param>
         /// <returns>a CreateTemporary response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbCreateTemporaryResponsePacket CreateCreateTemporaryResponse(
             CifsServerPerConnection connection,
@@ -791,7 +773,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a CreateNew response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbCreateNewResponsePacket CreateCreateNewResponse(
             CifsServerPerConnection connection,
@@ -815,7 +796,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a CheckDirectory Request Packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbCheckDirectoryResponsePacket CreateCheckDirectoryResponse(
             CifsServerPerConnection connection,
@@ -834,7 +814,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a ProcessExit response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbProcessExitResponsePacket CreateProcessExitResponse(
             CifsServerPerConnection connection,
@@ -853,7 +832,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a Seek response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbSeekResponsePacket CreateSeekResponse(
             CifsServerPerConnection connection,
@@ -878,7 +856,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="request">the corresponding request</param>
         /// <param name="bytes">The array of bytes read from the file. The array is not null-terminated.</param>
         /// <returns>a LockAndRead response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbLockAndReadResponsePacket CreateLockAndReadResponse(
             CifsServerPerConnection connection,
@@ -912,7 +889,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns> a WriteAndUnlock response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbWriteAndUnlockResponsePacket CreateWriteAndUnlockResponse(
             CifsServerPerConnection connection,
@@ -935,7 +911,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// </summary>
         /// <param name="rawData">the raw data being read from the file or named pipe.</param>
         /// <returns>a ReadRaw response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbReadRawResponsePacket CreateReadRawResponse(
             byte[] rawData)
@@ -968,7 +943,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// pipes.</param>
         /// <param name="data">The bytes read from the file.</param>
         /// <returns>a ReadMpx response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbReadMpxResponsePacket CreateReadMpxResponse(
             CifsServerPerConnection connection,
@@ -1010,7 +984,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a ReadMpxSecondary response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbReadMpxSecondaryResponsePacket CreateReadMpxSecondaryResponse(
             CifsServerPerConnection connection,
@@ -1046,7 +1019,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// the number of bytes remaining to be read after the requested write was completed. If the client writes to a
         /// disk file, this field MUST be set to -1 (0xFFFF).</param>
         /// <returns>a WriteRaw response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbWriteRawInterimResponsePacket CreateWriteRawInterimResponse(
             CifsServerPerConnection connection,
@@ -1072,7 +1044,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="request">the corresponding request</param>
         /// <param name="count">This field contains the total number of bytes written to the file by the server.</param>
         /// <returns>a WriteRaw response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbWriteRawFinalResponsePacket CreateWriteRawFinalResponse(
             CifsServerPerConnection connection,
@@ -1100,7 +1071,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a WriteMpx response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbWriteMpxResponsePacket CreateWriteMpxResponse(
             CifsServerPerConnection connection,
@@ -1124,7 +1094,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a WriteMpxSecondary response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbWriteMpxSecondaryResponsePacket CreateWriteMpxSecondaryResponse(
             CifsServerPerConnection connection,
@@ -1158,7 +1127,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a QueryServer response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbQueryServerResponsePacket CreateQueryServerResponse(
             CifsServerPerConnection connection,
@@ -1192,7 +1160,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a SetInformation2 response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbSetInformation2ResponsePacket CreateSetInformation2Response(
             CifsServerPerConnection connection,
@@ -1225,7 +1192,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="fileAttributes">This field is a 16-bit unsigned bit field encoding the attributes of the file.
         /// </param>
         /// <returns>a QueryInformation2 response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbQueryInformation2ResponsePacket CreateQueryInformation2Response(
             CifsServerPerConnection connection,
@@ -1267,7 +1233,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="open">the open file on which this oplock broke.</param>
         /// <param name="newOplockLevel">newOplockLevel filed of smbparameters.</param>
         /// <returns>an OpLock Break Notification packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbLockingAndxRequestPacket CreateLockingAndxRequest(
             CifsServerPerOpenFile open,
@@ -1303,7 +1268,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="request">the corresponding request</param>
         /// <param name="andxPacket">the andx packet</param>
         /// <returns>a LockingAndx response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbLockingAndxResponsePacket CreateLockingAndxResponse(
             CifsServerPerConnection connection,
@@ -1335,7 +1299,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a TransactionInterim response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTransactionInterimResponsePacket CreateTransactionInterimResponse(
             CifsServerPerConnection connection,
@@ -1356,7 +1319,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="parameters">IOCTL parameter bytes. The contents are implementation-dependent.</param>
         /// <param name="data">IOCTL data bytes. The contents are implementation-dependent.</param>
         /// <returns>a Ioctl response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbIoctlResponsePacket CreateIoctlResponse(
             CifsServerPerConnection connection,
@@ -1402,7 +1364,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a IoctlSecondary response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbIoctlSecondaryResponsePacket CreateIoctlSecondaryResponse(
             CifsServerPerConnection connection,
@@ -1435,7 +1396,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a Copy response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbCopyResponsePacket CreateCopyResponse(
             CifsServerPerConnection connection,
@@ -1468,7 +1428,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a Move response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbMoveResponsePacket CreateMoveResponse(
             CifsServerPerConnection connection,
@@ -1501,7 +1460,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a Echo response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbEchoResponsePacket CreateEchoResponse(
             CifsServerPerConnection connection,
@@ -1531,7 +1489,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a WriteAndClose response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbWriteAndCloseResponsePacket CreateWriteAndCloseResponse(
             CifsServerPerConnection connection,
@@ -1563,7 +1520,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="openResults">A 16-bit field that shows the results of the open operation.</param>
         /// <param name="andxPacket">the andx packet</param>
         /// <returns>a OpenAndx response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbOpenAndxResponsePacket CreateOpenAndxResponse(
             CifsServerPerConnection connection,
@@ -1615,7 +1571,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="data">the data read from this server.</param>
         /// <param name="andxPacket">the andx packet</param>
         /// <returns>a ReadAndx response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbReadAndxResponsePacket CreateReadAndxResponse(
             CifsServerPerConnection connection,
@@ -1667,7 +1622,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// disk file, this field MUST be set to -1 (0xFFFF).</param>
         /// <param name="andxPacket">the andx packet</param>
         /// <returns>a WriteAndx response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbWriteAndxResponsePacket CreateWriteAndxResponse(
             CifsServerPerConnection connection,
@@ -1702,7 +1656,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a NewFileSize response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbNewFileSizeResponsePacket CreateNewFileSizeResponse(
             CifsServerPerConnection connection,
@@ -1736,7 +1689,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a CloseAndTreeDisc response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbCloseAndTreeDiscResponsePacket CreateCloseAndTreeDiscResponse(
             CifsServerPerConnection connection,
@@ -1769,7 +1721,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns></returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTransaction2InterimResponsePacket CreateTransaction2InterimResponse(
             CifsServerPerConnection connection,
@@ -1788,7 +1739,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a FindClose2 response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbFindClose2ResponsePacket CreateFindClose2Response(
             CifsServerPerConnection connection,
@@ -1807,7 +1757,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a FindNotifyClose response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbFindNotifyCloseResponsePacket CreateFindNotifyCloseResponse(
             CifsServerPerConnection connection,
@@ -1840,7 +1789,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a TreeConnect response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTreeConnectResponsePacket CreateTreeConnectResponse(
             CifsServerPerConnection connection,
@@ -1865,7 +1813,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a TreeConnect response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTreeDisconnectResponsePacket CreateTreeDisconnectResponse(
             CifsServerPerConnection connection,
@@ -1886,7 +1833,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="securityMode">An 8-bit field indicating the security modes supported or required by the server.
         /// </param>
         /// <exception cref="NotSupportedException">Only NTLM dialect is supported.</exception>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbNegotiateResponsePacket CreateNegotiateResponse(
             CifsServerPerConnection connection,
@@ -1967,7 +1913,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// SMB_SETUP_USE_LANMAN_KEY 0x0002</param>
         /// <param name="andxPacket">the andx packet.</param>
         /// <returns>a SessionSetupAndx response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbSessionSetupAndxResponsePacket CreateSessionSetupAndxResponse(
             CifsServerPerConnection connection,
@@ -2018,7 +1963,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="request">the corresponding request</param>
         /// <param name="andxPacket">the andx packet.</param>
         /// <returns>a LogoffAndx response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbLogoffAndxResponsePacket CreateLogoffAndxResponse(
             CifsServerPerConnection connection,
@@ -2061,7 +2005,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// "IPC" Named Pipe, "COMM" Serial Communications device</param>
         /// <param name="andxPacket">the andx packet.</param>
         /// <returns>a TreeConnectAndx response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTreeConnectAndxResponsePacket CreateTreeConnectAndxResponse(
             CifsServerPerConnection connection,
@@ -2109,7 +2052,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a SecurityPackageAndx response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbSecurityPackageAndxResponsePacket CreateSecurityPackageAndxResponse(
             CifsServerPerConnection connection,
@@ -2150,7 +2092,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="freeUnits">This field is a 16-bit unsigned value that represents the total number of free 
         /// allocation units available on the volume.</param>
         /// <returns>a QueryInformationDisk response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbQueryInformationDiskResponsePacket CreateQueryInformationDiskResponse(
             CifsServerPerConnection connection,
@@ -2186,7 +2127,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// SMB_Directory_Information records. The structure and contents of these records is specified below. Note 
         /// that the SMB_Directory_Information record structure is a fixed 43 bytes in length.</param>
         /// <returns>a Search response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbSearchResponsePacket CreateSearchResponse(
             CifsServerPerConnection connection,
@@ -2227,7 +2167,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// structure and contents of these records is specified below. Note that the SMB_Directory_Information record
         /// structure is a fixed 43 bytes in length.</param>
         /// <returns>a Find response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbFindResponsePacket CreateFindResponse(
             CifsServerPerConnection connection,
@@ -2268,7 +2207,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// structure and contents of these records is specified below. Note that the SMB_Directory_Information record
         /// structure is a fixed 43 bytes in length.</param>
         /// <returns>a FindUnique response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbFindUniqueResponsePacket CreateFindUniqueResponse(
             CifsServerPerConnection connection,
@@ -2306,7 +2244,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a FindClose response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbFindCloseResponsePacket CreateFindCloseResponse(
             CifsServerPerConnection connection,
@@ -2336,7 +2273,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a FindClose response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbNtTransactInterimResponsePacket CreateNtTransactInterimResponse(
             CifsServerPerConnection connection,
@@ -2372,7 +2308,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// (FALSE).</param>
         /// <param name="andxPacket">the andx packet.</param>
         /// <returns>a NtCreateAndx response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbNtCreateAndxResponsePacket CreateNtCreateAndxResponse(
             CifsServerPerConnection connection,
@@ -2424,7 +2359,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a NtRename response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbNtRenameResponsePacket CreateNtRenameResponse(
             CifsServerPerConnection connection,
@@ -2443,7 +2377,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a OpenPrintFile response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbOpenPrintFileResponsePacket CreateOpenPrintFileResponse(
             CifsServerPerConnection connection,
@@ -2467,7 +2400,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a WritePrintFile response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbWritePrintFileResponsePacket CreateWritePrintFileResponse(
             CifsServerPerConnection connection,
@@ -2486,7 +2418,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns> a ClosePrintFile response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbClosePrintFileResponsePacket CreateClosePrintFileResponse(
             CifsServerPerConnection connection,
@@ -2505,7 +2436,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a GetPrintQueue response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbGetPrintQueueResponsePacket CreateGetPrintQueueResponse(
             CifsServerPerConnection connection,
@@ -2538,7 +2468,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a ReadBulk response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbReadBulkResponsePacket CreateReadBulkResponse(
             CifsServerPerConnection connection,
@@ -2572,7 +2501,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a WriteBulk response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbWriteBulkResponsePacket CreateWriteBulkResponse(
             CifsServerPerConnection connection,
@@ -2606,7 +2534,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a WriteBulkData response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbWriteBulkDataResponsePacket CreateWriteBulkDataResponse(
             CifsServerPerConnection connection,
@@ -2640,7 +2567,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>an invalid response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbInvalidResponsePacket CreateInvalidResponse(
             CifsServerPerConnection connection,
@@ -2673,7 +2599,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a NoAndxCommand response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbNoAndxCommandResponsePacket CreateNoAndxCommandResponse(
             CifsServerPerConnection connection,
@@ -2709,7 +2634,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a TransSetNmpipeState response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTransSetNmpipeStateSuccessResponsePacket CreateTransSetNmpipeStateSuccessResponse(
             CifsServerPerConnection connection,
@@ -2731,7 +2655,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="bytesRead">The data buffer that MUST contain the bytes read from the named pipe in raw mode. 
         /// The size of the buffer MUST be equal to the value in TotalDataCount.</param>
         /// <returns>a TransRawReadNmpipe response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTransRawReadNmpipeSuccessResponsePacket CreateTransRawReadNmpipeSuccessResponse(
             CifsServerPerConnection connection,
@@ -2760,7 +2683,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="nmPipeStatus">A 16-bit field that shows the status of the named pipe. This field is formatted 
         /// as an SMB_NMPIPE_STATUS (section 2.2.1.3).</param>
         /// <returns>a TransQueryNmpipeState response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTransQueryNmpipeStateSuccessResponsePacket CreateTransQueryNmpipeStateSuccessResponse(
             CifsServerPerConnection connection,
@@ -2802,7 +2724,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// array of OEM characters. If the PipeName field consists of Unicode characters, this field MUST be aligned
         /// to start on a 2-byte boundary from the start of the SMB Header.</param>
         /// <returns>a TransQueryNmpipeInfo response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTransQueryNmpipeInfoSuccessResponsePacket CreateTransQueryNmpipeInfoSuccessResponse(
             CifsServerPerConnection connection,
@@ -2848,7 +2769,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="namedPipeState">The status of the named pipe.</param>
         /// <param name="readData">This field contains the data read from the named pipe.</param>
         /// <returns>a TransPeekNmpipe response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTransPeekNmpipeSuccessResponsePacket CreateTransPeekNmpipeSuccessResponse(
             CifsServerPerConnection connection,
@@ -2885,7 +2805,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="request">the corresponding request</param>
         /// <param name="readData">This field MUST contain data read from the named pipe.</param>
         /// <returns>a TransTransactNmpipe response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTransTransactNmpipeSuccessResponsePacket CreateTransTransactNmpipeSuccessResponse(
             CifsServerPerConnection connection,
@@ -2912,7 +2831,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a TransRawWriteNmpipe response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTransRawWriteNmpipeSuccessResponsePacket CreateTransRawWriteNmpipeSuccessResponse(
             CifsServerPerConnection connection,
@@ -2939,7 +2857,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// MUST be equal to the value in TotalDataCount. If the named pipe is a message mode pipe, and the entire
         /// message was not read, the Status field in the SMB Header MUST be set to STATUS_BUFFER_OVERFLOW.</param>
         /// <returns>a TransReadNmpipe response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTransReadNmpipeSuccessResponsePacket CreateTransReadNmpipeSuccessResponse(
             CifsServerPerConnection connection,
@@ -2965,7 +2882,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a TransWriteNmpipe response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTransWriteNmpipeSuccessResponsePacket CreateTransWriteNmpipeSuccessResponse(
             CifsServerPerConnection connection,
@@ -2990,7 +2906,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a TransWaitNmpipe response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTransWaitNmpipeSuccessResponsePacket CreateTransWaitNmpipeSuccessResponse(
             CifsServerPerConnection connection,
@@ -3015,7 +2930,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// pipe, and the entire message was not read, the Status field in the SMB Header MUST be set to 
         /// STATUS_BUFFER_OVERFLOW.</param>
         /// <returns>a TransCallNmpipe response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTransCallNmpipeSuccessResponsePacket CreateTransCallNmpipeSuccessResponse(
             CifsServerPerConnection connection,
@@ -3051,7 +2965,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// opened is a named pipe instance.</param>
         /// <param name="actionTaken">A 16-bit field that shows the results of the open operation.</param>
         /// <returns>a Trans2Open2 response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTrans2Open2FinalResponsePacket CreateTrans2Open2FinalResponse(
             CifsServerPerConnection connection,
@@ -3097,7 +3010,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// section 2.2.8.1.</param>
         /// <returns>a Trans2FindFirst2 response packet</returns>
         /// <exception cref="InvalidCastException">The findInformationLevel should correspond with request</exception>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTrans2FindFirst2FinalResponsePacket CreateTrans2FindFirst2FinalResponse(
             CifsServerPerConnection connection,
@@ -3144,7 +3056,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// section 2.2.8.1.</param>
         /// <returns>a Trans2FindNext2 response packet</returns>
         /// <exception cref="InvalidCastException">The findInformationLevel should correspond with request</exception>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTrans2FindNext2FinalResponsePacket CreateTrans2FindNext2FinalResponse(
             CifsServerPerConnection connection,
@@ -3190,7 +3101,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <returns>a Trans2QueryFsInformation response packet</returns>
         /// <exception cref="InvalidCastException">The queryFsInformationLevel should correspond with request
         /// </exception>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTrans2QueryFsInformationFinalResponsePacket CreateTrans2QueryFsInformationFinalResponse(
             CifsServerPerConnection connection,
@@ -3224,7 +3134,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a Trans2SetFsInformation response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTrans2SetFsInformationFinalResponsePacket CreateTrans2SetFsInformationFinalResponse(
             CifsServerPerConnection connection,
@@ -3264,7 +3173,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <returns>a Trans2QueryPathInformation response packet</returns>
         /// <exception cref="InvalidCastException">The queryInformationLevel should correspond with request
         /// </exception>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTrans2QueryPathInformationFinalResponsePacket CreateTrans2QueryPathInformationFinalResponse(
             CifsServerPerConnection connection,
@@ -3301,7 +3209,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a Trans2SetPathInformation response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTrans2SetPathInformationFinalResponsePacket CreateTrans2SetPathInformationFinalResponse(
             CifsServerPerConnection connection,
@@ -3331,7 +3238,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <returns>a Trans2QueryFileInformation response packet</returns>
         /// <exception cref="InvalidCastException">The queryInformationLevel should correspond with request
         /// </exception>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTrans2QueryFileInformationFinalResponsePacket CreateTrans2QueryFileInformationFinalResponse(
             CifsServerPerConnection connection,
@@ -3368,7 +3274,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a Trans2SetFileInformation response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTrans2SetFileInformationFinalResponsePacket CreateTrans2SetFileInformationFinalResponse(
             CifsServerPerConnection connection,
@@ -3393,7 +3298,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a Trans2Fsctl response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTrans2FsctlFinalResponsePacket CreateTrans2FsctlFinalResponse(
             CifsServerPerConnection connection,
@@ -3428,7 +3332,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a Trans2Ioctl2 response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTrans2Ioctl2FinalResponsePacket CreateTrans2Ioctl2FinalResponse(
             CifsServerPerConnection connection,
@@ -3463,7 +3366,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a Trans2FindNotifyFirst response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTrans2FindNotifyFirstFinalResponsePacket CreateTrans2FindNotifyFirstFinalResponse(
             CifsServerPerConnection connection,
@@ -3498,7 +3400,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a Trans2FindNotifyNext response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTrans2FindNotifyNextFinalResponsePacket CreateTrans2FindNotifyNextFinalResponse(
             CifsServerPerConnection connection,
@@ -3533,7 +3434,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a Trans2CreateDirectory response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTrans2CreateDirectoryFinalResponsePacket CreateTrans2CreateDirectoryFinalResponse(
             CifsServerPerConnection connection,
@@ -3558,7 +3458,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a Trans2SessionSetup response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTrans2SessionSetupFinalResponsePacket CreateTrans2SessionSetupFinalResponse(
             CifsServerPerConnection connection,
@@ -3595,7 +3494,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="referralResponse">This field MUST be a properly formatted DFS referral response, as specified in
         /// [MS-DFSC] section 2.2.3.</param>
         /// <returns>a Trans2GetDfsReferal response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTrans2GetDfsReferalFinalResponsePacket CreateTrans2GetDfsReferalFinalResponse(
             CifsServerPerConnection connection,
@@ -3621,7 +3519,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a Trans2ReportDfsInconsistency response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbTrans2ReportDfsInconsistencyFinalResponsePacket CreateTrans2ReportDfsInconsistencyFinalResponse(
             CifsServerPerConnection connection,
@@ -3669,7 +3566,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// a nonzero (0x00) value. If the FID is not a directory, the server MUST set this value to 0x00 (FALSE).
         /// </param>
         /// <returns>a NtTransactCreate response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbNtTransactCreateResponsePacket CreateNtTransactCreateResponse(
             CifsServerPerConnection connection,
@@ -3716,7 +3612,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="data">Results returned by either an I/O device or a file system control command. The results 
         /// are the raw bytes returned from the command if the command was successful.</param>
         /// <returns>a NtTransactIoctl response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbNtTransactIoctlResponsePacket CreateNtTransactIoctlResponse(
             CifsServerPerConnection connection,
@@ -3743,7 +3638,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a NtTransactSetSecurityDesc response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbNtTransactSetSecurityDescResponsePacket CreateNtTransactSetSecurityDescResponse(
             CifsServerPerConnection connection,
@@ -3769,7 +3663,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// is the last entry in the list, this field is 0x00000000.Each entry in the list MUST be DWORD aligned (32-bit
         /// aligned), so NextEntryOffset MUST be a multiple of 4.</param>
         /// <returns>a NtTransactNotifyChange response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbNtTransactNotifyChangeResponsePacket CreateNtTransactNotifyChangeResponse(
             CifsServerPerConnection connection,
@@ -3795,7 +3688,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>a NtTransactRenameRequest response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbNtTransactRenameResponsePacket CreateNtTransactRenameResponse(
             CifsServerPerConnection connection,
@@ -3833,7 +3725,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// SECURITY_DESCRIPTOR structure is returned. For details, see SECURITY_DESCRIPTOR ([MS-DTYP] section 2.4.6).
         /// </param>
         /// <returns>a NtTransactSetSecurityDesc response packet</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public SmbNtTransactQuerySecurityDescResponsePacket CreateNtTransactQuerySecurityDescResponse(
             CifsServerPerConnection connection,
@@ -3869,7 +3760,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="connection">the connection on which the response will be sent.</param>
         /// <param name="request">the corresponding request</param>
         /// <returns>the default response to the request.</returns>
-        [CLSCompliant(false)]
         public SmbPacket CreateDefaultResponse(CifsServerPerConnection connection, SmbPacket request)
         {
             return this.CreateDefaultResponseWithCallBack(connection, request, null);
@@ -3885,7 +3775,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <param name="callBack">the callback function, sdk will try to create default
         /// response using this callback function. this parameter can be null.</param>
         /// <returns>the default response to the request.</returns>
-        [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public SmbPacket CreateDefaultResponseWithCallBack(

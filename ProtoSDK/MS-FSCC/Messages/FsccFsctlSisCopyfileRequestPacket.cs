@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FSCTL_SIS_COPYFILE 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlSisCopyfileRequestPacket : FsccStandardPacket<FSCTL_SIS_COPYFILE_Request>
     {
         #region Properties

@@ -11,7 +11,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
     /// <summary>
     /// Packets for SmbReadAndx Response
     /// </summary>
-    [CLSCompliant(false)]
     public class SmbReadAndxResponsePacket : SmbBatchedResponsePacket
     {
         #region Fields

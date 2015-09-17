@@ -27,19 +27,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <summary>
         /// Specifies the effective key length, in bits, for the session key. This is typically 40, 56, or 128 bits.
         /// </summary>
-        [CLSCompliant(false)]
         public uint KeySize;
 
         /// <summary>
         /// Specifies the algorithm identifier (ALG_ID) used for generating signatures, if available.
         /// </summary>
-        [CLSCompliant(false)]
         public uint SignatureAlgorithm;
 
         /// <summary>
         /// Specifies the algorithm identifier (ALG_ID) used for encrypting messages. Reserved for future use.
         /// </summary>
-        [CLSCompliant(false)]
         public uint EncryptAlgorithm;
 
         /// <summary>

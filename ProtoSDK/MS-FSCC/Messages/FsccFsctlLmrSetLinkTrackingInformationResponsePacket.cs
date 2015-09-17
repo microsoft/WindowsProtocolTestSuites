@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FSCTL_LMR_SET_LINK_TRACKING_INFORMATION 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlLmrSetLinkTrackingInformationResponsePacket : FsccStandardPacket<FsctlLmrSetLinkTrackingInformationReplyStatus>
     {
         #region Properties

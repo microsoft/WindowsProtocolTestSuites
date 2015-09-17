@@ -14,28 +14,24 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <summary>
         /// Specifies the maximum size of the security token used in the authentication exchanges
         /// </summary>
-        [CLSCompliant(false)]
         public uint MaxTokenSize;
 
         /// <summary>
         /// Specifies the maximum size of the signature created by the MakeSignature function. This member must
         /// be zero if integrity services are not requested or available.
         /// </summary>
-        [CLSCompliant(false)]
         public uint MaxSignatureSize;
 
         /// <summary>
         /// Specifies the preferred integral size of the messages. For example, eight indicates that messages should
         /// be of size zero mod eight for optimal performance. Messages other than this block size can be padded.
         /// </summary>
-        [CLSCompliant(false)]
         public uint BlockSize;
 
         /// <summary>
         /// Size of the security trailer to be appended to messages. This member should be zero if the relevant 
         /// services are not requested or available.
         /// </summary>
-        [CLSCompliant(false)]
         public uint SecurityTrailerSize;
     }
 }

@@ -8,7 +8,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FSCTL_SET_ZERO_DATA 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFsctlSetZeroDataRequestPacket : FsccStandardPacket<FSCTL_SET_ZERO_DATA_Request>
     {
         #region Properties

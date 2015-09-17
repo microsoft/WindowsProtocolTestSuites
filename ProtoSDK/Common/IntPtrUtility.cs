@@ -64,7 +64,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// </summary>
         /// <param name="value">The value to be converted to IntPtr.</param>
         /// <returns>The IntPtr.</returns>
-        [CLSCompliant(false)]
         public static IntPtr UInt32ToPtr(uint value)
         {
             unchecked
@@ -84,7 +83,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         // suppress CA1004 because this is utility method for array,
         // and returning object[] is not user-friendly.
         [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter")]
-        [CLSCompliant(false)]
         public static T[] PtrToArray<T>(IntPtr ptr, uint count)
             where T : struct
         {
@@ -104,7 +102,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         // suppress CA1004 because this is utility method for array,
         // and returning object[] is not user-friendly.
         [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter")]
-        [CLSCompliant(false)]
         public static T[] PtrToArray<T>(IntPtr ptr, int offset, uint count)
             where T : struct
         {

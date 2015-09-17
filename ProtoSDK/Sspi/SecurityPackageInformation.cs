@@ -17,26 +17,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <summary>
         /// Set of bit flags that describes the capabilities of the security package. 
         /// </summary>
-        [CLSCompliant(false)]
         public uint Capabilities;
 
         /// <summary>
         /// Specifies the version of the package protocol. Must be 1.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort Version;
 
         /// <summary>
         /// Specifies a DCE RPC identifier, if appropriate. If the package does not implement one of the DCE registered
         /// security systems, the reserved value SECPKG_ID_NONE is used.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort RpcId;
 
         /// <summary>
         /// Specifies the maximum size, in bytes, of the token.
         /// </summary>
-        [CLSCompliant(false)]
         public uint MaxToken;
 
         /// <summary>

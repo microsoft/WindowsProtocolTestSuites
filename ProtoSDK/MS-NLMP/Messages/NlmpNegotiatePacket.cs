@@ -9,7 +9,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
     /// <summary>
     /// the negotiate packet of nlmp
     /// </summary>
-    [CLSCompliant(false)]
     public class NlmpNegotiatePacket : NlmpPacket
     {
         /// <summary>

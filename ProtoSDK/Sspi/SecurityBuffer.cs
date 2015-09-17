@@ -15,7 +15,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <summary>
         /// Bit flags that indicate the type of buffer.
         /// </summary>
-        [CLSCompliant(false)]
         public SecurityBufferType BufferType;
 
         /// <summary>
@@ -28,7 +27,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// </summary>
         /// <param name="bufferType">SecBuffer type</param>
         /// <param name="buffer">SecBuffer in bytes.</param>
-        [CLSCompliant(false)]
         public SecurityBuffer(SecurityBufferType bufferType, byte[] buffer)
         {
             this.BufferType = bufferType;

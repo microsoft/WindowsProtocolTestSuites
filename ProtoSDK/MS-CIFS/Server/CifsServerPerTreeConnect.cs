@@ -118,7 +118,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// all the open searches in this tree connect.
         /// </summary>
-        [CLSCompliant(false)]
         public ReadOnlyCollection<CifsServerPerOpenSearch> OpenSearchTable
         {
             get
@@ -166,7 +165,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Remove an open file from this OpenTable.
         /// </summary>
         /// <param name="fileId">The open file id to remove.</param>
-        [CLSCompliant(false)]
         public void RemoveOpen(ushort fileId)
         {
             lock (this.openTable)
@@ -180,7 +178,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Get the specified file from this OpenTable.
         /// </summary>
         /// <param name="fileId">The file id of the Open to remove.</param>
-        [CLSCompliant(false)]
         public CifsServerPerOpenFile GetOpen(ushort fileId)
         {
             lock (this.openTable)
@@ -216,7 +213,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Get the specified search from this OpenTable.
         /// </summary>
         /// <param name="searchId">The open search id to remove.</param>
-        [CLSCompliant(false)]
         public CifsServerPerOpenSearch GetOpenSearch(ushort searchId)
         {
             lock (this.openSearchTable)
@@ -234,7 +230,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// Remove an open search from this OpenSearchTable.
         /// </summary>
         /// <param name="searchId">The open search id to remove.</param>
-        [CLSCompliant(false)]
         public void RemoveOpenSearch(ushort searchId)
         {
             lock (this.openSearchTable)
@@ -250,7 +245,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
         /// <summary>
         /// public Constructor
         /// </summary>
-        [CLSCompliant(false)]
         public CifsServerPerTreeConnect(
             IFileServiceServerSession session,
             string name,

@@ -7,7 +7,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FileMailslotQueryInformation 
     /// </summary>
-    [CLSCompliant(false)]
     public class FsccFileMailslotQueryInformationResponsePacket : FsccStandardPacket<FileMailslotQueryInformation>
     {
         #region Properties

@@ -332,7 +332,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// Writes a ushort to the bytes array.
         /// </summary>
         /// <param name="data">The ushort to write.</param>
-        [CLSCompliant(false)]
         public void WriteUInt16(ushort data)
         {
             WriteBytesNumeric(BitConverter.GetBytes(data));
@@ -342,7 +341,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// Writes a uint to the bytes array.
         /// </summary>
         /// <param name="data">The uint to write.</param>
-        [CLSCompliant(false)]
         public void WriteUInt32(uint data)
         {
             WriteBytesNumeric(BitConverter.GetBytes(data));
@@ -352,7 +350,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// Writes a ulong to the bytes array.
         /// </summary>
         /// <param name="data">The ulong to write.</param>
-        [CLSCompliant(false)]
         public void WriteUInt64(ulong data)
         {
             WriteBytesNumeric(BitConverter.GetBytes(data));
@@ -505,7 +502,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// Reads a ushort from the bytes array.
         /// </summary>
         /// <returns>The ushort to read.</returns>
-        [CLSCompliant(false)]
         public ushort ReadUInt16()
         {
             return BitConverter.ToUInt16(ReadBytesNumeric(2), 0);
@@ -515,7 +511,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// Reads a uint from the bytes array.
         /// </summary>
         /// <returns>The uint to read.</returns>
-        [CLSCompliant(false)]
         public uint ReadUInt32()
         {
             return BitConverter.ToUInt32(ReadBytesNumeric(4), 0);
@@ -525,7 +520,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// Reads a ulong from the bytes array.
         /// </summary>
         /// <returns>The ulong to read.</returns>
-        [CLSCompliant(false)]
         public ulong ReadUInt64()
         {
             return BitConverter.ToUInt64(ReadBytesNumeric(8), 0);
