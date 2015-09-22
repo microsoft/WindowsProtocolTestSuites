@@ -1,0 +1,35 @@
+###############################################################################
+# Set default behavior to automatically normalize line endings.
+###############################################################################
+
+[attr]wintext text eol=crlf
+
+* text=auto
+
+# Default
+*.* wintext
+
+# Build Specifications
+*.sln	wintext
+*.csproj	wintext
+
+# Sources (Managed)
+*.cs	wintext
+*.ptfconfig	wintext
+
+# Sources (Script)
+*.cmd	wintext
+
+# Configuration
+*.gitattributes	wintext
+*.gitignore	wintext
+
+#Binaries
+*.exe  binary
+*.dll  binary
+*.obj  binary
+*.pdb  binary
+
+#Images (Binary)
+*.png binary
+*.jpg binary

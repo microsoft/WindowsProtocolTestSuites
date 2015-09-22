@@ -1,0 +1,9 @@
+bin
+obj
+drop
+*.suo
+
+# Generated files
+TestSuites/MS-SMB/src/Deploy/TestSuiteBatchFiles.wxs
+TestSuites/MS-SMB/src/Deploy/TestSuiteBinFiles.wxs
+TestSuites/MS-SMB/src/Deploy/TestSuiteScripts.wxs

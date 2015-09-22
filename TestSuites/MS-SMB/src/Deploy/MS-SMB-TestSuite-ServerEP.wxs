@@ -32,7 +32,7 @@
     <WixVariable Id="TESTSUITE_NAME" Value="$(var.TESTSUITE_NAME)" Overridable="no" />
     <WixVariable Id="TESTSUITE_ENDPOINT" Value="$(var.TESTSUITE_ENDPOINT)" Overridable="no" />
     <WixVariable Id="TESTSUITE_VERSION" Value="$(var.TESTSUITE_VERSION)" Overridable="no" />
-    <WixVariable Id="QUICK_START_GUIDE" Value="MS-SMB_ServerUserGuide.docx" />
+    <WixVariable Id="QUICK_START_GUIDE" Value="MS-SMB_ServerUserGuide.md" />
 
     <WixVariable Id="PROTOSDK_DROP_DIR" Value="$(env.TestSuiteRoot)\drop\ProtoSDK\Bin" />
     <WixVariable Id="TESTSUITE_BATCH_DIR" Value="..\Batch" />

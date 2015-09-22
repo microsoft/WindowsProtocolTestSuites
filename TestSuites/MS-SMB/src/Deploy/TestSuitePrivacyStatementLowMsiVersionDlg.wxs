@@ -15,7 +15,8 @@
         <Control Id="Title" Type="Text" X="15" Y="6" Width="350" Height="15" Transparent="yes" NoPrefix="yes" Text="{\WixUI_Font_Title}Install the [ProductName]" />
         <!--TODO:add the right link for the Privacy Statement-->
         <Control Id="TestSuiteDescription" Height="105" Width="305" Type="Text" X="30" Y="80">
-          <Text>This software will collect and store personal information from users computers, including user names and passwords. For more information, see the Privacy Statement(Protocol Test Suites Privacy Statement.docx).</Text>
+			<Text><![CDATA[This software will collect and store personal information from users computers, including user names and passwords. For more information, see the <a href="http://www.microsoft.com/privacystatement/en-us/core/default.aspx">Privacy Statement</a>.]]>
+			</Text>
         </Control>
       </Dialog>
     </UI>
