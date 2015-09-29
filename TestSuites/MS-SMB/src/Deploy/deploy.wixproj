@@ -185,7 +185,7 @@
     <Exec Command='"$(WIX)\bin\heat.exe" dir $(TestSuiteRoot)\drop\TestSuites\MS-SMB\Scripts -out TestSuiteScripts.wxs -template fragment -gg -cg TESTSUITE_SCRIPTS_FILES -dr TESTSUITE_SCRIPTS_DIR -var wix.TESTSUITE_SCRIPTS_DIR -sreg -sfrag -srd' />
   </Target> 
   <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)en-us\$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-SMB\Installer\" />
+    <Copy SourceFiles="$(TargetDir)en-us\$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-SMB\deploy\" />
   </Target>  
   <ItemGroup>
 	<SMBScriptFiles Include="..\..\scripts\*" />
