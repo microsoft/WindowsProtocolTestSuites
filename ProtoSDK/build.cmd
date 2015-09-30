@@ -18,16 +18,16 @@ if not defined buildtool (
 
 set CurrentPath=%~dp0
 if not defined TestSuiteRoot (
-	set TestSuiteRoot=%CurrentPath%..\
+	set TestSuiteRoot="%CurrentPath%..\"
 )
 
-%buildtool% %TestSuiteRoot%ProtoSDK\CryptoLib\CryptoLib.csproj /t:Clean;Rebuild
-%buildtool% %TestSuiteRoot%ProtoSDK\FileAccessService\FileAccessService.csproj /t:Clean;Rebuild
-%buildtool% %TestSuiteRoot%ProtoSDK\MS-CIFS\Cifs.csproj /t:Clean;Rebuild
-%buildtool% %TestSuiteRoot%ProtoSDK\MS-FSCC\Fscc.csproj /t:Clean;Rebuild
-%buildtool% %TestSuiteRoot%ProtoSDK\MS-NLMP\Nlmp.csproj /t:Clean;Rebuild
-%buildtool% %TestSuiteRoot%ProtoSDK\MS-SMB\Smb.csproj /t:Clean;Rebuild
-%buildtool% %TestSuiteRoot%ProtoSDK\Sspi\Sspi.csproj /t:Clean;Rebuild
-%buildtool% %TestSuiteRoot%ProtoSDK\TransportStack\TransportStack.csproj /t:Clean;Rebuild
-%buildtool% %TestSuiteRoot%ProtoSDK\Common\Common.csproj /t:Clean;Rebuild
-%buildtool% %TestSuiteRoot%ProtoSDK\Messages\Messages.csproj /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\CryptoLib\CryptoLib.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\FileAccessService\FileAccessService.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-CIFS\Cifs.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-FSCC\Fscc.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-NLMP\Nlmp.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-SMB\Smb.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\Sspi\Sspi.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\TransportStack\TransportStack.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\Common\Common.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\Messages\Messages.csproj" /t:Clean;Rebuild
