@@ -49,10 +49,10 @@ if not defined TestSuiteRoot (
 	set TestSuiteRoot=%CurrentPath%..\..\..\
 )
 
-%buildtool% %TestSuiteRoot%TestSuites\MS-SMB\src\MS-SMB_Server.sln /t:clean
-if exist %TestSuiteRoot%drop\TestSuites\MS-SMB (
- rd /s /q %TestSuiteRoot%drop\TestSuites\MS-SMB
+%buildtool% "%TestSuiteRoot%TestSuites\MS-SMB\src\MS-SMB_Server.sln" /t:clean
+if exist "%TestSuiteRoot%drop\TestSuites\MS-SMB" (
+ rd /s /q "%TestSuiteRoot%drop\TestSuites\MS-SMB"
 )
 
-%buildtool% %TestSuiteRoot%TestSuites\MS-SMB\src\deploy\deploy.wixproj /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%TestSuites\MS-SMB\src\deploy\deploy.wixproj" /t:Clean;Rebuild
 

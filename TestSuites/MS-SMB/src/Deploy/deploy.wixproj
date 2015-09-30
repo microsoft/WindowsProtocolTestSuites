@@ -180,9 +180,9 @@
   
   <Target Name="GenDeployWxsFile" DependsOnTargets="ResolveWixExtensionReferences" BeforeTargets="Compile">
     <!--Test Suite WXS files-->
-    <Exec Command='"$(WIX)\bin\heat.exe" dir $(TestSuiteRoot)\drop\TestSuites\MS-SMB\Bin -out TestSuiteBinFiles.wxs -template fragment -gg -cg TESTSUITE_BIN_FILES -dr TESTSUITE_BIN_DIR -var wix.TESTSUITE_BIN_DIR -sreg -sfrag -srd' />
+    <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\MS-SMB\Bin" -out TestSuiteBinFiles.wxs -template fragment -gg -cg TESTSUITE_BIN_FILES -dr TESTSUITE_BIN_DIR -var wix.TESTSUITE_BIN_DIR -sreg -sfrag -srd' />
     <Exec Command='"$(WIX)\bin\heat.exe" dir ..\Batch -out TestSuiteBatchFiles.wxs -template fragment -gg -cg TESTSUITE_BATCH_FILES -dr TESTSUITE_BATCH_DIR -var wix.TESTSUITE_BATCH_DIR -sreg -sfrag -srd' />
-    <Exec Command='"$(WIX)\bin\heat.exe" dir $(TestSuiteRoot)\drop\TestSuites\MS-SMB\Scripts -out TestSuiteScripts.wxs -template fragment -gg -cg TESTSUITE_SCRIPTS_FILES -dr TESTSUITE_SCRIPTS_DIR -var wix.TESTSUITE_SCRIPTS_DIR -sreg -sfrag -srd' />
+    <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\MS-SMB\Scripts" -out TestSuiteScripts.wxs -template fragment -gg -cg TESTSUITE_SCRIPTS_FILES -dr TESTSUITE_SCRIPTS_DIR -var wix.TESTSUITE_SCRIPTS_DIR -sreg -sfrag -srd' />
   </Target> 
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)en-us\$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-SMB\deploy\" />

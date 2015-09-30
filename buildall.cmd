@@ -5,8 +5,8 @@
 
 set TestSuiteRoot=%~dp0
 
-if exist %TestSuiteRoot%drop (
- rd /s /q %TestSuiteRoot%drop
+if exist "%TestSuiteRoot%drop" (
+ rd /s /q "%TestSuiteRoot%drop"
 )
 
 call ProtoSDK\build.cmd
