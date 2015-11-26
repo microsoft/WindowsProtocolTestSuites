@@ -234,7 +234,7 @@ This is used to test SMB2 common user scenarios.
 |<empty>  |<empty>  |
 |-------|-----|
 | **Test ID**              | BVT\_SMB2Basic\_QueryDir\_WriteFlush\_ChangeNotify\_Read |
-| **Description **         | This test case is designed to test whether server can handle common QUERY, WRITE, FLUSH, CHANGE\_NOTIFY operations. |
+| **Description**         | This test case is designed to test whether server can handle common QUERY, WRITE, FLUSH, CHANGE\_NOTIFY operations. |
 | **Prerequisites**   | |
 | **Test Execution Steps** | From client1 query information on an open of a directory then open the sub directory according to the queried info and register change notify on the sub directory |
 ||   NEGOTIATE|  
@@ -285,7 +285,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                                                                                              |
 |--------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_SMB2Basic\_CancelRegisteredChangeNotify                                                                                                 |
-| **Description **         | This test case is designed to verify that CANCEL request cancels CHANGE\_NOTIFY request when there's no CHANGE\_NOTIFY response from server. |
+| **Description**         | This test case is designed to verify that CANCEL request cancels CHANGE\_NOTIFY request when there's no CHANGE\_NOTIFY response from server. |
 | **Prerequisites**        |                                                                                                                                              |
 | **Test Execution Steps** | NEGOTIATE |                                                                                                                                   
 |                          |SESSION\_SETUP |                                                                                                                               
@@ -320,7 +320,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                                                                            |
 |--------------------------|----------------------------------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_SMB2Basic\_QueryAndSet\_FileInfo                                                                                      |
-| **Description **         | Query and set the info for a file                                                                                          |
+| **Description**         | Query and set the info for a file                                                                                          |
 | **Prerequisites**        |                                                                                                                            |
 | **Test Execution Steps** | NEGOTIATE                                                                                                                  |
 |                          |SESSION\_SETUP                                                                                                              |
@@ -372,7 +372,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                                       |
 |--------------------------|---------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_SMB2Basic\_LockAndUnLock                                                         |
-| **Description **         | Verify locking range could not be written and after unlock the range could be written |
+| **Description**         | Verify locking range could not be written and after unlock the range could be written |
 | **Prerequisites**        |                                                                                       |
 | **Test Execution Steps** | **From client1 open a file and lock a specific range**                                |
 |                          |NEGOTIATE                                                                              |
@@ -421,7 +421,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                                                               |
 |--------------------------|---------------------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_MultiCredit\_OneRequestWithMultiCredit                                                                   |
-| **Description **         | This test case is designed to test whether server can handle one request which consumes more than one credit. |
+| **Description**         | This test case is designed to test whether server can handle one request which consumes more than one credit. |
 | **Prerequisites**        |                                                                                                               |
 | **Test Execution Steps** | NEGOTIATE                                                                                                     | 
 |                          | SESSION\_SETUP                                                                                                | 
@@ -450,7 +450,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                                                    |
 |--------------------------|----------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_Negotiate\_Compatible\_Wildcard                                                               |
-| **Description **         | This test case is designed to test whether server can handle NEGOTIATE with Smb2 dialect wildcard. |
+| **Description**         | This test case is designed to test whether server can handle NEGOTIATE with Smb2 dialect wildcard. |
 | **Prerequisites**        |                                                                                                    |
 | **Test Execution Steps** | 1.  Client sends SMB\_COM\_NEGOTIATE containing SMB2.??? Dialect and SMB2.002                      |
 |                          | 2.  Server returns SMB2 NEGOTIATE response with SMB2.FF dialect                                    | 
@@ -462,7 +462,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                  |
 |--------------------------|------------------------------------------------------------------|
 | **Test ID**              | BVT\_Negotiate\_Compatible\_2002                                 |
-| **Description **         | Ensure server could handle compatible negotiate                  |
+| **Description**         | Ensure server could handle compatible negotiate                  |
 | **Prerequisites**        |                                                                  |
 | **Test Execution Steps** | 1.  Client sends SMB\_COM\_NEGOTIATE containing SMB2.002         |
 |                          |  2.  Server returns SMB2 NEGOTIATE response with SMB2.002 dialect|
@@ -472,7 +472,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                                                |
 |--------------------------|------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_Negotiate\_SMB2002                                                                        |
-| **Description **         | This test case is designed to test whether server can handle NEGOTIATE with Smb 2.002 dialect. |
+| **Description**         | This test case is designed to test whether server can handle NEGOTIATE with Smb 2.002 dialect. |
 | **Prerequisites**        |                                                                                                |
 | **Test Execution Steps** | 1.  Client sends SMB2 NEGOTIATE containing SMB2.002                                            |
 |                          | 2.  Server returns SMB2 NEGOTIATE response with SMB2.002 dialect                               |
@@ -482,7 +482,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                                                  |
 |--------------------------|--------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_Negotiate\_SMB21                                                                            |
-| **Description **         | This test case is designed to test whether server can handle NEGOTIATE with Smb 2.1 dialect.     |
+| **Description**         | This test case is designed to test whether server can handle NEGOTIATE with Smb 2.1 dialect.     |
 | **Prerequisites**        |                                                                                                  |
 | **Test Execution Steps** | 1.  Client sends SMB2 NEGOTIATE containing SMB2.002 and SMB2.1                                   |
 |                          | 2.  Server returns SMB2 NEGOTIATE response with the max common dialect client and server support |
@@ -492,7 +492,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                                                  |
 |--------------------------|--------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_Negotiate\_SMB30                                                                            |
-| **Description **         | This test case is designed to test whether server can handle NEGOTIATE with Smb 3.0 dialect.     |
+| **Description**         | This test case is designed to test whether server can handle NEGOTIATE with Smb 3.0 dialect.     |
 | **Prerequisites**        |                                                                                                  |
 | **Test Execution Steps** | 1.  Client sends SMB2 NEGOTIATE containing SMB2.002, SMB2.1 and SMB3.0                           |
 |                          | 2.  Server returns SMB2 NEGOTIATE response with the max common dialect client and server support |
@@ -502,7 +502,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                                                  |
 |--------------------------|--------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_Negotiate\_SMB302                                                                           |
-| **Description **         | This test case is designed to test whether server can handle NEGOTIATE with Smb 3.02 dialect.    |
+| **Description**         | This test case is designed to test whether server can handle NEGOTIATE with Smb 3.02 dialect.    |
 | **Prerequisites**        |                                                                                                  |
 | **Test Execution Steps** | 1.  Client sends SMB2 NEGOTIATE containing SMB2.002, SMB2.1, SMB3.0 and SMB3.02                  |
 |                          | 2.  Server returns SMB2 NEGOTIATE response with the max common dialect client and server support |
@@ -512,7 +512,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                                                    |
 |--------------------------|----------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_Negotiate\_SigningEnabled                                                                     |
-| **Description **         | This test case is designed to test whether server can handle NEGOTIATE with Signing Enabled.       |
+| **Description**         | This test case is designed to test whether server can handle NEGOTIATE with Signing Enabled.       |
 | **Prerequisites**        |                                                                                                    |
 | **Test Execution Steps** | 1.  Client sends NEGOTIATE request containing SMB2.002, SMB2.1, SMB3 dialects with signing enabled |
 |                          | 2.  Server returns NEGOTIATE response with SMB3 dialect                                            |
@@ -522,7 +522,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                                                                                                                            |
 |--------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_Negotiate\_SMB311                                                                                                                                                     |
-| **Description **         | This test case is designed to test whether server (including the server doesn't implement dialect 3.11) can handle NEGOTIATE with Smb 3.11 dialect and Negotiate Contexts. |
+| **Description**         | This test case is designed to test whether server (including the server doesn't implement dialect 3.11) can handle NEGOTIATE with Smb 3.11 dialect and Negotiate Contexts. |
 | **Prerequisites**        |                                                                                                                                                                            |
 | **Test Execution Steps** | 1.  Client send Negotiate request with dialect SMB 3.11, SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context.                        |
 |                          | 2.  Server returns correct SMB2 NEGOTIATE response according to their supported dialect.                                                                                   |
@@ -532,7 +532,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                                                                                                       |
 |--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_Negotiate\_SMB311\_Preauthentication                                                                                                             |
-| **Description **         | This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context only. |
+| **Description**         | This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context only. |
 | **Prerequisites**        | The server implements dialect 3.11.                                                                                                                   |
 | **Test Execution Steps** | 1.  Client send Negotiate request with dialect SMB 3.11, SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context.                                              |
 |                          | 2.  Server returns SMB2 NEGOTIATE response with dialect 3.11 and the correct SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context.                          |
@@ -542,7 +542,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                                                                                                       |
 |--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_Negotiate\_SMB311\_Preauthentication\_Encryption\_CCM                                                                                                                                |
-| **Description **         | This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-128-CCM preferred. |
+| **Description**         | This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-128-CCM preferred. |
 | **Prerequisites**        | The server implements dialect 3.11.                                                                                                                                                       |
 | **Test Execution Steps** | 1.  Client send Negotiate request with dialect SMB 3.11, SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-128-CCM preferred.            |
 |                          | 2.  Server returns SMB2 NEGOTIATE response with dialect 3.11 and the correct Ciphers in SMB2\_ENCRYPTION\_CAPABILITIES context.                                                           |
@@ -552,7 +552,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                                                                                                       |
 |--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_Negotiate\_SMB311\_Preauthentication\_Encryption\_GCM                                                                                                                                |
-| **Description **         | This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-128-GCM preferred. |
+| **Description**         | This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-128-GCM preferred. |
 | **Prerequisites**        | The server implements dialect 3.11.                                                                                                                                                       |
 | **Test Execution Steps** | 1.  Client send Negotiate request with dialect SMB 3.11, SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-128-GCM preferred.            |
 |                          | 2.  Server returns SMB2 NEGOTIATE response with dialect 3.11 and the correct Ciphers in SMB2\_ENCRYPTION\_CAPABILITIES  context.                                                          |
@@ -589,7 +589,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                                                                                     |
 |--------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_MultipleChannel\_NicRedundantOnBoth                                                                                            |
-| **Description **         | This test case is designed to test the basic functionality of Multiple Channel, assuming that both client and server have two NICs. |
+| **Description**         | This test case is designed to test the basic functionality of Multiple Channel, assuming that both client and server have two NICs. |
 | **Prerequisites**        |                                                                                                                                     |
 | **Test Execution Steps** | SETUP\_CONNECTION from client NIC\_1 to SUT NIC\_1                                                                                  |
 |                          | NEGOTIATE                                                                                                                           | 
@@ -632,7 +632,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                                                                               |
 |--------------------------|-------------------------------------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_CopyOffload                                                                                                              |
-| **Description **         | This test case is designed to test whether server can handle offload copy correctly when copy content between two files.      |
+| **Description**         | This test case is designed to test whether server can handle offload copy correctly when copy content between two files.      |
 | **Prerequisites**        |                                                                                                                               |
 | **Test Execution Steps** | 1.  Client sends NEGOTIATE request                                                                                            |
 |                          | 2.  Server sends NEGOTIATE response                                                                                           |   
@@ -691,7 +691,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                                     |
 |--------------------------|-------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_FileLevelTrim                                                                  |
-| **Description **         | This test case is designed to test basic functionality of FSCTL\_FILE\_LEVEL\_TRIM. |
+| **Description**         | This test case is designed to test basic functionality of FSCTL\_FILE\_LEVEL\_TRIM. |
 | **Prerequisites**        |                                                                                     |
 | **Test Execution Steps** | NEGOTIATE                                                                           |
 |                          | SESSION\_SETUP                                                                      | 
@@ -732,7 +732,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                                                                                                                                                      |
 |--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_SetGetIntegrityInfo                                                                                                                                                                             |
-| **Description **         | This test case is designed to test whether server can handle IOCTL FSCTL\_GET\_INTEGRITY\_INFORMATION and FSCTL\_SET\_INTEGRITY\_INFORMATION.                                                        |
+| **Description**         | This test case is designed to test whether server can handle IOCTL FSCTL\_GET\_INTEGRITY\_INFORMATION and FSCTL\_SET\_INTEGRITY\_INFORMATION.                                                        |
 | **Prerequisites**        |                                                                                                                                                                                                      |
 | **Test Execution Steps** | 1.  Client creates a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE                                                                            |
 |                          | 2.  Client sends IOCTL request with FSCTL\_GET\_INTEGRITY\_INFORMATION.                                                                                                                              |
@@ -767,7 +767,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                                                                                                                                                      |
 |--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_DirectoryLeasing\_ReadWriteHandleCaching                                                                                                                                                        |
-| **Description **         | This test case is designed to test whether server can handle READ|WRITE|HANDLE leasing on a directory correctly.                                                                                     |
+| **Description**         | This test case is designed to test whether server can handle READ|WRITE|HANDLE leasing on a directory correctly.                                                                                     |
 | **Prerequisites**        |                                                                                                                                                                                                      |
 | **Test Execution Steps** | 1.  Client sends NEGOTIATE request                                                                                                                                                                   |
 |                          | 2.  Server sends NEGOTIATE response                                                                                                                                                                  | 
@@ -825,7 +825,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                                                                                     |
 |--------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_DirectoryLeasing\_LeaseBreakOnMultiClients                                                                                     |
-| **Description **         | Test whether server can handle lease break notification when multiple clients request caching lease.                                |
+| **Description**         | Test whether server can handle lease break notification when multiple clients request caching lease.                                |
 | **Prerequisites**        |                                                                                                                                     |
 | **Test Execution Steps** | **From client1**                                                                                                                    |
 |                          | NEGOTIATE                                                                                                                           | 
@@ -875,7 +875,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                                                      |
 |--------------------------|------------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_Encryption\_GlobalEncryptionEnabled                                                             |
-| **Description **         | Ensure server could handle encrypted requests correctly while global encryption is enabled           |
+| **Description**         | Ensure server could handle encrypted requests correctly while global encryption is enabled           |
 | **Prerequisites**        |                                                                                                      |
 | **Test Execution Steps** | 1.  Client sends NEGOTIATE request with SMB2\_GLOBAL\_CAP\_ENCRYPTION                                |
 |                          | 2.  Server sends NEGOTIATE response with SMB2\_GLOBAL\_CAP\_ENCRYPTION                               |
@@ -903,7 +903,7 @@ This is used to test SMB2 common user scenarios.
 |                          |                                                                                                              |
 |--------------------------|--------------------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_Encryption\_PerShareEncryptionEnabled                                                                   |
-| **Description **         | Ensure server could handle encrypted requests correctly while client requests to connect to encrypted share. |
+| **Description**         | Ensure server could handle encrypted requests correctly while client requests to connect to encrypted share. |
 | **Prerequisites**        |                                                                                                              |
 | **Test Execution Steps** | 1.  Client sends NEGOTIATE request with SMB2\_GLOBAL\_CAP\_ENCRYPTION                                        |
 |                          | 2.  Server sends NEGOTIATE response with SMB2\_GLOBAL\_CAP\_ENCRYPTION                                       |
@@ -930,7 +930,7 @@ This is used to test SMB2 common user scenarios.
 |||
 |--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_Encryption\_SMB311\_CCM                                                                                                                                     |
-| **Description **         | This case is to ensure server could handle encrypted requests correctly with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-128-CCM as encryption algorithm.  | 
+| **Description**         | This case is to ensure server could handle encrypted requests correctly with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-128-CCM as encryption algorithm.  | 
 | **Prerequisites**        | The server implement dialect 3.11.                                                                                                                                           |
 | **Test Execution Steps** | 1.  Client sends NEGOTIATE request with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context. AES-128-CCM is as the preferred cipher algorithm. Server should reply NEGOTIATE response with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-128-CCM as cipher algorithm.                                                                                                                         |
 |                          | 2.  Client sends SESSION\_SETUP request and gets response.                                                                                                                   |
@@ -940,7 +940,7 @@ This is used to test SMB2 common user scenarios.
 |||
 |--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_Encryption\_SMB311\_GCM                                                                                                                                                 |
-| **Description **         | This case is to ensure server could handle encrypted requests correctly with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-128-GCM as encryption algorithm.   |
+| **Description**         | This case is to ensure server could handle encrypted requests correctly with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-128-GCM as encryption algorithm.   |
 | **Prerequisites**        | The server implement dialect 3.11.                                                                                                                                           |
 | **Test Execution Steps** | 1.  Client sends NEGOTIATE request with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context. AES-128-GCM is as the preferred cipher algorithm. Server should reply NEGOTIATE response with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-128-GCM as cipher algorithm.            | 
 |                          | 2.  Client sends SESSION\_SETUP request and gets response.                                                                                                                   |
@@ -974,9 +974,9 @@ This is used to test SMB2 common user scenarios.
 #####<a name="3.1.13.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_AppInstanceId|
-|**Description **|Check when client fails over to a new client, the previous opened file can be reopened with the same AppInstanceId. |
+|**Description**|Check when client fails over to a new client, the previous opened file can be reopened with the same AppInstanceId. |
 |**Prerequisites**||
 |**Test Execution Steps**|Via NIC1|
 ||1. Start the first client by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT|
@@ -997,7 +997,7 @@ This is used to test SMB2 common user scenarios.
 #####<a name="3.1.14.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Client cluster failover v2|
 |**Message Sequence**|**Client1:**|
 ||NEGOTIATE|
@@ -1017,9 +1017,9 @@ This is used to test SMB2 common user scenarios.
 #####<a name="3.1.14.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_AppInstanceVersion_SMB311_GreaterVersion|
-|**Description **|Check when client fails over to a new client, the previous opened file can be reopened with a greater AppInstanceVersion.|
+|**Description**|Check when client fails over to a new client, the previous opened file can be reopened with a greater AppInstanceVersion.|
 |**Prerequisites**|The server implements dialect 3.11.|
 |**Test Execution Steps**|1. Start the first client by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT.|
 ||2. The first client sends CREATE request with AppInstanceVersionHigh = 1, AppInstanceVersionLow = 0.|
@@ -1032,9 +1032,9 @@ This is used to test SMB2 common user scenarios.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_AppInstanceVersion_SMB311_SameVersion|
-|**Description **|Check when client fails over to a new client, the previous opened file can NOT be reopened with the same AppInstanceVersion.|
+|**Description**|Check when client fails over to a new client, the previous opened file can NOT be reopened with the same AppInstanceVersion.|
 |**Prerequisites**|The server implements dialect 3.11.|
 |**Test Execution Steps**|1. Start the first client by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT.|
 ||2. The first client sends CREATE request with AppInstanceVersionHigh = 1, AppInstanceVersionLow = 0.|
@@ -1047,9 +1047,9 @@ This is used to test SMB2 common user scenarios.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_AppInstanceVersion_SMB311_LowerAppInstanceVersionHigh|
-|**Description **|Check when client fails over to a new client, the previous opened file can NOT be reopened with lower AppInstanceVersion.AppInstanceVersionHigh.|
+|**Description**|Check when client fails over to a new client, the previous opened file can NOT be reopened with lower AppInstanceVersion.AppInstanceVersionHigh.|
 |**Prerequisites**|The server implements dialect 3.11.|
 |**Test Execution Steps**|1. Start the first client by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT.|
 ||2. The first client sends CREATE request with AppInstanceVersionHigh = 2, AppInstanceVersionLow = 0.|
@@ -1061,9 +1061,9 @@ This is used to test SMB2 common user scenarios.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_AppInstanceVersion_SMB311_LowerAppInstanceVersionLow|
-|**Description **|Check when client fails over to a new client, the previous opened file can NOT be reopened with lower AppInstanceVersion.AppInstanceVersionLow.|
+|**Description**|Check when client fails over to a new client, the previous opened file can NOT be reopened with lower AppInstanceVersion.AppInstanceVersionLow.|
 |**Prerequisites**|The server implements dialect 3.11.|
 |**Test Execution Steps**|1. Start the first client by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT.|
 ||2. The first client sends CREATE request with AppInstanceVersionHigh = 1, AppInstanceVersionLow = 2.|
@@ -1079,7 +1079,7 @@ This is used to test SMB2 common user scenarios.
 #####<a name="3.1.15.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|DurableHandle|
 |**Message Sequence**|NEGOTIATE|
 ||SESSION_SETUP|
@@ -1099,9 +1099,9 @@ This is used to test SMB2 common user scenarios.
 
 #####<a name="3.1.15.2"> Test Case
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_DurableHandleV1_Reconnect_WithBatchOplock|
-|**Description **|This test case is designed to test whether server can create a durable open v1 with batch oplock correctly.|
+|**Description**|This test case is designed to test whether server can create a durable open v1 with batch oplock correctly.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client sends NEGOTIATE request|
 ||Server sends NEGOTIATE response|
@@ -1135,9 +1135,9 @@ This is used to test SMB2 common user scenarios.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_DurableHandleV1_Reconnect_WithLeaseV1|
-|**Description **|Test reconnect with DurableHandleV1 and LeaseV1 context. |
+|**Description**|Test reconnect with DurableHandleV1 and LeaseV1 context. |
 |**Prerequisites**||
 |**Test Execution Steps**|Client sends NEGOTIATE request|
 ||Server sends NEGOTIATE response|
@@ -1171,9 +1171,9 @@ This is used to test SMB2 common user scenarios.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_DurableHandleV2_Reconnect_WithBatchOplock|
-|**Description **|Test reconnect with DurableHandleV2 and BatchOplock.|
+|**Description**|Test reconnect with DurableHandleV2 and BatchOplock.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client sends NEGOTIATE request|
 ||Server sends NEGOTIATE response|
@@ -1207,9 +1207,9 @@ This is used to test SMB2 common user scenarios.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_DurableHandleV2_Reconnect_WithLeaseV1|
-|**Description **|Test reconnect with DurableHandleV2 and LeaseV1 context.|
+|**Description**|Test reconnect with DurableHandleV2 and LeaseV1 context.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client sends NEGOTIATE request|
 ||Server sends NEGOTIATE response|
@@ -1243,9 +1243,9 @@ This is used to test SMB2 common user scenarios.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_PersistentHandle_Reconnect|
-|**Description **|Test reconnect with persistent handle |
+|**Description**|Test reconnect with persistent handle |
 |**Prerequisites**||
 |**Test Execution Steps**|Client sends NEGOTIATE request|
 ||Server sends NEGOTIATE response|
@@ -1283,7 +1283,7 @@ This is used to test SMB2 common user scenarios.
 #####<a name="3.1.16.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|This scenario is to test whether server can handle Oplock break correctly.|
 |**Message Sequence**|**Based on NIC1, create Client1:**|
 ||NEGOTIATE|
@@ -1305,9 +1305,9 @@ This is used to test SMB2 common user scenarios.
 #####<a name="3.1.16.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_OpLockBreak |
-|**Description **|This test case is designed to test whether sever can handle OplockBreak correctly.|
+|**Description**|This test case is designed to test whether sever can handle OplockBreak correctly.|
 |**Prerequisites**||
 |**Test Execution Steps**|Via NIC1|
 ||Client sends NEGOTIATE request|
@@ -1345,7 +1345,7 @@ This is used to test SMB2 common user scenarios.
 #####<a name="3.1.17.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|This scenario is to test whether server can handle lease correctly.|
 |**Message Sequence**|**Based on NIC1, create Client1:**|
 ||NEGOTIATE|
@@ -1367,9 +1367,9 @@ This is used to test SMB2 common user scenarios.
 #####<a name="3.1.17.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_Leasing_FileLeasingV1|
-|**Description **|This test case is designed to test whether server can handle LeaseV1 context correctly on a file.|
+|**Description**|This test case is designed to test whether server can handle LeaseV1 context correctly on a file.|
 |**Prerequisites**||
 |**Test Execution Steps**|Via NIC1|
 ||Client sends NEGOTIATE request|
@@ -1420,9 +1420,9 @@ This is used to test SMB2 common user scenarios.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_Leasing_FileLeasingV2|
-|**Description **|This test case is designed to test whether server can handle LeaseV2 context correctly on a file.|
+|**Description**|This test case is designed to test whether server can handle LeaseV2 context correctly on a file.|
 |**Prerequisites**||
 |**Test Execution Steps**|Via NIC1|
 ||Client sends NEGOTIATE request|
@@ -1477,9 +1477,9 @@ This is used to test SMB2 common user scenarios.
 #####<a name="3.1.18.1"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_Replay_WriteWithInvalidChannelSequence|
-|**Description **|This test case is designed to test whether server can handle the Replay request with invalid channel sequence correctly.|
+|**Description**|This test case is designed to test whether server can handle the Replay request with invalid channel sequence correctly.|
 |**Prerequisites**||
 |**Test Execution Steps**|Via NIC1|
 ||Start a client from main channel by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE.|
@@ -1499,9 +1499,9 @@ This is used to test SMB2 common user scenarios.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_Replay_ReplayCreate|
-|**Description **|This test case is designed to test whether server can handle Replay operation correctly.|
+|**Description**|This test case is designed to test whether server can handle Replay operation correctly.|
 |**Prerequisites**||
 |**Test Execution Steps**|Via NIC1|
 ||Start a client from main channel, and send NEGOTIATE and SESSION_SETUP requests via NIC2|
@@ -1520,9 +1520,9 @@ This is used to test SMB2 common user scenarios.
 #####<a name="3.1.19.1"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_ResilientHandle_Reconnect|
-|**Description **|Test whether server can request a durable open when receiving FSCTL_LMR_REQUEST_RESILLIENNCY successfully.|
+|**Description**|Test whether server can request a durable open when receiving FSCTL_LMR_REQUEST_RESILLIENNCY successfully.|
 |**Prerequisites**||
 |**Test Execution Steps**|Start the first client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT|
 ||The first client sends an IOCTL FSCTL_LMR_REQUEST_RESILLIENCY request.|
@@ -1534,9 +1534,9 @@ This is used to test SMB2 common user scenarios.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_ResilientHandle_LockSequence|
-|**Description **|This test case is designed to test whether server can handle Lock request with specified LockSequence.|
+|**Description**|This test case is designed to test whether server can handle Lock request with specified LockSequence.|
 |**Prerequisites**||
 |**Test Execution Steps**|Start the first client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE. The first client sends an IOCTL FSCTL_LMR_REQUEST_RESILLIENCY request|
 ||The first client sends WRITE request.|
@@ -1553,9 +1553,9 @@ This is used to test SMB2 common user scenarios.
 #####<a name="3.1.20.1"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_Signing|
-|**Description **|This test case is designed to test whether server can handle NEGOTIATE and SESSION_SETUP requests with NEGOTIATE_SIGNING_REQUIRED set.|
+|**Description**|This test case is designed to test whether server can handle NEGOTIATE and SESSION_SETUP requests with NEGOTIATE_SIGNING_REQUIRED set.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client sends NEGOTIATE request with NEGOTIATE_SIGNING_REQUIRED flag set|
 ||Server sends NEGOTIATE response|
@@ -1570,9 +1570,9 @@ This is used to test SMB2 common user scenarios.
 #####<a name="3.1.21.1"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_TreeMgmt_TreeConnectAndDisconnect|
-|**Description **|This test case is designed to test whether server can handle TREE_CONNECT and TREE_DISCONNECT requests correctly.|
+|**Description**|This test case is designed to test whether server can handle TREE_CONNECT and TREE_DISCONNECT requests correctly.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client sends NEGOTIATE request with NEGOTIATE_SIGNING_REQUIRED flag set|
 ||Server sends NEGOTIATE response|
@@ -1587,9 +1587,9 @@ This is used to test SMB2 common user scenarios.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_TreeMgmt_SMB311_Disconnect_NoSignedNoEncryptedTreeConnect|
-|**Description **|This test case is designed to test whether server can disconnect the connection when Connection.Dialect is 3.1.1 and the TreeConnect request is not signed or not encrypted.|
+|**Description**|This test case is designed to test whether server can disconnect the connection when Connection.Dialect is 3.1.1 and the TreeConnect request is not signed or not encrypted.|
 |**Prerequisites**|The server implements dialect 3.11.|
 |**Test Execution Steps**|Client sends NEGOTIATE request without NEGOTIATE_SIGNING_REQUIRED and GLOBAL_CAP_ENCRYPTION set and gets response.|
 ||Client sends SESSION_SETUP request without NEGOTIATE_SIGNING_REQUIRED flag set and gets response.|
@@ -1602,9 +1602,9 @@ This is used to test SMB2 common user scenarios.
 #####<a name="3.1.22.1"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_SessionMgmt_NewSession|
-|**Description **|This test case is designed to test whether server can handle a new session.|
+|**Description**|This test case is designed to test whether server can handle a new session.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client sends NEGOTIATE request|
 ||Server sends NEGOTIATE response|
@@ -1614,9 +1614,9 @@ This is used to test SMB2 common user scenarios.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_SessionMgmt_ReconnectSessionSetup|
-|**Description **|This test case is designed to test whether server can handle authentication after disconnection|
+|**Description**|This test case is designed to test whether server can handle authentication after disconnection|
 |**Prerequisites**||
 |**Test Execution Steps**|Client1 sends NEGOTIATE request|
 ||Server sends NEGOTIATE response|
@@ -1631,7 +1631,7 @@ This is used to test SMB2 common user scenarios.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_SessionMgmt_Reauthentication|
 |**Description**|This test case is designed to test whether server can handle reauthentication successfully.|
 |**Test Execution Steps **|Client sends NEGOTIATE request. |
@@ -1646,7 +1646,7 @@ This is used to test SMB2 common user scenarios.
 #####<a name="3.1.23.1"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_CreateClose_CreateAndCloseFile|
 |**Description**|This case is designed to test whether server can handle Create and Delete operations on file correctly.|
 |**Message Sequence**|NEGOTIATE|
@@ -1666,7 +1666,7 @@ This is used to test SMB2 common user scenarios.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_CreateClose_CreateAndCloseDirectory|
 |**Description**|This case is designed to test whether server can handle Create and Delete operations on directory correctly.|
 |**Message Sequence**|NEGOTIATE|
@@ -1690,7 +1690,7 @@ This is used to test SMB2 common user scenarios.
 #####<a name="3.1.24.1"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_Compound_RelatedRequests|
 |**Message Sequence**|NEGOTIATE|
 ||SESSION_SETUP|
@@ -1702,7 +1702,7 @@ This is used to test SMB2 common user scenarios.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_Compound_UnrelatedRequests|
 |**Message Sequence**|NEGOTIATE|
 ||SESSION_SETUP|
@@ -1718,7 +1718,7 @@ This is used to test SMB2 common user scenarios.
 #####<a name="3.1.25.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Request validation of a previous SMB2 NEGOTIATE|
 |**Message Sequence**|NEGOTIATE|
 ||SESSION_SETUP|
@@ -1733,9 +1733,9 @@ This is used to test SMB2 common user scenarios.
 #####<a name="3.1.25.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_ValidateNegotiateInfo|
-|**Description **|Test whether server can handle IOCTL FSCTL_VALIDATE_NEGOTIATE_INFO.|
+|**Description**|Test whether server can handle IOCTL FSCTL_VALIDATE_NEGOTIATE_INFO.|
 |**Prerequisites**||
 |**Test Execution Steps**|NEGOTIATE|
 ||SESSION_SETUP|
@@ -1772,7 +1772,7 @@ N/A
 ######<a name="3.2.1.1.3"> Scenario Design 
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|AppInstanceId|
 |**Description**|Basic scenario:|
 ||Create an open first with/without AppInstanceId, then send create request again to see if the open can be closed or not.|
@@ -1787,9 +1787,9 @@ N/A
 Scenario see [Scenario](#3.1.13.1)
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|Negative_AppInstanceId_DifferentAppInstanceIdAfterFailover|
-|**Description **|Open a file with a different AppInstanceId after failover so that server treat the open differently|
+|**Description**|Open a file with a different AppInstanceId after failover so that server treat the open differently|
 |**Prerequisites**||
 |**Test Execution Steps**|Based on NIC1, create Client1:|
 ||NEGOTIATE|
@@ -1810,9 +1810,9 @@ Scenario see [Scenario](#3.1.13.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|AppInstanceId_Negative_DifferentAppInstanceIdInReopen|
-|**Description **|This test case is designed to check that if a client fails over to a new client, whether the previously opened file can be reopened with different AppInstanceId.|
+|**Description**|This test case is designed to check that if a client fails over to a new client, whether the previously opened file can be reopened with different AppInstanceId.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client1 sends the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT|
 ||Server responses successfully.|
@@ -1830,9 +1830,9 @@ Scenario see [Scenario](#3.1.13.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|AppInstanceId_Smb311|
-|**Description **|The case is designed to test if the server implements dialect 3.11, and when client fails over to a new client, the previous open can be closed by the new client with the same AppInstanceId. AppInstanceId should work without DH2Q create context.|
+|**Description**|The case is designed to test if the server implements dialect 3.11, and when client fails over to a new client, the previous open can be closed by the new client with the same AppInstanceId. AppInstanceId should work without DH2Q create context.|
 |**Prerequisites**|The server implements dialect 3.11.|
 |**Test Execution Steps**|Client1 sends NEGOTIATE request with dialect 3.11 and gets NEGOTIATE response also with dialect 3.11.|
 ||Client1 sends the following requests: SESSION_SETUP; TREE_CONNECT.|
@@ -1858,9 +1858,9 @@ See section [Scenario](#3.1.14.1).
 #####<a name="3.2.2.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|Negative_AppInstanceVersion_SMB311_NoVersion|
-|**Description **|Check when client fails over to a new client, the previous opened file can NOT be reopened with no AppInstanceVersion.|
+|**Description**|Check when client fails over to a new client, the previous opened file can NOT be reopened with no AppInstanceVersion.|
 |**Prerequisites**|The server implements dialect 3.11.|
 |**Test Execution Steps**|Start the first client by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT.|
 ||The first client sends CREATE request with AppInstanceVersionHigh = 1, AppInstanceVersionLow = 0.|
@@ -1872,9 +1872,9 @@ See section [Scenario](#3.1.14.1).
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|AppInstanceVersion_SMB311_SMB302|
-|**Description **|Check if server can fail the create request if the second client send a create request with dialect302 and AppInstanceID create context.|
+|**Description**|Check if server can fail the create request if the second client send a create request with dialect302 and AppInstanceID create context.|
 |**Prerequisites**|The server implements dialect 3.11.|
 |**Test Execution Steps**|Start the first client by sending the following requests: NEGOTIATE with dialect 3.11; SESSION_SETUP; TREE_CONNECT.|
 ||The first client sends CREATE request with AppInstanceVersionHigh = 1, AppInstanceVersionLow = 0.|
@@ -1886,9 +1886,9 @@ See section [Scenario](#3.1.14.1).
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|AppInstanceVersion_SMB302_SMB311|
-|**Description **|Check when the first client negotiates dialect 3.02, the second client negotiates dialect 3.11, the create request with SMB2_CREATE_APP_INSTANCE_VERSION create context sent by the second client should succeed.|
+|**Description**|Check when the first client negotiates dialect 3.02, the second client negotiates dialect 3.11, the create request with SMB2_CREATE_APP_INSTANCE_VERSION create context sent by the second client should succeed.|
 |**Prerequisites**|The server implements dialect 3.11.|
 |**Test Execution Steps**|Start the first client by sending the following requests: NEGOTIATE with dialect 3.02; SESSION_SETUP; TREE_CONNECT.|
 ||The first client sends CREATE request with an AppInstanceId context.|
@@ -1932,7 +1932,7 @@ The feature has 34 model-based test cases and several traditional test cases.
 ######<a name="3.2.3.1.3"> Scenario Design
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|CreateClose|
 |**Description**|Basic scenario to test how the server handles CREATE Request and CLOSE Request.|
 |**Machine**|ReadConfig;|
@@ -1948,7 +1948,7 @@ The feature has 34 model-based test cases and several traditional test cases.
 #####<a name="3.2.3.2"> Traditional Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|CreateClose_SymbolicLinkInMiddle|
 |**Description**|This case is designed to test whether server can handle Create operation with symbolic link in middle of file path.|
 |**Message Sequence**|NEGOTIATE|
@@ -1962,7 +1962,7 @@ The feature has 34 model-based test cases and several traditional test cases.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|CreateClose_SymbolicLinkAtLast|
 |**Description**|This case is designed to test whether server can handle Create operation with symbolic link at last of file path.|
 |**Message Sequence**|NEGOTIATE|
@@ -1976,7 +1976,7 @@ The feature has 34 model-based test cases and several traditional test cases.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|CreateClose_InvalidSymbolicLink|
 |**Description**|This case is designed to test whether server can handle Create operation with other invalid symbolic link.|
 |**Message Sequence**|NEGOTIATE|
@@ -1990,7 +1990,7 @@ The feature has 34 model-based test cases and several traditional test cases.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|CreateClose_DeleteFile_DesiredAccessNotIncludeDeleteOrGenericAll|
 |**Description**|This case is designed to test whether server can handle delete file request when desired access does not include DELETE or GENERIC_ALL.|
 |**Message Sequence**|NEGOTIATE|
@@ -2004,7 +2004,7 @@ The feature has 34 model-based test cases and several traditional test cases.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|InvalidCreateRequestStructureSize|
 |**Description**|Test the server response when it receives an invalid structure size of CREATE request.|
 |**Message Sequence**|NEGOTIATE|
@@ -2048,7 +2048,7 @@ This feature contains 49 model-based test cases.
 ######<a name="3.2.4.1.3"> Scenario Design
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|CreditMgmt|
 |**Description**|This scenario covers basic message sequence with various MessageId, CreditCharge, CreditRequest and payload length to test server behavior of credit verification.|
 |**Machine**|ReadConfig;|
@@ -2070,9 +2070,9 @@ See [Scenario](#3.1.11.1.1)
 ######<a name="3.2.5.1.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DirectoryLeasing_ReadCaching|
-|**Description **|Ensure server could handle read directory leasing correctly|
+|**Description**|Ensure server could handle read directory leasing correctly|
 |**Prerequisites**||
 |**Test Execution Steps**|Client sends NEGOTIATE request|
 ||Server sends NEGOTIATE response|
@@ -2097,9 +2097,9 @@ See [Scenario](#3.1.11.1.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DirectoryLeasing_ReadWriteCaching|
-|**Description **|Ensure server could handle READ_WRITE directory leasing correctly|
+|**Description**|Ensure server could handle READ_WRITE directory leasing correctly|
 |**Prerequisites**||
 |**Test Execution Steps**|Client sends NEGOTIATE request|
 ||Server sends NEGOTIATE response|
@@ -2124,9 +2124,9 @@ See [Scenario](#3.1.11.1.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DirectoryLeasing_ReadHandleCaching|
-|**Description **|Ensure server could handle READ_HANDLE directory leasing correctly|
+|**Description**|Ensure server could handle READ_HANDLE directory leasing correctly|
 |**Prerequisites**||
 |**Test Execution Steps**|Client sends NEGOTIATE request|
 ||Server sends NEGOTIATE response|
@@ -2151,9 +2151,9 @@ See [Scenario](#3.1.11.1.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|Negative_DirectoryLeasing_SMB21|
-|**Description **|Negative test case to test SMB3 directory leasing feature using SMB2.1 dialect.|
+|**Description**|Negative test case to test SMB3 directory leasing feature using SMB2.1 dialect.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client sends NEGOTIATE request with dialect SMB2.002 and SMB2.1.|
 ||Server sends NEGOTIATE response with dialect SMB2.1|
@@ -2178,9 +2178,9 @@ See [Scenario](#3.1.11.1.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|Negative_DirectoryLeasing_SMB2002|
-|**Description **|Negative test case to test SMB3 directory leasing feature using SMB2.002 dialect.|
+|**Description**|Negative test case to test SMB3 directory leasing feature using SMB2.002 dialect.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client sends NEGOTIATE request with only SMB2.002 dialect.|
 ||Server sends NEGOTIATE response with dialect SMB2.002|
@@ -2205,9 +2205,9 @@ See [Scenario](#3.1.11.1.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DirectoryLeasing_InvalidClientGuidInLeaseBreakAck|
-|**Description **|The LEASE_BREAK_ACK for open which is already closed|
+|**Description**|The LEASE_BREAK_ACK for open which is already closed|
 |**Prerequisites**||
 |**Test Execution Steps**|**Test preparation**|
 ||Create a directory on a share|
@@ -2228,9 +2228,9 @@ See [Scenario](#3.1.11.1.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DirectoryLeasing_InvalidLeaseStateInLeaseBreakAck|
-|**Description **|The info in LEASE_BREAK_ACK contains invalid LeaseState|
+|**Description**|The info in LEASE_BREAK_ACK contains invalid LeaseState|
 |**Prerequisites**||
 |**Test Execution Steps**|**Test preparation**|
 ||Create a directory on a share|
@@ -2251,9 +2251,9 @@ See [Scenario](#3.1.11.1.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DirectoryLeasing_Invalid LeaseKeyInLeaseBreakAck|
-|**Description **|The info in LEASE_BREAK_ACK contains invalid LeaseKey|
+|**Description**|The info in LEASE_BREAK_ACK contains invalid LeaseKey|
 |**Prerequisites**||
 |**Test Execution Steps**|**Test preparation**|
 ||Create a directory on a share|
@@ -2287,7 +2287,7 @@ See [Scenario](#3.1.11.1.1)
 ######<a name="3.2.5.2.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Trigger the lease break by specific operations|
 |**Message Sequence**|**Test preparation**|
 ||Create a directory on a share|
@@ -2313,9 +2313,9 @@ See [Scenario](#3.1.11.1.1)
 ######<a name="3.2.5.2.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DirectoryLeasing_BreakReadCachingByChildRenamed|
-|**Description **|Test whether server can handle READ lease break notification triggered by renaming child item on a directory.|
+|**Description**|Test whether server can handle READ lease break notification triggered by renaming child item on a directory.|
 |**Prerequisites**||
 |**Test Execution Steps**|**Test preparation**|
 ||Create a directory on a share|
@@ -2345,9 +2345,9 @@ See [Scenario](#3.1.11.1.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DirectoryLeasing_BreakReadCachingByChildDeleted|
-|**Description **|Test whether server can handle READ lease break notification triggered by deleting child item on a directory.|
+|**Description**|Test whether server can handle READ lease break notification triggered by deleting child item on a directory.|
 |**Prerequisites**||
 |**Test Execution Steps**|**Test preparation**|
 ||Create a directory on a share|
@@ -2376,9 +2376,9 @@ See [Scenario](#3.1.11.1.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DirectoryLeasing_BreakReadCachingByChildModified|
-|**Description **|Test whether server can handle READ lease break notification triggered by modifying child item on a directory.|
+|**Description**|Test whether server can handle READ lease break notification triggered by modifying child item on a directory.|
 |**Prerequisites**||
 |**Test Execution Steps**|**Test preparation**|
 ||Create a directory on a share|
@@ -2408,9 +2408,9 @@ See [Scenario](#3.1.11.1.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DirectoryLeasing_BreakHandleCachingByConflictOpen|
-|**Description **|Test whether server can handle HANDLE lease break notification triggered by a conflict open.|
+|**Description**|Test whether server can handle HANDLE lease break notification triggered by a conflict open.|
 |**Prerequisites**||
 |**Test Execution Steps**|**Test preparation**|
 ||Create a directory on a share|
@@ -2437,9 +2437,9 @@ See [Scenario](#3.1.11.1.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DirectoryLeasing_BreakHandleCachingByParentDeleted|
-|**Description **|Test whether server can handle HANDLE lease break notification triggered by deleting parent directory.|
+|**Description**|Test whether server can handle HANDLE lease break notification triggered by deleting parent directory.|
 |**Prerequisites**||
 |**Test Execution Steps**|**Test preparation**|
 ||Create a parent directory on a share|
@@ -2472,9 +2472,9 @@ See [Scenario](#3.1.11.1.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DirectoryLeasing_BreakHandleCachingByParentRenamed|
-|**Description **|Test whether server can handle HANDLE lease break notification triggered by renaming parent directory.|
+|**Description**|Test whether server can handle HANDLE lease break notification triggered by renaming parent directory.|
 |**Prerequisites**||
 |**Test Execution Steps**|**Test preparation**|
 ||Create a parent directory on a share|
@@ -2507,7 +2507,7 @@ See [Scenario](#3.1.11.1.1)
 ######<a name="3.2.5.3.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Verify WRITE caching is cleared when server grants lease|
 |**Message Sequence**|**Test preparation**|
 ||Create a directory on a share|
@@ -2526,9 +2526,9 @@ See [Scenario](#3.1.11.1.1)
 ######<a name="3.2.5.3.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DirectoryLeasing_RWGrantedAsR|
-|**Description **|Verify only SMB2_LEASE_READ_CACHING granted when client request SMB2_LEASE_READ_CACHING | SMB2_LEASE_WRITE_CACHING|
+|**Description**|Verify only SMB2_LEASE_READ_CACHING granted when client request SMB2_LEASE_READ_CACHING | SMB2_LEASE_WRITE_CACHING|
 |**Prerequisites**||
 |**Test Execution Steps**|**Test preparation**|
 ||Create a directory on a share|
@@ -2545,9 +2545,9 @@ See [Scenario](#3.1.11.1.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DirectoryLeasing_RWHGrantedAsRH|
-|**Description **|Verify only SMB2_ SMB2_LEASE_READ_CACHING | SMB2_LEASE_HANDLE_CACHING granted when client request SMB2_LEASE_READ_CACHING | SMB2_LEASE_WRITE_CACHING | SMB2_LEASE_HANDLE_CACHING|
+|**Description**|Verify only SMB2_ SMB2_LEASE_READ_CACHING | SMB2_LEASE_HANDLE_CACHING granted when client request SMB2_LEASE_READ_CACHING | SMB2_LEASE_WRITE_CACHING | SMB2_LEASE_HANDLE_CACHING|
 |**Prerequisites**||
 |**Test Execution Steps**|**Test preparation**|
 ||Create a directory on a share|
@@ -2594,7 +2594,7 @@ This model doesn’t test TRANSFORM\_HEADER message type, which will be covered 
 This model has one scenario:
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|Encryption|
 |**Description**|It's a basic scenario to test how the server handles encryption request under different situation.|
 |**Machine**|ReadConfig;|
@@ -2653,7 +2653,7 @@ For traditional encryption BVT test cases, refer to section [Encryption](#3.1.12
 This model has 10 scenarios:
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|RequestDurableHandleV1BatchOplock|
 |**Description**|Basic scenario to test create durable handle v1 with batch oplock|
 |**Machine**|        ReadConfig;|
@@ -2670,7 +2670,7 @@ This model has 10 scenarios:
 
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|RequestDurableHandleV1LeaseV1|
 |**Description**|Basic scenario to test create durable handle v1 with lease v1|
 |**Machine**|ReadConfig;|
@@ -2687,7 +2687,7 @@ This model has 10 scenarios:
 
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|RequestDurableHandleV2BatchOplock|
 |**Description**|Basic scenario to test create durable handle v2 with batch oplock|
 |**Machine**|ReadConfig;|
@@ -2704,7 +2704,7 @@ This model has 10 scenarios:
 
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|RequestDurableHandleV2LeaseV1|
 |**Description**|Basic scenario to test create durable handle v2 with lease v1|
 |**Machine**|ReadConfig;|
@@ -2721,7 +2721,7 @@ This model has 10 scenarios:
 
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|RequestDurableHandleV2LeaseV2|
 |**Description**|Basic scenario to test create durable handle v2 with lease v2|
 |**Machine**|ReadConfig;|
@@ -2738,7 +2738,7 @@ This model has 10 scenarios:
 
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|RequestPersistentHandle|
 |**Description**|Basic scenario to test create persistent handle|
 |**Machine**|ReadConfig;|
@@ -2755,7 +2755,7 @@ This model has 10 scenarios:
 
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|DurableHandleV1PreparedWithBatchOplockReconnect|
 |**Description**|Test reconnect durable handle|
 ||The durablev1 open is created with batch lock|
@@ -2780,7 +2780,7 @@ This model has 10 scenarios:
 
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|DurableHandleV1PreparedWithLeaseV1Reconnect|
 |**Description**|Test reconnect durable handle|
 ||The durablev1 open is created with lease v1|
@@ -2805,7 +2805,7 @@ This model has 10 scenarios:
 
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|DurableHandleV2PreparedWithBatchOplockReconnect|
 |**Description**|Test reconnect durable handle|
 ||The durablev2 open is created with batch oplock|
@@ -2831,7 +2831,7 @@ This model has 10 scenarios:
 
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|DurableHandleV2PreparedWithLeaseV1Reconnect|
 |**Description**|Test reconnect durable handle|
 ||The durablev2 open is created with lease v1|
@@ -2857,7 +2857,7 @@ This model has 10 scenarios:
 
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|DurableHandleV2PreparedWithLeaseV2Reconnect|
 |**Description**|Test reconnect durable handle|
 ||The durablev2 open is created with lease v2|
@@ -2883,7 +2883,7 @@ This model has 10 scenarios:
 
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|PersistentHandleReconnect|
 |**Description**|Test reconnect persistent handle|
 || The persistent open is created.|
@@ -2917,7 +2917,7 @@ If the user represented by SessionSecurityContext is not the same user denoted b
 If the server disconnect the connection, the reconnect will be successful.
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DurableHandleV2_Reconnection_WithDifferentDurableOwner|
 |**Description**|Test reconnect with different durable owner will fail with STATUS_ACCESS_DENIED|
 |**Message Sequence**|**Open a file and request durable handle v2 then write content to file**|
@@ -2939,7 +2939,7 @@ If the server disconnect the connection, the reconnect will be successful.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DurableHandleV1_Reconnect_WithoutLogoffOrDisconnect_WithPreviousSessionIdSet|
 |**Description**|Test reconnect with DurableHandleV1, without log off or disconnect but with previous session id.|
 |**Message Sequence**|**Open a file and request durable handle v1 then write content to file**|
@@ -2960,7 +2960,7 @@ If the server disconnect the connection, the reconnect will be successful.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DurableHandleV1_Reconnect_WithoutLogoffOrDisconnect_WithoutPreviousSessionIdSet|
 |**Description**|Test reconnect with DurableHandleV1, without log off or disconnect but without previous session id.|
 |**Message Sequence**|**Open a file and request durable handle v1 then write content to file**|
@@ -2981,7 +2981,7 @@ If the server disconnect the connection, the reconnect will be successful.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DurableHandleV1_Reconnect_AfterServerDisconnect|
 |**Description**|Test reconnect with durable handle V1 with server disconnect|
 |**Message Sequence**|**Open a file and request durable handle v2 then write content to file**|
@@ -3003,9 +3003,9 @@ If the server disconnect the connection, the reconnect will be successful.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DurableHandleV2_NoPersistenceGrantedOnNonCAShare|
-|**Description **|Test no persistent handle is granted by the server when the share doesn't have CA capability|
+|**Description**|Test no persistent handle is granted by the server when the share doesn't have CA capability|
 |**Prerequisites**||
 |**Test Execution Steps**|Client sends NEGOTIATE request|
 ||Server sends NEGOTIATE response|
@@ -3020,9 +3020,9 @@ If the server disconnect the connection, the reconnect will be successful.
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DurableHandleV2_Reconnection_WithoutPersistence|
-|**Description **|Test durable handle V2 without persistence could be reconnected|
+|**Description**|Test durable handle V2 without persistence could be reconnected|
 |**Prerequisites**||
 |**Test Execution Steps**|Client sends NEGOTIATE request|
 ||Server sends NEGOTIATE response|
@@ -3112,7 +3112,7 @@ This model has 4 scenarios.
 * BreakReadLeaseV1
 
 |||
-|-|-|
+|---|---|
 |**Description**|It's a scenario to test how the server handles read leasing for LeaseV1 |
 |**Machine**|ReadConfig;|
 ||SetupConnection;|
@@ -3130,7 +3130,7 @@ This model has 4 scenarios.
 * BreakReadLeaseV2
 
 |||
-|-|-|
+|---|---|
 |**Description**|It's a scenario to test how the server handles read leasing for LeaseV2.|
 |**Machine**|ReadConfig;|
 ||SetupConnection({ModelDialectRevision.Smb30, ModelDialectRevision.Smb302}, _);|
@@ -3148,7 +3148,7 @@ This model has 4 scenarios.
 * BreakReadWriteLeaseV1
 
 |||
-|-|-|
+|---|---|
 |**Description**|It's a scenario to test how the server handles Read&Write leasing for LeaseV1 |
 |**Machine**|ReadConfig;|
 ||SetupConnection;|
@@ -3193,7 +3193,7 @@ This model has 4 scenarios.
 * BreakReadWriteLeaseV2
 
 |||
-|-|-|
+|---|---|
 |**Description**|It's a scenario to test how the server handles Read&Write leasing for LeaseV2|
 |**Machine**|ReadConfig;|
 ||SetupConnection({ModelDialectRevision.Smb30, ModelDialectRevision.Smb302}, _);|
@@ -3238,7 +3238,7 @@ This model has 4 scenarios.
 * BreakReadHandleLeasingV1
 
 |||
-|-|-|
+|---|---|
 |**Description**|It's a scenario to test how the server handles Read&Handle leasing for LeaseV1 |
 |**Machine**|ReadConfig;|
 ||SetupConnection;|
@@ -3312,7 +3312,7 @@ This model has 4 scenarios.
 * BreakReadHandleLeasingV2
 
 |||
-|-|-|
+|---|---|
 |**Description**|It's a scenario to test how the server handles Read&Handle leasing for LeaseV2|
 |**Machine**|ReadConfig;|
 ||SetupConnection({ModelDialectRevision.Smb30, ModelDialectRevision.Smb302}, _);|
@@ -3386,7 +3386,7 @@ This model has 4 scenarios.
 * BreakReadWriteHandleLeasingV1
 
 |||
-|-|-|
+|---|---|
 |**Description**|It's a scenario to test how the server handles Read&Write&Handle leasing for LeaseV1.|
 |**Machine**|ReadConfig;|
 ||SetupConnection;|
@@ -3522,7 +3522,7 @@ This model has 4 scenarios.
 * BreakReadWriteHandleLeasingV2
 
 |||
-|-|-|
+|---|---|
 |**Description**|It's a scenario to test how the server handles Read&Write&Handle leasing for LeaseV2.|
 |**Machine**|ReadConfig;|
 ||SetupConnection({ModelDialectRevision.Smb30, ModelDialectRevision.Smb302}, _);|
@@ -3696,7 +3696,7 @@ This Model covers all statements (except which are mentioned in “Assumptions/R
 This model has 1 scenario.
 
 |||
-|-|-|
+|---|---|
 |**Description**|It's a basic scenario to test how the server handles Negotiate Request and ComNegotiate Request with different dialects and different sequences.|
 |**Machine**|ReadConfig;|
 ||SetupConnection;|
@@ -3711,9 +3711,9 @@ This model has 1 scenario.
 Scenario see section [Scenario](#3.1.6.1).
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|Negotiate_SMB311_WithoutAnyContexts|
-|**Description **|This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and without any Negotiate Contexts.|
+|**Description**|This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and without any Negotiate Contexts.|
 |**Prerequisites**|The server implements dialect 3.11.|
 |**Test Execution Steps**|Client send Negotiate request with dialect SMB 3.11, and without any Negotiate Contexts.|
 ||Verify server fails the negotiate request with STATUS_INVALID_PARAMETER.|
@@ -3721,9 +3721,9 @@ Scenario see section [Scenario](#3.1.6.1).
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|Negotiate_SMB311_WithEncryptionContextWithoutIntegrityContext|
-|**Description **|This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect, with SMB2_ENCRYPTION_CAPABILITIES Context and without SMB2_PREAUTH_INTEGRITY_CAPABILITIES Context.|
+|**Description**|This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect, with SMB2_ENCRYPTION_CAPABILITIES Context and without SMB2_PREAUTH_INTEGRITY_CAPABILITIES Context.|
 |**Prerequisites**|The server implements dialect 3.11.|
 |**Test Execution Steps**|Send Negotiate request with dialect SMB 3.11, with SMB2_ENCRYPTION_CAPABILITIES context, without SMB2_PREAUTH_INTEGRITY_CAPABILITIES context.|
 ||Verify server fails the negotiate request with STATUS_INVALID_PARAMETER.|
@@ -3731,9 +3731,9 @@ Scenario see section [Scenario](#3.1.6.1).
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|Negotiate_SMB311_InvalidHashAlgorithm|
-|**Description **|This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and with an invalid HashAlgorithm in SMB2_PREAUTH_INTEGRITY_CAPABILITIES Context.|
+|**Description**|This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and with an invalid HashAlgorithm in SMB2_PREAUTH_INTEGRITY_CAPABILITIES Context.|
 |**Prerequisites**|The server implements dialect 3.11.|
 |**Test Execution Steps**|Client send Negotiate request with dialect SMB 3.11, SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and set HashAlgorithm to an invalid value: 0xFFFF.|
 ||Verify server fails the negotiate request with STATUS_SMB_NO_PREAUTH_INTEGRITY_HASH_OVERLAP.|
@@ -3741,9 +3741,9 @@ Scenario see section [Scenario](#3.1.6.1).
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|Negotiate_SMB311_InvalidCipher|
-|**Description **|This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and with an invalid Cihper in SMB2_ENCRYPTION_CAPABILITIES Context.|
+|**Description**|This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and with an invalid Cihper in SMB2_ENCRYPTION_CAPABILITIES Context.|
 |**Prerequisites**|The server implements dialect 3.11.|
 |**Test Execution Steps**|Client Send Negotiate request with dialect SMB 3.11, SMB2_ENCRYPTION_CAPABILITIES context and set Cipher to an invalid value: 0xFFFF.|
 ||Verify that server sets Connection.CipherId to 0 from the response.|
@@ -3775,7 +3775,7 @@ The feature contains 336 model-based test cases in 4 scenarios.
 ######<a name="3.2.10.1.3"> Scenario Design
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|OplockOnShareWithoutForceLevel2OrSOFS|
 |**Description**|Scenario for Share.ForceLevel2Oplock is FALSE and Share.Type does not includes STYPE_CLUSTER_SOFS|
 |**Machine**|ReadConfig;|
@@ -3787,7 +3787,7 @@ The feature contains 336 model-based test cases in 4 scenarios.
 
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|OplockOnShareWithoutForceLevel2WithSOFS|
 |**Description**|Scenario for Share.ForceLevel2Oplock is FALSE and Share.Type includes STYPE_CLUSTER_SOFS|
 |**Machine**|ReadConfig;|
@@ -3799,7 +3799,7 @@ The feature contains 336 model-based test cases in 4 scenarios.
 
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|OplockOnShareWithForceLevel2WithoutSOFS|
 |**Description**|Scenario for Share.ForceLevel2Oplock is TRUE and Share.Type does not includes STYPE_CLUSTER_SOFS|
 |**Machine**|ReadConfig;|
@@ -3811,7 +3811,7 @@ The feature contains 336 model-based test cases in 4 scenarios.
 
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|OplockOnShareWithForceLevel2AndSOFS|
 |**Description**|Scenario for Share.ForceLevel2Oplock is TRUE and Share.Type includes STYPE_CLUSTER_SOFS|
 |**Machine**|ReadConfig;|
@@ -3903,7 +3903,7 @@ This model has 6 scenarios.
 * ReplayCreateWithoutHandle
 
 |||
-|-|-|
+|---|---|
 |**Description**|It's a scenario to test how the server handles a create request with/without replay flag and valid/invalid channel sequence when no handle is created.|
 |**Machine**|ReadConfig;|
 ||CreateRequest(|
@@ -3927,7 +3927,7 @@ This model has 6 scenarios.
 * ReplayCreateNormalHandle
 
 |||
-|-|-|
+|---|---|
 |**Description**|It's a scenario to test how the server handles a create request with/without replay flag and valid/invalid channel sequence when a normal handle is created.|
 |**Machine**|        ReadConfig;|
 ||        PrepareCreate(|
@@ -3944,7 +3944,7 @@ This model has 6 scenarios.
 * ReplayCreateDurableHandleV1
 
 |||
-|-|-|
+|---|---|
 |**Description**|It's a scenario to test how the server handles a create request with/without replay flag and valid/invalid channel sequence when a durableV1 handle is created.|
 |**Machine**|        ReadConfig;|
 ||        PrepareCreate(|
@@ -3961,7 +3961,7 @@ This model has 6 scenarios.
 * ReplayCreateDurableHandleV2
 
 |||
-|-|-|
+|---|---|
 |**Description**|It's a scenario to test how the server handles a create request with/without replay flag and valid/invalid channel sequence when a durableV2 handle (Non persistent) is created.|
 |**Machine**|        ReadConfig;|
 ||        PrepareCreate(|
@@ -3978,7 +3978,7 @@ This model has 6 scenarios.
 * ReplayCreateDurableHandleV2Persistent
 
 |||
-|-|-|
+|---|---|
 |**Description**|It's a scenario to test how the server handles a create request with/without replay flag and valid/invalid channel sequence when a persistent handle is created.|
 |**Machine**|        ReadConfig;|
 ||        PrepareCreate(|
@@ -3995,7 +3995,7 @@ This model has 6 scenarios.
 * ReplayFileOperation
 
 |||
-|-|-|
+|---|---|
 |**Description**|It's a scenario to test how the server handles a READ/WRITE/IOCTL/SET_INFO request with/without replay flag and valid/invalid channel sequence.|
 |**Machine**|        ReadConfig;|
 ||        PrepareFileOperation({ModelDialectRevision.Smb30, ModelDialectRevision.Smb302}, requestCommand)?;|
@@ -4030,7 +4030,7 @@ This model has 6 scenarios.
 ######<a name="3.2.12.1.3"> Scenario Design
 
 |||
-|-|-|
+|---|---|
 |**Scenario ID**|ResilientHandleBasic|
 |**Description**|Basic scenario to test how the server handles Resiliency Request and Resilient Handle when Log Off and Loss Connection.|
 |**Machine**|ReadConfig;|
@@ -4044,7 +4044,7 @@ This model has 6 scenarios.
 
 
 |||
-|-|-|
+|---|---|
 |**Scenario ID**|ResilientHandleDurable|
 |**Description**|Test how the server handles Resiliency Request on durable handle and Resilient Handle when Log Off and Loss Connection.|
 |**Machine**|ReadConfig;|
@@ -4068,7 +4068,7 @@ The server MUST verify the request size. If the size of the SMB2 CREATE Request 
 #######<a name="3.2.12.2.1.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Request Resilient Handle on Persistent Handle.|
 ||It covers the below statement in section 3.3.5.9:|
 ||If Connection.Dialect is "3.000" and the request does not contain SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context |
@@ -4084,9 +4084,9 @@ The server MUST verify the request size. If the size of the SMB2 CREATE Request 
 #######<a name="3.2.12.2.1.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|ResilientWithPersistentHandle_OpenFromDiffClient|
-|**Description **|Verify that whether Open.IsResilient will impact persistent handle.|
+|**Description**|Verify that whether Open.IsResilient will impact persistent handle.|
 ||Without resilient handle, server will return STATUS_FILE_NOT_AVAILABLE when open the same file when Open.IsPersistent is True and Open is disconnected.|
 |**Prerequisites**||
 |**Test Execution Steps**|SMB2 Negotiate with SUT|
@@ -4107,7 +4107,7 @@ The server MUST verify the request size. If the size of the SMB2 CREATE Request 
 #######<a name="3.2.12.2.2.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Resilient Open Scavenger Timer|
 |**Message Sequence**|Open File|
 ||Send Resiliency Request with specific Timeout value|
@@ -4120,9 +4120,9 @@ The server MUST verify the request size. If the size of the SMB2 CREATE Request 
 #######<a name="3.2.12.2.2.2"> Test Case 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|ResilientOpenScavengerTimer_ReconnectAfterTimeout|
-|**Description **|Verify that the Open will be terminated after Resilient Open Scavenger Timer is expired.|
+|**Description**|Verify that the Open will be terminated after Resilient Open Scavenger Timer is expired.|
 |**Prerequisites**||
 |**Test Execution Steps**|SMB2 Negotiate with SUT|
 ||SMB2 Session Setup|
@@ -4136,9 +4136,9 @@ The server MUST verify the request size. If the size of the SMB2 CREATE Request 
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|ResilientOpenScavengerTimer_ReconnectBeforeTimeout|
-|**Description **|Verify that the Open will be preserved before Resilient Open Scavenger Timer is expired.|
+|**Description**|Verify that the Open will be preserved before Resilient Open Scavenger Timer is expired.|
 |**Prerequisites**||
 |**Test Execution Steps**|SMB2 Negotiate with SUT|
 ||SMB2 Session Setup|
@@ -4152,9 +4152,9 @@ The server MUST verify the request size. If the size of the SMB2 CREATE Request 
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|ResilientOpenScavengerTimer_ReconnectBeforeTimeout_Zero|
-|**Description **|Verify that the Open will be preserved before Resilient Open Scavenger Timer is expired.|
+|**Description**|Verify that the Open will be preserved before Resilient Open Scavenger Timer is expired.|
 |**Prerequisites**||
 |**Test Execution Steps**|SMB2 Negotiate with SUT|
 ||SMB2 Session Setup|
@@ -4202,7 +4202,7 @@ NA
 This model has five scenarios:
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|SessionMgmtNewSession|
 |**Description**|It's a basic scenario to test how the server handles SESSION_SETUP Request and LOGOFF Request. Reconnection and binding is excluded.|
 |**Machine**|ReadConfig;|
@@ -4222,7 +4222,7 @@ This model has five scenarios:
 
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|SessionMgmtReconnectSession|
 |**Description**|This scenario is to test session reconnection. |
 |**Machine**|ReadConfig;|
@@ -4240,7 +4240,7 @@ This model has five scenarios:
 
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|SessionMgmtBindSession|
 |**Description**|This scenario is to test session binding. |
 |**Machine**|ReadConfig;|
@@ -4255,7 +4255,7 @@ This model has five scenarios:
 
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|SessionMgmtBindSessionAfterLogOff|
 |**Description**|This scenario is to test session binding after logoff. |
 |**Machine**|ReadConfig;|
@@ -4273,7 +4273,7 @@ This model has five scenarios:
 
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|SessionMgmtBindSessionAfterDisconnection|
 |**Description**|This scenario is to test session binding after disconnection. |
 |**Machine**|ReadConfig;|
@@ -4294,7 +4294,7 @@ This model has five scenarios:
 Scenario see [SessionMgmt](#3.1.22)
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|SessionMgmt_ReconnectWithDifferentDialect|
 |**Description**|This test case is designed to test whether server can handle reconnect with different dialect.|
 |**Message Sequence**|Client1 sends NEGOTIATE request|
@@ -4317,7 +4317,7 @@ Scenario see [SessionMgmt](#3.1.22)
 Scenario see [Scenario](#3.1.7.1)
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|MultipleChannel_NicRedundantOnClient|
 |**Description**|Operate file via multi-channel with 2 Nics on client.|
 |**Message Sequence**|**SETUP_CONNECTION from client NIC_1 to SUT NIC_1**|
@@ -4337,7 +4337,7 @@ Scenario see [Scenario](#3.1.7.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|MultipleChannel_NicRedundantOnServer|
 |**Description**|Operate file via multi-channel with 2 Nics on server.|
 |**Message Sequence**|**SETUP_CONNECTION from client NIC_1 to SUT NIC_1**|
@@ -4357,7 +4357,7 @@ Scenario see [Scenario](#3.1.7.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|MultipleChannel_MultiChannelOnSameNic|
 |**Description**|Operate file via multi-channel on same Nic.|
 |**Message Sequence**|**SETUP_CONNECTION from client NIC_1 to SUT NIC_1**|
@@ -4377,7 +4377,7 @@ Scenario see [Scenario](#3.1.7.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|Negative_MultipleChannel_SMB21|
 |**Description**|Operate file via multi-channel with SMB21 dialect, expect failure with error code STATUS_REQUEST_NOT_ACCEPTED.|
 |**Message Sequence**|**SETUP_CONNECTION from client NIC_1 to SUT NIC_1**|
@@ -4397,7 +4397,7 @@ Scenario see [Scenario](#3.1.7.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|Negative_MultipleChannel_SMB2002|
 |**Description**|Operate file via multi-channel with SMB2002 dialect, expect failure with error code STATUS_REQUEST_NOT_ACCEPTED.|
 |**Message Sequence**|**SETUP_CONNECTION from client NIC_1 to SUT NIC_1**|
@@ -4453,7 +4453,7 @@ This model doesn’t test the algorithm of calculating the signature, for which 
 This model has one scenario:
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|Signing|
 |**Description**|It’s a basic scenario to test how the server handles signing.|
 |**Machine**|ReadConfig;|
@@ -4526,7 +4526,7 @@ This model has one scenario:
 ######<a name="3.2.16.1.3"> Scenario Design
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|ResilientHandleBasic|
 |**Description**|TreeMgmt Model basic|
 |**Machine**|ReadConfig;|
@@ -4539,9 +4539,9 @@ This model has one scenario:
 #####<a name="3.2.16.2"> Traditional Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|TreeMgmt_SMB311_CLUSTER_RECONNECT|
-|**Description **|Once a client has successfully connected to a clustered share it must set the CLUSTER_RECONNECT flag on all subsequent clustered tree connect requests to the same server.|
+|**Description**|Once a client has successfully connected to a clustered share it must set the CLUSTER_RECONNECT flag on all subsequent clustered tree connect requests to the same server.|
 ||This test case is designed to test server can handle a TreeConnect request with flag SMB2_SHAREFLAG_CLUSTER_RECONNECT successfully.|
 |**Prerequisites**|The server implements dialect 3.11.|
 |**Test Execution Steps**|Start a client by sending the following requests: NEGOTIATE (dialect 3.11); SESSION_SETUP.|
@@ -4572,7 +4572,7 @@ Client uses an SMB2 IOCTL Request FSCTL\_VALIDATE\_NEGOTIATE\_INFO to request va
 ######<a name="3.2.17.1.3"> Scenario Design
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|ValidateNegotiateInfo|
 |**Description**|Basic scenario to test how the server handles ValidateNegotiateInfo Request|
 |**Machine**|ReadConfig;|
@@ -4586,9 +4586,9 @@ Client uses an SMB2 IOCTL Request FSCTL\_VALIDATE\_NEGOTIATE\_INFO to request va
 Scenario see section [Scenario](#3.1.25.1)
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|ValidateNegotiateInfo_Negative_InvalidGuid |
-|**Description **|Test whether the server terminates the transport connection and free the Connection object, if the Guid received in the VALIDATE_NEGOTIATE_INFO request structure is not equal to the Connection.ClientGuid.|
+|**Description**|Test whether the server terminates the transport connection and free the Connection object, if the Guid received in the VALIDATE_NEGOTIATE_INFO request structure is not equal to the Connection.ClientGuid.|
 |**Prerequisites**|The server implements dialect 3.0.|
 |**Test Execution Steps**|NEGOTIATE|
 ||SESSION_SETUP|
@@ -4599,9 +4599,9 @@ Scenario see section [Scenario](#3.1.25.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|ValidateNegotiateInfo_Negative_InvalidDialects_NoCommonDialect|
-|**Description **|Test whether server terminates the transport connection and free the connection object if no dialect is matched when determine the greatest common dialect between the dialects it implements and the dialects array of VALIDATE_NEGOTIATE_INFO request.|
+|**Description**|Test whether server terminates the transport connection and free the connection object if no dialect is matched when determine the greatest common dialect between the dialects it implements and the dialects array of VALIDATE_NEGOTIATE_INFO request.|
 |**Prerequisites**|The server implements dialect 3.0.|
 |**Test Execution Steps**|NEGOTIATE with dialect larger or equal to 3.0|
 ||SESSION_SETUP|
@@ -4612,9 +4612,9 @@ Scenario see section [Scenario](#3.1.25.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|ValidateNegotiateInfo_Negative_InvalidDialects_CommonDialectNotExpected|
-|**Description **|Test whether the server terminates the transport connection and free the Connection object, if the value is not equal to Connection.Dialect when determine the greatest common dialect between the dialects it implements and the Dialects array of the VALIDATE_NEGOTIATE_INFO request.|
+|**Description**|Test whether the server terminates the transport connection and free the Connection object, if the value is not equal to Connection.Dialect when determine the greatest common dialect between the dialects it implements and the Dialects array of the VALIDATE_NEGOTIATE_INFO request.|
 |**Prerequisites**|The server implements dialect 3.0.|
 |**Test Execution Steps**|NEGOTIATE with dialect larger or equal to 3.0|
 ||SESSION_SETUP|
@@ -4625,9 +4625,9 @@ Scenario see section [Scenario](#3.1.25.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|ValidateNegotiateInfo_Negative_InvalidGuid|
-|**Description **|Test whether the server terminates the transport connection and free the Connection object, if the Guid received in the VALIDATE_NEGOTIATE_INFO request structure is not equal to the Connection.ClientGuid.|
+|**Description**|Test whether the server terminates the transport connection and free the Connection object, if the Guid received in the VALIDATE_NEGOTIATE_INFO request structure is not equal to the Connection.ClientGuid.|
 |**Prerequisites**|The server implements dialect 3.0.|
 |**Test Execution Steps**|NEGOTIATE |
 ||SESSION_SETUP|
@@ -4638,9 +4638,9 @@ Scenario see section [Scenario](#3.1.25.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|ValidateNegotiateInfo_Negative_InvalidSecurityMode|
-|**Description **|Test whether the server terminates the transport connection and free the Connection object, if the SecurityMode received in the VALIDATE_NEGOTIATE_INFO request structure is not equal to Connection.ClientSecurityMode.|
+|**Description**|Test whether the server terminates the transport connection and free the Connection object, if the SecurityMode received in the VALIDATE_NEGOTIATE_INFO request structure is not equal to Connection.ClientSecurityMode.|
 |**Prerequisites**|The server implements dialect 3.0.|
 |**Test Execution Steps**|NEGOTIATE |
 ||SESSION_SETUP|
@@ -4651,9 +4651,9 @@ Scenario see section [Scenario](#3.1.25.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|ValidateNegotiateInfo_Negative_InvalidCapabilities|
-|**Description **|Test whether the server terminates the transport connection and free the Connection object, if Connection.ClientCapabilities is not equal to the Capabilities received in the VALIDATE_NEGOTIATE_INFO request structure.|
+|**Description**|Test whether the server terminates the transport connection and free the Connection object, if Connection.ClientCapabilities is not equal to the Capabilities received in the VALIDATE_NEGOTIATE_INFO request structure.|
 |**Prerequisites**|The server implements dialect 3.0.|
 |**Test Execution Steps**|NEGOTIATE |
 ||SESSION_SETUP|
@@ -4664,9 +4664,9 @@ Scenario see section [Scenario](#3.1.25.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|ValidateNegotiateInfo_Negative_InvalidMaxOutputResponse|
-|**Description **|Test whether the server terminates the transport connection and free the Connection object, if MaxOutputResponse in the IOCTL request is less than the size of a VALIDATE_NEGOTIATE_INFO Response.|
+|**Description**|Test whether the server terminates the transport connection and free the Connection object, if MaxOutputResponse in the IOCTL request is less than the size of a VALIDATE_NEGOTIATE_INFO Response.|
 |**Prerequisites**|The server implements dialect 3.0.|
 |**Test Execution Steps**|NEGOTIATE |
 ||SESSION_SETUP|
@@ -4677,9 +4677,9 @@ Scenario see section [Scenario](#3.1.25.1)
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|ValidateNegotiateInfo_Negative_SMB311|
-|**Description **|Test whether the server can terminate the transport connection when receiving a VALIDATE_NEGOTIATE_INFO request if the negotiated dialect is 3.11.|
+|**Description**|Test whether the server can terminate the transport connection when receiving a VALIDATE_NEGOTIATE_INFO request if the negotiated dialect is 3.11.|
 |**Prerequisites**|The server implements dialect 3.11.|
 |**Test Execution Steps**|NEGOTIATE with dialect 3.11|
 ||SESSION_SETUP|
@@ -4702,9 +4702,9 @@ Will not cover this feature in model.
 Scenario see [Scenario](#3.1.9.1)
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|FileLevelTrim_Negative_NonZeroKeyInRequest|
-|**Description **|Test the server response when non-zero value is set to the Key field of FSCTL_FILE_LEVEL_TRIM request.|
+|**Description**|Test the server response when non-zero value is set to the Key field of FSCTL_FILE_LEVEL_TRIM request.|
 |**Prerequisites**||
 |**Test Execution Steps**|NEGOTIATE|
 ||SESSION_SETUP|
@@ -4733,9 +4733,9 @@ Will not cover this feature in model.
 Scenario see section [Scenario](#3.1.8.1)
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|CopyOffload_CopyContentWithinSameFile|
-|**Description **|This test case is designed to test whether server can handle offload copy correctly when copy content in the same file.|
+|**Description**|This test case is designed to test whether server can handle offload copy correctly when copy content in the same file.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client sends NEGOTIATE request|
 ||Server sends NEGOTIATE response|
@@ -4797,7 +4797,7 @@ N/A
 ######<a name="3.2.20.1.3"> Scenario Design
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|Conflict|
 |**Description**|  1. Prepare a test file and initialize two clients. |
 ||  2. The first client does some file operation from one node to the test file successfully.|
@@ -4833,7 +4833,7 @@ N/A
 ######<a name="3.2.21.1.3"> Scenario Design
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|OplockLeaseScenario|
 |**Description**|  1. Initialize two clients. |
 ||  2. The first client requests Oplock|
@@ -4846,7 +4846,7 @@ N/A
 
 
 |||
-|-|-|
+|---|---|
 |**Scenario Name**|LeaseOplockScenario|
 |**Description**|  1. Initialize two clients. |
 ||  2. The first client requests Lease|
@@ -4871,7 +4871,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 #####<a name="3.3.1.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Replay the request via alternative channel when main channel connection lost|
 |**Message Sequence**|**Create main channel via connection1**|
 ||NEGOTIATE|
@@ -4894,7 +4894,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 #####<a name="3.3.1.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test Id**|MultipleChannel_CreateReplay|
 |**Description**|Replay the request via alternative channel when main channel connection lost|
 |**Prerequisites**||
@@ -4932,7 +4932,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 #####<a name="3.3.2.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Operate file via multi-channel with/without encryption on one channel or both channels|
 |**Message Sequence**|**Create main channel**|
 ||NEGOTIATE (with/without SMB2_GLOBAL_CAP_ENCRYPTION)|
@@ -4955,9 +4955,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 #####<a name="3.3.2.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|MultipleChannel_EncryptionOnBothChannels|
-|**Description **|Operate file via multi-channel with encryption on both channels.|
+|**Description**|Operate file via multi-channel with encryption on both channels.|
 |**Prerequisites**||
 |**Test Execution Steps**|Create main channel|
 ||NEGOTIATE (with/without SMB2_GLOBAL_CAP_ENCRYPTION)|
@@ -4978,9 +4978,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|MultipleChannel_Negative_EncryptionOnMainChannel|
-|**Description **|Operate file via multi-channel only with encryption on main channel.|
+|**Description**|Operate file via multi-channel only with encryption on main channel.|
 |**Prerequisites**||
 |**Test Execution Steps**|Create main channel|
 ||NEGOTIATE (with SMB2_GLOBAL_CAP_ENCRYPTION)|
@@ -5001,9 +5001,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|MultipleChannel_Negative_EncryptionOnAlternativeChannel|
-|**Description **|Operate file via multi-channel only with encryption on alternative channel|
+|**Description**|Operate file via multi-channel only with encryption on alternative channel|
 |**Prerequisites**||
 |**Test Execution Steps**|Create main channel|
 ||NEGOTIATE (without SMB2_GLOBAL_CAP_ENCRYPTION)|
@@ -5028,7 +5028,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 #####<a name="3.3.3.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Operate file via multi-channel with file lease and the lease break is expected from main channel|
 |**Message Sequence**|**Create main channel via connection1**|
 ||NEGOTIATE|
@@ -5058,9 +5058,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 #####<a name="3.3.3.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|MultipleChannel_FileLease|
-|**Description **|Operate file via multi-channel with file lease and the lease break is expected from main channel.|
+|**Description**|Operate file via multi-channel with file lease and the lease break is expected from main channel.|
 |**Prerequisites**||
 |**Test Execution Steps**|**Create main channel via connection1**|
 ||NEGOTIATE|
@@ -5092,7 +5092,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 #####<a name="3.3.4.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Operate file via multi-channel with lock operation on same/different channel|
 |**Message Sequence**|**Create main channel**|
 ||NEGOTIATE|
@@ -5131,9 +5131,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 #####<a name="3.3.4.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|MultipleChannel_LockUnlockOnSameChannel|
-|**Description **|Operate file via multi-channel with lock operation on same channel.|
+|**Description**|Operate file via multi-channel with lock operation on same channel.|
 |**Prerequisites**||
 |**Test Execution Steps**|**Create main channel**|
 ||NEGOTIATE|
@@ -5170,9 +5170,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|MultipleChannel_LockUnlockOnDiffChannel|
-|**Description **|Operate file via multi-channel with lock operation on different channels.|
+|**Description**|Operate file via multi-channel with lock operation on different channels.|
 |**Prerequisites**||
 |**Test Execution Steps**|**Create main channel**|
 ||NEGOTIATE|
@@ -5213,7 +5213,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 #####<a name="3.3.5.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Operate files with/without encryption before client failover or after failover|
 |**Message Sequence**|**Based on NIC1, create client1:**|
 ||NEGOTIATE (with/without SMB2_GLOBAL_CAP_ENCRYPTION)|
@@ -5237,9 +5237,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 #####<a name="3.3.5.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|AppInstanceId_Encryption|
-|**Description **|Operate files with encrypted message before and after client failover|
+|**Description**|Operate files with encrypted message before and after client failover|
 |**Prerequisites**||
 |**Test Execution Steps**|**Based on NIC1, create client1:**|
 ||NEGOTIATE (with SMB2_GLOBAL_CAP_ENCRYPTION)|
@@ -5262,9 +5262,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 |**Cleanup**||
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|AppInstanceId_Negative_NoEncryptionInInitialOpen_EncryptionInReOpen|
-|**Description **|Operate files with encrypted message before client failover but with unencrypted message after failover|
+|**Description**|Operate files with encrypted message before client failover but with unencrypted message after failover|
 |**Prerequisites**||
 |**Test Execution Steps**|**Based on NIC1, create client1:**|
 ||NEGOTIATE (with SMB2_GLOBAL_CAP_ENCRYPTION)|
@@ -5288,9 +5288,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|AppInstanceId_Negative_EncryptionInInitialOpen_NoEncryptionInReOpen|
-|**Description **|Operate files with encrypted message before failover but with unencrypted message after failover|
+|**Description**|Operate files with encrypted message before failover but with unencrypted message after failover|
 |**Prerequisites**||
 |**Test Execution Steps**|**Based on NIC1, create client1:**|
 ||NEGOTIATE (with SMB2_GLOBAL_CAP_ENCRYPTION)|
@@ -5316,7 +5316,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 #####<a name="3.3.6.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Operate file/directory with lease before client failover and expect no lease state is maintained after client failover|
 |**Message Sequence**|**Based on NIC1, create client1:**|
 ||NEGOTIATE|
@@ -5350,9 +5350,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 #####<a name="3.3.6.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|AppInstanceId_FileLeasing_NoLeaseInReOpen|
-|**Description **|Operate file with lease before client failover and expect no lease state is maintained after client failover|
+|**Description**|Operate file with lease before client failover and expect no lease state is maintained after client failover|
 |**Prerequisites**||
 |**Test Execution Steps**|**Based on NIC1, create client1:**|
 ||NEGOTIATE|
@@ -5384,9 +5384,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|AppInstanceId_DirectoryLeasing_NoLeaseInReOpen|
-|**Description **|Operate file with lease before client failover and expect no lease state is maintained after client failover|
+|**Description**|Operate file with lease before client failover and expect no lease state is maintained after client failover|
 |**Prerequisites**||
 |**Test Execution Steps**|**Based on NIC1, create client1:**|
 ||NEGOTIATE|
@@ -5420,7 +5420,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 #####<a name="3.3.7.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Operate file with lock during client failover and expect no lock is maintained after failover |
 |**Message Sequence**|**Based on NIC1, create client1:**|
 ||NEGOTIATE|
@@ -5452,9 +5452,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 #####<a name="3.3.7.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|AppInstanceId_Lock_ExpectNoLockInReOpen|
-|**Description **|Operate file with lock during client failover and expect no lock is maintained after failover|
+|**Description**|Operate file with lock during client failover and expect no lock is maintained after failover|
 |**Prerequisites**||
 |**Test Execution Steps**|**Based on NIC1, create client1:**|
 ||NEGOTIATE|
@@ -5488,7 +5488,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 #####<a name="3.3.8.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Send encrypted and compounded requests to SUT and verify response|
 |**Message Sequence**|NEGOTIATE|
 ||SESSION_SETUP|
@@ -5503,7 +5503,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 #####<a name="3.3.8.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|Compound_Encrypt_RelatedRequests|
 |**Description**|Send encrypted and compounded related requests (Create, Write and Close a same file) to SUT and verify response.|
 |**Message Sequence**|NEGOTIATE|
@@ -5516,7 +5516,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|Compound_Encrypt_UnrelatedRequests|
 |**Description**|Send encrypted and compounded unrelated requests (two Creates request to different files) to SUT and verify response.|
 |**Message Sequence**|NEGOTIATE|
@@ -5555,9 +5555,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 #####<a name="3.4.1.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_SWNGetInterfaceList_ClusterSingleNode|
-|**Description **|Ensure that the cluster does not response the interface list correctly until there is an available node.|
+|**Description**|Ensure that the cluster does not response the interface list correctly until there is an available node.|
 |**Prerequisites**|Only Node1 provides the service. Node2 is disabled.|
 |**Test Execution Steps**|Bind to cluster server|
 ||Invoke WitnessrGetInterfaceList|
@@ -5577,9 +5577,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_SWNGetInterfaceList_ScaleOutSingleNode|
-|**Description **|Ensure that single node does not response the interface list correctly until there is an available node.|
+|**Description**|Ensure that single node does not response the interface list correctly until there is an available node.|
 |**Prerequisites**|Only Node1 provides the service. Node2 is disabled.|
 |**Test Execution Steps**|Bind to Node1|
 ||Invoke WitnessrGetInterfaceList|
@@ -5603,7 +5603,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 #####<a name="3.4.2.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Register and unregister the client.|
 |**Call Sequence**|WitnessrRegister|
 ||WitnessUnRegister|
@@ -5613,9 +5613,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 #####<a name="3.4.2.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|SWNRegistration_InvalidNetName|
-|**Description **|Register with WitnessrRegister and invalid netname.|
+|**Description**|Register with WitnessrRegister and invalid netname.|
 |**Prerequisites**||
 |**Test Execution Steps**|1. GetClusterResourceOwner|
 ||2. Bind to cluster server|
@@ -5636,9 +5636,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 |**Cleanup**||
 
 |||
-|-|-|
+|---|---|
 | **Test ID**              | SWNRegistration\_InvalidVersion                                                   |
-| **Description **         | Register with WitnessrRegister and invalid version.                               |
+| **Description**         | Register with WitnessrRegister and invalid version.                               |
 | **Prerequisites**        |                                                                                   |
 | **Test Execution Steps** | 1.  GetClusterResourceOwner                                                       |
 ||                            2.  Bind to cluster server                                                       |  
@@ -5659,9 +5659,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 | **Cleanup**              |                                                                                   |
 
 |||
-|-|-|
+|---|---|
 | **Test ID**              | SWNRegistration\_InvalidIpAddress                                                   |
-| **Description **         | Register with WitnessrRegister and invalid IpAddress.                               |
+| **Description**         | Register with WitnessrRegister and invalid IpAddress.                               |
 | **Prerequisites**        |                                                                                   |
 | **Test Execution Steps** | 1.  GetClusterResourceOwner                                                       |
 ||                            2.  Bind to cluster server                                                       |  
@@ -5682,9 +5682,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 | **Cleanup**              |                                                                                   |
 
 |||
-|-|-|
+|---|---|
 | **Test ID**              | SWNRegistration\_InvalidUnRegister                                                   |
-| **Description **         | Register with WitnessrRegister and Unregister the client twice.                               |
+| **Description**         | Register with WitnessrRegister and Unregister the client twice.                               |
 | **Prerequisites**        |                                                                                   |
 | **Test Execution Steps** | 1.  GetClusterResourceOwner                                                       |
 ||                            2.  Bind to cluster server                                                       |  
@@ -5707,9 +5707,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 
 
 |||
-|-|-|
+|---|---|
 | **Test ID**              | SWNRegistrationEx\_InvalidNetName                                                   |
-| **Description **         | Register with WitnessrRegisterEx and invalid NetName.                                  |
+| **Description**         | Register with WitnessrRegisterEx and invalid NetName.                                  |
 | **Prerequisites**        |                                                                                   |
 | **Test Execution Steps** | 1.  GetClusterResourceOwner                                                       |
 ||                            2.  Bind to cluster server                                                       |  
@@ -5730,9 +5730,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 | **Cleanup**              |                                                                                   |
 
 |||
-|-|-|
+|---|---|
 | **Test ID**              | SWNRegistrationEx\_InvalidVersion                                                   |
-| **Description **         | Register with WitnessrRegisterEx and invalid version.                               |
+| **Description**         | Register with WitnessrRegisterEx and invalid version.                               |
 | **Prerequisites**        |                                                                                   |
 | **Test Execution Steps** | 1.  GetClusterResourceOwner                                                       |
 ||                            2.  Bind to cluster server                                                       |  
@@ -5754,9 +5754,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 
 
 |||
-|-|-|
+|---|---|
 | **Test ID**              | SWNRegistrationEx\_InvalidIpAddress                                                   |
-| **Description **         | Register with WitnessrRegisterEx and invalid IpAddress.                               |
+| **Description**         | Register with WitnessrRegisterEx and invalid IpAddress.                               |
 | **Prerequisites**        |                                                                                   |
 | **Test Execution Steps** | 1.  GetClusterResourceOwner                                                       |
 ||                            2.  Bind to cluster server                                                       |  
@@ -5778,9 +5778,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 
 
 |||
-|-|-|
+|---|---|
 | **Test ID**              | SWNRegistrationEx\_InvalidUnRegister                                                   |
-| **Description **         | Register with WitnessrRegisterEx and Unregister the client twice.                               |
+| **Description**         | Register with WitnessrRegisterEx and Unregister the client twice.                               |
 | **Prerequisites**        |                                                                                   |
 | **Test Execution Steps** | 1.  GetClusterResourceOwner                                                       |
 ||                            2.  Bind to cluster server                                                       |  
@@ -5803,9 +5803,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 
 
 |||
-|-|-|
+|---|---|
 | **Test ID**              | SWNRegistrationEx\_InvalidIpAddress                                                   |
-| **Description **         | Register with WitnessrRegisterEx and invalid sharename.                               |
+| **Description**         | Register with WitnessrRegisterEx and invalid sharename.                               |
 | **Prerequisites**        |                                                                                   |
 | **Test Execution Steps** | 1.  GetClusterResourceOwner                                                       |
 ||                            2.  Bind to cluster server                                                       |  
@@ -5830,7 +5830,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 #####<a name="3.4.3.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Get the asynchronous notification.|
 |**Call Sequence**|WitnessrRegister|
 ||WitnessrAsyncNotify|
@@ -5841,9 +5841,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 #####<a name="3.4.3.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 | **Test ID**              | BVT\_WitnessrRegister\_SWNAsyncNotification\_ClientMove                                                   |
-| **Description **         | Register with WitnessrRegister and Get CLIENT\_MOVE\_NOTIFICATION on scaleout cluster server.                               |
+| **Description**         | Register with WitnessrRegister and Get CLIENT\_MOVE\_NOTIFICATION on scaleout cluster server.                               |
 | **Prerequisites**        |                                                                                   |
 | **Test Execution Steps** | 1.  Get the address(Node01) of ScaleOutFs                                                       |
 ||                            2.  Bind to Node01                                                       |  
@@ -5872,9 +5872,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 
 
 |||
-|-|-|
+|---|---|
 | **Test ID**              | BVT\_WitnessrRegisterEx\_SWNAsyncNotification\_ClientMove                                                   |
-| **Description **         | Register with WitnessrRegisterEx and Get CLIENT\_MOVE\_NOTIFICATION on scaleout cluster server.                               |
+| **Description**         | Register with WitnessrRegisterEx and Get CLIENT\_MOVE\_NOTIFICATION on scaleout cluster server.                               |
 | **Prerequisites**        |                                                                                   |
 | **Test Execution Steps** | 1.  Get the address(Node01) of ScaleOutFs                                                       |
 ||                            2.  Bind to Node01                                                       |  
@@ -5903,9 +5903,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 
 
 |||
-|-|-|
+|---|---|
 | **Test ID**              | SWNAsyncNotification\_InvalidRequest                                                   |
-| **Description **         | Assure that server responses correctly with invalid context.                                |
+| **Description**         | Assure that server responses correctly with invalid context.                                |
 | **Prerequisites**        |                                                                                   |
 | **Test Execution Steps** | 1.  GetClusterResourceOwner                                                       |
 ||                            2.  Bind to cluster server(GeneralFS)                                                       |  
@@ -5926,9 +5926,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 | **Cleanup**              |                                                                                   |
 
 |||
-|-|-|
+|---|---|
 | **Test ID**              | WitnessrRegisterEx\_SWNAsyncNotification\_Timeout                                                   |
-| **Description **         | Get Timeout notification on scaleout cluster server.                                 |
+| **Description**         | Get Timeout notification on scaleout cluster server.                                 |
 | **Prerequisites**        |                                                                                   |
 | **Test Execution Steps** | 1.  Get the address(Node01) of ScaleOutFs                                                         |
 ||                            2.  Bind to Node01                                                       |  
@@ -5953,9 +5953,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 | **Cleanup**              |                                                                                   |
 
 |||
-|-|-|
+|---|---|
 | **Test ID**              | BVT\_WitnessrRegisterEx\_SWNAsyncNotification\_ShareMove                                                                |
-| **Description **         | Get SHARE\_MOVE\_NOTIFICATION on scaleout cluster server.                                                               |
+| **Description**         | Get SHARE\_MOVE\_NOTIFICATION on scaleout cluster server.                                                               |
 | **Prerequisites**        |                                                                                                                         |
 | **Test Execution Steps** | 1.  Get the address(Node01) of ScaleOutFs                                                                               |
 ||                            2.  Bind to Node01                                                                                                     | 
@@ -5982,9 +5982,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 
 
 |||
-|-|-|
+|---|---|
 | **Test ID**              | BVT\_WitnessrRegisterEx\_SWNAsyncNotification\_IPChange                                                                |
-| **Description **         | Get IP\_CHANGE\_NOTIFICATION on scaleout cluster server.                                                               |
+| **Description**         | Get IP\_CHANGE\_NOTIFICATION on scaleout cluster server.                                                               |
 | **Prerequisites**        |                                                                                                                         |
 | **Test Execution Steps** | 1.  Get the address(Node01) of ScaleOutFs                                                                               |
 ||                            2.  Bind to Node01                                                                                                     | 
@@ -6017,7 +6017,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.4.4.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Test the server behavior when client connect to asymmetric share.|
 |**Call Sequence**|Connect to asymmetric share|
 ||Register SWN witness notification to the server|
@@ -6027,9 +6027,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.4.4.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|AsymmetricShare_OnNonOptimumNode|
-|**Description **|This test case is designed to test asymmetric share when the client connects to the asymmetric share on the non-optimum node.|
+|**Description**|This test case is designed to test asymmetric share when the client connects to the asymmetric share on the non-optimum node.|
 |**Prerequisites**||
 |**Test Execution Steps**|NEGOTIATE|
 ||SESSION_SETUP|
@@ -6054,9 +6054,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|AsymmetricShare_OnOptimumNode|
-|**Description **|This test case is designed to test asymmetric share when the client connects to the asymmetric share on the optimum node.|
+|**Description**|This test case is designed to test asymmetric share when the client connects to the asymmetric share on the optimum node.|
 |**Prerequisites**||
 |**Test Execution Steps**|NEGOTIATE|
 ||SESSION_SETUP|
@@ -6081,9 +6081,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|AsymmetricShare_OnNonScaleOutShare|
-|**Description **|This test case is designed to test asymmetric share when the client connects to the non scaleout share.|
+|**Description**|This test case is designed to test asymmetric share when the client connects to the non scaleout share.|
 |**Prerequisites**||
 |**Test Execution Steps**|NEGOTIATE|
 ||SESSION_SETUP|
@@ -6108,9 +6108,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|AsymmetricShare_OnSmb30|
-|**Description **|This test case is designed to test asymmetric share when the client connects to the non-optimum node with Smb30 dialect.|
+|**Description**|This test case is designed to test asymmetric share when the client connects to the non-optimum node with Smb30 dialect.|
 |**Prerequisites**||
 |**Test Execution Steps**|NEGOTIATE|
 ||SESSION_SETUP|
@@ -6139,7 +6139,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.4.5.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|File sharing cluster failover|
 |**Message Sequence**|NEGOTIATE|
 ||SESSION_SETUP|
@@ -6161,9 +6161,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.4.5.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|FileServerFailover_FileServer |
-|**Description **|This test case is designed to test whether server can handle failover to another node of continuous available file servers.|
+|**Description**|This test case is designed to test whether server can handle failover to another node of continuous available file servers.|
 |**Prerequisites**||
 |**Test Execution Steps**|Start a client by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT to GeneralFileServer.|
 ||Client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 with PERSISTENT flag set.|
@@ -6181,9 +6181,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|FileServerFailover_ScaleOutFileServer|
-|**Description **|This test case is designed to test whether server can handle failover to another node of continuous available scale out file servers.|
+|**Description**|This test case is designed to test whether server can handle failover to another node of continuous available scale out file servers.|
 |**Prerequisites**||
 |**Test Execution Steps**|Start a client by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT to ScaleOutFileServer.|
 ||Client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 with PERSISTENT flag set.|
@@ -6201,9 +6201,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|FileServerFailover_ScaleOutFileServer_ReconnectWithoutFailover|
-|**Description **|Ensure persistent handle could be re-connected via connection with another node without failover|
+|**Description**|Ensure persistent handle could be re-connected via connection with another node without failover|
 |**Prerequisites**||
 |**Test Execution Steps**|**Establish connection to node01**|
 ||Client sends NEGOTIATE request|
@@ -6233,9 +6233,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|SWNFileServerFailover_FileServer|
-|**Description **|Get WitnessrAsyncNotify notification on cluster server.|
+|**Description**|Get WitnessrAsyncNotify notification on cluster server.|
 |**Prerequisites**||
 |**Test Execution Steps**|1. GetClusterResourceOwner|
 ||2. Bind to cluster server(GeneralFS)|
@@ -6270,9 +6270,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|SWNFileServerFailover_ScaleOutFileServer|
-|**Description **|Get WitnessrAsyncNotify notification on scaleout cluster server.|
+|**Description**|Get WitnessrAsyncNotify notification on scaleout cluster server.|
 |**Prerequisites**||
 |**Test Execution Steps**|1. Get the address(Node01) of ScaleOutFs|
 ||2. Bind to Node01 |
@@ -6311,7 +6311,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.4.6.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Operate files with/without encryption before/after server failover and after failover|
 |**Message Sequence**|**From client1**|
 ||NEGOTIATE (with/without SMB2_GLOBAL_CAP_ENCRYPTION)|
@@ -6335,9 +6335,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.4.6.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|FileServerFailover_Encryption|
-|**Description **|Operate files with encryption before server failover and after failover|
+|**Description**|Operate files with encryption before server failover and after failover|
 |**Prerequisites**||
 |**Test Execution Steps**|**From client1**|
 ||NEGOTIATE (with SMB2_GLOBAL_CAP_ENCRYPTION)|
@@ -6359,9 +6359,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|FileServerFailover_Negative_EncryptionBeforeFailover_NoEncryptionAfterFailover|
-|**Description **|Operate files with encryption before server failover but without encryption after failover|
+|**Description**|Operate files with encryption before server failover but without encryption after failover|
 |**Prerequisites**||
 |**Test Execution Steps**|**From client1**|
 ||NEGOTIATE (with SMB2_GLOBAL_CAP_ENCRYPTION)|
@@ -6385,9 +6385,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|FileServerFailover_Negative_NoEncryptionBeforeFailover_EncrytpionAfterFailover|
-|**Description **|Operate files without encryption before failover but with encryption after failover|
+|**Description**|Operate files without encryption before failover but with encryption after failover|
 |**Prerequisites**||
 |**Test Execution Steps**|**From client1**|
 ||NEGOTIATE (without SMB2_GLOBAL_CAP_ENCRYPTION)|
@@ -6413,7 +6413,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.4.7.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Operate file/directory with lease and durable handle before server failover and expect lease break notification|
 |**Message Sequence**|**From client1 **|
 ||NEGOTIATE|
@@ -6447,9 +6447,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.4.7.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|FileServerFailover_DirectoryLeasing|
-|**Description **|Operate directory with lease and durable handle before server failover and expect lease break notification|
+|**Description**|Operate directory with lease and durable handle before server failover and expect lease break notification|
 |**Prerequisites**||
 |**Test Execution Steps**|**From client1 **|
 ||NEGOTIATE|
@@ -6481,9 +6481,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|FileServerFailover_FileLeasing|
-|**Description **|Operate file with lease and durable handle before server failover and expect lease break notification|
+|**Description**|Operate file with lease and durable handle before server failover and expect lease break notification|
 |**Prerequisites**||
 |**Test Execution Steps**|**From client1 **|
 ||NEGOTIATE|
@@ -6520,7 +6520,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test case**|FileServer_Filover_Lock|
 |**Description**|Operate files with lock during failover and expect the lock is maintained after failover|
 |**Message Sequence**|**From client1 open a  file and lock a specific range**|
@@ -6561,9 +6561,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.4.8.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|FileServerFailover_Lock|
-|**Description **|Operate files with lock during failover and expect the lock is maintained after failover|
+|**Description**|Operate files with lock during failover and expect the lock is maintained after failover|
 |**Prerequisites**||
 |**Test Execution Steps**|**From client1 open a  file and lock a specific range**|
 ||NEGOTIATE|
@@ -6605,7 +6605,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.4.9.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Test the CREATE request from different client could not success after failover when persistent handle is requested|
 |**Message Sequence**|**From one client open a file and request persistent handle**|
 ||NEGOTIATE|
@@ -6625,9 +6625,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.4.9.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|FileServerFailover_BlockCreateFromDifferentClient|
-|**Description **|Test the CREATE request from different client could succeed after failover when persistent handle is requested|
+|**Description**|Test the CREATE request from different client could succeed after failover when persistent handle is requested|
 |**Prerequisites**||
 |**Test Execution Steps**|**From one client open a file and request persistent handle**|
 ||Client sends NEGOTIATE request|
@@ -6665,7 +6665,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.5.1.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Operate a shadow copy set. |
 |**Call Sequence**|IsPathSupported|
 ||GetSupportedVersion|
@@ -6685,9 +6685,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.5.1.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_VSSOperateShadowCopySet_WritableSnapshot_GeneralFileServer|
-|**Description **|Check if the general file server supports the VSS provider to create a writable snapshot for remote files.|
+|**Description**|Check if the general file server supports the VSS provider to create a writable snapshot for remote files.|
 |**Prerequisites**||
 |**Test Execution Steps**|IsPathSupported("\\GeneralFS.contoso.com\SMBBasic")|
 ||GetSupportedVersion|
@@ -6707,9 +6707,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_VSSOperateShadowCopySet_WritableSnapshot_ScaleoutFileServer|
-|**Description **|Check if the scaleout file server supports the VSS provider to create a writable snapshot for remote files.|
+|**Description**|Check if the scaleout file server supports the VSS provider to create a writable snapshot for remote files.|
 |**Prerequisites**||
 |**Test Execution Steps**|IsPathSupported("\\ScaleOutFS.contoso.com\SMBBasic")|
 ||GetSupportedVersion|
@@ -6729,9 +6729,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_VSSOperateShadowCopySet_WritableSnapshot_SingleNode|
-|**Description **|Check if the server supports the VSS provider to create a writable snapshot for remote files.|
+|**Description**|Check if the server supports the VSS provider to create a writable snapshot for remote files.|
 |**Prerequisites**||
 |**Test Execution Steps**|IsPathSupported("\\Node01\SMBBasic")|
 ||GetSupportedVersion|
@@ -6751,9 +6751,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|VSSOperateShadowCopySet_DifferentNodeSharePath|
-|**Description **|Check if the server returns correctly when adding different sharePath on multi nodes to a shadow copy set.|
+|**Description**|Check if the server returns correctly when adding different sharePath on multi nodes to a shadow copy set.|
 |**Prerequisites**||
 |**Test Execution Steps**|IsPathSupported("\\Node01\SMBBasic")|
 ||GetSupportedVersion|
@@ -6767,9 +6767,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_VSSOperateShadowCopySet_ClusterSharePath_OwnerNode|
-|**Description **|Check if the server returns correctly when adding different sharePath on the cluster and the owner node to a shadow copy set.|
+|**Description**|Check if the server returns correctly when adding different sharePath on the cluster and the owner node to a shadow copy set.|
 |**Prerequisites**||
 |**Test Execution Steps**|Get the owner of cluster resource "GeneralFS"
 ||IsPathSupported("\\GeneralFS\SMBClustered")|
@@ -6791,9 +6791,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_VSSOperateShadowCopySet_ClusterSharePath_NonOwnerNode|
-|**Description **|Check if the server returns correctly when adding different sharePath on the cluster and the non-owner node to a shadow copy set.|
+|**Description**|Check if the server returns correctly when adding different sharePath on the cluster and the non-owner node to a shadow copy set.|
 |**Prerequisites**||
 |**Test Execution Steps**|Get the owner of cluster resource "GeneralFS"
 ||IsPathSupported("\\GeneralFS\SMBClustered")|
@@ -6811,7 +6811,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.5.2.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Test important context. |
 |**Call Sequence**|IsPathSupported|
 ||GetSupportedVersion|
@@ -6831,9 +6831,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.5.2.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_VSSSetContext_ReadonlySnapshot_BACKUP|
-|**Description **|Check if the server supports FsrvpContextValues.FSRVP_CTX_BACKUP|FsrvpShadowCopyAttributes.FSRVP_ATTR_NO_AUTO_RECOVERY (0x00000002).|
+|**Description**|Check if the server supports FsrvpContextValues.FSRVP_CTX_BACKUP|FsrvpShadowCopyAttributes.FSRVP_ATTR_NO_AUTO_RECOVERY (0x00000002).|
 |**Prerequisites**||
 |**Test Execution Steps**|IsPathSupported|
 ||GetSupportedVersion|
@@ -6853,9 +6853,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|VSSSetContext_ReadonlySnapshot_APP_ROLLBACK|
-|**Description **|Check if the server supports FsrvpContextValues.FSRVP_CTX_APP_ROLLBACK|FsrvpShadowCopyAttributes.FSRVP_ATTR_NO_AUTO_RECOVERY (0x0000000B).|
+|**Description**|Check if the server supports FsrvpContextValues.FSRVP_CTX_APP_ROLLBACK|FsrvpShadowCopyAttributes.FSRVP_ATTR_NO_AUTO_RECOVERY (0x0000000B).|
 |**Prerequisites**||
 |**Test Execution Steps**|IsPathSupported|
 ||GetSupportedVersion|
@@ -6875,9 +6875,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|VSSSetContext_ReadonlySnapshot_NAS_ROLLBACK|
-|**Description **|Check if the server supports FsrvpContextValues.FSRVP_CTX_NAS_ROLLBACK (0x00000010).|
+|**Description**|Check if the server supports FsrvpContextValues.FSRVP_CTX_NAS_ROLLBACK (0x00000010).|
 |**Prerequisites**||
 |**Test Execution Steps**|IsPathSupported|
 ||GetSupportedVersion|
@@ -6897,9 +6897,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|VSSSetContext_ReadonlySnapshot_FILE_SHARE_BACKUP|
-|**Description **|Check if the server supports FsrvpContextValues.FSRVP_CTX_FILE_SHARE_BACKUP (0x00000019).|
+|**Description**|Check if the server supports FsrvpContextValues.FSRVP_CTX_FILE_SHARE_BACKUP (0x00000019).|
 |**Prerequisites**||
 |**Test Execution Steps**|IsPathSupported|
 ||GetSupportedVersion|
@@ -6919,9 +6919,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|VSSSetContext_Invalid|
-|**Description **|Check if the server does not support FsrvpShadowCopyAttributes.FSRVP_ATTR_NO_AUTO_RECOVERY|FsrvpShadowCopyAttributes.FSRVP_ATTR_AUTO_RECOVERY (0x00400002).|
+|**Description**|Check if the server does not support FsrvpShadowCopyAttributes.FSRVP_ATTR_NO_AUTO_RECOVERY|FsrvpShadowCopyAttributes.FSRVP_ATTR_AUTO_RECOVERY (0x00400002).|
 |**Prerequisites**||
 |**Test Execution Steps**|IsPathSupported|
 ||GetSupportedVersion|
@@ -6936,7 +6936,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.5.3.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Test to abort a shadow copy set in specific state. |
 |**Call Sequence**|IsPathSupported|
 ||GetSupportedVersion|
@@ -6956,9 +6956,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.5.3.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|VSSAbortShadowCopySet_Started|
-|**Description **|Check if the server supports AbortShadowCopySet after calling StartShadowCopySet.|
+|**Description**|Check if the server supports AbortShadowCopySet after calling StartShadowCopySet.|
 |**Prerequisites**||
 |**Test Execution Steps**|IsPathSupported|
 ||GetSupportedVersion|
@@ -6971,9 +6971,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|VSSAbortShadowCopySet_Added|
-|**Description **|Check if the server supports AbortShadowCopySet after calling AddShadowCopySet.|
+|**Description**|Check if the server supports AbortShadowCopySet after calling AddShadowCopySet.|
 |**Prerequisites**||
 |**Test Execution Steps**|IsPathSupported|
 ||GetSupportedVersion|
@@ -6987,9 +6987,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|VSSAbortShadowCopySet_Recovered|
-|**Description **|Check if the server responses with FSRVP_E_BAD_STATE when calling AbortShadowCopySet after called RecoveryCompleteShadowCopySet.|
+|**Description**|Check if the server responses with FSRVP_E_BAD_STATE when calling AbortShadowCopySet after called RecoveryCompleteShadowCopySet.|
 |**Prerequisites**||
 |**Test Execution Steps**|IsPathSupported|
 ||GetSupportedVersion|
@@ -7009,7 +7009,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ###<a name="3.6">RSVD Test
 
 |||
-|-|-|
+|---|---|
 |**Scenario**|**Test Cases**|
 |**OpenCloseSharedVHD**|1|
 |**TunnelOperationToSharedVHD**|6|
@@ -7028,7 +7028,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.6.1.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Check if server handles the request to open/close a shared virtual disk file correctly.|
 |**Message Sequence**|OpenSharedVirtualDisk|
 ||CloseSharedVirtualDisk|
@@ -7038,9 +7038,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.6.1.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_OpenCloseSharedVHD|
-|**Description **|Check if the server supports opening/closing a shared virtual disk file.|
+|**Description**|Check if the server supports opening/closing a shared virtual disk file.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client opens a shared virtual disk file with SMB2 create context SVHDX_OPEN_DEVICE_CONTEXT and expects success.|
 ||Client closes the file and expect success.|
@@ -7048,9 +7048,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|ReconnectSharedVHDWithoutDeviceContext|
-|**Description **|Check if the client can reconnect the persistent handle to the shared virtual disk file without carrying device context.|
+|**Description**|Check if the client can reconnect the persistent handle to the shared virtual disk file without carrying device context.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client opens a shared virtual disk file with SMB2 create contexts         SVHDX_OPEN_DEVICE_CONTEXT and SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (persistent bit is set). |
 ||Client disconnects from the server.|
@@ -7063,7 +7063,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.6.2.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Check if server handles the tunnel operation request to a shared virtual disk file correctly.|
 |**Message Sequence**|OpenSharedVirtualDisk|
 ||TunnelOperation|
@@ -7074,9 +7074,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.6.2.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_TunnelGetFileInfoToSharedVHD|
-|**Description **|Check if server supports handling tunnel operation RSVD_TUNNEL_GET_FILE_INFO_OPERATION.|
+|**Description**|Check if server supports handling tunnel operation RSVD_TUNNEL_GET_FILE_INFO_OPERATION.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client opens a shared virtual disk file successfully.|
 ||Client sends tunnel operation RSVD_TUNNEL_GET_FILE_INFO_OPERATION to server and expects success.|
@@ -7085,9 +7085,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_TunnelSCSIToSharedVHD|
-|**Description **|Check if server supports handling tunnel operation RSVD_TUNNEL_SCSI_OPERATION.|
+|**Description**|Check if server supports handling tunnel operation RSVD_TUNNEL_SCSI_OPERATION.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client opens a shared virtual disk file successfully.|
 ||Client sends tunnel operation RSVD_TUNNEL_SCSI_OPERATION to server and expects success.|
@@ -7096,9 +7096,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_TunnelCheckConnectionStatusToSharedVHD|
-|**Description **|Check if server supports handling tunnel operation RSVD_TUNNEL_CHECK_CONNECTION_STATUS_OPERATION.|
+|**Description**|Check if server supports handling tunnel operation RSVD_TUNNEL_CHECK_CONNECTION_STATUS_OPERATION.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client opens a shared virtual disk file successfully.|
 ||Client sends tunnel operation RSVD_TUNNEL_CHECK_CONNECTION_STATUS_OPERATION to server and expects success.|
@@ -7107,9 +7107,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_TunnelSRBStatusToSharedVHD|
-|**Description **|Check if server supports handling tunnel operation RSVD_TUNNEL_SRB_STATUS_OPERATION.|
+|**Description**|Check if server supports handling tunnel operation RSVD_TUNNEL_SRB_STATUS_OPERATION.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client opens a shared virtual disk file successfully.|
 ||Read fail|
@@ -7119,9 +7119,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_TunnelGetDiskInfoToSharedVHD|
-|**Description **|Check if server supports handling tunnel operation RSVD_TUNNEL_GET_DISK_INFO_OPERATION.|
+|**Description**|Check if server supports handling tunnel operation RSVD_TUNNEL_GET_DISK_INFO_OPERATION.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client opens a shared virtual disk file successfully.|
 ||Client sends tunnel operation RSVD_TUNNEL_GET_DISK_INFO_OPERATION to server and expects success.|
@@ -7130,9 +7130,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_TunnelValidateDiskToSharedVHD|
-|**Description **|Check if server supports handling tunnel operation RSVD_TUNNEL_VALIDATE_DISK_OPERATION.|
+|**Description**|Check if server supports handling tunnel operation RSVD_TUNNEL_VALIDATE_DISK_OPERATION.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client opens a shared virtual disk file successfully.|
 ||Client sends tunnel operation RSVD_TUNNEL_VALIDATE_DISK_OPERATION to server and expects success.|
@@ -7145,7 +7145,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.6.3.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Check if server handles Read/Write request to a shared virtual disk file correctly.|
 |**Message Sequence**|OpenSharedVirtualDisk|
 ||ReadContent|
@@ -7157,9 +7157,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.6.3.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_ReadSharedVHD|
-|**Description **|Check if server handles Read request to a shared virtual disk file correctly.|
+|**Description**|Check if server handles Read request to a shared virtual disk file correctly.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client opens a shared virtual disk file successfully.|
 ||Client reads file content successfully.|
@@ -7168,9 +7168,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_WriteSharedVHD|
-|**Description **|Check if server handles Write request to a shared virtual disk file correctly.|
+|**Description**|Check if server handles Write request to a shared virtual disk file correctly.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client opens a shared virtual disk file successfully.|
 ||Client writes file content successfully.|
@@ -7183,7 +7183,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.6.4.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Check if server handles SHARED_VIRTUAL_DISK_SUPPORT request to a shared virtual disk file correctly.|
 |**Message Sequence**|OpenSharedVirtualDisk|
 ||QuerySharedVirtualDiskSupport|
@@ -7194,9 +7194,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.6.4.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_QuerySharedVirtualDiskSupport|
-|**Description **|Check if server handles SHARED_VIRTUAL_DISK_SUPPORT request to a shared virtual disk file correctly.|
+|**Description**|Check if server handles SHARED_VIRTUAL_DISK_SUPPORT request to a shared virtual disk file correctly.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client opens a shared virtual disk file successfully.|
 ||Client sends SVHDX_SHARED_VIRTUAL_DISK_SUPPORT_REQUEST to server and expects success.|
@@ -7209,7 +7209,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.6.5.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Check if server handles requests to the same shared virtual disk file from two clients correctly.|
 |**Message Sequence**|The first client does some operation to the shared virtual disk file.|
 ||The second client does some operation to the same shared virtual disk file.|
@@ -7220,9 +7220,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.6.5.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|TwoClientsReadSameSharedVHD|
-|**Description **|Check if server handles Read request to a shared virtual disk file from two clients correctly.|
+|**Description**|Check if server handles Read request to a shared virtual disk file from two clients correctly.|
 |**Prerequisites**||
 |**Test Execution Steps**|The first client opens a shared virtual disk file successfully.|
 ||The first client reads file content successfully.|
@@ -7234,9 +7234,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|TwoClientsWriteSameSharedVHD|
-|**Description **|Check if server handles Write request to a shared virtual disk file from two clients correctly.|
+|**Description**|Check if server handles Write request to a shared virtual disk file from two clients correctly.|
 |**Prerequisites**|N/A|
 |**Test Execution Steps**|The first client opens a shared virtual disk file successfully.|
 ||The first client writes file content successfully.|
@@ -7252,7 +7252,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.6.6.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Check if server can reconnect the persistent handle to the shared virtual disk file without carrying device context successfully.|
 |**Message Sequence**|The client requests a persistent handle with device context and to the shared virtual disk file and expects success.|
 ||The client disconnects.|
@@ -7263,9 +7263,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.6.6.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|ReconnectSharedVHDWithoutDeviceContext|
-|**Description **|Check if server can reconnect the persistent handle to the shared virtual disk file without carrying device context successfully.|
+|**Description**|Check if server can reconnect the persistent handle to the shared virtual disk file without carrying device context successfully.|
 |**Prerequisites**||
 |**Test Execution Steps**|The client requests a persistent handle with device context successfully.|
 ||The client disconnects successfully.|
@@ -7279,7 +7279,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.6.7.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Check if server handles the tunnel operation request to query a shared virtual disk set file information correctly.|
 |**Message Sequence**|OpenSharedVirtualDisk|
 ||SvhdxTunnelVhdSetQueryInformation|
@@ -7289,9 +7289,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.6.7.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_Query_VHDSet_FileInfo_SnapshotList |
-|**Description **|Check if server supports handling tunnel operation SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_REQUEST while SetFileInfo is set to SvhdxVHDSetFileInformationTypeSnapshotList|
+|**Description**|Check if server supports handling tunnel operation SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_REQUEST while SetFileInfo is set to SvhdxVHDSetFileInformationTypeSnapshotList|
 |**Prerequisites**||
 |**Test Execution Steps**|Client opens a shared virtual disk set file successfully.|
 ||Client sends tunnel operation SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_REQUEST with SetFileInfo set to SvhdxVHDSetFileInformationTypeSnapshotList to server and expects success.|
@@ -7300,9 +7300,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_Query_VHDSet_FileInfo_SnapshotEntry|
-|**Description **|Check if server supports handling tunnel operation SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_REQUEST while SetFileInfo is set to SvhdxVHDSetFileInformationTypeSnapshotEntry|
+|**Description**|Check if server supports handling tunnel operation SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_REQUEST while SetFileInfo is set to SvhdxVHDSetFileInformationTypeSnapshotEntry|
 |**Prerequisites**||
 |**Test Execution Steps**|Client opens a shared virtual disk set file successfully.|
 ||Client sends tunnel operation SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_REQUEST with SetFileInfo set to SvhdxVHDSetFileInformationTypeSnapshotEntry to server and expects success.|
@@ -7315,7 +7315,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.6.8.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Check if server handles the tunnel operation request to convert a shared virtual disk file into a shared virtual disk set file correctly.|
 |**Message Sequence**|OpenSharedVirtualDisk|
 ||SvhdxMetaOperationStart |
@@ -7326,9 +7326,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.6.8.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_Convert_VHDFile_to_VHDSetFile  |
-|**Description **|Check if server supports handling tunnel operation SVHDX_META_OPERATION_START_REQUEST with SVHDX_META_OPERATION_CONVERT_TO_VHDSET in the payload to convert the .vhdx file into the .vhds file correctly.|
+|**Description**|Check if server supports handling tunnel operation SVHDX_META_OPERATION_START_REQUEST with SVHDX_META_OPERATION_CONVERT_TO_VHDSET in the payload to convert the .vhdx file into the .vhds file correctly.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client opens a shared virtual disk set file successfully.|
 ||Client sends tunnel operation SVHDX_META_OPERATION_START_REQUEST with SVHDX_META_OPERATION_CONVERT_TO_VHDSET structure in the payload to server and expects success.|
@@ -7341,7 +7341,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.6.9.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Check if server handles the tunnel operation request to take and delete checkpoint on a shared virtual disk set file correctly.|
 |**Message Sequence**|OpenSharedVirtualDisk|
 ||SvhdxMetaOperationStart|
@@ -7354,9 +7354,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.6.9.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_Create_Delete_Checkpoint|
-|**Description **|Check if server supports handling tunnel operation to create and delete checkpoint on a shared virtual disk set file correctly.|
+|**Description**|Check if server supports handling tunnel operation to create and delete checkpoint on a shared virtual disk set file correctly.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client opens a shared virtual disk set file successfully.|
 ||Client sends the first SVHDX_META_OPERATION_START_REQUEST with SVHDX_META_OPERATION_CREATE_SNAPSHOT structure in the payload to server to do initialization and expects success.|
@@ -7371,7 +7371,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.6.10.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Check if server handles the tunnel operation request to extract the shared virtual disk set file correctly.|
 |**Message Sequence**|OpenSharedVirtualDisk|
 ||SvhdxMetaOperationStart |
@@ -7382,9 +7382,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 #####<a name="3.6.10.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_Extract_VHDSet|
-|**Description **|Check if server supports handling tunnel operation to extract the shared virtual disk set file correctly.|
+|**Description**|Check if server supports handling tunnel operation to extract the shared virtual disk set file correctly.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client opens a shared virtual disk set file successfully.|
 ||Client sends the SVHDX_META_OPERATION_START_REQUEST with SVHDX_META_OPERATION_EXTRACT structure in the payload to server and expects success.|
@@ -7431,7 +7431,7 @@ The test cases are designed with below assumptions, and these terms will be used
 #####<a name="3.7.1.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Check if server handles domain referral requests correctly.|
 |**Message Sequence**|Client establishes SMB2 connection to server.|
 ||Client sends domain referral request to server.|
@@ -7443,9 +7443,9 @@ The test cases are designed with below assumptions, and these terms will be used
 #####<a name="3.7.1.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_DomainReferralV3ToDC|
-|**Description **|Client sends a version 3 Domain referral request to DC and expects positive response|
+|**Description**|Client sends a version 3 Domain referral request to DC and expects positive response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes a SMB connection between client and DC server.|
 ||2. Client sends a Domain referral v3 REQ_GET_DFS_REFERRAL message (RequestFileName is empty, MaxReferralLevel is 3) to DC.|
@@ -7455,9 +7455,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DomainReferralV1ToDC|
-|**Description **|Client sends a v1 Domain referral request to DC,  and expects negative response|
+|**Description**|Client sends a v1 Domain referral request to DC,  and expects negative response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Domain referral v1 REQ_GET_DFS_REFERRAL message (RequestFileName is empty, MaxReferralLevel is 1) to DC.|
@@ -7467,9 +7467,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DomainReferralV2ToDC|
-|**Description **|Client send a v2 Domain referral request to DC,  and expects negative response|
+|**Description**|Client send a v2 Domain referral request to DC,  and expects negative response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Domain referral v2 REQ_GET_DFS_REFERRAL message (RequestFileName is empty, MaxReferralLevel is 2) to DC.|
@@ -7479,9 +7479,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DomainReferralV4EXSiteToDC|
-|**Description **|Client sends a v4 Domain referral request EX to DC,  and expects positive response|
+|**Description**|Client sends a v4 Domain referral request EX to DC,  and expects positive response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Domain referral v4 REQ_GET_DFS_REFERRAL_EX message (RequestFileName is empty, MaxReferralLevel is 4, SiteName flag is set) to DC.|
@@ -7492,9 +7492,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DomainReferralV4EXToDC|
-|**Description **|Client sends v4 Domain referral request EX to DC and expects positive response|
+|**Description**|Client sends v4 Domain referral request EX to DC and expects positive response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Domain referral v4 REQ_GET_DFS_REFERRAL_EX message (RequestFileName is empty, MaxReferralLevel is 4, SiteName flag is not set) to DC.|
@@ -7509,7 +7509,7 @@ The test cases are designed with below assumptions, and these terms will be used
 #####<a name="3.7.2.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Check if server handles DC referral request correctly.|
 |**Message Sequence**|Client establishes SMB2 connection to server.|
 ||Client sends DC referral request to server.|
@@ -7521,9 +7521,9 @@ The test cases are designed with below assumptions, and these terms will be used
 #####<a name="3.7.2.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_DCReferralV3ToDC|
-|**Description **|Client sends a version 3 DC referral request with a valid domain name(FQDN) to DC and expects positive response|
+|**Description**|Client sends a version 3 DC referral request with a valid domain name(FQDN) to DC and expects positive response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes a SMB connection between client and DC server.|
 ||2. Client sends a DC referral v3 REQ_GET_DFS_REFERRAL message (RequestFileName is "\contoso.com",  MaxReferralLevel is 3) to DC.|
@@ -7535,9 +7535,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DCReferralV1ToDC|
-|**Description **|Client sends a v1 DC referral request to DC and expects negative response|
+|**Description**|Client sends a v1 DC referral request to DC and expects negative response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a DC referral v1 REQ_GET_DFS_REFERRAL message (RequestFileName is "\contoso.com",  MaxReferralLevel is 1) to DC.|
@@ -7547,9 +7547,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DCReferralV2ToDC|
-|**Description **|Client sends a v2 DC referral request to DC and expects negative response|
+|**Description**|Client sends a v2 DC referral request to DC and expects negative response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a DC referral v2 REQ_GET_DFS_REFERRAL message (RequestFileName is "\contoso.com",  MaxReferralLevel is 2) to DC.|
@@ -7559,9 +7559,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DCReferralV4EXNetbiosToDC|
-|**Description **|Client sends a v4 DC referral request EX with a valid domain name(NETBIOS) to DC and expects positive response|
+|**Description**|Client sends a v4 DC referral request EX with a valid domain name(NETBIOS) to DC and expects positive response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a DC referral v4 REQ_GET_DFS_REFERRAL_EX message (RequestFileName is "\contoso", MaxReferralLevel is 4, SiteName flag is not set) to DC.|
@@ -7573,9 +7573,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|DCReferralV4EXSiteToDC|
-|**Description **|Client sends a v4 DC referral request EX with a site name to DC and expects positive response.|
+|**Description**|Client sends a v4 DC referral request EX with a site name to DC and expects positive response.|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a DC referral v4 REQ_GET_DFS_REFERRAL_EX message (RequestFileName is "\contoso", MaxReferralLevel is 4, SiteName flag is set) to DC.|
@@ -7586,9 +7586,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|InvalidDCReferralToDC|
-|**Description **|Client sends a v4 DC referral request with an invalid domain name(NETBIOS) to DC and expects negative response|
+|**Description**|Client sends a v4 DC referral request with an invalid domain name(NETBIOS) to DC and expects negative response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a DC referral v4 REQ_GET_DFS_REFERRAL message (RequestFileName is "\Invalid", MaxReferralLevel is 4) to DC.|
@@ -7602,7 +7602,7 @@ The test cases are designed with below assumptions, and these terms will be used
 #####<a name="3.7.3.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Check if server handles Sysvol request correctly.|
 |**Message Sequence**|Client establishes SMB2 connection to server.|
 ||Client sends Sysvol referral request to server.|
@@ -7614,9 +7614,9 @@ The test cases are designed with below assumptions, and these terms will be used
 #####<a name="3.7.3.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_SysvolReferralV3ToDCNetlogonPath|
-|**Description **|Client sends a version 3 sysvol referral request with NETLOGON directory to DC,  and expects positive response|
+|**Description**|Client sends a version 3 sysvol referral request with NETLOGON directory to DC,  and expects positive response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes a SMB connection between client and DC server.|
 ||2. Client sends a Sysvol referral v3 REQ_GET_DFS_REFERRAL message (RequestFileName is "\contoso\NETLOGON",  MaxReferralLevel is 3) to DC.|
@@ -7626,9 +7626,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_SysvolReferralV4ToDCSysvolPath|
-|**Description **|Client sends a v4 Sysvol referral request with SYSVOL directory to DC,  and expects positive response|
+|**Description**|Client sends a v4 Sysvol referral request with SYSVOL directory to DC,  and expects positive response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Sysvol referral v4 REQ_GET_DFS_REFERRAL_EX message (RequestFileName is "\contoso.com\NETLOGON", MaxReferralLevel is 4) to DC.|
@@ -7638,9 +7638,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|InvalidSysvolReferralToDC|
-|**Description **|Client sends a v1 Sysvol referral request with invalid Domain name to DC and expects negative response|
+|**Description**|Client sends a v1 Sysvol referral request with invalid Domain name to DC and expects negative response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Sysvol referral v1 REQ_GET_DFS_REFERRAL message (RequestFileName is "\Invalid\SYSVOL", MaxReferralLevel is 1) to DC.|
@@ -7650,9 +7650,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|SysvolReferralV1EXSiteToDCSysvolPath|
-|**Description **|Client sends a v1 Sysvol referral request(EX) with SYSVOL directory to DC and expects positive response|
+|**Description**|Client sends a v1 Sysvol referral request(EX) with SYSVOL directory to DC and expects positive response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Sysvol referral v1 REQ_GET_DFS_REFERRAL_EX message (RequestFileName is "\contoso.com\SYSVOL", MaxReferralLevel is 1, SiteName flag is set) to DC.|
@@ -7662,9 +7662,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|SysvolReferralV1ToDCSysvolPath|
-|**Description **|Client sends v1 Sysvol referral request with SYSVOL directory to DC and expects positive response|
+|**Description**|Client sends v1 Sysvol referral request with SYSVOL directory to DC and expects positive response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Sysvol referral v1 REQ_GET_DFS_REFERRAL message (RequestFileName is "\contoso.com\SYSVOL",  MaxReferralLevel is 1) to DC.|
@@ -7674,9 +7674,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|SysvolReferralV2ToDCNetlogonPath|
-|**Description **|Client sends a v2 Sysvol referral request with NETLOGON path to DC and expects positive response|
+|**Description**|Client sends a v2 Sysvol referral request with NETLOGON path to DC and expects positive response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Sysvol referral v2 REQ_GET_DFS_REFERRAL message (RequestFileName is "\contoso.com\NETLOGON", MaxReferralLevel is 2) to DC.|
@@ -7686,9 +7686,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|SysvolReferralV2EXToDCNetlogonPath|
-|**Description **|Client sends a v2 Sysvol referral request(EX) with NETLOGON directory to DC and expects positive response|
+|**Description**|Client sends a v2 Sysvol referral request(EX) with NETLOGON directory to DC and expects positive response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Sysvol referral v2 REQ_GET_DFS_REFERRAL_EX message (RequestFileName is "\contoso.com\SYSVOL", MaxReferralLevel is 1, SiteName flag is not set) to DC.|
@@ -7702,7 +7702,7 @@ The test cases are designed with below assumptions, and these terms will be used
 #####<a name="3.7.4.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Check if server handles Root referral request correctly.|
 |**Message Sequence**|Client establishes SMB2 connection to server.|
 ||Client sends Root referral request to server.|
@@ -7714,9 +7714,9 @@ The test cases are designed with below assumptions, and these terms will be used
 #####<a name="3.7.4.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_RootReferralV4ToDC|
-|**Description **|Client sends a v4 Root referral request to DC,  and expects positive response|
+|**Description**|Client sends a v4 Root referral request to DC,  and expects positive response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Root referral v4 REQ_GET_DFS_REFERRAL message (RequestFileName is "\contoso.com\Root", MaxReferralLevel is 4) to DC.|
@@ -7727,9 +7727,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|RootReferralV1ToDC|
-|**Description **|Client sends a v1 Root referral request to DC and expects positive response|
+|**Description**|Client sends a v1 Root referral request to DC and expects positive response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Root referral v1 REQ_GET_DFS_REFERRAL message (RequestFileName is "\contoso.com\DomainBased", MaxReferralLevel is 1) to DC.|
@@ -7740,9 +7740,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|RootReferralV2EXToDC|
-|**Description **|Client sends a v2 Root referral request to DC and expects positive response|
+|**Description**|Client sends a v2 Root referral request to DC and expects positive response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Root referral v2 REQ_GET_DFS_REFERRAL_EX message (RequestFileName is "\contoso.com\DomainBased", MaxReferralLevel is 2, SiteName Flag is not set) to DC.|
@@ -7753,9 +7753,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|RootReferralV3EXSiteToDC|
-|**Description **|Client sends a v3 Root referral request to DC and expects positive response|
+|**Description**|Client sends a v3 Root referral request to DC and expects positive response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Root referral v3 REQ_GET_DFS_REFERRAL_EX message (RequestFileName is "\contoso.com\DomainBased", MaxReferralLevel is 3, SiteName flag is set) to DC.|
@@ -7766,9 +7766,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|InvalidRootReferralToDC|
-|**Description **|Client sends an invalid v4 Root referral request to DC and expects negative response|
+|**Description**|Client sends an invalid v4 Root referral request to DC and expects negative response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Root referral v4 REQ_GET_DFS_REFERRAL message (RequestFileName is "\contoso.com\Invalid", MaxReferralLevel is 4) to DC.|
@@ -7782,7 +7782,7 @@ The test cases are designed with below assumptions, and these terms will be used
 #####<a name="3.7.5.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Check if server handles Link referral request correctly.|
 |**Message Sequence**|Client establishes SMB2 connection to server.|
 ||Client sends Link referral request to server.|
@@ -7794,9 +7794,9 @@ The test cases are designed with below assumptions, and these terms will be used
 #####<a name="3.7.5.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|LinkReferralV4ToDC|
-|**Description **|Client sends a v4 Link referral request to DC, and expects positive response or STATUS_NOT_FOUND depends on if the DC is hosting DFS server.|
+|**Description**|Client sends a v4 Link referral request to DC, and expects positive response or STATUS_NOT_FOUND depends on if the DC is hosting DFS server.|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Link referral v4 REQ_GET_DFS_REFERRAL message (RequestFileName is "\contoso.com\DomainBased\DFSLink", MaxReferralLevel is 4) to DC.|
@@ -7807,9 +7807,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|LinkReferralV1ToDC|
-|**Description **|Client sends a v1 Link referral request to DC, and expects positive response or STATUS_NOT_FOUND depends on if the DC is hosting DFS server.|
+|**Description**|Client sends a v1 Link referral request to DC, and expects positive response or STATUS_NOT_FOUND depends on if the DC is hosting DFS server.|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Link referral v1 REQ_GET_DFS_REFERRAL message (RequestFileName is "\contoso.com\DomainBased\DFSLink", MaxReferralLevel is 1) to DC.|
@@ -7820,9 +7820,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|LinkReferralV2EXToDC|
-|**Description **| Client sends a v2 Link referral request to DC, and expects positive response or STATUS_NOT_FOUND depends on if the DC is hosting DFS server.|
+|**Description**| Client sends a v2 Link referral request to DC, and expects positive response or STATUS_NOT_FOUND depends on if the DC is hosting DFS server.|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Link referral v2 REQ_GET_DFS_REFERRAL_EX message (RequestFileName is "\contoso.com\DomainBased\DFSLink", MaxReferralLevel is 2, SiteName flag is not set) to DC.|
@@ -7833,9 +7833,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|LinkReferralV3EXSiteToDC|
-|**Description **|Client sends a v3 Link referral request to DC, and expects positive response or STATUS_NOT_FOUND depends on if the DC is hosting DFS server.|
+|**Description**|Client sends a v3 Link referral request to DC, and expects positive response or STATUS_NOT_FOUND depends on if the DC is hosting DFS server.|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Link referral v3 REQ_GET_DFS_REFERRAL_EX message (RequestFileName is "\contoso.com\DomainBased\DFSLink", MaxReferralLevel is 3, SiteName flag is set) to DC.|
@@ -7846,9 +7846,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|InvalidDomainNameLinkReferralToDC|
-|**Description **|Client sends a v2 Link referral request with invalid Domain name to DC, expect negative response|
+|**Description**|Client sends a v2 Link referral request with invalid Domain name to DC, expect negative response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Link referral v2 REQ_GET_DFS_REFERRAL message with invalid domain name (RequestFileName is "\Invalid\DomainBased\DFSLink", MaxReferralLevel is 2) to DC.|
@@ -7858,9 +7858,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|InvalidLinkNameLinkReferralToDC|
-|**Description **|Client sends a v3 Link referral request with invalid link name to DC, expect negative response|
+|**Description**|Client sends a v3 Link referral request with invalid link name to DC, expect negative response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Link referral v3 REQ_GET_DFS_REFERRAL message (RequestFileName is "\contoso.com\DomainBased\Invalid", MaxReferralLevel is 3) to DC.|
@@ -7870,9 +7870,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|InvalidNamespaceLinkReferralToDC|
-|**Description **|Client sends a v4 Link referral request to DC with invalid namespace, expect negative response|
+|**Description**|Client sends a v4 Link referral request to DC with invalid namespace, expect negative response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Link referral v4 REQ_GET_DFS_REFERRAL message (RequestFileName is "\contoso.com\Invalid\DFSLink", MaxReferralLevel is 4) to DC.|
@@ -7886,7 +7886,7 @@ The test cases are designed with below assumptions, and these terms will be used
 #####<a name="3.7.6.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Check if server handles root and link referral request correctly.|
 |**Message Sequence**|Client establishes SMB2 connection to server.|
 ||Client sends root and link referral request to server.|
@@ -7898,9 +7898,9 @@ The test cases are designed with below assumptions, and these terms will be used
 #####<a name="3.7.6.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_RootAndLinkReferralStandaloneV4ToDFSServer|
-|**Description **|Client sends a DFS root referral request v4 to DFS Server first, and then link referral request v4.|
+|**Description**|Client sends a DFS root referral request v4 to DFS Server first, and then link referral request v4.|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DFS server.|
 ||2. Client sends a Root referral v4 REQ_GET_DFS_REFERRAL message (RequestFileName is "\node01\Standalone\", MaxReferralLevel is 4) to DFS server.|
@@ -7912,9 +7912,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|BVT_RootAndLinkReferralDomainV4ToDFSServer|
-|**Description **|Client sends a DFS root referral request v4 to DFS Server first, and then link referral request v4.|
+|**Description**|Client sends a DFS root referral request v4 to DFS Server first, and then link referral request v4.|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DFS server.|
 ||2. Client sends a Root referral v4 REQ_GET_DFS_REFERRAL message (RequestFileName is "\contoso.com\DomainBased\", MaxReferralLevel is 4) to DFS server.|
@@ -7926,9 +7926,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|RootAndLinkReferralStandaloneV2ToDFSServer|
-|**Description **|Client sends a DFS root referral request v2 to DFS Server first, and then link referral request v2.|
+|**Description**|Client sends a DFS root referral request v2 to DFS Server first, and then link referral request v2.|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DFS server.|
 ||2. Client sends a Root referral v2 REQ_GET_DFS_REFERRAL message (RequestFileName is "\node01\Standalone\", MaxReferralLevel is 2) to DFS server.|
@@ -7940,9 +7940,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|RootAndLinkReferralEXStandaloneV1ToDFSServer|
-|**Description **|Client sends a DFS root referral request v1 first, and then link referral request v1.|
+|**Description**|Client sends a DFS root referral request v1 first, and then link referral request v1.|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DFS server.|
 ||2. Client sends a Root referral v1 REQ_GET_DFS_REFERRAL message (RequestFileName is "\node01\Standalone\", MaxReferralLevel is 1) to DFS server.|
@@ -7954,9 +7954,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|LinkReferralStandaloneToDFSServerReturnRootTarget|
-|**Description **|Client sends a DFS link referral request v3 to DFS Server first and expects root target returned.|
+|**Description**|Client sends a DFS link referral request v3 to DFS Server first and expects root target returned.|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DFS server.|
 ||2. Client sends a Link referral v3 REQ_GET_DFS_REFERRAL message (RequestFileName is "\node01\Standalone\Invalid", MaxReferralLevel is 3) to DFS server.|
@@ -7966,9 +7966,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|LinkReferralStandaloneToDFSServerReturnInterlink|
-|**Description **|Client sends a DFS link referral request v4 and expects interlink returned.|
+|**Description**|Client sends a DFS link referral request v4 and expects interlink returned.|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DFS server.|
 ||2. Client sends a Link referral v4 REQ_GET_DFS_REFERRAL message (RequestFileName is "\node01\Standalone\Interlink", MaxReferralLevel is 4) to DFS server.|
@@ -7978,9 +7978,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|LinkReferralDomainV1ToDFSServer|
-|**Description **|Client sends a DFS link referral request v1 to DFS Server and expects positive response.|
+|**Description**|Client sends a DFS link referral request v1 to DFS Server and expects positive response.|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DFS server.|
 ||2. Client sends a Link referral v1 REQ_GET_DFS_REFERRAL message (RequestFileName is "\contoso.com\DomainBased\DFSlink", MaxReferralLevel is 1) to DFS server.|
@@ -7990,9 +7990,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|LinkReferralDomainToDFSServerReturnRootTarget|
-|**Description **|Client sends a DFS link referral request v4 and expects root target returned.|
+|**Description**|Client sends a DFS link referral request v4 and expects root target returned.|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DFS server.|
 ||2. Client sends a Link referral v4 REQ_GET_DFS_REFERRAL message (RequestFileName is "\contoso.com\DomainBased\Invalid", MaxReferralLevel is 1) to DFS server.|
@@ -8002,9 +8002,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|LinkReferralDomainToDFSServerReturnInterlink|
-|**Description **|Client sends a DFS link referral request v4 to DFS Server and expects interlink returned.|
+|**Description**|Client sends a DFS link referral request v4 to DFS Server and expects interlink returned.|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DFS server.|
 ||2. Client sends a Link referral v4 REQ_GET_DFS_REFERRAL message (RequestFileName is "\contoso.com\DomainBased\Interlink", MaxReferralLevel is 4) to DFS server.|
@@ -8014,9 +8014,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|InvalidRootReferralStandaloneToDFSServer|
-|**Description **|Client sends a v4 invalid Root referral request to DFS server and expects negative response|
+|**Description**|Client sends a v4 invalid Root referral request to DFS server and expects negative response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DFS server.|
 ||2. Client sends a Root referral v4 REQ_GET_DFS_REFERRAL message (RequestFileName is "\node01\Invalid", MaxReferralLevel is 4) to DFS server.|
@@ -8026,9 +8026,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|InvalidRootReferralDomainToDFSServer|
-|**Description **|Client sends a v4 invalid Root referral request to DFS server and expects negative response|
+|**Description**|Client sends a v4 invalid Root referral request to DFS server and expects negative response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DFS server.|
 ||2. Client sends a Root referral v4 REQ_GET_DFS_REFERRAL message (RequestFileName is "\contoso.com\Invalid", MaxReferralLevel is 4) to DFS server.|
@@ -8042,7 +8042,7 @@ The test cases are designed with below assumptions, and these terms will be used
 #####<a name="3.7.7.1"> Scenario
 
 |||
-|-|-|
+|---|---|
 |**Description**|Check if server handles path normalization request correctly.|
 |**Message Sequence**|Client establishes SMB2 connection to server.|
 ||Client sends path normalization request to server.|
@@ -8054,9 +8054,9 @@ The test cases are designed with below assumptions, and these terms will be used
 #####<a name="3.7.7.2"> Test Case
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|NormalizePathWithDFSLink|
-|**Description **|Client sends SMB2 create request to open a file in a DFS path with DFS Link, verify if server normalize the path correctly.|
+|**Description**|Client sends SMB2 create request to open a file in a DFS path with DFS Link, verify if server normalize the path correctly.|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DFS server.|
 ||2. Client sends a SMB2 CREATE message with DFS path containing DFSLink to DFS server.|
@@ -8066,9 +8066,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 
 |||
-|-|-|
+|---|---|
 |**Test ID**|NormalizePathWithoutDFSlink|
-|**Description **|Client sends SMB2 create request to open a file in a DFS path without DFS Link, verify if server normalize the path correctly.|
+|**Description**|Client sends SMB2 create request to open a file in a DFS path without DFS Link, verify if server normalize the path correctly.|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DFS server.|
 ||2. Client sends a SMB2 CREATE with DFS path but not containing DFSLink to DFS server.|

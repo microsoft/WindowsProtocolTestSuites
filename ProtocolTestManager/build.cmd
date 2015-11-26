@@ -26,19 +26,6 @@ if not exist "%programfiles(x86)%\Protocol Test Framework\bin\Microsoft.Protocol
 	goto :eof
 )
 
-if not defined vspath (
-	if defined VS110COMNTOOLS (
-		set vspath="%VS110COMNTOOLS%"
-	) else if defined VS120COMNTOOLS (
-		set vspath="%VS120COMNTOOLS%"
-	) else if defined VS140COMNTOOLS (
-		set vspath="%VS140COMNTOOLS%"
-	) else (
-		echo Error: Visual Studio or Visual Studio test agent should be installed, version 2012 or higher
-		goto :eof
-	)
-)
-
 set CurrentPath=%~dp0
 if not defined TestSuiteRoot (
 	set TestSuiteRoot=%CurrentPath%..\
