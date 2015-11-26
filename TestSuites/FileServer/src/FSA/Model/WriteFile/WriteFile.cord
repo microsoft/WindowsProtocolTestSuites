@@ -1,0 +1,66 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+config WriteFileConfig : Actions_Coverage
+{                     
+    action MessageStatus IFSAAdapter.CreateFile(
+            FileAttribute desiredFileAttribute, 
+            CreateOptions createOption,
+            StreamTypeNameToOPen streamTypeNameToOPen, 
+            FileAccess desiredAccess,
+            ShareAccess shareAccess,
+            CreateDisposition createDisposition,
+            StreamFoundType streamFoundType,
+            SymbolicLinkType symbolicLinkType,
+            FileType openFileType,
+            FileNameStatus fileNameStatus)
+     where {.
+            Condition.In<CreateOptions>(createOption, CreateOptions.NO_INTERMEDIATE_BUFFERING);
+          .};
+
+      action MessageStatus IFSAAdapter.WriteFile(
+            long byteOffset,
+            long byteCount,
+            out long bytesWritten)
+      where {.
+		Condition.IsTrue(byteOffset >= 0);
+        Condition.IsTrue(byteCount >= 0);
+	  .};
+
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.WriteFile)";
+}
+
+// Scenario of [MS-FSA] 2.1.5.3   Server Requests a Write
+machine WriteFileScenario() : WriteFileConfig
+{
+    (
+        FsaInitial; 
+        GetSystemConfig;
+        GetIfOpenFileVolumeIsReadOnly;
+        CreateFile(
+                FileAttribute.NORMAL,
+                _,
+                StreamTypeNameToOPen.NULL,
+                FileAccess.MAXIMUM_ALLOWED,
+                ShareAccess.FILE_SHARE_WRITE,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+         GetFileVolumSize;
+         WriteFile;
+    )
+    ||
+    (construct model program from WriteFileConfig)
+}
+
+// Test case of [MS-FSA] 2.1.5.3   Server Requests a Write
+machine WriteFileTestCase() : WriteFileConfig where TestEnabled = true
+{
+    construct requirement coverage where strategy = "selective"
+    for (
+        construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true for 
+        WriteFileScenario
+    )
+}

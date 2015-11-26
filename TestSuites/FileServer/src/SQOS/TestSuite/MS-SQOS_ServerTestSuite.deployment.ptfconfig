@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+  <Include>
+    <File name="CommonTestSuite.deployment.ptfconfig"/>
+  </Include>
+
+  <Properties>
+    <Group name="SQOS">
+      <Property name="SqosVHDFullPath" value="\\scaleoutfs\SMBClustered\sqos.vhdx">
+          <Description>
+          Full path of the virtual disk file used to test Storage QOS, should start with "\\".
+          The file server name could be an IP address.
+          If no such share, leave it blank.
+        </Description>
+      </Property>
+
+      <Property name="SqosPolicyId" value="ec320704-6443-426c-ab74-86413e90dbfb">
+        <Description>
+          The GUID of the Quality of Service policy to be applied to the logical flow.
+          SqosPolicyId must exist in the server before running the test suite.
+        </Description>
+      </Property>
+
+      <Property name="SqosInitiatorName" value="FileServerProtocolTestSuite">
+        <Description>
+          The name of the logical flow initiator.
+        </Description>
+      </Property>
+
+      <Property name="SqosMaximumIoRate" value="200">
+        <Description>
+          The maximum I/O initiation rate currently assigned to the logical flow, expressed in normalized IOPS.
+        </Description>
+      </Property>
+
+      <Property name="SqosMinimumIoRate" value="100">
+        <Description>
+          The minimum I/O completion rate currently assigned to the logical flow, expressed in normalized IOPS.
+        </Description>
+      </Property>
+
+      <Property name="SqosBaseIoSizeInBytes" value="8192">
+        <Description>
+          The base I/O size used to compute the normalized size of an I/O request for the logical flow.
+          Default value is 8192 (8 KB)
+        </Description>
+      </Property>
+    </Group>
+  </Properties>
+</TestSite>

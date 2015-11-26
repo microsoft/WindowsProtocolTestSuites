@@ -1,0 +1,93 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+config QueryDirectoryConfig : Actions 
+{
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.QueryDirectory)";
+}
+
+// Scenario of [MS-FSA] 2.1.5.5.1   FileObjectIdInformation
+machine QueryFileObjectIdInformationScenario() : QueryDirectoryConfig
+{
+    (
+        FsaInitial;
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.DIRECTORY_FILE,
+             StreamTypeNameToOPen.INDEX_ALLOCATION, // An Open of a DirectoryStream.
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DirectoryFile,
+             FileNameStatus.PathNameValid);
+        GetIfImplementQueryFileObjectIdInformation;
+        QueryFileObjectIdInfo;
+    )
+    ||
+    FSAModelProgram 
+}
+
+// Scenario of [MS-FSA] 2.1.5.5.2   FileReparsePointInformation
+machine QueryFileReparsePointInformationScenario() : QueryDirectoryConfig
+{
+    (
+        FsaInitial;
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.DIRECTORY_FILE,
+             StreamTypeNameToOPen.INDEX_ALLOCATION,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DirectoryFile,
+             FileNameStatus.PathNameValid);
+        GetIfImplementQueryFileReparsePointInformation;
+        QueryFileReparsePointInformation;
+    )
+    ||
+    FSAModelProgram 
+}
+
+// All scenario under document section of [MS-FSA] 2.1.5.5.3   Directory Information Queries
+machine QueryDirectoryInformationScenario() : QueryDirectoryConfig
+{
+    (
+        FsaInitial;
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.DIRECTORY_FILE,
+             StreamTypeNameToOPen.INDEX_ALLOCATION,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DirectoryFile,
+             FileNameStatus.PathNameValid);
+        QueryDirectoryInfo;
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+// Scenario of [MS-FSA] 2.1.5.5   Server Requests Querying a Directory
+machine QueryDirectoryScenario_All() : QueryDirectoryConfig
+{
+    QueryFileObjectIdInformationScenario | 
+    QueryFileReparsePointInformationScenario | 
+    QueryDirectoryInformationScenario
+}
+
+// Test case of [MS-FSA] 2.1.5.5   Server Requests Querying a Directory
+machine QueryDirectoryTestCase() : QueryDirectoryConfig where TestEnabled = true
+{
+    construct requirement coverage where strategy = "selective"
+    for (
+        construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true for 
+        QueryDirectoryScenario_All
+    )
+}

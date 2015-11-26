@@ -1,0 +1,317 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+  <Properties>
+
+    <!--
+        Tag named Choice is used for the ComboBox in UI design
+        Tag named Description is used for the comment
+    -->
+
+    <Group name="PTF">
+      <Group name="NetworkCapture">
+        <Property name="Enabled" value="false">
+          <Choice>true,false</Choice>
+          <Description>
+            If it is true, enable the auto-capture feature.
+          </Description>
+        </Property>
+        <Property name="CaptureFileFolder" value="C:\FileServerCaptureFileDirectory">
+          <Description>
+            The path to put the capture files. Old files will be overwritten.
+          </Description>
+        </Property>
+        <Property name="StopRunningOnError" value="false">
+          <Choice>true,false</Choice>
+          <Description>
+            If it is true, fail the test case when error happens in running network capture commands. Otherwise, ignore the error.
+          </Description>
+        </Property>
+      </Group>
+    </Group>
+
+    <Group name="Common">
+
+      <Property name="Timeout" value="120">
+        <Description>
+          Timeout in seconds for SMB2 connection over transport
+        </Description>
+      </Property>
+
+      <Property name="RetryInterval" value="10">
+        <Description>
+          The time interval to retry the SMB2 connection, in seconds
+        </Description>
+      </Property>
+
+      <Property name="UnderlyingTransport" value="Tcp">
+        <Choice>Tcp, NetBios</Choice>
+        <Description>
+          The underlying transport of SMB2 protocol
+        </Description>
+      </Property>
+
+      <Property name="SutComputerName" value="node01">
+        <Description>
+          Computer name of system under test (SUT)
+          If SUT does not have a computer name, set the value to SUT's IP address
+        </Description>
+      </Property>
+
+      <Property name="SutIPAddress" value="192.168.1.11" >
+        <Description>
+          IP address of SUT to establish connections
+        </Description>
+      </Property>
+
+      <Property name="DomainName" value="contoso.com" >
+        <Description>
+          Domain name where the SUT locates
+          If SUT is in WORKGROUP, set it to the value of SutComputerName
+          If SUT does not have a computer name, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="AdminUserName" value="Administrator">
+        <Description>
+          Administrator user account name of the SUT
+        </Description>
+      </Property>
+
+      <Property name="NonAdminUserName" value="nonadmin" >
+        <Description>
+          Non administrator user account name of the SUT. If no such user, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="GuestUserName" value="Guest">
+        <Description>
+          Domain guest account name. If no such user, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="PasswordForAllUsers" value="Password01!">
+        <Description>
+          Password for all the users listed as above: AdminUserName, NonAdminUserName, GuestUserName.
+          (To simplify the config, the 3 accounts use the same password.)
+        </Description>
+      </Property>
+
+      <Property name="BasicFileShare" value="SMBBasic">
+        <Description>
+          Name for file share without encryption enabled
+        </Description>
+      </Property>
+
+      <Property name="EncryptedFileShare" value="SMBEncrypted">
+        <Description>
+          Name for file share name with encryption enabled
+          If SUT does not have such share, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="MaxSmbVersionSupported" value="Smb302">
+        <Choice>Smb2002, Smb21, Smb30, Smb302, Smb311</Choice>
+        <Description>
+          Max version which the server supports: Smb2002, Smb21, Smb30, Smb302, Smb311
+        </Description>
+      </Property>
+
+      <Property name="MaxSmbVersionClientSupported" value="Smb311">
+        <Choice>Smb2002, Smb21, Smb30, Smb302, Smb311</Choice>
+        <Description>
+          Max version which the client supports: Smb2002, Smb21, Smb30, Smb302, Smb311
+        </Description>
+      </Property>
+
+      <Property name="IsSMB1NegotiateEnabled" value="true">
+        <Choice>true,false</Choice>
+        <Description>
+          If this property is set to true, the client will send ComNegotiate request before sending Negotiate request.
+          Otherwise, the client will send Negotiate request directly.
+        </Description>
+      </Property>
+
+      <Property name="IsLeasingSupported" value="true">
+        <Choice>true,false</Choice>
+        <Description>
+          Set true if SUT supports leasing, otherwise set it to false
+        </Description>
+      </Property>
+
+      <Property name="IsMultiChannelCapable" value="true">
+        <Choice>true,false</Choice>
+        <Description>
+          Set true if SUT supports multiple channel, otherwise set it to false
+        </Description>
+      </Property>
+
+      <Property name="SendSignedRequest" value="true">
+        <Choice>true,false</Choice>
+        <Description>
+          If this property is set to true, the client will send signed request.
+          Otherwise, the client will send unsigned request.
+        </Description>
+      </Property>
+      <Property name="DisableVerifySignature" value="true">
+        <Choice>true,false</Choice>
+        <Description>
+          If this property is set to true, the client will not verify the signature of received SMB2 message.
+          Otherwise, the client will verify the signature of recieved message.
+        </Description>
+      </Property>
+
+      <Property name="IsDirectoryLeasingSupported" value="true">
+        <Choice>true,false</Choice>
+        <Description>
+          Set true if SUT supports directory leasing, otherwise set it to false
+        </Description>
+      </Property>
+
+      <Property name="IsPersistentHandlesSupported" value="true">
+        <Choice>true,false</Choice>
+        <Description>
+          Set true if SUT supports persistent handle, otherwise set it to false
+        </Description>
+      </Property>
+
+      <Property name="IsEncryptionSupported" value="true">
+        <Choice>true,false</Choice>
+        <Description>
+          Set true if SUT supports encryption, otherwise set it to false
+        </Description>
+      </Property>
+
+      <Property name="IsMultiCreditSupported" value="true">
+        <Choice>true,false</Choice>
+        <Description>
+          Set true if SUT supports multiple credit and the transport is not NetBIOS, otherwise set it to false
+        </Description>
+      </Property>
+
+      <Property name="UnsupportedIoCtlCodes" value="FSCTL_OFFLOAD_READ;FSCTL_OFFLOAD_WRITE;FSCTL_FILE_LEVEL_TRIM">
+        <Description>
+          List all unsupported IoCtl codes. Current IoCtl codes covered in this test suite include
+          FSCTL_LMR_REQUEST_RESILIENCY
+          FSCTL_QUERY_NETWORK_INTERFACE_INFO
+          FSCTL_OFFLOAD_READ
+          FSCTL_OFFLOAD_WRITE
+          FSCTL_VALIDATE_NEGOTIATE_INFO
+          FSCTL_FILE_LEVEL_TRIM
+          FSCTL_GET_INTEGRITY_INFORMATION
+          FSCTL_SET_INTEGRITY_INFORMATION
+          Multiple values should be separated by semicolons
+        </Description>
+      </Property>
+
+      <Property name="UnsupportedCreateContexts" value="">
+        <Description>
+          List all unsupported Create Contexts. Current Create Contexts covered includes
+          SMB2_CREATE_QUERY_ON_DISK_ID
+          SMB2_CREATE_DURABLE_HANDLE_REQUEST
+          SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2
+          SMB2_CREATE_DURABLE_HANDLE_RECONNECT
+          SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2
+          SMB2_CREATE_REQUEST_LEASE
+          SMB2_CREATE_REQUEST_LEASE_V2
+          SMB2_CREATE_APP_INSTANCE_ID
+          SMB2_CREATE_APP_INSTANCE_VERSION
+          Multiple values should be separated by semicolons
+        </Description>
+      </Property>
+
+      <Property name="CAShareName" value="SMBClustered">
+        <Description>
+          Name of file share that supports Continuous Availability (CA)
+          If SUT does not have such share, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="CAShareServerName" value="GeneralFS">
+        <Description>
+          Computer name of server which hosts Continuous Availability (CA) share
+          If the server does not have a computer name, set it with IP address
+          If it is not applicable, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="ClientNic1IPAddress" value="192.168.1.111">
+        <Description>
+          One IP address on local test drive computer to establish connections to SUT
+        </Description>
+      </Property>
+
+      <Property name="ClientNic2IPAddress" value="192.168.2.111">
+        <Description>
+          Another IP address on local test drive computer to establish connections to SUT
+          If test drive computer only has one IP address, set it to the same value of ClientNic1IPAddress
+        </Description>
+      </Property>
+
+      <Property name="Platform" value="WindowsServer2012R2">
+        <Choice>NonWindows,WindowsServer2008,WindowsServer2008R2,WindowsServer2012,WindowsServer2012R2,WindowsServer10</Choice>
+        <Description>
+          Platform type of the SUT
+        </Description>
+      </Property>
+
+      <Property name="SupportedSecurityPackage" value="Negotiate">
+        <Choice>Negotiate,Kerberos,Ntlm</Choice>
+        <Description>
+          Supported security packages, should be one of them
+        </Description>
+      </Property>
+
+      <Property name="UseServerGssToken" value="true">
+        <Choice>true,false</Choice>
+        <Description>
+          If this property is set to true, the client will use server-initiated SPNEGO authentication.
+          Otherwise, client-initiated SPNEGO will be used.
+          Only applicable when SupportedSecurityPackage is set to Negotiate.
+        </Description>
+      </Property>
+
+      <Property name="SupportedEncryptionAlgorithms" value="ENCRYPTION_AES128_GCM;ENCRYPTION_AES128_CCM">
+        <Description>
+          List all supportd encryption algorithms, possible values: ENCRYPTION_AES128_GCM, ENCRYPTION_AES128_CCM
+          Multiple values should be separated by semicolons
+          If it is not applicable, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="IsRequireMessageSigning" value="true">
+        <Choice>true,false</Choice>
+        <Description>
+          Set true if SUT requires that messages MUST be signed, otherwise set it to false
+        </Description>
+      </Property>
+
+      <Property name="IsGlobalEncryptDataEnabled" value="false">
+        <Choice>true,false</Choice>
+        <Description>
+          Set true if SUT requires messages to be encrypted after session establishment, otherwise set it to false
+        </Description>
+      </Property>
+
+      <Property name="IsGlobalRejectUnencryptedAccessEnabled" value="true">
+        <Choice>true,false</Choice>
+        <Description>
+          Set true if SUT will reject any unencrypted messages, otherwise set it to false
+        </Description>
+      </Property>
+
+      <Property name="MaxResiliencyTimeout" value="300000">
+        <Description>
+          Max Resiliencency Timeout in milliseconds
+        </Description>
+      </Property>
+
+      <Property name="DefaultResiliencyTimeoutInSecond" value="120">
+        <Description>
+          Default Resiliencency Timeout in seconds
+        </Description>
+      </Property>
+    </Group>
+  </Properties>
+</TestSite>

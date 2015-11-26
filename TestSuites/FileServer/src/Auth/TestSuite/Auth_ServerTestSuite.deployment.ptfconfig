@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+  <Include>
+    <File name="CommonTestSuite.deployment.ptfconfig"/>
+  </Include>
+
+  <Properties>
+    <Group name="Auth">
+      <Group name="Authentication">
+        <Property name="KeytabFile" value="">
+          <Description>
+            The keytab file of the file server. Used in Kerberos Authentication cases.
+            When keytab file is provided, the value of ServicePassword and ServiceSaltString will be ignored.
+            Set it to empty if you want to test Kerberos Authentication using ServicePassword and ServiceSaltString.
+          </Description>
+        </Property>
+
+        <Property name="ServicePassword" value="Password04!">
+          <Description>
+            Password of the SMB2 service principal. Applicable when keytab file is not provided. Used in Kerberos Authentication cases.
+          </Description>
+        </Property>
+
+        <Property name="ServiceSaltString" value="CONTOSO.COMhostnode01.contoso.com">
+          <Description>
+            Password salt of the SMB2 service principal. Applicable when keytab file is not provided. Used in Kerberos Authentication cases.
+          </Description>
+        </Property>
+      </Group>
+
+      <Group name="Authorization">
+        <Property name="CBACShare" value="AzCBAC">
+          <Description>
+            The share used to test CBAC
+          </Description>
+        </Property>
+
+        <Property name="FolderPermissionTestShare" value="AzFolder">
+          <Description>
+            The share used to test folder permission
+          </Description>
+        </Property>
+
+        <Property name="SharePermissionTestShare" value="AzShare">
+          <Description>
+            The share used to test share permission.
+            If SRVS is not supported, please create 6 shares: AzShare01, ..., AzShare06
+          </Description>
+        </Property>
+
+        <Property name="FilePermissionTestShare" value="AzFile">
+          <Description>
+            The share used to test file permission.
+          </Description>
+        </Property>
+      </Group>
+    </Group>
+  </Properties>
+</TestSite>

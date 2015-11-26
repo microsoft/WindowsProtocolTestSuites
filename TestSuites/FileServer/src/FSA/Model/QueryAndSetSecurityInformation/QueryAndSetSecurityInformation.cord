@@ -1,0 +1,71 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+config QuerySecurityInformationConfig : Actions 
+{
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.QuerySecurityInformation)";
+}
+
+// Scenario of [MS-FSA] 2.1.5.13   Server Requests a Query of Security Information
+machine QuerySecurityInformationScenario() : QuerySecurityInformationConfig
+{
+    (
+        FsaInitial;
+       CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.FILE_READ_DATA,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+        QuerySecurityInfo;
+    )|| FSAModelProgram
+}
+
+// Test case of [MS-FSA] 2.1.5.13   Server Requests a Query of Security Information
+// The exploration time for this machine is about 5 seconds
+machine QuerySecurityInformationTestCase() : QuerySecurityInformationConfig where TestEnabled = true
+{
+    construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true
+    for QuerySecurityInformationScenario
+}
+
+
+config SetSecurityInformationConfig : Actions 
+{
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.SetSecurityInformation)";
+}
+
+// Scenario of [MS-FSA] 2.1.5.16   Server Requests Setting of Security Information
+machine SetSecurityInformationScenario() : SetSecurityInformationConfig
+{
+    (
+        FsaInitial;
+        GetObjectFunctionality;
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+        SetSecurityInfo;
+    )|| FSAModelProgram
+}
+
+// Test case of [MS-FSA] 2.1.5.16   Server Requests Setting of Security Information
+// The exploration time for this machine is about 5 seconds
+machine SetSecurityInformationTestCase() : SetSecurityInformationConfig where TestEnabled = true
+{
+    construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true
+    for SetSecurityInformationScenario
+}
+

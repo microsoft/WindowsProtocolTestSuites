@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+
+  <Properties>
+
+    <!-- START - OVERALL ENVIRONMENT CONFIG -->
+    <!--Type:string! 
+          Usage: true to run all test cases against AD DS,
+                 false to run all test cases against AD LDS.-->
+    <Property name="Common.TestDS" value="true"/>
+
+    <!-- Type:string! 
+            Usage: true to enable running of environment-breaking cases,
+                   false to disable. -->
+    <Property name="Common.AllowBreakEnvironment" value="false"/>
+
+    <!--Type:string! 
+          Usage: forest domain function level.
+                 Possible values:
+                 DS_BEHAVIOR_WIN2000
+                 DS_BEHAVIOR_WIN2003
+                 DS_BEHAVIOR_WIN2008
+                 DS_BEHAVIOR_WIN2008R2
+                 DS_BEHAVIOR_WIN2012-->
+    <Property name="Common.DomainFunctionLevel" value="DS_BEHAVIOR_WIN2012R2"/>
+
+    <!--Type:string! 
+          Usage: Username of the administrator account,
+                 the account should be identical across all domains.-->
+    <Property name="Common.DomainAdministratorName" value="Administrator"/>
+
+    <!--Type:string! 
+          Usage: Username of a non-admin user account,
+                 the account is created on the primary domain.-->
+    <Property name="Common.DomainUserName" value="Tester"/>
+
+    <!--Type:string! 
+          Usage: Password of all users (administrator + standard) across all domains. -->
+    <Property name="Common.UserObjectPassword" value="Password01!"/>
+
+
+    <!--Type:boolean! Usage:set to true if native RPC stub is used, false to use SDK RPC adapter. -->
+    <Property name="Common.UseNativeRpcLib" value="true" />
+
+    <!--Type:string! 
+          Usage:true if use Kerberos to authenticate, 
+                false for Negotiate.-->
+    <Property name="Common.UseKerberos" value="false"/>
+
+    <!--Type:string! Usage:Mid-fix string in DsaNetworkAddress, for MS AD, it's "._msdcs".-->
+    <Property name="Common.DsaNetworkAddressMidfix" value="._msdcs"/>
+
+    <!-- END - OVERALL ENVIRONMENT CONFIG -->
+
+    <!-- START - WRITABLE DC 1 -->
+
+    <!--Type:string! 
+            Usage: DNS suffix of the primary domain. -->
+    <Property name="PrimaryDomain.DNSName" value="contoso.com"/>
+
+    <!--Type:string! 
+          Usage: NetBIOS name of the main DC, should be equal to WritableDC1. -->
+    <Property name="MainDC.NetbiosName" value="dc01"/>
+
+    <!--Type:string! 
+          Usage: NetBIOS name of the writable DC 1, should be equal to MainDC,
+                 this DC should be a GC and holding all FSMO roles.-->
+    <Property name="WritableDC1.NetbiosName" value="dc01"/>
+
+    <!--Type:string! 
+          Usage: true if WritableDC1 is a Windows machine,
+                 false if a third-party implementation. -->
+    <Property name="WritableDC1.IsWindows" value="true"/>
+
+    <!--Type:string! Usage:WritableDC1's machine password. -->
+    <Property name="WritableDC1.Password" value="Password01!"/>
+
+    <!-- END - WRITABLE DC 1 -->
+
+    <!--Type:string! 
+          Usage: NetBIOS name of the writable DC 1, should be equal to MainDC,
+                 this DC should be a GC and holding all FSMO roles.-->
+    <Property name="WritableDC2.NetbiosName" value="dc02"/>
+
+    <!--Type:string! 
+          Usage: true if WritableDC1 is a Windows machine,
+                 false if a third-party implementation. -->
+    <Property name="WritableDC2.IsWindows" value="true"/>
+
+    <!--Type:string! Usage:WritableDC1's machine password. -->
+    <Property name="WritableDC2.Password" value="dc02"/>
+
+    <!-- START - RODC -->
+    <!--TODO: RODC disabled-->
+    <!--Type:string! Usage:RODC's machine name. -->
+        <Property name="RODC.NetbiosName" value="rodc01"/>
+
+    <!--Type:string! Usage:RODC is windows if true. -->
+        <Property name="RODC.IsWindows" value="true"/>
+
+        <Property name="RODC.Password" value="rodc01"/>
+    <!-- END - RODC -->
+
+    <!-- START - MOCK CONFIGURATION -->
+    <!--Type:string! Usage: DNS suffix of a mock domain. -->
+    <Property name="InvalidDomain.DS.DNSName" value="abc.com"/>
+
+    <!--Type:string! Usage: Name of a mock LDS service. -->
+    <Property name="InvalidDomain.LDS.DNSName" value="abc1"/>
+
+    <!--Type:string! Usage:invalid DS DC's NetBIOS name. -->
+    <Property name="InvalidDSDC.NetbiosName" value=""/>
+
+    <!--Type:string! Usage:invalid LDS DC's machine name. -->
+    <Property name="InvalidLDSDC.NetbiosName" value=""/>
+    <!-- END - MOCK CONFIGURATION -->
+
+    <!-- START - CASE-SPECIFIED CONFIGURATION -->
+    <!--Type:string! Usage:AppNC's DN. -->
+    <Property name="AppNC.DistinguishedName" value=""/>
+
+    <!--Type:string! Usage:new cloned DC's NetBIOS name. -->
+    <Property name="ClonedDC.NetbiosName" value="cloned"/>
+
+    <!--Type:string! Usage:Client machine's NetBIOS name. -->
+    <Property name="Client.NetbiosName" value="Driver"/>
+
+    <!--Type:string! Usage:a script batch file will be placed here after IDL_DRSFinishDemotion failed to remove target SPNs.-->
+    <Property name="LDSDemotion.Scriptfolder" value="c:\"/>
+
+    <!--Type:string! Usage:The DN of an principal on DC1. This principal should have a foreign principal object on the external forest. -->
+    <Property name="VerifyNames.FPODN" value="CN=Administrator,CN=Users,DC=contoso,DC=com" />
+
+    <!--Type:string! Usage: A DN of the "domain users" group in the primay domain. -->
+    <Property name="GetMemberships.GroupDN" value="CN=Domain Users,CN=Users,DC=contoso,DC=com" />
+
+    <!-- The following properties are used to block out internal TDI related issues -->
+    <Property name="TDI.67260" value="false" />
+    <!-- END - CASE-SPECIFIED CONFIGURATION -->
+
+  </Properties>
+  <Adapters>
+  </Adapters>
+
+  <!-- The default profile name.-->
+  <TestLog defaultprofile="Verbose">
+    <Sinks>
+    </Sinks>
+    <Profiles>
+    </Profiles>
+  </TestLog>
+</TestSite>

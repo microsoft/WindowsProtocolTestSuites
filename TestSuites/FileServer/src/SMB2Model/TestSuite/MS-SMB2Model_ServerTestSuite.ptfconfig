@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+  <Include>
+    <File name="CommonTestSuite.ptfconfig"/>
+  </Include>
+
+  <Properties/>
+  
+  <Adapters>
+    <Adapter xsi:type="managed" name="INegotiateAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Negotiate.NegotiateAdapter"/>
+    <Adapter xsi:type="managed" name="ILeasingAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingAdapter"/>
+    <Adapter xsi:type="managed" name="ICreateCloseAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseAdapter"/>
+    <Adapter xsi:type="managed" name="ICreditMgmtAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreditMgmt.CreditMgmtAdapter"/>
+    <Adapter xsi:type="managed" name="IEncryptionAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Encryption.EncryptionAdapter"/>
+    <Adapter xsi:type="managed" name="IHandleAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleAdapter"/>
+    <Adapter xsi:type="managed" name="IValidateNegotiateInfoAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoAdapter"/>
+    <Adapter xsi:type="managed" name="ISessionMgmtAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtAdapter"/>
+    <Adapter xsi:type="managed" name="ITreeMgmtAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.TreeMgmtAdapter"/>
+    <Adapter xsi:type="managed" name="IResilientHandleAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ResilientHandle.ResilientHandleAdapter"/>
+    <Adapter xsi:type="managed" name="IAppInstanceIdAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdAdapter"/>
+    <Adapter xsi:type="managed" name="IOplockAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockAdapter"/>
+    <Adapter xsi:type="managed" name="ISigningAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Signing.SigningAdapter"/>
+    <Adapter xsi:type="managed" name="IReplayAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayAdapter"/>
+    <Adapter xsi:type="managed" name="IConflictAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Conflict.ConflictAdapter"/>
+    <Adapter xsi:type="managed" name="IMixedOplockLeaseAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.MixedOplockLease.MixedOplockLeaseAdapter"/>
+  </Adapters>
+
+  <TestLog defaultprofile="Verbose">
+    <Sinks/>
+    <Profiles/>
+  </TestLog>
+
+</TestSite>

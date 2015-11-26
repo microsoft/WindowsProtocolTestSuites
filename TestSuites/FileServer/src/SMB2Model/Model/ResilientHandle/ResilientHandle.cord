@@ -1,0 +1,49 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.ResilientHandle;
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ResilientHandle;
+
+config ResilientHandleBaseConfig : BaseConfig
+{
+    action all IResilientHandleAdapter;
+
+    switch TestMethodAttribute =
+     "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb21), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.FsctlLmrRequestResiliency)";
+}
+
+config ResilientHandleConfig : ResilientHandleBaseConfig
+{
+}
+
+machine ResilientHandleBasicScenario() : ResilientHandleConfig
+{
+    (
+        ReadConfig;
+        PrepareOpen(_, DurableHandle.NoDurableHandle);
+        IoCtlResiliencyRequest; IoCtlResiliencyResponse; 
+        ( LogOff; | Disconnect; );
+        ReEstablishResilientOpenRequest; ReEstablishResilientOpenResponse;
+    ) || (construct model program from ResilientHandleConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.ResilientHandle")
+}
+
+machine ResilientHandleBasicTestCase() : ResilientHandleConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for ResilientHandleBasicScenario()
+}
+
+machine ResilientHandleDurableScenario() : ResilientHandleConfig
+{
+    (
+        ReadConfig;
+        PrepareOpen(_, DurableHandle.DurableHandle);
+        IoCtlResiliencyRequest; IoCtlResiliencyResponse; 
+        ( LogOff; | Disconnect; );
+        ReEstablishResilientOpenRequest; ReEstablishResilientOpenResponse;
+    ) || (construct model program from ResilientHandleConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.ResilientHandle")
+}
+
+machine ResilientHandleDurableTestCase() : ResilientHandleConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for ResilientHandleDurableScenario()
+}

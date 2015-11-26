@@ -1,0 +1,32 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.ValidateNegotiateInfo;
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo;
+
+config ValidateNegotiateInfoBaseConfig : BaseConfig 
+{
+    action all IValidateNegotiateInfoAdapter;
+
+    switch TestMethodAttribute =
+     "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb30), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.FsctlValidateNegotiateInfo)";
+}
+
+config ValidateNegotiateInfoConfig: ValidateNegotiateInfoBaseConfig
+{
+}
+
+machine ValidateNegotiateInfoScenario() : ValidateNegotiateInfoConfig 
+{
+    (
+        ReadConfig;
+        SetupConnection;
+        ValidateNegotiateInfoRequest;
+        (ValidateNegotiateInfoResponse | TerminateConnection);
+    ) || (construct model program from ValidateNegotiateInfoConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.ValidateNegotiateInfo")
+}
+
+machine ValidateNegotiateInfoTestCase() : ValidateNegotiateInfoConfig where TestEnabled = true
+{
+    construct test cases where Strategy = "longtests", AllowUndeterminedCoverage = true for ValidateNegotiateInfoScenario()
+}

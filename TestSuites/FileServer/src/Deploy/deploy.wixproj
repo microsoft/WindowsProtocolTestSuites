@@ -1,0 +1,417 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	<DefineSolutionProperties>false</DefineSolutionProperties>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>3.5</ProductVersion>
+    <ProjectGuid>{1ee9e1e6-c406-448f-b3a4-844706123937}</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>FileServer-TestSuite-ServerEP</OutputName>
+    <OutputType>Package</OutputType>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+    <!--Ignore error LGHT0204: ICE30: The same target file by two different components on an LFN system which breaks component reference counting-->
+    <SuppressIces>ICE30</SuppressIces>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'fxcop|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>fxcop</DefineConstants>
+    <SuppressSpecificWarnings>1055</SuppressSpecificWarnings>
+    <SuppressIces>ICE30</SuppressIces>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <!--Ignore error LGHT0204: ICE30: The same target file by two different components on an LFN system which breaks component reference counting-->
+    <SuppressIces>ICE30</SuppressIces>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="UiText.wxl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Batch.wxs" />
+    <Compile Include="Bin.wxs" />
+    <Compile Include="DependencyCheckWarningDlg.wxs" />
+    <Compile Include="EndpointDlg.wxs" />
+    <Compile Include="FileServer-TestSuite-ServerEP.wxs" />
+    <Compile Include="TestSuiteMiscFiles.wxs" />
+    <Compile Include="TestSuitePrivacyStatementDlg.wxs" />
+    <Compile Include="TestSuitePrivacyStatementLowMsiVersionDlg.wxs" />
+    <Compile Include="TestSuiteProduct.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixVSExtension">
+      <HintPath>$(WIX)\bin\WixVSExtension.dll</HintPath>
+      <Name>WixVSExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WIX)\bin\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WIX)\bin\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Asn1Base\Asn1Base.csproj">
+      <Name>Asn1Base</Name>
+      <Project>{deda188c-c97e-4968-bc31-594925631e9f}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Claim\Claim.csproj">
+      <Name>Claim</Name>
+      <Project>{0742b083-6193-4c12-9405-e0f7ba88c635}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Common\Common.csproj">
+      <Name>Common</Name>
+      <Project>{fe653643-6342-4300-871e-683c7ba31494}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\CryptoLib\CryptoLib.csproj">
+      <Name>CryptoLib</Name>
+      <Project>{bf6afaf0-7592-467f-ad5c-18429d854057}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\FileAccessService\FileAccessService.csproj">
+      <Name>FileAccessService</Name>
+      <Project>{ab191b32-b12d-42cb-976d-cea2c5bad8be}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\KerberosLib\KerberosLib.csproj">
+      <Name>KerberosLib</Name>
+      <Project>{3f0b2460-33f7-4a58-9cb5-bb38914c7845}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Messages\Messages.csproj">
+      <Name>Messages</Name>
+      <Project>{75544419-3f4e-4308-a676-165f45c1462e}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-CIFS\Cifs.csproj">
+      <Name>Cifs</Name>
+      <Project>{0129b48e-2977-4e87-adb0-a024a69c1ccc}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-DFSC\Dfsc.csproj">
+      <Name>Dfsc</Name>
+      <Project>{ffb198e5-2b91-48d9-97af-27114f8961dd}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-FSRVP\Fsrvp.csproj">
+      <Name>Fsrvp</Name>
+      <Project>{15162940-f895-48a8-a0f2-49e3a65b632f}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-FSCC\Fscc.csproj">
+      <Name>Fscc</Name>
+      <Project>{124E0F6D-57D7-4582-AF9A-3DE11B358E76}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-NLMP\Nlmp.csproj">
+      <Name>Nlmp</Name>
+      <Project>{5e53e71e-52d1-4bf0-99c0-608437ec446c}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-PAC\Pac.csproj">
+      <Name>Pac</Name>
+      <Project>{aefaf10d-d1bf-44c4-bd9f-5cff2afa432f}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-RPCE\Rpce.csproj">
+      <Name>Rpce</Name>
+      <Project>{a5814e1e-d79c-49a9-a8ea-ba8ed6e0eb39}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-RSVD\Rsvd.csproj">
+      <Name>Rsvd</Name>
+      <Project>{6233f472-b2b6-42b1-8676-530c8d0be6ed}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-SMB\Smb.csproj">
+      <Name>Smb</Name>
+      <Project>{c3c96860-5d29-4797-a311-cc568cc8b699}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj">
+      <Name>Smb2</Name>
+      <Project>{C7F08825-D3C9-4DDD-9BA3-06733B1ABE36}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-SRVS\Srvs.csproj">
+      <Name>Srvs</Name>
+      <Project>{e471f558-bb6d-4317-81f8-8fd755afefdc}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-SWN\Swn.csproj">
+      <Name>Swn</Name>
+      <Project>{5be7e49e-5cb5-4115-98b1-e7e8b10cfccb}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Sspi\Sspi.csproj">
+      <Name>Sspi</Name>
+      <Project>{d0cb354b-2cd3-49c1-8eca-2f6ebadbccee}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\TransportStack\TransportStack.csproj">
+      <Name>TransportStack</Name>
+      <Project>{967d976a-c792-4893-9235-14615ae1ff58}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ShareUtil\ShareUtil\ShareUtil.csproj">
+      <Name>ShareUtil</Name>
+      <Project>{10da3c4e-730c-4ea3-95bb-a12865833ee6}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>	
+    <ProjectReference Include="..\Auth\TestSuite\Auth_ServerTestSuite.csproj">
+      <Name>Auth_ServerTestSuite</Name>
+      <Project>{1f5c2146-bb0f-4c1c-8d1f-13c90b04bdae}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\Adapter\CommonAdapter.csproj">
+      <Name>CommonAdapter</Name>
+      <Project>{3fd566ba-e398-461e-b1b6-464b117ed422}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\TestSuite\CommonTestSuite.csproj">
+      <Name>CommonTestSuite</Name>
+      <Project>{cf70c975-efea-4b87-b278-1f0b15995f8e}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\DFSC\TestSuite\MS-DFSC_ServerTestSuite.csproj">
+      <Name>MS-DFSC_ServerTestSuite</Name>
+      <Project>{b2479859-49e4-4955-9cb3-2b571c491bf4}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\FSRVP\TestSuite\MS-FSRVP_ServerTestSuite.csproj">
+      <Name>MS-FSRVP_ServerTestSuite</Name>
+      <Project>{D118ECF2-381D-4D22-90B6-6CB874957B76}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\RSVD\TestSuite\MS-RSVD_ServerTestSuite.csproj">
+      <Name>MS-RSVD_ServerTestSuite</Name>
+      <Project>{a232784c-6c18-4b4f-a610-13681ae40537}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\ServerFailover\Adapter\ServerFailoverAdapter.csproj">
+      <Name>ServerFailoverAdapter</Name>
+      <Project>{3ed5de06-92cb-4e43-82f7-77d000315005}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\ServerFailover\TestSuite\ServerFailoverTestSuite.csproj">
+      <Name>ServerFailoverTestSuite</Name>
+      <Project>{52666d18-d798-43b7-be15-4831c7dc50bb}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\SMB2\Adapter\MS-SMB2_ServerAdapter.csproj">
+      <Name>MS-SMB2_ServerAdapter</Name>
+      <Project>{E7E99C95-1EE5-4E61-BC27-B4D69A31C5BC}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\SMB2\TestSuite\MS-SMB2_ServerTestSuite.csproj">
+      <Name>MS-SMB2_ServerTestSuite</Name>
+      <Project>{FE3B845F-B07F-483A-986E-91FE7F39460A}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\SMB2Model\Adapter\MS-SMB2Model_ServerAdapter.csproj">
+      <Name>MS-SMB2Model_ServerAdapter</Name>
+      <Project>{6E8058F1-AF11-42F3-9459-C716F07EA673}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\SMB2Model\Model\MS-SMB2Model_ServerModel.csproj">
+      <Name>MS-SMB2Model_ServerModel</Name>
+      <Project>{1486BFE5-D3AD-4486-A9E9-CE2CB0D048A2}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\SMB2Model\TestSuite\MS-SMB2Model_ServerTestSuite.csproj">
+      <Name>MS-SMB2Model_ServerTestSuite</Name>
+      <Project>{BF78EB8B-3984-46A1-89B7-1BE232E23310}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\FSA\Adapter\MS-FSA_ServerAdapter.csproj">
+      <Name>MS-FSA_ServerAdapter</Name>
+      <Project>{98A76DE1-2D66-476B-9222-F15FFDFA8C81}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\FSA\Model\MS-FSA_ServerModel.csproj">
+      <Name>MS-FSA_ServerModel</Name>
+      <Project>{BBC6AD3A-649C-4702-A4F0-FC33DBE59CD6}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\FSA\TestSuite\MS-FSA_ServerTestSuite.csproj">
+      <Name>MS-FSA_ServerTestSuite</Name>
+      <Project>{3A6DFF03-804A-4040-8AC6-3CC97989F950}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\SQOS\TestSuite\MS-SQOS_ServerTestSuite.csproj">
+      <Name>MS-SQOS_ServerTestSuite</Name>
+      <Project>{DB6ABFDA-DC02-45F3-A519-177C8BCED276}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+  <Target Name="GenDeployWxsFile" DependsOnTargets="ResolveWixExtensionReferences" BeforeTargets="Compile">
+    <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" -out Bin.wxs -template fragment -gg -cg BIN_FILES -dr TESTSUITE_BIN_DIR -var wix.TESTSUITE_BIN_DIR -sreg -sfrag -srd' />
+    <Exec Command='"$(WIX)\bin\heat.exe" dir "..\Batch" -out Batch.wxs -template fragment -gg -cg BATCH_FILES -dr TESTSUITE_BATCH_DIR -var wix.TESTSUITE_BATCH_DIR -sreg -sfrag -srd' />
+  </Target>
+  <Import Project="$(WixTargetsPath)" />
+  
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)en-us\$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\deploy\" />
+  </Target>  
+  <ItemGroup>
+	<SutProtocolControlAdapterScriptFiles Include="..\Common\Adapter\SutProtocolControlAdapter\*" />
+	<SutControlAdapterScriptFiles Include="..\ServerFailover\Adapter\WindowsSutControlAdapter\*" />
+  </ItemGroup>
+
+  <Target Name="CopyFilesToBin" BeforeTargets="GenDeployWxsFile" >
+	<Copy SourceFiles="..\Auth\TestSuite\Auth_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+	<Copy SourceFiles="..\Auth\TestSuite\Auth_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+	<Copy SourceFiles="..\Common\TestSuite\CommonTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+	<Copy SourceFiles="..\Common\TestSuite\CommonTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+	<Copy SourceFiles="..\DFSC\TestSuite\MS-DFSC_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+	<Copy SourceFiles="..\DFSC\TestSuite\MS-DFSC_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+	<Copy SourceFiles="..\FSA\TestSuite\MS-FSA_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+	<Copy SourceFiles="..\FSA\TestSuite\MS-FSA_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+	<Copy SourceFiles="..\FSRVP\TestSuite\MS-FSRVP_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+	<Copy SourceFiles="..\FSRVP\TestSuite\MS-FSRVP_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+	<Copy SourceFiles="..\RSVD\TestSuite\MS-RSVD_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+	<Copy SourceFiles="..\RSVD\TestSuite\MS-RSVD_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+	<Copy SourceFiles="..\ServerFailover\TestSuite\ServerFailoverTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+	<Copy SourceFiles="..\ServerFailover\TestSuite\ServerFailoverTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+	<Copy SourceFiles="..\SMB2\TestSuite\MS-SMB2_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+	<Copy SourceFiles="..\SMB2\TestSuite\MS-SMB2_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+	<Copy SourceFiles="..\SMB2Model\TestSuite\MS-SMB2Model_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+	<Copy SourceFiles="..\SMB2Model\TestSuite\MS-SMB2Model_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+	<Copy SourceFiles="..\SQOS\TestSuite\MS-SQOS_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+	<Copy SourceFiles="..\SQOS\TestSuite\MS-SQOS_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+	<Copy SourceFiles="..\ServerLocalTestRun.testrunconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+	<Copy SourceFiles="@(SutProtocolControlAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\Common\Adapter\SutProtocolControlAdapter\" />	
+	<Copy SourceFiles="@(SutControlAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\ServerFailover\Adapter\WindowsSutControlAdapter\" />	
+  </Target>    
+
+</Project>

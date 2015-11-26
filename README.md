@@ -8,11 +8,13 @@ However, each test suite provides users with a useful indication of interoperabi
 Windows Protocol Test Suites provide interoperability testing against the implementation of Windows open specifications including File Services, Identity Management, Remote Desktop and etc.
 
 * **SMB Protocol Test Suite**. It covers requirements documented in [MS-SMB], [MS-FSCC] as well [MS-CIFS] dependencies referred to in [MS-SMB].
+* **File Server Protocol Test Suite**. It is designed to test implementations of file server protocol family including [MS-SMB2], [MS-DFSC], [MS-SWN], [MS-FSRVP], [MS-FSA], [MS-RSVD] and [MS-SQOS].
 
 ## Components
 Windows Protocol Test Suites contain three components:
 
 * **CommonScripts**. Common scripts used by every test suite. Normally they're used to configure the environment.
+* **ProtocolTestManager**. Protocol Test Manager is a UI tool to help you to configure and run test cases.
 * **ProtoSDK**. Protocol SDK is the protocol library used by every test suite. It provides the data structures of the protocol messages, the methods to encode and decode the messages, the methods to send and recieve messages and etc.
 * **TestSuites**. All Test Suites code and documents are saved here and categorized by folder representing each test suite.
 
@@ -44,11 +46,17 @@ buildall.cmd
 After the build succeeds, the MSI (installer package) files of every test suite should be generated in the folder *WindowsProtocolTestSuite\drop\TestSuites\\[TestSuiteName]\Installer\.*
 Take SMB test suite as an example, **MS-SMB-TestSuite-ServerEP.msi** should be generated in the folder *WindowsProtocolTestSuite\drop\TestSuites\MS-SMB\Installer\.*
 
-You can also run **build.cmd** for protocol SDK and every test suite separately.
+You can also run **build.cmd** for protocol SDK, Protocol Test Manager and every test suite separately.
 
 To build protocol SDK
 ```
 cd WindowsProtocolTestSuites\ProtoSDK
+build.cmd
+```
+
+To build Protocol Test Manager
+```
+cd WindowsProtocolTestSuite\ProtocolTestManager
 build.cmd
 ```
 

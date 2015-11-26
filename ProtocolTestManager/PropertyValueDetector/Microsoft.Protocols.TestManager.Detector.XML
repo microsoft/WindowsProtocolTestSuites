@@ -1,0 +1,321 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.Protocols.TestManager.Detector</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.Protocols.TestManager.Detector.DetectorUtil">
+            <summary>
+            This class defines utility for detector.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Detector.DetectorUtil.WriteLog(System.String,System.Boolean,Microsoft.Protocols.TestManager.Detector.LogStyle)">
+            <summary>
+            Write a log message.
+            </summary>
+            <param name="message">Log message.</param>
+            <param name="startNewLine">Start a new line before this message. True by default.</param>
+            <param name="style">The style of the message</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Detector.DetectorUtil.GetPropertyValue(System.String)">
+            <summary>
+            Get the property value of current prfconfig file.
+            </summary>
+            <param name="name">Property name,</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Detector.DetectorUtil.GetPropertiesByFile(System.String)">
+            <summary>
+            Get properties defined in the specific file.
+            </summary>
+            <param name="file">ptfconfig file name.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Detector.UtilCallBackFunctions">
+            <summary>
+            A static class including callback functions.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Detector.UtilCallBackFunctions.WriteLog">
+            <summary>
+             Instance of WriteLogDelegate
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Detector.UtilCallBackFunctions.GetPropertyValue">
+            <summary>
+            Instance of GetPropertyValueDelegate
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Detector.UtilCallBackFunctions.GetPropertiesByFile">
+            <summary>
+            Instance of GetPropertiesByFileDelegate
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Detector.UtilCallBackFunctions.SendLogContent">
+            <summary>
+            Instance of SendLogContentDelegate
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Detector.UtilCallBackFunctions.WriteLogDelegate">
+            <summary>
+            Writes log.
+            </summary>
+            <param name="message">The message</param>
+            <param name="startNewLine">Indicates start a new line or not</param>
+            <param name="style">Log style</param>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Detector.UtilCallBackFunctions.GetPropertyValueDelegate">
+            <summary>
+            Gets property value.
+            </summary>
+            <param name="name">Property name</param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Detector.UtilCallBackFunctions.GetPropertiesByFileDelegate">
+            <summary>
+            Gets a list of properties.
+            </summary>
+            <param name="file"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Detector.UtilCallBackFunctions.SendLogContentDelegate">
+            <summary>
+            Sends log content.
+            </summary>
+            <param name="detectingItemsList"></param>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Detector.DetectingItem">
+            <summary>
+            Content and status of detecting item.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Detector.DetectingItem.DetectingContent">
+            <summary>
+            The content of detecting item.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Detector.DetectingItem.DetectingStatus">
+            <summary>
+            The status of detecting item.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Detector.DetectingItem.Style">
+            <summary>
+            The log style: Default, StepPassed, StepFailed, StepSkipped, StepNotFound or Error.
+            </summary>
+        </member>
+        <member name="E:Microsoft.Protocols.TestManager.Detector.DetectingItem.PropertyChanged">
+            <summary>
+            Changes property event handler.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Detector.LogStyle">
+            <summary>
+            Style of the log message.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Detector.LogStyle.Default">
+            <summary>
+            Default Style
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Detector.LogStyle.StepPassed">
+            <summary>
+            The message means a step in the auto-dection passed.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Detector.LogStyle.StepFailed">
+            <summary>
+            The message means a step in the auto-dection failed. The detection continues.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Detector.LogStyle.StepSkipped">
+            <summary>
+            The item to detect is nout found.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Detector.LogStyle.StepNotFound">
+            <summary>
+            The item to detect is nout found.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Detector.LogStyle.Error">
+            <summary>
+            The message means an error occurs in the detection. The detection cannot proceed.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Detector.DetectingStatus">
+            <summary>
+            Enumerates the status of detecting.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Detector.DetectingStatus.Pending">
+            <summary>
+            Default Status
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Detector.DetectingStatus.Detecting">
+            <summary>
+            Detecting Status
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Detector.DetectingStatus.Finished">
+            <summary>
+            The status means a step in the auto-dection passed.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Detector.DetectingStatus.Skipped">
+            <summary>
+            The detecting object is not found.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Detector.DetectingStatus.NotFound">
+            <summary>
+            The detecting object is not found.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Detector.DetectingStatus.Failed">
+            <summary>
+            The status means a step in the auto-dection failed. The detection continues.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Detector.DetectingStatus.Error">
+            <summary>
+            The status means an error occurs in the detection. The detection cannot proceed.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Detector.Prerequisites">
+            <summary>
+            Prerequisites for auto-detect.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Detector.Prerequisites.Title">
+            <summary>
+            The Title of the set prerequisites window.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Detector.Prerequisites.Summary">
+            <summary>
+            Summary information to be shown in the windows.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Detector.Prerequisites.Properties">
+            <summary>
+            The properties needed for the auto-detection.
+            Key: Property name.
+            Value: Default value(One item) / Possible values (Multiple items).
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Detector.CaseSelectRule">
+            <summary>
+            Class rule status
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Detector.CaseSelectRule.Name">
+            <summary>
+            Rule name.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Detector.CaseSelectRule.Status">
+            <summary>
+            Rule status.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Detector.RuleStatus">
+            <summary>
+            Rule status
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Detector.RuleStatus.Selected">
+            <summary>
+            Indicates the rule is selected.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Detector.RuleStatus.NotSupported">
+            <summary>
+            Indicates the rule is not supported.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Detector.RuleStatus.Unknown">
+            <summary>
+            Indicates the rule is unknown.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Detector.RuleStatus.Default">
+            <summary>
+            Indicates the rule is default.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Detector.IValueDetector">
+            <summary>
+            Interface for property value auto-detect.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Detector.IValueDetector.SelectEnvironment(System.String)">
+            <summary>
+            Sets selected test environment.
+            </summary>
+            <param name="NetworkEnvironment">The network environment</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Detector.IValueDetector.GetPrerequisites">
+            <summary>
+            Gets the prerequisites for auto-detection.
+            </summary>
+            <returns>A instance of Prerequisites class.</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Detector.IValueDetector.SetPrerequisiteProperties(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Sets the values for the required properties.
+            </summary>
+            <param name="properties">Property name and values.</param>
+            <returns>
+            Return true if no other property needed. Return false means there are 
+            other property required. PTF Tool will invoke GetPrerequisites and 
+            pop up a dialog to set the value of the properties.
+            </returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Detector.IValueDetector.GetDetectionSteps">
+            <summary>
+            Adds Detection steps to the log shown when detecting
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Detector.IValueDetector.RunDetection">
+            <summary>
+            Runs property autodetection.
+            </summary>
+            <returns>Return true if the function is succeeded.</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Detector.IValueDetector.GetDetectedProperty(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}}@)">
+            <summary>
+            Gets the detect result.
+            </summary>
+            <returns>Return true if the property value is successfully got.</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Detector.IValueDetector.GetSelectedRules">
+            <summary>
+            Gets selected rules
+            </summary>
+            <returns>Selected rules</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Detector.IValueDetector.GetSUTSummary">
+            <summary>
+            Gets a summary of the detect result.
+            </summary>
+            <returns>Detect result.</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Detector.IValueDetector.GetHiddenProperties(System.Collections.Generic.List{Microsoft.Protocols.TestManager.Detector.CaseSelectRule})">
+            <summary>
+            Gets the list of properties that will be hidder in the configure page.
+            </summary>
+            <param name="rules">Selected rules.</param>
+            <returns>The list of properties whick will not be shown in the configure page.</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Detector.IValueDetector.CheckConfigrationSettings(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Returns false if check failed and set failed property in dictionary
+            </summary>
+            <param name="properties"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

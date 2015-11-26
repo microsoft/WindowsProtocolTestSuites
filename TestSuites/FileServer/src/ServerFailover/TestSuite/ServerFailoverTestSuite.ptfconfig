@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+
+  <Include>
+    <File name="CommonTestSuite.ptfconfig"/>
+  </Include>
+
+  <Properties>
+    <Group name="Cluster">
+      <Property name="FailoverTimeout" value ="300">
+        <Description>
+          Timeout in seconds specially for file server failover scenarios
+        </Description>
+      </Property>
+
+      <Property name="SwnWitnessSyncTimeout" value ="3">
+        <Description>
+          Timeout in seconds to sync information for witness services
+        </Description>
+      </Property>
+
+      <Property name="ActiveTDIs" value ="">
+        <Description>
+          Active TDIs that would impact test, multiple values should be separated by semicolons
+        </Description>
+      </Property>
+
+      <Property name="ClusterName" value ="cluster01.contoso.com">
+        <Description>
+          Computer name of Windows failover cluster which hosts Continuous Availability (CA) file server (the SUT)
+          If SUT is non-Windows implementation, leave it blank
+        </Description>
+      </Property>
+    </Group>
+  </Properties>
+
+  <Adapters>
+    <Adapter xsi:type="powershell" name="ISutControlAdapter" scriptdir=".\"/>
+    <!--<Adapter xsi:type="interactive" name="ISutControlAdapter" /> -->
+  </Adapters>
+
+  <TestLog defaultprofile="Verbose">
+    <Sinks/>
+    <Profiles/>
+  </TestLog>
+
+</TestSite>

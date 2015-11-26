@@ -1,0 +1,69 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+config LockAndUnlockConfig : Actions 
+{
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.LockAndUnlock)";
+}
+
+// Scenario of [MS-FSA] 2.1.5.7   Server Requests a Byte-Range Lock
+// and 2.1.5.8   Server Requests an Unlock of a Byte-Range
+machine LockAndUnlockScenario() : LockAndUnlockConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        (
+            (
+                // Verify requirement 904
+                // If Open.Stream.StreamType is DirectoryStream, return STATUS_INVALID_PARAMETER, 
+                // as byte range locks are not permitted on directories.
+                CreateFile(
+                     FileAttribute.NORMAL,
+                     CreateOptions.DIRECTORY_FILE,
+                     StreamTypeNameToOPen.INDEX_ALLOCATION, // DirectoryStream
+                     FileAccess.GENERIC_WRITE,
+                     ShareAccess.FILE_SHARE_WRITE,
+                     CreateDisposition.OPEN_IF,
+                     StreamFoundType.StreamIsFound,
+                     SymbolicLinkType.IsNotSymbolicLink,
+                     FileType.DirectoryFile,
+                     FileNameStatus.PathNameValid);
+                ByteRangeLock(3, 5, true, true, false);
+                ByteRangeUnlock;
+            )
+            |
+            (
+                // Verify lock conflict
+                CreateFile(
+                     FileAttribute.NORMAL,
+                     CreateOptions.NON_DIRECTORY_FILE,
+                     StreamTypeNameToOPen.DATA, // DataStream
+                     FileAccess.GENERIC_WRITE,
+                     ShareAccess.FILE_SHARE_WRITE,
+                     CreateDisposition.OPEN_IF,
+                     StreamFoundType.StreamIsFound,
+                     SymbolicLinkType.IsNotSymbolicLink,
+                     FileType.DataFile,
+                     FileNameStatus.PathNameValid);
+                ByteRangeLock(3, 7, true, true, false);
+                ByteRangeLock(5, 8, true, true, false); // Lock conflict
+                ByteRangeUnlock;
+            )
+        );
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+// Test case of [MS-FSA] 2.1.5.7   Server Requests a Byte-Range Lock
+// and 2.1.5.8   Server Requests an Unlock of a Byte-Range
+// The exploration time for this machine is about 10 seconds
+machine LockAndUnlockTestCase() : LockAndUnlockConfig where TestEnabled = true
+{
+    construct requirement coverage where strategy = "selective"
+    for (
+        construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true for 
+        LockAndUnlockScenario
+    )
+}

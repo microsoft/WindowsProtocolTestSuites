@@ -1,0 +1,36 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.CreateClose;
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose;
+
+config CreateCloseBaseConfig : BaseConfig 
+{
+    action all ICreateCloseAdapter;
+
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb2002), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.CreateClose)";
+}
+
+config CreateCloseConfig: CreateCloseBaseConfig
+{
+}
+
+machine CreateCloseScenario() : CreateCloseConfig 
+{
+    (
+        ReadConfig; 
+        SetupConnection;
+        CreateRequest;
+        CreateResponse;
+        (
+            CloseRequest;
+            CloseResponse;
+        )*;  
+   
+    ) || (construct model program from CreateCloseConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.CreateClose")
+}
+
+machine CreateCloseTestCase() : CreateCloseConfig where TestEnabled = true
+{
+    construct test cases where Strategy = "longtests", AllowUndeterminedCoverage = true for CreateCloseScenario()
+}

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+  <Properties>
+    <Property name="Property01" value="value01">
+      <Description>
+        A quick brown fox jumps over a lazy dog.
+      </Description>
+    </Property>
+    <Group name="Group01">
+      <Property name="Property02" value="value02" >
+        <Description>
+          A quick brown fox jumps over a lazy dog.
+        </Description>
+      </Property>
+      <Property name="Property03" value="value03">
+        <Choice>true,false</Choice>
+        <Description>
+          A quick brown fox jumps over a lazy dog.
+        </Description>
+      </Property>
+    </Group>
+    <Group name="Group03">
+      <Property name="Property3" value="value"/>
+      <Group name="Group031">
+        <Property name="Property31" value="value"/>
+      </Group>
+    </Group>
+  </Properties>
+  <Adapters>
+    <Adapter xsi:type="powershell" name="ISutControlAdapter" scriptdir=".\"/>
+  </Adapters>
+</TestSite>

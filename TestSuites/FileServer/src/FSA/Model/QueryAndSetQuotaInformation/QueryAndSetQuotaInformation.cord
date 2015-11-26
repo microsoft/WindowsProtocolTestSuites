@@ -1,0 +1,44 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+config QueryQuotaInformationConfig : Actions 
+{
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.QueryQuotaInformation)";
+}
+
+// Scenario of [MS-FSA] 2.1.5.20   Server Requests Querying Quota Information
+machine QueryFileQuotaInformationScenario() : QueryQuotaInformationConfig
+{
+    (
+        FsaInitial;
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+        GetIfImplementQueryFileQuotaInformation;
+        QueryFileQuotaInformation;
+    )
+    ||
+    FSAModelProgram 
+}
+
+// Test case of [MS-FSA] 2.1.5.20   Server Requests Querying Quota Information
+// The exploration time for this machine is about 10 seconds
+// QueryFileQuotaInformation method is not implemented in FSA adapter, set "TestEnabled = false" before implement it in FSA adapter. 
+machine QueryFileQuotaInformationTestCase() : QueryQuotaInformationConfig where TestEnabled = false
+{
+    construct requirement coverage where strategy = "full"
+    for (
+        construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for 
+        QueryFileQuotaInformationScenario
+    )
+}
+
+// SetQuotaInformation is not implemented.

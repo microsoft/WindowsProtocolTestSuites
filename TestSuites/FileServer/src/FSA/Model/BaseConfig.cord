@@ -1,0 +1,55 @@
+// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter;
+using Microsoft.Protocols.TestSuites.FileSharing.FSA.Model;
+
+/// Contains actions of the model, bounds, and switches.
+config Actions 
+{ 
+    action all IFSAAdapter;
+
+    switch stackdepth = 750000;
+    switch StateBound = 1024000;
+    switch StepBound = 2000;
+    switch PathDepthBound = 30;
+    switch TestClassBase = "ptf"; 
+    switch quiescencetimeout = 30000;
+    switch GeneratedTestPath = "..\\TestSuite";
+    switch GeneratedTestNamespace = "Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite";
+    switch TestEnabled = false;
+    switch DefaultParameterExpansion = "PairWise";
+}
+
+/// Constructs a machine from the model program. 
+/// Since the model is not finite, this machine explodes
+/// and exploration is stopped by a bound.
+machine FSAModelProgram() : Actions
+{   
+    construct model program from Actions 
+}
+
+/// Contains actions of the model, bounds, and switches.
+config Actions_Coverage
+{     
+    action all IFSAAdapter;
+        
+    switch stackdepth = 750000;
+    switch StateBound = 1024000;
+    switch StepBound = 1024000;
+    switch PathDepthBound = 1024000;
+    switch TestClassBase = "ptf"; 
+    switch quiescencetimeout = 2000000;
+    switch GeneratedTestPath = "..\\TestSuite";
+    switch GeneratedTestNamespace = "Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite";
+    switch TestEnabled = false;
+    switch DefaultParameterExpansion = "Coverage";
+}
+
+/// Constructs a machine from the model program. 
+/// Since the model is not finite, this machine explodes
+/// and exploration is stopped by a bound.
+machine FSAModelProgramCoverage() : Actions_Coverage
+{
+    construct model program from Actions_Coverage 
+}

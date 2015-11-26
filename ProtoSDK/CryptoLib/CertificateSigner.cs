@@ -71,7 +71,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
         /// <exception cref="NullReferenceException">If Certificate is set to null in constructor,
         /// this exception will be thrown</exception>
         /// <exception cref="SEHException">If Invoking CryptAPI failed, this exception will be thrown.</exception>
-        [SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes"), CLSCompliant(false)]
+        [SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
         public byte[] SignHash(byte[] rgbHash, AlgId hashType)
         {
             if (rgbHash == null)
