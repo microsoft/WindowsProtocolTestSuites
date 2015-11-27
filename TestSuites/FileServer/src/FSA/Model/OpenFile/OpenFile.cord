@@ -1,0 +1,2118 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+config OpenFileConfig : Actions_Coverage
+{
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.OpenFile)";
+}
+
+//To verify R366, R377
+// R366: [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+//      Phase 1 - Parameter Validation:]If any of the bits in the mask 0x0CE0FE00 are set, 
+//      the operation MUST be failed with STATUS_ACCESS_DENIED.
+// R377: [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+//      Phase 1 - Parameter Validation:]If DesiredAccess is zero, the operation MUST be failed with STATUS_ACCESS_DENIED.
+machine OpenFileScenario01() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            {FileAccess.None, FileAccess.INVALID_ACCESS_MASK}, // DesiredAccess is zero, or if any of the bits in the mask 0x0CE0FE00 are set
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R2370
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If ShareAccess are not valid values for a file object as specified in [MS-SMB2] section 2.2.13.
+machine OpenFileScenario02() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.NOT_VALID_VALUE, // ShareAccess are not valid values
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.NOT_VALID_VALUE, 
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R2371
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions are not valid values for a file object as specified in [MS-SMB2] section 2.2.13.
+machine OpenFileScenario03() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NOT_VALID_VALUE, // CreateOptions are not valid values
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R2372
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateDisposition are not valid values for a file object as specified in [MS-SMB2] section 2.2.13.
+machine OpenFileScenario04() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.NOT_VALID_VALUE, // CreateDisposition are not valid values
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R404
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If FileAttributes are not valid values for a file object as specified in [MS-SMB2] section 2.2.13.
+machine OpenFileScenario05() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NOT_VALID_VALUE); // FileAttributes are not valid values
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R368
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.FILE_DIRECTORY_FILE && CreateOptions.FILE_NON_DIRECTORY_FILE.
+config OpenFileScenario06Config : OpenFileConfig
+{
+    action MessageStatus IFSAAdapter.OpenExistingFile(
+            ShareAccess shareAccess,
+            FileAccess desiredAccess,
+            StreamFoundType streamFoundType,
+            SymbolicLinkType symbolicLinkType,
+            FileType openFileType,
+            FileNameStatus fileNameStatus,
+            CreateOptions existingOpenModeCreateOption,
+            ShareAccess existOpenShareModeShareAccess,
+            FileAccess existOpenDesiredAccess,
+            CreateOptions createOption, 
+            CreateDisposition createDisposition, 
+            StreamTypeNameToOPen streamTypeNameToOPen,
+            FileAttribute fileAttribute, 
+            FileAttribute desiredFileAttribute
+            )
+     where {.
+            Condition.In<CreateOptions>(createOption, CreateOptions.DIRECTORY_FILE | CreateOptions.NON_DIRECTORY_FILE);
+           .};
+}
+
+//To verify R368
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.FILE_DIRECTORY_FILE && CreateOptions.FILE_NON_DIRECTORY_FILE.
+machine OpenFileScenario06() : OpenFileScenario06Config
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            _, // CreateOptions.FILE_DIRECTORY_FILE && CreateOptions.FILE_NON_DIRECTORY_FILE.
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    (construct model program from OpenFileScenario06Config) 
+}
+
+//To verify R369
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.FILE_SYNCHRONOUS_IO_ALERT && !DesiredAccess.SYNCHRONIZE.
+machine OpenFileScenario07() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA, // !DesiredAccess.SYNCHRONIZE
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA, 
+            CreateOptions.SYNCHRONOUS_IO_ALERT, // CreateOptions.FILE_SYNCHRONOUS_IO_ALERT
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R2373
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If Create.FILE_SYNCHRONOUS_IO_NONALERT && !DesiredAccess.SYNCHRONIZE.
+machine OpenFileScenario08() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA, // !DesiredAccess.SYNCHRONIZE
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA, 
+            CreateOptions.SYNCHRONOUS_IO_NONALERT, // Create.FILE_SYNCHRONOUS_IO_NONALERT
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R371
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.FILE_DELETE_ON_CLOSE && !DesiredAccess.DELETE.
+machine OpenFileScenario09() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA, // !DesiredAccess.DELETE
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA, 
+            CreateOptions.DELETE_ON_CLOSE, // CreateOptions.FILE_DELETE_ON_CLOSE
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R373
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.FILE_SYNCHRONOUS_IO_ALERT && Create.FILE_SYNCHRONOUS_IO_NONALERT.
+config OpenFileScenario10Config : OpenFileConfig
+{                     
+    action MessageStatus IFSAAdapter.OpenExistingFile(
+            ShareAccess shareAccess,
+            FileAccess desiredAccess,
+            StreamFoundType streamFoundType,
+            SymbolicLinkType symbolicLinkType,
+            FileType openFileType,
+            FileNameStatus fileNameStatus,
+            CreateOptions existingOpenModeCreateOption,
+            ShareAccess existOpenShareModeShareAccess,
+            FileAccess existOpenDesiredAccess,
+            CreateOptions createOption, 
+            CreateDisposition createDisposition, 
+            StreamTypeNameToOPen streamTypeNameToOPen,
+            FileAttribute fileAttribute, 
+            FileAttribute desiredFileAttribute
+            )
+     where {.
+            Condition.In<CreateOptions>(createOption, CreateOptions.SYNCHRONOUS_IO_NONALERT | CreateOptions.SYNCHRONOUS_IO_ALERT);
+           .};
+}
+
+//To verify R373
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.FILE_SYNCHRONOUS_IO_ALERT && Create.FILE_SYNCHRONOUS_IO_NONALERT.
+machine OpenFileScenario10() : OpenFileScenario10Config
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            _, // CreateOptions.FILE_SYNCHRONOUS_IO_ALERT && Create.FILE_SYNCHRONOUS_IO_NONALERT.
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+   (construct model program from OpenFileScenario10Config) 
+}
+
+//To verify R2375
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.FILE_DIRECTORY_FILE && CreateDisposition == OVERWRITE.
+machine OpenFileScenario11() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.DIRECTORY_FILE, // CreateOptions.FILE_DIRECTORY_FILE
+            CreateDisposition.OVERWRITE, // CreateDisposition == OVERWRITE
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R2374
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.FILE_DIRECTORY_FILE && CreateDisposition == SUPERSEDE .
+machine OpenFileScenario12() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.DIRECTORY_FILE, // CreateOptions.FILE_DIRECTORY_FILE
+            CreateDisposition.SUPERSEDE, // CreateDisposition == SUPERSEDE
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R2376
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.FILE_DIRECTORY_FILE && CreateDisposition == OVERWRITE_IF).
+machine OpenFileScenario13() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.DIRECTORY_FILE, // CreateOptions.FILE_DIRECTORY_FILE
+            CreateDisposition.OVERWRITE_IF, // CreateDisposition == OVERWRITE_IF
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R375
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.COMPLETE_IF_OPLOCKED && CreateOptions.FILE_RESERVE_OPFILTER.
+config OpenFileScenario14Config : OpenFileConfig
+{
+    action MessageStatus IFSAAdapter.OpenExistingFile(
+            ShareAccess shareAccess,
+            FileAccess desiredAccess,
+            StreamFoundType streamFoundType,
+            SymbolicLinkType symbolicLinkType,
+            FileType openFileType,
+            FileNameStatus fileNameStatus,
+            CreateOptions existingOpenModeCreateOption,
+            ShareAccess existOpenShareModeShareAccess,
+            FileAccess existOpenDesiredAccess,
+            CreateOptions createOption, 
+            CreateDisposition createDisposition, 
+            StreamTypeNameToOPen streamTypeNameToOPen,
+            FileAttribute fileAttribute, 
+            FileAttribute desiredFileAttribute
+            )
+     where {.
+            Condition.In<CreateOptions>(createOption, CreateOptions.COMPLETE_IF_OPLOCKED | CreateOptions.RESERVE_OPFILTER);
+          .};
+}
+
+//To verify R375
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.COMPLETE_IF_OPLOCKED && CreateOptions.FILE_RESERVE_OPFILTER.
+machine OpenFileScenario14() : OpenFileScenario14Config
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            _, // CreateOptions.COMPLETE_IF_OPLOCKED && CreateOptions.FILE_RESERVE_OPFILTER.
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    (construct model program from OpenFileScenario14Config)  
+}
+
+//To verify R376
+// [In Application Requests an Open of a File ,Phase 1 - Parameter Validation:]
+// The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.FILE_NO_INTERMEDIATE_BUFFERING && DesiredAccess.FILE_APPEND_DATA.
+machine OpenFileScenario15() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_APPEND_DATA, // DesiredAccess.FILE_APPEND_DATA
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NO_INTERMEDIATE_BUFFERING, // CreateOptions.FILE_NO_INTERMEDIATE_BUFFERING
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R379
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_OBJECT_NAME_INVALID under any of the following conditions:
+// If PathName is not valid as specified in [MS-FSCC] section 2.1.5.
+machine OpenFileScenario16() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.NotPathNameValid, // PathName is not valid
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R380
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_OBJECT_NAME_INVALID under any of the following conditions:
+// If PathName contains a trailing backslash and CreateOptions.FILE_NON_DIRECTORY_FILE is TRUE.
+machine OpenFileScenario17() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.BlacklashName, // PathName contains a trailing backslash
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R2377
+// [In Application Requests an Open of a File,Pseudocode for the operation is as follows: ]
+// If RootOpen.Volume.IsReadOnly && CreateDisposition == FILE_CREATE,then the operation MUST be failed with STATUS_MEDIA_WRITE_PROTECTED.
+machine OpenFileScenario18() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        GetIfOpenFileVolumeIsReadOnly; // If RootOpen.Volume.IsReadOnly
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.CREATE, // CreateDisposition == FILE_CREATE
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R2378
+// [In Application Requests an Open of a File,Pseudocode for the operation is as follows: ]
+// If RootOpen.Volume.IsReadOnly && CreateDisposition == FILE_SUPERSEDE, then the operation MUST be failed with STATUS_MEDIA_WRITE_PROTECTED.
+machine OpenFileScenario19() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        GetIfOpenFileVolumeIsReadOnly; // If RootOpen.Volume.IsReadOnly
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.SUPERSEDE, // CreateDisposition == FILE_SUPERSEDE
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R2379
+// [In Application Requests an Open of a File,Pseudocode for the operation is as follows: ]
+// If RootOpen.Volume.IsReadOnly && CreateDisposition == OVERWRITE, then the operation MUST be failed with STATUS_MEDIA_WRITE_PROTECTED.
+machine OpenFileScenario20() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        GetIfOpenFileVolumeIsReadOnly; // If RootOpen.Volume.IsReadOnly
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OVERWRITE, // CreateDisposition == OVERWRITE
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R2380
+// [In Application Requests an Open of a File,Pseudocode for the operation is as follows: ]
+// If RootOpen.Volume.IsReadOnly && CreateDisposition == OVERWRITE_IF, then the operation MUST be failed with STATUS_MEDIA_WRITE_PROTECTED.
+machine OpenFileScenario21() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        GetIfOpenFileVolumeIsReadOnly; // If RootOpen.Volume.IsReadOnly
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OVERWRITE_IF, // CreateDisposition == OVERWRITE_IF
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R507, R392
+// R507: [In Application Requests an Open of a File ,Phase 5 -- Parse path name:]
+//      If any StreamTypeNamei is \""$INDEX_ALLOCATION"" and the corresponding StreamNamei has a value other than an empty string 
+//      or \""$I30"", the operation is failed with STATUS_INVALID_PARAMETER in Windows.
+// R392: [In Application Requests an Open of a File ,Phase 5 -- Parse path name:]
+//      If any StreamTypeNamei is \""$INDEX_ALLOCATION"" and the corresponding StreamNamei has a value other than an empty string 
+//      or \""$I30"", the operation is failed with STATUS_INVALID_PARAMETER in Windows.
+machine OpenFileScenario22() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetOSInfo;
+        CheckIsR507Implemented;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.StreamTypeNameIsINDEX_ALLOCATION,  // StreamTypeNamei is "$INDEX_ALLOCATION"
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R547
+// [In Application Requests an Open of a File , Pseudocode for the operation is as follows:
+// Phase 6 -- Location of file:] for this search is as follows:For i = 1 to n-1:
+// Search ParentFile.DirectoryList for a Link where Link.Name or Link.ShortName matches FileNamei,
+// If no such link is found, the operation MUST be failed with STATUS_OBJECT_PATH_NOT_FOUND.
+machine OpenFileScenario23() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.isprefixLinkNotFound,
+            CreateOptions.DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.DIRECTORY_FILE,
+            CreateDisposition.OPEN,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R513
+// [In Application Requests an Open of a File , Pseudocode for the operation is as follows:
+// Phase 6 -- Location of file:] Else:[If such a link is not found:]
+// If CreateDisposition == FILE_OPEN, the operation MUST be failed with STATUS_OBJECT_NAME_NOT_FOUND.
+machine OpenFileScenario24() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OPEN, // CreateDisposition == FILE_OPEN
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R2395
+// [In Application Requests an Open of a File , Pseudocode for the operation is as follows:
+// Phase 6 -- Location of file:] Else:[If such a link is not found:]If CreateDisposition == FILE_OVERWRITE), 
+// the operation MUST be failed with STATUS_OBJECT_NAME_NOT_FOUND.
+machine OpenFileScenario25() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsNotFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OVERWRITE, // CreateDisposition == FILE_OVERWRITE
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R514, R547
+// R514: [In Application Requests an Open of a File , Pseudocode for the operation is as follows:
+//      Phase 6 -- Location of file:] Else:[If such a link is not found:]If RootOpen.Volume.IsReadOnly 
+//      then the operation MUST be failed with STATUS_MEDIA_WRITE_PROTECTED.
+// R547: [In Application Requests an Open of a File , Pseudocode for the operation is as follows:
+//      Phase 6 -- Location of file:] for this search is as follows:For i = 1 to n-1:
+//      Search ParentFile.DirectoryList for a Link where Link.Name or Link.ShortName matches FileNamei,
+//      If no such link is found, the operation MUST be failed with STATUS_OBJECT_PATH_NOT_FOUND.
+machine OpenFileScenario26() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        GetIfOpenFileVolumeIsReadOnly; // If RootOpen.Volume.IsReadOnly
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R399
+// [In Application Requests an Open of a File , 
+// Pseudocode for the operation is as follows:Phase 6 - Location of file:] 
+// Pseudocode for this search:For i = 1 to n-1:If Link.File.IsSymbolicLink is TRUE, 
+// the operation MUST be failed with Status set to STATUS_STOPPED_ON_SYMLINK.
+machine OpenFileScenario27() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsSymbolicLink, // Link.File.IsSymbolicLink is TRUE
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R415
+// [In Application Requests an Open of a File , Pseudocode for the operation is as follows:
+// Phase 7 -- Type of file to open:]If FileTypeToOpen is DataFile and StreamNameToOpen is empty and Open.File is not NULL 
+// and Open.File.FileType is DirectoryFile, the operation MUST be failed with STATUS_FILE_IS_A_DIRECTORY.
+machine OpenFileScenario28() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.OpenFileNotNull, // Open.File is not NULL 
+            CreateOptions.NON_DIRECTORY_FILE, // FileTypeToOpen is DataFile
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.DIRECTORY_FILE, // Open.File.FileType is DirectoryFile
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL, // StreamNameToOpen is empty
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R635, R2422
+//Has relationship to global variable gfileTypeToOpen
+//
+// R635: [In Open of an Existing File,Pseudocode for the operation is as follows:
+//      If FileTypeToOpen is DirectoryFile:If CreateDisposition is FILE_OPEN then:]
+//      If this[Perform access checks as described in section 3.1.5.1.2.1.] fails, the request MUST be failed with the same status.
+// R2422: [In Algorithm to Check Access to an Existing File]Pseudocode for these checks is as follows:
+//      If Open.File.FileType is DataFile and (File.FileAttributes.FILE_ATTRIBUTE_READONLY && (DesiredAccess.FILE_APPEND_DATA)), 
+//      then return STATUS_ACCESS_DENIED.
+machine OpenFileScenario29() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_APPEND_DATA, // DesiredAccess.FILE_APPEND_DATA
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE, // Open.File.FileType is DataFile
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.READONLY, // File.FileAttributes.FILE_ATTRIBUTE_READONLY
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R635, R53
+//Has relationship to global variable gfileTypeToOpen
+//
+// R635: [In Open of an Existing File,Pseudocode for the operation is as follows:
+//      If FileTypeToOpen is DirectoryFile:If CreateDisposition is FILE_OPEN then:]
+//      If this[Perform access checks as described in section 3.1.5.1.2.1.] fails, the request MUST be failed with the same status.
+// R53: @"[In Algorithm to Check Access to an Existing File,Pseudocode for these checks is as follows:]
+//      If Open.File.FileType is DataFile and (File.FileAttributes.FILE_ATTRIBUTE_READONLY && (DesiredAccess.FILE_WRITE_DATA )), 
+//      then return STATUS_ACCESS_DENIED.
+machine OpenFileScenario30() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_WRITE_DATA, // DesiredAccess.FILE_WRITE_DATA
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE, // Open.File.FileType is DataFile
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.READONLY, // File.FileAttributes.FILE_ATTRIBUTE_READONLY
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R635, R54
+//Has relationship to global variable gfileTypeToOpen
+//
+// R635: [In Open of an Existing File,Pseudocode for the operation is as follows:
+//      If FileTypeToOpen is DirectoryFile:If CreateDisposition is FILE_OPEN then:]
+//      If this[Perform access checks as described in section 3.1.5.1.2.1.] fails, the request MUST be failed with the same status.
+// R54: [In Algorithm to Check Access to an Existing File,Pseudocode for these checks is as follows:]
+//      If ((File.FileAttributes.FILE_ATTRIBUTE_READONLY) && CreateOptions.FILE_DELETE_ON_CLOSE), then return STATUS_CANNOT_DELETE.
+machine OpenFileScenario31() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.DELETE,
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.DELETE_ON_CLOSE, // CreateOptions.FILE_DELETE_ON_CLOSE
+            CreateDisposition.OPEN,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.READONLY, // File.FileAttributes.FILE_ATTRIBUTE_READONLY
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R635, R54
+//Has relationship to global variable gfileTypeToOpen
+//
+// R635: [In Open of an Existing File,Pseudocode for the operation is as follows:
+//      If FileTypeToOpen is DirectoryFile:If CreateDisposition is FILE_OPEN then:]
+//      If this[Perform access checks as described in section 3.1.5.1.2.1.] fails, the request MUST be failed with the same status.
+// R54: [In Algorithm to Check Access to an Existing File,Pseudocode for these checks is as follows:]
+//      If ((File.FileAttributes.FILE_ATTRIBUTE_READONLY) && CreateOptions.FILE_DELETE_ON_CLOSE), then return STATUS_CANNOT_DELETE.
+machine OpenFileScenario32() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        GetIfOpenFileVolumeIsReadOnly; // If RootOpen.Volume.IsReadOnly
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.DELETE,
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.DELETE_ON_CLOSE, // CreateOptions.FILE_DELETE_ON_CLOSE
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.READONLY, // File.FileAttributes.FILE_ATTRIBUTE_READONLY
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R635, R66
+//Has relationship to global variable gfileTypeToOpen
+//
+// R635: [In Open of an Existing File,Pseudocode for the operation is as follows:
+//      If FileTypeToOpen is DirectoryFile:If CreateDisposition is FILE_OPEN then:]
+//      If this[Perform access checks as described in section 3.1.5.1.2.1.] fails, the request MUST be failed with the same status.
+// R66: [In Algorithm to Check Access to an Existing File,Pseudocode for these checks is as follows:]
+//      If Open.GrantedAccess.DELETE is TRUE and Open.Stream.StreamType is DirectoryStream:For each ExistingOpen in Open.File.OpenList:
+//      If ExistingOpen.SharingMode.FILE_SHARE_DELETE is FALSE, then return STATUS_SHARING_VIOLATION.
+machine OpenFileScenario33() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_DELETE, // Open.GrantedAccess.DELETE is TRUE
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ, // ExistingOpen.SharingMode.FILE_SHARE_DELETE is FALSE
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.INDEX_ALLOCATION, // Open.Stream.StreamType is DirectoryStream
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R65, R656
+//Has relationship to global variable gfileTypeToOpen
+//
+// R65: [In Algorithm to Check Access to an Existing File,Pseudocode for these checks is as follows:
+//      if the sharing conflicts check has no violation]Return STATUS_SUCCESS. 
+// R656: [In Algorithm to Check Sharing Access to an Existing Stream or Directory]
+//      Pseudocode for these checks is as follows,if the sharing checks has no violation]Return STATUS_SUCCESS.
+machine OpenFileScenario34() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R636, R649, R2424
+//Has relationship to global variable gfileTypeToOpen
+//
+// R636: [In Open of an Existing File,Pseudocode for the operation is as follows:
+//      If OpenFileType is DirectoryFile:If CreateDisposition is FILE_OPEN_IF then:]
+//      If this[Perform access checks as described in section 3.1.5.1.2.1.] fails, the request MUST be failed with the same status.
+// R649: "[In Algorithm to Check Sharing Access to an Existing Stream or Directory,Pseudocode for these checks is as follows]
+//      For each ExistingOpen in Open.File.OpenList:
+//      If ExistingOpen.Stream equals Open.Stream, then return STATUS_ACCESS_VIOLATION under any of the following conditions:
+//      If ExistingOpen.SharingMode.FILE_SHARE_READ is FALSE and Open.DesiredAccess contains FILE_READ_DATA."
+// R2424: "[In Algorithm to Check Sharing Access to an Existing Stream or Directory,Pseudocode for these checks is as follows]
+//      For each ExistingOpen in Open.File.OpenList:
+//      If ExistingOpen.Stream equals Open.Stream, then return STATUS_ACCESS_VIOLATION under any of the following conditions: 
+//      If ExistingOpen.SharingMode.FILE_SHARE_READ is FALSE and Open.DesiredAccess contains FILE_READ_DATA."
+machine OpenFileScenario35() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA, // Open.DesiredAccess contains FILE_READ_DATA
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_DELETE, // ExistingOpen.SharingMode.FILE_SHARE_READ is FALSE
+            FileAccess.FILE_WRITE_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OPEN,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R636, R650
+//Has relationship to global variable gfileTypeToOpen
+//
+// R636: [In Open of an Existing File,Pseudocode for the operation is as follows:
+//      If OpenFileType is DirectoryFile:If CreateDisposition is FILE_OPEN_IF then:]
+//      If this[Perform access checks as described in section 3.1.5.1.2.1.] fails, the request MUST be failed with the same status.
+// R650: [In Algorithm to Check Sharing Access to an Existing Stream or Directory,
+//      Pseudocode for these checks is as follows,For each ExistingOpen in Open.File.OpenList:If ExistingOpen.Stream equals Open.Stream, 
+//      then return STATUS_ACCESS_VIOLATION under any of the following conditions:]
+//      If ExistingOpen.SharingMode.FILE_SHARE_WRITE is FALSE and Open.DesiredAccess contains  FILE_EXECUTE.
+machine OpenFileScenario36() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_WRITE,
+            FileAccess.FILE_EXECUTE, // Open.DesiredAccess contains  FILE_EXECUTE
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ, // ExistingOpen.SharingMode.FILE_SHARE_WRITE is FALSE
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OPEN,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+
+//To verify R636, R2425
+//Has relationship to global variable gfileTypeToOpen
+//
+// R636: [In Open of an Existing File,Pseudocode for the operation is as follows:
+//      If OpenFileType is DirectoryFile:If CreateDisposition is FILE_OPEN_IF then:]
+//      If this[Perform access checks as described in section 3.1.5.1.2.1.] fails, the request MUST be failed with the same status.
+// R2425: "[In Algorithm to Check Sharing Access to an Existing Stream or Directory,Pseudocode for these checks is as follows:
+//      For each ExistingOpen in Open.File.OpenList:
+//      If ExistingOpen.Stream equals Open.Stream, then return STATUS_ACCESS_VIOLATION under any of the following conditions:]
+//      If ExistingOpen.SharingMode.FILE_SHARE_WRITE is FALSE and Open.DesiredAccess contains FILE_APPEND_DATA."
+machine OpenFileScenario37() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_APPEND_DATA, // Open.DesiredAccess contains FILE_APPEND_DATA.
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ, // ExistingOpen.SharingMode.FILE_SHARE_WRITE is FALSE
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OPEN,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R636, R651
+//Has relationship to global variable gfileTypeToOpen
+//
+// R636: [In Open of an Existing File,Pseudocode for the operation is as follows:
+//      If OpenFileType is DirectoryFile:If CreateDisposition is FILE_OPEN_IF then:]
+//      If this[Perform access checks as described in section 3.1.5.1.2.1.] fails, the request MUST be failed with the same status.
+// R651: "[In Algorithm to Check Sharing Access to an Existing Stream or Directory,Pseudocode for these checks is as follows:
+//      For each ExistingOpen in Open.File.OpenList:
+//      If ExistingOpen.Stream equals Open.Stream, then return STATUS_ACCESS_VIOLATION under any of the following conditions:]
+//      If ExistingOpen.SharingMode.FILE_SHARE_DELETE is FALSE and Open.DesiredAccess contains DELETE."
+machine OpenFileScenario38() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.DELETE, // Open.DesiredAccess contains DELETE.
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ, // ExistingOpen.SharingMode.FILE_SHARE_DELETE is FALSE
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OPEN,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R636, R652
+//Has relation to global variable gOpenSharingMode
+//Has relationship to global variable gfileTypeToOpen
+//
+// R636: [In Open of an Existing File,Pseudocode for the operation is as follows:
+//      If OpenFileType is DirectoryFile:If CreateDisposition is FILE_OPEN_IF then:]
+//      If this[Perform access checks as described in section 3.1.5.1.2.1.] fails, the request MUST be failed with the same status.
+//
+// R652: "[In Algorithm to Check Sharing Access to an Existing Stream or Directory,Pseudocode for these checks is as follows
+//      For each ExistingOpen in Open.File.OpenList:
+//      If ExistingOpen.Stream equals Open.Stream, then return STATUS_ACCESS_VIOLATION under any of the following conditions:]
+//      If Open.SharingMode.FILE_SHARE_READ is FALSE and ExistingOpen.DesiredAccess contains FILE_READ_DATA."
+machine OpenFileScenario39() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_DELETE, // Open.SharingMode.FILE_SHARE_READ is FALSE
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA, // ExistingOpen.DesiredAccess contains FILE_READ_DATA
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OPEN,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R636, R2426
+//Has relation to global variable gOpenSharingMode
+//Has relationship to global variable gfileTypeToOpen
+//
+// R636: [In Open of an Existing File,Pseudocode for the operation is as follows:
+//      If OpenFileType is DirectoryFile:If CreateDisposition is FILE_OPEN_IF then:]
+//      If this[Perform access checks as described in section 3.1.5.1.2.1.] fails, the request MUST be failed with the same status.
+//
+// R2426: "[In Algorithm to Check Sharing Access to an Existing Stream or Directory,Pseudocode for these checks is as follows
+//      For each ExistingOpen in Open.File.OpenList:
+//      If ExistingOpen.Stream equals Open.Stream, then return STATUS_ACCESS_VIOLATION under any of the following conditions:]
+//      If Open.SharingMode.FILE_SHARE_READ is FALSE and ExistingOpen.DesiredAccess contains FILE_EXECUTE."
+machine OpenFileScenario40() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_DELETE, // Open.SharingMode.FILE_SHARE_READ is FALSE
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_EXECUTE, // ExistingOpen.DesiredAccess contains FILE_EXECUTE.
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OPEN,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R636, R653
+//Has relation to global variable gOpenSharingMode
+//Has relationship to global variable gfileTypeToOpen
+//
+// R636: [In Open of an Existing File,Pseudocode for the operation is as follows:
+//      If OpenFileType is DirectoryFile:If CreateDisposition is FILE_OPEN_IF then:]
+//      If this[Perform access checks as described in section 3.1.5.1.2.1.] fails, the request MUST be failed with the same status.
+//
+// R653: "[In Algorithm to Check Sharing Access to an Existing Stream or Directory,Pseudocode for these checks is as follows
+//      For each ExistingOpen in Open.File.OpenList:
+//      If ExistingOpen.Stream equals Open.Stream, then return STATUS_ACCESS_VIOLATION under any of the following conditions:]
+//      If Open.SharingMode.FILE_SHARE_WRITE is FALSE and ExistingOpen.DesiredAccess contains FILE_WRITE_DATA."
+machine OpenFileScenario41() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ, // Open.SharingMode.FILE_SHARE_WRITE is FALSE
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_WRITE,
+            FileAccess.FILE_WRITE_DATA, // ExistingOpen.DesiredAccess contains FILE_WRITE_DATA
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OPEN,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R636, R2427
+//Has relation to global variable gOpenSharingMode
+//Has relationship to global variable gfileTypeToOpen
+//
+// R636: [In Open of an Existing File,Pseudocode for the operation is as follows:
+//      If OpenFileType is DirectoryFile:If CreateDisposition is FILE_OPEN_IF then:]
+//      If this[Perform access checks as described in section 3.1.5.1.2.1.] fails, the request MUST be failed with the same status.
+//
+// R2427: "[In Algorithm to Check Sharing Access to an Existing Stream or Directory,Pseudocode for these checks is as follows
+//      For each ExistingOpen in Open.File.OpenList:
+//      If ExistingOpen.Stream equals Open.Stream, then return STATUS_ACCESS_VIOLATION under any of the following conditions:]
+//      If Open.SharingMode.FILE_SHARE_WRITE is FALSE and ExistingOpen.DesiredAccess contains FILE_APPEND_DATA.
+machine OpenFileScenario42() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ, // Open.SharingMode.FILE_SHARE_WRITE is FALSE
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_APPEND_DATA, // xistingOpen.DesiredAccess contains FILE_APPEND_DATA
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OPEN,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+
+//To verify R636, R654
+//Has relation to global variable gOpenSharingMode
+//Has relationship to global variable gfileTypeToOpen
+//
+// R636: [In Open of an Existing File,Pseudocode for the operation is as follows:
+//      If OpenFileType is DirectoryFile:If CreateDisposition is FILE_OPEN_IF then:]
+//      If this[Perform access checks as described in section 3.1.5.1.2.1.] fails, the request MUST be failed with the same status.
+//
+// R654: "[In Algorithm to Check Sharing Access to an Existing Stream or Directory,Pseudocode for these checks is as follows
+//      For each ExistingOpen in Open.File.OpenList:
+//      If ExistingOpen.Stream equals Open.Stream, then return STATUS_ACCESS_VIOLATION under any of the following conditions:]
+//      If Open.SharingMode.FILE_SHARE_READ is FALSE and ExistingOpen.DesiredAccess contains DELETE."
+machine OpenFileScenario43() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_DELETE, // Open.SharingMode.FILE_SHARE_READ is FALSE
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.DELETE, // ExistingOpen.DesiredAccess contains DELETE.
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OPEN,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R640
+//Has relationship to global variable gfileTypeToOpen
+//
+// R640: "[In Open of an Existing File,Pseudocode for the operation is as follows:If FileTypeToOpen is DirectoryFile:
+//      If CreateDisposition is FILE_OPEN_IF then:]If this[Perform sharing access checks as described in section 3.1.5.1.2.2.] fails, 
+//      the request MUST be failed with the same status.
+machine OpenFileScenario44() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_WRITE_DATA,
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.DIRECTORY_FILE, // FileTypeToOpen is DirectoryFile
+            CreateDisposition.OPEN_IF, // CreateDisposition is FILE_OPEN_IF
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.READONLY,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R639
+//Has relationship to global variable gfileTypeToOpen
+//
+// R639: "[In Open of an Existing File,Pseudocode for the operation is as follows:If FileTypeToOpen is DirectoryFile:
+//      If CreateDisposition is FILE_OPEN then:]If this [Perform sharing access checks as described in section 3.1.5.1.2.2.]fails, 
+//      the request MUST be failed with the same status.
+machine OpenFileScenario45() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_WRITE,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.DIRECTORY_FILE, // FileTypeToOpen is DirectoryFile
+            CreateDisposition.OPEN, // CreateDisposition is FILE_OPEN
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R578, R579
+//Has relationship to global variable gfileTypeToOpen
+//
+// R578: [In Open of an Existing File,Pseudocode for the operation is as follows:
+//      If FileTypeToOpen is DirectoryFile:]
+//      Else If File == File.Volume.RootDirectory then the operation MUST be failed with STATUS_ACCESS_DENIED.
+//
+// R579: [In Open of an Existing File,Pseudocode for the operation is as follows:
+//      If FileTypeToOpen is DirectoryFile:]else[If File != File.Volume.RootDirectory ] 
+//      the operation MUST be failed with STATUS_OBJECT_NAME_COLLISION.
+machine OpenFileScenario46() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.DIRECTORY_FILE, // FileTypeToOpen is DirectoryFile
+            CreateDisposition.OVERWRITE_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R584
+//Has relationship to global variable gfileTypeToOpen
+//gfileTypeToOpen == FileType.DataFile
+//
+// R584: [In Open of an Existing File,Pseudocode for the operation is as follows:
+//      Else if FileTypeToOpen is DataFile,If Stream was found,]
+//      If CreateDisposition is FILE_CREATE, then the operation MUST be failed with STATUS_OBJECT_NAME_COLLISION.
+machine OpenFileScenario47() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE, // FileTypeToOpen is DataFile
+            CreateDisposition.CREATE, // CreateDisposition is FILE_CREATE
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R590, R2411, R2422
+//Has relationship to global variable gfileTypeToOpen
+//gfileTypeToOpen == FileType.DataFile
+//
+// R590: [In Open of an Existing File,Pseudocode for the operation is as follows:
+//      Else if FileTypeToOpen is DataFile:
+//          If Stream was found,
+//              If CreateDisposition is FILE_OPEN,
+//                  If that Perform access checks as described in section 3.1.5.1.2.1. fails with STATUS_SHARING_VIOLATION:]
+//                      If this[Perform access checks as described in section 3.1.5.1.2.1. ] fails, the request MUST be failed with the same status[STATUS_REPARSE].
+//
+// R2411: [In Open of an Existing File,Pseudocode for the operation is as follows:
+//      Else if FileTypeToOpen is DataFile:
+//          If Stream was found,
+//              If CreateDisposition is FILE_OPEN_IF,
+//                  If that Perform access checks as described in section 3.1.5.1.2.1. fails with STATUS_SHARING_VIOLATION:]
+//                      If this[Perform access checks as described in section 3.1.5.1.2.1. ] fails, the request MUST be failed with the same status.
+//
+// R2422: "[In Algorithm to Check Access to an Existing File]Pseudocode for these checks is as follows:
+//      If Open.File.FileType is DataFile and (File.FileAttributes.FILE_ATTRIBUTE_READONLY && (DesiredAccess.FILE_APPEND_DATA)), then return STATUS_ACCESS_DENIED."
+machine OpenFileScenario48() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_APPEND_DATA, // DesiredAccess.FILE_APPEND_DATA
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE, // Open.File.FileType is DataFile
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.READONLY, // File.FileAttributes.FILE_ATTRIBUTE_READONLY
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R594, R2415, R649, R2424
+//Has relationship to global variable gfileTypeToOpen
+//gfileTypeToOpen == FileType.DataFile
+//
+// R594: [In Open of an Existing File,Pseudocode for the operation is as follows:
+//      Else if FileTypeToOpen is DataFile:
+//          If Stream was found,
+//              If CreateDisposition is FILE_OPEN,
+//                  If that Perform sharing access checks as described in section 3.1.5.1.2.2. fails with STATUS_SHARING_VIOLATION:]
+//                      If this[Perform sharing access checks as described in section 3.1.5.1.2.2.] fails, 
+//                      the request MUST be failed with the same status[STATUS_REPARSE].
+//
+// R2415: [In Open of an Existing File,Pseudocode for the operation is as follows:
+//      Else if FileTypeToOpen is DataFile:
+//          If Stream was found,
+//              If CreateDisposition is FILE_OPEN_IF,
+//                  If that Perform sharing access checks as described in section 3.1.5.1.2.2. fails with STATUS_SHARING_VIOLATION:]
+//                      If this fails, the request MUST be failed with the same status.
+//
+// R649: "[In Algorithm to Check Sharing Access to an Existing Stream or Directory,Pseudocode for these checks is as follows]
+//      For each ExistingOpen in Open.File.OpenList:
+//          If ExistingOpen.Stream equals Open.Stream, then return STATUS_ACCESS_VIOLATION under any of the following conditions:
+//              If ExistingOpen.SharingMode.FILE_SHARE_READ is FALSE and Open.DesiredAccess contains FILE_READ_DATA."
+//
+// R2424: "[In Algorithm to Check Sharing Access to an Existing Stream or Directory,Pseudocode for these checks is as follows]
+//      For each ExistingOpen in Open.File.OpenList:
+//      If ExistingOpen.Stream equals Open.Stream, then return STATUS_ACCESS_VIOLATION under any of the following conditions: 
+//          If ExistingOpen.SharingMode.FILE_SHARE_READ is FALSE and Open.DesiredAccess contains FILE_READ_DATA."
+machine OpenFileScenario49() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA, // Open.DesiredAccess contains FILE_READ_DATA.
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_DELETE, // ExistingOpen.SharingMode.FILE_SHARE_READ is FALSE
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OPEN_IF, // CreateDisposition is FILE_OPEN_IF
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.READONLY,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R596
+//Has relationship to global variable gfileTypeToOpen
+//gfileTypeToOpen == FileType.DataFile
+//
+// R596: [In Open of an Existing File,Pseudocode for the operation is as follows:
+//      Else if FileTypeToOpen is DataFile:
+//          If Stream was found]
+//              Else (CreateDisposition is not FILE_OPEN and is not FILE_OPEN_IF)
+//                  If File.Volume.IsReadOnly is TRUE, 
+//                      the operation MUST be failed with STATUS_MEDIA_WRITE_PROTECTED.
+machine OpenFileScenario50() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        GetIfOpenFileVolumeIsReadOnly; // If RootOpen.Volume.IsReadOnly
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsFound, // Stream was found
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE, // FileTypeToOpen is DataFile
+            CreateDisposition.OVERWRITE_IF, // CreateDisposition is not FILE_OPEN and is not FILE_OPEN_IF
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R487
+//Has relationship to global variable gfileTypeToOpen
+//gfileTypeToOpen == FileType.DataFile
+//Note: File.Volume.IsReadOnly was set in Fsainitial
+//
+// R487: [In Open of an Existing File,Pseudocode for these checks is as follows:
+//      Else if FileTypeToOpen is DataFile,
+//          If Stream was found,
+//              Else (CreateDisposition is not FILE_OPEN and is not FILE_OPEN_IF),
+//                  If Stream.Name is empty:]If File.FileAttributes.FILE_ATTRIBUTE_HIDDEN is TRUE and DesiredFileAttributes.FILE_ATTRIBUTE_HIDDEN is FALSE, 
+//                  then the operation MUST be failed with STATUS_ACCESS_DENIED.
+machine OpenFileScenario51() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsFound, // Stream was found
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE, // FileTypeToOpen is DataFile
+            CreateDisposition.CREATE,
+            StreamTypeNameToOPen.NULL, // Stream.Name is empty
+            FileAttribute.HIDDEN, // File.FileAttributes.FILE_ATTRIBUTE_HIDDEN is TRUE
+            FileAttribute.NORMAL); // DesiredFileAttributes.FILE_ATTRIBUTE_HIDDEN is FALSE
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R488
+//Has relationship to global variable gfileTypeToOpen
+//gfileTypeToOpen == FileType.DataFile
+//Note: File.Volume.IsReadOnly was set in Fsainitial
+//
+// R488: [In Open of an Existing File,Pseudocode for these checks is as follows:
+//      Else if FileTypeToOpen is DataFile,
+//          If Stream was found,
+//              Else (CreateDisposition is not FILE_OPEN and is not FILE_OPEN_IF),
+//                  If Stream.Name is empty:]If File.FileAttributes.FILE_ATTRIBUTE_SYSTEM is TRUE and DesiredFileAttributes.FILE_ATTRIBUTE_SYSTEM is FALSE, 
+//                      then the operation MUST be failed with STATUS_ACCESS_DENIED.
+machine OpenFileScenario52() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsFound, // Stream was found
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.StreamNameNull,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE, // FileTypeToOpen is DataFile
+            CreateDisposition.OVERWRITE_IF, // CreateDisposition is not FILE_OPEN and is not FILE_OPEN_IF
+            StreamTypeNameToOPen.NULL, // Stream.Name is empty
+            FileAttribute.SYSTEM, // File.FileAttributes.FILE_ATTRIBUTE_SYSTEM is TRUE
+            FileAttribute.NORMAL); // DesiredFileAttributes.FILE_ATTRIBUTE_SYSTEM is FALSE
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R610
+//Has relationship to global variable gfileTypeToOpen
+//gfileTypeToOpen == FileType.DataFile
+//
+// R610: [In Open of an Existing File,Pseudocode for these checks is as follows:
+//      Else if FileTypeToOpen is DataFile,
+//          Else (Steam not found)]
+//              If CreateDisposition is FILE_OPEN, the operation MUST be failed with STATUS_OBJECT_NAME_NOT_FOUND.
+machine OpenFileScenario53() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsNotFound, // Steam not found
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE, // FileTypeToOpen is DataFile
+            CreateDisposition.OPEN, // CreateDisposition is FILE_OPEN
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R2416
+//Has relationship to global variable gfileTypeToOpen
+//gfileTypeToOpen == FileType.DataFile
+//
+// R2416: [In Open of an Existing File,Pseudocode for these checks is as follows:
+//      Else if FileTypeToOpen is DataFile,
+//          Else (Steam not found)]
+//              If CreateDisposition is FILE_OVERWRITE, the operation MUST be failed with STATUS_OBJECT_NAME_NOT_FOUND.
+machine OpenFileScenario54() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsNotFound, // Steam not found
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE, // FileTypeToOpen is DataFile
+            CreateDisposition.OVERWRITE, // CreateDisposition is FILE_OVERWRITE
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R9840, R2422
+//Has relationship to global variable gfileTypeToOpen
+//gfileTypeToOpen == FileType.DataFile
+//
+// R9840: [In Open of an Existing File,Pseudocode for these checks is as follows:
+//      Else if FileTypeToOpen is DataFile,
+//          Else (Steam not found)] 
+//              If this[Perform access checks as described in section 3.1.5.1.2.1] fails, 
+//                  the request MUST be failed with the same status.
+//
+// R2422: "[In Algorithm to Check Access to an Existing File]Pseudocode for these checks is as follows:
+//      If Open.File.FileType is DataFile and (File.FileAttributes.FILE_ATTRIBUTE_READONLY && (DesiredAccess.FILE_APPEND_DATA)), 
+//          then return STATUS_ACCESS_DENIED."
+machine OpenFileScenario55() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA, // DesiredAccess.FILE_APPEND_DATA
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE, // Open.File.FileType is DataFile
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.READONLY, // File.FileAttributes.FILE_ATTRIBUTE_READONLY
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R614
+//Has relationship to global variable gfileTypeToOpen
+//gfileTypeToOpen == FileType.DataFile
+//Note: File.Volume.IsReadOnly was set in Fsainitial
+//
+// R614: [In Open of an Existing File,Pseudocode for these checks is as follows:
+//      Else if FileTypeToOpen is DataFile,
+//          Else (Steam not found)]
+//              If File.Volume.IsReadOnly is TRUE, the operation MUST be failed with STATUS_MEDIA_WRITE_PROTECTED.
+machine OpenFileScenario56() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        GetIfOpenFileVolumeIsReadOnly; // If RootOpen.Volume.IsReadOnly
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_WRITE_DATA,
+            StreamFoundType.StreamIsNotFound, // Steam not found
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE, // FileTypeToOpen is DataFile
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.READONLY,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R623
+//Has relationship to global variable gSecurityContext, it was set in GetSystemConfig
+//It has relation to global variable gCreateAction: gCreateAction == CreateAction.OVERWRITTEN
+//
+// R623: "[In Open of an Existing File,Pseudocode for these checks is as follows:]
+//      If the object store implements encryption:
+//      If (CreateAction is FILE_OVERWRITTEN) 
+//          and (Stream.Name is empty) 
+//          and (DesiredAttributes.FILE_ATTRIBUTE_ENCRYPTED is TRUE) 
+//          and (File.FileAttributes.FILE_ATTRIBUTE_ENCRYPTED is FALSE), 
+//          then:
+//              If File.OpenList is non-empty, then 
+//                  the operation MUST be failed with STATUS_SHARING_VIOLATION."
+machine OpenFileScenario57() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.StreamNameNull,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OVERWRITE, // CreateAction is FILE_OVERWRITTEN
+            StreamTypeNameToOPen.NULL, // Stream.Name is empty
+            FileAttribute.NORMAL, // File.FileAttributes.FILE_ATTRIBUTE_ENCRYPTED is FALSE
+            FileAttribute.ENCRYPTED); // DesiredAttributes.FILE_ATTRIBUTE_ENCRYPTED is TRUE
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R2417
+//Has relationship to global variable gSecurityContext, it was set in GetSystemConfig
+//It has relation to global variable gCreateAction: gCreateAction == CreateAction.SUPERSEDED
+//
+// R2417: "[In Open of an Existing File,Pseudocode for these checks is as follows:]
+//      If the object store implements encryption:
+//      If (CreateAction is FILE_SUPERSEDED) 
+//          and (Stream.Name is empty) 
+//          and (DesiredAttributes.FILE_ATTRIBUTE_ENCRYPTED is TRUE) 
+//          and (File.FileAttributes.FILE_ATTRIBUTE_ENCRYPTED is FALSE), 
+//          then:
+//              If File.OpenList is non-empty, then 
+//                  the operation MUST be failed with STATUS_SHARING_VIOLATION.
+machine OpenFileScenario58() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.FileNameNull,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.SUPERSEDE, // CreateAction is FILE_SUPERSEDED
+            StreamTypeNameToOPen.NULL, // Stream.Name is empty
+            FileAttribute.NORMAL, // File.FileAttributes.FILE_ATTRIBUTE_ENCRYPTED is FALSE
+            FileAttribute.ENCRYPTED); // DesiredAttributes.FILE_ATTRIBUTE_ENCRYPTED is TRUE
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R414
+//Has relation to global variable gfileTypeToOpen
+//
+// R414: "[In Application Requests an Open of a File , Pseudocode for the operation is as follows:
+//      Phase 7 -- Type of file to open:]
+//      If FileTypeToOpen is DirectoryFile and Open.File is not NULL and Open.File.FileType is not DirectoryFile:
+//          If CreateDisposition == FILE_CREATE then 
+//              the operation MUST be failed with STATUS_OBJECT_NAME_COLLISION.
+machine OpenFileScenario59() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.OpenFileNotNull,
+            CreateOptions.NON_DIRECTORY_FILE, // Open.File.FileType is not DirectoryFile
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.DIRECTORY_FILE, // FileTypeToOpen is DirectoryFile
+            CreateDisposition.CREATE, // CreateDisposition == FILE_CREATE
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage
+}
+
+//To verify R2396
+//Has relation to global variable gfileTypeToOpen
+//
+// R2396: "[In Application Requests an Open of a File , 
+//      Phase 7 -- Type of file to open:]
+//      If FileTypeToOpen is DirectoryFile and Open.File is not NULL and Open.File.FileType is not DirectoryFile:
+//      else[If CreateDisposition != FILE_CREATE] the operation MUST be failed with STATUS_NOT_A_DIRECTORY."
+machine OpenFileScenario60() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.OpenFileNotNull,
+            CreateOptions.NON_DIRECTORY_FILE, // Open.File.FileType is not DirectoryFile
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.DIRECTORY_FILE, // FileTypeToOpen is DirectoryFile
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R631, R630
+// R631: [In Open of an Existing File,Pseudocode for these checks is as follows:]The object store MUST return :CreateAction set to FILE_OPENED.
+// R630: [In Open of an Existing File,Pseudocode for these checks is as follows:]The object store MUST return:Status set to STATUS_SUCCESS.
+machine OpenFileScenario61() : OpenFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        OpenExistingFile(
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.Normal,
+            CreateOptions.NON_DIRECTORY_FILE,
+            ShareAccess.FILE_SHARE_READ,
+            FileAccess.FILE_READ_DATA,
+            CreateOptions.NON_DIRECTORY_FILE,
+            CreateDisposition.OPEN_IF,
+            StreamTypeNameToOPen.NULL,
+            FileAttribute.NORMAL,
+            FileAttribute.NORMAL);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+// Scenario of [MS-FSA] 2.1.5.1.2   Open of an Existing File
+machine OpenFileScenario_All() : OpenFileConfig
+{
+    OpenFileScenario01 | OpenFileScenario02 | OpenFileScenario03 | OpenFileScenario04| OpenFileScenario05 |
+    OpenFileScenario06 | OpenFileScenario07 | OpenFileScenario08 | OpenFileScenario09| OpenFileScenario10 |
+    OpenFileScenario11 | OpenFileScenario12 | OpenFileScenario13 | OpenFileScenario14| OpenFileScenario15 |
+    OpenFileScenario16 | OpenFileScenario17 | OpenFileScenario18 | OpenFileScenario19| OpenFileScenario20 |
+    OpenFileScenario21 | OpenFileScenario22 | OpenFileScenario23 | OpenFileScenario24| OpenFileScenario25 |
+    OpenFileScenario26 | OpenFileScenario27 | OpenFileScenario28 | OpenFileScenario29| OpenFileScenario30 |
+    OpenFileScenario31 | OpenFileScenario32 | OpenFileScenario33 | OpenFileScenario34| OpenFileScenario35 |
+    OpenFileScenario36 | OpenFileScenario37 | OpenFileScenario38 | OpenFileScenario39| OpenFileScenario40 |
+    OpenFileScenario41 | OpenFileScenario42 | OpenFileScenario43 | OpenFileScenario44| OpenFileScenario45 |
+    OpenFileScenario46 | OpenFileScenario47 | OpenFileScenario48 | OpenFileScenario49| OpenFileScenario50 |
+    OpenFileScenario51 | OpenFileScenario52 | OpenFileScenario53 | OpenFileScenario54| OpenFileScenario55 |
+    OpenFileScenario56 | OpenFileScenario57 | OpenFileScenario58 | OpenFileScenario59| OpenFileScenario60 |
+    OpenFileScenario61
+}
+
+// Test case of [MS-FSA] 2.1.5.1.2   Open of an Existing File 
+// The exploration time for this machine is about 10 seconds
+machine OpenFileTestCase() : OpenFileConfig where TestEnabled = true
+{
+    construct requirement coverage where strategy = "selective"
+    for (
+        construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true for 
+        OpenFileScenario_All
+    )
+}

@@ -48,8 +48,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
     /// please refer: http://msdn.microsoft.com/en-us/library/aa375549(v=VS.85).aspx
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32"),
-    SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue"),
-    CLSCompliant(false)]
+    SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     public enum AlgId : uint
     {
         /// <summary>

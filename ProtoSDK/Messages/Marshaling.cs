@@ -3,15 +3,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-
-using System.IO;
+using System.Globalization;
 using IOP = System.Runtime.InteropServices;
+using System.IO;
 using System.Reflection;
+using System.Text;
 
 using Microsoft.Protocols.TestTools.StackSdk.Messages;
 using Microsoft.Protocols.TestTools.StackSdk.Messages.Runtime.Marshaling;
-using System.Globalization;
+using Microsoft.Protocols.TestTools.StackSdk.Asn1;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling
 {
@@ -612,6 +612,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling
         Dictionary<string, Type> bindingTypes =
             new Dictionary<string, Type>();
 
+        Dictionary<EncodingRule, ITypeMarshaler> asn1Marshalers =
+            new Dictionary<EncodingRule, ITypeMarshaler>();
+
         #region Marshaler registration
 
         /// <summary>
@@ -704,6 +707,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling
         public void RegisterBitMarshaler(ITypeMarshaler typeMarshaler)
         {
             bitMarshaler = typeMarshaler;
+            ClearCache();
+        }
+
+        /// <summary>
+        /// Registers an ASN1 marshaler
+        /// </summary>
+        /// <param name="rule">The encoding rule</param>
+        /// <param name="typeMarshaler">The type marshaler</param>
+        public void RegisterAsn1Marshaler(EncodingRule rule, ITypeMarshaler typeMarshaler)
+        {
+            asn1Marshalers[rule] = typeMarshaler;
             ClearCache();
         }
 
@@ -839,6 +853,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling
                 return msr;
             }
 
+            // try [Asn1BER], [Asn1DER] and [Asn1PER] Asn.1 marshalers
+            if (TryGetAsn1Marshaler(marshaler, descriptor, out msr))
+            {
+                return msr;
+            }
+
             // try bit marshaler
             if (descriptor.Attributes.IsDefined(typeof(BitAttribute), false))
             {
@@ -969,6 +989,33 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling
             throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "cannot find marshaler for type '{0}'", descriptor.Type));
         }
 
+        private bool TryGetAsn1Marshaler(Marshaler marshaler,
+                                MarshalingDescriptor descriptor,
+                                out ITypeMarshaler typeMarshaler)
+        {
+            typeMarshaler = null;
+            EncodingRule rule;
+            if (MarshalingDescriptor.TryGetAttribute<EncodingRule>(descriptor.Attributes, typeof(Asn1Attribute), "rule", out rule)
+                || MarshalingDescriptor.TryGetAttribute<EncodingRule>(descriptor.Type, typeof(Asn1Attribute), "rule", out rule))
+            {
+                if (asn1Marshalers[rule] != null)
+                {
+                    typeMarshaler = asn1Marshalers[rule];
+                }
+                else
+                {
+                    marshaler.TestAssumeFail(
+                            descriptor,
+                            "current marshaling configuration does not support marshaling asn.1 type with encoding rule '{0}'",
+                            rule.ToString());
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
         #endregion
 
         public int Alignment
@@ -1078,6 +1125,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling
             RegisterArrayMarshalerInline(new GenericArrayMarshalerInline());
 
             RegisterBitMarshaler(new BitMarshaler());
+
+            RegisterAsn1Marshaler(EncodingRule.Ber, new Asn1BerMarshaler());
+            RegisterAsn1Marshaler(EncodingRule.Der, new Asn1DerMarshaler());
+            RegisterAsn1Marshaler(EncodingRule.Per, new Asn1PerMarshaler());
 
             Alignment = IntPtr.Size;
             IntPtrSize = IntPtr.Size;
@@ -3296,4 +3347,360 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling
 
     #endregion
 
+    #region Asn.1 Marshaler
+
+    /// <summary>
+    /// A stream that provides a wrapper for Marshaler so that Asn.1 decode buffer can get bytes from Marshaler.
+    /// </summary>
+    internal class Asn1BufferedStream : Stream
+    {
+        private Marshaler marshaler;
+        private List<byte> bytesBuffer = new List<byte>();
+        private long position;
+
+        public Asn1BufferedStream(Marshaler marshaler)
+        {
+            this.marshaler = marshaler;
+        }
+        public override bool CanRead
+        {
+            get { return true; }
+        }
+
+        public override bool CanSeek
+        {
+            get { return true; }
+        }
+
+        public override bool CanWrite
+        {
+            get { return false; }
+        }
+
+        public override void Flush()
+        {
+        }
+
+        public override long Length
+        {
+            get
+            {
+                return bytesBuffer.Count;
+            }
+        }
+
+        public override long Position
+        {
+            get
+            {
+                return position;
+            }
+            set
+            {
+                position = value;
+            }
+        }
+
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            if (buffer == null)
+            {
+                throw new ArgumentNullException("buffer");
+            }
+
+            if (offset < 0)
+            {
+                throw new ArgumentOutOfRangeException("offset", "'offset' must be positive");
+            }
+
+            if (count < 0)
+            {
+                throw new ArgumentOutOfRangeException("count", "'count' must be positive");
+            }
+
+            if ((buffer.Length - offset) < count)
+            {
+                throw new ArgumentException("The length of the buffer is not large enough to hold the incoming data");
+            }
+
+            // Read bytes from marshaler if the expected bytes are not in the buffer.
+            int size = (int)position + count;
+            AppendBytes(size - bytesBuffer.Count);
+
+            for (int i = 0; i < count; i++)
+            {
+                buffer[offset + i] = bytesBuffer[(int)position + i];
+            }
+            position += count;
+
+            return count;
+        }
+
+        public override long Seek(long offset, SeekOrigin origin)
+        {
+            switch (origin)
+            {
+                case SeekOrigin.Begin:
+                    if (offset < 0L)
+                    {
+                        throw new IOException("'offset' must not be negative when SeekOrigin is SeekOrigin.Begin");
+                    }
+                    AppendBytes(offset - Length);
+                    position = offset;
+                    break;
+
+                case SeekOrigin.Current:
+                    if (offset + position < 0)
+                    {
+                        throw new IOException("expected position is out of range");
+                    }
+                    long num = position + offset - Length;
+                    AppendBytes(num);
+                    position += (int)offset;
+                    break;
+
+                case SeekOrigin.End:
+                    long len = Length;
+                    if (Length + offset < 0)
+                    {
+                        throw new IOException("expected position is out of range");
+                    }
+                    AppendBytes(offset);
+                    position = len + offset;
+                    break;
+
+                default:
+                    throw new ArgumentException("seek origin is invalid");
+            }
+            return position;
+
+        }
+
+        public override void SetLength(long value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Write(byte[] buffer, int offset, int count)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected void AppendBytes(long num)
+        {
+            for (long i = 0; i < num; i++)
+            {
+                byte b = marshaler.ReadByte();
+                bytesBuffer.Add(b);
+            }
+        }
+    }
+
+    #region BER marshaler
+    /// <summary>
+    /// A marshaler used to marshal Asn.1 type by BER.
+    /// </summary>
+    internal class Asn1BerMarshaler : ITypeMarshaler
+    {
+        public int GetSize(Marshaler marshaler, MarshalingDescriptor descriptor, object value)
+        {
+            if (marshaler == null)
+            {
+                throw new ArgumentNullException("marshaler");
+            }
+
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+
+            Asn1Object asnValue = value as Asn1Object;
+            if (asnValue == null)
+            {
+                throw new ArgumentException("The type of Asn.1 value must be derived from 'Asn1Object'");
+            }
+
+            Asn1BerEncodingBuffer encodeBuffer = CreateEncodeBuffer();
+            asnValue.BerEncode(encodeBuffer, true);
+
+            return encodeBuffer.Data.Length;
+        }
+
+        public int GetAlignment(Marshaler marshaler, MarshalingDescriptor descriptor)
+        {
+            return 1;
+        }
+
+        public Type GetNativeType(Marshaler marshaler, MarshalingDescriptor descriptor)
+        {
+            return null;
+        }
+
+        public void Marshal(Marshaler marshaler, MarshalingDescriptor descriptor, object value)
+        {
+            if (marshaler == null)
+            {
+                throw new ArgumentNullException("marshaler");
+            }
+
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+
+            Asn1Object asnValue = value as Asn1Object;
+            if (asnValue == null)
+            {
+                throw new ArgumentException("The type of Asn.1 value must be derived from 'Asn1Type'");
+            }
+
+            Asn1BerEncodingBuffer encodeBuffer = CreateEncodeBuffer();
+            asnValue.BerEncode(encodeBuffer, true);
+
+            foreach (byte b in encodeBuffer.Data)
+            {
+                marshaler.WriteByte(b);
+            }
+        }
+
+        public object Unmarshal(Marshaler marshaler, MarshalingDescriptor descriptor)
+        {
+            if (marshaler == null)
+            {
+                throw new ArgumentNullException("marshaler");
+            }
+
+            Asn1Object value = (Asn1Object)Activator.CreateInstance(descriptor.Type);
+            Asn1BufferedStream stream = new Asn1BufferedStream(marshaler);
+            byte[] bytes = new byte[stream.Length];
+            stream.Read(bytes, 0, (int)stream.Length);
+            Asn1DecodingBuffer decodeBuffer = CreateDecodeBuffer(bytes);
+            value.BerDecode(decodeBuffer);
+
+            return value;
+        }
+
+        protected virtual Asn1BerEncodingBuffer CreateEncodeBuffer()
+        {
+            return new Asn1BerEncodingBuffer();
+        }
+
+        protected virtual Asn1DecodingBuffer CreateDecodeBuffer(byte[] bytes)
+        {
+            if (bytes == null)
+            {
+                throw new ArgumentNullException("bytes");
+            }
+
+            return new Asn1DecodingBuffer(bytes);
+        }
+    }
+    #endregion
+
+    #region DER marshaler
+    /// <summary>
+    /// A marshaler used to marshal Asn.1 type by DER.
+    /// </summary>
+    internal class Asn1DerMarshaler : Asn1BerMarshaler
+    {
+        //DER is the same as BER 
+    }
+    #endregion
+
+    #region PER marshaler
+    /// <summary>
+    /// A marshaler used to marshal Asn.1 type by PER.
+    /// </summary>
+    internal class Asn1PerMarshaler : ITypeMarshaler
+    {
+        public int GetSize(Marshaler marshaler, MarshalingDescriptor descriptor, object value)
+        {
+            if (marshaler == null)
+            {
+                throw new ArgumentNullException("marshaler");
+            }
+
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+
+            Asn1Object asnValue = value as Asn1Object;
+            if (asnValue == null)
+            {
+                throw new ArgumentException("The type of Asn.1 value must be derived from 'Asn1Type'");
+            }
+
+            Asn1PerEncodingBuffer encodeBuffer = new Asn1PerEncodingBuffer(true);
+            asnValue.PerEncode(encodeBuffer);
+
+            return encodeBuffer.ByteArrayData.Length;
+        }
+
+        public int GetAlignment(Marshaler marshaler, MarshalingDescriptor descriptor)
+        {
+            return 1;
+        }
+
+        public Type GetNativeType(Marshaler marshaler, MarshalingDescriptor descriptor)
+        {
+            return null;
+        }
+
+        public void Marshal(Marshaler marshaler, MarshalingDescriptor descriptor, object value)
+        {
+            if (marshaler == null)
+            {
+                throw new ArgumentNullException("marshaler");
+            }
+
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+
+            Asn1Object asnValue = value as Asn1Object;
+            if (asnValue == null)
+            {
+                throw new ArgumentException("The type of Asn.1 value must be derived from 'Asn1Type'");
+            }
+
+            Asn1PerEncodingBuffer encodeBuffer = new Asn1PerEncodingBuffer(IsAligned(descriptor));
+            asnValue.PerEncode(encodeBuffer);
+
+            foreach (byte b in encodeBuffer.ByteArrayData)
+            {
+                marshaler.WriteByte(b);
+            }
+        }
+
+        public object Unmarshal(Marshaler marshaler, MarshalingDescriptor descriptor)
+        {
+            Asn1Object value = (Asn1Object)Activator.CreateInstance(descriptor.Type);
+            Asn1BufferedStream stream = new Asn1BufferedStream(marshaler);
+            byte[] bytes = new byte[stream.Length];
+            stream.Read(bytes, 0, (int)stream.Length);
+            Asn1DecodingBuffer decodeBuffer = new Asn1DecodingBuffer(bytes);
+            value.PerDecode(decodeBuffer, IsAligned(descriptor));
+            return value;
+        }
+
+        protected static bool IsAligned(MarshalingDescriptor descriptor)
+        {
+            bool isAligned;
+
+            if (MarshalingDescriptor.TryGetAttribute<bool>(descriptor.Attributes, typeof(AlignedAttribute), "aligned", out isAligned)
+                || MarshalingDescriptor.TryGetAttribute<bool>(descriptor.Type, typeof(AlignedAttribute), "aligned", out isAligned))
+            {
+                return isAligned;
+            }
+            else
+            {
+                return true;
+            }
+        }
+    }
+    #endregion
+
+    #endregion
 }

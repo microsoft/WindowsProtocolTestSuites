@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FE3B845F-B07F-483A-986E-91FE7F39460A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite</RootNamespace>
+    <AssemblyName>MS-SMB2_ServerTestSuite</AssemblyName>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.Protocols.TestTools">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.Protocols.TestTools.VSTS">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+    </Reference>
+    <Reference Include="Microsoft.Xrt.Runtime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Claim\Claim.csproj">
+      <Project>{0742b083-6193-4c12-9405-e0f7ba88c635}</Project>
+      <Name>Claim</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Common\Common.csproj">
+      <Project>{FE653643-6342-4300-871E-683C7BA31494}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\CryptoLib\CryptoLib.csproj">
+      <Project>{BF6AFAF0-7592-467F-AD5C-18429D854057}</Project>
+      <Name>CryptoLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\FileAccessService\FileAccessService.csproj">
+      <Project>{AB191B32-B12D-42CB-976D-CEA2C5BAD8BE}</Project>
+      <Name>FileAccessService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-DFSC\Dfsc.csproj">
+      <Project>{FFB198E5-2B91-48D9-97AF-27114F8961DD}</Project>
+      <Name>Dfsc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-FSRVP\Fsrvp.csproj">
+      <Project>{15162940-F895-48A8-A0F2-49E3A65B632F}</Project>
+      <Name>Fsrvp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-NLMP\Nlmp.csproj">
+      <Project>{5E53E71E-52D1-4BF0-99C0-608437EC446C}</Project>
+      <Name>Nlmp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-PAC\Pac.csproj">
+      <Project>{aefaf10d-d1bf-44c4-bd9f-5cff2afa432f}</Project>
+      <Name>Pac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RPCE\Rpce.csproj">
+      <Project>{A5814E1E-D79C-49A9-A8EA-BA8ED6E0EB39}</Project>
+      <Name>Rpce</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj">
+      <Project>{C7F08825-D3C9-4DDD-9BA3-06733B1ABE36}</Project>
+      <Name>Smb2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMB\Smb.csproj">
+      <Project>{C3C96860-5D29-4797-A311-CC568CC8B699}</Project>
+      <Name>Smb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SWN\Swn.csproj">
+      <Project>{5BE7E49E-5CB5-4115-98B1-E7E8B10CFCCB}</Project>
+      <Name>Swn</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Sspi\Sspi.csproj">
+      <Project>{D0CB354B-2CD3-49C1-8ECA-2F6EBADBCCEE}</Project>
+      <Name>Sspi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\Adapter\CommonAdapter.csproj">
+      <Project>{3FD566BA-E398-461E-B1B6-464B117ED422}</Project>
+      <Name>CommonAdapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\TestSuite\CommonTestSuite.csproj">
+      <Project>{CF70C975-EFEA-4B87-B278-1F0B15995F8E}</Project>
+      <Name>CommonTestSuite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Adapter\MS-SMB2_ServerAdapter.csproj">
+      <Project>{E7E99C95-1EE5-4E61-BC27-B4D69A31C5BC}</Project>
+      <Name>MS-SMB2_ServerAdapter</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AppInstanceID\AppInstanceIdBasic.cs" />
+    <Compile Include="AppInstanceID\AppInstanceIdExtendedTest.cs" />
+    <Compile Include="AppInstanceID\AppInstanceIdWithEncryption.cs" />
+    <Compile Include="AppInstanceID\AppInstanceIdWithLeasing.cs" />
+    <Compile Include="AppInstanceID\AppInstanceIdWithLock.cs" />
+    <Compile Include="AppInstanceID\AppInstanceVersion.cs" />
+    <Compile Include="Basic\MultiCredit.cs" />
+    <Compile Include="Basic\SMB2Basic.cs" />
+    <Compile Include="Compound\Compound.cs" />
+    <Compile Include="CreateClose\CreateClose.cs" />
+    <Compile Include="DurableHandle\SMB2DurableHandleTestBase.cs" />
+    <Compile Include="Negotiate\Negotiation.cs" />
+    <Compile Include="DurableHandle\DurableHandle.cs" />
+    <Compile Include="DurableHandle\DurableHandleV2.cs" />
+    <Compile Include="Encryption\Encryption.cs" />
+    <Compile Include="IOCTL\CopyOffload.cs" />
+    <Compile Include="IOCTL\FileLevelTrim.cs" />
+    <Compile Include="IOCTL\SetGetIntegrityInformation.cs" />
+    <Compile Include="IOCTL\ValidateNegotiateInfo.cs" />
+    <Compile Include="Leasing\FileLeasing.cs" />
+    <Compile Include="Leasing\DirectoryLeasing.cs" />
+    <Compile Include="Leasing\DirectoryLeasingExtendedTest.cs" />
+    <Compile Include="Leasing\SMB2LeasingTestBase.cs" />
+    <Compile Include="MultipleChannel\MultipleChannelBasic.cs" />
+    <Compile Include="MultipleChannel\MultipleChannelExtendedTest.cs" />
+    <Compile Include="MultipleChannel\MultipleChannelWithEncryption.cs" />
+    <Compile Include="MultipleChannel\MultipleChannelWithLeasing.cs" />
+    <Compile Include="MultipleChannel\MultipleChannelWithLock.cs" />
+    <Compile Include="OpLock\OpLock.cs" />
+    <Compile Include="Replay\Replay.cs" />
+    <Compile Include="ResilientHandle\ResilientHandle.cs" />
+    <Compile Include="ResilientHandle\ResilientOpenScavengerTimer.cs" />
+    <Compile Include="ResilientHandle\ResilientWithPersistentHandle.cs" />
+    <Compile Include="SessionMgmt\SessionMgmt.cs" />
+    <Compile Include="SMB2CreateContextResponseChecker.cs" />
+    <Compile Include="TreeMgmt\TreeMgmt.cs" />
+    <Compile Include="SMB2TestBase.cs" />
+    <Compile Include="Signing\Signing.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MS-SMB2_ServerTestSuite.deployment.ptfconfig" />
+    <Content Include="MS-SMB2_ServerTestSuite.ptfconfig" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\" />
+  </Target>
+</Project>

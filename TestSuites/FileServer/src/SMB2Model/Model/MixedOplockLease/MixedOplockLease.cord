@@ -1,0 +1,51 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.MixedOplockLease;
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.MixedOplockLease;
+
+// Total exploration time: less than 1 minute
+config MixedOplockLeaseBaseConfig : BaseConfig
+{
+    action all IMixedOplockLeaseAdapter;
+
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb21), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.MixedOplockLease)";
+}
+
+// The first client requests Oplock
+// The second client requests Lease.
+// Verify if there's an oplock break and if the granted LeaseState is correct
+machine OplockLeaseScenario() : MixedOplockLeaseBaseConfig
+{
+    (
+        Preparation;
+        RequestOplock;
+        RequestLease;
+        Verification;
+    )
+    || (construct model program from MixedOplockLeaseBaseConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.MixedOplockLease")
+}
+
+machine OplockLeaseTestCase() : MixedOplockLeaseBaseConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for OplockLeaseScenario()
+}
+
+// The first client requests Lease
+// The second client requests Oplock.
+// Verify if there's a lease break and if the granted OplockLevel is correct
+machine LeaseOplockScenario() : MixedOplockLeaseBaseConfig
+{
+    (
+        Preparation;
+        RequestLease;
+        RequestOplock;
+        Verification;
+    )
+    || (construct model program from MixedOplockLeaseBaseConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.MixedOplockLease")
+}
+
+machine LeaseOplockTestCase() : MixedOplockLeaseBaseConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for LeaseOplockScenario()
+}

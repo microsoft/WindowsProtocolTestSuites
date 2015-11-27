@@ -1,0 +1,107 @@
+﻿<Page x:Class="ExecutionConsoleUI.DetectingPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      Width="Auto" Height="Auto"
+      WindowWidth="640" WindowHeight="480" MinWidth="400"
+	Title="DetectingPage">
+
+    <Page.Resources>
+        <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding DetectingStatus}" Value="Finished">
+                    <Setter Property="Foreground" Value="Green"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding DetectingStatus}" Value="Failed">
+                    <Setter Property="Foreground" Value="Yellow"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding DetectingStatus}" Value="Error">
+                    <Setter Property="Foreground" Value="Red"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding DetectingStatus}" Value="Pending">
+                    <Setter Property="Foreground" Value="#C0C0C0"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding DetectingStatus}" Value="Detecting">
+                    <Setter Property="Foreground" Value="Blue"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        
+        <DataTemplate x:Key="DetectingStateTemplate">
+            <WrapPanel Height="20">
+                <!--TODO: Autosize Detecting Content Size with The Max length of the items-->
+                <TextBlock Text="{Binding DetectingContent}" Width="200" TextAlignment="Left" HorizontalAlignment="Stretch" FontSize="9 pt" FontFamily="Segoe UI"></TextBlock>
+                <ContentControl Name="ContentCtrl" Content="{Binding}" Width="100">
+                </ContentControl>
+                
+            </WrapPanel>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding DetectingStatus}" Value="Finished">
+                    <Setter TargetName="ContentCtrl" Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding DetectingStatus}" Style="{StaticResource TextBlockStyle}" FontFamily="Segoe UI" FontSize="12" TextAlignment="Center"></TextBlock>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding DetectingStatus}" Value="Detecting">
+                    <Setter TargetName="ContentCtrl" Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <Image Source="images/Spinner.png" RenderTransformOrigin="0.5, 0.5" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Height="Auto" Width="Auto">
+                                    <Image.RenderTransform>
+                                        <RotateTransform x:Name="AnimatedRotateTransform" Angle="0" />
+                                    </Image.RenderTransform>
+                                    <Image.Triggers>
+                                        <EventTrigger RoutedEvent="Image.Loaded">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="AnimatedRotateTransform" 
+                                                 Storyboard.TargetProperty="Angle" 
+                                                 From="0"
+                                                 By="10"        
+                                                 To="360" 
+                                                 Duration="0:0:1" 
+                                                 RepeatBehavior="Forever"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Image.Triggers>
+                                </Image>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding DetectingStatus}" Value="Pending">
+                    <Setter TargetName="ContentCtrl" Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding DetectingStatus}" Style="{StaticResource TextBlockStyle}" FontFamily="Segoe UI" FontSize="12" TextAlignment="Center"></TextBlock>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+        
+        <Storyboard x:Key="RotateImage">
+            <DoubleAnimation Storyboard.TargetName="AnimatedRotateTransform" 
+                                                 Storyboard.TargetProperty="Angle" 
+                                                 From="0"
+                                                 By="10"        
+                                                 To="360" 
+                                                 Duration="0:0:1" 
+                                                 RepeatBehavior="Forever"/>
+        </Storyboard>
+    </Page.Resources>
+    
+    <Grid>
+        <Grid Name="MainLayout">
+            <TextBlock Name="TitleTextBlock" Text="Running Auto-Detection..." Height="23" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Segoe UI" FontSize="16" Foreground="#003399"/>
+                <ItemsControl x:Name="LogListBox" Margin="0,30,0,0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemTemplate="{StaticResource DetectingStateTemplate}"/>
+        </Grid>
+    </Grid>
+</Page>

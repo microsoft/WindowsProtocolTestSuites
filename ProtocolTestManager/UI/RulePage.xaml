@@ -1,0 +1,42 @@
+﻿<Page x:Class="Microsoft.Protocols.TestManager.UI.RulePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	x:Name="Page"
+	WindowTitle="Page"
+	FlowDirection="LeftToRight"
+	Width="Auto" Height="Auto" MinHeight="300" MinWidth="600"
+    Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
+	WindowWidth="640" WindowHeight="480" 
+	Title="RulePage">
+
+    <Page.Resources>
+        <DataTemplate x:Key="CaseListTemplate">
+            <TextBlock Text="{Binding Name}" AutomationProperties.Name="{Binding Name}" ToolTip="{Binding ToolTipOnUI}" Focusable="False"/>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid x:Name="LayoutRoot">
+        <ScrollViewer Name="scrollViewer"
+                      AutomationProperties.Name="Case selection rules" 
+                      Margin="0,21,0,0" Width="308" BorderThickness="1,1,1,1" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Disabled">
+        <ItemsControl x:Name="RuleList"  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                      HorizontalAlignment="Stretch" Margin="0,0,0,0"
+			          ItemsSource="{Binding RuleGroupList}" />
+        </ScrollViewer>
+        <TextBlock Text="Filter" FontFamily="Segoe UI" FontSize="9pt" FontWeight="Bold" Margin="0,0,0,0" VerticalAlignment="Top"/>
+        <TextBlock Text="Selected test cases" FontFamily="Segoe UI" FontSize="9pt" FontWeight="Bold" Height="17" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="313,0,0,0"/>
+        <TextBlock Text="0" Name="CaseNumberTextBlock" FontSize="9pt" Margin="424,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <ListBox x:Name="CaseList" Height="Auto" Margin="313,21,0,0" VerticalAlignment="Stretch" Background="{x:Null}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" BorderThickness="1,1,1,1"
+                 AutomationProperties.Name="Selected test cases"
+			    ItemTemplate="{StaticResource CaseListTemplate}"
+			    ItemsSource="{Binding SelectedTestCaseList}" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="AutomationProperties.Name" Value="{Binding Name}"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
+    </Grid>
+</Page>

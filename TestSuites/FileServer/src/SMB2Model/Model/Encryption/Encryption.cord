@@ -1,0 +1,42 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Encryption;
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter;
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Encryption;
+
+config EncryptionBaseConfig : BaseConfig 
+{
+    action all IEncryptionAdapter;
+
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb30), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Encryption)";
+}
+
+config EncryptionConfig : EncryptionBaseConfig
+{
+}
+
+machine EncryptionScenario() : EncryptionConfig 
+{
+    (
+        ReadConfig;
+        SetupConnection;
+        (
+             SessionSetupRequest;
+             SessionSetupResponse;
+
+             TreeConnectRequest;
+             (TreeConnectResponse|ExpectDisconnect);
+
+             ( 
+                FileOperationVerifyEncryptionRequest;
+                (FileOperationVerifyEncryptionResponse|ExpectDisconnect);
+             )?;            
+        );
+    ) || (construct model program from EncryptionConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Encryption")
+}
+
+machine EncryptionTestCase() : EncryptionConfig where TestEnabled = true
+{
+    construct test cases where Strategy = "longtests", AllowUndeterminedCoverage = true for EncryptionScenario()
+}

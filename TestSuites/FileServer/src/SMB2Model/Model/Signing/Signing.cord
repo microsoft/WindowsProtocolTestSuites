@@ -1,0 +1,44 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Signing;
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter;
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Signing;
+
+config SigningBaseConfig : BaseConfig 
+{
+    action all ISigningAdapter;
+
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb2002), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Signing)";
+}
+
+config SigningConfig : SigningBaseConfig
+{
+}
+
+machine SigningScenario() : SigningConfig 
+{
+    (
+        ReadConfig;
+        (
+            NegotiateRequest;
+            NegotiateResponse;
+
+            (
+                SessionSetupRequest;
+                SessionSetupResponse;
+
+                (
+                    TreeConnectRequest;
+                    TreeConnectResponse;
+                )?;
+            )?;            
+        );
+
+    ) || (construct model program from SigningConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Signing")
+}
+
+machine SigningTestCase() : SigningConfig where TestEnabled = true
+{
+    construct test cases where Strategy = "longtests", AllowUndeterminedCoverage = true for SigningScenario()
+}

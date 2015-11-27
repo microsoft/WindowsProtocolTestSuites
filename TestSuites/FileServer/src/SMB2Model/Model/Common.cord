@@ -1,0 +1,27 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
+using Microsoft.Modeling;
+using System.Collections.Generic;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+
+config BaseConfig
+{
+    switch StateBound = 12800;
+    switch StepBound = 12800;
+    switch PathDepthBound = 12800;
+
+    switch TestClassBase = "ptf";
+    
+    switch EnableExplorationCleanup = true;
+    switch ForExploration = true;
+    switch TestEnabled = false;
+    switch ExplorationErrorBound = none;
+
+    switch KeepOutputParametersUnexpanded = true;
+
+    switch GeneratedTestNamespace = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite";
+    switch GeneratedTestPath = "..\\TestSuite";
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)";
+}

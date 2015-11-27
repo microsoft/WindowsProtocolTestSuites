@@ -1,0 +1,1661 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.Protocols.TestManager.Kernel</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.AppConfig">
+            <summary>
+            This class represents test suite specific configurations for the PTM.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.AppConfig.HtmlResultFolderName">
+            <summary>
+            Html result root folder
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.AppConfig.HtmlLogFileFolder">
+            <summary>
+            The folder saving the html log files.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.AppConfig.HtmlLogStatusPassed">
+            <summary>
+            The "Passed" status used in txt file names.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.AppConfig.HtmlLogStatusFailed">
+            <summary>
+            The "Failed" status used in txt file names.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.AppConfig.HtmlLogStatusInconclusive">
+            <summary>
+            The "Inconclusive" status used in txt file names.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.AppConfig.ResultKeyword">
+            <summary>
+            Keyword used to search the test status in the html log file
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.AppConfig.IndexHtmlFileName">
+            <summary>
+            File name of the index html
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.AppConfig.TestSuiteAssembly">
+            <summary>
+            Test suite assemblies.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.AppConfig.TestListName">
+            <summary>
+            Name of test list.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.AppConfig.VSTestPath">
+            <summary>
+            The path of VSTest.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.AppConfig.VSTestArguments">
+            <summary>
+            The arguments of VSTest.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.AppConfig.TestSetting">
+            <summary>
+            The setting of test.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.AppConfig.RuleDefinitions">
+            <summary>
+            Test case selection rules
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.AppConfig.AdapterDefinitions">
+            <summary>
+            Adapter definitions node.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.AppConfig.PredefinedAdapters">
+            <summary>
+            A list of predefined adapters.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.AppConfig.LoadConfig(System.String,System.String,System.String,System.String)">
+            <summary>
+            Loads the configuration file
+            </summary>
+            <param name="testSuiteName">The name of the test suite.</param>
+            <param name="testSuiteVersion">The version of test suite</param>
+            <param name="testSuiteDir">The working directory for the test suite.</param>
+            <param name="installDir">The install directory of PTM.</param>
+            <returns>An instance of AppConfig class.</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.AppConfig.InitDefaultConfigurations">
+            <summary>
+            Copy the ptfconfig files to the AppData directory as the default value.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.AppConfig.GetAdapterMethods">
+            <summary>
+            Loads the help messages of the methods in the adapters from the test suite assemblies.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.AppConfig.TestSuiteName">
+            <summary>
+            The name of the test suite
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.AppConfig.TestSuiteVersion">
+            <summary>
+            The version of the test suite
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.AppConfig.TestSuiteDirectory">
+            <summary>
+            The installation directory of the test suite
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.AppConfig.PtmInstallDirectory">
+            <summary>
+            The installation directory of PTM
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.AppConfig.DocDirectory">
+            <summary>
+            The location of the doc directory
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.AppConfig.EtcDirectory">
+            <summary>
+            The location of the etc directory
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.AppConfig.AppDataDirectory">
+            <summary>
+            Path like C:\Users\administrator.CONTOSO\AppData\Roaming\Protocol Test Manager\MS-XXXX\1.0.1234.0
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.AppConfig.PtfConfigFiles">
+            <summary>
+            PTMConfig files in bin folder
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.AppConfig.DefaultPtfConfigFiles">
+            <summary>
+            The PTMConfig files used as the default values
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.AppConfig.PtfConfigFilesInSource">
+            <summary>
+            The PTMConfig files in source code
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.AppConfig.PropertyGroupOrder">
+            <summary>
+            The order of the properties on UI
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.AppConfig.UserGuide">
+            <summary>
+            Test suite user guide
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.AppConfig.DetectorAssemblyPath">
+            <summary>
+            The detector engine
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.AppConfig.TestCategory">
+            <summary>
+            The config file to define the additional categories
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.AppConfig.TestSuiteIntroduction">
+            <summary>
+            WelcomePage
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.AppConfigTestCategory">
+            <summary>
+            The class for TestCategories node of config.xml
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.AppConfigTestCategory.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.AppConfigTestCategory.TestCases">
+            <summary>
+            A list of test case.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.AppConfigTestCase">
+            <summary>
+            The class for TestCase node under TestCategories node of config.xml
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.AppConfigTestCase.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.AppConfigTestCase.Name">
+            <summary>
+            Test case name.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.AppConfigTestCase.Categories">
+            <summary>
+            A list of test category.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.DetectionStatus">
+            <summary>
+            This enum defines the status of Detection.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.DetectionOutcome">
+            <summary>
+            This class defines the outcome structure of detection.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.DetectionOutcome.Status">
+            <summary>
+            Status of detection.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.DetectionOutcome.Exception">
+            <summary>
+            Exception of detection.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.Detector">
+            <summary>
+            This class represents the engine for the auto-detection.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Detector.Load(System.String)">
+            <summary>
+            Loads the auto-detect plug-in from assembly file.
+            </summary>
+            <param name="detectorAssembly">File name</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Detector.GetPrerequisits">
+            <summary>
+            Gets the properties required for auto-detection.
+            </summary>
+            <returns>Prerequisites object.</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Detector.GetDetectSteps">
+            <summary>
+            Gets a list of the detection steps.
+            </summary>
+            <returns>A list fo the detection steps.</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Detector.BeginDetection(Microsoft.Protocols.TestManager.Kernel.DetectionCallback)">
+            <summary>
+            Begins the auto-detection.
+            </summary>
+            <param name="DetectionEvent">Callback function when the detection finished.</param>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.Detector.DetectLogCallback">
+            <summary>
+            Instance of DetectLog.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Detector.SetPrerequisits(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Sets the values of the properties required for auto-detection.
+            </summary>
+            <param name="properties">Name - value map.</param>
+            <returns>Returns true if provided values are enough, otherwise returns false.</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Detector.GetDetectionSummary">
+            <summary>
+            Gets an object represents the detection summary.
+            </summary>
+            <returns>An object</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Detector.GetRules">
+            <summary>
+            Gets the case selection rules suggested by the detector.
+            </summary>
+            <returns>A list of the rules</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Detector.GetHiddenProperties(System.Collections.Generic.List{Microsoft.Protocols.TestManager.Detector.CaseSelectRule})">
+            <summary>
+            Gets a list of properties to hide.
+            </summary>
+            <param name="rules">Test case selection rules</param>
+            <returns>A list of properties to hide.</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Detector.GetDetectedProperty">
+            <summary>
+            Gets the property values detected by the detector.
+            </summary>
+            <returns>Name - value / values map.</returns>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.Detector.DetectLog">
+            <summary>
+            Delegate of logging.
+            </summary>
+            <param name="message"></param>
+            <param name="style"></param>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.PrerequisitView">
+            <summary>
+            This class defines the view of prerequisit.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.PrerequisitProperty">
+            <summary>
+            This class defines the property structure of prerequisit.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.PrerequisitProperty.PropertyName">
+            <summary>
+            Name of property.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.PrerequisitProperty.PropertyType">
+            <summary>
+            Type of property, Text or Choice.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.ProfileInfo">
+            <summary>
+            The information of the test profile.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.ProfileInfo.WriteTo(System.IO.Stream)">
+            <summary>
+            Serializes the object to stream.
+            </summary>
+            <param name="stream">Stream</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.ProfileInfo.Readfrom(System.IO.Stream)">
+            <summary>
+            Reads profile info from a stream.
+            </summary>
+            <param name="stream">Stream</param>
+            <returns>An instance of the ProfileInfo</returns>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.ProfileInfo.TestSuiteName">
+            <summary>
+            The test suite name of the profile.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.ProfileInfo.Version">
+            <summary>
+            The Version of the profile.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.ProfileUtil.#ctor">
+            <summary>
+            The default constructor of ProfileUtil
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.ProfileUtil.LoadProfile(System.String)">
+            <summary>
+            Loads the profile from file.
+            </summary>
+            <param name="filename">The file name</param>
+            <returns>An instance of ProfileUtil</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.ProfileUtil.CreateProfile(System.String,System.String,System.String)">
+            <summary>
+            Creates a new PTM profile
+            </summary>
+            <param name="filename">The file name to save the profile</param>
+            <param name="testSuiteName">The test suite name</param>
+            <param name="version">The test suite version</param>
+            <returns>An instance of ProfileUtil</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.ProfileUtil.VerifyVersion(System.String,System.String)">
+            <summary>
+            Verifies the test suite name and version of the profile.
+            </summary>
+            <param name="testSuiteName">The name of the test suite</param>
+            <param name="version">The version of the test suite</param>
+            <returns>Returns true if the version and test suite name matches. If the package does not contains the version information returns false.</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.ProfileUtil.Close">
+            <summary>
+            Closes the ProfileUtil file.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.ProfileUtil.AddPtfCfg(System.String)">
+            <summary>
+            Adds a PTF Config file to the profile.
+            </summary>
+            <param name="filename">File name</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.ProfileUtil.SavePtfCfgTo(System.String)">
+            <summary>
+            Saves the PTFConfig files in the profile to the specified path.
+            </summary>
+            <param name="path">Path</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.ProfileUtil.Dispose">
+            <summary>
+            Closes the profile package.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.ProfileUtil.Info">
+            <summary>
+            The information about the profile.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.ProfileUtil.PlaylistStream">
+            <summary>
+            The Stream to read and save the play list in the profile.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.ProfileUtil.ProfileStream">
+            <summary>
+            The stream to read and save the test selection profile.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.InteractiveAdapterNode">
+            <summary>
+            This class defines the interactive adapter node.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.IAdapterConfig">
+            <summary>
+            An interface of node.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.InteractiveAdapterNode.CreateXmlNode(System.Xml.XmlDocument)">
+            <summary>
+            Creates XML node.
+            </summary>
+            <param name="doc">xml document</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.InteractiveAdapterNode.#ctor(System.String,System.String)">
+            <summary>
+            Constructor of InteractiveAdapterNode.
+            </summary>
+            <param name="name">The name of node</param>
+            <param name="displayName">the display name of node</param>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.InteractiveAdapterNode.DisplayName">
+            <summary>
+            The display name of this node.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.InteractiveAdapterNode.Name">
+            <summary>
+            The name of this node.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.PowerShellAdapterNode">
+            <summary>
+            This class defines the powershell adapter node.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.PowerShellAdapterNode.CreateXmlNode(System.Xml.XmlDocument)">
+            <summary>
+            Creates xml node.
+            </summary>
+            <param name="doc">xml document</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.PowerShellAdapterNode.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Constructor of PowerShellAdapterNode.
+            </summary>
+            <param name="name">The name of node</param>
+            <param name="displayName">The display name of node</param>
+            <param name="scriptdir">The script directory.</param>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.PowerShellAdapterNode.DisplayName">
+            <summary>
+            The display name of this node.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.PowerShellAdapterNode.Name">
+            <summary>
+            The name of this node.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.PowerShellAdapterNode.ScriptDir">
+            <summary>
+            The directory of powershell script.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.ManagedAdapterNode">
+            <summary>
+            This class defines the managed adapter node.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.ManagedAdapterNode.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Constructor of ManagedAdapterNode.
+            </summary>
+            <param name="name">The name of node</param>
+            <param name="displayName">The display name of node</param>
+            <param name="adapterType">The type of node</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.ManagedAdapterNode.CreateXmlNode(System.Xml.XmlDocument)">
+            <summary>
+            Creates xml node.
+            </summary>
+            <param name="doc">The xml document</param>
+            <returns></returns>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.ManagedAdapterNode.DisplayName">
+            <summary>
+            The display name of this node.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.ManagedAdapterNode.Name">
+            <summary>
+            The name of this node.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.ManagedAdapterNode.AdapterType">
+            <summary>
+            The adapter type of this node.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.ScriptAdapterNode">
+            <summary>
+            This class defines script adapter node.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.ScriptAdapterNode.CreateXmlNode(System.Xml.XmlDocument)">
+            <summary>
+            Creates xml Node.
+            </summary>
+            <param name="doc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.ScriptAdapterNode.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Constructor of ScriptAdapterNode.
+            </summary>
+            <param name="name"></param>
+            <param name="displayName"></param>
+            <param name="scriptdir"></param>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.ScriptAdapterNode.DisplayName">
+            <summary>
+            The display name of this node.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.ScriptAdapterNode.Name">
+            <summary>
+            The name of this node.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.ScriptAdapterNode.ScriptDir">
+            <summary>
+            The directory of script.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.AdapterType">
+            <summary>
+            Defines the adapter types.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.PtfAdapterView">
+            <summary>
+            Represents the configurations of an adapter.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.PtfAdapterView.#ctor">
+            <summary>
+            Constructor of PtfAdapterView.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.PtfAdapterView.Name">
+            <summary>
+            The name of this ptf adapter veiw.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.PtfAdapterView.FriendlyName">
+            <summary>
+            The friendly name of ptf adapter view.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.PtfAdapterView.Type">
+            <summary>
+            The adapter type.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.PtfAdapterView.AdapterConfig">
+            <summary>
+            The type of adapter configuration.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.AdapterMethod">
+            <summary>
+            Represents a method in an adapter.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.AdapterMethod.#ctor(System.Reflection.MethodInfo)">
+            <summary>
+            Constructor of AdapterMethod.
+            </summary>
+            <param name="method">The MethodInfo</param>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.AdapterMethod.Name">
+            <summary>
+            The name of this method.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.AdapterMethod.HelpMessage">
+            <summary>
+            The help message of this method.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.PtfConfig">
+            <summary>
+            PTFConfig file.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.PtfConfig.#ctor(System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String})">
+            <summary>
+            Constructor of PtfConfig
+            </summary>
+            <param name="activeConfigFile">A list of active configfile</param>
+            <param name="defaultConfigFile">A list of default configfile</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.PtfConfig.Save(System.String)">
+            <summary>
+            Save changes back to ptfconfig file in bin folder.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.PtfConfig.Merge(System.Collections.Generic.List{System.String},Microsoft.Protocols.TestManager.Kernel.PtfProperty)">
+            <summary>
+            Merges PTFConfig files 
+            </summary>
+            <param name="configFileNames">PTFConfig file names</param>
+            <param name="RootNode">PTF property tree</param>
+            <returns>Filename-property list dictionary</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.PtfConfig.MergePropertyAndGroup(Microsoft.Protocols.TestManager.Kernel.PtfProperty,System.Xml.XmlNode)">
+            <summary>
+            recurrsively create Config Node tree from ptfconfig file
+            </summary>
+            <param name="baseConfigNode"></param>
+            <param name="root"></param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.PtfConfig.AdjustDefaultGroup(Microsoft.Protocols.TestManager.Kernel.PtfProperty)">
+            <summary>
+            Set Propert under Properties node into DefaultGroup
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.PtfConfig.SetDefaultValues(Microsoft.Protocols.TestManager.Kernel.PtfProperty)">
+            <summary>
+            Set Environment config as default value
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.PtfConfig.SetPropertyValue(System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            Sets the property value.
+            </summary>
+            <param name="propertyName">The property name</param>
+            <param name="propertyValue">A list of property values</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.PtfConfig.GetPropertyNodeByName(System.String)">
+            <summary>
+            Gets the PtfProperty instance from a property name.
+            </summary>
+            <param name="propertyName">property name</param>
+            <returns>The PtfProperty</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.PtfConfig.CreatePtfPropertyView(System.Collections.Generic.List{System.String})">
+            <summary>
+            Creates PtfPropertyView
+            </summary>
+            <param name="hideProperties">Hide properties.</param>
+            <returns>An instance of PtfPropertyView</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.PtfConfig.ApplyAdapterConfig(Microsoft.Protocols.TestManager.Kernel.IAdapterConfig)">
+            <summary>
+            Applies the adapter config.
+            </summary>
+            <param name="adapter">the adapter config</param>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.PtfConfig.ConfigFileNames">
+            <summary>
+            The name of Configfile.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.PtfProperty">
+            <summary>
+            Represents a property in a PTFConfig file.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.PtfProperty.#ctor">
+            <summary>
+            Constructor of PtfProperty.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.PtfProperty.#ctor(System.Xml.XmlNode,System.Boolean)">
+            <summary>
+            Create Confignode from Property node in a ptfconfig file.
+            </summary>
+            <param name="xmlNode">The node of the property.</param>
+            <param name="isGroup">Whether the node is a group node.</param>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.PtfProperty.Type">
+            <summary>
+            Property type.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.PtfProperty.Name">
+            <summary>
+            Name of property.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.PtfProperty.Description">
+            <summary>
+            Description of property.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.PtfProperty.DefaultValue">
+            <summary>
+            The default value of property.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.PtfPropertyType">
+            <summary>
+            The type of the property value.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.PtfPropertyView">
+            <summary>
+            PTF properties to show on the UI.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.PtfPropertyView.#ctor(Microsoft.Protocols.TestManager.Kernel.PtfProperty,System.String)">
+            <summary>
+            Constructor of PtfPropertyView
+            </summary>
+            <param name="propertyNode">The property node which bind to the View</param>
+            <param name="parent">Parent path</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.PtfPropertyView.SortItems(System.Collections.Generic.Dictionary{System.String,System.Int32})">
+            <summary>
+            Sorts the items using the defined order.
+            </summary>
+            <param name="order">Order definition</param>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.PtfPropertyView.Name">
+            <summary>
+            The property name.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.PtfPropertyView.Value">
+            <summary>
+            The value of propertyNode.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.PtfPropertyView.DefaultValue">
+            <summary>
+            The default value of propertyNode.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.PtfPropertyView.Description">
+            <summary>
+            The description of propertyNode.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.PtfPropertyView.ToolTip">
+            <summary>
+            The tip information of propertyNode.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.PtfPropertyView.IsEmptyGroup">
+            <summary>
+            Specifies whether the node is an empty group.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.StringResource">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.AppendCategoryError">
+            <summary>
+              Looks up a localized string similar to Failed to append test category..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.ConfigFilename">
+            <summary>
+              Looks up a localized string similar to config.xml.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.ConfigFileNameNotSpecified">
+            <summary>
+              Looks up a localized string similar to The configFileNames must not be null..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.ConfigLoadError">
+             <summary>
+               Looks up a localized string similar to Failed to load the test suite configure file config.xml:
+            {0}.
+             </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.DefaultDescription">
+            <summary>
+              Looks up a localized string similar to This is a {0} test suite..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.DefaultGroupName">
+            <summary>
+              Looks up a localized string similar to Default Group.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.DefaultNamespace">
+            <summary>
+              Looks up a localized string similar to http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.DirectoryNotFound">
+            <summary>
+              Looks up a localized string similar to Directory {0} is not found..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.DuplicatePTFConfigNode">
+            <summary>
+              Looks up a localized string similar to Duplicated node with type = &quot;{0}&quot;, name = &quot;{1}&quot; found..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.EndpointRegex">
+            <summary>
+              Looks up a localized string similar to (Server)|(Client).
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.InvalidProfile">
+            <summary>
+              Looks up a localized string similar to It is not a valid PTM test profile..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.LoadAdapterError">
+             <summary>
+               Looks up a localized string similar to Failed to load adapters from the test suite assembly:
+            {0}.
+             </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.LoadAssemblyError">
+             <summary>
+               Looks up a localized string similar to Failed to load the test suite assembly:
+            {0}.
+             </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.LoadFilterError">
+             <summary>
+               Looks up a localized string similar to Failed to load the filter definitions from the config.xml:
+            {0}.
+             </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.LoadingAutoDetectorFailed">
+            <summary>
+              Looks up a localized string similar to Loading auto-detector assembly failed..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.LoadProfileError">
+            <summary>
+              Looks up a localized string similar to Error in loading profile: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.LoadPtfconfigError">
+             <summary>
+               Looks up a localized string similar to Failed to load the PTFConfig files:
+            {0}.
+             </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.ProfileNotMatchError">
+             <summary>
+               Looks up a localized string similar to The profile does not match the installed test suite.
+            The profile is for {0} {1}.
+            The test suite is {2} {3}..
+             </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.RegistryPathNotSpecified">
+            <summary>
+              Looks up a localized string similar to DefaultRegistryPath is not specified..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.TestSuiteFolder">
+            <summary>
+              Looks up a localized string similar to C:\MicrosoftProtocolTests\{0}\{1}-Endpoint\{2}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.VersionRegex">
+            <summary>
+              Looks up a localized string similar to \d\.\d\.\d\.\d.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.VSTestLocation">
+            <summary>
+              Looks up a localized string similar to ..\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.VSTestNotInstalled">
+            <summary>
+              Looks up a localized string similar to Cannot find the test engine vstest.console.exe..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.XsiNamespace">
+            <summary>
+              Looks up a localized string similar to http://www.w3.org/2001/XMLSchema-instance.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.Filter">
+            <summary>
+            This class defines the filter of test case.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Filter.#ctor(System.Collections.Generic.List{System.String},Microsoft.Protocols.TestManager.Kernel.RuleType)">
+            <summary>
+            Constructor of Filter.
+            </summary>
+            <param name="categories">A list of categories</param>
+            <param name="type">the rule</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Filter.FilterTestCase(System.Collections.Generic.List{System.String})">
+            <summary>
+            Filters test cases according to the rule.
+            </summary>
+            <param name="categories"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.Rule">
+            <summary>
+            This class defines the filter rule.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Rule.ChangeSelectStatus(Microsoft.Protocols.TestManager.Kernel.RuleSelectStatus)">
+            <summary>
+            To change the select status of this rule.
+            </summary>
+            <param name="status">The status to be changed to.</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Rule.Add(Microsoft.Protocols.TestManager.Kernel.Rule)">
+            <summary>
+            Method to add rule.
+            </summary>
+            <param name="rule"></param>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.Rule.Name">
+            <summary>
+            The name of this rule.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.Rule.Description">
+            <summary>
+            The description of this rule.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.Rule.CategoryList">
+            <summary>
+            A list of categories.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.Rule.Status">
+            <summary>
+            The status that this rule supported.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.Rule.SelectStatus">
+            <summary>
+            The select status of this rule.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.Rule.IsSelected">
+            <summary>
+            Indicates this rule was selected or not.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.RuleSupportStatus">
+            <summary>
+            Enumerates the supportStatus of a rule.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.RuleSelectStatus">
+            <summary>
+            Enumerates the selectStatus of a rule. 
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.RuleGroup">
+            <summary>
+            This class defines rule group.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.RuleGroup.Name">
+            <summary>
+            RuleGroup Name.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.TestCaseFilter.SaveProfile(System.IO.Stream)">
+            <summary>
+            Save the profile.
+            </summary>
+            <param name="stream">Profile stream</param>
+            <returns>Indicates this operations success or fail</returns>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.GroupByCategory">
+            <summary>
+            Test cases grouped by category.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.GroupByOutcome">
+            <summary>
+            Test cases grouped by execution outcome.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.HtmlResultChecker">
+            <summary>
+            It's used to check the html results by analyzing all the files under the html result folder
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.HtmlResultChecker.workingDir">
+            <summary>
+            The directory where to execute vstest.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.HtmlResultChecker.watcher">
+            <summary>
+            Notify the file system changes.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.HtmlResultChecker.indexHtmlFilePath">
+            <summary>
+            Path of index.html
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.HtmlResultChecker.GetHtmlResultChecker">
+            <summary>
+            Gets a singleton instance of HtmlResultChecker.
+            </summary>
+            <returns>An instance of HtmlResultChecker.</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.HtmlResultChecker.Start(System.String)">
+            <summary>
+            Registers the callback function. Wait to be notified when there're file changes.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.HtmlResultChecker.Stop">
+            <summary>
+            Disables notifying the file system changes.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.HtmlResultChecker.IndexHtmlFilePath">
+            <summary>
+            The path of index.html
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.HtmlResultChecker.UpdateCaseDelegate">
+            <summary>
+            Delegate to be passed to Logger, then status and log of the case could be shown on UI.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.Logger">
+            <summary>
+            This class defines the logger.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Logger.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Logger.Initialize(System.Collections.Generic.List{Microsoft.Protocols.TestManager.Kernel.TestCase})">
+            <summary>
+            Initialize the logger.
+            </summary>
+            <param name="allTestCases">all test cases</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Logger.ApplyFilteredList(System.Collections.Generic.List{Microsoft.Protocols.TestManager.Kernel.TestCase})">
+            <summary>
+            Filter test cases.
+            </summary>
+            <param name="testcases">test cases</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Logger.RefreshTestCaseLists">
+            <summary>
+            To refresh the test case lists.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Logger.UpdateCaseFromHtmlLog(Microsoft.Protocols.TestManager.Kernel.TestCaseStatus,System.String,System.String)">
+            <summary>
+            Update the case status and case log
+            Find the related case name, change its status and show log to user
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Logger.FinishTest">
+            <summary>
+            If existing running test cases, change the status to Other.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.Logger.GroupByOutcome">
+            <summary>
+            Group test cases by outcome.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.Logger.GroupByCategory">
+            <summary>
+            Group test cases by category.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.Logger.AllTestCases">
+            <summary>
+            List of all test cases.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.Logger.RunningTestCase">
+            <summary>
+            The running test case.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.Logger.IndexHtmlFilePath">
+            <summary>
+            Path of index.html
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.TestCaseGroup">
+            <summary>
+            A test case group in the run page.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.TestCaseGroup.#ctor(System.String,System.Int32)">
+            <summary>
+            The constuctor of TestCaseGroup.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.TestCaseGroup.totalCasesCount">
+            <summary>
+            Count of all cases, used to show progress to user.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.TestCaseGroup.AddTestCase(Microsoft.Protocols.TestManager.Kernel.TestCase)">
+            <summary>
+            Add a test case to the group.
+            </summary>
+            <param name="testcase">The test case.</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.TestCaseGroup.RemoveTestCase(Microsoft.Protocols.TestManager.Kernel.TestCase)">
+            <summary>
+            Remove the test case from the group.
+            </summary>
+            <param name="testcase">The test case.</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.TestCaseGroup.HoldUpdatingHeader">
+            <summary>
+            Holds updating the header in the test case list.
+            Updating the header is a high-cost operation. If changing the status of a large number of test cases, hold it to improve the performance.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.TestCaseGroup.ResumeUpdatingHeader">
+            <summary>
+            Resumes updating the header int the test case list.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.TestCaseGroup.UpdateHeader">
+            <summary>
+            Updates the header.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.TestCaseGroup.CheckAllSubItems(System.Boolean)">
+            <summary>
+            Checks all the sub items.
+            </summary>
+            <param name="isChecked">Flags to indicate a case should be checked or not</param>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.TestCaseGroup.Name">
+            <summary>
+            Name of the group
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.TestCaseGroup.HeaderText">
+            <summary>
+            The header text of the group.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.TestCaseGroup.Autohide">
+            <summary>
+            If true, hide the group if it is empty.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.TestCaseGroup.Visibility">
+            <summary>
+            The Visibility of the group. Used for databinding.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.TestCaseGroup.TestCaseList">
+            <summary>
+            Test cases in the group.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.TestEngine.GetLogger">
+            <summary>
+            Retrieves the Logger object.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.TestEngine.FilterByKeyword(System.String)">
+            <summary>
+            Filters test cases by keyword in name.
+            </summary>
+            <param name="keyword">Keyword</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.TestEngine.RemoveFilter">
+            <summary>
+            Removes the filter.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.TestEngine.BeginRunByFilter(System.String)">
+            <summary>
+            Begins to run the test suite using the specified filter expression.
+            </summary>
+            <param name="filterExpression"></param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.TestEngine.BeginRunByCase(System.Collections.Generic.Stack{Microsoft.Protocols.TestManager.Kernel.TestCase})">
+            <summary>
+            Begins to run the specified test cases in the test suite.
+            </summary>
+            <param name="caseStack">Test Cases</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.TestEngine.ConstructVstestArgs(System.Collections.Generic.Stack{Microsoft.Protocols.TestManager.Kernel.TestCase})">
+            <summary>
+            Build vstest arguments. If caseStack is null, build common arguments only.
+            </summary>
+            <param name="caseStack">Test cases to run.</param>
+            <returns>A StringBuilder</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.TestEngine.RunByCase(System.Collections.Generic.Stack{Microsoft.Protocols.TestManager.Kernel.TestCase})">
+            <summary>
+            Runs the specified test cases in the test suite.
+            </summary>
+            <param name="caseStack">Test Cases</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.TestEngine.RunByFilter(System.String)">
+            <summary>
+            Runs the test suite using the given filter expression.
+            </summary>
+            <param name="filterExpr"></param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.TestEngine.AbortExecution">
+            <summary>
+            Aborts the test execution.
+            </summary>
+        </member>
+        <member name="E:Microsoft.Protocols.TestManager.Kernel.TestEngine.TestFinished">
+            <summary>
+            Occurs when the test execution is finished.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.TestSuiteFamilies">
+            <summary>
+            This class defines all the available test suites in PTM.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.TestSuiteFamilies.Load(System.String)">
+            <summary>
+            Load test suites
+            </summary>
+            <param name="filename">The name of an XML file, which defines all the basic info of all available test suites</param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.TestSuiteFamily">
+            <summary>
+            This class defines a test suite with all it's releated information.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.TestSuiteFamily.Name">
+            <summary>
+            The name of this test suite.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.TestSuiteInfo">
+            <summary>
+            This class defines the structure of a test suite information.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.InstallStatus">
+            <summary>
+            Test suite installation status.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.TestCase">
+            <summary>
+            Represents a test case.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.TestCase.Category">
+            <summary>
+            The categories of the test case
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.TestCase.ToolTipOnUI">
+            <summary>
+            The tool tip of the test case on the UI
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.TestCase.Name">
+            <summary>
+            The name of the test case.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.TestCase.FullName">
+            <summary>
+            The fully qualified name of the test case
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.TestCase.IsChecked">
+            <summary>
+            Indicate the test case is checked for running by case
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.TestCase.Status">
+            <summary>
+            The status of the test case. NotRun, Running, Passed, Failed or Other
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.TestCase.Log">
+            <summary>
+            The log of the test case
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.TestCase.LogUri">
+            <summary>
+            The uri of the html log
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.TestCaseStatus">
+            <summary>
+            The status of a test case
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.TestSuite">
+            <summary>
+            This class defines the structure of a test suite.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.TestSuite.LoadFrom(System.Collections.Generic.List{System.String})">
+            <summary>
+            Loads the test suite assembly
+            </summary>
+            <param name="dllPath">A list of assemblies.</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.TestSuite.AppendCategoryByConfigFile(Microsoft.Protocols.TestManager.Kernel.AppConfigTestCategory)">
+            <summary>
+            Append test case categories from config.xml
+            </summary>
+            <param name="testCategory">TestCategory of AppConfig.</param>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.Utility">
+            <summary>
+            Utility for the test suite manager.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.LoadTestSuiteConfig(Microsoft.Protocols.TestManager.Kernel.TestSuiteInfo)">
+            <summary>
+            Loads test suite configuration.
+            </summary>
+            <param name="testSuiteInfo">The information of a test suite</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.LoadTestSuiteAssembly">
+            <summary>
+            Loads test suite assembly.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.LoadPtfconfig">
+            <summary>
+            Loads PTF configuration.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.InitializeDetector">
+            <summary>
+            Initializes the auto-detection plug-in.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.GetPrerequisits">
+            <summary>
+            Gets properties required for auto-detection.
+            </summary>
+            <returns>A PrerequisitView object</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.GetDetectSteps">
+            <summary>
+            Gets the auto-detection steps.
+            </summary>
+            <returns>A list of the steps</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.SetPrerequisits">
+            <summary>
+            Sets the property values required for auto-detection.
+            </summary>
+            <returns>Returns true if succeeded, otherwise false.</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.StartDetection(Microsoft.Protocols.TestManager.Kernel.DetectionCallback)">
+            <summary>
+            Start the auto-detection
+            </summary>
+            <param name="callback">The call back function when the detection finished.</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.GetDetectionSummary">
+            <summary>
+            Get a object to show on the UI as the detection summary.
+            </summary>
+            <returns>A object to show in the content control.</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.ApplyDetectedRules">
+            <summary>
+            Apply the test case selection rules detected by the plug-in.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.OpenDetectionLog">
+            <summary>
+            Opens the auto-detection log
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.ApplyDetectedValues">
+            <summary>
+            Apply the property values detected by the plug-in.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.GetFilter">
+            <summary>
+            Gets the TestCaseFilter object for current test suite.
+            </summary>
+            <returns>A TestCaseFilter object</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.GetSelectedCaseList">
+            <summary>
+            Gets a filtered test case list.
+            </summary>
+            <returns>Test case list</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.HideProperties">
+            <summary>
+            Gets the properties to hide from the plug-in.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.CreatePtfPropertyView">
+            <summary>
+            Creates a PtfPropertyView for the UI.
+            </summary>
+            <returns>A PtfPropertyView object</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.SavePtfconfigToBinFolder">
+            <summary>
+            Saves the ptfconfig file back to the bin folder.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.SavePtfconfigToSourceCode">
+            <summary>
+            Saves the ptfconfig files back to the source code folder.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.GetAdaptersView">
+            <summary>
+            Gets PtfAdapterView for the UI.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.ApplyAdaptersConfig">
+            <summary>
+            Applies the changes in the PtfAdapterView in the ptfconfig XML Documents.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.LoadProfileSettings(System.String)">
+            <summary>
+            Loads the configurations from a saved profile.
+            </summary>
+            <param name="filename">File name</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.SaveProfileSettings(System.String)">
+            <summary>
+            Saves the configurations as a profile.
+            </summary>
+            <param name="filename">File name</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.SaveLastProfile">
+            <summary>
+            Save the rule selection of current run.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.InitializeTestEngine">
+            <summary>
+            Initializes the test engine
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.GetLogger">
+            <summary>
+            Retrives the object of the logger.
+            </summary>
+            <returns>Logger object.</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.RunAllTestCases">
+            <summary>
+            Runs all filtered test cases.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.RunByCases(System.Collections.Generic.List{Microsoft.Protocols.TestManager.Kernel.TestCase})">
+            <summary>
+            Runs specific test cases.
+            </summary>
+            <param name="testcases">Test case</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.FilterByKeyword(System.String)">
+            <summary>
+            Filters test cases by keyword in name.
+            </summary>
+            <param name="keyword">Keyword</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.RemoveFilter">
+            <summary>
+            Removes the filter and show all selected test cases.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.ExportPlaylist(System.String,System.Boolean)">
+            <summary>
+            Export test cases to a Visual Studio playlist.
+            </summary>
+            <param name="filename">The filename.</param>
+            <param name="checkedOnly">True if only export checked cases. False export all test cases.</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.ExportPlaylist(System.IO.Stream,System.Boolean)">
+            <summary>
+            Export test cases to a Visual Studio playlist.
+            </summary>
+            <param name="stream">A Stream</param>
+            <param name="checkedOnly">True if only export checked cases. False export all test cases.</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.ImportPlaylist(System.IO.Stream)">
+            <summary>
+            Import a Play List
+            </summary>
+            <param name="stream">A Stream</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.ImportPlaylist(System.String)">
+            <summary>
+            Import a Play List
+            </summary>
+            <param name="filename">Filename</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.ApplyPlaylist(System.Int32@,System.Int32@)">
+            <summary>
+            Check the test cases in the playlist.
+            </summary>
+            <param name="numberOfChecked">Number of checked cases.</param>
+            <param name="numberOfNotfound">Number of not found test cases in the list.</param>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.GenerateTextCaseListItems(System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Generates plain text case list.
+            </summary>
+            <param name="passed">Include passed test cases</param>
+            <param name="failed">Include failed test cases</param>
+            <param name="inconclusive">Include inconclusive test cases</param>
+            <param name="notrun">Include not run test cases</param>
+            <returns>A list of CaseListItem</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.GeneratePlainTextReport(System.Collections.Generic.List{Microsoft.Protocols.TestManager.Kernel.CaseListItem},System.Boolean,Microsoft.Protocols.TestManager.Kernel.Utility.SortBy,Microsoft.Protocols.TestManager.Kernel.CaseListItem.Separator)">
+            <summary>
+            Convert the list to plain text report
+            </summary>
+            <param name="items">Case list</param>
+            <param name="showOutcome">shows test case outcome in the list</param>
+            <param name="sortby">The way of sorting items in the test case list</param>
+            <param name="separator">The style of the text file</param>
+            <returns>Plain text report</returns>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.Utility.RemoveReadonly(System.String)">
+            <summary>
+            Changes the read only attribute of a file.
+            </summary>
+            <param name="file">The file to be removed the read only attribute</param>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.Utility.AppConfig">
+            <summary>
+            Test suite specific configures.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.Utility.TestSuiteIntroduction">
+            <summary>
+            Test suite introduction.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.Utility.SelectedCaseCount">
+            <summary>
+            The number of the selected test cases.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.Utility.ChangedPropertyCount">
+            <summary>
+            The number of the properties whos value is different from the default.
+            </summary>
+        </member>
+        <member name="E:Microsoft.Protocols.TestManager.Kernel.Utility.TestFinished">
+            <summary>
+            Occurs when the test run finished.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.Utility.SortBy">
+            <summary>
+            The way of sorting items in the test case list
+            </summary>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.CaseListItem">
+            <summary>
+            Items for the plain text report
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.CaseListItem.#ctor(System.String,Microsoft.Protocols.TestManager.Kernel.TestCaseStatus)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="name">Name of the test case</param>
+            <param name="status">The status of the test case</param>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.CaseListItem.Outcome">
+            <summary>
+            The outcome of the test case
+            </summary>
+        </member>
+        <member name="F:Microsoft.Protocols.TestManager.Kernel.CaseListItem.Name">
+            <summary>
+            The name of the test case
+            </summary>
+        </member>
+        <member name="M:Microsoft.Protocols.TestManager.Kernel.CaseListItem.FormatText(System.Boolean,Microsoft.Protocols.TestManager.Kernel.CaseListItem.Separator)">
+            <summary>
+            Generates a line in the plain text case list.
+            </summary>
+            <param name="showOutcome">Shows the outcome</param>
+            <param name="separator">The separator</param>
+            <returns>An item in the report</returns>
+        </member>
+        <member name="T:Microsoft.Protocols.TestManager.Kernel.CaseListItem.Separator">
+            <summary>
+            The separator in the case list
+            </summary>
+        </member>
+    </members>
+</doc>

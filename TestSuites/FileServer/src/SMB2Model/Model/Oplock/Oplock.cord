@@ -1,0 +1,93 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Oplock;
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock;
+
+config OplockBaseConfig : BaseConfig
+{
+    switch StateBound = 128000;
+    switch StepBound = 128000;
+    switch PathDepthBound = 128000;
+
+    action all IOplockAdapter;
+
+    // Category: Model, Smb2002, Oplock
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb2002), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Oplock)";
+}
+
+config OplockConfig : OplockBaseConfig
+{
+}
+
+// Scenario for Share.ForceLevel2Oplock is FALSE and Share.Type does not includes STYPE_CLUSTER_SOFS
+machine OplockOnShareWithoutForceLevel2OrSOFSScenario() : OplockConfig
+{
+    (
+        ReadConfig;
+        SetupConnection(_, ModelShareFlag.NO_SMB2_SHAREFLAG_FORCE_LEVELII_OPLOCK, ModelShareType.NO_STYPE_CLUSTER_SOFS);
+        RequestOplockAndOperateFileRequest(_, _, out _, out _);
+        OplockBreakNotification?; // If no notification arrival, ack on non-breaking oplock will be tested
+        OplockBreakAcknowledgementRequest;
+        OplockBreakResponse;
+    ) || (construct model program from OplockConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Oplock")
+}
+
+machine OplockOnShareWithoutForceLevel2OrSOFSTestCase() : OplockConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for OplockOnShareWithoutForceLevel2OrSOFSScenario()
+}
+
+// Scenario for Share.ForceLevel2Oplock is FALSE and Share.Type includes STYPE_CLUSTER_SOFS
+machine OplockOnShareWithoutForceLevel2WithSOFSScenario() : OplockConfig
+{
+    (
+        ReadConfig;
+        SetupConnection(_, ModelShareFlag.NO_SMB2_SHAREFLAG_FORCE_LEVELII_OPLOCK, ModelShareType.STYPE_CLUSTER_SOFS);
+        RequestOplockAndOperateFileRequest(_, _, out _, out _);
+        OplockBreakNotification?; // If no notification arrival, ack on non-breaking oplock will be tested
+        OplockBreakAcknowledgementRequest;
+        OplockBreakResponse;
+    ) || (construct model program from OplockConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Oplock")
+}
+
+machine OplockOnShareWithoutForceLevel2WithSOFSTestCase() : OplockConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for OplockOnShareWithoutForceLevel2WithSOFSScenario()
+}
+
+// Scenario for Share.ForceLevel2Oplock is TRUE and Share.Type does not includes STYPE_CLUSTER_SOFS
+machine OplockOnShareWithForceLevel2WithoutSOFSScenario() : OplockConfig
+{
+    (
+        ReadConfig;
+        SetupConnection(_, ModelShareFlag.SMB2_SHAREFLAG_FORCE_LEVELII_OPLOCK, ModelShareType.NO_STYPE_CLUSTER_SOFS);
+        RequestOplockAndOperateFileRequest(_, _, out _, out _);
+        OplockBreakNotification?; // If no notification arrival, ack on non-breaking oplock will be tested
+        OplockBreakAcknowledgementRequest;
+        OplockBreakResponse;
+    ) || (construct model program from OplockConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Oplock")
+}
+
+machine OplockOnShareWithForceLevel2WithoutSOFSTestCase() : OplockConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for OplockOnShareWithForceLevel2WithoutSOFSScenario()
+}
+
+// Scenario for Share.ForceLevel2Oplock is TRUE and Share.Type includes STYPE_CLUSTER_SOFS
+machine OplockOnShareWithForceLevel2AndSOFSScenario() : OplockConfig
+{
+    (
+        ReadConfig;
+        SetupConnection(_, ModelShareFlag.SMB2_SHAREFLAG_FORCE_LEVELII_OPLOCK, ModelShareType.STYPE_CLUSTER_SOFS);
+        RequestOplockAndOperateFileRequest(_, _, out _, out _);
+        OplockBreakNotification?; // If no notification arrival, ack on non-breaking oplock will be tested
+        OplockBreakAcknowledgementRequest;
+        OplockBreakResponse;
+    ) || (construct model program from OplockConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Oplock")
+}
+
+machine OplockOnShareWithForceLevel2AndSOFSTestCase() : OplockConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for OplockOnShareWithForceLevel2AndSOFSScenario()
+}

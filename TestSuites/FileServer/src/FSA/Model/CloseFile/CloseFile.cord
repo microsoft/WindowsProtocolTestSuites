@@ -1,0 +1,41 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+config CloseFileConfig : Actions_Coverage 
+{
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.CloseFile)";
+}
+
+// Scenario of [MS-FSA] 2.1.5.4   Server Requests Closing an Open
+machine CloseFileScenario() : CloseFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_READ,
+             ShareAccess.FILE_SHARE_READ,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+         CloseOpen;
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+// Test case of [MS-FSA] 2.1.5.4   Server Requests Closing an Open
+// The exploration time for this machine is about 5 seconds
+machine CloseFileTestCase() : CloseFileConfig where TestEnabled = true
+{
+    construct requirement coverage where strategy = "full"
+    for (
+        construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for 
+        CloseFileScenario
+    )
+}

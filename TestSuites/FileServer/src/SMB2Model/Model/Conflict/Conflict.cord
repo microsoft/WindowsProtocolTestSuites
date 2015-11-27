@@ -1,0 +1,32 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Conflict;
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Conflict;
+
+// Total exploration time: less than 1 minute
+config ConflictBaseConfig : BaseConfig
+{
+    action all IConflictAdapter;
+
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb21), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.OperateOneFileFromTwoNodes)";
+}
+
+config ConflictConfig : ConflictBaseConfig
+{
+}
+
+machine ConflictScenario() : ConflictConfig
+{
+    (
+        Preparation;
+        ConflictRequest;
+        ConflictResponse;
+    )
+    || (construct model program from ConflictConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Conflict")
+}
+
+machine ConflictTestCase() : ConflictConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for ConflictScenario()
+}

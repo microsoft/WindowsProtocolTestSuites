@@ -21,13 +21,25 @@ if not defined TestSuiteRoot (
 	set TestSuiteRoot="%CurrentPath%..\"
 )
 
-%buildtool% "%TestSuiteRoot%ProtoSDK\CryptoLib\CryptoLib.csproj" /t:Clean;Rebuild
-%buildtool% "%TestSuiteRoot%ProtoSDK\FileAccessService\FileAccessService.csproj" /t:Clean;Rebuild
-%buildtool% "%TestSuiteRoot%ProtoSDK\MS-CIFS\Cifs.csproj" /t:Clean;Rebuild
-%buildtool% "%TestSuiteRoot%ProtoSDK\MS-FSCC\Fscc.csproj" /t:Clean;Rebuild
-%buildtool% "%TestSuiteRoot%ProtoSDK\MS-NLMP\Nlmp.csproj" /t:Clean;Rebuild
-%buildtool% "%TestSuiteRoot%ProtoSDK\MS-SMB\Smb.csproj" /t:Clean;Rebuild
-%buildtool% "%TestSuiteRoot%ProtoSDK\Sspi\Sspi.csproj" /t:Clean;Rebuild
-%buildtool% "%TestSuiteRoot%ProtoSDK\TransportStack\TransportStack.csproj" /t:Clean;Rebuild
-%buildtool% "%TestSuiteRoot%ProtoSDK\Common\Common.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\Asn1Base\Asn1Base.csproj" /t:Clean;Rebuild
 %buildtool% "%TestSuiteRoot%ProtoSDK\Messages\Messages.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\Common\Common.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\Claim\Claim.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\CryptoLib\CryptoLib.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\Sspi\Sspi.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-NLMP\Nlmp.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\TransportStack\TransportStack.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-PAC\Pac.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\FileAccessService\FileAccessService.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\KerberosLib\KerberosLib.csproj" /t:Clean;Rebuild
+
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-FSCC\Fscc.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-CIFS\Cifs.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-SMB\Smb.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-DFSC\Dfsc.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-RPCE\Rpce.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-FSRVP\Fsrvp.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-SRVS\Srvs.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-SMB2\Smb2.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-RSVD\Rsvd.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-SWN\Swn.csproj" /t:Clean;Rebuild

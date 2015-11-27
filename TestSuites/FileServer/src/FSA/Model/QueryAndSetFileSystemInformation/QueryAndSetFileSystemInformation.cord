@@ -1,0 +1,71 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+config QueryFileSystemInformationConfig : Actions 
+{
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.QueryFileSystemInformation)";
+}
+
+// Scenario of [MS-FSA] 2.1.5.12   Server Requests a Query of File System Information
+machine QueryFileSystemInformationScenario() : QueryFileSystemInformationConfig
+{
+    (
+        FsaInitial;
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_READ,
+             ShareAccess.FILE_SHARE_READ,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+        (            
+            QueryFileSystemInfo({FileSystemInfoClass.File_FsVolumeInformation,
+                                FileSystemInfoClass.File_FsLabelInformation,
+                                FileSystemInfoClass.File_FsDriverPath_Information,
+                                FileSystemInfoClass.File_FsSizeInformation,
+                                FileSystemInfoClass.File_FsFullSize_Information,
+                                FileSystemInfoClass.File_FsDevice_Information,
+                                FileSystemInfoClass.File_FsAttribute_Information,
+                                FileSystemInfoClass.File_FsSectorSizeInformation,
+                                FileSystemInfoClass.Zero,
+                                FileSystemInfoClass.NOT_DEFINED_IN_FSCC},
+                                 _, 
+                                 out _)
+            |
+            (
+                GetIfImplementQueryFileFsControlInformation;
+                GetIFQuotasSupported;
+                QueryFileSystemInfo(FileSystemInfoClass.File_FsControlInformation, _, out _)
+            )
+            |
+            (
+                GetIfImplementQueryFileFsObjectIdInformation;
+                GetIFObjectIDsSupported;
+                QueryFileSystemInfo(FileSystemInfoClass.File_FsObjectId_Information, _, out _)
+            )
+
+        );
+    )
+    ||
+    FSAModelProgram 
+}
+
+// Test case of [MS-FSA] 2.1.5.12   Server Requests a Query of File System Information
+// The exploration time for this machine is about 30 seconds
+machine QueryFileSystemInformationTestCase() : QueryFileSystemInformationConfig where TestEnabled = true
+{
+    construct requirement coverage where strategy = "Full"
+    for (
+        construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for 
+        QueryFileSystemInformationScenario
+    )
+}
+
+config SetFileSystemInformationConfig : Actions 
+{
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.SetFileSystemInformation)";
+}

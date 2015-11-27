@@ -11,4 +11,6 @@ if exist "%TestSuiteRoot%drop" (
 
 call ProtoSDK\build.cmd
 call TestSuites\MS-SMB\src\build.cmd
+call TestSuites\FileServer\src\build.cmd
+call ProtocolTestManager\build.cmd
 

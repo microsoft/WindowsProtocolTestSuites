@@ -1,0 +1,420 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+config IoCtlRequestConfig : Actions
+{
+    switch StateBound = 12800;
+    switch StepBound = 12800;
+    switch PathDepthBound = 12800;
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.IoCtlRequest)";
+}
+
+machine IoCtlRequest_Combination_FsCtlForEasyRequest() : IoCtlRequestConfig
+{
+    (
+         FsaInitial;
+         GetIfNtfsFileSystem;
+         GetObjectFunctionality;
+         GetObjectIDsSupported;
+         GetIfOpenFileVolumeIsReadOnly;
+         CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+         FsCtlForEasyRequest;
+    )
+    ||
+    FSAModelProgram 
+}
+
+// Scenario of [MS-FSA] 2.1.5.9.1   FSCTL_CREATE_OR_GET_OBJECT_ID
+machine IoCtlRequest_FSCTL_CREATE_OR_GET_OBJECT_ID() : IoCtlRequestConfig
+{
+    (
+         FsaInitial;
+         GetIfImplementObjectIdIoCtlRequest;
+         CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_READ,
+             ShareAccess.FILE_SHARE_READ,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+         FsCtlCreateOrGetObjId;
+    )
+    ||
+    FSAModelProgram 
+}
+
+// Scenario of [MS-FSA] 2.1.5.9.2   FSCTL_DELETE_OBJECT_ID
+machine IoCtlRequest_FSCTL_DELETE_OBJECT_ID() : IoCtlRequestConfig
+{
+    ( 
+         FsaInitial;
+         GetIfImplementObjectIdIoCtlRequest;
+         CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+         FsCtlDeleteObjId;
+    )
+    ||
+    FSAModelProgram 
+}
+
+// Scenario of [MS-FSA] 2.1.5.9.3   FSCTL_DELETE_REPARSE_POINT
+machine IoCtlRequest_FSCTL_DELETE_REPARSE_POINT() : IoCtlRequestConfig
+{
+    (
+         FsaInitial;
+         GetObjectFunctionality;
+         GetReparsePointsSupported;
+         CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+         FsCtlDeleteReparsePoint;
+    )
+    ||
+    FSAModelProgram 
+}
+
+// Scenario of [MS-FSA] 2.1.5.9.7   FSCTL_FIND_FILES_BY_SID
+machine IoCtlRequest_FSCTL_FIND_FILES_BY_SID() : IoCtlRequestConfig
+{
+    (
+         GetopenHasManageVolPrivilege;
+         GetObjectFunctionality;
+         FsaInitial;
+         GetSystemConfig;
+         CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.FILE_READ_DATA,
+             ShareAccess.FILE_SHARE_READ,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+         FsCtlFindFilesBySID;
+    )
+    ||
+    FSAModelProgram 
+}
+
+// Scenario of [MS-FSA] 2.1.5.9.13   FSCTL_GET_REPARSE_POINT
+machine IoCtlRequest_FSCTL_GET_REPARSE_POINT() : IoCtlRequestConfig
+{
+    ( 
+         FsaInitial;
+         GetObjectFunctionality;
+         GetReparsePointsSupported;
+         CreateFile(
+             FileAttribute.REPARSE_POINT,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+         FsCtlGetReparsePoint;
+    )
+    ||
+    FSAModelProgram 
+}
+
+// Scenario of [MS-FSA] 2.1.5.9.14   FSCTL_GET_RETRIEVAL_POINTERS
+machine IoCtlRequest_FSCTL_GET_RETRIEVAL_POINTERS() : IoCtlRequestConfig
+{
+    ( 
+         FsaInitial;
+         GetObjectFunctionality;
+         CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+         FsCtlGetRetrivalPoints;
+    )
+    ||
+    FSAModelProgram 
+}
+
+// Scenario of [MS-FSA] 2.1.5.9.20   FSCTL_QUERY_ALLOCATED_RANGES
+machine IoCtlRequest_FSCTL_QUERY_ALLOCATED_RANGES() : IoCtlRequestConfig
+{
+    ( 
+         FsaInitial;
+         GetObjectFunctionality;
+         CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_READ,
+             ShareAccess.FILE_SHARE_READ,
+             CreateDisposition.OPEN,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+         FsCtlQueryAllocatedRanges;
+    )
+    ||
+    FSAModelProgram 
+}
+
+// Scenario of [MS-FSA] 2.1.5.9.25   FSCTL_READ_FILE_USN_DATA
+machine IoCtlRequest_FSCTL_READ_FILE_USN_DATA() : IoCtlRequestConfig
+{
+    ( 
+         FsaInitial;
+         GetObjectFunctionality;
+         CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid)/MessageStatus.SUCCESS;
+         FsCtlReadFileUSNData;
+    )
+    ||
+    FSAModelProgram 
+}
+
+// Scenario of [MS-FSA] 2.1.5.9.27   FSCTL_SET_COMPRESSION
+machine IoCtlRequest_FSCTL_SET_COMPRESSION() : IoCtlRequestConfig
+{
+    (
+         FsaInitial;
+         GetObjectFunctionality;
+         CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+         FsCtlSetCompression;
+    )
+    ||
+    FSAModelProgram 
+}
+
+// Scenario of [MS-FSA] 2.1.5.9.28   FSCTL_SET_DEFECT_MANAGEMENT
+machine IoCtlRequest_FSCTL_SET_DEFECT_MANAGEMENT() : IoCtlRequestConfig
+{
+    (
+         FsaInitial;
+         GetObjectFunctionality;
+         CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+         FsCtlSetDefectManagement;
+    )
+    ||
+    FSAModelProgram 
+}
+
+// Scenario of [MS-FSA] 2.1.5.9.29   FSCTL_SET_ENCRYPTION
+machine IoCtlRequest_FSCTL_SET_ENCRYPTION() : IoCtlRequestConfig
+{
+    (
+         FsaInitial;
+         GetObjectFunctionality;
+         CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+         FsCtlSetEncryption;
+    )
+    ||
+    FSAModelProgram 
+}
+
+// Scenario of [MS-FSA] 2.1.5.9.31   FSCTL_SET_OBJECT_ID
+machine IoCtlRequest_FSCTL_SET_OBJECT_ID() : IoCtlRequestConfig
+{
+    (
+         FsaInitial;
+         GetIfImplementObjectIdIoCtlRequest;
+         GetRestoreAccess;
+         CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+         FsCtlSetObjID;
+    )
+    ||
+    FSAModelProgram 
+}
+
+// Scenario of [MS-FSA] 2.1.5.9.33   FSCTL_SET_REPARSE_POINT
+machine IoCtlRequest_FSCTL_SET_REPARSE_POINT() : IoCtlRequestConfig
+{
+    (
+         FsaInitial;
+         GetReparsePointsSupported;
+         GetObjectFunctionality;
+         CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+         FsCtlSetReparsePoint;
+    )
+    ||
+    FSAModelProgram 
+}
+
+// Scenario of [MS-FSA] 2.1.5.9.36   FSCTL_SET_ZERO_DATA
+machine IoCtlRequest_FSCTL_SET_ZERO_DATA() : IoCtlRequestConfig
+{
+    (
+         FsaInitial;
+         GetReparsePointsSupported;
+         GetObjectFunctionality;
+         GetIfOpenFileVolumeIsReadOnly;
+         CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+         FsCtlSetZeroData;
+    )
+    ||
+    FSAModelProgram 
+}
+
+// Scenario of [MS-FSA] 2.1.5.9.38   FSCTL_SIS_COPYFILE
+machine IoCtlRequest_FSCTL_SIS_COPYFILE() : IoCtlRequestConfig
+{
+    ( 
+         FsaInitial;
+         GetAdministrator;
+         GetObjectFunctionality;
+         CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+         FsctlSisCopyFile;
+    )
+    ||
+    FSAModelProgram 
+}
+
+
+machine IoCtlRequest_AllScenario() : IoCtlRequestConfig
+{
+    IoCtlRequest_Combination_FsCtlForEasyRequest |
+    IoCtlRequest_FSCTL_CREATE_OR_GET_OBJECT_ID |
+    IoCtlRequest_FSCTL_DELETE_OBJECT_ID |
+    IoCtlRequest_FSCTL_DELETE_REPARSE_POINT |
+    IoCtlRequest_FSCTL_FIND_FILES_BY_SID |
+    IoCtlRequest_FSCTL_GET_REPARSE_POINT |
+    IoCtlRequest_FSCTL_GET_RETRIEVAL_POINTERS |
+    IoCtlRequest_FSCTL_QUERY_ALLOCATED_RANGES |
+    IoCtlRequest_FSCTL_READ_FILE_USN_DATA |
+    IoCtlRequest_FSCTL_SET_COMPRESSION |
+    IoCtlRequest_FSCTL_SET_DEFECT_MANAGEMENT |
+    IoCtlRequest_FSCTL_SET_ENCRYPTION |
+    IoCtlRequest_FSCTL_SET_OBJECT_ID |
+    IoCtlRequest_FSCTL_SET_REPARSE_POINT |
+    IoCtlRequest_FSCTL_SET_ZERO_DATA |
+    IoCtlRequest_FSCTL_SIS_COPYFILE
+}
+
+// Test case of IoCtlRequest_AllScenario
+// The exploration time for this machine is about 50 seconds
+machine IoCtlRequestTestCase() : IoCtlRequestConfig where TestEnabled = true
+{
+    construct requirement coverage where strategy = "selective"
+    for (
+    construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true for IoCtlRequest_AllScenario
+    )
+}

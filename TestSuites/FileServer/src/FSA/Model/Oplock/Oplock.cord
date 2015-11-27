@@ -1,0 +1,76 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+config OplockConfig : Actions_Coverage 
+{
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Oplock)";
+}
+
+// Scenario of [MS-FSA] 2.1.5.17   Server Requests an Oplock
+machine OplockRequestScenario() : OplockConfig
+{
+    (
+        FsaInitial;
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_READ,
+             ShareAccess.FILE_SHARE_READ,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+        ByteRangeLock;
+        Oplock;
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+// Test case of of [MS-FSA] 2.1.5.17   Server Requests an Oplock
+// The exploration time for this machine is about 3 mins
+// Oplock is not implemented in FSA adapter, disable this scenario first.
+machine OplockRequestTestCase() : OplockConfig where TestEnabled = false
+{
+    construct requirement coverage where strategy = "selective"
+    for (
+        construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true for 
+        OplockRequestScenario
+    )
+}
+
+// Scenario of [MS-FSA] 2.1.5.18   Server Acknowledges an Oplock Break
+machine OplockBreakAcknowledgeScenario() : OplockConfig
+{
+    (
+        FsaInitial;
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_READ,
+             ShareAccess.FILE_SHARE_READ,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+        OplockBreakAcknowledge;
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+// Test case of [MS-FSA] 2.1.5.18   Server Acknowledges an Oplock Break
+// The exploration time for this machine is about 2 mins
+// OplockBreakAcknowledge is not implemented in FSA adapter, disable this scenario first.
+machine OplockBreakAcknowledgeTestCase() : OplockConfig where TestEnabled = false
+{
+    construct requirement coverage where strategy = "selective"
+    for (
+        construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true for 
+        OplockBreakAcknowledgeScenario
+    )
+}

@@ -1,0 +1,113 @@
+﻿<Page x:Class="Microsoft.Protocols.TestManager.UI.AdapterPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      MinHeight="300" MinWidth="600"
+      Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
+	Title="AdapterPage" FontSize="9pt">
+
+    <Grid>
+        <TextBlock Text="Configure the adapters in the test suite." HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="9pt"/>
+        <ScrollViewer AutomationProperties.Name="Adapters" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" Margin="0,24,0,0">
+        <ItemsControl Name="AdaptersList" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Stretch" BorderThickness="0,0,0,0" KeyboardNavigation.TabNavigation="Continue" KeyboardNavigation.IsTabStop="False">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <GroupBox>
+                        <GroupBox.Header><TextBlock Text="{Binding FriendlyName}" FontSize="11pt" Foreground="#FF003399"/></GroupBox.Header>
+                        <StackPanel HorizontalAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,6,0">Type:</TextBlock>
+                                <ComboBox Name="TypeBox" AutomationProperties.Name="Adapter type" SelectedIndex="{Binding TypeIndex}" HorizontalAlignment="Left" Width="200" VerticalAlignment="Center" Height="20">
+                                    <ComboBox.Items>
+                                        <TextBlock>Interactive</TextBlock>
+                                        <TextBlock>Managed</TextBlock>
+                                        <TextBlock>PowerShell</TextBlock>
+                                        <TextBlock>Script</TextBlock>
+                                    </ComboBox.Items>
+                                </ComboBox>
+                            </StackPanel>
+                            <Separator></Separator>
+                            <ContentControl KeyboardNavigation.IsTabStop="False" Name="AdapterContent" Content="{Binding}"/>
+                            <Separator></Separator>
+                            <ItemsControl KeyboardNavigation.IsTabStop="False" ItemsSource="{Binding Methods}" >
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="0,0,0,7">
+                                            <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                                            <TextBlock Text="{Binding HelpMessage}" TextWrapping="Wrap" Margin="7,0,0,0" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </GroupBox>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding TypeIndex}" Value="0">
+                            <Setter TargetName="AdapterContent" Property="ContentTemplate">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock>Interactive Adapter pops up a dialog when one of the following method is called.</TextBlock>
+                                            <TextBlock>You need to do the operation manually and enter the results in the dialog box.</TextBlock>
+                                            <TextBlock FontStyle="Italic">Interactive adapter has no configurations</TextBlock>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding TypeIndex}" Value="1">
+                            <Setter TargetName="AdapterContent" Property="ContentTemplate">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock>Managed Adapter uses managed code to implement the methods in the adapter.</TextBlock>
+                                            <TextBlock>Usually, you do not need to change the configuration for managed adapter.</TextBlock>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Margin="0,0,5,0" FontWeight="Bold" >Adapter Type:</TextBlock>
+                                                <TextBox AutomationProperties.Name="Adapter type" DataContext="{Binding ManagedAdapter}" Text="{Binding AdapterType}" Width="300"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding TypeIndex}" Value="2">
+                            <Setter TargetName="AdapterContent" Property="ContentTemplate">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock>PowerShell Adapter uses PowerShell scripts to implement the methods in the adapter.</TextBlock>
+                                            <TextBlock>One PowerShell script file for each method.</TextBlock>
+                                            <TextBlock>You need to configure the location of the scripts.</TextBlock>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Margin="0,0,5,0" FontWeight="Bold" >Script Directory:</TextBlock>
+                                                <TextBox AutomationProperties.Name="Adapter script directory" DataContext="{Binding PowerShellAdapter}" Text="{Binding ScriptDir}" Width="300"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding TypeIndex}" Value="3">
+                            <Setter TargetName="AdapterContent" Property="Content">
+                                <Setter.Value>
+                                    <StackPanel>
+                                        <TextBlock>Script Adapter uses cmd scripts to implement the methods in the adapter.</TextBlock>
+                                        <TextBlock>One script file for each method.</TextBlock>
+                                        <TextBlock>You need to configure the location of the scripts.</TextBlock>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Margin="0,0,5,0" FontWeight="Bold" >Script Directory:</TextBlock>
+                                            <TextBox AutomationProperties.Name="Adapter script directory" DataContext="{Binding ScriptAdapter}" Text="{Binding ScriptDir}" Width="300"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</Page>
