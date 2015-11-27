@@ -1634,7 +1634,7 @@ This is used to test SMB2 common user scenarios.
 |---|---|
 |**Test ID**|BVT_SessionMgmt_Reauthentication|
 |**Description**|This test case is designed to test whether server can handle reauthentication successfully.|
-|**Test Execution Steps **|Client sends NEGOTIATE request. |
+|**Test Execution Steps**|Client sends NEGOTIATE request. |
 ||Client sends SESSION_SETUP request with SESSION_ID set to ZERO. |
 ||Client sends SESSION-SETUP request with SESSION_ID set to the value in the previous SESSION_SETUP response. |
 ||Check server response.|
