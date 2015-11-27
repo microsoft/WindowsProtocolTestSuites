@@ -1,0 +1,33 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.TreeMgmt;
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt;
+
+config TreeMgmtBaseConfig : BaseConfig
+{
+    action all ITreeMgmtAdapter;
+
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb2002), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Tree)";
+}
+
+config TreeMgmtConfig : TreeMgmtBaseConfig
+{
+    
+}
+
+machine TreeMgmtScenario() : TreeMgmtConfig
+{
+    (
+        ReadConfig;
+        SetupConnection;
+        (TreeConnectRequest; TreeConnectResponse;)?;
+        (TreeDisconnectRequest; TreeDisconnectResponse;)+;
+    )
+    || (construct model program from TreeMgmtConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.TreeMgmt")
+}
+
+machine TreeMgmtTestCase() : TreeMgmtConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for TreeMgmtScenario()
+}

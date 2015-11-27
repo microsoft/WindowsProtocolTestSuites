@@ -1,0 +1,1107 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+config CreateFileConfig : Actions_Coverage
+{
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.CreateFile)";
+}
+
+// To verify R474, R475
+// R474: [In Creation of a New File,Pseudocode for the operation is as follows:] 
+//      The object store MUST return :Status set to STATUS_SUCCESS.
+// R475: [In Creation of a New File,Pseudocode for the operation is as follows:]
+//      The object store MUST return:CreateAction set to FILE_CREATED.
+machine CreateFileScenario00() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.READONLY,
+                CreateOptions.NON_DIRECTORY_FILE,
+                StreamTypeNameToOPen.NULL,
+                FileAccess.MAXIMUM_ALLOWED,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R366, R377
+// R366: [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+//      Phase 1 - Parameter Validation:]If any of the bits in the mask 0x0CE0FE00 are set, 
+//      the operation MUST be failed with STATUS_ACCESS_DENIED.
+// R377: [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+//      Phase 1 - Parameter Validation:]If DesiredAccess is zero, the operation MUST be failed with STATUS_ACCESS_DENIED.
+machine CreateFileScenario01() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.NORMAL,
+                CreateOptions.NON_DIRECTORY_FILE,
+                StreamTypeNameToOPen.NULL,
+                {FileAccess.None, FileAccess.INVALID_ACCESS_MASK}, // DesiredAccess is zero, or if any of the bits in the mask 0x0CE0FE00 are set
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.BlacklashName);
+    )
+    ||
+    FSAModelProgramCoverage
+}
+
+//To verify R2370
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If ShareAccess are not valid values for a file object as specified in [MS-SMB2] section 2.2.13.
+machine CreateFileScenario02() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.NORMAL,
+                CreateOptions.NON_DIRECTORY_FILE,
+                StreamTypeNameToOPen.NULL,
+                FileAccess.MAXIMUM_ALLOWED,
+                ShareAccess.NOT_VALID_VALUE, // ShareAccess are not valid values
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+
+//To verify R2371
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions are not valid values for a file object as specified in [MS-SMB2] section 2.2.13.
+machine CreateFileScenario03() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.READONLY,
+                CreateOptions.NOT_VALID_VALUE, // CreateOptions are not valid values
+                StreamTypeNameToOPen.NULL,
+                FileAccess.MAXIMUM_ALLOWED,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R2372
+// In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateDisposition are not valid values for a file object as specified in [MS-SMB2] section 2.2.13.
+machine CreateFileScenario04() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.READONLY,
+                CreateOptions.NON_DIRECTORY_FILE,
+                StreamTypeNameToOPen.NULL,
+                FileAccess.MAXIMUM_ALLOWED,
+                ShareAccess.FILE_SHARE_WRITE,
+                CreateDisposition.NOT_VALID_VALUE, // CreateDisposition are not valid values
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R404
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If FileAttributes are not valid values for a file object as specified in [MS-SMB2] section 2.2.13.
+machine CreateFileScenario05() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.NOT_VALID_VALUE, // FileAttributes are not valid values
+                CreateOptions.NON_DIRECTORY_FILE,
+                StreamTypeNameToOPen.NULL,
+                FileAccess.MAXIMUM_ALLOWED,
+                ShareAccess.FILE_SHARE_WRITE,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+
+//To verify R368
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.FILE_DIRECTORY_FILE && CreateOptions.FILE_NON_DIRECTORY_FILE.
+config CreateFileScenario06Config : CreateFileConfig
+{
+    action MessageStatus IFSAAdapter.CreateFile(
+            FileAttribute desiredFileAttribute, 
+            CreateOptions createOption,
+            StreamTypeNameToOPen streamTypeNameToOPen, 
+            FileAccess desiredAccess,
+            ShareAccess shareAccess,
+            CreateDisposition createDisposition,
+            StreamFoundType streamFoundType,
+            SymbolicLinkType symbolicLinkType,
+            FileType openFileType,
+            FileNameStatus fileNameStatus)
+     where {.
+            Condition.In<CreateOptions>(createOption, CreateOptions.DIRECTORY_FILE | CreateOptions.NON_DIRECTORY_FILE);
+           .};      
+}
+
+//To verify R368
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.FILE_DIRECTORY_FILE && CreateOptions.FILE_NON_DIRECTORY_FILE.
+machine CreateFileScenario06() : CreateFileScenario06Config
+{
+    (
+        FsaInitial; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.READONLY,
+                _, // CreateOptions.FILE_DIRECTORY_FILE && CreateOptions.FILE_NON_DIRECTORY_FILE
+                StreamTypeNameToOPen.INDEX_ALLOCATION,
+                FileAccess.MAXIMUM_ALLOWED,
+                ShareAccess.FILE_SHARE_WRITE,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    (construct model program from CreateFileScenario06Config)
+}
+
+//To verify R369
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.FILE_SYNCHRONOUS_IO_ALERT && !DesiredAccess.SYNCHRONIZE.
+machine CreateFileScenario07() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.READONLY,
+                CreateOptions.SYNCHRONOUS_IO_ALERT, // CreateOptions.FILE_SYNCHRONOUS_IO_ALERT
+                StreamTypeNameToOPen.NULL,
+                FileAccess.FILE_READ_DATA, // !DesiredAccess.SYNCHRONIZE
+                ShareAccess.FILE_SHARE_WRITE,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R2373
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If Create.FILE_SYNCHRONOUS_IO_NONALERT && !DesiredAccess.SYNCHRONIZE.
+machine CreateFileScenario08() : CreateFileConfig
+{
+    (
+        FsaInitial; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.READONLY,
+                CreateOptions.SYNCHRONOUS_IO_NONALERT, // Create.FILE_SYNCHRONOUS_IO_NONALERT 
+                StreamTypeNameToOPen.NULL,
+                FileAccess.FILE_READ_DATA, // !DesiredAccess.SYNCHRONIZE
+                ShareAccess.FILE_SHARE_WRITE,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R371
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.FILE_DELETE_ON_CLOSE && !DesiredAccess.DELETE.
+machine CreateFileScenario09() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.NORMAL,
+                CreateOptions.DELETE_ON_CLOSE, // CreateOptions.FILE_DELETE_ON_CLOSE
+                StreamTypeNameToOPen.NULL,
+                FileAccess.FILE_READ_DATA, // !DesiredAccess.DELETE
+                ShareAccess.FILE_SHARE_WRITE,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R373
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.FILE_SYNCHRONOUS_IO_ALERT && Create.FILE_SYNCHRONOUS_IO_NONALERT.
+config CreateFileScenario10Config : CreateFileConfig
+{
+    action MessageStatus IFSAAdapter.CreateFile(
+            FileAttribute desiredFileAttribute, 
+            CreateOptions createOption,
+            StreamTypeNameToOPen streamTypeNameToOPen, 
+            FileAccess desiredAccess,
+            ShareAccess shareAccess,
+            CreateDisposition createDisposition,
+            StreamFoundType streamFoundType,
+            SymbolicLinkType symbolicLinkType,
+            FileType openFileType,
+            FileNameStatus fileNameStatus)
+     where {.
+            Condition.In<CreateOptions>(createOption, CreateOptions.SYNCHRONOUS_IO_NONALERT | CreateOptions.SYNCHRONOUS_IO_ALERT);
+           .};
+}
+
+//To verify R373
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.FILE_SYNCHRONOUS_IO_ALERT && Create.FILE_SYNCHRONOUS_IO_NONALERT.
+machine CreateFileScenario10() : CreateFileScenario10Config
+{
+    (
+        FsaInitial; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.NORMAL,
+                _, // CreateOptions.FILE_SYNCHRONOUS_IO_ALERT && Create.FILE_SYNCHRONOUS_IO_NONALERT
+                StreamTypeNameToOPen.NULL,
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_WRITE,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    (construct model program from CreateFileScenario10Config)
+}
+
+//To verify R2375
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.FILE_DIRECTORY_FILE && CreateDisposition == OVERWRITE.
+machine CreateFileScenario11() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.NORMAL,
+                CreateOptions.DIRECTORY_FILE, // CreateOptions.FILE_DIRECTORY_FILE
+                StreamTypeNameToOPen.NULL,
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_WRITE,
+                CreateDisposition.OVERWRITE, // CreateDisposition == OVERWRITE
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DirectoryFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+
+//To verify R2374
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.FILE_DIRECTORY_FILE && CreateDisposition == SUPERSEDE .
+machine CreateFileScenario12() : CreateFileConfig
+{
+    (
+        FsaInitial; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.NORMAL,
+                CreateOptions.DIRECTORY_FILE, // CreateOptions.FILE_DIRECTORY_FILE
+                StreamTypeNameToOPen.NULL,
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_WRITE,
+                CreateDisposition.SUPERSEDE, // CreateDisposition == SUPERSEDE
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DirectoryFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R2376
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.FILE_DIRECTORY_FILE && CreateDisposition == OVERWRITE_IF).
+machine CreateFileScenario13() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.NORMAL,
+                CreateOptions.DIRECTORY_FILE, // CreateOptions.FILE_DIRECTORY_FILE
+                StreamTypeNameToOPen.NULL,
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_WRITE,
+                CreateDisposition.OVERWRITE_IF, // CreateDisposition == OVERWRITE_IF
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DirectoryFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+
+//To verify R375
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.COMPLETE_IF_OPLOCKED && CreateOptions.FILE_RESERVE_OPFILTER.
+config CreateFileScenario14Config : CreateFileConfig
+{                     
+    action MessageStatus IFSAAdapter.CreateFile(
+            FileAttribute desiredFileAttribute, 
+            CreateOptions createOption,
+            StreamTypeNameToOPen streamTypeNameToOPen, 
+            FileAccess desiredAccess,
+            ShareAccess shareAccess,
+            CreateDisposition createDisposition,
+            StreamFoundType streamFoundType,
+            SymbolicLinkType symbolicLinkType,
+            FileType openFileType,
+            FileNameStatus fileNameStatus)
+     where {.
+            Condition.In<CreateOptions>(createOption, CreateOptions.COMPLETE_IF_OPLOCKED | CreateOptions.RESERVE_OPFILTER);
+           .};
+}
+
+//To verify R375
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+// If CreateOptions.COMPLETE_IF_OPLOCKED && CreateOptions.FILE_RESERVE_OPFILTER.
+machine CreateFileScenario14() : CreateFileScenario14Config
+{
+    (
+        FsaInitial; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.NORMAL,
+                _, // CreateOptions.COMPLETE_IF_OPLOCKED && CreateOptions.FILE_RESERVE_OPFILTER.
+                StreamTypeNameToOPen.NULL,
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_WRITE,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    (construct model program from CreateFileScenario14Config) 
+}
+
+// To verify R376
+// R376: [In Application Requests an Open of a File ,Phase 1 - Parameter Validation:]
+//      The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+//      If CreateOptions.FILE_NO_INTERMEDIATE_BUFFERING && DesiredAccess.FILE_APPEND_DATA.
+machine CreateFileScenario15() : CreateFileConfig
+{
+    (
+        FsaInitial; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.NORMAL,
+                CreateOptions.NO_INTERMEDIATE_BUFFERING, // CreateOptions.FILE_NO_INTERMEDIATE_BUFFERING
+                StreamTypeNameToOPen.NULL,
+                FileAccess.FILE_APPEND_DATA, // DesiredAccess.FILE_APPEND_DATA
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R379
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_OBJECT_NAME_INVALID under any of the following conditions:
+// If PathName is not valid as specified in [MS-FSCC] section 2.1.5.
+machine CreateFileScenario16() : CreateFileConfig
+{
+    (
+        FsaInitial; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.READONLY,
+                CreateOptions.NON_DIRECTORY_FILE,
+                StreamTypeNameToOPen.NULL,
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.NotPathNameValid); // PathName is not valid
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R380
+// [In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
+// Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_OBJECT_NAME_INVALID under any of the following conditions:
+// If PathName contains a trailing backslash and CreateOptions.FILE_NON_DIRECTORY_FILE is TRUE.
+machine CreateFileScenario17() : CreateFileConfig
+{
+    (
+        FsaInitial; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.NORMAL,
+                CreateOptions.NON_DIRECTORY_FILE, // CreateOptions.FILE_NON_DIRECTORY_FILE
+                StreamTypeNameToOPen.NULL,
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.BlacklashName); // PathName contains a trailing backslash
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R2377
+// [In Application Requests an Open of a File,Pseudocode for the operation is as follows: ]
+// If RootOpen.Volume.IsReadOnly && CreateDisposition == FILE_CREATE,then the operation MUST be failed with STATUS_MEDIA_WRITE_PROTECTED.
+machine CreateFileScenario18() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        GetIfOpenFileVolumeIsReadOnly; // If RootOpen.Volume.IsReadOnly
+        CreateFile(
+                FileAttribute.NORMAL,
+                CreateOptions.NON_DIRECTORY_FILE,
+                StreamTypeNameToOPen.NULL,
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.CREATE, // CreateDisposition == FILE_CREATE
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R2378
+// [In Application Requests an Open of a File,Pseudocode for the operation is as follows: ]
+// If RootOpen.Volume.IsReadOnly && CreateDisposition == FILE_SUPERSEDE, then the operation MUST be failed with STATUS_MEDIA_WRITE_PROTECTED.
+machine CreateFileScenario19() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        GetIfOpenFileVolumeIsReadOnly; // If RootOpen.Volume.IsReadOnly
+        CreateFile(
+                FileAttribute.NORMAL,
+                CreateOptions.NON_DIRECTORY_FILE,
+                StreamTypeNameToOPen.NULL,
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.SUPERSEDE, // CreateDisposition == FILE_SUPERSEDE
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R2379
+// [In Application Requests an Open of a File,Pseudocode for the operation is as follows: ]
+// If RootOpen.Volume.IsReadOnly && CreateDisposition == OVERWRITE, then the operation MUST be failed with STATUS_MEDIA_WRITE_PROTECTED.
+machine CreateFileScenario20() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        GetIfOpenFileVolumeIsReadOnly; // If RootOpen.Volume.IsReadOnly
+        CreateFile(
+                FileAttribute.READONLY,
+                CreateOptions.NON_DIRECTORY_FILE,
+                StreamTypeNameToOPen.NULL,
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.OVERWRITE, // CreateDisposition == OVERWRITE
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R2380
+// [In Application Requests an Open of a File,Pseudocode for the operation is as follows: ]
+// If RootOpen.Volume.IsReadOnly && CreateDisposition == OVERWRITE_IF, then the operation MUST be failed with STATUS_MEDIA_WRITE_PROTECTED.
+machine CreateFileScenario21() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        GetIfOpenFileVolumeIsReadOnly; // If RootOpen.Volume.IsReadOnly
+        CreateFile(
+                FileAttribute.READONLY,
+                CreateOptions.NON_DIRECTORY_FILE,
+                StreamTypeNameToOPen.NULL,
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.OVERWRITE_IF, // CreateDisposition == OVERWRITE_IF
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R507, R392
+// R507: [In Application Requests an Open of a File ,Phase 5 -- Parse path name:]
+//      If any StreamTypeNamei is \""$INDEX_ALLOCATION"" and the corresponding StreamNamei has a value other than an empty string 
+//      or \""$I30"", the operation is failed with STATUS_INVALID_PARAMETER in Windows.
+// R392: [In Application Requests an Open of a File ,Phase 5 -- Parse path name:]
+//      If any StreamTypeNamei is \""$INDEX_ALLOCATION"" and the corresponding StreamNamei has a value other than an empty string 
+//      or \""$I30"", the operation is failed with STATUS_INVALID_PARAMETER in Windows.
+machine CreateFileScenario22() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetOSInfo;
+        CheckIsR507Implemented; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.NORMAL,
+                CreateOptions.DIRECTORY_FILE,
+                StreamTypeNameToOPen.INDEX_ALLOCATION, // StreamTypeNamei is "$INDEX_ALLOCATION"
+                FileAccess.GENERIC_ALL,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DirectoryFile,
+                FileNameStatus.StreamTypeNameIsINDEX_ALLOCATION);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R547
+// [In Application Requests an Open of a File , Pseudocode for the operation is as follows:
+// Phase 6 -- Location of file:] for this search is as follows:For i = 1 to n-1:
+// Search ParentFile.DirectoryList for a Link where Link.Name or Link.ShortName matches FileNamei,
+// If no such link is found, the operation MUST be failed with STATUS_OBJECT_PATH_NOT_FOUND.
+machine CreateFileScenario23() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetOSInfo;
+        CheckIsR507Implemented; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.READONLY,
+                CreateOptions.DIRECTORY_FILE,
+                StreamTypeNameToOPen.INDEX_ALLOCATION,
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DirectoryFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R513
+// [In Application Requests an Open of a File , Pseudocode for the operation is as follows:
+// Phase 6 -- Location of file:] Else:[If such a link is not found:]
+// If CreateDisposition == FILE_OPEN, the operation MUST be failed with STATUS_OBJECT_NAME_NOT_FOUND.
+machine CreateFileScenario24() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetOSInfo;
+        CheckIsR507Implemented; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.READONLY,
+                CreateOptions.NON_DIRECTORY_FILE,
+                StreamTypeNameToOPen.INDEX_ALLOCATION,
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.OPEN, // CreateDisposition == FILE_OPEN
+                StreamFoundType.StreamIsNotFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R2395
+// [In Application Requests an Open of a File , Pseudocode for the operation is as follows:
+// Phase 6 -- Location of file:] Else:[If such a link is not found:]If CreateDisposition == FILE_OVERWRITE), 
+// the operation MUST be failed with STATUS_OBJECT_NAME_NOT_FOUND.
+machine CreateFileScenario25() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetOSInfo;
+        CheckIsR507Implemented; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.READONLY,
+                CreateOptions.NON_DIRECTORY_FILE,
+                StreamTypeNameToOPen.INDEX_ALLOCATION,
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.OVERWRITE, // CreateDisposition == FILE_OVERWRITE
+                StreamFoundType.StreamIsNotFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R514, R547
+// R514: [In Application Requests an Open of a File , Pseudocode for the operation is as follows:
+//      Phase 6 -- Location of file:] Else:[If such a link is not found:]If RootOpen.Volume.IsReadOnly 
+//      then the operation MUST be failed with STATUS_MEDIA_WRITE_PROTECTED.
+// R547: [In Application Requests an Open of a File , Pseudocode for the operation is as follows:
+//      Phase 6 -- Location of file:] for this search is as follows:For i = 1 to n-1:
+//      Search ParentFile.DirectoryList for a Link where Link.Name or Link.ShortName matches FileNamei,
+//      If no such link is found, the operation MUST be failed with STATUS_OBJECT_PATH_NOT_FOUND.
+machine CreateFileScenario26() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetOSInfo;
+        CheckIsR507Implemented; 
+        GetSystemConfig;
+        GetIfOpenFileVolumeIsReadOnly; // If RootOpen.Volume.IsReadOnly
+        CreateFile(
+                FileAttribute.NORMAL,
+                CreateOptions.NON_DIRECTORY_FILE,
+                StreamTypeNameToOPen.NULL,
+                FileAccess.GENERIC_ALL,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsNotFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+
+//To verify R399
+// [In Application Requests an Open of a File , 
+// Pseudocode for the operation is as follows:Phase 6 - Location of file:] 
+// Pseudocode for this search:For i = 1 to n-1:If Link.File.IsSymbolicLink is TRUE, 
+// the operation MUST be failed with Status set to STATUS_STOPPED_ON_SYMLINK.
+machine CreateFileScenario27() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetOSInfo;
+        CheckIsR507Implemented; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.READONLY,
+                CreateOptions.NON_DIRECTORY_FILE,
+                StreamTypeNameToOPen.INDEX_ALLOCATION,
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsSymbolicLink, // Link.File.IsSymbolicLink is TRUE
+                FileType.DataFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R406, R407
+// R406: [In Application Requests an Open of a File , Pseudocode for the operation is as follows:
+//      Phase 7 -- Type of file to open:]The object store MUST use the following algorithm to determine which type of file is being opened:
+//      If CreateOptions.FILE_DIRECTORY_FILE is TRUE then FileTypeToOpen = DirectoryFile.
+// R407: [In Application Requests an Open of a File , Pseudocode for the operation is as follows:
+//      Phase 7 -- Type of file to open:]The object store MUST use the following algorithm to determine which type of file is being opened:
+//      Else if CreateOptions.FILE_NON_DIRECTORY_FILE is TRUE then FileTypeToOpen = DataFile.
+machine CreateFileScenario28() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetOSInfo;
+        CheckIsR507Implemented; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.READONLY,
+                {CreateOptions.DIRECTORY_FILE, CreateOptions.NON_DIRECTORY_FILE},
+                StreamTypeNameToOPen.INDEX_ALLOCATION,
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                {FileType.DirectoryFile, FileType.DataFile},
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+
+//To verify R408, R409
+// R408: [In Application Requests an Open of a File , Pseudocode for the operation is as follows:
+//      Phase 7 -- Type of file to open:]The object store MUST use the following algorithm to determine which type of file is being opened:
+//      Else if StreamTypeNameToOpen is "$INDEX_ALLOCATION" then FileTypeToOpen = DirectoryFile.
+// R409: [In Application Requests an Open of a File , Pseudocode for the operation is as follows:
+//      Phase 7 -- Type of file to open:]The object store MUST use the following algorithm to determine which type of file is being opened:
+//      Else if StreamTypeNameToOpen is "$DATA" then FileTypeToOpen = DataFile.
+machine CreateFileScenario29() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetOSInfo;
+        CheckIsR507Implemented; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.NORMAL,
+                CreateOptions.RANDOM_ACCESS,
+                {StreamTypeNameToOPen.INDEX_ALLOCATION, StreamTypeNameToOPen.DATA},
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                {FileType.DirectoryFile, FileType.DataFile},
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R410
+// [In Application Requests an Open of a File , Pseudocode for the operation is as follows:
+//      Phase 7 -- Type of file to open:]The object store MUST use the following algorithm to determine which type of file is being opened:
+//      Else if Open.File is not NULL and Open.File.FileType is DirectoryFile, then FileTypeToOpen = DirectoryFile.
+machine CreateFileScenario30() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetOSInfo;
+        CheckIsR507Implemented; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.READONLY,
+                CreateOptions.RANDOM_ACCESS,
+                StreamTypeNameToOPen.NULL,
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DirectoryFile, // Open.File.FileType is DirectoryFile
+                FileNameStatus.OpenFileNotNull); // Open.File is not NULL
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R411
+// [In Application Requests an Open of a File , 
+//      Phase 7 -- Type of file to open:]The object store MUST use the following algorithm to determine which type of file is being opened:
+//      Else if PathName contains a trailing backslash then FileTypeToOpen = DirectoryFile.
+machine CreateFileScenario31() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetOSInfo;
+        CheckIsR507Implemented; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.READONLY,
+                CreateOptions.RANDOM_ACCESS,
+                StreamTypeNameToOPen.NULL,
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DirectoryFile, // FileTypeToOpen = DirectoryFile
+                FileNameStatus.BlacklashName); // PathName contains a trailing backslash
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R412
+// [In Application Requests an Open of a File , Pseudocode for the operation is as follows:
+//      Phase 7 -- Type of file to open:]The object store MUST use the following algorithm to determine which type of file is being opened:
+//      Else FileTypeToOpen = DataFile.
+machine CreateFileScenario32() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetOSInfo;
+        CheckIsR507Implemented; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.READONLY,
+                CreateOptions.RANDOM_ACCESS,
+                StreamTypeNameToOPen.NULL,
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile, // FileTypeToOpen = DataFile
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R414, 2396
+// R414: [In Application Requests an Open of a File , Pseudocode for the operation is as follows:
+//      Phase 7 -- Type of file to open:]If FileTypeToOpen is DirectoryFile and Open.File is not NULL 
+//      and Open.File.FileType is not DirectoryFile:If CreateDisposition == FILE_CREATE then the operation MUST be failed with STATUS_OBJECT_NAME_COLLISION.
+// R2396: [In Application Requests an Open of a File , 
+//      Phase 7 -- Type of file to open:]If FileTypeToOpen is DirectoryFile and Open.File is not NULL and Open.File.FileType is not DirectoryFile:
+//      else[If CreateDisposition != FILE_CREATE] the operation MUST be failed with STATUS_NOT_A_DIRECTORY.
+machine CreateFileScenario33() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetOSInfo;
+        CheckIsR507Implemented; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.READONLY,
+                CreateOptions.DIRECTORY_FILE, // FileTypeToOpen is DirectoryFile
+                StreamTypeNameToOPen.INDEX_ALLOCATION,
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_WRITE,
+                {CreateDisposition.CREATE, CreateDisposition.OPEN}, // CreateDisposition == FILE_CREATE
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DirectoryFile,
+                FileNameStatus.OpenFileNotNull); // Open.File is not NULL
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R415
+// [In Application Requests an Open of a File , Pseudocode for the operation is as follows:
+// Phase 7 -- Type of file to open:]If FileTypeToOpen is DataFile and StreamNameToOpen is empty and Open.File is not NULL 
+// and Open.File.FileType is DirectoryFile, the operation MUST be failed with STATUS_FILE_IS_A_DIRECTORY.
+machine CreateFileScenario34() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetOSInfo;
+        CheckIsR507Implemented; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.READONLY,
+                CreateOptions.NON_DIRECTORY_FILE, // FileTypeToOpen is DataFile
+                StreamTypeNameToOPen.NULL, // StreamNameToOpen is empty
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.OPEN,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DirectoryFile, // Open.File.FileType is DirectoryFile
+                FileNameStatus.OpenFileNotNull); // Open.File is not NULL 
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R418
+// [In Creation of a New File,Pseudocode for the operation is as follows:]
+// If FileTypeToOpen is DirectoryFile and DesiredFileAttributes.FILE_ATTRIBUTE_TEMPORARY is set, 
+// the operation MUST be failed with STATUS_INVALID_PARAMETER.
+machine CreateFileScenario35() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetOSInfo;
+        CheckIsR507Implemented; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.TEMPORARY, // DesiredFileAttributes.FILE_ATTRIBUTE_TEMPORARY
+                CreateOptions.DIRECTORY_FILE, // FileTypeToOpen is DirectoryFile
+                StreamTypeNameToOPen.NULL,
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DirectoryFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+//To verify R419
+// [In Creation of a New File,Pseudocode for the operation is as follows:]
+// If DesiredFileAttributes.FILE_ATTRIBUTE_READONLY and CreateOptions.FILE_DELETE_ON_CLOSE are both set, 
+// the operation MUST be failed with STATUS_CANNOT_DELETE.
+machine CreateFileScenario36() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetOSInfo;
+        CheckIsR507Implemented; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.READONLY, // DesiredFileAttributes.FILE_ATTRIBUTE_READONLY
+                CreateOptions.DELETE_ON_CLOSE, // CreateOptions.FILE_DELETE_ON_CLOSE
+                StreamTypeNameToOPen.INDEX_ALLOCATION,
+                FileAccess.DELETE,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage
+}
+
+//To verify R420
+// [In Creation of a New File,Pseudocode for the operation is as follows:]
+// If StreamTypeNameToOpen is non-empty and has a value other than "$DATA",
+// the operation MUST be failed with STATUS_ACCESS_DENIED.
+machine CreateFileScenario37() : CreateFileConfig
+{
+    (
+        FsaInitial;
+        GetOSInfo;
+        CheckIsR507Implemented; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.NORMAL,
+                CreateOptions.RANDOM_ACCESS,
+                StreamTypeNameToOPen.Other, // If StreamTypeNameToOpen is non-empty and has a value other than "$DATA"
+                FileAccess.FILE_READ_DATA,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.OPEN,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+    )
+    ||
+    FSAModelProgramCoverage 
+}
+
+// Scenario of [MS-FSA] 3.1.5.1.1   Creation of a new file
+machine CreateFileScenario_All() : CreateFileConfig
+{
+    CreateFileScenario00 | CreateFileScenario01 | CreateFileScenario02 | CreateFileScenario03 | CreateFileScenario04 |
+    CreateFileScenario05 | CreateFileScenario06 | CreateFileScenario07 | CreateFileScenario08 | CreateFileScenario09 |
+    CreateFileScenario10 | CreateFileScenario11 | CreateFileScenario12 | CreateFileScenario13 | CreateFileScenario14 |
+    CreateFileScenario15 | CreateFileScenario16 | CreateFileScenario17 | CreateFileScenario18 | CreateFileScenario19 |
+    CreateFileScenario20 | CreateFileScenario21 | CreateFileScenario22 | CreateFileScenario23 | CreateFileScenario24 |
+    CreateFileScenario25 | CreateFileScenario26 | CreateFileScenario27 | CreateFileScenario28 | CreateFileScenario29 |
+    CreateFileScenario30 | CreateFileScenario31 | CreateFileScenario32 | CreateFileScenario33 | CreateFileScenario34 |
+    CreateFileScenario35 | CreateFileScenario36 | CreateFileScenario37 
+}
+
+// Test case of [MS-FSA] 3.1.5.1.1   Creation of a new file
+// The exploration time for this machine is about 20 seconds
+machine CreateFileTestCase() : CreateFileConfig where TestEnabled = true
+{
+    construct requirement coverage where strategy = "selective"
+    for (
+        construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true for 
+        CreateFileScenario_All
+    )
+}

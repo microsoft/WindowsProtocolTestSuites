@@ -1,0 +1,585 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+config QueryFileInformationConfig : Actions
+{
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.QueryFileInformation)";
+
+    action MessageStatus IFSAAdapter.QueryFileInfoPart1(
+            FileInfoClass fileInfoClass,
+            OutputBufferSize outputBufferSize,
+            out ByteCount byteCount,   
+            out OutputBuffer outputBuffer)
+            where {.
+            Condition.In<FileInfoClass>(fileInfoClass,FileInfoClass.NOT_DEFINED_IN_FSCC,
+                FileInfoClass.FILE_ACCESS_INFORMATION,
+                FileInfoClass.FILE_ALIGNMENT_INFORMATION,
+                FileInfoClass.FILE_ALL_INFORMATION,
+                FileInfoClass.FILE_ALTERNATENAME_INFORMATION,
+                FileInfoClass.FILE_ATTRIBUTETAG_INFORMATION,
+                FileInfoClass.FILE_BASIC_INFORMATION,
+                FileInfoClass.FILE_BOTH_DIR_INFORMATION,
+                FileInfoClass.FILE_COMPRESSION_INFORMATION,
+                FileInfoClass.FILE_DIRECTORY_INFORMATION,
+                FileInfoClass.FILE_EA_INFORMATION,
+                FileInfoClass.FILE_FULL_DIR_INFORMATIO,
+                FileInfoClass.FILE_FULLEA_INFORMATION,
+                FileInfoClass.FILE_LINKS_INFORMATION,
+                FileInfoClass.FILE_ID_BOTH_DIR_INFORMATION,
+                FileInfoClass.FILE_ID_FULL_DIR_INFORMATION,
+                FileInfoClass.FILE_ID_GLOBAL_TX_DIR_INFORMATION,
+                FileInfoClass.FILE_INTERNAL_INFORMATION,
+                FileInfoClass.FILE_MODE_INFORMATION,
+                FileInfoClass.FILE_NAME_INFORMATION,
+                FileInfoClass.FILE_NAMES_INFORMATION,
+                FileInfoClass.FILE_NETWORKOPEN_INFORMATION,
+                FileInfoClass.FILE_OBJECTID_INFORMATION,
+                FileInfoClass.FILE_POSITION_INFORMATION,
+                FileInfoClass.FILE_SFIO_RESERVE_INFORMATION,
+                FileInfoClass.FILE_STANDARD_INFORMATION,
+                FileInfoClass.FILE_STANDARD_LINK_INFORMATION,
+                FileInfoClass.FILE_QUOTA_INFORMATION,
+                FileInfoClass.FILE_REPARSE_POINT_INFORMATION,
+                FileInfoClass.FILE_STREAM_INFORMATION);
+            Condition.In<OutputBufferSize>(outputBufferSize,OutputBufferSize.NotLessThan,OutputBufferSize.LessThan);
+            .};
+}
+
+// Scenario of [MS-FSA] 2.1.5.11   Server Requests a Query of File Information
+machine QueryFileInformationScenario() : QueryFileInformationConfig
+{
+    (
+        FsaInitial;
+        GetSystemConfig;
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_ALL,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+        QueryFileInfoPart1(_,_,out _,out _);
+    )|| (construct model program from QueryFileInformationConfig)
+}
+
+// Test case of [MS-FSA] 2.1.5.11   Server Requests a Query of File Information
+// The exploration time for this machine is about 10 seconds
+machine QueryFileInformationTestCase() : QueryFileInformationConfig where TestEnabled = true
+{
+    construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true
+    for QueryFileInformationScenario
+}
+
+config SetFileInformationConfig : Actions
+{
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.SetFileInformation)";
+}
+
+
+config SetFileAllocOrObjIdInformationConfig : SetFileInformationConfig
+{
+    action MessageStatus IFSAAdapter.SetFileAllocOrObjIdInfo(FileInfoClass fileInfoClass, AllocationSizeType allocationSizeType)
+            where {.
+            Condition.In<FileInfoClass>(fileInfoClass,FileInfoClass.FILE_ALLOCATION_INFORMATION,
+                FileInfoClass.FILE_OBJECTID_INFORMATION,
+                FileInfoClass.FILE_SFIO_RESERVE_INFORMATION);
+            .};
+}
+
+// Scenario of [MS-FSA]
+// 3.1.5.14.1   FileAllocationInformation
+// 3.1.5.14.8   FileObjectIdInformation
+// 3.1.5.14.12  FileSfioReserveInformation
+machine SetFileAllocOrObjIdInformationScenario() : SetFileAllocOrObjIdInformationConfig
+{
+    (
+        FsaInitial;
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+        SetFileAllocOrObjIdInfo;
+    )|| (construct model program from SetFileAllocOrObjIdInformationConfig)
+}
+
+// Test case of [MS-FSA]
+// 3.1.5.14.1   FileAllocationInformation
+// 3.1.5.14.8   FileObjectIdInformation
+// 3.1.5.14.12  FileSfioReserveInformation 
+// 3.1.5.14.10  FileQuotaInformation
+// The exploration time for this machine is about 5 seconds
+machine SetFileAllocOrObjIdInformationTestCase() : SetFileAllocOrObjIdInformationConfig where TestEnabled = true
+{
+    construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true
+    for SetFileAllocOrObjIdInformationScenario
+}
+
+
+config SetFileBasicInformationConfig : SetFileInformationConfig
+{
+    action MessageStatus IFSAAdapter.SetFileBasicInfo(InputBufferSize inputBufferSize,InputBufferTime inputBufferTime);
+}
+
+// Scenario of [MS-FSA] 2.1.5.14.2   FileBasicInformation
+machine SetFileBasicInformationScenario() : SetFileBasicInformationConfig
+{
+    (
+        FsaInitial;
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+        SetFileBasicInfo;
+    )|| (construct model program from SetFileBasicInformationConfig) 
+}
+
+// Test case of [MS-FSA] 2.1.5.14.2   FileBasicInformation
+// The exploration time for this machine is about 5 seconds
+machine SetFileBasicInformationTestCase() : SetFileBasicInformationConfig where TestEnabled = true
+{
+    construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true
+    for SetFileBasicInformationScenario
+}
+
+
+config SetFileDispositionInformationConfig : SetFileInformationConfig
+{
+    action MessageStatus IFSAAdapter.SetFileDispositionInfo(FileDispositionType fileDispositionType);
+}
+
+// Scenario of [MS-FSA] 2.1.5.14.3   FileDispositionInformation
+machine SetFileDispositionInformationScenario() : SetFileDispositionInformationConfig
+{
+    (
+        FsaInitial;
+        CreateFile(
+            FileAttribute.NORMAL,
+            CreateOptions.NO_INTERMEDIATE_BUFFERING,
+            StreamTypeNameToOPen.NULL,
+            FileAccess.DELETE,
+            ShareAccess.FILE_SHARE_WRITE,
+            CreateDisposition.OPEN_IF,
+            StreamFoundType.StreamIsFound,
+            SymbolicLinkType.IsNotSymbolicLink,
+            FileType.DataFile,
+            FileNameStatus.PathNameValid);
+        SetFileDispositionInfo;
+    )|| (construct model program from SetFileDispositionInformationConfig) 
+}
+
+//Test case of 3.1.5.14.3   FileDispositionInformation
+// The exploration time for this machine is about 5 seconds
+machine SetFileDispositionInformationTestCase() : SetFileDispositionInformationConfig where TestEnabled = true
+{
+    construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true
+    for SetFileDispositionInformationScenario
+}
+
+// Scenario of [MS-FSA] 2.1.5.14.4   FileEndOfFileInformation
+machine SetFileEndOfFileInformationScenario() : SetFileInformationConfig
+{
+    (
+        FsaInitial;
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+        SetFileEndOfFileInfo;
+    )|| (construct model program from SetFileInformationConfig) 
+}
+
+// Test case of [MS-FSA] 3.1.5.14.4   FileEndOfFileInformation
+// The exploration time for this machine is about 5 seconds
+machine SetFileEndOfFileInformationTestCase() : SetFileInformationConfig where TestEnabled = true
+{
+    construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true
+    for SetFileEndOfFileInformationScenario
+}
+
+
+
+config SetFileFullEaInformationConfig : SetFileInformationConfig
+{
+    action MessageStatus IFSAAdapter.SetFileFullEaInfo(EainInputBuffer eAValidate);
+}
+
+// Scenario of [MS-FSA] 2.1.5.14.5   FileFullEaInformation
+machine SetFileFullEaInformationScenario() : SetFileFullEaInformationConfig
+{
+    (
+        FsaInitial;
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+        SetFileFullEaInfo;
+    )|| (construct model program from SetFileFullEaInformationConfig) 
+}
+
+// Test case of [MS-FSA] 2.1.5.14.5   FileFullEaInformation
+// The exploration time for this machine is about 5 seconds
+machine SetFileFullEaInformationTestCase() : SetFileFullEaInformationConfig where TestEnabled = true
+{
+    construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true
+    for SetFileFullEaInformationScenario
+}
+
+// Scenario of [MS-FSA] 2.1.5.14.6   FileLinkInformation
+// The exploration time for this machine is about 5 seconds
+machine SetFileLinkInformationScenario() : SetFileInformationConfig
+{
+    (
+        FsaInitial;
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+        GetIsLinkFound(out true);
+        SetFileLinkInfo;
+    )|| (construct model program from SetFileInformationConfig) 
+}
+
+// Test case of [MS-FSA] 2.1.5.14.6   FileLinkInformation
+// The exploration time for this machine is about 5 seconds
+machine SetFileLinkInformationTestCase() : SetFileInformationConfig where TestEnabled = true
+{
+    construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true
+    for SetFileLinkInformationScenario
+}
+
+
+config SetFileModeInformationConfig : SetFileInformationConfig
+{
+    action MessageStatus IFSAAdapter.SetFileModeInfo(FileMode inputMode)
+    where {. 
+    Condition.In<FileMode>(inputMode,FileMode.WRITE_THROUGH,
+        FileMode.SEQUENTIAL_ONLY,
+        FileMode.SYNCHRONOUS_IO_ALERT,
+        FileMode.SYNCHRONOUS_IO_NONALERT);
+    .};
+}
+
+// Scenario of [MS-FSA] 2.1.5.14.7   FileModeInformation
+machine SetFileModeInformationScenario() : SetFileModeInformationConfig
+{
+    (
+        FsaInitial;
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+        SetFileModeInfo;
+    )|| (construct model program from SetFileModeInformationConfig) 
+}
+
+// Test case of [MS-FSA] 2.1.5.14.7   FileModeInformation
+// The exploration time for this machine is about 5 seconds
+machine SetFileModeInformationTestCase() : SetFileModeInformationConfig where TestEnabled = true
+{
+    construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true
+    for SetFileModeInformationScenario
+}
+
+config SetFilePositionInformationConfig : SetFileInformationConfig
+{
+    action MessageStatus IFSAAdapter.SetFilePositionInfo(InputBufferSize inputBufferSize,InputBufferCurrentByteOffset  currentByteOffset);
+}
+
+// Scenario of [MS-FSA] 2.1.5.14.9   FilePositionInformation
+machine SetFilePositionInformationScenario() : SetFilePositionInformationConfig
+{
+    (
+        FsaInitial;
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NO_INTERMEDIATE_BUFFERING,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+        SetFilePositionInfo;
+    )|| (construct model program from SetFilePositionInformationConfig) 
+}
+
+// Test case of [MS-FSA] 2.1.5.14.9   FilePositionInformation
+// The exploration time for this machine is about 5 seconds
+machine SetFilePositionInformationTestCase() : SetFilePositionInformationConfig where TestEnabled = true
+{
+    construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true
+    for SetFilePositionInformationScenario
+}
+
+
+config SetFileRenameInformationConfig : SetFileInformationConfig
+{
+    action MessageStatus IFSAAdapter.SetFileRenameInfo(
+            InputBufferFileNameLength inputBufferFileNameLength,
+            InputBufferFileName inputBufferFileName,
+            DirectoryVolumeType directoryVolumeType,
+            DestinationDirectoryType destinationDirectoryType,
+            NewLinkNameFormatType newLinkNameFormatType,
+            NewLinkNameMatchType newLinkNameMatchType,
+            ReplacementType replacementType,
+            TargetLinkDeleteType targetLinkDeleteType,
+            OplockBreakStatusType oplockBreakStatusType,
+            TargetLinkFileOpenListType targetLinkFileOpenListType
+            )
+            where {. 
+            Condition.In<InputBufferFileName>(inputBufferFileName,InputBufferFileName.StartWithColon,
+                InputBufferFileName.StartWithBackSlash,
+                InputBufferFileName.NotValid);
+            .};                            
+}
+
+// Scenario of [MS-FSA] 2.1.5.14.11   FileRenameInformation
+machine SetFileRenameInformationScenario() : SetFileRenameInformationConfig
+{
+    (
+        FsaInitial;
+        GetIsOpenListContains;
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.DELETE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+        SetFileRenameInfo (
+            _,
+            _,
+            DirectoryVolumeType.DestDirVolumeEqualToOpenFileVolume,
+            DestinationDirectoryType.DestDirIsSameAsOpenLinkParentFile,
+            NewLinkNameFormatType.NewLinkNameIsCaseSensitive,
+            NewLinkNameMatchType.NewLinkNameMatchTargetLinkShortName,
+            ReplacementType.ReplaceIfExists,
+            TargetLinkDeleteType.TargetLinkIsDeleted,
+            OplockBreakStatusType.HasNoOplockBreak,
+            TargetLinkFileOpenListType.TargetLinkFileOpenListContainMatchedOpen);
+    )|| (construct model program from SetFileRenameInformationConfig) 
+}
+
+// Test case of [MS-FSA] 3.1.5.14.11   FileRenameInformation
+// The exploration time for this machine is about 5 seconds
+machine SetFileRenameInformationTestCase() : SetFileRenameInformationConfig where TestEnabled = true
+{
+    construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true
+    for SetFileRenameInformationScenario
+}
+
+config SetFileStreamRenameInformationConfig : SetFileInformationConfig
+{
+    action MessageStatus IFSAAdapter.StreamRename(InputBufferFileName NewStreamName,
+        InputBufferFileName StreamTypeName,
+        ReplacementType replacementType)
+            where {. 
+            Condition.In<InputBufferFileName>(NewStreamName,InputBufferFileName.EndWithColon,
+                InputBufferFileName.ColonOccurMoreThanThreeTimes,
+                InputBufferFileName.ContainsInvalid,
+                InputBufferFileName.ContainsWildcard,
+                InputBufferFileName.IsCaseInsensitiveMatch,
+                InputBufferFileName.IsMore255Unicode,
+                InputBufferFileName.LengthZero);
+            Condition.In<InputBufferFileName>(StreamTypeName,InputBufferFileName.isData,
+                InputBufferFileName.isIndexAllocation,
+                InputBufferFileName.ContainsInvalid,
+                InputBufferFileName.ContainsWildcard,
+                InputBufferFileName.LengthZero);
+            .};
+}
+
+// Scenario of [MS-FSA] 2.1.5.14.11.1   Algorithm for Performing Stream Rename
+machine SetFileStreamRenameInformationScenario() : SetFileStreamRenameInformationConfig
+{
+    (
+        FsaInitial;        
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.DATA,
+             FileAccess.DELETE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+        GetIfStreamRenameIsSupported;
+        // Current FSA adapter only support the scenario when gIsTargetStreamFound is false
+        {.
+           ModelProgram.gIsTargetStreamFound=false;
+        .}:
+        StreamRename;
+    )|| (construct model program from SetFileStreamRenameInformationConfig) 
+}
+
+// Test case of [MS-FSA] 2.1.5.14.11.1   Algorithm for Performing Stream Rename
+// The exploration time for this machine is about 5 seconds
+machine SetFileStreamRenameInformationTestCase() : SetFileStreamRenameInformationConfig where TestEnabled = true
+{
+    construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true
+    for SetFileStreamRenameInformationScenario
+}
+
+config SetFileShortNameInformationConfig : SetFileInformationConfig
+{
+    action MessageStatus IFSAAdapter.SetFileShortNameInfo( InputBufferFileName inputBufferFileName)
+            where {. 
+            //Condition.In<FileMode>(openMode,FileMode.DELETE_ON_CLOSE);                                                                      
+            Condition.In<InputBufferFileName>(inputBufferFileName,InputBufferFileName.StartWithBackSlash,
+                InputBufferFileName.Empty,
+                InputBufferFileName.EqualLinkShortName,
+                InputBufferFileName.NotValid,
+                InputBufferFileName.Valid);
+            .};
+}
+
+// Scenario of [MS-FSA] 2.1.5.14.13   FileShortNameInformation
+machine SetFileShortNameInformationScenario() : SetFileShortNameInformationConfig
+{
+    (
+        FsaInitial;
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+             {.
+                 ModelProgram.openHasRestoreAcces=true;
+                 ModelProgram.gOpenGenerateShortNames=true;
+             .}:
+        SetFileShortNameInfo;
+    )|| (construct model program from SetFileShortNameInformationConfig) 
+}
+
+// Test case of [MS-FSA] 2.1.5.14.13   FileShortNameInformation
+// The exploration time for this machine is about 5 seconds
+machine SetFileShortNameInformationTestCase() : SetFileShortNameInformationConfig where TestEnabled = true
+{
+    construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true
+    for SetFileShortNameInformationScenario
+}
+
+// Scenario of [MS-FSA] 3.1.5.14.14   FileValidDataLengthInformation
+machine SetFileValidDataLengthInformationScenario01() : SetFileInformationConfig
+{
+    (
+        FsaInitial;
+        GetIfOpenHasManageVolumeAccess;
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+             {.
+                 ModelProgram.gOpenStreamIsCompressed=false;
+                 ModelProgram.gOpenStreamIsSparse=false;
+             .}:
+        SetFileValidDataLengthInfo(false);
+    )|| (construct model program from SetFileInformationConfig) 
+}
+
+// Scenario of [MS-FSA] 3.1.5.14.14   FileValidDataLengthInformation
+machine SetFileValidDataLengthInformationScenario02() : SetFileInformationConfig
+{
+    (
+        FsaInitial;
+        GetIfOpenHasManageVolumeAccess;
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.NON_DIRECTORY_FILE,
+             StreamTypeNameToOPen.NULL,
+             FileAccess.GENERIC_WRITE,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DataFile,
+             FileNameStatus.PathNameValid);
+             {.
+                 ModelProgram.gOpenStreamIsCompressed=true;
+                 ModelProgram.gOpenStreamIsSparse=true;
+             .}:
+        SetFileValidDataLengthInfo(true);
+    )|| (construct model program from SetFileInformationConfig) 
+}
+
+// Scenario of [MS-FSA] 3.1.5.14.14   FileValidDataLengthInformation
+machine SetFileValidDataLengthInformationScenario_All() : SetFileInformationConfig
+{
+    SetFileValidDataLengthInformationScenario01 |
+    SetFileValidDataLengthInformationScenario02
+}
+
+// Test case of [MS-FSA] 3.1.5.14.14   FileValidDataLengthInformation
+// The exploration time for this machine is about 5 seconds
+machine SetFileValidDataLengthInformationTestCase() : SetFileInformationConfig where TestEnabled = true
+{
+    construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true
+    for SetFileValidDataLengthInformationScenario_All
+}

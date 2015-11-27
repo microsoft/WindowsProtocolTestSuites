@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+  <Include>
+    <File name="CommonTestSuite.deployment.ptfconfig"/>
+  </Include>
+
+  <Properties>
+    <Group name="SMB2">
+      <!--Tag named Description is used for the comment-->
+
+      <Property name="ShareTypeInclude_STYPE_CLUSTER_SOFS" value="false">
+        <Choice>true,false</Choice>
+        <Description>
+          Set true if TreeConnect.Share.Type for BasicFileShare includes STYPE_CLUSTER_SOFS, otherwise set it to false
+        </Description>
+      </Property>
+
+      <Property name="SpecialShare" value="ADMIN$">
+        <Description>
+          Used by TreeMgmt model
+          Name of a Share with STYPE_SPECIAL Bit but not IPC$, if SUT does not have such share, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="SameShareWithSMBBasic" value="SameWithSMBBasic">
+        <Description>
+          Used by AppInstanceId Model
+          Name of share with following properties
+          Share name is different from the value of BasicFileShare
+          Local path is same with share of BasicFileShare
+          If SUT does not have such share, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="DifferentShareFromSMBBasic" value="DifferentFromSMBBasic">
+        <Description>
+          Used by AppInstanceId Model
+          Name of share with following properties
+          Share name is different from the value of BasicFileShare
+          Local path is also different from share of BasicFileShare
+          If SUT does not have such share, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="PathSeparator" value="\">
+        <Description>
+          Used by CreateClose model for negative cases (the name of file path starting with path separator is invalid)
+          Path separator used in file path
+          For windows platform, it's backslash "\"
+          For non-windows platform, it could be other character, e.g. slash "/"
+        </Description>
+      </Property>
+
+      <Property name="ShareWithoutForceLevel2OrSOFS" value="SMBBasic">
+        <Description>
+          Used by Oplock model
+          Name of a share with following properties
+          Share.ForceLevel2Oplock is FALSE, it's indicated by SHI1005_FLAGS_FORCE_LEVELII_OPLOCK bit in  SHI1005_flags as specified in [MS-SRVS] section 2.2.4.29; otherwise, it MUST be set to FALSE.
+          Share.Type does NOT include STYPE_CLUSTER_SOFS, it's indicated by share type as mentioned in [MS-SRVS] section 2.2.2.4
+          If SUT does not have such share, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="ShareWithoutForceLevel2WithSOFS" value="SMBClustered">
+        <Description>
+          Used by Oplock model
+          Name of a share with following properties
+          Share.ForceLevel2Oplock is FALSE, it's indicated by SHI1005_FLAGS_FORCE_LEVELII_OPLOCK bit in  SHI1005_flags as specified in [MS-SRVS] section 2.2.4.29; otherwise, it MUST be set to FALSE.
+          Share.Type includes STYPE_CLUSTER_SOFS, it's indicated by share type as mentioned in [MS-SRVS] section 2.2.2.4
+          If SUT does not have such share, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="ShareWithForceLevel2WithoutSOFS" value="ShareForceLevel2">
+        <Description>
+          Used by Oplock model
+          Name of a share with following properties
+          Share.ForceLevel2Oplock is TRUE, it's indicated by SHI1005_FLAGS_FORCE_LEVELII_OPLOCK bit in  SHI1005_flags as specified in [MS-SRVS] section 2.2.4.29; otherwise, it MUST be set to FALSE.
+          Share.Type does NOT include STYPE_CLUSTER_SOFS, it's indicated by share type as mentioned in [MS-SRVS] section 2.2.2.4
+          If SUT does not have such share, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="ShareWithForceLevel2AndSOFS" value="SMBClusteredForceLevel2">
+        <Description>
+          Used by Oplock model
+          Name of a share with following properties
+          Share.ForceLevel2Oplock is TRUE, it's indicated by SHI1005_FLAGS_FORCE_LEVELII_OPLOCK bit in  SHI1005_flags as specified in [MS-SRVS] section 2.2.4.29; otherwise, it MUST be set to FALSE.
+          Share.Type includes STYPE_CLUSTER_SOFS, it's indicated by share type as mentioned in [MS-SRVS] section 2.2.2.4
+          If SUT does not have such share, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="ScaleOutFileServerName" value="ScaleOutFS.contoso.com">
+        <Description>
+          Used by Oplock model
+          Computer name of server that hosts share which includes STYPE_CLUSTER_SOFS in Share.Type
+          If server does not have computer name, set it to IP address
+          If it is not applicable, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="ScaleOutFileServerIP1" value="192.168.1.11">
+        <Description>
+          Used by Conflict model
+          One IP address of a server that belongs to the scale out file server
+          If it is not applicable, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="ScaleOutFileServerIP2" value="192.168.2.11">
+        <Description>
+          Used by Conflict model
+          One IP address of another server that belongs to the scale out file server
+          If it is not applicable, leave it blank
+        </Description>
+      </Property>
+
+    </Group>
+  </Properties>
+</TestSite>

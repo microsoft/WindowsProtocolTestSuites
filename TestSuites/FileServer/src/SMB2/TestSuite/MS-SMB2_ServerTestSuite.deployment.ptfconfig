@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+  <Include>
+    <File name="CommonTestSuite.deployment.ptfconfig"/>
+  </Include>
+
+  <Properties>
+    <Group name="SMB2">
+      <!--Tag named Description is used for the comment-->
+
+      <Property name="SutAlternativeIPAddress" value="192.168.2.11">
+        <Description>
+          Alternative IP address of SUT to establish connection
+          If SUT only has one IP, set it to same value of SutIPAddress
+        </Description>
+      </Property>
+
+      <Property name="FileShareSupportingIntegrityInfo" value="SMBReFSShare">
+        <Description>
+          Name of file share that support set/get integrity info
+          If SUT does not have such share, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="Symboliclink" value="Symboliclink">
+        <Description>
+          Name of symbolic link under BasicFileShare share. If SUT does not have a symbolic link, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="SymboliclinkInSubFolder" value="Sub\Symboliclink2">
+        <Description>
+          Relative path of symbolic link under sub folder of BasicFileShare share. If SUT does not have a symbolic link, leave it blank
+        </Description>
+      </Property>
+	  
+    </Group>
+  </Properties>
+</TestSite>

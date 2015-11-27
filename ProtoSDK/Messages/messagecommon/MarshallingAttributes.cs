@@ -447,6 +447,47 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling
     }
 
     /// <summary>
+    /// An attribute used to indicate PER is either aligned or unaligned.
+    /// If this attribute is not attached to the asn.1 type, aligned mode will be used.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Field, AllowMultiple = false)]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments")]
+    public sealed class AlignedAttribute : Attribute
+    {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        internal bool aligned;
+
+        /// <summary>
+        /// Constructs an instance of AlignedAttribute object.
+        /// </summary>
+        /// <param name="aligned">The boolean value indicating PER is either aligned or unaligned.</param>
+        public AlignedAttribute(bool aligned)
+        {
+            this.aligned = aligned;
+        }
+    }
+
+    /// <summary>
+    /// An attribute that indicates which ASN.1 encoding rule should be used.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Field, AllowMultiple = false)]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments")]
+    public sealed class Asn1Attribute : Attribute
+    {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        internal EncodingRule rule;
+
+        /// <summary>
+        /// Constructs an instance of Asn1Attribute object.
+        /// </summary>
+        /// <param name="rule">The encoding rule to be used.</param>
+        public Asn1Attribute(EncodingRule rule)
+        {
+            this.rule = rule;
+        }
+    }
+
+    /// <summary>
     /// Indicates the endian type.
     /// </summary>
     public enum EndianType

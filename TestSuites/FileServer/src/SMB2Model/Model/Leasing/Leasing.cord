@@ -1,0 +1,612 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Leasing;
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing;
+
+// Total exploration time: 1 hour 20 minutes
+config LeasingBaseConfig : BaseConfig
+{
+    action all ILeasingAdapter;
+    switch StateBound = 25600;
+    switch StepBound = 25600;
+
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb21)";
+}
+
+config LeaseV1Config : LeasingBaseConfig
+{
+    // Category: Model, Smb21, LeaseV1
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb21), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.LeaseV1)";
+}
+
+config LeaseV2Config : LeasingBaseConfig
+{
+    // Category: Model, Smb30, LeaseV2
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb30), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.LeaseV2)";
+}
+
+// Break Read LeaseV1
+machine BreakReadLeaseV1Scenario() : LeaseV1Config
+{
+    (
+        ReadConfig;
+        SetupConnection;
+        CreateRequest(ConnectTargetType.ConnectToNonDirectory, LeaseContextType.LeaseV1, LeaseKeyType.ValidLeaseKey, 1, 
+            _, _);
+        CreateResponse; 
+        (
+            FileOperationToBreakLeaseRequest({FileOperation.OPEN_OVERWRITE, FileOperation.WRITE_DATA, FileOperation.SIZE_CHANGED, FileOperation.RANGE_LOCK}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+            // 1 R -> None
+            OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.None, 1, 0);
+            FileOperationToBreakLeaseResponse;
+        )?;
+    ) || (construct model program from LeaseV1Config where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Leasing")
+}
+machine BreakReadLeaseV1TestCase() : LeaseV1Config where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for BreakReadLeaseV1Scenario()
+}
+
+// Break Read LeaseV2
+machine BreakReadLeaseV2Scenario() : LeaseV2Config
+{
+    (
+        ReadConfig;
+        SetupConnection({ModelDialectRevision.Smb30, ModelDialectRevision.Smb302}, _);
+        CreateRequest(ConnectTargetType.ConnectToNonDirectory, LeaseContextType.LeaseV2, LeaseKeyType.ValidLeaseKey, 1, 
+            _, _);
+        CreateResponse; 
+        (
+            FileOperationToBreakLeaseRequest({FileOperation.OPEN_OVERWRITE, FileOperation.WRITE_DATA, FileOperation.SIZE_CHANGED, FileOperation.RANGE_LOCK}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+            // 1 R -> None
+            OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.None, 1, 0);
+            FileOperationToBreakLeaseResponse;
+        )?;
+    ) || (construct model program from LeaseV2Config where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Leasing")
+}
+
+machine BreakReadLeaseV2TestCase() : LeaseV2Config where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for BreakReadLeaseV2Scenario()
+}
+
+// Break ReadWrite LeaseV1
+machine BreakReadWriteLeaseV1Scenario() : LeaseV1Config
+{
+    (
+        ReadConfig;
+        SetupConnection;
+        CreateRequest(ConnectTargetType.ConnectToNonDirectory, LeaseContextType.LeaseV1, LeaseKeyType.ValidLeaseKey, 5, 
+            LeaseFlagsValues.SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET, ParentLeaseKeyType.ValidParentLeaseKey);
+        CreateResponse;
+        (
+            FileOperationToBreakLeaseRequest({FileOperation.OPEN_WITHOUT_OVERWRITE}, OperatorType.SameClientId, _, out _);
+            FileOperationToBreakLeaseResponse;
+            (
+                (
+                    FileOperationToBreakLeaseRequest(FileOperation.OPEN_OVERWRITE, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                    // 1 RW -> None
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 5, 0);
+                    LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                    LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                    FileOperationToBreakLeaseResponse;
+                ) | (
+                    FileOperationToBreakLeaseRequest({FileOperation.OPEN_WITHOUT_OVERWRITE}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                    ((
+                        // 2 RW -> R
+                        OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 5, 1);
+                        LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 1);
+                        LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 1);
+                        FileOperationToBreakLeaseResponse;
+                        FileOperationToBreakLeaseRequest({FileOperation.OPEN_OVERWRITE, FileOperation.WRITE_DATA, FileOperation.SIZE_CHANGED, FileOperation.RANGE_LOCK}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                        // 2.1 R -> None
+                        OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.None, 1, 0);
+                        FileOperationToBreakLeaseResponse;
+                    ) | (
+                        // 3 RW -> None
+                        OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 5, 0);
+                        LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                        LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                        FileOperationToBreakLeaseResponse;
+                    ))
+                )
+            );
+        )?;
+    ) || (construct model program from LeaseV1Config where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Leasing")
+}
+
+machine BreakReadWriteLeaseV1TestCase() : LeaseV1Config where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for BreakReadWriteLeaseV1Scenario()
+}
+
+// Break ReadWrite LeaseV2
+machine BreakReadWriteLeaseV2Scenario() : LeaseV2Config
+{
+    (
+        ReadConfig;
+        SetupConnection({ModelDialectRevision.Smb30, ModelDialectRevision.Smb302}, _);
+        CreateRequest(ConnectTargetType.ConnectToNonDirectory, LeaseContextType.LeaseV2, LeaseKeyType.ValidLeaseKey, 5, 
+            LeaseFlagsValues.SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET, ParentLeaseKeyType.ValidParentLeaseKey);
+        CreateResponse;
+        (
+            FileOperationToBreakLeaseRequest({FileOperation.OPEN_WITHOUT_OVERWRITE}, OperatorType.SameClientId, _, out _);
+            FileOperationToBreakLeaseResponse;
+            (
+                (
+                    FileOperationToBreakLeaseRequest(FileOperation.OPEN_OVERWRITE, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                    // 1 RW -> None
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 5, 0);
+                    LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                    LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                    FileOperationToBreakLeaseResponse;
+                ) | (
+                    FileOperationToBreakLeaseRequest({FileOperation.OPEN_WITHOUT_OVERWRITE}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                    ((
+                        // 2 RW -> R
+                        OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 5, 1);
+                        LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 1);
+                        LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 1);
+                        FileOperationToBreakLeaseResponse;
+                        FileOperationToBreakLeaseRequest({FileOperation.OPEN_OVERWRITE, FileOperation.WRITE_DATA, FileOperation.SIZE_CHANGED, FileOperation.RANGE_LOCK}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                        // 2.1 R -> None
+                        OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.None, 1, 0);
+                        FileOperationToBreakLeaseResponse;
+                    ) | (
+                        // 3 RW -> None
+                        OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 5, 0);
+                        LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                        LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                        FileOperationToBreakLeaseResponse;
+                    ))
+                )
+            );
+        )?;
+    ) || (construct model program from LeaseV2Config where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Leasing")
+}
+
+machine BreakReadWriteLeaseV2TestCase() : LeaseV2Config where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for BreakReadWriteLeaseV2Scenario()
+}
+
+// Break ReadHandle LeaseV1
+machine BreakReadHandleLeaseV1Scenario() : LeaseV1Config
+{
+    (
+        ReadConfig;
+        SetupConnection;
+        CreateRequest(ConnectTargetType.ConnectToNonDirectory, LeaseContextType.LeaseV1, LeaseKeyType.ValidLeaseKey, 3, 
+            LeaseFlagsValues.SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET, ParentLeaseKeyType.ValidParentLeaseKey);
+        CreateResponse;
+        (
+            FileOperationToBreakLeaseRequest({FileOperation.OPEN_SHARING_VIOLATION, FileOperation.OPEN_SHARING_VIOLATION_WITH_OVERWRITE, FileOperation.RENAMEED}, OperatorType.SameClientId, _, out _);
+            FileOperationToBreakLeaseResponse;
+            ((
+                FileOperationToBreakLeaseRequest(FileOperation.DELETED, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                ((
+                    // 1 RH -> R, and no other operation after delete
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 1);
+                    LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 1);
+                    LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 1);
+                    FileOperationToBreakLeaseResponse;
+                ) | (
+                    // 2 RH -> None
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 0);
+                    LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                    LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                    FileOperationToBreakLeaseResponse;
+                ))
+            ) | (
+                // 3 RH -> RH, and no other operation after delete
+                FileOperationToBreakLeaseRequest(FileOperation.DELETED, OperatorType.SameClientId, _, out _);
+                FileOperationToBreakLeaseResponse;
+            ) | (
+                FileOperationToBreakLeaseRequest({FileOperation.OPEN_SHARING_VIOLATION, FileOperation.OPEN_SHARING_VIOLATION_WITH_OVERWRITE, FileOperation.RENAMEED}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                ((
+                    // 4 RH -> R
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 1);
+                    LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 1);
+                    LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 1);
+                    FileOperationToBreakLeaseResponse;
+                    FileOperationToBreakLeaseRequest({FileOperation.OPEN_OVERWRITE, FileOperation.WRITE_DATA, FileOperation.SIZE_CHANGED, FileOperation.RANGE_LOCK}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                    // 4.1 R -> None
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.None, 1, 0);
+                    FileOperationToBreakLeaseResponse;
+                ) | (
+                    // 5 RH -> None
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 0);
+                    LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                    LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                    FileOperationToBreakLeaseResponse;
+                ))
+            ) | (
+                FileOperationToBreakLeaseRequest({FileOperation.PARENT_DIR_RENAMED}, _, _, out _);
+                ((
+                    // 6 RH -> R
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 1);
+                    LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 1);
+                    LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 1);
+                    FileOperationToBreakLeaseResponse;
+                    FileOperationToBreakLeaseRequest({FileOperation.OPEN_OVERWRITE, FileOperation.WRITE_DATA, FileOperation.SIZE_CHANGED, FileOperation.RANGE_LOCK}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                    // 6.1 R -> None
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.None, 1, 0);
+                    FileOperationToBreakLeaseResponse;
+                ) | (
+                    // 7 RH -> None
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 0);
+                    LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                    LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                    FileOperationToBreakLeaseResponse;
+                ))
+            ));
+        )?;
+    ) || (construct model program from LeaseV1Config where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Leasing")
+}
+
+machine BreakReadHandleLeaseV1TestCase() : LeaseV1Config where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for BreakReadHandleLeaseV1Scenario()
+}
+
+// Break ReadHandle leaseV2
+machine BreakReadHandleLeaseV2Scenario() : LeaseV2Config
+{
+    (
+        ReadConfig;
+        SetupConnection({ModelDialectRevision.Smb30, ModelDialectRevision.Smb302}, _);
+        CreateRequest(ConnectTargetType.ConnectToNonDirectory, LeaseContextType.LeaseV2, LeaseKeyType.ValidLeaseKey, 3, 
+            LeaseFlagsValues.SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET, ParentLeaseKeyType.ValidParentLeaseKey);
+        CreateResponse;
+        (
+            FileOperationToBreakLeaseRequest({FileOperation.OPEN_SHARING_VIOLATION, FileOperation.OPEN_SHARING_VIOLATION_WITH_OVERWRITE, FileOperation.RENAMEED}, OperatorType.SameClientId, _, out _);
+            FileOperationToBreakLeaseResponse;
+            ((
+                FileOperationToBreakLeaseRequest(FileOperation.DELETED, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                ((
+                    // 1 RH -> R, and no other operation after delete
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 1);
+                    LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 1);
+                    LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 1);
+                    FileOperationToBreakLeaseResponse;
+                ) | (
+                    // 2 RH -> None
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 0);
+                    LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                    LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                    FileOperationToBreakLeaseResponse;
+                ))
+            ) | (
+                // 3 RH -> RH, and no other operation after delete
+                FileOperationToBreakLeaseRequest(FileOperation.DELETED, OperatorType.SameClientId, _, out _);
+                FileOperationToBreakLeaseResponse;
+            ) | (
+                FileOperationToBreakLeaseRequest({FileOperation.OPEN_SHARING_VIOLATION, FileOperation.OPEN_SHARING_VIOLATION_WITH_OVERWRITE, FileOperation.RENAMEED}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                ((
+                    // 4 RH -> R
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 1);
+                    LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 1);
+                    LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 1);
+                    FileOperationToBreakLeaseResponse;
+                    FileOperationToBreakLeaseRequest({FileOperation.OPEN_OVERWRITE, FileOperation.WRITE_DATA, FileOperation.SIZE_CHANGED, FileOperation.RANGE_LOCK}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                    // 4.1 R -> None
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.None, 1, 0);
+                    FileOperationToBreakLeaseResponse;
+                ) | (
+                    // 5 RH -> None
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 0);
+                    LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                    LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                    FileOperationToBreakLeaseResponse;
+                ))
+            ) | (
+                FileOperationToBreakLeaseRequest({FileOperation.PARENT_DIR_RENAMED}, _, _, out _);
+                ((
+                    // 6 RH -> R
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 1);
+                    LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 1);
+                    LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 1);
+                    FileOperationToBreakLeaseResponse;
+                    FileOperationToBreakLeaseRequest({FileOperation.OPEN_OVERWRITE, FileOperation.WRITE_DATA, FileOperation.SIZE_CHANGED, FileOperation.RANGE_LOCK}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                    // 6.1 R -> None
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.None, 1, 0);
+                    FileOperationToBreakLeaseResponse;
+                ) | (
+                    // 7 RH -> None
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 0);
+                    LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                    LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                    FileOperationToBreakLeaseResponse;
+                ))
+            ));
+        )?;
+    ) || (construct model program from LeaseV2Config where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Leasing")
+}
+
+machine BreakReadHandleLeaseV2TestCase() : LeaseV2Config where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for BreakReadHandleLeaseV2Scenario()
+}
+
+// Break ReadWriteHandle LeaseV1
+machine BreakReadWriteHandleLeaseV1Scenario() : LeaseV1Config
+{
+    (
+        ReadConfig;
+        SetupConnection;
+        CreateRequest(ConnectTargetType.ConnectToNonDirectory, LeaseContextType.LeaseV1, LeaseKeyType.ValidLeaseKey, 7, 
+            LeaseFlagsValues.SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET, ParentLeaseKeyType.ValidParentLeaseKey);
+        CreateResponse;
+        (
+            (
+                (
+                    FileOperationToBreakLeaseRequest({FileOperation.OPEN_SHARING_VIOLATION, FileOperation.OPEN_SHARING_VIOLATION_WITH_OVERWRITE}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _)
+                    |
+                    FileOperationToBreakLeaseRequest(FileOperation.PARENT_DIR_RENAMED, _, _, out _)
+                );
+                ((
+                    // 1 RWH -> RW
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 7, 5);
+                    LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 5);
+                    LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 5);
+                    FileOperationToBreakLeaseResponse;
+                    (
+                        (
+                            FileOperationToBreakLeaseRequest(FileOperation.OPEN_OVERWRITE, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                            // 1.1 RW -> None
+                            OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 5, 0);
+                            LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                            LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                            FileOperationToBreakLeaseResponse;
+                        ) | (
+                            FileOperationToBreakLeaseRequest({FileOperation.OPEN_WITHOUT_OVERWRITE}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                            ((
+                                // 1.2 RW -> R
+                                OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 5, 1);
+                                LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 1);
+                                LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 1);
+                                FileOperationToBreakLeaseResponse;
+                                FileOperationToBreakLeaseRequest({FileOperation.OPEN_OVERWRITE, FileOperation.WRITE_DATA, FileOperation.SIZE_CHANGED, FileOperation.RANGE_LOCK}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                                // 1.2.1 R -> None
+                                OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.None, 1, 0);
+                                FileOperationToBreakLeaseResponse;
+                            ) | (
+                                // 1.3 RW -> None
+                                OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 5, 0);
+                                LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                                LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                                FileOperationToBreakLeaseResponse;
+                            ))
+                        )
+                    );
+                ) | (
+                    // 2 RWH -> None
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 7, 0);
+                    LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                    LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                    FileOperationToBreakLeaseResponse;
+                ));
+            ) | (
+                FileOperationToBreakLeaseRequest({FileOperation.OPEN_WITHOUT_OVERWRITE}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                ((
+                    // 3 RWH -> RH
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 7, 3);
+                    LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 3);
+                    LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 3);
+                    FileOperationToBreakLeaseResponse;
+                    ((
+                        FileOperationToBreakLeaseRequest(FileOperation.DELETED, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                        ((
+                            // 3.1 RH -> R, and no other operation after delete
+                            OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 1);
+                            LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 1);
+                            LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 1);
+                            FileOperationToBreakLeaseResponse;
+                        ) | (
+                            // 3.2 RH -> None
+                            OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 0);
+                            LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                            LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                            FileOperationToBreakLeaseResponse;
+                        ))
+                    ) | (
+                        // 3.3 RH -> RH, and no other operation after delete
+                        FileOperationToBreakLeaseRequest(FileOperation.DELETED, OperatorType.SameClientId, _, out _);
+                        FileOperationToBreakLeaseResponse;
+                    ) | (
+                        FileOperationToBreakLeaseRequest({FileOperation.OPEN_SHARING_VIOLATION, FileOperation.OPEN_SHARING_VIOLATION_WITH_OVERWRITE, FileOperation.RENAMEED}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                        ((
+                            // 3.4 RH -> R
+                            OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 1);
+                            LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 1);
+                            LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 1);
+                            FileOperationToBreakLeaseResponse;
+                            FileOperationToBreakLeaseRequest({FileOperation.OPEN_OVERWRITE, FileOperation.WRITE_DATA, FileOperation.SIZE_CHANGED, FileOperation.RANGE_LOCK}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                            // 3.4.1 R -> None
+                            OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.None, 1, 0);
+                            FileOperationToBreakLeaseResponse;
+                        ) | (
+                            // 3.5 RH -> None
+                            OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 0);
+                            LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                            LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                            FileOperationToBreakLeaseResponse;
+                        ))
+                    ) | (
+                        FileOperationToBreakLeaseRequest({FileOperation.PARENT_DIR_RENAMED}, _, _, out _);
+                        ((
+                            // 3.6 RH -> R
+                            OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 1);
+                            LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 1);
+                            LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 1);
+                            FileOperationToBreakLeaseResponse;
+                            FileOperationToBreakLeaseRequest({FileOperation.OPEN_OVERWRITE, FileOperation.WRITE_DATA, FileOperation.SIZE_CHANGED, FileOperation.RANGE_LOCK}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                            // 3.6.1 R -> None
+                            OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.None, 1, 0);
+                            FileOperationToBreakLeaseResponse;
+                        ) | (
+                            // 3.7 RH -> None
+                            OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 0);
+                            LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                            LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                            FileOperationToBreakLeaseResponse;
+                        ))
+                    ));
+                ) | (
+                    // 4 RWH -> None
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 7, 0);
+                    LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                    LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                    FileOperationToBreakLeaseResponse;
+                ))
+            )
+        )?;
+    ) || (construct model program from LeaseV1Config where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Leasing")
+}
+
+machine BreakReadWriteHandleLeaseV1TestCase() : LeaseV1Config where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for BreakReadWriteHandleLeaseV1Scenario()
+}
+
+// Break ReadWriteHandle LeaseV2
+machine BreakReadWriteHandleLeaseV2Scenario() : LeaseV2Config
+{
+    (
+        ReadConfig;
+        SetupConnection({ModelDialectRevision.Smb30, ModelDialectRevision.Smb302}, _);
+        CreateRequest(ConnectTargetType.ConnectToNonDirectory, LeaseContextType.LeaseV2, LeaseKeyType.ValidLeaseKey, 7, 
+            LeaseFlagsValues.SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET, ParentLeaseKeyType.ValidParentLeaseKey);
+        CreateResponse;
+        (
+            (
+                (
+                    FileOperationToBreakLeaseRequest({FileOperation.OPEN_SHARING_VIOLATION, FileOperation.OPEN_SHARING_VIOLATION_WITH_OVERWRITE}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _)
+                    |
+                    FileOperationToBreakLeaseRequest(FileOperation.PARENT_DIR_RENAMED, _, _, out _)
+                );
+                ((
+                    // 1 RWH -> RW
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 7, 5);
+                    LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 5);
+                    LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 5);
+                    FileOperationToBreakLeaseResponse;
+                    (
+                        (
+                            FileOperationToBreakLeaseRequest(FileOperation.OPEN_OVERWRITE, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                            // 1.1 RW -> None
+                            OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 5, 0);
+                            LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                            LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                            FileOperationToBreakLeaseResponse;
+                        ) | (
+                            FileOperationToBreakLeaseRequest({FileOperation.OPEN_WITHOUT_OVERWRITE}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                            ((
+                                // 1.2 RW -> R
+                                OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 5, 1);
+                                LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 1);
+                                LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 1);
+                                FileOperationToBreakLeaseResponse;
+                                FileOperationToBreakLeaseRequest({FileOperation.OPEN_OVERWRITE, FileOperation.WRITE_DATA, FileOperation.SIZE_CHANGED, FileOperation.RANGE_LOCK}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                                // 1.2.1 R -> None
+                                OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.None, 1, 0);
+                                FileOperationToBreakLeaseResponse;
+                            ) | (
+                                // 1.3 RW -> None
+                                OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 5, 0);
+                                LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                                LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                                FileOperationToBreakLeaseResponse;
+                            ))
+                        )
+                    );
+                ) | (
+                    // 2 RWH -> None
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 7, 0);
+                    LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                    LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                    FileOperationToBreakLeaseResponse;
+                ));
+            ) | (
+                FileOperationToBreakLeaseRequest({FileOperation.OPEN_WITHOUT_OVERWRITE}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                ((
+                    // 3 RWH -> RH
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 7, 3);
+                    LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 3);
+                    LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 3);
+                    FileOperationToBreakLeaseResponse;
+                    ((
+                        FileOperationToBreakLeaseRequest(FileOperation.DELETED, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                        ((
+                            // 3.1 RH -> R, and no other operation after delete
+                            OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 1);
+                            LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 1);
+                            LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 1);
+                            FileOperationToBreakLeaseResponse;
+                        ) | (
+                            // 3.2 RH -> None
+                            OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 0);
+                            LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                            LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                            FileOperationToBreakLeaseResponse;
+                        ))
+                    ) | (
+                        // 3.3 RH -> RH, and no other operation after delete
+                        FileOperationToBreakLeaseRequest(FileOperation.DELETED, OperatorType.SameClientId, _, out _);
+                        FileOperationToBreakLeaseResponse;
+                    ) | (
+                        FileOperationToBreakLeaseRequest({FileOperation.OPEN_SHARING_VIOLATION, FileOperation.OPEN_SHARING_VIOLATION_WITH_OVERWRITE, FileOperation.RENAMEED}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                        ((
+                            // 3.4 RH -> R
+                            OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 1);
+                            LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 1);
+                            LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 1);
+                            FileOperationToBreakLeaseResponse;
+                            FileOperationToBreakLeaseRequest({FileOperation.OPEN_OVERWRITE, FileOperation.WRITE_DATA, FileOperation.SIZE_CHANGED, FileOperation.RANGE_LOCK}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                            // 3.4.1 R -> None
+                            OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.None, 1, 0);
+                            FileOperationToBreakLeaseResponse;
+                        ) | (
+                            // 3.5 RH -> None
+                            OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 0);
+                            LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                            LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                            FileOperationToBreakLeaseResponse;
+                        ))
+                    ) | (
+                        FileOperationToBreakLeaseRequest({FileOperation.PARENT_DIR_RENAMED}, _, _, out _);
+                        ((
+                            // 3.6 RH -> R
+                            OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 1);
+                            LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 1);
+                            LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 1);
+                            FileOperationToBreakLeaseResponse;
+                            FileOperationToBreakLeaseRequest({FileOperation.OPEN_OVERWRITE, FileOperation.WRITE_DATA, FileOperation.SIZE_CHANGED, FileOperation.RANGE_LOCK}, {OperatorType.SameClientGuidDifferentLeaseKey, OperatorType.SecondClient}, _, out _);
+                            // 3.6.1 R -> None
+                            OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.None, 1, 0);
+                            FileOperationToBreakLeaseResponse;
+                        ) | (
+                            // 3.7 RH -> None
+                            OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 3, 0);
+                            LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                            LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                            FileOperationToBreakLeaseResponse;
+                        ))
+                    ));
+                ) | (
+                    // 4 RWH -> None
+                    OnLeaseBreakNotification(_, LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED, 7, 0);
+                    LeaseBreakAcknowledgmentRequest(ModelLeaseKeyType.ValidLeaseKey, 0);
+                    LeaseBreakResponse(ModelSmb2Status.STATUS_SUCCESS, 0);
+                    FileOperationToBreakLeaseResponse;
+                ))
+            )
+        )?;
+    ) || (construct model program from LeaseV2Config where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Leasing")
+}
+
+machine BreakReadWriteHandleLeaseV2TestCase() : LeaseV2Config where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for BreakReadWriteHandleLeaseV2Scenario()
+}

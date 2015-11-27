@@ -1,0 +1,182 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay;
+
+config ReplayBaseConfig : BaseConfig
+{
+    switch StateBound = 100000;
+    switch StepBound = 100000;
+    switch PathDepthBound = 100000;
+
+    action all IReplayAdapter;
+
+    // Category: Model, Smb30, Replay
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb30), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Replay)";
+}
+
+//
+// Total exploration time for all testcase machines about 40 min
+//
+config ReplayConfig : ReplayBaseConfig
+{
+    action void IReplayAdapter.PrepareCreate(
+            ModelDialectRevision maxSmbVersionClientSupported,
+            ReplayModelClientSupportPersistent isClientSupportPersistent,
+            ReplayModelDurableHandle modelDurableHandle,
+            ReplayModelShareType shareType,
+            ReplayModelRequestedOplockLevel requestedOplockLevel,
+            ReplayModelLeaseState leaseState)
+            where maxSmbVersionClientSupported in {ModelDialectRevision.Smb30, ModelDialectRevision.Smb302};
+}
+
+//
+// Replay CREATE without an existing open
+//
+machine ReplayCreateWithoutHandleScenario() : ReplayConfig
+{
+    (
+        ReadConfig;
+        CreateRequest(
+            {ModelDialectRevision.Smb30, ModelDialectRevision.Smb302},
+             _, // ReplayModelShareType
+             _, // ReplayModelClientSupportPersistent
+             ReplayModelSwitchChannelType.MainChannel,
+             _, // ReplayModelChannelSequenceType
+             _, // ReplayModelSetReplayFlag
+             _, // ReplayModelDurableHandle
+             _, // ReplayModelRequestedOplockLevel
+             _, // ReplayModelLeaseState
+            ReplayModelFileName.DefaultFileName,
+            ReplayModelCreateGuid.DefaultCreateGuid,
+            ReplayModelFileAttributes.DefaultFileAttributes,
+            ReplayModelCreateDisposition.DefaultCreateDisposition,
+            ReplayModelLeaseKey.DefaultLeaseKey);
+        CreateResponse;
+    ) || (construct model program from ReplayConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.Model.Replay")
+}
+
+machine ReplayCreateWithoutHandleTestCase() : ReplayConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for ReplayCreateWithoutHandleScenario()
+}
+
+//
+// Replay CREATE on an existing open
+//
+machine ReplayCreateNormalHandleScenario() : ReplayConfig
+{
+    (
+        ReadConfig;
+        PrepareCreate(
+            _,
+            ReplayModelClientSupportPersistent.ClientNotSupportPersistent,
+            ReplayModelDurableHandle.NormalHandle,
+            ReplayModelShareType.NonCAShare,
+            ReplayModelRequestedOplockLevel.OplockLevelNone,
+            ReplayModelLeaseState.LeaseStateIsNone);
+        CreateRequest;
+        CreateResponse;
+    ) || (construct model program from ReplayConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.Model.Replay")
+}
+
+machine ReplayCreateNormalHandleTestCase() : ReplayConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for ReplayCreateNormalHandleScenario()
+}
+
+//
+// Replay CREATE on an existing open with durable handle v1
+//
+machine ReplayCreateDurableHandleV1Scenario() : ReplayConfig
+{
+    (
+        ReadConfig;
+        PrepareCreate(
+            _,
+            ReplayModelClientSupportPersistent.ClientNotSupportPersistent,
+            ReplayModelDurableHandle.DurableHandleV1,
+            ReplayModelShareType.NonCAShare,
+            ReplayModelRequestedOplockLevel.OplockLevelBatch,
+            {ReplayModelLeaseState.LeaseStateIsNone});
+        CreateRequest;
+        CreateResponse;
+    ) || (construct model program from ReplayConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.Model.Replay")
+}
+
+machine ReplayCreateDurableHandleV1TestCase() : ReplayConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for ReplayCreateDurableHandleV1Scenario()
+}
+
+//
+// Replay CREATE on an existing open with durable handle v2
+//
+machine ReplayCreateDurableHandleV2Scenario() : ReplayConfig
+{
+    (
+        ReadConfig;
+        PrepareCreate(
+            _,
+            ReplayModelClientSupportPersistent.ClientNotSupportPersistent,
+            ReplayModelDurableHandle.DurableHandleV2,
+            ReplayModelShareType.NonCAShare,
+            {ReplayModelRequestedOplockLevel.OplockLevelLeaseV1, ReplayModelRequestedOplockLevel.OplockLevelLeaseV2},
+            {ReplayModelLeaseState.LeaseStateIncludeH});
+        CreateRequest;
+        CreateResponse;
+    ) || (construct model program from ReplayConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.Model.Replay")
+}
+
+machine ReplayCreateDurableHandleV2TestCase() : ReplayConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for ReplayCreateDurableHandleV2Scenario()
+}
+
+//
+// Replay CREATE on an existing open with persistent handle
+//
+machine ReplayCreateDurableHandleV2PersistentScenario() : ReplayConfig
+{
+    (
+        ReadConfig;
+        PrepareCreate(
+            _,
+            ReplayModelClientSupportPersistent.ClientSupportPersistent,
+            ReplayModelDurableHandle.DurableHandleV2Persistent,
+            ReplayModelShareType.CAShare,
+            {ReplayModelRequestedOplockLevel.OplockLevelLeaseV1, ReplayModelRequestedOplockLevel.OplockLevelLeaseV2},
+            {ReplayModelLeaseState.LeaseStateIncludeH});
+        CreateRequest;
+        CreateResponse;
+    ) || (construct model program from ReplayConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.Model.Replay")
+}
+
+machine ReplayCreateDurableHandleV2PersistentTestCase() : ReplayConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for ReplayCreateDurableHandleV2PersistentScenario()
+}
+
+//
+// Replay READ/WRITE/IOCTL/SET_INFO
+//
+machine ReplayFileOperationScenario(): ReplayConfig
+{
+    let ReplayModelRequestCommand requestCommand
+        where
+        {.
+            Condition.In(requestCommand, ReplayModelRequestCommand.Read, ReplayModelRequestCommand.Write, ReplayModelRequestCommand.IoCtl, ReplayModelRequestCommand.SetInfo);
+        .}
+    in
+    (
+        ReadConfig;
+        PrepareFileOperation({ModelDialectRevision.Smb30, ModelDialectRevision.Smb302}, requestCommand)?;
+        FileOperationRequest(_, _, requestCommand, _, _, _);
+        FileOperationResponse;
+    ) || (construct model program from ReplayConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.Model.Replay")
+}
+
+machine ReplayFileOperationTestCase() : ReplayConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for ReplayFileOperationScenario()
+}

@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+
+  <Properties>
+
+    <Group name="Common">
+      <Property name="TestName" value="FileServer Family Test" />
+      <Property name="FeatureName" value="FileServer" />
+      <Property name="Version" value="3.0" />
+
+      <!--
+        Supported rpce authentication level:
+        RPC_C_AUTHN_LEVEL_DEFAULT,
+        RPC_C_AUTHN_LEVEL_NONE,
+        RPC_C_AUTHN_LEVEL_CONNECT,
+        RPC_C_AUTHN_LEVEL_CALL,
+        RPC_C_AUTHN_LEVEL_PKT,
+        RPC_C_AUTHN_LEVEL_PKT_INTEGRITY,
+        RPC_C_AUTHN_LEVEL_PKT_PRIVACY
+    -->
+      <Property name="RpceAuthenticationLevel" value="RPC_C_AUTHN_LEVEL_PKT_INTEGRITY"/>
+
+      <!--Active TDIs that would impact test, multiple values should be separated by semicolons. It will be overridden by separate <TestSuiteName>.deployment.ptfconfig-->
+      <Property name="ActiveTDIs" value=";"/>
+
+    </Group>
+  </Properties>
+  <Adapters>
+    <Adapter xsi:type="powershell" name="ISutProtocolControlAdapter" scriptdir=".\"/>
+  </Adapters>
+
+  <TestLog defaultprofile="Verbose">
+    <Sinks>
+      <File id="XMLLog" directory=".\TestLog" file="FileServer_Log.xml" format="xml"/>
+      <File id="Debug" directory=".\TestLog" file="FileServer_DEBUG.txt" format="text"/>
+      <Sink id="PipeSink" type="Microsoft.Protocols.TestTools.Logging.PipeSink"/>
+    </Sinks>
+
+    <Profiles>
+      <Profile name="Verbose" extends="Error">
+        <!-- Show for ETW -->
+        <Rule kind="TestStep" sink="Etw" delete="false"/>
+        <Rule kind="Checkpoint" sink="Etw" delete="false"/>
+        <Rule kind="CheckSucceeded" sink="Etw" delete="false"/>
+        <Rule kind="CheckFailed" sink="Etw" delete="false"/>
+        <Rule kind="CheckInconclusive" sink="Etw" delete="false"/>
+        <Rule kind="Comment" sink="Etw" delete="false"/>
+        <Rule kind="Warning" sink="Etw" delete="false"/>
+        <Rule kind="Debug" sink="Etw" delete="false"/>
+        <Rule kind="TestFailed" sink="Etw" delete="false"/>
+        <Rule kind="TestInconclusive" sink="Etw" delete="false"/>
+        <Rule kind="TestPassed" sink="Etw" delete="false"/>
+
+        <!-- Show for CommandlineConsole -->
+        <Rule kind="TestStep" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="Checkpoint" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="CheckSucceeded" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="CheckFailed" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="CheckInconclusive" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="Comment" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="Warning" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="Debug" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="TestFailed" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="TestInconclusive" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="TestPassed" sink="CommandLineConsole" delete="false"/>
+
+        <!-- Show for Console -->
+        <Rule kind="TestStep" sink="Console" delete="false"/>
+        <Rule kind="Checkpoint" sink="Console" delete="false"/>
+        <Rule kind="CheckSucceeded" sink="Console" delete="false"/>
+        <Rule kind="CheckFailed" sink="Console" delete="false"/>
+        <Rule kind="CheckInconclusive" sink="Console" delete="false"/>
+        <Rule kind="Comment" sink="Console" delete="false"/>
+        <Rule kind="Warning" sink="Console" delete="false"/>
+        <Rule kind="Debug" sink="Console" delete="false"/>
+        <Rule kind="TestFailed" sink="Console" delete="false"/>
+        <Rule kind="TestInconclusive" sink="Console" delete="false"/>
+        <Rule kind="TestPassed" sink="Console" delete="false"/>
+
+        <!-- Show for XML log -->
+        <Rule kind="TestStep" sink="XMLLog" delete="false"/>
+        <Rule kind="Checkpoint" sink="XMLLog" delete="false"/>
+        <Rule kind="CheckSucceeded" sink="XMLLog" delete="false"/>
+        <Rule kind="CheckFailed" sink="XMLLog" delete="false"/>
+        <Rule kind="CheckInconclusive" sink="XMLLog" delete="false"/>
+        <Rule kind="Comment" sink="XMLLog" delete="false"/>
+        <Rule kind="Warning" sink="XMLLog" delete="false"/>
+        <Rule kind="Debug" sink="XMLLog" delete="false"/>
+        <Rule kind="TestFailed" sink="XMLLog" delete="false"/>
+        <Rule kind="TestInconclusive" sink="XMLLog" delete="false"/>
+        <Rule kind="TestPassed" sink="XMLLog" delete="false"/>
+
+        <!-- Show for debugging -->
+        <Rule kind="TestStep" sink="Debug" delete="false"/>
+        <Rule kind="Checkpoint" sink="Debug" delete="false"/>
+        <Rule kind="CheckSucceeded" sink="Debug" delete="false"/>
+        <Rule kind="CheckFailed" sink="Debug" delete="false"/>
+        <Rule kind="CheckInconclusive" sink="Debug" delete="false"/>
+        <Rule kind="EnterMethod" sink="Debug"/>
+        <Rule kind="ExitMethod" sink="Debug"/>
+        <Rule kind="Comment" sink="Debug" delete="false"/>
+        <Rule kind="Warning" sink="Debug" delete="false"/>
+        <Rule kind="Debug" sink="Debug" delete="false"/>
+        <Rule kind="TestFailed" sink="Debug" delete="false"/>
+        <Rule kind="TestInconclusive" sink="Debug" delete="false"/>
+        <Rule kind="TestPassed" sink="Debug" delete="false"/>
+
+        <!--Shown for Protocol Test Manager-->
+        <Rule kind="Checkpoint" sink="PipeSink" delete="false" />
+        <Rule kind="CheckFailed" sink="PipeSink" delete="false" />
+        <Rule kind="CheckSucceeded" sink="PipeSink" delete="false" />
+        <Rule kind="CheckInconclusive" sink="PipeSink" delete="false"/>
+        <Rule kind="TestInProgress" sink="PipeSink" delete="false" />
+        <Rule kind="TestFailed" sink="PipeSink" delete="false" />
+        <Rule kind="TestInconclusive" sink="PipeSink" delete="false" />
+        <Rule kind="TestPassed" sink="PipeSink" delete="false" />
+        <Rule kind="TestError" sink="PipeSink" delete="false" />
+        <Rule kind="TestTimeout" sink="PipeSink" delete="false" />
+        <Rule kind="TestAborted" sink="PipeSink" delete="false" />
+        <Rule kind="Comment" sink="PipeSink" delete="false" />
+      </Profile>
+    </Profiles>
+  </TestLog>
+</TestSite>

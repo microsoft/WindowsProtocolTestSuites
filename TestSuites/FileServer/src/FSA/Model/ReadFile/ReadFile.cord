@@ -1,0 +1,48 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+
+config ReadFileConfig : Actions_Coverage
+{                     
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.ReadFile)";
+}
+
+// Scenario of [MS-FSA] 2.1.5.2   Server Requests a Read
+machine ReadFileScenario() : ReadFileConfig
+{
+    (
+        FsaInitial;
+        CheckIsR507Implemented; 
+        CheckIsR405Implemented; 
+        GetSystemConfig;
+        CreateFile(
+                FileAttribute.NORMAL,
+                CreateOptions.NON_DIRECTORY_FILE,
+                StreamTypeNameToOPen.NULL,
+                FileAccess.MAXIMUM_ALLOWED,
+                ShareAccess.FILE_SHARE_WRITE,
+                CreateDisposition.CREATE,
+                StreamFoundType.StreamIsFound,
+                SymbolicLinkType.IsNotSymbolicLink,
+                FileType.DataFile,
+                FileNameStatus.Normal);
+         GetFileVolumSize;
+         (
+            // To reduce the scope for SE to explor, narrow down scenario to below 3 requirements. Skip other scenarios witch will cause SMB2 connection terminated.
+            // (1) ByteOffset is negative (2) ByteCount is zero (3) (ByteOffset + ByteCount) is larger than MAXLONGLONG (0x7fffffffffffffff)
+            ReadFile(-1, 0, out _) | ReadFile(0, 0, out _) | ReadFile(9223372036854775806, 1, out _)
+         );
+    )
+    ||
+    (construct model program from ReadFileConfig) 
+}
+
+// Test case of [MS-FSA] 2.1.5.2   Server Requests a Read
+machine ReadFileTestCase() : ReadFileConfig where TestEnabled = true
+{
+    construct requirement coverage where strategy = "selective"
+    for (
+        construct test cases where strategy = "shorttests", AllowUndeterminedCoverage = true for 
+        ReadFileScenario
+    )
+}

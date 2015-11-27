@@ -1,0 +1,66 @@
+import "ms-dtyp.idl";
+typedef [context_handle] void * PCONTEXT_HANDLE;
+typedef [context_handle] PCONTEXT_HANDLE PCONTEXT_HANDLE_SHARED;
+typedef [ref] PCONTEXT_HANDLE * PPCONTEXT_HANDLE;
+typedef RESOURCE_CHANGE * PRESOURCE_CHANGE;
+typedef MOVE_IPADDR_LIST * PMOVE_IPADDR_LIST;
+typedef MOVE_REQUEST * PMOVE_REQUEST;
+typedef WITNESS_INTERFACE_INFO * PWITNESS_INTERFACE_INFO;
+typedef RESP_ASYNC_NOTIFY * PRESP_ASYNC_NOTIFY;
+typedef WITNESS_INTERFACE_LIST * PWITNESS_INTERFACE_LIST;
+typedef struct _RESOURCE_CHANGE {
+UINT Length;
+UINT32 ChangeType;
+WCHAR ResourceName[];
+} RESOURCE_CHANGE;
+typedef struct _MOVE_IPADDR_LIST {
+UINT Flags;
+ULONG IPV4;
+USHORT IPV6[8];
+} MOVE_IPADDR_LIST;
+typedef struct _MOVE_REQUEST {
+UINT Length;
+ULONG Reserved;
+ULONG IPAddrInstances;
+MOVE_IPADDR_LIST IPAddrList[];
+} MOVE_REQUEST;
+typedef struct _RESP_ASYNC_NOTIFY {
+UINT MessageType;
+UINT Length;
+UINT NumberOfMessages;
+[size_is(Length)] [unique] PBYTE MessageBuffer;
+} RESP_ASYNC_NOTIFY;
+typedef struct _WITNESS_INTERFACE_INFO {
+WCHAR InterfaceGroupName[260];
+ULONG Version;
+USHORT State;
+ULONG IPV4;
+USHORT IPV6[8];
+UINT Flags;
+} WITNESS_INTERFACE_INFO;
+typedef struct _WITNESS_INTERFACE_LIST {
+UINT NumberOfInterfaces;
+[size_is(NumberOfInterfaces)] [unique] PWITNESS_INTERFACE_INFO InterfaceInfo;
+} WITNESS_INTERFACE_LIST;
+[uuid(ccd8c074-d0e5-4a40-92b4-d074faa6ba28)]
+[version(1.1)]
+[pointer_default(unique)]
+interface Witness {
+DWORD WitnessrGetInterfaceList(
+[in] handle_t Handle,
+[out] PWITNESS_INTERFACE_LIST * InterfaceList);
+DWORD WitnessrRegister(
+[in] handle_t Handle,
+[out] PPCONTEXT_HANDLE ppContext,
+[in] ULONG Version,
+[in] [string] [unique] LPWSTR NetName,
+[in] [string] [unique] LPWSTR IpAddress,
+[in] [string] [unique] LPWSTR ClientComputerName);
+DWORD WitnessrUnRegister(
+[in] handle_t Handle,
+[in] PCONTEXT_HANDLE pContext);
+DWORD WitnessrAsyncNotify(
+[in] handle_t Handle,
+[in] PCONTEXT_HANDLE_SHARED pContext,
+[out] PRESP_ASYNC_NOTIFY * pResp);
+};

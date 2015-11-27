@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BBC6AD3A-649C-4702-A4F0-FC33DBE59CD6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.FSA.Model</RootNamespace>
+    <AssemblyName>MS-FSA_ServerModel</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\MS-FSA_ServerModel.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <!--For CoReXT bcz fxcop settings-->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'fxcop|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\fxcop\</OutputPath>
+    <DefineConstants>FXCOP;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="BaseModel.cs" />
+    <Compile Include="ModelHelper.cs" />
+    <Compile Include="ChangeNotification\ChangeNotificationModel.cs" />
+    <Compile Include="CreateFile\CreateFile.cs" />
+    <Compile Include="OpenFile\OpenFile.cs" />
+    <Compile Include="CloseFile\CloseFile.cs" />
+    <Compile Include="IOCTL\IoCtlRequestModel.cs" />
+    <Compile Include="LockAndUnlock\LockAndUnlockModel.cs" />
+    <Compile Include="Oplock\OplockModel.cs" />
+    <Compile Include="QueryAndSetFileInformation\QueryAndSetFileInformationModel.cs" />
+    <Compile Include="QueryAndSetFileSystemInformation\QueryAndSetFileSystemInformationModel.cs" />
+    <Compile Include="QueryAndSetQuotaInformation\QueryAndSetQuotaInformationModel.cs" />
+    <Compile Include="QueryAndSetSecurityInformation\QueryAndSetSecurityInformationModel.cs" />
+    <Compile Include="QueryDirectory\QueryDirectoryModel.cs" />
+    <Compile Include="ReadFile\ReadFile.cs" />
+    <Compile Include="WriteFile\WriteFile.cs" />
+    <Compile Include="FlushCachedData\FlushCachedData.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="BaseConfig.cord" />
+    <Content Include="ChangeNotification\ChangeNotification.cord" />
+    <Content Include="CreateFile\CreateFile.cord" />
+    <Content Include="OpenFile\OpenFile.cord" />
+    <Content Include="CloseFile\CloseFile.cord" />
+    <Content Include="IOCTL\IoCtlRequest.cord" />
+    <Content Include="LockAndUnlock\LockAndUnlock.cord" />
+    <Content Include="Oplock\Oplock.cord" />
+    <Content Include="QueryAndSetFileInformation\QueryAndSetFileInformation.cord" />
+    <Content Include="QueryAndSetFileSystemInformation\QueryAndSetFileSystemInformation.cord" />
+    <Content Include="QueryAndSetQuotaInformation\QueryAndSetQuotaInformation.cord" />
+    <Content Include="QueryAndSetSecurityInformation\QueryAndSetSecurityInformation.cord" />
+    <Content Include="QueryDirectory\QueryDirectory.cord" />
+    <Content Include="ReadFile\ReadFile.cord" />
+    <Content Include="WriteFile\WriteFile.cord" />
+    <Content Include="FlushCachedData\FlushCachedData.cord" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Protocols.TestTools">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.Protocols.TestTools.VSTS">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.Xrt.Runtime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-FSCC\Fscc.csproj">
+      <Project>{124e0f6d-57d7-4582-af9a-3de11b358e76}</Project>
+      <Name>Fscc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Adapter\MS-FSA_ServerAdapter.csproj">
+      <Project>{98A76DE1-2D66-476B-9222-F15FFDFA8C81}</Project>
+      <Name>MS-FSA_ServerAdapter</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\" />
+  </Target>
+</Project>

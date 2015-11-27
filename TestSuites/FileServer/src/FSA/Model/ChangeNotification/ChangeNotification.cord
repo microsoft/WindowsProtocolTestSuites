@@ -1,0 +1,39 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+config ChangeNotificationConfig : Actions 
+{
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.ChangeNotification)";
+}
+
+// Scenario of [MS-FSA] 2.1.5.10   Server Requests Change Notifications for a Directory
+// The server provides:
+// Open: An Open of a DirectoryStream.
+machine ChangeNotificationScenario() : ChangeNotificationConfig
+{
+    (
+        FsaInitial;
+        CreateFile(
+             FileAttribute.NORMAL,
+             CreateOptions.DIRECTORY_FILE, // Directory
+             StreamTypeNameToOPen.INDEX_ALLOCATION, // DirectoryStream
+             FileAccess.GENERIC_ALL,
+             ShareAccess.FILE_SHARE_WRITE,
+             CreateDisposition.OPEN_IF,
+             StreamFoundType.StreamIsFound,
+             SymbolicLinkType.IsNotSymbolicLink,
+             FileType.DirectoryFile, // DirectoryFile
+             FileNameStatus.PathNameValid);
+        ChangeNotificationForDir;
+    )
+    ||
+    FSAModelProgram 
+}
+
+// Test case of [MS-FSA] 3.1.5.10   Server Requests Change Notifications for a Directory
+// The exploration time for this machine is about 5 seconds
+machine ChangeNotificationTestCase() : ChangeNotificationConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true
+    for ChangeNotificationScenario
+}

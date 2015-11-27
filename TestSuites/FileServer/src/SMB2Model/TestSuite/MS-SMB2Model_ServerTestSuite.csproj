@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BF78EB8B-3984-46A1-89B7-1BE232E23310}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite</RootNamespace>
+    <AssemblyName>MS-SMB2Model_ServerTestSuite</AssemblyName>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <!--For CoReXT bcz fxcop settings-->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'fxcop|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\fxcop\</OutputPath>
+    <DefineConstants>FXCOP;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Protocols.TestTools">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.Protocols.TestTools.VSTS">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.SpecExplorer.Runtime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.Xrt.Runtime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Common\Common.csproj">
+      <Project>{FE653643-6342-4300-871E-683C7BA31494}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\FileAccessService\FileAccessService.csproj">
+      <Project>{AB191B32-B12D-42CB-976D-CEA2C5BAD8BE}</Project>
+      <Name>FileAccessService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-DFSC\Dfsc.csproj">
+      <Project>{FFB198E5-2B91-48D9-97AF-27114F8961DD}</Project>
+      <Name>Dfsc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-FSRVP\Fsrvp.csproj">
+      <Project>{15162940-F895-48A8-A0F2-49E3A65B632F}</Project>
+      <Name>Fsrvp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-NLMP\Nlmp.csproj">
+      <Project>{5E53E71E-52D1-4BF0-99C0-608437EC446C}</Project>
+      <Name>Nlmp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RPCE\Rpce.csproj">
+      <Project>{A5814E1E-D79C-49A9-A8EA-BA8ED6E0EB39}</Project>
+      <Name>Rpce</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj">
+      <Project>{C7F08825-D3C9-4DDD-9BA3-06733B1ABE36}</Project>
+      <Name>Smb2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMB\Smb.csproj">
+      <Project>{C3C96860-5D29-4797-A311-CC568CC8B699}</Project>
+      <Name>Smb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SWN\Swn.csproj">
+      <Project>{5BE7E49E-5CB5-4115-98B1-E7E8B10CFCCB}</Project>
+      <Name>Swn</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Sspi\Sspi.csproj">
+      <Project>{D0CB354B-2CD3-49C1-8ECA-2F6EBADBCCEE}</Project>
+      <Name>Sspi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\Adapter\CommonAdapter.csproj">
+      <Project>{3FD566BA-E398-461E-B1B6-464B117ED422}</Project>
+      <Name>CommonAdapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Adapter\MS-SMB2Model_ServerAdapter.csproj">
+      <Project>{6E8058F1-AF11-42F3-9459-C716F07EA673}</Project>
+      <Name>MS-SMB2Model_ServerAdapter</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MS-SMB2Model_ServerTestSuite.deployment.ptfconfig">
+    </Content>
+    <Content Include="MS-SMB2Model_ServerTestSuite.ptfconfig">
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AppInstanceIdTestCase.cs" />
+    <Compile Include="BreakReadHandleLeaseV1TestCase.cs" />
+    <Compile Include="BreakReadHandleLeaseV2TestCase.cs" />
+    <Compile Include="BreakReadLeaseV1TestCase.cs" />
+    <Compile Include="BreakReadLeaseV2TestCase.cs" />
+    <Compile Include="BreakReadWriteHandleLeaseV1TestCase.cs" />
+    <Compile Include="BreakReadWriteHandleLeaseV2TestCase.cs" />
+    <Compile Include="BreakReadWriteLeaseV1TestCase.cs" />
+    <Compile Include="BreakReadWriteLeaseV2TestCase.cs" />
+    <Compile Include="ConflictTestCase.cs" />
+    <Compile Include="CreateCloseTestCase.cs" />
+    <Compile Include="CreditMgmtTestCase.cs" />
+    <Compile Include="DurableHandleV1PreparedWithBatchOplockReconnectTestCase.cs" />
+    <Compile Include="DurableHandleV1PreparedWithLeaseV1ReconnectTestCase.cs" />
+    <Compile Include="DurableHandleV2PreparedWithBatchOplockReconnectTestCase.cs" />
+    <Compile Include="DurableHandleV2PreparedWithLeaseV1ReconnectTestCase.cs" />
+    <Compile Include="DurableHandleV2PreparedWithLeaseV2ReconnectTestCase.cs" />
+    <Compile Include="EncryptionTestCase.cs" />
+    <Compile Include="LeaseOplockTestCase.cs" />
+    <Compile Include="NegotiateTestCase.cs" />
+    <Compile Include="OplockLeaseTestCase.cs" />
+    <Compile Include="OplockOnShareWithForceLevel2AndSOFSTestCase.cs" />
+    <Compile Include="OplockOnShareWithForceLevel2WithoutSOFSTestCase.cs" />
+    <Compile Include="OplockOnShareWithoutForceLevel2OrSOFSTestCase.cs" />
+    <Compile Include="OplockOnShareWithoutForceLevel2WithSOFSTestCase.cs" />
+    <Compile Include="PersistentHandleReconnectTestCase.cs" />
+    <Compile Include="ReplayCreateDurableHandleV1TestCase.cs" />
+    <Compile Include="ReplayCreateDurableHandleV2PersistentTestCase.cs" />
+    <Compile Include="ReplayCreateDurableHandleV2TestCase.cs" />
+    <Compile Include="ReplayCreateNormalHandleTestCase.cs" />
+    <Compile Include="ReplayCreateWithoutHandleTestCase.cs" />
+    <Compile Include="ReplayFileOperationTestCase.cs" />
+    <Compile Include="RequestDurableHandleV1BatchOplockTestCase.cs" />
+    <Compile Include="RequestDurableHandleV1LeaseV1TestCase.cs" />
+    <Compile Include="RequestDurableHandleV2BatchOplockTestCase.cs" />
+    <Compile Include="RequestDurableHandleV2LeaseV1TestCase.cs" />
+    <Compile Include="RequestDurableHandleV2LeaseV2TestCase.cs" />
+    <Compile Include="RequestPersistentHandleTestCase.cs" />
+    <Compile Include="ResilientHandleBasicTestCase.cs" />
+    <Compile Include="ResilientHandleDurableTestCase.cs" />
+    <Compile Include="SessionMgmtBindSessionAfterDisconnectionScenarioTestCase.cs" />
+    <Compile Include="SessionMgmtBindSessionAfterLogOffScenarioTestCase.cs" />
+    <Compile Include="SessionMgmtBindSessionScenarioTestCase.cs" />
+    <Compile Include="SessionMgmtNewSessionScenarioTestCase.cs" />
+    <Compile Include="SessionMgmtReconnectSessionScenarioTestCase.cs" />
+    <Compile Include="SigningTestCase.cs" />
+    <Compile Include="TreeMgmtTestCase.cs" />
+    <Compile Include="ValidateNegotiateInfoTestCase.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\" />
+  </Target>
+</Project>
