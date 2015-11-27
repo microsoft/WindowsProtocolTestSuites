@@ -7,7 +7,7 @@ However, each test suite provides users with a useful indication of interoperabi
 
 Windows Protocol Test Suites provide interoperability testing against the implementation of Windows open specifications including File Services, Identity Management, Remote Desktop and etc.
 
-* **SMB Protocol Test Suite**. It covers requirements documented in [MS-SMB], [MS-FSCC] as well [MS-CIFS] dependencies referred to in [MS-SMB].
+* **SMB1 Protocol Test Suite**. It covers requirements documented in [MS-SMB], [MS-FSCC] as well [MS-CIFS] dependencies referred to in [MS-SMB].
 * **File Server Protocol Test Suite**. It is designed to test implementations of file server protocol family including [MS-SMB2], [MS-DFSC], [MS-SWN], [MS-FSRVP], [MS-FSA], [MS-RSVD] and [MS-SQOS].
 
 ## Components
