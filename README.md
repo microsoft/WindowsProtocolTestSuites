@@ -58,13 +58,13 @@ build.cmd
 
 To build Protocol Test Manager
 ```
-cd WindowsProtocolTestSuite\ProtocolTestManager
+cd WindowsProtocolTestSuites\ProtocolTestManager
 build.cmd
 ```
 
 To build a test suite, take SMB test suite as an example
 ```
-cd WindowsProtocolTestSuite\TestSuites\MS-SMB\src
+cd WindowsProtocolTestSuites\TestSuites\MS-SMB\src
 build.cmd
 ```
 ## Documentation
