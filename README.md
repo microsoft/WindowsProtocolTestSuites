@@ -1,5 +1,7 @@
 # Windows Protocol Test Suites
 
+[![Join the chat at https://gitter.im/Microsoft/WindowsProtocolTestSuites](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Microsoft/WindowsProtocolTestSuites?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Originally developed for in-house testing of the Microsoft Open Specifications, Microsoft Protocol Test Suites have been used extensively during plugfests and interoperability labs to test partner implementations.
 A Test Suite evaluates whether a protocol or protocol family implementation meets certain interoperability requirements.
 Test Suites do not cover every protocol requirement and in no way certify an implementation, even if all tests pass. 
