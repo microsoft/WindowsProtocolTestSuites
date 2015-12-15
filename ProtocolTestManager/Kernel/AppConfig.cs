@@ -255,6 +255,11 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 config.VSTestPath = vspath;
             }
+            else if (Environment.GetEnvironmentVariable("VS140COMNTOOLS") != null &&
+                File.Exists(vspath = Path.Combine(Environment.GetEnvironmentVariable("VS140COMNTOOLS"), StringResource.VSTestLocation)))
+            {
+                config.VSTestPath = vspath;
+            }
             else
             {
                 throw new Exception(StringResource.VSTestNotInstalled);
