@@ -9,8 +9,8 @@ However, each test suite provides users with a useful indication of interoperabi
 
 Windows Protocol Test Suites provide interoperability testing against the implementation of Windows open specifications including File Services, Identity Management, Remote Desktop and etc.
 
-* **SMB1 Protocol Test Suite**. It covers requirements documented in [MS-SMB], [MS-FSCC] as well [MS-CIFS] dependencies referred to in [MS-SMB].
-* **File Server Protocol Test Suite**. It is designed to test implementations of file server protocol family including [MS-SMB2], [MS-DFSC], [MS-SWN], [MS-FSRVP], [MS-FSA], [MS-RSVD] and [MS-SQOS].
+* **SMB1 Server Test Suite**. It covers requirements documented in [MS-SMB], [MS-FSCC] as well [MS-CIFS] dependencies referred to in [MS-SMB].
+* **File Server Family Test Suite**. It is designed to test implementations of file server protocol family including [MS-SMB2], [MS-DFSC], [MS-SWN], [MS-FSRVP], [MS-FSA], [MS-RSVD] and [MS-SQOS].
 
 ## Components
 Windows Protocol Test Suites contain three components:
@@ -67,12 +67,13 @@ To build a test suite, take SMB test suite as an example
 cd WindowsProtocolTestSuite\TestSuites\MS-SMB\src
 build.cmd
 ```
-## Documentation
-Every test suite contains three kinds of documents:
+## Run
+After the build succeeds, you could set up the test environment and install/configure/run the test suite according to its **User Guide**.
+Every test suite has its own **User Guide** in the **doc** folder.
+There're two more documents in the same folder:
 
 * **Technical Document**. The Open Specifications documentation for protocols, published by Microsoft. It's the basis of developing Test Suites.
 * **Test Design Spec**.  It provides information about the test scope and test suite design.
-* **User Guide**. It provides information about how to set up environment and how to install, configure, and run Test Suites. 
 
 ## Contribute
 
@@ -82,3 +83,28 @@ You can find contributing guide [here](https://github.com/Microsoft/WindowsProto
 
 Windows Protocol Test Suites is under the [MIT license](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/master/LICENSE.txt).
   
+## Roadmap
+
+The test suites will be updated according to Windows' release and your interest.
+If one protocol is updated to a newer version, and it is also a high-interest procotol, the test sutie will be aligned and updated.
+If a new procotol is released and it's high-interest, the specific test suite will be developed.
+
+The following test suites will be released in version 1.0.
+
+| **Test Suite Name** | **Protocol Covered**|
+|--------------------|-------------------|
+|SMB1 Server Test Suite|MS-SMB|
+|File Server Family Test Suite|MS-SMB2, MS-DFSC, MS-SWN, MS-FSRVP, MS-FSA, MS-RSVD, MS-SQOS|
+|Protocol Test Manager|N/A|
+|Kerberos Test Suite|MS-PAC, MS-KILE, MS-KKDPC|
+|MS-AZOD Test Suite|MS-AZOD|
+|RDP Client Family Test Suite|MS-RDPBCGR, MS-RDPDISP, MS-RDPEDYC, MS-RDPEGFX, MS-RDPEGT, MS-RDPEI, MS-RDPEMT, MS-RDPEUDP, MS-RDPEUSB, MS-RDPEVOR,MS-RDPRFX|
+|MS-SMBD Test Suite |MS-SMBD|
+|BYOD Test Suite|MS-ADFSPIP|
+|AD Family Test Suite|MS-ADTS, MS-ADA1, MS-ADA2, MS-ADA3, MS-ADLS, MS-ADSC, MS-APDS, MS-DRSR, MS-FRS2, MS-LSAD, MS-LSAT, MS-NRPC, MS-SAMR|
+|MS-HVRS Test Suite|MS-HVRS|
+
+# Contact
+
+Keep up with the Windows protocol test team by chatting in [Gitter](https://gitter.im/Microsoft/WindowsProtocolTestSuites?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge), 
+sending us email to winterop@microsoft.com or following us [@WindowsProtocolTest](https://twitter.com/MSProtocolTest). 
