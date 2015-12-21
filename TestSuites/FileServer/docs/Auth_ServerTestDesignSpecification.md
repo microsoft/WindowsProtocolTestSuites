@@ -1,9 +1,8 @@
-﻿
-##A UTH  Protocol Server Test Design Specification 
+﻿# A UTH  Protocol Server Test Design Specification 
+# Windows is built to be the most interoperable platform 
+#  MICROSOFT CORPORATION    December 18, 2015  Send suggestions and comments about this document to dochelp@microsoft.com.  Please include the name of the test suite with your feedback. 
 
-##Windows is built to be the most interoperable platform 
 
-## MICROSOFT CORPORATION    December 18, 2015  Send suggestions and comments about this document to dochelp@microsoft.com.  Please include the name of the test suite with your feedback. 
 
 
 
@@ -44,7 +43,9 @@
 
 
 ## <a name="_Toc427487691"/>Summary
-The Auth_ServerTestSuite is designed to test Authentication and Authorization scenarios of MS-SMB2.The Authentication cases cover Kerberos Authentication;The Authorization cases cover Share Permission Check, Folder Permission Check, File Permission Check, and Claim-Based Access Control scenario.
+The Auth_ServerTestSuite is designed to test Authentication and Authorization scenarios of MS-SMB2.
+The Authentication cases cover Kerberos Authentication;
+The Authorization cases cover Share Permission Check, Folder Permission Check, File Permission Check, and Claim-Based Access Control scenario.
 
 ## <a name="_Toc427487692"/>Test Scope
 
@@ -76,24 +77,25 @@ Service password/keytab file may be needed in order for synthetic Kerberos clien
 
 #### <a name="_Toc427487700"/>BVT cases
 
-|  **Test ID**| BVT_KerbAuth_AccessFile_Success
-| -------------| -------------| -------------
-|  **Description** | This test case is designed to test whether server can handle Kerberos Authentication using GSSAPI correctly
-|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC
-| &nbsp;| Kerberos client expects KRB-ERROR from KDC
-| &nbsp;| Kerberos client sends AS-REQ with PA-DATA to KDC
-| &nbsp;| Kerberos client expects AS-REP from KDC
-| &nbsp;| Kerberos client sends TGS-REQ to KDC
-| &nbsp;| Kerberos client expects TGS-REP from KDC
-| &nbsp;| Decrypt SMB2 Service Ticket
-| &nbsp;| Create Authenticator
-| &nbsp;| Create AP-REQ
-| &nbsp;| Create GSS Token
-| &nbsp;| SMB2 client sends SMB2 NEGOTIATE request to AP
-| &nbsp;| SMB2 client expects SMB2 NEOGTIATE response from AP
-| &nbsp;| SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token
-| &nbsp;| SMB2 client expects SMB2 SESSION_SETUP response with GSS Token
-| &nbsp;| Try accessing files, which should be successful
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Test ID**| BVT_KerbAuth_AccessFile_Success| 
+|  **Description** | This test case is designed to test whether server can handle Kerberos Authentication using GSSAPI correctly| 
+|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC| 
+| | Kerberos client expects KRB-ERROR from KDC| 
+| | Kerberos client sends AS-REQ with PA-DATA to KDC| 
+| | Kerberos client expects AS-REP from KDC| 
+| | Kerberos client sends TGS-REQ to KDC| 
+| | Kerberos client expects TGS-REP from KDC| 
+| | Decrypt SMB2 Service Ticket| 
+| | Create Authenticator| 
+| | Create AP-REQ| 
+| | Create GSS Token| 
+| | SMB2 client sends SMB2 NEGOTIATE request to AP| 
+| | SMB2 client expects SMB2 NEOGTIATE response from AP| 
+| | SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token| 
+| | SMB2 client expects SMB2 SESSION_SETUP response with GSS Token| 
+| | Try accessing files, which should be successful| 
 
 
 
@@ -102,235 +104,189 @@ Service password/keytab file may be needed in order for synthetic Kerberos clien
 
 #### <a name="_Toc427487701"/>Other traditional cases
 
-|  **Test ID**| KerbAuth_Authenticator_CNameNotMatch
-| -------------| -------------| -------------
-|  **Description**| This test case is designed to test whether server can handle wrong cname in the Authenticator in AP_REQ.
-|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC
-| &nbsp;| Kerberos client expects KRB-ERROR from KDC
-| &nbsp;| Kerberos client sends AS-REQ with PA-DATA to KDC
-| &nbsp;| Kerberos client expects AS-REP from KDC
-| &nbsp;| Kerberos client sends TGS-REQ to KDC
-| &nbsp;| Kerberos client expects TGS-REP from KDC
-| &nbsp;| Create Authenticator with wrong cname
-| &nbsp;| Create AP-REQ
-| &nbsp;| Create GSS Token
-| &nbsp;| SMB2 client sends SMB2 NEGOTIATE request to AP
-| &nbsp;| SMB2 client expects SMB2 NEOGTIATE response from AP
-| &nbsp;| SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token
-| &nbsp;| SMB2 client expects SMB2 SESSION_SETUP response with GSS Token
-| &nbsp;| Session Setup should fail because the cname or crealm in the Authenticator does not match the same field in the Ticket
-| &nbsp;| SMB2 Server should return KRB_AP_ERR_BADMATCH in GSS Token
-
-
-
-
-
-
-
-|  **Test ID**| KerbAuth_Authenticator_CRealmNotMatch
-| -------------| -------------| -------------
-|  **Description**| This test case is designed to test whether server can handle wrong crealm in the Authenticator in AP_REQ.
-|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC
-| &nbsp;| Kerberos client expects KRB-ERROR from KDC
-| &nbsp;| Kerberos client sends AS-REQ with PA-DATA to KDC
-| &nbsp;| Kerberos client expects AS-REP from KDC
-| &nbsp;| Kerberos client sends TGS-REQ to KDC
-| &nbsp;| Kerberos client expects TGS-REP from KDC
-| &nbsp;| Create Authenticator with wrong crealm
-| &nbsp;| Create AP-REQ
-| &nbsp;| Create GSS Token
-| &nbsp;| SMB2 client sends SMB2 NEGOTIATE request to AP
-| &nbsp;| SMB2 client expects SMB2 NEOGTIATE response from AP
-| &nbsp;| SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token
-| &nbsp;| SMB2 client expects SMB2 SESSION_SETUP response with GSS Token
-| &nbsp;| Session Setup should fail because the cname or crealm in the Authenticator does not match the same field in the Ticket
-| &nbsp;| SMB2 Server should return KRB_AP_ERR_BADMATCH in GSS Token
-
-
-
-
-
-
-
-|  **Test ID**| KerbAuth_Authenticator_WrongEncKey
-| -------------| -------------| -------------
-|  **Description**| This test case is designed to test whether server can handle wrong encryption key of the Ticket in AP_REQ.
-|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC
-| &nbsp;| Kerberos client expects KRB-ERROR from KDC
-| &nbsp;| Kerberos client sends AS-REQ with PA-DATA to KDC
-| &nbsp;| Kerberos client expects AS-REP from KDC
-| &nbsp;| Kerberos client sends TGS-REQ to KDC
-| &nbsp;| Kerberos client expects TGS-REP from KDC
-| &nbsp;| Create Authenticator
-| &nbsp;| Use wrong key to encrypt authenticator
-| &nbsp;| Create AP-REQ
-| &nbsp;| Create GSS Token
-| &nbsp;| SMB2 client sends SMB2 NEGOTIATE request to AP
-| &nbsp;| SMB2 client expects SMB2 NEOGTIATE response from AP
-| &nbsp;| SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token
-| &nbsp;| SMB2 client expects SMB2 SESSION_SETUP response with GSS Token
-| &nbsp;| Session Setup should fail because the Authenticator cannot be correctly decrypted
-| &nbsp;| SMB2 Server should return KRB_AP_ERR_MODIFIED in GSS Token
-
-
-
-
-
-
-
-|  **Test ID**| KerbAuth_Ticket_WrongRealm
-| -------------| -------------| -------------
-|  **Description**| This test case is designed to test whether server can handle unknown Realm in the Ticket in AP_REQ.
-|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC
-| &nbsp;| Kerberos client expects KRB-ERROR from KDC
-| &nbsp;| Kerberos client sends AS-REQ with PA-DATA to KDC
-| &nbsp;| Kerberos client expects AS-REP from KDC
-| &nbsp;| Kerberos client sends TGS-REQ to KDC
-| &nbsp;| Kerberos client expects TGS-REP from KDC
-| &nbsp;| Decrypt cifs Ticket
-| &nbsp;| Change the realm in the Ticket to wrong realm
-| &nbsp;| Create Authenticator
-| &nbsp;| Create AP-REQ
-| &nbsp;| Create GSS Token
-| &nbsp;| SMB2 client sends SMB2 NEGOTIATE request to AP
-| &nbsp;| SMB2 client expects SMB2 NEOGTIATE response from AP
-| &nbsp;| SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token
-| &nbsp;| SMB2 client expects SMB2 SESSION_SETUP response with GSS Token
-| &nbsp;| Server would find the right key, despite of the wrong realm
-| &nbsp;| Session Setup should succeed
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Test ID**| KerbAuth_Authenticator_CNameNotMatch| 
+|  **Description**| This test case is designed to test whether server can handle wrong cname in the Authenticator in AP_REQ.| 
+|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC| 
+| | Kerberos client expects KRB-ERROR from KDC| 
+| | Kerberos client sends AS-REQ with PA-DATA to KDC| 
+| | Kerberos client expects AS-REP from KDC| 
+| | Kerberos client sends TGS-REQ to KDC| 
+| | Kerberos client expects TGS-REP from KDC| 
+| | Create Authenticator with wrong cname| 
+| | Create AP-REQ| 
+| | Create GSS Token| 
+| | SMB2 client sends SMB2 NEGOTIATE request to AP| 
+| | SMB2 client expects SMB2 NEOGTIATE response from AP| 
+| | SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token| 
+| | SMB2 client expects SMB2 SESSION_SETUP response with GSS Token| 
+| | Session Setup should fail because the cname or crealm in the Authenticator does not match the same field in the Ticket| 
+| | SMB2 Server should return KRB_AP_ERR_BADMATCH in GSS Token| 
+
+
+
+
+
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Test ID**| KerbAuth_Authenticator_CRealmNotMatch| 
+|  **Description**| This test case is designed to test whether server can handle wrong crealm in the Authenticator in AP_REQ.| 
+|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC| 
+| | Kerberos client expects KRB-ERROR from KDC| 
+| | Kerberos client sends AS-REQ with PA-DATA to KDC| 
+| | Kerberos client expects AS-REP from KDC| 
+| | Kerberos client sends TGS-REQ to KDC| 
+| | Kerberos client expects TGS-REP from KDC| 
+| | Create Authenticator with wrong crealm| 
+| | Create AP-REQ| 
+| | Create GSS Token| 
+| | SMB2 client sends SMB2 NEGOTIATE request to AP| 
+| | SMB2 client expects SMB2 NEOGTIATE response from AP| 
+| | SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token| 
+| | SMB2 client expects SMB2 SESSION_SETUP response with GSS Token| 
+| | Session Setup should fail because the cname or crealm in the Authenticator does not match the same field in the Ticket| 
+| | SMB2 Server should return KRB_AP_ERR_BADMATCH in GSS Token| 
+
+
+
+
+
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Test ID**| KerbAuth_Authenticator_WrongEncKey| 
+|  **Description**| This test case is designed to test whether server can handle wrong encryption key of the Ticket in AP_REQ.| 
+|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC| 
+| | Kerberos client expects KRB-ERROR from KDC| 
+| | Kerberos client sends AS-REQ with PA-DATA to KDC| 
+| | Kerberos client expects AS-REP from KDC| 
+| | Kerberos client sends TGS-REQ to KDC| 
+| | Kerberos client expects TGS-REP from KDC| 
+| | Create Authenticator| 
+| | Use wrong key to encrypt authenticator| 
+| | Create AP-REQ| 
+| | Create GSS Token| 
+| | SMB2 client sends SMB2 NEGOTIATE request to AP| 
+| | SMB2 client expects SMB2 NEOGTIATE response from AP| 
+| | SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token| 
+| | SMB2 client expects SMB2 SESSION_SETUP response with GSS Token| 
+| | Session Setup should fail because the Authenticator cannot be correctly decrypted| 
+| | SMB2 Server should return KRB_AP_ERR_MODIFIED in GSS Token| 
+
+
+
+
+
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Test ID**| KerbAuth_Ticket_WrongRealm| 
+|  **Description**| This test case is designed to test whether server can handle unknown Realm in the Ticket in AP_REQ.| 
+|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC| 
+| | Kerberos client expects KRB-ERROR from KDC| 
+| | Kerberos client sends AS-REQ with PA-DATA to KDC| 
+| | Kerberos client expects AS-REP from KDC| 
+| | Kerberos client sends TGS-REQ to KDC| 
+| | Kerberos client expects TGS-REP from KDC| 
+| | Decrypt cifs Ticket| 
+| | Change the realm in the Ticket to wrong realm| 
+| | Create Authenticator| 
+| | Create AP-REQ| 
+| | Create GSS Token| 
+| | SMB2 client sends SMB2 NEGOTIATE request to AP| 
+| | SMB2 client expects SMB2 NEOGTIATE response from AP| 
+| | SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token| 
+| | SMB2 client expects SMB2 SESSION_SETUP response with GSS Token| 
+| | Server would find the right key, despite of the wrong realm| 
+| | Session Setup should succeed| 
+
 
-
-
-
-
 
 
-|  **Test ID**| KerbAuth_Ticket_WrongSName
-| -------------| -------------| -------------
-|  **Description**| This test case is designed to test whether server can handle unknown SName in the Ticket in AP_REQ.
-|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC
-| &nbsp;| Kerberos client expects KRB-ERROR from KDC
-| &nbsp;| Kerberos client sends AS-REQ with PA-DATA to KDC
-| &nbsp;| Kerberos client expects AS-REP from KDC
-| &nbsp;| Kerberos client sends TGS-REQ to KDC
-| &nbsp;| Kerberos client expects TGS-REP from KDC
-| &nbsp;| Decrypt cifs Ticket
-| &nbsp;| Change the sname in the Ticket to wrong realm
-| &nbsp;| Create Authenticator
-| &nbsp;| Create AP-REQ
-| &nbsp;| Create GSS Token
-| &nbsp;| SMB2 client sends SMB2 NEGOTIATE request to AP
-| &nbsp;| SMB2 client expects SMB2 NEOGTIATE response from AP
-| &nbsp;| SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token
-| &nbsp;| SMB2 client expects SMB2 SESSION_SETUP response with GSS Token
-| &nbsp;| Server would find the right key, despite of the wrong realm
-| &nbsp;| Session Setup should succeed
 
 
-
-
-
-
-
-|  **Test ID**| KerbAuth_Ticket_WrongKvno
-| -------------| -------------| -------------
-|  **Description**| This test case is designed to test whether server can handle invalid KVNO in the Ticket in AP_REQ.
-|  **Test Execution Steps**| Kerberos client expects Kerberos Error from KDC
-| &nbsp;| Kerberos client sends AS request with PA-DATA set
-| &nbsp;| Kerberos client expects AS response from KDC
-| &nbsp;| Kerberos client sends TGS request to KDC
-| &nbsp;| Kerberos client expects TGS response from KDC
-| &nbsp;| Decrypt cifs Ticket
-| &nbsp;| Change the KVNO of the Ticket to wrong number
-| &nbsp;| Create authenticator
-| &nbsp;| Create AP Request
-| &nbsp;| Create GSS Token
-| &nbsp;| SMB2 client sends SMB2 NEGOTIATE request to AP
-| &nbsp;| SMB2 client expects SMB2 NEOGTIATE response from AP
-| &nbsp;| SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token
-| &nbsp;| SMB2 client expects SMB2 SESSION_SETUP response with GSS Token
-| &nbsp;| Server would find the right key, despite of the wrong realm
-| &nbsp;| Session Setup should succeed
 
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Test ID**| KerbAuth_Ticket_WrongSName| 
+|  **Description**| This test case is designed to test whether server can handle unknown SName in the Ticket in AP_REQ.| 
+|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC| 
+| | Kerberos client expects KRB-ERROR from KDC| 
+| | Kerberos client sends AS-REQ with PA-DATA to KDC| 
+| | Kerberos client expects AS-REP from KDC| 
+| | Kerberos client sends TGS-REQ to KDC| 
+| | Kerberos client expects TGS-REP from KDC| 
+| | Decrypt cifs Ticket| 
+| | Change the sname in the Ticket to wrong realm| 
+| | Create Authenticator| 
+| | Create AP-REQ| 
+| | Create GSS Token| 
+| | SMB2 client sends SMB2 NEGOTIATE request to AP| 
+| | SMB2 client expects SMB2 NEOGTIATE response from AP| 
+| | SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token| 
+| | SMB2 client expects SMB2 SESSION_SETUP response with GSS Token| 
+| | Server would find the right key, despite of the wrong realm| 
+| | Session Setup should succeed| 
 
 
 
-
-
-
-|  **Test ID**| KerbAuth_Ticket_NotValid
-| -------------| -------------| -------------
-|  **Description**| This test case is designed to test whether server can handle invalid Ticket in AP_REQ.
-|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC
-| &nbsp;| Kerberos client expects KRB-ERROR from KDC
-| &nbsp;| Kerberos client sends AS-REQ with PA-DATA to KDC
-| &nbsp;| Kerberos client expects AS-REP from KDC
-| &nbsp;| Kerberos client sends TGS-REQ to KDC
-| &nbsp;| Kerberos client expects TGS-REP from KDC
-| &nbsp;| Decrypt cifs Ticket
-| &nbsp;| Change the Ticket start time to tomorrow
-| &nbsp;| Create Authenticator
-| &nbsp;| Create AP-REQ
-| &nbsp;| Create GSS Token
-| &nbsp;| SMB2 Client sends SMB2 NEGOTIATE request to AP
-| &nbsp;| SMB2 Client expects SMB2 NEOGTIATE response from AP
-| &nbsp;| SMB2 Client sends SMB2 SESSION_SETUP request to AP with GSS Token
-| &nbsp;| SMB2 Client expects SMB2 SESSION_SETUP response with GSS Token
-| &nbsp;| Session Setup should fail because the starttime (tomorrow) in the Ticket is later than the current time by more than the allowable clock skew
-| &nbsp;| SMB2 Server should return KRB_AP_ERR_TKT_NYV in GSS Token
 
 
 
 
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Test ID**| KerbAuth_Ticket_WrongKvno| 
+|  **Description**| This test case is designed to test whether server can handle invalid KVNO in the Ticket in AP_REQ.| 
+|  **Test Execution Steps**| Kerberos client expects Kerberos Error from KDC| 
+| | Kerberos client sends AS request with PA-DATA set| 
+| | Kerberos client expects AS response from KDC| 
+| | Kerberos client sends TGS request to KDC| 
+| | Kerberos client expects TGS response from KDC| 
+| | Decrypt cifs Ticket| 
+| | Change the KVNO of the Ticket to wrong number| 
+| | Create authenticator| 
+| | Create AP Request| 
+| | Create GSS Token| 
+| | SMB2 client sends SMB2 NEGOTIATE request to AP| 
+| | SMB2 client expects SMB2 NEOGTIATE response from AP| 
+| | SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token| 
+| | SMB2 client expects SMB2 SESSION_SETUP response with GSS Token| 
+| | Server would find the right key, despite of the wrong realm| 
+| | Session Setup should succeed| 
 
-
-
-|  **Test ID**| KerbAuth_Ticket_Expired
-| -------------| -------------| -------------
-|  **Description**| This test case is designed to test whether server can handle expired Ticket in AP_REQ.
-|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC
-| &nbsp;| Kerberos client expects KRB-ERROR from KDC
-| &nbsp;| Kerberos client sends AS-REQ with PA-DATA to KDC
-| &nbsp;| Kerberos client expects AS-REP from KDC
-| &nbsp;| Kerberos client sends TGS-REQ to KDC
-| &nbsp;| Kerberos client expects TGS-REP from KDC
-| &nbsp;| Decrypt cifs Ticket
-| &nbsp;| Change the Ticket endtime to yesterday
-| &nbsp;| Create Authenticator
-| &nbsp;| Create AP Request
-| &nbsp;| Create GSS Token
-| &nbsp;| SMB2 client sends SMB2 NEGOTIATE request to AP
-| &nbsp;| SMB2 client expects SMB2 NEOGTIATE response from AP
-| &nbsp;| SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token
-| &nbsp;| SMB2 client expects SMB2 SESSION_SETUP response with GSS Token
-| &nbsp;| Session Setup should fail because the current time is later than the endtime (yesterday) in the Ticket by more than the allowable clock skew
-| &nbsp;| SMB2 Server should return KRB_AP_ERR_TKT_EXPIRED in GSS Token
 
 
 
 
 
 
-
-|  **Test ID**| KerbAuth_Ticket_WrongEncKey
-| -------------| -------------| -------------
-|  **Description**| This test case is designed to test whether server can handle wrong encryption key of the Ticket in AP_REQ.
-|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC
-| &nbsp;| Kerberos client expects KRB-ERROR from KDC
-| &nbsp;| Kerberos client sends AS-REQ with PA-DATA to KDC
-| &nbsp;| Kerberos client expects AS-REP from KDC
-| &nbsp;| Kerberos client sends TGS-REQ to KDC
-| &nbsp;| Kerberos client expects TGS-REP from KDC
-| &nbsp;| Use wrong key to encrypt Ticket
-| &nbsp;| Create Authenticator
-| &nbsp;| Create AP Request
-| &nbsp;| Create GSS Token
-| &nbsp;| SMB2 client sends SMB2 NEGOTIATE request to AP
-| &nbsp;| SMB2 client expects SMB2 NEOGTIATE response from AP
-| &nbsp;| SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token
-| &nbsp;| SMB2 client expects SMB2 SESSION_SETUP response with GSS Token
-| &nbsp;| Session Setup should fail because the Ticket cannot be correctly decrypted
-| &nbsp;| SMB2 Server should return KRB_AP_ERR_MODIFIED in GSS Token
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Test ID**| KerbAuth_Ticket_NotValid| 
+|  **Description**| This test case is designed to test whether server can handle invalid Ticket in AP_REQ.| 
+|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC| 
+| | Kerberos client expects KRB-ERROR from KDC| 
+| | Kerberos client sends AS-REQ with PA-DATA to KDC| 
+| | Kerberos client expects AS-REP from KDC| 
+| | Kerberos client sends TGS-REQ to KDC| 
+| | Kerberos client expects TGS-REP from KDC| 
+| | Decrypt cifs Ticket| 
+| | Change the Ticket start time to tomorrow| 
+| | Create Authenticator| 
+| | Create AP-REQ| 
+| | Create GSS Token| 
+| | SMB2 Client sends SMB2 NEGOTIATE request to AP| 
+| | SMB2 Client expects SMB2 NEOGTIATE response from AP| 
+| | SMB2 Client sends SMB2 SESSION_SETUP request to AP with GSS Token| 
+| | SMB2 Client expects SMB2 SESSION_SETUP response with GSS Token| 
+| | Session Setup should fail because the starttime (tomorrow) in the Ticket is later than the current time by more than the allowable clock skew| 
+| | SMB2 Server should return KRB_AP_ERR_TKT_NYV in GSS Token| 
 
 
 
@@ -338,26 +294,27 @@ Service password/keytab file may be needed in order for synthetic Kerberos clien
 
 
 
-|  **Test ID**| KerbAuth_AuthData_UnknownType_Authenticator
-| -------------| -------------| -------------
-|  **Description**| This test case is designed to test whether server can handle unknown AuthorizationData in the Authenticator.
-|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC
-| &nbsp;| Kerberos client expects KRB-ERROR from KDC
-| &nbsp;| Kerberos client sends AS-REQ with PA-DATA to KDC
-| &nbsp;| Kerberos client expects AS-REP from KDC
-| &nbsp;| Kerberos client sends TGS-REQ to KDC
-| &nbsp;| Kerberos client expects TGS-REP from KDC
-| &nbsp;| Decrypt cifs Ticket
-| &nbsp;| Create Authenticator
-| &nbsp;| Add a type-unknown Authorization-Data to the Authenticator
-| &nbsp;| Create AP-REQ
-| &nbsp;| Create GSS Token
-| &nbsp;| SMB2 client sends SMB2 NEGOTIATE request to AP
-| &nbsp;| SMB2 client expects SMB2 NEOGTIATE response from AP
-| &nbsp;| SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token
-| &nbsp;| SMB2 client expects SMB2 SESSION_SETUP response with GSS Token
-| &nbsp;| Unknown Authorization-Data in the Authenticator would not fail the request
-| &nbsp;| SessionSetup should succeed
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Test ID**| KerbAuth_Ticket_Expired| 
+|  **Description**| This test case is designed to test whether server can handle expired Ticket in AP_REQ.| 
+|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC| 
+| | Kerberos client expects KRB-ERROR from KDC| 
+| | Kerberos client sends AS-REQ with PA-DATA to KDC| 
+| | Kerberos client expects AS-REP from KDC| 
+| | Kerberos client sends TGS-REQ to KDC| 
+| | Kerberos client expects TGS-REP from KDC| 
+| | Decrypt cifs Ticket| 
+| | Change the Ticket endtime to yesterday| 
+| | Create Authenticator| 
+| | Create AP Request| 
+| | Create GSS Token| 
+| | SMB2 client sends SMB2 NEGOTIATE request to AP| 
+| | SMB2 client expects SMB2 NEOGTIATE response from AP| 
+| | SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token| 
+| | SMB2 client expects SMB2 SESSION_SETUP response with GSS Token| 
+| | Session Setup should fail because the current time is later than the endtime (yesterday) in the Ticket by more than the allowable clock skew| 
+| | SMB2 Server should return KRB_AP_ERR_TKT_EXPIRED in GSS Token| 
 
 
 
@@ -365,27 +322,26 @@ Service password/keytab file may be needed in order for synthetic Kerberos clien
 
 
 
-|  **Test ID**| KerbAuth_AuthData_UnknownType_Optional_Authenticator
-| -------------| -------------| -------------
-|  **Description**| This test case is designed to test whether server can handle unknown AuthorizationData contained in AD-IF-RELEVANT in the Authenticator.
-|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC
-| &nbsp;| Kerberos client expects KRB-ERROR from KDC
-| &nbsp;| Kerberos client sends AS-REQ with PA-DATA to KDC
-| &nbsp;| Kerberos client expects AS-REP from KDC
-| &nbsp;| Kerberos client sends TGS-REQ to KDC
-| &nbsp;| Kerberos client expects TGS-REP from KDC
-| &nbsp;| Decrypt cifs Ticket
-| &nbsp;| Create authenticator
-| &nbsp;| Add a type-unknown Authorization-Data which is inside AD_IF_RELEVANT to the Authenticator
-| &nbsp;| Create AP-REQ
-| &nbsp;| Create GSS Token
-| &nbsp;| SMB2 client sends SMB2 NEGOTIATE request to AP
-| &nbsp;| SMB2 client expects SMB2 NEOGTIATE response from AP
-| &nbsp;| SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token
-| &nbsp;| SMB2 client expects SMB2 SESSION_SETUP response with GSS Token
-| &nbsp;| Unknown Authorization-Data is in AD_IF_RELEVANT is optional.
-| &nbsp;| Server should not fail the request.
-| &nbsp;| SessionSetup should succeed
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Test ID**| KerbAuth_Ticket_WrongEncKey| 
+|  **Description**| This test case is designed to test whether server can handle wrong encryption key of the Ticket in AP_REQ.| 
+|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC| 
+| | Kerberos client expects KRB-ERROR from KDC| 
+| | Kerberos client sends AS-REQ with PA-DATA to KDC| 
+| | Kerberos client expects AS-REP from KDC| 
+| | Kerberos client sends TGS-REQ to KDC| 
+| | Kerberos client expects TGS-REP from KDC| 
+| | Use wrong key to encrypt Ticket| 
+| | Create Authenticator| 
+| | Create AP Request| 
+| | Create GSS Token| 
+| | SMB2 client sends SMB2 NEGOTIATE request to AP| 
+| | SMB2 client expects SMB2 NEOGTIATE response from AP| 
+| | SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token| 
+| | SMB2 client expects SMB2 SESSION_SETUP response with GSS Token| 
+| | Session Setup should fail because the Ticket cannot be correctly decrypted| 
+| | SMB2 Server should return KRB_AP_ERR_MODIFIED in GSS Token| 
 
 
 
@@ -393,25 +349,27 @@ Service password/keytab file may be needed in order for synthetic Kerberos clien
 
 
 
-|  **Test ID**| KerbAuth_AuthData_UnknownType_Ticket
-| -------------| -------------| -------------
-|  **Description**| This test case is designed to test whether server can handle unknown AuthorizationData in the Ticket.
-|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC
-| &nbsp;| Kerberos client expects KRB-ERROR from KDC
-| &nbsp;| Kerberos client sends AS-REQ with PA-DATA to KDC
-| &nbsp;| Kerberos client expects AS-REP from KDC
-| &nbsp;| Kerberos client sends TGS-REQ to KDC
-| &nbsp;| Kerberos client expects TGS-REP from KDC
-| &nbsp;| Decrypt cifs Ticket
-| &nbsp;| Add a type-unknown Authorization-Data to the ticket
-| &nbsp;| Create authenticator
-| &nbsp;| Create AP Request
-| &nbsp;| Create GSS Token
-| &nbsp;| SMB2 client sends SMB2 NEGOTIATE request to AP
-| &nbsp;| SMB2 client expects SMB2 NEOGTIATE response from AP
-| &nbsp;| SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token
-| &nbsp;| SMB2 client expects SMB2 SESSION_SETUP response with GSS Token
-| &nbsp;| Session Setup should fail because of the unknown Authorization-Data in the Ticket
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Test ID**| KerbAuth_AuthData_UnknownType_Authenticator| 
+|  **Description**| This test case is designed to test whether server can handle unknown AuthorizationData in the Authenticator.| 
+|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC| 
+| | Kerberos client expects KRB-ERROR from KDC| 
+| | Kerberos client sends AS-REQ with PA-DATA to KDC| 
+| | Kerberos client expects AS-REP from KDC| 
+| | Kerberos client sends TGS-REQ to KDC| 
+| | Kerberos client expects TGS-REP from KDC| 
+| | Decrypt cifs Ticket| 
+| | Create Authenticator| 
+| | Add a type-unknown Authorization-Data to the Authenticator| 
+| | Create AP-REQ| 
+| | Create GSS Token| 
+| | SMB2 client sends SMB2 NEGOTIATE request to AP| 
+| | SMB2 client expects SMB2 NEOGTIATE response from AP| 
+| | SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token| 
+| | SMB2 client expects SMB2 SESSION_SETUP response with GSS Token| 
+| | Unknown Authorization-Data in the Authenticator would not fail the request| 
+| | SessionSetup should succeed| 
 
 
 
@@ -419,54 +377,113 @@ Service password/keytab file may be needed in order for synthetic Kerberos clien
 
 
 
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Test ID**| KerbAuth_AuthData_UnknownType_Optional_Authenticator| 
+|  **Description**| This test case is designed to test whether server can handle unknown AuthorizationData contained in AD-IF-RELEVANT in the Authenticator.| 
+|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC| 
+| | Kerberos client expects KRB-ERROR from KDC| 
+| | Kerberos client sends AS-REQ with PA-DATA to KDC| 
+| | Kerberos client expects AS-REP from KDC| 
+| | Kerberos client sends TGS-REQ to KDC| 
+| | Kerberos client expects TGS-REP from KDC| 
+| | Decrypt cifs Ticket| 
+| | Create authenticator| 
+| | Add a type-unknown Authorization-Data which is inside AD_IF_RELEVANT to the Authenticator| 
+| | Create AP-REQ| 
+| | Create GSS Token| 
+| | SMB2 client sends SMB2 NEGOTIATE request to AP| 
+| | SMB2 client expects SMB2 NEOGTIATE response from AP| 
+| | SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token| 
+| | SMB2 client expects SMB2 SESSION_SETUP response with GSS Token| 
+| | Unknown Authorization-Data is in AD_IF_RELEVANT is optional.| 
+| | Server should not fail the request.| 
+| | SessionSetup should succeed| 
 
-|  **Test ID**| KerbAuth_AuthData_UnknownType_Optional_Ticket
-| -------------| -------------| -------------
-|  **Description**| This test case is designed to test whether server can handle unknown AuthorizationData contained in AD-IF-RELEVANT in the Ticket.
-|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC
-| &nbsp;| Client expects KRB-ERROR from KDC
-| &nbsp;| Client sends AS-REQ with PA-DATA to KDC
-| &nbsp;| Client expects AS-REP from KDC
-| &nbsp;| Client sends TGS-REQ to KDC
-| &nbsp;| Client expects TGS-REP from KDC
-| &nbsp;| Decrypt cifs Ticket
-| &nbsp;| Add a type-unknown Authorization-Data which is inside AD_IF_RELEVANT to the Ticket
-| &nbsp;| Create authenticator
-| &nbsp;| Create AP Request
-| &nbsp;| Create GSS Token
-| &nbsp;| Client sends SMB2 NEGOTIATE request to AP
-| &nbsp;| Client expects SMB2 NEOGTIATE response from AP
-| &nbsp;| Client sends SMB2 SESSION_SETUP request to AP with GSS Token
-| &nbsp;| Client expects SMB2 SESSION_SETUP response with GSS Token
-| &nbsp;| Unknown Authorization-Data is in AD_IF_RELEVANT is optional.
-| &nbsp;| Server should not fail the request.
 
 
 
 
 
 
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Test ID**| KerbAuth_AuthData_UnknownType_Ticket| 
+|  **Description**| This test case is designed to test whether server can handle unknown AuthorizationData in the Ticket.| 
+|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC| 
+| | Kerberos client expects KRB-ERROR from KDC| 
+| | Kerberos client sends AS-REQ with PA-DATA to KDC| 
+| | Kerberos client expects AS-REP from KDC| 
+| | Kerberos client sends TGS-REQ to KDC| 
+| | Kerberos client expects TGS-REP from KDC| 
+| | Decrypt cifs Ticket| 
+| | Add a type-unknown Authorization-Data to the ticket| 
+| | Create authenticator| 
+| | Create AP Request| 
+| | Create GSS Token| 
+| | SMB2 client sends SMB2 NEGOTIATE request to AP| 
+| | SMB2 client expects SMB2 NEOGTIATE response from AP| 
+| | SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token| 
+| | SMB2 client expects SMB2 SESSION_SETUP response with GSS Token| 
+| | Session Setup should fail because of the unknown Authorization-Data in the Ticket| 
 
-|  **Test ID**| KerbAuth_Replay
-| -------------| -------------| -------------
-|  **Description**| This test case is designed to test whether server can handle Replay correctly.
-|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC
-| &nbsp;| Kerberos client expects KRB-ERROR from KDC
-| &nbsp;| Kerberos client sends AS-REQ with PA-DATA to KDC
-| &nbsp;| Kerberos client expects AS-REP from KDC
-| &nbsp;| Kerberos client sends TGS-REQ to KDC
-| &nbsp;| Kerberos client expects TGS-REP from KDC
-| &nbsp;| Decrypt cifs Ticket
-| &nbsp;| Create authenticator
-| &nbsp;| Create AP Request
-| &nbsp;| Create GSS Token
-| &nbsp;| SMB2 client sends SMB2 NEGOTIATE request to AP
-| &nbsp;| SMB2 client expects SMB2 NEOGTIATE response from AP
-| &nbsp;| SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token
-| &nbsp;| SMB2 client expects SMB2 SESSION_SETUP response with GSS Token
-| &nbsp;| Session Setup should fail because it uses a Replay of KRB_AP_REQ
-| &nbsp;| SMB2 Server should return KRB_AP_ERR_REPEAT in GSS Token
-| &nbsp;| Try accessing file using another SMB2 Client, which should succeed
+
+
+
+
+
+
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Test ID**| KerbAuth_AuthData_UnknownType_Optional_Ticket| 
+|  **Description**| This test case is designed to test whether server can handle unknown AuthorizationData contained in AD-IF-RELEVANT in the Ticket.| 
+|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC| 
+| | Client expects KRB-ERROR from KDC| 
+| | Client sends AS-REQ with PA-DATA to KDC| 
+| | Client expects AS-REP from KDC| 
+| | Client sends TGS-REQ to KDC| 
+| | Client expects TGS-REP from KDC| 
+| | Decrypt cifs Ticket| 
+| | Add a type-unknown Authorization-Data which is inside AD_IF_RELEVANT to the Ticket| 
+| | Create authenticator| 
+| | Create AP Request| 
+| | Create GSS Token| 
+| | Client sends SMB2 NEGOTIATE request to AP| 
+| | Client expects SMB2 NEOGTIATE response from AP| 
+| | Client sends SMB2 SESSION_SETUP request to AP with GSS Token| 
+| | Client expects SMB2 SESSION_SETUP response with GSS Token| 
+| | Unknown Authorization-Data is in AD_IF_RELEVANT is optional.| 
+| | Server should not fail the request.| 
+
+
+
+
+
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Test ID**| KerbAuth_Replay| 
+|  **Description**| This test case is designed to test whether server can handle Replay correctly.| 
+|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC| 
+| | Kerberos client expects KRB-ERROR from KDC| 
+| | Kerberos client sends AS-REQ with PA-DATA to KDC| 
+| | Kerberos client expects AS-REP from KDC| 
+| | Kerberos client sends TGS-REQ to KDC| 
+| | Kerberos client expects TGS-REP from KDC| 
+| | Decrypt cifs Ticket| 
+| | Create authenticator| 
+| | Create AP Request| 
+| | Create GSS Token| 
+| | SMB2 client sends SMB2 NEGOTIATE request to AP| 
+| | SMB2 client expects SMB2 NEOGTIATE response from AP| 
+| | SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token| 
+| | SMB2 client expects SMB2 SESSION_SETUP response with GSS Token| 
+| | Session Setup should fail because it uses a Replay of KRB_AP_REQ| 
+| | SMB2 Server should return KRB_AP_ERR_REPEAT in GSS Token| 
+| | Try accessing file using another SMB2 Client, which should succeed| 
 
 
 
@@ -478,6 +495,7 @@ Service password/keytab file may be needed in order for synthetic Kerberos clien
 #### <a name="_Toc427487703"/>Test Case Design
 In Share Permission Check scenario, different DACLs will be applied to SMB share(s). Test suite will try to access the share(s) using specific user accounts. The result (either Allowed or Denied) would be verified according to MS-DTYP. The following picture is an example of how to set Share Permission in Windows.
 
+
 ![Picture 5](./image/Auth_ServerTestDesignSpecification/image3.jpeg)
 
 
@@ -486,11 +504,10 @@ In Share Permission Check scenario, different DACLs will be applied to SMB share
 
 #####Domain Users
 
-| User Name| SID| Member Of| Attributes
-| -------------| -------------| -------------| -------------| -------------
-| AzUser01| S-1-5-21-465464611-2451339954-1855217765-1106| AzGroup01| 
-
-| &nbsp;| &nbsp;| Domain Users| &nbsp;
+| User Name| SID| Member Of| Attributes| 
+| -------------| -------------| -------------| ------------- |
+| AzUser01| S-1-5-21-465464611-2451339954-1855217765-1106| AzGroup01|  | 
+| | | Domain Users| | 
 
 
 
@@ -507,7 +524,8 @@ In Share Permission Check scenario, different DACLs will be applied to SMB share
 * SID may be different in your environment.
 
 #####Share(s)
-If MS-SRVS is supported by SUT, test suite can dynamically set Share Permissions using MS-SRVS. One share need to be exposed, named AzShare by default. Folder (NTFS) permission should be set to allow everyone to access it.Otherwise, 6 shares (AzShare01, …, AzShare06) are required. Share Permissions should be set respectively according to the Security Descriptor in each of the following tables. Folder (NTFS) permission should be set to allow everyone to access it.
+If MS-SRVS is supported by SUT, test suite can dynamically set Share Permissions using MS-SRVS. One share need to be exposed, named AzShare by default. Folder (NTFS) permission should be set to allow everyone to access it.
+Otherwise, 6 shares (AzShare01, …, AzShare06) are required. Share Permissions should be set respectively according to the Security Descriptor in each of the following tables. Folder (NTFS) permission should be set to allow everyone to access it.
 
 #### <a name="_Toc427487705"/>BVT cases
 
@@ -590,14 +608,15 @@ If MS-SRVS is supported by SUT, test suite can dynamically set Share Permissions
 
 
 
-|  **Test ID**| SharePermission_CreateClose_DeleteFile_MaximalAccessNotIncludeDeleteOrGenericAll
-| -------------| -------------| -------------
-|  **Description**| This case is designed to test whether server can handle delete file request when Treeconnect.MaximalAccess does not include DELETE or GENERIC_ALL.
-|  **Security Descriptor**| O:BAG:DUD:**(A;;0x1effff;;;**  **S-1-5-21-465464611-2451339954-1855217765-1106** **)**(A;OICI;FA;;;BA)
-|  **Access Account**| AzUser01
-|  **Step**| Set share permission to  ALLOW user AzUsre01 to access the share target share with access mask: (STANDARD_RIGHTS_ALL  &#124;  SPECIFIC_RIGHTS_ALL) & ~DELETE
-| &nbsp;| Use account AzUsre01 to access the share and create a file. This operation should succeed.
-| &nbsp;| Use account AzUsre01 to delete the file just created. This operation should not succeed because Treeconnect.MaximalAccess does not include DELETE or GENERIC_ALL.
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Test ID**| SharePermission_CreateClose_DeleteFile_MaximalAccessNotIncludeDeleteOrGenericAll| 
+|  **Description**| This case is designed to test whether server can handle delete file request when Treeconnect.MaximalAccess does not include DELETE or GENERIC_ALL.| 
+|  **Security Descriptor**| O:BAG:DUD:**(A;;0x1effff;;;**  **S-1-5-21-465464611-2451339954-1855217765-1106** **)**(A;OICI;FA;;;BA)| 
+|  **Access Account**| AzUser01| 
+|  **Step**| Set share permission to  ALLOW user AzUsre01 to access the share target share with access mask: (STANDARD_RIGHTS_ALL  &#124;  SPECIFIC_RIGHTS_ALL) & ~DELETE| 
+| | Use account AzUsre01 to access the share and create a file. This operation should succeed.| 
+| | Use account AzUsre01 to delete the file just created. This operation should not succeed because Treeconnect.MaximalAccess does not include DELETE or GENERIC_ALL.| 
 
 
 
@@ -609,6 +628,7 @@ If MS-SRVS is supported by SUT, test suite can dynamically set Share Permissions
 #### <a name="_Toc427487708"/>Test Case Design
 In Folder Permission Check scenario, different DACLs will be applied to a shared folder (the folder that is exposed as an SMB share). And then test suite will try to access the share using specific user accounts. The result (either Allowed or Denied) would be verified according to MS-DTYP. The following picture is an example of how to set Folder Permission in Windows.
 
+
 ![Picture 4](./image/Auth_ServerTestDesignSpecification/image4.jpeg)
 
 
@@ -617,11 +637,10 @@ In Folder Permission Check scenario, different DACLs will be applied to a shared
 
 #####Domain Users
 
-| User Name| SID| Member Of| Attributes
-| -------------| -------------| -------------| -------------| -------------
-| AzUser01| S-1-5-21-465464611-2451339954-1855217765-1106| AzGroup01| 
-
-| &nbsp;| &nbsp;| Domain Users| &nbsp;
+| User Name| SID| Member Of| Attributes| 
+| -------------| -------------| -------------| ------------- |
+| AzUser01| S-1-5-21-465464611-2451339954-1855217765-1106| AzGroup01|  | 
+| | | Domain Users| | 
 
 
 
@@ -638,7 +657,8 @@ In Folder Permission Check scenario, different DACLs will be applied to a shared
 * SID may be different in your environment.
 
 #####Share(s)
-One share need to be exposed, named AzFolder by default. Share Permission should be set to allow everyone to access it. Domain Admins should be granted Full Access permission to the folder.SMB2 SET_INFO is required to run these cases.
+One share need to be exposed, named AzFolder by default. Share Permission should be set to allow everyone to access it. Domain Admins should be granted Full Access permission to the folder.
+SMB2 SET_INFO is required to run these cases.
 
 #### <a name="_Toc427487710"/>BVT cases
 
@@ -725,17 +745,17 @@ One share need to be exposed, named AzFolder by default. Share Permission should
 #### <a name="_Toc427487713"/>Test Case Design
 In File Permission Check scenario, files with different DACLs will be created in an SMB share. And then test suite will try to access those files using specific user accounts. The result (either Allowed or Denied) would be verified according to MS-DTYP. The following picture is an example of how to set File Permission in Windows.
 
+
 ![Picture 3](./image/Auth_ServerTestDesignSpecification/image5.jpeg)
 
 
 
 #####Domain Users
 
-| User Name| SID| Member Of| Attributes
-| -------------| -------------| -------------| -------------| -------------
-| AzUser01| S-1-5-21-465464611-2451339954-1855217765-1106| AzGroup01| 
-
-| &nbsp;| &nbsp;| Domain Users| &nbsp;
+| User Name| SID| Member Of| Attributes| 
+| -------------| -------------| -------------| ------------- |
+| AzUser01| S-1-5-21-465464611-2451339954-1855217765-1106| AzGroup01|  | 
+| | | Domain Users| | 
 
 
 
@@ -752,7 +772,8 @@ In File Permission Check scenario, files with different DACLs will be created in
 * SID may be different in your environment.
 
 #####Share(s)
-One share need to be exposed, named AzFile by default. Share permission should be set to allow everyone accessing it. Domain Admins should be granted Full Access permission to the folder.SMB2 SET_INFO is required to run these cases.
+One share need to be exposed, named AzFile by default. Share permission should be set to allow everyone accessing it. Domain Admins should be granted Full Access permission to the folder.
+SMB2 SET_INFO is required to run these cases.
 
 #### <a name="_Toc427487714"/>BVT cases
 
@@ -837,6 +858,7 @@ One share need to be exposed, named AzFile by default. Share permission should b
 #### <a name="_Toc427487717"/>Test Case Design
 In Claim-Based Access Control scenario, different Central Access Policies (CAPs) will be applied to an SMB share. And then test suite will try to access the share using specific user accounts. The result (either Allowed or Denied) would be verified according to MS-DTYP. The following picture is an example of how to set CAP in Windows.
 
+
 ![image6](./image/Auth_ServerTestDesignSpecification/image6.png)
 
 
@@ -845,28 +867,27 @@ In Claim-Based Access Control scenario, different Central Access Policies (CAPs)
 
 #####Domain Users
 
-| User Name| SID| Member Of| Attributes
-| -------------| -------------| -------------| -------------| -------------
-| ITadmin01| S-1-5-21-465464611-2451339954-1855217765-1608| IT Admins| department: IT
-| &nbsp;| &nbsp;| Domain Users| &nbsp;
-| &nbsp;| &nbsp;| &nbsp;| countryCode: 156
-| ITmember01| S-1-5-21-465464611-2451339954-1855217765-1609| IT| department: IT
-| &nbsp;| &nbsp;| Domain Users| &nbsp;
-| &nbsp;| &nbsp;| &nbsp;| countryCode: 392
-| Payrollmemeber01| S-1-5-21-465464611-2451339954-1855217765-1611| Payroll| department: Payroll
-| &nbsp;| &nbsp;| Domain Users| &nbsp;
-| &nbsp;| &nbsp;| &nbsp;| countryCode: 156
-| Payrollmemeber02| S-1-5-21-465464611-2451339954-1855217765-1612| Payroll| department: Payroll
-| &nbsp;| &nbsp;| Domain Users| &nbsp;
-| &nbsp;| &nbsp;| &nbsp;| countryCode: 840
-| Payrollmemeber03| S-1-5-21-465464611-2451339954-1855217765-1613| Payroll| department: Payroll
-| &nbsp;| &nbsp;| Domain Users| &nbsp;
-| &nbsp;| &nbsp;| &nbsp;| countryCode: 392
-| Payrolladmin01| S-1-5-21-465464611-2451339954-1855217765-1610| Payroll Admins| department: Payroll
-| &nbsp;| &nbsp;| Domain Users| &nbsp;
-| &nbsp;| &nbsp;| &nbsp;| countryCode: 840
-| noclaimuser| S-1-5-21-465464611-2451339954-1855217765-1607| Domain Users| 
-
+| User Name| SID| Member Of| Attributes| 
+| -------------| -------------| -------------| ------------- |
+| ITadmin01| S-1-5-21-465464611-2451339954-1855217765-1608| IT Admins| department: IT| 
+| | | Domain Users| | 
+| | | | countryCode: 156| 
+| ITmember01| S-1-5-21-465464611-2451339954-1855217765-1609| IT| department: IT| 
+| | | Domain Users| | 
+| | | | countryCode: 392| 
+| Payrollmemeber01| S-1-5-21-465464611-2451339954-1855217765-1611| Payroll| department: Payroll| 
+| | | Domain Users| | 
+| | | | countryCode: 156| 
+| Payrollmemeber02| S-1-5-21-465464611-2451339954-1855217765-1612| Payroll| department: Payroll| 
+| | | Domain Users| | 
+| | | | countryCode: 840| 
+| Payrollmemeber03| S-1-5-21-465464611-2451339954-1855217765-1613| Payroll| department: Payroll| 
+| | | Domain Users| | 
+| | | | countryCode: 392| 
+| Payrolladmin01| S-1-5-21-465464611-2451339954-1855217765-1610| Payroll Admins| department: Payroll| 
+| | | Domain Users| | 
+| | | | countryCode: 840| 
+| noclaimuser| S-1-5-21-465464611-2451339954-1855217765-1607| Domain Users|  | 
 
 
 
@@ -901,7 +922,10 @@ In Claim-Based Access Control scenario, different Central Access Policies (CAPs)
 
 ######CountryCodeAnyOf156Or840
 
-Target Resources: All ResourcesCurrent Permissions:
+
+Target Resources: All Resources
+Current Permissions:
+
 
 ![image7](./image/Auth_ServerTestDesignSpecification/image7.png)
 
@@ -909,7 +933,11 @@ Target Resources: All ResourcesCurrent Permissions:
 
 ######CountryCodeEquals156AndITDepartmentRule
 
-Target Resources: All ResourcesCurrent Permissions:
+
+Target Resources: All Resources
+Current Permissions:
+
+
 
 
 ![image8](./image/Auth_ServerTestDesignSpecification/image8.png)
@@ -918,7 +946,10 @@ Target Resources: All ResourcesCurrent Permissions:
 
 ######CountryCodeEquals156OrITDepartmentRule
 
-Target Resources: All ResourcesCurrent Permissions:
+
+Target Resources: All Resources
+Current Permissions:
+
 
 ![image9](./image/Auth_ServerTestDesignSpecification/image9.png)
 
@@ -926,7 +957,10 @@ Target Resources: All ResourcesCurrent Permissions:
 
 ######CountryCodeEquals156Rule
 
-Target Resources: All ResourcesCurrent Permissions:
+
+Target Resources: All Resources
+Current Permissions:
+
 
 ![image10](./image/Auth_ServerTestDesignSpecification/image10.png)
 
@@ -934,7 +968,10 @@ Target Resources: All ResourcesCurrent Permissions:
 
 ######CountryCodeGreaterThan392Rule
 
-Target Resources: All ResourcesCurrent Permissions:
+
+Target Resources: All Resources
+Current Permissions:
+
 
 ![image11](./image/Auth_ServerTestDesignSpecification/image11.png)
 
@@ -942,7 +979,10 @@ Target Resources: All ResourcesCurrent Permissions:
 
 ######CountryCodeGreaterThanOrEquals392Rule
 
-Target Resources: All ResourcesCurrent Permissions:
+
+Target Resources: All Resources
+Current Permissions:
+
 
 ![image12](./image/Auth_ServerTestDesignSpecification/image12.png)
 
@@ -950,7 +990,10 @@ Target Resources: All ResourcesCurrent Permissions:
 
 ######CountryCodeLessThan392Rule
 
-Target Resources: All ResourcesCurrent Permissions:
+
+Target Resources: All Resources
+Current Permissions:
+
 
 ![image13](./image/Auth_ServerTestDesignSpecification/image13.png)
 
@@ -958,7 +1001,10 @@ Target Resources: All ResourcesCurrent Permissions:
 
 ######CountryCodeLessThanOrEquals392Rule
 
-Target Resources: All ResourcesCurrent Permissions:
+
+Target Resources: All Resources
+Current Permissions:
+
 
 ![image14](./image/Auth_ServerTestDesignSpecification/image14.png)
 
@@ -966,7 +1012,10 @@ Target Resources: All ResourcesCurrent Permissions:
 
 ######CountryCodeNotAnyOf156Or840Rule
 
-Target Resources: All ResourcesCurrent Permissions:
+
+Target Resources: All Resources
+Current Permissions:
+
 
 ![image15](./image/Auth_ServerTestDesignSpecification/image15.png)
 
@@ -974,7 +1023,10 @@ Target Resources: All ResourcesCurrent Permissions:
 
 ######CountryCodeNotEquals156Rule
 
-Target Resources: All ResourcesCurrent Permissions:
+
+Target Resources: All Resources
+Current Permissions:
+
 
 ![image16](./image/Auth_ServerTestDesignSpecification/image16.png)
 
@@ -1007,7 +1059,8 @@ Target Resources: All ResourcesCurrent Permissions:
 
 
 #####Share(s)
-One share need to be exposed, named AzCBAC by default. Share Permission and Folder Permission should all be set to allow everyone to access it.SMB2 SET_INFO is required to run these cases.
+One share need to be exposed, named AzCBAC by default. Share Permission and Folder Permission should all be set to allow everyone to access it.
+SMB2 SET_INFO is required to run these cases.
 
 #####BVT cases
 
