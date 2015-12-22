@@ -239,7 +239,7 @@ In the test design, MS-FSA uses a common test initialization and cleanup method,
 The following diagram shows the basic test environment for MS-FSA. The DC01 is optional.
 
 
-![image2.emf](./image/MS-FSA_ServerTestDesignSpecification/image2.emf)
+![image2.png](./image/MS-FSA_ServerTestDesignSpecification/image2.png)
 
 
 
@@ -800,9 +800,9 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | Note: Only ReFS supports integrity
 | | Test environment: NTFS, ReFS
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsIntegritySupported == True&nbsp;STATUS_SUCCESS
-| | IsIntegritySupported == False &nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsIntegritySupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsIntegritySupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile (DataFile)
 | | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION
 | | If (IsIntegritySupported == True) {
@@ -822,9 +822,9 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | Note: Only ReFS supports integrity
 | | Test environment: NTFS, ReFS
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsIntegritySupported == True&nbsp;STATUS_SUCCESS
-| | IsIntegritySupported == False &nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsIntegritySupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsIntegritySupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile (DirectoryFile)
 | | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION
 | | If (IsIntegritySupported == True) {
@@ -1003,9 +1003,9 @@ Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
 | | Note: Only ReFS supports integrity
 | | Test environment: NTFS, ReFS
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsIntegritySupported == True &nbsp;STATUS_SUCCESS
-| | IsIntegritySupported == False &nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsIntegritySupported == True &nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsIntegritySupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile (DataFile)
 | | FSCTL request with FSCTL_SET_INTEGRITY_INFORMATION
 | | If (IsIntegritySupported == True) {
@@ -1025,9 +1025,9 @@ Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
 | | Note: Only ReFS supports integrity
 | | Test environment: NTFS, ReFS
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsIntegritySupported == True &nbsp;STATUS_SUCCESS
-| | IsIntegritySupported == False &nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsIntegritySupported == True &nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsIntegritySupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile (Directory)
 | | FSCTL request with FSCTL_SET_INTEGRITY_INFORMATION
 | | If (IsIntegritySupported == True) {
@@ -1279,9 +1279,9 @@ Test matrix for InputBuffer.ChecksumAlgorithm
 | | Note: Only ReFS supports integrity
 | | Test object: DataFile
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsOffloadSupported == True&nbsp;STATUS_SUCCESS
-| | IsOffloadSupported == False&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsOffloadSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsOffloadSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile (DataFile)
 | | FSCTL request with SCTL_OFFLOAD_READ
 | | If (IsOffloadSupported == True) {
@@ -1301,9 +1301,9 @@ Test matrix for InputBuffer.ChecksumAlgorithm
 | | Note: Only ReFS supports integrity
 | | Test object: DataFile
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsOffloadSupported == True&nbsp;STATUS_SUCCESS
-| | IsOffloadSupported == False&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsOffloadSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsOffloadSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile (DataFile)
 | | FSCTL request with SCTL_OFFLOAD_WRITE
 | | If (IsOffloadSupported == True) {
@@ -1509,9 +1509,9 @@ Parameter combination
 | | Test environment: NTFS, ReFS
 | | Test object: DataFile, DirectoryFile
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsShortNameSupported == True&nbsp;STATUS_SUCCESS
-| | IsShortNameSupported == False &nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsShortNameSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsShortNameSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile 
 | | SetInfo with FileInfoClass.FileShortNameInformation
 | | If (IsShortNameSupported == True) {
@@ -1532,9 +1532,9 @@ Parameter combination
 | | Test environment: NTFS, ReFS
 | | Test object: DataFile, DirectoryFile
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsShortNameSupported == True&nbsp;STATUS_SUCCESS
-| | IsShortNameSupported == False &nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsShortNameSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsShortNameSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile 
 | | SetInfo with FileInfoClass.FileShortNameInformation
 | | If (IsShortNameSupported == True) {
@@ -1589,9 +1589,9 @@ Parameter combination
 | | Test environment: NTFS, ReFS
 | | Test object: DataFile, DirectoryFile
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsObjectIdSupported == True&nbsp;STATUS_SUCCESS
-| | IsObjectIdSupported == False &nbsp;STATUS_INVALID_PARAMETER
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsObjectIdSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsObjectIdSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_PARAMETER
 | Message Sequence| CreateFile 
 | | QueryInfo with FsInfoClass.FileFsObjectIdInformation
 | | If (IsObjectIdSupported == True) {
@@ -1612,9 +1612,9 @@ Parameter combination
 | | Test environment: NTFS, ReFS
 | | Test object: DataFile, DirectoryFile
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsObjectIdSupported == True&nbsp;STATUS_SUCCESS
-| | IsObjectIdSupported == False &nbsp;STATUS_INVALID_PARAMETER
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsObjectIdSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsObjectIdSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_PARAMETER
 | Message Sequence| CreateFile 
 | | QueryInfo with FsInfoClass.FileFsObjectIdInformation
 | | If (IsObjectIdSupported == True) {
@@ -1635,9 +1635,9 @@ Parameter combination
 | | Test environment: NTFS, ReFS
 | | Test object: DataFile, DirectoryFile
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsObjectIdSupported == True&nbsp;STATUS_SUCCESS
-| | IsObjectIdSupported == False &nbsp;STATUS_INVALID_PARAMETER
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsObjectIdSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsObjectIdSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_PARAMETER
 | Message Sequence| CreateFile 
 | | SetInfo with FsInfoClass.FileFsObjectIdInformation
 | | If (IsObjectIdSupported == True) {
@@ -1658,9 +1658,9 @@ Parameter combination
 | | Test environment: NTFS, ReFS
 | | Test object: DataFile, DirectoryFile
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsObjectIdSupported == True&nbsp;STATUS_SUCCESS
-| | IsObjectIdSupported == False &nbsp;STATUS_INVALID_PARAMETER
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsObjectIdSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsObjectIdSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_PARAMETER
 | Message Sequence| CreateFile 
 | | SetInfo with FsInfoClass.FileFsObjectIdInformation
 | | If (IsObjectIdSupported == True) {
@@ -1716,9 +1716,9 @@ Parameter combination
 | | Test environment: NTFS, ReFS
 | | Test object: DataFile, DirectoryFile
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsCompressionSupported == True&nbsp;STATUS_SUCCESS
-| | IsCompressionSupported == False &nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsCompressionSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsCompressionSupported == False &nbsp;&#124;&nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
 | Message Sequence| CreateFile 
 | | QueryInfo for FileInfoClass.FileCompressionInformation
 | | If (IsCompressionSupported == True) {
@@ -1739,9 +1739,9 @@ Parameter combination
 | | Test environment: NTFS, ReFS
 | | Test object: DataFile, DirectoryFile
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsCompressionSupported == True&nbsp;STATUS_SUCCESS
-| | IsCompressionSupported == False &nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsCompressionSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsCompressionSupported == False &nbsp;&#124;&nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
 | Message Sequence| CreateFile 
 | | QueryInfo for FileInfoClass.FileCompressionInformation
 | | If (IsCompressionSupported == True) {
@@ -1762,9 +1762,9 @@ Parameter combination
 | | Test environment: NTFS, ReFS
 | | Test object: DataFile, DirectoryFile
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsCompressionSupported == True&nbsp;STATUS_SUCCESS
-| | IsCompressionSupported == False &nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsCompressionSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsCompressionSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile 
 | | FsCtl request with FSCTL_GET_COMPRESSION
 | | If (IsCompressionSupported == True) {
@@ -1785,9 +1785,9 @@ Parameter combination
 | | Test environment: NTFS, ReFS
 | | Test object: DataFile, DirectoryFile
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsCompressionSupported == True&nbsp;STATUS_SUCCESS
-| | IsCompressionSupported == False &nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsCompressionSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsCompressionSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile 
 | | FsCtl request with FSCTL_GET_COMPRESSION
 | | If (IsCompressionSupported == True) {
@@ -1807,9 +1807,9 @@ Parameter combination
 | | Note: ReFS does not support object IDs.
 | | Test environment: NTFS, ReFS
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsCompressionSupported == True&nbsp;STATUS_SUCCESS
-| | IsCompressionSupported == False &nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsCompressionSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsCompressionSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile (DataFile)
 | | FsCtl request with FSCTL_SET_COMPRESSION
 | | If (IsCompressionSupported == True) {
@@ -1830,9 +1830,9 @@ Parameter combination
 | | Test environment: NTFS, ReFS
 | | Test object: DataFile, DirectoryFile
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsCompressionSupported == True&nbsp;STATUS_SUCCESS
-| | IsCompressionSupported == False &nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsCompressionSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsCompressionSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile  (DirectoryFile)
 | | FsCtl request with FSCTL_SET_COMPRESSION
 | | If (IsCompressionSupported == True) {
@@ -1854,9 +1854,9 @@ Parameter combination
 | | Note: Only NTFS implements EAs.
 | | Test environment: NTFS, ReFS
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsEASupported == True&nbsp;STATUS_SUCCESS
-| | IsEASupported == False &nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsEASupported == False &nbsp;&#124;&nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
 | Message Sequence| CreateFile (DataFile)
 | | SetInfo with FileInfoClass.FileFullEaInformation
 | | If (IsEASupported == True) {
@@ -1876,9 +1876,9 @@ Parameter combination
 | | Note: Only NTFS implements EAs.
 | | Test environment: NTFS, ReFS
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsEASupported == True&nbsp;STATUS_SUCCESS
-| | IsEASupported == False &nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsEASupported == False &nbsp;&#124;&nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
 | Message Sequence| CreateFile (DirectoryFile)
 | | SetInfo with FileInfoClass.FileFullEaInformation
 | | If (IsEASupported == True) {
@@ -1898,9 +1898,9 @@ Parameter combination
 | | Note: Only NTFS implements EAs.
 | | Test environment: NTFS, ReFS
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsEASupported == True&nbsp;STATUS_SUCCESS
-| | IsEASupported == False &nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsEASupported == False &nbsp;&#124;&nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
 | Message Sequence| CreateFile (DataFile)
 | | QueryInfo with FileInfoClass.FileFullEaInformation
 | | If (IsEASupported == True) {
@@ -1920,9 +1920,9 @@ Parameter combination
 | | Note: Only NTFS implements EAs.
 | | Test environment: NTFS, ReFS
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsEASupported == True&nbsp;STATUS_SUCCESS
-| | IsEASupported == False &nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsEASupported == False &nbsp;&#124;&nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
 | Message Sequence| CreateFile (DirectoryFile)
 | | QueryInfo with FileInfoClass.FileFullEaInformation
 | | If (IsEASupported == True) {
@@ -1942,9 +1942,9 @@ Parameter combination
 | | Note: Only NTFS implements EAs.
 | | Test environment: NTFS, ReFS
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsEASupported == True&nbsp;STATUS_SUCCESS
-| | IsEASupported == False &nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsEASupported == False &nbsp;&#124;&nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
 | Message Sequence| CreateFile (DataFile)
 | | SetInfo with FileInfoClass.FileEaInformation
 | | If (IsEASupported == True) {
@@ -1964,9 +1964,9 @@ Parameter combination
 | | Note: Only NTFS implements EAs.
 | | Test environment: NTFS, ReFS
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsEASupported == True&nbsp;STATUS_SUCCESS
-| | IsEASupported == False &nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsEASupported == False &nbsp;&#124;&nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
 | Message Sequence| CreateFile (DirectoryFile)
 | | SetInfo with FileInfoClass.FileEaInformation
 | | If (IsEASupported == True) {
@@ -1986,9 +1986,9 @@ Parameter combination
 | | Note: Only NTFS implements EAs.
 | | Test environment: NTFS, ReFS
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsEASupported == True&nbsp;STATUS_SUCCESS
-| | IsEASupported == False &nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsEASupported == False &nbsp;&#124;&nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
 | Message Sequence| CreateFile (DataFile)
 | | QueryInfo with FileInfoClass.FileEaInformation
 | | If (IsEASupported == True) {
@@ -2008,9 +2008,9 @@ Parameter combination
 | | Note: Only NTFS implements EAs.
 | | Test environment: NTFS, ReFS
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsEASupported == True&nbsp;STATUS_SUCCESS
-| | IsEASupported == False &nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsEASupported == False &nbsp;&#124;&nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
 | Message Sequence| CreateFile (DirectoryFile)
 | | QueryInfo with FileInfoClass.FileEaInformation
 | | If (IsEASupported == True) {
@@ -2200,9 +2200,9 @@ Parameter combination
 | | Test object: DataFile, DirectoryFile
 | | Input parameter: FileInfoClass.FileLinkInformation
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsFileLinkInfoSupported == True&nbsp;STATUS_SUCCESS
-| | IsFileLinkInfoSupported == False &nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsFileLinkInfoSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsFileLinkInfoSupported == False &nbsp;&#124;&nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
 | Message Sequence| CreateFile
 | | SetInfo with FileInfoClass.FileLinkInformation 
 | | If (IsFileLinkInfoSupported == True) {
@@ -2224,9 +2224,9 @@ Parameter combination
 | | Test object: DataFile, DirectoryFile
 | | Input parameter: FileInfoClass.FileLinkInformation
 | | Parameter combination.
-| | Parameter&nbsp;Expected Result
-| | IsFileLinkInfoSupported == True&nbsp;STATUS_SUCCESS
-| | IsFileLinkInfoSupported == False &nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsFileLinkInfoSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsFileLinkInfoSupported == False &nbsp;&#124;&nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
 | Message Sequence| CreateFile
 | | SetInfo with FileInfoClass.FileLinkInformation 
 | | If (IsFileLinkInfoSupported == True) {
@@ -2249,9 +2249,9 @@ Parameter combination
 | | Test object: DataFile, DirectoryFile
 | | Input parameter: FileInfoClass.FileValidDataLengthInformation
 | | Parameter combination.
-| | Parameter&emsp;&emsp;&nbsp;Expected Result
-| | IsFileValidDataLengthInfoSupported == True&nbsp;STATUS_SUCCESS
-| | IsFileValidDataLengthInfoSupported == False &nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
+| | Parameter&emsp;&emsp;&nbsp;&#124;&nbsp;Expected Result
+| | IsFileValidDataLengthInfoSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsFileValidDataLengthInfoSupported == False &nbsp;&#124;&nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
 | Message Sequence| CreateFile
 | | SetInfo with FileInfoClass = FileValidDataLengthInformation 
 | | If (IsFileValidDataLengthInfoSupported == True) {
@@ -2272,9 +2272,9 @@ Parameter combination
 | | Test object: DataFile, DirectoryFile
 | | Input parameter: FileInfoClass.FileValidDataLengthInformation
 | | Parameter combination.
-| | Parameter&emsp;&emsp;&nbsp;Expected Result
-| | IsFileValidDataLengthInfoSupported == True&nbsp;STATUS_SUCCESS
-| | IsFileValidDataLengthInfoSupported == False &nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
+| | Parameter&emsp;&emsp;&nbsp;&#124;&nbsp;Expected Result
+| | IsFileValidDataLengthInfoSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsFileValidDataLengthInfoSupported == False &nbsp;&#124;&nbsp;**STATUS_NOT_** **SUPPORTED**  **??**
 | Message Sequence| CreateFile
 | | SetInfo with FileInfoClass = FileValidDataLengthInformation 
 | | If (IsFileValidDataLengthInfoSupported == True) {
@@ -2305,9 +2305,9 @@ Parameter combination
 | | Test environment: NTFS, ReFS
 | | Test object: DataFile, DirectoryFile
 | | Parameter combination
-| | Parameter&nbsp;Expected Result
-| | FileSystem == NTFS&nbsp;SectorsPerAllocationUnit = 8
-| | FileSystem == ReFS&nbsp;SectorsPerAllocationUnit = 128
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | FileSystem == NTFS&nbsp;&#124;&nbsp;SectorsPerAllocationUnit = 8
+| | FileSystem == ReFS&nbsp;&#124;&nbsp;SectorsPerAllocationUnit = 128
 | Message Sequence| CreateFile
 | | QueryInfo with FsInfoClass. FileFsSizeInformation
 | | Verify the outputbuffer.SectorsPerAllocationUnit  is correctly set according to default cluster size.
@@ -2339,9 +2339,9 @@ Parameter combination
 | | Test environment: NTFS, ReFS
 | | Test object: DataFile, DirectoryFile
 | | Parameter combination
-| | Parameter&nbsp;Expected Result
-| | FileSystem == NTFS&nbsp;SectorsPerAllocationUnit = 8
-| | FileSystem == ReFS&nbsp;SectorsPerAllocationUnit = 128
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | FileSystem == NTFS&nbsp;&#124;&nbsp;SectorsPerAllocationUnit = 8
+| | FileSystem == ReFS&nbsp;&#124;&nbsp;SectorsPerAllocationUnit = 128
 | Message Sequence| CreateFile
 | | QueryInfo with FsInfoClass. FileFsSizeInformation
 | | Verify the outputbuffer.SectorsPerAllocationUnit  is correctly set according to default cluster size.
@@ -2366,9 +2366,9 @@ Parameter combination
 | | Note: Only NTFS supports quotas.
 | | Test environment: NTFS, ReFS
 | | Parameter combination
-| | Parameter&nbsp;Expected Result
-| | IsQuotaInfoSupported == True&nbsp;STATUS_SUCCESS
-| | IsQuotaInfoSupported == False&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsQuotaInfoSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsQuotaInfoSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| Open Quota file
 | | QueryInfo with FileInfoClass.FileQuotaInformation
 | | If (IsQuotaInfoSupported == True) {
@@ -2388,9 +2388,9 @@ Parameter combination
 | | Note: Only NTFS supports quotas.
 | | Test environment: NTFS, ReFS
 | | Parameter combination
-| | Parameter&nbsp;Expected Result
-| | IsQuotaInfoSupported == True&nbsp;STATUS_SUCCESS
-| | IsQuotaInfoSupported == False&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsQuotaInfoSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsQuotaInfoSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| Open Quota file
 | | SetInfo with FileInfoClass.FileQuotaInformation
 | | If (IsQuotaInfoSupported == True) {
@@ -2446,9 +2446,9 @@ Parameter combination
 | | Test object: DataFile, DirectoryFile
 | | FsCtl request: FSCTL_SET_ENCRYPTION
 | | Parameter combination
-| | Parameter&nbsp;Expected Result
-| | IsEncryptionSupported == True&nbsp;STATUS_SUCCESS
-| | IsEncryptionSupported == False&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsEncryptionSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsEncryptionSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile
 | | FsCtl request with FSCTL_SET_ENCRYPTION
 | | If (IsEncryptionSupported == True) {
@@ -2470,9 +2470,9 @@ Parameter combination
 | | Test object: DataFile, DirectoryFile
 | | FsCtl request: FSCTL_SET_ENCRYPTION
 | | Parameter combination
-| | Parameter&nbsp;Expected Result
-| | IsEncryptionSupported == True&nbsp;STATUS_SUCCESS
-| | IsEncryptionSupported == False&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsEncryptionSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsEncryptionSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile
 | | FsCtl request with FSCTL_SET_ENCRYPTION
 | | If (IsEncryptionSupported == True) {
@@ -2497,9 +2497,9 @@ Parameter combination
 | | Test environment: NTFS, ReFS, FAT32
 | | FsCtl Request: FSCTL_QUERY_ALLOCATED_RANGES
 | | Parameter combination
-| | Parameter&nbsp;Expected Result
-| | IsAllocatedRangesSupported == True&nbsp;STATUS_SUCCESS
-| | IsAllocatedRangesSupported == False&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsAllocatedRangesSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsAllocatedRangesSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile (DataFile)
 | | FsCtl request with FSCTL_QUERY_ALLOCATED_RANGES
 | | If (IsAllocatedRangesSupported == True) {
@@ -2520,9 +2520,9 @@ Parameter combination
 | | Test environment: NTFS, ReFS, FAT32
 | | FsCtl Request: FSCTL_QUERY_ALLOCATED_RANGES
 | | Parameter combination
-| | Parameter&nbsp;Expected Result
-| | IsAllocatedRangesSupported == True&nbsp;STATUS_INVALID_PARAMETER
-| | IsAllocatedRangesSupported == False&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsAllocatedRangesSupported == True&nbsp;&#124;&nbsp;STATUS_INVALID_PARAMETER
+| | IsAllocatedRangesSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile (DirectoryFile)
 | | FsCtl request with FSCTL_QUERY_ALLOCATED_RANGES
 | | If (IsAllocatedRangesSupported == True) {
@@ -2546,9 +2546,9 @@ Parameter combination
 | | Test object: DataFile, DirectoryFile
 | | FsCtl Request: FSCTL_SET_REPARSE_POINT
 | | Parameter combination
-| | Parameter&nbsp;Expected Result
-| | IsReparsePointSupported == True&nbsp;STATUS_SUCCESS
-| | IsReparsePointSupported == False&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsReparsePointSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsReparsePointSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile
 | | FsCtl request with FSCTL_SET_REPARSE_POINT
 | | If (IsReparsePointSupported == True) {
@@ -2570,9 +2570,9 @@ Parameter combination
 | | Test object: DataFile, DirectoryFile
 | | FsCtl Request: FSCTL_SET_REPARSE_POINT
 | | Parameter combination
-| | Parameter&nbsp;Expected Result
-| | IsReparsePointSupported == True&nbsp;STATUS_SUCCESS
-| | IsReparsePointSupported == False&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsReparsePointSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsReparsePointSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile
 | | FsCtl request with FSCTL_SET_REPARSE_POINT
 | | If (IsReparsePointSupported == True) {
@@ -2596,9 +2596,9 @@ Parameter combination
 | | Test object: DataFile, DirectoryFile
 | | FsCtl Request: FSCTL_SET_SPARSE
 | | Parameter combination
-| | Parameter&nbsp;Expected Result
-| | IsSparseFileSupported == True&nbsp;STATUS_SUCCESS
-| | IsSparseFileSupported == False&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsSparseFileSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsSparseFileSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile
 | | FsCtl request with FSCTL_SET_SPARSE
 | | If (IsSparseFileSupported == True) {
@@ -2620,9 +2620,9 @@ Parameter combination
 | | Test object: DataFile, DirectoryFile
 | | FsCtl Request: FSCTL_SET_SPARSE
 | | Parameter combination
-| | Parameter&nbsp;Expected Result
-| | IsSparseFileSupported == True&nbsp;STATUS_SUCCESS
-| | IsSparseFileSupported == False&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsSparseFileSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsSparseFileSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile
 | | FsCtl request with FSCTL_SET_SPARSE
 | | If (IsSparseFileSupported == True) {
@@ -2645,9 +2645,9 @@ Parameter combination
 | | Test environment: NTFS, ReFS
 | | FsCtl Request: FSCTL_SET_ZERO_DATA
 | | Parameter combination
-| | Parameter&nbsp;Expected Result
-| | IsSetZeroDataSupported == True&nbsp;STATUS_SUCCESS
-| | IsSetZeroDataSupported == False&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsSetZeroDataSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsSetZeroDataSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile (DataFile)
 | | FsCtl request with FSCTL_SET_ZERO_DATA
 | | If (IsZeroDataSupported == True) {
@@ -2668,9 +2668,9 @@ Parameter combination
 | | Test environment: NTFS, ReFS
 | | FsCtl Request: FSCTL_SET_ZERO_DATA
 | | Parameter combination
-| | Parameter&nbsp;Expected Result
-| | IsSetZeroDataSupported == True&nbsp;STATUS_SUCCESS
-| | IsSetZeroDataSupported == False&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsSetZeroDataSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsSetZeroDataSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile (DirectoryFile)
 | | FsCtl request with FSCTL_SET_ZERO_DATA
 | | If (IsSetZeroDataSupported == True) {
@@ -2720,7 +2720,7 @@ The MS-FSA Protocol adapter is called FSAAdapter in the Test Suite. It implement
 Class Diagram
 
 
-![Picture 16](./image/MS-FSA_ServerTestDesignSpecification/image3.png)
+![image3.png](./image/MS-FSA_ServerTestDesignSpecification/image3.png)
 
 
 
@@ -2756,7 +2756,7 @@ Class Diagram
 
 
 
-![Picture 18](./image/MS-FSA_ServerTestDesignSpecification/image4.png)
+![image4.png](./image/MS-FSA_ServerTestDesignSpecification/image4.png)
 
 
 
@@ -2766,7 +2766,7 @@ Class Diagram
 Below diagram shows the message sequence between FSA adapter, transport adapter and SMB server.
 
 
-![image5.emf](./image/MS-FSA_ServerTestDesignSpecification/image5.emf)
+![image5.png](./image/MS-FSA_ServerTestDesignSpecification/image5.png)
 
 
 ### <a name="_Toc427488774"/>Scenarios

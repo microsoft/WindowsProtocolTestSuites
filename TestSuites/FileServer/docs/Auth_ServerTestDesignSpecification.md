@@ -60,7 +60,7 @@ SUT has joined a Windows domain (or other equivalent implementations). Users, Cl
 ## <a name="_Toc427487696"/>Test Environment
 
 
-![image2](./image/Auth_ServerTestDesignSpecification/image2.png)
+![image2.png](./image/Auth_ServerTestDesignSpecification/image2.png)
 
 
 Details of the environment is specified in section 1 of FileSharing_ServerTestDesignSpecification.docx
@@ -496,7 +496,7 @@ Service password/keytab file may be needed in order for synthetic Kerberos clien
 In Share Permission Check scenario, different DACLs will be applied to SMB share(s). Test suite will try to access the share(s) using specific user accounts. The result (either Allowed or Denied) would be verified according to MS-DTYP. The following picture is an example of how to set Share Permission in Windows.
 
 
-![Picture 5](./image/Auth_ServerTestDesignSpecification/image3.jpeg)
+![image3.jpeg](./image/Auth_ServerTestDesignSpecification/image3.jpeg)
 
 
 
@@ -629,7 +629,7 @@ Otherwise, 6 shares (AzShare01, …, AzShare06) are required. Share Permissions 
 In Folder Permission Check scenario, different DACLs will be applied to a shared folder (the folder that is exposed as an SMB share). And then test suite will try to access the share using specific user accounts. The result (either Allowed or Denied) would be verified according to MS-DTYP. The following picture is an example of how to set Folder Permission in Windows.
 
 
-![Picture 4](./image/Auth_ServerTestDesignSpecification/image4.jpeg)
+![image4.jpeg](./image/Auth_ServerTestDesignSpecification/image4.jpeg)
 
 
 
@@ -746,7 +746,7 @@ SMB2 SET_INFO is required to run these cases.
 In File Permission Check scenario, files with different DACLs will be created in an SMB share. And then test suite will try to access those files using specific user accounts. The result (either Allowed or Denied) would be verified according to MS-DTYP. The following picture is an example of how to set File Permission in Windows.
 
 
-![Picture 3](./image/Auth_ServerTestDesignSpecification/image5.jpeg)
+![image5.jpeg](./image/Auth_ServerTestDesignSpecification/image5.jpeg)
 
 
 
@@ -859,7 +859,7 @@ SMB2 SET_INFO is required to run these cases.
 In Claim-Based Access Control scenario, different Central Access Policies (CAPs) will be applied to an SMB share. And then test suite will try to access the share using specific user accounts. The result (either Allowed or Denied) would be verified according to MS-DTYP. The following picture is an example of how to set CAP in Windows.
 
 
-![image6](./image/Auth_ServerTestDesignSpecification/image6.png)
+![image6.png](./image/Auth_ServerTestDesignSpecification/image6.png)
 
 
 
@@ -927,7 +927,7 @@ Target Resources: All Resources
 Current Permissions:
 
 
-![image7](./image/Auth_ServerTestDesignSpecification/image7.png)
+![image7.png](./image/Auth_ServerTestDesignSpecification/image7.png)
 
 
 
@@ -940,7 +940,7 @@ Current Permissions:
 
 
 
-![image8](./image/Auth_ServerTestDesignSpecification/image8.png)
+![image8.png](./image/Auth_ServerTestDesignSpecification/image8.png)
 
 
 
@@ -951,7 +951,7 @@ Target Resources: All Resources
 Current Permissions:
 
 
-![image9](./image/Auth_ServerTestDesignSpecification/image9.png)
+![image9.png](./image/Auth_ServerTestDesignSpecification/image9.png)
 
 
 
@@ -962,7 +962,7 @@ Target Resources: All Resources
 Current Permissions:
 
 
-![image10](./image/Auth_ServerTestDesignSpecification/image10.png)
+![image10.png](./image/Auth_ServerTestDesignSpecification/image10.png)
 
 
 
@@ -973,7 +973,7 @@ Target Resources: All Resources
 Current Permissions:
 
 
-![image11](./image/Auth_ServerTestDesignSpecification/image11.png)
+![image11.png](./image/Auth_ServerTestDesignSpecification/image11.png)
 
 
 
@@ -984,7 +984,7 @@ Target Resources: All Resources
 Current Permissions:
 
 
-![image12](./image/Auth_ServerTestDesignSpecification/image12.png)
+![image12.png](./image/Auth_ServerTestDesignSpecification/image12.png)
 
 
 
@@ -995,7 +995,7 @@ Target Resources: All Resources
 Current Permissions:
 
 
-![image13](./image/Auth_ServerTestDesignSpecification/image13.png)
+![image13.png](./image/Auth_ServerTestDesignSpecification/image13.png)
 
 
 
@@ -1006,7 +1006,7 @@ Target Resources: All Resources
 Current Permissions:
 
 
-![image14](./image/Auth_ServerTestDesignSpecification/image14.png)
+![image14.png](./image/Auth_ServerTestDesignSpecification/image14.png)
 
 
 
@@ -1017,7 +1017,7 @@ Target Resources: All Resources
 Current Permissions:
 
 
-![image15](./image/Auth_ServerTestDesignSpecification/image15.png)
+![image15.png](./image/Auth_ServerTestDesignSpecification/image15.png)
 
 
 
@@ -1028,7 +1028,7 @@ Target Resources: All Resources
 Current Permissions:
 
 
-![image16](./image/Auth_ServerTestDesignSpecification/image16.png)
+![image16.png](./image/Auth_ServerTestDesignSpecification/image16.png)
 
 
 
