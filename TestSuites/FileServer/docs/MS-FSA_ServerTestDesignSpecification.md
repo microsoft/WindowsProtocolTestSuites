@@ -2,15 +2,6 @@
 # Windows is built to be the most interoperable platform 
 #  MICROSOFT CORPORATION    August 17, 2015  Send suggestions and comments about this document to dochelp@microsoft.com.  Please include the name of the test suite with your feedback. 
 
-
-
-
-
-
-
-
-
-
 # Contents
 * [Contents](#_Toc427488644)
 * [Introduction](#_Toc427488645)
@@ -144,56 +135,12 @@
 		* [Message Sequence](#_Toc427488773)
     * [Scenarios](#_Toc427488774)
 
-
-
-
-
-
 ## <a name="_Toc427488645"/>Introduction
 This document provides information about how MS-FSA test suite is designed to test MS-FSA technical document usability and accuracy. It gives the analysis of MS-FSA technical document content, and describes test assumptions, scope and constraints of the test suite. It also specifies test approach, test scenarios, detail test cases, test suite architecture and adapter design.
 
 ## <a name="_Toc427488646"/>MS-FSA Overview
 
-
 MS-FSA is algorithm technical document, with detail algorithm implementation. Below diagram shows the basic 11 operations for MS-FSA.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ## <a name="_Toc427488647"/>Test Approach
 In MS-FSA test suite, MBT test method and traditional approach will work together.
@@ -201,8 +148,6 @@ In MS-FSA test suite, MBT test method and traditional approach will work togethe
 * **MBT**
 
 * Model-based test will mostly cover the return codes for the algorithm operations. 
-
-
 
 * **Traditional**
 
@@ -213,18 +158,6 @@ In MS-FSA test suite, MBT test method and traditional approach will work togethe
 ### <a name="_Toc427488648"/>Test Suite Overview
 The following flow charts show the overview for MS-FSA test suite design.
 
-
-
-
-
-
-
-
-
-
-
-
-
 ### <a name="_Toc427488649"/>Test initialization and cleanup
 In the test design, MS-FSA uses a common test initialization and cleanup method, which will be used commonly in the test cases:
 
@@ -232,17 +165,10 @@ In the test design, MS-FSA uses a common test initialization and cleanup method,
 
 * Cleanup: Logoff and disconnect from server.
 
-
-
-
 ## <a name="_Toc427488650"/>MS-FSA Test Environment
 The following diagram shows the basic test environment for MS-FSA. The DC01 is optional.
 
-
 ![image2.png](./image/MS-FSA_ServerTestDesignSpecification/image2.png)
-
-
-
 
 ## <a name="_Toc427488651"/>Scenario and Test Case Summary
 
@@ -250,25 +176,14 @@ The following diagram shows the basic test environment for MS-FSA. The DC01 is o
 Traditional Test cases are designed specific to Win8 new algorithms and REFS file system.
 There are 88 test cases in total:
 
-
 |  **Category**|  **Scenarios**|  **Test cases (BVT)**| 
 | -------------| -------------| ------------- |
 | Scenarios for Win8 new added algorithm| 5| 37 (7)| 
 | Scenarios for ReFS file system| 15| 51 (7)| 
 
-
-
-
-
-
-
-
-
-
 ### <a name="_Toc427488653"/>MBT Test cases
 Model-based test cases are designed to cover most of algorithm details.
 There are 400 test cases in total:
-
 
 |  **Category**|  **Test Cases**| 
 | -------------| ------------- |
@@ -292,11 +207,6 @@ There are 400 test cases in total:
 | Set SecurityInfo| 18| 
 | CloseAnOpen| 1| 
 
-
-
-
-
-
 ## <a name="_Toc427488654"/>Traditional Test Scenarios Design
 
 ### <a name="_Toc427488655"/>Scenarios for Win8 new added algorithm
@@ -311,9 +221,6 @@ Here is a list for Win8 new added algorithms, the designed scenarios are based o
 * [FsCtl] 3.1.5.9.15   FSCTL_OFFLOAD_WRITE
 
 * [FsInfo] 3.1.5.12.10   FileFsSectorSizeInformation
-
-
-
 
 #### <a name="_Toc427488656"/>FsCtl_Get_IntegrityInformation
 
@@ -342,9 +249,6 @@ Here is a list for Win8 new added algorithms, the designed scenarios are based o
 | | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION| 
 | | Verify server responses accordingly to input parameters.| 
 
-
-
-
 #### <a name="_Toc427488657"/>FsCtl_Set_IntegrityInformation
 
 | &#32;| &#32; |
@@ -372,9 +276,6 @@ Here is a list for Win8 new added algorithms, the designed scenarios are based o
 | | FSCTL request with FSCTL_SET_INTEGRITY_INFORMATION| 
 | | Verify server responses accordingly to input parameters.| 
 
-
-
-
 #### <a name="_Toc427488658"/>FsCtl_Offload_Read
 
 | &#32;| &#32; |
@@ -394,9 +295,6 @@ Here is a list for Win8 new added algorithms, the designed scenarios are based o
 | Message Sequence| CreateFile | 
 | | FSCTL request with  FSCTL_OFFLOAD_READ| 
 | | Verify server responses accordingly to input parameters.| 
-
-
-
 
 #### <a name="_Toc427488659"/>FsCtl_Offload_Write
 
@@ -418,9 +316,6 @@ Here is a list for Win8 new added algorithms, the designed scenarios are based o
 | | FSCTL request with  FSCTL_OFFLOAD_Write| 
 | | Verify server response correctly.| 
 
-
-
-
 #### <a name="_Toc427488660"/>FsInfo_Query_FileFsSectorSizeInformation
 
 | &#32;| &#32; |
@@ -437,13 +332,6 @@ Here is a list for Win8 new added algorithms, the designed scenarios are based o
 | Message Sequence| CreateFile | 
 | | QueryInfo with FsInfoClass.FileFsSectorSizeInformation.| 
 | | Verify server responses accordingly to the input parameters.| 
-
-
-
-
-
-
-
 
 ### <a name="_Toc427488661"/>Scenarios for ReFS file system
 Here is a list for product behavior for NTFS and ReFS file system, the designed scenarios are based on them.
@@ -474,9 +362,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 
 * [**FsControl_ZeroData**] This is only implemented by the ReFS and NTFS file systems.
 
-
-
-
 #### <a name="_Toc427488662"/>FsInfo_FileFsAttributeInformation
 
 | &#32;| &#32; |
@@ -495,9 +380,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | QueryInfo with FsInfoClass.FileFsAttributeInformation| 
 | | Verify the file system attribute is set correctly.| 
 
-
-
-
 #### <a name="_Toc427488663"/>FileInfo_IsShortNameSupported
 
 | &#32;| &#32; |
@@ -514,9 +396,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | SetInfo with FileInfoClass.FileShortNameInformation| 
 | | Verify server response with ShortName info for supported file system| 
 | | Or failed the request for unsupported file system.| 
-
-
-
 
 #### <a name="_Toc427488664"/>FsInfo_IsObjectIdSupported
 
@@ -535,9 +414,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | Verify server return with **STATUS_SUCCESS** for supported file system| 
 | | Or failed the request with **STATUS_INVALID_PARAMETER**| 
 
-
-
-
 #### <a name="_Toc427488665"/>FileInfo_IsCompressionSupported
 
 | &#32;| &#32; |
@@ -554,9 +430,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | SetInfo for FileInfoClass.FileCompressionInformation| 
 | | Verify server return with **STATUS_SUCCESS** for supported file system| 
 | | Or failed the request with **STATUS_NOT_SUPPORTED**| 
-
-
-
 
 #### <a name="_Toc427488666"/>FileInfo_IsEASupported
 
@@ -575,9 +448,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | Verify server return EA size  &#62; 0 for supported file system| 
 | | Or EA size == 0 for unsupported file system.| 
 
-
-
-
 #### <a name="_Toc427488667"/>FileInfo_IsIntegritySupported
 
 | &#32;| &#32; |
@@ -593,9 +463,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | Message Sequence| CreateFile| 
 | | QueryInfo with FileInfoClass = FileAttributeTagInformation/FileBasicInformation/FileNetworkOpenInformation| 
 | | Verify the FILE_ATTRIBUTE_INTEGRITY_STREAM  is set or not in OutputBuffer.FileAttributes.| 
-
-
-
 
 #### <a name="_Toc427488668"/>FileInfo_IsFileLinkInfoSupported
 
@@ -613,9 +480,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | SetInfo with FileInfoClass.FileLinkInformation | 
 | | Verify server responses accordingly.| 
 
-
-
-
 #### <a name="_Toc427488669"/>FileInfo_IsFileValidDateLengthInfoSupported
 
 | &#32;| &#32; |
@@ -630,9 +494,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | Message Sequence| CreateFile| 
 | | SetInfo with FileInfoClass = FileValidDataLengthInformation | 
 | | Verify server responses accordingly.| 
-
-
-
 
 #### <a name="_Toc427488670"/>FsInfo_FileFsSizeInformation_ClusterSize
 
@@ -658,9 +519,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | QueryInfo with FsInfoClass. FileFsSizeInformation| 
 | | Verify the outputbuffer. SectorsPerAllocationUnit is correctly set according to default cluster size.| 
 
-
-
-
 #### <a name="_Toc427488671"/> QuotaInfo_IsQuotaInfoSupported
 
 | &#32;| &#32; |
@@ -676,9 +534,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | Message Sequence| CreateFile| 
 | | Query Quota Information| 
 | | Verify server responses STATUS_SUCCESS/ STATUS_INVALID_DEVICE_REQUEST accordingly.| 
-
-
-
 
 #### <a name="_Toc427488672"/> FsCtl_IsEncryptionSupported
 
@@ -697,11 +552,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | Verify server returns STATUS_SUCCESS for supported file system| 
 | | Or returns STATUS_INVALID_DEVICE_REQUEST for unsupported file system.| 
 
-
-
-
-
-
 #### <a name="_Toc427488673"/> FsCtl_IsAllocatedRangesSupported
 
 | &#32;| &#32; |
@@ -718,9 +568,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | FsCtl request with FSCTL_QUERY_ALLOCATED_RANGES| 
 | | Verify server returns STATUS_SUCCESS for supported file system| 
 | | Or returns STATUS_INVALID_DEVICE_REQUEST for unsupported file system.| 
-
-
-
 
 #### <a name="_Toc427488674"/> FsCtl_IsReparsePointSupported
 
@@ -739,9 +586,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | Verify server returns STATUS_SUCCESS for supported file system| 
 | | Or returns STATUS_INVALID_DEVICE_REQUEST for unsupported file system.| 
 
-
-
-
 #### <a name="_Toc427488675"/> FsCtl_ IsSparseFileSupported
 
 | &#32;| &#32; |
@@ -759,9 +603,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | Verify server returns STATUS_SUCCESS for supported file system| 
 | | Or returns STATUS_INVALID_DEVICE_REQUEST for unsupported file system.| 
 
-
-
-
 #### <a name="_Toc427488676"/> FsCtl_IsZeroDataSupported
 
 | &#32;| &#32; |
@@ -778,15 +619,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | FsCtl request with FSCTL_SET_ZERO_DATA| 
 | | Verify server returns STATUS_SUCCESS for supported file system| 
 | | Or returns STATUS_INVALID_DEVICE_REQUEST for unsupported file system.| 
-
-
-
-
-
-
-
-
-
 
 ## <a name="_Toc427488677"/>Traditional Test Case Design
 
@@ -811,9 +643,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | Assert.AreEqual(STATUS_INVALID_DEVICE_REQUEST,ActualResult);
 | | }
 
-
-
-
 #### <a name="_Toc427488680"/>FsCtl_Get_IntegrityInformation_Dir_IsIntegritySupported (BVT)
 
 | &#32;| &#32; |
@@ -833,12 +662,8 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | Assert.AreEqual(STATUS_INVALID_DEVICE_REQUEST,ActualResult);
 | | }
 
-
-
-
 #### <a name="_Toc427488681"/>FsCtl_Get_IntegrityInformation_File_InvalidParameter(3TCs)
 Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
-
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -848,12 +673,6 @@ Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
 | 2| Open.Stream.StreamType != FileStream| 
 | | && Open.Stream.StreamType != DirectoryStream| 
 | 3| Open.File.FileAttributes.FILE_ATTRIBUTE_SYSTEM == TRUE| 
-
-
-
-
-
-
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -884,12 +703,8 @@ Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
 | | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION | 
 | | Assert.AreEqual(STATUS_INVALID_PARAMETER,ActualResult);| 
 
-
-
-
 #### <a name="_Toc427488682"/>FsCtl_Get_IntegrityInformation_Dir_InvalidParameter(3TCs)
 Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
-
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -899,12 +714,6 @@ Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
 | 2| Open.Stream.StreamType != FileStream| 
 | | && Open.Stream.StreamType != DirectoryStream| 
 | 3| Open.File.FileAttributes.FILE_ATTRIBUTE_SYSTEM == TRUE| 
-
-
-
-
-
-
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -935,9 +744,6 @@ Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
 | | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION | 
 | | Assert.AreEqual(STATUS_INVALID_PARAMETER,ActualResult);| 
 
-
-
-
 #### <a name="_Toc427488683"/>FsCtl_Get_IntegrityInformation_File_OutputValue(2TCs)
 
 | &#32;| &#32; |
@@ -962,9 +768,6 @@ Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
 | |     With Flags set to CHECKSUM_ENFORCEMENT_OFF| 
 | | FsControl request with  FSCTL_GET_INTEGRITY_INFORMATION| 
 | | OutputBuffer.Flags is CHECKSUM_ENFORCEMENT_OFF| 
-
-
-
 
 #### <a name="_Toc427488684"/>FsCtl_Get_IntegrityInformation_Dir_OutputValue(2TCs)
 
@@ -992,9 +795,6 @@ Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
 | | FsControl request with  FSCTL_GET_INTEGRITY_INFORMATION| 
 | | OutputBuffer.Flags is **not** CHECKSUM_ENFORCEMENT_OFF| 
 
-
-
-
 #### <a name="_Toc427488685"/>FsCtl_Set_IntegrityInformation_File_IsIntegritySupported (BVT)
 
 | &#32;| &#32; |
@@ -1013,9 +813,6 @@ Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
 | | } Else {
 | | assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
-
-
-
 
 #### <a name="_Toc427488686"/>FsCtl_Set_IntegrityInformation_Dir_IsIntegritySupported (BVT)
 
@@ -1036,12 +833,8 @@ Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
 | | assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
 
-
-
-
 #### <a name="_Toc427488687"/>FsCtl_Set_IntegrityInformation_File_InvalidParameter(2TCs)
 Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
-
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1050,12 +843,6 @@ Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
 | | FSCTL_GET_INTEGRITY_INFORMATION_BUFFER)| 
 | 2| InputBuffer.ChecksumAlgorithm which is not one of CHECKSUM_TYPE_NONE, CHECKSUM_TYPE_CRC64, CHECKSUM_TYPE_UNCHANGED| 
 | 3| The operation is attempting to change the checksum state of a non-empty file; the integrity status of files can be changed only when they have not yet been written to.| 
-
-
-
-
-
-
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1087,12 +874,8 @@ Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
 | | InputBuffer.ChecksumAlgorithm = CHECKSUM_TYPE_NONE| 
 | | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);| 
 
-
-
-
 #### <a name="_Toc427488688"/>FsCtl_Set_IntegrityInformation_Dir_InvalidParameter(2TCs)
 Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
-
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1100,12 +883,6 @@ Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
 | 1| OutputBufferSize   &#60;  sizeof(| 
 | | FSCTL_GET_INTEGRITY_INFORMATION_BUFFER)| 
 | 2| InputBuffer.ChecksumAlgorithm which is not one of CHECKSUM_TYPE_NONE, CHECKSUM_TYPE_CRC64, CHECKSUM_TYPE_UNCHANGED| 
-
-
-
-
-
-
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1126,9 +903,6 @@ Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
 | | InputBuffer.ChecksumAlgorithm = 0x0003| 
 | | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);| 
 
-
-
-
 #### <a name="_Toc427488689"/>FsCtl_Set_IntegrityInformation_File_WriteProtected
 
 | &#32;| &#32; |
@@ -1140,9 +914,6 @@ Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
 | | OpenFile (DataFile)| 
 | | FsCtl request FSCTL_GET_INTEGRITY_INFORMATION| 
 | | Assert.AreEqual(**STATUS_MEDIA_WRITE_PROTECTED**,ActualResult);| 
-
-
-
 
 #### <a name="_Toc427488690"/>FsCtl_Set_IntegrityInformation_Dir_WriteProtected
 
@@ -1156,12 +927,8 @@ Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
 | | FsCtl request FSCTL_GET_INTEGRITY_INFORMATION| 
 | | Assert.AreEqual(**STATUS_MEDIA_WRITE_PROTECTED**,ActualResult);| 
 
-
-
-
 #### <a name="_Toc427488691"/>FsCtl_Set_IntegrityInformation_File_ChecksumAlgorithm(2TCs)
 Test matrix for InputBuffer.ChecksumAlgorithm
-
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1170,14 +937,6 @@ Test matrix for InputBuffer.ChecksumAlgorithm
 | CHECKSUM_TYPE_CRC64| CHECKSUM_TYPE_CRC64| 
 | CHECKSUM_TYPE_UNCHANGED| CHECKSUM_TYPE_NONE| 
 | CHECKSUM_TYPE_UNCHANGED| CHECKSUM_TYPE_CRC64| 
-
-
-
-
-
-
-
-
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1212,12 +971,8 @@ Test matrix for InputBuffer.ChecksumAlgorithm
 | | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
 | | Assert.AreEqual(CHECKSUM_TYPE_CRC64, OutputBuffer.CheckSumAlgorithm).| 
 
-
-
-
 #### <a name="_Toc427488692"/>FsCtl_Set_IntegrityInformation_Dir_ChecksumAlgorithm(2TCs)
 Test matrix for InputBuffer.ChecksumAlgorithm
-
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1226,14 +981,6 @@ Test matrix for InputBuffer.ChecksumAlgorithm
 | CHECKSUM_TYPE_CRC64| CHECKSUM_TYPE_CRC64| 
 | CHECKSUM_TYPE_UNCHANGED| CHECKSUM_TYPE_NONE| 
 | CHECKSUM_TYPE_UNCHANGED| CHECKSUM_TYPE_CRC64| 
-
-
-
-
-
-
-
-
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1268,9 +1015,6 @@ Test matrix for InputBuffer.ChecksumAlgorithm
 | | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
 | | Assert.AreEqual(CHECKSUM_TYPE_CRC64, OutputBuffer.CheckSumAlgorithm).| 
 
-
-
-
 #### <a name="_Toc427488693"/>FsCtl_Offload_Read_File_IsOffloadSupported (BVT)
 
 | &#32;| &#32; |
@@ -1289,9 +1033,6 @@ Test matrix for InputBuffer.ChecksumAlgorithm
 | | } Else {
 | | Assert.AreEqual(STATUS_INVALID_DEVICE_REQUEST,ActualResult);
 | | }
-
-
-
 
 #### <a name="_Toc427488694"/>FsCtl_Offload_Write_File_IsOffloadSupported (BVT)
 
@@ -1312,12 +1053,8 @@ Test matrix for InputBuffer.ChecksumAlgorithm
 | | Assert.AreEqual(STATUS_INVALID_DEVICE_REQUEST,ActualResult);
 | | }
 
-
-
-
 #### <a name="_Toc427488695"/>FsInfo_Query_FileFsSectorSizeInformation_File_OutputBufferSize(3TCs, 1BVT)
 Parameter combination
-
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1328,12 +1065,6 @@ Parameter combination
 | FILE_FS_SECTOR_SIZE_INFORMATION)| | 
 | OutputBufferSize  = sizeof(| STATUS_SUCCESS| 
 | FILE_FS_SECTOR_SIZE_INFORMATION) +1| | 
-
-
-
-
-
-
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1372,12 +1103,8 @@ Parameter combination
 | |  **OutputBufferSize**  **=**  **sizeof(** **FILE_FS_SECTOR_SIZE_INFORMATION** **)** **+** **1**| 
 | | Assert.AreEqual(**STATUS_** **SUCCESS**,ActualResult);| 
 
-
-
-
 #### <a name="_Toc427488696"/> FsInfo_Query_FileFsSectorSizeInformation_Dir_OutputBufferSize(3TCs)
 Parameter combination
-
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1388,12 +1115,6 @@ Parameter combination
 | FILE_FS_SECTOR_SIZE_INFORMATION)| | 
 | OutputBufferSize  = sizeof(| STATUS_SUCCESS| 
 | FILE_FS_SECTOR_SIZE_INFORMATION) +1| | 
-
-
-
-
-
-
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1431,9 +1152,6 @@ Parameter combination
 | |  **OutputBufferSize**  **=**  **sizeof(** **FILE_FS_SECTOR_SIZE_INFORMATION** **)** **+** **1**| 
 | | Assert.AreEqual(**STATUS_** **SUCCESS**,ActualResult);| 
 
-
-
-
 #### <a name="_Toc427488697"/>FsInfo_Query_FileFsSectorSizeInformation_File_OutputValue_Common
 
 | &#32;| &#32; |
@@ -1447,9 +1165,6 @@ Parameter combination
 | | Assert.AreEqual(sizeof(FILE_FS_SECTOR_SIZE_INFORMATION), **ByteCount**);| 
 | | Verify ByteCount is set to the size of the FILE_FS_SECTOR_SIZE_INFORMATION structure| 
 | | Verify LogicalBytesPerSector/PhysicalBytesPerSector/ SystemPageSize are correctly set.| 
-
-
-
 
 #### <a name="_Toc427488698"/>FsInfo_Query_FileFsSectorSizeInformation_Dir_OutputValue_Common
 
@@ -1465,9 +1180,6 @@ Parameter combination
 | | Verify ByteCount is set to the size of the FILE_FS_SECTOR_SIZE_INFORMATION structure| 
 | | Verify LogicalBytesPerSector/PhysicalBytesPerSector/ SystemPageSize are correctly set.| 
 
-
-
-
 #### <a name="_Toc427488699"/>FsInfo_Set_FileFsSectorSizeInformation_File_InvalidInfoClass
 
 | &#32;| &#32; |
@@ -1478,9 +1190,6 @@ Parameter combination
 | | SetInfo  with FileSystemInfoClass  = FileFsSectorSizeInformation | 
 | | Assert.AreEqual(**STATUS_ INVALID_INFO_CLASS**, actualResult);| 
 
-
-
-
 #### <a name="_Toc427488700"/>FsInfo_Set_FileFsSectorSizeInformation_Dir_InvalidInfoClass
 
 | &#32;| &#32; |
@@ -1490,11 +1199,6 @@ Parameter combination
 | Message Sequence| CreateFile (DirectoryFile)| 
 | | SetInfo  with FileSystemInfoClass  = FileFsSectorSizeInformation | 
 | | Assert.AreEqual(**STATUS_ INVALID_INFO_CLASS**, actualResult);| 
-
-
-
-
-
 
 ### <a name="_Toc427488701"/>Test cases for ReFS file system
 
@@ -1520,9 +1224,6 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
 
-
-
-
 #### <a name="_Toc427488704"/>FileInfo_Set_FileShortNameInfo_Dir_IsShortNameSupported
 
 | &#32;| &#32; |
@@ -1543,9 +1244,6 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
 
-
-
-
 ### <a name="_Toc427488705"/>IsObjectIdSupported
 
 #### <a name="_Toc427488706"/>FsInfo_Query_FileFsAttributeInformation_File_IsObjectIdSupported(BVT)
@@ -1561,9 +1259,6 @@ Parameter combination
 | | } Else {| 
 | |     Verify FileAttribute..FILE_ FILE_SUPPORTS_OBJECT_IDS is not set.}| 
 
-
-
-
 #### <a name="_Toc427488707"/>FsInfo_Query_FileFsAttributeInformation_Dir_IsObjectIdSupported
 
 | &#32;| &#32; |
@@ -1576,9 +1271,6 @@ Parameter combination
 | | Verify FileAttribute.FILE_ FILE_SUPPORTS_OBJECT_IDS is set.| 
 | | } Else {| 
 | |     Verify FileAttribute..FILE_ FILE_SUPPORTS_OBJECT_IDS is not set.}| 
-
-
-
 
 #### <a name="_Toc427488708"/>FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported (BVT)
 
@@ -1600,9 +1292,6 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);
 | | }
 
-
-
-
 #### <a name="_Toc427488709"/>FsInfo_Query_FileFsObjectIdInformation_Dir_IsObjectIdSupported
 
 | &#32;| &#32; |
@@ -1622,9 +1311,6 @@ Parameter combination
 | | } Else {
 | | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);
 | | }
-
-
-
 
 #### <a name="_Toc427488710"/>FsInfo_Set_FileFsObjectIdInformation_File_IsObjectIdSupported 
 
@@ -1646,9 +1332,6 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);
 | | }
 
-
-
-
 #### <a name="_Toc427488711"/>FsInfo_Set_FileFsObjectIdInformation_Dir_IsObjectIdSupported 
 
 | &#32;| &#32; |
@@ -1669,9 +1352,6 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);
 | | }
 
-
-
-
 ### <a name="_Toc427488712"/>IsCompressionSupported
 
 #### <a name="_Toc427488713"/>FsInfo_Query_FileFsAttributeInformation_File_IsCompressionSupported(BVT)
@@ -1687,9 +1367,6 @@ Parameter combination
 | | } Else {| 
 | |     Verify FileAttribute.FILE_FILE_COMPRESSION is not set.}| 
 
-
-
-
 #### <a name="_Toc427488714"/>FsInfo_Query_FileFsAttributeInformation_Dir_IsCompressionSupported
 
 | &#32;| &#32; |
@@ -1703,9 +1380,6 @@ Parameter combination
 | | } Else {| 
 | |     Verify FileAttribute.FILE_FILE_COMPRESSION is not set.| 
 | | }| 
-
-
-
 
 #### <a name="_Toc427488715"/>FileInfo_Query_FileCompressionInfo_File_IsCompressionSupported
 
@@ -1727,9 +1401,6 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
 | | }
 
-
-
-
 #### <a name="_Toc427488716"/>FileInfo_Query_FileCompressionInfo_Dir_IsCompressionSupported
 
 | &#32;| &#32; |
@@ -1749,9 +1420,6 @@ Parameter combination
 | | } Else {
 | | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
 | | }
-
-
-
 
 #### <a name="_Toc427488717"/>FsCtl_Get_Compression_File_IsCompressionSupported
 
@@ -1773,9 +1441,6 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
 
-
-
-
 #### <a name="_Toc427488718"/>FsCtl_Get_Compression_Dir_IsCompressionSupported
 
 | &#32;| &#32; |
@@ -1796,9 +1461,6 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
 
-
-
-
 #### <a name="_Toc427488719"/>FsCtl_Set_Compression_File_IsCompressionSupported
 
 | &#32;| &#32; |
@@ -1817,9 +1479,6 @@ Parameter combination
 | | } Else {
 | | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
-
-
-
 
 #### <a name="_Toc427488720"/>FsCtl_Set_Compression_Dir_IsCompressionSupported
 
@@ -1840,9 +1499,6 @@ Parameter combination
 | | } Else {
 | | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
-
-
-
 
 ### <a name="_Toc427488721"/>IsEASupported
 
@@ -1865,9 +1521,6 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
 | | }
 
-
-
-
 #### <a name="_Toc427488723"/>FileInfo_Set_FileFullEaInformation_Dir_IsEASupported
 
 | &#32;| &#32; |
@@ -1886,9 +1539,6 @@ Parameter combination
 | | } Else {
 | | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
 | | }
-
-
-
 
 #### <a name="_Toc427488724"/>FileInfo_Query_FileFullEaInformation_File_IsEASupported
 
@@ -1909,9 +1559,6 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
 | | }
 
-
-
-
 #### <a name="_Toc427488725"/>FileInfo_Query_FileFullEaInformation_Dir_IsEASupported
 
 | &#32;| &#32; |
@@ -1930,9 +1577,6 @@ Parameter combination
 | | } Else {
 | | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
 | | }
-
-
-
 
 #### <a name="_Toc427488726"/>FileInfo_Set_FileEaInformation_File_IsEASupported
 
@@ -1953,9 +1597,6 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
 | | }
 
-
-
-
 #### <a name="_Toc427488727"/>FileInfo_Set_FileEaInformation_Dir_IsEASupported
 
 | &#32;| &#32; |
@@ -1974,9 +1615,6 @@ Parameter combination
 | | } Else {
 | | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
 | | }
-
-
-
 
 #### <a name="_Toc427488728"/>FileInfo_Query_FileEaInformation_File_IsEASupported
 
@@ -1997,9 +1635,6 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
 | | }
 
-
-
-
 #### <a name="_Toc427488729"/>FileInfo_Query_FileEaInformation_Dir_IsEASupported
 
 | &#32;| &#32; |
@@ -2019,9 +1654,6 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
 | | }
 
-
-
-
 ### <a name="_Toc427488730"/>IsIntegritySupported
 
 #### <a name="_Toc427488731"/>FsInfo_Query_FileFsAttributeInformation_File_IsIntegritySupported(BVT)
@@ -2037,9 +1669,6 @@ Parameter combination
 | | } Else {| 
 | |     Verify FileAttribute.FILE_SUPPORT_INTEGRITY_STREAMS is not set.}| 
 
-
-
-
 #### <a name="_Toc427488732"/>FsInfo_Query_FileFsAttributeInformation_Dir_IsIntegritySupported
 
 | &#32;| &#32; |
@@ -2052,9 +1681,6 @@ Parameter combination
 | | Verify FileAttribute.FILE_SUPPORT_INTEGRITY_STREAMS is set.| 
 | | } Else {| 
 | |     Verify FileAttribute.FILE_SUPPORT_INTEGRITY_STREAMS is not set.}| 
-
-
-
 
 #### <a name="_Toc427488733"/>FileInfo_Query_FileBasicInfo_File_IsIntegritySupported (BVT)
 
@@ -2075,9 +1701,6 @@ Parameter combination
 | | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is not set.| 
 | | }| 
 
-
-
-
 #### <a name="_Toc427488734"/>FileInfo_Query_FileBasicInfo_Dir_IsIntegritySupported
 
 | &#32;| &#32; |
@@ -2096,9 +1719,6 @@ Parameter combination
 | | } Else {| 
 | | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is not set.| 
 | | }| 
-
-
-
 
 #### <a name="_Toc427488735"/>FileInfo_Query_FileAttributeTagInfo_File_IsIntegritySupported
 
@@ -2119,9 +1739,6 @@ Parameter combination
 | | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is not set.| 
 | | }| 
 
-
-
-
 #### <a name="_Toc427488736"/>FileInfo_Query_FileAttributeTagInfo_Dir_IsIntegritySupported
 
 | &#32;| &#32; |
@@ -2140,9 +1757,6 @@ Parameter combination
 | | } Else {| 
 | | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is not set.| 
 | | }| 
-
-
-
 
 #### <a name="_Toc427488737"/>FileInfo_Query_FileNetworkOpenInfo_File_IsIntegritySupported
 
@@ -2163,9 +1777,6 @@ Parameter combination
 | | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is not set.| 
 | | }| 
 
-
-
-
 #### <a name="_Toc427488738"/>FileInfo_Query_FileNetworkOpenInfo_Dir_IsIntegritySupported
 
 | &#32;| &#32; |
@@ -2184,9 +1795,6 @@ Parameter combination
 | | } Else {| 
 | | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is not set.| 
 | | }| 
-
-
-
 
 ### <a name="_Toc427488739"/>IsFileLinkInfoSupported
 
@@ -2211,9 +1819,6 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
 | | }
 
-
-
-
 #### <a name="_Toc427488741"/>FileInfo_Set_FileLinkInfo_DIr_IsFileLinkInfoSupported
 
 | &#32;| &#32; |
@@ -2234,9 +1839,6 @@ Parameter combination
 | | } Else {
 | | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
 | | }
-
-
-
 
 ### <a name="_Toc427488742"/>IsFileValidDataLengthInfoSupported
 
@@ -2260,9 +1862,6 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
 | | }
 
-
-
-
 #### <a name="_Toc427488744"/>FileInfo_Set_FileValidDataLengthInformation_Dir_IsSupported
 
 | &#32;| &#32; |
@@ -2282,9 +1881,6 @@ Parameter combination
 | | } Else {
 | | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
 | | }
-
-
-
 
 ### <a name="_Toc427488745"/>ClusterSize
 
@@ -2319,9 +1915,6 @@ Parameter combination
 | |     Assert.AreEqual(expectedUnits, outputbuffer.SectorsPerAllocationUnit);
 | | }
 
-
-
-
 #### <a name="_Toc427488747"/>FsInfo_Query_FileFsSizeInformation_Dir_SectorsPerAllocationUnit
 
 | &#32;| &#32; |
@@ -2353,9 +1946,6 @@ Parameter combination
 | |     Assert.AreEqual(expectedUnits, outputbuffer.SectorsPerAllocationUnit);
 | | }
 
-
-
-
 ### <a name="_Toc427488748"/> IsQuotaInfoSupported
 
 #### <a name="_Toc427488749"/>QuotaInfo_Query_QuotaInformation_IsQuotaInfoSupported
@@ -2377,9 +1967,6 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
 
-
-
-
 #### <a name="_Toc427488750"/>QuotaInfo_Set_QuotaInformation_IsQuotaInfoSupported
 
 | &#32;| &#32; |
@@ -2399,9 +1986,6 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
 
-
-
-
 ### <a name="_Toc427488751"/>IsEncryptionSupported
 
 #### <a name="_Toc427488752"/>FsInfo_Query_FileFsAttributeInformation_File_IsEncryptionSupported(BVT)
@@ -2417,9 +2001,6 @@ Parameter combination
 | | } Else {| 
 | |     Verify FileAttribute.FILE_SUPPORTS_ENCRYPTION is not set.}| 
 
-
-
-
 #### <a name="_Toc427488753"/>FsInfo_Query_FileFsAttributeInformation_Dir_IsEncryptionSupported
 
 | &#32;| &#32; |
@@ -2432,9 +2013,6 @@ Parameter combination
 | | Verify FileAttribute.FILE_SUPPORTS_ENCRYPTION is set.| 
 | | } Else {| 
 | |     Verify FileAttribute.FILE_SUPPORTS_ENCRYPTION is not set.}| 
-
-
-
 
 #### <a name="_Toc427488754"/>FsCtl_Set_Encryption_File_IsEncryptionSupported
 
@@ -2457,9 +2035,6 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
 
-
-
-
 #### <a name="_Toc427488755"/>FsCtl_Set_Encryption_Dir_IsEncryptionSupported
 
 | &#32;| &#32; |
@@ -2480,11 +2055,6 @@ Parameter combination
 | | } Else {
 | | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
-
-
-
-
-
 
 ### <a name="_Toc427488756"/> IsAllocatedRangesSupported
 
@@ -2508,9 +2078,6 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
 
-
-
-
 #### <a name="_Toc427488758"/>FsCtl_Query_AllocatedRanges_Dir_IsAllocatedRangesSupported
 
 | &#32;| &#32; |
@@ -2530,9 +2097,6 @@ Parameter combination
 | | } Else {
 | | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
-
-
-
 
 ### <a name="_Toc427488759"/> IsReparsePointSupported
 
@@ -2557,9 +2121,6 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
 
-
-
-
 #### <a name="_Toc427488761"/>FsCtl_Set_ReparsePoint_Dir_IsReparsePointSupported
 
 | &#32;| &#32; |
@@ -2580,9 +2141,6 @@ Parameter combination
 | | } Else {
 | | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
-
-
-
 
 ### <a name="_Toc427488762"/> IsSparseFileSupported
 
@@ -2607,9 +2165,6 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
 
-
-
-
 #### <a name="_Toc427488764"/>FsCtl_Set_Sparse_Dir_IsSparseFileSupported
 
 | &#32;| &#32; |
@@ -2630,9 +2185,6 @@ Parameter combination
 | | } Else {
 | | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
-
-
-
 
 ### <a name="_Toc427488765"/> IsZeroDataSupported
 
@@ -2656,9 +2208,6 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
 
-
-
-
 #### <a name="_Toc427488767"/>FsCtl_Set_ZeroData_Dir_IsZeroDataSupported
 
 | &#32;| &#32; |
@@ -2679,31 +2228,10 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## <a name="_Toc427488768"/>MBT Test Design
 
 ### <a name="_Toc427488769"/>Model Design
 Here is a list for Win8 new added algorithms, the designed scenarios are based on them.
-
-
-
-
 
 ### <a name="_Toc427488770"/>Adapter Design
 The MS-FSA test suite implements 2 adapters: 
@@ -2712,17 +2240,11 @@ The MS-FSA test suite implements 2 adapters:
 
 * Transport adapter (SMB_TransportAdapter or SMB2_TransportAdapter).
 
-
-
-
 #### <a name="_Toc427488771"/>Protocol Adapter
 The MS-FSA Protocol adapter is called FSAAdapter in the Test Suite. It implements the interface IFSAAdapter. Its functionality is to communicate with the transport adapter, where called relevant methods to interact with the file system. Another functionality of the Protocol Adapter is when the server replies, it parses the messages, set the output value for test.
 Class Diagram
 
-
 ![image3.png](./image/MS-FSA_ServerTestDesignSpecification/image3.png)
-
-
 
 #### <a name="_Toc427488772"/>Transport Adapter
 There are 3 transport adapters implement the interface ITransportAdapter.
@@ -2733,15 +2255,11 @@ There are 3 transport adapters implement the interface ITransportAdapter.
 
 * It uses SMB dialects for negotiation.
 
-
-
 * SMB2TransportAdapter
 
 * It uses SMB2 SDK to send/receive SMB packet to/from SMB server.
 
 * It uses SMB2 dialects for negotiation including 0x0202 and 0x0210.
-
-
 
 * SMB3TransportAdapter
 
@@ -2749,29 +2267,17 @@ There are 3 transport adapters implement the interface ITransportAdapter.
 
 * It uses SMB3 dialects for negotiation including 0x0224 and 0x0300.
 
-
-
 Class Diagram
 
-
-
-
 ![image4.png](./image/MS-FSA_ServerTestDesignSpecification/image4.png)
-
-
-
-
 
 #### <a name="_Toc427488773"/>Message Sequence
 Below diagram shows the message sequence between FSA adapter, transport adapter and SMB server.
 
-
 ![image5.png](./image/MS-FSA_ServerTestDesignSpecification/image5.png)
-
 
 ### <a name="_Toc427488774"/>Scenarios
 Here is a list for MBT scenarios:
-
 
 |  **Scenario**|  **Description**| 
 | -------------| ------------- |
@@ -2793,13 +2299,5 @@ Here is a list for MBT scenarios:
 | S16_MS-FSA_SetSecurityInfo| To test all requirements of setting security information.| 
 | S17_MS-FSA_Oplock| To test all requirements of oplock.| 
 
-
-
-
-
-
-
 .
-
-
 
