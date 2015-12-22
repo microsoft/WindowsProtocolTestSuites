@@ -91,10 +91,14 @@ Details of the environment is specified in section 1 of FileSharing_ServerTestDe
 
 ### <a name="_Toc427583973"/>Test Case Design
 The Storage Quality of Service (QoS) Protocol allows a client application to perform the following high-level operations:
-Define a [logical flow](#z3) and specify a [QoS Policy](#z6) for the logical flow.
-Provide data used to compute I/O performance metrics for a logical flow.
-Retrieve status information for a logical flow.
-3 BVT test cases and 9 negative cases are designed to cover the above scenarios.
+
+* Define a [logical flow](#z3) and specify a [QoS Policy](#z6) for the logical flow.
+
+* Provide data used to compute I/O performance metrics for a logical flow.
+
+* Retrieve status information for a logical flow.
+
+* 3 BVT test cases and 9 negative cases are designed to cover the above scenarios.
 
 #### <a name="_Toc427583974"/>BVT Test Cases
 The first two BVT cases are to set or probe the SQOS policy for a logical flow. And then they check the response of querying status request to validate if the policy is set correctly.
