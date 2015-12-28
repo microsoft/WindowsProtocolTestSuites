@@ -1,0 +1,45 @@
+<!--
+    Note:
+      config.xml is unfinished
+  -->
+
+<Config>
+  <PtfFileNames>
+    <PtfFileName>Test.ptfconfig</PtfFileName>
+    <PtfFileName>Test.deployment.ptfconfig</PtfFileName>
+  </PtfFileNames>
+  <ConfigFilePath>
+    <PtfFileName>Test.ptfconfig</PtfFileName>
+    <PtfFileName>Test.deployment.ptfconfig</PtfFileName>
+  </ConfigFilePath>
+  <DllFileNames>
+    <DllFileName>Bin\CommonTestSuite.dll</DllFileName>
+    <DllFileName>Bin\TestSuite.dll</DllFileName>
+  </DllFileNames>
+  <AutoDetectionDllName>c:\Path\To\Detector.dll</AutoDetectionDllName>
+  <ConfigCaseRule>
+    <Group name ="ACategory">
+      <Rule name = "Rule1">
+        <Category name = "Cat1"/>
+      </Rule>
+      <Rule name = "Rule2">
+        <Category name = "Cat21"/>
+        <Category name = "Cat22"/>
+      </Rule>
+      <Rule name = "Rule3">
+        <Rule name = "Rule31">
+          <Category name = "Cat31"/>
+        </Rule>
+      </Rule>
+    </Group>
+  </ConfigCaseRule>
+  <Adapters>
+    <AdapterItem displayname="SUT Control Adapter" name="ISutControlAdapter">
+      <Adapter type="powershell" scriptdir=".\"/>
+      <Adapter type="interactive"/>
+      <Adapter type="managed" adaptertype="SampleAdapterType"/>
+    </AdapterItem>
+  </Adapters>
+  <TestSetting>Bin\ServerLocalTestRun.testrunconfig</TestSetting>
+  <VSTestPath>C:\Program Files (x86)\Microsoft Visual Studio 11.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe</VSTestPath>
+</Config>

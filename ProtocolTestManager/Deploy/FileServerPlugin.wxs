@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?define BLDVER=1.0.0.0?>
+<?define SRCDIR=$(env.TestSuiteRoot)\drop\ProtocolTestManager?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="FILESERVERDOCFOLDER">
+            <Component Id="cmp85C74555EE23312FB235421547D3E836" Guid="{54F1CB8D-A892-403F-9FB6-8CD108EF6E08}">
+                <File Id="filECB3E4CD565684C5800E1BA640D4092F" Source="..\Plugins\fileserverPlugin\fileserverPlugin\Docs\arrow_right.png" />
+            </Component>
+            <Component Id="cmp9C94615420D4282DC0346B752BB28EF9" Guid="{2A7F1899-10BD-4CD3-8431-CC27B30B5A1A}">
+                <File Id="fil2CFB4DAC7B48D496C25ACB03565E7305" Source="..\Plugins\fileserverPlugin\fileserverPlugin\Docs\deployment.html" />
+            </Component>
+            <Component Id="cmp8265BA12A608450DBD952B6D84A87356" Guid="{E86A64F6-D8A4-4F4E-9735-29DBE65B548C}">
+                <File Id="filD2490D067F88B4B8DD9A76B75C47B325" Source="..\Plugins\fileserverPlugin\fileserverPlugin\Docs\domain.html" />
+            </Component>
+            <Component Id="cmpA0F2B1A289F3D227EC4772E550C4BA4B" Guid="{7B243070-2605-43E3-9795-247F3B4E9BB6}">
+                <File Id="fil474F2F85891137F74D593022E6ED2F98" Source="..\Plugins\fileserverPlugin\fileserverPlugin\Docs\domain.png" />
+            </Component>
+            <Component Id="cmp347908F53D0781B53A5CB2F0DAB120AE" Guid="{2744F51E-B259-47DA-BA8E-241E38DD16FC}">
+                <File Id="fil87C15A852893509145026A3DA5FB249E" Source="..\Plugins\fileserverPlugin\fileserverPlugin\Docs\index.html" />
+            </Component>
+            <Component Id="cmp942C2EBDA4F765056F104C35D3BB29B3" Guid="{CE31A960-FA8F-495A-9873-0D8FF6160763}">
+                <File Id="fil2AF9078932621BAC202D46FFE927EE52" Source="..\Plugins\fileserverPlugin\fileserverPlugin\Docs\note.png" />
+            </Component>
+            <Component Id="cmpF91BE42E06AB126B1EC84BD105EDF798" Guid="{D6776B3F-518A-4E5B-866B-C98AFC5B93BF}">
+                <File Id="filB1BA02228B877D777B228C0476971B7D" Source="..\Plugins\fileserverPlugin\fileserverPlugin\Docs\workgroup.html" />
+            </Component>
+            <Component Id="cmp19B67EFB6E55775206085788F36569FF" Guid="{4A9D5100-8371-4B58-8C2C-AB8B6A47D32C}">
+                <File Id="filFBA88A9A407D331CC351682C09B8C9F4" Source="..\Plugins\fileserverPlugin\fileserverPlugin\Docs\workgroup.png" />
+            </Component>
+            <Component Id="cmp3DE29B63C16D4C6BBC74FE25B62D5182" Guid="{7717D68A-A0CF-436E-A1F7-C20A604B7C4B}">
+                <File Id="filCA7528D6372246F5AF2E21FC8BFE275D" Source="..\Plugins\fileserverPlugin\fileserverPlugin\Docs\domain_setupSUT.html" />
+            </Component>
+            <Component Id="cmp83F6DA28F3424788AC24B95F52965ECC" Guid="{79194F1B-2670-44AF-91B3-1215130B7929}">
+                <File Id="filE2D633084B994942B049958B630A7AE5" Source="..\Plugins\fileserverPlugin\fileserverPlugin\Docs\workgroup_setupSUT.html" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="LIBFOLDER">
+            <Component Id="fileserverPlugin.dll" Guid="{E0D2D3A4-149C-483B-953A-44E6BCD77BC9}">
+                <File Id="fileserverPlugin.dll" Source="$(var.SRCDIR)\lib\FileServerPlugin.dll" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="FILESERVERCONFIG">
+            <Component Id="fileserverConfigFile" Guid="{94B85AE3-AC68-4F53-AB6B-3863E5BCF418}">
+                <File Id="fileserverConfigFile" Source="..\Plugins\fileserverPlugin\fileserverPlugin\config.xml" />
+            </Component>
+          <Component Id="fileserverTestCategoryFile" Guid="{94B85AE3-AC68-4F53-AB6B-3863E5BCE529}">
+            <File Id="fileserverTestCategoryFile" Source="..\Plugins\fileserverPlugin\fileserverPlugin\TestCategories.xml" />
+          </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="fileserver_PLUGIN">
+            <ComponentRef Id="cmp85C74555EE23312FB235421547D3E836" />
+            <ComponentRef Id="cmp9C94615420D4282DC0346B752BB28EF9" />
+            <ComponentRef Id="cmp8265BA12A608450DBD952B6D84A87356" />
+            <ComponentRef Id="cmpA0F2B1A289F3D227EC4772E550C4BA4B" />
+            <ComponentRef Id="cmp347908F53D0781B53A5CB2F0DAB120AE" />
+            <ComponentRef Id="cmp942C2EBDA4F765056F104C35D3BB29B3" />
+            <ComponentRef Id="cmpF91BE42E06AB126B1EC84BD105EDF798" />
+            <ComponentRef Id="cmp19B67EFB6E55775206085788F36569FF" />
+            <ComponentRef Id="cmp3DE29B63C16D4C6BBC74FE25B62D5182" />
+            <ComponentRef Id="cmp83F6DA28F3424788AC24B95F52965ECC" />
+            <ComponentRef Id="fileserverPlugin.dll" />
+            <ComponentRef Id="fileserverConfigFile" />
+            <ComponentRef Id="fileserverTestCategoryFile" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

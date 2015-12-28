@@ -1,0 +1,33 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.AppInstanceId;
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId;
+
+// Total exploration time: less than 5 minutes
+config AppInstanceIdBaseConfig : BaseConfig
+{
+    action all IAppInstanceIdAdapter;
+
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb30), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.AppInstanceId)";
+}
+
+config AppInstanceIdConfig : AppInstanceIdBaseConfig
+{
+}
+
+machine AppInstanceIdScenario() : AppInstanceIdConfig
+{
+    (
+        ReadConfig;
+        PrepareOpen;
+        OpenRequest;
+        OpenResponse;
+    )
+    || (construct model program from AppInstanceIdConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.AppInstanceId")
+}
+
+machine AppInstanceIdTestCase() : AppInstanceIdConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for AppInstanceIdScenario()
+}

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+  <Include>
+    <File name="CommonTestSuite.deployment.ptfconfig"/>
+  </Include>
+
+  <Properties>
+
+    <Group name="Cluster">
+      <!--Tag named Description is used for the comment-->
+
+      <Property name="ClusterNode01" value="node01.contoso.com">
+        <Description>
+          Name of one computer (i.e. node) constructing SUT which is Continuous Availability (CA) file server.
+          If the computer does not have a computer name, set the value to its IP address.
+          If the SUT does not consist of multiple computers, set the value to SUT's computer name or IP address.
+        </Description>
+      </Property>
+
+      <Property name="ClusterNode02" value="node02.contoso.com">
+        <Description>
+          Name of another computer (i.e. node) constructing SUT which is Continuous Availability (CA) file server.
+          If the computer does not have a computer name, set the value to its IP address.
+          If the SUT does not consist of multiple computers, set the value to SUT's computer name or IP address.
+        </Description>
+      </Property>
+
+      <Property name="CAShareWithDataEncryption" value="SMBClusteredEncrypted">
+        <Description>
+          Name of file share that supports Continuous Availability (CA) and data encryption
+          If SUT does not have such share, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="ClusteredFileServerName" value="GeneralFS">
+        <Description>
+          Computer name of traditional CA file server which hosts the CA share.
+          This type of file server keeps online on one of servers (nodes) which construct the file server at a time.
+          It is also referred to active-passive mode.
+          If the server does not have computer name, set it to the IP address of the file server.
+          If the file server is not of this type, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="ClusteredScaleOutFileServerName" value="ScaleOutFS">
+        <Description>
+          Computer name of scale-out CA file server which hosts the CA share.
+          This type of file server keeps online on all servers (nodes) which construct the file server.
+          It is also referred to active-active mode.
+          If the server does not have a computer name, set it to the IP address of the file server.
+          If the file server is not of this type, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="AsymmetricShare" value="SMBClustered">
+        <Description>
+          Name for ScaleOut asymmetric share.
+          If SUT does not have such share, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="OptimumNodeOfAsymmetricShare" value="ScaleOutFS">
+        <Description>
+          Name of optimum computer for ScaleOut asymmetric share.
+          If SUT does not have asymmetric share, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="NonOptimumNodeOfAsymmetricShare" value="ScaleOutFS">
+        <Description>
+          Name of non-optimum computer for ScaleOut asymmetric share.
+          If SUT does not have asymmetric share, leave it blank
+        </Description>
+      </Property>
+    </Group>
+  </Properties>
+</TestSite>

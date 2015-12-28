@@ -1,0 +1,58 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Negotiate;
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Negotiate;
+
+config NegotiateBaseConfig : BaseConfig
+{
+    action all INegotiateAdapter;
+
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb2002), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Negotiate)";
+}
+
+//
+// Test case exploration time is less than 5 min
+//
+config NegotiateConfig : NegotiateBaseConfig
+{
+    action void INegotiateAdapter.ComNegotiateRequest(Sequence<string> dialects)
+            where dialects in { 
+                            Sequence<string>{"SMB 2.002"}, // SMB2.002
+                            Sequence<string>{"SMB 2.???"}, // SMB2.1 or SMB3.x
+                            Sequence<string>{"SMB 2.002", "SMB 2.???"}, // SMB2.1 or SMB3.x but also include SMB 2.002
+                            Sequence<string>{}, // no dialect
+                            Sequence<string>{"SMB 1.002"} // no valid dialect string
+                            };
+
+    action void INegotiateAdapter.NegotiateRequest(Sequence<DialectRevision> dialects)
+            where dialects in {
+                            Sequence<DialectRevision>{DialectRevision.Smb2002}, // SMB2.002 client dialect
+                            Sequence<DialectRevision>{DialectRevision.Smb2002, DialectRevision.Smb21}, // SMB2.1 client dialect
+                            Sequence<DialectRevision>{DialectRevision.Smb2002, DialectRevision.Smb21, DialectRevision.Smb30}, // SMB3.0 client dialect
+                            Sequence<DialectRevision>{DialectRevision.Smb2002, DialectRevision.Smb21, DialectRevision.Smb30, DialectRevision.Smb302}, // SMB3.02 client dialect
+                            Sequence<DialectRevision>{}, // no dialect
+                            Sequence<DialectRevision>{DialectRevision.Smb2Wildcard}, // invalid dialect
+                            Sequence<DialectRevision>{DialectRevision.Smb2Unknown}, // invalid dialect
+                            Sequence<DialectRevision>{DialectRevision.Smb21},
+                            Sequence<DialectRevision>{DialectRevision.Smb30},
+                            Sequence<DialectRevision>{DialectRevision.Smb302}
+                            };
+}
+
+machine NegotiateScenario() : NegotiateConfig
+{
+    (
+        ReadConfig;
+        SetupConnection;
+        (
+            (ComNegotiateRequest | NegotiateRequest);
+            (NegotiateResponse | ExpectDisconnect)
+        )+;
+    ) || (construct model program from NegotiateConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Negotiate")
+}
+
+machine NegotiateTestCase() : NegotiateConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for NegotiateScenario()
+}

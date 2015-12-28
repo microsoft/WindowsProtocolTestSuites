@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+  <Include>
+    <File name="CommonTestSuite.deployment.ptfconfig"/>
+  </Include>
+
+  <Properties>
+    <Group name="RSVD">
+      <Property name="ShareContainingSharedVHD" value="\\ScaleoutFS\SMBClustered">
+        <Description>
+          The share path which contains the shared virtual disk files, should start with "\\"
+          If no such share, leave it blank
+        </Description>
+      </Property>
+      
+      <Property name="SharedVHDXName" value="rsvd.vhdx">
+        <Description>
+          The vhdx file name, which should end with ".vhdx"
+          If no such file, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="SharedVHDSName" value="rsvd.vhds">
+        <Description>
+          The vhds file name, which should end with ".vhds"
+          If no such file, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="ConvertSharedVHDXName" value="convert.vhdx">
+        <Description>
+          The vhdx file name, which should end with ".vhdx" and will be converted into a vhds file
+          If no such file, leave it blank
+        </Description>
+      </Property>
+      
+      <Property name="ConvertedSharedVHDSName" value="ConvertedSharedVHDS.vhds">
+        <Description>
+          The vhds file name, which is converted from a vhdx file, end with ".vhds"
+          If not supported, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="FileServerIPContainingSharedVHD" value="192.168.1.11">
+        <Description>
+          IP address of the file server which stores the shared VHD
+        </Description>
+      </Property>
+
+      <Property name="InitiatorHostName" value="client01">
+        <Description>
+          Specifies the computer name on which the initiator resides
+          Could be set to application-provided initiator name
+        </Description>
+      </Property>
+
+      <Property name="ServerServiceVersion" value="0x00000001">
+        <Choice>0x00000001,0x00000002</Choice>
+        <Description>
+          Specifies the highest protocol version supported by the server
+        </Description>
+      </Property>
+
+      <Property name="SectorSizeInBytes" value="512">
+        <Description>
+          A 32-bit unsigned integer which indicates the sector size, in bytes, of the shared virtual disk
+        </Description>
+      </Property>
+
+      <Property name="PhysicalSectorSizeInBytes" value="4096">
+        <Description>
+          A 32-bit unsigned integer which indicates the physical sector size, in bytes, of the shared virtual disk
+        </Description>
+      </Property>
+
+      <Property name="VirtualSizeInGB" value="1">
+        <Description>
+          A 64-bit unsigned integer which indicates the virtual size, in Gigabytes, of the shared virtual disk.
+        </Description>
+      </Property>
+
+      <Property name="DiskType" value="VHD_TYPE_DYNAMIC">
+        <Choice>VHD_TYPE_FIXED, VHD_TYPE_DYNAMIC</Choice>
+        <Description>
+          Indicates the type of the virtual disk.
+          VHD_TYPE_FIXED: Indicates that the type of the disk is fixed.
+          VHD_TYPE_DYNAMIC: Indicates that the type of the disk is dynamic.
+        </Description>
+      </Property>
+
+      <Property name="IsMounted" value="true">
+        <Choice>true, false</Choice>
+        <Description>
+          A Boolean value.
+          "false" indicates that the disk is not ready for read or write operations.
+          "true" indicates that the disk is mounted and ready for read or write operations.
+        </Description>
+      </Property>
+
+      <Property name="Is4kAligned" value="true">
+        <Choice>true, false</Choice>
+        <Description>
+          A Boolean value.
+          "false" indicates disk sectors are not aligned to 4 kilobytes.
+          "true" indicates disk sectors are aligned to 4 kilobytes.
+        </Description>
+      </Property>
+
+      <Property name="FileSizeInMB" value="4">
+        <Description>
+          The size of shared virtual disk, in Megabytes.
+        </Description>
+      </Property>
+    </Group>
+  </Properties>
+</TestSite>

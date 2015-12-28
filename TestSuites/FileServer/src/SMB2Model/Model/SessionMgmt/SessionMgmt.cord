@@ -1,0 +1,152 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.SessionMgmt;
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt;
+
+// Total exploration time: 30 minutes
+config SessionMgmtBaseConfig : BaseConfig
+{
+    // Increase the bound to avoid exploration stops on bound
+    switch StateBound = 128000;
+    switch StepBound = 128000;
+    switch PathDepthBound = 128000;
+
+    // Attach default view for graphic rendering which will take more than default 25 sec
+    switch RecommendedViews = "LongRendering";
+
+    action all ISessionMgmtAdapter;
+
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb2002), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Session)";
+}
+
+config SessionMgmtConfig : SessionMgmtBaseConfig
+{
+}
+
+// Basic scenario with SessionSetup and LogOff
+// Exclude session reconnection and session binding
+machine SessionMgmtNewSessionScenario() : SessionMgmtConfig
+{
+    (
+        ReadConfig;
+        (
+            SetupConnection(ModelConnectionId.MainConnection,_);
+            (
+                SessionSetupRequest(ModelConnectionId.MainConnection,_,_,ModelSigned.SignFlagNotSet,_,_,ModelAllowReauthentication.AllowReauthentication);
+                SessionSetupResponse;
+            )+;
+            (
+                (
+                    LogOffRequest(ModelConnectionId.MainConnection,_);
+                    (LogOffResponse|ExpectDisconnect(ModelConnectionId.MainConnection,_));
+                )
+            )*;
+        )
+    )
+    || (construct model program from SessionMgmtConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.SessionMgmt")
+}
+
+machine SessionMgmtNewSessionScenarioTestCase() : SessionMgmtConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for SessionMgmtNewSessionScenario()
+}
+
+// Scenario for session reconnection
+machine SessionMgmtReconnectSessionScenario() : SessionMgmtConfig
+{
+    let ModelDialectRevision dialect in 
+    (
+        ReadConfig;
+        (            
+            SetupConnection(ModelConnectionId.MainConnection,dialect);
+            SessionSetupRequest(ModelConnectionId.MainConnection,ModelSessionId.ZeroSessionId,ModelSessionId.ZeroSessionId,ModelSigned.SignFlagNotSet,ModelFlags.NotBinding,ModelUser.DefaultUser,ModelAllowReauthentication.AllowReauthentication);
+            SessionSetupResponse;
+            (
+                TerminateConnection(ModelConnectionId.MainConnection);
+            )?;
+            SetupConnection(ModelConnectionId.AlternativeConnection,dialect);
+            SessionSetupRequest(ModelConnectionId.AlternativeConnection, ModelSessionId.ZeroSessionId, {ModelSessionId.MainSessionId, ModelSessionId.ZeroSessionId, ModelSessionId.AlternativeSessionId},ModelSigned.SignFlagNotSet,ModelFlags.NotBinding,ModelUser.DefaultUser,ModelAllowReauthentication.AllowReauthentication);
+            SessionSetupResponse;
+        )
+    )
+    || (construct model program from SessionMgmtConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.SessionMgmt")
+}
+
+machine SessionMgmtReconnectSessionScenarioTestCase() : SessionMgmtConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for SessionMgmtReconnectSessionScenario()
+}
+
+// Scenario for session binding
+machine SessionMgmtBindSessionScenario() : SessionMgmtConfig
+{
+    (
+        ReadConfig;
+        (
+            SetupConnection(ModelConnectionId.MainConnection,_);
+            SessionSetupRequest(ModelConnectionId.MainConnection,ModelSessionId.ZeroSessionId,ModelSessionId.ZeroSessionId,ModelSigned.SignFlagNotSet,ModelFlags.NotBinding,ModelUser.DefaultUser,ModelAllowReauthentication.NotAllowReauthentication);
+            SessionSetupResponse;
+            SetupConnection(ModelConnectionId.AlternativeConnection,_);
+            SessionSetupRequest(ModelConnectionId.AlternativeConnection,{ModelSessionId.MainSessionId, ModelSessionId.ZeroSessionId, ModelSessionId.AlternativeSessionId /*ModelSessionId.AlternativeSessionId has same effect as ModelSessionId.InvalidSessionId */},ModelSessionId.ZeroSessionId,_,ModelFlags.Binding,_,ModelAllowReauthentication.AllowReauthentication);
+            SessionSetupResponse;
+        )
+    )
+    || (construct model program from SessionMgmtConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.SessionMgmt")
+}
+
+machine SessionMgmtBindSessionScenarioTestCase() : SessionMgmtConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for SessionMgmtBindSessionScenario()
+}
+
+// Scenario for session binding after logoff
+machine SessionMgmtBindSessionAfterLogOffScenario() : SessionMgmtConfig
+{
+    (
+        ReadConfig;
+        (
+            SetupConnection(ModelConnectionId.MainConnection,_);
+            SessionSetupRequest(ModelConnectionId.MainConnection,ModelSessionId.ZeroSessionId,ModelSessionId.ZeroSessionId,ModelSigned.SignFlagNotSet,ModelFlags.NotBinding,ModelUser.DefaultUser,ModelAllowReauthentication.AllowReauthentication);
+            SessionSetupResponse;
+            (
+                LogOffRequest(ModelConnectionId.MainConnection,ModelSessionId.MainSessionId);
+                (LogOffResponse|ExpectDisconnect(ModelConnectionId.MainConnection,_));
+            );
+            SetupConnection(ModelConnectionId.AlternativeConnection,_);
+            SessionSetupRequest(ModelConnectionId.AlternativeConnection,{ModelSessionId.MainSessionId, ModelSessionId.ZeroSessionId, ModelSessionId.AlternativeSessionId /*ModelSessionId.AlternativeSessionId has same effect as ModelSessionId.InvalidSessionId */},ModelSessionId.ZeroSessionId,_,ModelFlags.Binding,_,ModelAllowReauthentication.AllowReauthentication);
+            SessionSetupResponse;
+        )
+    )
+    || (construct model program from SessionMgmtConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.SessionMgmt")
+}
+
+machine SessionMgmtBindSessionAfterLogOffScenarioTestCase() : SessionMgmtConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for SessionMgmtBindSessionAfterLogOffScenario()
+}
+
+// Scenario for session binding after disconnection
+machine SessionMgmtBindSessionAfterDisconnectionScenario() : SessionMgmtConfig
+{
+    (
+        ReadConfig;
+        (
+            SetupConnection(ModelConnectionId.MainConnection,_);
+            SessionSetupRequest(ModelConnectionId.MainConnection,ModelSessionId.ZeroSessionId,ModelSessionId.ZeroSessionId,ModelSigned.SignFlagNotSet,ModelFlags.NotBinding,ModelUser.DefaultUser,ModelAllowReauthentication.AllowReauthentication);
+            SessionSetupResponse;
+            (
+                TerminateConnection(ModelConnectionId.MainConnection);
+            );
+            SetupConnection(ModelConnectionId.AlternativeConnection,_);
+            SessionSetupRequest(ModelConnectionId.AlternativeConnection,{ModelSessionId.MainSessionId, ModelSessionId.ZeroSessionId, ModelSessionId.AlternativeSessionId /*ModelSessionId.AlternativeSessionId has same effect as ModelSessionId.InvalidSessionId */},ModelSessionId.ZeroSessionId,_,ModelFlags.Binding,_,ModelAllowReauthentication.AllowReauthentication);
+            SessionSetupResponse;
+        )
+    )
+    || (construct model program from SessionMgmtConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.SessionMgmt")
+}
+
+machine SessionMgmtBindSessionAfterDisconnectionScenarioTestCase() : SessionMgmtConfig where TestEnabled = true
+{
+    construct test cases where strategy = "longtests", AllowUndeterminedCoverage = true for SessionMgmtBindSessionAfterDisconnectionScenario()
+}

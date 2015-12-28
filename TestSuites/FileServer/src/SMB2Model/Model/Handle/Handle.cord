@@ -1,0 +1,421 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle;
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter;
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle;
+
+// Total exploration time: 8 minutes
+config HandleBaseConfig : BaseConfig 
+{
+    // Increase the bound to avoid exploration stops on bound
+    switch StateBound = 128000;
+    switch StepBound = 128000;
+    switch PathDepthBound = 128000;
+
+    action all IHandleAdapter;
+
+    // Category: Model, Smb21
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb21)";
+}
+
+config DurableHandleV1WithBatchOplockConfig : HandleBaseConfig
+{
+    // Category: Model, Smb21, DurableHandleV1BatchOplock
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb21), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.DurableHandleV1BatchOplock)";
+}
+
+config DurableHandleV1WithLeaseV1Config : HandleBaseConfig
+{
+    // Category: Model, Smb21, DurableHandleV1LeaseV1
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb21), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.DurableHandleV1LeaseV1)";
+}
+
+config DurableHandleV2WithBatchOplockConfig : HandleBaseConfig
+{
+    // Category: Model, Smb30, DurableHandleV2BatchOplock
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb30), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.DurableHandleV2BatchOplock)";
+}
+
+config DurableHandleV2WithLeaseV1Config : HandleBaseConfig
+{
+    // Category: Model, Smb30, DurableHandleV2LeaseV1
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb30), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.DurableHandleV2LeaseV1)";
+}
+
+config DurableHandleV2WithLeaseV2Config : HandleBaseConfig
+{
+    // Category: Model, Smb30, DurableHandleV2LeaseV2
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb30), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.DurableHandleV2LeaseV2)";
+}
+
+config PersistentHandleConfig : HandleBaseConfig
+{
+    // Category: Model, Smb30, PersistentHandleBatchOplock
+    switch TestMethodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Smb30), Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.PersistentHandle)";
+}
+
+// Test create durable handle
+// DurableHandleV1 + BatchOplock
+machine RequestDurableHandleV1BatchOplockScenario() : DurableHandleV1WithBatchOplockConfig 
+{
+    (
+        ReadConfig;
+        OpenRequest(
+            {ModelDialectRevision.Smb21, ModelDialectRevision.Smb30, ModelDialectRevision.Smb302}, // clientMaxDialect
+            PersistentBitType.PersistentBitNotSet,
+            CAShareType.NonCAShare,
+            {OplockLeaseType.BatchOplock, OplockLeaseType.NoOplockOrLease},
+            _, // durableV1RequestContext
+            DurableV2RequestContext.DurableV2RequestContextNotExist,
+            _, // durableV1ReconnectContext
+            DurableV2ReconnectContext.DurableV2ReconnectContextNotExist);
+        OpenResponse;
+
+    ) || (construct model program from DurableHandleV1WithBatchOplockConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle")
+}
+
+machine RequestDurableHandleV1BatchOplockTestCase() : DurableHandleV1WithBatchOplockConfig where TestEnabled = true
+{
+    construct test cases where Strategy = "longtests", AllowUndeterminedCoverage = true for RequestDurableHandleV1BatchOplockScenario()
+}
+
+// Test create durable handle
+// DurableHandleV1 + LeaseV1
+machine RequestDurableHandleV1LeaseV1Scenario() : DurableHandleV1WithLeaseV1Config 
+{
+    (
+        ReadConfig;
+        OpenRequest(
+            {ModelDialectRevision.Smb21, ModelDialectRevision.Smb30, ModelDialectRevision.Smb302}, // clientMaxDialect
+            PersistentBitType.PersistentBitNotSet,
+            CAShareType.NonCAShare,
+            {OplockLeaseType.LeaseV1, OplockLeaseType.NoOplockOrLease},
+            _, // durableV1RequestContext
+            DurableV2RequestContext.DurableV2RequestContextNotExist,
+            _, // durableV1ReconnectContext
+            DurableV2ReconnectContext.DurableV2ReconnectContextNotExist);
+        OpenResponse;
+
+    ) || (construct model program from DurableHandleV1WithLeaseV1Config where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle")
+}
+
+machine RequestDurableHandleV1LeaseV1TestCase() : DurableHandleV1WithLeaseV1Config where TestEnabled = true
+{
+    construct test cases where Strategy = "longtests", AllowUndeterminedCoverage = true for RequestDurableHandleV1LeaseV1Scenario()
+}
+
+// Test create durable handle
+// DurableHandleV2 + BatchOplock
+machine RequestDurableHandleV2BatchOplockScenario() : DurableHandleV2WithBatchOplockConfig 
+{
+    (
+        ReadConfig;
+        OpenRequest(
+            {ModelDialectRevision.Smb30, ModelDialectRevision.Smb302}, // clientMaxDialect
+            PersistentBitType.PersistentBitNotSet,
+            CAShareType.NonCAShare,
+            {OplockLeaseType.BatchOplock, OplockLeaseType.NoOplockOrLease},
+            DurableV1RequestContext.DurableV1RequestContextNotExist,
+            {DurableV2RequestContext.DurableV2RequestContextExistWithoutPersistent, DurableV2RequestContext.DurableV2RequestContextNotExist}, 
+            DurableV1ReconnectContext.DurableV1ReconnectContextNotExist,
+            {DurableV2ReconnectContext.DurableV2ReconnectContextExistWithoutPersistent, DurableV2ReconnectContext.DurableV2ReconnectContextNotExist}); 
+        OpenResponse;
+
+    ) || (construct model program from DurableHandleV2WithBatchOplockConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle")
+}
+
+machine RequestDurableHandleV2BatchOplockTestCase() : DurableHandleV2WithBatchOplockConfig where TestEnabled = true
+{
+    construct test cases where Strategy = "longtests", AllowUndeterminedCoverage = true for RequestDurableHandleV2BatchOplockScenario()
+}
+
+// Test create durable handle
+// DurableHandleV2 + LeaseV1
+machine RequestDurableHandleV2LeaseV1Scenario() : DurableHandleV2WithLeaseV1Config 
+{
+    (
+        ReadConfig;
+        OpenRequest(
+            {ModelDialectRevision.Smb30, ModelDialectRevision.Smb302}, // clientMaxDialect
+            PersistentBitType.PersistentBitNotSet,
+            CAShareType.NonCAShare,
+            {OplockLeaseType.LeaseV1, OplockLeaseType.NoOplockOrLease},
+            DurableV1RequestContext.DurableV1RequestContextNotExist,
+            {DurableV2RequestContext.DurableV2RequestContextExistWithoutPersistent, DurableV2RequestContext.DurableV2RequestContextNotExist}, 
+            DurableV1ReconnectContext.DurableV1ReconnectContextNotExist,
+            {DurableV2ReconnectContext.DurableV2ReconnectContextExistWithoutPersistent, DurableV2ReconnectContext.DurableV2ReconnectContextNotExist}); 
+        OpenResponse;
+
+    ) || (construct model program from DurableHandleV2WithLeaseV1Config where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle")
+}
+
+machine RequestDurableHandleV2LeaseV1TestCase() : DurableHandleV2WithLeaseV1Config where TestEnabled = true
+{
+    construct test cases where Strategy = "longtests", AllowUndeterminedCoverage = true for RequestDurableHandleV2LeaseV1Scenario()
+}
+
+// Test create durable handle
+// DurableHandleV2 + LeaseV2
+machine RequestDurableHandleV2LeaseV2Scenario() : DurableHandleV2WithLeaseV2Config 
+{
+    (
+        ReadConfig;
+        OpenRequest(
+            {ModelDialectRevision.Smb30, ModelDialectRevision.Smb302}, // clientMaxDialect
+            PersistentBitType.PersistentBitNotSet,
+            CAShareType.NonCAShare,
+            {OplockLeaseType.LeaseV2, OplockLeaseType.NoOplockOrLease},
+            DurableV1RequestContext.DurableV1RequestContextNotExist,
+            {DurableV2RequestContext.DurableV2RequestContextExistWithoutPersistent, DurableV2RequestContext.DurableV2RequestContextNotExist}, 
+            DurableV1ReconnectContext.DurableV1ReconnectContextNotExist,
+            {DurableV2ReconnectContext.DurableV2ReconnectContextExistWithoutPersistent, DurableV2ReconnectContext.DurableV2ReconnectContextNotExist}); 
+        OpenResponse;
+
+    ) || (construct model program from DurableHandleV2WithLeaseV2Config where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle")
+}
+
+machine RequestDurableHandleV2LeaseV2TestCase() : DurableHandleV2WithLeaseV2Config where TestEnabled = true
+{
+    construct test cases where Strategy = "longtests", AllowUndeterminedCoverage = true for RequestDurableHandleV2LeaseV2Scenario()
+}
+
+// Test create durable handle
+// PersistentHandle + BatchOplock
+machine RequestPersistentHandleScenario() : PersistentHandleConfig 
+{
+    (
+        ReadConfig;
+        OpenRequest(
+            {ModelDialectRevision.Smb30, ModelDialectRevision.Smb302}, // clientMaxDialect
+            _, // persistentBit
+            _, // connectToCAShare
+            OplockLeaseType.NoOplockOrLease,
+            DurableV1RequestContext.DurableV1RequestContextNotExist,
+            {DurableV2RequestContext.DurableV2RequestContextExistWithPersistent, DurableV2RequestContext.DurableV2RequestContextNotExist}, 
+            DurableV1ReconnectContext.DurableV1ReconnectContextNotExist,
+            {DurableV2ReconnectContext.DurableV2ReconnectContextExistWithPersistent, DurableV2ReconnectContext.DurableV2ReconnectContextNotExist}); 
+        OpenResponse;
+
+    ) || (construct model program from PersistentHandleConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle")
+}
+
+machine RequestPersistentHandleTestCase() : PersistentHandleConfig where TestEnabled = true
+{
+    construct test cases where Strategy = "longtests", AllowUndeterminedCoverage = true for RequestPersistentHandleScenario()
+}
+
+// Test reconnect durable handle
+// The durableV1 open is created with batch lock
+// Client does Logoff/Disconnect/Nothing.
+// Client reconnects the open.
+machine DurableHandleV1PreparedWithBatchOplockReconnectScenario() : DurableHandleV1WithBatchOplockConfig 
+{
+    (
+        ReadConfig;
+
+        PrepareOpen(
+            {ModelDialectRevision.Smb21, ModelDialectRevision.Smb30, ModelDialectRevision.Smb302}, // clientMaxDialect
+            PersistentBitType.PersistentBitNotSet,
+            CAShareType.NonCAShare, 
+            ModelHandleType.DurableHandleV1,
+            OplockLeaseType.BatchOplock);
+
+        (LogOff|Disconnect)?;
+
+        ReconnectOpenRequest(
+            _, // durableV1ReconnectContext
+            DurableV2ReconnectContext.DurableV2ReconnectContextNotExist,
+            {OplockLeaseType.BatchOplock, OplockLeaseType.NoOplockOrLease},
+            _, // leaseKeyDifferentialType
+            _, // clientIdType
+            _);// createGuidType
+
+        OpenResponse;
+
+    ) || (construct model program from DurableHandleV1WithBatchOplockConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle")
+}
+
+machine DurableHandleV1PreparedWithBatchOplockReconnectTestCase() : DurableHandleV1WithBatchOplockConfig where TestEnabled = true
+{
+    construct test cases where Strategy = "longtests", AllowUndeterminedCoverage = true for DurableHandleV1PreparedWithBatchOplockReconnectScenario()
+}
+
+// Test reconnect durable handle
+// The durableV1 open is created with lease V1 Create Context.
+// Client does Logoff/Disconnect/Nothing.
+// Client reconnects the open.
+machine DurableHandleV1PreparedWithLeaseV1ReconnectScenario() : DurableHandleV1WithLeaseV1Config 
+{
+    (
+        ReadConfig;
+        PrepareOpen(
+            {ModelDialectRevision.Smb21, ModelDialectRevision.Smb30, ModelDialectRevision.Smb302},
+            PersistentBitType.PersistentBitNotSet,
+            CAShareType.NonCAShare, 
+            ModelHandleType.DurableHandleV1,
+            OplockLeaseType.LeaseV1);
+
+        (LogOff|Disconnect)?;
+
+        ReconnectOpenRequest(
+            _, // durableV1ReconnectContext
+            DurableV2ReconnectContext.DurableV2ReconnectContextNotExist,
+            {OplockLeaseType.LeaseV1, OplockLeaseType.NoOplockOrLease},
+            _, // leaseKeyDifferentialType
+            _, // clientIdType
+            _);// createGuidType
+
+        OpenResponse;
+    )
+     || (construct model program from DurableHandleV1WithLeaseV1Config where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle")
+}
+
+machine DurableHandleV1PreparedWithLeaseV1ReconnectTestCase() : DurableHandleV1WithLeaseV1Config where TestEnabled = true
+{
+    construct test cases where Strategy = "longtests", AllowUndeterminedCoverage = true for DurableHandleV1PreparedWithLeaseV1ReconnectScenario()
+}
+
+// Test reconnect durable handle
+// The durableV2 open is created with batch oplock.
+// Client does Logoff/Disconnect/Nothing.
+// Client reconnects to the open.
+// The cases are only applied for Dialect 3.0 or later.
+machine DurableHandleV2PreparedWithBatchOplockReconnectScenario() : DurableHandleV2WithBatchOplockConfig 
+{
+    (
+        ReadConfig;
+        PrepareOpen(
+            {ModelDialectRevision.Smb30, ModelDialectRevision.Smb302},
+            PersistentBitType.PersistentBitNotSet,
+            CAShareType.NonCAShare, 
+            ModelHandleType.DurableHandleV2,
+            OplockLeaseType.BatchOplock);
+
+        (LogOff|Disconnect)?;
+
+        ReconnectOpenRequest(
+            DurableV1ReconnectContext.DurableV1ReconnectContextNotExist,
+            {DurableV2ReconnectContext.DurableV2ReconnectContextExistWithoutPersistent, DurableV2ReconnectContext.DurableV2ReconnectContextNotExist},
+            {OplockLeaseType.BatchOplock, OplockLeaseType.NoOplockOrLease},
+            _, // leaseKeyDifferentialType
+            _, // clientIdType
+            _);// createGuidType
+
+        OpenResponse;
+    )
+     || (construct model program from DurableHandleV2WithBatchOplockConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle")
+}
+
+machine DurableHandleV2PreparedWithBatchOplockReconnectTestCase() : DurableHandleV2WithBatchOplockConfig where TestEnabled = true
+{
+    construct test cases where Strategy = "longtests", AllowUndeterminedCoverage = true for DurableHandleV2PreparedWithBatchOplockReconnectScenario()
+}
+
+// Test reconnect durable handle
+// The durableV2 open is created with lease V1 Create Context.
+// Client does Logoff/Disconnect/Nothing.
+// Client reconnects to the open.
+// The cases are only applied for Dialect 3.0 or later.
+machine DurableHandleV2PreparedWithLeaseV1ReconnectScenario() : DurableHandleV2WithLeaseV1Config 
+{
+    (
+        ReadConfig;
+        PrepareOpen(
+            {ModelDialectRevision.Smb30, ModelDialectRevision.Smb302},
+            PersistentBitType.PersistentBitNotSet,
+            CAShareType.NonCAShare, 
+            ModelHandleType.DurableHandleV2,
+            OplockLeaseType.LeaseV1);
+
+        (LogOff|Disconnect)?;
+
+        ReconnectOpenRequest(
+            DurableV1ReconnectContext.DurableV1ReconnectContextNotExist,
+            {DurableV2ReconnectContext.DurableV2ReconnectContextExistWithoutPersistent, DurableV2ReconnectContext.DurableV2ReconnectContextNotExist},
+            {OplockLeaseType.LeaseV1, OplockLeaseType.NoOplockOrLease},
+            _, // leaseKeyDifferentialType
+            _, // clientIdType
+            _);// createGuidType
+
+        OpenResponse;
+    )
+     || (construct model program from DurableHandleV2WithLeaseV1Config where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle")
+}
+
+machine DurableHandleV2PreparedWithLeaseV1ReconnectTestCase() : DurableHandleV2WithLeaseV1Config where TestEnabled = true
+{
+    construct test cases where Strategy = "longtests", AllowUndeterminedCoverage = true for DurableHandleV2PreparedWithLeaseV1ReconnectScenario()
+}
+
+// Test reconnect durable handle
+// The durableV2 open is created with lease V2 Create Context.
+// Client does Logoff/Disconnect/Nothing.
+// Client reconnects to the open.
+// The cases are only applied for Dialect 3.0 or later.
+machine DurableHandleV2PreparedWithLeaseV2ReconnectScenario() : DurableHandleV2WithLeaseV2Config 
+{
+    (
+        ReadConfig;
+        PrepareOpen(
+            {ModelDialectRevision.Smb30, ModelDialectRevision.Smb302},
+            PersistentBitType.PersistentBitNotSet,
+            CAShareType.NonCAShare, 
+            ModelHandleType.DurableHandleV2,
+            OplockLeaseType.LeaseV2);
+
+        (LogOff|Disconnect)?;
+
+        ReconnectOpenRequest(
+            DurableV1ReconnectContext.DurableV1ReconnectContextNotExist,
+            {DurableV2ReconnectContext.DurableV2ReconnectContextExistWithoutPersistent, DurableV2ReconnectContext.DurableV2ReconnectContextNotExist},
+            {OplockLeaseType.LeaseV2, OplockLeaseType.NoOplockOrLease},
+            _, // leaseKeyDifferentialType
+            _, // clientIdType
+            _);// createGuidType
+
+        OpenResponse;
+    )
+     || (construct model program from DurableHandleV2WithLeaseV2Config where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle")
+}
+
+machine DurableHandleV2PreparedWithLeaseV2ReconnectTestCase() : DurableHandleV2WithLeaseV2Config where TestEnabled = true
+{
+    construct test cases where Strategy = "longtests", AllowUndeterminedCoverage = true for DurableHandleV2PreparedWithLeaseV2ReconnectScenario()
+}
+
+// Test reconnect persistent handle
+// The persistent open is created.
+// Client does Logoff/Disconnect.
+// Client reconnects to the open.
+// The cases are only applied for Dialect 3.0 or later.
+machine PersistentHandleReconnectScenario() : PersistentHandleConfig 
+{
+    (
+        ReadConfig;
+        PrepareOpen(
+            {ModelDialectRevision.Smb30, ModelDialectRevision.Smb302},
+            _, // persistentBit
+            CAShareType.CAShare, // connectToCAShare
+            ModelHandleType.PersistentHandle,
+            OplockLeaseType.NoOplockOrLease);
+
+        (LogOff|Disconnect);
+
+        ReconnectOpenRequest(
+            DurableV1ReconnectContext.DurableV1ReconnectContextNotExist,
+            _, // durableV2ReconnectContext
+            OplockLeaseType.NoOplockOrLease,
+            _, // leaseKeyDifferentialType
+            _, // clientIdType
+            _);// createGuidType
+
+        OpenResponse;
+    )
+     || (construct model program from PersistentHandleConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle")
+}
+
+machine PersistentHandleReconnectTestCase() : PersistentHandleConfig where TestEnabled = true
+{
+    construct test cases where Strategy = "longtests", AllowUndeterminedCoverage = true for PersistentHandleReconnectScenario()
+}
