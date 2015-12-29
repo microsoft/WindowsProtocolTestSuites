@@ -150,7 +150,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
             }
             #endregion
 
-            System.Threading.Timer timer = new System.Threading.Timer(CheckBreakNotification, client1TreeId, 5000, Timeout.Infinite);
+            System.Threading.Timer timer = new System.Threading.Timer(CheckBreakNotification, client1TreeId, 0, Timeout.Infinite);
 
             #region Lease Break RWH => RH
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a second client to create the same file with the first client by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE");

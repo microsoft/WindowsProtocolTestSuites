@@ -350,14 +350,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
-        public uint DefaultResiliencyTimeoutInSecond
-        {
-            get
-            {
-                return uint.Parse(GetProperty("DefaultResiliencyTimeoutInSecond"));
-            }
-        }
-
         public bool IsWindowsPlatform
         {
             get
@@ -678,8 +670,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         WindowsServer2012R2 = 0x10000007,
 
         /// <summary>
-        /// Windows Server 10
+        /// Windows Server 2016
         /// </summary>
-        WindowsServer10 = 0x10000008,
+        WindowsServer2016 = 0x10000008,
     }
 }

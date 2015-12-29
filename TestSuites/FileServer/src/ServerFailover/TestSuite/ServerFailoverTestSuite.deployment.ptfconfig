@@ -74,6 +74,12 @@
           If SUT does not have asymmetric share, leave it blank
         </Description>
       </Property>
+
+      <Property name="WitnessClientName" value="client01">
+        <Description>
+          Name of the witness client
+        </Description>
+      </Property>      
     </Group>
   </Properties>
 </TestSite>

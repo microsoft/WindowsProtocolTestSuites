@@ -80,7 +80,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 treeId);
 
             // Create a timer that signals the delegate to invoke CheckBreakNotification after 5 seconds
-            Timer timer = new Timer(CheckBreakNotification, treeId, 5000, Timeout.Infinite);
+            Timer timer = new Timer(CheckBreakNotification, treeId, 0, Timeout.Infinite);
 
             Smb2FunctionalClient clientTriggeringBreak = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
 

@@ -168,7 +168,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Dfsc
                                     referral1.ReferralEntryFlags = channel.Read<ushort>();
                                     referral1.ShareName = Encoding.Unicode.GetString(channel.ReadBytes(referral1.Size
                                         - referralV1fixedSize - sizeofWord));
-                                    channel.Stream.Position += sizeofWord;
+                                    channel.ReadBytes(sizeofWord);
                                     referral1List.Add(referral1);
                                 }
                                 this.referralResponse.ReferralEntries = referral1List.ToArray();
@@ -466,7 +466,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Dfsc
             }
 
             string dfsPAth = Encoding.Unicode.GetString(channel.ReadBytes(pathLength));
-            channel.Stream.Position += sizeofWord;
+            channel.ReadBytes(sizeofWord);
             return dfsPAth;
         }
 

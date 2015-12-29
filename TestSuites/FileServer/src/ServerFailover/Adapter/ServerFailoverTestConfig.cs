@@ -96,6 +96,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.Adapter
                 return GetProperty("NonOptimumNodeOfAsymmetricShare");
             }
         }
+
         #endregion
 
         #region SWN Configuration
@@ -104,6 +105,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.Adapter
             get
             {
                 return TimeSpan.FromSeconds(int.Parse(GetProperty("SwnWitnessSyncTimeout")));
+            }
+        }
+
+        public string WitnessClientName
+        {
+            get
+            {
+                return GetProperty("WitnessClientName");
             }
         }
         #endregion

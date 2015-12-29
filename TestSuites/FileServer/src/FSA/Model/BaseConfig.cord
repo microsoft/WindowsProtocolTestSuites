@@ -15,7 +15,7 @@ config Actions
     switch PathDepthBound = 30;
     switch TestClassBase = "ptf"; 
     switch quiescencetimeout = 30000;
-    switch GeneratedTestPath = "..\\TestSuite";
+    switch GeneratedTestPath = "..\\TestSuite\\ModelTestCases";
     switch GeneratedTestNamespace = "Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite";
     switch TestEnabled = false;
     switch DefaultParameterExpansion = "PairWise";
@@ -40,7 +40,7 @@ config Actions_Coverage
     switch PathDepthBound = 1024000;
     switch TestClassBase = "ptf"; 
     switch quiescencetimeout = 2000000;
-    switch GeneratedTestPath = "..\\TestSuite";
+    switch GeneratedTestPath = "..\\TestSuite\\ModelTestCases";
     switch GeneratedTestNamespace = "Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite";
     switch TestEnabled = false;
     switch DefaultParameterExpansion = "Coverage";

@@ -46,6 +46,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private bool isSetZeroDataSupported;
         private bool isFileLinkInfoSupported;
         private bool isShortNameSupported;
+        private bool isQueryFileFsControlInformationSupported;
+        private bool isQueryFileFsObjectIdInformationSupported;
+        private bool isQueryFileObjectIdInformationSupported;
+        private bool isQueryFileReparsePointInformationSupported;
+        private bool isQueryFileQuotaInformationSupported;
+        private bool isObjectIdIoCtlRequestSupported;
+        private bool isOpenHasManageVolumeAccessSupported;
+        private bool isStreamRenameSupported;
 
         private bool isErrorCodeMappingRequired;
         private bool isVolumeReadonly;
@@ -60,6 +68,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private string shareName;
         private Transport transport;
         private FileSystem fileSystem;
+        private uint reFSVersion;
         private IpVersion ipVersion;
         private ITestSite site;
         private ITransportAdapter transAdapter;
@@ -82,6 +91,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         public FileSystem FileSystem
         {
             get { return fileSystem; }
+        }
+
+        public uint ReFSVersion
+        {
+            get { return reFSVersion; }
         }
 
         public bool IsIntegritySupported
@@ -257,6 +271,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             //File System Under Test
             this.fileSystem = (FileSystem)Enum.Parse(typeof(FileSystem), testConfig.GetProperty("FileSystem"));
+            this.reFSVersion = uint.Parse(testConfig.GetProperty("ReFSVersion"));
             this.shareName = testConfig.GetProperty((fileSystem.ToString() + "_ShareFolder"));
             this.rootDirectory = testConfig.GetProperty((fileSystem.ToString() + "_RootDirectory"));
             this.quotaFile = testConfig.GetProperty("QuotaFile");
@@ -276,6 +291,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.isSetZeroDataSupported = testConfig.GetProperty("WhichFileSystemSupport_SetZeroData").Contains(this.fileSystem.ToString());
             this.isFileLinkInfoSupported = testConfig.GetProperty("WhichFileSystemSupport_FileLinkInfo").Contains(this.fileSystem.ToString());
             this.isShortNameSupported = testConfig.GetProperty("WhichFileSystemSupport_ShortName").Contains(this.fileSystem.ToString());
+            this.isQueryFileFsControlInformationSupported = testConfig.GetProperty("WhichFileSystemSupport_QueryFileFsControlInformation").Contains(this.fileSystem.ToString());
+            this.isQueryFileFsObjectIdInformationSupported = testConfig.GetProperty("WhichFileSystemSupport_QueryFileFsObjectIdInformation").Contains(this.fileSystem.ToString());
+            this.isQueryFileObjectIdInformationSupported = testConfig.GetProperty("WhichFileSystemSupport_QueryFileObjectIdInformation").Contains(this.fileSystem.ToString());
+            this.isQueryFileReparsePointInformationSupported = testConfig.GetProperty("WhichFileSystemSupport_QueryFileReparsePointInformation").Contains(this.fileSystem.ToString());
+            this.isQueryFileQuotaInformationSupported = testConfig.GetProperty("WhichFileSystemSupport_QueryFileQuotaInformation").Contains(this.fileSystem.ToString());
+            this.isObjectIdIoCtlRequestSupported = testConfig.GetProperty("WhichFileSystemSupport_ObjectIdIoCtlRequest").Contains(this.fileSystem.ToString());
+            this.isOpenHasManageVolumeAccessSupported = testConfig.GetProperty("WhichFileSystemSupport_OpenHasManageVolumeAccess").Contains(this.fileSystem.ToString());
+            this.isStreamRenameSupported = testConfig.GetProperty("WhichFileSystemSupport_StreamRename").Contains(this.fileSystem.ToString());
 
             //Volume Properties
             this.clusterSizeInKB = uint.Parse(testConfig.GetProperty((fileSystem.ToString() + "_ClusterSizeInKB")));
@@ -4880,8 +4903,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <param name="isImplemented">True: if this functionality is implemented by the object store.</param>
         public void GetIfImplementQueryFileFsControlInformation(out bool isImplemented)
         {
-            // Section 2.1.5.12.6: This is implemented only by the NTFS file system.
-            isImplemented = (this.FileSystem == Adapter.FileSystem.NTFS);
+            isImplemented = this.isQueryFileFsControlInformationSupported;
         }
 
         /// <summary>
@@ -4890,8 +4912,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <param name="isImplemented">True: if this functionality is implemented by the object store.</param>
         public void GetIfImplementQueryFileFsObjectIdInformation(out bool isImplemented)
         {
-            // Section 2.1.5.12.8: This is implemented only by the NTFS file system.
-            isImplemented = (this.FileSystem == Adapter.FileSystem.NTFS);
+            isImplemented = this.isQueryFileFsObjectIdInformationSupported;
         }
 
         /// <summary>
@@ -4918,8 +4939,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <param name="isImplemented">true: If the object store implements this functionality.</param>        
         public void GetIfImplementQueryFileObjectIdInformation(out bool isImplemented)
         {
-            // Section 2.1.5.5.1: This is implemented only by the NTFS file system.
-            isImplemented = (this.FileSystem == Adapter.FileSystem.NTFS);
+            isImplemented = this.isQueryFileObjectIdInformationSupported;
         }
 
         /// <summary>
@@ -4928,8 +4948,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <param name="isImplemented">true: If the object store implements this functionality.</param>
         public void GetIfImplementQueryFileReparsePointInformation(out bool isImplemented)
         {
-            // Section 2.1.5.5.2: This is implemented only by the NTFS file system.
-            isImplemented = (this.FileSystem == Adapter.FileSystem.NTFS);
+            isImplemented = this.isQueryFileReparsePointInformationSupported;
         }
 
         /// <summary>
@@ -4938,8 +4957,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <param name="isImplemented">true: If the object store implements this functionality.</param>
         public void GetIfImplementQueryFileQuotaInformation(out bool isImplemented)
         {
-            // Section 2.1.5.20: This operation is implemented only by the NTFS file system.
-            isImplemented = (this.FileSystem == Adapter.FileSystem.NTFS);
+            isImplemented = this.isQueryFileQuotaInformationSupported;
 
         }
 
@@ -4949,8 +4967,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <param name="isImplemented">true: If the object store implements this functionality.</param>
         public void GetIfImplementObjectIdIoCtlRequest(out bool isImplemented)
         {
-            // Section 2.1.5.9.1: This is only implemented by the NTFS file system.
-            isImplemented = (this.fileSystem == Adapter.FileSystem.NTFS);
+            isImplemented = this.isObjectIdIoCtlRequestSupported;
         }
 
         /// <summary>
@@ -4968,14 +4985,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <param name="isHasManageVolumeAccess">true: if open has manage volume access.</param>
         public void GetIfOpenHasManageVolumeAccess(out bool isHasManageVolumeAccess)
         {
-            if (this.fileSystem == Adapter.FileSystem.NTFS || this.fileSystem == Adapter.FileSystem.REFS)
-            {
-                isHasManageVolumeAccess = true;
-            }
-            else
-            {
-                isHasManageVolumeAccess = false;
-            }
+            isHasManageVolumeAccess = this.isOpenHasManageVolumeAccessSupported;
         }
 
         /// <summary>
@@ -4984,7 +4994,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <param name="isSupported">true: if stream rename is supported.</param>
         public void GetIfStreamRenameIsSupported(out bool isSupported)
         {
-            isSupported = (this.fileSystem == Adapter.FileSystem.NTFS);
+            isSupported = this.isStreamRenameSupported;
         }
         #endregion
 
