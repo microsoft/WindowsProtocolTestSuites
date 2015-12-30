@@ -2,9 +2,9 @@
 There are many ways to contribute to Windows Protocol Test Suites.
 
 * Report [issues](https://github.com/Microsoft/windowsProtocolTestSuites/issues) and help verify fixes when they are checked in.
-* [Fork](https://github.com/Microsoft/windowsProtocolTestSuites#fork-destination-box) to your local and send us pull request to:
-	* Submit updates and improvements to the documentation.
-	* Contribute bug fixes.
+* [Fork](https://github.com/Microsoft/windowsProtocolTestSuites#fork-destination-box) to your local machines and send us pull requests to:
+	* Submit updates and improvements to the documentation like User Guide and Test Design Specification.
+	* Contribute to existing bug fixes.
 	* Add new features. But firstly you should log an issue to notify the team before you spend a lot of time on it.
 
 ## CLA

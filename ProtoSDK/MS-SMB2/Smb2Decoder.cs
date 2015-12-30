@@ -701,7 +701,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 
                 byte[] bytesToCompute = messageBytes;
                 // Zero out the 16-byte signature field in the SMB2 Header of the incoming message.
-                Array.Clear(bytesToCompute, System.Runtime.InteropServices.Marshal.SizeOf(packet.Header) - 16, 16);
+                Array.Clear(bytesToCompute, System.Runtime.InteropServices.Marshal.SizeOf(packet.Header) - Smb2Consts.SignatureSize, Smb2Consts.SignatureSize);
 
                 //Compute the message with signing key  
                 byte[] computedSignature = null;
@@ -731,7 +731,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 //[MS-SMB2] 3.1.5.1   
                 //If the first 16 bytes (the high-order portion) of the computed signature from step 3 or step 4 matches the saved signature from step 1, the message is signed correctly
                 // compare the first 16 bytes of the originalSignature and computedSignature
-                return packet.Header.Signature.SequenceEqual(computedSignature.Take(16));
+                return packet.Header.Signature.SequenceEqual(computedSignature.Take(Smb2Consts.SignatureSize));
             }
             catch (Exception ex)
             {

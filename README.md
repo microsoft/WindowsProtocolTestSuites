@@ -9,7 +9,7 @@ However, each test suite provides users with a useful indication of interoperabi
 
 Windows Protocol Test Suites provide interoperability testing against the implementation of Windows open specifications including File Services, Identity Management, Remote Desktop and etc.
 
-* **SMB1 Server Test Suite**. It covers requirements documented in [MS-SMB], [MS-FSCC], [MS-CIFS], as well as dependencies referred to in [MS-SMB].
+* **SMB1 Server Test Suite**. It covers the requirements documented by [MS-SMB], and those documented by other protocols which are related to [MS-SMB], i.e. [MS-FSCC] and [MS-CIFS].
 * **File Server Family Test Suite**. It is designed to test implementations of file server protocol family including [MS-SMB2], [MS-DFSC], [MS-SWN], [MS-FSRVP], [MS-FSA], [MS-RSVD] and [MS-SQOS].
 
 ## Components
@@ -33,19 +33,19 @@ You should install the following list of software in order to build Test Suites 
 
 ## Build
 
-After you clone a copy of this repo, change to the WindowsProtocolTestSuites directory:
+After you clone a copy of this repo, change to the **WindowsProtocolTestSuites** directory:
 
 ```
 cd WindowsProtocolTestSuites
 ```
 
-Run buildall.cmd
+Run **buildall.cmd**
 
 ```
 buildall.cmd
 ```
 
-After the build succeeds, the MSI (installer package) files of every test suite should be generated in the folder *WindowsProtocolTestSuite\drop\TestSuites\\[TestSuiteName]\Installer\.*
+After the build succeeds, the MSI (installer package) file of every test suite should be generated in the folder *WindowsProtocolTestSuite\drop\TestSuites\\[TestSuiteName]\Installer\.*
 Take SMB test suite as an example, **MS-SMB-TestSuite-ServerEP.msi** should be generated in the folder *WindowsProtocolTestSuite\drop\TestSuites\MS-SMB\Installer\.*
 
 You can also run **build.cmd** for protocol SDK, Protocol Test Manager and every test suite separately.
@@ -85,9 +85,9 @@ Windows Protocol Test Suites are under the [MIT license](https://github.com/Micr
   
 ## Roadmap
 
-The test suites will be updated according to Windows' release and your interest.
-If one protocol is updated to a newer version, and it is also a high-interest procotol, the test suite will be aligned and updated.
-If a new protocol is released and it's high-interest, the specific test suite will be developed.
+The test suites will be updated according to Windows' release and your interests.
+If one protocol is updated to a newer version, and it is also a highly interested protocol, the test suite will be aligned and updated.
+If a new protocol is released and it's highly interested, the specific test suite will be developed.
 
 The following test suites will be released in version 1.0.
 
