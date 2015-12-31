@@ -254,6 +254,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
+        public TimeSpan LongerTimeout
+        {
+            get
+            {
+                return TimeSpan.FromSeconds(int.Parse(GetProperty("LongerTimeout")));
+            }
+        }
+
         public TimeSpan RetryInterval
         {
             get

@@ -39,6 +39,12 @@
         </Description>
       </Property>
 
+      <Property name="LongerTimeout" value="120">
+        <Description>
+          The longer timeout in seconds for the connection against SUT
+        </Description>
+      </Property>      
+
       <Property name="RetryInterval" value="10">
         <Description>
           The time interval to retry the SMB2 connection, in seconds
