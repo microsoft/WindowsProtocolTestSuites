@@ -96,7 +96,7 @@ The following test suites will be released in version 1.0.
 |SMB1 Server Test Suite|MS-SMB|
 |File Server Family Test Suite|MS-SMB2, MS-DFSC, MS-SWN, MS-FSRVP, MS-FSA, MS-RSVD, MS-SQOS|
 |Protocol Test Manager|N/A|
-|Kerberos Test Suite|MS-PAC, MS-KILE, MS-KKDPC|
+|Kerberos Test Suite|MS-PAC, MS-KILE, MS-KKDCP|
 |MS-AZOD Test Suite|MS-AZOD|
 |RDP Client Family Test Suite|MS-RDPBCGR, MS-RDPDISP, MS-RDPEDYC, MS-RDPEGFX, MS-RDPEGT, MS-RDPEI, MS-RDPEMT, MS-RDPEUDP, MS-RDPEUSB, MS-RDPEVOR,MS-RDPRFX|
 |MS-SMBD Test Suite |MS-SMBD|
@@ -107,4 +107,4 @@ The following test suites will be released in version 1.0.
 # Contact
 
 Keep up with the Windows protocol test team by visiting our [blog](https://blogs.msdn.microsoft.com/windowsinteroperability), chatting in [Gitter](https://gitter.im/Microsoft/WindowsProtocolTestSuites?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge), 
-sending us email to winterop@microsoft.com or following us [@WindowsProtocolTest](https://twitter.com/MSProtocolTest). 
+sending us email to winterop@microsoft.com. 
