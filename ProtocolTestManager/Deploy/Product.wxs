@@ -26,6 +26,7 @@
       <ComponentGroupRef Id="ProductComponents_etc" />
       <ComponentGroupRef Id="ProductComponents_ProtoSDK" />
       <ComponentGroupRef Id="fileserver_PLUGIN"/>
+      <ComponentGroupRef Id="KERBEROS_PLUGIN"/>
       <ComponentRef Id="ApplicationShortcut"/>
       <ComponentRef Id="DesktopShortcuts"/>
     </Feature>
@@ -97,10 +98,12 @@
           <Directory Id="BINFOLDER" Name="bin" />
           <Directory Id="ETCFOLDER" Name="etc" >
             <Directory Id="FILESERVERCONFIG" Name="fileserver" />
+            <Directory Id="KERBEROSCONFIGFOLDER" Name="kerberos" />
           </Directory>
           <Directory Id="LIBFOLDER" Name="lib" />
           <Directory Id="DOCFOLDER" Name="doc" >
             <Directory Id="FILESERVERDOCFOLDER" Name="fileserver" />
+            <Directory Id="KERBEROSDOCFOLDER" Name="kerberos" />
           </Directory>
         </Directory>
       </Directory>

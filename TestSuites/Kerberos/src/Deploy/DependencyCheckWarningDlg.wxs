@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+    <UI>
+      <Dialog Id="DependencyCheckWarningDlg" Width="270" Height="85" Title="[ProductName] Setup">
+        <Control Id="WarningText" Type="Text" X="48" Y="15" Width="205" Height="60" TabSkip="no" Text="[DEPENDENCY_CHECK_WARNING_TEXT]" />
+        <Control Id="WarningIcon" Type="Icon" X="15" Y="15" Width="24" Height="24" FixedSize="yes" IconSize="32" Text="WixUI_Ico_Exclam" />
+        <Control Id="OkButton" Type="PushButton" X="100" Y="60" Width="56" Height="17" TabSkip="yes" Text="!(loc.WixUIOK)">
+          <Publish Event="EndDialog" Value="Return">1</Publish>
+        </Control>
+      </Dialog>
+    </UI>
+  </Fragment>
+</Wix>

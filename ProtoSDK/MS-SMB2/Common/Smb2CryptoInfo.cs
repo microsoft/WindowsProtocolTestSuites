@@ -42,6 +42,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             byte[] cryptographicKey, 
             bool enableSigning, 
             bool enableEncryption, 
+            bool disableVerifySignature,
             Smb2CryptoInfo cryptoInfo = null,
             byte[] preauthIntegrityHashValue = null,
             EncryptionAlgorithm cipherId = EncryptionAlgorithm.ENCRYPTION_AES128_CCM)
@@ -59,6 +60,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 }
             }
 
+            DisableVerifySignature = disableVerifySignature;
             Dialect = dialect;
 
             SessionKey = cryptographicKey;

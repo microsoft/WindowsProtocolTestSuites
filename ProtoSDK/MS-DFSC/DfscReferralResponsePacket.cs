@@ -1,5 +1,6 @@
-﻿// Copyright (c) Microsoft. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+﻿//------------------------------------------------------------------------------
+// Copyright (c) Microsoft Corporation. All rights reserved.
+//------------------------------------------------------------------------------
 
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Dfsc
         /// <summary>
         /// Specify the error code
         /// </summary>
+        [CLSCompliant(false)]
         public uint NTStatus
         {
             get
@@ -109,6 +111,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Dfsc
         /// Fail to decode buffer data to RESP_GET_DFS_REFERRAL structure
         /// </exception>
         /// <exception cref=" System.FormatException">payload is null or empty</exception>
+        [CLSCompliant(false)]
         public DfscReferralResponsePacket(uint ntStatus, byte[] payload)
         {
             this.ntStatus = ntStatus;
@@ -168,7 +171,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Dfsc
                                     referral1.ReferralEntryFlags = channel.Read<ushort>();
                                     referral1.ShareName = Encoding.Unicode.GetString(channel.ReadBytes(referral1.Size
                                         - referralV1fixedSize - sizeofWord));
-                                    channel.Stream.Position += sizeofWord;
+                                    channel.ReadBytes(sizeofWord);
                                     referral1List.Add(referral1);
                                 }
                                 this.referralResponse.ReferralEntries = referral1List.ToArray();
@@ -249,11 +252,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Dfsc
                     // Drop the possibly exists padding data
                     referral2.DFSPath = ReadDfsPath(channel);
                     ReadPadding(channel, referral2.DFSAlternatePathOffset - referral2.DFSPathOffset
-                        - referral2.DFSPath.Length * sizeofWord);
+                        - (referral2.DFSPath.Length + 1) * sizeofWord);
 
                     referral2.DFSAlternatePath = ReadDfsPath(channel);
                     ReadPadding(channel, referral2.NetworkAddressOffset - referral2.DFSAlternatePathOffset
-                        - referral2.DFSAlternatePath.Length * sizeofWord);
+                        - (referral2.DFSAlternatePath.Length + 1) * sizeofWord);
 
                     referral2.DFSTargetPath = ReadDfsPath(channel);
                 }
@@ -330,7 +333,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Dfsc
                     // Drop the possibly exists padding data
                     referral3.SpecialName = ReadDfsPath(channel);
                     ReadPadding(channel, referral3.ExpandedNameOffset - referral3.SpecialNameOffset
-                        - referral3.SpecialName.Length * sizeofWord);
+                        - (referral3.SpecialName.Length + 1) * sizeofWord);
                     referral3.DCNameArray = new string[referral3.NumberOfExpandedNames];
 
                     for (int j = 0; j < referral3.NumberOfExpandedNames; j++)
@@ -411,11 +414,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Dfsc
                     // Drop the possibly exists padding data
                     referral3.DFSPath = ReadDfsPath(channel);
                     ReadPadding(channel, referral3.DFSAlternatePathOffset - referral3.DFSPathOffset
-                        - referral3.DFSPath.Length * sizeofWord);
+                        - (referral3.DFSPath.Length + 1) * sizeofWord);
 
                     referral3.DFSAlternatePath = ReadDfsPath(channel);
                     ReadPadding(channel, referral3.NetworkAddressOffset - referral3.DFSAlternatePathOffset
-                        - referral3.DFSAlternatePath.Length * sizeofWord);
+                        - (referral3.DFSAlternatePath.Length + 1) * sizeofWord);
 
                     referral3.DFSTargetPath = ReadDfsPath(channel);
                 }
@@ -466,7 +469,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Dfsc
             }
 
             string dfsPAth = Encoding.Unicode.GetString(channel.ReadBytes(pathLength));
-            channel.Stream.Position += sizeofWord;
+            channel.ReadBytes(sizeofWord);
             return dfsPAth;
         }
 

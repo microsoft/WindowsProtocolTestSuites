@@ -2,9 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Reflection;
-using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
 {
@@ -20,30 +21,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
 
         //In derived classes, there should be some public const int values which specify the indices of the choices.
         //There values should have Asn1ChoiceIndex attribute.
+        //The ascending order of the values should be the same as the the canonical order for the alternatives. Ref: X.691 22.2 and X.680 8.6
 
         /// <summary>
         /// Stores all the above public const values.
         /// </summary>
-        /// <remarks>
-        /// Also contains the undefinedIndex;
-        /// </remarks>
-        private List<long?> allowedIndices = null;
+        private List<long?> definedAllowedIndices;
 
         /// <summary>
-        /// Stores the index of the current choice.
+        /// Gets the selected choice index for the current choice.
         /// </summary>
-        /// <remarks>
-        /// Should be one of the values in allowedIndices.
-        /// </remarks>
-        private long? currentChoice;
-
-        /// <summary>
-        /// Gets the selected ID for the current choice.
-        /// </summary>
-        public long? SelectedChoice
-        {
-            get { return currentChoice; }
-        }
+        public long? SelectedChoice { get; private set; }
 
         /// <summary>
         /// Ensures the current choice is in allowedIndices.
@@ -51,13 +39,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// <returns>Return true if it is in allowedIndices. Return false if neither.</returns>
         protected sealed override bool VerifyConstraints()
         {
-            return allowedIndices.Contains(this.currentChoice);
+            return SelectedChoice == UndefinedIndex || definedAllowedIndices.Contains(SelectedChoice);
         }
 
         /// <summary>
         /// Specifies an undefined index.
         /// </summary>
-        protected static readonly long? undefinedIndex = null;
+        protected static readonly long? UndefinedIndex = null;
+
+        /// <summary>
+        /// Indicates the array index of the chosen field for the CHOICE in fieldsMemberInfo.
+        /// </summary>
+        /// <remarks>
+        /// definedAllowedIndices = [1,3,5,7,9], SelectedChoice is 7 and then choiceIndexInFieldsMemberInfo is 3.
+        /// </remarks>
+        private long? choiceIndexInFieldsMemberInfo = UndefinedIndex;
 
         #endregion index
 
@@ -67,35 +63,67 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         //Each property/field corresponds to a choice element in the definition.
         //Additionally, it has the same type as the corresponding choice element.
         //Each property/field should have the Asn1ChoiceElement attribute.
-        //This attribute will build a mapping from the propery/field to the index.
-
-        //Stores the metadata
-        private MemberInfo[] fieldsMemberInfo = null;
-        private Asn1Tag[] attachedTags = null;
+        //This attribute will build a mapping from the propery/field to the index mentioned above.
 
         /// <summary>
-        /// Indicates the index of the chosen field for the CHOICE in fieldsMemberInfo.
+        /// Stores the metadata of a single field in a Choice.
         /// </summary>
-        private long? choiceIndexInFieldsMemberInfo = undefinedIndex;
+        private class ChoiceMetaData : Asn1ConstraintedFieldMetadata
+        {
+            //Fields from base class:
+            //Asn1Object outReference
+            //MemberInfo MemberInfo
+            //Asn1Tag AttachedTag
+            //Asn1Constraint Constraint
+
+            /// <summary>
+            /// Stores the index defined for the choice.
+            /// </summary>
+            /// <remarks>
+            /// This information will be obtained via the Asn1ChoiceElement attributes for the field.
+            /// </remarks>
+            public readonly long? AttachedIndex;
+
+            /// <summary>
+            /// Create a new instance of FieldMetaData with a given MemberInfo.
+            /// </summary>
+            /// <param name="outRef">Specifies the out reference of the field.</param>
+            /// <param name="info"></param>
+            /// <remarks>
+            /// AttachedTag, Optional, Constraint will be set automatically by reflection.
+            /// </remarks>
+            public ChoiceMetaData(Asn1Object outRef, MemberInfo info)
+                : base(outRef, info)
+            {
+                //Get Optional
+                var attrs = MemberInfo.GetCustomAttributes(typeof(Asn1ChoiceElement), true);
+                if (attrs == null || attrs.Length == 0)
+                {
+                    throw new Asn1UserDefinedTypeInconsistent(ExceptionMessages.UserDefinedTypeInconsistent + " No choice element in CHOICE is defined.");
+                }
+                AttachedIndex = ((Asn1ChoiceElement)attrs[0]).Index;
+            }
+        }
+
+        //Stores the metadatas for all choices.
+        private ChoiceMetaData[] metaDatas;
 
         /// <summary>
         /// Collects the metadata in the definition.
         /// </summary>
         private void CollectMetadata()
         {
-            //TODO: ensure that only collect once for each derived class.
-
             //Get the indices and choices
-            allowedIndices = new List<long?>();
-            List<MemberInfo> choiceList = new List<MemberInfo>();
-            List<long?> allIndicesDefinedInFields = new List<long?>();
+            definedAllowedIndices = new List<long?>();
+            List<ChoiceMetaData> metaDataList = new List<ChoiceMetaData>();
 
-            MemberInfo[] mis = this.GetType().GetMembers(
+            MemberInfo[] mis = GetType().GetMembers(
                 BindingFlags.Static | BindingFlags.Public | BindingFlags.Instance |
                 BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
 
             foreach (var mi in mis)
             {
+                //Get Choice Index.
                 if (mi.IsDefined(typeof(Asn1ChoiceIndex), true))
                 {
                     object o;
@@ -114,21 +142,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
                         throw new Asn1UnreachableExcpetion(ExceptionMessages.Unreachable);
                     }
                     long allowedIndex = Convert.ToInt64(o);
-                    if (allowedIndices.Contains(allowedIndex))
+                    if (definedAllowedIndices.Contains(allowedIndex))
                     {
                         throw new Asn1UserDefinedTypeInconsistent(ExceptionMessages.UserDefinedTypeInconsistent +
                         " Duplicated indices.");
                     }
-                    allowedIndices.Add(allowedIndex);
+                    definedAllowedIndices.Add(allowedIndex);
                 }
+                //Get Choice.
                 if (mi.IsDefined(typeof(Asn1ChoiceElement), true))
                 {
                     if (mi.MemberType == MemberTypes.Field ||
                         mi.MemberType == MemberTypes.Property)
                     {
-                        choiceList.Add(mi);
-                        var attrs = mi.GetCustomAttributes(typeof(Asn1ChoiceElement), true);
-                        allIndicesDefinedInFields.Add((attrs[0] as Asn1ChoiceElement).Index);
+                        ChoiceMetaData metaData = new ChoiceMetaData(this, mi);
+                        metaDataList.Add(metaData);
                     }
                     else
                     {
@@ -139,43 +167,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
             }
 
             //Ensure the consistency of the definition.
-            allowedIndices.Sort();
-            allIndicesDefinedInFields.Sort();
-            if (!Enumerable.SequenceEqual<long?>(allowedIndices, allIndicesDefinedInFields))
+            definedAllowedIndices.Sort();
+            metaDataList = new List<ChoiceMetaData>(metaDataList.OrderBy(var => var.AttachedIndex));
+            List<long?> indicesDefinedInChoices = metaDataList.ConvertAll(var => var.AttachedIndex);
+            if (!definedAllowedIndices.SequenceEqual(indicesDefinedInChoices))
             {
                 throw new Asn1UserDefinedTypeInconsistent(ExceptionMessages.UserDefinedTypeInconsistent +
                     " Stated Indices are different from the indices in choice elements' attributes.");
             }
 
-            allowedIndices.Add(undefinedIndex);
-
-            //Sort the fields by the defined order
-            fieldsMemberInfo = choiceList.OrderBy(mi =>
-            {
-                var attrs = mi.GetCustomAttributes(typeof(Asn1ChoiceElement), true);
-                return (attrs[0] as Asn1ChoiceElement).Index;
-            }).ToArray();
-
-            //Get the tags in defined order
-            attachedTags = new Asn1Tag[fieldsMemberInfo.Length];
-
-            for (int i = 0; i < fieldsMemberInfo.Length; i++)
-            {
-                var attrs = fieldsMemberInfo[i].GetCustomAttributes(typeof(Asn1Tag), true);
-                if (attrs.Length != 0)
-                {
-                    //Only the first tag is valid.
-                    Asn1Tag tag = attrs[0] as Asn1Tag;
-                    if (tag.TagType != Asn1TagType.Context && tag.TagType != Asn1TagType.Application)
-                    {
-                        throw new Asn1UserDefinedTypeInconsistent(ExceptionMessages.UserDefinedTypeInconsistent
-                            + " Only Context-Specific and Application tags are allowed for fields.");
-                    }
-                    attachedTags[i] = tag;
-                }
-                //attachedTags[i] keeps equaling to null if there is no attched tags for the field.
-
-            }
+            metaDatas = metaDataList.ToArray();
         }
 
         #endregion choice elements
@@ -195,7 +196,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// Initializes a new instance of the Asn1Choice class with undefined value. 
         /// </summary>
         protected Asn1Choice()
-            : this(undefinedIndex, null)
+            : this(UndefinedIndex, null)
         {
 
         }
@@ -208,34 +209,26 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// <param name="obj">The data to be stored in the CHOICE.</param>
         public void SetData(long? index, Asn1Object obj)
         {
-            if (index == undefinedIndex)
+            if (index == UndefinedIndex)
             {
-                this.currentChoice = undefinedIndex;
-                this.choiceIndexInFieldsMemberInfo = undefinedIndex;
+                SelectedChoice = UndefinedIndex;
+                choiceIndexInFieldsMemberInfo = UndefinedIndex;
                 return;
             }
-            if (allowedIndices.Contains(index))
+            if (definedAllowedIndices.Contains(index))
             {
-                for (int i = 0; i < fieldsMemberInfo.Length; i++)
+                if (HasExternalObjects && index == definedAllowedIndices[definedAllowedIndices.Count - 1])
                 {
-                    var attrs = fieldsMemberInfo[i].GetCustomAttributes(typeof(Asn1ChoiceElement), true);
-                    if ((attrs[0] as Asn1ChoiceElement).Index == index)
+                    throw new NotImplementedException("Assigning value to external objects is not implemented.");
+                }
+                for (int i = 0; i < metaDatas.Length; i++)
+                {
+                    if (metaDatas[i].AttachedIndex == index)
                     {
-                        currentChoice = index;
+                        SelectedChoice = index;
                         choiceIndexInFieldsMemberInfo = i;
                         //Store the data
-                        if (fieldsMemberInfo[i].MemberType == MemberTypes.Property)
-                        {
-                            (fieldsMemberInfo[i] as PropertyInfo).SetValue(this, obj, null);
-                        }
-                        else if (fieldsMemberInfo[i].MemberType == MemberTypes.Field)
-                        {
-                            (fieldsMemberInfo[i] as FieldInfo).SetValue(this, obj);
-                        }
-                        else
-                        {
-                            throw new Asn1UnreachableExcpetion(ExceptionMessages.Unreachable);
-                        }
+                        metaDatas[i].ValueInOutObject = obj;
                         break;
                     }
                 }
@@ -252,25 +245,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// <returns>The reference of the object.</returns>
         public Asn1Object GetData()
         {
-            if (choiceIndexInFieldsMemberInfo == undefinedIndex)
+            if (choiceIndexInFieldsMemberInfo == UndefinedIndex)
             {
                 return null;
             }
 
-            MemberInfo mi = fieldsMemberInfo[(int)choiceIndexInFieldsMemberInfo];
-
-            if (mi.MemberType == MemberTypes.Property)
-            {
-                return (mi as PropertyInfo).GetValue(this, null) as Asn1Object;
-            }
-            else if (mi.MemberType == MemberTypes.Field)
-            {
-                return (mi as FieldInfo).GetValue(this) as Asn1Object;
-            }
-            else
-            {
-                throw new Asn1UnreachableExcpetion(ExceptionMessages.Unreachable);
-            }
+            return metaDatas[(int)choiceIndexInFieldsMemberInfo].ValueInOutObject;
         }
 
         #region overrode methods from System.Object
@@ -280,17 +260,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// </summary>
         /// <param name="obj">The object to be compared.</param>
         /// <returns>True if obj has same data with this instance. False if not.</returns>
-        public override bool Equals(System.Object obj)
+        public override bool Equals(object obj)
         {
-            // If parameter is null return false.
-            if (obj == null)
-            {
-                return false;
-            }
-
-            // If parameter cannot be cast to Asn1Choice return false.
+            // If parameter is null or cannot be cast to Asn1Choice return false.
             Asn1Choice p = obj as Asn1Choice;
-            if ((System.Object)p == null)
+            if (p == null)
             {
                 return false;
             }
@@ -317,15 +291,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         {
             get
             {
-                Object[] attrs = this.GetType().GetCustomAttributes(typeof(Asn1Tag), true);
+                Object[] attrs = GetType().GetCustomAttributes(typeof(Asn1Tag), true);
                 if (attrs.Length == 0)
                 {
                     return GetData().TopTag;
                 }
-                else
-                {
-                    return (attrs[0] as Asn1Tag);
-                }
+                return (attrs[0] as Asn1Tag);
             }
         }
 
@@ -333,26 +304,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// Gets instances of all the choices in the structure.
         /// </summary>
         /// <returns>An array that contains the instances.</returns>
-        private Asn1Object[] GetChoiceTypeInstances()
+        private Asn1Object[] ChoiceTypeInstances
         {
-            Asn1Object[] allChoices = new Asn1Object[fieldsMemberInfo.Length];
-            for (int i = 0; i < fieldsMemberInfo.Length; i++)
+            get
             {
-                if (fieldsMemberInfo[i].MemberType == MemberTypes.Property)
+                Asn1Object[] allChoices = new Asn1Object[metaDatas.Length];
+                for (int i = 0; i < allChoices.Length; i++)
                 {
-                    allChoices[i] = Activator.CreateInstance((fieldsMemberInfo[i] as PropertyInfo).PropertyType) as Asn1Object;
+                    allChoices[i] = metaDatas[i].NewInstance;
                 }
-                else if (fieldsMemberInfo[i].MemberType == MemberTypes.Field)
-                {
-                    allChoices[i] = Activator.CreateInstance((fieldsMemberInfo[i] as FieldInfo).FieldType) as Asn1Object;
-                }
-                else
-                {
-                    throw new Asn1UnreachableExcpetion(ExceptionMessages.Unreachable);
-                }
+                return allChoices;
             }
-            return allChoices;
         }
+
+        #region BER
 
         /// <summary>
         /// Encodes the object by BER.
@@ -366,20 +331,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         public override int BerEncode(IAsn1BerEncodingBuffer buffer, bool explicitTag = true)
         {
             //TODO: deal with explicitTag
-            if (currentChoice == undefinedIndex)
+            if (SelectedChoice == UndefinedIndex)
             {
                 throw new Asn1EmptyDataException(ExceptionMessages.EmptyData);
             }
 
             int length = GetData().BerEncode(buffer);
 
-            if (attachedTags[(int)choiceIndexInFieldsMemberInfo] != null)
+            Asn1Tag contextTag = metaDatas[(int)choiceIndexInFieldsMemberInfo].AttachedTag;
+            if (contextTag != null)
             {
                 length += LengthBerEncode(buffer, length);
-                length += TagBerEncode(buffer, attachedTags[(int)choiceIndexInFieldsMemberInfo]);
+                length += TagBerEncode(buffer, contextTag);
             }
 
-            Object[] attrs = this.GetType().GetCustomAttributes(typeof(Asn1Tag), true);
+            Object[] attrs = GetType().GetCustomAttributes(typeof(Asn1Tag), true);
             if (attrs.Length != 0)
             {
                 Asn1Tag tag = attrs[0] as Asn1Tag;
@@ -393,14 +359,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// Decodes the object by BER.
         /// </summary>
         /// <param name="buffer">A buffer that contains a BER encoding result.</param>
+	    /// <param name="explicitTag">Indicates whether the tags should be encoded explicitly. In our Test Suites, it will always be true.</param>
         /// <returns>The number of the bytes consumed in the buffer to decode this object.</returns>
         /// <exception cref="Asn1DecodingUnexpectedData">
         /// Thrown when the data in the buffer can not be properly decoded.
         /// </exception>
-        public override int BerDecode(IAsn1DecodingBuffer buffer)
+        public override int BerDecode(IAsn1DecodingBuffer buffer, bool explicitTag = true)
         {
             int length = 0;
-            Object[] attrs = this.GetType().GetCustomAttributes(typeof(Asn1Tag), true);
+            Object[] attrs = GetType().GetCustomAttributes(typeof(Asn1Tag), true);
             Asn1Tag topTag;
             if (attrs.Length != 0)
             {
@@ -417,12 +384,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
             //Determine which choice should be decoded.
             int? decodingTargetIndex = null;
             int tagLen = TagBerDecode(buffer, out topTag);
-            Asn1Object[] choiceInstances = GetChoiceTypeInstances();
-            for (int i = 0; i < fieldsMemberInfo.Length; i++)
+            Asn1Object[] choiceInstances = ChoiceTypeInstances;
+            for (int i = 0; i < metaDatas.Length; i++)
             {
-                if (attachedTags[i] != null)
+                if (metaDatas[i].AttachedTag != null)
                 {
-                    if (topTag.Equals(attachedTags[i]))
+                    if (topTag.Equals(metaDatas[i].AttachedTag))
                     {
                         //Decode this choice.
                         length += tagLen;
@@ -453,10 +420,45 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
             //Decode the data.
             length += choiceInstances[(int)decodingTargetIndex].BerDecode(buffer);
             //Store the data in the CHOICE.
-            attrs = fieldsMemberInfo[(int)decodingTargetIndex].GetCustomAttributes(typeof(Asn1ChoiceElement), true);
-            SetData((attrs[0] as Asn1ChoiceElement).Index, choiceInstances[(int)decodingTargetIndex]);
+            SetData(metaDatas[(int)decodingTargetIndex].AttachedIndex, choiceInstances[(int)decodingTargetIndex]);
             return length;
         }
 
+        #endregion BER
+
+        #region PER
+
+        /// <summary>
+        /// Encodes the content of the object by PER.
+        /// </summary>
+        /// <param name="buffer">A buffer to which the encoding result will be written.</param>
+        protected override void ValuePerEncode(IAsn1PerEncodingBuffer buffer)
+        {
+            //Encode an index specifying the chosen alternative, Ref: X.691: 22
+            Asn1Integer ai = new Asn1Integer(choiceIndexInFieldsMemberInfo, 0, definedAllowedIndices.Count - 1);
+            ai.PerEncode(buffer);
+            //Encode the chosen alternative
+            Asn1Object obj = GetData();
+            obj.PerEncode(buffer);
+        }
+
+        /// <summary>
+        /// Decodes the content of the object by PER.
+        /// </summary>
+        /// <param name="buffer">A buffer that contains a PER encoding result.</param>
+        /// <param name="aligned">Indicating whether the PER decoding is aligned.</param>
+        protected override void ValuePerDecode(IAsn1DecodingBuffer buffer, bool aligned = true)
+        {
+            //Decode the index specifying the chosen alternative, Ref: X.691: 22
+            Asn1Integer ai = new Asn1Integer(null, 0, definedAllowedIndices.Count - 1);
+            ai.PerDecode(buffer);
+            //Decode the chosen alternative
+            Asn1Object[] instances = ChoiceTypeInstances;
+            Asn1Object obj = instances[(int)ai.Value];
+            obj.PerDecode(buffer);
+            SetData(definedAllowedIndices[(int)ai.Value], obj);
+        }
+
+        #endregion PER
     }
 }

@@ -100,7 +100,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         {
             get
             {
-                MemberInfo[] mis = this.GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy);
+                MemberInfo[] mis = this.GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public |BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
                 List<MemberInfo> list = new List<MemberInfo>();
                 foreach (var mi in mis)
                 {
@@ -279,6 +279,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// Decodes the object by BER.
         /// </summary>
         /// <param name="buffer">A buffer that contains a BER encoding result.</param>
+	    /// <param name="explicitTag">Indicates whether the tags should be encoded explicitly. In our Test Suites, it will always be true.</param>
         /// <returns>The number of the bytes consumed in the buffer to decode this object.</returns>
         /// <exception cref="Asn1ConstraintsNotSatisfied">
         /// Thrown when the constraints are not satisfied after decoding.
@@ -287,7 +288,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// Thrown when the data in the buffer can not be properly decoded.
         /// </exception>
         /// <remarks>Override this method in a user-defined class only if the procedure is not applicable in some special scenarios.</remarks>
-        public virtual int BerDecode(IAsn1DecodingBuffer buffer)
+        public virtual int BerDecode(IAsn1DecodingBuffer buffer, bool explicitTag = true)
         {
             int returnVal = 0;
             //Decode the top most tag and universal class tag
@@ -330,17 +331,94 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
             return returnVal;
         }
 
+        /// <summary>
+        /// Encodes only the data and length of the data.
+        /// </summary>
+        /// <param name="buffer">A buffer that stores the BER encoding result.</param>
+        public int BerEncodeWithoutUnisersalTag(IAsn1BerEncodingBuffer buffer)
+        {
+            if (!VerifyConstraints())
+            {
+                throw new Asn1ConstraintsNotSatisfied(ExceptionMessages.ConstraintsNotSatisfied
+                    + " Encode " + this.GetType().Name + ".");
+            }
+
+            //Encoding inversely since buffer is reversed.
+
+            //Add the encoding result of Value to the front of buffer.
+            int resultLen = ValueBerEncode(buffer);
+
+            //Add the encoding result of Length to the front of buffer.
+            resultLen += LengthBerEncode(buffer, resultLen);
+
+            return resultLen;
+        }
+
+        /// <summary>
+        /// Decodes the data and length of the data.
+        /// </summary>
+        /// <param name="buffer">A buffer that contains a BER encoding result without tags.</param>
+        public int BerDecodeWithoutUnisersalTag(IAsn1DecodingBuffer buffer)
+        {
+            int returnVal = 0;
+            //Decode length
+            int length;
+            returnVal += LengthBerDecode(buffer, out length);
+            //Decode data
+            returnVal += ValueBerDecode(buffer, length);
+
+            if (!VerifyConstraints())
+            {
+                throw new Asn1ConstraintsNotSatisfied(ExceptionMessages.ConstraintsNotSatisfied
+                    + " Decode " + this.GetType().Name + ".");
+            }
+
+            return returnVal;
+        }
+
         #endregion BER
 
         #region PER
 
         /// <summary>
+        /// Encodes the content of the object by PER.
+        /// </summary>
+        /// <param name="buffer">A buffer to which the encoding result will be written.</param>
+        protected virtual void ValuePerEncode(IAsn1PerEncodingBuffer buffer)
+        {
+            throw new NotImplementedException("PER encoding is not implemented yet.");
+        }
+
+        /// <summary>
+        /// Decodes the content of the object by PER.
+        /// </summary>
+        /// <param name="buffer">A buffer that contains a PER encoding result.</param>
+        /// <param name="aligned">Indicating whether the PER decoding is aligned.</param>
+        protected virtual void ValuePerDecode(IAsn1DecodingBuffer buffer, bool aligned = true)
+        {
+            throw new NotImplementedException("PER decoding is not implemented yet.");
+        }
+
+        /// <summary>
         /// Encodes the object by PER.
         /// </summary>
         /// <param name="buffer">A buffer to which the encoding result will be written.</param>
+        /// <remarks>
+        /// Includes the constraints verification and external object check.
+        /// </remarks>
         public virtual void PerEncode(IAsn1PerEncodingBuffer buffer)
         {
-            throw new NotImplementedException("PER encoding is not implemented yet.");
+            if (!VerifyConstraints())
+            {
+                throw new Asn1ConstraintsNotSatisfied(ExceptionMessages.ConstraintsNotSatisfied);
+            }
+            if (HasExternalObjects)
+            {
+                //TODO: write true to the buffer if external element is used.
+                buffer.WriteBit(false);
+            }
+            ValuePerEncode(buffer);
+            //TODO: encode the external object.
         }
 
         /// <summary>
@@ -348,9 +426,30 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// </summary>
         /// <param name="buffer">A buffer that contains a PER encoding result.</param>
         /// <param name="aligned">Indicating whether the PER decoding is aligned.</param>
+        /// <remarks>
+        /// Includes the constraints verification and external object check.
+        /// </remarks> 
         public virtual void PerDecode(IAsn1DecodingBuffer buffer, bool aligned = true)
         {
-            throw new NotImplementedException("PER decoding is not implemented yet.");
+            if (aligned == false)
+            {
+                throw new NotImplementedException(ExceptionMessages.UnalignedNotImplemented);
+            }
+            if (HasExternalObjects)
+            {
+                bool hasExt = buffer.ReadBit();
+                //TODO: if true is read, store the decoding value to external object
+                if (hasExt)
+                {
+                    throw new NotImplementedException("External marker is not implemented yet.");
+                }
+            }
+            ValuePerDecode(buffer, aligned);
+            //TODO: decode the external object.
+            if (!VerifyConstraints())
+            {
+                throw new Asn1ConstraintsNotSatisfied(ExceptionMessages.ConstraintsNotSatisfied);
+            }
         }
 
         #endregion PER

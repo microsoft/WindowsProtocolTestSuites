@@ -43,6 +43,7 @@
     <Compile Include="AbstractClass\Asn1HeterogeneousComposition.cs" />
     <Compile Include="AbstractClass\Asn1HomogeneousComposition.cs" />
     <Compile Include="AbstractClass\Asn1Enumerated.cs" />
+    <Compile Include="AbstractClass\Asn1ConstraintedFieldMetadata.cs" />
     <Compile Include="AbstractClass\Asn1Sequence.cs" />
     <Compile Include="AbstractClass\Asn1SequenceOf.cs" />
     <Compile Include="AbstractClass\Asn1Set.cs" />
@@ -55,7 +56,10 @@
     <Compile Include="Attributes\Asn1EnumeratedElement.cs" />
     <Compile Include="Attributes\Asn1Extension.cs" />
     <Compile Include="Attributes\Asn1Field.cs" />
+    <Compile Include="Attributes\Asn1Constraint.cs" />
     <Compile Include="Attributes\Asn1IntegerBound.cs" />
+    <Compile Include="Attributes\Asn1SizeConstraint.cs" />
+    <Compile Include="Attributes\Asn1StringConstraint.cs" />
     <Compile Include="Attributes\Asn1Tag.cs" />
     <Compile Include="Buffers\Asn1BerEncodingBuffer.cs" />
     <Compile Include="Buffers\Asn1PerEncodingBuffer.cs" />
@@ -85,6 +89,7 @@
     <Compile Include="PrimitiveTypes\Asn1NumericString.cs" />
     <Compile Include="PrimitiveTypes\Asn1ObjectIdentifier.cs" />
     <Compile Include="PrimitiveTypes\Asn1OctetString.cs" />
+    <Compile Include="PrimitiveTypes\Asn1OpenExt.cs" />
     <Compile Include="PrimitiveTypes\Asn1UniversalString.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

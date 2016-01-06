@@ -1,0 +1,69 @@
+<Config>
+  <PtfFileNames>
+	<PtfFileName>Kerberos_ServerTestSuite.deployment.ptfconfig</PtfFileName>   
+  </PtfFileNames>
+  <DllFileNames>
+    <DllFileName>Bin\Kerberos_ServerTestSuite.dll</DllFileName>
+  </DllFileNames>
+  <AutoDetectionDllName>KerberosPlugin.dll</AutoDetectionDllName>
+  <ConfigFileInSourceCode>
+	<PtfFileName>Source\Server\TestCode\TestSuite\Kerberos_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+  </ConfigFileInSourceCode>
+  <ConfigCaseRule>
+    <Group name ="NetworkTopology">
+      <Rule name = "Single Realm">
+        <Category name = "SingleRealm"/>
+      </Rule>
+      <Rule name = "Cross Realm">
+        <Category name = "CrossRealm"/>
+      </Rule>
+    </Group>
+    <Group name ="DomainFunctionalityLevel">
+      <Rule name = "2K8R2">
+        <Category name = "DFL2K8R2"/>
+      </Rule>
+      <Rule name = "2K12">
+        <Category name = "DFL2K12"/>
+      </Rule>
+      <Rule name = "2K12R2">
+        <Category name = "DFL2K12R2"/>
+      </Rule>
+    </Group>
+    <Group name ="SUT">
+      <Rule name = "KDC">
+        <Category name = "KDC"/>
+      </Rule>
+      <Rule name = "Smb2ApplicationServer">
+        <Category name = "Smb2ApplicationServer"/>
+      </Rule>
+      <Rule name = "HttpApplicationServer">
+        <Category name = "HttpApplicationServer"/>
+      </Rule>
+      <Rule name = "LdapApplicationServer">
+        <Category name = "LdapApplicationServer"/>
+      </Rule>
+    </Group>
+    <Group name ="Feature">
+      <Rule name = "BVT">
+        <Category name = "BVT"/>
+      </Rule>
+      <Rule name = "KilePac">
+        <Category name = "KilePac"/>
+      </Rule>
+      <Rule name = "Claim">
+        <Category name = "Claim"/>
+      </Rule>
+      <Rule name = "FAST">
+        <Category name = "FAST"/>
+      </Rule>
+      <Rule name = "Silo">
+        <Category name = "Silo"/>
+      </Rule>
+      <Rule name = "Kerberos Error">
+        <Category name = "Kerberos Error"/>
+      </Rule>
+    </Group>
+  </ConfigCaseRule>
+  <TestSetting>Bin\ServerLocalTestRun.testrunconfig</TestSetting>
+  <VSTestPath>C:\Program Files (x86)\Microsoft Visual Studio 11.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe</VSTestPath>
+</Config>
