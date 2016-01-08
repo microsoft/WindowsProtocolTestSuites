@@ -176,7 +176,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 TestConfig.DefaultRpceAuthenticationLevel, TestConfig.Timeout, server), TestConfig.FailoverTimeout,
                 "Retry BindServer until succeed within timeout span");
 
-            string clientName = Guid.NewGuid().ToString();
+            string clientName = TestConfig.WitnessClientName;
             string netName = SWNTestUtility.GetPrincipleName(TestConfig.DomainName, server);
 
             BaseTestSite.Log.Add(LogEntryKind.Debug, "Register witness:");
@@ -322,7 +322,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 TestConfig.DefaultRpceAuthenticationLevel, TestConfig.Timeout, server), TestConfig.FailoverTimeout,
                 "Retry BindServer until succeed within timeout span");
 
-            string clientName = Guid.NewGuid().ToString();
+            string clientName = TestConfig.WitnessClientName;
             string netName = SWNTestUtility.GetPrincipleName(TestConfig.DomainName, server);
             string shareName = TestConfig.ClusteredFileShare;
             WitnessrRegisterExFlagsValue flag = WitnessrRegisterExFlagsValue.WITNESS_REGISTER_NONE;

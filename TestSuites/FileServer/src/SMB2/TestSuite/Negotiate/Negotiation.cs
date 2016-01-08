@@ -517,22 +517,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     PreauthIntegrityHashID.SHA_512,
                     client.SelectedPreauthIntegrityHashID,
                     "[MS-SMB2] 3.3.5.4 The server MUST set Connection.PreauthIntegrityHashId to one of the hash algorithms " +
-                    "in the client's SMB2_PREAUTH_INTEGRITY_CAPABILITIES HashAlgorithms array. ");
+                    "in the client's SMB2_PREAUTH_INTEGRITY_CAPABILITIES HashAlgorithms array.");
 
                 if (encryptionAlgs != null)
                 {
-                    EncryptionAlgorithm expectedEnAlg = EncryptionAlgorithm.ENCRYPTION_NONE;
-                    foreach (var alg in encryptionAlgs)
-                    {
-                        if (TestConfig.SupportedEncryptionAlgorithmList.Contains(alg))
-                        {
-                            expectedEnAlg = alg;
-                            break;
-                        }
-                    }
-                    BaseTestSite.Assert.AreEqual(
-                        expectedEnAlg,
-                        client.SelectedCipherID,
+                    BaseTestSite.Assert.IsTrue(
+                        TestConfig.SupportedEncryptionAlgorithmList.Contains(client.SelectedCipherID),
                         "[MS-SMB2] 3.3.5.4 The server MUST set Connection.CipherId to one of the ciphers in the client's " +
                         "SMB2_ENCRYPTION_CAPABILITIES Ciphers array in an implementation-specific manner.");
                 }

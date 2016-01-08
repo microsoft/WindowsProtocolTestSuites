@@ -138,8 +138,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 "Retry Create until succeed within timeout span");
             #endregion
 
-            // Create a timer that signals the delegate to invoke CheckBreakNotification after 5 seconds
-            Timer timer = new Timer(CheckBreakNotification, treeIdAfterFailover, 5000, Timeout.Infinite);
+            // Create a timer that signals the delegate to invoke CheckBreakNotification
+            Timer timer = new Timer(CheckBreakNotification, treeIdAfterFailover, 0, Timeout.Infinite);
             base.clientToAckLeaseBreak = clientAfterFailover;
 
             Smb2FunctionalClient clientTriggeringBreak = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
@@ -159,8 +159,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "AfterFailover: Sleep 10 seconds to wait completion of LeaseBreakNotification check and acknowledgement in background thread");
-            Thread.Sleep(10000);
+                "AfterFailover: Sleep 1 second to wait completion of LeaseBreakNotification check and acknowledgement in background thread");
+            Thread.Sleep(1000);
 
             status = clientAfterFailover.Close(treeIdAfterFailover, fileIdAfterFailover);
 

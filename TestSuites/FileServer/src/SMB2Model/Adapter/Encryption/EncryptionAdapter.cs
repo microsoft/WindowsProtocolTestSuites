@@ -58,7 +58,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Encryptio
                 MaxSmbVersionSupported = ModelUtility.GetModelDialectRevision(testConfig.MaxSmbVersionSupported),
                 IsGlobalEncryptDataEnabled = testConfig.IsGlobalEncryptDataEnabled,
                 IsGlobalRejectUnencryptedAccessEnabled = testConfig.IsGlobalRejectUnencryptedAccessEnabled,
-                Platform = testConfig.Platform == Platform.WindowsServer10 ? Platform.WindowsServer2012R2 : testConfig.Platform
+                Platform = testConfig.Platform == Platform.WindowsServer2016 ? Platform.WindowsServer2012R2 : testConfig.Platform
             };
 
             encryptionConfig = c;

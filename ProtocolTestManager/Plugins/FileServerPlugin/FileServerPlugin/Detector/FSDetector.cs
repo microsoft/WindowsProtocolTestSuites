@@ -58,20 +58,18 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         #region Fields
         private Logger logWriter = null;
         private const string defautBasicShare = "SMBBasic";
-        private int defaultTimeoutInSeconds;
+        private int defaultTimeoutInSeconds = 3;
         #endregion
 
         public FSDetector
             (Logger logger, 
             string targetSUT, 
             AccountCredential accountCredential, 
-            SecurityPackageType securityPackageType,
-            int defaultTimeoutInSeconds)
+            SecurityPackageType securityPackageType)
         {
             SUTName = targetSUT;
             Credential = accountCredential;
             SecurityPackageType = securityPackageType;
-            this.defaultTimeoutInSeconds = defaultTimeoutInSeconds;
 
             logWriter = logger;
             logWriter.AddLog(LogLevel.Information, string.Format("SutName: {0}", SUTName));

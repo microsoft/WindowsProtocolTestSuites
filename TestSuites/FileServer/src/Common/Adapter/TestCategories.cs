@@ -43,7 +43,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         public const string Credit = "Credit";
         public const string Signing = "Signing";
         public const string Encryption = "Encryption";
-        public const string Oplock = "Oplock";
+
+        public const string OplockOnShareWithoutForceLevel2OrSOFS = "OplockOnShareWithoutForceLevel2OrSOFS";
+        public const string OplockOnShareWithoutForceLevel2WithSOFS = "OplockOnShareWithoutForceLevel2WithSOFS";
+        public const string OplockOnShareWithForceLevel2WithoutSOFS = "OplockOnShareWithForceLevel2WithoutSOFS";
+        public const string OplockOnShareWithForceLevel2AndSOFS = "OplockOnShareWithForceLevel2AndSOFS";
 
         public const string DurableHandleV1BatchOplock = "DurableHandleV1BatchOplock";
         public const string DurableHandleV1LeaseV1 = "DurableHandleV1LeaseV1";

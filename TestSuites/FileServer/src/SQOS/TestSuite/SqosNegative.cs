@@ -103,7 +103,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
                 out sqosResponse,
                 checker: (header, response) => { });
 
-            if (TestConfig.Platform == Platform.WindowsServer10 && status != Smb2Status.STATUS_INVALID_PARAMETER)
+            if (TestConfig.Platform == Platform.WindowsServer2016 && status != Smb2Status.STATUS_INVALID_PARAMETER)
             {
 
             }
@@ -306,7 +306,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
                 String.Format(
                     "if (Request.{0}Length:{1} + Request.{0}Offset:{2}) is greater than RequestSize:{3}.", variableType, nameLength, invalidOffset, requestSize);
 
-            if (TestConfig.Platform == Platform.WindowsServer10 && status != Smb2Status.STATUS_INVALID_PARAMETER)
+            if (TestConfig.Platform == Platform.WindowsServer2016 && status != Smb2Status.STATUS_INVALID_PARAMETER)
             {
 
             }

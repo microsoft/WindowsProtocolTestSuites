@@ -429,6 +429,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
             Condition.IsTrue(sutOSInfo == SutOSInfo.RequestGetSutInfo);
             sutPlatForm = platForm;
             sutOSInfo = SutOSInfo.FinishGetSutInfo;
+
+            // Force Spec Explorer to expand sutPlatForm.
+            Condition.IsTrue(sutPlatForm == PlatformType.NoneWindows || sutPlatForm == PlatformType.Windows);
         }
 
         #endregion

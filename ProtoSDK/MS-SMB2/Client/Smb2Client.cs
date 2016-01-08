@@ -808,6 +808,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                             cryptographicKey,
                             enableSigning,
                             enableEncryption,
+                            DisableVerifySignature,
                             null,
                             preauthHashValue,
                             cipherId));
@@ -825,6 +826,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                             cryptographicKey,
                             enableSigning,
                             enableEncryption,
+                            DisableVerifySignature,
                             cryptoInfo,
                             preauthHashValue));
                 }

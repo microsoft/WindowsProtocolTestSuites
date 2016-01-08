@@ -278,7 +278,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSRVP.TestSuite
 
             try
             {
-                DoUntilSucceed(() => ConnectServer(ref fsrvpClientForQuery, serverName), TestConfig.Timeout,
+                DoUntilSucceed(() => ConnectServer(ref fsrvpClientForQuery, serverName), TestConfig.LongerTimeout,
                     "Retry ConnectServer until succeed within timeout span");
 
                 BaseTestSite.Log.Add(LogEntryKind.Debug,
@@ -319,7 +319,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSRVP.TestSuite
             #region Connect to FSRVP server
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Connect to FSRVP server.");
             fsrvpClientForCreation = new FsrvpClient();
-            DoUntilSucceed(() => ConnectServer(ref fsrvpClientForCreation, FsrvpServerName), TestConfig.Timeout,
+            DoUntilSucceed(() => ConnectServer(ref fsrvpClientForCreation, FsrvpServerName), TestConfig.LongerTimeout,
                 "Retry ConnectServer until succeed within timeout span");
             #endregion
 
@@ -375,7 +375,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSRVP.TestSuite
             #region Connect to FSRVP server
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Connect to FSRVP server.");
             fsrvpClientForCreation = new FsrvpClient();
-            DoUntilSucceed(() => ConnectServer(ref fsrvpClientForCreation, FsrvpServerName), TestConfig.Timeout,
+            DoUntilSucceed(() => ConnectServer(ref fsrvpClientForCreation, FsrvpServerName), TestConfig.LongerTimeout,
                 "Retry ConnectServer until succeed within timeout span");
             #endregion
 

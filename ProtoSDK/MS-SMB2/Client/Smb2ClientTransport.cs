@@ -249,7 +249,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 }
             } while (status == Smb2Status.STATUS_MORE_PROCESSING_REQUIRED);
 
-            client.GenerateCryptoKeys(sessionId, sspiClientGss.SessionKey, session_SigningRequired, false);
+            client.GenerateCryptoKeys(
+                sessionId, 
+                sspiClientGss.SessionKey, 
+                session_SigningRequired, 
+                sessionSetupResponse.SessionFlags.HasFlag(SessionFlags_Values.SESSION_FLAG_ENCRYPT_DATA)); // Encrypt the session if server required.
 
             TREE_CONNECT_Response treeConnectResponse;
 

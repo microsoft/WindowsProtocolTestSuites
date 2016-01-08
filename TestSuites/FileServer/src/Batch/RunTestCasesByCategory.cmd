@@ -25,7 +25,6 @@ echo    LeasingV1                     Test cases for Leasing v1
 echo    LeasingV2                     Test cases for Leasing v2
 echo    DirectoryLeasing              Test cases to test server capability SMB2_GLOBAL_CAP_DIRECTORY_LEASING
 echo    Negotiate                     Test cases Negotiate
-echo    Oplock                        Test cases Oplock
 echo    Replay                        Test cases Replay
 echo    Session                       Test cases Session Management
 echo    Signing                       Test cases Signing
@@ -46,10 +45,15 @@ echo    Cluster                       Test cases that require cluster environmen
 echo    FsctlLmrRequestResiliency     Test cases to test FSCTL/IOCTL code FSCTL_LMR_REQUEST_RESILIENCY
 echo    FsctlFileLevelTrim            Test cases to test FSCTL/IOCTL code FSCTL_FILE_LEVEL_TRIM
 echo    FsctlValidateNegotiateInfo    Test cases to test FSCTL/IOCTL code FSCTL_VALIDATE_NEGOTIATE_INFO
-echo    FsctlSetGetIntegrityInformation     Test cases to test FSCTL/IOCTL code FSCTL_GET_INTEGRITY_INFORMATION and FSCTL_SET_INTEGRITY_INFORMATION
 echo    FsctlOffloadReadWrite         Test cases to test FSCTL/IOCTL code FSCTL_OFFLOAD_READ and FSCTL_OFFLOAD_WRITE
 echo    CombinedFeature               Test cases which cover more than 1 feature
 echo    OperateOneFileFromTwoNodes    Test cases to test operate the same file from two nodes of the scaleout file server
+echo    FsctlSetGetIntegrityInformation     Test cases to test FSCTL/IOCTL code FSCTL_GET_INTEGRITY_INFORMATION and FSCTL_SET_INTEGRITY_INFORMATION
+echo    OplockOnShareWithoutForceLevel2OrSOFS  Test cases for Oplock on the share that does not include ForceLevel2Oplock or STYPE_CLUSTER_SOFS
+echo    OplockOnShareWithoutForceLevel2WithSOFS  Test cases for Oplock on the share that does not include ForceLevel2Oplock but include STYPE_CLUSTER_SOFS
+echo    OplockOnShareWithForceLevel2WithoutSOFS  Test cases for Oplock on the share that includes ForceLevel2Oplock but not include STYPE_CLUSTER_SOFS
+echo    OplockOnShareWithForceLevel2AndSOFS  Test cases for Oplock on the share that includes ForceLevel2Oplock and STYPE_CLUSTER_SOFS
+
 echo: 
 echo To combine multiple categories, please use logical operators "|", "!" and "&":
 echo Examples:
