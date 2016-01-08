@@ -106,4 +106,4 @@ The following test suites will be released in version 1.0.
 
 # Contact
 
-Keep up with the Windows protocol test team by visiting our [blog](https://blogs.msdn.microsoft.com/windowsinteroperability), chatting in [Gitter](https://gitter.im/Microsoft/WindowsProtocolTestSuites?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge), or sending us email to winterop@microsoft.com. 
+Keep up with the Windows protocol test team by visiting our [blog](https://blogs.msdn.microsoft.com/windowsinteroperability), chatting in [Gitter](https://gitter.im/Microsoft/WindowsProtocolTestSuites?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge), or sending email to winterop@microsoft.com. 
