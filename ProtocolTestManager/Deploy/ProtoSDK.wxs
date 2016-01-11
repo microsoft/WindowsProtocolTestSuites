@@ -67,8 +67,15 @@
         <File Id="Microsoft.Protocols.TestTools.StackSdk.Transport.dll"
               Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Transport.dll" />
       </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll" Guid="{B7A49AEB-0B7C-4F01-A60D-D1F273B94C96}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.dll" Guid="{6358B77F-AB19-4A98-B22D-6E95A1B5C0C5}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.dll" />
+      </Component>
     </ComponentGroup>
-
   </Fragment>
 
 </Wix>
