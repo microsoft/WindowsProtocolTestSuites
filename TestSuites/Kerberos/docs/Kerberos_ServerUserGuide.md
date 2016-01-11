@@ -136,7 +136,7 @@ Note
 
 * Refer to the Detailed Logging Support section 
 
-Refer to the Privacy Statement and EULA for further information
+Refer to the Privacy Statement and LICENSE for further information
 
 ### <a name="_Toc427061824"/>Environment
 
@@ -426,20 +426,18 @@ The  &#60; version &#35;  &#62;  placeholder indicates the installed build of th
 
 |  **File or Folder**|  **Description**| 
 | -------------| ------------- |
-| Data| Configuration files used in environment setting scripts.| 
 | Batch| Command files that you can use to run individual test cases, BVT test cases, Categorized test cases or all test cases.| 
 | Bin| Test suite binaries and configuration files.| 
 | Docs| The version of each of the following protocol specifications used to develop this test suite:| 
 | |  **[MS-KILE].pdf**| 
 | |  **[MS-PAC].pdf**| 
 | |  **[MS-KKDCP].pdf**| 
-| | **Kerberos_ServerUserGuide.docx** – A user guide that explains how to install and configure the driver computer, the Domain Controllers (DC), the Key Distribution Centers (KDC) and the Application Servers (AP), as well as how to run test cases.| 
-| | **Kerberos_ServerTestDesignSpecification.docx** – An overview document containing conceptual information about a protocol including probable use, relationships to other protocols, message flow, state diagrams, a short list of properties, and a test approach describing justification and adapter approach.| 
+| | **Kerberos_ServerUserGuide.md** – A user guide that explains how to install and configure the driver computer, the Domain Controllers (DC), the Key Distribution Centers (KDC) and the Application Servers (AP), as well as how to run test cases.| 
+| | **Kerberos_ServerTestDesignSpecification.md** – An overview document containing conceptual information about a protocol including probable use, relationships to other protocols, message flow, state diagrams, a short list of properties, and a test approach describing justification and adapter approach.| 
 | | ![notice.png](./image/notice.png)Note | 
 | | The driver computer should include Microsoft Office or other programs that can open and display these documents. If it does not, you can copy these documents to a computer equipped with applications that can.| 
 | Scripts| Scripts that are used to set up and configure the Driver Computer, the Key Distribution Centers and the Application Servers.| 
-| Source| Test suite source code.| 
-| EULA.rtf| The End User License Agreement.| 
+| LICENSE.rtf| The End User License Agreement.| 
 
 ## <a name="_Toc427061841"/>Configuration
 
