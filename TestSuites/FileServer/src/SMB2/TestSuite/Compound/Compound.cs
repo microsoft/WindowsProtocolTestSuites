@@ -124,7 +124,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Compound
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Verify responses to the compounded request.");
             foreach (var responsePacket in responsePackets)
             {
-                if (TestConfig.Platform == Platform.WindowsServer10 && responsePacket.Header.Status != Smb2Status.STATUS_SUCCESS)
+                if (TestConfig.Platform == Platform.WindowsServer2016 && responsePacket.Header.Status != Smb2Status.STATUS_SUCCESS)
                 {
 
                 }
@@ -171,7 +171,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Compound
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Verify responses to the compounded request.");
             foreach (var responsePacket in responsePackets)
             {
-                if (TestConfig.Platform == Platform.WindowsServer10 && responsePacket.Header.Status != Smb2Status.STATUS_SUCCESS)
+                if (TestConfig.Platform == Platform.WindowsServer2016 && responsePacket.Header.Status != Smb2Status.STATUS_SUCCESS)
                 {
 
                 }

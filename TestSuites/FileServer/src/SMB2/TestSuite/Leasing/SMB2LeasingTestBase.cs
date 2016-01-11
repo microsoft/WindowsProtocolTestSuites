@@ -16,7 +16,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         /// Received LEASE_BREAK_Notification
         /// </summary>
         protected LEASE_BREAK_Notification_Packet receivedLeaseBreakNotify;
-        
+
         /// <summary>
         /// ManualResetEvent instance for signal
         /// </summary>
@@ -74,7 +74,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 0,
                 leaseBreakNotify.ShareMaskHint,
                 "Expect that the field ShareMaskHint is set to 0.");
-            
+
             notificationReceived.Set();
         }
 
@@ -124,6 +124,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             BaseTestSite.Log.Add(
                 LogEntryKind.Debug,
                 "Client attempts to acknowledge the lease break");
+            AcknowledgeLeaseBreak(clientToAckLeaseBreak, treeId, receivedLeaseBreakNotify);
         }
         #endregion
     }

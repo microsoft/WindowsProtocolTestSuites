@@ -189,7 +189,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 sutProtocolController.CreateFile(Path.Combine(Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare), testDirectory), CurrentTestCaseName, string.Empty);
             }
 
-            Thread.Sleep(3000);
+            Thread.Sleep(500);
             BaseTestSite.Assert.AreNotEqual(
                 true,
                 isLeaseBreakReceived,

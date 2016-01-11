@@ -140,7 +140,18 @@
           <Category name = "CreateClose"/>
         </Rule>
         <Rule name = "Oplock">
-          <Category name = "Oplock"/>
+          <Rule name = "OplockOnShareWithoutForceLevel2OrSOFS">
+            <Category name = "OplockOnShareWithoutForceLevel2OrSOFS" />
+          </Rule>
+          <Rule name = "OplockOnShareWithoutForceLevel2WithSOFS">
+            <Category name = "OplockOnShareWithoutForceLevel2WithSOFS" />
+          </Rule>
+          <Rule name = "OplockOnShareWithForceLevel2WithoutSOFS">
+            <Category name = "OplockOnShareWithForceLevel2WithoutSOFS" />
+          </Rule>
+          <Rule name = "OplockOnShareWithForceLevel2AndSOFS">
+            <Category name = "OplockOnShareWithForceLevel2AndSOFS" />
+          </Rule>          
         </Rule>
         <Rule name = "DirectoryLeasing">
           <Category name = "DirectoryLeasing"/>

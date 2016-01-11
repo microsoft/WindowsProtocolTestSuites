@@ -186,8 +186,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                 (logWriter,
                 detectionInfo.targetSUT,
                 new AccountCredential(detectionInfo.domainName, detectionInfo.userName, detectionInfo.password),
-                detectionInfo.securityPackageType,
-                int.Parse(DetectorUtil.GetPropertyValue("Common.Timeout"))); // Retrieve timeout from ptfconfig
+                detectionInfo.securityPackageType);
 
             // Terminate the whole detection if any exception happens in the following processes
             if (!PingSUT(detector))
@@ -440,7 +439,12 @@ namespace Microsoft.Protocols.TestManager.Detector
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.Session"));
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.Tree"));
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.CreateClose"));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock"));
+
+            selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock.OplockOnShareWithoutForceLevel2OrSOFS", HasOplockShare(OplockShareType.WithoutForceLevel2OrSOFS)));
+            selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock.OplockOnShareWithoutForceLevel2WithSOFS", HasOplockShare(OplockShareType.WithoutForceLevel2WithSOFS)));
+            selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock.OplockOnShareWithForceLevel2WithoutSOFS", HasOplockShare(OplockShareType.WithForceLevel2WithoutSOFS)));
+            selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock.OplockOnShareWithForceLevel2AndSOFS", HasOplockShare(OplockShareType.WithForceLevel2AndSOFS)));
+
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.OperateOneFileFromTwoNodes"));
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.Compound"));
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.ChangeNotify"));
@@ -1235,6 +1239,55 @@ namespace Microsoft.Protocols.TestManager.Detector
 
         #region Helper functions for Getting Detected Results
 
+        /// <summary>
+        /// Share type for Oplock cases
+        /// </summary>
+        public enum OplockShareType
+        {
+            WithoutForceLevel2OrSOFS,
+            WithoutForceLevel2WithSOFS,
+            WithForceLevel2WithoutSOFS,
+            WithForceLevel2AndSOFS
+        }
+
+        private bool HasOplockShare(OplockShareType oplockShareType)
+        {
+            if (detectionInfo.shareInfo == null)
+                return false;
+            foreach (var item in detectionInfo.shareInfo)
+            {
+                if (item.ShareType != ShareType_Values.SHARE_TYPE_DISK)
+                    continue;
+                switch (oplockShareType)
+                {
+                    case OplockShareType.WithoutForceLevel2OrSOFS:
+                        if (!item.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_FORCE_LEVELII_OPLOCK)
+                            && !item.ShareCapabilities.HasFlag(Share_Capabilities_Values.SHARE_CAP_SCALEOUT))
+                            return true;
+                        break;
+                    case OplockShareType.WithoutForceLevel2WithSOFS:
+                        if (!item.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_FORCE_LEVELII_OPLOCK)
+                            && item.ShareCapabilities.HasFlag(Share_Capabilities_Values.SHARE_CAP_SCALEOUT))
+                            return true;
+                        break;
+                    case OplockShareType.WithForceLevel2WithoutSOFS:
+                        if (item.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_FORCE_LEVELII_OPLOCK)
+                            && !item.ShareCapabilities.HasFlag(Share_Capabilities_Values.SHARE_CAP_SCALEOUT))
+                            return true;
+                        break;
+                    case OplockShareType.WithForceLevel2AndSOFS:
+                        if (item.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_FORCE_LEVELII_OPLOCK)
+                            && item.ShareCapabilities.HasFlag(Share_Capabilities_Values.SHARE_CAP_SCALEOUT))
+                            return true;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return false;
+        }
+
         private string GetShare(ShareFlags_Values shareFlags, Share_Capabilities_Values shareCap = Share_Capabilities_Values.NONE)
         {
             if (detectionInfo.shareInfo != null)
@@ -1384,7 +1437,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                         break;
                 }
             }
-            else if (hasFlag == true)
+            else if (hasFlag.Value)
                 rule = new CaseSelectRule() { Name = ruleCategoryName, Status = RuleStatus.Selected };
             else
                 rule = new CaseSelectRule() { Name = ruleCategoryName, Status = RuleStatus.NotSupported };

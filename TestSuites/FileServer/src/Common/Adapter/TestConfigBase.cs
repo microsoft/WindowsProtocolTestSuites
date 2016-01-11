@@ -254,6 +254,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
+        public TimeSpan LongerTimeout
+        {
+            get
+            {
+                return TimeSpan.FromSeconds(int.Parse(GetProperty("LongerTimeout")));
+            }
+        }
+
         public TimeSpan RetryInterval
         {
             get
@@ -347,14 +355,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             get
             {
                 return uint.Parse(GetProperty("MaxResiliencyTimeout")) / 1000;
-            }
-        }
-
-        public uint DefaultResiliencyTimeoutInSecond
-        {
-            get
-            {
-                return uint.Parse(GetProperty("DefaultResiliencyTimeoutInSecond"));
             }
         }
 
@@ -678,8 +678,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         WindowsServer2012R2 = 0x10000007,
 
         /// <summary>
-        /// Windows Server 10
+        /// Windows Server 2016
         /// </summary>
-        WindowsServer10 = 0x10000008,
+        WindowsServer2016 = 0x10000008,
     }
 }

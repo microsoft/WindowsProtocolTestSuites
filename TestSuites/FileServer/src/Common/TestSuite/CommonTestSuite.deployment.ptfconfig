@@ -33,11 +33,17 @@
 
     <Group name="Common">
 
-      <Property name="Timeout" value="120">
+      <Property name="Timeout" value="5">
         <Description>
           Timeout in seconds for SMB2 connection over transport
         </Description>
       </Property>
+
+      <Property name="LongerTimeout" value="120">
+        <Description>
+          The longer timeout in seconds for the connection against SUT
+        </Description>
+      </Property>      
 
       <Property name="RetryInterval" value="10">
         <Description>
@@ -250,7 +256,7 @@
       </Property>
 
       <Property name="Platform" value="WindowsServer2012R2">
-        <Choice>NonWindows,WindowsServer2008,WindowsServer2008R2,WindowsServer2012,WindowsServer2012R2,WindowsServer10</Choice>
+        <Choice>NonWindows,WindowsServer2008,WindowsServer2008R2,WindowsServer2012,WindowsServer2012R2,WindowsServer2016</Choice>
         <Description>
           Platform type of the SUT
         </Description>
@@ -304,12 +310,6 @@
       <Property name="MaxResiliencyTimeout" value="300000">
         <Description>
           Max Resiliencency Timeout in milliseconds
-        </Description>
-      </Property>
-
-      <Property name="DefaultResiliencyTimeoutInSecond" value="120">
-        <Description>
-          Default Resiliencency Timeout in seconds
         </Description>
       </Property>
     </Group>

@@ -377,7 +377,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                             info.InterfaceGroupName,
                             (uint)SwnVersion.SWN_VERSION_1);
                     }
-                    else if (platform == Platform.WindowsServer10)
+                    else if (platform == Platform.WindowsServer2016)
                     {
                         if (info.Version == (uint)SwnVersion.SWN_VERSION_UNKNOWN)
                         {

@@ -300,7 +300,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 TestConfig.DefaultRpceAuthenticationLevel, TestConfig.Timeout, serverName), TestConfig.FailoverTimeout,
                 "Retry BindServer until succeed within timeout span");
 
-            string clientName = Guid.NewGuid().ToString();
+            string clientName = TestConfig.WitnessClientName;
 
             BaseTestSite.Log.Add(LogEntryKind.Debug, "Register witness:");
             BaseTestSite.Log.Add(LogEntryKind.Debug, "\tNetName: {0}", serverName);
