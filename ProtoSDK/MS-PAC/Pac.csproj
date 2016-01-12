@@ -103,10 +103,6 @@
       <Project>{75544419-3F4E-4308-A676-165F45C1462E}</Project>
       <Name>Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TransportStack\TransportStack.csproj">
-      <Project>{967D976A-C792-4893-9235-14615AE1FF58}</Project>
-      <Name>TransportStack</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Asn\" />

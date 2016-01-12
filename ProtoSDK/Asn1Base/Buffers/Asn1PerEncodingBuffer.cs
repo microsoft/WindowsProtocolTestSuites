@@ -35,7 +35,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// <summary>
         /// Create a new aligned instance of class Asn1PerEncodingBuffer.
         /// </summary>
-        /// <param name="aligned"></param>
         public Asn1PerEncodingBuffer()
             : this(true)
         {

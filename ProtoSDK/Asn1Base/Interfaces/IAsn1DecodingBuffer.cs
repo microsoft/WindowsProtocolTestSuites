@@ -49,5 +49,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// <param name="offset">A byte offset relative to the origin parameter.</param>
         /// <param name="origin">A value of type SeekOrigin indicating the reference point used to obtain the new position.</param>
         void SeekBytePosition(long offset, SeekOrigin origin = SeekOrigin.Current);
+
+        /// <summary>
+        /// Align the data by octet in the buffer.
+        /// </summary>
+        void AlignData();
     }
 }

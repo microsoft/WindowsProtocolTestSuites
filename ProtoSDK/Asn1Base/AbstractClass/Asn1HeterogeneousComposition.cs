@@ -2,8 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
@@ -19,38 +19,61 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
     public abstract class Asn1HeterogeneousComposition : Asn1Object
     {
         /// <summary>
-        /// Stores the metadata of the type of the fields in the C# definition.
+        /// Stores the metadata of a single field in a SEQUENCE/SET.
         /// </summary>
-        private MemberInfo[] fieldsMemberInfo = null;
+        private class FieldMetaData : Asn1ConstraintedFieldMetadata
+        {
+            //Fields from base class:
+            //Asn1Object outReference
+            //MemberInfo MemberInfo
+            //Asn1Tag AttachedTag
+            //Asn1Constraint Constraint
+
+            /// <summary>
+            /// Indicates whether the field is optional.
+            /// </summary>
+            /// <remarks>
+            /// This information will be obtained via the Asn1Field attributes for the field.
+            /// If the field is optional, it will be set to true.
+            /// Otherwise, it will be set to false.
+            /// </remarks>
+            public bool Optional;
+
+            /// <summary>
+            /// Create a new instance of FieldMetaData with a given MemberInfo.
+            /// </summary>
+            /// <param name="outRef">Stores the out reference of the object.</param>
+            /// <param name="info"></param>
+            /// <remarks>
+            /// AttachedTag, Optional, Constraint will be set automatically by reflection.
+            /// </remarks>
+            public FieldMetaData(Asn1Object outRef, MemberInfo info)
+                : base(outRef, info)
+            {
+                //Get Optional
+                var attrs = MemberInfo.GetCustomAttributes(typeof(Asn1Field), true);
+                if (attrs == null || attrs.Length == 0)
+                {
+                    throw new Asn1UserDefinedTypeInconsistent(ExceptionMessages.UserDefinedTypeInconsistent + " No Asn1Field is specified.");
+                }
+                Optional = (attrs[0] as Asn1Field).Optional;
+            }
+        }
+
+        private FieldMetaData[] fieldsMetaData;
 
         /// <summary>
-        /// Stores the tags of the fields.
-        /// </summary>
-        /// <remarks>
-        /// This information will be obtained via the Asn1Tag attributes for the fields.
-        /// </remarks>
-        private Asn1Tag[] attachedTags = null;
-
-        /// <summary>
-        /// Stores the flags which specify whether a field is optional.
-        /// </summary>
-        /// <remarks>
-        /// This information will be obtained via the Asn1Field attributes for the fields.
-        /// If the field corresponding to fieldsMemberInfo[i] is optional, fieldOptionalFlags[i] will be set to true.
-        /// Otherwise, it will be set to false.
-        /// </remarks>
-        private bool[] fieldOptionalFlags = null;
-
-        /// <summary>
-        /// Initialize fieldsMemberInfo, attachedTags and fieldOptionalFlags.
+        /// Initialize fieldsMemberInfo, attachedTags fieldOptionalFlags and fieldsConstraints.
         /// </summary>
         /// <exception cref="Asn1UserDefinedTypeInconsistent">
         /// Thrown when Asn1Field attribute is used not only in fields and properties.
         /// </exception>
         private void CollectMetadata()
         {
-            //TODO: ensure that only collect once for each derived class.
-            MemberInfo[] mis = this.GetType().GetMembers(
+            //TODO: ensure that only collect once for each derived class, like static member. Cound not find a solution yet.
+
+            //Get metadata for fields
+            MemberInfo[] mis = GetType().GetMembers(
                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy);
             List<MemberInfo> list = new List<MemberInfo>();
             foreach (var mi in mis)
@@ -71,33 +94,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
                 }
             }
 
-            fieldsMemberInfo = list.OrderBy(mi =>
+            //Sort by Asn1Field.Index, make its order consistent with the ASN.1 definition
+            MemberInfo[] sortedMetadata = list.OrderBy(mi =>
             {
                 var attrs = mi.GetCustomAttributes(typeof(Asn1Field), true);
+                if (attrs == null || attrs.Length == 0)
+                {
+                    throw new Asn1UserDefinedTypeInconsistent(ExceptionMessages.UserDefinedTypeInconsistent + " No Asn1Field is specified.");
+                }
                 return (attrs[0] as Asn1Field).Index;
             }).ToArray();
 
-            attachedTags = new Asn1Tag[fieldsMemberInfo.Length];
-            fieldOptionalFlags = new bool[fieldsMemberInfo.Length];
-
-            for (int i = 0; i < fieldsMemberInfo.Length; i++)
+            fieldsMetaData = new FieldMetaData[sortedMetadata.Length];
+            for (int i = 0; i < fieldsMetaData.Length; i++)
             {
-                var attrs = fieldsMemberInfo[i].GetCustomAttributes(typeof(Asn1Field), true);
-                fieldOptionalFlags[i] = (attrs[0] as Asn1Field).Optional;
-                attrs = fieldsMemberInfo[i].GetCustomAttributes(typeof(Asn1Tag), true);
-                if (attrs.Length != 0)
-                {
-                    //Only the first tag is valid.
-                    Asn1Tag tag = attrs[0] as Asn1Tag;
-                    if (tag.TagType != Asn1TagType.Context && tag.TagType != Asn1TagType.Application)
-                    {
-                        throw new Asn1UserDefinedTypeInconsistent(ExceptionMessages.UserDefinedTypeInconsistent
-                            + " Only Context-Specific and Application tags are allowed for fields.");
-                    }
-                    attachedTags[i] = tag;
-                }
-                //attachedTags[i] keeps equaling to null if there is no attched tags for the field.
-
+                fieldsMetaData[i] = new FieldMetaData(this, sortedMetadata[i]);
             }
         }
 
@@ -117,23 +128,28 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         {
             get
             {
-                Asn1Object[] fields = new Asn1Object[fieldsMemberInfo.Length];
+                Asn1Object[] fields = new Asn1Object[fieldsMetaData.Length];
                 for (int i = 0; i < fields.Length; i++)
                 {
-                    if (fieldsMemberInfo[i].MemberType == MemberTypes.Property)
-                    {
-                        fields[i] = (fieldsMemberInfo[i] as PropertyInfo).GetValue(this, null) as Asn1Object;
-                    }
-                    else if (fieldsMemberInfo[i].MemberType == MemberTypes.Field)
-                    {
-                        fields[i] = (fieldsMemberInfo[i] as FieldInfo).GetValue(this) as Asn1Object;
-                    }
-                    else
-                    {
-                        //Unreachable. Ensured by the AttributeUsage of Asn1Field..
-                        throw new Asn1UserDefinedTypeInconsistent(ExceptionMessages.UserDefinedTypeInconsistent
-                            + " Asn1Field property could only be used in properties or fields.");
-                    }
+                    fields[i] = fieldsMetaData[i].ValueInOutObject;
+                }
+                return fields;
+            }
+        }
+
+        /// <summary>
+        /// Gets new instances of all the fields in the structure.
+        /// </summary>
+        /// <returns>An array that contains the instances.</returns>
+        /// <remarks>This method is used when decoding. All the elements in the returned array don't have data.</remarks>
+        private Asn1Object[] FieldsTypeInstances
+        {
+            get
+            {
+                Asn1Object[] fields = new Asn1Object[fieldsMetaData.Length];
+                for (int i = 0; i < fieldsMetaData.Length; i++)
+                {
+                    fields[i] = fieldsMetaData[i].NewInstance;
                 }
                 return fields;
             }
@@ -149,48 +165,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         protected override bool VerifyConstraints()
         {
             Asn1Object[] allFields = Fields;
-            for (int i = 0; i < fieldOptionalFlags.Length; i++)
+            for (int i = 0; i < fieldsMetaData.Length; i++)
             {
-                if (fieldOptionalFlags[i] == false && allFields[i] == null)
+                if (fieldsMetaData[i].Optional == false && allFields[i] == null)
                 {
                     return false;
                 }
             }
             return true;
-        }
-
-        /// <summary>
-        /// Gets new instances of all the fields in the structure.
-        /// </summary>
-        /// <returns>An array that contains the instances.</returns>
-        /// <remarks>This method is used when decoding. All the elements in the returned array don't have data.</remarks>
-        private Asn1Object[] GetFieldsTypeInstances()
-        {
-            Asn1Object[] allFields = new Asn1Object[fieldsMemberInfo.Length];
-            for (int i = 0; i < fieldsMemberInfo.Length; i++)
-            {
-                if (fieldsMemberInfo[i].MemberType == MemberTypes.Property)
-                {
-                    allFields[i] = Activator.CreateInstance((fieldsMemberInfo[i] as PropertyInfo).PropertyType) as Asn1Object;
-                }
-                else if (fieldsMemberInfo[i].MemberType == MemberTypes.Field)
-                {
-                    allFields[i] = Activator.CreateInstance((fieldsMemberInfo[i] as FieldInfo).FieldType) as Asn1Object;
-                }
-                else
-                {
-                    //Unreachable. Ensured by the AttributeUsage of Asn1Field..
-                    throw new Asn1UserDefinedTypeInconsistent(ExceptionMessages.UserDefinedTypeInconsistent
-                        + " Asn1Field property could only be used in properties or fields.");
-                }
-                if (allFields[i] == null)
-                {
-                    throw new Asn1UserDefinedTypeInconsistent(ExceptionMessages.UserDefinedTypeInconsistent
-                        + " Can't create instance for member " + fieldsMemberInfo[i].Name
-                        + " in class " + this.GetType().Name + ".");
-                }
-            }
-            return allFields;
         }
 
         #region overrode methods from System.Object
@@ -200,25 +182,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// </summary>
         /// <param name="obj">The object to be compared.</param>
         /// <returns>True if obj has same data with this instance. False if not.</returns>
-        public override bool Equals(System.Object obj)
+        public override bool Equals(object obj)
         {
-            // If parameter is null return false.
-            if (obj == null)
-            {
-                return false;
-            }
-
-            // If parameter cannot be cast to Asn1CompositionOfDifferentTypes return false.
+            // If parameter is null or cannot be cast to Asn1CompositionOfDifferentTypes return false.
             Asn1HeterogeneousComposition p = obj as Asn1HeterogeneousComposition;
-            if ((System.Object)p == null)
+            if (p == null)
             {
                 return false;
             }
 
             // Return true if the fields match.
-            Asn1Object[] fieldsThis = Fields;
-            Asn1Object[] fieldsObj = p.Fields;
-            return Enumerable.SequenceEqual<Asn1Object>(fieldsThis, fieldsObj);
+            var fieldsThis = Fields;
+            var fieldsObj = p.Fields;
+            return fieldsThis.SequenceEqual(fieldsObj);
         }
 
         /// <summary>
@@ -250,18 +226,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
 
             //Encode inversely
             Asn1Object[] allFields = Fields;
-            for (int i = attachedTags.Length - 1; i >= 0; i--)
+            for (int i = fieldsMetaData.Length - 1; i >= 0; i--)
             {
-                if (!(fieldOptionalFlags[i] == true && allFields[i] == null))
+                if (!(fieldsMetaData[i].Optional && allFields[i] == null))
                 {
                     //The field is not optional or its optional but it exists
                     int curFieldLen = allFields[i].BerEncode(buffer);
                     resultLen += curFieldLen;
                     //Encode the context tag if the field has one
-                    if (attachedTags[i] != null)
+                    if (fieldsMetaData[i].AttachedTag != null)
                     {
                         resultLen += LengthBerEncode(buffer, curFieldLen);
-                        resultLen += TagBerEncode(buffer, attachedTags[i]);
+                        resultLen += TagBerEncode(buffer, fieldsMetaData[i].AttachedTag);
                     }
                 }
             }
@@ -289,7 +265,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
 
             int curFieldIndex = 0;//The index of the field that currently is trying to decode.
 
-            Asn1Object[] tempFields = GetFieldsTypeInstances();
+            Asn1Object[] tempFields = FieldsTypeInstances;
 
             while (consumedLen < length)
             {
@@ -304,14 +280,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
                     //The decoded tag may be context , application or universal tag.
                 }
 
-                if (fieldOptionalFlags[curFieldIndex] == false)
+                if (fieldsMetaData[curFieldIndex].Optional == false)
                 {
                     //Current field is mandatory.
-                    if (attachedTags[curFieldIndex] != null)
+                    if (fieldsMetaData[curFieldIndex].AttachedTag != null)
                     {
                         //Current field has a context class tag.
                         //The decoded tag must be the context class tag of the field.
-                        if (tag.Equals(attachedTags[curFieldIndex]))
+                        if (tag.Equals(fieldsMetaData[curFieldIndex].AttachedTag))
                         {
                             consumedLen += tagLen;
                             int lengthAfterCtxTag;
@@ -335,11 +311,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
                 else
                 {
                     //Current field is optional.
-                    if (attachedTags[curFieldIndex] != null)
+                    if (fieldsMetaData[curFieldIndex].AttachedTag != null)
                     {
                         //Current field has a context class tag.
                         //Check whether it is the encoding result of this field by the context-specific class tag.
-                        if (tag.Equals(attachedTags[curFieldIndex]))
+                        if (tag.Equals(fieldsMetaData[curFieldIndex].AttachedTag))
                         {
                             //Yes
                             consumedLen += tagLen;
@@ -390,20 +366,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
             }
 
             //Stores the decoded fields in this object.
-            if (tempFields.Length != fieldsMemberInfo.Length)
+            if (tempFields.Length != fieldsMetaData.Length)
             {
                 throw new Asn1DecodingUnexpectedData(ExceptionMessages.DecodingUnexpectedData);
             }
 
             for (int i = 0; i < curFieldIndex; i++)
             {
-                if (fieldsMemberInfo[i].MemberType == MemberTypes.Property)
+                if (fieldsMetaData[i].MemberInfo.MemberType == MemberTypes.Property)
                 {
-                    (fieldsMemberInfo[i] as PropertyInfo).SetValue(this, tempFields[i], null);
+                    (fieldsMetaData[i].MemberInfo as PropertyInfo).SetValue(this, tempFields[i], null);
                 }
-                else if (fieldsMemberInfo[i].MemberType == MemberTypes.Field)
+                else if (fieldsMetaData[i].MemberInfo.MemberType == MemberTypes.Field)
                 {
-                    (fieldsMemberInfo[i] as FieldInfo).SetValue(this, tempFields[i]);
+                    (fieldsMetaData[i].MemberInfo as FieldInfo).SetValue(this, tempFields[i]);
                 }
                 else
                 {
@@ -414,7 +390,87 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
             }
             return consumedLen;
         }
+
         #endregion BER
+
+        #region PER
+
+        /// <summary>
+        /// Encodes the content of the object by PER.
+        /// </summary>
+        /// <param name="buffer">A buffer to which the encoding result will be written.</param>
+        protected override void ValuePerEncode(IAsn1PerEncodingBuffer buffer)
+        {
+            //Ref. X.691: 18, a bit-map preamble records the presence or absence of default and optional components
+            Asn1Object[] fields = Fields;
+            List<bool> bitMap = new List<bool>();
+            for (int i = 0; i < fields.Length; i++)
+            {
+                if (fieldsMetaData[i].Optional)
+                {
+                    //1: presence; 0: absence
+                    bitMap.Add(fields[i] != null);
+                }
+            }
+            if (bitMap.Count >= 64 * 1024) //64k
+            {
+                throw new NotImplementedException("More than 64K optional fields are not supported yet.");
+                //Ref. X.691: 18.3
+            }
+            buffer.WriteBits(bitMap.ToArray());
+            foreach (var v in fields)
+            {
+                if (v != null)
+                {
+                    v.PerEncode(buffer);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Decodes the content of the object by PER.
+        /// </summary>
+        /// <param name="buffer">A buffer that contains a PER encoding result.</param>
+        /// <param name="aligned">Indicating whether the PER decoding is aligned.</param>
+        protected override void ValuePerDecode(IAsn1DecodingBuffer buffer, bool aligned = true)
+        {
+            int optionalFieldsCount = 0;
+            foreach (var v in fieldsMetaData)
+            {
+                if (v.Optional)
+                {
+                    optionalFieldsCount++;
+                }
+            }
+            if (optionalFieldsCount >= 64 * 1024) //64k
+            {
+                throw new NotImplementedException("More than 64K optional fields are not supported yet.");
+                //Ref. X.691: 18.3
+            }
+            bool[] bitMap = buffer.ReadBits(optionalFieldsCount);
+            Asn1Object[] decodingResult = FieldsTypeInstances;
+            int curOptionalFlagIndex = 0; //index in bitMap
+            for (int i = 0; i < decodingResult.Length; i++)
+            {
+                if (fieldsMetaData[i].Optional == false ||
+                    fieldsMetaData[i].Optional && bitMap[curOptionalFlagIndex++])
+                {
+                    decodingResult[i].PerDecode(buffer, aligned);
+                }
+                else
+                {
+                    //fieldOptionalFlags[i] equals to true and bitMap[curOptionalFlagIndex] equals to false.
+                    decodingResult[i] = null;
+                }
+            }
+
+            for (int i = 0; i < decodingResult.Length; i++)
+            {
+                fieldsMetaData[i].ValueInOutObject = decodingResult[i];
+            }
+        }
+
+        #endregion PER
 
     }
 }
