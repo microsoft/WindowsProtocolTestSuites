@@ -1,0 +1,271 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2FA90F03-31CD-4495-86BF-8DA9CC14E210}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts</RootNamespace>
+    <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRules>
+    </CodeAnalysisRules>
+    <DocumentationFile>
+    </DocumentationFile>
+    <CodeAnalysisRuleSet>Sdl7.0.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.DirectoryServices.Protocols" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AdtsLdapV2Asn1Codec\AbandonRequest.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\AddRequest.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\AddRequest_attrs_element.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\AddResponse.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\AttributeType.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\AttributeValue.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\AttributeValueAssertion.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\BindRequest.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\BindRequest_authentication.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\BindResponse.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\CompareRequest.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\CompareResponse.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\DelRequest.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\DelResponse.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\Filter.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\LDAPDN.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\LDAPMessage.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\LDAPMessage_protocolOp.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\LDAPResult.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\LDAPResult_resultCode.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\LDAPString.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\MessageID.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\ModifyDNRequest.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\ModifyDNResponse.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\ModifyRDNRequest.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\ModifyRDNResponse.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\ModifyRequest.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\ModifyRequest_modifications_element.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\ModifyRequest_modifications_element_modification.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\ModifyRequest_modifications_element_operation.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\ModifyResponse.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\RelativeLDAPDN.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\SearchRequest.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\SearchRequest_derefAliases.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\SearchRequest_scope.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\SearchResponse.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\SearchResponse_entry.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\SearchResponse_entry_attributes_element.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\SearchResponse_resultCode.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\SicilyBindResponse.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\SicilyBindResponse_resultCode.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\SubstringFilter.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\SubstringFilter_substrings_element.cs" />
+    <Compile Include="AdtsLdapV2Asn1Codec\UnbindRequest.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\AbandonRequest.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\AddRequest.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\AddResponse.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\AssertionValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\AttributeDescription.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\AttributeDescriptionList.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\AttributeList.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\AttributeList_element.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\AttributeType.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\AttributeTypeAndValues.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\AttributeValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\AttributeValueAssertion.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\AuthenticationChoice.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\BatchRequestRequestValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\BatchRequestResponseValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\BindRequest.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\BindResponse.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\CompareRequest.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\CompareResponse.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\Control.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\Controls.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\DelRequest.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\DelResponse.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\DirSyncRequestValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\DirSyncResponseValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\DNInputRequestValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\ExpectedEntryCountRequestValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\ExtendedDNRequestValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\ExtendedRequest.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\ExtendedResponse.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\Filter.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\LDAPDN.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\LDAPMessage.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\LDAPMessage_protocolOp.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\LDAPOID.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\LDAPResult.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\LDAPResult_resultCode.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\LDAPString.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\LDAPURL.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\MatchingRuleAssertion.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\MatchingRuleId.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\MessageID.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\ModifyDNRequest.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\ModifyDNResponse.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\ModifyRequest.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\ModifyRequest_modification_element.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\ModifyRequest_modification_element_operation.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\ModifyResponse.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\PartialAttributeList.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\PartialAttributeList_element.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\PolicyHintsRequestValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\QuotaRequestValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\Referral.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\RelativeLDAPDN.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\RequireSortIndexHintValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\SaslCredentials.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\SDFlagsRequestValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\SearchHintsRequestValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\SearchHintsRequestValue_element.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\SearchOptionsRequestValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\SearchRequest.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\SearchRequest_derefAliases.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\SearchRequest_scope.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\SearchResultDone.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\SearchResultEntry.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\SearchResultReference.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\SicilyBindResponse.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\SicilyBindResponse_resultCode.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\SoftSizeLimitHintValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\StatsResponseValueV1.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\StatsResponseValueV2.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\StatsResponseValueV3.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\StatsResponseValueV4.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\StatsResponseValueV4_element.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\StatsResponseValueV4_element_choice.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\SubstringFilter.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\SubstringFilter_substrings_element.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\TreeDeleteExRequestValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\UnbindRequest.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\UpdateStatsResponseValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\UpdateStatsResponseValue_element.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\VerifyNameRequestValue.cs" />
+    <Compile Include="AdtsLdap\AdtsLdapBlobs.cs" />
+    <Compile Include="AdtsLdap\AdtsLdapConnectionType.cs" />
+    <Compile Include="AdtsLdap\AdtsLdapDecoderCallbackBase.cs" />
+    <Compile Include="AdtsLdap\AdtsLdapUtility.cs" />
+    <Compile Include="AdtsLdap\Client\AdtsLdapClient.cs" />
+    <Compile Include="AdtsLdap\Client\AdtsLdapClientDecoder.cs" />
+    <Compile Include="AdtsLdap\AdtsLdapDecoder.cs" />
+    <Compile Include="AdtsLdap\AdtsLdapEncoder.cs" />
+    <Compile Include="AdtsLdap\Packets\AdtsAbandonRequestPacket.cs" />
+    <Compile Include="AdtsLdap\Packets\AdtsAddRequestPacket.cs" />
+    <Compile Include="AdtsLdap\Packets\AdtsAddResponsePacket.cs" />
+    <Compile Include="AdtsLdap\Packets\AdtsBindRequestPacket.cs" />
+    <Compile Include="AdtsLdap\Packets\AdtsBindResponsePacket.cs" />
+    <Compile Include="AdtsLdap\Packets\AdtsCompareRequestPacket.cs" />
+    <Compile Include="AdtsLdap\Packets\AdtsCompareResponsePacket.cs" />
+    <Compile Include="AdtsLdap\Packets\AdtsDelRequestPacket.cs" />
+    <Compile Include="AdtsLdap\Packets\AdtsDelResponsePacket.cs" />
+    <Compile Include="AdtsLdap\Packets\AdtsExtendedRequestPacket.cs" />
+    <Compile Include="AdtsLdap\Packets\AdtsExtendedResponsePacket.cs" />
+    <Compile Include="AdtsLdap\Packets\AdtsModifyDnRequestPacket.cs" />
+    <Compile Include="AdtsLdap\Packets\AdtsModifyDnResponsePacket.cs" />
+    <Compile Include="AdtsLdap\Packets\AdtsModifyRequestPacket.cs" />
+    <Compile Include="AdtsLdap\Packets\AdtsModifyResponsePacket.cs" />
+    <Compile Include="AdtsLdap\Packets\AdtsSearchRequestPacket.cs" />
+    <Compile Include="AdtsLdap\Packets\AdtsSearchResultDonePacket.cs" />
+    <Compile Include="AdtsLdap\Packets\AdtsSearchResultEntryPacket.cs" />
+    <Compile Include="AdtsLdap\Packets\AdtsSearchResultReferencePacket.cs" />
+    <Compile Include="AdtsLdap\Packets\AdtsSicilyBindResponsePacket.cs" />
+    <Compile Include="AdtsLdap\Packets\AdtsUnbindRequestPacket.cs" />
+    <Compile Include="AdtsLdap\Security\AdtsLdapClient.cs" />
+    <Compile Include="AdtsLdap\Packets\AdtsLdapPacket.cs" />
+    <Compile Include="AdtsLdap\Security\AdtsLdapSimpleSecurityLayer.cs" />
+    <Compile Include="AdtsLdap\Security\AdtsLdapSaslSecurityLayer.cs" />
+    <Compile Include="AdtsLdap\Security\AdtsLdapSslTlsSecurityLayer.cs" />
+    <Compile Include="AdtsLdap\Security\AdtsLdapSecurityStream.cs" />
+    <Compile Include="AdtsLdap\Security\AdtsLdapSslTlsSecurityHeader.cs" />
+    <Compile Include="AdtsLdap\Security\AdtsLdapSaslSecurityHeader.cs" />
+    <Compile Include="AdtsLdap\Security\AdtsLdapSecurityBuffer.cs" />
+    <Compile Include="AdtsLdap\Security\AdtsLdapContext.cs" />
+    <Compile Include="AdtsLdap\Server\AdtsLdapServer.cs" />
+    <Compile Include="AdtsLdap\AdtsLdapContext.cs" />
+    <Compile Include="AdtsLdap\Server\AdtsLdapContextManager.cs" />
+    <Compile Include="AdtsLdap\AdtsLdapV2Decoder.cs" />
+    <Compile Include="AdtsLdap\AdtsLdapV2Encoder.cs" />
+    <Compile Include="AdtsLdap\AdtsLdapV3Decoder.cs" />
+    <Compile Include="AdtsLdap\AdtsLdapV3Encoder.cs" />
+    <Compile Include="AdtsLdap\AdtsLdapVersion.cs" />
+    <Compile Include="AdtsLdap\Server\AdtsLdapServerDecoder.cs" />
+    <Compile Include="AdtsLdap\Security\AdtsLdapServer.cs" />
+    <Compile Include="AdtsLdap\Security\AdtsLdapSecurityLayer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Asn1Base\Asn1Base.csproj">
+      <Project>{deda188c-c97e-4968-bc31-594925631e9f}</Project>
+      <Name>Asn1Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{FE653643-6342-4300-871E-683C7BA31494}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sspi\Sspi.csproj">
+      <Project>{d0cb354b-2cd3-49c1-8eca-2f6ebadbccee}</Project>
+      <Name>Sspi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TransportStack\TransportStack.csproj">
+      <Project>{F8CDC462-0754-4BEA-B048-33AC1A5855C4}</Project>
+      <Name>TransportStack</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />
+  </Target>
+</Project>

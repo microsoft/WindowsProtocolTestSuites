@@ -32,7 +32,6 @@ if not defined TestSuiteRoot (
 %buildtool% "%TestSuiteRoot%ProtoSDK\MS-PAC\Pac.csproj" /t:Clean;Rebuild
 %buildtool% "%TestSuiteRoot%ProtoSDK\FileAccessService\FileAccessService.csproj" /t:Clean;Rebuild
 %buildtool% "%TestSuiteRoot%ProtoSDK\KerberosLib\KerberosLib.csproj" /t:Clean;Rebuild
-
 %buildtool% "%TestSuiteRoot%ProtoSDK\MS-FSCC\Fscc.csproj" /t:Clean;Rebuild
 %buildtool% "%TestSuiteRoot%ProtoSDK\MS-CIFS\Cifs.csproj" /t:Clean;Rebuild
 %buildtool% "%TestSuiteRoot%ProtoSDK\MS-SMB\Smb.csproj" /t:Clean;Rebuild
@@ -43,3 +42,8 @@ if not defined TestSuiteRoot (
 %buildtool% "%TestSuiteRoot%ProtoSDK\MS-SMB2\Smb2.csproj" /t:Clean;Rebuild
 %buildtool% "%TestSuiteRoot%ProtoSDK\MS-RSVD\Rsvd.csproj" /t:Clean;Rebuild
 %buildtool% "%TestSuiteRoot%ProtoSDK\MS-SWN\Swn.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-ADTS-LDAP\MS-ADTS-LDAP.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-APDS\Apds.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-NRPC\Nrpc.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-SAMR\Samr.csproj" /t:Clean;Rebuild
+

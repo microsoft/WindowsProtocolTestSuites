@@ -1,0 +1,1 @@
+<Playlist Version="1.0"><Add Test="Microsoft.Protocol.TestSuites.Kerberos.TestSuite.KileTestSuite.CrossRealmNetworkLogonSmb2" /><Add Test="Microsoft.Protocol.TestSuites.Kerberos.TestSuite.KILE.KileCrossRealmTest.ReferralTicketIncludePacByDefault_Smb2" /><Add Test="Microsoft.Protocol.TestSuites.Kerberos.TestSuite.KILE.KileCrossRealmTest.ReferralTicketWithPac_Smb2" /></Playlist>

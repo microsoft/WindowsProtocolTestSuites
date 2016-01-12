@@ -1,9 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Text.RegularExpressions;
-
 namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
 {
     /// <summary>
@@ -16,46 +13,31 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
     public abstract class Asn1ByteString : Asn1String
     {
         /// <summary>
-        /// Stores the data of the object.
-        /// </summary>
-        private byte[] data;
-
-        /// <summary>
         /// Gets or sets the data of the object in string form.
         /// </summary>
         public override string Value
         {
             get
             {
-                return ConvertByteArrayToString(this.data);
+                return ConvertByteArrayToString(ByteArrayValue);
             }
             set
             {
-                this.data = ConvertStringToByteArray(value);
+                ByteArrayValue = ConvertStringToByteArray(value);
             }
         }
 
         /// <summary>
         /// Gets or sets the data of the object in byte array form.
         /// </summary>
-        public byte[] ByteArrayValue
-        {
-            get { return data; }
-            set { this.data = value; }
-        }
+        public byte[] ByteArrayValue { get; set; }
 
         /// <summary>
-        /// Ensures all characters are ASCII code.
+        /// Gets the built in charset of the string type, in string form or regex form.
         /// </summary>
-        /// <returns>True if all characters are ASCII code, false if not.</returns>
-        protected override bool VerifyConstraints()
+        protected override string TypeBuiltInCharSet
         {
-            if (this.Value == null)
-            {
-                return true;
-            }
-            Regex r = new Regex(@"^[\x00-\xFF]*$");//ASCII or EMPTY
-            return r.IsMatch(this.Value);
+            get { return @"\x00-\xFF"; }
         }
 
         #region overrode methods from System.Object
@@ -66,7 +48,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// <returns>A string that represents this instance.</returns>
         public override string ToString()
         {
-            return this.Value;
+            return Value;
         }
 
         #endregion overrode methods from System.Object
@@ -123,8 +105,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// </remarks>
         protected override int ValueBerEncode(IAsn1BerEncodingBuffer buffer)
         {
-            buffer.WriteBytes(this.ByteArrayValue);
-            return this.ByteArrayValue == null ? 0 : this.ByteArrayValue.Length;
+            buffer.WriteBytes(ByteArrayValue);
+            return ByteArrayValue == null ? 0 : ByteArrayValue.Length;
         }
 
         /// <summary>
@@ -141,7 +123,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         protected override int ValueBerDecode(IAsn1DecodingBuffer buffer, int length)
         {
             byte[] result = buffer.ReadBytes(length);
-            this.ByteArrayValue = result;
+            ByteArrayValue = result;
             return length;
         }
 

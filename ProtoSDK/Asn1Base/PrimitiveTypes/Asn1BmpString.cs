@@ -77,6 +77,43 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
 
         #region PER
 
+        /// <summary>
+        /// Encodes the content of the object by PER.
+        /// </summary>
+        /// <param name="buffer">A buffer to which the encoding result will be written.</param>
+        /// <remarks>Length is included.</remarks>
+        protected override void ValuePerEncode(IAsn1PerEncodingBuffer buffer)
+        {
+            Asn1StandardProcedure.PerEncodeArray(buffer, Value.ToCharArray(),
+                (encodingBuffer, b) =>
+                {
+                    byte[] result = Encoding.BigEndianUnicode.GetBytes("" + b);
+                    encodingBuffer.WriteBytes(result);
+                }
+            , Constraint != null && Constraint.HasMinSize ? Constraint.MinSize : (long?)null, Constraint != null && Constraint.HasMaxSize ? Constraint.MaxSize : (long?)null,
+            true);
+        }
+
+        /// <summary>
+        /// Decodes the object by PER.
+        /// </summary>
+        /// <param name="buffer">A buffer that contains a PER encoding result.</param>
+        /// <param name="aligned">Indicating whether the PER decoding is aligned.</param>
+        /// <remarks>Length is included.</remarks>
+        protected override void ValuePerDecode(IAsn1DecodingBuffer buffer, bool aligned = true)
+        {
+            char[] result = Asn1StandardProcedure.PerDecodeArray<char>(buffer,
+                decodingBuffer =>
+                {
+                    byte[] encodingResult = buffer.ReadBytes(2);
+                    string s = Encoding.BigEndianUnicode.GetString(encodingResult);
+                    return s[0];
+                },
+            Constraint != null && Constraint.HasMinSize ? Constraint.MinSize : (long?)null, Constraint != null && Constraint.HasMaxSize ? Constraint.MaxSize : (long?)null,
+            true);
+            Value = new string(result);
+        }
+
         #endregion PER
     }
 }
