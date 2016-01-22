@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <String Id="WelcomeDlgDescription">The Setup Wizard will install [ProductName] (version [ProductVersion]) on your computer. Click Next to continue or Cancel to exit the Setup Wizard.</String>
+  <String Id="MaintenanceWelcomeDlgDescription">The Setup Wizard allows you to change the way [ProductName] (version [ProductVersion]) features are installed on your computer or to remove it from your computer. Click Next to continue or Cancel to exit the Setup Wizard.</String>
+</WixLocalization>

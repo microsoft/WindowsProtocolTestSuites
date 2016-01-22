@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	<DefineSolutionProperties>false</DefineSolutionProperties>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>3.5</ProductVersion>
+    <ProjectGuid>{D973BDA7-03D3-4BED-96C4-0B62E5D6D0BE}</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>MS-AZOD-TestSuite-ODEP</OutputName>
+    <OutputType>Package</OutputType>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+    <SuppressSpecificWarnings>58;1055;1076</SuppressSpecificWarnings>
+    <SuppressIces>ICE30</SuppressIces>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'fxcop|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>fxcop</DefineConstants>
+    <SuppressSpecificWarnings>58;1055;1076</SuppressSpecificWarnings>
+    <SuppressIces>ICE30</SuppressIces>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <SuppressSpecificWarnings>58;1055;1076</SuppressSpecificWarnings>
+    <SuppressIces>ICE30</SuppressIces>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="DependencyCheckWarningDlg.wxs" />
+    <Compile Include="EndpointDlg.wxs" />
+    <Compile Include="MS-AZOD-TestSuite-ODEP.wxs" />
+    <Compile Include="TestSuiteMiscFiles.wxs" />
+    <Compile Include="TestSuitePrivacyStatementDlg.wxs" />
+    <Compile Include="TestSuitePrivacyStatementLowMsiVersionDlg.wxs" />
+    <Compile Include="TestSuiteProduct.wxs" />
+    <Compile Include="TestSuiteBin.wxs" />
+	<Compile Include="TestSuiteScripts.wxs" />
+	<Compile Include="TestSuiteBatch.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="UiText.wxl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="LICENSE.rtf" />
+    <Content Include="readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixVSExtension">
+      <HintPath>$(WIX)\bin\WixVSExtension.dll</HintPath>
+      <Name>WixVSExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WIX)\bin\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WIX)\bin\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixNetFxExtension">
+      <HintPath>$(WIX)\bin\WixNetFxExtension.dll</HintPath>
+      <Name>WixNetFxExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MessageAnalyzerLibrary\MessageAnalyzerLibrary.csproj">
+      <Name>MessageAnalyzerLibrary</Name>
+      <Project>{e3b08663-c752-41cc-b2b7-43c69b8c1292}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Adapter\MS-AZOD_ODAdapter.csproj">
+      <Name>MS-AZOD_ODAdapter</Name>
+      <Project>{8EE14F2E-A5F9-42BC-9B37-9D23F570D728}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\TestSuite\MS-AZOD_ODTestSuite.csproj">
+      <Name>MS-AZOD_ODTestSuite</Name>
+      <Project>{497432CA-FDEE-4146-8D30-671FBBE90789}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\" />
+    <Folder Include="bin\Debug\" />
+    <Folder Include="bin\Debug\en-us\" />
+  </ItemGroup>
+  <ItemGroup>
+	<AZODScriptFiles Include="..\..\scripts\*" />
+	<AZODAdapterScriptFiles Include="..\Adapter\SutControlAdapter\*" />
+	<AZODExpectFrames Include="..\TestSuite\ExpectFrames\*" />
+  </ItemGroup>
+  <Target Name="GenDeployWxsFile" DependsOnTargets="ResolveWixExtensionReferences" BeforeTargets="Compile">
+    <Exec Command='"$(WIX)\bin\heat.exe" dir $(TestSuiteRoot)\drop\TestSuites\MS-AZOD\Bin -out TestSuiteBin.wxs -template fragment -gg -cg TESTSUITE_BIN -dr TESTSUITE_BIN_DIR  -var wix.TESTSUITE_BIN_DIR  -sreg -sfrag -srd' /> 
+	<Exec Command='"$(WIX)\bin\heat.exe" dir $(TestSuiteRoot)\drop\TestSuites\MS-AZOD\Scripts -out TestSuiteScripts.wxs -template fragment -gg -cg TESTSUITE_SCRIPTS -dr TESTSUITE_SCRIPTS_DIR  -var wix.TESTSUITE_SCRIPTS_DIR  -sreg -sfrag -srd' /> 
+    <Exec Command='"$(WIX)\bin\heat.exe" dir "..\Batch" -out TestSuiteBatch.wxs -template fragment -gg -cg TESTSUITE_BATCH -dr TESTSUITE_BATCH_DIR -var wix.TESTSUITE_BATCH_DIR -sreg -sfrag -srd' />
+  </Target>
+  <Import Project="$(WixTargetsPath)" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)en-us\$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-AZOD\deploy\" />
+  </Target>  
+  <Target Name="CopyFilesToBin" BeforeTargets="GenDeployWxsFile" >
+	<Copy SourceFiles="..\TestSuite\MS-AZOD_ODTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-AZOD\Bin" />
+	<Copy SourceFiles="..\TestSuite\MS-AZOD_ODTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-AZOD\Bin" />
+	<Copy SourceFiles="@(AZODAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-AZOD\Bin" />
+	<Copy SourceFiles="@(AZODExpectFrames)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-AZOD\Bin" />
+	<Copy SourceFiles="..\ODLocalTestRun.testrunconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-AZOD\Bin" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Write-Error.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-AZOD\Scripts" />	
+	<Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Write-Info.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-AZOD\Scripts" />	
+	<Copy SourceFiles="@(AZODScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-AZOD\Scripts" />	
+  </Target>
+</Project>

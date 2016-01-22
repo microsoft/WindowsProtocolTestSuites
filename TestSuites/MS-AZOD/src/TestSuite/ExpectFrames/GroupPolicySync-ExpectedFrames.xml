@@ -1,0 +1,409 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ExpectedMessageList>
+
+  <Filter>(SMB2 or LDAP or MSRPCE)</Filter>
+  <!--1 IDL_DRSBind(Encrypted, Opnum 0)-->
+  <ExpectedMessage>
+    <Name>MSRPCE.RpcconnRequestHdrT</Name>
+    <!--computer name is required-->
+    <Source>{ApplicationServerName}</Source>
+    <!--computer name is required-->
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Opnum" Value="0" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--2 IDL_DRSCrackNames(Encrypted, Opnum 12)-->
+  <ExpectedMessage>
+    <Name>MSRPCE.RpcconnRequestHdrT</Name>
+    <!--computer name is required-->
+    <Source>{ApplicationServerName}</Source>
+    <!--computer name is required-->
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Opnum" Value="12" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--3 IDL_DRSUnbind(Encrypted, Opnum 1)-->
+  <ExpectedMessage>
+    <Name>MSRPCE.RpcconnRequestHdrT</Name>
+    <!--computer name is required-->
+    <Source>{ApplicationServerName}</Source>
+    <!--computer name is required-->
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Opnum" Value="1" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--4 LDAP: Bind Operation-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <!--computer name is required-->
+    <Source>{ApplicationServerName}</Source>
+    <!--computer name is required-->
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.Version" Value="3" Type="long"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--5 Domain SOM Search request-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.BaseObject" Value="DC={KdcDomainNetbios},DC=com" Type="string"/>
+    </VerifyItemList>
+    <ArrayField FieldName="ProtocolOp.Attributes">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="gPLink" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+      <VerifyItemList Operation="and">
+        <VerifyItem Operation="equal" Value="gPOptions" Type="string"/>
+      </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+    <ArrayField FieldName="ProtocolOp.Filter.Content.Content">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Content.AttributeDesc" Value="distinguishedName" Type="string"/>
+          <VerifyItem Operation="equal" FieldName="Content.AssertionValue" Value="DC={KdcDomainNetbios},DC=com" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--6 Domain SOM Search response-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{KdcName}</Source>
+    <Destination>{ApplicationServerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.ObjectName" Value="DC={KdcDomainNetbios},DC=com" Type="string"/>
+    </VerifyItemList>
+    <ArrayField FieldName="ProtocolOp.Attributes">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Type" Value="gPLink" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--7 LDAP: Bind Operation-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.Version" Value="3" Type="long"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--8 LDAP: Site Search request-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.BaseObject" Value="" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.Filter.Content" Value="objectClass" Type="string"/>
+    </VerifyItemList>
+    <ArrayField FieldName="ProtocolOp.Attributes">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="configurationNamingContext" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="nTSecurityDescriptor" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--9 LDAP: Site Search response-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{KdcName}</Source>
+    <Destination>{ApplicationServerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.ObjectName" Value="" Type="string"/>
+    </VerifyItemList>
+    <ArrayField FieldName="ProtocolOp.Attributes">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Type" Value="configurationNamingContext" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--10 LDAP: Site SOM Search request-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <!--need to investigate the site "PROTOCOL", which is inconsistent with Feng's value--> 
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.BaseObject" Value="CN={SiteName},CN=Sites,CN=Configuration,DC={KdcDomainNetbios},DC=com" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.Filter.Content" Value="objectClass" Type="string"/>
+    </VerifyItemList>
+    <ArrayField FieldName="ProtocolOp.Attributes">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="gPLink" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="gPOptions" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>  
+  <!--11 LDAP: Site SOM Search response-->      
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{KdcName}</Source>
+    <Destination>{ApplicationServerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.ObjectName" Value="CN={SiteName},CN=Sites,CN=Configuration,DC={KdcDomainNetbios},DC=com" Type="string"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--12 LDAP: GPO Search request-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.BaseObject" Value="cn=policies,cn=system,DC={KdcDomainNetbios},DC=com" Type="string"/>      
+    </VerifyItemList>
+    <ArrayField FieldName="ProtocolOp.Attributes">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="nTSecurityDescriptor" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="gPCFileSysPath" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="cn" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="displayName" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="versionNumber" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="gPCFunctionalityVersion" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="flags" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="gPCMachineExtensionNames" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="gPCUserExtensionNames" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="objectClass" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="gPCWQLFilter" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+    <ArrayField FieldName="ProtocolOp.Filter.Content.Content">
+      <ArrayItem>
+        <VerifyItemList Operation="or">
+          <!--Windows 8-->
+          <VerifyItemList Operation="and">
+            <VerifyItem Operation="equal" FieldName="Content.AttributeDesc" Value="distinguishedName" Type="string"/>
+            <VerifyItem Operation="equal" FieldName="Content.AssertionValue" Value="CN={31B2F340-016D-11D2-945F-00C04FB984F9},CN=Policies,CN=System,DC={KdcDomainNetbios},DC=com" Type="string"/>
+          </VerifyItemList>
+          <!--Windows 8.1-->
+          <ArrayField FieldName="Content.Content">
+            <ArrayItem>
+              <VerifyItemList Operation="and">
+                <VerifyItem Operation="equal" FieldName="Content.AttributeDesc" Value="distinguishedName" Type="string"/>
+                <VerifyItem Operation="equal" FieldName="Content.AssertionValue" Value="CN={31B2F340-016D-11D2-945F-00C04FB984F9},CN=Policies,CN=System,DC={KdcDomainNetbios},DC=com" Type="string"/>
+              </VerifyItemList>
+            </ArrayItem>
+          </ArrayField>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--13 LDAP: GPO Search response-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{KdcName}</Source>
+    <Destination>{ApplicationServerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.ObjectName" Value="CN={31B2F340-016D-11D2-945F-00C04FB984F9},CN=Policies,CN=System,DC={KdcDomainNetbios},DC=com" Type="string"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--14 SMB2: Create operation: Access registry.pol-->
+  <ExpectedMessage>
+    <Name>SMB2.VirtualOperations.Create</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Name" Value="{KdcDomainName}\Policies\{31B2F340-016D-11D2-945F-00C04FB984F9}\Machine\registry.pol" Type="string"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--15 SMB2: Create operation: Access cap.inf-->
+  <ExpectedMessage>
+    <Name>SMB2.VirtualOperations.Create</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Name" Value="{KdcDomainName}\Policies\{31B2F340-016D-11D2-945F-00C04FB984F9}\Machine\Microsoft\Windows NT\Cap\cap.inf" Type="string"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--16 LDAP: Bind Operation-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.Version" Value="3" Type="long"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--17 LDAP: Search Request-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.BaseObject" Value="" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.Filter.Content" Value="objectClass" Type="string"/>
+    </VerifyItemList>
+    <ArrayField FieldName="ProtocolOp.Attributes">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="rootDomainNamingContext" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--18 LDAP: Search Response-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{KdcName}</Source>
+    <Destination>{ApplicationServerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.ObjectName" Value="" Type="string"/>
+    </VerifyItemList>
+    <ArrayField FieldName="ProtocolOp.Attributes">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Type" Value="rootDomainNamingContext" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--19 LDAP: Central Access Policies Search Request-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">      
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.BaseObject" Value="CN=Central Access Policies,CN=Claims Configuration,CN=Services,CN=Configuration,DC={KdcDomainNetbios},DC=com" Type="string"/>
+    </VerifyItemList>
+    <ArrayField FieldName="ProtocolOp.Attributes">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="msAuthz-CentralAccessPolicyID" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="msAuthz-MemberRulesInCentralAccessPolicy" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>      
+    </ArrayField>
+    <ArrayField FieldName="ProtocolOp.Filter.Content.Content">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Content.AttributeDesc" Value="distinguishedName" Type="string"/>
+          <!--CentralAccessPolicyNames can be configured in ptfconfig file-->
+          <VerifyItem Operation="equal" FieldName="Content.AssertionValue" Value="CN={CentralAccessPolicyNames[0]},CN=Central Access Policies,CN=Claims Configuration,CN=Services,CN=Configuration,DC={KdcDomainNetbios},DC=com" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Content.AttributeDesc" Value="distinguishedName" Type="string"/>
+          <!--CentralAccessPolicyNames can be configured in ptfconfig file-->
+          <VerifyItem Operation="equal" FieldName="Content.AssertionValue" Value="CN={CentralAccessPolicyNames[0]},CN=Central Access Policies,CN=Claims Configuration,CN=Services,CN=Configuration,DC={KdcDomainNetbios},DC=com" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <!-- Can add new array item for other focused policy-->
+    </ArrayField>
+  </ExpectedMessage>  
+  <!--20 LDAP: Central Access Rules Search Request-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.BaseObject" Value="CN=Central Access Rules,CN=Claims Configuration,CN=Services,CN=Configuration,DC={KdcDomainNetbios},DC=com" Type="string"/>
+    </VerifyItemList>
+    <ArrayField FieldName="ProtocolOp.Attributes">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="msAuthz-ResourceCondition" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="msAuthz-EffectiveSecurityPolicy" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="msAuthz-ProposedSecurityPolicy" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+    <ArrayField FieldName="ProtocolOp.Filter.Content.Content">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Content.AttributeDesc" Value="distinguishedName" Type="string"/>
+          <!-- CentralAccessRuleNames can be configured in ptfconfig-->
+          <VerifyItem Operation="equal" FieldName="Content.AssertionValue" Value="CN={CentralAccessRuleNames[0]},CN=Central Access Rules,CN=Claims Configuration,CN=Services,CN=Configuration,DC={KdcDomainNetbios},DC=com" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Content.AttributeDesc" Value="distinguishedName" Type="string"/>
+          <!-- CentralAccessRuleNames can be configured in ptfconfig-->
+          <VerifyItem Operation="equal" FieldName="Content.AssertionValue" Value="CN={CentralAccessRuleNames[0]},CN=Central Access Rules,CN=Claims Configuration,CN=Services,CN=Configuration,DC={KdcDomainNetbios},DC=com" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <!-- Can add new array item for other focused rule-->
+    </ArrayField>
+  </ExpectedMessage>  
+</ExpectedMessageList>

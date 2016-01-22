@@ -12,6 +12,7 @@ Windows Protocol Test Suites provide interoperability testing against the implem
 * **SMB1 Server Test Suite**. It covers the requirements documented by [MS-SMB], and those documented by other protocols which are related to [MS-SMB], i.e. [MS-FSCC] and [MS-CIFS].
 * **File Server Family Test Suite**. It is designed to test implementations of file server protocol family including [MS-SMB2], [MS-DFSC], [MS-SWN], [MS-FSRVP], [MS-FSA], [MS-RSVD] and [MS-SQOS].
 * **Kerberos Protocol Server Test Suite**. It is intended for interoperability testing for a server implementation of the Kerberos Protocols including [MS-KILE], [MS-PAC], [MS-KKDCP] and required dependent specification requirements as well as file server AP scenario and KDC (server) requirements.
+* **MS-AZOD OD Test Suite**. It covers the requirements documented by [MS-AZOD].
 
 ## Components
 Windows Protocol Test Suites contain 4 components:
@@ -107,5 +108,3 @@ The following test suites will be released in version 1.0.
 # Contact
 
 Keep up with the Windows protocol test team by visiting our [blog](https://blogs.msdn.microsoft.com/windowsinteroperability), chatting in [Gitter](https://gitter.im/Microsoft/WindowsProtocolTestSuites?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge), or sending email to winterop@microsoft.com. 
-
-If you have protocol spec questions, please direct your questions to dochelp@microsoft.com.

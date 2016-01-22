@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="TESTSUITE_BATCH_DIR">
+            <Component Id="cmp524A3D5B76F1DDD42C964F083F6CCAC3" Guid="{65A3DCE5-4F66-4D7A-9072-4F967C72BC7E}">
+                <File Id="fil7A0D52FB487F1579DF980A211EDC8F5A" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RunAllTestCases.cmd" />
+            </Component>
+            <Component Id="cmp8C608FCC6EDD2836B945045B1739D795" Guid="{781A20FD-40A7-47D9-B0ED-758742316136}">
+                <File Id="filC67B528B95CC16BE8F518DA5ECFD1FE2" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RunBVTTestCases.cmd" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="TESTSUITE_BATCH">
+            <ComponentRef Id="cmp524A3D5B76F1DDD42C964F083F6CCAC3" />
+            <ComponentRef Id="cmp8C608FCC6EDD2836B945045B1739D795" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

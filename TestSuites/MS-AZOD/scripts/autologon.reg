@@ -1,0 +1,7 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon]
+"AutoAdminLogon"="1"                   
+"DefaultdomainName"="contoso.com"
+"Defaultusername"="administrator"
+"DefaultPassword"="Password01!"
