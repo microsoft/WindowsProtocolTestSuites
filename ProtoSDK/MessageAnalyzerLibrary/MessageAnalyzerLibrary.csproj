@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E3B08663-C752-41CC-B2B7-43C69B8C1292}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Protocols.TestTools.MessageAnalyzer</RootNamespace>
+    <AssemblyName>Microsoft.Protocols.TestTools.MessageAnalyzer</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\MessageAnalyzerLibrary.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>Sdl6.1.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 11.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 11.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\MessageAnalyzerLibrary.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 11.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 11.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Opn.Language" Condition="Exists('C:\Program Files\Microsoft Message Analyzer\Microsoft.Opn.Language.dll')">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\Microsoft Message Analyzer\Microsoft.Opn.Language.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Opn.Runtime" Condition="Exists('C:\Program Files\Microsoft Message Analyzer\Microsoft.Opn.Runtime.dll')">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\Microsoft Message Analyzer\Microsoft.Opn.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Opn.Runtime.Messaging" Condition="Exists('C:\Program Files\Microsoft Message Analyzer\extensions\Microsoft.Opn.Runtime.Messaging.dll')">
+      <HintPath>C:\Program Files\Microsoft Message Analyzer\extensions\Microsoft.Opn.Runtime.Messaging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Opn.Technologies" Condition="Exists('C:\Program Files\Microsoft Message Analyzer\extensions\Microsoft.Opn.Technologies.dll')">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\Microsoft Message Analyzer\extensions\Microsoft.Opn.Technologies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Opn.Runtime" Condition="!Exists('C:\Program Files\Microsoft Message Analyzer\Microsoft.Opn.Runtime.dll')">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.Opn.Language" Condition="!Exists('C:\Program Files\Microsoft Message Analyzer\Microsoft.Opn.Language.dll')">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.Opn.Runtime.Messaging" Condition="!Exists('C:\Program Files\Microsoft Message Analyzer\extensions\Microsoft.Opn.Runtime.Messaging.dll')">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.Opn.Technologies" Condition="!Exists('C:\Program Files\Microsoft Message Analyzer\extensions\Microsoft.Opn.Technologies.dll')">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition.dll">
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CaptureFileSession.cs" />
+    <Compile Include="ComplexType.cs" />
+    <Compile Include="LiveTraceSession.cs" />
+    <Compile Include="Message.cs" />
+    <Compile Include="MessageAnalyzerMonitor.cs" />
+    <Compile Include="Session.cs" />
+    <Compile Include="Type.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />
+  </Target>
+  <PropertyGroup>
+    <PostBuildEvent>SET etwAdapter=Microsoft.Opn.Runtime.Messaging.dll
+IF EXIST "$(TargetDir)%25etwAdapter%25" del "$(TargetDir)%25etwAdapter%25"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

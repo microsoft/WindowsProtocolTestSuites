@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExpectedMessageList>
+  <!--computer ip are required for filter, this is the limitation of MA-->
+  <Filter>(SMB2 or KerberosV5)</Filter>
+  <!--1 SMB2 Negotiate Request-->
+  <ExpectedMessage>
+    <Name>SMB2.Messages.NegotiateRequest</Name>
+    <!--computer name is required-->
+    <Source>{ClientComputerName}</Source>
+    <!--computer name is required-->
+    <Destination>{ApplicationServerName}</Destination>
+    <ArrayField FieldName="Request.Dialects">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="770" Type="ushort"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--2 SMB2 Negotiate Response-->
+  <ExpectedMessage>
+    <Name>SMB2.Messages.NegotiateResponse</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Response.DialectRevision" Value="770" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--3 AS-REQ: Request for initial authentication-->
+  <ExpectedMessage>
+    <Name>KerberosV5.KrbMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Message.MsgType" Value="10" Type="long"/>
+    </VerifyItemList>
+    <ArrayField FieldName="Message.PAData">      
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <!--KERB-PA-PAC-REQUEST-->
+          <VerifyItem Operation="equal" FieldName="PADataType" Value="128" Type="long"/>
+        </VerifyItemList>
+      </ArrayItem>      
+    </ArrayField>
+    <ArrayField FieldName="Message.ReqBody.Cname.NameString">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="administrator" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+    <ArrayField FieldName="Message.ReqBody.Sname.NameString">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="krbtgt" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="or">
+          <VerifyItem Operation="equal" Value="{KdcDomainNetbios}" Type="string"/>
+          <VerifyItem Operation="equal" Value="{KdcDomainName}" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--4 AS-REP: Error response : Additional pre-authentication required*-->
+  <ExpectedMessage>
+    <Name>KerberosV5.KrbMessage</Name>
+    <Source>{KdcName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <!--KRB-ERROR-->
+      <VerifyItem Operation="equal" FieldName="Message.MsgType" Value="30" Type="long"/>
+      <VerifyItem Operation="equal" FieldName="Message.ErrorCode" Value="25" Type="long"/>
+    </VerifyItemList>
+    <ArrayField FieldName="Message.Sname.NameString">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="krbtgt" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="or">
+          <VerifyItem Operation="equal" Value="{KdcDomainNetbios}" Type="string"/>
+          <VerifyItem Operation="equal" Value="{KdcDomainName}" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--5 AS-REQ: Request for initial authentication-->
+  <ExpectedMessage>
+    <Name>KerberosV5.KrbMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Message.MsgType" Value="10" Type="long"/>
+    </VerifyItemList>
+    <ArrayField FieldName="Message.PAData">      
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <!--KERB-PA-PAC-REQUEST-->
+          <VerifyItem Operation="equal" FieldName="PADataType" Value="128" Type="long"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <!--PA-ENC-TIMESTAMP-->
+          <VerifyItem Operation="equal" FieldName="PADataType" Value="2" Type="long"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+    <ArrayField FieldName="Message.ReqBody.Cname.NameString">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="administrator" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+    <ArrayField FieldName="Message.ReqBody.Sname.NameString">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="krbtgt" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="or">
+          <VerifyItem Operation="equal" Value="{KdcDomainNetbios}" Type="string"/>
+          <VerifyItem Operation="equal" Value="{KdcDomainName}" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--6 AS-REP: Response to KRB_AS_REQ request-->
+  <ExpectedMessage>
+    <Name>KerberosV5.KrbMessage</Name>
+    <Source>{KdcName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <!--AS-REP-->
+      <VerifyItem Operation="equal" FieldName="Message.MsgType" Value="11" Type="long"/>
+    </VerifyItemList>
+    <ArrayField FieldName="Message.Cname.NameString">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="administrator" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+    <ArrayField FieldName="Message.Ticket.Sname.NameString">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="krbtgt" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="or">
+          <VerifyItem Operation="equal" Value="{KdcDomainNetbios}" Type="string"/>
+          <VerifyItem Operation="equal" Value="{KdcDomainName}" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>   
+  <!--7 TGS-REQ: Request for authentication based on TGT-->
+  <ExpectedMessage>
+    <Name>KerberosV5.KrbMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <!--TGS-REQ-->
+      <VerifyItem Operation="equal" FieldName="Message.MsgType" Value="12" Type="long"/>
+    </VerifyItemList>
+    <ArrayField FieldName="Message.PAData">     
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <!--PA-TGS-REQ-->
+          <VerifyItem Operation="equal" FieldName="PADataType" Value="1" Type="long"/>
+        </VerifyItemList>       
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <!--PA-PAC-OPTIONS-->
+          <VerifyItem Operation="equal" FieldName="PADataType" Value="167" Type="long"/>
+          <!--Claim bit is false-->          
+          <ArrayItem>
+            <ArrayField FieldName="PaDataValue.PADataValue.PaPacOptions">
+              <VerifyItemList Operation="or">
+                <VerifyItem Operation="equal" Value="false" Type="bool"/>
+              </VerifyItemList>
+            </ArrayField>
+          </ArrayItem>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+    <ArrayField FieldName="Message.ReqBody.Sname.NameString">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="cifs" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="{ApplicationServerName}.{KdcDomainName}" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--8 TGS-REP: Response to KRB_TGS_REQ request-->
+  <ExpectedMessage>
+    <Name>KerberosV5.KrbMessage</Name>
+    <Source>{KdcName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <!--TGS-REP-->
+      <VerifyItem Operation="equal" FieldName="Message.MsgType" Value="13" Type="long"/>
+    </VerifyItemList>
+    <ArrayField FieldName="Message.Ticket.Sname.NameString">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="cifs" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="{ApplicationServerName}.{KdcDomainName}" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--9 SMB2 SessionSetup Request-->
+  <ExpectedMessage>
+    <Name>SMB2.Messages.SessionSetupRequest</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{ApplicationServerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Request.Buffer.Gssapi.InnerContextToken.MechToken.InnerContextToken.Token.Krb5.MsgType" Value="14" Type="long"/>
+    </VerifyItemList>
+    <ArrayField FieldName="Request.Buffer.Gssapi.InnerContextToken.MechToken.InnerContextToken.Token.Krb5.Ticket.Sname.NameString">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="cifs" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="{ApplicationServerName}.{KdcDomainName}" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--10 TGS-REQ: AP01 Request for authentication on behalf of User-->
+  <ExpectedMessage>
+    <Name>KerberosV5.KrbMessage</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Message.MsgType" Value="12" Type="long"/>
+    </VerifyItemList>
+    <ArrayField FieldName="Message.PAData">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <!--PA-TGS-REQ-->
+          <VerifyItem Operation="equal" FieldName="PADataType" Value="1" Type="long"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <!--PA_S4U_X509_USER-->
+          <VerifyItem Operation="equal" FieldName="PADataType" Value="130" Type="long"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <!--PA-FOR-USER-->
+          <VerifyItem Operation="equal" FieldName="PADataType" Value="129" Type="long"/>
+        </VerifyItemList>
+      </ArrayItem>     
+    </ArrayField>
+    <ArrayField FieldName="Message.ReqBody.Sname.NameString">
+      <ArrayItem>
+        <VerifyItemList Operation="or">
+          <VerifyItem Operation="equal" Value="{ApplicationServerName}$@{KdcDomainName}" Type="string"/>          
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--11 TGS-REP: Response to AP01 for KRB_TGS_REQ request-->
+  <ExpectedMessage>
+    <Name>KerberosV5.KrbMessage</Name>
+    <Source>{KdcName}</Source>
+    <Destination>{ApplicationServerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Message.MsgType" Value="13" Type="long"/>
+    </VerifyItemList>
+    <ArrayField FieldName="Message.PAData">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <!--PA_S4U_X509_USER-->
+          <VerifyItem Operation="equal" FieldName="PADataType" Value="130" Type="long"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+    <ArrayField FieldName="Message.Cname.NameString">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="Administrator" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+    <ArrayField FieldName="Message.Ticket.Sname.NameString">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="{ApplicationServerName}$@{KdcDomainName}" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+ 
+  <!--12 SMB2 SessionSetup Response-->
+  <ExpectedMessage>
+    <Name>SMB2.Messages.SessionSetupResponse</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Response.Buffer.Gssapi.ResponseToken.InnerContextToken.Token.Krb5.MsgType" Value="15" Type="long"/>
+      <VerifyItem Operation="equal" FieldName="Header.Status" Value="0" Type="uint"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--13 SMB2 Tree connect Request-->
+  <ExpectedMessage>
+    <Name>SMB2.Messages.TreeConnectRequest</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{ApplicationServerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Request.Buffer" Value="{FQDNUncPath}" Type="string"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--14 SMB2 SMB2 Tree connect Response-->
+  <ExpectedMessage>
+    <Name>SMB2.Messages.TreeConnectResponse</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Header.Status" Value="0" Type="uint"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--15 SMB2 Create Request-->
+  <ExpectedMessage>
+    <Name>SMB2.Messages.CreateRequest</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{ApplicationServerName}</Destination>
+    <VerifyItemList Operation="and">
+      <!--SMB2Create-->
+      <VerifyItem Operation="equal" FieldName="Header.Command" Value="5" Type="uint"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--16 SMB2 Create Response-->
+  <ExpectedMessage>
+    <Name>SMB2.Messages.CreateResponse</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <!--smb2create-->
+      <VerifyItem Operation="equal" FieldName="Header.Command" Value="5" Type="uint"/>
+      <VerifyItem Operation="equal" FieldName="Header.Status.Sev" Value="0" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--17 SMB2 Tree Disconnect operation-->
+  <ExpectedMessage>
+    <Name>SMB2.VirtualOperations.TreeDisconnect</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{ApplicationServerName}</Destination>
+    <VerifyItemList Operation="and">
+      <!--smb2 tree disconnect succeed-->
+      <VerifyItem Operation="equal" FieldName="Status.Sev" Value="0" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage> 
+  
+  <!--18 SMB2 Logoff Operation-->
+  <ExpectedMessage>
+    <Name>SMB2.VirtualOperations.Logoff</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{ApplicationServerName}</Destination>
+    <VerifyItemList Operation="and">
+      <!--SMB2 Tree logoff succeed--> 
+      <VerifyItem Operation="equal" FieldName="Status.Sev" Value="0" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>  
+
+</ExpectedMessageList>

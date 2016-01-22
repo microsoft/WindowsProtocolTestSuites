@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="TESTSUITE_BIN_DIR">
+            <Component Id="cmp460A19F47A81C1E6C8C18CF459967577" Guid="{77E55DD8-F408-45D5-8242-DB0813A40282}">
+                <File Id="fil954B411BC00D433CF2B002F3AEC7A9E9" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\CbacKerberosSmb2-client-ExpectedFrames.xml" />
+            </Component>
+            <Component Id="cmp5507A7A99468BFADBA554FA7AF5619DF" Guid="{7604BBCB-F269-4DE0-A141-2DB684AAAFC4}">
+                <File Id="fil1F53088A90506AB9858F716DF10108D2" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\CbacKerberosSmb2-dc-ExpectedFrames.xml" />
+            </Component>
+            <Component Id="cmpA841F1BE4813D926881E423DC23BB9AD" Guid="{C4B18C35-1A58-4F52-A80B-CB6446A0506B}">
+                <File Id="fil29B789B49558DDE2974DF7381026F1F5" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\CbacKerberosSmb2-ExpectedFrames.xml" />
+            </Component>
+            <Component Id="cmp56CE053EEBAE02B3EDDD86B30F9C318B" Guid="{C1E1C87A-27E2-4192-8B28-545415A1C7AB}">
+                <File Id="fil5D98369FEB32CE11B4CE0A9951CFE2CE" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\CbacNtlmSmb2-client-ExpectedFrames.xml" />
+            </Component>
+            <Component Id="cmp2DD40ED6CB92AC83ECE4BE80E45B0D82" Guid="{383A4C14-6D92-4C22-9A67-71AC85367DD3}">
+                <File Id="filD4CBE73BC33B24E114C8149095AFD81C" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\CbacNtlmSmb2-dc-ExpectedFrames.xml" />
+            </Component>
+            <Component Id="cmpC5423AAAD1D70616F1FF1F8D975082F7" Guid="{9090296A-1F6B-4BF1-8EC0-DD811D00BA9C}">
+                <File Id="fil57A51363CDB3C5078327A826DBCC0752" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\CbacNtlmSmb2-ExpectedFrames.xml" />
+            </Component>
+            <Component Id="cmp08FDE70C409233ABC1F36E3F78C50B01" Guid="{5A63E48C-F9D6-4448-935D-F03341CED14B}">
+                <File Id="fil49B62824D0E6905A42615C1102DFAAD2" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\CbacSfuSmb2-client-ExpectedFrames.xml" />
+            </Component>
+            <Component Id="cmp679904C6A56E083776845DDC3AA5CBFB" Guid="{31EE672A-5D56-4D8B-8B11-1028A0FFAE19}">
+                <File Id="filC19545B94CA867AD15A9E329018781F1" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\CbacSfuSmb2-dc-ExpectedFrames.xml" />
+            </Component>
+            <Component Id="cmp99C7C931504392353CF47305803DA1D2" Guid="{46DA94C7-E21A-4B76-AFD4-96682C332911}">
+                <File Id="fil189C707487BCECF85807D29860A7E8B8" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\CbacSfuSmb2-ExpectedFrames.xml" />
+            </Component>
+            <Component Id="cmp3D1F7E934FA890AC5C22976785921AFA" Guid="{F6E9BD8B-2D9E-477D-986C-33CB96CBF6EF}">
+                <File Id="filADA2CA87F1875C84C57C96F480370925" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\CbacSwitch.ps1" />
+            </Component>
+            <Component Id="cmpC02C1A03B1E0B61D018CDA77D395484C" Guid="{CE0932B1-CABA-46DC-801F-BEA6E691D812}">
+                <File Id="fil45582882CCCBD845285C47A4A4CED138" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\CleanupCachedTickets.ps1" />
+            </Component>
+            <Component Id="cmp2F192BB6EC96DAEDF3ADB99D6B914C06" Guid="{2BD5ED5F-10D9-4365-ABC7-125625BEAF58}">
+                <File Id="fil2256817B82B845DF404F899E170A6370" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\CtaSmb2-ExpectedFrames.xml" />
+            </Component>
+            <Component Id="cmp991CE9359E6B922415D99AE46BC93777" Guid="{97283320-B144-419F-B802-62E0D1B341FA}">
+                <File Id="fil10CF3218CEA17AA4A6355592152BCED6" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\DacKerberosSmb2-ExpectedFrames.xml" />
+            </Component>
+            <Component Id="cmp2CAE3C02EBF8F58460CAFD0804DEB29B" Guid="{BC922956-78B9-4F55-86F1-A537E28C5D05}">
+                <File Id="fil4504C92CE10EFE9792DFEFA1D8405B0E" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\DacNtlmSmb2-ExpectedFrames.xml" />
+            </Component>
+            <Component Id="cmp02F641AB7E7B1DECF92EE0F435B31058" Guid="{837AB3AF-4BC4-4A85-9BCF-83DF18C5AB8C}">
+                <File Id="fil80A9647772C169BA1DF417055AB2BC22" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\FASTSwitch.ps1" />
+            </Component>
+            <Component Id="cmp0F3A98021E0061572E6C910438BD50F5" Guid="{148C6A6C-4908-4FCD-AAE0-3565F84B3079}">
+                <File Id="fil839BF09EFED39B989CB9DEAC0A389382" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\GroupPolicySync-ExpectedFrames.xml" />
+            </Component>
+            <Component Id="cmp96D6DD3B4C28CEFA3F2C64BB51EC7ABD" Guid="{097D76BF-46A6-42C4-897C-3A77B926BCE2}">
+                <File Id="fil34209C6378563E00FE9A2BE677F2F165" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\IsRemoteSessionSetup.ps1" />
+            </Component>
+            <Component Id="cmpA0CBCE318F37879B4163AEA7E74D9B68" Guid="{6B1F7924-DB28-4051-A8EE-2C43141AED08}">
+                <File Id="fil39924E4D5BCA03468842A3FCB4A76475" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\MS-AZOD_ODAdapter.dll" />
+            </Component>
+            <Component Id="cmp1402BDFB30D901C2ABE4C5A637534853" Guid="{963BAAFB-3479-4F76-BD36-84EEE401D00B}">
+                <File Id="filC4DC9A806310C70CA3F3638FCD2A7EDE" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\MS-AZOD_ODAdapter.pdb" />
+            </Component>
+            <Component Id="cmp46FB32A2C123C1E2727C1D0CFA6D7F3A" Guid="{3771C64F-B27F-4E3E-99F0-EECFD88A4D34}">
+                <File Id="fil3889D98100356EDD7775445D2D8FF67D" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\MS-AZOD_ODTestSuite.deployment.ptfconfig" />
+            </Component>
+            <Component Id="cmpF17B1E539787BDB1649CF957C6F6CDD3" Guid="{94BF4836-7C03-4C60-8AE2-AA274D0320FB}">
+                <File Id="fil3D0F70510C7AAF8A3A7870277877D468" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\MS-AZOD_ODTestSuite.dll" />
+            </Component>
+            <Component Id="cmp6AB94F2D50461B18CACCCCF11C485805" Guid="{C8933D71-B175-470E-84DB-E7770532BA76}">
+                <File Id="filD86FB0347C5555903CFE83421506AED5" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\MS-AZOD_ODTestSuite.pdb" />
+            </Component>
+            <Component Id="cmp4C6C01C0896845F10FC41545082D7B46" Guid="{C44309CD-E251-425A-8539-8CBFE29B5578}">
+                <File Id="filE1D89F5D28958460AC4897D1D79245CE" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\MS-AZOD_ODTestSuite.ptfconfig" />
+            </Component>
+            <Component Id="cmp5C6783CCAA0E8D81C7123A765DBBA7B9" Guid="{C34D7BD1-C816-49CE-9612-AF30A5910663}">
+                <File Id="fil68425E467CF3FA3F40B0AE0CA619EDCF" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\ODLocalTestRun.testrunconfig" />
+            </Component>
+            <Component Id="cmpF11261E777D4B9C78792F832996B6D99" Guid="{1F082DCB-0C50-4331-B22C-00BB6C68223C}">
+                <File Id="fil65944FF84DDEB6C318E2AC030AD19315" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\ReadShareFolder.ps1" />
+            </Component>
+            <Component Id="cmpE150D3F2A5B3B0E1C8F22674B6B9A87C" Guid="{47D7730F-48F9-4FDC-A4DC-2ADEE9E1D559}">
+                <File Id="fil35292C254043B60CE230564B95FE4691" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RemoteSessionSetup.ps1" />
+            </Component>
+            <Component Id="cmpDDD4B18A47C6D6FD0FC995F147265923" Guid="{8E1194A1-43D7-4B01-BFE5-F3A0CC6B0598}">
+                <File Id="fil79F486CF5F1ACE04BC94A3E1EFF3B38E" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\ResourcePropertySync-ExpectedFrames.xml" />
+            </Component>
+            <Component Id="cmp62333F5B8D7074537D3770369EFA5FA4" Guid="{DB4C5063-D6E6-4F84-B9F8-C92BD5B30B8A}">
+                <File Id="fil8ECA265CEA2D634DD1C388E7CB6D8B6F" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\WriteToShareFolder.ps1" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="TESTSUITE_BIN">
+            <ComponentRef Id="cmp460A19F47A81C1E6C8C18CF459967577" />
+            <ComponentRef Id="cmp5507A7A99468BFADBA554FA7AF5619DF" />
+            <ComponentRef Id="cmpA841F1BE4813D926881E423DC23BB9AD" />
+            <ComponentRef Id="cmp56CE053EEBAE02B3EDDD86B30F9C318B" />
+            <ComponentRef Id="cmp2DD40ED6CB92AC83ECE4BE80E45B0D82" />
+            <ComponentRef Id="cmpC5423AAAD1D70616F1FF1F8D975082F7" />
+            <ComponentRef Id="cmp08FDE70C409233ABC1F36E3F78C50B01" />
+            <ComponentRef Id="cmp679904C6A56E083776845DDC3AA5CBFB" />
+            <ComponentRef Id="cmp99C7C931504392353CF47305803DA1D2" />
+            <ComponentRef Id="cmp3D1F7E934FA890AC5C22976785921AFA" />
+            <ComponentRef Id="cmpC02C1A03B1E0B61D018CDA77D395484C" />
+            <ComponentRef Id="cmp2F192BB6EC96DAEDF3ADB99D6B914C06" />
+            <ComponentRef Id="cmp991CE9359E6B922415D99AE46BC93777" />
+            <ComponentRef Id="cmp2CAE3C02EBF8F58460CAFD0804DEB29B" />
+            <ComponentRef Id="cmp02F641AB7E7B1DECF92EE0F435B31058" />
+            <ComponentRef Id="cmp0F3A98021E0061572E6C910438BD50F5" />
+            <ComponentRef Id="cmp96D6DD3B4C28CEFA3F2C64BB51EC7ABD" />
+            <ComponentRef Id="cmpA0CBCE318F37879B4163AEA7E74D9B68" />
+            <ComponentRef Id="cmp1402BDFB30D901C2ABE4C5A637534853" />
+            <ComponentRef Id="cmp46FB32A2C123C1E2727C1D0CFA6D7F3A" />
+            <ComponentRef Id="cmpF17B1E539787BDB1649CF957C6F6CDD3" />
+            <ComponentRef Id="cmp6AB94F2D50461B18CACCCCF11C485805" />
+            <ComponentRef Id="cmp4C6C01C0896845F10FC41545082D7B46" />
+            <ComponentRef Id="cmp5C6783CCAA0E8D81C7123A765DBBA7B9" />
+            <ComponentRef Id="cmpF11261E777D4B9C78792F832996B6D99" />
+            <ComponentRef Id="cmpE150D3F2A5B3B0E1C8F22674B6B9A87C" />
+            <ComponentRef Id="cmpDDD4B18A47C6D6FD0FC995F147265923" />
+            <ComponentRef Id="cmp62333F5B8D7074537D3770369EFA5FA4" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

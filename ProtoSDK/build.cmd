@@ -42,6 +42,7 @@ if not defined TestSuiteRoot (
 %buildtool% "%TestSuiteRoot%ProtoSDK\MS-SMB2\Smb2.csproj" /t:Clean;Rebuild
 %buildtool% "%TestSuiteRoot%ProtoSDK\MS-RSVD\Rsvd.csproj" /t:Clean;Rebuild
 %buildtool% "%TestSuiteRoot%ProtoSDK\MS-SWN\Swn.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MessageAnalyzerLibrary\MessageAnalyzerLibrary.csproj" /t:Clean;Rebuild
 %buildtool% "%TestSuiteRoot%ProtoSDK\MS-ADTS-LDAP\MS-ADTS-LDAP.csproj" /t:Clean;Rebuild
 %buildtool% "%TestSuiteRoot%ProtoSDK\MS-APDS\Apds.csproj" /t:Clean;Rebuild
 %buildtool% "%TestSuiteRoot%ProtoSDK\MS-NRPC\Nrpc.csproj" /t:Clean;Rebuild
