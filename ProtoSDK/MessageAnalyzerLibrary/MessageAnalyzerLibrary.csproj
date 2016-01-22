@@ -87,6 +87,7 @@
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System.ComponentModel.Composition.dll">
+	  <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
