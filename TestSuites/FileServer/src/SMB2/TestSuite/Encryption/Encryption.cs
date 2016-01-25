@@ -91,6 +91,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Encryption)]
+        [Description("This case is to ensure server could handle encrypted requests correctly with dialect 3.11, SMB2_ENCRYPTION_CAPABILITIES context.")]
+        public void BVT_Encryption_SMB311()
+        {
+            NegotiateWithEncryptionCapabilitiesContext(EncryptionAlgorithm.ENCRYPTION_AES128_GCM, sendCipherArray: true);
+            PostNegotiateOperations(EnableEncryptionType.EnableEncryptionPerSession, connectEncryptedShare: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Encryption)]
         [Description("This case is to ensure server could handle encrypted requests correctly with dialect 3.11, SMB2_ENCRYPTION_CAPABILITIES context and AES-128-CCM as encryption algorithm.")]
         public void BVT_Encryption_SMB311_CCM()
         {
@@ -108,6 +119,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             NegotiateWithEncryptionCapabilitiesContext(EncryptionAlgorithm.ENCRYPTION_AES128_GCM);
             PostNegotiateOperations(EnableEncryptionType.EnableEncryptionPerSession, connectEncryptedShare:true);
         }
+
         #endregion
 
         private void NegotiateWithoutContext()
@@ -125,7 +137,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 );
         }
         
-        private void NegotiateWithEncryptionCapabilitiesContext(EncryptionAlgorithm cipherId)
+        private void NegotiateWithEncryptionCapabilitiesContext(EncryptionAlgorithm cipherId, bool sendCipherArray = false)
         {
             if (cipherId == EncryptionAlgorithm.ENCRYPTION_NONE)
             {
@@ -145,16 +157,36 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 LogEntryKind.TestStep,
                 "Server should reply NEGOTIATE response with dialect 3.11, SMB2_ENCRYPTION_CAPABILITIES context and {0} as cipher algorithm. ", cipherId);
             PreauthIntegrityHashID[] preauthHashAlgs = new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 };
-            EncryptionAlgorithm[] encryptionAlgs = new EncryptionAlgorithm[] { 
-                cipherId, 
-                cipherId == EncryptionAlgorithm.ENCRYPTION_AES128_CCM? EncryptionAlgorithm.ENCRYPTION_AES128_GCM : EncryptionAlgorithm.ENCRYPTION_AES128_CCM };
+            EncryptionAlgorithm[] encryptionAlgs = null;
+            if (sendCipherArray)
+            {
+                encryptionAlgs = new EncryptionAlgorithm[] { 
+                    cipherId, 
+                    cipherId == EncryptionAlgorithm.ENCRYPTION_AES128_CCM? EncryptionAlgorithm.ENCRYPTION_AES128_GCM : EncryptionAlgorithm.ENCRYPTION_AES128_CCM };
+            }
+            else
+            {
+                encryptionAlgs = new EncryptionAlgorithm[] { cipherId };
+            }
+
             client.NegotiateWithContexts(
                 Packet_Header_Flags_Values.NONE,
                 TestConfig.RequestDialects,
                 capabilityValue: Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU | Capabilities_Values.GLOBAL_CAP_LEASING | Capabilities_Values.GLOBAL_CAP_ENCRYPTION,
                 preauthHashAlgs: preauthHashAlgs,
                 encryptionAlgs: encryptionAlgs);
-            BaseTestSite.Assert.AreEqual(cipherId, client.SelectedCipherID, "The selected Cipher Id should be {0}", cipherId);
+
+            if (sendCipherArray)
+            {
+                BaseTestSite.Assert.IsTrue(
+                    TestConfig.SupportedEncryptionAlgorithmList.Contains(client.SelectedCipherID),
+                    "[MS-SMB2] 3.3.5.4 The server MUST set Connection.CipherId to one of the ciphers in the client's " +
+                        "SMB2_ENCRYPTION_CAPABILITIES Ciphers array in an implementation-specific manner.");
+            }
+            else
+            {
+                BaseTestSite.Assert.AreEqual(cipherId, client.SelectedCipherID, "The selected Cipher Id should be {0}", cipherId);
+            }
         }
 
         /// <summary>

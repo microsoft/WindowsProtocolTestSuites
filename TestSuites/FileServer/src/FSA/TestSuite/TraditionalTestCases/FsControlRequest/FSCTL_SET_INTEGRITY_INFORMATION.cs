@@ -318,9 +318,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             }
             else
             {
-                if (this.fsaAdapter.TestConfig.Platform >= Platform.WindowsServer10)
+                if (this.fsaAdapter.ReFSVersion == 2)
                 {
-                    // WindowsServer10 provides ReFS v2
                     this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.SUCCESS, status,
                         "[MS-FSCC] section 2.3.57: for ReFS v2 any value except CHECKSUM_TYPE_NONE or CHECKSUM_TYPE_UNCHANGED will set the integrity value to a file-system-selected integrity mechanism and is not guaranteed to use the user specified checksum value.");
 

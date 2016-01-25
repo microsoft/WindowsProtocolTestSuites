@@ -82,12 +82,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             {
                 if (swnClientForInterface != null)
                 {
-                    swnClientForInterface.SwnUnbind(TestConfig.Timeout);
+                    swnClientForInterface.SwnUnbind(TestConfig.FailoverTimeout);
                     swnClientForInterface = null;
                 }
                 if (swnClientForWitness != null)
                 {
-                    swnClientForWitness.SwnUnbind(TestConfig.Timeout);
+                    swnClientForWitness.SwnUnbind(TestConfig.FailoverTimeout);
                     swnClientForInterface = null;
                 }
             }
@@ -213,7 +213,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
             DoUntilSucceed(() => SWNTestUtility.BindServer(swnClientForInterface, currentAccessIpAddr,
                 TestConfig.DomainName, TestConfig.UserName, TestConfig.UserPassword, TestConfig.DefaultSecurityPackage,
-                TestConfig.DefaultRpceAuthenticationLevel, TestConfig.Timeout, server), TestConfig.FailoverTimeout,
+                TestConfig.DefaultRpceAuthenticationLevel, TestConfig.FailoverTimeout, server), TestConfig.FailoverTimeout,
                 "Retry BindServer until succeed within timeout span");
 
             int ret;
@@ -226,7 +226,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 return SWNTestUtility.VerifyInterfaceList(interfaceList, TestConfig.Platform);
             }, TestConfig.FailoverTimeout, "Retry to call WitnessrGetInterfaceList until succeed within timeout span");
 
-            swnClientForInterface.SwnUnbind(TestConfig.Timeout);
+            swnClientForInterface.SwnUnbind(TestConfig.FailoverTimeout);
             swnClientForInterface = null;
 
             SWNTestUtility.GetRegisterInterface(interfaceList, out registerInterface);
@@ -240,7 +240,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             DoUntilSucceed(() => SWNTestUtility.BindServer(swnClientForWitness,
                 (registerInterface.Flags & (uint)SwnNodeFlagsValue.IPv4) != 0 ? new IPAddress(registerInterface.IPV4) : SWNTestUtility.ConvertIPV6(registerInterface.IPV6),
                 TestConfig.DomainName, TestConfig.UserName, TestConfig.UserPassword, TestConfig.DefaultSecurityPackage,
-                TestConfig.DefaultRpceAuthenticationLevel, TestConfig.Timeout), TestConfig.FailoverTimeout,
+                TestConfig.DefaultRpceAuthenticationLevel, TestConfig.FailoverTimeout), TestConfig.FailoverTimeout,
                 "Retry BindServer until succeed within timeout span");
 
             SwnVersion registerVersion;
@@ -341,7 +341,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                     BaseTestSite.Assert.AreEqual<SwnErrorCode>(SwnErrorCode.ERROR_INVALID_PARAMETER, (SwnErrorCode)ret, "WitnessrUnRegister returns with result code = 0x{0:x8}", ret);
                 }
                 pContext = IntPtr.Zero;
-                swnClientForWitness.SwnUnbind(TestConfig.Timeout);
+                swnClientForWitness.SwnUnbind(TestConfig.FailoverTimeout);
             }
 
             if (registerType == SwnRegisterType.InvalidRequest)
@@ -358,7 +358,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 BaseTestSite.Assert.AreEqual<SwnErrorCode>(SwnErrorCode.ERROR_NOT_FOUND, (SwnErrorCode)ret, "ExpectWitnessrAsyncNotify returns with result code = 0x{0:x8}", ret);
 
                 pContext = IntPtr.Zero;
-                swnClientForWitness.SwnUnbind(TestConfig.Timeout);
+                swnClientForWitness.SwnUnbind(TestConfig.FailoverTimeout);
             }
 
             if (registerType == SwnRegisterType.KeepAliveTimeout)
@@ -372,13 +372,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 BaseTestSite.Assert.AreEqual<SwnErrorCode>(SwnErrorCode.ERROR_TIMEOUT, (SwnErrorCode)ret, "ExpectWitnessrAsyncNotify returns with result code = 0x{0:x8}", ret);
 
                 pContext = IntPtr.Zero;
-                swnClientForWitness.SwnUnbind(TestConfig.Timeout);
+                swnClientForWitness.SwnUnbind(TestConfig.FailoverTimeout);
             }
             #endregion
 
             #region Cleanup
             pContext = IntPtr.Zero;
-            swnClientForWitness.SwnUnbind(TestConfig.Timeout);
+            swnClientForWitness.SwnUnbind(TestConfig.FailoverTimeout);
             swnClientForWitness = null;
             #endregion
         }

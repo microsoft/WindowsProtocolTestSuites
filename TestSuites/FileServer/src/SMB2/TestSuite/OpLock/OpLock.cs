@@ -75,7 +75,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.OpLock
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Smb2002)]
-        [TestCategory(TestCategories.Oplock)]
+        [TestCategory(TestCategories.OplockOnShareWithoutForceLevel2OrSOFS)]
         [Description("This test case is designed to test whether sever can handle OplockBreak correctly.")]
         public void BVT_OpLockBreak()
         {            

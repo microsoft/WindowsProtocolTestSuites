@@ -75,7 +75,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle
             c = new HandleConfig
             {
                 MaxSmbVersionSupported = ModelUtility.GetModelDialectRevision(testConfig.MaxSmbVersionSupported),
-                Platform = testConfig.Platform == Platform.WindowsServer10 ? Platform.WindowsServer2012R2 : testConfig.Platform,
+                Platform = testConfig.Platform == Platform.WindowsServer2016 ? Platform.WindowsServer2012R2 : testConfig.Platform,
                 IsPersistentHandleSupported = testConfig.IsPersistentHandlesSupported,
                 IsLeasingSupported = testConfig.IsLeasingSupported,
                 IsDirectoryLeasingSupported = testConfig.IsDirectoryLeasingSupported

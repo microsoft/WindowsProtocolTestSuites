@@ -249,20 +249,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 if (decodedPacket is Smb2SinglePacket)
                 {
                     //verify signature of a single packet
-                    Smb2SinglePacket singlePacket = decodedPacket as Smb2SinglePacket;   
-                    
-                    if (!TryVerifySignature(singlePacket, singlePacket.Header.SessionId))
-                    {
-                        throw new Exception("Error happened during signature verification of single packet: " + singlePacket.ToString());
-                    }
+                    Smb2SinglePacket singlePacket = decodedPacket as Smb2SinglePacket;
+
+                    TryVerifySignature(singlePacket, singlePacket.Header.SessionId, messageBytes);
                 }
                 else if (decodedPacket is Smb2CompoundPacket)//For Compound packet signature verification
                 {
                     //verify signature of the compound packet
-                    if (!TryVerifySignature(decodedPacket as Smb2CompoundPacket))
-                    {
-                        throw new Exception("Error happened during signature verification of compound packet: " + decodedPacket.ToString());
-                    }
+                    TryVerifySignature(decodedPacket as Smb2CompoundPacket, messageBytes);
                 }
 
                 return decodedPacket;
@@ -690,7 +684,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <param name="packet">The packet to be verified</param>
         /// <param name="cryptoInfo">The cryptoInfo of smb2client</param>        
         /// <returns>True when signature verification succeeds and false when fails</returns>
-        private bool VerifySignature(Smb2SinglePacket packet, Smb2CryptoInfo cryptoInfo)
+        private bool VerifySignature(Smb2SinglePacket packet, Smb2CryptoInfo cryptoInfo, byte[] messageBytes)
         {
             if (cryptoInfo.DisableVerifySignature)
             {
@@ -704,15 +698,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 {
                     packet = packet.Error;
                 }
-                //save the 16-byte signature from the Signature field in the SMB2 Header
-                byte[] originalSignature = packet.Header.Signature;
-
-                //zero out the 16-byte signature field in the SMB2 Header of the incoming message.
-                packet.Header.Signature = new byte[Smb2Consts.SignatureSize];
-                byte[] bytesToCompute = packet.ToBytes();
+                
+                byte[] bytesToCompute = messageBytes;
+                // Zero out the 16-byte signature field in the SMB2 Header of the incoming message.
+                Array.Clear(bytesToCompute, System.Runtime.InteropServices.Marshal.SizeOf(packet.Header) - Smb2Consts.SignatureSize, Smb2Consts.SignatureSize);
 
                 //Compute the message with signing key  
-                byte[] computedSignature = new byte[] { };
+                byte[] computedSignature = null;
                 if (Smb2Utility.IsSmb3xFamily(cryptoInfo.Dialect))
                 {
                     //[MS-SMB2] 3.1.5.1   
@@ -735,12 +727,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     HMACSHA256 hmacSha = new HMACSHA256(cryptoInfo.SigningKey);
                     computedSignature = hmacSha.ComputeHash(bytesToCompute);
                 }
-                packet.Header.Signature = originalSignature;
 
                 //[MS-SMB2] 3.1.5.1   
                 //If the first 16 bytes (the high-order portion) of the computed signature from step 3 or step 4 matches the saved signature from step 1, the message is signed correctly
                 // compare the first 16 bytes of the originalSignature and computedSignature
-                return originalSignature.SequenceEqual(computedSignature.Take(16));
+                return packet.Header.Signature.SequenceEqual(computedSignature.Take(Smb2Consts.SignatureSize));
             }
             catch (Exception ex)
             {
@@ -753,14 +744,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// </summary>
         /// <param name="singlePacket">The singlepacket to verified</param>
         /// <param name="sessionId">The sessionId to retrieve the cryptoinfo of the session.</param>
-        /// <returns>True if verified succeeds and false when fails</returns>
-        private bool TryVerifySignature(Smb2SinglePacket singlePacket, ulong sessionId)
+        private void TryVerifySignature(Smb2SinglePacket singlePacket, ulong sessionId, byte[] messageBytes)
         {
             // [MS-SMB2] 3.2.5.1.3             
             //If the MessageId is 0xFFFFFFFFFFFFFFFF, no verification is necessary.
             if (singlePacket.Header.MessageId == 0xFFFFFFFFFFFFFFFF)
             {
-                return true;
+                return;
             }
 
             Smb2CryptoInfo cryptoInfo = null;
@@ -776,12 +766,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     && singlePacket.Header.Status == Smb2Status.STATUS_SUCCESS)
                 {
                     //skip
-                    return true;
+                    return;
                 }
 
                 if (cryptoInfoTable.TryGetValue(sessionId, out cryptoInfo))
                 {
-                    if (!VerifySignature(singlePacket, cryptoInfo))
+                    if (!VerifySignature(singlePacket, cryptoInfo, messageBytes))
                     {
                         //If signature verification fails, the client MUST discard the received message and do no further processing for it.
                         //The client MAY also choose to disconnect the connection.
@@ -791,46 +781,35 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 }                
             }           
 
-            return true;
+            return;
         }
 
         /// <summary>
         /// Verify the signature of a Smb2CompoundPacket
         /// </summary>
         /// <param name="packet">The compound packet to be verified</param>        
-        /// <returns>True when signature verification succeeds and false when fails</returns>
-        private bool TryVerifySignature(Smb2CompoundPacket packet)
+        private void TryVerifySignature(Smb2CompoundPacket packet, byte[] messageBytes)
         {
             try
             {
-                Packet_Header header = TypeMarshal.ToStruct<Packet_Header>(packet.ToBytes());
 
-                if ((header.Flags & Packet_Header_Flags_Values.FLAGS_RELATED_OPERATIONS)
-                == Packet_Header_Flags_Values.FLAGS_RELATED_OPERATIONS)
+                ulong firstSessionId = packet.Packets[0].Header.SessionId;
+
+                uint offset = 0;
+                for (int i = 0; i < packet.Packets.Count; i++)
                 {
-                    //The realSessionId is the sessionId in the first pacekt of the compoundpacket for related packets.
-                    ulong realSessionId = packet.Packets[0].Header.SessionId;
-                    for (int i = 0; i < packet.Packets.Count; i++)
-                    {
-                        Smb2SinglePacket singlePacket = packet.Packets[i];
-                        if (!TryVerifySignature(singlePacket, realSessionId))
-                        {
-                            break;
-                        }
-                    }
+                    Smb2SinglePacket singlePacket = packet.Packets[i];
+                    // NextCommand is the offset, in bytes, from the beginning of this SMB2 header to the start of the subsequent 8-byte aligned SMB2 header. 
+                    uint packetLen = singlePacket.Header.NextCommand != 0 ? singlePacket.Header.NextCommand : (uint)(messageBytes.Length - offset);
+                    byte[] packetBytes = new byte[packetLen];
+                    Array.Copy(messageBytes, offset, packetBytes, 0, packetLen);
+                    offset += packetLen;
+
+                    // For Related operations, the sessinId is in the first packet of the compound packet.
+                    ulong sessionId = singlePacket.Header.Flags.HasFlag(Packet_Header_Flags_Values.FLAGS_RELATED_OPERATIONS) ? firstSessionId : singlePacket.Header.SessionId;
+
+                    TryVerifySignature(singlePacket, sessionId, packetBytes);
                 }
-                else
-                {
-                    for (int i = 0; i < packet.Packets.Count; i++)
-                    {
-                        Smb2SinglePacket singlePacket = packet.Packets[i];
-                        if (!TryVerifySignature(singlePacket, singlePacket.Header.SessionId))
-                        {
-                            break;
-                        }
-                    }
-                }
-                return true;
             }
             catch (Exception ex)
             {

@@ -2355,6 +2355,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// Cluster Shared Volume file system (CSVFS)
         /// </summary>
         CSVFS = 7,
+
+        /// <summary>
+        /// None of the above file systems
+        /// </summary>
+        OTHERFS = 8,
     }
 
     /// <summary>
