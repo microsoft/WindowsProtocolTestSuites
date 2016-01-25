@@ -83,27 +83,10 @@ You can find contributing guide [here](https://github.com/Microsoft/WindowsProto
 
 Windows Protocol Test Suites are under the [MIT license](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/master/LICENSE.txt).
   
-## Roadmap
-
-The test suites will be updated according to Windows' release and your interests.
-If one protocol is updated to a newer version, and it is also a highly interested protocol, the test suite will be aligned and updated.
-If a new protocol is released and it's highly interested, the specific test suite will be developed.
-
-The following test suites will be released in version 1.0.
-
-| **Test Suite Name** | **Protocol Covered**|
-|--------------------|-------------------|
-|SMB1 Server Test Suite|MS-SMB|
-|File Server Family Test Suite|MS-SMB2, MS-DFSC, MS-SWN, MS-FSRVP, MS-FSA, MS-RSVD, MS-SQOS|
-|Protocol Test Manager|N/A|
-|Kerberos Test Suite|MS-PAC, MS-KILE, MS-KKDCP|
-|MS-AZOD Test Suite|MS-AZOD|
-|RDP Client Family Test Suite|MS-RDPBCGR, MS-RDPDISP, MS-RDPEDYC, MS-RDPEGFX, MS-RDPEGT, MS-RDPEI, MS-RDPEMT, MS-RDPEUDP, MS-RDPEUSB, MS-RDPEVOR,MS-RDPRFX|
-|MS-SMBD Test Suite |MS-SMBD|
-|BYOD Test Suite|MS-ADFSPIP|
-|AD Family Test Suite|MS-ADTS, MS-ADA1, MS-ADA2, MS-ADA3, MS-ADLS, MS-ADSC, MS-APDS, MS-DRSR, MS-FRS2, MS-LSAD, MS-LSAT, MS-NRPC, MS-SAMR|
-|MS-HVRS Test Suite|MS-HVRS|
 
 # Contact
 
-Keep up with the Windows protocol test team by visiting our [blog](https://blogs.msdn.microsoft.com/windowsinteroperability), chatting in [Gitter](https://gitter.im/Microsoft/WindowsProtocolTestSuites?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge), or sending us email to winterop@microsoft.com. 
+Keep up with the Windows protocol test team by visiting our [blog](https://blogs.msdn.microsoft.com/windowsinteroperability), chatting in [Gitter](https://gitter.im/Microsoft/WindowsProtocolTestSuites?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge), or sending email to winterop@microsoft.com. 
+
+If you have protocol spec questions, please direct your questions to dochelp@microsoft.com.
+
