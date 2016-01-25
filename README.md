@@ -69,7 +69,7 @@ build.cmd
 ```
 ## Run
 After the build succeeds, you could set up the test environment and install/configure/run the test suite according to its **User Guide**.
-Every test suite has its own **User Guide** in the **WindowsProtocolTestSuites\TestSuites\[TestSuiteName]\docs** folder.
+Every test suite has its own **User Guide** in the **WindowsProtocolTestSuites\TestSuites\\[TestSuiteName]\docs** folder.
 There're two more documents in the same folder:
 
 * **Technical Document**. The Open Specifications documentation for protocols, published by Microsoft. It's the basis of developing Test Suites.
