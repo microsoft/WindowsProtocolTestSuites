@@ -674,7 +674,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         private Platform ConvertPlatform(string osVersion)
         {
             if (osVersion.StartsWith("10.0."))
-                return Platform.WindowsServer10;
+                return Platform.WindowsServer2016;
             else if (osVersion.StartsWith("6.3."))
                 return Platform.WindowsServer2012R2;
             else if (osVersion.StartsWith("6.2."))

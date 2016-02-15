@@ -52,9 +52,9 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         WindowsServer2012R2 = 0x10000007,
 
         /// <summary>
-        /// Windows Server 10
+        /// Windows Server 2016
         /// </summary>
-        WindowsServer10 = 0x10000008,
+        WindowsServer2016 = 0x10000008,
     }
 
     /// <summary>
