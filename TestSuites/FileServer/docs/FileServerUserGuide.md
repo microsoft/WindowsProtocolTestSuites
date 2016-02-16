@@ -1503,6 +1503,8 @@ Give **Full Control** to the account that will access the file share.
 
 ![](./image/FileServerUserGuide/image140.png)
 
+Repeat the steps except for setting the share location on the scale-out file server role on **Select the Server and path for this share** page and setting the share name to **SMBClustered** on **Specify share name** page.
+
 To create a file share on the file server for scale-out application data, first add an existing free cluster disk (**Assigned To** is **Available Storage**) as **Cluster Shared Volumes** like below.
 
 ![](./image/FileServerUserGuide/image141.png)
