@@ -118,7 +118,7 @@ Below environment topology is used to demonstrate how Windows uses MS-SMB2 proto
 
 **Network Overview**
 
-![](./image/env.png)
+![](./image/FileServerTestDesignSpecification/env.png)
 
 ###<a name="1.2">Partner Test Environment
 ------------------------
@@ -137,7 +137,7 @@ There are 2 parts to modify if only replace storage:
 
 **Network Overview**
 
-![](./image/network.png)
+![](./image/FileServerTestDesignSpecification/network.png)
 
 ##<a name="2"> Test Scope
 
