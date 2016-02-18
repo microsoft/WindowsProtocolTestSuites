@@ -1503,7 +1503,9 @@ Give **Full Control** to the account that will access the file share.
 
 ![](./image/FileServerUserGuide/image140.png)
 
-To create a file share on the file server for scale-out application data, first add an existing free cluster disk (**Assigned To** is **Available Storage**) as **Cluster Shared Volumes** like below.
+Repeat above steps except for setting the share location on the scale-out file server role on **Select the Server and path for this share** page and setting the share name to **SMBClustered** on **Specify share name** page.
+
+For Windows platform to add Scale-out Share volume, please refer to section [7.3.24](#_Add_Scale-out_Share).
 
 ![](./image/FileServerUserGuide/image141.png)
 
@@ -1652,6 +1654,11 @@ Run the following PowerShell command to create a MultiInstance sqos policy in th
 Get the policy id:
 
 	$policy.PolicyId
+
+#### <a name="_Add_Scale-out_Share"/>Add Scale-out Share volume
+To create a file share on the file server for scale-out application data, first add an existing free cluster disk (**Assigned To** is **Available Storage**) as **Cluster Shared Volumes** like below.
+
+![image150.png](./image/FileSharing_ServerUserGuide/image150.png)	
 
 ##<a name="6"/>Installed Files and Folders
 
