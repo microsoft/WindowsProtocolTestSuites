@@ -1659,11 +1659,6 @@ Get the policy id:
 
 	$policy.PolicyId
 
-#### <a name="_Add_Scale-out_Share"/>Add Scale-out Share volume
-To create a file share on the file server for scale-out application data, first add an existing free cluster disk (**Assigned To** is **Available Storage**) as **Cluster Shared Volumes** like below.
-
-![image150.png](./image/FileSharing_ServerUserGuide/image141.png)
-
 ##<a name="6"/>Installed Files and Folders
 
 The installation process adds the following folders and files to the driver computer at C:\\MicrosoftProtocolTests\\FileS\\Server-Endpoint\\*&lt;version\#&gt;*\\.
