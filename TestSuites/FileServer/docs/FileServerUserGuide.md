@@ -1470,7 +1470,7 @@ Repeat above steps when select **File Server for scale-out application data** to
 
 ![](./image/FileServerUserGuide/image129.png)
 
-#### <a name="_Add_Scale-out_Share"/>Add Scale-out Share volume
+##### <a name="_Add_Scale-out_Share"/>Add Scale-out Share volume
 To create a file share on the file server for scale-out application data, first add an existing free cluster disk (**Assigned To** is **Available Storage**) as **Cluster Shared Volumes** like below.
 
 ![image141.png](./image/FileServerUserGuide/image141.png)
