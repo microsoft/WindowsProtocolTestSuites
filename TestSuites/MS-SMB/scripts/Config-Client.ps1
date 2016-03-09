@@ -1,4 +1,4 @@
-#############################################################################
+############################################################################
 ##
 ## Microsoft Windows Powershell Scripting
 ## File:           Config-Client.ps1
@@ -6,7 +6,7 @@
 ## Requirements:   Windows Powershell 2.0 CTP2
 ## Supported OS:   Windows 7 and later versions
 ##
-##############################################################################
+#############################################################################
 $ScriptsSignalFile = "$env:HOMEDRIVE\config.finished.signal"
 if (Test-Path -Path $ScriptsSignalFile)
 {
