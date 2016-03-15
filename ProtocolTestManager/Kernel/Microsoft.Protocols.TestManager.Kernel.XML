@@ -907,7 +907,7 @@
         </member>
         <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.VersionRegex">
             <summary>
-              Looks up a localized string similar to \d\.\d\.\d\.\d.
+              Looks up a localized string similar to \d\.\d\.\d{1,4}\.\d.
             </summary>
         </member>
         <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.VSTestLocation">

@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rdprfx", "Rdprfx.csproj", "{9DD86DE1-3231-4713-9B45-493F4FE4199C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messages", "..\Messages\Messages.csproj", "{75544419-3F4E-4308-A676-165F45C1462E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Fxcop|Any CPU = Fxcop|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9DD86DE1-3231-4713-9B45-493F4FE4199C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DD86DE1-3231-4713-9B45-493F4FE4199C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DD86DE1-3231-4713-9B45-493F4FE4199C}.Fxcop|Any CPU.ActiveCfg = Release|Any CPU
+		{9DD86DE1-3231-4713-9B45-493F4FE4199C}.Fxcop|Any CPU.Build.0 = Release|Any CPU
+		{9DD86DE1-3231-4713-9B45-493F4FE4199C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DD86DE1-3231-4713-9B45-493F4FE4199C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75544419-3F4E-4308-A676-165F45C1462E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75544419-3F4E-4308-A676-165F45C1462E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75544419-3F4E-4308-A676-165F45C1462E}.Fxcop|Any CPU.ActiveCfg = Fxcop|Any CPU
+		{75544419-3F4E-4308-A676-165F45C1462E}.Fxcop|Any CPU.Build.0 = Fxcop|Any CPU
+		{75544419-3F4E-4308-A676-165F45C1462E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75544419-3F4E-4308-A676-165F45C1462E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

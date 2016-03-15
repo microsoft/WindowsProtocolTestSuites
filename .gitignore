@@ -7,3 +7,8 @@ drop
 TestSuites/MS-SMB/src/Deploy/TestSuiteBatchFiles.wxs
 TestSuites/MS-SMB/src/Deploy/TestSuiteBinFiles.wxs
 TestSuites/MS-SMB/src/Deploy/TestSuiteScripts.wxs
+TestSuites/RDP/src/Deploy/TestSuiteDataFiles.wxs
+TestSuites/RDP/src/Deploy/TestSuiteBatchFiles.wxs
+TestSuites/RDP/src/Deploy/TestSuiteBinFiles.wxs
+TestSuites/RDP/src/Deploy/TestSuiteScripts.wxs
+

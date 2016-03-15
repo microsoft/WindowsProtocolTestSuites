@@ -9,28 +9,29 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
     /// Spcifies the bounds of an INTEGER.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
-    public sealed class Asn1IntegerBound : Asn1Attribute
+    public sealed class Asn1IntegerBound : Asn1Constraint
     {
         private long max, min;
+        private bool hasMax, hasMin;
 
         /// <summary>
         /// Initializes a new instance of the Asn1IntegerBound class that doesn't have max and min bounds.
         /// </summary>
         public Asn1IntegerBound()
         {
-            HasMax = false;
-            HasMin = false;
+            hasMax = false;
+            hasMin = false;
         }
 
         /// <summary>
         /// Gets a bool indicates whether an max bound is defined.
         /// </summary>
-        public bool HasMax { get; private set; }
+        public bool HasMax { get { return hasMax; } }
 
         /// <summary>
         /// Gets a bool indicates whether a min bound is defined.
         /// </summary>
-        public bool HasMin { get; private set; }
+        public bool HasMin { get { return hasMin; } }
 
         /// <summary>
         /// Gets or sets the max bound of an INTEGER.
@@ -39,12 +40,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         {
             get
             {
+                if (!HasMax)
+                {
+                    throw new Asn1InvalidOperation("Max Bound is not set.");
+                }
                 return max;
             }
             set
             {
                 max = value;
-                HasMax = true;
+                hasMax = true;
             }
         }
 
@@ -55,12 +60,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         {
             get
             {
+                if (!HasMin)
+                {
+                    throw new Asn1InvalidOperation("Min Bound is not set.");
+                }
                 return min;
             }
             set
             {
                 min = value;
-                HasMin = true;
+                hasMin = true;
             }
         }
     }

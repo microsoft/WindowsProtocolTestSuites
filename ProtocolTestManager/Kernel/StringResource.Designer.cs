@@ -248,7 +248,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to \d\.\d\.\d\.\d.
+        ///   Looks up a localized string similar to \d\.\d\.\d{1,4}\.\d.
         /// </summary>
         internal static string VersionRegex {
             get {
