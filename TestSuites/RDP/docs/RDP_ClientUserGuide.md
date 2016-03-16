@@ -272,12 +272,12 @@ All of the following software must be installed on the driver computer _before_ 
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
 
-Visual Studio 2012 Professional is the minimum requirement.
+>Visual Studio 2012 Professional is the minimum requirement.
 
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note 
 
-Visual Studio need update to Update 4 or later.
+>Visual Studio need update to Update 4 or later.
 
 ## <a name="_Toc421010894"/>Network Setup
 
@@ -624,13 +624,13 @@ Note
 
 >After run Config-DriverComputer.ps1, three files are generated under C:\, as follows: 
 
-* ***ComputerName***.cer
+>	* ***ComputerName***.cer
 
-* ***ComputerName***.pfx
+>	* ***ComputerName***.pfx
 
-* ***ComputerName***.pvk
+>	* ***ComputerName***.pvk
 
-***ComputerName*** represents driver computer’s name as you configured in ParamConfig.xml.
+>***ComputerName*** represents driver computer’s name as you configured in ParamConfig.xml.
 
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
@@ -887,16 +887,26 @@ The following table describes the optional configuration properties and provides
 This test suite includes command files that you can use to complete some basic test cases. Each test case verifies the protocol implementation based on a given scenario. 
 
 You can find and run these test cases in the following directories: 
- C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch
- C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPBCGR
- C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPEUSB
- C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPRFX
- C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPEVOR
- C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPEUDP
- C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPEMT
- C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPEI
- C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPEGFX
- C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPEDISP
+
+* C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch
+
+* C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPBCGR
+
+* C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPEUSB
+
+* C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPRFX
+
+* C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPEVOR
+
+* C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPEUDP
+
+* C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPEMT
+
+* C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPEI
+
+* C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPEGFX
+
+* C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPEDISP
 
 You can run these command files at the command prompt or via the graphical user interface.
 
@@ -953,11 +963,11 @@ Note
 
 >The following RDPBCGR test cases must be run under “interactive” mode, and will fail when running under “Powershell” mode
 
-* BVT\_ClientInputTest_FastPath 
+>	* BVT\_ClientInputTest_FastPath 
 
-* BVT\_ClientInputTest_SlowPath
+>	* BVT\_ClientInputTest_SlowPath
 
-* S1\_ConnectionTest\_Disconnection\_PositiveTest_ClientInitiated
+>	* S1\_ConnectionTest\_Disconnection\_PositiveTest_ClientInitiated
 
 #### <a name="_Toc421010913"/>Configuration for RDPEI
 
@@ -969,11 +979,9 @@ Except common events, MS-RDPEI test cases need to control remote desktop client 
 
 * Find the  &#60; Adapter xsi:type="interactive" name="IRdpeiSUTControlAdapter" / &#62;  option in the **adapters** node. The default mode is **interactive**.
 
-* To use **enhanced interactive** mode, replace it to  &#60; Adapter xsi:type="managed" name="IRdpeiSUTControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdpei.RdpeiSUTControlAdapter"/ &#62; .
+* To use **enhanced interactive** mode, replace it to &#60; Adapter xsi:type="managed" name="IRdpeiSUTControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdpei.RdpeiSUTControlAdapter"/ &#62; .
 
-* To use **protocol-based** mode, replace it to 
-
-*  &#60; Adapter xsi:type="managed" name="IRdpeiSUTControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdp.ProtocolBasedRdpeiSUTControlAdapter"/ &#62; 
+* To use **protocol-based** mode, replace it to &#60; Adapter xsi:type="managed" name="IRdpeiSUTControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdp.ProtocolBasedRdpeiSUTControlAdapter"/ &#62; 
 
 When using the **interactive** mode, test cases will pop up dialogs and guide you to perform testing steps manually. 
 
@@ -991,7 +999,7 @@ For MS-RDPEDISP, test suite also need to control SUT to trigger some specific ev
 
 * Find  &#60; Adapter xsi:type="powershell" name="IRdpedispSUTControlAdapter" scriptdir="." / &#62;  option in the **adapters** node. The default mode is **powershell**. 
 
-* To use **interactive** mode, replace it to  &#60; Adapter xsi:type="interactive" name="IRdpedispSUTControlAdapter" / &#62; .
+* To use **interactive** mode, replace it to &#60; Adapter xsi:type="interactive" name="IRdpedispSUTControlAdapter" / &#62; .
 
 * To use **protocol-based** mode, replace it to &#60; Adapter xsi:type="managed" name="IRdpedispSUTControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdp.ProtocolBasedRdpedispSUTControlAdapter"/ &#62; 
 
@@ -1010,52 +1018,52 @@ Note: Desktop shortcuts referenced below are created during the installation pro
 **To run all smoke tests**
 
 * From the desktop of the driver computer, double-click the **Run All BVT Test Cases** shortcut. 
-Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **RunBVTTestCases.cmd** file. 
+* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **RunBVTTestCases.cmd** file. 
 
 **To run the smoke test of MS-RDPBCGR**
 
 * From the desktop of the driver computer, double-click the **Run MS-RDPBCGR Client-EP BVT Test Cases** shortcut. 
-Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpbcgr_RunBVTTestCases.cmd** file. 
+* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpbcgr_RunBVTTestCases.cmd** file. 
 
 **To run the smoke test of MS-RDPEUSB**
 
 * From the desktop of the driver computer, double-click the **Run MS-RDPEUSB Client-EP BVT Test Cases** shortcut. 
-Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpeusb_RunBVTTestCases.cmd** file. 
+* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpeusb_RunBVTTestCases.cmd** file. 
 
 **To run the smoke test of MS-RDPRFX**
 
 * From the desktop of the driver computer, double-click the **Run MS-RDPRFX Client-EP BVT Test Cases** shortcut.
-Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdprfx_RunBVTTestCases.cmd** file. 
+* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdprfx_RunBVTTestCases.cmd** file. 
 
 **To run the smoke test of MS-RDPEVOR**
 
 * From the desktop of the driver computer, double-click the **Run MS-RDPEVOR Client-EP BVT Test Cases** shortcut. 
-Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpevor_RunBVTTestCases.cmd** file. 
+* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpevor_RunBVTTestCases.cmd** file. 
 
 **To run the smoke test of MS-RDPEUDP**
 
 * From the desktop of the driver computer, double-click the **Run MS-RDPEUDP Client-EP BVT Test Cases** shortcut. 
-Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpeudp_RunBVTTestCases.cmd** file. 
+* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpeudp_RunBVTTestCases.cmd** file. 
 
 **To run the smoke test of MS-RDPEMT**
 
 * From the desktop of the driver computer, double-click the **Run MS-RDPEMT Client-EP BVT Test Cases** shortcut. 
-Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpemt_RunBVTTestCases.cmd** file. 
+* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpemt_RunBVTTestCases.cmd** file. 
 
 **To run the smoke test of MS-RDPEI**
 
 * From the desktop of the driver computer, double-click the **Run MS-RDPEI Client-EP BVT Test Cases** shortcut. 
-Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpei_RunBVTTestCases.cmd** file. 
+* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpei_RunBVTTestCases.cmd** file. 
 
 **To run the smoke test of MS-RDPEGFX**
 
 * From the desktop of the driver computer, double-click the **Run MS-RDPEGFX Client-EP BVT Test Cases** shortcut. 
-Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpegfx_RunBVTTestCases.cmd** file.
+* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpegfx_RunBVTTestCases.cmd** file.
 
 **To run the smoke test of MS-RDPEDISP**
 
 * From the desktop of the driver computer, double-click the **Run MS-RDPEDISP Client-EP BVT Test Cases** shortcut. 
-Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpedisp_RunBVTTestCases.cmd** file.
+* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpedisp_RunBVTTestCases.cmd** file.
 
 ### <a name="_Toc421010916"/>Run All Test Cases
 
@@ -1064,52 +1072,52 @@ Use the steps below to run all test cases.
 **To run all test cases**
 
 * From the desktop of the driver computer, double-click the **Run All Test Cases** shortcut.
-Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **RunAllTestCases.cmd** file. 
+* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **RunAllTestCases.cmd** file. 
 
 **To run all test cases of MS-RDPBCGR**
 
 * From the desktop of the driver computer, double-click the **Run MS-RDPBCGR Client-EP Test Cases** shortcut. 
-Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpbcgr_RunAllTestCases.cmd** file. 
+* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpbcgr_RunAllTestCases.cmd** file. 
 
 **To run all test cases of MS-RDPEUSB**
 
 * From the desktop of the driver computer, double-click the **Run MS-RDPEUSB Client-EP Test Cases** shortcut. 
-Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpeusb_RunAllTestCases.cmd** file. 
+* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpeusb_RunAllTestCases.cmd** file. 
 
 **To run all test cases of MS-RDPRFX**
 
 * From the desktop of the driver computer, double-click the **Run MS-RDPRFX Client-EP Test Cases** shortcut. 
-Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdprfx_RunAllTestCases.cmd** file. 
+* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdprfx_RunAllTestCases.cmd** file. 
 
 **To run all test cases of MS-RDPEVOR**
 
 * From the desktop of the driver computer, double-click the **Run MS-RDPEVOR Client-EP Test Cases** shortcut. 
-Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpevor_RunAllTestCases.cmd** file. 
+* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpevor_RunAllTestCases.cmd** file. 
 
 **To run all test cases of MS-RDPEUDP**
 
 * From the desktop of the driver computer, double-click the **Run MS-RDPEUDP Client-EP Test Cases** shortcut. 
-Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpeudp_RunAllTestCases.cmd** file. 
+* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpeudp_RunAllTestCases.cmd** file. 
 
 **To run all test cases of MS-RDPEMT**
 
 * From the desktop of the driver computer, double-click the **Run MS-RDPEMT Client-EP Test Cases** shortcut. 
-Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpemt_RunAllTestCases.cmd** file. 
+* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpemt_RunAllTestCases.cmd** file. 
 
 **To run all test cases of MS-RDPEI**
 
 * From the desktop of the driver computer, double-click the **Run MS-RDPEI Client-EP Test Cases** shortcut. 
-Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpei_RunAllTestCases.cmd** file.
+* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpei_RunAllTestCases.cmd** file.
 
 **To run all test cases of MS-RDPEGFX**
 
 * From the desktop of the driver computer, double-click the **Run MS-RDPEGFX Client-EP Test Cases** shortcut. 
-Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpegfx_RunAllTestCases.cmd** file.
+* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpegfx_RunAllTestCases.cmd** file.
 
 **To run all test cases of MS-RDPEDISP**
 
 * From the desktop of the driver computer, double-click the **Run MS-RDPEDISP Client-EP Test Cases** shortcut. 
-Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpedisp_RunAllTestCases.cmd** file.
+* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpedisp_RunAllTestCases.cmd** file.
 
 ### <a name="_Toc421010917"/>Run Specified Test Cases
 
@@ -1121,6 +1129,7 @@ Use the step below to run specific test cases.
 
 ### <a name="_Toc421010918"/>Example of How to run test case under interactive mode
 The following example illustrates how to run test case under interactive mode.
+
 On the driver computer, configure the test suite mode to interactive mode. For the details, please refer to [Configuring the Test Suite Mode](#_Toc421010911).
 
 * On the driver computer, from the directory C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\_RDPBCGR_\, double-click the **BVT_ConnectionTest_CapabilityExchange_PositiveTest.cmd** file to run this test case.
@@ -1129,26 +1138,27 @@ On the driver computer, configure the test suite mode to interactive mode. For t
 
 ![image7.jpg](./image/RDP_ClientUserGuide/image7.jpg)
 
-* Please read the **Help Message** shown in the dialog to perform the operations manually. In this case, you will do:
+Please read the **Help Message** shown in the dialog to perform the operations manually. In this case, you will do:
 
-* On the SUT, start a remote desktop (RDP) connection to the driver computer using the negotiation-based approach, and either of the TLS, CredSSP or RDP standard security protocol. 
+	* On the SUT, start a remote desktop (RDP) connection to the driver computer using the negotiation-based approach, and either of the TLS, CredSSP or RDP standard security protocol. 
 
-* Once you start the RDP connection successfully, on the driver computer, fill a non-negative number (such as 0) in **Return Value** field and click **Succeed** button**.** Otherwise, if you cannot start the RDP connection, fill a negative number (such as -1) in **Return Value** field, and fill the error message in the **Failure Message** field, then click **Fail**.
+	* Once you start the RDP connection successfully, on the driver computer, fill a non-negative number (such as 0) in **Return Value** field and click **Succeed** button**.** Otherwise, if you cannot start the RDP connection, fill a negative number (such as -1) in **Return Value** field, and fill the error message in the **Failure Message** field, then click **Fail**.
 
-* The test case will continue to run if you click the **Succeed** button, otherwise, it will end and fail. 
+	* The test case will continue to run if you click the **Succeed** button, otherwise, it will end and fail. 
 
 * After the test finished, another dialog will be popped up on the driver computer, as following:
 
 ![image8.jpg](./image/RDP_ClientUserGuide/image8.jpg)
 
-* According to the **Help Message**, you will do:
+According to the **Help Message**, you will do:
 
-* On the SUT, close all the RDP connections to driver computer.
+	* On the SUT, close all the RDP connections to driver computer.
 
-* On the driver computer, fill a non-negative number (such as 0) in **Return Value** and click **Succeed** if you close all the RDP connections successfully. Otherwise, if you cannot stop any of the existing RDP connections, fill a negative number (such as -1) in **Return Value** field, and fill the error message in the **Failure Message** field, then click **Fail**.
+	* On the driver computer, fill a non-negative number (such as 0) in **Return Value** and click **Succeed** if you close all the RDP connections successfully. Otherwise, if you cannot stop any of the existing RDP connections, fill a negative number (such as -1) in **Return Value** field, and fill the error message in the **Failure Message** field, then click **Fail**.
 
 ### <a name="_Toc421010919"/>Example of How to run MS-RDPEI test case under enhanced interactive mode
 The following example illustrates how to run MS-RDPEI test case under **enhanced interactive** mode with **connection** under powershell mode.
+
 On the driver computer, configure the MS-RDPEI test suite mode to enhanced interactive mode. For the details, please refer to [Configuring the Test Suite Mode](#_Toc421010911).
 
 * On the driver computer, run the test case named **Rdpei_TouchInputTest_Positive_SingleTouchEvent**.
@@ -1165,9 +1175,12 @@ On the driver computer, configure the MS-RDPEI test suite mode to enhanced inter
 
 ### <a name="_Toc421010920"/>Check Test Results
 Test suite generates test result files in different paths based on the way how test case is executed.
-For running test case with batch: _C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ &#60; version &#35;  &#62; \Batch\TestResults_
-For running test case with Visual Studio: _C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ &#60; version &#35;  &#62; \Source\Client\TestCode\TestResults_
-For further information about test log settings, see the PTF User Guide in the PTF installation directory.
+
+* For running test case with batch: _C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ &#60; version &#35;  &#62; \Batch\TestResults_
+
+* For running test case with Visual Studio: _C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ &#60; version &#35;  &#62; \Source\Client\TestCode\TestResults_
+
+* For further information about test log settings, see the PTF User Guide in the PTF installation directory.
 
 ## <a name="_Toc421010921"/>Debugging Test Cases
 
@@ -1178,28 +1191,37 @@ Note
 
 >Copy _RDP_ClientTestSuite.deployment.ptfconfig_ and _RDP_ClientTestSuite.ptfconfig_ from C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ &#60; version &#35;  &#62; \Bin to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ &#60; version &#35;  &#62; \Source\Client\TestCode\TestSuite and replace the original file.
 
-To debug a test case
+**To debug a test case**
 
 * On the driver computer, use Visual Studio to open the following solution file:
-C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Source\Client\TestCode\RDP_Client.sln
+	* C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Source\Client\TestCode\RDP_Client.sln
 
 * In the **Solution Explorer** window, right-click the **Solution** ‘**RDP_Client’**, and select **Build Solution**.
 
 * Open the **Test Explorer** window in Visual Studio, select the names of the test cases that you want to debug.
 
-**Using Protocol Test Manager**
+## <a name="_Toc421010922"/>Using Protocol Test Manager
+
 Protocol Test Manager (PTM) is a graphical front-end for Windows protocol test suites. You can configure and run this test suite from the Protocol Test Manager.
-**Install Protocol Test Manager**
+
+### <a name="_Toc421010923"/>Install Protocol Test Manager
+
 Install the test suite and all its dependencies.
+
 Launch the ProtocolTestManager.msi and install the Protocol Test Manager.
-**Start Protocol Test Manager**
+
+### <a name="_Toc421010924"/>Start Protocol Test Manager
+
 Open the Protocol Test Manager from the shortcut on the desktop.
 
 ![image11.png](./image/RDP_ClientUserGuide/image11.png)
 
 Only the installed protocol test suite is usable. The first time you need to click “Configure Wizard” to configure the protocol test suite. Once the test suite is configured with PTM, you can click “Run” to run the test suite with last settings.
-**Test Suite Introduction**
+
+### <a name="_Toc421010925"/>Test Suite Introduction
+
 The test suite introduction page provide you some general information about the test suite. You may click the hyperlinks in this page to see more details about the test environment.
+
 All the steps are listed in the left part of the window. You may go back to the previous steps from the list. If you change any settings, you need to click Next to apply you changes.
 
 ![image12.png](./image/RDP_ClientUserGuide/image12.png)
@@ -1209,18 +1231,24 @@ You may press Alt button to show the access keys:
 ![image13.png](./image/RDP_ClientUserGuide/image13.png)
 
 For example: Alt+P for Previous, Alt+N for Next.
+
 This page is for your information. You may click Next to choose how to configure the test suite. 
 
-**Configure the Test Suite**
+### <a name="_Toc421010926"/>Configure the Test Suite
+
 Protocol Test Manager supports three ways to configure the test suite. Auto-detection, manual configuration and load a saved profile.
 
 ![image14.png](./image/RDP_ClientUserGuide/image14.png)
 
-**Configure the Test Suite with Auto-detection**
-Choose Run Auto-Detection to begin auto-detection.
-Set the properties need for auto-detection.
-Click Detect to begin the detection.
-The detection steps are listed.
+#### <a name="_Toc421010927"/>Configure the Test Suite with Auto-detection
+
+* Choose Run Auto-Detection to begin auto-detection.
+
+* Set the properties need for auto-detection.
+
+* Click Detect to begin the detection.
+
+* The detection steps are listed.
 
 ![image15.png](./image/RDP_ClientUserGuide/image15.png)
 
@@ -1229,36 +1257,47 @@ When the detection is finished, click Next to see the detection result.
 ![image16.png](./image/RDP_ClientUserGuide/image16.png)
 
 Click Next to filter the test cases.
-**Configure Test Suite Manually**
+
+#### <a name="_Toc421010928"/>Configure Test Suite Manually
+
 Click Do Manual Configuration on the Configure Method page to go to the Filter Test Cases page directly without using auto-detection.
+
 You may select the test cases and configure the properties manually.
 
 ![image17.png](./image/RDP_ClientUserGuide/image17.png)
 
-**Load Profile**
+#### <a name="_Toc421010929"/>Load Profile
+
 A test profile contains all the test settings including the values of the properties and the test case selections.
+
 You can save all you settings in the Export / Import menu of the Run Selected Test Cases page. 
-**Filter Test Cases**
+
+#### <a name="_Toc421010930"/>Filter Test Cases
+
 Filter the test cases.
 
 ![image18.png](./image/RDP_ClientUserGuide/image18.png)
 
 Click Next to configure the properties of the test suite.
-**Configure Test Cases**
+
+#### <a name="_Toc421010931"/>Configure Test Cases
 
 ![image19.png](./image/RDP_ClientUserGuide/image19.png)
 
-**Configure Adapter**
+#### <a name="_Toc421010932"/>Configure Adapter
 
 ![image20.png](./image/RDP_ClientUserGuide/image20.png)
 
-**Run Selected Test Cases**
+### <a name="_Toc421010933"/>Run Selected Test Cases
+
 You can run the selected test cases in the run page.
+
 The selected test cases are listed. If a test case is executed, you can click this test case and the test log of the case is shown in the test logs window.
 
 ![image21.png](./image/RDP_ClientUserGuide/image21.png)
 
 You may drag the separator between the case list and the log to adjust the width of the window.
+
 You may right click on the test cases to uncheck all the test cases.
 
 ![image22.png](./image/RDP_ClientUserGuide/image22.png)
@@ -1272,24 +1311,35 @@ After the test cases are run, you can click the hyperlink at the upper-right cor
 ![image24.png](./image/RDP_ClientUserGuide/image24.png)
 
 You may group the test cases by either the outcome or the category.
+
 If a test case belongs to multiple categories, it is listed in each category.
+
 You may also find test cases by name. Enter the keywords in the text box then press Enter or click the button next to the text box. Only the test cases which contains the keyword is listed. 
+
 Click the cross button to remove the keyword and show all the test cases.
+
 The keyword is case-insensitive.
 
 ![image25.png](./image/RDP_ClientUserGuide/image25.png)
 
-**Export Results**
+### <a name="_Toc421010934"/>Export Results
+
 You can export the test cases from the Export / Import menu.
 
 ![image26.png](./image/RDP_ClientUserGuide/image26.png)
 
 Playlist is a test case list supported by the Microsoft Visual Studio.
+
 Profile is used for saving all your settings and case selections. 
+
 You can also save the test case list in a text file.
-**Command Line Interface**
+
+### <a name="_Toc421010935"/>Command Line Interface
+
 Protocol Test Manager has a command line interface (ptmcli.exe) which can be used for automation test run.
+
 The command line interface ptmcli.exe is located in the bin folder of the Protocol Test Framework installation folder. To use PTM, you need to provide a profile using –p option.
+
 You can use ptmcli.exe –h to show more information.
 
 ![image27.png](./image/RDP_ClientUserGuide/image27.png)
@@ -1304,30 +1354,29 @@ Microsoft Message Analyzer (MMA) is used to capture the data on wire and the dat
 
 * Copy OPNs to MMA
 
-* Copy C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ &#60; version &#35;  &#62; \Data\SuperLogViewer\OPNs\ &#42; .opn to  &#60; MMA installation directory &#62; \OPNAndConfiguration\OPNs\Microsoft\Windows\RemoteDesktop and start the MMA.
+	Copy C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ &#60; version &#35;  &#62; \Data\SuperLogViewer\OPNs\ &#42; .opn to  &#60; MMA installation directory &#62; \OPNAndConfiguration\OPNs\Microsoft\Windows\RemoteDesktop and start the MMA.
 
 ![image3.png](./image/RDP_ClientUserGuide/image3.png)
-Note
+	Note
 
-* If it is not the first time MMA starts up, OPNs should be copied to _C:\Users\ &#60; user &#62; \AppData\Local\Microsoft\MessageAnalyzer\OPNAndConfiguration\OPNs\Microsoft\Windows\RemoteDesktop_ and restart MMA
+	>If it is not the first time MMA starts up, OPNs should be copied to _C:\Users\ &#60; user &#62; \AppData\Local\Microsoft\MessageAnalyzer\OPNAndConfiguration\OPNs\Microsoft\Windows\RemoteDesktop_ and restart MMA
 
 * Apply the color rule.
 
-Open **Session****Analysis Grid****Color Rules****Manage Color Rules****Import**, and import the color rule in _C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ &#60; version &#35;  &#62; \Data\SuperLogViewer\RDPColorRule.asset_ and add all the color rule to MMA.
+	Open **Session****Analysis Grid****Color Rules****Manage Color Rules****Import**, and import the color rule in _C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ &#60; version &#35;  &#62; \Data\SuperLogViewer\RDPColorRule.asset_ and add all the color rule to MMA.
 
 ![image28.png](./image/RDP_ClientUserGuide/image28.png)
 
 * Select color rule
 
-*  All color rules above should be selected when viewing logs in MMA except for the **RDP_Decrypted** and **TLS_Decrypted**. When the RDP test suite using Standard RDP Security **RDP_Decrypted** color rule should be selected and when Enhanced RDP Security (TLS) is used **TLS_Decrypted** should be selected.
+	All color rules above should be selected when viewing logs in MMA except for the **RDP_Decrypted** and **TLS_Decrypted**. When the RDP test suite using Standard RDP Security **RDP_Decrypted** color rule should be selected and when Enhanced RDP Security (TLS) is used **TLS_Decrypted** should be selected.
 
 ### <a name="_Toc421010938"/>Capture traffics using Microsoft Message Analyzer
 After configuring Microsoft Message Analyzer, you can follow below steps to capture traffics.
 
-* 
+* Open **File****New SessionLive Trace**, in the **ETW Providers** add the **Protocol-Test-Suite** provider to capture messaged dumped by test suite. If you also want to capture data on the wire, **Microsoft-Windows-NDIS-PacketCapture** provider should also be selected. At last click start to capture traffics using that trace configuration.
 
 ![image29.png](./image/RDP_ClientUserGuide/image29.png)
-Open **File****New SessionLive Trace**, in the **ETW Providers** add the **Protocol-Test-Suite** provider to capture messaged dumped by test suite. If you also want to capture data on the wire, **Microsoft-Windows-NDIS-PacketCapture** provider should also be selected. At last click start to capture traffics using that trace configuration.
 
 * After the correct color rule is selected, all test suite logs will be displayed in a brown background. Decrypted message will be shown in green color and the decompressed message in blue color.
 
@@ -1339,45 +1388,50 @@ This section describes how to troubleshoot common test suite issues.
 
 ### <a name="_Toc421010940"/>Ping Failure
 
-
+|||
+|-|-|
 | **PROBLEM**| The SUT does not respond to pings from the driver computer.| 
-| -------------| ------------- |
 | **CAUSE**| The driver computer was not in the same network segment as the SUT, or the SUT firewall is enabled. | 
 | **RESOLUTION**| Move the driver computer and the SUT to the same network segment or disable the SUT firewall.| 
 
 ### <a name="_Toc421010941"/>Test Run Issues
 
+|||
+|-|-|
 | **PROBLEM**| Test cases failed with message like “Timeout when expecting  &#60; Message Type &#62; ”.| 
-| -------------| ------------- |
 | **CAUSE**| For Windows RDP client, the test suites must be run using the Administrator account.| 
 | | For non-Windows RDP client, the SUT control adapter may be not implemented properly. | 
 | **RESOLUTION**| For Windows RDP client, enable Administrator and log on.| 
 | | For non-Windows RDP client, Please refer to [Configuring the Test Suite Mode](#_Toc421010911).| 
 
+
+|||
+|-|-|
 | **PROBLEM**| Test cases failed with exception “The handle is invalid”.| 
-| -------------| ------------- |
 | **CAUSE**| The driver computer’s screen is locked when running test cases. | 
 | **RESOLUTION**| Do not lock the screen of the driver computer when running test cases. | 
 
 ### <a name="_Toc421010942"/>Most MS-RDPEUSB Test Cases Failed
 
+|||
+|-|-|
 | **PROBLEM**| Most MS-RDPEUSB test cases are failed.| 
-| -------------| ------------- |
 | **CAUSE**| The OSR USB FX2 board is not plugged into the SUT or the USB Redirection is not enabled by the SUT. | 
 | **RESOLUTION**| Plug OSR USB FX2 board into the SUT and enable the USB Redirection in the Local Group Policy Editor. For more details, please refer to [Configuring Windows-based Computers](#_Toc421010905).| 
 
 ### <a name="_Toc421010943"/>Most MS-RDPEUDP/MS-RDPEMT Test Cases Failed
 
+|||
+|-|-|
 | **PROBLEM**| Most MS-RDPEUDP/MS-RDPEMT test cases are failed.| 
-| -------------| ------------- |
 | **CAUSE**| Some MS-RDPEUDP and MS-RDPEMT test cases create RDP-UDP connection, which need to use TLS or CredSSP security protocol. | 
 | **RESOLUTION**| In **RDP_ClientTestSuite.deployment.ptfconfig,** configure **RDP.Security.Protocol** to TLS or CredSSP. For more details, please refer to [Configuring the Test Suite](#_Toc421010907)| 
 
 ### <a name="_Toc421010944"/>3 RDPBCGR Test Cases Must be Run Under “interactive” Mode
 
-
+|||
+|-|-|
 | **PROBLEM**| The following RDPBCGR test cases will fail when running under “Powershell” mode:| 
-| -------------| ------------- |
 | | BVT_ClientInputTest_FastPath | 
 | | BVT_ClientInputTest_SlowPath | 
 | | S1_ConnectionTest_Disconnection_PositiveTest_ClientInitiated| 
@@ -1386,9 +1440,9 @@ This section describes how to troubleshoot common test suite issues.
 
 ### <a name="_Toc421010945"/>3 RDPEGFX test cases require H264 enabled on SUT
 
-
+|||
+|-|-|
 | **PROBLEM**| The following test cases will fail:| 
-| -------------| ------------- |
 | | RDPEGFX\_H264Codec\_PositiveTest_H264Support| 
 | | RDPEGFX\_H264Codec\_PositiveTest_SendH264Stream| 
 | | RDPEGFX\_H264Codec\_NegativeTest_IncorrectRegionRectsNum| 
@@ -1397,14 +1451,15 @@ This section describes how to troubleshoot common test suite issues.
 
 ### <a name="_Toc421010946"/>Most Test Cases Failed When Using TLS/CredSSP protocol
 
+|||
+|-|-|
 | **PROBLEM**| When using TLS or CredSSP protocol, test cases are failed with Timeout exception. | 
-| -------------| ------------- |
 | **CAUSE**| TLS and CredSSP protocol need more time on encryption and decryption. | 
 | **RESOLUTION**| In **RDP_ClientTestSuite.deployment.ptfconfig,** configure **WaitTime** to give more waiting time. For more details, please refer to [Configuring the Test Suite](#_Toc421010907)| 
 
-
+|||
+|-|-|
 | **PROBLEM**| When using TLS or CredSSP protocol, test cases are failed with exception: The system cannot find the file specified.| 
-| -------------| ------------- |
 | **CAUSE**| The certificate files, which are used to secure TLS or CrepSSP transports, are not generated successfully. | 
 | **RESOLUTION**| Re-run **Config-DriverComputer.ps1** on the driver computer. For more details, please refer to [Configuring Windows-based Computers](#_Toc421010905).| 
 
