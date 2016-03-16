@@ -1140,11 +1140,11 @@ On the driver computer, configure the test suite mode to interactive mode. For t
 
 Please read the **Help Message** shown in the dialog to perform the operations manually. In this case, you will do:
 
-	* On the SUT, start a remote desktop (RDP) connection to the driver computer using the negotiation-based approach, and either of the TLS, CredSSP or RDP standard security protocol. 
+	On the SUT, start a remote desktop (RDP) connection to the driver computer using the negotiation-based approach, and either of the TLS, CredSSP or RDP standard security protocol. 
 
-	* Once you start the RDP connection successfully, on the driver computer, fill a non-negative number (such as 0) in **Return Value** field and click **Succeed** button**.** Otherwise, if you cannot start the RDP connection, fill a negative number (such as -1) in **Return Value** field, and fill the error message in the **Failure Message** field, then click **Fail**.
+	Once you start the RDP connection successfully, on the driver computer, fill a non-negative number (such as 0) in Return Value field and click Succeed button. Otherwise, if you cannot start the RDP connection, fill a negative number (such as -1) in Return Value field, and fill the error message in the Failure Message field, then click Fail.
 
-	* The test case will continue to run if you click the **Succeed** button, otherwise, it will end and fail. 
+	The test case will continue to run if you click the Succeed button, otherwise, it will end and fail. 
 
 * After the test finished, another dialog will be popped up on the driver computer, as following:
 
@@ -1152,9 +1152,9 @@ Please read the **Help Message** shown in the dialog to perform the operations m
 
 According to the **Help Message**, you will do:
 
-	* On the SUT, close all the RDP connections to driver computer.
+	On the SUT, close all the RDP connections to driver computer.
 
-	* On the driver computer, fill a non-negative number (such as 0) in **Return Value** and click **Succeed** if you close all the RDP connections successfully. Otherwise, if you cannot stop any of the existing RDP connections, fill a negative number (such as -1) in **Return Value** field, and fill the error message in the **Failure Message** field, then click **Fail**.
+	On the driver computer, fill a non-negative number (such as 0) in Return Value and click Succeed if you close all the RDP connections successfully. Otherwise, if you cannot stop any of the existing RDP connections, fill a negative number (such as -1) in Return Value field, and fill the error message in the Failure Message field, then click Fail.
 
 ### <a name="_Toc421010919"/>Example of How to run MS-RDPEI test case under enhanced interactive mode
 The following example illustrates how to run MS-RDPEI test case under **enhanced interactive** mode with **connection** under powershell mode.
@@ -1194,7 +1194,8 @@ Note
 **To debug a test case**
 
 * On the driver computer, use Visual Studio to open the following solution file:
-	* C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Source\Client\TestCode\RDP_Client.sln
+
+	C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Source\Client\TestCode\RDP_Client.sln
 
 * In the **Solution Explorer** window, right-click the **Solution** ‘**RDP_Client’**, and select **Build Solution**.
 
@@ -1357,9 +1358,9 @@ Microsoft Message Analyzer (MMA) is used to capture the data on wire and the dat
 	Copy C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ &#60; version &#35;  &#62; \Data\SuperLogViewer\OPNs\ &#42; .opn to  &#60; MMA installation directory &#62; \OPNAndConfiguration\OPNs\Microsoft\Windows\RemoteDesktop and start the MMA.
 
 ![image3.png](./image/RDP_ClientUserGuide/image3.png)
-	Note
+Note
 
-	>If it is not the first time MMA starts up, OPNs should be copied to _C:\Users\ &#60; user &#62; \AppData\Local\Microsoft\MessageAnalyzer\OPNAndConfiguration\OPNs\Microsoft\Windows\RemoteDesktop_ and restart MMA
+>If it is not the first time MMA starts up, OPNs should be copied to _C:\Users\ &#60; user &#62; \AppData\Local\Microsoft\MessageAnalyzer\OPNAndConfiguration\OPNs\Microsoft\Windows\RemoteDesktop_ and restart MMA
 
 * Apply the color rule.
 
@@ -1388,16 +1389,16 @@ This section describes how to troubleshoot common test suite issues.
 
 ### <a name="_Toc421010940"/>Ping Failure
 
-|||
-|-|-|
+| | |
+| -------------| -------------|
 | **PROBLEM**| The SUT does not respond to pings from the driver computer.| 
 | **CAUSE**| The driver computer was not in the same network segment as the SUT, or the SUT firewall is enabled. | 
 | **RESOLUTION**| Move the driver computer and the SUT to the same network segment or disable the SUT firewall.| 
 
 ### <a name="_Toc421010941"/>Test Run Issues
 
-|||
-|-|-|
+| | |
+| -------------| -------------|
 | **PROBLEM**| Test cases failed with message like “Timeout when expecting  &#60; Message Type &#62; ”.| 
 | **CAUSE**| For Windows RDP client, the test suites must be run using the Administrator account.| 
 | | For non-Windows RDP client, the SUT control adapter may be not implemented properly. | 
@@ -1405,32 +1406,32 @@ This section describes how to troubleshoot common test suite issues.
 | | For non-Windows RDP client, Please refer to [Configuring the Test Suite Mode](#_Toc421010911).| 
 
 
-|||
-|-|-|
+| | |
+| -------------| -------------|
 | **PROBLEM**| Test cases failed with exception “The handle is invalid”.| 
 | **CAUSE**| The driver computer’s screen is locked when running test cases. | 
 | **RESOLUTION**| Do not lock the screen of the driver computer when running test cases. | 
 
 ### <a name="_Toc421010942"/>Most MS-RDPEUSB Test Cases Failed
 
-|||
-|-|-|
+| | |
+| -------------| -------------|
 | **PROBLEM**| Most MS-RDPEUSB test cases are failed.| 
 | **CAUSE**| The OSR USB FX2 board is not plugged into the SUT or the USB Redirection is not enabled by the SUT. | 
 | **RESOLUTION**| Plug OSR USB FX2 board into the SUT and enable the USB Redirection in the Local Group Policy Editor. For more details, please refer to [Configuring Windows-based Computers](#_Toc421010905).| 
 
 ### <a name="_Toc421010943"/>Most MS-RDPEUDP/MS-RDPEMT Test Cases Failed
 
-|||
-|-|-|
+| | |
+| -------------| -------------|
 | **PROBLEM**| Most MS-RDPEUDP/MS-RDPEMT test cases are failed.| 
 | **CAUSE**| Some MS-RDPEUDP and MS-RDPEMT test cases create RDP-UDP connection, which need to use TLS or CredSSP security protocol. | 
 | **RESOLUTION**| In **RDP_ClientTestSuite.deployment.ptfconfig,** configure **RDP.Security.Protocol** to TLS or CredSSP. For more details, please refer to [Configuring the Test Suite](#_Toc421010907)| 
 
 ### <a name="_Toc421010944"/>3 RDPBCGR Test Cases Must be Run Under “interactive” Mode
 
-|||
-|-|-|
+| | |
+| -------------| -------------|
 | **PROBLEM**| The following RDPBCGR test cases will fail when running under “Powershell” mode:| 
 | | BVT_ClientInputTest_FastPath | 
 | | BVT_ClientInputTest_SlowPath | 
@@ -1440,8 +1441,8 @@ This section describes how to troubleshoot common test suite issues.
 
 ### <a name="_Toc421010945"/>3 RDPEGFX test cases require H264 enabled on SUT
 
-|||
-|-|-|
+| | |
+| -------------| -------------|
 | **PROBLEM**| The following test cases will fail:| 
 | | RDPEGFX\_H264Codec\_PositiveTest_H264Support| 
 | | RDPEGFX\_H264Codec\_PositiveTest_SendH264Stream| 
@@ -1451,14 +1452,14 @@ This section describes how to troubleshoot common test suite issues.
 
 ### <a name="_Toc421010946"/>Most Test Cases Failed When Using TLS/CredSSP protocol
 
-|||
-|-|-|
+| | |
+| -------------| -------------|
 | **PROBLEM**| When using TLS or CredSSP protocol, test cases are failed with Timeout exception. | 
 | **CAUSE**| TLS and CredSSP protocol need more time on encryption and decryption. | 
 | **RESOLUTION**| In **RDP_ClientTestSuite.deployment.ptfconfig,** configure **WaitTime** to give more waiting time. For more details, please refer to [Configuring the Test Suite](#_Toc421010907)| 
 
-|||
-|-|-|
+| | |
+| -------------| -------------|
 | **PROBLEM**| When using TLS or CredSSP protocol, test cases are failed with exception: The system cannot find the file specified.| 
 | **CAUSE**| The certificate files, which are used to secure TLS or CrepSSP transports, are not generated successfully. | 
 | **RESOLUTION**| Re-run **Config-DriverComputer.ps1** on the driver computer. For more details, please refer to [Configuring Windows-based Computers](#_Toc421010905).| 
