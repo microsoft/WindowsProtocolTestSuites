@@ -1057,7 +1057,5 @@ The synthetic RDP server which is used to test against SUT.
 
 ### <a name="_Toc326663510"/>Reference
 
-* Technical Document: 
-
-**[MS-RDPRFX].pdf**
+* Technical Document: **[MS-RDPRFX].pdf**
 

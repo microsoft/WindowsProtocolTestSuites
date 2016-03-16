@@ -767,18 +767,18 @@ The Traditional test approach is used to design all test cases. The test cases a
 
 The following table shows the number of test cases for each scenario. 
 
-|  **Scenario**|  **Test Cases**|  **Covered Requirements**|  **BVTs**|  **P0**|  **P1**|  **P2**| 
-| -------------| -------------| -------------| -------------| -------------| -------------| ------------- |
-| [S1\_Connection](#_Toc427051967)| 87| 468| 7| 11| 31| 27| 
-| [S2\_Reactivation](#_Toc427051968)| 2| 2| 1| 1| 1| 0| 
-| [S3\_AutoReconnect](#_Toc427051969)| 2| 8| 1| 1| 1| 0| 
-| [S4\_SlowPathInput](#_Toc427051970)| 6| 42| 1| 1| 4| 1| 
-| [S5\_FastPathInput](#_Toc427051971)| 1| 24| 1| 1| 0| 0| 
-| [S6\_AutoDetectTest](#_Toc427051972)| 5| N/A| 0| 0| 5| 0| 
-| [S7\_StaticVirtualChannel](#_Toc427051973)| 7| 28| 2| 4| 2| 1| 
-| [S8\_ServerRedirection](#_Toc427051974)| 2| 11| 1| 1| 1| 0| 
-| [S9\_HealthMonitoring](#_Toc427051975)| 1| N/A| 1| 1| 0| 0| 
-| [S10\_FastPathOutput](#_Toc427051976)| 20| N/A| 0| 6| 14| 0| 
+|  **Scenario**|  **Test Cases**|  **BVTs**|  **P0**|  **P1**|  **P2**| 
+| -------------| -------------| -------------| -------------| -------------| ------------- |
+| [S1\_Connection](#_Toc427051967)| 87| 7| 11| 31| 27| 
+| [S2\_Reactivation](#_Toc427051968)| 2| 1| 1| 1| 0| 
+| [S3\_AutoReconnect](#_Toc427051969)| 2| 1| 1| 1| 0| 
+| [S4\_SlowPathInput](#_Toc427051970)| 6| 1| 1| 4| 1| 
+| [S5\_FastPathInput](#_Toc427051971)| 1| 1| 1| 0| 0| 
+| [S6\_AutoDetectTest](#_Toc427051972)| 5| 0| 0| 5| 0| 
+| [S7\_StaticVirtualChannel](#_Toc427051973)| 7| 2| 4| 2| 1| 
+| [S8\_ServerRedirection](#_Toc427051974)| 2| 1| 1| 1| 0| 
+| [S9\_HealthMonitoring](#_Toc427051975)| 1| 1| 1| 0| 0| 
+| [S10\_FastPathOutput](#_Toc427051976)| 20| 0| 6| 14| 0| 
 
 ### <a name="_Toc427051992"/>Test Cases Description 
 The test suite is a synthetic RDP server. In the following descriptions, all instances of the term “Test Suite” can be understood as the RDP server.
@@ -826,7 +826,7 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Description** | This test case tests:| 
 | | The correctness of Client MCS Connect Initial PDU with GCC Conference Create Request when the server advertises support for Extended Client Data Blocks.| 
 | | If SUT can process the valid Server MCS Connect Response PDU with GCC Conference Create Response correctly.| 
-|  **Prerequisites**|  | 
+|  **Prerequisites**| N/A | 
 |  **Test Execution Steps**| Trigger SUT to initiate an RDP connection and complete the Connection Initiation phase. Server should set the EXTENDED\_CLIENT\_DATA\_SUPPORTED flag in RDP Negotiation Response. | 
 | | Test Suite expects SUT continues the connection sequence by sending a Client MCS Connect Initial PDU with GCC Conference Create Request. | 
 | | Verify that received Client MCS Connect Initial PDU with GCC Conference Create Request and responded with a Server MCS Connect Response PDU with GCC Conference Create Response.| 
@@ -2729,7 +2729,7 @@ This scenario only contains BVT test case.
 
 * Technical Document: 
 
-**[MS-RDPBCGR].pdf** 
+	**[MS-RDPBCGR].pdf** 
 
-**[MS-RDPBCGR].pdf**
+	**[MS-RDPBCGR].pdf**
 

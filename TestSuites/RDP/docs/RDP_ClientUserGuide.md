@@ -186,28 +186,29 @@ A computer configured as the SUT (System Under Test). It can be any version of W
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
 
-If SUT computer is an implementation that is not based on Windows operating system or its version is below Windows 7, part of test cases cannot be executed automatically.
+>If SUT computer is an implementation that is not based on Windows operating system or its version is below Windows 7, part of test cases cannot be executed automatically.
 
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
 
-To run the MS-RDPEUSB test cases, the SUT must be a physical machine, and **one OSR USB FX2 board is required**. Plug the OSR USB FX2 board into the SUT computer before running MS-RDPEUSB test cases.
+>To run the MS-RDPEUSB test cases, the SUT must be a physical machine, and **one OSR USB FX2 board is required**. Plug the OSR USB FX2 board into the SUT computer before running MS-RDPEUSB test cases.
+
 The OSR USB FX2 board can be bought from the [OSR Online Store](https://www.osronline.com/custom.cfm?name=index_fullframeset.cfm&pageURL=https://www.osronline.com/store/index.cfm).
 
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
 
-To run the MS-RDPEI test cases, the SUT must be touch enabled.
+>To run the MS-RDPEI test cases, the SUT must be touch enabled.
 
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
 
-To run the MS-RDPEVOR test cases, the SUT must be Windows 8, Windows 8.1 or Windows 10.
+>To run the MS-RDPEVOR test cases, the SUT must be Windows 8, Windows 8.1 or Windows 10.
 
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
 
-To run the MS-RDPEDISP test cases, the OS on SUT must support display configuration changes including the addition, removal and repositioning of monitors, resolution updates, and orientation updates.
+>To run the MS-RDPEDISP test cases, the OS on SUT must support display configuration changes including the addition, removal and repositioning of monitors, resolution updates, and orientation updates.
 
 ### <a name="_Toc421010890"/>Driver Computer 
 
@@ -226,7 +227,7 @@ The minimum requirements for the SUT are as follows.
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
 
-If SUT computer is an implementation that is not based on Windows operating system or its version is below Windows 7, external work is need to execute test cases automatically, for more details, please refer to [Configuring the Test Suite Mode](#_Toc421010911).
+>If SUT computer is an implementation that is not based on Windows operating system or its version is below Windows 7, external work is need to execute test cases automatically, for more details, please refer to [Configuring the Test Suite Mode](#_Toc421010911).
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
@@ -485,11 +486,11 @@ Note
 
 >You must use the Administrator account on the SUT. If the Administrator account is disabled, you can enable it as follows: 
 
-	* In **Control Panel**, open **Administrative Tools** and then open **Computer Management**.
+>	* In **Control Panel**, open **Administrative Tools** and then open **Computer Management**.
 
-	* In the left panel, open **Local Users and** **Groups** under **System Tools,** and then select **Users**.
+>	* In the left panel, open **Local Users and** **Groups** under **System Tools,** and then select **Users**.
 
-	* In the right panel, double click **Administrator** and then uncheck the **Account is disabled** box.
+>	* In the right panel, double click **Administrator** and then uncheck the **Account is disabled** box.
 
 * Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Scripts, and open the ParamConfig.xml file. 
 
@@ -1339,71 +1340,71 @@ This section describes how to troubleshoot common test suite issues.
 ### <a name="_Toc421010940"/>Ping Failure
 
 
-| PROBLEM| The SUT does not respond to pings from the driver computer.| 
+| **PROBLEM**| The SUT does not respond to pings from the driver computer.| 
 | -------------| ------------- |
-| CAUSE| The driver computer was not in the same network segment as the SUT, or the SUT firewall is enabled. | 
-| RESOLUTION| Move the driver computer and the SUT to the same network segment or disable the SUT firewall.| 
+| **CAUSE**| The driver computer was not in the same network segment as the SUT, or the SUT firewall is enabled. | 
+| **RESOLUTION**| Move the driver computer and the SUT to the same network segment or disable the SUT firewall.| 
 
 ### <a name="_Toc421010941"/>Test Run Issues
 
-| PROBLEM| Test cases failed with message like “Timeout when expecting  &#60; Message Type &#62; ”.| 
+| **PROBLEM**| Test cases failed with message like “Timeout when expecting  &#60; Message Type &#62; ”.| 
 | -------------| ------------- |
-| CAUSE| For Windows RDP client, the test suites must be run using the Administrator account.| 
+| **CAUSE**| For Windows RDP client, the test suites must be run using the Administrator account.| 
 | | For non-Windows RDP client, the SUT control adapter may be not implemented properly. | 
-| RESOLUTION| For Windows RDP client, enable Administrator and log on.| 
+| **RESOLUTION**| For Windows RDP client, enable Administrator and log on.| 
 | | For non-Windows RDP client, Please refer to [Configuring the Test Suite Mode](#_Toc421010911).| 
 
-| PROBLEM| Test cases failed with exception “The handle is invalid”.| 
+| **PROBLEM**| Test cases failed with exception “The handle is invalid”.| 
 | -------------| ------------- |
-| CAUSE| The driver computer’s screen is locked when running test cases. | 
-| RESOLUTION| Do not lock the screen of the driver computer when running test cases. | 
+| **CAUSE**| The driver computer’s screen is locked when running test cases. | 
+| **RESOLUTION**| Do not lock the screen of the driver computer when running test cases. | 
 
 ### <a name="_Toc421010942"/>Most MS-RDPEUSB Test Cases Failed
 
-| PROBLEM| Most MS-RDPEUSB test cases are failed.| 
+| **PROBLEM**| Most MS-RDPEUSB test cases are failed.| 
 | -------------| ------------- |
-| CAUSE| The OSR USB FX2 board is not plugged into the SUT or the USB Redirection is not enabled by the SUT. | 
-| RESOLUTION| Plug OSR USB FX2 board into the SUT and enable the USB Redirection in the Local Group Policy Editor. For more details, please refer to [Configuring Windows-based Computers](#_Toc421010905).| 
+| **CAUSE**| The OSR USB FX2 board is not plugged into the SUT or the USB Redirection is not enabled by the SUT. | 
+| **RESOLUTION**| Plug OSR USB FX2 board into the SUT and enable the USB Redirection in the Local Group Policy Editor. For more details, please refer to [Configuring Windows-based Computers](#_Toc421010905).| 
 
 ### <a name="_Toc421010943"/>Most MS-RDPEUDP/MS-RDPEMT Test Cases Failed
 
-| PROBLEM| Most MS-RDPEUDP/MS-RDPEMT test cases are failed.| 
+| **PROBLEM**| Most MS-RDPEUDP/MS-RDPEMT test cases are failed.| 
 | -------------| ------------- |
-| CAUSE| Some MS-RDPEUDP and MS-RDPEMT test cases create RDP-UDP connection, which need to use TLS or CredSSP security protocol. | 
-| RESOLUTION| In **RDP_ClientTestSuite.deployment.ptfconfig,** configure **RDP.Security.Protocol** to TLS or CredSSP. For more details, please refer to [Configuring the Test Suite](#_Toc421010907)| 
+| **CAUSE**| Some MS-RDPEUDP and MS-RDPEMT test cases create RDP-UDP connection, which need to use TLS or CredSSP security protocol. | 
+| **RESOLUTION**| In **RDP_ClientTestSuite.deployment.ptfconfig,** configure **RDP.Security.Protocol** to TLS or CredSSP. For more details, please refer to [Configuring the Test Suite](#_Toc421010907)| 
 
 ### <a name="_Toc421010944"/>3 RDPBCGR Test Cases Must be Run Under “interactive” Mode
 
 
-| PROBLEM| The following RDPBCGR test cases will fail when running under “Powershell” mode:| 
+| **PROBLEM**| The following RDPBCGR test cases will fail when running under “Powershell” mode:| 
 | -------------| ------------- |
 | | BVT_ClientInputTest_FastPath | 
 | | BVT_ClientInputTest_SlowPath | 
 | | S1_ConnectionTest_Disconnection_PositiveTest_ClientInitiated| 
-| CAUSE| These test cases must be run under the “interactive” mode.| 
-| RESOLUTION| Use the “interactive” mode when running these test cases. For more details, please refer to [Configuring the Test Suite Mode](#_Toc421010911).| 
+| **CAUSE**| These test cases must be run under the “interactive” mode.| 
+| **RESOLUTION**| Use the “interactive” mode when running these test cases. For more details, please refer to [Configuring the Test Suite Mode](#_Toc421010911).| 
 
 ### <a name="_Toc421010945"/>3 RDPEGFX test cases require H264 enabled on SUT
 
 
-| PROBLEM| The following test cases will fail:| 
+| **PROBLEM**| The following test cases will fail:| 
 | -------------| ------------- |
 | | RDPEGFX\_H264Codec\_PositiveTest_H264Support| 
 | | RDPEGFX\_H264Codec\_PositiveTest_SendH264Stream| 
 | | RDPEGFX\_H264Codec\_NegativeTest_IncorrectRegionRectsNum| 
-| CAUSE| These test cases are used to test H264 codec of RDPEGFX on thin client, so they are failed if H264 is not enabled.| 
-| RESOLUTION| If the SUT is not a thin client which supports H264 codec of RDPEGFX, these failures are expected.| 
+| **CAUSE**| These test cases are used to test H264 codec of RDPEGFX on thin client, so they are failed if H264 is not enabled.| 
+| **RESOLUTION**| If the SUT is not a thin client which supports H264 codec of RDPEGFX, these failures are expected.| 
 
 ### <a name="_Toc421010946"/>Most Test Cases Failed When Using TLS/CredSSP protocol
 
-| PROBLEM| When using TLS or CredSSP protocol, test cases are failed with Timeout exception. | 
+| **PROBLEM**| When using TLS or CredSSP protocol, test cases are failed with Timeout exception. | 
 | -------------| ------------- |
-| CAUSE| TLS and CredSSP protocol need more time on encryption and decryption. | 
-| RESOLUTION| In **RDP_ClientTestSuite.deployment.ptfconfig,** configure **WaitTime** to give more waiting time. For more details, please refer to [Configuring the Test Suite](#_Toc421010907)| 
+| **CAUSE**| TLS and CredSSP protocol need more time on encryption and decryption. | 
+| **RESOLUTION**| In **RDP_ClientTestSuite.deployment.ptfconfig,** configure **WaitTime** to give more waiting time. For more details, please refer to [Configuring the Test Suite](#_Toc421010907)| 
 
 
-| PROBLEM| When using TLS or CredSSP protocol, test cases are failed with exception: The system cannot find the file specified.| 
+| **PROBLEM**| When using TLS or CredSSP protocol, test cases are failed with exception: The system cannot find the file specified.| 
 | -------------| ------------- |
-| CAUSE| The certificate files, which are used to secure TLS or CrepSSP transports, are not generated successfully. | 
-| RESOLUTION| Re-run **Config-DriverComputer.ps1** on the driver computer. For more details, please refer to [Configuring Windows-based Computers](#_Toc421010905).| 
+| **CAUSE**| The certificate files, which are used to secure TLS or CrepSSP transports, are not generated successfully. | 
+| **RESOLUTION**| Re-run **Config-DriverComputer.ps1** on the driver computer. For more details, please refer to [Configuring Windows-based Computers](#_Toc421010905).| 
 
