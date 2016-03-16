@@ -145,8 +145,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
             }
 
             // Return true if the fields match.
-            return Enumerable.SequenceEqual<byte>(
-                ByteArrayValue, p.ByteArrayValue) &&
+            return ByteArrayValue.SequenceEqual<byte>(p.ByteArrayValue) &&
                 this.unusedBitsInLastByte == p.unusedBitsInLastByte;
         }
 

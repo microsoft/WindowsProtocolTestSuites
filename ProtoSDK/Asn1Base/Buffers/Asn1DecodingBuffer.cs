@@ -16,6 +16,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         private int curBitIndexInTempData;
 
         /// <summary>
+        /// Align the data by octet in the buffer.
+        /// </summary>
+        public void AlignData()
+        {
+            if (RestBitsNumberInTempByte != 8)
+            {
+                RefreshTempByte();
+            }
+        }
+
+        /// <summary>
         /// Indicates the rest number of bits in temp byte in the buffer.
         /// </summary>
         public int RestBitsNumberInTempByte

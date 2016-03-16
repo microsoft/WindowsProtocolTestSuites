@@ -82,7 +82,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Spng
         /// Thrown when the data in the buffer can not be properly decoded.
         /// </exception>
         /// <remarks>This method is overrode because Universal Class Tag is not included in the encoding result.</remarks>
-        public override int BerDecode(IAsn1DecodingBuffer buffer)
+        public override int BerDecode(IAsn1DecodingBuffer buffer, bool explicitTag = true)
         {
             int returnVal = 0;
             //Decode the top most tag and universal class tag

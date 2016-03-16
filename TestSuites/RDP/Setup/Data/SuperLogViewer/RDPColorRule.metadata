@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AssetCollectionMetadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <UniqueId>becdbf9d-76ab-44e5-9abb-64d2c0f0ea5c</UniqueId>
+  <GroupId>becdbf9d-76ab-44e5-9abb-64d2c0f0ea5c</GroupId>
+  <Name>RDP ETW Color Rule</Name>
+  <AssetType>ColorRuleAsset</AssetType>
+  <VersionNumber>0</VersionNumber>
+  <Author>FAREAST\zhaliu</Author>
+  <PublishedDate>0001-01-01T00:00:00</PublishedDate>
+  <ModifiedDate>2014-03-10T15:36:56.7194404+08:00</ModifiedDate>
+  <Revision>0</Revision>
+  <Description>RDP ETW Color Rule</Description>
+  <Rating>0</Rating>
+</AssetCollectionMetadata>

@@ -43,3 +43,15 @@ if not defined TestSuiteRoot (
 %buildtool% "%TestSuiteRoot%ProtoSDK\MS-SMB2\Smb2.csproj" /t:Clean;Rebuild
 %buildtool% "%TestSuiteRoot%ProtoSDK\MS-RSVD\Rsvd.csproj" /t:Clean;Rebuild
 %buildtool% "%TestSuiteRoot%ProtoSDK\MS-SWN\Swn.csproj" /t:Clean;Rebuild
+
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-RDPBCGR\Rdpbcgr.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-RDPEDISP\Rdpedisp.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-RDPEDYC\MS-RDPEDYC.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-RDPEGFX\Rdpegfx.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-RDPEGT\Rdpegt.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-RDPEI\Rdpei.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-RDPEMT\Rdpemt.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-RDPEUDP\Rdpeudp.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-RDPEUSB\Rdpeusb.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-RDPEVOR\Rdpevor.csproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%ProtoSDK\MS-RDPRFX\Rdprfx.csproj" /t:Clean;Rebuild

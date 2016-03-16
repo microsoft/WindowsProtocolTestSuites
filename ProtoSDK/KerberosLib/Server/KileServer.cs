@@ -1,10 +1,5 @@
-//------------------------------------------------------------------------------
-// Copyright (c) Microsoft Corporation. All rights reserved.
-//
-// Description: This file implements KILE server, which receives client
-//              PDUs and sends server PDUs.
-//
-//------------------------------------------------------------------------------
+// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
 using System.Collections.Generic;
@@ -151,7 +146,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <exception cref="System.ArgumentNullException">Thrown when the input parameter is null.</exception>
         /// <exception cref="System.InvalidOperationException">Thrown when no kileConnection related server context
         /// is found </exception>
-        [CLSCompliant(false)]
         public KileAsResponse CreateAsResponse(
             KileConnection kileConnection,
             KerberosAccountType accountType,
@@ -271,7 +265,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <exception cref="System.ArgumentNullException">Thrown when the input parameter is null.</exception>
         /// <exception cref="System.InvalidOperationException">Thrown when no kileConnection related server context
         /// is found </exception>
-        [CLSCompliant(false)]
         public KileTgsResponse CreateTgsResponse(
             KileConnection kileConnection,
             _SeqOfPA_DATA seqOfPaData,
@@ -356,7 +349,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <exception cref="System.ArgumentNullException">Thrown when the input parameter is null.</exception>
         /// <exception cref="System.InvalidOperationException">Thrown when no kileConnection related server context
         /// is found </exception>
-        [CLSCompliant(false)]
         public KileTgsResponse CreateTgsResponse(
             KileConnection kileConnection,
             _SeqOfPA_DATA seqOfPaData,
@@ -385,7 +377,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <exception cref="System.ArgumentNullException">Thrown when the input parameter is null.</exception>
         /// <exception cref="System.InvalidOperationException">Thrown when no kileConnection related server context
         /// is found </exception>
-        [CLSCompliant(false)]
         public KileApResponse CreateApResponse(KileConnection kileConnection, EncryptionKey subkey)
         {
             context = GetServerContextByKileConnection(kileConnection);
@@ -454,7 +445,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <param name="message">The message to be wrapped. This argument can be null.</param>
         /// <returns>The created Gss_Wrap token.</returns>
         /// <exception cref="System.NotSupportedException">Thrown when the encryption is not supported.</exception>
-        [CLSCompliant(false)]
         public KilePdu GssWrap(KileConnection kileConnection, bool isEncrypted, SGN_ALG signAlgorithm, byte[] message)
         {
             context = GetServerContextByKileConnection(kileConnection);
@@ -471,7 +461,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <param name="message">The message to be computed signature. This argument can be null.</param>
         /// <returns>The created Gss_GetMic token, NotSupportedException.</returns>
         /// <exception cref="System.NotSupportedException">Thrown when the encryption is not supported.</exception>
-        [CLSCompliant(false)]
         public KilePdu GssGetMic(KileConnection kileConnection, SGN_ALG signAlgorithm, byte[] message)
         {
             context = GetServerContextByKileConnection(kileConnection);
@@ -536,7 +525,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <param name="ipType">Ip Version</param>
         /// <param name="transportSize">The buffer size of transport stack. </param>
         /// <exception cref="System.ArgumentException">Thrown when the transportType is neither TCP nor UDP.</exception>
-        [CLSCompliant(false)]
         public void Start(ushort localPort, KileConnectionType transportType, KileIpType ipType, int transportSize)
         {
             SocketTransportConfig transportConfig = new SocketTransportConfig();

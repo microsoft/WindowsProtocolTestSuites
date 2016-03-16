@@ -2,8 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
 {
@@ -19,14 +19,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// <summary>
         /// Gets or sets the data of the object.
         /// </summary>
-        public int[] Value{get; set;}
+        public int[] Value { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the Asn1ObjectIdentifier class with empty data.
         /// </summary>
         public Asn1ObjectIdentifier()
         {
-            this.Value = null;
+            Value = null;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// <param name="val"></param>
         public Asn1ObjectIdentifier(int[] val)
         {
-            this.Value = val;
+            Value = val;
         }
 
         /// <summary>
@@ -50,11 +50,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         protected override bool VerifyConstraints()
         {
             //Ref. X.660: 7.6
-            if (this.Value == null || this.Value.Length < 2 || this.Value[0] > 2)
+            if (Value == null || Value.Length < 2 || Value[0] > 2)
             {
                 return false;
             }
-            if (this.Value[0] <= 1 && this.Value[1] > 39)
+            if (Value[0] <= 1 && Value[1] > 39)
             {
                 return false;
             }
@@ -68,23 +68,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// </summary>
         /// <param name="obj">The object to be compared.</param>
         /// <returns>True if obj has same data with this instance. False if not.</returns>
-        public override bool Equals(System.Object obj)
+        public override bool Equals(object obj)
         {
-            // If parameter is null return false.
-            if (obj == null)
-            {
-                return false;
-            }
-
-            // If parameter cannot be cast to Asn1ObjectIdentifier return false.
+            // If parameter is null or cannot be cast to Asn1ObjectIdentifier return false.
             Asn1ObjectIdentifier p = obj as Asn1ObjectIdentifier;
-            if ((System.Object)p == null)
-            {
-                return false;
-            }
-
-            // Return true if the fields match.
-            return Enumerable.SequenceEqual<int>(this.Value, p.Value);
+            return p != null && Value.SequenceEqual(p.Value);
         }
 
         /// <summary>
@@ -105,21 +93,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// </summary>
         /// <param name="val"></param>
         /// <returns>A list which contains the encoding result.</returns>
-        private List<byte> EncodeSubIdentifier(int val)
+        private static IEnumerable<byte> EncodeSubIdentifier(int val)
         {
             if (val < 0)
             {
                 throw new NotImplementedException("Negative identifier.");
             }
             //Ref: X.690:8.19.2
-            List<byte> res = new List<byte>();
+            var res = new List<byte>();
             //Take the last 7 bits
-            byte last = (byte)(val & 127);//bit 8 is 0
+            var last = (byte)(val & 127);//bit 8 is 0
             res.Add(last);
             val >>= 7;
             while (val != 0)
             {
-                byte cur = (byte)(128 + (val & 127));//bit 8 is 1
+                var cur = (byte)(128 + (val & 127));//bit 8 is 1
                 res.Insert(0, cur);
                 val >>= 7;
             }
@@ -131,13 +119,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// </summary>
         /// <param name="val"></param>
         /// <returns>An array of bytes which contains the encoding result.</returns>
-        private byte[] EncodeIdentifier(int[] val)
+        private static byte[] EncodeIdentifier(IList<int> val)
         {
             //Ref: X.690:8.19.4
-            int first = val[0] * 40 + val[1];
-            List<byte> all = new List<byte>();
+            var first = val[0] * 40 + val[1];
+            var all = new List<byte>();
             all.AddRange(EncodeSubIdentifier(first));
-            for (int i = 2; i < val.Length; i++)
+            for (var i = 2; i < val.Count; i++)
             {
                 all.AddRange(EncodeSubIdentifier(val[i]));
             }
@@ -145,18 +133,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         }
 
         /// <summary>
-        /// Decodes integers (subidentifiers) from a byte array.
+        /// Decodes integers (subidentifiers) from a byte array by BER.
         /// </summary>
         /// <param name="val"></param>
-        /// <returns>An array of integers that contains the decoding result.</returns>
-        private int[] DecodeSubidentifiers(byte[] val)
+        /// <returns>An array of integers that contains the decoding result. Length is not included in val.</returns>
+        private static int[] DecodeIdentifiers(IList<byte> val)
         {
-            List<int> res = new List<int>();
-            bool first = true;
-            int curPos = 0;
-            while (curPos != val.Length)
+            var res = new List<int>();
+            var first = true;
+            var curPos = 0;
+            while (curPos != val.Count)
             {
-                int curIntVal = 0;
+                var curIntVal = 0;
                 do
                 {
                     curIntVal <<= 7;
@@ -164,9 +152,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
                 } while (val[curPos++] >= 128);
                 if (first)
                 {
+                    if (curIntVal >= 128)
+                    {
+                        throw new NotImplementedException("Ojbect Identifier with first element greater than 127 is not implemented."); 
+                    }
                     first = false;
-                    int val1 = (curIntVal >= 80 ? 2 : curIntVal / 40);
-                    int val2 = (curIntVal - val1 * 40);
+                    var val1 = (curIntVal >= 80 ? 2 : curIntVal / 40);
+                    var val2 = (curIntVal - val1 * 40);
                     res.Add(val1);
                     res.Add(val2);
                 }
@@ -194,7 +186,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// </remarks>
         protected override int ValueBerEncode(IAsn1BerEncodingBuffer buffer)
         {
-            byte[] res = EncodeIdentifier(this.Value);
+            var res = EncodeIdentifier(Value);
             buffer.WriteBytes(res);
             return res.Length;
         }
@@ -212,14 +204,46 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// </remarks>
         protected override int ValueBerDecode(IAsn1DecodingBuffer buffer, int length)
         {
-            byte[] all = buffer.ReadBytes(length);
-            this.Value = DecodeSubidentifiers(all);
+            var all = buffer.ReadBytes(length);
+            Value = DecodeIdentifiers(all);
             return length;
         }
 
         #endregion BER
 
         #region PER
+
+        /// <summary>
+        /// Encodes the content of the object by PER.
+        /// </summary>
+        /// <param name="buffer">A buffer to which the encoding result will be written.</param>
+        /// <remarks>Length is included.</remarks>
+        protected override void ValuePerEncode(IAsn1PerEncodingBuffer buffer)
+        {
+            if (Value[0]*40 + Value[1] >= 128)
+            {
+                throw new NotImplementedException("Ojbect Identifier with first element greater than 127 is not implemented.");
+                //Len will be minus 1 while encoding.
+            }
+            var res = EncodeIdentifier(Value);
+            Asn1StandardProcedure.PerEncodeArray<byte>(buffer, res,
+                (encodingBuffer, b) =>
+                {
+                    encodingBuffer.WriteByte(b);
+                });
+        }
+
+        /// <summary>
+        /// Decodes the content of the object by PER.
+        /// </summary>
+        /// <param name="buffer">A buffer that contains a PER encoding result.</param>
+        /// <param name="aligned">Indicating whether the PER decoding is aligned.</param>
+        /// <remarks>Length is included.</remarks>
+        protected override void ValuePerDecode(IAsn1DecodingBuffer buffer, bool aligned = true)
+        {
+            byte[] res = Asn1StandardProcedure.PerDecodeArray(buffer, decodingBuffer => (decodingBuffer.ReadByte()));
+            Value = DecodeIdentifiers(res);
+        }
 
         #endregion PER
     }

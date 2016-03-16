@@ -1,7 +1,6 @@
-//------------------------------------------------------------------------------
-// Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//------------------------------------------------------------------------------
+// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -16,7 +15,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
     /// Provide Kerberos authentication for upper-layer protocol. 
     /// This class only supports single realm transport and single service principle request.
     /// </summary>
-    [CLSCompliant(false)]
     public class KerberosServerSecurityContext : ServerSecurityContext, IDisposable
     {
         #region Private Members
@@ -171,7 +169,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <param name="securityBuffers">Data to sign and token to update.</param>
         /// <exception cref="System.NotSupportedException">Thrown when the input parameter is null.</exception>
         /// <exception cref="System.ArgumentException">Thrown when the input parameter is null.</exception>
-        [CLSCompliant(false)]
         public override void Sign(params SecurityBuffer[] securityBuffers)
         {
             KileUtility.Sign(server, securityBuffers);
@@ -183,7 +180,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// </summary>
         /// <param name="securityBuffers">Data and token to verify</param>
         /// <returns>Success if true, Fail if false</returns>
-        [CLSCompliant(false)]
         public override bool Verify(params SecurityBuffer[] securityBuffers)
         {
             return KileUtility.Verify(server, securityBuffers);
@@ -194,7 +190,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// Encrypts Message. User decides what SecBuffers are used.
         /// </summary>
         /// <param name="securityBuffers">The security buffers to encrypt.</param>
-        [CLSCompliant(false)]
         public override void Encrypt(params SecurityBuffer[] securityBuffers)
         {
             KileUtility.Encrypt(server, securityBuffers);
@@ -206,7 +201,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// the original, unencrypted byte array.
         /// </summary>
         /// <param name="securityBuffers">The security buffers to decrypt.</param>
-        [CLSCompliant(false)]
         public override bool Decrypt(params SecurityBuffer[] securityBuffers)
         {
             return KileUtility.Decrypt(server, securityBuffers);
@@ -220,7 +214,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <summary>
         /// Package type
         /// </summary>
-        [CLSCompliant(false)]
         public override SecurityPackageType PackageType
         {
             get
@@ -258,7 +251,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// Currently local sequence number
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
-        [CLSCompliant(false)]
         public override uint SequenceNumber
         {
             get
@@ -295,7 +287,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <summary>
         /// Queries the sizes of the structures used in the per-message functions.
         /// </summary>
-        [CLSCompliant(false)]
         public override SecurityPackageContextSizes ContextSizes
         {
             get

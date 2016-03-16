@@ -104,8 +104,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
             }
             allowedValues.Sort();
 
-            Min = 0;
-            Max = allowedValues.Count-1;
+            Constraints = new Asn1IntegerBound() { Min = 0, Max = allowedValues.Count - 1 };
         }
 
         /// <summary>
@@ -123,17 +122,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         #region PER
 
         /// <summary>
-        /// Encodes the object by PER.
+        /// Encodes the content of the object by PER.
         /// </summary>
         /// <param name="buffer">A buffer to which the encoding result will be written.</param>
-        public override void PerEncode(IAsn1PerEncodingBuffer buffer)
+        protected override void ValuePerEncode(IAsn1PerEncodingBuffer buffer)
         {
-            if (HasExternalObjects)
-            {
-                //TODO: write true to the buffer if external element is used and not within the extension root
-                //Ref: X.691: 13.3
-                buffer.WriteBit(false);
-            }
             int i = 0;
             for (; i < allowedValues.Count; i++)
             {
@@ -147,7 +140,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
                 throw new Asn1ConstraintsNotSatisfied(ExceptionMessages.ConstraintsNotSatisfied + " Invalid enumeration.");
             }
 
-            Asn1Integer ai = new Asn1Integer(i, Min, Max);
+            Asn1Integer ai = new Asn1Integer(i, Constraints.Min, Constraints.Max);
             ai.PerEncode(buffer);
         }
 
@@ -156,16 +149,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// </summary>
         /// <param name="buffer">A buffer that contains a PER encoding result.</param>
         /// <param name="aligned">Indicating whether the PER decoding is aligned.</param>
-        public override void PerDecode(IAsn1DecodingBuffer buffer, bool aligned = true)
+        protected override void ValuePerDecode(IAsn1DecodingBuffer buffer, bool aligned = true)
         {
-            if (HasExternalObjects)
-            {
-                buffer.ReadBit();
-                //TODO: if true is read, store the decoding value to external object
-            }
-            Asn1Integer ai = new Asn1Integer(null, Min, Max);
+            Asn1Integer ai = new Asn1Integer(null, Constraints.Min, Constraints.Max);
             ai.PerDecode(buffer, aligned);
-            Debug.Assert(ai.Value != null, "ai.Value != null");
             Value = allowedValues[(int)ai.Value];
         }
 
