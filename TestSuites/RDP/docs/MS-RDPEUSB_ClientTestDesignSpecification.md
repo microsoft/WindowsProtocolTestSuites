@@ -50,8 +50,9 @@ The Remote Desktop Protocol: USB Devices Virtual Channel Extension is embedded i
 There are 17 protocol data units (PDUs) described by this protocol, and they can be classified into the following message flows:
 
 
-| -------------| ------------- |
+
 |  **Message Flows**|  **Number of PDUs** | 
+| -------------| ------------- |
 | Interface Manipulation Exchange Capabilities Interface| 2| 
 | Device Sink Interface| 2| 
 | Channel Notification Interface| 1| 
@@ -381,11 +382,11 @@ Figure 3-1 illustrates the relationship between adapters, test cases and SUT.
 The Traditional test approach is used to design all test cases. The test cases are designed to cover all in-scope testable requirements, including both positive and negative requirements. 
 The following table shows the number of test cases for each scenario.
 
-|  **Scenario**|  **Test Cases**|  **Covered Requirements**|  **BVTs**|  **P0**|  **P1**|  **P2**| 
-| -------------| -------------| -------------| -------------| -------------| -------------| ------------- |
-| S1_OperateDeviceChannel| 2|  | 1| 1| 1| 0| 
-| S2_CancelRequest| 3|  | 3| 3| 0| 0| 
-| S3_OperateIo| 24|  | 4| 4| 14| 6| 
+|  **Scenario**|  **Test Cases**|  **BVTs**|  **P0**|  **P1**|  **P2**| 
+| -------------| -------------| -------------| -------------| -------------| ------------- |
+| S1_OperateDeviceChannel| 2| 1| 1| 1| 0| 
+| S2_CancelRequest| 3| 3| 3| 0| 0| 
+| S3_OperateIo| 24| 4| 4| 14| 6| 
 
 ### <a name="_Toc326658525"/>Test Cases Description 
 The test suite is a synthetic RDP server. In the following descriptions, all instances of the term “Test Suite” can be understood as the RDPEUSB server.
@@ -409,8 +410,8 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 #### <a name="_Toc326658526"/>BVT Test Cases
 
 
-| -------------| ------------- |
 |  **S1_OperateDeviceChannel**| | 
+| -------------| ------------- |
 |  **Test ID**| BVT\_EUSB_OperateDeviceChannel| 
 |  **Priority**| P0| 
 |  **Description** | This test case tests:| 
@@ -424,8 +425,8 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S2_CancelRequest**| | 
+| -------------| ------------- |
 |  **Test ID**| BVT\_EUSB\_CancelRequest_IoControl| 
 |  **Priority**| P0| 
 |  **Description** | This test case tests:| 
@@ -443,8 +444,9 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
+
 |  **S2_CancelRequest**| | 
+| -------------| ------------- |
 |  **Test ID**| BVT\_EUSB\_CancelRequest_InternalIoControl| 
 |  **Priority**| P0| 
 |  **Description** | This test case tests:| 
@@ -462,8 +464,8 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
-|  **S2_CancelRequest**| | 
+|  **S2_CancelRequest**| |
+| -------------| ------------- | 
 |  **Test ID**| BVT\_EUSB\_CancelRequest_TransferInRequest| 
 |  **Priority**| P0| 
 |  **Description** | This test case tests:| 
@@ -481,8 +483,8 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| BVT\_EUSB\_OperateIo_IoControl| 
 |  **Priority**| P0| 
 |  **Description** | This test case tests:| 
@@ -499,8 +501,8 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| BVT\_EUSB\_OperateIo_InternalIoControl| 
 |  **Priority**| P0| 
 |  **Description** | This test case tests:| 
@@ -517,8 +519,8 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| BVT\_EUSB\_OperateIo_TransferIn| 
 |  **Priority**| P0| 
 |  **Description** | This test case tests:| 
@@ -537,8 +539,8 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| BVT\_EUSB\_OperateIo_QueryDeviceText| 
 |  **Priority**| P0| 
 |  **Description** | This test case tests:| 
@@ -555,8 +557,8 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 #### <a name="_Toc326658527"/>S1_OperateDeviceChannel
 
 
-| -------------| ------------- |
 |  **S1_OperateDeviceChannel**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_EUSB\_RdpeusbOperateDeviceChannel\_Invalid_MajorVersion| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies the client behaviors which response to an invalid CHANNEL_CREATED message.| 
@@ -573,8 +575,8 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 #### <a name="_Toc326658529"/>S3_OperateIo
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| S3\_EUSB\_OperateIo_SelectConfiguration| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies behaviors of the select-configuration process for the directed USB device.| 
@@ -596,8 +598,8 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| S3\_EUSB\_OperateIo_SelectInterface| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies behaviors of the select-interface process for the directed USB device.| 
@@ -614,8 +616,8 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| S3\_EUSB\_OperateIo_PipeRequest| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies behaviors of clearing a stall condition of the directed USB device.| 
@@ -633,8 +635,8 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| S3\_EUSB\_OperateIo_GetCurrentFrameNumber| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies behaviors of retrieving the current frame number of the directed USB device.| 
@@ -650,8 +652,8 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| S3\_EUSB\_OperateIo_GetStatus| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies behaviors of retrieving status from a device, an interface, and an endpoint of the directed USB device.| 
@@ -668,8 +670,8 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| S3\_EUSB\_OperateIo_GetConfiguration| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies behaviors of retrieving the current configuration for the directed USB device.| 
@@ -684,8 +686,8 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
-|  **S3_OperateIo**| | 
+|  **S3_OperateIo**| |
+| -------------| ------------- | 
 |  **Test ID**| S3\_EUSB\_OperateIo_GetInterface| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies behaviors of retrieving the current alternate interface setting for an interface in the current configuration.| 
@@ -700,8 +702,8 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| S3\_EUSB\_OperateIo_OsFeatureDescriptor| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies behaviors of retrieving Microsoft OS Feature Descriptors from the directed USB device or an interface on the directed USB device.| 
@@ -716,8 +718,8 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| S3\_EUSB\_OperateIo_ResetPort| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies behaviors of the process to reset the upstream port of the directed USB device.| 
@@ -733,8 +735,8 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| S3\_EUSB\_OperateIo_GetPortStatus| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies behaviors of querying the status of the PDO.| 
@@ -750,8 +752,8 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| S3\_EUSB\_OperateIo_GetHubCount| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies behaviors of querying the count of the USB hub on the client.| 
@@ -767,8 +769,8 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| S3\_EUSB\_OperateIo_CyclePort| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies behaviors of simulating a device unplug and replug on the port associated with the PDO.| 
@@ -784,8 +786,8 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| S3\_EUSB\_OperateIo_GetBusInfo| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies behaviors of querying the bus driver for certain bus information on the client.| 
@@ -801,8 +803,8 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| S3\_EUSB\_OperateIo_GetControllerName| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies behaviors of querying the bus driver for the device name of the USB host controller on the client.| 
@@ -818,8 +820,8 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| S3\_EUSB\_OperateIo\_OSRFX2_BargraphDisplay| 
 |  **Priority**| P2| 
 |  **Description** | This test case verifies behaviors of issuing OSR FX2 Device vendor commands, SET/READ BARGRAPH DISPLAY, to the directed device.| 
@@ -834,8 +836,8 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| S3\_EUSB\_OperateIo\_OSRFX2_SegmentDisplay| 
 |  **Priority**| P2| 
 |  **Description** | This test case verifies behaviors of issuing OSR FX2 Device vendor commands, SET/READ 7 SEGMENT DISPLAY, to the directed device.| 
@@ -850,8 +852,8 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| S3\_EUSB\_OperateIo\_OSRFX2\_IsHighSpeed| 
 |  **Priority**| P2| 
 |  **Description** | This test case verifies behaviors of issuing the OSR FX2 Device vendor command, IS HIGH SPEED, to the directed device.| 
@@ -866,8 +868,8 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| S3\_EUSB\_OperateIo\_OSRFX2_ReadSwitches| 
 |  **Priority**| P2| 
 |  **Description** | This test case verifies behaviors of issuing the OSR FX2 Device vendor command, READ SWITCHES, to the directed device.| 
@@ -882,8 +884,8 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| S3\_EUSB\_OperateIo\_OSRFX2_InterruptIn| 
 |  **Priority**| P2| 
 |  **Description** | This test case verifies behaviors of using the interrupt endpoint to read the switch states on the directed device.| 
@@ -899,8 +901,8 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S3_OperateIo**| | 
+| -------------| ------------- |
 |  **Test ID**| S3\_EUSB\_OperateIo\_OSRFX2_BulkWriteRead| 
 |  **Priority**| P2| 
 |  **Description** | This test case verifies behaviors of using the bulk read and write endpoints of the directed OSR FX2 Device.| 

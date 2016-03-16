@@ -706,20 +706,20 @@ The Traditional test approach is used to design all test cases. The test cases a
 
 Below table shows the test case number of each scenario. 
 
-|  **Scenario**|  **Test Case Number**|  **Covered Requirement**|  **BVT**|  **P0**|  **P1**|  **P2**| 
-| -------------| -------------| -------------| -------------| -------------| -------------| ------------- |
-| Capability Exchange Test| 3|  | 1| 1| 2| 0| 
-| Surface To Screen Test| 21|  | 2| 2| 19| 0| 
-| Cache Management Test| 13|  | 1| 1| 12| 0| 
-| Surface to Surface Test| 11|  | 2| 2| 9| 0| 
-| Wire to Surface Test| 2|  | 1| 1| 1| 0| 
-| ClearCodec Test| 32|  | 2| 7| 25| 0| 
-| RFX progressive Codec Test| 36|  | 2| 4| 32| 0| 
-| Frame Segmentation Test| 11|  | 0| 1| 10| 0| 
-| RDP8 Compression Test| 4|  | 1| 1| 3| 0| 
-| RemoteFX Codec Test| 4|  | 1| 1| 3| 0| 
-| H264 Codec Test| 14|  | 3| 4| 10| 0| 
-|  **Summary**|  **151**|  |  **16**|  **25**|  **126**| 0| 
+|  **Scenario**|  **Test Case Number**|  **BVT**|  **P0**|  **P1**|  **P2**| 
+| -------------| -------------| -------------| -------------| -------------| ------------- |
+| Capability Exchange Test| 3| 1| 1| 2| 0| 
+| Surface To Screen Test| 21| 2| 2| 19| 0| 
+| Cache Management Test| 13| 1| 1| 12| 0| 
+| Surface to Surface Test| 11| 2| 2| 9| 0| 
+| Wire to Surface Test| 2| 1| 1| 1| 0| 
+| ClearCodec Test| 32| 2| 7| 25| 0| 
+| RFX progressive Codec Test| 36| 2| 4| 32| 0| 
+| Frame Segmentation Test| 11| 0| 1| 10| 0| 
+| RDP8 Compression Test| 4| 1| 1| 3| 0| 
+| RemoteFX Codec Test| 4| 1| 1| 3| 0| 
+| H264 Codec Test| 14| 3| 4| 10| 0| 
+|  **Summary**|  **151**| **16**|  **25**|  **126**| 0| 
 
 The total BVT case number is 12, non-BVT(P0+P1）case is 124, P2 case is 0 and the all case number is 133.
 
@@ -2153,6 +2153,8 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 8: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 9: Delete the surface| 
 |  **Cleanup**| N/A| 
+
+
 |  **RFX Progressive Codec Stream Test**| | 
 | -------------| ------------- |
 |  **Test ID**| RDPEGFX\_RfxProgressiveCodec\_PositiveTest\_ProgressiveEncoding_SurfaceNotTileAligned| 

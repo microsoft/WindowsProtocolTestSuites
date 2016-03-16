@@ -1338,43 +1338,45 @@ This section describes how to troubleshoot common test suite issues.
 
 ### <a name="_Toc421010940"/>Ping Failure
 
-| -------------| ------------- |
+
 | PROBLEM| The SUT does not respond to pings from the driver computer.| 
+| -------------| ------------- |
 | CAUSE| The driver computer was not in the same network segment as the SUT, or the SUT firewall is enabled. | 
 | RESOLUTION| Move the driver computer and the SUT to the same network segment or disable the SUT firewall.| 
 
 ### <a name="_Toc421010941"/>Test Run Issues
 
-| -------------| ------------- |
 | PROBLEM| Test cases failed with message like “Timeout when expecting  &#60; Message Type &#62; ”.| 
+| -------------| ------------- |
 | CAUSE| For Windows RDP client, the test suites must be run using the Administrator account.| 
 | | For non-Windows RDP client, the SUT control adapter may be not implemented properly. | 
 | RESOLUTION| For Windows RDP client, enable Administrator and log on.| 
 | | For non-Windows RDP client, Please refer to [Configuring the Test Suite Mode](#_Toc421010911).| 
 
-| -------------| ------------- |
 | PROBLEM| Test cases failed with exception “The handle is invalid”.| 
+| -------------| ------------- |
 | CAUSE| The driver computer’s screen is locked when running test cases. | 
 | RESOLUTION| Do not lock the screen of the driver computer when running test cases. | 
 
 ### <a name="_Toc421010942"/>Most MS-RDPEUSB Test Cases Failed
 
-| -------------| ------------- |
 | PROBLEM| Most MS-RDPEUSB test cases are failed.| 
+| -------------| ------------- |
 | CAUSE| The OSR USB FX2 board is not plugged into the SUT or the USB Redirection is not enabled by the SUT. | 
 | RESOLUTION| Plug OSR USB FX2 board into the SUT and enable the USB Redirection in the Local Group Policy Editor. For more details, please refer to [Configuring Windows-based Computers](#_Toc421010905).| 
 
 ### <a name="_Toc421010943"/>Most MS-RDPEUDP/MS-RDPEMT Test Cases Failed
 
-| -------------| ------------- |
 | PROBLEM| Most MS-RDPEUDP/MS-RDPEMT test cases are failed.| 
+| -------------| ------------- |
 | CAUSE| Some MS-RDPEUDP and MS-RDPEMT test cases create RDP-UDP connection, which need to use TLS or CredSSP security protocol. | 
 | RESOLUTION| In **RDP_ClientTestSuite.deployment.ptfconfig,** configure **RDP.Security.Protocol** to TLS or CredSSP. For more details, please refer to [Configuring the Test Suite](#_Toc421010907)| 
 
 ### <a name="_Toc421010944"/>3 RDPBCGR Test Cases Must be Run Under “interactive” Mode
 
-| -------------| ------------- |
+
 | PROBLEM| The following RDPBCGR test cases will fail when running under “Powershell” mode:| 
+| -------------| ------------- |
 | | BVT_ClientInputTest_FastPath | 
 | | BVT_ClientInputTest_SlowPath | 
 | | S1_ConnectionTest_Disconnection_PositiveTest_ClientInitiated| 
@@ -1383,8 +1385,9 @@ This section describes how to troubleshoot common test suite issues.
 
 ### <a name="_Toc421010945"/>3 RDPEGFX test cases require H264 enabled on SUT
 
-| -------------| ------------- |
+
 | PROBLEM| The following test cases will fail:| 
+| -------------| ------------- |
 | | RDPEGFX\_H264Codec\_PositiveTest_H264Support| 
 | | RDPEGFX\_H264Codec\_PositiveTest_SendH264Stream| 
 | | RDPEGFX\_H264Codec\_NegativeTest_IncorrectRegionRectsNum| 
@@ -1393,13 +1396,14 @@ This section describes how to troubleshoot common test suite issues.
 
 ### <a name="_Toc421010946"/>Most Test Cases Failed When Using TLS/CredSSP protocol
 
-| -------------| ------------- |
 | PROBLEM| When using TLS or CredSSP protocol, test cases are failed with Timeout exception. | 
+| -------------| ------------- |
 | CAUSE| TLS and CredSSP protocol need more time on encryption and decryption. | 
 | RESOLUTION| In **RDP_ClientTestSuite.deployment.ptfconfig,** configure **WaitTime** to give more waiting time. For more details, please refer to [Configuring the Test Suite](#_Toc421010907)| 
 
-| -------------| ------------- |
+
 | PROBLEM| When using TLS or CredSSP protocol, test cases are failed with exception: The system cannot find the file specified.| 
+| -------------| ------------- |
 | CAUSE| The certificate files, which are used to secure TLS or CrepSSP transports, are not generated successfully. | 
 | RESOLUTION| Re-run **Config-DriverComputer.ps1** on the driver computer. For more details, please refer to [Configuring Windows-based Computers](#_Toc421010905).| 
 

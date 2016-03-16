@@ -83,8 +83,9 @@ The following protocols are tunneled within an [MS-RDPBCGR] static virtual chann
 ### <a name="_Toc427051961"/>Protocol Operations/Messages 
 There are 51 protocol data units (PDUs) described by this protocol, and they can be classified into the following message flows:
 
-| -------------| ------------- |
+
 |  **Message Flows** |  **Number of PDUs**| 
+| -------------| ------------- |
 | Connection Sequence| 23| 
 | Deactivation-Reactivation Sequence| 1| 
 | Disconnection Sequences| 3| 
@@ -968,8 +969,9 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
+
 |  **S5_FastPathInput**| | 
+| -------------| ------------- |
 |  **Test ID**| BVT\_ClientInputTest\_FastPath| 
 |  **Priority**| P0| 
 |  **Description** | This test case is used to verify the Client Input Events when Fast-Path is enabled.| 
@@ -982,8 +984,9 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
+
 |  **S7_StaticVirtualChannel**| | 
+| -------------| ------------- |
 |  **Test ID**| BVT\_StaticVirtualChannel\_PositiveTest\_CompressionNotSupported| 
 |  **Priority**| P0| 
 |  **Description** | This test case is used to verify the uncompressed Static Virtual Channel PDU. | 
@@ -995,8 +998,9 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
+
 |  **S7_StaticVirtualChannel**| | 
+| -------------| ------------- |
 |  **Test ID**| BVT\_StaticVirtualChannel\_PositiveTest\_VCChunkSizeNotPresent| 
 |  **Priority**| P0| 
 |  **Description** | This test case is used to verify the Static Virtual Channel PDUs when VCChunkSizeField is not present in server-to-client Virtual Channel Capability Set. | 
@@ -1008,8 +1012,9 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
+
 |  **S8_ServerRedirection**| | 
+| -------------| ------------- |
 |  **Test ID**| BVT\_ServerRedirection\_PositiveTest\_WithoutRoutingToken| 
 |  **Priority**| P0| 
 |  **Description** | This test case is used to ensure SUT can process server redirection successfully and the routingToken is not expected when server didn’t present LoadBalanceInfo in the Server Redirection PDU.| 
@@ -1024,8 +1029,9 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
+
 |  **S9_HealthMonitoring**| | 
+| -------------| ------------- |
 |  **Test ID**| BVT\_HealthMonitoring\_PositiveTest\_SendHeartbeat| 
 |  **Priority**| P0| 
 |  **Description** | This test verify client can receive Server Heartbeat PDU, and will auto-reconnect if not receive heartbeat after certain time.| 
@@ -1044,8 +1050,9 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 #####Connection Initiation Test
 
 
-| -------------| ------------- |
+
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_ConnectionInitiation\_NegativeTest\_InvalidTPKTHeader| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies that SUT drops the connection once receiving a Server X.224 Connection Confirm PDU with an invalid TPKT header from RDP server.| 
@@ -1056,8 +1063,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_ConnectionInitiation\_NegativeTest\_InvalidRDPNegData| 
 |  **Priority**| P2| 
 |  **Description** | This test case verifies that SUT drops the connection when received a Server X.224 Connection Confirm PDU with an invalid RDP Negotiation Data.| 
@@ -1068,8 +1075,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**|  | 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_ConnectionInitiation\_NegativeTest\_RDPNegotiationFailure| 
 |  **Priority**| P0| 
 |  **Description** | This test case verifies that SUT drops the connection when received a Server X.224 Connection Confirm PDU with an RDP Negotiation Failure structure.| 
@@ -1080,8 +1087,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**|  | 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_ConnectionInitiation\_PositiveTest\_HybridEXSelected| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies that SUT support PROTOCOL\_HYBRID\_EX security protocol.| 
@@ -1089,12 +1096,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Test Execution Steps**| Trigger SUT to initiate a RDP connection with sending a Client X.224 Connection Request PDU.| 
 | | Test Suite responds a Server X.224 Connection Confirm PDU and set the requestedProtocols field to PROTOCOL\_HYBRID\_EX.| 
 | | Test Suite and RDP client complete security headshake and the subsequent connection phase.| 
-
 |  **Cleanup**|  | 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_ConnectionInitiation\_PositiveTest\_FlagsOfRdpNegRsp_SupportAllProtocols| 
 |  **Priority**| P2| 
 |  **Description** | This test case verifies that SUT can process the valid RDP\_NEG\_RSP with supporting all protocols correctly.| 
@@ -1102,12 +1108,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Test Execution Steps**| Trigger SUT to initiate a RDP connection with sending a Client X.224 Connection Request PDU.| 
 | | Test Suite responds a Server X.224 Connection Confirm PDU and set the flags field of the RDP\_NEG\_RSP to EXTENDED\_CLIENT\_DATA\_SUPPORTED  &#124;  DYNVC\_GFX\_PROTOCOL_SUPPORTED  &#124;  RESTRICTED\_ADMIN\_MODE_SUPPORTED| 
 | | Test Suite expects SUT continues the connection sequence by sending a Client MCS Connect Initial PDU with GCC Conference Create Request.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_ConnectionInitiation\_PositiveTest\_RDPNegotiationFailure| 
 |  **Priority**| P2| 
 |  **Description** | This test case verifies that SUT can process the valid RDP\_NEG\_FAILURE correctly.| 
@@ -1115,14 +1120,13 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Test Execution Steps**| Trigger SUT to initiate a RDP connection with sending a Client X.224 Connection Request PDU.| 
 | | Test Suite responds a Server X.224 Connection Confirm PDU and set a valid failureCode of the RDP\_NEG\_FAILURE according to the Client X.244 Connection Request PDU from SUT.| 
 | | Test Suite expects SUT drops the connection.| 
-
 |  **Cleanup**|  | 
 
 #####Basic Setting Exchange Test
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_PositiveTest\_ExtendedClientDataNotSupported| 
 |  **Priority**| P0| 
 |  **Description** | This test case tests:| 
@@ -1136,8 +1140,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_NegativeTest\_MCSConnectResonseFailure| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies that SUT drops the connection when the result field of the MCS Connect Response PDU is not set to rt-successful (non 0).| 
@@ -1149,8 +1153,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_NegativeTest\_InvalidH221NonStandardkey| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies that SUT drops the connection when the H.221 nonstandard key embedded at the start of x224Ddata field is not ANSI character string “McDn”.| 
@@ -1162,8 +1166,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_NegativeTest\_InvalidEncodedLength| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies that SUT drops the connection when the length field of User Data Header is an invalid value (less than actual value).| 
@@ -1175,8 +1179,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_NegativeTest\_InvalidClientReaquestedProtocols| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies that SUT drops the connection when the clientReaquestedProtocols field in the Server Core Data is not same as that received in RDP Negotiation Response.| 
@@ -1188,8 +1192,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_NegativeTest\_InvalidEncryptionMethod| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies that SUT drops the connection when the encryptionMethod field in the Server Security Data is not valid or not supported.| 
@@ -1201,8 +1205,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_NegativeTest\_InvalidServerRandomLen| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies that SUT drops the connection when the serverRandomLen field in the Server Security Data is not valid.| 
@@ -1214,8 +1218,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_NegativeTest\_InvalidServerCertificate| 
 |  **Priority**| P1| 
 |  **Description** | This test case verifies that SUT drops the connection when the serverCertificate field in the Server Security Data is not valid.| 
@@ -1227,8 +1231,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_PositiveTest\_V10Server| 
 |  **Priority**| P2| 
 |  **Description** | This test case verifies that SUT can connect to a RDP 10.0 Server| 
@@ -1237,12 +1241,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite expects SUT continues the connection sequence by sending a Client MCS Connect Initial PDU with GCC Conference Create Request. | 
 | | Verify that received Client MCS Connect Initial PDU with GCC Conference Create Request and Test Suite responds  a Server MCS Connect Response PDU with GCC Conference Create Response and set the version field in the TS\_UD\_SC\_CORE to 0x00080005 (RDP 10.0 servers).| 
 | | Test Suite expects SUT complete the connection process successful.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| A_S1\_ConnectionTest\_BasicSettingExchange\_PositiveTest\_V1RnsUdScEdgeActionsSupported| 
 |  **Priority**| P2| 
 |  **Description** | This test case verifies that SUT can process the earlyCapabilityFlags of the TS\_US\_SC\_CORE correctly with supporting version 1 RNS\_UD\_SC\_EDGE\_ACTIONS.| 
@@ -1251,12 +1254,10 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite expects SUT continues the connection sequence by sending a Client MCS Connect Initial PDU with GCC Conference Create Request. | 
 | | Verify that received Client MCS Connect Initial PDU with GCC Conference Create Request and Test Suite responds a Server MCS Connect Response PDU with GCC Conference Create Response and set the earlyCapabilityFlags of the TS\_UD\_SC\_CORE to RNS\_UD\_SC\_EDGE\_ACTIONS\_SUPPORTED\_V1.| 
 | | Test Suite expects a Client MCS Erect Domain Request PDU to indicate the successful process of the Server MCS Connect Response PDU with GCC Conference Create Response.| 
-
 |  **Cleanup**| N/A| 
 
-
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_PositiveTest\_V2RnsUdScEdgeActionsSupported| 
 |  **Priority**| P2| 
 |  **Description** | This test case verifies that SUT can process the earlyCapabilityFlags of the TS\_US\_SC\_CORE correctly with supporting version 2 RNS\_UD\_EDGE_ACTIONS.| 
@@ -1265,12 +1266,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite expects SUT continues the connection sequence by sending a Client MCS Connect Initial PDU with GCC Conference Create Request. | 
 | | Verify that received Client MCS Connect Initial PDU with GCC Conference Create Request and Test Suite responds a Server MCS Connect Response PDU with GCC Conference Create Response and set the earlyCapabilityFlags of the TS\_UD\_SC\_CORE to RNS\_UD\_SC\_EDGE\_ACTIONS\_SUPPORTED_V2.| 
 | | Test Suite expects a Client MCS Erect Domain Request PDU to indicate the successful process of the Server MCS Connect Response PDU with GCC Conference Create Response.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_PositiveTest\_V1andV2RnsUdScEdgeActionsSupported| 
 |  **Priority**| P2| 
 |  **Description** | This test case verifies that SUT can process the earlyCapabilityFlags of the TS\_US\_SC\_CORE correctly with supporting version 1 and version 2 RNS\_UD\_SC\_EDGE\_ACTIONS.| 
@@ -1279,12 +1279,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite expects SUT continues the connection sequence by sending a Client MCS Connect Initial PDU with GCC Conference Create Request. | 
 | | Verify that received Client MCS Connect Initial PDU with GCC Conference Create Request and Test Suite responds a Server MCS Connect Response PDU with GCC Conference Create Response and set the earlyCapabilityFlags of the TS\_UD\_SC\_CORE to   RNS\_UD\_SC\_EDGE\_ACTIONS\_SUPPORTED\_V1  &#124;  RNS\_UD\_SC\_EDGE\_ACTIONS\_SUPPORTED\_V2.| 
 | | Test Suite expects a Client MCS Erect Domain Request PDU to indicate the successful process of the Server MCS Connect Response PDU with GCC Conference Create Response.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_PositiveTest\_RnsUdScDynamicDstSupported| 
 |  **Priority**| P2| 
 |  **Description** | This test case verifies that SUT can process the earlyCapabilityFlags of the TS\_US\_SC\_CORE correctly with supporting RNS\_UD\_SC\_DYNAMIC\_DST.| 
@@ -1293,12 +1292,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite expects SUT continues the connection sequence by sending a Client MCS Connect Initial PDU with GCC Conference Create Request. | 
 | | Verify that received Client MCS Connect Initial PDU with GCC Conference Create Request and Test Suite responds a Server MCS Connect Response PDU with GCC Conference Create Response and set the earlyCapabilityFlags of the TS\_UD\_SC\_CORE to RNS\_UD\_SC\_DYNAMIC\_DST_SUPPORTED| 
 | | Test Suite expects a Client MCS Erect Domain Request PDU to indicate the successful process of the Server MCS Connect Response PDU with GCC Conference Create Response.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_PositiveTest\_EncryptionMethodandLevel| 
 |  **Priority**| P2| 
 |  **Description** | This test case verifies that SUT can process the encryptionMethod and encryptionLevel of the TS\_UD\_SC\_SEC1 correctly.| 
@@ -1307,12 +1305,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite expects SUT continues the connection sequence by sending a Client MCS Connect Initial PDU with GCC Conference Create Request. | 
 | | Verify that received Client MCS Connect Initial PDU with GCC Conference Create Request and Test Suite set the encryptionMethod to ENCRYPTION\_METHOD\_56BIT and encryptionLevel to ENCRYPTION\_LEVEL\_HIGH in the Server Security Data of Server MCS Connect Response PDU with GCC Conference Create Response.| 
 | | Test Suite expects a Client MCS Erect Domain Request PDU to indicate the successful process of the Server MCS Connect Response PDU with GCC Conference Create Response.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_PositiveTest\_MCSChannelIdOfServerNetworkData_LessMaxValue| 
 |  **Priority**| P2| 
 |  **Description** | This test case verifies that SUT can process the boundary value (65534) of MCSChannelId field in Server Network Data.| 
@@ -1321,12 +1318,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite expects SUT continues the connection sequence by sending a Client MCS Connect Initial PDU with GCC Conference Create Request. | 
 | | Verify that received Client MCS Connect Initial PDU with GCC Conference Create Request and Test Suite responds a Server MCS Connect Response PDU with GCC Conference Create Response and set the MCSChannel field of the Server Network Data to 65534.| 
 | | Test Suite expects a Client MCS Erect Domain Request PDU to indicate the successful process of the Server MCS Connect Response PDU with GCC Conference Create Response.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_PositiveTest\_MCSChannelIdOfServerNetworkData_ONE| 
 |  **Priority**| P2| 
 |  **Description** | This test case verifies that SUT can process the boundary value (1) of MCSChannelId field in Server Network Data.| 
@@ -1335,12 +1331,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite expects SUT continues the connection sequence by sending a Client MCS Connect Initial PDU with GCC Conference Create Request. | 
 | | Verify that received Client MCS Connect Initial PDU with GCC Conference Create Request and Test Suite responds a Server MCS Connect Response PDU with GCC Conference Create Response and set the MCSChannel field of the Server Network Data to 1.| 
 | | Test Suite expects a Client MCS Erect Domain Request PDU to indicate the successful process of the Server MCS Connect Response PDU with GCC Conference Create Response.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_PositiveTest\_MCSChannelIdOfServerNetworkData_ZERO| 
 |  **Priority**| P2| 
 |  **Description** | This test case verifies that SUT can process the boundary value (0) of MCSChannelId field in Server Network Data.| 
@@ -1349,12 +1344,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite expects SUT continues the connection sequence by sending a Client MCS Connect Initial PDU with GCC Conference Create Request. | 
 | | Verify that received Client MCS Connect Initial PDU with GCC Conference Create Request and Test Suite responds a Server MCS Connect Response PDU with GCC Conference Create Response and set the MCSChannel field of the Server Network Data to 0.| 
 | | Test Suite expects a Client MCS Erect Domain Request PDU to indicate the successful process of the Server MCS Connect Response PDU with GCC Conference Create Response.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_PositiveTest\_MCSChannelIdOfServerMessageChannelData_MaxValue| 
 |  **Priority**| P2| 
 |  **Description** | This test case verifies that SUT can process the boundary value (65535) of MCSChannelId field in Server Message Channel Data.| 
@@ -1363,12 +1357,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite expects SUT continues the connection sequence by sending a Client MCS Connect Initial PDU with GCC Conference Create Request. | 
 | | Verify that received Client MCS Connect Initial PDU with GCC Conference Create Request and Test Suite responds a Server MCS Connect Response PDU with GCC Conference Create Response and set the MCSChannel field of the Server Message Channel Data to 65535.| 
 | | Test Suite expects a Client MCS Erect Domain Request PDU to indicate the successful process of the Server MCS Connect Response PDU with GCC Conference Create Response.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_PositiveTest\_MCSChannelIdOfServerNetworkData_LessMaxValue| 
 |  **Priority**| P2| 
 |  **Description** | This test case verifies that SUT can process the boundary value (65534) of MCSChannelId field in Server Message Channel Data.| 
@@ -1377,12 +1370,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite expects SUT continues the connection sequence by sending a Client MCS Connect Initial PDU with GCC Conference Create Request. | 
 | | Verify that received Client MCS Connect Initial PDU with GCC Conference Create Request and Test Suite responds a Server MCS Connect Response PDU with GCC Conference Create Response and set the MCSChannel field of the Server Message Channel Data to 65534.| 
 | | Test Suite expects a Client MCS Erect Domain Request PDU to indicate the successful process of the Server MCS Connect Response PDU with GCC Conference Create Response.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_PositiveTest\_MCSChannelIdOfServerMessageChannelData_ONE| 
 |  **Priority**| P2| 
 |  **Description** | This test case verifies that SUT can process the boundary value (1) of MCSChannelId field in Server Message Channel Data.| 
@@ -1391,11 +1383,9 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite expects SUT continues the connection sequence by sending a Client MCS Connect Initial PDU with GCC Conference Create Request. | 
 | | Verify that received Client MCS Connect Initial PDU with GCC Conference Create Request and Test Suite responds a Server MCS Connect Response PDU with GCC Conference Create Response and set the MCSChannel field of the Server Message Channel Data to 1.| 
 | | Test Suite expects a Client MCS Erect Domain Request PDU to indicate the successful process of the Server MCS Connect Response PDU with GCC Conference Create Response.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
 |  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_PositiveTest\_MCSChannelIdOfServerMessageChannelData_ZERO| 
 |  **Priority**| P2| 
@@ -1405,14 +1395,13 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite expects SUT continues the connection sequence by sending a Client MCS Connect Initial PDU with GCC Conference Create Request. | 
 | | Verify that received Client MCS Connect Initial PDU with GCC Conference Create Request and Test Suite responds a Server MCS Connect Response PDU with GCC Conference Create Response and set the MCSChannel field of the Server Message Channel Data to 0.| 
 | | Test Suite expects a Client MCS Erect Domain Request PDU to indicate the successful process of the Server MCS Connect Response PDU with GCC Conference Create Response.| 
-
 |  **Cleanup**| N/A| 
 
 #####Channel Connection Test
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_ChannelConnection\_NegativeTest\_MCSAttachUserConfirm_InvalidTPKTLength | 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to verify that SUT drops the connection if the length field within tpktHeader in MCS Attach User Confirm PDU is not consistent with the received data.| 
@@ -1424,8 +1413,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_ChannelConnection\_NegativeTest\_MCSAttachUserConfirm_Failure| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to verify that SUT drops the connection if the result field in MCS Attach User Confirm PDU is not set to rt-successful (0).| 
@@ -1437,8 +1426,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_ChannelConnection\_NegativeTest\_MCSAttachUserConfirm_InitiatorNotPresent| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to verify that SUT drops the connection if the initiator field in MCS Attach User Confirm PDU is not present| 
@@ -1450,8 +1439,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_ChannelConnection\_NegativeTest\_MCSChannelJoinConfirm_InvalidTPKTLength| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to verify that SUT drops the connection if the length field within tpktHeader in MCS Channel Join Confirm PDU is not consistent with the received data.| 
@@ -1465,8 +1454,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_ChannelConnection\_NegativeTest\_MCSChannelJoinConfirm_ChannelIdNotPresent| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to verify that SUT drops the connection if the channelId field is not present in MCS Channel Join Confirm PDU.| 
@@ -1480,8 +1469,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_ChannelConnection\_NegativeTest\_MCSChannelJoinConfirm_Failure| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to verity that SUT drops the connection if the result field is not set to rt-successful (0) in MCS Channel Join Confirm PDU.| 
@@ -1495,8 +1484,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_ChannelConnection\_NegativeTest\_MCSChannelJoinConfirm_InvalidChannelId| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to verify that SUT drops the connection if the channelId field is not valid in MCS Channel Join Confirm PDU.| 
@@ -1512,8 +1501,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 #####Security Setting Exchange Test
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_SecurityExchange\_NegativeTest\_LicenseError_InvalidTKPKLength| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to verify SUT drops the connection if the length field within tpktHeader in License Error PDU is not consistent with the received data.| 
@@ -1526,8 +1515,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_SecurityExchange\_NegativeTest\_LicenseError_InvalidMCSLength| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to verify that SUT drops the connection if the length field within MCS Header in License Error PDU is not consistent with the received data.| 
@@ -1540,8 +1529,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_SecurityExchange\_NegativeTest\_LicenseError_InvalidFlag| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to verify that SUT drops the connection if the SEC\_LICENSE\_PKT (0x0080) flag within securityHeader in License Error PDU is not present.| 
@@ -1554,8 +1543,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_SecurityExchange\_NegativeTest\_LicenseError_InvalidSignature| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to verify that SUT drops the connection if MAC signature within securityHeader in License Error PDU is not valid and SEC_ENCRYPT (0x0008) flag is present.| 
@@ -1570,8 +1559,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 #####Capability Exchange Test
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_NegativeTest\_DemandActive_InvalidTKPKLength| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to verify that SUT drops the connection if the length field within tpktHeader in Server Demand Active PDU is not consistent with the received data.| 
@@ -1582,8 +1571,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_NegativeTest\_DemandActive_InvalidMCSLength| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to verify that SUT drops the connection if the length field within MCS Header in Server Demand Active PDU is not consistent with the received data.| 
@@ -1594,8 +1583,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_NegativeTest\_DemandActive_IncorrectSignature| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to verify that SUT drops the connection if the MAC signature field within securityHeader in Server Demand Active PDU is incorrect data.| 
@@ -1606,8 +1595,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_NegativeTest\_DemandActive_InvalidPDULength| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to verify that SUT drops the connection if the totalLength field within shareControlHeader in Server Demand Active PDU is invalid.| 
@@ -1618,8 +1607,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_GeneralCapSet_OSTypeWindowsRT| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to ensure SUT can process TS\_GENERAL\_CAPABILITYSET in Server Demand Active PDU correctly when OS type is set to Windows RT.| 
@@ -1627,13 +1616,12 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Test Execution Steps**| Trigger SUT to initiate a RDP connection and complete the Connection Initiation phase, Basic Setting Exchange phase, Channel Connection phase, RDP Security Commencement phase, Secure Setting Exchange phase and Licensing phase.| 
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, osMajorType of TS\_GENERAL\_CAPABILITYSET is set to OSMAJORTYPE_WINDOWS (0x0001), osMinorType is set to OSMINORTYPE_WINDOWS RT (0x0009).| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
-| | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
+| | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| | -------------| ------------- |
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_GeneralCapSet_OSTypeUnspecified| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process TS\_GENERAL\_CAPABILITYSET in Server Demand Active PDU correctly when OS type is set to unspecified.| 
@@ -1642,12 +1630,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, osMajorType of TS\_GENERAL\_CAPABILITYSET is set to OSMAJORTYPE\_UNSPECIFIED (0x0000), osMinorType is set to OSMINORTYPE_UNSPECIFIED (0x0000).| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_GeneralCapSet_FPOutputNotSupported| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process TS\_GENERAL\_CAPABILITYSET in Server Demand Active PDU correctly when fast-path output is not supported.| 
@@ -1656,12 +1643,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, not set FASTPATH\_OUTPUT\_SUPPORTED or LONG\_CREDENTIALS\_SUPPORTED in extraFlags of TS\_GENERAL\_CAPABILITYSET.| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_GeneralCapSet_RefreshRectNotSupported| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process TS\_GENERAL\_CAPABILITYSET in Server Demand Active PDU correctly when Refresh Rect PDU is not supported.| 
@@ -1670,12 +1656,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | |  Test Suite continues the connection with sending a Server Demand Active PDU to SUT, refreshRectSupport of TS\_GENERAL\_CAPABILITYSET is false (0x00).| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_GeneralCapSet_SuppressOutputNotSupported| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process TS\_GENERAL\_CAPABILITYSET in Server Demand Active PDU correctly when Suppress output PDU is not supported.| 
@@ -1684,12 +1669,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, suppressOutputSupport of TS\_GENERAL\_CAPABILITYSET is false (0x00).| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_BitmapCapSet_24ColorDepth| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to ensure SUT can process TS\_BITMAP\_CAPABILITYSET in Server Demand Active PDU correctly when preferredBitsPerPixel is set to 24.| 
@@ -1698,12 +1682,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, set preferredBitsPerPixel of TS\_BITMAP\_CAPABILITYSET to 24.| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_BitmapCapSet_MaxDesktopWidth| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process TS\_BITMAP\_CAPABILITYSET in Server Demand Active PDU correctly when desktopWidth is set to maximum allowed value on server (8192).| 
@@ -1712,12 +1695,10 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, set desktopWidth of TS\_BITMAP\_CAPABILITYSET to maximum allowed value on server (8192).| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
-
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_BitmapCapSet_MaxDesktopHeight| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process TS\_BITMAP\_CAPABILITYSET in Server Demand Active PDU correctly when desktopHeight is set to maximum allowed value on server (8192).| 
@@ -1726,12 +1707,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, set desktopHeight of TS\_BITMAP\_CAPABILITYSET to maximum allowed value on server (8192).| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_BitmapCapSet_DesktopResizeNotSupported| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process TS\_BITMAP\_CAPABILITYSET in Server Demand Active PDU correctly when desktopResizeFlag is set to False (0x0000).| 
@@ -1740,12 +1720,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, set desktopResizeFlag of TS\_BITMAP\_CAPABILITYSET to False (0x0000).| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_BitmapCapSet_DrawingFlagsNotSet| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process TS\_BITMAP\_CAPABILITYSET in Server Demand Active PDU correctly when drawingFlags is set to 0 (All not supported).| 
@@ -1754,12 +1733,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, set drawingFlags of TS\_BITMAP\_CAPABILITYSET to 0.| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_OrderCapSet_SolidPatternBrushOnly| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process TS\_ORDER\_CAPABILITYSET in Server Demand Active PDU correctly when SOLIDPATTERNBRUSHONLY flag is set on orderFlags.| 
@@ -1768,12 +1746,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, set SOLIDPATTERNBRUSHONLY flag on orderFlags of TS\_ORDER\_CAPABILITYSET.| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_OrderCapSet_ExtraFlagNotValid| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process TS\_ORDER\_CAPABILITYSET in Server Demand Active PDU correctly when ORDERFLAGS\_EXTRA\_FLAGS flag is not set on orderFlags.| 
@@ -1782,12 +1759,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, ORDERFLAGS\_EXTRA\_FLAGS flag on orderFlags of TS\_ORDER\_CAPABILITYSET is not set.| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_PointerCapSet\_ColorPointerCacheSize_0| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process TS\_POINTER\_CAPABILITYSET in Server Demand Active PDU correctly when colorPointerCacheSize is set to 0.| 
@@ -1796,12 +1772,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, set colorPointerCacheSize of TS\_POINTER\_CAPABILITYSET to 0.| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_PointerCapSet\_PointerCacheSize_0| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process TS\_POINTER\_CAPABILITYSET in Server Demand Active PDU correctly when pointerCacheSize is set to 0.| 
@@ -1810,12 +1785,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, set pointerCacheSize of TS\_POINTER\_CAPABILITYSET to 0.| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_InputCapSet_OnlySupportScanCodes| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to ensure SUT can process TS\_INPUT\_CAPABILITYSET in Server Demand Active PDU correctly when inputFlags only set INPUT\_FLAG\_SCANCODES flag.| 
@@ -1824,12 +1798,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, only set INPUT\_FLAG\_SCANCODES flag on inputFlags of TS\_INPUT\_CAPABILITYSET.| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_VirtualChannelCapSet_CompressionNotSupport| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to ensure SUT can process TS\_VIRTUALCHANNEL\_CAPABILITYSET in Server Demand Active PDU correctly when flags is set to VCCAPS\_NO\_COMPR flag.| 
@@ -1838,12 +1811,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, flags of TS\_VIRTUALCHANNEL\_CAPABILITYSET is set to VCCAPS\_NO\_COMPR.| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_VirtualChannelCapSet_VCChunkSizeNotPresent| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to ensure SUT can process TS\_VIRTUALCHANNEL\_CAPABILITYSET in Server Demand Active PDU correctly when VCChunkSize is not present.| 
@@ -1852,12 +1824,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, VCChunkSize is not present in TS\_VIRTUALCHANNEL\_CAPABILITYSET.| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_VirtualChannelCapSet_MaxVCChunkSize| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to ensure SUT can process TS\_VIRTUALCHANNEL\_CAPABILITYSET in Server Demand Active PDU correctly when VCChunkSize is set to max value.| 
@@ -1866,12 +1837,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, VCChunkSize of TS\_VIRTUALCHANNEL\_CAPABILITYSET is set to max value.| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_BitmapCacheHostSupportCapSet_NotPresent| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process Server Demand Active PDU correctly when TS\_BITMAPCACHE\_HOSTSUPPORT_CAPABILITYSET is not present.| 
@@ -1880,12 +1850,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, TS\_BITMAPCACHE\_HOSTSUPPORT_CAPABILITYSET is not present.| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_FontCapSet_NotPresent| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process Server Demand Active PDU correctly when TS\_FONT\_CAPABILITYSET is not present.| 
@@ -1894,12 +1863,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, TS\_FONT\_CAPABILITYSET is not present.| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_MultifragmentUpdateCapSet_NotPresent| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process Server Demand Active PDU correctly when TS\_MULTIFRAGMENTUPDATE\_CAPABILITYSET is not present.| 
@@ -1908,12 +1876,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, TS\_MULTIFRAGMENTUPDATE\_CAPABILITYSET is not present. | 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU. | 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_MultifragmentUpdateCapSet_MaxRequestSizeLargeValue| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process Server Demand Active PDU correctly when MaxRequestSize of TS\_MULTIFRAGMENTUPDATE\_CAPABILITYSET is set to a large value.| 
@@ -1922,12 +1889,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, MaxRequestSize of TS\_MULTIFRAGMENTUPDATE\_CAPABILITYSET is set to a large value.| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_LargePointerCapSet_NotPresent| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process Server Demand Active PDU correctly when TS\_LARGE\_POINTER_CAPABILITYSET is not present.| 
@@ -1936,12 +1902,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, TS\_LARGE\_POINTER_CAPABILITYSET is not present.| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_LargePointerCapSet_LargePointerNotSupport| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process Server Demand Active PDU correctly when largePointerSupportFlags of TS\_LARGE\_POINTER_CAPABILITYSET is set to 0.| 
@@ -1950,12 +1915,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, largePointerSupportFlags of TS\_LARGE\_POINTER_CAPABILITYSET is set to 0.| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_DesktopCompositionCapSet_NotPresent| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process Server Demand Active PDU correctly when TS\_COMPDESK\_CAPABILITYSET is not present.| 
@@ -1964,12 +1928,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, TS\_COMPDESK\_CAPABILITYSET is not present.| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
-|  **S1\_Connection**| | 
+|  **S1\_Connection**| |
+| -------------| ------------- | 
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_DesktopCompositionCapSet_CompositionNotSupport| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process Server Demand Active PDU correctly when CompDeskSupportLevel of TS\_COMPDESK\_CAPABILITYSET is set to COMPDESK\_NOT\_SUPPORTED (0x0000).| 
@@ -1978,12 +1941,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, CompDeskSupportLevel of TS\_COMPDESK\_CAPABILITYSET is set to COMPDESK\_NOT\_SUPPORTED (0x0000).| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_SurfaceCommandsCapSet_NotPresent| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process Server Demand Active PDU correctly when TS\_SURFCMDS\_CAPABILITYSET is not present.| 
@@ -1992,12 +1954,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, TS\_SURFCMDS\_CAPABILITYSET is not present.| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_SurfaceCommandsCapSet_StreamSurfaceBitsNotSupported| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process Server Demand Active PDU correctly when cmdFlags of TS\_SURFCMDS\_CAPABILITYSET is set not support Stream Surface Bits Command.| 
@@ -2006,11 +1967,9 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, cmdFlags of TS\_SURFCMDS\_CAPABILITYSET is set not support Stream Surface Bits Command.| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_BitmapCodecsCapSet\_NotPresent| 
 |  **Priority**| P2| 
@@ -2020,12 +1979,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, TS\_BITMAPCODECS\_CAPABILITYSET is not present.| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_BitmapCodecsCapSet\_NoBitmapCodec| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process Server Demand Active PDU correctly when TS\_BITMAPCODECS\_CAPABILITYSET contains no codec (bitmapCodecCount of TS_BITMAPCODECS is 0).| 
@@ -2034,12 +1992,12 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, TS\_BITMAPCODECS\_CAPABILITYSET contains no codec (bitmapCodecCount of TS_BITMAPCODECS is 0).| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
+
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_BitmapCodecsCapSet\_BitmapCodecCount_LargeValue| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to ensure SUT can process Server Demand Active PDU correctly when TS\_BITMAPCODECS\_CAPABILITYSET contains many bitmap codecs (some are unknown codecs).| 
@@ -2048,12 +2006,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, TS\_BITMAPCODECS\_CAPABILITYSET contains many bitmap codecs (some are unknown codecs).| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_BitmapCodecsCapSet\_BitmapCodecCount_MaxValue| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process Server Demand Active PDU correctly when TS\_BITMAPCODECS\_CAPABILITYSET contains max number of bitmap codecs (some are unknown codecs).| 
@@ -2062,14 +2019,13 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, TS\_BITMAPCODECS\_CAPABILITYSET contains max number of bitmap codecs (some are unknown codecs).| 
 | | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU.| 
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
-
 |  **Cleanup**| N/A| 
 
 #####Connection Finalization Test
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_ConnectionFinalization\_PositiveTest\_BitmapHostCacheNotSupported| 
 |  **Priority**| P0| 
 |  **Description** | This test case is used to verify that SUT can complete the Connection Finalization phase successfully when the server didn’t advertise support for the Bitmap Host Cache Support Capability Set.| 
@@ -2088,8 +2044,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_ConnectionFinalization\_PositiveTest\_BitmapHostCacheSupported\_sequenceTest_1| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can complete the Connection Finalization phase successfully with a valid sending and receiving PDU sequences. | 
@@ -2107,12 +2063,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Server Control PDU – Granted Control| 
 | | Client Font List PDU| 
 | | Server Font Map PDU | 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_ConnectionFinalization\_PositiveTest\_BitmapHostCacheSupported\_sequenceTest_2| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can complete the Connection Finalization phase successfully with a valid sending and receiving PDU sequences. | 
@@ -2130,12 +2085,11 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Client Font List PDU| 
 | | Server Control PDU – Granted Control| 
 | | Server Font Map PDU | 
-
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_ConnectionFinalization\_PositiveTest\_BitmapHostCacheSupported\_sequenceTest_3| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can complete the Connection Finalization phase successfully with a valid sending and receiving PDU sequences.  | 
@@ -2153,14 +2107,13 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Server Control PDU – Granted Control| 
 | | Client Font List PDU| 
 | | Server Font Map PDU | 
-
 |  **Cleanup**| N/A| 
 
 #####Disconnection Test
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_Disconnection\_PositiveTest\_ClientInitiated| 
 |  **Priority**| P0| 
 |  **Description** | This test case is used to verify the messages and behaviors of the disconnection sequence initiated by SUT. | 
@@ -2172,8 +2125,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_Disconnection\_NegativeTest\_MCSDisconnectProviderUltimatum_InvalidTPKTLength| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to verify that SUT drops the connection when the length field within tpktHeader of MCS Disconnect Provider Ultimatum PDU is inconsistent with the received data. | 
@@ -2187,8 +2140,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 #### <a name="_Toc427051995"/>S2_Reactivation
 
 
-| -------------| ------------- |
 |  **S2_Reactivation**| | 
+| -------------| ------------- |
 |  **Test ID**| S2\_ReactivationTest\_PositiveTest\_BitmapHostCacheNotSupported| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to verify that SUT can process the Deactivation-Reactivation successfully. | 
@@ -2213,8 +2166,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 #### <a name="_Toc427051996"/>S3_AutoReconnect
 
 
-| -------------| ------------- |
 |  **S3_AutoReconnect**| | 
+| -------------| ------------- |
 |  **Test ID**| S3\_AutoReconnection\_NegativeTest\_AutoReconnectionFailed| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to verify that SUT will continue with the reconnection attempt after receiving the Server Auto-Reconnect Status PDU. | 
@@ -2230,8 +2183,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 #### <a name="_Toc427051997"/>S4_SlowPathInput
 
 
-| -------------| ------------- |
 |  **S4_SlowPathInput**| | 
+| -------------| ------------- |
 |  **Test ID**| S4\_SlowPathInputTest\_NegativeTest\_ServerToClientSlowPath_InvalidTPKTLength| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to verify that SUT drops the connection when received a Server-to-Client Slow-Path output PDU and the length field within tpktHeader is invalid.| 
@@ -2242,8 +2195,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S4_SlowPathInput**| | 
+| -------------| ------------- |
 |  **Test ID**| S4\_SlowPathInputTest\_NegativeTest\_ServerToClientSlowPath_InvalidMCSLength| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to verify that SUT drops the connection when received a Server-to-Client Slow-Path output PDU and the length field within mcsSDin is invalid.| 
@@ -2255,8 +2208,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S4_SlowPathInput**| | 
+| -------------| ------------- |
 |  **Test ID**| S4\_SlowPathInputTest\_NegativeTest\_ServerToClientSlowPath_InvalidSignature| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to verify that SUT drops the connection when received a Server-to-Client Slow-Path output PDU and the signature field within security is invalid.| 
@@ -2268,8 +2221,8 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S4_SlowPathInput**| | 
+| -------------| ------------- |
 |  **Test ID**| S4\_SlowPathInputTest\_NegativeTest\_ServerToClientSlowPath_InvalidEncryptFlag| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to verify that SUT drops the connection when received a Server-to-Client Slow-Path output PDU and the SEC_ENCRYPT flag within securityHeader is set.| 

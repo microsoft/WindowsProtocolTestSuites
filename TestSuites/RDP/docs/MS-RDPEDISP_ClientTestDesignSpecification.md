@@ -298,8 +298,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 #### <a name="_Toc427063093"/>S1_ResolutionChange
 
 
-| -------------| ------------- |
 |  **S1_ResolutionChange**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_RDPEDISP\_ResolutionChange_DeactivationReactivation| 
 |  **Priority**| P0| 
 |  **Description** | Verify the RDP client can change the screen resolution of remote desktop session by sending Display Control Messages and receiving the Deactivation-Reactivation from the remote desktop session host.| 
@@ -319,8 +319,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Cleanup**| Restore the screen resolution of SUT.| 
 
 
-| -------------| ------------- |
 |  **S1_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_RDPEDISP\_ResolutionChange_RestartGraphicsPipeline| 
 |  **Priority**| P0| 
 |  **Description** | Verify the RDP client can change the screen resolution of remote desktop session by sending Display Control Messages and receiving the surface management commands to restart the graphics pipeline from the remote desktop session host.| 
@@ -342,8 +342,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 #### <a name="_Toc427063094"/>S2_OrientationChange
 
 
-| -------------| ------------- |
 |  **S2_OrientationChange**| | 
+| -------------| ------------- |
 |  **Test ID**| S2\_ RDPEDISP\_OrientationChange_DeactivationReactivation| 
 |  **Priority**| P0| 
 |  **Description** | Verify the RDP client can change the screen orientation of remote desktop session by sending Display Control Messages and receiving the Deactivation-Reactivation from the remote desktop session host.| 
@@ -363,8 +363,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Cleanup**| Restore the screen orientation of SUT.| 
 
 
-| -------------| ------------- |
 |  **S2_OrientationChange**| | 
+| -------------| ------------- |
 |  **Test ID**| S2\_ RDPEDISP\_OrientationChange_RestartGraphicsPipeline| 
 |  **Priority**| P0| 
 |  **Description** | Verify the RDP client can change the screen orientation of remote desktop session by sending Display Control Messages and receiving the surface management commands to restart the graphics pipeline from the remote desktop session host.| 
@@ -384,8 +384,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Cleanup**| Restore the screen orientation of SUT.| 
 
 
-| -------------| ------------- |
 |  **S2_OrientationChange**| | 
+| -------------| ------------- |
 |  **Test ID**| S2\_RDPEDISP\_OrientationAllChange_EnhancedAdapterDemo| 
 |  **Priority**| P1| 
 |  **Description** | Verify the RDP client can change the screen orientation of remote desktop session by sending Display Control Messages and receiving the surface management commands to restart the graphics pipeline from the remote desktop session host. Test case will instruct tester to test.| 
@@ -406,8 +406,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Cleanup**| Restore the screen orientation of SUT.| 
 
 
-| -------------| ------------- |
 |  **S2_OrientationChange**| | 
+| -------------| ------------- |
 |  **Test ID**| S2\_ RDPEDISP\_OrientationAllChange_DeactivationReactivation| 
 |  **Priority**| P1| 
 |  **Description** | Verify the RDP client can change the screen orientation of remote desktop session by sending Display Control Messages and receiving the Deactivation-Reactivation from the remote desktop session host.| 
@@ -431,8 +431,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Cleanup**| Restore the screen orientation of SUT.| 
 
 
-| -------------| ------------- |
 |  **S2_OrientationChange**| | 
+| -------------| ------------- |
 |  **Test ID**| S2\_ RDPEDISP\_OrientationAllChange_RestartGraphicsPipeline| 
 |  **Priority**| P1| 
 |  **Description** | Verify the RDP client can change the screen orientation of remote desktop session by sending Display Control Messages and receiving the surface management commands to restart the graphics pipeline from the remote desktop session host.| 
@@ -458,8 +458,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 #### <a name="_Toc427063095"/>S3_MonitorAdditionRemoval
 
 
-| -------------| ------------- |
 |  **S3_MonitorAdditionRemoval**| | 
+| -------------| ------------- |
 |  **Test ID**| S3\_ RDPEDISP\_MonitorAdditionRemoval_DeactivationReactivation| 
 |  **Priority**| P1| 
 |  **Description** | Verify the RDP client can change the number of monitors for remote desktop session by sending Display Control Messages and receiving the Deactivation-Reactivation from the remote desktop session host.| 
@@ -481,8 +481,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Cleanup**| Restore the number of monitors to default.| 
 
 
-| -------------| ------------- |
 |  **S3_MonitorAdditionRemoval**| | 
+| -------------| ------------- |
 |  **Test ID**| S2\_ RDPEDISP\_MonitorAdditionRemoval_RestartGraphicsPipeline| 
 |  **Priority**| P1| 
 |  **Description** | Verify the RDP client can change the number of monitors for remote desktop session by sending Display Control Messages and receiving the Deactivation-Reactivation from the remote desktop session host.| 
@@ -506,8 +506,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 #### <a name="_Toc427063096"/>S4_MonitorReposition
 
 
-| -------------| ------------- |
 |  **S3_MonitorAdditionRemoval**| | 
+| -------------| ------------- |
 |  **Test ID**| S3\_ RDPEDISP\_MonitorReposition_DeactivationReactivation| 
 |  **Priority**| P1| 
 |  **Description** | Verify the RDP client can change the number of monitors for remote desktop session by sending Display Control Messages and receiving the Deactivation-Reactivation from the remote desktop session host.| 
@@ -527,8 +527,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Cleanup**| Restore the position of monitors to default.| 
 
 
-| -------------| ------------- |
 |  **S3_MonitorAdditionRemoval**| | 
+| -------------| ------------- |
 |  **Test ID**| S2\_ RDPEDISP\_MonitorReposition_RestartGraphicsPipeline| 
 |  **Priority**| P1| 
 |  **Description** | Verify the RDP client can change the position of monitors for remote desktop session by sending Display Control Messages and receiving the Deactivation-Reactivation from the remote desktop session host.| 

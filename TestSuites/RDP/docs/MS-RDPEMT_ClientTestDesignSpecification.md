@@ -214,8 +214,9 @@ The common prerequisites and clean requirements are not listed in any of the tes
 #### <a name="_Toc350340330"/>S1_Connection
 
 
-| -------------| ------------- |
+
 |  **S1_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_Connection\_Initialization_InitialReliableConnection| 
 |  **Priority**| P0| 
 |  **Description** | Verify the RDP client can set up a RDPEMT connection upon a reliable RDP-UDP connection.| 
@@ -233,8 +234,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_Connection\_Initialization_InitialLossyConnection| 
 |  **Priority**| P0| 
 |  **Description** | Verify the RDP client can set up a RDPEMT connection upon a Lossy RDP-UDP connection.| 
@@ -252,8 +253,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_Connection\_Initialization\_NegativeTest\_InitialReliableConnection_RDPEncryption| 
 |  **Priority**| P1| 
 |  **Description** | Verify the RDP client will drop the RDP-UDP reliable connection if RDP-TCP connection uses RDP encryption method.| 
@@ -264,8 +265,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S1_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_Connection\_Initialization\_NegativeTest\_InitialLossyConnection_RDPEncryption| 
 |  **Priority**| P1| 
 |  **Description** | Verify the RDP client will drop the RDP-UDP lossy connection if RDP-TCP connection uses RDP encryption method.| 
@@ -278,8 +279,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 #### <a name="_Toc350340331"/>S2_AutoDetect
 
 
-| -------------| ------------- |
 |  **S2_AutoDetect**| | 
+| -------------| ------------- |
 |  **Test ID**| S2_AutoDetect_RTTMeasure| 
 |  **Priority**| P1| 
 |  **Description** | Verify the RDP client can response to round-trip measurement operations initiated by the RTT Measure Request correctly| 
@@ -295,8 +296,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S2_AutoDetect**| | 
+| -------------| ------------- |
 |  **Test ID**| S2_AutoDetect_ReliableBandwidthMeasure| 
 |  **Priority**| P0| 
 |  **Description** | Verify the RDP client can complete the bandwidth measure auto detection in a reliable UDP transport| 
@@ -314,8 +315,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S2_AutoDetect**| | 
+| -------------| ------------- |
 |  **Test ID**| S2_AutoDetect_LossyBandwidthMeasure| 
 |  **Priority**| P0| 
 |  **Description** | Verify the RDP client can complete the bandwidth measure auto detection in a lossy UDP transport| 
@@ -334,8 +335,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **S2_AutoDetect**| | 
+| -------------| ------------- |
 |  **Test ID**| S2_AutoDetect_NegtiveLossyBandwidthMeasure| 
 |  **Priority**| P1| 
 |  **Description** | Verify the RDP client doesn’t respond Bandwidth detection request in a lossy UDP transport if the sequenceNumber field in the Bandwidth Measure Stop structure is not the same as that in the Bandwidth Measure Start structure.| 

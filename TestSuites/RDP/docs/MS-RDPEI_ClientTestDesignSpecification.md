@@ -327,8 +327,9 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 #####Touch Input Test
 
 
-| -------------| ------------- |
+
 |  **Touch Input Test**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdpei\_TouchInputTest\_Positive_TouchReadiness| 
 |  **Priority**| P0| 
 |  **Description** | This test case is used to test the initialization of touch remoting transactions| 
@@ -341,8 +342,8 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Touch Input Test**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdpei\_TouchInputTest\_Positive_SingleTouchEvent| 
 |  **Priority**| P0| 
 |  **Description** | This test case is used to test the RDPINPUT\_TOUCH\_EVENT_PDU message.| 
@@ -358,8 +359,8 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 #####Touch Control Test
 
 
-| -------------| ------------- |
 |  **Touch Control Test**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdpei\_TouchControlTest\_Positive_Suspend| 
 |  **Priority**| P0| 
 |  **Description** | This test case is used to ensure the client suspend the transmission of the RDPINPUT\_TOUCH\_EVENT\_PDU if receive a RDPINPUT\_SUSPEND\_TOUCH_PDU.| 
@@ -374,8 +375,8 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Touch Control Test**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdpei\_TouchControlTest\_Positive_Resume| 
 |  **Priority**| P0| 
 |  **Description** | This test case is used to ensure the client resume the transmission of the RDPINPUT\_TOUCH\_EVENT\_PDU if receive a RDPINPUT\_RESUME\_TOUCH\_PDU after receiving a RDPINPUT\_SUSPEND\_TOUCH_PDU.| 
@@ -395,8 +396,8 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 #####Touch Input Test
 
 
-| -------------| ------------- |
 |  **Touch Input Test**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdpei\_TouchInputTest\_Positive_MultiTouchEvent| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to test the multitouch of RDPINPUT\_TOUCH\_EVENT_PDU.| 
@@ -411,8 +412,9 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
+
 |  **Touch Input Test**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdpei\_TouchInputTest\_Positive_DismissHoveringContact| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to test RDPINPUT\_DISMISS\_HOVERING\_CONTACT_PDU message.| 
@@ -426,8 +428,8 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Touch Input Test**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdpei\_TouchInputTest\_Positive_SingleTouchContactPosition| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to test the position of the contacts in RDPINPUT\_TOUCH\_EVENT_PDU message.| 
@@ -447,8 +449,8 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Touch Input Test**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdpei\_TouchInputTest\_Positive_ContactStateTransition| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to test the transition states of the contacts in RDPINPUT\_TOUCH\_EVENT\_PDU and RDPINPUT\_DISMISS\_HOVERING\_CONTACT_PDU messages.| 
@@ -463,8 +465,8 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Touch Input Test**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdpei\_TouchInputTest\_Negative_InvalidEventIdInInitializingPhase| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to ensure the client will ignore the message with invalid eventId in initializing phase.| 
@@ -477,8 +479,8 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Touch Input Test**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdpei\_TouchInputTest\_Negative_TouchEventWithoutNegotiation| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to ensure the client will not send RDPINPUT\_TOUCH\_EVENT_PDU message to the server without negotiation.| 
@@ -491,8 +493,8 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Touch Input Test**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdpei\_TouchInputTest\_Negative_InvalidScReadyPduLength| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to ensure the client will ignore the message when the pduLength is inconsistent with the length of the message.| 
@@ -506,8 +508,8 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 #####Touch Control Test
 
 
-| -------------| ------------- |
 |  **Touch Control Test**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdpei\_TouchControlTest\_Negative_InvalidSuspendPduLength| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to ensure the client will ignore the message when the pduLength is inconsistent with the length of the message.| 
@@ -522,8 +524,8 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Touch Control Test**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdpei\_TouchControlTest\_Negative_InvalidResumePduLength| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to ensure the client will ignore the message when the pduLength is inconsistent with the length of the message.| 
@@ -539,8 +541,8 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Touch Control Test**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdpei\_TouchControlTest\_Negative_InvalidEventIdInRunningPhase| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to ensure the client will ignore the message with invalid eventId during running phase.| 
@@ -556,8 +558,8 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Touch Control Test**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdpei\_TouchControlTest\_Negative_DuplicatedSuspend| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to ensure the client will ignore the duplicated RDPINPUT_SUSPEND_TOUCH_PDU.| 
@@ -573,8 +575,8 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Touch Control Test**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdpei\_TouchControlTest\_Negative_DuplicatedResume| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to ensure the client will ignore the duplicated RDPINPUT_RESUME_TOUCH_PDU.| 

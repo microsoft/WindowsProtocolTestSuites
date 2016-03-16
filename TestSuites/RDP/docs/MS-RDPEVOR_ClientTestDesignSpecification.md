@@ -266,8 +266,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 #### <a name="_Toc326664444"/>BVT Test Cases
 
 
-| -------------| ------------- |
 |  **Video Streaming Test**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdpevor_ProtocolSupportTest_Positive| 
 |  **Priority**| P0| 
 |  **Description** | This test case is used to test if MS-RDPEVOR is supported by SUT (RDP client).| 
@@ -277,8 +277,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Video Streaming Test**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdpevor_VideoControlTest_Positive| 
 |  **Priority**| P0| 
 |  **Description** | This test case is used to test video control messages such as presentation request and response.| 
@@ -292,8 +292,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Video Streaming Test**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdpevor_VideoStreamingTest_Positive| 
 |  **Priority**| P0| 
 |  **Description** | This test case is used to test video streaming, SUT (RDP client) is expected to decode and render the video.| 
@@ -310,8 +310,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 #### <a name="_Toc326664445"/>Non BVT Test Cases
 
 
-| -------------| ------------- |
 |  **Video Streaming Test**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdpevor_VideoControlTest_Negative_InvalidPacketLength| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to ensure RDP client drop the connection if the packet length of Presentation Request is invalid.| 
@@ -324,8 +324,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Video Streaming Test**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdpevor_VideoStreamingTest_Negative_InvalidPacketLength| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to ensure RDP client drop the connection when the packet length of TSMM_VIDEO_DATA is invalid.| 
@@ -340,8 +340,8 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Video Streaming Test**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdpevor_VideoStreamingTest_Positive_OverUDPTransport| 
 |  **Priority**| P1| 
 |  **Description** | This test case is used to test video streaming over UDP transport, SUT (RDP client) is expected to decode and render the video.| 

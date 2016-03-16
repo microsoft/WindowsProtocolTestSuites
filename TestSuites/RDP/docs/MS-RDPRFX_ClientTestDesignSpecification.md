@@ -355,8 +355,8 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 #### <a name="_Toc326663503"/>BVT Test Cases
 
 
-| -------------| ------------- |
 |  **Exchange Capabilities**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx_VerifyClientCoreData| 
 |  **Priority**| P0| 
 |  **Description** | Verify the connection type and color depth within Client Core Data.| 
@@ -368,8 +368,8 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Exchange Capabilities**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx_VerifyClientCapabilities| 
 |  **Priority**| P0| 
 |  **Description** | Verify the client capabilities.| 
@@ -381,8 +381,9 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
+
 |  **Send Encode Header Messages**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_HeaderMessage\_PositiveTest\_OrderTest\_VersionsChannelsContext| 
 |  **Priority**| P0| 
 |  **Description** | Verify the encode header messages can be sent in order of Sync - &#62;  Versions - &#62;  Channels - &#62;  Context.| 
@@ -396,8 +397,9 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
+
 |  **Send Encode Data Messages in Image Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_ImageMode\_PositiveTest_RLGR1| 
 |  **Priority**| P0| 
 |  **Description** | Sending client an encoded bitmap data which encoded with RLGR1 algorithm.| 
@@ -412,8 +414,8 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_ImageMode\_PositiveTest_RLGR3| 
 |  **Priority**| P0| 
 |  **Description** | Sending client an encoded bitmap data which encoded with RLGR3 algorithm.| 
@@ -428,8 +430,8 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest_RLGR1| 
 |  **Priority**| P0| 
 |  **Description** | Sending client an encoded bitmap data which encoded with RLGR1 algorithm.| 
@@ -444,8 +446,8 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest_RLGR3| 
 |  **Priority**| P0| 
 |  **Description** | Sending client an encoded bitmap data which encoded with RLGR3 algorithm.| 
@@ -465,8 +467,8 @@ Please refer to “**BVT Test Cases**”.
 #### <a name="_Toc326663505"/>Send Encode Header Messages
 
 
-| -------------| ------------- |
 |  **Send Encode Header Messages**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_HeaderMessage\_PositiveTest\_OrderTest_ChannelsVersionsContext| 
 |  **Priority**| P0| 
 |  **Description** | Verify the encode header messages can be sent in order of Sync - &#62;  Channels - &#62;  Versions - &#62;  Context.| 
@@ -479,8 +481,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Header Messages**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_HeaderMessage\_PositiveTest\_OrderTest_ContextVersionsChannels| 
 |  **Priority**| P0| 
 |  **Description** | Verify the encode header messages can be sent in order of Sync - &#62;  Context - &#62;  Versions - &#62;  Channels.| 
@@ -493,8 +495,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Header Messages**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_HeaderMessage\_PositiveTest\_OrderTest_VersionsContextChannels| 
 |  **Priority**| P0| 
 |  **Description** | Verify the encode header messages can be sent in order of Sync - &#62;  Versions - &#62;  Context - &#62;  Channels.| 
@@ -503,8 +505,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Header Messages**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_HeaderMessage\_NegativeTest\_TsRfxSync\_InvalidBlockLen| 
 |  **Priority**| P1| 
 |  **Description** | Ensure client terminate the RDP connection when received a TS\_RFX\_SYNC message with the blockLen field set to an invalid value.| 
@@ -515,8 +517,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Header Messages**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_HeaderMessage\_NegativeTest_UnspecifiedMessage| 
 |  **Priority**| P1| 
 |  **Description** | Ensure client terminate the RDP connection when received an unspecified type of message.| 
@@ -527,8 +529,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Header Messages**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_MUST\_NegativeTest_TsRfxSync| 
 |  **Priority**| P2| 
 |  **Description** | Ensure client terminate the RDP connection when received a TS\_RFX\_SYNC message with:| 
@@ -544,8 +546,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Header Messages**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_MUST\_NegativeTest_TsRfxChannels| 
 |  **Priority**| P2| 
 |  **Description** | Ensure client terminate the RDP connection when received a  TS\_RFX\_CHANNELS message with:| 
@@ -557,8 +559,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Header Messages**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_MUST\_NegativeTest_TsRfxCodecChannelT| 
 |  **Priority**| P2| 
 |  **Description** | Ensure client terminate the RDP connection when received a   TS\_RFX\_FRAME\_BEGIN and its  TS\_RFX\_CODEC\_CHANNELT structure:| 
@@ -574,8 +576,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Header Messages**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx_HeaderMessage\_PositiveTest\_ChannelBoundaryTest_1x1Channel| 
 |  **Priority**| P1| 
 |  **Description** | Verify the client can support the smallest channel 1x1.| 
@@ -589,8 +591,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Header Messages**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx_HeaderMessage\_PositiveTest\_ChannelBoundaryTest_2x2Channel| 
 |  **Priority**| P1| 
 |  **Description** | Verify the client can support the channel 2x2.| 
@@ -604,8 +606,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Header Messages**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx_HeaderMessage\_PositiveTest\_ChannelBoundaryTest_4096x2048Channel| 
 |  **Priority**| P1| 
 |  **Description** | Verify the client can support the largest channel 4096x2048.| 
@@ -619,8 +621,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Header Messages**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx_HeaderMessage\_PositiveTest\_ChannelBoundaryTest_4095x2047Channel| 
 |  **Priority**| P1| 
 |  **Description** | Verify the client can support the smallest channel 4095x2047.| 
@@ -636,8 +638,8 @@ Please refer to “**BVT Test Cases**”.
 #### <a name="_Toc326663506"/>Send Encode Data Messages in Image Mode
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_ImageMode\_PositiveTest_ClippedByRegion| 
 |  **Priority**| P0| 
 |  **Description** | Verify the client can decode a RemoteFX encoded bitmap and render correctly when the bitmap should be clipped by rectangular in TS\_RFX\_REGION.| 
@@ -652,8 +654,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_ImageMode\_PositiveTest_MultiQuantVals| 
 |  **Priority**| P0| 
 |  **Description** | Verify the client can decode a RemoteFX encoded bitmap successfully when each component use different quantization value.| 
@@ -668,8 +670,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_ImageMode\_NegativeTest\_TsRfxFrameBegin_InvalidBlockLen| 
 |  **Priority**| P1| 
 |  **Description** | Ensure client terminate the RDP connection when received a TS\_RFX\_FRAME\_BEGIN with the blockLen field set to an invalid value.| 
@@ -680,8 +682,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_ImageMode\_NegtiveTest_DuplicatedTile| 
 |  **Priority**| P2| 
 |  **Description** | Verify the client can handle a duplicated tile correctly.| 
@@ -694,8 +696,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_ImageMode\_PositiveTest_FourTilesComposeOneRectWithoutCommonBoundary| 
 |  **Priority**| P1| 
 |  **Description** | Verify the client can decode a RemoteFX encoded bitmap and render correctly when one rectangular is composed by four tiles in the corner in TS\_RFX\_REGION.| 
@@ -709,8 +711,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_ImageMode\_PositiveTest_FourTilesComposeOneRectWithCommonBoundary| 
 |  **Priority**| P1| 
 |  **Description** | Verify the client can decode a RemoteFX encoded bitmap and render correctly when one rectangular is composed by four tiles in the corner in TS\_RFX\_REGION.| 
@@ -724,8 +726,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_ImageMode\_PositiveTest_ListOfRects| 
 |  **Priority**| P1| 
 |  **Description** | Verify the client can decode a RemoteFX encoded bitmap and render correctly when send a list of rectangle.| 
@@ -739,8 +741,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_ImageMode\_PositiveTest_ListOfRectsOverlap| 
 |  **Priority**| P1| 
 |  **Description** | Verify the client can decode a RemoteFX encoded bitmap and render correctly when send a list of rectangle with overlapping.| 
@@ -754,8 +756,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_ImageMode\_PositiveTest_ListOfRectsOverlapWithDuplicateTiles| 
 |  **Priority**| P1| 
 |  **Description** | Verify the client can decode a RemoteFX encoded bitmap and render correctly when send a list of rectangle with overlapping and duplicated tile.| 
@@ -769,8 +771,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_ImageMode\_PositiveTest_numRectsSetToZero| 
 |  **Priority**| P1| 
 |  **Description** | Verify the client can decode a RemoteFX encoded bitmap and render correctly when the numRects field of TS\_RFX\_REGION is set to zero.| 
@@ -784,8 +786,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_ImageMode\_PositiveTest_OutOfRects| 
 |  **Priority**| P1| 
 |  **Description** | Verify the client can decode a RemoteFX encoded bitmap and render correctly when some tiles are out of the rectangle in TS\_RFX\_REGION.| 
@@ -799,8 +801,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_PositiveTest\_ImageWithoutEncoding| 
 |  **Priority**| P1| 
 |  **Description** | Verify the client can deal with the images without encoding.| 
@@ -816,8 +818,8 @@ Please refer to “**BVT Test Cases**”.
 #### <a name="_Toc326663507"/>Send Encode Data Messages in Video Mode
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_SendTsRfxSyncInStream| 
 |  **Priority**| P0| 
 |  **Description** | Send a TS\_RFX\_SYNC message among frames of the video mode stream.| 
@@ -833,8 +835,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_SendTsRfxCodecVersioinsInStream| 
 |  **Priority**| P0| 
 |  **Description** | Send a TS\_RFX\_CODEC\_VERSIONS message among frames of the video mode stream.| 
@@ -850,8 +852,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_SendTsRfxChannelsInStream| 
 |  **Priority**| P0| 
 |  **Description** | Send a TS\_RFX\_CHANNELS message among frames of the video mode stream.| 
@@ -867,8 +869,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_SendTsRfxContextInStream| 
 |  **Priority**| P0| 
 |  **Description** | Send a TS\_RFX\_CONTEXT message among frames of the video mode stream.| 
@@ -884,8 +886,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_VideoMode\_NegativeTest\_UnsupportedEntropyAlgorithm| 
 |  **Priority**| P1| 
 |  **Description** | When Video Mode is in effect, ensure client terminate the RDP connection when server use an unsupported entropy algorithm to encode data.| 
@@ -896,8 +898,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**|  | 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_VideoMode\_NegativeTest\_TsRfxFrameBegin_InvalidBlockLen| 
 |  **Priority**| P1| 
 |  **Description** | Ensure client terminate the RDP connection when received a TS\_RFX\_FRAME\_BEGIN with the blockLen field set to an invalid value.| 
@@ -908,8 +910,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_VideoMode\_NegtiveTest_DuplicatedTile| 
 |  **Priority**| P2| 
 |  **Description** | Verify the client can handle a duplicated tile correctly.| 
@@ -922,8 +924,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_FourTilesComposeOneRectWithoutCommonBoundary| 
 |  **Priority**| P1| 
 |  **Description** | Verify the client can decode a RemoteFX encoded bitmap and render correctly when one rectangular is composed by four tiles in the corner in TS\_RFX\_REGION.| 
@@ -937,8 +939,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_FourTilesComposeOneRectWithCommonBoundary| 
 |  **Priority**| P1| 
 |  **Description** | Verify the client can decode a RemoteFX encoded bitmap and render correctly when one rectangular is composed by four tiles in the corner in TS\_RFX\_REGION.| 
@@ -952,8 +954,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_ListOfRects| 
 |  **Priority**| P1| 
 |  **Description** | Verify the client can decode a RemoteFX encoded bitmap and render correctly when send a list of rectangle.| 
@@ -967,8 +969,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_ListOfRectsOverlap| 
 |  **Priority**| P1| 
 |  **Description** | Verify the client can decode a RemoteFX encoded bitmap and render correctly when send a list of rectangle with overlapping.| 
@@ -982,8 +984,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_ListOfRectsOverlapWithDuplicateTiles| 
 |  **Priority**| P1| 
 |  **Description** | Verify the client can decode a RemoteFX encoded bitmap and render correctly when send a list of rectangle with overlapping and duplicated tile.| 
@@ -997,8 +999,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_numRectsSetToZero| 
 |  **Priority**| P1| 
 |  **Description** | Verify the client can decode a RemoteFX encoded bitmap and render correctly when the numRects field of TS\_RFX\_REGION is set to zero.| 
@@ -1012,8 +1014,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_OutOfRects| 
 |  **Priority**| P1| 
 |  **Description** | Verify the client can decode a RemoteFX encoded bitmap and render correctly when some tiles are out of the rectangle in TS\_RFX\_REGION.| 
@@ -1027,8 +1029,8 @@ Please refer to “**BVT Test Cases**”.
 |  **Cleanup**| N/A| 
 
 
-| -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
+| -------------| ------------- |
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_Differencing| 
 |  **Priority**| P1| 
 |  **Description** | Verify the client can deal with differencing scenario.| 
