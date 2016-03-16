@@ -36,9 +36,9 @@
 The Remote Desktop Protocol: UDP Transport Extension Protocol has been designed to improve the performance of the network connectivity compared to a corresponding RDP-TCP connection, especially on wide area networks (WANs) or wireless networks.
 It has the following two primary goals:
 
-* Gain a higher network share while reducing the variation in packet transit delays.
+* Gain a higher network share while reducing the variation in packet transit delays.
 
-* Share network resources with other users.
+* Share network resources with other users.
 
 To achieve these goals, the protocol has two modes of operation. The first mode is a reliable mode where data is transferred reliably through persistent retransmits. The second mode is an unreliable mode, where no guarantees are made about reliability and the timeliness of data is preserved by avoiding retransmits. In addition, the Remote Desktop Protocol: UDP Transport Extension Protocol includes a forward error correction (FEC) logic that can be used to recover from random packet losses.
 
@@ -89,9 +89,11 @@ RDPEUDP doesn’t have any authentication, encryption and compression methods.
 
 ### <a name="_Toc350342271"/>Assumptions, Scope and Constraints
 **Assumptions:**
+
 The RDP client machine should Support using RDP-UDP transport.
 
 **Scope:**
+
 The protocol client endpoint (RDP client) playing the client role will be tested. For Windows, the Remote Desktop Client (MSTSC.exe) is the client endpoint.
 The protocol server endpoint (RDP Server) playing the server role is out of scope.
 For Windows, the System under Test (SUT) will be mstsc.exe.
@@ -99,6 +101,7 @@ External protocols are out of scope.
 Compression and encryption are out of scope.
 
 **Constraint:**
+
 There is no constraint for this Test Suite.
 
 ### <a name="_Toc350342272"/>Test Approach
@@ -113,14 +116,15 @@ There are 2 scenarios defined in the MS-RDPEUDP client test suite for verifying 
 | S1_Connection| 0| Traditional| Verify the RDP-UDP connection phase and keep alive behavior.| 
 | S2_DataTransfer| 0| Traditional| Verify data transfer over RDP-UDP connection.| 
 
-**Table 21 MS-RDPEUDP Test Suite Scenarios**
+_Table 2-1 MS-RDPEUDP Test Suite Scenarios_
 
 #### <a name="_Toc350342274"/>S1_Connection
-Preconditions:
+**Preconditions:**
 
 * The RDP connection has been established.
 
-Typical Sequence:
+**Typical Sequence:**
+
 The typical scenario sequence is the following:
 
 * RDP server sends a Server Initiate Multitransport Request PDU through main RDP connection (described in MS-RDPBCGR).
@@ -133,7 +137,8 @@ The typical scenario sequence is the following:
 
 * RDP client responds an ACK and source packet datagram over UDP connection.
 
-Scenario Testing:
+**Scenario Testing:**
+
 This scenario will test the following messages:
 
 * SYN datagram
@@ -141,11 +146,12 @@ This scenario will test the following messages:
 * SYN and ACK datagram
 
 #### <a name="_Toc350342275"/>S2_DataTransfer
-Preconditions:
+**Preconditions:**
 
 * The RDP connection has been established.
 
-Typical Sequence:
+**Typical Sequence:**
+
 The typical scenario sequence is the following:
 
 * RDP server and RDP client establish a RDP-UDP connection.
@@ -154,7 +160,8 @@ The typical scenario sequence is the following:
 
 * RDP client send ACK or ACK and source packets to acknowledge the receipt of these source packets.
 
-Scenario Testing:
+**Scenario Testing:**
+
 This scenario will test the following messages:
 
 * ACK datagram
@@ -231,7 +238,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 #####Connection Initialization
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S1_Connection**| | 
 |  **Test ID**| S1_Connection_Initialization_InitialUDPConnection| 
@@ -252,12 +259,11 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | In the UDP connection, test suite expects a ACK Datagram to  acknowledge the receipt of the  SYN and ACK Datagram, verify:| 
 | | The RDPUDP\_FLAG_ACK flag MUST be set| 
 | | If contain source package, the sequence number must be **snInitialSequenceNumber** +1| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| N/A| 
 
 #####Connection Keep Alive
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S1_Connection**| | 
 |  **Test ID**| S1_Connection_Keepalive_ClientSendKeepAlive| 
@@ -269,14 +275,13 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Establish RDPEMT connection.| 
 | | The test suite expects the client to send an ACK to acknowledge the receipt of the source packet (The source packet contain a RDP\_TUNNEL_CREATERESPONSE structure).| 
 | | The test suite wait for 65/2 seconds, expects the client to send the ACK again as a keep alive packet.| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| N/A| 
 
 #### <a name="_Toc350342288"/>S2_DataTransfer
 
 #####Data Transfer Test
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S2_DataTransfer**| | 
 |  **Test ID**| S2_DataTransfer_ClientReceiveData| 
@@ -288,13 +293,12 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | In the RDP-UDP connection, Test suite Send one **ACK and Source Packets Data**.| 
 | | In the RDP-UDP connection, Expect RDP client response an ACK datagram to acknowledge the receipt of the source packets. And verify:| 
 | | The RDPUDP_FLAG_ACK flag MUST be set.| 
-| | ACK Vector in the RDPUDP_ACK_VECTOR_HEADER Structure| 
-|  **Requirements Covered**| N/A| 
+| | ACK Vector in the RDPUDP_ACK_VECTOR_HEADER Structure|  
 |  **Cleanup**| N/A| 
 
 #####Acknowledge Test
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S2_DataTransfer**| | 
 |  **Test ID**| S2_DataTransfer_AcknowledgeTest_AcknowlegeLossyPackage| 
@@ -310,10 +314,9 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Expect ACK datagrams from RDP client, to acknowledge the receipt of the 1st, 3rd, 4th packet and the loss of the 2nd package. | 
 | | Test suite sends the lost **ACK and Source Packet**.| 
 | | Expect a ACK datagrams to acknowledge the receipt of all  **ACK and Source Packets**  | 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S2_DataTransfer**| | 
 |  **Test ID**| S2_DataTransfer_SequenceNumberWrapAround| 
@@ -325,11 +328,10 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Establish the RDPEMT connection.| 
 | | If the source sequence number is not wrapped around, send **ACK and Source Packet** until the sequence number wrapped around. | 
 | | Test suite sends 3 **ACK and Source Packets**.| 
-| | Expect an ACK datagram to acknowledge the receipt of all **ACK and Source Packets** correctly.| 
-|  **Requirements Covered**| N/A| 
+| | Expect an ACK datagram to acknowledge the receipt of all **ACK and Source Packets** correctly.|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S2_DataTransfer**| | 
 |  **Test ID**| S2_DataTransfer_ClientAckDelay| 
@@ -341,12 +343,11 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Establish the RDPEMT connection.| 
 | | In the RDP-UDP connection, test suite sends three **ACK and Source Packet,** wait 200 ms before each send.| 
 | | Expect the ACK datagrams to acknowledge the receipt of the 3 **ACK and Source Packet**, at least one of them must contain  RDPUDP\_FLAG_ACKDELAYED flag.| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| N/A| 
 
 #####Data Retransmit Test
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S2_DataTransfer**| | 
 |  **Test ID**| S2_DataTransfer_RetransmitTest_ClientRetransmit| 
@@ -357,13 +358,12 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Test suite receive the first  **ACK and Source Packet,** which is from the third step of connection creation| 
 | | Test suite sends an **ACK and Source Packet**, but not acknowledges the receipt of the 1st source packet.| 
 | | Test suite wait for a while.| 
-| | Test suite expects Client to resend the 1st **ACK and Source Packet.**| 
-|  **Requirements Covered**| N/A| 
+| | Test suite expects Client to resend the 1st **ACK and Source Packet.**|  
 |  **Cleanup**| N/A| 
 
 #####Security Channel Creation
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S2_DataTransfer**| | 
 |  **Test ID**| S2_DataTransfer_SecurityChannelCreation_ReliableConnection| 
@@ -373,10 +373,9 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Test Execution Steps**| Test suite trigger RDP client to create a reliable RDP-UDP connection| 
 | | Complete TLS handshake.| 
 | | Test suite expects for a ACK and Source Packets( The high-layer data is encrypted RDP_TUNNEL_CREATEREQUEST PDU);| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S2_DataTransfer**| | 
 |  **Test ID**| S2_DataTransfer_SecurityChannelCreation_LossyConnection| 
@@ -385,13 +384,12 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Prerequisites**| N/A| 
 |  **Test Execution Steps**| Test suite trigger RDP client to create a lossy RDP-UDP connection| 
 | | Complete DTLS handshake.| 
-| | Test suite expects for a ACK and Source Packets( The high-layer data is encrypted RDP_TUNNEL_CREATEREQUEST PDU);| 
-|  **Requirements Covered**| N/A| 
+| | Test suite expects for a ACK and Source Packets( The high-layer data is encrypted RDP_TUNNEL_CREATEREQUEST PDU);|  
 |  **Cleanup**| N/A| 
 
 #####Congestion Control test
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S2_DataTransfer**| | 
 |  **Test ID**| S2_DataTransfer_CongestionControlTest_ClientReceiveData| 
@@ -407,7 +405,6 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Test suite expect ACK datagrams, and RDPUDP_FLAG_CN flag is still set| 
 | | Test suite send An  **ACK and Source Packets**, and set the RDPUDP_FLAG_CWR flag| 
 | | Expect ACK datagrams, and RDPUDP_FLAG_CN flag is not set| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| N/A| 
 
 ## <a name="_Toc350342289"/>Appendix

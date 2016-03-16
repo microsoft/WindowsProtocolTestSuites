@@ -129,6 +129,7 @@ Figure 1-1: MS-RDPEGFX typical message flow
 None.
 
 **Scope:**
+
 1. Protocol client endpoint, playing the client role, will be tested. For Windows, Terminal Client (MSTSC.exe) is the RDP client endpoint. 
 
 2. Protocol Server endpoint, playing the server role, is out of scope for testing. 
@@ -185,11 +186,11 @@ Reasons for choosing Traditional Testing
 **Table 2-1 Scenarios of MS-RDPEGFX Test Suite**
 
 #### <a name="_Toc427065074"/>Capability exchange Test
-Preconditions:
+**Preconditions:**
 
 N/A.
 
-Typical Sequence:
+**Typical Sequence:**
 
 The typical scenario sequence is the following:
 
@@ -201,7 +202,7 @@ The typical scenario sequence is the following:
 
 * Close the RDP connection
 
-Scenario Testing:
+**Scenario Testing:**
 
 This scenario will test the following messages:
 
@@ -210,11 +211,11 @@ This scenario will test the following messages:
 * RDPGFX\_CAPS\_CONFIRM_PDU
 
 #### <a name="_Toc427065075"/>Surface to Screen Test
-Preconditions:
+**Preconditions:**
 
 N/A.
 
-Typical Sequence:
+**Typical Sequence:**
 
 The typical scenario sequence is the following:
 
@@ -236,7 +237,7 @@ The typical scenario sequence is the following:
 
 * Close the connection
 
-Scenario Testing:
+**Scenario Testing:**
 
 This scenario will test the following messages:
 
@@ -257,11 +258,11 @@ This scenario will test the following messages:
 * RDPGFX\_FRAME\_ACKNOWLEDGE_PDU
 
 #### <a name="_Toc427065076"/>Cache Management Test
-Preconditions:
+**Preconditions:**
 
 N/A.
 
-Typical Sequence:
+**Typical Sequence:**
 
 The typical scenario sequence is the following:
 
@@ -287,7 +288,7 @@ The typical scenario sequence is the following:
 
 * Close the connection
 
-Scenario Testing:
+**Scenario Testing:**
 
 This scenario will test the following messages:
 
@@ -298,11 +299,11 @@ This scenario will test the following messages:
 * RDPGFX\_CACHE\_TO\_SURFACE\_PDU 
 
 #### <a name="_Toc427065077"/>Surface to Surface Test
-Preconditions:
+**Preconditions:**
 
 N/A.
 
-Typical Sequence:
+**Typical Sequence:**
 
 The typical scenario sequence is the following:
 
@@ -324,18 +325,18 @@ The typical scenario sequence is the following:
 
 * Close the connection
 
-Scenario Testing:
+**Scenario Testing:**
 
 This scenario will test the following messages:
 
 * RDPGFX\_SURFACE\_TO\_SURFACE\_PDU
 
 #### <a name="_Toc427065078"/>Wire to Surface Test
-Preconditions:
+**Preconditions:**
 
 N/A.
 
-Typical Sequence:
+**Typical Sequence:**
 
 The typical scenario sequence is the following:
 
@@ -355,18 +356,18 @@ The typical scenario sequence is the following:
 
 * Close the connection.
 
-Scenario Testing:
+**Scenario Testing:**
 
 This scenario will test the following messages:
 
 * RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1
 
 #### <a name="_Toc427065079"/>ClearCodec Stream Test
-Preconditions:
+**Preconditions:**
 
 N/A.
 
-Typical Sequence:
+**Typical Sequence:**
 
 The typical scenario sequence is the following:
 
@@ -386,7 +387,7 @@ The typical scenario sequence is the following:
 
 * Close the connection.
 
-Scenario Testing:
+**Scenario Testing:**
 
 This scenario will test the following messages:
 
@@ -395,11 +396,11 @@ This scenario will test the following messages:
 * CLEARCODEC\_BITMAP_STREAM
 
 #### <a name="_Toc427065080"/>RFX progressive Codec Stream Test
-Preconditions:
+**Preconditions:**
 
 N/A.
 
-Typical Sequence:
+**Typical Sequence:**
 
 The typical scenario sequence is the following:
 
@@ -419,7 +420,7 @@ The typical scenario sequence is the following:
 
 * Close the connection
 
-Scenario Testing:
+**Scenario Testing:**
 
 This scenario will test the following messages:
 
@@ -428,11 +429,11 @@ This scenario will test the following messages:
 * RFX\_PROGRESSIVE\_BITMAP_STREAM
 
 #### <a name="_Toc427065081"/>Frame Fragmentation Test
-Preconditions:
+**Preconditions:**
 
 N/A.
 
-Typical Sequence:
+**Typical Sequence:**
 
 The typical scenario sequence is the following:
 
@@ -454,18 +455,18 @@ The typical scenario sequence is the following:
 
 * Close the connection.
 
-Scenario Testing:
+**Scenario Testing:**
 
 This scenario will test the following messages:
 
 * RDP\_SEGMENTED_DATA
 
 #### <a name="_Toc427065082"/>Compression Test
-Preconditions:
+**Preconditions:**
 
 N/A.
 
-Typical Sequence:
+**Typical Sequence:**
 
 The typical scenario sequence is the following:
 
@@ -487,7 +488,7 @@ The typical scenario sequence is the following:
 
 * Close the connection.
 
-Scenario Testing:
+**Scenario Testing:**
 
 This scenario will test the following messages:
 
@@ -496,11 +497,11 @@ This scenario will test the following messages:
 * RDP8\_BULK\_ENCODED_DATA
 
 #### <a name="_Toc427065083"/>RemoteFX Codec Test
-Preconditions:
+**Preconditions:**
 
 N/A.
 
-Typical Sequence:
+**Typical Sequence:**
 
 The typical scenario sequence is the following:
 
@@ -520,18 +521,18 @@ The typical scenario sequence is the following:
 
 Close the connection
 
-Scenario Testing:
+**Scenario Testing:**
 
 This scenario will test the following messages:
 
 * RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1
 
 #### <a name="_Toc427065084"/>H264 Codec Test
-Preconditions:
+**Preconditions:**
 
 N/A.
 
-Typical Sequence:
+**Typical Sequence:**
 
 The typical scenario sequence is the following:
 
@@ -551,7 +552,7 @@ The typical scenario sequence is the following:
 
 Close the connection
 
-Scenario Testing:
+**Scenario Testing:**
 
 This scenario will test the following messages:
 
@@ -758,7 +759,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 |  **Test Execution Steps**| Step 1: Expect SUT send a capability advertise request| 
 | | Step 2: Validate version( RDPGFX\_CAPVERSION_8),  capsDataLength(4)  and flags(0,1 or 2) in the request is OK| 
 | | Step 3: Choose the first capset in request and send response to client.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Screen  Test**| | 
@@ -774,7 +774,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Expect a frame acknowledge and validate frameId.| 
 | | Step 6: If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 7: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Screen  Test**| | 
@@ -791,7 +790,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Instruct client to map the surface to output.| 
 | | Step 6: If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 7: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Cache Management Test**| | 
@@ -808,7 +806,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Expect a frame acknowledge and validate frameId.| 
 | | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 8: Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Surface Test**| | 
@@ -824,7 +821,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Expect a frame acknowledge and validate frameId.| 
 | | Step 6: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 7: Delete the 2 surfaces| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface to Surface Test**| | 
@@ -840,7 +836,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Expect a frame acknowledge and validate frameId.| 
 | | Step 6: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 7: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Wire To Surface Test**| | 
@@ -855,7 +850,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4.  Expect a frame acknowledge and validate frameId.| 
 | | Step 5: If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 6: Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Test**| | 
@@ -872,7 +866,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Expect a frame acknowledge and validate frameId.| 
 | | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 8: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -889,7 +882,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Expect a frame acknowledge and validate frameId.| 
 | | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 8: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Test**| | 
@@ -907,7 +899,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 7: Expect a frame acknowledge and validate frameId| 
 | | Step 8: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 9: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -925,7 +916,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 7: Expect a frame acknowledge for each sent frame and validate frameId| 
 | | Step 8: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 9: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Codec Stream Test**| | 
@@ -940,7 +930,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Expect a frame acknowledge and validate frameId| 
 | | Step 5: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 6: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RDP 8 Compression Test**| | 
@@ -956,7 +945,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Expect a frame acknowledge and validate frameId| 
 | | Step 6: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 7: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **H264 Codec Test**| | 
@@ -976,7 +964,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Expect a frame acknowledge and validate frameId.| 
 | | If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 4: Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **H264 Codec Test**| | 
@@ -996,7 +983,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Expect a frame acknowledge and validate frameId.| 
 | | If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 5: Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **H264 Codec Test**| | 
@@ -1020,7 +1006,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Expect a frame acknowledge and validate frameId.| 
 | | If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 5: Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 #### <a name="_Toc427065102"/>Non BVT Test Cases
@@ -1037,7 +1022,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2: Validate version and flags in the request is OK| 
 | | Step 3: set an incorrect version(e.g 0x01) in RDPGFX\_CAPSET_VERSION8 structure and send capability confirm PDU to client| 
 | | Step 4: Expect the client to drop the connection| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Capability Exchange Test**| | 
@@ -1050,7 +1034,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2: Validate version and flags in the request is OK| 
 | | Step 3: set an  incorrect  CapsDataLength (e.g 0x01)) in RDPGFX\_CAPSET_VERSION8 structure  and send capability confirm PDU to client| 
 | | Step 4: Expect the client to drop the connection| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 #####Surface to Screen Test
@@ -1070,7 +1053,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 7:  If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 8: repeat the step 5 ~ step 7 two times, using different color: red and yellow.| 
 | | Step 9: delete all 4 surfaces| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Screen Test**| | 
@@ -1085,7 +1067,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Instruct client to fill the first surface with solid green color. | 
 | | Step 5:  If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 6: delete the two surfaces| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Screen Test**| | 
@@ -1101,7 +1082,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Expect a frame acknowledge and validate frameId.| 
 | | Step 6: If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 7: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Screen Test**| | 
@@ -1116,7 +1096,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Server pack the message into a frame and sent it to client| 
 | | Step 5: Expect a frame acknowledge and validate frameId.| 
 | | Step 6: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Screen Test**| | 
@@ -1132,7 +1111,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Server pack the message into a frame and sent it to client.| 
 | | Step 6: Expect a frame acknowledge and validate frameId.| 
 | | Step 7: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Screen Test**| | 
@@ -1148,7 +1126,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Expect a frame acknowledge and validate frameId.| 
 | | Step 6:  If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 7: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Screen Test**| | 
@@ -1162,7 +1139,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 3:  Delete the surface.| 
 | | Step 4:  Map the deleted surface to output again.| 
 | | Step 5:  Expect the client drop the connection.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Screen Test**| | 
@@ -1176,7 +1152,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 3:  Delete the surface.| 
 | | Step 4:  Create a new surface and use the same surface ID.| 
 | | Step 5:  Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Screen Test**| | 
@@ -1192,7 +1167,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Expect a frame acknowledge and validate frameId.| 
 | | Step 6: If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 7: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Screen Test**| | 
@@ -1208,7 +1182,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Expect a frame acknowledge and validate frameId.| 
 | | Step 6: If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 7: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Screen Test**| | 
@@ -1224,7 +1197,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Expect a frame acknowledge and validate frameId.| 
 | | Step 6: If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 7: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Screen Test**| | 
@@ -1240,7 +1212,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Expect a frame acknowledge and validate frameId.| 
 | | Step 6: If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 7: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Screen Test**| | 
@@ -1252,7 +1223,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 |  **Test Execution Steps**| Step 1: Capability Exchange| 
 | | Step 2: Instruct client to reset desktop size, set width to 32766| 
 | | Step 3: Instruct client to reset desktop size again, set height to 32766| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Screen Test**| | 
@@ -1263,7 +1233,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 |  **Prerequisites**| N/A| 
 |  **Test Execution Steps**| Step 1: Capability Exchange| 
 | | Step 2: Instruct client to reset desktop size, set monitor count to max value (16).| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Screen Test**| | 
@@ -1276,7 +1245,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2: Create a surface with surfaceId is 0, and instruct client to output bitmap data of surface.| 
 | | Step 3: Create another surface with surfaceId is 0, and different width & height| 
 | | Step 4: Expect the client to drop the connection| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Screen Test**| | 
@@ -1290,7 +1258,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 3: Delete the surface with surfaceId 0| 
 | | Step 4: Delete again the surface with surfaceId 0(Currently the surface 0 is inexistent)| 
 | | Step 4: Expect the client to drop the connection| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Screen Test**| | 
@@ -1303,7 +1270,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2: Create a surface with surfaceId is 0| 
 | | Step 3: Map the surface to output with surfaceId is 0xffff| 
 | | Step 4: Expect the client to drop the connection| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Screen Test**| | 
@@ -1316,7 +1282,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2:  Create a surface with surfaceId 0 and instruct client to output bitmap data of surface| 
 | | Step 3: Make a frame with one  RDPGFX\_SOLIDFILL_PDU (surfaceId is 0xffff)  and send it to client| 
 | | Step 4: Expect the client to drop the connection| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Screen Test**| | 
@@ -1329,7 +1294,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2: Create dynamic virtual channels for MS-RDPEGFX| 
 | | Step 3: Send Capability Confirm with incorrect PDU length in RDPEGFX_HEADER to client| 
 | | Step 4: Expect the client to drop the connection| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 #####CacheManagement Test
@@ -1348,7 +1312,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Expect a frame acknowledge and validate frameId.| 
 | | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 8: Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Cache Management Test**| | 
@@ -1364,7 +1327,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Expect a frame acknowledge and validate frameId.| 
 | | Step 6: Repeat step 3 - 5 to make the cache reach to max size (100M or 16M for small cache). | 
 | | Step 7: Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Cache Management Test**| | 
@@ -1381,7 +1343,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Expect a frame acknowledge and validate frameId.| 
 | | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 8: Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Cache Management Test**| | 
@@ -1403,7 +1364,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 11: Expect a frame acknowledge and validate frameId.| 
 | | Step 12: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 13: Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Cache Management Test**| | 
@@ -1420,7 +1380,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Expect a frame acknowledge and validate frameId.| 
 | | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 8: Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Cache Management Test**| | 
@@ -1437,7 +1396,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Expect a frame acknowledge and validate frameId.| 
 | | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 8: Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Cache Management Test**| | 
@@ -1455,7 +1413,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 7: Server encode a message to instruct client to copy bitmap area saved in slot 0x01 to other position in the surface.| 
 | | Step 8: Server pack messages into a frame and sent it to client | 
 | | Step 9: Expect client drop the connection.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Cache Management Test** | | 
@@ -1468,7 +1425,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2: Create a surface, and instruct client to output bitmap data of surface| 
 | | Step 3: Make a frame with 101 RDPGFX\_SURFACE\_TO\_CACHE_PDUs, which have 1M bitmap data for each cache entry and send it to client| 
 | | Step 4: Expect the client to drop the connection| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Cache Management Test**| | 
@@ -1481,7 +1437,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2: Create a surface and solid fill it with green color| 
 | | Step 3: Make a frame with one RDPGFX\_SURFACE\_TO\_CACHE_PDU(surfaceId is 0xffff)  and send it to client| 
 | | Step 4:  Expect the client to drop the connection| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Cache Management Test**| | 
@@ -1495,7 +1450,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 3: Create a surface(surfaceId: 0), and instruct client to output bitmap data of surface| 
 | | Step 4: Make a frame with  one RDPGFX\_SURFACE\_TO\_CACHE\_PDU(surfaceId is 0, cache slot 0x01) and one RDPGFX\_CACHE\_TO\_SURFACE\_PDU(surfaceId is 0xffff,  cache slot 0x01)  and send it to client| 
 | | Step 5:  Expect the client to drop  the connection| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Cache Management Test**| | 
@@ -1508,7 +1462,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2: Create a surface(surfaceId: 0), and instruct client to output bitmap data of surface| 
 | | Step 3: Make a frame with one RDPGFX\_CACHE\_TO\_SURFACE\_PDU(surfaceId is 0,  cache slot 0xfefe)  and send it to client| 
 | | Step 4:  Expect a frame acknowledge and validate frameId.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Cache Management Test**| | 
@@ -1521,7 +1474,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2: Create a surface, and instruct client to output bitmap data of surface| 
 | | Step 3: Make a frame with a RDPGFX\_EVICT\_CACHE\_ENTRY_PDU(cache slot is 0xfefe)| 
 | | Step 4:  Expect the client to drop the connection| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 #####Surface to Surface Test
@@ -1539,7 +1491,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Expect a frame acknowledge and validate frameId.| 
 | | Step 6: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 7: Delete the 2 surfaces| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Surface Test**| | 
@@ -1555,7 +1506,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Expect a frame acknowledge and validate frameId.| 
 | | Step 6: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 7: Delete the 2 surfaces| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Surface Test**| | 
@@ -1571,7 +1521,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Expect a frame acknowledge and validate frameId.| 
 | | Step 6: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 7: Delete the 2 surfaces| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Surface Test**| | 
@@ -1587,7 +1536,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Expect a frame acknowledge and validate frameId.| 
 | | Step 6: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 7: Delete the 2 surfaces| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Surface Test**| | 
@@ -1602,7 +1550,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Create a second surface(surfaceId is 1), and instruct client to output bitmap data of the surface| 
 | | Step 5: Send message with RDPGFX\_SURFACE\_TO\_ SURFACE _PDUs (src surfaced: 0xffff, dest surfaceId: 0x00) to client| 
 | | Step 6:  Expect the client to drop the connection| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Surface Test**| | 
@@ -1617,7 +1564,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4:  Create a second surface(surfaceId is 1), and instruct client to output bitmap data of the surface| 
 | | Step 5: Send message with one RDPGFX\_SURFACE\_TO\_CACHE_PDU (o src surfaced: 0x00, dest surfaceId: 0xffff)  and to client| 
 | | Step 6: Expect the client to drop the connection| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Surface Test**| | 
@@ -1632,7 +1578,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4:  Create a second surface(surfaceId is 1), and instruct client to output bitmap data of the surface| 
 | | Step 5: Send message with one RDPGFX\_SURFACE\_TO\_CACHE_PDU to trigger client copy a bitmap with width 512, height 512 from surface 0 to surface 1| 
 | | Step 6: Expect the client to drop the connection| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Surface Test**| | 
@@ -1647,7 +1592,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4:  Create a second surface(surfaceId is 1) with width 356 and height 356, and instruct client to output bitmap data of the surface| 
 | | Step 5: Send message with one RDPGFX\_SURFACE\_TO\_CACHE_PDU to trigger client copy a bitmap with width 64, height 64 from surface 0 to position (512, 512) that outside the surface 1| 
 | | Step 6: Expect the client to drop the connection| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Surface To Surface Test**| | 
@@ -1662,7 +1606,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4:  Create a second surface(surfaceId is 1) with width 356 and height 356, and instruct client to output bitmap data of the surface| 
 | | Step 5: Send message with one RDPGFX\_SURFACE\_TO\_CACHE_PDU to trigger client copy a bitmap from source to destination, in which the value of destPtsCount and the length of destPts doesn’t match| 
 | | Step 6: Expect the client to drop the connection| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 #####Wire to Surface Test
@@ -1682,7 +1625,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 7: Send an uncompressed bitmap to the surface by using RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1, bitmap in the left-bottom corner of surface.| 
 | | Step 8: If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 9: Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 #####ClearCodec Test
@@ -1701,7 +1643,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Expect a frame acknowledge and validate frameId.| 
 | | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 8: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -1718,7 +1659,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Expect a frame acknowledge and validate frameId.| 
 | | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 8: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -1742,7 +1682,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 13: Expect a frame acknowledge and validate frameId.| 
 | | Step 14: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 15: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -1759,7 +1698,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Expect a frame acknowledge and validate frameId.| 
 | | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 8: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -1776,7 +1714,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Expect a frame acknowledge and validate frameId.| 
 | | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 8: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Test**| | 
@@ -1794,7 +1731,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 7: Expect a frame acknowledge and validate frameId.| 
 | | Step 8: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 9: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Test**| | 
@@ -1812,7 +1748,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 7: Expect a frame acknowledge and validate frameId.| 
 | | Step 8: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 9: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Test**| | 
@@ -1831,7 +1766,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 8: Expect a frame acknowledge and validate frameId.| 
 | | Step 9: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 10: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -1852,7 +1786,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 10: Expect a frame acknowledge and validate frameId.| 
 | | Step 11: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 12: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -1872,7 +1805,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 9: encode data in step 8 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1 with  Rect area is 20  &#42;  50 and send it as a frame to client| 
 | | Step 10: Expect a frame acknowledge and validate frameId.| 
 | | Step 11: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -1889,7 +1821,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Send PDU as a frame to client| 
 | | Step 7: Expect a frame acknowledge and validate frameId.| 
 | | Step 8: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -1906,7 +1837,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Send PDU as a frame to client| 
 | | Step 7: Expect a frame acknowledge and validate frameId.| 
 | | Step 8: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -1921,7 +1851,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Send PDU as a frame to client| 
 | | Step 6: Expect a frame acknowledge and validate frameId.| 
 | | Step 7: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -1937,7 +1866,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Send PDU as a frame to client| 
 | | Step 6: Expect a frame acknowledge and validate frameId.| 
 | | Step 7: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -1953,7 +1881,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Send PDU as a frame to client| 
 | | Step 6: Expect a frame acknowledge and validate frameId.| 
 | | Step 7: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -1968,7 +1895,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Create a bitmap with width 32767 pixels| 
 | | Step 5: Encode the bitmap into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1 and send it to client as a frame| 
 | | Step 6: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -1983,7 +1909,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Create a bitmap with height 32767 pixels| 
 | | Step 5: Encode the bitmap into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1 and send it to client as a frame| 
 | | Step 6: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -1998,7 +1923,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Encode a glyph with 41  &#42;  25 pixels size into band layer| 
 | | Step 5: Encode ClearCodec stream in step 4  into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1 and send it as a frame to client| 
 | | Step 6: Expect RDP Connection is stopped | 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -2012,7 +1936,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 3: Set ClearCodec stream flag to 0x02| 
 | | Step 4: Encode a ClearCodec stream into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1 and send it as a frame to client| 
 | | Step 5: Expect RDP Connection is stopped | 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -2026,7 +1949,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 3: Set ClearCodec stream flag to 0x03, set glyph index 999. | 
 | | Step 4: Encode ClearCodec stream with config in step 4  into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1 and send it as a frame to client| 
 | | Step 5: Expect RDP Connection is stopped | 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -2040,7 +1962,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 3: Set ClearCodec stream flag to 0x03, set glyph index 4000. | 
 | | Step 4: Encode ClearCodec stream with config in step 3  into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1 and send it as a frame to client| 
 | | Step 5: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -2055,7 +1976,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Encode 4001 glyph with different glyph index into band layer| 
 | | Step 5: Encode bitmap data with config in step 3 and 5 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1 and send it as a frame to client| 
 | | Step 6: Expect RDP Connection is stopped | 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -2072,7 +1992,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Set ClearCodec stream flag to 0x03| 
 | | Step 7: Encode bitmap data into compsitepayload field and also set glyph index with 999, then pack them into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1 and send it as a frame to client| 
 | | Step 8: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -2087,7 +2006,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Encode Residual layer with runlengthFactor1 is 0x0f, and runlengthFactor2 is 0xf0f0| 
 | | Step 5: Encode data in step 3,4  into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1 and send it as a frame to client| 
 | | Step 6: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -2102,7 +2020,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Encode Residual layer with runlengthFactor1 is 0xff, and no runlengthFactor2| 
 | | Step 5: Encode data in step 3,4  into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1 and send it as a frame to client| 
 | | Step 6: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -2117,7 +2034,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Encode Residual layer with runlengthFactor1 is 0xff, runlengthFactor2 is 0x0f0f, and runlengthFactor3 is 0xf0f0f0f0| 
 | | Step 5: Encode data in step 3,4  into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1 and send it as a frame to client| 
 | | Step 6: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -2132,7 +2048,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Encode Residual layer with runlengthFactor1 is 0xff, runlengthFactor2 is 0xffff, and no runlengthFactor3 | 
 | | Step 5: Encode data in step 3,4  into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1 and send it as a frame to client| 
 | | Step 6: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -2147,7 +2062,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Encode a band bitmap with height 53 pixels| 
 | | Step 5: Encode the data in step 3, 4 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1 and send it as a frame to client| 
 | | Step 6: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -2163,7 +2077,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Encode a bitmap data by RLEX SubCodec and pack the data into| 
 | | RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1 and send it as a frame to client| 
 | | Step 6: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **ClearCodec Stream Test**| | 
@@ -2178,7 +2091,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Encode a bitmap data by RLEX SubCodec layer with paletteCount is 17 but actual paletteEntries is 16.| 
 | | Step 5: Encode the data in step 3, 4 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1 and send it as a frame to client| 
 | | Step 6: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 #####RemoteFX Progressive Codec Test
@@ -2202,7 +2114,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 11: Expect a frame acknowledge and validate frameId| 
 | | Step 12: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 13: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2224,7 +2135,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 11: Expect a frame acknowledge and validate frameId| 
 | | Step 12: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 13: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2242,9 +2152,7 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 7: Expect a frame acknowledge and validate frameId.| 
 | | Step 8: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 9: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
-
 |  **RFX Progressive Codec Stream Test**| | 
 | -------------| ------------- |
 |  **Test ID**| RDPEGFX\_RfxProgressiveCodec\_PositiveTest\_ProgressiveEncoding_SurfaceNotTileAligned| 
@@ -2260,7 +2168,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 7: Expect a frame acknowledge and validate frameId.| 
 | | Step 8: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 9: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2278,7 +2185,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 7: Expect a frame acknowledge and validate frameId.| 
 | | Step 8: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 9: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2295,7 +2201,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Expect a frame acknowledge and validate frameId| 
 | | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 8: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2316,7 +2221,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 10: Expect a frame acknowledge and validate frameId| 
 | | Step 11: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 12: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2337,7 +2241,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 10: Expect a frame acknowledge and validate frameId| 
 | | Step 11: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 12: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2354,7 +2257,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Expect a frame acknowledge and validate frameId| 
 | | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 8: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2371,7 +2273,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Expect a frame acknowledge and validate frameId| 
 | | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 8: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2388,7 +2289,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Pack data in step 5 into a RDPGFX\_WIRE\_TO\_SURFACE\_PDU_2 message and send it as a frame to client| 
 | | Step 7: Expect a frame acknowledge and validate frameId| 
 | | Step 8: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2403,7 +2303,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Encode bitmap data with block type:RFX\_PROGRESSIVE\_TILE\_SIMPLE and pack it into progressive frame| 
 | | Step 5: Pack data in step 4 RDPGFX\_WIRE\_TO\_SURFACE\_PDU_2 and send it as a frame to surface 0 on client| 
 | | Step 6: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2419,7 +2318,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Encode bitmap data with block type:RFX\_PROGRESSIVE\_TILE\_SIMPLE and pack it into progressive frame| 
 | | Step 6: Encoded  data in step 3, 4, 5 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_2 and send it as a frame to client| 
 | | Step 7: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2436,7 +2334,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Encode a rfx\_progressive\_frame_end block| 
 | | Step 7: Encoded  data in step 3~6 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_2 and send it as a frame to client| 
 | | Step 8: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2453,7 +2350,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Encode a rfx\_progressive\_frame_end block| 
 | | Step 7: Encoded  data in step 3~6 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_2 and send it as a frame to client| 
 | | Step 8: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2470,7 +2366,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Encode 2 rfx\_progressive\_frame_end blocks| 
 | | Step 7: Encoded  data in step 3~6 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_2 and send it as a frame to client| 
 | | Step 8: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2487,7 +2382,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Encode a rfx\_progressive\_frame_end block| 
 | | Step 7: Encoded  data in step 3~6 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_2 and send it as a frame to client| 
 | | Step 8: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2504,7 +2398,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Encode no rfx\_progressive\_frame_end block| 
 | | Step 7: Encoded  data in step 3~6 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_2 and send it as a frame to client| 
 | | Step 8: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2521,7 +2414,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Encode a rfx\_progressive\_frame_end block with blockLen is  0x05| 
 | | Step 7: Encoded  data in step 3~6 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_2 and send it as a frame to client| 
 | | Step 8: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2537,7 +2429,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Encode bitmap data with block type:RFX\_PROGRESSIVE\_TILE\_SIMPLE and pack it into progressive frame| 
 | | Step 6: Encoded  data in step 3~5 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_2 and send it as a frame to client| 
 | | Step 7: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2553,7 +2444,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Encode bitmap data with block type:RFX\_PROGRESSIVE\_TILE\_SIMPLE and pack it into progressive frame| 
 | | Step 6: Encoded  data in step 3~5 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_2 and send it as a frame to client| 
 | | Step 7: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2570,7 +2460,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Encode a rfx\_progressive\_frame_end block| 
 | | Step 7: Encoded data in step 3~6 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_2 and send it as a frame to client| 
 | | Step 8: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2585,7 +2474,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Encode an rfx\_progressive\_region block with block length is larger 1 than correct length.| 
 | | Step 5: Encoded data in step 3~4 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_2 and send it as a frame to client| 
 | | Step 6: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2600,7 +2488,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Encode a rfx\_progressive\_region with  tieSize is 0x0041| 
 | | Step 5: Encoded data in step 3~4 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_2 and send it as a frame to client| 
 | | Step 6: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2615,7 +2502,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Encode an rfx\_progressive\_region with numRects is 0x02 but rects field has only one TS\_RFX\_RECT.| 
 | | Step 5: Encoded data in step 3~4 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_2 and send it as a frame to client| 
 | | Step 6: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2630,7 +2516,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Encode a rfx\_progressive\_region with numRects is 0x0 but rects field is null| 
 | | Step 5: Encoded data in step 3~4 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_2 and send it as a frame to client| 
 | | Step 6: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2645,7 +2530,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Encode an rfx\_progressive\_region with numQuant is 0x02 and quantVals has only 1 TS\_RFX\_CODEC_QUANT structure. | 
 | | Step 5: Encoded data in step 3~4 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_2 and send it as a frame to client| 
 | | Step 6: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2660,7 +2544,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Encode a rfx\_progressive\_region with numQuant is 0x0 and quantVals is null| 
 | | Step 5: Encoded data in step 3~4 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_2 and send it as a frame to client| 
 | | Step 6: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2675,7 +2558,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Encode a rfx\_progressive\_region with numProgQuant is 0x02 and quantProgVals has only 1 rfx\_progressive\_CODEC_QUANT structure| 
 | | Step 5: Encoded data in step 3~4 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_2 and send it as a frame to client| 
 | | Step 6: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2690,7 +2572,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Encode a rfx\_progressive\_region with numTiles is 0x02 and tiles fields has only 1 tile data block| 
 | | Step 5: Encoded data in step 3~4 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_2 and send it as a frame to client| 
 | | Step 6: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2705,7 +2586,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Encode a rfx\_progressive\_region block with tile type is 0xffff| 
 | | Step 5: Encoded data in step 3~4 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_2 and send it as a frame to client| 
 | | Step 6: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2721,7 +2601,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Encode only one rfx\_progressive\_region block| 
 | | Step 6: Encoded data in step 3~5 into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_2 and send it as a frame to client| 
 | | Step 7: Expect RDP Connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2737,7 +2616,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Expect a frame acknowledge and validate frameId| 
 | | Step 7: repeat step 5 again| 
 | | Step 8: Expect RDP connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Progressive Codec Stream Test**| | 
@@ -2752,7 +2630,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 5: Delete the created surface in step 2| 
 | | Step 6: Encode codecContextId get from step 4 into a RDPGFX\_DELETE\_ENCODING\_CONTEXT\_PDU and send it as a frame to client| 
 | | Step 7: Expect RDP connection is stopped| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 #####Frame Segmentation Test
@@ -2767,7 +2644,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2: Validate version and flags in the request is OK| 
 | | Step 3: Encode a capability confirm PDU without segment header in RDP\_SEGMENTED\_DATA and send it to the client.| 
 | | Step 4: Expect the client to drop the connection| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Frame Segmentation Test**| | 
@@ -2782,7 +2658,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Send the multiple segments as a frame to Client| 
 | | Step 5: Expect a frame acknowledge and validate frameId.| 
 | | Step 6: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Frame Segmentation Test**| | 
@@ -2797,7 +2672,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Send bitmap frame, which is filled with blue color| 
 | | Step 5: Expect a frame acknowledge and validate frameId.| 
 | | Step 6: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Frame Segmentation Test**| | 
@@ -2810,7 +2684,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2: Validate version and flags in the request is OK| 
 | | Step 3: Encode a capability confirm PDU with compress flag is 0x20 but without segment header in RDP\_SEGMEMNTED\_DATA to send it to the client.| 
 | | Step 4: Expect the client to drop the connection| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Frame Segmentation Test**| | 
@@ -2823,7 +2696,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2: Validate version and flags in the request is OK | 
 | | Step 3: Encode a capability confirm PDU with segment descriptor 0xff in RDP\_SEGMEMNTED\_DATA and send it to client.| 
 | | Step 4: Expect the client to drop the connection.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Frame Segmentation Test**| | 
@@ -2836,7 +2708,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2: Validate version and flags in the request is OK| 
 | | Step 3: Encode a capability confirm PDU with segment descriptor is 0xe0, segmentcount is 1 in RDP\_SEGMEMNTED\_DATA and send it to client.| 
 | | Step 4: Expect the client to drop the connection| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Frame Segmentation Test**| | 
@@ -2848,7 +2719,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 |  **Test Execution Steps**| Step 1: Expect SUT send a capability advertise request| 
 | | Step 2: Validate version and flags in the request is OK| 
 | | Step 3: Encode a response with segment descriptor is 0xe0, UncompressedSize is 0x000000ff to client.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Frame Segmentation Test**| | 
@@ -2861,7 +2731,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2: Validate version and flags in the request is OK| 
 | | Step 3: Encode a capability confirm PDU with segment descriptor is 0xe0, SegmentArrary exist in RDP\_SEGMEMNTED\_DATA and send it to client.| 
 | | Step 4: Expect the client to drop the connection.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Frame Segmentation Test**| | 
@@ -2874,7 +2743,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2: Validate version and flags in the request is OK| 
 | | Step 3: Encode a capability confirm PDU with segment descriptor is 0xe1, without Segment Count  in RDP\_SEGMEMNTED\_DATA  and send it to client.| 
 | | Step 4: Expect the client to drop the connection.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Frame Segmentation Test**| | 
@@ -2887,7 +2755,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2: Validate version and flags in the request is OK| 
 | | Step 3: Encode  a capability confirm PDU with segment descriptor is 0xe1, without UncompressedSize  in RDP\_SEGMEMNTED\_DATA  and send it to client| 
 | | Step 4: Expect the client to drop the connection| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **Frame Segmentation Test**| | 
@@ -2900,7 +2767,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2: Validate version and flags in the request is OK| 
 | | Step 3: Encode  a capability confirm PDU  with segment descriptor is 0xe1, without SegmentArrary  in RDP\_SEGMEMNTED\_DATA  and send it to client| 
 | | Step 4: Expect the client to drop the connection| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 #####RDP 8 Compression Test
@@ -2915,7 +2781,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2: Validate version and flags in the request is OK| 
 | | Step 3: Encode  a capability confirm PDU  with compress flag is 0x40 in RDP\_BULK\_ENCODED_DATA structure and send it  to client.| 
 | | Step 4: Expect the client to drop the connection| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RDP 8 Compression Test**| | 
@@ -2928,7 +2793,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2: Validate version and flags in the request is OK| 
 | | Step 3: Encode a capability confirm PDU with compress type is 0x02 in RDP\_BULK\_ENCODED_DATA structure and send it to client.| 
 | | Step 4: Expect the client to drop the connection.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RDP 8 Compression Test**| | 
@@ -2941,7 +2805,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2: Validate version and flags in the request is OK| 
 | | Step 3: Encode  a capability confirm PDU with compress flag is 0x24, but PDU is not compressed raw data  RDP\_BULK\_ENCODED_DATA structure and send it to client.| 
 | | Step 4: Expect the client to drop the connection.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 #####RemoteFX Codec Test
@@ -2958,7 +2821,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Expect a frame acknowledge and validate frameId| 
 | | Step 5: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 6: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Codec Stream Test**| | 
@@ -2973,7 +2835,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Expect a frame acknowledge and validate frameId| 
 | | Step 5: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 6: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **RFX Codec Stream Test**| | 
@@ -2988,7 +2849,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 4: Expect a frame acknowledge and validate frameId| 
 | | Step 5: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
 | | Step 6: Delete the surface| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 #####H264 Codec Test
@@ -3003,7 +2863,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2: Verify the capability request include a CAPSET as following| 
 | | If the version is RDPGFX\_CAPVERSION\_81, flags should contains RDPGFX\_CAPS\_FLAG\_H264ENABLED and RDPGFX\_CAPS\_FLAG\_SMALL_CACHE.| 
 | | Or if the version is RDPGFX\_CAPVERSION\_10, flags not contains  RDPGFX\_CAPS\_FLAG\_AVC_DISABLED| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **H264 Codec Test**| | 
@@ -3023,7 +2882,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Expect a frame acknowledge and validate frameId.| 
 | | If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 4: Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **H264 Codec Test**| | 
@@ -3043,7 +2901,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Expect a frame acknowledge and validate frameId.| 
 | | If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 4: Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **H264 Codec Test**| | 
@@ -3063,7 +2920,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Expect a frame acknowledge and validate frameId.| 
 | | If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 4: Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **H264 Codec Test**| | 
@@ -3084,7 +2940,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Expect a frame acknowledge and validate frameId.| 
 | | If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 4: Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **H264 Codec Test**| | 
@@ -3105,7 +2960,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Expect a frame acknowledge and validate frameId.| 
 | | If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 4: Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **H264 Codec Test**| | 
@@ -3125,7 +2979,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Expect a frame acknowledge and validate frameId.| 
 | | If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 4: Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **H264 Codec Test**| | 
@@ -3145,7 +2998,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Expect a frame acknowledge and validate frameId.| 
 | | If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 4: Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **H264 Codec Test**| | 
@@ -3166,7 +3018,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Expect a frame acknowledge and validate frameId.| 
 | | If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 4: Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **H264 Codec Test**| | 
@@ -3185,7 +3036,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 6: Expect a frame acknowledge and validate frameId.| 
 | | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 8: Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 |  **H264 Codec Test**| | 
@@ -3206,7 +3056,6 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Expect a frame acknowledge and validate frameId.| 
 | | If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 4: Delete the surface.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 ## <a name="_Toc427065103"/>Appendix

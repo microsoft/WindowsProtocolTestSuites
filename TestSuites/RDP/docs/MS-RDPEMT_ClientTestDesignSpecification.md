@@ -96,11 +96,12 @@ There are 2 scenarios defined in the MS-RDPEMT client test suite for verifying t
 ***Table 21 MS-RDPEMT Test Suite Scenarios***
 
 #### <a name="_Toc350340317"/>S1_Connection
-Preconditions:
+**Preconditions:**
 
 * The RDP connection has been established.
 
-Typical Sequence:
+**Typical Sequence:**
+
 The typical scenario sequence is the following:
 
 * RDP server sends a Server Initiate Multitransport Request PDU through main RDP connection (described in [MS-RDPBCGR]).
@@ -111,7 +112,8 @@ The typical scenario sequence is the following:
 
 * RDP server responds a Tunnel Create Response PDU over RDPEUDP connection.
 
-Scenario Testing:
+**Scenario Testing:**
+
 This scenario will test the following structures:
 
 * RDP\_TUNNEL_HEADER
@@ -121,11 +123,12 @@ This scenario will test the following structures:
 * RDP\_TUNNEL_CREATERESPONSE
 
 #### <a name="_Toc350340318"/>S2_AutoDetect
-Preconditions:
+**Preconditions:**
 
 * The RDP connection has been established.
 
-Typical Sequence:
+**Typical Sequence:**
+
 The typical scenario sequence is the following:
 
 * RDP server and RDP client establish a RDPEUDP connection.
@@ -138,7 +141,8 @@ The typical scenario sequence is the following:
 
 * RDP server sends a Network Characteristics Result.
 
-Scenario Testing:
+**Scenario Testing:**
+
 This scenario will test the following structures:
 
 * RDP\_TUNNEL_HEADER
@@ -209,7 +213,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 #### <a name="_Toc350340330"/>S1_Connection
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S1_Connection**| | 
 |  **Test ID**| S1\_Connection\_Initialization_InitialReliableConnection| 
@@ -226,10 +230,9 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | The **Reserved** field set to zero| 
 | | The **SecurityCookie** field MUST contain the security cookie included in the Initiate Multitransport Request PDU that was sent over the main RDP connection| 
 | | If the above requirements are all satisfied, test suite should sent a Tunnel Create Response PDU with an **HrResponse** code of S_OK(0x0)| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S1_Connection**| | 
 |  **Test ID**| S1\_Connection\_Initialization_InitialLossyConnection| 
@@ -246,10 +249,9 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | The **Reserved** field set to zero| 
 | | The **SecurityCookie** field MUST contain the security cookie included in the Initiate Multitransport Request PDU that was sent over the main RDP connection| 
 | | If the above requirements are all satisfied, test suite should sent a Tunnel Create Response PDU with an **HrResponse** code of S_OK(0x0)| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S1_Connection**| | 
 |  **Test ID**| S1\_Connection\_Initialization\_NegativeTest\_InitialReliableConnection_RDPEncryption| 
@@ -259,10 +261,9 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Test Execution Steps**| Test suite trigger RDP client to create a reliable RDP-UDP connection | 
 | | Test suite and RDP client complete TLS handshake to initialize a TLS encrypted channel.| 
 | | Test suite expect RDP client to send a Client Initiate Multitransport Error PDU.| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S1_Connection**| | 
 |  **Test ID**| S1\_Connection\_Initialization\_NegativeTest\_InitialLossyConnection_RDPEncryption| 
@@ -272,12 +273,11 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Test Execution Steps**| Test suite trigger RDP client to create a lossy RDP-UDP connection | 
 | | Test suite and RDP client complete DTLS handshake to initialize a DTLS encrypted channel.| 
 | | Test suite expect RDP client to send a Client Initiate Multitransport Error PDU.| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| N/A| 
 
 #### <a name="_Toc350340331"/>S2_AutoDetect
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S2_AutoDetect**| | 
 |  **Test ID**| S2_AutoDetect_RTTMeasure| 
@@ -292,10 +292,9 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | The **headerTypeID** field MUST be set to TYPE\_ID\_AUTODETECT_RESPONSE (0x01)| 
 | | The **sequenceNumber** field SHOULD be set to the same value as the sequenceNumber field of the most recent RTT Measure Request message received from the server| 
 | | The **responseType** MUST be set to 0x0000| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S2_AutoDetect**| | 
 |  **Test ID**| S2_AutoDetect_ReliableBandwidthMeasure| 
@@ -312,10 +311,9 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | The **headerTypeId** field MUST be set to TYPE\_ID\_AUTODETECT_RESPONSE (0x01)| 
 | | The **requestType** field MUST be set to 0x000B| 
 | | The **timeDelta** field MUST specify the time delta, in milliseconds, between the receipt of the Bandwidth Measure Start and the Bandwidth Measure Stop messages| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S2_AutoDetect**| | 
 |  **Test ID**| S2_AutoDetect_LossyBandwidthMeasure| 
@@ -333,10 +331,9 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | The **sequenceNumber** field SHOULD be set to the same value as the sequenceNumber field of the most recent Bandwidth Measure Stop message received from the server| 
 | | The **requestType** field MUST be set to 0x000B| 
 | | The **timeDelta** field MUST specify the time delta, in milliseconds, between the receipt of the Bandwidth Measure Start and the Bandwidth Measure Stop messages| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S2_AutoDetect**| | 
 |  **Test ID**| S2_AutoDetect_NegtiveLossyBandwidthMeasure| 
@@ -349,7 +346,6 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Test suite send amounts of bytes to the client| 
 | | Test suite send a Bandwidth Measure Stop message encapsulated in the SubHeaderData field of an RDP_TUNNEL_SUBHEADER structure to the client. The sequenceNumber field in Bandwidth Measure Stop is set a different value from Bandwidth Measure Start message| 
 | | The client should skip the response step and test suite SHOULD NOT get a Bandwidth Measure Result PDU from the client| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| N/A| 
 
 ## <a name="_Toc350340332"/>Appendix

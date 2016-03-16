@@ -97,19 +97,26 @@ RDPRFX is designed to work in LAN environment.
 
 ### <a name="_Toc326663480"/>Assumptions, Scope and Constraints
 **Assumptions:**
+
 None.
 
 **Scope:**
-The protocol client endpoint (RDP client), playing the client role, will be tested. For Windows, the Remote Desktop Client (MSTSC.exe) is the client endpoint.
-The protocol Server endpoint (RDP Server), playing the server role, is out of scope.
-The validation of the client decode behaviors is out of scope, because it cannot be observed on the wire.
-For Windows, the System Under Test (SUT) will be client SKUs only.
+
+* The protocol client endpoint (RDP client), playing the client role, will be tested. For Windows, the Remote Desktop Client (MSTSC.exe) is the client endpoint.
+
+* The protocol Server endpoint (RDP Server), playing the server role, is out of scope.
+
+* The validation of the client decode behaviors is out of scope, because it cannot be observed on the wire.
+
+* For Windows, the System Under Test (SUT) will be client SKUs only.
 
 **Constraint:**
+
 None.
 
 ### <a name="_Toc326663481"/>Test Approach
 Because the MS-RDPRFX client test code is merged into the MS-RDPBCGR test code, so it applies the same test approach of MS-RDPBCGR: traditional testing. 
+
 For more details about the reason to choose traditional testing, please refer to **MS-RDPBCGR_ClientTestDesignSpecificaitoin.md**.
 
 ### <a name="_Toc326663482"/>Test Scenarios
@@ -319,12 +326,12 @@ The Traditional test approach is used to design all test cases. The test cases a
 
 The following table shows the number of test cases for each scenario. 
 
-|  **Scenario**|  **Test Cases**|  **Covered Requirements**|  **BVTs**|  **P0**|  **P1**|  **P2**| 
-| -------------| -------------| -------------| -------------| -------------| -------------| ------------- |
-| Exchange Capabilities| 2|  | 2| 2| 0| 0| 
-| Header Messages| 12|  | 1| 4| 6| 2| 
-| Image Mode| 15|  | 2| 4| 10| 1| 
-| Video Mode| 17|  | 2| 6| 11| 0| 
+|  **Scenario**|  **Test Cases**|  **BVTs**|  **P0**|  **P1**|  **P2**| 
+| -------------| -------------| -------------| -------------| -------------| ------------- |
+| Exchange Capabilities| 2| 2| 2| 0| 0| 
+| Header Messages| 12| 1| 4| 6| 2| 
+| Image Mode| 15| 2| 4| 10| 1| 
+| Video Mode| 17| 2| 6| 11| 0| 
 
 ### <a name="_Toc326663502"/>Test Cases Description 
 The test suite is a synthetic RDP server. In the following descriptions, all instances of the term “Test Suite” can be understood as the RDP server.
@@ -347,7 +354,7 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 
 #### <a name="_Toc326663503"/>BVT Test Cases
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Exchange Capabilities**| | 
 |  **Test ID**| Rdprfx_VerifyClientCoreData| 
@@ -358,10 +365,9 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | | Step 2: complete the connection initialization phase.| 
 | | Step 3: expect SUT send a MCS Connect Initial Request.| 
 | | Step 4: verify the connection Type and color depth support of SUT.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Exchange Capabilities**| | 
 |  **Test ID**| Rdprfx_VerifyClientCapabilities| 
@@ -372,10 +378,9 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | | Step 2: continue the connection until Capabilities Exchange phase.| 
 | | Step 3: server sends Demand Active PDU to SUT.| 
 | | Step 4: Expect SUT responds a Confirm Active PDU and verify this PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Header Messages**| | 
 |  **Test ID**| Rdprfx\_HeaderMessage\_PositiveTest\_OrderTest\_VersionsChannelsContext| 
@@ -388,10 +393,9 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | | Step 4: [RDPRFX] Send one frame of Encode Data Messages to SUT.| 
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
 |  **Test ID**| Rdprfx\_ImageMode\_PositiveTest_RLGR1| 
@@ -405,10 +409,9 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE_PDU.| 
 | | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT | 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
 |  **Test ID**| Rdprfx\_ImageMode\_PositiveTest_RLGR3| 
@@ -422,10 +425,9 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
 | | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest_RLGR1| 
@@ -439,10 +441,9 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 ||Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.|
 ||Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
 | | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest_RLGR3| 
@@ -456,7 +457,6 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 ||Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.|
 ||Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
 | | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 #### <a name="_Toc326663504"/>Exchange Capabilities
@@ -464,7 +464,7 @@ Please refer to “**BVT Test Cases**”.
 
 #### <a name="_Toc326663505"/>Send Encode Header Messages
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Header Messages**| | 
 |  **Test ID**| Rdprfx\_HeaderMessage\_PositiveTest\_OrderTest_ChannelsVersionsContext| 
@@ -476,10 +476,9 @@ Please refer to “**BVT Test Cases**”.
 ||Step 3: [RDPRFX] Send Encode Header Messages to SUT in order of TS\_RFX\_SYNC - &#62;  TS\_RFX\_CHANNELS - &#62;  TS\_RFX\_CODECVERSIONS - &#62;  TS\_RFX\_CONTEXT.|
 ||Step 4: [RDPRFX] Send one frame of Encode Data Messages to SUT.|
 ||Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Header Messages**| | 
 |  **Test ID**| Rdprfx\_HeaderMessage\_PositiveTest\_OrderTest_ContextVersionsChannels| 
@@ -491,10 +490,9 @@ Please refer to “**BVT Test Cases**”.
 ||Step 3: [RDPRFX] Send Encode Header Messages to SUT in order of TS\_RFX\_SYNC - &#62;  TS\_RFX\_CONTEXT - &#62;  TS\_RFX\_CODECVERSIONS - &#62;  TS\_RFX\_CHANNELS.|
 ||Step 4: [RDPRFX] Send one frame of Encode Data Messages to SUT.|
 ||Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Header Messages**| | 
 |  **Test ID**| Rdprfx\_HeaderMessage\_PositiveTest\_OrderTest_VersionsContextChannels| 
@@ -502,10 +500,9 @@ Please refer to “**BVT Test Cases**”.
 |  **Description** | Verify the encode header messages can be sent in order of Sync - &#62;  Versions - &#62;  Context - &#62;  Channels.| 
 |  **Prerequisites**| N/A| 
 |  **Test Execution Steps**| Step 1: [RDPBCGR] establishing the connection.Step 2: [RDPBCGR] send Frame Maker Command (Begin) to SUT.Step 3: [RDPRFX] Send Encode Header Messages to SUT in order of TS\_RFX\_SYNC - &#62;  TS_RFX_VERSIONS - &#62;  TS\_RFX\_CONTEXT - &#62;  TS\_RFX\_CHANNELS.Step 4: [RDPRFX] Send one frame of Encode Data Messages to SUT.Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Header Messages**| | 
 |  **Test ID**| Rdprfx\_HeaderMessage\_NegativeTest\_TsRfxSync\_InvalidBlockLen| 
@@ -515,10 +512,9 @@ Please refer to “**BVT Test Cases**”.
 |  **Test Execution Steps**| Step 1: [RDPBCGR] establish the RDP connection.Step |
 ||2: [RDPRFX] send one frame of Encode Header and Data Messages to SUT, and set the blockLen field of TS\_RFX\_SYNC to an invalid value (less than actual).Step |
 ||3: [RDPRFX] expect SUT terminate the RDP connection.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Header Messages**| | 
 |  **Test ID**| Rdprfx\_HeaderMessage\_NegativeTest_UnspecifiedMessage| 
@@ -528,10 +524,9 @@ Please refer to “**BVT Test Cases**”.
 |  **Test Execution Steps**| Step 1: [RDPBCGR] establish the RDP connection.|
 ||Step 2: [RDPRFX] send one unspecified message to client.|
 ||Step 3: [RDPRFX] expect SUT terminate the RDP connection.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Header Messages**| | 
 |  **Test ID**| Rdprfx\_MUST\_NegativeTest_TsRfxSync| 
@@ -546,10 +541,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 4: [RDPBCGR] establish the RDP connection.| 
 | | Step 5: [RDPRFX] send one frame of Encode Header and Data Messages to SUT, and set the version field of TS\_RFX\_SYNC to an invalid value.| 
 | | Step 6: [RDPRFX] expect SUT terminate the RDP connection.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Header Messages**| | 
 |  **Test ID**| Rdprfx\_MUST\_NegativeTest_TsRfxChannels| 
@@ -560,10 +554,9 @@ Please refer to “**BVT Test Cases**”.
 |  **Test Execution Steps**| Step 1: [RDPBCGR] establish the RDP connection.| 
 | | Step 2: [RDPRFX] send one frame of Encode Header and Data Messages to SUT, and set an invalid channelId  to TS_RFX_CHANNELT structure in TS\_RFX\_CHANNELS| 
 | | Step 3: [RDPRFX] expect SUT terminate the RDP connection.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Header Messages**| | 
 |  **Test ID**| Rdprfx\_MUST\_NegativeTest_TsRfxCodecChannelT| 
@@ -578,10 +571,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 4: [RDPBCGR] establish the RDP connection.| 
 | | Step 5: [RDPRFX] send one frame of Encode Header and Data Messages to SUT, and set the channelId field of TS\_RFX\_CODEC\_CHANNELT in TS\_RFX\_FRAME\_BEGIN to an invalid value.| 
 | | Step 6: [RDPRFX] expect SUT terminate the RDP connection.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Header Messages**| | 
 |  **Test ID**| Rdprfx_HeaderMessage\_PositiveTest\_ChannelBoundaryTest_1x1Channel| 
@@ -594,10 +586,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 4: [RDPRFX] Send one frame of Encode Data Messages to SUT.| 
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Header Messages**| | 
 |  **Test ID**| Rdprfx_HeaderMessage\_PositiveTest\_ChannelBoundaryTest_2x2Channel| 
@@ -610,10 +601,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 4: [RDPRFX] Send one frame of Encode Data Messages to SUT.| 
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Header Messages**| | 
 |  **Test ID**| Rdprfx_HeaderMessage\_PositiveTest\_ChannelBoundaryTest_4096x2048Channel| 
@@ -626,10 +616,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 4: [RDPRFX] Send one frame of Encode Data Messages to SUT.| 
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Header Messages**| | 
 |  **Test ID**| Rdprfx_HeaderMessage\_PositiveTest\_ChannelBoundaryTest_4095x2047Channel| 
@@ -642,12 +631,11 @@ Please refer to “**BVT Test Cases**”.
 | | Step 4: [RDPRFX] Send one frame of Encode Data Messages to SUT.| 
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 #### <a name="_Toc326663506"/>Send Encode Data Messages in Image Mode
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
 |  **Test ID**| Rdprfx\_ImageMode\_PositiveTest_ClippedByRegion| 
@@ -661,10 +649,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
 | | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT | 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
 |  **Test ID**| Rdprfx\_ImageMode\_PositiveTest_MultiQuantVals| 
@@ -678,10 +665,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
 | | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT | 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
 |  **Test ID**| Rdprfx\_ImageMode\_NegativeTest\_TsRfxFrameBegin_InvalidBlockLen| 
@@ -691,10 +677,9 @@ Please refer to “**BVT Test Cases**”.
 |  **Test Execution Steps**| Step 1: [RDPBCGR] establishing the connection.|
 ||Step 2: [RDPRFX] send one frame of Encode Header and Data Messages to client, set the blockLen field of TS\_RFX\_FRAME\_BEGIN to an invalid value (less than actual).|
 ||Step 3: [RDPRFX] expect client terminate the RDP connection.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
 |  **Test ID**| Rdprfx\_ImageMode\_NegtiveTest_DuplicatedTile| 
@@ -706,10 +691,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 3: [RDPRFX] Send Encode Header Messages to SUT.| 
 | | Step 4: [RDPRFX] Send one frame of Encode Data Messages (encoded with RLGR1) to SUT, the TS\_RFX\_REGION structure contains rectangular which contains a duplicated tile.| 
 | | Step 5: [RDPRFX] Expect client terminate the RDP connection.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
 |  **Test ID**| Rdprfx\_ImageMode\_PositiveTest_FourTilesComposeOneRectWithoutCommonBoundary| 
@@ -722,10 +706,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 4: [RDPRFX] Send one frame of Encode Data Messages (encoded with RLGR1) to SUT, the TS\_RFX\_REGION structure contains rectangular which is composed by four tiles.| 
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
 |  **Test ID**| Rdprfx\_ImageMode\_PositiveTest_FourTilesComposeOneRectWithCommonBoundary| 
@@ -738,10 +721,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 4: [RDPRFX] Send one frame of Encode Data Messages (encoded with RLGR1) to SUT, the TS\_RFX\_REGION structure contains rectangular which is composed by four tiles.| 
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
 |  **Test ID**| Rdprfx\_ImageMode\_PositiveTest_ListOfRects| 
@@ -754,10 +736,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 4: [RDPRFX] Send one frame of Encode Data Messages (encoded with RLGR1) to SUT, the TS\_RFX\_REGION structure contains a list of rectangles.| 
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
 |  **Test ID**| Rdprfx\_ImageMode\_PositiveTest_ListOfRectsOverlap| 
@@ -770,10 +751,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 4: [RDPRFX] Send one frame of Encode Data Messages (encoded with RLGR1) to SUT, the TS\_RFX\_REGION structure contains a list of rectangular which overlap with each other.| 
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
 |  **Test ID**| Rdprfx\_ImageMode\_PositiveTest_ListOfRectsOverlapWithDuplicateTiles| 
@@ -786,10 +766,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 4: [RDPRFX] Send one frame of Encode Data Messages (encoded with RLGR1) to SUT, the TS\_RFX\_REGION structure contains a list of rectangular which overlap with each other and contains a duplicated tile.| 
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
 |  **Test ID**| Rdprfx\_ImageMode\_PositiveTest_numRectsSetToZero| 
@@ -802,10 +781,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 4: [RDPRFX] Send one frame of Encode Data Messages (encoded with RLGR1) to SUT, the TS\_RFX\_REGION structure contains numRects field of TS\_RFX\_REGION which is set to zero.| 
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
 |  **Test ID**| Rdprfx\_ImageMode\_PositiveTest_OutOfRects| 
@@ -818,10 +796,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 4: [RDPRFX] Send one frame of Encode Data Messages (encoded with RLGR1) to SUT, when some tiles are out of the rectangle in TS\_RFX\_REGION.| 
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Image Mode**| | 
 |  **Test ID**| Rdprfx\_PositiveTest\_ImageWithoutEncoding| 
@@ -834,12 +811,11 @@ Please refer to “**BVT Test Cases**”.
 | | Step 4: [RDPRFX] Send one frame of Data Messages (not encoded) to SUT, the client should handle the unencoded image.| 
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 #### <a name="_Toc326663507"/>Send Encode Data Messages in Video Mode
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_SendTsRfxSyncInStream| 
@@ -854,10 +830,9 @@ Please refer to “**BVT Test Cases**”.
 ||Step 6: [RDPRFX] send another frame of Encode Data Messages to client.|
 ||Step 7: [RDPBCGR] send Frame Maker Command (End) to SUT.|
 ||Step 8: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_SendTsRfxCodecVersioinsInStream| 
@@ -872,10 +847,9 @@ Please refer to “**BVT Test Cases**”.
 ||Step 6: [RDPRFX] send another frame of Encode Data Messages to client.|
 ||Step 7: [RDPBCGR] send Frame Maker Command (End) to SUT.|
 ||Step 8: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_SendTsRfxChannelsInStream| 
@@ -890,10 +864,9 @@ Please refer to “**BVT Test Cases**”.
 ||Step 6: [RDPRFX] send another frame of Encode Data Messages to client.|
 ||Step 7: [RDPBCGR] send Frame Maker Command (End) to SUT.|
 ||Step 8: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_SendTsRfxContextInStream| 
@@ -908,10 +881,9 @@ Please refer to “**BVT Test Cases**”.
 ||Step 6: [RDPRFX] send another frame of Encode Data Messages to client.|
 ||Step 7: [RDPBCGR] send Frame Maker Command (End) to SUT.|
 ||Step 8: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
 |  **Test ID**| Rdprfx\_VideoMode\_NegativeTest\_UnsupportedEntropyAlgorithm| 
@@ -921,10 +893,9 @@ Please refer to “**BVT Test Cases**”.
 |  **Test Execution Steps**| Step 1: [RDPBCGR] establishing the connection.|
 ||Step 2: [RDPRFX] send one frame of Encode Header and Data Messages to client, the bitmap is encoded with an entropy algorithm that client not supported.|
 ||Step 3: [RDPRFX] expect client terminate the RDP connection.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**|  | 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
 |  **Test ID**| Rdprfx\_VideoMode\_NegativeTest\_TsRfxFrameBegin_InvalidBlockLen| 
@@ -934,10 +905,9 @@ Please refer to “**BVT Test Cases**”.
 |  **Test Execution Steps**| Step 1: [RDPBCGR] establishing the connection.|
 ||Step 2: [RDPRFX] send one frame of Encode Header and Data Messages to client, set the blockLen field of TS\_RFX\_FRAME\_BEGIN to an invalid value (less than actual).|
 ||Step 3: [RDPRFX] expect client terminate the RDP connection.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
 |  **Test ID**| Rdprfx\_VideoMode\_NegtiveTest_DuplicatedTile| 
@@ -949,10 +919,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 3: [RDPRFX] Send Encode Header Messages to SUT.| 
 | | Step 4: [RDPRFX] Send one frame of Encode Data Messages (encoded with RLGR1) to SUT, the TS\_RFX\_REGION structure contains rectangular which contains a duplicated tile.| 
 | | Step 5: [RDPRFX] Expect client terminate the RDP connection.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_FourTilesComposeOneRectWithoutCommonBoundary| 
@@ -965,10 +934,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 4: [RDPRFX] Send one frame of Encode Data Messages (encoded with RLGR1) to SUT, the TS\_RFX\_REGION structure contains rectangular which is composed by four tiles.| 
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_FourTilesComposeOneRectWithCommonBoundary| 
@@ -981,10 +949,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 4: [RDPRFX] Send one frame of Encode Data Messages (encoded with RLGR1) to SUT, the TS\_RFX\_REGION structure contains rectangular which is composed by four tiles.| 
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_ListOfRects| 
@@ -997,10 +964,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 4: [RDPRFX] Send one frame of Encode Data Messages (encoded with RLGR1) to SUT, the TS\_RFX\_REGION structure contains a list of rectangles.| 
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_ListOfRectsOverlap| 
@@ -1013,10 +979,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 4: [RDPRFX] Send one frame of Encode Data Messages (encoded with RLGR1) to SUT, the TS\_RFX\_REGION structure contains a list of rectangular which overlap with each other.| 
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_ListOfRectsOverlapWithDuplicateTiles| 
@@ -1029,10 +994,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 4: [RDPRFX] Send one frame of Encode Data Messages (encoded with RLGR1) to SUT, the TS\_RFX\_REGION structure contains a list of rectangular which overlap with each other and contains a duplicated tile.| 
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_numRectsSetToZero| 
@@ -1045,10 +1009,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 4: [RDPRFX] Send one frame of Encode Data Messages (encoded with RLGR1) to SUT, the TS\_RFX\_REGION structure contains numRects field of TS\_RFX\_REGION which is set to zero.| 
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_OutOfRects| 
@@ -1061,10 +1024,9 @@ Please refer to “**BVT Test Cases**”.
 | | Step 4: [RDPRFX] Send one frame of Encode Data Messages (encoded with RLGR1) to SUT, when some tiles are out of the rectangle in TS\_RFX\_REGION.| 
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Send Encode Data Messages in Video Mode**| | 
 |  **Test ID**| Rdprfx\_VideoMode\_PositiveTest\_Differencing| 
@@ -1078,17 +1040,22 @@ Please refer to “**BVT Test Cases**”.
 | | Step 4: [RDPRFX] Send multiple frames with one frame no changes (encoded with RLGR1) to SUT.| 
 | | Step 5: [RDPBCGR] send Frame Maker Command (End) to SUT.| 
 | | Step 6: [RDPRFX] Expect SUT sends a TS\_FRAME\_ACKNOWLEDGE\_PDU.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 ## <a name="_Toc326663508"/>Appendix
 
 ### <a name="_Toc326663509"/>Glossary (Optional)
-**SUT**: System under Test. In this spec, it indicates the MS-RDPBCGR client implementation.
+**SUT**: 
 
-**Test Suite**: The synthetic RDP server which is used to test against SUT.
+System under Test. In this spec, it indicates the MS-RDPBCGR client implementation.
+
+**Test Suite**: 
+
+The synthetic RDP server which is used to test against SUT.
 
 ### <a name="_Toc326663510"/>Reference
 
-* Technical Document: **[MS-RDPRFX].pdf**
+* Technical Document: 
+
+**[MS-RDPRFX].pdf**
 

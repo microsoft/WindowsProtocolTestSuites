@@ -25,10 +25,9 @@ For most of the test cases, the RDP server and RDP client can be a physical or a
 
 **Operating System Requirements**
 
-| &#32;| &#32; |
-| -------------| ------------- |
 |  **Endpoint**|  **Operating System**| 
-| RDPServer | Windows 8 or Windows 7  | 
+| -------------| ------------- |
+| RDPServer | Windows 10, Windows 8 or Windows 7  | 
 | RDPClient| A system with RDP client installed| 
 
 **Network Overview**

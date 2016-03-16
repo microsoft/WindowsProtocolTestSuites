@@ -69,9 +69,11 @@ MS-RDPEVOR is asynchronous because most of the messages don’t need any respons
 
 ### <a name="_Toc326664424"/>Assumptions, Scope and Constraints
 **Assumptions:**
+
 None.
 
 **Scope:**
+
 In Scope:
 The protocol client endpoint (RDP client), playing the client role, will be tested. For Windows, the Remote Desktop Client (MSTSC.exe) is the client endpoint.
 
@@ -79,10 +81,12 @@ Out of Scope:
 The protocol server endpoint (RDP Server), playing the server role, is out of scope.
 
 **Constraint:**
+
 There is no constraint for this Test Suite.
 
 ### <a name="_Toc326664425"/>Test Approach
 Because the MS-RDPEVOR client test code is merged into the MS-RDPBCGR test code, it applies the same test approach used for MS-RDPBCGR: traditional testing. 
+
 For more details about the reason for choosing traditional testing, please refer to **[MS-RDPBCGR_ClientTestDesignSpecificaitoin.md]**
 ### <a name="_Toc326664426"/>Test Scenarios
 
@@ -92,12 +96,15 @@ For more details about the reason for choosing traditional testing, please refer
 | -------------| -------------| -------------| ------------- |
 | Video Streaming Test| P0| Traditional| Use to verify all messages.| 
 
-**Table 2-1 MS-RDPEVOR Test Suite Scenarios** 
+_Table 2-1 MS-RDPEVOR Test Suite Scenarios_
 
 #### <a name="_Toc326664427"/>Video Streaming Test
-Preconditions:
+**Preconditions:**
+
 N/A.
-Typical Sequence:
+
+**Typical Sequence:**
+
 The typical scenario sequence is the following:
 
 * RDP client and server establish the connection (described in MS-RDPBCGR).
@@ -114,7 +121,8 @@ The typical scenario sequence is the following:
 
 * RDP server sends TSMM\_PRESENTATION_REQUEST to stop the presentation.
 
-Scenario Testing:
+**Scenario Testing:**
+
 This scenario will test the following messages:
 
 * TSMM\_PRESENTATION_REQUEST
@@ -232,9 +240,9 @@ Figure 3-2 illustrates the inner work flow of these four adapters.
 The Traditional test approach is used to design all test cases. The test cases are designed to cover all in-scope testable requirements, including both positive and negative requirements. 
 The following table shows the number of test cases for each scenario. 
 
-|  **Scenario**|  **Test Cases**|  **Covered Requirements**|  **BVTs**|  **P0**|  **P1**|  **P2**| 
-| -------------| -------------| -------------| -------------| -------------| -------------| ------------- |
-| **Video Streaming Test**| 6|  | 3| 3| 3| 0| 
+|  **Scenario**|  **Test Cases**|  **BVTs**|  **P0**|  **P1**|  **P2**| 
+| -------------| -------------| -------------| -------------| -------------| ------------- |
+| **Video Streaming Test**| 6| 3| 3| 3| 0| 
 
 ### <a name="_Toc326664443"/>Test Cases Description 
 The test suite is a synthetic RDP server. In the following descriptions, all instances of the term “Test Suite” can be understood as the RDP server.
@@ -257,7 +265,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 #### <a name="_Toc326664444"/>BVT Test Cases
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Video Streaming Test**| | 
 |  **Test ID**| Rdpevor_ProtocolSupportTest_Positive| 
@@ -266,10 +274,9 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Prerequisites**| N/A| 
 |  **Test Execution Steps**| Step 1: establish the RDP connection between server and client.| 
 | | Step 2: try to create the control and data channels with client, if the creation fails, it indicates client doesn’t support this protocol, then fail this test case.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Video Streaming Test**| | 
 |  **Test ID**| Rdpevor_VideoControlTest_Positive| 
@@ -282,10 +289,9 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Step 4: Send client a TSMM_PRESENTATION_REQUEST to start a presentation.| 
 | | Step 5: Expect a TSMM_PRESENTATION_RESPONSE from client and verify the message content.| 
 | | Step 6: Send client a TSMM_PRESENTATION_REQUEST to stop the presentation.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Video Streaming Test**| | 
 |  **Test ID**| Rdpevor_VideoStreamingTest_Positive| 
@@ -299,12 +305,11 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Step 5: Expect a TSMM_PRESENTATION_RESPONSE from client and verify the message content.| 
 | | Step 6: Send multiple video samples to client. Client is expected to render this video content in certain position which indicates by the geometry information received in Step 3.| 
 | | Step 7: Send client a TSMM_PRESENTATION_REQUEST to stop the presentation.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 #### <a name="_Toc326664445"/>Non BVT Test Cases
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Video Streaming Test**| | 
 |  **Test ID**| Rdpevor_VideoControlTest_Negative_InvalidPacketLength| 
@@ -316,10 +321,9 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Step 3: send client a MAPPED_GEOMETRY_PACKET to create a geometry mapping (described in MS-RDPEGT).| 
 | | Step 4: Send client a TSMM_PRESENTATION_REQUEST to start a presentation, set the packet length to invalid value (less than actual).| 
 | | Step 5: Expect client to terminate the connection.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Video Streaming Test**| | 
 |  **Test ID**| Rdpevor_VideoStreamingTest_Negative_InvalidPacketLength| 
@@ -333,10 +337,9 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Step 5: Expect a TSMM_PRESENTATION_RESPONSE from client and verify the message content.| 
 | | Step 6:  Send a TSMM_VIDEO_DATA to client, set the packet length to invalid value (less than actual).| 
 | | Step 7: Expect client to terminate the connection.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Video Streaming Test**| | 
 |  **Test ID**| Rdpevor_VideoStreamingTest_Positive_OverUDPTransport| 
@@ -351,7 +354,6 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Step 5: Expect a TSMM_PRESENTATION_RESPONSE from client and verify the message content.| 
 | | Step 6: Send multiple video samples to client over RDP-UDP. Client is expected to render this video content in certain position which indicates by the geometry information received in Step 3.| 
 | | Step 7: Send client a TSMM_PRESENTATION_REQUEST over RDP-UDP to stop the presentation.| 
-|  **Requirements Covered**|  | 
 |  **Cleanup**| N/A| 
 
 ## <a name="_Toc326664446"/>Appendix

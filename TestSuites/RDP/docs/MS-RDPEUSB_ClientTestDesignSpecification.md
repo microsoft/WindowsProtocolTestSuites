@@ -49,7 +49,7 @@ The Remote Desktop Protocol: USB Devices Virtual Channel Extension is embedded i
 ### <a name="_Toc326658501"/>Protocol Operations/Messages 
 There are 17 protocol data units (PDUs) described by this protocol, and they can be classified into the following message flows:
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **Message Flows**|  **Number of PDUs** | 
 | Interface Manipulation Exchange Capabilities Interface| 2| 
@@ -82,21 +82,29 @@ RDPEUSB doesn’t have any encryption methods. It only relies on the security me
 
 ### <a name="_Toc326658504"/>Assumptions, Scope and Constraints
 **Assumptions:**
+
 The RDP client machine should be configurable to redirect the specific USB devices.
+
 **Scope:**
+
 The protocol client endpoint (RDP client) playing the client role will be tested. For Windows, the Remote Desktop Client (MSTSC.exe) is the client endpoint.
 The protocol server endpoint (RDP Server) playing the server role is out of scope.
 Transport protocols (MS-RDPBCGR and MS-RDPEDYC) are out of scope.
 For Windows, the System under Test (SUT) will be mstsc.exe.
 External protocols are out of scope.
 Compression and encryption are out of scope.
+
 **Constraint:**
+
 There is no constraint for this Test Suite.
 
 ### <a name="_Toc326658505"/>Test Approach
-Recommended Test Approach 
+**Recommended Test Approach**
+ 
 Traditional testing is chosen as the test approach for MS-RDPEUSB.
-Test Approach Comparison
+
+**Test Approach Comparison**
+
 Table 11 illustrates the comparison of test approaches for the MS-RDPEUSB test suite.
 
 |  ***Factor***|  ***Model-Based (MBT)***|  ***Traditional***|  ***Best Choice***| 
@@ -108,7 +116,8 @@ Table 11 illustrates the comparison of test approaches for the MS-RDPEUSB test s
 |  **Simple combinations of parameters**| Parameter combination is not complex.  | It is easy to cover all combinations of parameters with Traditional Testing.| Traditional| 
 
 ***Table 11 Test Approach Comparison***
-Reasons for choosing Traditional Testing
+
+**Reasons for choosing Traditional Testing**
 
 * The protocol is not complete state-ful.
 
@@ -127,16 +136,17 @@ There are three scenarios defined in the MS-RDPEUSB client test suite for verify
 | S2_CancelRequest| 0| Traditional| Use to verify the cancelation of an outstanding IO request.| 
 | S3_OperateIO| 1| Traditional| Use to verify IO request sequences.| 
 
-**Table 21 MS-RDPEUSB Test Suite Scenarios**
+_Table 2-1 MS-RDPEUSB Test Suite Scenarios_
 
 #### <a name="_Toc326658507"/>S1_OperateDeviceChannel
-Preconditions:
+**Preconditions:**
 
 * The RDP connection has been established.
 
 * The dynamic virtual channel has been initialized.
 
-Typical Sequence:
+**Typical Sequence:**
+
 The typical scenario sequence is the following:
 
 * Creates the control virtual channel, exchanges capabilities then notifies that the channel is created.
@@ -149,7 +159,8 @@ The typical scenario sequence is the following:
 
 * Sends retract device request and the channel for the device is expected to be closed.
 
-Scenario Testing:
+**Scenario Testing:**
+
 This scenario will test the following major messages:
 
 * RIM\_EXCHANGE\_CAPABILITY_REQUEST
@@ -167,7 +178,7 @@ This scenario will test the following major messages:
 * RETRACT_DEVICE
 
 #### <a name="_Toc326658508"/>S2_CancelRequest
-Preconditions:
+**Preconditions:**
 
 * The RDP connection has been established.
 
@@ -175,7 +186,8 @@ Preconditions:
 
 * The cancel request is received by the client before the I/O request is completed. That’s due to the client behavior that cancel request will be ignored if the I/O request has been completed.
 
-Typical Sequence:
+**Typical Sequence:**
+
 The typical scenario sequence is the following:
 
 * Creates the control virtual channel, exchanges capabilities then notifies that the channel is created.
@@ -196,17 +208,19 @@ The typical scenario sequence is the following:
 
 * Sends retract device request and the channel for the device is expected to be closed.
 
-Scenario Testing:
+**Scenario Testing:**
+
 Check if the corresponding completion message is received. If the completion message is not received, it means the cancel request has been handled correctly. If the completion message is received, it means the previous request may be finished or the cancel request may not be handled. The test is inconclusive for the latter case.
 
 #### <a name="_Toc326658509"/>S3_OperateIo
-Preconditions:
+**Preconditions:**
 
 * The RDP connection has been established.
 
 * The dynamic virtual channel has been initialized.
 
-Typical Sequence:
+**Typical Sequence:**
+
 The typical scenario sequence is the following:
 
 * Creates the control virtual channel, exchanges capabilities then notifies that the channel is created.
@@ -221,21 +235,21 @@ The typical scenario sequence is the following:
 
 * Sends one of below:
 
-* IO control request
+	* IO control request
 
-* Internal IO request
+	* Internal IO request
 
-* Transfer in request
+	* Transfer in request
 
-* Transfer out request
+	* Transfer out request
 
-* Device text request
+	* Device text request
 
 * Check if a completion message or the device text response is received.
 
 * Sends retract device request and the channel for the device is expected to be closed.
 
-Scenario Testing:
+**Scenario Testing:**
 
 * Verify all device interface related behaviors and cover all possible structures.
 
@@ -394,7 +408,7 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 
 #### <a name="_Toc326658526"/>BVT Test Cases
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S1_OperateDeviceChannel**| | 
 |  **Test ID**| BVT\_EUSB_OperateDeviceChannel| 
@@ -406,11 +420,10 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | | Receives an add virtual channel request.| 
 | | Creates a new virtual channel for the device.| 
 | | Receives an add device request.| 
-| | Sends retract device request and the channel for the device is expected to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed.|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S2_CancelRequest**| | 
 |  **Test ID**| BVT\_EUSB\_CancelRequest_IoControl| 
@@ -426,11 +439,10 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | | Sends an IO request.| 
 | | Sends a cancel request with the request ID specified in the IO request.| 
 | | Expects not to receive a completion message.| 
-| | Sends retract device request and the channel for the device is expected to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed.|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S2_CancelRequest**| | 
 |  **Test ID**| BVT\_EUSB\_CancelRequest_InternalIoControl| 
@@ -446,11 +458,10 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | | Sends an internal IO request.| 
 | | Sends a cancel request with the request ID specified in the IO request.| 
 | | Expects not to receive a completion message.| 
-| | Sends retract device request and the channel for the device is expected to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed.|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S2_CancelRequest**| | 
 |  **Test ID**| BVT\_EUSB\_CancelRequest_TransferInRequest| 
@@ -466,11 +477,10 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | | Sends TS\_URB\_CONTROL\_DESCRIPTOR_REQUEST within a transfer in request.| 
 | | Sends a cancel request with the request ID specified in the IO request.| 
 | | Expects not to receive a completion message.| 
-| | Sends retract device request and the channel for the device is expected to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed.|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| BVT\_EUSB\_OperateIo_IoControl| 
@@ -485,11 +495,10 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | | Registers a callback to provide the Request Completion Interface to the client.| 
 | | Sends an IO request.| 
 | | Expects to receive a completion message.| 
-| | Sends retract device request and the channel for the device is expected to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed.|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| BVT\_EUSB\_OperateIo_InternalIoControl| 
@@ -504,11 +513,10 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | | Registers a callback to provide the Request Completion Interface to the client.| 
 | | Sends an internal IO request.| 
 | | Expects to receive a completion message.| 
-| | Sends retract device request and the channel for the device is expected to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed.|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| BVT\_EUSB\_OperateIo_TransferIn| 
@@ -525,11 +533,10 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | | Receives a completion message to retrieve the descriptor size specified as the member bLength in the USB\_STRING_DESCRIPTOR.| 
 | | Sends TS\_URB\_CONTROL\_DESCRIPTOR_REQUEST with the buffer size as bLength.| 
 | | Receives and parses the descriptor result.| 
-| | Sends retract device request and the channel for the device is expected to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed.|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| BVT\_EUSB\_OperateIo_QueryDeviceText| 
@@ -542,13 +549,12 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | | Creates a new virtual channel for the device.| 
 | | Receives an add device request.| 
 | | Sends QUERY\_DEVICE_TEXT request and receives corresponding response.| 
-| | Sends retract device request and the channel for the device is expected to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed.|  
 |  **Cleanup**| N/A| 
 
 #### <a name="_Toc326658527"/>S1_OperateDeviceChannel
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S1_OperateDeviceChannel**| | 
 |  **Test ID**| S1\_EUSB\_RdpeusbOperateDeviceChannel\_Invalid_MajorVersion| 
@@ -558,8 +564,7 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 |  **Test Execution Steps**| Creates the control channel.| 
 | | Exchanges capabilities.| 
 | | Sends a CHANNEL_CREATED message with an invalid major version. | 
-| | Expect the virtual channel to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Expect the virtual channel to be closed.|  
 |  **Cleanup**| N/A| 
 
 #### <a name="_Toc326658528"/>S2_CancelRequest
@@ -567,7 +572,7 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 
 #### <a name="_Toc326658529"/>S3_OperateIo
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| S3\_EUSB\_OperateIo_SelectConfiguration| 
@@ -587,11 +592,10 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 | | Receives a completion message with the complete result for USB\_CONFIGURATION_DESCRIPTOR.| 
 | | Sends TS\_URB\_SELECT_CONFIGURATION URB request.| 
 | | Receives a completion message with the result for configuration selection.| 
-| | Sends retract device request and the channel for the device is expected to be closed. | 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed. |  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| S3\_EUSB\_OperateIo_SelectInterface| 
@@ -606,11 +610,10 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 | | Select the configuration with index 0.| 
 | | Select the interface with index 0 by sending TS\_URB\_SELECT_INTERFACE request.| 
 | | Receives a completion message with the result for interface selection.| 
-| | Sends retract device request and the channel for the device is expected to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed.|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| S3\_EUSB\_OperateIo_PipeRequest| 
@@ -626,11 +629,10 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 | | Searches the first bulk or interrupt pipe handle in the results of the configuration-selection.| 
 | | Sends the TS\_URB\_PIPE_REQUEST with URB\_FUNCTION\_SYNC\_RESET_PIPE and verifies the result.| 
 | | Sends the TS\_URB\_PIPE_REQUEST with URB\_FUNCTION\_ABORT_PIPE and verifies the result.| 
-| | Sends retract device request and the channel for the device is expected to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed.|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| S3\_EUSB\_OperateIo_GetCurrentFrameNumber| 
@@ -644,11 +646,10 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 | | Registers a callback to provide the Request Completion Interface to the client.| 
 | | Sends TS\_URB\_GET\_CURRENT\_FRAME_NUMBER request.| 
 | | Receives TS\_URB\_GET\_CURRENT\_FRAME\_NUMBER_RESULT in the URB\_COMPLETION\_NO_DATA message.| 
-| | Sends retract device request and the channel for the device is expected to be closed. | 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed. |  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| S3\_EUSB\_OperateIo_GetStatus| 
@@ -663,11 +664,10 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 | | Selects the device configuration.| 
 | | Retrieves the status from the device by sending TS\_URB\_CONTROL\_GET\_STATUS_REQUEST and verifies the response.| 
 | | Enumerates all interfaces and endpoints of the device and retrieves their status.| 
-| | Sends retract device request and the channel for the device is expected to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed.|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| S3\_EUSB\_OperateIo_GetConfiguration| 
@@ -680,11 +680,10 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 | | Receives an add device request.| 
 | | Registers a callback to provide the Request Completion Interface to the client.| 
 | | Sends TS\_URB\_CONTROL\_GET\_CONFIGURATION\_REQUEST and verifies the response.| 
-| | Sends retract device request and the channel for the device is expected to be closed. .| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed. .|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| S3\_EUSB\_OperateIo_GetInterface| 
@@ -697,11 +696,10 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 | | Receives an add device request.| 
 | | Registers a callback to provide the Request Completion Interface to the client.| 
 | | Sends TS\_URB\_CONTROL\_GET\_CONFIGURATION_REQUEST and verifies the response.| 
-| | Sends retract device request and the channel for the device is expected to be closed. .| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed. .|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| S3\_EUSB\_OperateIo_OsFeatureDescriptor| 
@@ -714,11 +712,10 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 | | Receives an add device request.| 
 | | Registers a callback to provide the Request Completion Interface to the client.| 
 | | Sends TS\_URB\_CONTROL\_GET\_CONFIGURATION_REQUEST and verifies the response.| 
-| | Sends retract device request and the channel for the device is expected to be closed. .| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed. .|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| S3\_EUSB\_OperateIo_ResetPort| 
@@ -732,11 +729,10 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 | | Registers a callback to provide the Request Completion Interface to the client.| 
 | | Sends an IOCTL\_INTERNAL\_USB\_RESET_PORT request.| 
 | | Receives a completion message.| 
-| | Sends retract device request and the channel for the device is expected to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed.|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| S3\_EUSB\_OperateIo_GetPortStatus| 
@@ -750,11 +746,10 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 | | Registers a callback to provide the Request Completion Interface to the client.| 
 | | Sends an IOCTL\_INTERNAL\_USB\_GET\_PORT_STATUS request.| 
 | | Receives a completion message.| 
-| | Sends retract device request and the channel for the device is expected to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed.|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| S3\_EUSB\_OperateIo_GetHubCount| 
@@ -768,11 +763,10 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 | | Registers a callback to provide the Request Completion Interface to the client.| 
 | | Sends an IOCTL\_INTERNAL\_USB\_GET\_HUB_COUNT request.| 
 | | Receives a completion message.| 
-| | Sends retract device request and the channel for the device is expected to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed.|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| S3\_EUSB\_OperateIo_CyclePort| 
@@ -786,11 +780,10 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 | | Registers a callback to provide the Request Completion Interface to the client.| 
 | | Sends an IOCTL\_INTERNAL\_USB\_CYCLE_PORT request.| 
 | | Receives a completion message.| 
-| | Sends retract device request and the channel for the device is expected to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed.|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| S3\_EUSB\_OperateIo_GetBusInfo| 
@@ -804,11 +797,10 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 | | Registers a callback to provide the Request Completion Interface to the client.| 
 | | Sends an IOCTL\_INTERNAL\_USB\_GET\_BUS_INFO request.| 
 | | Receives a completion message.| 
-| | Sends retract device request and the channel for the device is expected to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed.|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| S3\_EUSB\_OperateIo_GetControllerName| 
@@ -822,11 +814,10 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 | | Registers a callback to provide the Request Completion Interface to the client.| 
 | | Sends an IOCTL\_INTERNAL\_USB\_GET\_CONTROLLER_NAME request.| 
 | | Receives a completion message.| 
-| | Sends retract device request and the channel for the device is expected to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed.|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| S3\_EUSB\_OperateIo\_OSRFX2_BargraphDisplay| 
@@ -839,11 +830,10 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 | | Receives an add device request.| 
 | | Registers a callback to provide the Request Completion Interface to the client. | 
 | | Sends several TS\_URB\_CONTROL\_VENDOR\_OR\_CLASS\_REQUESTs with the vendor command code SET\_BARGRAPH\_DISPLAY to change state of the bar graph display on the device, then READ\_BARGRAPH_DISPLAY to retrieve the state.| 
-| | Sends retract device request and the channel for the device is expected to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed.|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| S3\_EUSB\_OperateIo\_OSRFX2_SegmentDisplay| 
@@ -856,11 +846,10 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 | | Receives an add device request.| 
 | | Registers a callback to provide the Request Completion Interface to the client. | 
 | | Sends several TS\_URB\_CONTROL\_VENDOR\_OR\_CLASS\_REQUESTs with the vendor command code SET\_\7\_SEGMENT\_DISPLAY to change state of the 7-segment display on the device, then READ\_7\_SEGMENT_DISPLAY to retrieve the state.| 
-| | Sends retract device request and the channel for the device is expected to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed.|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| S3\_EUSB\_OperateIo\_OSRFX2\_IsHighSpeed| 
@@ -873,11 +862,10 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 | | Receives an add device request.| 
 | | Registers a callback to provide the Request Completion Interface to the client. | 
 | | Sends TS\_URB\_CONTROL\_VENDOR\_OR\_CLASS\_REQUEST with the vendor command code IS\_HIGH_SPEED to check the state of the device.| 
-| | Sends retract device request and the channel for the device is expected to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed.|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| S3\_EUSB\_OperateIo\_OSRFX2_ReadSwitches| 
@@ -890,11 +878,10 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 | | Receives an add device request.| 
 | | Registers a callback to provide the Request Completion Interface to the client. | 
 | | Sends TS\_URB\_CONTROL\_VENDOR\_OR\_CLASS\_REQUEST with the vendor command code READ_SWITCHES to check the switch state of the device.| 
-| | Sends retract device request and the channel for the device is expected to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed.|  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| S3\_EUSB\_OperateIo\_OSRFX2_InterruptIn| 
@@ -908,11 +895,10 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 | | Registers a callback to provide the Request Completion Interface to the client.| 
 | | Select the configuration with index 0.| 
 | | Query the switch states from the interrupt endpoint for serveral times.| 
-| | Sends retract device request and the channel for the device is expected to be closed. | 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed. |  
 |  **Cleanup**| N/A| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_OperateIo**| | 
 |  **Test ID**| S3\_EUSB\_OperateIo\_OSRFX2_BulkWriteRead| 
@@ -927,8 +913,7 @@ Please refer to “[BVT Test Cases](#_BVT_Test_Cases)”.
 | | Select the configuration with index 0.| 
 | | Writes test data to the bulk write endpoint.| 
 | | Reads data from the bulk read endpoint and verifies they read are same as written data.| 
-| | Sends retract device request and the channel for the device is expected to be closed.| 
-|  **Requirements Covered**| N/A| 
+| | Sends retract device request and the channel for the device is expected to be closed.|  
 |  **Cleanup**| N/A| 
 
 ## <a name="_Toc326658530"/>Appendix

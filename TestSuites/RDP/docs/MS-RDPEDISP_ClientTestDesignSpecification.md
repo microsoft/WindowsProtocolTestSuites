@@ -114,6 +114,7 @@ Preconditions:
 * RDPEDYC dynamic virtual channel established.
 
 Typical Sequence:
+
 The typical scenario sequence is the following:
 
 * RDP server sends a DISPLAYCONTROL\_CAPS\_PDU PDU through RDPEDYC dynamic virtual channel whose name is "Microsoft::Windows::RDS::DisplayControl" specified in [MS-RDPEDYC] section 2.2.2.1.
@@ -121,6 +122,7 @@ The typical scenario sequence is the following:
 * RDP Client sends a DISPLAYCONTROL\_MONITOR\_LAYOUT_PDU PDU when screen resolution on client is updated.
 
 Scenario Testing:
+
 This scenario will test the following structures:
 
 * DISPLAYCONTROL_HEADER 
@@ -145,6 +147,7 @@ Preconditions:
 * RDPEDYC dynamic virtual channel established.
 
 Typical Sequence:
+
 The typical scenario sequence is the following:
 
 * RDP server sends a DISPLAYCONTROL\_CAPS\_PDU PDU through RDPEDYC dynamic virtual channel whose name is "Microsoft::Windows::RDS::DisplayControl" specified in [MS-RDPEDYC] section 2.2.2.1.
@@ -152,6 +155,7 @@ The typical scenario sequence is the following:
 * RDP Client sends a DISPLAYCONTROL\_MONITOR\_LAYOUT_PDU PDU when screen orientation on client is updated.
 
 Scenario Testing:
+
 This scenario will test the following structures:
 
 * DISPLAYCONTROL_HEADER 
@@ -176,6 +180,7 @@ Preconditions:
 * RDPEDYC dynamic virtual channel established.
 
 Typical Sequence:
+
 The typical scenario sequence is the following:
 
 * RDP server sends a DISPLAYCONTROL\_CAPS_PDU PDU through RDPEDYC dynamic virtual channel whose name is "Microsoft::Windows::RDS::DisplayControl" specified in [MS-RDPEDYC] section 2.2.2.1.
@@ -183,6 +188,7 @@ The typical scenario sequence is the following:
 * RDP Client sends a DISPLAYCONTROL\_MONITOR\_LAYOUT_PDU PDU when addition or removal of monitors happens. 
 
 Scenario Testing:
+
 This scenario will test the following structures:
 
 * DISPLAYCONTROL_HEADER 
@@ -207,6 +213,7 @@ Preconditions:
 * RDPEDYC dynamic virtual channel established.
 
 Typical Sequence:
+
 The typical scenario sequence is the following:
 
 * RDP server sends a DISPLAYCONTROL\_CAPS_PDU PDU through RDPEDYC dynamic virtual channel whose name is "Microsoft::Windows::RDS::DisplayControl" specified in [MS-RDPEDYC] section 2.2.2.1.
@@ -214,6 +221,7 @@ The typical scenario sequence is the following:
 * RDP Client sends a DISPLAYCONTROL\_MONITOR\_LAYOUT_PDU PDU when position of monitors is updated.
 
 Scenario Testing:
+
 This scenario will test the following structures:
 
 * DISPLAYCONTROL_HEADER 
@@ -289,7 +297,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 #### <a name="_Toc427063093"/>S1_ResolutionChange
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S1_ResolutionChange**| | 
 |  **Test ID**| S1\_RDPEDISP\_ResolutionChange_DeactivationReactivation| 
@@ -307,11 +315,10 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | None of the specified monitors overlap.| 
 | | Each monitor is adjacent to at least one other monitor (even if only at a single point).| 
 | | If the above requirements are all satisfied, test suite should initiate a Deactivation-Reactivation Sequence.| 
-| | Expect client to change screen resolution of the remote desktop session.| 
-|  **Requirements Covered**| N/A| 
+| | Expect client to change screen resolution of the remote desktop session.|  
 |  **Cleanup**| Restore the screen resolution of SUT.| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S1_Connection**| | 
 |  **Test ID**| S1\_RDPEDISP\_ResolutionChange_RestartGraphicsPipeline| 
@@ -330,12 +337,11 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Each monitor is adjacent to at least one other monitor (even if only at a single point).| 
 | | If the above requirements are all satisfied, test suite should send surface management commands to restart the graphics pipeline.| 
 | | Expect client to change screen resolution of the remote desktop session.| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| Restore the screen resolution of SUT.| 
 
 #### <a name="_Toc427063094"/>S2_OrientationChange
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S2_OrientationChange**| | 
 |  **Test ID**| S2\_ RDPEDISP\_OrientationChange_DeactivationReactivation| 
@@ -354,10 +360,9 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Each monitor is adjacent to at least one other monitor (even if only at a single point).| 
 | | If the above requirements are all satisfied, test suite should initiate a Deactivation-Reactivation Sequence.| 
 | | Expect client to change screen orientation of the remote desktop session.| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| Restore the screen orientation of SUT.| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S2_OrientationChange**| | 
 |  **Test ID**| S2\_ RDPEDISP\_OrientationChange_RestartGraphicsPipeline| 
@@ -376,10 +381,9 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Each monitor is adjacent to at least one other monitor (even if only at a single point).| 
 | | If the above requirements are all satisfied, test suite should send surface management commands to restart the graphics pipeline.| 
 | | Expect client to change screen orientation of the remote desktop session.| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| Restore the screen orientation of SUT.| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S2_OrientationChange**| | 
 |  **Test ID**| S2\_RDPEDISP\_OrientationAllChange_EnhancedAdapterDemo| 
@@ -399,10 +403,9 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | If the above requirements are all satisfied, test suite should send surface management commands to restart the graphics pipeline.| 
 | | Expect client to change screen orientation of the remote desktop session.| 
 | | Repeat Step 11 to 14 until test case finishes.| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| Restore the screen orientation of SUT.| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S2_OrientationChange**| | 
 |  **Test ID**| S2\_ RDPEDISP\_OrientationAllChange_DeactivationReactivation| 
@@ -425,10 +428,9 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Repeat Step 5 to 7.| 
 | | Trigger client to change screen orientation from Portrait (flipped) to Landscape to and maximize the window of RDP session.| 
 | | Repeat Step 5 to 7.| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| Restore the screen orientation of SUT.| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S2_OrientationChange**| | 
 |  **Test ID**| S2\_ RDPEDISP\_OrientationAllChange_RestartGraphicsPipeline| 
@@ -451,12 +453,11 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Repeat Step 5 to 7.| 
 | | Trigger client to change screen orientation from Portrait (flipped) to Landscape and maximize the window of RDP session.| 
 | | Repeat Step 5 to 7.| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| Restore the screen orientation of SUT.| 
 
 #### <a name="_Toc427063095"/>S3_MonitorAdditionRemoval
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_MonitorAdditionRemoval**| | 
 |  **Test ID**| S3\_ RDPEDISP\_MonitorAdditionRemoval_DeactivationReactivation| 
@@ -477,10 +478,9 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Expect client to change number or monitors for the remote desktop session.| 
 | | Trigger client to change number of monitors by removing a monitor and maximize the window of RDP session.| 
 | | Repeat Step 5 to 7.| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| Restore the number of monitors to default.| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_MonitorAdditionRemoval**| | 
 |  **Test ID**| S2\_ RDPEDISP\_MonitorAdditionRemoval_RestartGraphicsPipeline| 
@@ -501,12 +501,11 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Expect client to change number of monitors for the remote desktop session.| 
 | | Trigger client to change number of monitors by removing a monitor and maximize the window of RDP session.| 
 | | Repeat step 5 to 7.| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| Restore the number of monitors to default.| 
 
 #### <a name="_Toc427063096"/>S4_MonitorReposition
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_MonitorAdditionRemoval**| | 
 |  **Test ID**| S3\_ RDPEDISP\_MonitorReposition_DeactivationReactivation| 
@@ -525,10 +524,9 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Each monitor is adjacent to at least one other monitor (even if only at a single point).| 
 | | If the above requirements are all satisfied, test suite should initiate a Deactivation-Reactivation Sequence.| 
 | | Expect client to change position of monitors for the remote desktop session.| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| Restore the position of monitors to default.| 
 
-| &#32;| &#32; |
+
 | -------------| ------------- |
 |  **S3_MonitorAdditionRemoval**| | 
 |  **Test ID**| S2\_ RDPEDISP\_MonitorReposition_RestartGraphicsPipeline| 
@@ -547,7 +545,6 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Each monitor is adjacent to at least one other monitor (even if only at a single point).| 
 | | If the above requirements are all satisfied, test suite should send surface management commands to restart the graphics pipeline.| 
 | | Expect client to change position of monitors for the remote desktop session.| 
-|  **Requirements Covered**| N/A| 
 |  **Cleanup**| Restore the position of monitors to default.| 
 
 ## <a name="_Toc427063097"/>Appendix
