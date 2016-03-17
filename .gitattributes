@@ -16,20 +16,40 @@
 # Sources (Managed)
 *.cs	wintext
 *.ptfconfig	wintext
+*.opn	wintext
+*.asset	wintext
+*.metadata	wintext
+*.inf	wintext
+*.cdf	wintext
+*.vsmdi	wintext
+*.TestSettings wintext
+
 
 # Sources (Script)
 *.cmd	wintext
+*.bat	wintext
+*.sh	wintext
+*.vbs	wintext
+
 
 # Configuration
 *.gitattributes	wintext
 *.gitignore	wintext
 
 #Binaries
-*.exe  binary
-*.dll  binary
-*.obj  binary
-*.pdb  binary
+*.exe  	binary
+*.dll  	binary
+*.obj  	binary
+*.pdb  	binary
+*.msi	binary
+*.cer	binary
+*.cat	binary
+*.sys	binary
+*.rdp   binary
 
 #Images (Binary)
 *.png binary
 *.jpg binary
+*.bmp binary
+*.pdf binary
+*.jpeg binary

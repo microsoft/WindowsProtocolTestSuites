@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--?define REDIST_DIR=$(env.INETROOT)\build\external\redist?-->
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+    
+    <!-- TODO: Define  merge module if necessary. Choose correct version. -->
+    <!--
+    <DirectoryRef Id="TESTSUITE_ROOT_DIR">
+      <Merge Id="VC90PolicyRedistMergeModule"
+                SourceFile="$(var.REDIST_DIR)\policy_9_0_Microsoft_VC90_CRT_x86.msm"
+                DiskId="1"
+                Language="0" />
+
+      <Merge Id="VC90RedistMergeModule"
+             SourceFile="$(var.REDIST_DIR)\Microsoft_VC90_CRT_x86.msm"
+             DiskId="1"
+             Language="0" />
+
+        <Merge Id="VC100RedistMergeModule"
+               SourceFile="$(var.REDIST_DIR)\Microsoft_VC100_CRT_x86.msm"
+               DiskId="1"
+               Language="0" />
+    -->
+
+
+    <!-- TODO: Install Merge Modules. If SUT needs merge modules, move them to SutFeature. -->
+    <!--
+    <FeatureRef Id="TestSuiteFeature">
+        <MergeRef Id="VC90PolicyRedistMergeModule"/>
+        <MergeRef Id="VC90RedistMergeModule"/>
+        <MergeRef Id="VC100RedistMergeModule"/>
+    </FeatureRef>
+    -->
+    
+  </Fragment>
+</Wix>

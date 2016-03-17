@@ -25,6 +25,7 @@
   </PropertyGroup>
   <Import Project="$(WixTargetsPath)" />
   <ItemGroup>
+    <Compile Include="RDPPlugin.wxs" />
     <Compile Include="Product.wxs" />
     <Compile Include="PrivacyDlg.wxs" />
     <Compile Include="ProtoSDK.wxs" />
@@ -86,6 +87,14 @@
     <ProjectReference Include="..\Plugins\FileServerPlugin\FileServerPlugin\FileServerPlugin.csproj">
       <Name>FileServerPlugin</Name>
       <Project>{20855E41-DDBD-4886-AB6B-135005475CFF}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+   <ProjectReference Include="..\Plugins\RDPPlugin\RDPPlugin\RDPPlugin.csproj">
+      <Name>RDPPlugin</Name>
+      <Project>{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>

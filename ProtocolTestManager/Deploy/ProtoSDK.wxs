@@ -7,6 +7,10 @@
   <Fragment Id="ProtoSDK">
 
     <ComponentGroup Id="ProductComponents_ProtoSDK" Directory="LIBFOLDER">
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Asn1Base.dll" Guid="{76A7792D-FDCD-4092-9BDE-9E5D3795BFC5}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.Asn1Base.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Asn1Base.dll" />
+      </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.dll" Guid="{56A4492D-FDCD-4092-9BDE-9E5D3795BFC5}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestTools.StackSdk.dll"
               Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.dll" />
@@ -66,6 +70,50 @@
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Transport.dll" Guid="{CE1D5237-8E9D-4032-938D-38C98DB6ED13}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestTools.StackSdk.Transport.dll"
               Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Transport.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.dll" Guid="{48A2467D-F9DA-4DF1-9BBE-A54305284853}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedisp.dll" Guid="{C5669DF3-4176-4E0F-B38A-D093370F0643}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedisp.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedisp.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc.dll" Guid="{23D54707-8B4F-4E20-9D1C-A5E8C8DD4AFD}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx.dll" Guid="{C12869C5-66AB-49F2-B220-777059D199C4}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegt.dll" Guid="{6C40D63A-8874-4232-AC4D-AAB28073726D}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegt.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegt.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei.dll" Guid="{8F518DE7-798D-4659-BA94-F1FD8B189864}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt.dll" Guid="{62DEE27E-1B18-455F-A644-501436486836}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp.dll" Guid="{C3B3BB14-E2B6-44F8-B248-802152D94F1F}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeusb.dll" Guid="{0F1745B8-0334-4915-8419-1E1C0925E2EE}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeusb.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeusb.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpevor.dll" Guid="{F6091E95-5087-42D4-95E9-4881AAD5CE4E}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpevor.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpevor.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx.dll" Guid="{EFE82390-887D-4F52-8D98-B1E0812FA1B2}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx.dll" />
       </Component>
     </ComponentGroup>
 
