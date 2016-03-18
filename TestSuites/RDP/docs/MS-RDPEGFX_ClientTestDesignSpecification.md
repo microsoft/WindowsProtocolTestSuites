@@ -48,6 +48,7 @@
 
 ### <a name="_Toc427065066"/>Technical Document Overview
 The Remote Desktop Protocol: Graphics Pipeline Extension applies to the Remote Desktop Protocol: Basic Connectivity and Graphics Remoting, as specified in [MS-RDPBCGR]. The graphics protocol is used to efficiently encode graphics display data generated in a session associated with a remote user on a terminal server so that the data can be sent on the wire, received, decoded, and rendered by a compatible client.
+
 The graphics protocol introduces bitmap cache and two new graphics encoding technique (ClearCodec and RemoteFX Progressive Codec) to improve the efficiency of transferring graphics bitmap data.
 
 ### <a name="_Toc427065067"/>Relationship to Other Protocols 
@@ -110,7 +111,7 @@ The typical message flow of this protocol is described in following figures.
 
 ![image2.png](./image/MS-RDPEGFX_ClientTestDesignSpecification/image2.png)
 
-Figure 1-1: MS-RDPEGFX typical message flow
+_Figure 1-1: MS-RDPEGFX typical message flow_
 
 ### <a name="_Toc427065069"/>Protocol Properties
 * MS-RDPEGFX is a block protocol.
@@ -576,7 +577,7 @@ Figure 3-1 illustrates the architecture of the MS-RDPBCGR test suite for client 
 
 ![image3.png](./image/MS-RDPEGFX_ClientTestDesignSpecification/image3.png)
 
- Figure 3-1 MS-RDPEGFX Test Suite Architecture
+ _Figure 3-1 MS-RDPEGFX Test Suite Architecture_
  
 As shown in Figure 31, MS-RDPEGFX is using the synthetic server pattern to design the test suite architecture. MS-RDPEGFX Test Suite contains the following components:
 
@@ -721,7 +722,7 @@ Below table shows the test case number of each scenario.
 | H264 Codec Test| 14| 3| 4| 10| 0| 
 |  **Summary**|  **151**| **16**|  **25**|  **126**| 0| 
 
-The total BVT case number is 12, non-BVT(P0+P1）case is 124, P2 case is 0 and the all case number is 133.
+The total BVT case number is 16, non-BVT case is 135, P2 case is 0 and the all case number is 151.
 
 ### <a name="_Toc427065100"/>Test Cases Description 
 The test suite is a synthetic RDP server. In the following descriptions, all instances of the term “Test Suite” can be understood as the RDP server.

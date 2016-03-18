@@ -437,7 +437,7 @@ The typical scenario sequence is as follows:
 
 * The server disconnects.
 
-Scenario Testing:
+**Scenario Testing:**
 
 Fast-Path Input Event PDUs with the following input events:
 
@@ -650,7 +650,7 @@ Figure 3\-1 illustrates the architecture of the MS-RDPBCGR test suite for client
 
 ![image3.png](./image/MS-RDPBCGR_ClientTestDesignSpecification/image3.png)
 
- Figure 3\-1 MS-RDPBCGR Test Suite Architecture
+ _Figure 3\-1 MS-RDPBCGR Test Suite Architecture_
  
 As shown in Figure 3\-1, MS-RDPBCGR is using the synthetic server pattern to design the test suite architecture. The MS-RDPBCGR Test Suite contains the following components:
 

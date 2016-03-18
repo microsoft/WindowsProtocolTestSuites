@@ -21,6 +21,7 @@
 
 ##<a name="1"/>Test Environment
 The RDP test environment includes two endpoints: a RDP server and a RDP client. The RDP server hosts the test suite and the RDP client hosts the RDP client to be tested.
+
 For most of the test cases, the RDP server and RDP client can be a physical or a virtual machine. However, to run the MS-RDPEUSB test cases, the RDP client machine should be a physical machine because this test case requires that a specific USB device be connected to the RDP client. 
 
 **Operating System Requirements**

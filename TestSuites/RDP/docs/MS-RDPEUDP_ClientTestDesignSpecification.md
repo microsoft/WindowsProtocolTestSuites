@@ -34,6 +34,7 @@
 
 ### <a name="_Toc350342266"/>Technical Document Overview
 The Remote Desktop Protocol: UDP Transport Extension Protocol has been designed to improve the performance of the network connectivity compared to a corresponding RDP-TCP connection, especially on wide area networks (WANs) or wireless networks.
+
 It has the following two primary goals:
 
 * Gain a higher network share while reducing the variation in packet transit delays.
@@ -47,6 +48,7 @@ The Remote Desktop Protocol: UDP Transport Extension Protocol works on top of th
 
 ### <a name="_Toc350342268"/>Protocol Operations/Messages 
 **Structures and Messages**
+
 There are 7 structures described by this protocol.
 
 * RDPUDP\_FEC_HEADER
@@ -75,15 +77,20 @@ There are 5 messages consisted of the above structures.
 
 * ACK and FEC Packets Data
 
-**Message Flows:** The two endpoints, the terminal client and the terminal server, first set up a connection, and then transfer the data as shown in the following figure. 
+**Message Flows:** 
+
+The two endpoints, the terminal client and the terminal server, first set up a connection, and then transfer the data as shown in the following figure. 
 
 ![image2.jpeg](./image/MS-RDPEUDP_ClientTestDesignSpecification/image2.jpeg)
 
 ### <a name="_Toc350342269"/>Protocol Properties
-RDPEUDP is a block protocol and an extension of MS-RDPBCGR.
-RDPEUDP specifies network connectivity between the user's machine and a remote computer system over the User Datagram Protocol (UDP).
-The transport of RDPEUDP is UDP.
-RDPEUDP doesn’t have any authentication, encryption and compression methods.
+* RDPEUDP is a block protocol and an extension of MS-RDPBCGR.
+
+* RDPEUDP specifies network connectivity between the user's machine and a remote computer system over the User Datagram Protocol (UDP).
+
+* The transport of RDPEUDP is UDP.
+
+* RDPEUDP doesn’t have any authentication, encryption and compression methods.
 
 ## <a name="_Toc350342270"/>Test Method
 
@@ -94,11 +101,15 @@ The RDP client machine should Support using RDP-UDP transport.
 
 **Scope:**
 
-The protocol client endpoint (RDP client) playing the client role will be tested. For Windows, the Remote Desktop Client (MSTSC.exe) is the client endpoint.
-The protocol server endpoint (RDP Server) playing the server role is out of scope.
-For Windows, the System under Test (SUT) will be mstsc.exe.
-External protocols are out of scope.
-Compression and encryption are out of scope.
+* The protocol client endpoint (RDP client) playing the client role will be tested. For Windows, the Remote Desktop Client (MSTSC.exe) is the client endpoint.
+
+* The protocol server endpoint (RDP Server) playing the server role is out of scope.
+
+* For Windows, the System under Test (SUT) will be mstsc.exe.
+
+* External protocols are out of scope.
+
+* Compression and encryption are out of scope.
 
 **Constraint:**
 
@@ -106,6 +117,7 @@ There is no constraint for this Test Suite.
 
 ### <a name="_Toc350342272"/>Test Approach
 Because the MS-RDPEUDP client test code is merged into the MS-RDPBCGR test code, it applies the same test approach used for MS-RDPBCGR: traditional testing. 
+
 For more details about the reason for choosing traditional testing, please refer to MS-RDPBCGR_ClientTestDesignSpecificaitoin.docx.
 
 ### <a name="_Toc350342273"/>Test Scenarios
@@ -173,15 +185,16 @@ This scenario will test the following messages:
 ### <a name="_Toc350342277"/>Test Suite Architecture
 
 #### <a name="_Toc350342278"/>System under Test (SUT)
-From the third party point of view, the SUT is a component which implements MS-RDPEUDP.
-From the Windows implementation point of view, the SUT is the Remote Desktop Client (Mstsc.exe).
+* From the third party point of view, the SUT is a component which implements MS-RDPEUDP.
+
+* From the Windows implementation point of view, the SUT is the Remote Desktop Client (Mstsc.exe).
 
 #### <a name="_Toc350342279"/>Test Suite Architecture
 Figure 3-1 illustrates the architecture of the MS-RDPEUDP test suite for client endpoint testing.
 
 ![image3.png](./image/MS-RDPEUDP_ClientTestDesignSpecification/image3.png)
 
- Figure 3-1 MS-RDPEUDP Test Suite Architecture
+ _Figure 3-1 MS-RDPEUDP Test Suite Architecture_
  
 As shown in Figure 3-1, MS-RDPEUDP is using the synthetic server pattern to design the test suite architecture. MS-RDPEUDP Test Suite contains the following components:
 
@@ -212,6 +225,7 @@ None.
 
 ### <a name="_Toc350342285"/>Traditional Test Case Design 
 The Traditional test approach is used to design all test cases. The test cases are designed to cover all in-scope testable requirements, including both positive and negative requirements. 
+
 The following table shows the number of test cases for each scenario. 
 
 |  **Scenario**|  **Test Cases**|  **BVTs**|  **P0**|  **P1**|  **P2**| 
@@ -221,9 +235,13 @@ The following table shows the number of test cases for each scenario.
 
 ### <a name="_Toc350342286"/>Test Cases Description 
 The test suite is a synthetic RDP server. In the following descriptions, all instances of the term “Test Suite” can be understood as the RDP server.
+
 **Common prerequisites for all test cases:**
-The test suite has established main RDP connection.
-The test suite has started the UDP listening service on the port which serves the RDP server.
+
+* The test suite has established main RDP connection.
+
+* The test suite has started the UDP listening service on the port which serves the RDP server.
+
 **Common cleanup requirements:**
 
 * The test suite disconnects all RDP connections if there any.

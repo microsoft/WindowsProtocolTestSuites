@@ -52,19 +52,19 @@ This protocol describes 6 messages, and these messages are divided into two dist
 
 * Initializing phase
 
-* RDPINPUT\_SC\_READY_PDU: this message is sent by the sever endpoint to indicate readiness to commence with touch remoting transactions.
+	* RDPINPUT\_SC\_READY_PDU: this message is sent by the sever endpoint to indicate readiness to commence with touch remoting transactions.
 
-* RDPINPUT\_CS\_READY_PDU: this message is sent by the client endpoint to indicate readiness to commence with touch remoting transactions.
+	* RDPINPUT\_CS\_READY_PDU: this message is sent by the client endpoint to indicate readiness to commence with touch remoting transactions.
 
 * Running phase
 
-* RDPINPUT\_TOUCH\_EVENT_PDU: this message is sent by the client endpoint to remote a collection of touch frames.
+	* RDPINPUT\_TOUCH\_EVENT_PDU: this message is sent by the client endpoint to remote a collection of touch frames.
 
-* RDPINPUT\_SUSPEND\_TOUCH\_PDU: this message is sent by the server endpoint to instruct the client to suspend the transmission of the RDPINPUT\_TOUCH\_EVENT_PDU.
+	* RDPINPUT\_SUSPEND\_TOUCH\_PDU: this message is sent by the server endpoint to instruct the client to suspend the transmission of the RDPINPUT\_TOUCH\_EVENT_PDU.
 
-* RDPINPUT\_RESUME\_TOUCH\_PDU: this message is sent by the server endpoint to instruct the client to resume the transmission of the RDPINPUT\_TOUCH\_EVENT_PDU.
+	* RDPINPUT\_RESUME\_TOUCH\_PDU: this message is sent by the server endpoint to instruct the client to resume the transmission of the RDPINPUT\_TOUCH\_EVENT_PDU.
 
-* RDPINPUT\_DISMISS\_HOVERING\_CONTACT_PDU: this message is sent by the client endpoint to instruct the server to transition a contact in the “hovering” state to the “out of range” state.
+	* RDPINPUT\_DISMISS\_HOVERING\_CONTACT_PDU: this message is sent by the client endpoint to instruct the server to transition a contact in the “hovering” state to the “out of range” state.
 
 The typical message flow of this protocol is described in following figure (Figure 1-1).
 
@@ -96,6 +96,7 @@ In scope:
 Protocol client endpoint (RDP client), playing the client role, will be tested. For Windows, Terminal Client (MSTSC.exe) is the client endpoint. 
 
 Out of scope:
+
 Protocol Server endpoint (RDP Server), playing the server role, is out of scope for testing. 
 
 **Constraint:**
@@ -173,15 +174,16 @@ This scenario will test the following messages:
 ### <a name="_Toc347752040"/>Test Suite Architecture
 
 #### <a name="_Toc347752041"/>System under Test (SUT)
-From the third party point of view, the SUT is a component which implements MS-RDPEI.
-From the Windows implementation point of view, the SUT is a Remote Desktop Client (Mstsc.exe).
+* From the third party point of view, the SUT is a component which implements MS-RDPEI.
+
+* From the Windows implementation point of view, the SUT is a Remote Desktop Client (Mstsc.exe).
 
 #### <a name="_Toc347752042"/>Test Suite Architecture
 Figure 3-1 illustrates the architecture of the MS-RDPEI test suite for client endpoint testing.
 
 ![image3.png](./image/MS-RDPEI_ClientTestDesignSpecification/image3.PNG)
 
-Figure 3-1 MS-RDPEI Test Suite Architecture
+_Figure 3-1 MS-RDPEI Test Suite Architecture_
 
 As shown in Figure 3-1, MS-RDPEI is using the synthetic server pattern to design the test suite architecture. MS-RDPEI Test Suite contains the following components:
 
@@ -214,16 +216,21 @@ None.
 
 #### <a name="_Toc347752048"/>Adapter Overview
 The MS-RDPEI Client Test Suite implements no protocol adapter. It uses the SUT control adapter and the protocol adapter of MS-RDPBCGR. 
+
 Moreover, the MS-RDPEI Client Test Suite also uses another Rdpei SUT control adapter for interactive testing. 
+
 For the details about the SUT control adapter and the protocol adapter of MS-RDPBCGR, please refer to **MS-RDPBCGR_ClientTestDesignSpecificaitoin.md**.
 
 #### <a name="_Toc347752049"/>Technical Feasibility of Adapter Approach
-SUT Control Adapter:
+**SUT Control Adapter:**
+
 MS-RDPEI test suite reuses the SUT control adapter of MS-RDPBCGR. Please refer to section 3.3.3 of **MS-RDPBCGR_ClientTestDesignSpecificaitoin.md** for the technical feasibility information of SUT control adapter.
+
 MS-RDPEI test suite also uses another Rdpei SUT control adapter for interactive tesing. The approach of this adapter is alternative. If the client implements MS-RDPRFX, it can be configured as “managed” adapter, which sends instruction images to the client to instruct user to trigger the client. If the client doesn’t implement MS-RDPRFX, it should be configured as “interactive” adapter.
 
 #### <a name="_Toc347752050"/>Adapter Abstract Level
-SUT Control Adapter of MS-RDPEI
+**SUT Control Adapter of MS-RDPEI**
+
 The SUT control adapter of MS-RDPEI defines 5 interfaces:
 
 **TriggerOneTouchEventOnClient**: This method is used to instruct user to trigger a touch event on the RDP client.
@@ -254,19 +261,19 @@ None.
 
 * Create and send following packets to the client
 
-* RDPINPUT\_SC\_READY_PDU (P0)
+	* RDPINPUT\_SC\_READY_PDU (P0)
 
-* RDPINPUT\_SUSPEND\_TOUCH_PDU (P0)
+	* RDPINPUT\_SUSPEND\_TOUCH_PDU (P0)
 
-* RDPINPUT\_RESUME\_TOUCH_PDU (P0)
+	* RDPINPUT\_RESUME\_TOUCH_PDU (P0)
 
 * Handling the following packets received from the client
 
-* RPDINPUT\_CS\_READY_PDU (P0)
+	* RPDINPUT\_CS\_READY_PDU (P0)
 
-* RDPINPUT\_TOUCH\_EVENT_PDU (P0)
+	* RDPINPUT\_TOUCH\_EVENT_PDU (P0)
 
-* RDPINPUT\_DISMISS\_HOVERING\_CONTACT_PDU (P1)
+	* RDPINPUT\_DISMISS\_HOVERING\_CONTACT_PDU (P1)
 
 * Create dynamic virtual channel (P0)
 
@@ -276,19 +283,19 @@ None.
 
 * Create and send following packets to the server
 
-* RPDINPUT\_CS\_READY_PDU (P0)
+	* RPDINPUT\_CS\_READY_PDU (P0)
 
-* RDPINPUT\_TOUCH\_EVENT_PDU (P0)
+	* RDPINPUT\_TOUCH\_EVENT_PDU (P0)
 
-* RDPINPUT\_DISMISS\_HOVERING\_CONTACT_PDU (P1)
+	* RDPINPUT\_DISMISS\_HOVERING\_CONTACT_PDU (P1)
 
 * Handling the following packets received from the server
 
-* RDPINPUT\_SC\_READY_PDU (P0)
+	* RDPINPUT\_SC\_READY_PDU (P0)
 
-* RDPINPUT\_SUSPEND\_TOUCH_PDU (P0)
+	* RDPINPUT\_SUSPEND\_TOUCH_PDU (P0)
 
-* RDPINPUT\_RESUME\_TOUCH_PDU (P0)
+	* RDPINPUT\_RESUME\_TOUCH_PDU (P0)
 
 * Call back on receiving a message from the dynamic virtual channel (P0)
 
@@ -296,6 +303,7 @@ None.
 
 ### <a name="_Toc347752057"/>Traditional Test Case Design
 The Traditional test approach is used to design all test cases. The test cases are designed to cover all in-scope testable requirements, including both positive and negative requirements. 
+
 Below table shows the test case number of each scenario. 
 
 |  **Scenario**|  **Test Case Number**|  **BVT**|  **P0**|  **P1**| 

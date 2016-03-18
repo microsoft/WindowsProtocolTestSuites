@@ -60,9 +60,9 @@ Bootstrapping, creating, securing and finalizing a multitransport connection use
 Figure 1: Messages used by multitransport connections
 
 ### <a name="_Toc350340312"/>Protocol Properties
-RDPEMT is a block protocol and an extension of MS-RDPBCGR.
-RDPEMT operates over the RDP-UDP protocol, as defined in [MS-RDPEUDP]).
-All multitransport connections are secured by using either Transport Layer Security (TLS) ([[RFC2246]](http://go.microsoft.com/fwlink/?LinkId=90324), [[RFC4346]](http://go.microsoft.com/fwlink/?LinkId=90474) and [[RFC5246]](http://go.microsoft.com/fwlink/?LinkId=129803)) or Datagram Transport Layer Security (DTLS) ([[RFC4347]](http://go.microsoft.com/fwlink/?LinkId=227111)).
+* RDPEMT is a block protocol and an extension of MS-RDPBCGR.
+* RDPEMT operates over the RDP-UDP protocol, as defined in [MS-RDPEUDP]).
+* All multitransport connections are secured by using either Transport Layer Security (TLS) ([[RFC2246]](http://go.microsoft.com/fwlink/?LinkId=90324), [[RFC4346]](http://go.microsoft.com/fwlink/?LinkId=90474) and [[RFC5246]](http://go.microsoft.com/fwlink/?LinkId=129803)) or Datagram Transport Layer Security (DTLS) ([[RFC4347]](http://go.microsoft.com/fwlink/?LinkId=227111)).
 
 ## <a name="_Toc350340313"/>Test Method
 
@@ -83,6 +83,7 @@ There is no constraint for this Test Suite.
 
 ### <a name="_Toc350340315"/>Test Approach
 Because the MS-RDPEMT client test code is merged into the MS-RDPBCGR test code, it applies the same test approach used for MS-RDPBCGR: traditional testing. 
+
 For more details about the reason for choosing traditional testing, please refer to **MS-RDPBCGR_ClientTestDesignSpecificaitoin.md**
 
 ### <a name="_Toc350340316"/>Test Scenarios
@@ -156,15 +157,16 @@ This scenario will test the following structures:
 ### <a name="_Toc350340320"/>Test Suite Architecture
 
 #### <a name="_Toc350340321"/>System under Test (SUT)
-From the third party point of view, the SUT is a component which implements MS-RDPEMT.
-From the Windows implementation point of view, the SUT is the Remote Desktop Client (Mstsc.exe).
+* From the third party point of view, the SUT is a component which implements MS-RDPEMT.
+
+* From the Windows implementation point of view, the SUT is the Remote Desktop Client (Mstsc.exe).
 
 #### <a name="_Toc350340322"/>Test Suite Architecture
 Figure 3-1 illustrates the architecture of the MS-RDPEMT test suite for client endpoint testing.
 
 ![image3.png](./image/MS-RDPEMT_ClientTestDesignSpecification/image3.png)
 
- Figure 3-1 MS-RDPEMT Test Suite Architecture
+ _Figure 3-1 MS-RDPEMT Test Suite Architecture_
  
 As shown in Figure 3-1, MS-RDPEMT is using the synthetic server pattern to design the test suite architecture. MS-RDPEMT Test Suite contains the following components:
 
@@ -201,10 +203,12 @@ All multitransport connections are secured by using either Transport Layer Secur
 ### <a name="_Toc350340329"/>Test Cases Description 
 The test suite is a synthetic RDP server. In the following descriptions, all instances of the term “Test Suite” can be understood as the RDP server.
 Common prerequisites for all test cases:
+
 * The test suite has established the main RDP connection.
 * The test suite has started the UDP listening service on the port which serves the RDP server.
 
 Common cleanup requirements:
+
 * The test suite disconnects all RDP connections if there any.
 * The test suite stops the TCP and UDP listening service.
 * The SUT deletes all data caches from previous RDP connections.   
