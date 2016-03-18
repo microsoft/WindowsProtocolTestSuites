@@ -60,10 +60,10 @@ The sequence of messages exchanged by the Remote Desktop Protocol: Display Contr
 Figure 1: The Display Control message sequence
 
 ### <a name="_Toc427063073"/>Protocol Properties
-RDPEDISP is a block protocol and an extension of MS-RDPBCGR.
-RDPEDISP is embedded in a RDPEDYC dynamic virtual channel transport.
-RDPEDISP operates only after the dynamic virtual channel transport is fully established. If the dynamic virtual channel transport is terminated, the RDPEDISP is also terminated.
-The protocol is terminated by closing the underlying virtual channel.
+* RDPEDISP is a block protocol and an extension of MS-RDPBCGR.
+* RDPEDISP is embedded in a RDPEDYC dynamic virtual channel transport.
+* RDPEDISP operates only after the dynamic virtual channel transport is fully established. If the dynamic virtual channel transport is terminated, the RDPEDISP is also terminated.
+* The protocol is terminated by closing the underlying virtual channel.
 
 ## <a name="_Toc427063074"/>Test Method
 
@@ -86,6 +86,7 @@ There is no constraint for this Test Suite.
 
 ### <a name="_Toc427063076"/>Test Approach
 Because the MS-RDPEDISP client test code is merged into the MS-RDPBCGR test code, it applies the same test approach used for MS-RDPBCGR: traditional testing. 
+
 For more details about the reason for choosing traditional testing, please refer to **MS-RDPBCGR_ClientTestDesignSpecificaitoin.md**.
 
 ### <a name="_Toc427063077"/>Test Scenarios
@@ -101,7 +102,7 @@ There are 4 scenarios defined in the MS-RDPEDISP client test suite for verifying
 ***Table 2-1 MS-RDPEMT Test Suite Scenarios***
 
 #### <a name="_Toc427063078"/>S1_ResolutionChange
-Preconditions:
+**Preconditions:**
 
 * RDP Client should not be thin client.
 
@@ -113,7 +114,7 @@ Preconditions:
 
 * RDPEDYC dynamic virtual channel established.
 
-Typical Sequence:
+**Typical Sequence:**
 
 The typical scenario sequence is the following:
 
@@ -121,7 +122,7 @@ The typical scenario sequence is the following:
 
 * RDP Client sends a DISPLAYCONTROL\_MONITOR\_LAYOUT_PDU PDU when screen resolution on client is updated.
 
-Scenario Testing:
+**Scenario Testing:**
 
 This scenario will test the following structures:
 
@@ -134,7 +135,7 @@ This scenario will test the following structures:
 * DISPLAYCONTROL\_MONITOR_LAYOUT
 
 #### <a name="_Toc427063079"/>S2_OrientationChange
-Preconditions:
+**Preconditions:**
 
 * RDP Client should not be thin client.
 
@@ -146,7 +147,7 @@ Preconditions:
 
 * RDPEDYC dynamic virtual channel established.
 
-Typical Sequence:
+**Typical Sequence:**
 
 The typical scenario sequence is the following:
 
@@ -154,7 +155,7 @@ The typical scenario sequence is the following:
 
 * RDP Client sends a DISPLAYCONTROL\_MONITOR\_LAYOUT_PDU PDU when screen orientation on client is updated.
 
-Scenario Testing:
+**Scenario Testing:**
 
 This scenario will test the following structures:
 
@@ -167,7 +168,7 @@ This scenario will test the following structures:
 * DISPLAYCONTROL\_MONITOR_LAYOUT
 
 #### <a name="_Toc427063080"/>S3_MonitorAdditionRemoval
-Preconditions:
+**Preconditions:**
 
 * RDP Client should not be thin client.
 
@@ -179,7 +180,7 @@ Preconditions:
 
 * RDPEDYC dynamic virtual channel established.
 
-Typical Sequence:
+**Typical Sequence:**
 
 The typical scenario sequence is the following:
 
@@ -187,7 +188,7 @@ The typical scenario sequence is the following:
 
 * RDP Client sends a DISPLAYCONTROL\_MONITOR\_LAYOUT_PDU PDU when addition or removal of monitors happens. 
 
-Scenario Testing:
+**Scenario Testing:**
 
 This scenario will test the following structures:
 
@@ -200,7 +201,7 @@ This scenario will test the following structures:
 * DISPLAYCONTROL\_MONITOR_LAYOUT
 
 #### <a name="_Toc427063081"/>S4_MonitorReposition
-Preconditions:
+**Preconditions:**
 
 * RDP Client should not be thin client.
 
@@ -212,7 +213,7 @@ Preconditions:
 
 * RDPEDYC dynamic virtual channel established.
 
-Typical Sequence:
+**Typical Sequence:**
 
 The typical scenario sequence is the following:
 
@@ -220,7 +221,7 @@ The typical scenario sequence is the following:
 
 * RDP Client sends a DISPLAYCONTROL\_MONITOR\_LAYOUT_PDU PDU when position of monitors is updated.
 
-Scenario Testing:
+**Scenario Testing:**
 
 This scenario will test the following structures:
 
@@ -237,8 +238,9 @@ This scenario will test the following structures:
 ### <a name="_Toc427063083"/>Test Suite Architecture
 
 #### <a name="_Toc427063084"/>System under Test (SUT)
-From the third party point of view, the SUT is a component which implements MS-RDPEDISP.
-From the Windows implementation point of view, the SUT is the Remote Desktop Client (Mstsc.exe).
+* From the third party point of view, the SUT is a component which implements MS-RDPEDISP.
+
+* From the Windows implementation point of view, the SUT is the Remote Desktop Client (Mstsc.exe).
 
 #### <a name="_Toc427063085"/>Test Suite Architecture
 Figure 3-1 illustrates the architecture of the MS-RDPEDISP test suite for client endpoint testing.
@@ -285,10 +287,12 @@ None.
 The test suite is a synthetic RDP server. In the following descriptions, all instances of the term “Test Suite” can be understood as the RDP server.
 
 Common prerequisites for all test cases:
+
 * The test suite has established the main RDP connection.
 * The test suite has established RDPEDYC dynamic virtual channel.
 
 Common cleanup requirements:
+
 * The test suite disconnects all RDP connections if there any.
 * The test suite stops the TCP and UDP listening service.
 * The SUT deletes all data caches from previous RDP connections.   

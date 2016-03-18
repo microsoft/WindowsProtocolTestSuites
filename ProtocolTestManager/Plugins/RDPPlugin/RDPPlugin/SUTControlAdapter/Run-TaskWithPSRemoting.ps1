@@ -1,6 +1,6 @@
-##################################################################################
-## Copyright (c) Microsoft Corporation. All rights reserved.
-##################################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 # This script is used to run a scheduled job on remote machine
 # Return Value: 0 indicates task is started successfully; -1 indicates failed to run the specified task
 

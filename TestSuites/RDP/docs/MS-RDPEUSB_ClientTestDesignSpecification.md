@@ -60,6 +60,7 @@ There are 17 protocol data units (PDUs) described by this protocol, and they can
 | Request Completion Interface| 3| 
 
 The Remote Desktop Protocol: USB Devices Virtual Channel Extension is divided into the following logical sequences:
+
 **Channel setup sequence**: A channel is opened, and capabilities are exchanged. The channel is assigned a specific identifier that is used by the client and the server to identify the USB device.
 
 ![image2.png](./image/MS-RDPEUSB_ClientTestDesignSpecification/image2.png)
@@ -73,27 +74,36 @@ The Remote Desktop Protocol: USB Devices Virtual Channel Extension is divided in
 ![image4.png](./image/MS-RDPEUSB_ClientTestDesignSpecification/image4.png)
 
 ### <a name="_Toc326658502"/>Protocol Properties
-RDPEUSB is a block protocol and is based on the RDPEDYC dynamic channel.
-RDPEUSB is a client-server protocol. The server role is responsible for creating and maintaining virtual channels. The server also receives redirected USB traffics from the client and sends USB packets to the client. The client role is responsible for notifying the USB device status and redirecting USB packets to the server. 
-RDPEUSB is synchronized for the channel setup sequence and new device sequence, but asynchronized for the I/O sequence.
-RDPEUSB is dependent on RDPEDYC and RDPBCGR.
-RDPEUSB doesn’t have any encryption methods. It only relies on the security methods of the transport protocol.
+* RDPEUSB is a block protocol and is based on the RDPEDYC dynamic channel.
+
+* RDPEUSB is a client-server protocol. The server role is responsible for creating and maintaining virtual channels. The server also receives redirected USB traffics from the client and sends USB packets to the client. The client role is responsible for notifying the USB device status and redirecting USB packets to the server. 
+
+* RDPEUSB is synchronized for the channel setup sequence and new device sequence, but asynchronized for the I/O sequence.
+
+* RDPEUSB is dependent on RDPEDYC and RDPBCGR.
+
+* RDPEUSB doesn’t have any encryption methods. It only relies on the security methods of the transport protocol.
 
 ## <a name="_Toc326658503"/>Test Method
 
 ### <a name="_Toc326658504"/>Assumptions, Scope and Constraints
 **Assumptions:**
 
-The RDP client machine should be configurable to redirect the specific USB devices.
+* The RDP client machine should be configurable to redirect the specific USB devices.
 
 **Scope:**
 
-The protocol client endpoint (RDP client) playing the client role will be tested. For Windows, the Remote Desktop Client (MSTSC.exe) is the client endpoint.
-The protocol server endpoint (RDP Server) playing the server role is out of scope.
-Transport protocols (MS-RDPBCGR and MS-RDPEDYC) are out of scope.
-For Windows, the System under Test (SUT) will be mstsc.exe.
-External protocols are out of scope.
-Compression and encryption are out of scope.
+* The protocol client endpoint (RDP client) playing the client role will be tested. For Windows, the Remote Desktop Client (MSTSC.exe) is the client endpoint.
+
+* The protocol server endpoint (RDP Server) playing the server role is out of scope.
+
+* Transport protocols (MS-RDPBCGR and MS-RDPEDYC) are out of scope.
+
+* For Windows, the System under Test (SUT) will be mstsc.exe.
+
+* External protocols are out of scope.
+
+* Compression and encryption are out of scope.
 
 **Constraint:**
 
@@ -106,7 +116,7 @@ Traditional testing is chosen as the test approach for MS-RDPEUSB.
 
 **Test Approach Comparison**
 
-Table 11 illustrates the comparison of test approaches for the MS-RDPEUSB test suite.
+Table 1-1 illustrates the comparison of test approaches for the MS-RDPEUSB test suite.
 
 |  ***Factor***|  ***Model-Based (MBT)***|  ***Traditional***|  ***Best Choice***| 
 | -------------| -------------| -------------| ------------- |
@@ -116,7 +126,7 @@ Table 11 illustrates the comparison of test approaches for the MS-RDPEUSB test s
 |  **Large Number of Test Cases**| Based on the newest test suite development process, the number of test cases is not expected to be too large.  But MBT may generate a lot of “garbage” test cases.| It is easy to create useful test cases with Traditional Testing. It can reduce the number of cases and the cost of sustaining.  | Traditional| 
 |  **Simple combinations of parameters**| Parameter combination is not complex.  | It is easy to cover all combinations of parameters with Traditional Testing.| Traditional| 
 
-***Table 11 Test Approach Comparison***
+***Table 1-1 Test Approach Comparison***
 
 **Reasons for choosing Traditional Testing**
 
@@ -259,15 +269,17 @@ The typical scenario sequence is the following:
 ### <a name="_Toc326658511"/>Test Suite Architecture
 
 #### <a name="_Toc326658512"/>System under Test (SUT)
-For the third party implementation, the SUT is a component that implements MS-RDPEUSB client role.
-For the Windows implementation, the SUT is the Remote Desktop Client (Mstsc.exe).
+* For the third party implementation, the SUT is a component that implements MS-RDPEUSB client role.
+
+* For the Windows implementation, the SUT is the Remote Desktop Client (Mstsc.exe).
 
 #### <a name="_Toc326658513"/>Test Suite Architecture
 Figure 3-1 illustrates the architecture of the MS-RDPEUSB test suite for client endpoint testing.
 
 ![image5.png](./image/MS-RDPEUSB_ClientTestDesignSpecification/image5.png)
 
- Figure 3-1 MS-SMB Test Suite Architecture
+ _Figure 3-1 MS-SMB Test Suite Architecture_
+ 
 As shown in Figure 3-1, MS-RDPEUSB is using the synthetic server pattern to design the test suite. The MS-RDPEUSB test suite contains the following components:
 
 * The SUT Control Adapter is used by the test case to trigger the client to send the request and redirect USB packets to the server.
@@ -305,8 +317,10 @@ The protocol adapter is used to receive messages from SUT and to send out messag
 The protocol adapter leverages the MS-RDPBCGR protocol adapter to initialize the RDP connection and the MS-RDPBCGR SUT control adapter to trigger SUT. For more details about functions of MS-RDPBCGR adapters, please refer to **MS-RDPBCGR Client Test Design Specification.md**.
 
 #### <a name="_Toc326658520"/>Technical Feasibility of Adapter Approach
-Protocol Adapter
+**Protocol Adapter**
+
 The protocol adapter uses the Protocol test suite library to generate protocol messages which sent to SUT. Protocol adapter compiler (PAC) is used in the MS-RDPBCGR test suite library.
+
 The protocol adapter uses the protocol test suite library to consume protocol messages which are received from SUT. The MS-RDPBCGR protocol test suite library will parse and decode the received messages and send it to protocol adapter.
 
 #### <a name="_Toc326658521"/>Adapter Abstract Level
@@ -380,6 +394,7 @@ Figure 3-1 illustrates the relationship between adapters, test cases and SUT.
 
 ### <a name="_Toc326658524"/>Traditional Test Case Design
 The Traditional test approach is used to design all test cases. The test cases are designed to cover all in-scope testable requirements, including both positive and negative requirements. 
+
 The following table shows the number of test cases for each scenario.
 
 |  **Scenario**|  **Test Cases**|  **BVTs**|  **P0**|  **P1**|  **P2**| 

@@ -50,7 +50,8 @@ This protocol extends the Remote Desktop Protocol: Basic Connectivity and Graphi
 
 ### <a name="_Toc326663477"/>Protocol Operations/Messages 
 This protocol describes 3 capability structures and 9 protocol messages which can be classified into 3 groups:
-Capabilities Messages:
+
+**Capabilities Messages:**
 
 * TS\_RFX\_CLNT\_CAPS\_CONTAINER
 
@@ -58,7 +59,7 @@ Capabilities Messages:
 
 * TS\_FRAME\_ACKNOWLEDGE\_CAPABILITYSET
 
-Encode Messages:
+**Encode Messages:**
 
 * TS\_RFX\_SYNC
 
@@ -76,7 +77,7 @@ Encode Messages:
 
 * TS\_RFX\_TILESET
 
-Control Messages
+**Control Messages**
 
 * TS\_FRAME\_ACKNOWLEDGE\_PDU
 
@@ -84,14 +85,18 @@ The typical message flow of this protocol is described in following figure (Figu
 
 ![image2.png](./image/MS-RDPRFX_ClientTestDesignSpecification/image2.png)
 
-Figure 1-1: MS-RDPRFX typical message flow
+_Figure 1-1: MS-RDPRFX typical message flow_
 
 ### <a name="_Toc326663478"/>Protocol Properties
-RDPRFX is a block protocol.
-This protocol is an extension of RDPBCGR and all packets are tunneled within the RDP transport.
-The client-to-server data is always encrypted.
-RDPRFX specifies an algorithm to encode and decode images. 
-RDPRFX is designed to work in LAN environment. 
+* RDPRFX is a block protocol.
+
+* This protocol is an extension of RDPBCGR and all packets are tunneled within the RDP transport.
+
+* The client-to-server data is always encrypted.
+
+* RDPRFX specifies an algorithm to encode and decode images. 
+
+* RDPRFX is designed to work in LAN environment. 
 
 ## <a name="_Toc326663479"/>Test Method
 
@@ -132,9 +137,12 @@ There are four scenarios defined in the MS-RDPRFX client test suite for verifyin
 **Table 2-1 MS-RDPRFX Test Suite Scenarios**
 
 #### <a name="_Toc326663483"/>Exchange Capabilities
-Preconditions:
+**Preconditions:**
+
 N/A.
-Typical Sequence:
+
+** Typical Sequence:**
+
 The typical scenario sequence is the following:
 
 * The RDP client starts the connecting to RDP server.
@@ -143,7 +151,8 @@ The typical scenario sequence is the following:
 
 * Complete the RDP connection.
 
-Scenario Testing:
+**Scenario Testing:**
+
 This scenario will test the following messages:
 
 * Client Core Data in MCS Connect Initial PDU
@@ -153,9 +162,12 @@ This scenario will test the following messages:
 * TS\_FRAME\_ACKNOWLEDGE\_CAPABILITYSET
 
 #### <a name="_Toc326663484"/>Send Encode Header Messages
-Preconditions:
+**Preconditions:**
+
 N/A.
-Typical Sequence:
+
+**Typical Sequence:**
+
 The typical scenario sequence is the following:
 
 * The RDP client establishes the connection to RDP server.
@@ -164,7 +176,8 @@ The typical scenario sequence is the following:
 
 * The RDP client proceeds the encode header messages.
 
-Scenario Testing:
+**Scenario Testing:**
+
 This scenario will test the following messages:
 
 * TS\_RFX\_SYNC
@@ -176,9 +189,12 @@ This scenario will test the following messages:
 * TS\_RFX\_CONTEXT
 
 #### <a name="_Toc326663485"/>Send Encode Data Messages in Image Mode
-Preconditions:
+**Preconditions:**
+
 N/A.
-Typical Sequence:
+
+**Typical Sequence:**
+
 The typical scenario sequence is the following:
 
 * The RDP client establishes the connection to RDP server.
@@ -193,7 +209,8 @@ The typical scenario sequence is the following:
 
 * The RDP client responds a TS\_FRAME\_ACKNOWLEDGE\_PDU to server.
 
-Scenario Testing:
+**Scenario Testing:**
+
 This scenario will test the following messages:
 
 * TS\_RFX\_FRAME\_BEGIN
@@ -207,9 +224,12 @@ This scenario will test the following messages:
 * TS\_FRAME\_ACKNOWLEDGE\_PDU
 
 #### <a name="_Toc326663486"/>Send Encode Data Messages in Video Mode
-Preconditions:
+**Preconditions:**
+
 N/A.
-Typical Sequence:
+
+**Typical Sequence:**
+
 The typical scenario sequence is the following:
 
 * The RDP client establishes the connection to RDP server.
@@ -224,7 +244,8 @@ The typical scenario sequence is the following:
 
 * The RDP client responds a TS\_FRAME\_ACKNOWLEDGE\_PDU to server.
 
-Scenario Testing:
+**Scenario Testing:**
+
 This scenario will test the following messages:
 
 * TS\_RFX\_FRAME\_BEGIN
@@ -242,15 +263,16 @@ This scenario will test the following messages:
 ### <a name="_Toc326663488"/>Test Suite Architecture
 
 #### <a name="_Toc326663489"/>System under Test (SUT)
-From the third party point of view, the SUT is a component that implements MS-RDPRFX.
-From the Windows implementation point of view, the SUT is the Remote Desktop Client (Mstsc.exe).
+* From the third party point of view, the SUT is a component that implements MS-RDPRFX.
+
+* From the Windows implementation point of view, the SUT is the Remote Desktop Client (Mstsc.exe).
 
 #### <a name="_Toc326663490"/>Test Suite Architecture
 Figure 3-1 illustrates the architecture of the MS-RDPRFX test suite for client endpoint testing.
 
 ![image3.png](./image/MS-RDPRFX_ClientTestDesignSpecification/image3.png)
 
- Figure 3-1 MS-RDPRFX Test Suite Architecture
+ _Figure 3-1 MS-RDPRFX Test Suite Architecture_
  
 As shown in Figure 3-1, MS-RDPRFX is using the synthetic server pattern to design the test suite architecture. The MS-RDPRFX Test Suite contains the following components:
 
@@ -1048,11 +1070,9 @@ Please refer to “**BVT Test Cases**”.
 
 ### <a name="_Toc326663509"/>Glossary (Optional)
 **SUT**: 
-
 System under Test. In this spec, it indicates the MS-RDPBCGR client implementation.
 
 **Test Suite**: 
-
 The synthetic RDP server which is used to test against SUT.
 
 ### <a name="_Toc326663510"/>Reference
