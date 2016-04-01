@@ -88,7 +88,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             return 0;
         }
 
-        public override int BerDecode(IAsn1DecodingBuffer buffer)
+        public override int BerDecode(IAsn1DecodingBuffer buffer, bool explicitTag = true)
         {
             return 0;
         }

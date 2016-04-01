@@ -2,8 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
 {
@@ -27,7 +27,29 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
             set;
         }
 
-        //If there are some constraints like SIZE, override VerifyConstraints method in the derived classes
+        /// <summary>
+        /// Records the size constraint of the type. 
+        /// </summary>
+        protected internal Asn1SizeConstraint Constraint;
+
+        /// <summary>
+        /// Sets the constraint by reflection.
+        /// </summary>
+        protected Asn1HomogeneousComposition()
+        {
+            Constraint = null;
+
+            //Gets the size constraint for the structure.
+            var allAttributes = GetType().GetCustomAttributes(true);
+            foreach (object o in allAttributes)
+            {
+                if (o is Asn1SizeConstraint)
+                {
+                    Constraint = o as Asn1SizeConstraint;
+                    break;
+                }
+            }
+        }
 
         #region overrode methods from System.Object
 
@@ -36,23 +58,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// </summary>
         /// <param name="obj">The object to be compared.</param>
         /// <returns>True if obj has same data with this instance. False if not.</returns>
-        public override bool Equals(System.Object obj)
+        public override bool Equals(object obj)
         {
-            // If parameter is null return false.
-            if (obj == null)
-            {
-                return false;
-            }
-
-            // If parameter cannot be cast to Asn1CompositionOfSameType return false.
-            Asn1HomogeneousComposition<T> p = obj as Asn1HomogeneousComposition<T>;
-            if ((System.Object)p == null)
-            {
-                return false;
-            }
-
-            // Return true if the fields match.
-            return Enumerable.SequenceEqual<T>(this.Elements, p.Elements);
+            // If parameter is null or cannot be cast to Asn1CompositionOfSameType return false.
+            var p = obj as Asn1HomogeneousComposition<T>;
+            return p != null && Elements.SequenceEqual(p.Elements);
         }
 
         /// <summary>
@@ -125,7 +135,42 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
 
             return consumedLen;
         }
+
         #endregion BER
 
+        #region PER
+
+        /// <summary>
+        /// Encodes the content of the object by PER.
+        /// </summary>
+        /// <param name="buffer">A buffer to which the encoding result will be written.</param>
+        /// <remarks>Length is included.</remarks>
+        protected override void ValuePerEncode(IAsn1PerEncodingBuffer buffer)
+        {
+            Asn1StandardProcedure.PerEncodeArray(buffer, Elements, (encodingBuffer, obj) =>
+            {
+                obj.PerEncode(encodingBuffer);
+            },
+            Constraint != null && Constraint.HasMinSize ? Constraint.MinSize : (long?)null, Constraint != null && Constraint.HasMaxSize ? Constraint.MaxSize : (long?)null);
+        }
+
+        /// <summary>
+        /// Decodes the content of the object by PER.
+        /// </summary>
+        /// <param name="buffer">A buffer that contains a PER encoding result.</param>
+        /// <param name="aligned">Indicating whether the PER decoding is aligned.</param>
+        /// <remarks>Length is included.</remarks>
+        protected override void ValuePerDecode(IAsn1DecodingBuffer buffer, bool aligned = true)
+        {
+            Elements = Asn1StandardProcedure.PerDecodeArray(buffer, decodingBuffer =>
+            {
+                T curObj = new T();
+                curObj.PerDecode(buffer);
+                return curObj;
+            }, 
+            Constraint != null && Constraint.HasMinSize ? Constraint.MinSize : (long?)null, Constraint != null && Constraint.HasMaxSize ? Constraint.MaxSize : (long?)null);
+        }
+
+        #endregion PER
     }
 }

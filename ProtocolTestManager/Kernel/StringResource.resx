@@ -174,7 +174,7 @@
     <value>(Server)|(Client)</value>
   </data>
   <data name="VersionRegex" xml:space="preserve">
-    <value>\d\.\d\.\d\.\d</value>
+    <value>\d\.\d\.\d{1,4}\.\d</value>
   </data>
   <data name="DirectoryNotFound" xml:space="preserve">
     <value>Directory {0} is not found.</value>

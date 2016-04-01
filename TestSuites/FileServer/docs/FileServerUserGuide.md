@@ -94,6 +94,7 @@
 			* [Install Roles and Features on each failover cluster node](#5.3.12.2)
 			* [Create failover cluster in either node](#5.3.12.3)
 			* [Create file server on failover cluster](#5.3.12.4)
+			* [Add Scale-out Share volume](#_Add_Scale-out_Share)
 			* [Create file share for cluster](#5.3.12.5)
 			* [Create file share with Oplock Force Level 2 enabled for cluster ](#5.3.12.6)
 			* [Create file share with Encrypt data enabled for cluster](#5.3.12.7)
@@ -1469,6 +1470,11 @@ Repeat above steps when select **File Server for scale-out application data** to
 
 ![](./image/FileServerUserGuide/image129.png)
 
+##### <a name="_Add_Scale-out_Share"/>Add Scale-out Share volume
+To create a file share on the file server for scale-out application data, first add an existing free cluster disk (**Assigned To** is **Available Storage**) as **Cluster Shared Volumes** like below.
+
+![image141.png](./image/FileServerUserGuide/image141.png)
+
 #####<a name="5.3.12.5"/> Create file share for cluster
 
 Select **Roles** from **Failover Cluster Manager**, to create a file share on file server for general use, right click one of the file server items with **Type** "**File Server**" (**GeneralFS**) and select **Add Shared Folder**
@@ -1503,9 +1509,9 @@ Give **Full Control** to the account that will access the file share.
 
 ![](./image/FileServerUserGuide/image140.png)
 
-To create a file share on the file server for scale-out application data, first add an existing free cluster disk (**Assigned To** is **Available Storage**) as **Cluster Shared Volumes** like below.
+Repeat above steps except for setting the share location on the scale-out file server role on **Select the Server and path for this share** page and setting the share name to **SMBClustered** on **Specify share name** page.
 
-![](./image/FileServerUserGuide/image141.png)
+![](./image/FileServerUserGuide/image167.png)
 
 #####<a name="5.3.12.6"/> Create file share with Oplock Force Level 2 enabled for cluster 
 

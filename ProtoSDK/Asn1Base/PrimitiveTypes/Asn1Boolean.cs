@@ -25,7 +25,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// </summary>
         public Asn1Boolean()
         {
-            this.Value = false;
+            Value = false;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// <param name="val"></param>
         public Asn1Boolean(bool val)
         {
-            this.Value = val;
+            Value = val;
         }
 
         //Constraint is not needed for primitive type BOOLEAN.
@@ -47,7 +47,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// </summary>
         /// <param name="obj">The object to be compared.</param>
         /// <returns>True if obj has same data with this instance. False if not.</returns>
-        public override bool Equals(System.Object obj)
+        public override bool Equals(Object obj)
         {
             // If parameter is null return false.
             if (obj == null)
@@ -57,13 +57,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
 
             // If parameter cannot be cast to Asn1Boolean return false.
             Asn1Boolean p = obj as Asn1Boolean;
-            if ((System.Object)p == null)
+            if (p == null)
             {
                 return false;
             }
 
             // Return true if the fields match.
-            return this.Value == p.Value;
+            return Value == p.Value;
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         protected override int ValueBerEncode(IAsn1BerEncodingBuffer buffer)
         {
             //Encode data
-            if (this.Value == false)
+            if (Value == false)
             {
                 buffer.WriteByte(0);
             }
@@ -124,11 +124,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
             byte readContent = buffer.ReadByte();//Since length == 1
             if (readContent == 0)
             {
-                this.Value = false;
+                Value = false;
             }
             else
             {
-                this.Value = true;
+                Value = true;
             }
             return length;
         }
@@ -136,6 +136,40 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         #endregion BER
 
         #region PER
+
+        /// <summary>
+        /// Encodes the content of the object by PER.
+        /// </summary>
+        /// <param name="buffer">A buffer to which the encoding result will be written.</param>
+        protected override void ValuePerEncode(IAsn1PerEncodingBuffer buffer)
+        {
+            if (Value)
+            {
+                buffer.WriteBit(true);
+            }
+            else
+            {
+                buffer.WriteBit(false);
+            }
+        }
+
+        /// <summary>
+        /// Decodes the object by PER.
+        /// </summary>
+        /// <param name="buffer">A buffer that contains a PER encoding result.</param>
+        /// <param name="aligned">Indicating whether the PER decoding is aligned.</param>
+        protected override void ValuePerDecode(IAsn1DecodingBuffer buffer, bool aligned = true)
+        {
+            bool result = buffer.ReadBit();
+            if (result)
+            {
+                Value = true;
+            }
+            else
+            {
+                Value = false;
+            }
+        }
 
         #endregion PER
     }
