@@ -277,7 +277,7 @@ All of the following software must be installed on the driver computer. They hav
 	
 * Install Spec Explorer (build 3.5.3146.0 or later) 
     
-	Spec Explorer is a model based testing tool used by test suite to design model and generate test cases. It has some dependencies on VC++ 9.0 redistributable package which should be installed together.    
+	Spec Explorer is a model based testing tool used by test suite to design model and generate test cases. It has some dependencies on [VC++ 9.0 redistributable package](https://www.microsoft.com/en-us/download/details.aspx?id=5582) which should be installed together.    
 	
     You can download Spec Explorer from the website listed below: 
 
