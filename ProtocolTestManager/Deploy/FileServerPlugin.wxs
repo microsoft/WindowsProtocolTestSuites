@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<?define BLDVER=1.0.0.0?>
 <?define SRCDIR=$(env.TestSuiteRoot)\drop\ProtocolTestManager?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">

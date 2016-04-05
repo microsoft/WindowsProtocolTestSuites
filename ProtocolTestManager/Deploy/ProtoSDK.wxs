@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?define SDK_SRCDIR=$(env.TestSuiteRoot)\drop\ProtoSDK\bin?>
-<?define BLDVER=$1.0.0.0?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   
