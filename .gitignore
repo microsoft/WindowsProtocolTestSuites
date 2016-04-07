@@ -11,4 +11,6 @@ TestSuites/RDP/src/Deploy/TestSuiteDataFiles.wxs
 TestSuites/RDP/src/Deploy/TestSuiteBatchFiles.wxs
 TestSuites/RDP/src/Deploy/TestSuiteBinFiles.wxs
 TestSuites/RDP/src/Deploy/TestSuiteScripts.wxs
+TestSuites/FileServer/src/Deploy/Batch.wxs
+TestSuites/FileServer/src/Deploy/Bin.wxs
 

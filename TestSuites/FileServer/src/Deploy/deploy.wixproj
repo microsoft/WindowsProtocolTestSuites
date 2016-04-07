@@ -11,6 +11,7 @@
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+	<BLDVersion Condition=" '$(BLDVersion)' == '' ">1.0.0.0</BLDVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -18,6 +19,7 @@
     <DefineConstants>Debug</DefineConstants>
     <!--Ignore error LGHT0204: ICE30: The same target file by two different components on an LFN system which breaks component reference counting-->
     <SuppressIces>ICE30</SuppressIces>
+	<DefineConstants>Debug;TESTSUITE_VERSION=$(BLDVersion)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'fxcop|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -25,12 +27,14 @@
     <DefineConstants>fxcop</DefineConstants>
     <SuppressSpecificWarnings>1055</SuppressSpecificWarnings>
     <SuppressIces>ICE30</SuppressIces>
+	<DefineConstants>TESTSUITE_VERSION=$(BLDVersion)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <!--Ignore error LGHT0204: ICE30: The same target file by two different components on an LFN system which breaks component reference counting-->
     <SuppressIces>ICE30</SuppressIces>
+	<DefineConstants>TESTSUITE_VERSION=$(BLDVersion)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="UiText.wxl" />
