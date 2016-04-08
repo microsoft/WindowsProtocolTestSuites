@@ -44,7 +44,13 @@ if not defined TestSuiteRoot (
 	set TestSuiteRoot=%CurrentPath%..\..\..\
 )
 
-%buildtool% "%TestSuiteRoot%TestSuites\RDP\src\RDP_Client.sln" /t:clean;rebuild
+set KeyFile=%1
+if not defined KeyFile (
+	%buildtool% "%TestSuiteRoot%TestSuites\RDP\src\RDP_Client.sln" /t:clean;rebuild 
+) else (
+	%buildtool% "%TestSuiteRoot%TestSuites\RDP\src\RDP_Client.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true	
+)
+
 if exist "%TestSuiteRoot%drop\TestSuites\RDP" (
  rd /s /q "%TestSuiteRoot%drop\TestSuites\RDP"
 )
