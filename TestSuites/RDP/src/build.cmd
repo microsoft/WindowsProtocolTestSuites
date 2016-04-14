@@ -7,6 +7,12 @@ echo =============================================
 echo          Start to build RDP Test Suite
 echo =============================================
 
+set BLDVersion=%1
+
+if not defined BLDVersion (
+	set BLDVersion=1.0.0.0
+)
+
 if not defined buildtool (
 	for /f %%i in ('dir /b /ad /on "%windir%\Microsoft.NET\Framework\v4*"') do (@if exist "%windir%\Microsoft.NET\Framework\%%i\msbuild".exe set buildtool=%windir%\Microsoft.NET\Framework\%%i\msbuild.exe)
 )
@@ -49,5 +55,5 @@ if exist "%TestSuiteRoot%drop\TestSuites\RDP" (
  rd /s /q "%TestSuiteRoot%drop\TestSuites\RDP"
 )
 
-%buildtool% "%TestSuiteRoot%TestSuites\RDP\src\deploy\deploy.wixproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%TestSuites\RDP\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:BLDVersion=%BLDVersion%
 

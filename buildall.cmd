@@ -4,14 +4,19 @@
 @echo off
 
 set TestSuiteRoot=%~dp0
+set BLDVersion=%1
+
+if not defined BLDVersion (
+	set BLDVersion=1.0.0.0
+)
 
 if exist "%TestSuiteRoot%drop" (
  rd /s /q "%TestSuiteRoot%drop"
 )
 
 call ProtoSDK\build.cmd
-call TestSuites\MS-SMB\src\build.cmd
-call TestSuites\FileServer\src\build.cmd
-call TestSuites\RDP\src\build.cmd
-call ProtocolTestManager\build.cmd
+call TestSuites\MS-SMB\src\build.cmd %BLDVersion%
+call TestSuites\FileServer\src\build.cmd %BLDVersion%
+call TestSuites\RDP\src\build.cmd %BLDVersion%
+call ProtocolTestManager\build.cmd %BLDVersion%
 
