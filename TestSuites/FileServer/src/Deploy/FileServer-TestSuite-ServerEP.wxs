@@ -3,7 +3,6 @@
 <!-- TODO: Update test suite name and endpoint -->
 <?define TESTSUITE_NAME=FileServer?>
 <?define TESTSUITE_ENDPOINT=Server?>
-<?define TESTSUITE_VERSION=1.0.0.0?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">

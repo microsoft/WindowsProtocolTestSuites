@@ -7,6 +7,12 @@ echo ====================================================
 echo          Start to build Protocol Test Manager
 echo ====================================================
 
+set BLDVersion=%1
+
+if not defined BLDVersion (
+	set BLDVersion=1.0.0.0
+)
+
 if not defined buildtool (
 	for /f %%i in ('dir /b /ad /on "%windir%\Microsoft.NET\Framework\v4*"') do (@if exist "%windir%\Microsoft.NET\Framework\%%i\msbuild".exe set buildtool=%windir%\Microsoft.NET\Framework\%%i\msbuild.exe)
 )
@@ -31,5 +37,4 @@ if exist "%TestSuiteRoot%drop\ProtocolTestManager" (
  rd /s /q "%TestSuiteRoot%drop\ProtocolTestManager"
 )
 
-%buildtool% "%TestSuiteRoot%ProtocolTestManager\deploy\ProtocolTestManagerInstaller.wixproj" /t:Clean;Rebuild /p:NoWarn=1591
-
+%buildtool% "%TestSuiteRoot%ProtocolTestManager\deploy\ProtocolTestManagerInstaller.wixproj" /t:Clean;Rebuild /p:NoWarn=1591 /p:BLDVersion=%BLDVersion%
