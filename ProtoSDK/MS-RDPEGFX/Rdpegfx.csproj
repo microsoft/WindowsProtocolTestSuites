@@ -46,6 +46,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Client\RdpegfxClient.cs" />
     <Compile Include="Codecs\BitStream.cs" />
     <Compile Include="Codecs\ClearCodec\ClearCodecBandDecoder.cs" />

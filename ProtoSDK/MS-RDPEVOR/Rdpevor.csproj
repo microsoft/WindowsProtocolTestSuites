@@ -39,6 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Client\RdpevorClient.cs" />
     <Compile Include="Server\RdpevorServer.cs" />
     <Compile Include="Server\RdpevorTestData.cs" />

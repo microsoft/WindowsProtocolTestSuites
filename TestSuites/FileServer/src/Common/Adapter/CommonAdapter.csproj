@@ -64,6 +64,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="CommonRequirementHelper.cs" />
     <Compile Include="ISutProtocolControlAdapter.cs" />
     <Compile Include="Smb2FunctionalClient.cs" />

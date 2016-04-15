@@ -63,6 +63,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Client\Rdpbcgr_DVCClientTransport.cs" />
     <Compile Include="Client\RdpedycClient.cs" />
     <Compile Include="Client\Rdpemt_DVCClientTransport.cs" />

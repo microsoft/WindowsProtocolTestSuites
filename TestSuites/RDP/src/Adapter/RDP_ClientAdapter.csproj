@@ -63,6 +63,9 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="CommonConfigPropNames.cs" />
     <Compile Include="CommonUtility.cs" />
     <Compile Include="ImageQualityAccessment\Downscaler.cs" />

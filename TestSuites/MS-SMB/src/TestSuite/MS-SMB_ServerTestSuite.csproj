@@ -91,6 +91,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AdditionalNonExtendRequirementCoverage_QueryQuota_Win7_Win2K8.cs">
       <SubType>Code</SubType>
     </Compile>

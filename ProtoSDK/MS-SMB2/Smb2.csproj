@@ -91,6 +91,9 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Client\Smb2ClientTransport.cs" />
     <Compile Include="Client\Smb2ClientUnlockRange.cs" />
     <Compile Include="Client\Smb2ClientCopyRange.cs" />

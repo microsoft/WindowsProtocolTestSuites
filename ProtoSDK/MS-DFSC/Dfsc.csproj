@@ -62,6 +62,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Client\DfscClient.cs" />
     <Compile Include="DfscMessage.cs" />
     <Compile Include="DfscReferralRequestEXPacket.cs" />
