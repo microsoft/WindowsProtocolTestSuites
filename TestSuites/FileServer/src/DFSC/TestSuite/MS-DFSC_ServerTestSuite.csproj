@@ -64,6 +64,9 @@
     </Binplace>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="DCReferralToDC.cs" />
     <Compile Include="DFSCTestBase.cs" />
     <Compile Include="DFSCTestConfig.cs" />

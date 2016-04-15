@@ -92,6 +92,9 @@
     <Content Include="MS-FSA_ServerTestSuite.ptfconfig" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="ModelTestCases\ChangeNotificationTestCase.cs" />
     <Compile Include="ModelTestCases\CloseFileTestCase.cs" />
     <Compile Include="ModelTestCases\CreateFileTestCase.cs" />

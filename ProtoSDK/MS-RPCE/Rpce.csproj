@@ -68,6 +68,9 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Client\RpceClient.cs" />
     <Compile Include="Client\RpceClientContext.cs" />
     <Compile Include="Client\RpceClientTransport.cs" />

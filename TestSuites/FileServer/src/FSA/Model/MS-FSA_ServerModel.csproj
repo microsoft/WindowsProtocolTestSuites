@@ -64,6 +64,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="BaseModel.cs" />
     <Compile Include="ModelHelper.cs" />
     <Compile Include="ChangeNotification\ChangeNotificationModel.cs" />

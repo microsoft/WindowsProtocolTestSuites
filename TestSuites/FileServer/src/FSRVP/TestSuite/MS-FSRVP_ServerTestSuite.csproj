@@ -122,6 +122,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="VSSAbortShadowCopySet.cs" />
     <Compile Include="VSSOperateShadowCopySet.cs" />
     <Compile Include="VSSSetContext.cs" />

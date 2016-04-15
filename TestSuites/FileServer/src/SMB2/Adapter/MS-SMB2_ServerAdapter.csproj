@@ -74,6 +74,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="SMB2TestConfig.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

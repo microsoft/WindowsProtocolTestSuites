@@ -57,6 +57,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="ConfigItemDependency.cs" />
     <Compile Include="Detector\CreateContextDetector.cs" />
     <Compile Include="DetectionResultControl.xaml.cs">
