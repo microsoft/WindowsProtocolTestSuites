@@ -57,8 +57,16 @@ for /f "delims=" %%i in ('""%FindExe%" "AssemblyVersion" "%path%""') do set vers
 set BLDVersion=%versionStr:~28,-3%
 
 %buildtool% "%TestSuiteRoot%TestSuites\MS-SMB\src\MS-SMB_Server.sln" /t:clean
+
+set KeyFile=%1
+if not defined KeyFile (
+	%buildtool% "%TestSuiteRoot%TestSuites\MS-SMB\src\MS-SMB_Server.sln" /t:clean;rebuild 
+) else (
+	%buildtool% "%TestSuiteRoot%TestSuites\MS-SMB\src\MS-SMB_Server.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true	
+)
+
 if exist "%TestSuiteRoot%drop\TestSuites\MS-SMB" (
- rd /s /q "%TestSuiteRoot%drop\TestSuites\MS-SMB"
+ rd /s /q "%TestSuiteRoot%drop\TestSuites\MS-SMB" 
 )
 
 %buildtool% "%TestSuiteRoot%TestSuites\MS-SMB\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:BLDVersion=%BLDVersion%

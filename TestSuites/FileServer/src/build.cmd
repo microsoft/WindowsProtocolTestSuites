@@ -57,9 +57,18 @@ for /f "delims=" %%i in ('""%FindExe%" "AssemblyVersion" "%path%""') do set vers
 set BLDVersion=%versionStr:~28,-3%
 
 %buildtool% "%TestSuiteRoot%TestSuites\FileServer\src\FileServer.sln" /t:clean;rebuild
+
+set KeyFile=%1
+if not defined KeyFile (
+	%buildtool% "%TestSuiteRoot%TestSuites\FileServer\src\FileServer.sln" /t:clean;rebuild 
+) else (
+	%buildtool% "%TestSuiteRoot%TestSuites\FileServer\src\FileServer.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true	
+)
+
 if exist "%TestSuiteRoot%drop\TestSuites\FileServer" (
  rd /s /q "%TestSuiteRoot%drop\TestSuites\FileServer"
 )
 
 %buildtool% "%TestSuiteRoot%TestSuites\FileServer\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:BLDVersion=%BLDVersion%
 
+ 
