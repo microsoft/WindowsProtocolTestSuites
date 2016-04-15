@@ -45,16 +45,14 @@ if not defined vspath (
 )
 
 set CurrentPath=%~dp0
-if not defined TestSuiteRoot (
-	set TestSuiteRoot=%CurrentPath%..\..\..\
-)
+set TestSuiteRoot=%CurrentPath%..\..\..\
 
 ::Get build version from AssemblyInfo
 set path=%TestSuiteRoot%AssemblyInfo\SharedAssemblyInfo.cs
 set FindExe="%SystemRoot%\system32\findstr.exe"
 set versionStr="[assembly: AssemblyVersion("1.0.0.0")]"
 for /f "delims=" %%i in ('""%FindExe%" "AssemblyVersion" "%path%""') do set versionStr=%%i
-set BLDVersion=%versionStr:~28,-3%
+set TESTSUITE_VERSION=%versionStr:~28,-3%
 
 %buildtool% "%TestSuiteRoot%TestSuites\MS-SMB\src\MS-SMB_Server.sln" /t:clean
 
@@ -69,5 +67,5 @@ if exist "%TestSuiteRoot%drop\TestSuites\MS-SMB" (
  rd /s /q "%TestSuiteRoot%drop\TestSuites\MS-SMB" 
 )
 
-%buildtool% "%TestSuiteRoot%TestSuites\MS-SMB\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:BLDVersion=%BLDVersion%
+%buildtool% "%TestSuiteRoot%TestSuites\MS-SMB\src\deploy\deploy.wixproj" /t:Clean;Rebuild
 

@@ -9,7 +9,7 @@
   <Product Id="*" 
            Name="Microsoft $(var.TESTSUITE_NAME) $(var.TESTSUITE_ENDPOINT) Endpoint Test Suite" 
            Language="1033" 
-           Version="$(var.TESTSUITE_VERSION)" 
+           Version="$(env.TESTSUITE_VERSION)" 
            Manufacturer="Microsoft Corporation" 
            UpgradeCode="4216D0F5-645C-4563-B302-01501A871A45">
 		
@@ -17,7 +17,7 @@
     <Package Id="*" 
              InstallScope="perMachine"
              InstallPrivileges="elevated"
-             Description="Microsoft $(var.TESTSUITE_NAME) $(var.TESTSUITE_ENDPOINT) Endpoint Test Suite v$(var.TESTSUITE_VERSION)"
+             Description="Microsoft $(var.TESTSUITE_NAME) $(var.TESTSUITE_ENDPOINT) Endpoint Test Suite v$(env.TESTSUITE_VERSION)"
              Manufacturer="Microsoft Corporation"
              InstallerVersion="300"
              Compressed="yes" />
@@ -30,7 +30,7 @@
 
     <WixVariable Id="TESTSUITE_NAME" Value="$(var.TESTSUITE_NAME)" Overridable="no" />
     <WixVariable Id="TESTSUITE_ENDPOINT" Value="$(var.TESTSUITE_ENDPOINT)" Overridable="no" />
-    <WixVariable Id="TESTSUITE_VERSION" Value="$(var.TESTSUITE_VERSION)" Overridable="no" />
+    <WixVariable Id="TESTSUITE_VERSION" Value="$(env.TESTSUITE_VERSION)" Overridable="no" />
     <WixVariable Id="QUICK_START_GUIDE" Value="MS-SMB_ServerUserGuide.md" />
 
     <WixVariable Id="PROTOSDK_DROP_DIR" Value="$(env.TestSuiteRoot)\drop\ProtoSDK\Bin" />

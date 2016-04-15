@@ -10,7 +10,6 @@
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
-	<BLDVersion Condition=" '$(BLDVersion)' == '' ">1.0.0.0</BLDVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -18,7 +17,6 @@
     <DefineConstants>Debug</DefineConstants>
     <SuppressSpecificWarnings>1055</SuppressSpecificWarnings>
     <SuppressIces>ICE30</SuppressIces>
-	<DefineConstants>Debug;TESTSUITE_VERSION=$(BLDVersion)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'fxcop|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -26,14 +24,12 @@
     <DefineConstants>fxcop</DefineConstants>
     <SuppressSpecificWarnings>1055</SuppressSpecificWarnings>
     <SuppressIces>ICE30</SuppressIces>
-	<DefineConstants>TESTSUITE_VERSION=$(BLDVersion)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <SuppressSpecificWarnings>1055</SuppressSpecificWarnings>
     <SuppressIces>ICE30</SuppressIces>
-	<DefineConstants>TESTSUITE_VERSION=$(BLDVersion)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <!--Deployment WXS files-->

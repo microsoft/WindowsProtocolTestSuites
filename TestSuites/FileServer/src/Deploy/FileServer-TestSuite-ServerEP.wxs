@@ -10,14 +10,14 @@
   <Product Id="*" 
            Name="Microsoft $(var.TESTSUITE_NAME) $(var.TESTSUITE_ENDPOINT) Endpoint Test Suite" 
            Language="1033" 
-           Version="$(var.TESTSUITE_VERSION)" 
+           Version="$(env.TESTSUITE_VERSION)" 
            Manufacturer="Microsoft Corporation" 
            UpgradeCode="{56D3AD37-DED4-458D-8428-3CBFF4EA1A9C}">
     
     <Package Id="*" 
              InstallScope="perMachine"
              InstallPrivileges="elevated"
-             Description="Microsoft $(var.TESTSUITE_NAME) $(var.TESTSUITE_ENDPOINT) Endpoint Test Suite v$(var.TESTSUITE_VERSION)"
+             Description="Microsoft $(var.TESTSUITE_NAME) $(var.TESTSUITE_ENDPOINT) Endpoint Test Suite v$(env.TESTSUITE_VERSION)"
              Manufacturer="Microsoft Corporation"
              InstallerVersion="300"
              Compressed="yes" />
@@ -28,7 +28,7 @@
 
     <WixVariable Id="TESTSUITE_NAME" Value="$(var.TESTSUITE_NAME)" Overridable="no" />
     <WixVariable Id="TESTSUITE_ENDPOINT" Value="$(var.TESTSUITE_ENDPOINT)" Overridable="no" />
-    <WixVariable Id="TESTSUITE_VERSION" Value="$(var.TESTSUITE_VERSION)" Overridable="no" />
+    <WixVariable Id="TESTSUITE_VERSION" Value="$(env.TESTSUITE_VERSION)" Overridable="no" />
 
     <WixVariable Id="TESTSUITE_BIN_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
     <WixVariable Id="TESTSUITE_BATCH_DIR" Value="..\Batch" />

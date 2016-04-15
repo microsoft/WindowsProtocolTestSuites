@@ -22,20 +22,19 @@ if not defined WIX (
 )
 
 set CurrentPath=%~dp0
-if not defined TestSuiteRoot (
-	set TestSuiteRoot=%CurrentPath%..\
-)
+set TestSuiteRoot=%CurrentPath%..\
+
 
 ::Get build version from AssemblyInfo
 set path=%TestSuiteRoot%AssemblyInfo\SharedAssemblyInfo.cs
 set FindExe="%SystemRoot%\system32\findstr.exe"
 set versionStr="[assembly: AssemblyVersion("1.0.0.0")]"
 for /f "delims=" %%i in ('""%FindExe%" "AssemblyVersion" "%path%""') do set versionStr=%%i
-set BLDVersion=%versionStr:~28,-3%
+set TESTSUITE_VERSION=%versionStr:~28,-3%
 
 %buildtool% "%TestSuiteRoot%ProtocolTestManager\ProtocolTestManager.sln" /t:clean
 if exist "%TestSuiteRoot%drop\ProtocolTestManager" (
  rd /s /q "%TestSuiteRoot%drop\ProtocolTestManager"
 )
 
-%buildtool% "%TestSuiteRoot%ProtocolTestManager\deploy\ProtocolTestManagerInstaller.wixproj" /t:Clean;Rebuild /p:NoWarn=1591 /p:BLDVersion=%BLDVersion%
+%buildtool% "%TestSuiteRoot%ProtocolTestManager\deploy\ProtocolTestManagerInstaller.wixproj" /t:Clean;Rebuild /p:NoWarn=1591
