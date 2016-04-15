@@ -62,3 +62,4 @@ if exist "%TestSuiteRoot%drop\TestSuites\FileServer" (
 
 %buildtool% "%TestSuiteRoot%TestSuites\FileServer\src\deploy\deploy.wixproj" /t:Clean;Rebuild
 
+ 
