@@ -72,6 +72,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="ASNT124\ConferenceCreateRequest.cs" />
     <Compile Include="ASNT124\ConferenceCreateResponse.cs" />
     <Compile Include="ASNT124\ConferenceName.cs" />

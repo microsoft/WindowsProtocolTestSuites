@@ -124,6 +124,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AppInstanceIdTestCase.cs" />
     <Compile Include="BreakReadHandleLeaseV1TestCase.cs" />
     <Compile Include="BreakReadHandleLeaseV2TestCase.cs" />

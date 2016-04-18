@@ -60,6 +60,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="TestAppConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestPtfConfig.cs" />

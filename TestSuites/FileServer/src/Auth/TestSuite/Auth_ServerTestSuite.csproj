@@ -49,6 +49,9 @@
     <Reference Include="System.DirectoryServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Authentication\AuthenticationTestBase.cs" />
     <Compile Include="Authentication\KerberosAuthentication\KerberosAuthentication.cs" />
     <Compile Include="Authentication\KerberosAuthentication\KerberosFunctionalClient.cs" />

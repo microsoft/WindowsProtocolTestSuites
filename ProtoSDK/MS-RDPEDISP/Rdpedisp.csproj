@@ -39,6 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Client\RdpedispClient.cs" />
     <Compile Include="Server\RdpedispServer.cs" />
     <Compile Include="Types\RdpedispEnumTypes.cs" />

@@ -39,6 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Client\RdpeusbClient.cs" />
     <Compile Include="Server\RdpeusbClientPduParser.cs" />
     <Compile Include="EusbUtilities.cs" />

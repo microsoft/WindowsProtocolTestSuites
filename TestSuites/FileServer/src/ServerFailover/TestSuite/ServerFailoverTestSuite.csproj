@@ -110,6 +110,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AsymmetricShare.cs" />
     <Compile Include="FileServerFailoverBasic.cs" />
     <Compile Include="FileServerFailoverDurableHandleV2.cs" />

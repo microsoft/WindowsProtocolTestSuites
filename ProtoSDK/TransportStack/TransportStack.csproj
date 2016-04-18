@@ -64,6 +64,9 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="BytesBuffer.cs" />
     <Compile Include="Interfaces\ITargetSend.cs" />
     <Compile Include="Interfaces\ITargetReceive.cs" />
