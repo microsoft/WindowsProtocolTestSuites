@@ -44,6 +44,9 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Client\FsrvpClient.cs" />
     <Compile Include="Client\FsrvpClientContext.cs" />
     <Compile Include="Client\FsrvpStubFormatString.cs" />

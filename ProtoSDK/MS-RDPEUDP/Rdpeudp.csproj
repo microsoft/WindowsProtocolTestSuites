@@ -44,6 +44,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Client\RdpeudpClient.cs" />
     <Compile Include="Client\RdpeudpClientSocket.cs" />
     <Compile Include="CongestionControl.cs" />
