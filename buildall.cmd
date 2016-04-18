@@ -9,13 +9,6 @@ if exist "%TestSuiteRoot%drop" (
  rd /s /q "%TestSuiteRoot%drop"
 )
 
-::Get build version from AssemblyInfo
-set path=%TestSuiteRoot%AssemblyInfo\SharedAssemblyInfo.cs
-set FindExe="%SystemRoot%\system32\findstr.exe"
-set versionStr="[assembly: AssemblyVersion("1.0.0.0")]"
-for /f "delims=" %%i in ('""%FindExe%" "AssemblyVersion" "%path%""') do set versionStr=%%i
-set TESTSUITE_VERSION=%versionStr:~28,-3%
-
 call ProtoSDK\build.cmd
 call TestSuites\MS-SMB\src\build.cmd
 call TestSuites\FileServer\src\build.cmd
