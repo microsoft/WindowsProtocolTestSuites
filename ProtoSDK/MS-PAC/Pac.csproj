@@ -66,6 +66,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Message\ClientClaimsInfo.cs" />
     <Compile Include="Message\DeviceClaimsInfo.cs" />
     <Compile Include="Message\PacDeviceInfo.cs" />

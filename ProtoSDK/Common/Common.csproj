@@ -68,6 +68,9 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AccessCheckObjectTree.cs" />
     <Compile Include="ArrayUtility.cs" />
     <Compile Include="ChannelHelper.cs" />

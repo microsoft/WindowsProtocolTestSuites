@@ -89,6 +89,9 @@
     <Content Include="Leasing\Leasing.cord" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AppInstanceId\AppInstanceIdModel.cs" />
     <Compile Include="Conflict\ConflictModel.cs" />
     <Compile Include="CreateClose\CreateCloseModel.cs" />

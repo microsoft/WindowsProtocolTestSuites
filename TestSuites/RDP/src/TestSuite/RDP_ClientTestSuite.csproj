@@ -72,6 +72,9 @@
     <Content Include="RDP_ClientTestSuite.ptfconfig" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="RDPBCGR\RdpbcgrTestSuite.cs" />
     <Compile Include="RDPBCGR\S10_FastPathOutputTest.cs" />
     <Compile Include="RDPBCGR\S1_ConnectionTest.cs" />
