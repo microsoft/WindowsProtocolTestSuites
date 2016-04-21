@@ -32,7 +32,6 @@ set versionStr="[assembly: AssemblyVersion("1.0.0.0")]"
 for /f "delims=" %%i in ('""%FindExe%" "AssemblyVersion" "%path%""') do set versionStr=%%i
 set TESTSUITE_VERSION=%versionStr:~28,-3%
 
-%buildtool% "%TestSuiteRoot%ProtocolTestManager\ProtocolTestManager.sln" /t:clean
 if exist "%TestSuiteRoot%drop\ProtocolTestManager" (
  rd /s /q "%TestSuiteRoot%drop\ProtocolTestManager"
 )

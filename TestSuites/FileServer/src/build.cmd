@@ -59,6 +59,7 @@ if not defined KeyFile (
 	%buildtool% "%TestSuiteRoot%TestSuites\FileServer\src\FileServer.sln" /t:clean;rebuild 
 ) else (
 	%buildtool% "%TestSuiteRoot%TestSuites\FileServer\src\FileServer.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true	
+	%buildtool% "%TestSuiteRoot%TestSuites\FileServer\ShareUtil\ShareUtil.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true          
 )
 
 if exist "%TestSuiteRoot%drop\TestSuites\FileServer" (
