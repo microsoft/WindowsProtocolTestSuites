@@ -46,7 +46,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Resilient
             }
 
             // delete created file
-            File.Delete(string.Format("\\\\{0}\\{1}\\{2}", testConfig.SutComputerName, testConfig.BasicFileShare, fileName));
+            try
+            {
+                sutProtocolController.DeleteFile(string.Format("\\\\{0}\\{1}", testConfig.SutComputerName, testConfig.BasicFileShare), fileName);
+            }
+            catch
+            {
+            }
 
             base.Reset();
         }

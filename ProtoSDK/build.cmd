@@ -17,9 +17,8 @@ if not defined buildtool (
 )
 
 set CurrentPath=%~dp0
-if not defined TestSuiteRoot (
-	set TestSuiteRoot="%CurrentPath%..\"
-)
+set TestSuiteRoot="%CurrentPath%..\"
+
 
 %buildtool% "%TestSuiteRoot%ProtoSDK\Asn1Base\Asn1Base.csproj" /t:Clean;Rebuild
 %buildtool% "%TestSuiteRoot%ProtoSDK\Messages\Messages.csproj" /t:Clean;Rebuild

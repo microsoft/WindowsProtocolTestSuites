@@ -44,6 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Codecs\RdprfxTileUtils.cs" />
     <Compile Include="Codecs\RemoteFXCodec\RemoteFXCodecContext.cs" />
     <Compile Include="Codecs\RemoteFXCodec\RemoteFXDecoder.cs" />
