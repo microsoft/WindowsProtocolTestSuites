@@ -13,17 +13,17 @@ if not defined buildtool (
 
 if not defined buildtool (
 	echo Error: No msbuild.exe was found, install .Net Framework version 4.0 or higher
-	goto :eof
+	exit /b 1
 )
 
 if not defined WIX (
 	echo Error: WiX Toolset version 3.7 or higher should be installed
-	goto :eof
+	exit /b 1
 )
 
 if not exist "%programfiles(x86)%\Protocol Test Framework\bin\Microsoft.Protocols.TestTools.dll" (
         echo Error: Protocol Test Framework should be installed
-	goto :eof
+	exit /b 1
 )
 
 if not defined vspath (
@@ -35,7 +35,7 @@ if not defined vspath (
 		set vspath="%VS140COMNTOOLS%"
 	) else (
 		echo Error: Visual Studio or Visual Studio test agent should be installed, version 2012 or higher
-		goto :eof
+		exit /b 1
 	)
 )
 
