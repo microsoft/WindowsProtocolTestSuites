@@ -272,9 +272,8 @@ __To set up a Windows-based SUT__
 
 1.	Join the computer to domain (ignore this step if it's a workgroup environment).
 2.	Copy MS-SMB-TestSuite-ServerEP.msi installer on the Windows-based SUT.
-3.	Copy Protocol Test Suites Privacy Statement.rtf on the Windows-based SUT.
-4.	Run the MS-SMB-TestSuite-ServerEP.msi installer on the Windows-based SUT.
-5.	When options are prompted, select the option, Install and configure Windows System Under Test (SUT).
+3.	Run the MS-SMB-TestSuite-ServerEP.msi installer on the Windows-based SUT.
+4.	When options are prompted, select the option, Install and configure Windows System Under Test (SUT).
 
 To set up a SUT that is not based on the Windows operating system, see [Configure a SUT that is Not Windows-based](#7.2.2).
 
@@ -291,9 +290,6 @@ File or Folder|	Description
 --------------|-------------
 Batch|Command files you can use to run individual test cases or all test cases.
 Bin|Test suite binaries and configuration files.
-Docs|__[MS-SMB].pdf__ ¨C The version of the technical document that this test suite is based on. 
-    |__MS-SMB_ServerUserGuide.md__ ¨C A user guide that explains how to install and configure the driver computer, the SUT and the DC, as well as how to run test cases. 
-    |__MS-SMB_ServerTestDesignSpecification.md__ ¨C An overview document containing conceptual information about a protocol including probable use, relationships to other protocols, message flow, state diagrams, a short list of properties, and a test approach describing justification and adapter approach.
 Scripts   |Scripts that are used to set up and configure the driver computer and the Windows-based SUT, and the Windows-based DC.
 LICENSE.rtf|The End User License Agreement.
 

@@ -139,8 +139,8 @@ For workgroup environments, omit tasks that are related to the setup and configu
 |-----------|------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | □         | Download the test suite for the protocol implementation                                  | For a list of the files that the download package contains, please see [Installed Files and Folders](#6).                                                                                                      |
 | □         | Confirm that your test environment and computers meet the requirements of the test suite | For information about the requirements of the test suite, please see [Requirements](#3).                                                                                                                 |
-| □         | Set up the Domain Controller (DC)                                                        | See [Set up the Domain Controller (DC)](#%.2.1).                                                                                                                                              |
-| □         | Set up the system under test (SUT)                                                       | See [Set up the SUT](#5.1.2) or [Set up the SUT](#5.2.3) .                                                                                                                                      |
+| □         | Set up the Domain Controller (DC)                                                        | See [Set up the Domain Controller (DC)](#5.2.1).                                                                                                                                              |
+| □         | Set up the system under test (SUT)                                                       | See [Set up the SUT in Workgroup Environment](#5.1.2) or [Set up the SUT in Domain Environment](#5.2.3) .                                                                                                                                      |
 | □         | Set up the driver computer                                                               | See [Set up the Driver Computer](#5.1.1) or [Set up the Driver Computer](#5.2.2).                                                                                                                               |
 | □         | Set up the network                                                                       | See [Network Setup](#4).                                                                                                                                                                               |
 | □         | Verify the connections from the driver computer to the SUT and other computers           | See [Verify Connectivity from the Driver Computer](#4.3).                                                                                                                                                                  |
@@ -192,7 +192,7 @@ Run this test suite in a domain environment that contains the following computer
 
     For scenarios not involving cluster, a computer running Microsoft® Windows Server 2016 Technical Preview 2, or a computer set up as SUT that is running non-Windows operating system. Either failover cluster node could be used as SUT for non-cluster involved scenarios here.
 
-![](./image/FileServerUserGuide/FileServerUserGuide/image3.png)Note
+![](./image/FileServerUserGuide/image3.png)Note
 
 For more information about scenarios involving cluster and otherwise, please check FileServerTestDesignSpecification.md section 3 "Test Suite Design".
 
@@ -638,7 +638,7 @@ For Windows platform, please refer to [Install DNS Service and Active Directory 
 
 6.  Password of all the accounts is set to "**Password01!**"
 
-For Windows platform, please refer to [Create a Domain group](#5.3.9.7) and [Create a Domain account that belongs to a Domain group](#5.3.9.8).
+For Windows platform, please refer to [Create Non-Admin user account](#5.3.9.5), [Enable Guest user account](#5.3.9.6), [Create a Domain group](#5.3.9.7) and [Create a Domain account that belongs to a Domain group](#5.3.9.8).
 
 #####<a name="5.2.1.4"/> Setup to test Claimed Based Access Control (CBAC)
 
