@@ -25,6 +25,7 @@
   <DeploymentItem filename="SQOS\TestSuite\MS-SQOS_ServerTestSuite.ptfconfig" />
   <DeploymentItem filename="Auth\TestSuite\Auth_ServerTestSuite.deployment.ptfconfig" />
   <DeploymentItem filename="Auth\TestSuite\Auth_ServerTestSuite.ptfconfig" />
+  <DeploymentItem filename="Data\" outputDirectory="Data"/>
   </Deployment>
   <Execution hostProcessPlatform="MSIL">
     <TestTypeSpecific>

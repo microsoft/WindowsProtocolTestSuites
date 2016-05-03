@@ -36,6 +36,13 @@
             </Component>
         </DirectoryRef>
     </Fragment>
+	<Fragment>
+		<DirectoryRef Id="FILESERVERDATAFOLDER" >
+			<Component Id="cmp183F3AF02B744E51BC19D19ADBCE0444" Guid="{FB0003F6-B37D-4AD2-B19C-3D9F9E2610AF}">
+				<File Id="fil780B459AB16E4C9DB1B3BEE4CEAF3F0D" Source="..\Plugins\fileserverPlugin\fileserverPlugin\Data\plugin.vhdx" />
+			</Component>
+		</DirectoryRef>
+	</Fragment>
     <Fragment>
         <DirectoryRef Id="LIBFOLDER">
             <Component Id="fileserverPlugin.dll" Guid="{E0D2D3A4-149C-483B-953A-44E6BCD77BC9}">
@@ -65,6 +72,7 @@
             <ComponentRef Id="cmp19B67EFB6E55775206085788F36569FF" />
             <ComponentRef Id="cmp3DE29B63C16D4C6BBC74FE25B62D5182" />
             <ComponentRef Id="cmp83F6DA28F3424788AC24B95F52965ECC" />
+			<ComponentRef Id="cmp183F3AF02B744E51BC19D19ADBCE0444" />
             <ComponentRef Id="fileserverPlugin.dll" />
             <ComponentRef Id="fileserverConfigFile" />
             <ComponentRef Id="fileserverTestCategoryFile" />

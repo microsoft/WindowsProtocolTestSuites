@@ -40,26 +40,24 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [Description("Check if server supports handling tunnel operation to extract the target VHD set file.")]
         public void BVT_Extract_VHDSet()
         {
-            ulong requestId = 0;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1.	Client opens a shared virtual disk file and expects success.");
-            OpenSharedVHD(TestConfig.NameOfSharedVHDS, requestId);
+            OpenSharedVHD(TestConfig.NameOfSharedVHDS, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_2);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client sends tunnel operation SVHDX_META_OPERATION_START_REQUEST to server and expects success.");
 
-            System.Guid snapshotId = CreateSnapshot(ref requestId, client);
+            System.Guid snapshotId = System.Guid.NewGuid();
+            CreateSnapshot(snapshotId);
+
             SVHDX_META_OPERATION_START_REQUEST startRequest = new SVHDX_META_OPERATION_START_REQUEST();
             startRequest.TransactionId = System.Guid.NewGuid();
             startRequest.OperationType = Operation_Type.SvhdxMetaOperationTypeExtractVHD;
-            startRequest.Padding = new byte[4];
             SVHDX_META_OPERATION_EXTRACT extract = new SVHDX_META_OPERATION_EXTRACT();
             extract.snapshotType = Snapshot_Type.SvhdxSnapshotTypeVM;
-            extract.Padding = new byte[4];
             extract.flags = ExtractSnapshot_Flags.SVHDX_EXTRACT_SNAPSHOTS_FLAG_ZERO;
             extract.SourceSnapshotId = snapshotId;
             extract.SourceLimitSnapshotId = snapshotId;
             extract.DestinationFileName = Encoding.Unicode.GetBytes(System.Guid.NewGuid().ToString() + "\0");
             extract.DestinationFileNameLength = (uint)extract.DestinationFileName.Length;
-            extract.padding = new byte[4];
             
             byte[] payload = client.CreateTunnelMetaOperationStartExtractRequest(
                 startRequest,
@@ -71,7 +69,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             uint status = client.TunnelOperation<SVHDX_TUNNEL_OPERATION_HEADER>(
                 true, //true for Async operation, false for non-async operation
                 RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_META_OPERATION_START,
-                requestId,
+                ++RequestIdentifier,
                 payload,
                 out header,
                 out response);
@@ -80,9 +78,49 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 status,
                 "Ioctl should succeed, actual status: {0}",
                 GetStatus(status));
-            VerifyTunnelOperationHeader(header.Value, RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_META_OPERATION_START, (uint)RsvdStatus.STATUS_SVHDX_SUCCESS, requestId++);
+            VerifyTunnelOperationHeader(header.Value, RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_META_OPERATION_START, (uint)RsvdStatus.STATUS_SVHDX_SUCCESS, RequestIdentifier);
 
-            DeleteSnapshot(ref requestId, snapshotId, client);
+            DeleteSnapshot(snapshotId);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "3.	Client closes the file.");
+            client.CloseSharedVirtualDisk();
+
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.RsvdVersion2)]
+        [Description("Check if server supports handling an Optimize request.")]
+        public void BVT_Optimize()
+        {
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "1.	Client opens a shared virtual disk file and expects success.");
+            OpenSharedVHD(TestConfig.NameOfSharedVHDS, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_2);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client sends the tunnel operation SVHDX_META_OPERATION_START_REQUEST with an Optimize request.");
+
+            SVHDX_META_OPERATION_START_REQUEST startRequest = new SVHDX_META_OPERATION_START_REQUEST();
+            startRequest.TransactionId = System.Guid.NewGuid();
+            startRequest.OperationType = Operation_Type.SvhdxMetaOperationTypeOptimize;
+
+            byte[] payload = client.CreateTunnelMetaOperationStartOptimizeRequest(
+                startRequest);
+
+            SVHDX_TUNNEL_OPERATION_HEADER? header;
+            SVHDX_TUNNEL_OPERATION_HEADER? response;
+            //For RSVD_TUNNEL_META_OPERATION_START operation code, the IOCTL code should be FSCTL_SVHDX_ASYNC_TUNNEL_REQUEST
+            uint status = client.TunnelOperation<SVHDX_TUNNEL_OPERATION_HEADER>(
+                true,//true for Async operation, false for non-async operation
+                RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_META_OPERATION_START,
+                ++RequestIdentifier,
+                payload,
+                out header,
+                out response);
+            BaseTestSite.Assert.AreEqual(
+                (uint)Smb2Status.STATUS_SUCCESS,
+                status,
+                "Ioctl should succeed, actual status: {0}",
+                GetStatus(status));
+            VerifyTunnelOperationHeader(header.Value, RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_META_OPERATION_START, (uint)RsvdStatus.STATUS_SVHDX_SUCCESS, RequestIdentifier);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "3.	Client closes the file.");
             client.CloseSharedVirtualDisk();

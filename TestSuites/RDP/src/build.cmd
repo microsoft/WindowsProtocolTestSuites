@@ -42,16 +42,23 @@ if not defined vspath (
 set CurrentPath=%~dp0
 set TestSuiteRoot=%CurrentPath%..\..\..\
 
-if exist "%TestSuiteRoot%drop\TestSuites\RDP" (
- rd /s /q "%TestSuiteRoot%drop\TestSuites\RDP"
-)
-
 ::Get build version from AssemblyInfo
 set path=%TestSuiteRoot%AssemblyInfo\SharedAssemblyInfo.cs
 set FindExe="%SystemRoot%\system32\findstr.exe"
 set versionStr="[assembly: AssemblyVersion("1.0.0.0")]"
 for /f "delims=" %%i in ('""%FindExe%" "AssemblyVersion" "%path%""') do set versionStr=%%i
 set TESTSUITE_VERSION=%versionStr:~28,-3%
+
+set KeyFile=%1
+if not defined KeyFile (
+	%buildtool% "%TestSuiteRoot%TestSuites\RDP\src\RDP_Client.sln" /t:clean;rebuild 
+) else (
+	%buildtool% "%TestSuiteRoot%TestSuites\RDP\src\RDP_Client.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true	
+)
+
+if exist "%TestSuiteRoot%drop\TestSuites\RDP" (
+ rd /s /q "%TestSuiteRoot%drop\TestSuites\RDP"
+)
 
 %buildtool% "%TestSuiteRoot%TestSuites\RDP\src\deploy\deploy.wixproj" /t:Clean;Rebuild
 

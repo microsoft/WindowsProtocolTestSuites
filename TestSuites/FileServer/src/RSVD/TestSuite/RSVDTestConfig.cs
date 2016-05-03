@@ -71,7 +71,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         {
             get
             {
-                return GetProperty("SharedVHDXName");
+                return "rsvd.vhdx";
             }
         }
 
@@ -82,18 +82,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         {
             get
             {
-                return GetProperty("SharedVHDSName");
-            }
-        }
-
-        /// <summary>
-        /// Name of the shared virtual disk file used to be converted into a virtual disk set file
-        /// </summary>
-        public string NameOfConvertSharedVHDX
-        {
-            get
-            {
-                return GetProperty("ConvertSharedVHDXName");
+                return "rsvd.vhds";
             }
         }
 
@@ -104,7 +93,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         {
             get
             {
-                return GetProperty("ConvertedSharedVHDSName");
+                return "ConvertedSharedVHDSName.vhds";
             }
         }
 
@@ -137,7 +126,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         {
             get
             {
-                return ParseUint("SectorSizeInBytes");
+                return 512;
             }
         }
 
@@ -148,18 +137,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         {
             get
             {
-                return ParseUint("PhysicalSectorSizeInBytes");
+                return 4096;
             }
         }
 
         /// <summary>
         /// A 64-bit unsigned integer which indicates the virtual size, in Gigabytes, of the shared virtual disk.
+        /// 1 GB
         /// </summary>
         public ulong VirtualSize
         {
             get
             {
-                return ParseUlong("VirtualSizeInGB") * 0x40000000;
+                return 1 * 0x40000000;
             }
         }
 
@@ -170,7 +160,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         {
             get
             {
-                return ParsePropertyToEnum<DISK_TYPE>(GetProperty("DiskType"), "DiskType");
+                return DISK_TYPE.VHD_TYPE_DYNAMIC;
             }
         }
 
@@ -183,7 +173,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         {
             get
             {
-                return bool.Parse(GetProperty("IsMounted"));
+                return true;
             }
         }
 
@@ -196,7 +186,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         {
             get
             {
-                return bool.Parse(GetProperty("Is4kAligned"));
+                return true;
             }
         }
 
@@ -207,9 +197,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         {
             get
             {
-                return ParseUlong("FileSizeInMB") * 0x100000; 
+                return 4 * 0x100000;  // 4 MB
             }
         }
+
+        public string FullPathShareContainingSharedVHD
+        {
+            get
+            {
+                return GetProperty("ShareContainingSharedVHD");
+            }
+        }
+
 
         public RSVDTestConfig(ITestSite site)
             : base(site)

@@ -34,6 +34,10 @@
         <File Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd.dll"
               Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd.dll" />
       </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos.dll" Guid="{90D7975C-E8C3-408F-9997-75C40502C3A0}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos.dll" />
+      </Component>	  
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb.dll" Guid="{BD049B50-41B3-4E56-9928-80CB1E54D271}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb.dll"
               Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb.dll" />

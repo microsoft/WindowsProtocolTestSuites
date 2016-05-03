@@ -2,14 +2,20 @@ bin
 obj
 drop
 *.suo
+*.mdf
+*.ldf
 
 # Generated files
 TestSuites/MS-SMB/src/Deploy/TestSuiteBatchFiles.wxs
 TestSuites/MS-SMB/src/Deploy/TestSuiteBinFiles.wxs
 TestSuites/MS-SMB/src/Deploy/TestSuiteScripts.wxs
-TestSuites/RDP/src/Deploy/TestSuiteDataFiles.wxs
+TestSuites/FileServer/src/Deploy/Bin.wxs
+TestSuites/FileServer/src/Deploy/Batch.wxs
+ProtocolTestManager/Kernel/Microsoft.Protocols.TestManager.Kernel.XML
+ProtocolTestManager/PropertyValueDetector/Microsoft.Protocols.TestManager.Detector.XML
 TestSuites/RDP/src/Deploy/TestSuiteBatchFiles.wxs
 TestSuites/RDP/src/Deploy/TestSuiteBinFiles.wxs
+TestSuites/RDP/src/Deploy/TestSuiteDataFiles.wxs
 TestSuites/RDP/src/Deploy/TestSuiteScripts.wxs
 TestSuites/FileServer/src/Deploy/Batch.wxs
 TestSuites/FileServer/src/Deploy/Bin.wxs

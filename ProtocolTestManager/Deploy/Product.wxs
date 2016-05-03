@@ -104,6 +104,9 @@
             <Directory Id="FILESERVERDOCFOLDER" Name="fileserver" />
 	    <Directory Id="RDPDOCFOLDER" Name="rdp" />
           </Directory>
+		  <Directory Id="DATAFOLDER" Name="data" >
+			<Directory Id="FILESERVERDATAFOLDER" Name="fileserver" />
+		  </Directory>
         </Directory>
       </Directory>
       <Directory Id="DesktopFolder" />

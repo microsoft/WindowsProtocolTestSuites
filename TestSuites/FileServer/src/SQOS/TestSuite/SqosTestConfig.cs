@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos;
 using Microsoft.Protocols.TestTools;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
@@ -128,6 +130,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
             get
             {
                 return uint.Parse(GetProperty("SqosBaseIoSizeInBytes"));
+            }
+        }
+
+        public ulong SqosMaximumBandwidth
+        {
+            get
+            {
+                return ulong.Parse(GetProperty("SqosMaximumBandwidth"));
+            }
+        }
+
+        public SQOS_PROTOCOL_VERSION SqosClientDialect
+        {
+            get
+            {
+                return ParsePropertyToEnum<SQOS_PROTOCOL_VERSION>(GetProperty("SqosClientDialect"), "SqosClientDialect");
             }
         }
 

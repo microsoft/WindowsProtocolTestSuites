@@ -314,6 +314,8 @@ The workgroup environment requires interactions between the following computers 
 
 The following diagram applies to both Windows based computers and Non-Windows based computers in the test environment.
 
+![](./image/FileServerUserGuide/image4.png)
+
 | Machine Name/Access Point | NIC       | IPv4          | Subnet Mask   |
 |---------------------------|-----------|---------------|---------------|
 | Client01                  | External1 | 192.168.1.111 | 255.255.255.0 |
@@ -343,6 +345,8 @@ For scenarios involving cluster, driver computer in this test suite will simulat
 For non-cluster scenarios, driver computer will simulate a physical machine than contacts either node which is acting as SUT.
 
 The following figure shows the domain environment with recommended network configurations for reference.
+
+![](./image/FileServerUserGuide/image5.png)
 
 ![](./image/FileServerUserGuide/image3.png)Note
 

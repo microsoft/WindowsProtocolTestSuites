@@ -102,6 +102,9 @@
     <Content Include="SutProtocolControlAdapter\DeleteDirectory.ps1" />
     <Content Include="SutProtocolControlAdapter\DeleteFile.ps1" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="SutProtocolControlAdapter\CopyFile.ps1" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\" />
