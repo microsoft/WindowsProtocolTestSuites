@@ -30,9 +30,19 @@ You should install the following list of software in order to build Test Suites 
 * [Protocol Test Framework](https://github.com/microsoft/protocoltestframework). You can use a released package or build an installer package of Protocol Test Framework from source code.
 * [Spec Explorer](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/). It is only required for the test suites that contain Model Based Test cases. If you want to regenerate Model Based Test cases, you must install Visual Studio 2012, otherwise higher versions of Visual Studio are supported.
 
+## Model-Based Testing
+
+Some test suites use [Model-Based Testing](https://msdn.microsoft.com/en-us/library/ee620469.aspx):
+
+* **SMB1 Server Test Suite**
+* **File Server Family Test Suite**
+
+To be able to build the above test suites, you should not only install [Spec Explorer](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/), but also build [Protocol Test Framework](https://github.com/microsoft/protocoltestframework)
+by **formodel** option and install the built installer file.
+
 ## Build
 
-After you clone a copy of this repo, change to the **WindowsProtocolTestSuites** directory:
+After you [clone a copy](https://help.github.com/articles/cloning-a-repository/) of this repo, change to the **WindowsProtocolTestSuites** directory:
 
 ```
 cd WindowsProtocolTestSuites
