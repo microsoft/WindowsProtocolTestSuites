@@ -85,7 +85,7 @@ Windows Protocol Test Suites are under the [MIT license](https://github.com/Micr
 
 ## Contact
 The following resources are for Windows protocol test suite news, discussion, and support:
-* View news announcement in [Open Specification Windows Protocols Forum](https://social.msdn.microsoft.com/Forums/en-US/home?forum=os_windowsprotocols).
-* Discuss test suites issues in [Windows Protocol Test Suites Forum](https://github.com/Microsoft/WindowsProtocolTestSuites/issues) on the github.
+* View news announcements in [Open Specification Windows Protocols Forum](https://social.msdn.microsoft.com/Forums/en-US/home?forum=os_windowsprotocols).
+* Discuss test suites issues [here](https://github.com/Microsoft/WindowsProtocolTestSuites/issues) on the github.
 * For [Open Specifications Protocols](https://msdn.microsoft.com/en-us/library/gg685446.aspx) support, contact dochelp@microsoft.com.
 
