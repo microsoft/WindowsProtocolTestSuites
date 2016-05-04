@@ -840,7 +840,7 @@ Navigate to **Server Manager** &gt; **File and Storage Services** &gt; **Share**
 
 Please modify and run below two commands from console window:
 
-	cd C:\MicrosoftProtocolTests\FileSharing\Server-Endpoint\<version#>\Bin\
+	cd C:\MicrosoftProtocolTests\FileServer\Server-Endpoint\<version#>\Bin\
 	ShareUtil.exe <computer name of the share> <share name> <flag > true
 
 Examples:
@@ -1854,7 +1854,7 @@ This test suite includes command files that you can use to complete some basic t
 
 You can find and run these test cases in the following directory:
 
-	C:\MicrosoftProtocolTests\FileSharing\Server-Endpoint\<version#>\Batch
+	C:\MicrosoftProtocolTests\FileServer\Server-Endpoint\<version#>\Batch
 
 You can run these command files at the command prompt, or by selecting and clicking one or more of the files from the directory.
 
