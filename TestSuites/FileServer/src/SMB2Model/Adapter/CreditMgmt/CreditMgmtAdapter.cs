@@ -441,7 +441,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreditMgm
                         {
                             // Make sure testClient was set to null during disconnection correctly
                             // In case we catch a timeout exception first
-                            // Temp fix for test suite bug 6349 as per discussion
 
                             // For an SMB2 Write request with an invalid MessageId, Windows 8 and Windows Server 2012 will stop processing 
                             // the request and any further requests on that connection.
@@ -533,7 +532,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreditMgm
                         {
                             // Make sure testClient was set to null during disconnection correctly
                             // In case we catch a timeout exception first
-                            // Temp fix for test suite bug 6349 as per discussion
 
                             // For an SMB2 Write request with an invalid MessageId, Windows 8 and Windows Server 2012 will stop processing 
                             // the request and any further requests on that connection.
