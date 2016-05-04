@@ -182,7 +182,7 @@ Test scenarios are categorized as below table and will be described in following
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 9          | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 38         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
-| RSVD Test                | 25         | Test for MS-RSVD                                                                                                  |
+| RSVD Test                | 24         | Test for MS-RSVD                                                                                                  |
 | DFSC Test                | 43         | Test for MS-DFSC                                                                                                  |
 
 ###<a name="3.1">SMB2 BVT
