@@ -20,7 +20,6 @@ namespace Microsoft.Protocol.TestSuites.Smb
     {
         /// <summary>
         /// Test case of verifying the Create request with Fields ignored.
-        /// This case failed, bug 6137 for track 
         /// </summary>
         [TestCategory("Traditional")]
         public void TraditionalTestCase_IgnoreFields_Create_01_Case()
