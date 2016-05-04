@@ -6897,7 +6897,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         ///  RDP 10.0 clients
         /// </summary>
-        V3 = 0x00080005
+        V3 = 0x00080005,
+
+        /// <summary>
+        ///  RDP 10.1 clients
+        /// </summary>
+        V4 = 0x00080006,
+
+        /// <summary>
+        ///  RDP 10.2 clients
+        /// </summary>
+        V5 = 0x00080007
     }
 
     /// <summary>
@@ -13112,10 +13122,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     public enum streamId_Values : byte
     {
         /// <summary>
-        ///  Undefined stream priority. This value might be used
-        ///  in the Server Synchronize PDU (see section ) due to
-        ///  a server-side RDP bug. It MUST not be used in conjunction
-        ///  with any other PDUs.
+        ///  Undefined stream priority.
         /// </summary>
         STREAM_UNDEFINED = 0x00,
 
