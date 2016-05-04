@@ -1303,7 +1303,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
                 //    Remove ACE.AccessMask from ns.Remaining
                 //    END FOR
                 //    FOR each node np such that np is an ancestor of n DO
-                //    Set np.Remaining = np.Remaining or np-1.Remaining   //Filed TDI 55801
+                //    Set np.Remaining = np.Remaining or np-1.Remaining   
                 //END FOR
                 //END IF
                 //END IF

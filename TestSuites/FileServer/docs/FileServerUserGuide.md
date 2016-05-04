@@ -314,6 +314,8 @@ The workgroup environment requires interactions between the following computers 
 
 The following diagram applies to both Windows based computers and Non-Windows based computers in the test environment.
 
+![](./image/FileServerUserGuide/image4.png)
+
 | Machine Name/Access Point | NIC       | IPv4          | Subnet Mask   |
 |---------------------------|-----------|---------------|---------------|
 | Client01                  | External1 | 192.168.1.111 | 255.255.255.0 |
@@ -343,6 +345,8 @@ For scenarios involving cluster, driver computer in this test suite will simulat
 For non-cluster scenarios, driver computer will simulate a physical machine than contacts either node which is acting as SUT.
 
 The following figure shows the domain environment with recommended network configurations for reference.
+
+![](./image/FileServerUserGuide/image5.png)
 
 ![](./image/FileServerUserGuide/image3.png)Note
 
@@ -836,7 +840,7 @@ Navigate to **Server Manager** &gt; **File and Storage Services** &gt; **Share**
 
 Please modify and run below two commands from console window:
 
-	cd C:\MicrosoftProtocolTests\FileSharing\Server-Endpoint\<version#>\Bin\
+	cd C:\MicrosoftProtocolTests\FileServer\Server-Endpoint\<version#>\Bin\
 	ShareUtil.exe <computer name of the share> <share name> <flag > true
 
 Examples:
@@ -1850,7 +1854,7 @@ This test suite includes command files that you can use to complete some basic t
 
 You can find and run these test cases in the following directory:
 
-	C:\MicrosoftProtocolTests\FileSharing\Server-Endpoint\<version#>\Batch
+	C:\MicrosoftProtocolTests\FileServer\Server-Endpoint\<version#>\Batch
 
 You can run these command files at the command prompt, or by selecting and clicking one or more of the files from the directory.
 

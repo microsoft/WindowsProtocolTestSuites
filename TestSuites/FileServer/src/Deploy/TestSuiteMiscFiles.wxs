@@ -21,6 +21,8 @@
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Dfsc.pdb"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd.dll"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd.pdb"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos.dll"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos.pdb"/>	  
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.dll"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.pdb"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fsrvp.dll"/>
@@ -164,6 +166,12 @@
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd.pdb" Guid="{23B2692C-CE3B-459D-B230-B765956EC819}">
         <File Id="filCE869EB0BAEE480898482F940195F108" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd.pdb" />
       </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos.dll" Guid="{683D5C0E-4DF4-4CA1-B045-63399B5ED228}">
+        <File Id="filC6E25E9E9BAB40FF85405EAF7B4CF30C" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos.pdb" Guid="{8081FF54-0E1B-4EB9-9D59-8DD5973E9C60}">
+        <File Id="fil5F944709C1414EEEBED70E715A8FACCF" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos.pdb" />
+      </Component>	  
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.dll" Guid="{0D2C0A17-9A8B-4C6E-96B7-5F7EC3E98EBB}">
         <File Id="filF5F1FC7433635A82592387076ECBCFC7" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.dll" />
       </Component>

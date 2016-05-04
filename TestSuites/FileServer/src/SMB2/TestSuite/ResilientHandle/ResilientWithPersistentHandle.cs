@@ -66,7 +66,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.ResilientHan
             /// GlobalOpenTable where Open.FileName matches the file name in the Buffer field of the request. If an Open entry is found, 
             /// if Open.IsPersistent is TRUE, *Open.IsResilient is TRUE* and if Open.Connection is NULL, the server MUST fail the request with STATUS_FILE_NOT_AVAILABLE.
             /// 
-            /// Related TDI: 67939
             #region Check Applicability
             TestConfig.CheckDialect(DialectRevision.Smb30);
             TestConfig.CheckCapabilities(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES);

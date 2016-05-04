@@ -38,12 +38,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
-        [TestCategory(TestCategories.RsvdVersion2)]
         [Description("Check if server handles SHARED_VIRTUAL_DISK_SUPPORT request to a shared virtual disk file correctly.")]
         public void BVT_QuerySharedVirtualDiskSupport()
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1.	Client opens a shared virtual disk file successfully.");
-            OpenSharedVHD(TestConfig.NameOfSharedVHDX);
+            OpenSharedVHD(TestConfig.NameOfSharedVHDX, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,

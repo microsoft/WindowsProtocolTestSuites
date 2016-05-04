@@ -34,8 +34,6 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             switch (level)
             {
                 case LogLevel.Information:
-                    DetectorUtil.WriteLog("[" + DateTime.Now + "]" + msg);
-                    break;
                 case LogLevel.Warning:
                     DetectorUtil.WriteLog(msg, startNewLine, style);
                     break;

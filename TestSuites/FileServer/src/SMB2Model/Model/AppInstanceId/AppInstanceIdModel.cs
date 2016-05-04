@@ -90,7 +90,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.AppInstance
                 return;
             }
 
-            // TDI: 72179
             ModelHelper.Log(LogType.Requirement, 
                 "3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, the server MUST initialize the following:");
             ModelHelper.Log(LogType.TestInfo, "Server supports dialect {0}.", MaxSmbVersionSupported);

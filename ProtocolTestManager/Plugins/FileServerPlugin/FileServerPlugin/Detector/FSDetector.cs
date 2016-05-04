@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using System;
@@ -49,30 +50,57 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
     {
         #region Properties
 
-        public string SUTName { get; private set; }
         public IPAddress SUTIpAddress { get; private set; }
         public SecurityPackageType SecurityPackageType { get; private set; }
         public AccountCredential Credential { get; private set; }
+
         #endregion
 
         #region Fields
         private Logger logWriter = null;
         private const string defautBasicShare = "SMBBasic";
-        private int defaultTimeoutInSeconds = 3;
+        private const string vhdName = "plugin.vhdx";
+        private const string fileNameSuffix = ":SharedVirtualDisk";
+        private const int defaultTimeoutInSeconds = 20; 
+        private const string testSuiteName = "FileServer";
+
+        // Get Service principal name may take a long time, so just get it once and save it.
+        private string sutName = null;
+        private bool alreadyGotDnsName = false;
         #endregion
 
+        public string SUTName
+        {
+            get
+            {
+                if (!alreadyGotDnsName)
+                {
+                    try
+                    {
+                        sutName = Dns.GetHostEntry(sutName).HostName;
+                        alreadyGotDnsName = true;
+                    }
+                    catch
+                    {
+                        logWriter.AddLog(LogLevel.Information, "GetHostEntry failed");
+                    }
+                }
+
+                return sutName;
+            }
+        }
         public FSDetector
             (Logger logger, 
             string targetSUT, 
             AccountCredential accountCredential, 
             SecurityPackageType securityPackageType)
         {
-            SUTName = targetSUT;
+            sutName = targetSUT;
             Credential = accountCredential;
             SecurityPackageType = securityPackageType;
 
             logWriter = logger;
-            logWriter.AddLog(LogLevel.Information, string.Format("SutName: {0}", SUTName));
+            logWriter.AddLog(LogLevel.Information, string.Format("SutName: {0}", sutName));
             logWriter.AddLog(LogLevel.Information, string.Format("DomainName: {0}", Credential.DomainName));
             logWriter.AddLog(LogLevel.Information, string.Format("UserName: {0}", Credential.AccountName));
             logWriter.AddLog(LogLevel.Information, string.Format("UserPassword: {0}", Credential.Password));
@@ -83,7 +111,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         public NetworkInfo PingTargetSUT()
         {
             NetworkInfo networkInfo = new NetworkInfo();
-            IPAddress[] addList = Dns.GetHostAddresses(SUTName);
+            IPAddress[] addList = Dns.GetHostAddresses(sutName);
 
             if (null == addList)
             {
@@ -662,7 +690,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         private void FetchPlatformInfo(ref DetectionInfo info)
         {
-            ManagementObjectCollection resultCollection = QueryWmiObject(info.targetSUT, "SELECT * FROM Win32_OperatingSystem");
+            ManagementObjectCollection resultCollection = QueryWmiObject(SUTName, "SELECT * FROM Win32_OperatingSystem");
             foreach (ManagementObject result in resultCollection)
             {
                 info.platform = ConvertPlatform(result["Version"].ToString());

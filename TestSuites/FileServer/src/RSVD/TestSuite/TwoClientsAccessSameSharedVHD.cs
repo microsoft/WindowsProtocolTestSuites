@@ -61,14 +61,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.RsvdVersion1)]
-        [TestCategory(TestCategories.RsvdVersion2)]
         [TestCategory(TestCategories.Compatibility)]
         [Description("Check if server handles Read request to a shared virtual disk file from two clients correctly.")]
         public void TwoClientsReadSameSharedVHD()
         {
-            ulong requestIdforFirstClient = 0;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1.	The first client opens a shared virtual disk file and expects success.");
-            OpenSharedVHD(TestConfig.NameOfSharedVHDX, requestIdforFirstClient++);
+            OpenSharedVHD(TestConfig.NameOfSharedVHDX, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1, 0);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	The first client reads file content and expects success.");
             byte[] payload;
@@ -79,11 +77,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 "Read content of shared virtual disk file from the first client should succeed, actual status: {0}",
                 GetStatus(status));
 
-            ulong requestIdforSecondClient = 0;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "3.	The second client opens a shared virtual disk file and expects success.");
             this.secondClient = new RsvdClient(TestConfig.Timeout);
-            OpenSharedVHD(TestConfig.NameOfSharedVHDX, requestIdforSecondClient, rsvdClient: secondClient);
-            requestIdforSecondClient++;
+            OpenSharedVHD(TestConfig.NameOfSharedVHDX, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1, 0, rsvdClient: secondClient);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "4.	The second client reads file content and expects success.");
             status = secondClient.Read(0, 512, out payload);
@@ -101,14 +97,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.RsvdVersion1)]
-        [TestCategory(TestCategories.RsvdVersion2)]
         [TestCategory(TestCategories.Compatibility)]
         [Description("Check if server handles Write request to a shared virtual disk file from two clients correctly.")]
         public void TwoClientsWriteSameSharedVHD()
         {
-            ulong requestIdforFirstClient = 0;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1.	The first client opens a shared virtual disk file and expects success.");
-            OpenSharedVHD(TestConfig.NameOfSharedVHDX, requestIdforFirstClient++);
+            OpenSharedVHD(TestConfig.NameOfSharedVHDX, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1, 0);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	The first client writes file content and expects success.");
             byte[] payload = new byte[512];
@@ -120,9 +114,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 GetStatus(status));
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "3.	The second client opens a shared virtual disk file and expects success.");
-            ulong requestIdforSecondClient = 0;
             this.secondClient = new RsvdClient(TestConfig.Timeout);
-            OpenSharedVHD(TestConfig.NameOfSharedVHDX, requestIdforSecondClient, rsvdClient: secondClient);
+            OpenSharedVHD(TestConfig.NameOfSharedVHDX, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1, 0, rsvdClient: secondClient);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "4.	The second client writes file content and expects success.");
             status = secondClient.Write(0, payload);

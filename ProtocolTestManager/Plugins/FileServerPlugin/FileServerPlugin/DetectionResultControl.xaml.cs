@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +28,70 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             InitializeComponent();
         }
 
+        public void LoadDetectionInfo(DetectionInfo detectionInfo)
+        {
+            this.info = detectionInfo;
+
+            // Add/Update detected Dialects
+            AddDialect(this.info.smb2Info.MaxSupportedDialectRevision);
+
+            // Add/Update detected Capablities
+            AddCapability(Capabilities_Values.GLOBAL_CAP_DFS, "DFS (Distributed File System)");
+            AddCapability(Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING, "Directory Leasing");
+            AddCapability(Capabilities_Values.GLOBAL_CAP_ENCRYPTION, "Encryption");
+            AddCapability(Capabilities_Values.GLOBAL_CAP_LARGE_MTU, "Large MTU (multi-credit operations)");
+            AddCapability(Capabilities_Values.GLOBAL_CAP_LEASING, "Leasing");
+            AddCapability(Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL, "Multiple Channel");
+            AddCapability(Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES, "Persistent Handle");
+
+            // Add/Update detected IoCtl codes
+            AddIoctlCode(CtlCode_Values.FSCTL_OFFLOAD_READ, this.info.F_CopyOffload[0]);
+            AddIoctlCode(CtlCode_Values.FSCTL_OFFLOAD_WRITE, this.info.F_CopyOffload[1]);
+            AddIoctlCode(CtlCode_Values.FSCTL_FILE_LEVEL_TRIM, this.info.F_FileLevelTrim);
+            AddIoctlCode(CtlCode_Values.FSCTL_GET_INTEGRITY_INFORMATION, this.info.F_IntegrityInfo[0]);
+            AddIoctlCode(CtlCode_Values.FSCTL_SET_INTEGRITY_INFORMATION, this.info.F_IntegrityInfo[1]);
+            AddIoctlCode(CtlCode_Values.FSCTL_LMR_REQUEST_RESILIENCY, this.info.F_ResilientHandle);
+            AddIoctlCode(CtlCode_Values.FSCTL_VALIDATE_NEGOTIATE_INFO, this.info.F_ValidateNegotiateInfo);
+
+            // Add/Update detected Create Contexts
+            AddCreateContext(CreateContextTypeValue.SMB2_CREATE_APP_INSTANCE_ID, this.info.F_AppInstanceId);
+            AddCreateContext(
+                CreateContextTypeValue.SMB2_CREATE_DURABLE_HANDLE_REQUEST,
+                (info.F_HandleV1_BatchOplock == DetectResult.Supported || info.F_HandleV1_LeaseV1 == DetectResult.Supported) ?
+                DetectResult.Supported : DetectResult.UnSupported);
+            AddCreateContext(
+                CreateContextTypeValue.SMB2_CREATE_DURABLE_HANDLE_RECONNECT,
+                (info.F_HandleV1_BatchOplock == DetectResult.Supported || info.F_HandleV1_LeaseV1 == DetectResult.Supported) ?
+                DetectResult.Supported : DetectResult.UnSupported);
+            AddCreateContext(
+                CreateContextTypeValue.SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2,
+                (info.F_HandleV2_BatchOplock == DetectResult.Supported
+                || info.F_HandleV2_LeaseV1 == DetectResult.Supported
+                || info.F_HandleV2_LeaseV2 == DetectResult.Supported) ?
+                DetectResult.Supported : DetectResult.UnSupported);
+            AddCreateContext(
+                CreateContextTypeValue.SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2,
+                (info.F_HandleV2_BatchOplock == DetectResult.Supported
+                || info.F_HandleV2_LeaseV1 == DetectResult.Supported
+                || info.F_HandleV2_LeaseV2 == DetectResult.Supported) ?
+                DetectResult.Supported : DetectResult.UnSupported);
+            AddCreateContext(CreateContextTypeValue.SMB2_CREATE_REQUEST_LEASE, this.info.F_Leasing_V1);
+            AddCreateContext(CreateContextTypeValue.SMB2_CREATE_REQUEST_LEASE_V2, this.info.F_Leasing_V2);
+
+            // Add/Updata detected RSVD/SQOS version
+            AddRSVD(info);
+            AddSQOS(info);
+
+            //Bind the data to the control
+            resultItemMapList.Add(dialectsItems);
+            resultItemMapList.Add(capabilitiesItems);
+            resultItemMapList.Add(ioctlCodesItems);
+            resultItemMapList.Add(createContextsItems);
+            resultItemMapList.Add(rsvdItems);
+            resultItemMapList.Add(sqosItems);
+            ResultMapList.ItemsSource = resultItemMapList;
+        }
+
         #region Properties
 
         private DetectionInfo info = null;
@@ -34,11 +100,17 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         private const string capabilitiesDescription = "\"Capabilities\" are found supported or not supported by analyzing the flags set in Negotiate Response when a Negotiate Request is sent to SUT with all defined flags in TD set in Capabilities field.";
         private const string ioctlCodesDescription = "\"IoCtl Codes\" are found supported or not supported by analyzing IOCTL Responses when the following IOCTL Requests are sent to SUT.";
         private const string createContextsDescription = "\"Creat Contexts\" are found supported or not supported by analyzing Create Responses when the Create Requests with the following create contexts are sent to SUT.";
+        private const string rsvdDescription = "\"RSVD Implementation\" is detected by sending Create Request with SVHDX_OPEN_DEVICE_CONTEXT\\SVHDX_OPEN_DEVICE_CONTEXT_V2.";
+        private const string sqosDescription = "\"SQOS Implementation\" is detected by sending SQOS get status request.";
+
 
         private ResultItemMap dialectsItems = new ResultItemMap() { Header = "Max Smb Version Supported", Description = dialectsDescription };
         private ResultItemMap capabilitiesItems = new ResultItemMap() { Header = "Capabilities", Description = capabilitiesDescription };
         private ResultItemMap ioctlCodesItems = new ResultItemMap() { Header = "IoCtl Codes", Description = ioctlCodesDescription };
         private ResultItemMap createContextsItems = new ResultItemMap() { Header = "Create Contexts", Description = createContextsDescription };
+
+        private ResultItemMap rsvdItems = new ResultItemMap() { Header = "Remote Shared Virtual Disk (RSVD)", Description = rsvdDescription };
+        private ResultItemMap sqosItems = new ResultItemMap() { Header = "Storage Quality of Service (SQOS)", Description = sqosDescription };
 
         private List<ResultItemMap> resultItemMapList = new List<ResultItemMap>();
 
@@ -120,6 +192,55 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             resultItemMap.ResultItemList.Add(item);
         }
 
+        private void AddRSVD(DetectionInfo info)
+        {
+            if (info.RsvdSupport == DetectResult.Supported)
+            {
+                if (info.RsvdVersion == RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1)
+                {
+                    AddResultItem(ref this.rsvdItems, "RSVD Protocol version 1", DetectResult.Supported);
+                    AddResultItem(ref this.rsvdItems, "RSVD Protocol version 2", DetectResult.UnSupported);
+                }
+                else
+                {
+                    AddResultItem(ref this.rsvdItems, "RSVD Protocol version 1", DetectResult.Supported);
+                    AddResultItem(ref this.rsvdItems, "RSVD Protocol version 2", DetectResult.Supported);
+                }
+            }
+            else if (info.RsvdSupport == DetectResult.UnSupported)
+            {
+                AddResultItem(ref this.rsvdItems, "The server doesn't support RSVD", info.RsvdSupport);
+            }
+            else
+            {
+                AddResultItem(ref this.rsvdItems, "Detection failed", this.info.RsvdSupport);
+            }
+        }
+
+        private void AddSQOS(DetectionInfo info)
+        {
+            if (info.SqosSupport == DetectResult.Supported)
+            {
+                if (info.SqosVersion == SQOS_PROTOCOL_VERSION.Sqos10)
+                {
+                    AddResultItem(ref this.sqosItems, "SQOS dialect 1.0", DetectResult.Supported);
+                    AddResultItem(ref this.sqosItems, "SQOS dialect 1.1", DetectResult.UnSupported);
+                }
+                else
+                {
+                    AddResultItem(ref this.sqosItems, "SQOS dialect 1.0", DetectResult.Supported);
+                    AddResultItem(ref this.sqosItems, "SQOS dialect 1.1", DetectResult.Supported);
+                }
+            }
+            else if (info.SqosSupport == DetectResult.UnSupported)
+            {
+                AddResultItem(ref this.sqosItems, "The server doesn't support SQOS", info.SqosSupport);
+            }
+            else
+            {
+                AddResultItem(ref this.sqosItems, "Detection failed", this.info.SqosSupport);
+            }
+        }
         #endregion
 
         #region Private events
@@ -262,62 +383,5 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         #endregion
 
-        public void LoadDetectionInfo(DetectionInfo detectionInfo)
-        {
-            this.info = detectionInfo;
-
-            // Add/Update detected Dialects
-            AddDialect(this.info.smb2Info.MaxSupportedDialectRevision);
-
-            // Add/Update detected Capablities
-            AddCapability(Capabilities_Values.GLOBAL_CAP_DFS, "DFS (Distributed File System)");
-            AddCapability(Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING, "Directory Leasing");
-            AddCapability(Capabilities_Values.GLOBAL_CAP_ENCRYPTION, "Encryption");
-            AddCapability(Capabilities_Values.GLOBAL_CAP_LARGE_MTU, "Large MTU (multi-credit operations)");
-            AddCapability(Capabilities_Values.GLOBAL_CAP_LEASING, "Leasing");
-            AddCapability(Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL, "Multiple Channel");
-            AddCapability(Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES, "Persistent Handle");
-
-            // Add/Update detected IoCtl codes
-            AddIoctlCode(CtlCode_Values.FSCTL_OFFLOAD_READ, this.info.F_CopyOffload[0]);
-            AddIoctlCode(CtlCode_Values.FSCTL_OFFLOAD_WRITE, this.info.F_CopyOffload[1]);
-            AddIoctlCode(CtlCode_Values.FSCTL_FILE_LEVEL_TRIM, this.info.F_FileLevelTrim);
-            AddIoctlCode(CtlCode_Values.FSCTL_GET_INTEGRITY_INFORMATION, this.info.F_IntegrityInfo[0]);
-            AddIoctlCode(CtlCode_Values.FSCTL_SET_INTEGRITY_INFORMATION, this.info.F_IntegrityInfo[1]);
-            AddIoctlCode(CtlCode_Values.FSCTL_LMR_REQUEST_RESILIENCY, this.info.F_ResilientHandle);
-            AddIoctlCode(CtlCode_Values.FSCTL_VALIDATE_NEGOTIATE_INFO, this.info.F_ValidateNegotiateInfo);
-
-            // Add/Update detected Create Contexts
-            AddCreateContext(CreateContextTypeValue.SMB2_CREATE_APP_INSTANCE_ID, this.info.F_AppInstanceId);
-            AddCreateContext(
-                CreateContextTypeValue.SMB2_CREATE_DURABLE_HANDLE_REQUEST, 
-                (info.F_HandleV1_BatchOplock == DetectResult.Supported || info.F_HandleV1_LeaseV1 == DetectResult.Supported) ?
-                DetectResult.Supported : DetectResult.UnSupported);
-            AddCreateContext(
-                CreateContextTypeValue.SMB2_CREATE_DURABLE_HANDLE_RECONNECT,
-                (info.F_HandleV1_BatchOplock == DetectResult.Supported || info.F_HandleV1_LeaseV1 == DetectResult.Supported) ?
-                DetectResult.Supported : DetectResult.UnSupported);
-            AddCreateContext(
-                CreateContextTypeValue.SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2,
-                (info.F_HandleV2_BatchOplock == DetectResult.Supported 
-                || info.F_HandleV2_LeaseV1 == DetectResult.Supported
-                || info.F_HandleV2_LeaseV2 == DetectResult.Supported) ?
-                DetectResult.Supported : DetectResult.UnSupported);
-            AddCreateContext(
-                CreateContextTypeValue.SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2,
-                (info.F_HandleV2_BatchOplock == DetectResult.Supported
-                || info.F_HandleV2_LeaseV1 == DetectResult.Supported
-                || info.F_HandleV2_LeaseV2 == DetectResult.Supported) ?
-                DetectResult.Supported : DetectResult.UnSupported);
-            AddCreateContext(CreateContextTypeValue.SMB2_CREATE_REQUEST_LEASE, this.info.F_Leasing_V1);
-            AddCreateContext(CreateContextTypeValue.SMB2_CREATE_REQUEST_LEASE_V2, this.info.F_Leasing_V2);
-
-            //Bind the data to the control
-            resultItemMapList.Add(dialectsItems);
-            resultItemMapList.Add(capabilitiesItems);
-            resultItemMapList.Add(ioctlCodesItems);
-            resultItemMapList.Add(createContextsItems);
-            ResultMapList.ItemsSource = resultItemMapList;
-        }
     }
 }

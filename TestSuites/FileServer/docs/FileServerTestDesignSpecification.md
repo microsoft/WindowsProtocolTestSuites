@@ -89,11 +89,11 @@
 		* [ReadWriteSharedVHD](#3.6.3)
 		* [ QuerySharedVirtualDiskSupport](#3.6.4)
 		* [TwoClientsAccessSameSharedVHD](#3.6.5)
-		* [ReconnectVHDWithoutDeviceContext](#3.6.6)
 		* [ QueryVHDSetFileInfo ](#3.6.7)
 		* [ ConvertVHDtoVHDSet ](#3.6.8)
-		* [ CreateDeleteCheckpoint ](#3.6.9)
-		* [ ExtractVHDSet ](#3.6.10)
+		* [ Checkpoint ](#3.6.9)
+		* [ ExtractAndOptimizeVHDSet ](#3.6.10)
+		* [ Resize ](#3.6.11)
 	* [ DFSC Test](#3.7)
 		* [ Domain\_referral\_to\_DC](#3.7.1)
 		* [ DC\_referral\_to\_DC](#3.7.2)
@@ -182,7 +182,7 @@ Test scenarios are categorized as below table and will be described in following
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 9          | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 38         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
-| RSVD Test                | 19         | Test for MS-RSVD                                                                                                  |
+| RSVD Test                | 24         | Test for MS-RSVD                                                                                                  |
 | DFSC Test                | 43         | Test for MS-DFSC                                                                                                  |
 
 ###<a name="3.1">SMB2 BVT
@@ -7005,17 +7005,16 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |||
 |---|---|
 |**Scenario**|**Test Cases**|
-|**OpenCloseSharedVHD**|1|
+|**OpenCloseSharedVHD**|3|
 |**TunnelOperationToSharedVHD**|6|
 |**ReadWriteSharedVHD**|2|
 |**QuerySharedVirtualDiskSupport**|1|
 |**TwoClientsAccessSameSharedVHD**|2|
-|**ReconnectVHDWithoutDeviceContext**|1|
 |**QueryVHDSetFileInfo**|2|
 |**ConvertVHDtoVHDSet**|1|
-|**CreateDeleteCheckpoint**|1|
-|**ExtractVHDSet**|1|
-
+|**Checkpoint**|4|
+|**ExtractAndOptimizeVHDSet**|2|
+|**Resize**|1|
 
 ####<a name="3.6.1"> OpenCloseSharedVHD
 
@@ -7033,20 +7032,28 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 |||
 |---|---|
-|**Test ID**|BVT_OpenCloseSharedVHD|
-|**Description**|Check if the server supports opening/closing a shared virtual disk file.|
+|**Test ID**|BVT_OpenCloseSharedVHD_V1|
+|**Description**|Check if the server supports V1 opening/closing a shared virtual disk file.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client opens a shared virtual disk file with SMB2 create context SVHDX_OPEN_DEVICE_CONTEXT and expects success.|
 ||Client closes the file and expect success.|
 |**Cleanup**|N/A|
 
+|||
+|---|---|
+|**Test ID**|BVT_OpenCloseSharedVHD_V2|
+|**Description**|Check if the server supports V2 opening/closing a shared virtual disk file.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client opens a shared virtual disk file with SMB2 create context SVHDX_OPEN_DEVICE_CONTEXT_V2 and expects success.|
+||Client closes the file and expect success.|
+|**Cleanup**|N/A|
 
 |||
 |---|---|
 |**Test ID**|ReconnectSharedVHDWithoutDeviceContext|
 |**Description**|Check if the client can reconnect the persistent handle to the shared virtual disk file without carrying device context.|
 |**Prerequisites**||
-|**Test Execution Steps**|Client opens a shared virtual disk file with SMB2 create contexts         SVHDX_OPEN_DEVICE_CONTEXT and SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (persistent bit is set). |
+|**Test Execution Steps**|Client opens a shared virtual disk file with SMB2 create contexts SVHDX_OPEN_DEVICE_CONTEXT and SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (persistent bit is set). |
 ||Client disconnects from the server.|
 ||Client reconnects the persistent handle without create context SVHDX_OPEN_DEVICE_CONTEXT and expects success.|
 |**Cleanup**|N/A|
@@ -7240,34 +7247,6 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||The second client closes the file.|
 |**Cleanup**|N/A|
 
-
-####<a name="3.6.6">ReconnectVHDWithoutDeviceContext
-
-#####<a name="3.6.6.1"> Scenario
-
-|||
-|---|---|
-|**Description**|Check if server can reconnect the persistent handle to the shared virtual disk file without carrying device context successfully.|
-|**Message Sequence**|The client requests a persistent handle with device context and to the shared virtual disk file and expects success.|
-||The client disconnects.|
-||The client reconnects the persistent handle without carrying device context and expects success.|
-|**Cluster Involved Scenario**|YES|
-
-
-#####<a name="3.6.6.2"> Test Case
-
-|||
-|---|---|
-|**Test ID**|ReconnectSharedVHDWithoutDeviceContext|
-|**Description**|Check if server can reconnect the persistent handle to the shared virtual disk file without carrying device context successfully.|
-|**Prerequisites**||
-|**Test Execution Steps**|The client requests a persistent handle with device context successfully.|
-||The client disconnects successfully.|
-||The client reconnects the persistent handle without carrying device context and expects success.|
-||The client closes the file.|
-|**Cleanup**|N/A|
-
-
 ####<a name="3.6.7"> QueryVHDSetFileInfo 
 
 #####<a name="3.6.7.1"> Scenario
@@ -7330,13 +7309,13 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cleanup**|N/A|
 
 
-####<a name="3.6.9"> CreateDeleteCheckpoint 
+####<a name="3.6.9"> Checkpoint 
 
 #####<a name="3.6.9.1"> Scenario
 
 |||
 |---|---|
-|**Description**|Check if server handles the tunnel operation request to take and delete checkpoint on a shared virtual disk set file correctly.|
+|**Description**|Check if server handles the tunnel operation request to create, delete, apply a checkpoint on a shared virtual disk set file, including querying virtual disk changes between snapshots and opening the virtual disk file by a target specifier.|
 |**Message Sequence**|OpenSharedVirtualDisk|
 ||SvhdxMetaOperationStart|
 ||SvhdxMetaOperationStart |
@@ -7359,14 +7338,58 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||Client closes the file.|
 |**Cleanup**|N/A|
 
+|||
+|---|---|
+|**Test ID**|BVT_QueryVirtualDiskChanges|
+|**Description**|Check if server supports querying a list of changed ranges since the designated snapshot.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client opens a shared virtual disk set file successfully.|
+||Client sends the first snapshot.|
+||Client closes the open.|
+||Client reopens the shared virtual disk file and expects success.|
+||Client sends Write request and expects success.|
+||Client creates another snapshot.|
+||Client sends the tunnel operation SVHDX_TUNNEL_QUERY_VIRTUAL_DISK_CHANGES_REQUEST to query the changes since the first snapshot.|
+||Client deletes the two snapshots.|
+||Client closes the file.|
+|**Cleanup**|N/A|
 
-####<a name="3.6.10"> ExtractVHDSet 
+|||
+|---|---|
+|**Test ID**|BVT_ApplySnapshot|
+|**Description**|Check if server supports applying a specified snapshot.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client opens a shared virtual disk set file successfully.|
+||Client reads 512 bytes and saves it for later comparation.|
+||Client creates a snapshot.|
+||Client closes the open.|
+||Client reopens the shared virtual disk file and expects success.|
+||Client sends Write request to change the file and expects success.|
+||Client sends Apply Snapshot request to apply the previous snapshot.|
+||Client rereads 512 bytes and compares it with the previously saved bytes.|
+||Client deletes ths snapshot.|
+||Client closes the file.|
+|**Cleanup**|N/A|
+
+|||
+|---|---|
+|**Test ID**|BVT_OpenSharedVHDSetByTargetSpecifier|
+|**Description**|Check if the server supports opening a shared VHD set file with using a Target Specifier.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client opens a shared virtual disk set file successfully.|
+||Client sends the first tunnel operation SVHDX_META_OPERATION_START_REQUEST to create a snapshot.|
+||Client closes the file.|
+||Client reopens the shared virtual disk file using a Target Specifier and expects success.|
+||Client closes the file.|
+|**Cleanup**|N/A|
+
+####<a name="3.6.10"> ExtractAndOptimizeVHDSet 
 
 #####<a name="3.6.10.1"> Scenario
 
 |||
 |---|---|
-|**Description**|Check if server handles the tunnel operation request to extract the shared virtual disk set file correctly.|
+|**Description**|Check if server handles the tunnel operation request to extract/optimize the shared virtual disk set file correctly.|
 |**Message Sequence**|OpenSharedVirtualDisk|
 ||SvhdxMetaOperationStart |
 ||CloseSharedVirtualDisk|
@@ -7382,6 +7405,44 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Prerequisites**||
 |**Test Execution Steps**|Client opens a shared virtual disk set file successfully.|
 ||Client sends the SVHDX_META_OPERATION_START_REQUEST with SVHDX_META_OPERATION_EXTRACT structure in the payload to server and expects success.|
+||Client closes the file.|
+|**Cleanup**|N/A|
+
+|||
+|---|---|
+|**Test ID**|BVT_Optimize|
+|**Description**|Check if server supports handling an Optimize request.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client opens a shared virtual disk set file successfully.|
+||Client sends the tunnel operation SVHDX_META_OPERATION_START_REQUEST with an Optimize request and expects success.|
+||Client closes the file.|
+|**Cleanup**|N/A|
+
+####<a name="3.6.11"> Resize
+
+#####<a name="3.6.11.1"> Scenario
+
+|||
+|---|---|
+|**Description**|Check if server supports Resize.|
+|**Message Sequence**|OpenSharedVirtualDisk|
+||Resize |
+||CloseSharedVirtualDisk|
+||OpenSharedVirtualDisk again and verify if the size is changed|
+||CloseSharedVirtualDisk|
+|**Cluster Involved Scenario**|YES|
+
+#####<a name="3.6.11.2"> Test Case
+
+|||
+|---|---|
+|**Test ID**|BVT_Resize|
+|**Description**|Check if server supports handling tunnel operation to resize a VHDSet file.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client opens a shared virtual disk set file successfully.|
+||Client sends the tunnel operation SVHDX_META_OPERATION_START_REQUEST to resize a VHDSet file and expects success.|
+||Client closes the file.|
+||Client reopens the virtual disk file and expects VirtualSize is changed to 2G.|
 ||Client closes the file.|
 |**Cleanup**|N/A|
 

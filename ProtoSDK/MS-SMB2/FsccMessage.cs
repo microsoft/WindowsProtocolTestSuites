@@ -478,4 +478,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
     {
         NONE = 0,
     }
+	
+	public struct FSCTL_DUPLICATE_EXTENTS_TO_FILE_Request
+    {
+        public FILEID SourceFileId;
+        public long SourceFileOffset;
+        public long TargetFileOffset;
+        public long ByteCount;
+    }
+
+    public struct FSCTL_DUPLICATE_EXTENTS_TO_FILE_Response
+    {
+
+    }
 }

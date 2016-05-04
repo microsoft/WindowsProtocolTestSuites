@@ -11,6 +11,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         public string EaName;
 
-        public Sequence<byte> EaValue;
+        public byte[] EaValue;
     }
 }

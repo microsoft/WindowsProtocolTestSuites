@@ -62,6 +62,10 @@
       <Project>{c7f08825-d3c9-4ddd-9ba3-06733b1abe36}</Project>
       <Name>Smb2</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SQOS\Sqos.csproj">
+      <Project>{014b338d-1b5e-434b-ba05-b2c6d6797d07}</Project>
+      <Name>Sqos</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\Sspi\Sspi.csproj">
       <Project>{d0cb354b-2cd3-49c1-8eca-2f6ebadbccee}</Project>
       <Name>Sspi</Name>
@@ -89,6 +93,9 @@
     <Compile Include="SqosNegative.cs" />
     <Compile Include="SqosTestBase.cs" />
     <Compile Include="SqosTestConfig.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">

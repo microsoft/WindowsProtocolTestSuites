@@ -32,7 +32,6 @@
   <ItemGroup>
     <Reference Include="Microsoft.Xrt.Runtime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>True</SpecificVersion>
-      <HintPath>$(INETROOT)\build\external\tools\SE\3.5.3146.0\Microsoft.Xrt.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

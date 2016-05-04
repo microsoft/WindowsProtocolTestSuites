@@ -286,9 +286,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Verify server response for WitnessrRegister request.");
 
-            // TDI to be filed, original fix for TDI 66777 and 69401 is not accurate, need clarify in new TDI
-            // Windows server won't fail the request if the target resource being monitored is ScaleOut FS share when request containst invalid IP address or invalid share name
-            // TODO: Test case should have ability to choose different server, otherwise we do not need such condition
             bool isScaleOutFsShare = ShareContainsSofs(server, Smb2Utility.GetUncPath(server, TestConfig.ClusteredFileShare));
 
             if (registerType == SwnRegisterType.InvalidNetName)
