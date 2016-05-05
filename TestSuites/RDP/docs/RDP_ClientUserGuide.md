@@ -877,10 +877,7 @@ The following table describes the optional configuration properties and provides
 |  **SUTSystemDrive**| If the SUT is using a Windows operating system, specify the system drive letter of SUT machine.| 
 | | Default value: **C**| 
 |  **WaitTime**| The maximum time in seconds to wait for one SUT message.| 
-| | Default value: **40**| 
-|  **ASNIssueFixed**| Indicates whether the workaround for the Asn1ObjectIdentifier encode issue is needed. The possible values are **True** and **False**.| 
-| | Default value: **True**| 
-|  **isTDIXXXXFixed**| Ignore -- reserved for use by the test suite development team| 
+| | Default value: **40**|  
 
 ## <a name="_Toc421010910"/>Running Test Cases
 
