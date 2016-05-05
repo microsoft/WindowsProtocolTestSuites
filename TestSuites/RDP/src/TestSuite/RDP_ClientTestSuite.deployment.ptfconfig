@@ -244,10 +244,6 @@
     <!-- Block End -->
 
     <!--Block Begin: Properties that should only be taken care of by Test Suite Development Team-->       
-    <!-- Win8 TDI: RDP Client doesn't drop the RDP-UDP connection when receive a datagram larger than 1232 -->
-    <Property name="IsTDI67289Fixed" value="false">
-      <Description>Win8 TDI: RDP Client doesn't drop the RDP-UDP connection when receive a datagram larger than 1232.</Description>
-    </Property>
     <!-- RDPEVOR test data file, which contains H.264 video data -->
     <Property name="RdpevorTestDataPath" value=".\RdpevorTestData.xml">
       <Description>RDPEVOR test data file, which contains H.264 video data.</Description>

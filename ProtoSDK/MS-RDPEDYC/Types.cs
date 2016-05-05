@@ -141,7 +141,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
         /// <summary>
         ///  The ChannelId is 4 bytes wide.
-        ///  This seems a TDI. should be invalid?
         /// </summary>
         Invalid = 0x03
     }
@@ -166,7 +165,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
         /// <summary>
         ///  The ChannelId is 4 bytes wide.
-        ///  This seems a TDI. should be invalid?
         /// </summary>
         Invalid = 0x3,
     }
