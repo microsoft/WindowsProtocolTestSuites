@@ -27,7 +27,7 @@ You should install the following list of software in order to build Test Suites 
 * .Net framework 3.5
 * [Wix toolset](http://wixtoolset.org/) v3.7 or higher
 * [Visual Studio](https://www.microsoft.com/en-us/download/details.aspx?id=30682) or [Visual Studio Agent](https://www.microsoft.com/en-us/download/details.aspx?id=38186), version 2012 or higher
-* [Protocol Test Framework](https://github.com/microsoft/protocoltestframework). You can use a released **ProtocolTestFrameworkInstaller.msi** or build it from source code.
+* [Protocol Test Framework](https://github.com/microsoft/protocoltestframework). You can use a released MSI file or build it from source code.
 * [Spec Explorer](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/). It is only required for the test suites that contain Model-Based Test cases. If you want to regenerate Model-Based Test cases, you must install Visual Studio 2012, otherwise higher versions of Visual Studio are supported.
 
 ## Model-Based Testing
@@ -48,12 +48,12 @@ cd WindowsProtocolTestSuites\ProtocolTestManager
 build.cmd
 ```
 
-###(<a name="BuildTestSuite">) Build a test suite
+###<a name="BuildTestSuite"> Build a test suite
 
-If the test suite contain Model-Based Test cases, you should follow the below steps before building it. If not, ignore the steps.
+If the test suite contain Model-Based Test cases, you should follow the below steps before building it. 
 
 * Install [Spec Explorer](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/), 
-* Build [Protocol Test Framework](https://github.com/microsoft/protocoltestframework) by **formodel** option and install the built **ProtocolTestFrameworkInstaller.msi**.
+* Install the **formodel** version of [Protocol Test Framework](https://github.com/microsoft/protocoltestframework). You can use a released MSI file or build it from source code by **formodel** option.
 
 After that, take SMB test suite as an example
 ```
@@ -61,7 +61,7 @@ cd WindowsProtocolTestSuites\TestSuites\MS-SMB\src
 build.cmd
 ```
 
-After the build succeeds, the MSI (installer package) file of each test suite should be generated in the folder *WindowsProtocolTestSuite\drop\TestSuites\\[TestSuiteName]\deploy\.*
+After the build succeeds, the MSI file of each test suite should be generated in the folder *WindowsProtocolTestSuite\drop\TestSuites\\[TestSuiteName]\deploy\.*
 Take SMB test suite as an example, **MS-SMB-TestSuite-ServerEP.msi** should be generated in the folder *WindowsProtocolTestSuite\drop\TestSuites\MS-SMB\deploy\.*
 
 ### Build all test suites
