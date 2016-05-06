@@ -48,7 +48,7 @@ cd WindowsProtocolTestSuites\ProtocolTestManager
 build.cmd
 ```
 
-###<a name="BuildTestSuite"> Build a test suite
+###<a name="BuildTestSuite">Build a test suite
 
 If the test suite contain Model-Based Test cases, you should follow the below steps before building it. 
 
