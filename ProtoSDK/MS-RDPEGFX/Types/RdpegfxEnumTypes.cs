@@ -130,7 +130,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <summary>
         /// Specifies the version of the capability, which is supported in RDP 10
         /// </summary>
-        RDPGFX_CAPVERSION_10  = 0x000A0002
+        RDPGFX_CAPVERSION_10  = 0x000A0002,
+
+        /// <summary>
+        /// Specifies the version of the capability, which is supported in RDP 10.2
+        /// </summary>
+        RDPGFX_CAPVERSION_102 = 0x000A0200
     }
 
     /// <summary>
