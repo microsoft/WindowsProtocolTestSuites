@@ -23,6 +23,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         [MethodHelp("Create a file in the specified share; and write the content to the file (don't write content if the content parameter is empty). \r\nThen return the result with True if the file was created successfully, otherwise reply False.")]
         bool CreateFile(string share, string fileName, string content);
 
+        /// <summary>
+        /// Copy the file to the share.
+        /// </summary>
+        /// <param name="share">UNC path of the share.</param>
+        /// <param name="fileName">The file name to copy.</param>
+        [MethodHelp("Copy the file to the specified share.")]
+        void CopyFile(string share, string fileName);
+
         [MethodHelp("Delete the file from the specified share.")]
         void DeleteFile(string share, string fileName);
 

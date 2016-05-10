@@ -119,6 +119,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AppInstanceID\AppInstanceIdBasic.cs" />
     <Compile Include="AppInstanceID\AppInstanceIdExtendedTest.cs" />
     <Compile Include="AppInstanceID\AppInstanceIdWithEncryption.cs" />

@@ -313,7 +313,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         /// <summary>
         /// Create a TS_ORDER_CAPABILITYSET type Capability, 2.2.7.1.3   
-        /// Problem: contain hardCode as SDK bug(miss member)
         /// </summary>
         /// <param name="orderSupport">An array of 32 bytes indicating support for various primary drawing orders. 
         /// The indices of this array are the negotiation indices for the primary orders specified in [MS-RDPEGDI] section 2.2.2.2.1.1.2.</param>
@@ -488,7 +487,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
             else
             {
-                virtualChannelSet.lengthCapability = 8;//it should be 8, SDK bug, VCChunkSize is optional.
+                virtualChannelSet.lengthCapability = 8;
                 virtualChannelSet.VCChunkSize = 0;
             }
             return virtualChannelSet;
@@ -637,7 +636,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         /// <summary>
         /// Create a TS_COMPDESK_CAPABILITYSET type Capability, 2.2.7.2.9 
-        /// Problem: hardcode as SDK bug (miss member)
         /// </summary>
         /// <param name="setSurfBits">The Set Surface Bits Command (section 2.2.9.2.1) is supported or not.</param>
         /// <param name="frameMarker">The Frame Marker Command (section 2.2.9.2.3) is supported or not.</param>
@@ -755,8 +753,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         #region "MISC Cap Sets"
         /// <summary>
         /// Create a TS_WINDOW_CAPABILITYSET type Capability, 2.2.1.1.2 in RDPERP
-        /// Problem: field not implemented in SDK
-        /// Problem: contain hardCode as SDK bug(miss member)
         /// </summary>
         /// <param name="wndSupportLevel">0x00000000:The client or server is not capable of supporting Windowing Alternate 
         /// Secondary Drawing Orders.0x00000001: The client or server is capable of supporting Windowing Alternate Secondary

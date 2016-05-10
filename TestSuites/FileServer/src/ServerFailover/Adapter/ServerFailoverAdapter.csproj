@@ -82,6 +82,9 @@
     <Content Include="WindowsSutControlAdapter\MoveClusterResourceOwner.ps1" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="ISutControlAdapter.cs" />
     <Compile Include="ServerFailoverTestConfig.cs" />
   </ItemGroup>

@@ -44,6 +44,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Client\RdpemtClient.cs" />
     <Compile Include="RdpemtDecoder.cs" />
     <Compile Include="RdpemtTransport.cs" />

@@ -41,41 +41,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         public void BVT_OpenCloseSharedVHD_V1()
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1.	Client opens a shared virtual disk file with SMB2 create context SVHDX_OPEN_DEVICE_CONTEXT and expects success.");
-            client.Connect(
-                TestConfig.FileServerNameContainingSharedVHD,
-                TestConfig.FileServerIPContainingSharedVHD,
-                TestConfig.DomainName,
-                TestConfig.UserName,
-                TestConfig.UserPassword,
-                TestConfig.DefaultSecurityPackage,
-                TestConfig.UseServerGssToken,
-                TestConfig.ShareContainingSharedVHD);
+            Smb2CreateContextResponse[] serverContextResponse;
+            OpenSharedVHD(TestConfig.NameOfSharedVHDX, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1, null, true, null, out serverContextResponse);
 
-            Smb2CreateContextRequest[] contexts = new Smb2CreateContextRequest[]
-            {
-                new Smb2CreateSvhdxOpenDeviceContext 
-                {
-                    Version = TestConfig.ServerServiceVersion,
-                    OriginatorFlags = (uint)OriginatorFlag.SVHDX_ORIGINATOR_PVHDPARSER, 
-                    InitiatorHostName = TestConfig.InitiatorHostName,
-                    InitiatorHostNameLength = (ushort)(TestConfig.InitiatorHostName.Length * 2)  // InitiatorHostName is a null-terminated Unicode UTF-16 string 
-                }
-            };
-
-            CREATE_Response response;
-            Smb2CreateContextResponse[] serverCreateContexts;
-            uint status = client.OpenSharedVirtualDisk(
-                TestConfig.NameOfSharedVHDX + fileNameSuffix,
-                FsCreateOption.NONE,
-                contexts,
-                out serverCreateContexts,
-                out response);
-
-            BaseTestSite.Assert.AreEqual(
-                (uint)Smb2Status.STATUS_SUCCESS,
-                status,
-                "Open shared virtual disk file should succeed, actual status: {0}",
-                GetStatus(status));
+            CheckOpenDeviceContext(serverContextResponse);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client closes the file.");
             client.CloseSharedVirtualDisk();
@@ -88,48 +57,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         public void BVT_OpenCloseSharedVHD_V2()
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1.	Client opens a shared virtual disk file with SMB2 create context SVHDX_OPEN_DEVICE_CONTEXT_V2 and expects success.");
-            client.Connect(
-                TestConfig.FileServerNameContainingSharedVHD,
-                TestConfig.FileServerIPContainingSharedVHD,
-                TestConfig.DomainName,
-                TestConfig.UserName,
-                TestConfig.UserPassword,
-                TestConfig.DefaultSecurityPackage,
-                TestConfig.UseServerGssToken,
-                TestConfig.ShareContainingSharedVHD);
-
-            Smb2CreateContextRequest[] contexts = new Smb2CreateContextRequest[]
-            {
-                new Smb2CreateSvhdxOpenDeviceContextV2
-                {
-                    Version = TestConfig.ServerServiceVersion,
-                    OriginatorFlags = (uint)OriginatorFlag.SVHDX_ORIGINATOR_PVHDPARSER, 
-                    InitiatorHostName = TestConfig.InitiatorHostName,
-                    InitiatorHostNameLength = (ushort)(TestConfig.InitiatorHostName.Length * 2),  // InitiatorHostName is a null-terminated Unicode UTF-16 string 
-                    VirtualDiskPropertiesInitialized = 0,
-                    ServerServiceVersion = 0,
-                    VirtualSectorSize = 0,
-                    PhysicalSectorSize = 0,
-                    VirtualSize = 0
-                }
-            };
-
-            CREATE_Response response;
-            Smb2CreateContextResponse[] serverCreateContexts;
-            uint status = client.OpenSharedVirtualDisk(
-                TestConfig.NameOfSharedVHDX + fileNameSuffix,
-                FsCreateOption.NONE,
-                contexts,
-                out serverCreateContexts,
-                out response);
-
-            BaseTestSite.Assert.AreEqual(
-                (uint)Smb2Status.STATUS_SUCCESS,
-                status,
-                "Open shared virtual disk file should succeed, actual status: {0}",
-                GetStatus(status));
-
-            CheckOpenDeviceContext(serverCreateContexts);
+            Smb2CreateContextResponse[] serverContextResponse;
+            OpenSharedVHD(TestConfig.NameOfSharedVHDS, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_2, null, true, null, out serverContextResponse);
+            CheckOpenDeviceContext(serverContextResponse);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client closes the file.");
             client.CloseSharedVirtualDisk();
@@ -142,15 +72,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         public void ReconnectSharedVHDWithoutDeviceContext()
         {
             BaseTestSite.Log.Add(
-                LogEntryKind.TestStep, 
-                "1.	Client opens a shared virtual disk file with SMB2 create contexts " + 
+                LogEntryKind.TestStep,
+                "1.	Client opens a shared virtual disk file with SMB2 create contexts " +
                 "SVHDX_OPEN_DEVICE_CONTEXT and SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (persistent bit is set). ");
 
             Smb2FunctionalClient clientBeforeDisconnect = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
-            string uncShareName = Smb2Utility.GetUncPath(TestConfig.FileServerNameContainingSharedVHD, TestConfig.ShareContainingSharedVHD);
             uint treeId;
             Guid clientGuid = Guid.NewGuid();
-            ConnectToShare(clientBeforeDisconnect, clientGuid, uncShareName, out treeId);
+            ConnectToShare(clientBeforeDisconnect, clientGuid, TestConfig.FullPathShareContainingSharedVHD, out treeId);
 
             Guid createGuid = Guid.NewGuid();
             Guid initiatorId = Guid.NewGuid();
@@ -167,7 +96,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 {
                     new Smb2CreateSvhdxOpenDeviceContext 
                     {
-                        Version = TestConfig.ServerServiceVersion,
+                        Version = (uint)RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1,
                         OriginatorFlags = (uint)OriginatorFlag.SVHDX_ORIGINATOR_PVHDPARSER, 
                         InitiatorHostName = TestConfig.InitiatorHostName,
                         InitiatorHostNameLength = (ushort)(TestConfig.InitiatorHostName.Length * 2),  // InitiatorHostName is a null-terminated Unicode UTF-16 string 
@@ -198,7 +127,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             clientBeforeDisconnect.Disconnect();
 
             Smb2FunctionalClient clientAfterDisconnect = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
-            ConnectToShare(clientAfterDisconnect, clientGuid, uncShareName, out treeId);
+            ConnectToShare(clientAfterDisconnect, clientGuid, TestConfig.FullPathShareContainingSharedVHD, out treeId);
             FILEID fileIdAfterDisconnect;
             uint status = clientAfterDisconnect.Create
                 (treeId,
@@ -240,11 +169,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES,
                 clientGuid);
             client.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, false);
-            client.TreeConnect(Smb2Utility.GetUncPath(TestConfig.FileServerNameContainingSharedVHD, TestConfig.ShareContainingSharedVHD), out treeId);
+            client.TreeConnect(uncShareName, out treeId);
         }
 
         private void CheckOpenDeviceContext(Smb2CreateContextResponse[] servercreatecontexts)
         {
+            // <9> Section 3.2.5.1:  Windows Server 2012 R2 without [MSKB-3025091] doesn't return SVHDX_OPEN_DEVICE_CONTEXT_RESPONSE.
+            if (TestConfig.Platform == Platform.WindowsServer2012R2)
+                return;
+                
             foreach (var context in servercreatecontexts)
             {
                 Type type = context.GetType();

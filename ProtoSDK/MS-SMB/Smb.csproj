@@ -97,6 +97,9 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Client\SmbClientTransport.cs" />
     <Compile Include="Messages\SmbNtTransactCreateRequestPacket.cs" />
     <Compile Include="Messages\SmbNtTransactCreateResponsePacket.cs" />

@@ -37,13 +37,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
-        [TestCategory(TestCategories.RsvdVersion2)]
         [Description("Check if server supports handling tunnel operation RSVD_TUNNEL_GET_FILE_INFO_OPERATION.")]
         public void BVT_TunnelGetFileInfoToSharedVHD()
         {
-            ulong requestId = 0;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1.	Client opens a shared virtual disk file and expects success.");
-            OpenSharedVHD(TestConfig.NameOfSharedVHDX, requestId++);
+            OpenSharedVHD(TestConfig.NameOfSharedVHDX, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client sends tunnel operation RSVD_TUNNEL_GET_FILE_INFO_OPERATION to server and expects success.");
             byte[] payload = client.CreateTunnelFileInfoRequest();
@@ -52,7 +50,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             uint status = client.TunnelOperation<SVHDX_TUNNEL_FILE_INFO_RESPONSE>(
                 false,//true for Async operation, false for non-async operation
                 RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_GET_FILE_INFO_OPERATION,
-                requestId,
+                ++RequestIdentifier,
                 payload,
                 out header,
                 out response);
@@ -61,7 +59,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 status,
                 "Ioctl should succeed, actual status: {0}",
                 GetStatus(status));
-            VerifyTunnelOperationHeader(header.Value, RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_GET_FILE_INFO_OPERATION, (uint)RsvdStatus.STATUS_SVHDX_SUCCESS, requestId++);
+            VerifyTunnelOperationHeader(header.Value, RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_GET_FILE_INFO_OPERATION, (uint)RsvdStatus.STATUS_SVHDX_SUCCESS, RequestIdentifier);
 
             VerifyFieldInResponse("ServerVersion", TestConfig.ServerServiceVersion, response.Value.ServerVersion);
             VerifyFieldInResponse("SectorSize", TestConfig.SectorSize, response.Value.SectorSize);
@@ -76,13 +74,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
-        [TestCategory(TestCategories.RsvdVersion2)]
         [Description("Check if server supports handling tunnel operation RSVD_TUNNEL_SCSI_OPERATION.")]
         public void BVT_TunnelSCSIToSharedVHD()
         {
-            ulong requestId = 0;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1.	Client opens a shared virtual disk file and expects success.");
-            OpenSharedVHD(TestConfig.NameOfSharedVHDX, requestId++);
+            OpenSharedVHD(TestConfig.NameOfSharedVHDX, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client sends tunnel operation RSVD_TUNNEL_SCSI_OPERATION to server and expects success.");
 
@@ -111,7 +107,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             uint status = client.TunnelOperation<SVHDX_TUNNEL_SCSI_RESPONSE>(
                 false,//true for Async operation, false for non-async operation
                 RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_SCSI_OPERATION,
-                requestId,
+                ++RequestIdentifier,
                 payload,
                 out header,
                 out response);
@@ -121,7 +117,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 "Ioctl should succeed, actual status: {0}",
                 GetStatus(status));
 
-            VerifyTunnelOperationHeader(header.Value, RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_SCSI_OPERATION, (uint)RsvdStatus.STATUS_SVHDX_SUCCESS, requestId++);
+            VerifyTunnelOperationHeader(header.Value, RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_SCSI_OPERATION, (uint)RsvdStatus.STATUS_SVHDX_SUCCESS, RequestIdentifier);
             VerifyFieldInResponse("SCSIStatus", 0, response.Value.ScsiStatus); // Status code 0 indicates that the device has completed the task successfully.
             VerifyFieldInResponse("SrbStatus", SRB_STATUS.SRB_STATUS_SUCCESS, response.Value.SrbStatus);
             VerifyFieldInResponse("DataIn", true, response.Value.DataIn); // the CDB buffer specified is to receive data from the server.
@@ -134,13 +130,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
-        [TestCategory(TestCategories.RsvdVersion2)]
         [Description("Check if server supports handling tunnel operation RSVD_TUNNEL_CHECK_CONNECTION_STATUS_OPERATION.")]
         public void BVT_TunnelCheckConnectionStatusToSharedVHD()
         {
-            ulong requestId = 0;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1.	Client opens a shared virtual disk file and expects success.");
-            OpenSharedVHD(TestConfig.NameOfSharedVHDX, requestId++);
+            OpenSharedVHD(TestConfig.NameOfSharedVHDX, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client sends tunnel operation RSVD_TUNNEL_CHECK_CONNECTION_STATUS_OPERATION to server and expects success.");
             byte[] payload = client.CreateTunnelCheckConnectionStatusRequest();
@@ -149,7 +143,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             uint status = client.TunnelOperation<SVHDX_TUNNEL_OPERATION_HEADER>(
                 false,//true for Async operation, false for non-async operation
                 RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_CHECK_CONNECTION_STATUS_OPERATION,
-                requestId,
+                ++RequestIdentifier,
                 payload,
                 out header,
                 out response);
@@ -159,7 +153,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 "Ioctl should succeed, actual status: {0}",
                 GetStatus(status));
 
-            VerifyTunnelOperationHeader(header.Value, RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_CHECK_CONNECTION_STATUS_OPERATION, (uint)RsvdStatus.STATUS_SVHDX_SUCCESS, requestId++);
+            VerifyTunnelOperationHeader(header.Value, RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_CHECK_CONNECTION_STATUS_OPERATION, (uint)RsvdStatus.STATUS_SVHDX_SUCCESS, RequestIdentifier);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "3.	Client closes the file.");
 
@@ -169,14 +163,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
-        [TestCategory(TestCategories.RsvdVersion2)]
         [Description("Check if server supports handling tunnel operation RSVD_TUNNEL_SRB_STATUS_OPERATION.")]
         public void BVT_TunnelSRBStatusToSharedVHD()
         {
-            ulong requestId = 0;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1.	Client opens a shared virtual disk file and expects success with no initiator id specified.");
             // Open the shared virtual disk file with no initiator id. Thus read request will fail with status key returned.
-            OpenSharedVHD(TestConfig.NameOfSharedVHDX, requestId++, false);
+            OpenSharedVHD(TestConfig.NameOfSharedVHDX, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1, hasInitiatorId:false);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client sends a Read request and expects error.");
 
@@ -196,7 +188,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             status = client.TunnelOperation<SVHDX_TUNNEL_SRB_STATUS_RESPONSE>(
                 false,//true for Async operation, false for non-async operation
                 RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_SRB_STATUS_OPERATION,
-                requestId,
+                ++RequestIdentifier,
                 payload,
                 out header,
                 out response);
@@ -206,7 +198,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 "Ioctl should succeed, actual status: {0}",
                 GetStatus(status));
 
-            VerifyTunnelOperationHeader(header.Value, RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_SRB_STATUS_OPERATION, (uint)RsvdStatus.STATUS_SVHDX_SUCCESS, requestId++);
+            VerifyTunnelOperationHeader(header.Value, RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_SRB_STATUS_OPERATION, (uint)RsvdStatus.STATUS_SVHDX_SUCCESS, RequestIdentifier);
             VerifyFieldInResponse("StatusKey", statusKey, response.Value.StatusKey); // The server MUST set this field to the status key value received in the request.
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "4.	Client closes the file.");
@@ -217,13 +209,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
-        [TestCategory(TestCategories.RsvdVersion2)]
         [Description("Check if server supports handling tunnel operation RSVD_TUNNEL_GET_DISK_INFO_OPERATION.")]
         public void BVT_TunnelGetDiskInfoToSharedVHD()
         {
-            ulong requestId = 0;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1.	Client opens a shared virtual disk file and expects success.");
-            OpenSharedVHD(TestConfig.NameOfSharedVHDX, requestId++);
+            OpenSharedVHD(TestConfig.NameOfSharedVHDX, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client sends tunnel operation RSVD_TUNNEL_GET_DISK_INFO_OPERATION to server and expects success.");
             byte[] payload = client.CreateTunnelDiskInfoRequest();
@@ -232,7 +222,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             uint status = client.TunnelOperation<SVHDX_TUNNEL_DISK_INFO_RESPONSE>(
                 false,//true for Async operation, false for non-async operation
                 RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_GET_DISK_INFO_OPERATION,
-                requestId,
+                ++RequestIdentifier,
                 payload,
                 out header,
                 out response);
@@ -242,7 +232,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 "Ioctl should succeed, actual status: {0}",
                 GetStatus(status));
 
-            VerifyTunnelOperationHeader(header.Value, RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_GET_DISK_INFO_OPERATION, (uint)RsvdStatus.STATUS_SVHDX_SUCCESS, requestId++);
+            VerifyTunnelOperationHeader(header.Value, RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_GET_DISK_INFO_OPERATION, (uint)RsvdStatus.STATUS_SVHDX_SUCCESS, RequestIdentifier);
 
             VerifyFieldInResponse("DiskFormat", DISK_FORMAT.VIRTUAL_STORAGE_TYPE_DEVICE_VHDX, response.Value.DiskFormat);
             VerifyFieldInResponse("DiskType", TestConfig.DiskType, response.Value.DiskType);
@@ -259,13 +249,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
-        [TestCategory(TestCategories.RsvdVersion2)]
         [Description("Check if server supports handling tunnel operation RSVD_TUNNEL_VALIDATE_DISK_OPERATION.")]
         public void BVT_TunnelValidateDiskToSharedVHD()
         {
-            ulong requestId = 0;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1.	Client opens a shared virtual disk file and expects success.");
-            OpenSharedVHD(TestConfig.NameOfSharedVHDX, requestId++);
+            OpenSharedVHD(TestConfig.NameOfSharedVHDX, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client sends tunnel operation RSVD_TUNNEL_VALIDATE_DISK_OPERATION to server and expects success.");
             byte[] payload = client.CreateTunnelValidateDiskRequest();
@@ -274,7 +262,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             uint status = client.TunnelOperation<SVHDX_TUNNEL_VALIDATE_DISK_RESPONSE>(
                 false,//true for Async operation, false for non-async operation
                 RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_VALIDATE_DISK_OPERATION,
-                requestId,
+                ++RequestIdentifier,
                 payload,
                 out header,
                 out response);
@@ -284,7 +272,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 "Ioctl should succeed, actual status: {0}",
                 GetStatus(status));
 
-            VerifyTunnelOperationHeader(header.Value, RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_VALIDATE_DISK_OPERATION, (uint)RsvdStatus.STATUS_SVHDX_SUCCESS, requestId++);
+            VerifyTunnelOperationHeader(header.Value, RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_VALIDATE_DISK_OPERATION, (uint)RsvdStatus.STATUS_SVHDX_SUCCESS, RequestIdentifier);
             VerifyFieldInResponse("IsValidDisk", true, response.Value.IsValidDisk);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "3.	Client closes the file.");

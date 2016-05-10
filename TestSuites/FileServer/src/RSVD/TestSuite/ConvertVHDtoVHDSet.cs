@@ -40,20 +40,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [Description("Check if server supports handling tunnel operation to convert a VHD file into a VHDSet file.")]
         public void BVT_Convert_VHDFile_to_VHDSetFile()
         {
-            ulong requestId = 0;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1.	Client opens a shared virtual disk file and expects success.");
-            OpenSharedVHD(TestConfig.NameOfConvertSharedVHDX, requestId++);
+            OpenSharedVHD(TestConfig.NameOfSharedVHDX, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_2);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client sends the tunnel operation SVHDX_META_OPERATION_START_REQUEST to convert a VHD file into a VHDSet file and expects success.");
 
             SVHDX_META_OPERATION_START_REQUEST startRequest = new SVHDX_META_OPERATION_START_REQUEST();
             startRequest.TransactionId = System.Guid.NewGuid();
             startRequest.OperationType = Operation_Type.SvhdxMetaOperationTypeConvertToVHDSet;
-            startRequest.Padding = new byte[4];
             SVHDX_META_OPERATION_CONVERT_TO_VHDSET convert = new SVHDX_META_OPERATION_CONVERT_TO_VHDSET();
-            convert.DestinationVhdSetName = Encoding.Unicode.GetBytes(TestConfig.NameOfConvertedSharedVHDS);
-            convert.DestinationVhdSetNameLength = (uint)convert.DestinationVhdSetName.Length;
-            convert.Padding = new byte[4];
+            convert.DestinationVhdSetName = TestConfig.NameOfConvertedSharedVHDS;
+            convert.DestinationVhdSetNameLength = (uint)(convert.DestinationVhdSetName.Length + 1) * 2;
             byte[] payload = client.CreateTunnelMetaOperationStartConvertToVHDSetRequest(
                 startRequest,
                 convert);
@@ -64,7 +61,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             uint status = client.TunnelOperation<SVHDX_TUNNEL_OPERATION_HEADER>(
                 true,//true for Async operation, false for non-async operation
                 RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_META_OPERATION_START,
-                requestId,
+                ++RequestIdentifier,
                 payload,
                 out header,
                 out response);
@@ -73,25 +70,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 status,
                 "Ioctl should succeed, actual status: {0}",
                 GetStatus(status));
-            VerifyTunnelOperationHeader(header.Value, RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_META_OPERATION_START, (uint)RsvdStatus.STATUS_SVHDX_SUCCESS, requestId++);
+            VerifyTunnelOperationHeader(header.Value, RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_META_OPERATION_START, (uint)RsvdStatus.STATUS_SVHDX_SUCCESS, RequestIdentifier);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "3.	Client closes the file.");
             client.CloseSharedVirtualDisk();
 
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "4.	Client queris the converted disk info and expects the format is changed successfully.");
+
+            CheckDiskFormat();
         }
 
         private void CheckDiskFormat()
         {
-            RsvdClient newClient = new RsvdClient(TestConfig.Timeout);
-            ulong newRequestId = 0;
-            OpenSharedVHD(TestConfig.NameOfConvertedSharedVHDS, newRequestId++, rsvdClient: newClient);
-            SVHDX_TUNNEL_DISK_INFO_RESPONSE? diskInfo = GetVirtualDiskInfo(ref newRequestId, newClient);
+            RequestIdentifier = 0;
+            OpenSharedVHD(TestConfig.NameOfConvertedSharedVHDS, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_2);
+            SVHDX_TUNNEL_DISK_INFO_RESPONSE? diskInfo = GetVirtualDiskInfo();
 
             BaseTestSite.Assert.AreEqual(
                 DISK_FORMAT.VIRTUAL_STORAGE_TYPE_DEVICE_VHDS,
                 diskInfo.Value.DiskFormat,
                 "Disk format should have been changed into VIRTUAL_STORAGE_TYPE_DEVICE_VHDS, the actual value is: {0}",
                 diskInfo.Value.DiskFormat);
+            client.CloseSharedVirtualDisk();
         }
     }
 }

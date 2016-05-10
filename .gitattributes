@@ -46,6 +46,11 @@
 *.cat	binary
 *.sys	binary
 *.rdp   binary
+*.vhdx  binary
+*.vhds  binary
+*.avhdx binary
+*.zip   binary
+*.ico   binary
 
 #Images (Binary)
 *.png binary

@@ -394,7 +394,7 @@ To set up a Windows-based SUT
 
 * On the **Options** dialog box, select **Install Configuration Scripts on System Under Test (SUT)**.
 
-To set up a SUT that is not based on the Windows operating system, see [Configuring Computers that are Not Based on Windows](#_Configuring_Computers_that_1)**.**
+To set up a SUT that is not based on the Windows operating system, see [Configuring Computers that are Not Based on Windows](#_Toc421010906).
 
 ### <a name="_Toc421010902"/>Set Up a Windows-Based Domain Controller (DC)
 This section provides information about how to set up a DC for use with this test suite.
@@ -408,7 +408,7 @@ To set up a Windows-based DC
 
 * Install Active Directory Domain Services.
 
-To set up a DC that is not based on the Windows operating system, see [Configuring Computers that are Not Based on Windows](#_Configuring_Computers_that_1).
+To set up a DC that is not based on the Windows operating system, see [Configuring Computers that are Not Based on Windows](#_Toc421010906).
 
 ### <a name="_Toc421010903"/>Installed Files and Folders
 
@@ -877,10 +877,7 @@ The following table describes the optional configuration properties and provides
 |  **SUTSystemDrive**| If the SUT is using a Windows operating system, specify the system drive letter of SUT machine.| 
 | | Default value: **C**| 
 |  **WaitTime**| The maximum time in seconds to wait for one SUT message.| 
-| | Default value: **40**| 
-|  **ASNIssueFixed**| Indicates whether the workaround for the Asn1ObjectIdentifier encode issue is needed. The possible values are **True** and **False**.| 
-| | Default value: **True**| 
-|  **isTDIXXXXFixed**| Ignore -- reserved for use by the test suite development team| 
+| | Default value: **40**|  
 
 ## <a name="_Toc421010910"/>Running Test Cases
 

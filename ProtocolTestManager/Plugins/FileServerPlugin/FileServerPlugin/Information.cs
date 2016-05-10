@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using System;
 using System.Collections.Generic;
@@ -64,6 +66,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
     {
         #region Properties
 
+        public string targetShareFullPath;
         public string targetSUT;
         public string domainName;
         public string userName;
@@ -83,6 +86,11 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         public DetectResult F_HandleV2_LeaseV2;
         public DetectResult F_Leasing_V1;
         public DetectResult F_Leasing_V2;
+
+        public DetectResult SqosSupport;
+        public DetectResult RsvdSupport;
+        public SQOS_PROTOCOL_VERSION SqosVersion;
+        public RSVD_PROTOCOL_VERSION RsvdVersion;
 
         // The dialect array for Negotiation.
         public DialectRevision[] requestDialect;

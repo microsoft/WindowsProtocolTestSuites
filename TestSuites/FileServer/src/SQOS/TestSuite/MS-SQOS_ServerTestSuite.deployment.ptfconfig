@@ -42,12 +42,25 @@
         </Description>
       </Property>
 
+      <Property name="SqosMaximumBandwidth" value="1600">
+        <Description>
+          Current maximum bandwidth assigned to the logical flow, expressed in kilobytes per second.
+        </Description>
+      </Property>
+
       <Property name="SqosBaseIoSizeInBytes" value="8192">
         <Description>
           The base I/O size used to compute the normalized size of an I/O request for the logical flow.
           Default value is 8192 (8 KB)
         </Description>
       </Property>
+
+      <Property name="SqosClientDialect" value="Sqos10">
+        <Choice>Sqos10, Sqos11</Choice>
+        <Description>
+          The dialect version used to send sqos requests by test suite: Sqos10, Sqos11
+        </Description>
+      </Property>      
     </Group>
   </Properties>
 </TestSite>

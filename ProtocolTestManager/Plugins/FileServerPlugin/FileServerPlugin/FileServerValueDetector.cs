@@ -9,6 +9,7 @@ using System.IO;
 using System.Data;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd;
 using System.Net;
 using System.Reflection;
 using System.Net.NetworkInformation;
@@ -32,7 +33,7 @@ namespace Microsoft.Protocols.TestManager.Detector
 
         private Logger logWriter = new Logger();
 
-        private const string SUTTitle = "Target SUT";
+        private const string targetShareTitle = @"Target Share";
         private const string domainTitle = "Domain Name";
         private const string userTitle = "User Name";
         private const string passwordTitle = "Password";
@@ -59,7 +60,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             Prerequisites prerequisites = new Prerequisites();
 
             prerequisites.Title = "FileServer";
-            prerequisites.Summary = "Please input the below info to detect SUT.\r\nIf SUT is in WORKGROUP, set Domain Name to the same value as the Target SUT field.";
+            prerequisites.Summary = "Please input the below info to detect SUT.\r\nIf SUT is in WORKGROUP, leave Domain Name blank.";
 
             Dictionary<string, List<string>> propertiesDic = new Dictionary<string, List<string>>();
 
@@ -67,6 +68,7 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             // Retrieve saved value from *.ptfconfig file
             string SUT = DetectorUtil.GetPropertyValue("Common.SutComputerName");
+            string share = DetectorUtil.GetPropertyValue("Common.BasicFileShare");
             string domain = DetectorUtil.GetPropertyValue("Common.DomainName");
             string user = DetectorUtil.GetPropertyValue("Common.AdminUserName");
             string password = DetectorUtil.GetPropertyValue("Common.PasswordForAllUsers");
@@ -81,20 +83,20 @@ namespace Microsoft.Protocols.TestManager.Detector
                 || string.IsNullOrWhiteSpace(user)
                 || string.IsNullOrWhiteSpace(password))
             {
-                SUTList.Add("node01");
+                SUTList.Add(@"\\node01\smbbasic");
                 domainList.Add("contoso.com");
                 userList.Add("administrator");
                 passwordList.Add("Password01!");
             }
             else
             {
-                SUTList.Add(SUT);
+                SUTList.Add(String.Format(@"\\{0}\{1}", SUT, share));
                 domainList.Add(domain);
                 userList.Add(user);
                 passwordList.Add(password);
             }
 
-            propertiesDic.Add(SUTTitle, SUTList);
+            propertiesDic.Add(targetShareTitle, SUTList);
             propertiesDic.Add(domainTitle, domainList);
             propertiesDic.Add(userTitle, userList);
             propertiesDic.Add(passwordTitle, passwordList);
@@ -128,13 +130,15 @@ namespace Microsoft.Protocols.TestManager.Detector
         public bool SetPrerequisiteProperties(Dictionary<string, string> properties)
         {
             // Save the prerequisites set by user
-            detectionInfo.targetSUT = properties[SUTTitle];
+            detectionInfo.targetShareFullPath = properties[targetShareTitle];
+            ParseShareFullPath();
+
             detectionInfo.domainName = properties[domainTitle];
             detectionInfo.userName = properties[userTitle];
             detectionInfo.password = properties[passwordTitle];
             detectionInfo.securityPackageType = (SecurityPackageType)Enum.Parse(typeof(SecurityPackageType), properties["Authentication"]);
 
-            if (detectionInfo.targetSUT == detectionInfo.domainName)
+            if (detectionInfo.targetSUT == detectionInfo.domainName || string.IsNullOrEmpty(detectionInfo.domainName))
                 env = EnvironmentType.Workgroup;
 
             // Check the validity of the inputs
@@ -168,9 +172,11 @@ namespace Microsoft.Protocols.TestManager.Detector
             DetectingItems.Add(new DetectingItem("Check the Credential", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Detect Platform and User Account", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Fetch Share Info", DetectingStatus.Pending, LogStyle.Default));
-            DetectingItems.Add(new DetectingItem("Detect Basic Share", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Detect Ioctl Codes", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Detect Create Contexts", DetectingStatus.Pending, LogStyle.Default));
+            DetectingItems.Add(new DetectingItem("Detect RSVD support", DetectingStatus.Pending, LogStyle.Default));
+            DetectingItems.Add(new DetectingItem("Detect SQOS support", DetectingStatus.Pending, LogStyle.Default));
+
             return DetectingItems;
         }
 
@@ -208,9 +214,6 @@ namespace Microsoft.Protocols.TestManager.Detector
             if (!DetectShareInfo(detector))
                 return false;
 
-            if (!DetermineBasicShare())
-                return false;
-
             DetermineSymboliclink();
 
             detectionInfo.detectExceptions = new Dictionary<string, string>();
@@ -219,6 +222,9 @@ namespace Microsoft.Protocols.TestManager.Detector
             // If any exceptions, just ignore
             DetectIoctlCodes(detector);
             DetectCreateContexts(detector);
+
+            DetectRSVD(detector);
+            DetectSQOS(detector);
 
             logWriter.AddLog(LogLevel.Information, "===== End detecting =====");
             return true;
@@ -368,6 +374,25 @@ namespace Microsoft.Protocols.TestManager.Detector
             propertiesDic.Add("SMB2.SymboliclinkInSubFolder", new List<string>() { detectionInfo.SymboliclinkInSubFolder });
             #endregion
 
+            #region RSVD
+            if (detectionInfo.RsvdSupport == DetectResult.Supported)
+            {
+                string versionvalue = "0x00000001";
+                if (detectionInfo.RsvdVersion == RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_2)
+                {
+                    versionvalue = "0x00000002";
+                }
+                propertiesDic.Add("RSVD.ServerServiceVersion", new List<string>() { versionvalue });
+            }
+            #endregion
+
+            #region SQOS
+            if (detectionInfo.SqosSupport == DetectResult.Supported)
+            {
+                propertiesDic.Add("SQOS.SqosClientDialect", new List<string>() { detectionInfo.SqosVersion.ToString() });
+            }
+            #endregion
+
             // Add every property whose name contains "share" and does not contain "server"
             string[] cfgFiles = {"CommonTestSuite.deployment.ptfconfig",
                                  "MS-SMB2_ServerTestSuite.deployment.ptfconfig",
@@ -417,7 +442,6 @@ namespace Microsoft.Protocols.TestManager.Detector
             selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.DFSC (Distributed File System Referral)", Status = RuleStatus.Unknown });
             selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.FSRVP (File Server Remote VSS)", Status = RuleStatus.Unknown });
             selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.SWN (Service Witness)", Status = RuleStatus.Unknown });
-            selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.RSVD (Remote Shared Virtual Disk)", Status = RuleStatus.Unknown });
             selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Auth (Authentication and Authorization)", Status = RuleStatus.Unknown });
 
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.Negotiate"));
@@ -439,12 +463,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.Session"));
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.Tree"));
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.CreateClose"));
-
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock.OplockOnShareWithoutForceLevel2OrSOFS", HasOplockShare(OplockShareType.WithoutForceLevel2OrSOFS)));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock.OplockOnShareWithoutForceLevel2WithSOFS", HasOplockShare(OplockShareType.WithoutForceLevel2WithSOFS)));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock.OplockOnShareWithForceLevel2WithoutSOFS", HasOplockShare(OplockShareType.WithForceLevel2WithoutSOFS)));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock.OplockOnShareWithForceLevel2AndSOFS", HasOplockShare(OplockShareType.WithForceLevel2AndSOFS)));
-
+            selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock"));
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.OperateOneFileFromTwoNodes"));
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.Compound"));
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.ChangeNotify"));
@@ -474,6 +493,15 @@ namespace Microsoft.Protocols.TestManager.Detector
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.FSCTL/IOCTL.FsctlOffloadReadWrite",
                 detectionInfo.F_CopyOffload[0] == DetectResult.Supported || detectionInfo.F_CopyOffload[1] == DetectResult.Supported));
 
+            selectedRuleList.Add(CreateRule(
+                "Feature.RSVD (Remote Shared Virtual Disk).RSVDVersion1", 
+                (detectionInfo.RsvdSupport == DetectResult.Supported) && 
+                (detectionInfo.RsvdVersion == RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1 || detectionInfo.RsvdVersion == RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_2)));
+            selectedRuleList.Add(CreateRule(
+                "Feature.RSVD (Remote Shared Virtual Disk).RSVDVersion2",
+                (detectionInfo.RsvdSupport == DetectResult.Supported) && (detectionInfo.RsvdVersion == RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_2)));
+
+            selectedRuleList.Add(CreateRule("Feature.SQOS (Storage Quality of Service)", null, detectionInfo.SqosSupport));
             return selectedRuleList;
         }
 
@@ -717,7 +745,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                 return false;
             }
 
-            logWriter.AddLog(LogLevel.Warning, "Success", false, LogStyle.StepPassed);
+            logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
             logWriter.AddLineToLog(LogLevel.Information);
             return true;
         }
@@ -860,58 +888,6 @@ namespace Microsoft.Protocols.TestManager.Detector
                 }
                 logWriter.AddLineToLog(LogLevel.Information);
             }
-            return true;
-        }
-
-        private bool DetermineBasicShare()
-        {
-            logWriter.AddLog(LogLevel.Information, "===== Detect Basic Share =====");
-
-            string smbBasicShare = null;
-            string containBasicShare = null;
-            string nonAdminShare = null;
-            foreach (ShareInfo item in detectionInfo.shareInfo)
-            {
-                if (item.ShareName.ToLower() == "smbbasic")
-                {
-                    smbBasicShare = item.ShareName;
-                    break;
-                }
-
-                if (item.ShareName.ToLower().Contains("basic") && ((item.ShareFlags & ShareFlags_Values.SHAREFLAG_ENCRYPT_DATA) != ShareFlags_Values.SHAREFLAG_ENCRYPT_DATA))
-                {
-                    containBasicShare = item.ShareName;
-                }
-
-                if ((!item.ShareName.Contains("$")) && ((item.ShareFlags & ShareFlags_Values.SHAREFLAG_ENCRYPT_DATA) != ShareFlags_Values.SHAREFLAG_ENCRYPT_DATA))
-                {
-                    nonAdminShare = item.ShareName;
-                }
-            }
-
-            if (null == smbBasicShare && null != containBasicShare)
-            {
-                smbBasicShare = containBasicShare;
-            }
-
-            if (null == smbBasicShare && null != nonAdminShare)
-            {
-                smbBasicShare = nonAdminShare;
-            }
-
-            if (null == smbBasicShare)
-            {
-                logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
-                logWriter.AddLineToLog(LogLevel.Information);
-                logWriter.AddLog(LogLevel.Error, "Did not find shares as a basic share folder");
-            }
-
-            logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
-            logWriter.AddLineToLog(LogLevel.Information);
-            logWriter.AddLog(LogLevel.Information, string.Format("Basic Share is: {0}", smbBasicShare));
-            logWriter.AddLineToLog(LogLevel.Information);
-
-            detectionInfo.BasicShareName = smbBasicShare;
             return true;
         }
 
@@ -1235,58 +1211,72 @@ namespace Microsoft.Protocols.TestManager.Detector
             logWriter.AddLineToLog(LogLevel.Information);
         }
 
-        #endregion
-
-        #region Helper functions for Getting Detected Results
-
-        /// <summary>
-        /// Share type for Oplock cases
-        /// </summary>
-        public enum OplockShareType
+        private bool DetectRSVD(FSDetector detector)
         {
-            WithoutForceLevel2OrSOFS,
-            WithoutForceLevel2WithSOFS,
-            WithForceLevel2WithoutSOFS,
-            WithForceLevel2AndSOFS
-        }
-
-        private bool HasOplockShare(OplockShareType oplockShareType)
-        {
-            if (detectionInfo.shareInfo == null)
-                return false;
-            foreach (var item in detectionInfo.shareInfo)
+            logWriter.AddLog(LogLevel.Information, "===== Detect RSVD =====");
+            if (detectionInfo.CheckHigherDialect(detectionInfo.smb2Info.MaxSupportedDialectRevision, DialectRevision.Smb30))
             {
-                if (item.ShareType != ShareType_Values.SHARE_TYPE_DISK)
-                    continue;
-                switch (oplockShareType)
+                try
                 {
-                    case OplockShareType.WithoutForceLevel2OrSOFS:
-                        if (!item.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_FORCE_LEVELII_OPLOCK)
-                            && !item.ShareCapabilities.HasFlag(Share_Capabilities_Values.SHARE_CAP_SCALEOUT))
-                            return true;
-                        break;
-                    case OplockShareType.WithoutForceLevel2WithSOFS:
-                        if (!item.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_FORCE_LEVELII_OPLOCK)
-                            && item.ShareCapabilities.HasFlag(Share_Capabilities_Values.SHARE_CAP_SCALEOUT))
-                            return true;
-                        break;
-                    case OplockShareType.WithForceLevel2WithoutSOFS:
-                        if (item.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_FORCE_LEVELII_OPLOCK)
-                            && !item.ShareCapabilities.HasFlag(Share_Capabilities_Values.SHARE_CAP_SCALEOUT))
-                            return true;
-                        break;
-                    case OplockShareType.WithForceLevel2AndSOFS:
-                        if (item.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_FORCE_LEVELII_OPLOCK)
-                            && item.ShareCapabilities.HasFlag(Share_Capabilities_Values.SHARE_CAP_SCALEOUT))
-                            return true;
-                        break;
-                    default:
-                        break;
+                    detectionInfo.RsvdSupport = detector.CheckRsvdSupport(ref detectionInfo);
+                }
+                catch (Exception e)
+                {
+                    logWriter.AddLog(LogLevel.Information, string.Format("Detect RSVD failed: {0}", e.Message));
+                    detectionInfo.RsvdSupport = DetectResult.DetectFail;
+                    detectionInfo.detectExceptions.Add(@"SVHDX_OPEN_DEVICE_CONTEXT_V1\V2", string.Format("Detect RSVD failed: {0}", e.Message));
                 }
             }
 
-            return false;
+            logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+            logWriter.AddLineToLog(LogLevel.Information);
+            return true;
         }
+
+        private bool DetectSQOS(FSDetector detector)
+        {
+            logWriter.AddLog(LogLevel.Information, "===== Detect SQOS =====");
+            if (detectionInfo.CheckHigherDialect(detectionInfo.smb2Info.MaxSupportedDialectRevision, DialectRevision.Smb311))
+            {
+                try
+                {
+                    detectionInfo.SqosSupport = detector.CheckSqosSupport(ref detectionInfo);
+                }
+                catch (Exception e)
+                {
+                    logWriter.AddLog(LogLevel.Information, string.Format("Detect SQOS failed: {0}", e.Message));
+                    detectionInfo.SqosSupport = DetectResult.DetectFail;
+                    detectionInfo.detectExceptions.Add(CtlCode_Values.FSCTL_STORAGE_QOS_CONTROL.ToString(), string.Format("Detect SQOS failed: {0}", e.Message));
+                }
+            }
+            logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+            logWriter.AddLineToLog(LogLevel.Information);
+            return true;
+        }
+
+        private void ParseShareFullPath()
+        {
+            // Parse full path to separate properties.
+            string fullPath = detectionInfo.targetShareFullPath;
+            if (!fullPath.StartsWith(@"\\"))
+            {
+                throw new Exception(@"The format of Target Share should be \\[ServerNameOrIp]\[ShareName]");
+            }
+
+            fullPath = fullPath.Substring(2);
+
+            int posBackSlash = fullPath.IndexOf(@"\");
+            if (posBackSlash == -1)
+            {
+                throw new Exception(@"The format of Target Share should be \\[ServerNameOrIp]\[ShareName]");
+            }
+
+            detectionInfo.targetSUT = fullPath.Substring(0, posBackSlash);
+            detectionInfo.BasicShareName = fullPath.Substring(detectionInfo.targetSUT.Length + 1);
+        }
+        #endregion
+
+        #region Helper functions for Getting Detected Results
 
         private string GetShare(ShareFlags_Values shareFlags, Share_Capabilities_Values shareCap = Share_Capabilities_Values.NONE)
         {

@@ -683,7 +683,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                             EaName = Encoding.ASCII.GetBytes(fileFullEaInfo.EaName + "\0"),
                             EaNameLength = (byte)Encoding.ASCII.GetByteCount(fileFullEaInfo.EaName),
                             EaValue = fileFullEaInfo.EaValue.ToArray(),
-                            EaValueLength = (ushort)fileFullEaInfo.EaValue.Count,
+                            EaValueLength = (ushort)fileFullEaInfo.EaValue.Length,
                             Flags = fileFullEaInfo.Flags
                         };
 

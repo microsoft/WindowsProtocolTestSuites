@@ -8,6 +8,7 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
@@ -39,14 +40,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
             Guid logicalFlowId = Guid.NewGuid();
             Guid initiatorId = Guid.NewGuid();
             AssociateOpenToLogicalFlow(logicalFlowId);
-            SetOrProbePolicy(logicalFlowId, initiatorId, setPolicy:true);
+            SetOrProbePolicy(logicalFlowId, initiatorId, setPolicy: true);
 
             // The server needs a few seconds to build up the set of known clients and the related statistics.
             // Resend the request until the max and min rates are computed.
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends an SQOS request to query status to a logical flow and expects success");
             DoUntilSucceed(
                 () => GetStatus(initiatorId, logicalFlowId),
-                TestConfig.Timeout,
+                TestConfig.LongerTimeout,
                 "Retry querying the logic flow status until succeed within timeout span");
         }
 
@@ -66,7 +67,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends an SQOS request to query status to a logical flow and expects success");
             DoUntilSucceed(
                 () => GetStatus(initiatorId, logicalFlowId),
-                TestConfig.Timeout,
+                TestConfig.LongerTimeout,
                 "Retry querying the logic flow status until succeed within timeout span");
         }
 
@@ -89,46 +90,58 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
             // So the tick unit is the same with latencyIncrement and lowerLatencyIncrement
             Stopwatch sw = Stopwatch.StartNew();
             sw.Start();
-            client.Read(treeId, fileId, 0, TestConfig.SqosBaseIoSize, out payload);
+            client.Read(0, TestConfig.SqosBaseIoSize, out payload);
             sw.Stop();
 
             // The difference of latencyIncrement and lowerLatencyIncrement is that if they include or exclude any delay accumulated 
             // by I/O requests in the initiator’s queues while waiting to be issued to lower layers
             // In this case, no delay in initiator queue since there's only one I/O request.
             // So the two value is the same.
-            UpdateCounters(logicalFlowId, initiatorId, 1, 1, (ulong)sw.ElapsedTicks, (ulong)sw.ElapsedTicks);
+            UpdateCounters(logicalFlowId, initiatorId, 1, 1, (ulong)sw.ElapsedTicks, (ulong)sw.ElapsedTicks, 0, 8);
         }
 
         private void AssociateOpenToLogicalFlow(Guid logicalFlowId)
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends an SQOS request to associate the Open to a logical flow and expects success");
-            STORAGE_QOS_CONTROL_Response? sqosResponse;
-            client.SendAndReceiveSqosPacket(
-                treeId,
-                fileId,
+            SqosResponsePacket sqosResponse;
+
+            SqosRequestPacket sqosRequest = new SqosRequestPacket(TestConfig.SqosClientDialect == SQOS_PROTOCOL_VERSION.Sqos10 ? SqosRequestType.V10 : SqosRequestType.V11,
+                (ushort)TestConfig.SqosClientDialect,
                 SqosOptions_Values.STORAGE_QOS_CONTROL_FLAG_SET_LOGICAL_FLOW_ID,
                 logicalFlowId,
                 Guid.Empty,
                 Guid.Empty,
                 string.Empty,
-                string.Empty,
+                string.Empty
+                );
+            client.SendAndReceiveSqosPacket(
+                sqosRequest,
                 out sqosResponse);
+
         }
 
         private void SetOrProbePolicy(Guid logicalFlowId, Guid initiatorId, bool setPolicy)
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends an SQOS request to {0} policy to a logical flow and expects success", setPolicy ? "set" : "probe");
-            STORAGE_QOS_CONTROL_Response? sqosResponse;
-            client.SendAndReceiveSqosPacket(
-                treeId,
-                fileId,
+            SqosResponsePacket sqosResponse;
+            SqosRequestPacket sqosRequest = new SqosRequestPacket(TestConfig.SqosClientDialect == SQOS_PROTOCOL_VERSION.Sqos10 ? SqosRequestType.V10 : SqosRequestType.V11,
+                (ushort)TestConfig.SqosClientDialect,
                 setPolicy ? SqosOptions_Values.STORAGE_QOS_CONTROL_FLAG_SET_POLICY : SqosOptions_Values.STORAGE_QOS_CONTROL_FLAG_PROBE_POLICY,
                 logicalFlowId,
                 TestConfig.SqosPolicyId,
                 initiatorId,
                 TestConfig.SqosInitiatorName,
-                TestConfig.SqosInitiatorNodeName,
+                TestConfig.SqosInitiatorNodeName);
+
+            uint status = client.SendAndReceiveSqosPacket(
+                sqosRequest,
                 out sqosResponse);
+            BaseTestSite.Assert.AreEqual(
+                (uint)Smb2Status.STATUS_SUCCESS,
+                status,
+                "{0} policy should succeed, actual status: {1}",
+                setPolicy ? "SetPolicy": "ProbePolicy",
+                Smb2Status.GetStatusCode(status));
         }
 
         private void UpdateCounters(
@@ -137,59 +150,83 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
             ulong ioCountIncrement,
             ulong normalizedIoCountIncrement,
             ulong latencyIncrement,
-            ulong lowerLatencyIncrement)
+            ulong lowerLatencyIncrement,
+            ulong bandwidthLimit,
+            ulong kilobyteCountIncrement)
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends an SQOS request to update counters to a logical flow and expects success");
-            STORAGE_QOS_CONTROL_Response? sqosResponse;
-            client.SendAndReceiveSqosPacket(
-                treeId,
-                fileId,
+            SqosResponsePacket sqosResponse;
+
+            SqosRequestPacket sqosRequest = new SqosRequestPacket(TestConfig.SqosClientDialect == SQOS_PROTOCOL_VERSION.Sqos10 ? SqosRequestType.V10 : SqosRequestType.V11,
+                (ushort)TestConfig.SqosClientDialect,
                 SqosOptions_Values.STORAGE_QOS_CONTROL_FLAG_UPDATE_COUNTERS,
                 logicalFlowId,
                 TestConfig.SqosPolicyId,
                 initiatorId,
                 TestConfig.SqosInitiatorName,
                 TestConfig.SqosInitiatorNodeName,
-                out sqosResponse,
+                0,
+                0,
                 ioCountIncrement,
                 normalizedIoCountIncrement,
                 latencyIncrement,
-                lowerLatencyIncrement);
+                lowerLatencyIncrement,
+                bandwidthLimit,
+                kilobyteCountIncrement
+                );
+            uint status = client.SendAndReceiveSqosPacket(
+                sqosRequest,
+                out sqosResponse);
+
+            BaseTestSite.Assert.AreEqual(
+                (uint)Smb2Status.STATUS_SUCCESS,
+                status,
+                "Update counters should succeed, actual status: {0}",
+                Smb2Status.GetStatusCode(status));
         }
 
         private void GetStatus(Guid initiatorId, Guid logicalFlowId)
         {
-            STORAGE_QOS_CONTROL_Response? sqosResponse;
-            client.SendAndReceiveSqosPacket(
-                treeId,
-                fileId,
+            SqosResponsePacket sqosResponse = null;
+
+            SqosRequestPacket sqosRequest = new SqosRequestPacket(TestConfig.SqosClientDialect == SQOS_PROTOCOL_VERSION.Sqos10 ? SqosRequestType.V10 : SqosRequestType.V11,
+                (ushort)TestConfig.SqosClientDialect,
                 SqosOptions_Values.STORAGE_QOS_CONTROL_FLAG_GET_STATUS,
                 logicalFlowId,
                 TestConfig.SqosPolicyId,
                 initiatorId,
                 TestConfig.SqosInitiatorName,
-                TestConfig.SqosInitiatorNodeName,
+                TestConfig.SqosInitiatorNodeName);
+
+            client.SendAndReceiveSqosPacket(
+                sqosRequest,
                 out sqosResponse);
 
-            if (sqosResponse.Value.MaximumIoRate != TestConfig.SqosMaximumIoRate)
-            {
-                throw new Exception(String.Format("MaximumRate should be {0}, not {1}, retry querying logical flow status in case the server is not ready.", 
-                    TestConfig.SqosMaximumIoRate, sqosResponse.Value.MaximumIoRate));
-            }
 
             BaseTestSite.Assert.IsNotNull(sqosResponse,
                 "Server should return STORAGE_QOS_CONTROL_RESPONSE when Request.Options includes the STORAGE_QOS_CONTROL_GET_STATUS flag");
 
-            BaseTestSite.Assert.AreEqual(SqosConst.STORAGE_QOS_VERSION_1, sqosResponse.Value.ProtocolVersion, "ProtocolVersion must be set to 0x0100");
-            BaseTestSite.Assert.AreEqual(SqosOptions_Values.STORAGE_QOS_CONTROL_FLAG_NONE, sqosResponse.Value.Options, "Options must be set to 0");
-            BaseTestSite.Assert.AreEqual(logicalFlowId, sqosResponse.Value.LogicalFlowID, "LogicalFlowID MUST be set to {0}", logicalFlowId);
-            BaseTestSite.Assert.AreEqual(TestConfig.SqosPolicyId, sqosResponse.Value.PolicyID, "PolicyID MUST be set to {0}", TestConfig.SqosPolicyId);
-            BaseTestSite.Assert.AreEqual(initiatorId, sqosResponse.Value.InitiatorID, "InitiatorID MUST be set to {0}", initiatorId);
-            BaseTestSite.Assert.AreNotEqual((uint)0, sqosResponse.Value.TimeToLive, "TimeToLive MUST be set to a positive value");
-            BaseTestSite.Assert.AreEqual(LogicalFlowStatus.StorageQoSStatusOk, sqosResponse.Value.Status, "Status MUST be StorageQoSStatusOk");
-            BaseTestSite.Assert.AreEqual(TestConfig.SqosMaximumIoRate, sqosResponse.Value.MaximumIoRate, "MaximumRate MUST be {0}", TestConfig.SqosMaximumIoRate);
-            BaseTestSite.Assert.AreEqual(TestConfig.SqosMinimumIoRate, sqosResponse.Value.MinimumIoRate, "MinimumIoRate MUST be {0}", TestConfig.SqosMinimumIoRate);
-            BaseTestSite.Assert.AreEqual(TestConfig.SqosBaseIoSize, sqosResponse.Value.BaseIoSize, "BaseIoSize MUST be {0}", TestConfig.SqosBaseIoSize);
+            if (sqosResponse.MaximumIoRate != TestConfig.SqosMaximumIoRate)
+            {
+                throw new Exception(String.Format("MaximumRate should be {0}, not {1}, retry querying logical flow status in case the server is not ready.", 
+                    TestConfig.SqosMaximumIoRate, sqosResponse.MaximumIoRate));
+            }
+
+            BaseTestSite.Log.Add(LogEntryKind.Debug, "ProtocolVersion in response is {0}", sqosResponse.Header.ProtocolVersion);
+            BaseTestSite.Assert.AreEqual(SqosOptions_Values.STORAGE_QOS_CONTROL_FLAG_NONE, sqosResponse.Header.Options, "Options must be set to 0");
+            BaseTestSite.Assert.AreEqual(logicalFlowId, sqosResponse.Header.LogicalFlowID, "LogicalFlowID MUST be set to {0}", logicalFlowId);
+            BaseTestSite.Assert.AreEqual(TestConfig.SqosPolicyId, sqosResponse.Header.PolicyID, "PolicyID MUST be set to {0}", TestConfig.SqosPolicyId);
+            BaseTestSite.Assert.AreEqual(initiatorId, sqosResponse.Header.InitiatorID, "InitiatorID MUST be set to {0}", initiatorId);
+            BaseTestSite.Assert.AreNotEqual((uint)0, sqosResponse.TimeToLive, "TimeToLive MUST be set to a positive value");
+            BaseTestSite.Assert.AreEqual(LogicalFlowStatus.StorageQoSStatusOk, sqosResponse.Status, "Status MUST be StorageQoSStatusOk");
+            BaseTestSite.Assert.AreEqual(TestConfig.SqosMaximumIoRate, sqosResponse.MaximumIoRate, "MaximumRate MUST be {0}", TestConfig.SqosMaximumIoRate);
+            BaseTestSite.Assert.AreEqual(TestConfig.SqosMinimumIoRate, sqosResponse.MinimumIoRate, "MinimumIoRate MUST be {0}", TestConfig.SqosMinimumIoRate);
+            BaseTestSite.Assert.AreEqual(TestConfig.SqosBaseIoSize, sqosResponse.BaseIoSize, "BaseIoSize MUST be {0}", TestConfig.SqosBaseIoSize);
+
+            if (sqosResponse.Header.ProtocolVersion == (ushort)SQOS_PROTOCOL_VERSION.Sqos11)
+            {
+                BaseTestSite.Assert.AreEqual(TestConfig.SqosMaximumBandwidth, sqosResponse.MaximumBandwidth, "MaximumBandwidth MUST be {0}", TestConfig.SqosMaximumBandwidth);
+            }
         }
     }
 }

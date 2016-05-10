@@ -13,22 +13,22 @@ if not defined buildtool (
 
 if not defined buildtool (
 	echo Error: No msbuild.exe was found, install .Net Framework version 4.0 or higher
-	goto :eof
+	exit /b 1
 )
 
 if not defined WIX (
 	echo Error: WiX Toolset version 3.7 or higher should be installed
-	goto :eof
+	exit /b 1
 )
 
 if not exist "%programfiles(x86)%\Spec Explorer 2010\SpecExplorer.exe" (
 	echo Error: Spec Explorer 2010 v3.5.3146.0 should be installed
-	goto :eof
+	exit /b 1
 )
 
 if not exist "%programfiles(x86)%\Protocol Test Framework\bin\Microsoft.Protocols.TestTools.dll" (
         echo Error: Protocol Test Framework should be installed
-	goto :eof
+	exit /b 1
 )
 
 if not defined vspath (
@@ -40,18 +40,29 @@ if not defined vspath (
 		set vspath="%VS140COMNTOOLS%"
 	) else (
 		echo Error: Visual Studio or Visual Studio test agent should be installed, version 2012 or higher
-		goto :eof
+		exit /b 1
 	)
 )
 
 set CurrentPath=%~dp0
-if not defined TestSuiteRoot (
-	set TestSuiteRoot=%CurrentPath%..\..\..\
+set TestSuiteRoot=%CurrentPath%..\..\..\
+
+::Get build version from AssemblyInfo
+set path=%TestSuiteRoot%AssemblyInfo\SharedAssemblyInfo.cs
+set FindExe="%SystemRoot%\system32\findstr.exe"
+set versionStr="[assembly: AssemblyVersion("1.0.0.0")]"
+for /f "delims=" %%i in ('""%FindExe%" "AssemblyVersion" "%path%""') do set versionStr=%%i
+set TESTSUITE_VERSION=%versionStr:~28,-3%
+
+set KeyFile=%1
+if not defined KeyFile (
+	%buildtool% "%TestSuiteRoot%TestSuites\MS-SMB\src\MS-SMB_Server.sln" /t:clean;rebuild 
+) else (
+	%buildtool% "%TestSuiteRoot%TestSuites\MS-SMB\src\MS-SMB_Server.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true	
 )
 
-%buildtool% "%TestSuiteRoot%TestSuites\MS-SMB\src\MS-SMB_Server.sln" /t:clean
 if exist "%TestSuiteRoot%drop\TestSuites\MS-SMB" (
- rd /s /q "%TestSuiteRoot%drop\TestSuites\MS-SMB"
+ rd /s /q "%TestSuiteRoot%drop\TestSuites\MS-SMB" 
 )
 
 %buildtool% "%TestSuiteRoot%TestSuites\MS-SMB\src\deploy\deploy.wixproj" /t:Clean;Rebuild

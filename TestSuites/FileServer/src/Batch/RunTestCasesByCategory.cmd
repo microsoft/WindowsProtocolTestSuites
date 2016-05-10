@@ -33,7 +33,8 @@ echo    MultipleChannel               Test cases to test server capability SMB2_
 echo    DFSC                          Test cases to test MS-DFSC protocol
 echo    FSRVP                         Test cases to test MS-FSRVP protocol
 echo    SWN                           Test cases to test MS-SWN protocol
-echo    RSVD                          Test cases to test MS-RSVD protocol
+echo    RsvdVersion1                  Test cases to test MS-RSVD version 1
+echo    RsvdVersion2                  Test cases to test MS-RSVD version 2
 echo    SQOS                          Test cases to test MS-SQOS protocol
 echo    Auth                          Test cases to test all Authentication & Authorization scenarios
 echo    KerberosAuthentication        Test cases for Kerberos Authentication

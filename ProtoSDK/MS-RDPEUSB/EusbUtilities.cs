@@ -399,9 +399,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeusb
 
         private MemoryStream ms = null;
 
-        // BUGBUG: Check if this is still valid.
-        // In Windows XP, Windows Server 2003 and later operating system, the MaximumTransferSize member of 
-        // the USBD_PIPE_INFORMATION structure is obsolete.
         private const uint USBD_DEFAULT_MAXIMUM_TRANSFER_SIZE = uint.MaxValue;
 
         #endregion

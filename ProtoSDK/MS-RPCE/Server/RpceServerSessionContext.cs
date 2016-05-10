@@ -325,10 +325,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             if (coPdu.PTYPE == RpcePacketType.Bind ||
                 coPdu.PTYPE == RpcePacketType.BindAck)
             {
-                //TDI: 
-                //TD said PFC_SUPPORT_HEADER_SIGN is meanful in Bind and AltContext.
-                //But when using Kerberos, AltContext doesn't have this flag, 
-                //if server or client read this flag according to AltContext, Sign/Encrypt will fail.
                 this.SupportsHeaderSign
                     = (coPdu.pfc_flags & RpceCoPfcFlags.PFC_SUPPORT_HEADER_SIGN)
                             == RpceCoPfcFlags.PFC_SUPPORT_HEADER_SIGN;

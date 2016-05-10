@@ -46,6 +46,9 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Asn1Code\Kile\KERB_PA_PAC_OPTIONS.cs" />
     <Compile Include="Asn1Code\KKDCP\KDC_PROXY_MESSAGE.cs" />
     <Compile Include="Asn1Code\Rfc3244\ChangePasswdData.cs" />

@@ -139,8 +139,8 @@ For workgroup environments, omit tasks that are related to the setup and configu
 |-----------|------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | □         | Download the test suite for the protocol implementation                                  | For a list of the files that the download package contains, please see [Installed Files and Folders](#6).                                                                                                      |
 | □         | Confirm that your test environment and computers meet the requirements of the test suite | For information about the requirements of the test suite, please see [Requirements](#3).                                                                                                                 |
-| □         | Set up the Domain Controller (DC)                                                        | See [Set up the Domain Controller (DC)](#%.2.1).                                                                                                                                              |
-| □         | Set up the system under test (SUT)                                                       | See [Set up the SUT](#5.1.2) or [Set up the SUT](#5.2.3) .                                                                                                                                      |
+| □         | Set up the Domain Controller (DC)                                                        | See [Set up the Domain Controller (DC)](#5.2.1).                                                                                                                                              |
+| □         | Set up the system under test (SUT)                                                       | See [Set up the SUT in Workgroup Environment](#5.1.2) or [Set up the SUT in Domain Environment](#5.2.3) .                                                                                                                                      |
 | □         | Set up the driver computer                                                               | See [Set up the Driver Computer](#5.1.1) or [Set up the Driver Computer](#5.2.2).                                                                                                                               |
 | □         | Set up the network                                                                       | See [Network Setup](#4).                                                                                                                                                                               |
 | □         | Verify the connections from the driver computer to the SUT and other computers           | See [Verify Connectivity from the Driver Computer](#4.3).                                                                                                                                                                  |
@@ -192,7 +192,7 @@ Run this test suite in a domain environment that contains the following computer
 
     For scenarios not involving cluster, a computer running Microsoft® Windows Server 2016 Technical Preview 2, or a computer set up as SUT that is running non-Windows operating system. Either failover cluster node could be used as SUT for non-cluster involved scenarios here.
 
-![](./image/FileServerUserGuide/FileServerUserGuide/image3.png)Note
+![](./image/FileServerUserGuide/image3.png)Note
 
 For more information about scenarios involving cluster and otherwise, please check FileServerTestDesignSpecification.md section 3 "Test Suite Design".
 
@@ -277,7 +277,7 @@ All of the following software must be installed on the driver computer. They hav
 	
 * Install Spec Explorer (build 3.5.3146.0 or later) 
     
-	Spec Explorer is a model based testing tool used by test suite to design model and generate test cases. It has some dependencies on VC++ 9.0 redistributable package which should be installed together.    
+	Spec Explorer is a model based testing tool used by test suite to design model and generate test cases. It has some dependencies on [VC++ 9.0 redistributable package](https://www.microsoft.com/en-us/download/details.aspx?id=5582) which should be installed together.    
 	
     You can download Spec Explorer from the website listed below: 
 
@@ -314,6 +314,8 @@ The workgroup environment requires interactions between the following computers 
 
 The following diagram applies to both Windows based computers and Non-Windows based computers in the test environment.
 
+![](./image/FileServerUserGuide/image4.png)
+
 | Machine Name/Access Point | NIC       | IPv4          | Subnet Mask   |
 |---------------------------|-----------|---------------|---------------|
 | Client01                  | External1 | 192.168.1.111 | 255.255.255.0 |
@@ -343,6 +345,8 @@ For scenarios involving cluster, driver computer in this test suite will simulat
 For non-cluster scenarios, driver computer will simulate a physical machine than contacts either node which is acting as SUT.
 
 The following figure shows the domain environment with recommended network configurations for reference.
+
+![](./image/FileServerUserGuide/image5.png)
 
 ![](./image/FileServerUserGuide/image3.png)Note
 
@@ -638,7 +642,7 @@ For Windows platform, please refer to [Install DNS Service and Active Directory 
 
 6.  Password of all the accounts is set to "**Password01!**"
 
-For Windows platform, please refer to [Create a Domain group](#5.3.9.7) and [Create a Domain account that belongs to a Domain group](#5.3.9.8).
+For Windows platform, please refer to [Create Non-Admin user account](#5.3.9.5), [Enable Guest user account](#5.3.9.6), [Create a Domain group](#5.3.9.7) and [Create a Domain account that belongs to a Domain group](#5.3.9.8).
 
 #####<a name="5.2.1.4"/> Setup to test Claimed Based Access Control (CBAC)
 
@@ -836,7 +840,7 @@ Navigate to **Server Manager** &gt; **File and Storage Services** &gt; **Share**
 
 Please modify and run below two commands from console window:
 
-	cd C:\MicrosoftProtocolTests\FileSharing\Server-Endpoint\<version#>\Bin\
+	cd C:\MicrosoftProtocolTests\FileServer\Server-Endpoint\<version#>\Bin\
 	ShareUtil.exe <computer name of the share> <share name> <flag > true
 
 Examples:
@@ -1850,7 +1854,7 @@ This test suite includes command files that you can use to complete some basic t
 
 You can find and run these test cases in the following directory:
 
-	C:\MicrosoftProtocolTests\FileSharing\Server-Endpoint\<version#>\Batch
+	C:\MicrosoftProtocolTests\FileServer\Server-Endpoint\<version#>\Batch
 
 You can run these command files at the command prompt, or by selecting and clicking one or more of the files from the directory.
 

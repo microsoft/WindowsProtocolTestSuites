@@ -32,6 +32,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         /// Specifies the size, in bytes, of the SVHDX_TUNNEL_SCSI_REQUEST structure excluding the DataBuffer field
         /// </summary>
         public const ushort SVHDX_TUNNEL_SCSI_REQUEST_LENGTH = 0x24;
+
+        /// <summary>
+        /// Used to set EaName when open a shared vhd set with a target specifier
+        /// </summary>
+        public const string RSVD_TARGET_SPECIFIER_EA = "RSVD_TARGET_SPECIFIER_EA";
+
     }
     #endregion
 
@@ -121,6 +127,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         RSVD_TUNNEL_CHANGE_TRACKING_STOP = 0x0200200A,
 
         /// <summary>
+        /// Get a list of ranges that have changed in the virtual disk since the indicated snapshot ID. 
+        /// </summary>
+        RSVD_TUNNEL_QUERY_VIRTUAL_DISK_CHANGES = 0x0200200C,
+
+        /// <summary>
         /// Start a meta operation
         /// </summary>
         RSVD_TUNNEL_META_OPERATION_START = 0x02002101
@@ -129,10 +140,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
     /// <summary>
     /// Indicates which component has originated or issued the operation. 
     /// </summary>
-    public enum OriginatorFlag: uint
+    public enum OriginatorFlag : uint
     {
-        // TDI 70986: No description in TD
-        // TDI 71002, 0x00000008 is not defined
         SVHDX_ORIGINATOR_PVHDPARSER = 0x00000001,
         SVHDX_ORIGINATOR_VHDMP = 0x00000004
     }
@@ -155,7 +164,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
     /// <summary>
     /// Indicates the type of the disk. 
     /// </summary>
-    public enum DISK_FORMAT: uint
+    public enum DISK_FORMAT : uint
     {
         /// <summary>
         /// Indicates that the type of the disk is shared virtual disk.
@@ -172,7 +181,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
     /// </summary>
     public enum SRB_FLAGS : uint
     {
-        // TDI 70986: No description in TD
         SRB_FLAGS_NO_DATA_TRANSFER = 0,
         SRB_FLAGS_QUEUE_ACTION_ENABLE = 0x00000002,
         SRB_FLAGS_DISABLE_DISCONNECT = 0x00000004,
@@ -190,7 +198,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         /// </summary>
         SRB_FLAGS_DATA_OUT = 0x00000080,
         SRB_FLAGS_UNSPECIFIED_DIRECTION = SRB_FLAGS_DATA_IN | SRB_FLAGS_DATA_OUT,
-        SRB_FLAGS_NO_QUEUE_FREEZE  = 0x00000100,
+        SRB_FLAGS_NO_QUEUE_FREEZE = 0x00000100,
         SRB_FLAGS_ADAPTER_CACHE_ENABLE = 0x00000200,
         SRB_FLAGS_FREE_SENSE_BUFFER = 0x00000400,
         SRB_FLAGS_D3_PROCESSING = 0x00000800,
@@ -209,7 +217,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
     /// <summary>
     /// Indicates error messages from the server to the client
     /// </summary>
-    public enum SRB_STATUS: byte
+    public enum SRB_STATUS : byte
     {
         /// <summary>
         /// Indicates the request is in progress.
@@ -230,7 +238,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         /// Indicates the request was completed with an error in the SCSI bus status.
         /// </summary>
         SRB_STATUS_ERROR = 0x04,
-       
+
         /// <summary>
         /// Indicates that the Shared Virtual Disk does not support the given request.
         /// </summary>
@@ -280,7 +288,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         /// <summary>
         /// The meta-operation requests that the given virtual disk file be converted to a VHD set
         /// </summary>
-        SvhdxMetaOperationTypeConvertToVHDSet = 0x00000004
+        SvhdxMetaOperationTypeConvertToVHDSet = 0x00000004,
+
+        /// <summary>
+        /// The meta-operation requests that a specific snapshot be applied to a shared VHD Set.
+        /// </summary>
+        SvhdxMetaOperationTypeApplySnapshot = 0x00000005
     }
 
     /// <summary>
@@ -290,7 +303,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
     {
         /// <summary>
         /// Indicates invalid snapshot type
-        /// TDI here: There is no definition for this value in TD
         /// </summary>
         SvhdxSnapshotTypeInvalid = 0x00000000,
 
@@ -329,7 +341,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         /// <summary>
         /// No stage present in this field
         /// </summary>
-        SvhdxSnapshotStageInvalid  = 0x00000000,
+        SvhdxSnapshotStageInvalid = 0x00000000,
 
         /// <summary>
         /// Perform any required initialization so that the appropriate type of snapshot can be taken
@@ -491,15 +503,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
     /// <summary>
     /// The following is a list of possible RSVD error codes that can be returned by the server.
     /// </summary>
-    public enum RsvdStatus: uint
+    public enum RsvdStatus : uint
     {
-        // TDI: There is no definition for this error code in TD
         STATUS_SVHDX_SUCCESS = 0,
 
         /// <summary>
         /// Sense error data was stored on server
         /// </summary>
-        STATUS_SVHDX_ERROR_STORED  = 0xC05C0000,
+        STATUS_SVHDX_ERROR_STORED = 0xC05C0000,
 
         /// <summary>
         /// Sense error data is not available
@@ -553,7 +564,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
     }
 
     /// <summary>
-    /// This field is used to indicate the capabilities supported by the server.
+    /// Indicates the capabilities supported by the server.
     /// </summary>
     public enum SharedVirtualDiskSupported : uint
     {
@@ -574,7 +585,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
     }
 
     /// <summary>
-    /// This field is used to indicate the capabilities supported by the server.
+    /// Indicates the RSVD protocol version supported by the server.
     /// </summary>
     public enum ServerServiceVersion : uint
     {
@@ -587,6 +598,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         /// Windows Server vNext sets ServerServiceVersion to RSVD protocol version 2(0x00000002)
         /// </summary>
         ProtocolVersion2 = 0x00000002
+    }
+
+    /// <summary>
+    /// Indicates the type of the target namespace used in RSVD_BLOCK_DEVICE_TARGET_SPECIFIER Structure
+    /// </summary>
+    public enum TargetNamespaceType : uint
+    {
+        /// <summary>
+        /// The target identifier is a snapshot ID.
+        /// </summary>
+        SnapshotId = 0x00000000
     }
 
     /// <summary>
@@ -770,7 +792,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         /// </summary>
         [StaticSize(4)]
         public DISK_TYPE DiskType;
-                /// <summary>
+        /// <summary>
         /// Indicates the type of the disk.
         /// </summary>
         [StaticSize(4)]
@@ -1046,7 +1068,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         /// There should be a 4-byte padding to align 
         /// </summary>
         [StaticSize(4)]
-        public byte[] Padding;
+        public uint Padding;
     }
 
     /// <summary>
@@ -1159,7 +1181,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         /// This value MUST be set to 0 by the client and MUST be ignored by the server
         /// </summary>
         [StaticSize(4)]
-        public byte[] Padding;
+        public uint Padding;
 
         /// <summary>
         /// This field MUST be set to zero or more of the following values
@@ -1192,10 +1214,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         public byte[] DestinationFileName;
 
         /// <summary>
-        /// Pending
+        /// Padding
         /// </summary>
         [StaticSize(4)]
-        public byte[] padding;
+        public uint Padding2;
     }
 
     /// <summary>
@@ -1213,10 +1235,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         /// A buffer containing a null-terminated Unicode UTF-16 string that indicates the name for the new VHD set that is to be created
         /// </summary>
         [Size("DestinationVhdSetNameLength")]
-        public byte[] DestinationVhdSetName;
+        public string DestinationVhdSetName;
 
         [StaticSize(4)]
-        public byte[] Padding;
+        public uint Padding;
     }
 
     /// <summary>
@@ -1255,20 +1277,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         public byte Reserved;
 
         [StaticSize(4)]
-        public byte[] Padding;
+        public uint Padding;
     }
 
     /// <summary>
-    /// The payload body of the SVHDX_META_OPERATION_START_REQUEST is the operation type is SvhdxMetaOperationTypeOptimize
-    /// </summary>
-    public struct SVHDX_META_OPERATION_OPTIMIZE
-    {
-        [StaticSize(80)]
-        public byte[] payload;
-    }
-
-    /// <summary>
-    /// Indicates a SVHDX_META_OPERATION_START_REQUEST with operation type SvhdxMetaOperationTypeCreateSnapshot
+    /// Indicates an SVHDX_META_OPERATION_START_REQUEST with operation type SvhdxMetaOperationTypeCreateSnapshot
     /// </summary>
     public struct SVHDX_META_OPERATION_START_CREATE_SNAPSHOT_REQUEST
     {
@@ -1281,6 +1294,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         /// Indicates an SVHDX_META_OPERATION_CREATE_SNAPSHOT structure
         /// </summary>
         public SVHDX_META_OPERATION_CREATE_SNAPSHOT createSnapshot;
+    }
+
+    /// <summary>
+    /// Indicates an SVHDX_META_OPERATION_START_REQUEST with operation type SvhdxMetaOperationTypeApplySnapshot
+    /// </summary>
+    public struct SVHDX_META_OPERATION_START_APPLY_SNAPSHOT_REQUEST
+    {
+        /// <summary>
+        /// Indicates an SVHDX_META_OPERATION_START_REQUEST which includes TransactionId and OperationType
+        /// </summary>
+        public SVHDX_META_OPERATION_START_REQUEST startRequest;
+
+        /// <summary>
+        /// Indicates an SVHDX_APPLY_SNAPSHOT_PARAMS structure
+        /// </summary>
+        public SVHDX_APPLY_SNAPSHOT_PARAMS applySnapshot;
     }
 
     /// <summary>
@@ -1315,7 +1344,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         public SVHDX_META_OPERATION_CONVERT_TO_VHDSET convert;
     }
 
-    public struct SVHDX_META_OPERATION_START_ONLINE_RESIZE_REQUEST
+    public struct SVHDX_META_OPERATION_START_RESIZE_REQUEST
     {
         /// <summary>
         /// Indicates an SVHDX_META_OPERATION_START_REQUEST which includes TransactionId and OperationType
@@ -1337,11 +1366,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         /// Indicates an SVHDX_META_OPERATION_START_REQUEST which includes TransactionId and OperationType
         /// </summary>
         public SVHDX_META_OPERATION_START_REQUEST startRequest;
-
-        /// <summary>
-        /// Indicates an SVHDX_META_OPERATION_OPTIMIZE structure
-        /// </summary>
-        public SVHDX_META_OPERATION_OPTIMIZE optimize;
     }
 
     /// <summary>
@@ -1360,7 +1384,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
 
     /// <summary>
     /// This packet is sent by a client as part of an SVHDX_TUNNEL_OP_VHDSET_FILE_QUERY_INFORMATION request
-    /// #TDI: There is no SVHDX_TUNNEL_OP_VHDSET_FILE_QUERY_INFORMATION defined
     /// </summary>
     public struct SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_REQUEST
     {
@@ -1396,7 +1419,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         [StaticSize(4)]
         public SetFile_InformationType SetFileInformationType;
 
-        // TDI: TD needs to be updated to adding pad
         [StaticSize(4)]
         public uint Padding;
 
@@ -1451,7 +1473,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         /// </summary>
         [StaticSize(4)]
         public uint IsValidSnapshot;
-        
+
         /// <summary>
         /// The globally unique ID of the snapshot
         /// </summary>
@@ -1550,6 +1572,214 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         /// </summary>
         [StaticSize(4)]
         public Snapshot_Type SnapshotType;
+    }
+
+    /// <summary>
+    /// The SVHDX_CHANGE_TRACKING_START_REQUEST packet is sent by the client to start change tracking on the server. 
+    /// </summary>
+    public struct SVHDX_CHANGE_TRACKING_START_REQUEST
+    {
+        /// <summary>
+        /// The client MUST set this to a globally unique transaction ID for each operation.
+        /// </summary>
+        [StaticSize(16)]
+        public Guid TransactionId;
+
+        /// <summary>
+        /// Offset from the beginning of the buffer in which this structure is contained from which the log path  
+        /// starts. 
+        /// </summary>
+        [StaticSize(4)]
+        public uint LogFilePathOffset;
+
+        /// <summary>
+        /// The length, in bytes, of the name string. This length MUST include a NULL terminating character.
+        /// </summary>
+        [StaticSize(4)]
+        public uint LogFileNameLength;
+
+        /// <summary>
+        /// A globally unique Id used to refer to this log file.
+        /// </summary>
+        [StaticSize(16)]
+        public Guid LogFileId;
+
+        /// <summary>
+        /// The maximum allowed size, in bytes, of the underlying object store for this particular change-tracking log file.
+        /// </summary>
+        [StaticSize(8)]
+        public ulong MaxLogFileSize;
+
+        /// <summary>
+        /// When set to TRUE, change tracking will be resumed, and further tracked data will be appended to the existing log file. 
+        /// The client sets this to FALSE for the first change-tracking request issued against the target device.  
+        /// </summary>
+        [StaticSize(4)]
+        public uint AppendData;
+
+        /// <summary>
+        /// Padding
+        /// </summary>
+        [StaticSize(4)]
+        public uint Padding;
+
+        /// <summary>
+        /// The name of the log file containing a null-terminated Unicode UTF-16 string.
+        /// </summary>
+        [Size("LogFileNameLength")]
+        public string LogFileName;
+    }
+
+    /// <summary>
+    /// The SVHDX_TUNNEL_QUERY_VIRTUAL_DISK_CHANGES_REQUEST structure requests a list of changed ranges since the designated snapshot.
+    /// </summary>
+    public struct SVHDX_TUNNEL_QUERY_VIRTUAL_DISK_CHANGES_REQUEST
+    {
+        /// <summary>
+        /// A GUID that identifies the snapshot to query for the changed ranges.
+        /// </summary>
+        [StaticSize(16)]
+        public Guid TargetSnapshotId;
+
+        /// <summary>
+        /// A GUID that identifies the snapshot to use as a baseline for getting the list of changed ranges.
+        /// </summary>
+        [StaticSize(16)]
+        public Guid LimitSnapshotId;
+
+        /// <summary>
+        /// The type of snapshot. 
+        /// </summary>
+        [StaticSize(4)]
+        public Snapshot_Type SnapshotType;
+
+        /// <summary>
+        /// Padding
+        /// </summary>
+        [StaticSize(4)]
+        public uint Padding;
+
+        /// <summary>
+        /// The byte offset of the region in the virtual disk to query changes for.
+        /// </summary>
+        [StaticSize(8)]
+        public ulong ByteOffset;
+
+        /// <summary>
+        /// The length, in bytes, of the region in the virtual disk to query changes for.
+        /// </summary>
+        [StaticSize(8)]
+        public ulong ByteLength;
+    }
+
+    /// <summary>
+    /// The SVHDX_TUNNEL_QUERY_VIRTUAL_DISK_CHANGES_REPLY structure is sent as a response to the virtual disk changes query.
+    /// </summary>
+    public struct SVHDX_TUNNEL_QUERY_VIRTUAL_DISK_CHANGES_REPLY
+    {
+        /// <summary>
+        /// The total byte length that was processed. 
+        /// This can be ByteLength from the SVHDX_TUNNEL_QUERY_VIRTUAL_DISK_CHANGES_REQUEST or a smaller value, 
+        /// if the provided buffer was not large enough to contain all the information that was available about the requested virtual disk region.
+        /// </summary>
+        [StaticSize(8)]
+        public ulong ProcessedByteLength;
+
+        /// <summary>
+        /// The number of changed ranges in the specified virtual disk region.
+        /// </summary>
+        [StaticSize(4)]
+        public uint RangeCount;
+
+        /// <summary>
+        /// Reserved. The server MUST set this field to zero and the client MUST ignore it on receipt.
+        /// </summary>
+        [StaticSize(4)]
+        public uint Reserved;
+
+        /// <summary>
+        /// The list of SVHDX_VIRTUAL_DISK_CHANGED_RANGE structures, representing the changed ranges in the specified virtual disk region.
+        /// </summary>
+        [Size("RangeCount")]
+        public SVHDX_VIRTUAL_DISK_CHANGED_RANGE[] Ranges;
+    }
+
+    /// <summary>
+    /// The SVHDX_VIRTUAL_DISK_CHANGED_RANGE structure contains the details of the changed range.
+    /// </summary>
+    public struct SVHDX_VIRTUAL_DISK_CHANGED_RANGE
+    {
+        /// <summary>
+        /// The byte offset of the changed range in the virtual disk.
+        /// </summary>
+        [StaticSize(8)]
+        public ulong ByteOffset;
+
+        /// <summary>
+        /// The length, in bytes, of the changed range in the virtual disk.
+        /// </summary>
+        [StaticSize(8)]
+        public ulong ByteLength;
+
+        /// <summary>
+        /// Reserved. The server MUST set this field to zero and the client MUST ignore it on receipt.
+        /// </summary>
+        [StaticSize(8)]
+        public ulong Reserved;
+    }
+
+    /// <summary>
+    /// The SVHDX_APPLY_SNAPSHOT_PARAMS structure is used to specify the snapshot to apply.
+    /// </summary>
+    public struct SVHDX_APPLY_SNAPSHOT_PARAMS
+    {
+        /// <summary>
+        /// The type of snapshot. 
+        /// </summary>
+        [StaticSize(4)]
+        public Snapshot_Type SnapshotType;
+
+        /// <summary>
+        /// A GUID that identifies the snapshot to open.
+        /// </summary>
+        [StaticSize(16)]
+        public Guid SnapshotID;
+    }
+
+    /// <summary>
+    /// RSVD_BLOCK_DEVICE_TARGET_SPECIFIER structure is used to read from a particular snapshot.
+    /// </summary>
+    public struct RSVD_BLOCK_DEVICE_TARGET_SPECIFIER
+    {
+        /// <summary>
+        /// This field is used to indicate the target namespace. 
+        /// </summary>
+        [StaticSize(4)]
+        public TargetNamespaceType RsvdBlockDeviceTargetNamespace;
+
+        /// <summary>
+        /// An RSVD_BLOCK_DEVICE_TARGET_SPECIFIER_SNAPSHOT structure defined in section 2.2.4.35
+        /// </summary>
+        [StaticSize(20)]
+        public RSVD_BLOCK_DEVICE_TARGET_SPECIFIER_SNAPSHOT TargetInformationSnapshot;
+    }
+
+    /// <summary>
+    /// The RSVD_BLOCK_DEVICE_TARGET_SPECIFIER_SNAPSHOT structure is used to specify the snapshot to open when opening the virtual disk as a block device.
+    /// </summary>
+    public struct RSVD_BLOCK_DEVICE_TARGET_SPECIFIER_SNAPSHOT
+    {
+        /// <summary>
+        /// The type of snapshot. 
+        /// </summary>
+        [StaticSize(4)]
+        public Snapshot_Type SnapshotType;
+
+        /// <summary>
+        /// A GUID that identifies the snapshot to open.
+        /// </summary>
+        [StaticSize(16)]
+        public Guid SnapshotID;
     }
 
     #endregion
