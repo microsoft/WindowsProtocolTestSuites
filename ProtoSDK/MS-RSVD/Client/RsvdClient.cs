@@ -385,19 +385,34 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         }
 
         /// <summary>
+        /// Create an SVHDX_META_OPERATION_START_APPLY_SNAPSHOT_REQUEST structure and marshal it to a byte array
+        /// </summary>
+        /// <param name="startRequest">Type SVHDX_META_OPERATION_START_REQUEST includes TransactionId and OperationType</param>
+        /// <param name="applySnapshot">Type of SVHDX_APPLY_SNAPSHOT_PARAMS structure</param>
+        /// <returns>The marshalled byte array</returns>
+        public byte[] CreateTunnelMetaOperationStartApplySnapshotRequest(
+            SVHDX_META_OPERATION_START_REQUEST startRequest,
+            SVHDX_APPLY_SNAPSHOT_PARAMS applySnapshot)
+        {
+            SVHDX_META_OPERATION_START_APPLY_SNAPSHOT_REQUEST applySnapshotRequest = new SVHDX_META_OPERATION_START_APPLY_SNAPSHOT_REQUEST();
+
+            applySnapshotRequest.startRequest = startRequest;
+            applySnapshotRequest.applySnapshot = applySnapshot;
+
+            return TypeMarshal.ToBytes(applySnapshotRequest);
+        }
+
+        /// <summary>
         /// Create an SVHDX_META_OPERATION_OPTIMIZE_REQUEST structure and marshal it to a byte array
         /// </summary>
         /// <param name="startRequest">Type SVHDX_META_OPERATION_START_REQUEST includes TransactionId and OperationType</param>
-        /// <param name="optimize">Type of SVHDX_META_OPERATION_OPTIMIZE structure</param>
         /// <returns>The marshalled byte array</returns>
         public byte[] CreateTunnelMetaOperationStartOptimizeRequest(
-            SVHDX_META_OPERATION_START_REQUEST startRequest,
-            SVHDX_META_OPERATION_OPTIMIZE optimize)
+            SVHDX_META_OPERATION_START_REQUEST startRequest)
         {
             SVHDX_META_OPERATION_START_OPTIMIZE_REQUEST optimizeRequest = new SVHDX_META_OPERATION_START_OPTIMIZE_REQUEST();
 
             optimizeRequest.startRequest = startRequest;
-            optimizeRequest.optimize = optimize;
 
             return TypeMarshal.ToBytes(optimizeRequest);
         }
@@ -450,21 +465,55 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         }
 
         /// <summary>
-        /// Create an SVHDX_META_OPERATION_START_ONLINE_RESIZE_REQUEST structure and marshal it to a byte array
+        /// Create an SVHDX_META_OPERATION_START_RESIZE_REQUEST structure and marshal it to a byte array
         /// </summary>
         /// <param name="startRequest">Struct SVHDX_META_OPERATION_START_REQUEST includes TransactionId and OperationType</param>
         /// <param name="resize">Struct SVHDX_META_OPERATION_RESIZE_VIRTUAL_DISK</param>
         /// <returns>The marshalled byte array</returns>
-        public byte[] CreateTunnelMetaOperationStartOnlineResizeRequest(
+        public byte[] CreateTunnelMetaOperationStartResizeRequest(
             SVHDX_META_OPERATION_START_REQUEST startRequest,
             SVHDX_META_OPERATION_RESIZE_VIRTUAL_DISK resize)
         {
-            SVHDX_META_OPERATION_START_ONLINE_RESIZE_REQUEST resizeVHDSetRequest = new SVHDX_META_OPERATION_START_ONLINE_RESIZE_REQUEST();
+            SVHDX_META_OPERATION_START_RESIZE_REQUEST resizeVHDSetRequest = new SVHDX_META_OPERATION_START_RESIZE_REQUEST();
 
             resizeVHDSetRequest.startRequest = startRequest;
             resizeVHDSetRequest.resizeRequest = resize;
 
             return TypeMarshal.ToBytes(resizeVHDSetRequest);
+        }
+
+        /// <summary>
+        /// Marshal an SVHDX_CHANGE_TRACKING_START_REQUEST structure
+        /// </summary>
+        /// <param name="request">SVHDX_CHANGE_TRACKING_START_REQUEST structure</param>
+        /// <returns>The marshalled byte array</returns>
+        public byte[] CreateChangeTrackingStartRequest(SVHDX_CHANGE_TRACKING_START_REQUEST request)
+        {
+            return TypeMarshal.ToBytes(request);
+        }
+
+        /// <summary>
+        /// Marshal an SVHDX_TUNNEL_QUERY_VIRTUAL_DISK_CHANGES_REQUEST structure
+        /// </summary>
+        /// <param name="request">SVHDX_TUNNEL_QUERY_VIRTUAL_DISK_CHANGES_REQUEST structure</param>
+        /// <returns>The marshalled byte array</returns>
+        public byte[] CreateQueryVirtualDiskChangeRequest(SVHDX_TUNNEL_QUERY_VIRTUAL_DISK_CHANGES_REQUEST request)
+        {
+            return TypeMarshal.ToBytes(request);
+        }
+
+        /// <summary>
+        /// Marshal a RSVD_BLOCK_DEVICE_TARGET_SPECIFIER structure
+        /// </summary>
+        /// <param name="snapshotId">A GUID that identifies the snapshot to open</param>
+        /// <returns>The marshalled byte array</returns>
+        public byte[] CreateTargetSpecifier(Guid snapshotId)
+        {
+            RSVD_BLOCK_DEVICE_TARGET_SPECIFIER targetSpecifier = new RSVD_BLOCK_DEVICE_TARGET_SPECIFIER();
+            targetSpecifier.RsvdBlockDeviceTargetNamespace = TargetNamespaceType.SnapshotId;
+            targetSpecifier.TargetInformationSnapshot.SnapshotID = snapshotId;
+            targetSpecifier.TargetInformationSnapshot.SnapshotType = Snapshot_Type.SvhdxSnapshotTypeVM;
+            return TypeMarshal.ToBytes(targetSpecifier);
         }
 
         /// <summary>

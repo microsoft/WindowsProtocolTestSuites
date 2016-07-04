@@ -64,6 +64,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="CommonRequirementHelper.cs" />
     <Compile Include="ISutProtocolControlAdapter.cs" />
     <Compile Include="Smb2FunctionalClient.cs" />
@@ -98,6 +101,9 @@
     <Content Include="SutProtocolControlAdapter\CreateFile.ps1" />
     <Content Include="SutProtocolControlAdapter\DeleteDirectory.ps1" />
     <Content Include="SutProtocolControlAdapter\DeleteFile.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SutProtocolControlAdapter\CopyFile.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">

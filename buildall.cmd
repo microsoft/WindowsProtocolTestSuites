@@ -9,8 +9,15 @@ if exist "%TestSuiteRoot%drop" (
  rd /s /q "%TestSuiteRoot%drop"
 )
 
-call ProtoSDK\build.cmd
-call TestSuites\MS-SMB\src\build.cmd
 call TestSuites\FileServer\src\build.cmd
+if errorlevel 1 exit /b 1
+
+call TestSuites\MS-SMB\src\build.cmd
+if errorlevel 1 exit /b 1
+
+call TestSuites\RDP\src\build.cmd
+if errorlevel 1 exit /b 1
+
 call ProtocolTestManager\build.cmd
+if errorlevel 1 exit /b 1
 

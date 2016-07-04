@@ -935,7 +935,6 @@ namespace GeneratedTests {
         #endregion
         
         #region Test Starting in S14
-        // This case fails, bug 6135 for track
         public virtual void RequirementCoverage_FSCC_FSCTLName_Win7_Win2K8R2S14() {
             this.Manager.BeginTest("RequirementCoverage_FSCC_FSCTLName_Win7_Win2K8R2S14");
             this.Manager.Comment("reaching state \'S14\'");

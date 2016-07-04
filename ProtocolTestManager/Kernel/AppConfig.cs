@@ -85,7 +85,14 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public string EtcDirectory { get; set; }
 
         /// <summary>
+        /// The directory to save the data used by plugin.
+        /// e.g. a virtual hard disk file is needed when detecting RSVD or SQOS
+        /// </summary>
+        public string TestDataDirectory { get; set; }
+
+        /// <summary>
         /// Path like C:\Users\administrator.CONTOSO\AppData\Roaming\Protocol Test Manager\MS-XXXX\1.0.1234.0
+        /// PTM detection logs are saved in this folder.
         /// </summary>
         public string AppDataDirectory { get; set; }
         /// <summary>

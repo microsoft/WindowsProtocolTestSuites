@@ -34,6 +34,9 @@
     <Content Include="Config.cord" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Common\AbstractData\Connection.cs" />
     <Compile Include="Common\AbstractData\File.cs" />
     <Compile Include="Common\AbstractData\Pipe.cs" />

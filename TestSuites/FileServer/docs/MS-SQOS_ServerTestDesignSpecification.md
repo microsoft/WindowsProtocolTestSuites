@@ -71,7 +71,7 @@ The Storage Quality of Service (QoS) Protocol allows a client application to per
 
 * Retrieve status information for a logical flow.
 
-3 BVT test cases and 9 negative cases are designed to cover the above scenarios.
+3 BVT test cases and 10 negative cases are designed to cover the above scenarios.
 
 #### <a name="_Toc427583974"/>BVT Test Cases
 The first two BVT cases are to set or probe the SQOS policy for a logical flow. And then they check the response of querying status request to validate if the policy is set correctly.
@@ -179,6 +179,14 @@ The strategy of the negative cases is to check if SUT can handle SQOS request co
 |  **Description** | This test case is to test if server can handle an SQOS request correctly when Request.Reservation is greater than Request.Limit| 
 |  **Prerequisites**| Client connects to the VHDX file (SMB2 Negotiate, SessionSetup, TreeConnect, and Create) and expects success.| 
 |  **Test Execution Steps**| Client sends an SQOS request with flag STORAGE_QOS_CONTROL_FLAG_SET_POLICY and the Open is not associated to a logical flow and expects STATUS_NOT_FOUND.| 
+|  **Cleanup**| Client disconnects to the VHDX file (SMB2 Close, TreeDisconnect, LogOff).| 
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Test ID**| Sqos_InvalidRequestType| 
+|  **Description** | This test case is to test if server can handle an SQOS version 1.0 request with ProtocolVersion field is set to 1.1| 
+|  **Prerequisites**| Client connects to the VHDX file (SMB2 Negotiate, SessionSetup, TreeConnect, and Create) and expects success.| 
+|  **Test Execution Steps**| Client sends an SQOS request to set policy, uses a version 1.0 request structure, but sets ProtocolVersion field to 1.1 and expects STATUS_INVALID_PARAMETER.| 
 |  **Cleanup**| Client disconnects to the VHDX file (SMB2 Close, TreeDisconnect, LogOff).| 
 
 ## <a name="_Toc427583976"/>References

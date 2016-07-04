@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{698F6802-BE9F-4483-A5C7-B4BBFA51D47B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeusb</RootNamespace>
+    <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeusb</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Client\RdpeusbClient.cs" />
+    <Compile Include="Server\RdpeusbClientPduParser.cs" />
+    <Compile Include="EusbUtilities.cs" />
+    <Compile Include="RdpeusbPduParser.cs" />
+    <Compile Include="RdpeusbUrbParser.cs" />
+    <Compile Include="Server\RdpeusbServer.cs" />
+    <Compile Include="Client\RdpeusbServerPduParser.cs" />
+    <Compile Include="TestContext.cs" />
+    <Compile Include="Types\RdpeusbEnumTypes.cs" />
+    <Compile Include="Types\RdpeusbTsUrbResultTypes.cs" />
+    <Compile Include="Types\RdpeusbTsUrbTypes.cs" />
+    <Compile Include="Types\RdpeusbTypes.cs" />
+    <Compile Include="Types\RdpeusbUSBD_ISO_PACKET_DESCRIPTOR.cs" />
+    <Compile Include="Types\UsbStructures.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{fe653643-6342-4300-871e-683c7ba31494}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MS-RDPEDYC\Rdpedyc.csproj">
+      <Project>{cfbafde2-f509-4ac8-817a-0c26c1b27653}</Project>
+      <Name>Rdpedyc</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />
+  </Target>
+</Project>

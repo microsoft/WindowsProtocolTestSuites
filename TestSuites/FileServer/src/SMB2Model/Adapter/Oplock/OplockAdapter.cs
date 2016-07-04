@@ -243,11 +243,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
                 "The server MUST set the MessageId to 0xFFFFFFFFFFFFFFFF");
 
             Site.Assert.AreEqual(
-                (ulong)0,
-                header.SessionId,
-                "The server MUST set the SessionId to 0");
-
-            Site.Assert.AreEqual(
                 (uint)0,
                 header.TreeId,
                 "The server MUST set the TreeId to 0");

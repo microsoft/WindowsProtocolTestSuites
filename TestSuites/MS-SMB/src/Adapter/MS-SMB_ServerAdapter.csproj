@@ -31,6 +31,9 @@
     <DocumentationFile>bin\Release\MS-SMB_ServerAdapter.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Adapter.cs" />
     <Compile Include="Capture\MS_FSCCCaptureCode.cs" />
     <Compile Include="Enum\Enum.cs" />

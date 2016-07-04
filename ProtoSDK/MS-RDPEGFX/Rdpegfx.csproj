@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C89AC3FB-7FFC-49D8-B99B-A76C9411AEC6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx</RootNamespace>
+    <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.Protocols.TestTools.ExtendedLogging">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Client\RdpegfxClient.cs" />
+    <Compile Include="Codecs\BitStream.cs" />
+    <Compile Include="Codecs\ClearCodec\ClearCodecBandDecoder.cs" />
+    <Compile Include="Codecs\ClearCodec\ClearCodecBandEncoder.cs" />
+    <Compile Include="Codecs\ClearCodec\ClearCodecBasicTypeDecoder.cs" />
+    <Compile Include="Codecs\ClearCodec\ClearCodecResidualDecoder.cs" />
+    <Compile Include="Codecs\ClearCodec\ClearCodecResidualEncoder.cs" />
+    <Compile Include="Codecs\ClearCodec\ClearCodecSubCodecDecoder.cs" />
+    <Compile Include="Codecs\ClearCodec\ClearCodecSubCodecEncoder.cs" />
+    <Compile Include="Codecs\RemoteFXProgressiveCodec\RfxProgressiveCodecContext.cs" />
+    <Compile Include="Codecs\RemoteFXProgressiveCodec\RfxProgressiveDecoder.cs" />
+    <Compile Include="Codecs\RemoteFXProgressiveCodec\RfxProgressiveEncoder.cs" />
+    <Compile Include="Codecs\RemoteFXProgressiveCodec\SRLDecoder.cs" />
+    <Compile Include="Codecs\RemoteFXProgressiveCodec\SRLEncoder.cs" />
+    <Compile Include="Codecs\SurfaceManager.cs" />
+    <Compile Include="Codecs\RdpegfxTileTypes.cs" />
+    <Compile Include="Codecs\RdpegfxTileUtils.cs" />
+    <Compile Include="CompressFactory.cs" />
+    <Compile Include="Server\RdpegfxServer.cs" />
+    <Compile Include="Types\AlphaCodecBitmapStream.cs" />
+    <Compile Include="Types\ClearCodecBitmapStream.cs" />
+    <Compile Include="Types\RdpegfxEnumTypes.cs" />
+    <Compile Include="Types\RdpegfxRFXProgressiveDataBlock.cs" />
+    <Compile Include="Types\RdpegfxTestType.cs" />
+    <Compile Include="Types\RdpegfxTypes.cs" />
+    <Compile Include="Types\RFXH264BitmapStream.cs" />
+    <Compile Include="Types\RFX_PROGRESSIVE_CODEC_QUANT.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{fe653643-6342-4300-871e-683c7ba31494}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MS-RDPBCGR\Rdpbcgr.csproj">
+      <Project>{fa218cab-320c-45e9-b641-04622418988e}</Project>
+      <Name>Rdpbcgr</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MS-RDPEDYC\Rdpedyc.csproj">
+      <Project>{cfbafde2-f509-4ac8-817a-0c26c1b27653}</Project>
+      <Name>Rdpedyc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MS-RDPRFX\Rdprfx.csproj">
+      <Project>{9dd86de1-3231-4713-9b45-493f4fe4199c}</Project>
+      <Name>Rdprfx</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />
+  </Target>
+</Project>

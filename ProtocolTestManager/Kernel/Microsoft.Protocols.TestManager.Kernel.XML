@@ -134,9 +134,16 @@
             The location of the etc directory
             </summary>
         </member>
+        <member name="P:Microsoft.Protocols.TestManager.Kernel.AppConfig.TestDataDirectory">
+            <summary>
+            The directory to save the data used by plugin.
+            e.g. a virtual hard disk file is needed when detecting RSVD or SQOS
+            </summary>
+        </member>
         <member name="P:Microsoft.Protocols.TestManager.Kernel.AppConfig.AppDataDirectory">
             <summary>
             Path like C:\Users\administrator.CONTOSO\AppData\Roaming\Protocol Test Manager\MS-XXXX\1.0.1234.0
+            PTM detection logs are saved in this folder.
             </summary>
         </member>
         <member name="P:Microsoft.Protocols.TestManager.Kernel.AppConfig.PtfConfigFiles">
@@ -907,7 +914,7 @@
         </member>
         <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.VersionRegex">
             <summary>
-              Looks up a localized string similar to \d\.\d\.\d\.\d.
+              Looks up a localized string similar to \d\.\d\.\d{1,4}\.\d.
             </summary>
         </member>
         <member name="P:Microsoft.Protocols.TestManager.Kernel.StringResource.VSTestLocation">

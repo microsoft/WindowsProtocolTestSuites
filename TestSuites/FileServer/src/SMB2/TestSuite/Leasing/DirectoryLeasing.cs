@@ -37,7 +37,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         protected override void TestInitialize()
         {
             base.TestInitialize();
-            client = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client = new Smb2FunctionalClient(TestConfig.LongerTimeout, TestConfig, BaseTestSite);
             client.Smb2Client.LeaseBreakNotificationReceived +=
                 new Action<Packet_Header, LEASE_BREAK_Notification_Packet>(base.OnLeaseBreakNotificationReceived);
         }

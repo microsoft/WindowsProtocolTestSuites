@@ -22,9 +22,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         }
 
         /// <summary>
-        /// max bound and min bound will be extracted from the attribute Asn1IntegerBound in constructor.
+        /// Constraints will be extracted from attributes in constructor.
         /// </summary>
-        protected long? Max, Min;
+        protected internal Asn1IntegerBound Constraints;
 
         /// <summary>
         /// Range = upperBound - lowerBound + 1, Ref. X.691: 10.5.3.
@@ -36,14 +36,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         {
             get
             {
-                if (Min != null && Max != null)
+                if (Constraints != null && Constraints.HasMax && Constraints.HasMin)
                 {
-                    if (Max < Min)
+                    if (Constraints.Max < Constraints.Min)
                     {
                         throw new Asn1InvalidArgument(ExceptionMessages.UserDefinedTypeInconsistent +
                                                       " Max should be not less than Min.");
                     }
-                    return Max - Min + 1;
+                    return Constraints.Max - Constraints.Min + 1;
                 }
                 else
                 {
@@ -69,9 +69,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// <param name="max"></param>
         protected internal Asn1Integer(long? val, long? min, long? max)
         {
-            this.Value = val;
-            this.Min = min;
-            this.Max = max;
+            Value = val;
+            if (Constraints == null)
+            {
+                Constraints = new Asn1IntegerBound();
+                if (min != null)
+                {
+                    Constraints.Min = (long)min;
+                }
+                if (max != null)
+                {
+                    Constraints.Max = (long)max;
+                }
+            }
         }
 
         /// <summary>
@@ -81,8 +91,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         public Asn1Integer(long? val)
         {
             Value = val;
-            Min = null;
-            Max = null;
+            Constraints = null;
 
             //Gets the upper and lower bound for the structure.
             object[] allAttributes = GetType().GetCustomAttributes(true);
@@ -90,16 +99,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
             {
                 if (o is Asn1IntegerBound)
                 {
-                    Asn1IntegerBound aib = o as Asn1IntegerBound;
-                    if (aib.HasMin)
-                    {
-                        Min = aib.Min;
-                    }
-                    if (aib.HasMax)
-                    {
-                        Max = aib.Max;
-                    }
-
+                    Constraints = o as Asn1IntegerBound;
                     break;
                 }
             }
@@ -111,7 +111,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// <returns>True if Value is between lower bound and upper bound, false if not.</returns>
         protected override bool VerifyConstraints()
         {
-            return (Max == null || Value <= Max) && (Min == null || Value >= Min);
+            return Value != null && (Constraints == null ||
+                ((!Constraints.HasMax || Value <= Constraints.Max) && (!Constraints.HasMin || Value >= Constraints.Min)));
         }
 
         #region overrode methods from System.Object
@@ -121,15 +122,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// </summary>
         /// <param name="obj">The object to be compared.</param>
         /// <returns>True if obj has same data with this instance. False if not.</returns>
-        public override bool Equals(Object obj)
+        public override bool Equals(object obj)
         {
-            // If parameter is null return false.
-            if (obj == null)
-            {
-                return false;
-            }
-
-            // If parameter cannot be cast to Asn1Integer return false.
+            // If parameter is null or cannot be cast to Asn1Integer return false.
             Asn1Integer p = obj as Asn1Integer;
             if (p == null)
             {
@@ -363,28 +358,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         }
 
         /// <summary>
-        /// Encodes the object by PER.
+        /// Encodes the content of the object by PER.
         /// </summary>
         /// <param name="buffer">A buffer to which the encoding result will be written.</param>
-        public override void PerEncode(IAsn1PerEncodingBuffer buffer)
+        protected override void ValuePerEncode(IAsn1PerEncodingBuffer buffer)
         {
-            if (!VerifyConstraints())
-            {
-                throw new Asn1ConstraintsNotSatisfied(ExceptionMessages.ConstraintsNotSatisfied);
-            }
             long offset;
-            if (Min == null)
+            if (Constraints == null || !Constraints.HasMin)
             {
-                Debug.Assert(Value != null, "Value != null");
                 offset = (long)Value;
             }
             else
             {
-                offset = (long)(Value - Min);
+                offset = (long)(Value - Constraints.Min);
             }
 
             //Ref. X.691: 10.5.2
-            if (Min == null || Max == null) //range is equal to null
+            if (Range == null)
             {
                 if (offset == 0)
                 {
@@ -393,7 +383,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
                 }
                 //Ref. X.691: 10.3, 10.4
                 byte[] result;
-                if (Min == null)
+                if (Constraints == null || !Constraints.HasMin)
                 {
                     result = IntegerEncoding(offset);
                 }
@@ -458,15 +448,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// </summary>
         /// <param name="buffer">A buffer that contains a PER encoding result.</param>
         /// <param name="aligned">Indicating whether the PER decoding is aligned.</param>
-        public override void PerDecode(IAsn1DecodingBuffer buffer, bool aligned = true)
+        protected override void ValuePerDecode(IAsn1DecodingBuffer buffer, bool aligned = true)
         {
-            if (aligned == false)
-            {
-                throw new NotImplementedException(ExceptionMessages.UnalignedNotImplemented);
-            }
-            long baseNum = Min ?? 0;
+            long baseNum = (Constraints != null && Constraints.HasMin ? Constraints.Min : 0);
             //Ref. X.691: 10.5.2
-            if (Min == null || Max == null) //range is equal to null
+            if (Range == null) //range is equal to null
             {
                 byte length = buffer.ReadByte();
                 if (length == 0)
@@ -476,7 +462,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
                 }
 
                 byte[] result = buffer.ReadBytes(length);
-                if (Min == null)
+                if (Constraints == null || !Constraints.HasMin)
                 {
                     //No base
                     Value = IntegerDecoding(result);
@@ -490,7 +476,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
             {
                 if (Range == 1)
                 {
-                    this.Value = Min;
+                    Value = Constraints.Min;
                 }
                 else if (Range <= 255) //10.5.7: a)
                 {
@@ -519,19 +505,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
                 }
                 else //10.5.7: d)
                 {
-                    Asn1Integer len = new Asn1Integer();
-                    len.Min = 1;
-                    len.Max = 4;
+                    Asn1Integer len = new Asn1Integer { Constraints = new Asn1IntegerBound { Min = 1, Max = 4 } };
                     len.PerDecode(buffer);
-                    Debug.Assert(len.Value != null, "len.Value != null");
                     byte[] bytes = buffer.ReadBytes((int)len.Value);
                     Value = baseNum + NonNegativeBinaryIntegerPerDeocde(bytes);
                 }
-            }
-
-            if (!VerifyConstraints())
-            {
-                throw new Asn1ConstraintsNotSatisfied(ExceptionMessages.ConstraintsNotSatisfied);
             }
         }
 

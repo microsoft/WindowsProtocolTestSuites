@@ -36,12 +36,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
-        [TestCategory(TestCategories.RsvdVersion2)]
         [Description("Check if server handles Read request to a shared virtual disk file correctly.")]
         public void BVT_ReadSharedVHD()
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1.	Client opens a shared virtual disk file successfully.");
-            OpenSharedVHD(TestConfig.NameOfSharedVHDX);
+            OpenSharedVHD(TestConfig.NameOfSharedVHDX, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client reads file content and expects success.");
             byte[] payload;
@@ -59,12 +58,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
-        [TestCategory(TestCategories.RsvdVersion2)]
         [Description("Check if server handles Write request to a shared virtual disk file correctly.")]
         public void BVT_WriteSharedVHD()
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1.	Client opens a shared virtual disk file successfully.");
-            OpenSharedVHD(TestConfig.NameOfSharedVHDX);
+            OpenSharedVHD(TestConfig.NameOfSharedVHDX, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client writes file content and expects success.");
 

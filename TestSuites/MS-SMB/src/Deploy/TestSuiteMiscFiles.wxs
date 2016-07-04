@@ -23,6 +23,8 @@
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs.pdb"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.dll"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.pdb"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Asn1Base.dll"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Asn1Base.pdb"/>	  
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.dll"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.pdb"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.dll"/>
@@ -111,6 +113,12 @@
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.pdb" Guid="{C6AB8387-34CF-418B-BD04-CED9539D5E88}">
         <File Id="fil27C518D7A3583F0071970672D3043D86" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.pdb" />
       </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Asn1Base.dll" Guid="{EB569F61-E46C-4DCE-8A94-F2A57271B98F}">
+        <File Id="fil0F0F93EED5034AB1B963B05DD048EFD2" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Asn1Base.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Asn1Base.pdb" Guid="{93376F40-7DAC-4199-9789-BFD3D2C56E41}">
+        <File Id="filE4E02206F83B4227B086AE4794135C5B" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Asn1Base.pdb" />
+      </Component>	  
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.dll" Guid="{4A0514E3-9C01-4C20-896E-5613E89F99E5}">
         <File Id="fil405C78F9895E03F03DFACB7897840DA4" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.dll" />
       </Component>

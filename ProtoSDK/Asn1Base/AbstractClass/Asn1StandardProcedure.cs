@@ -2,6 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
 {
@@ -198,6 +200,216 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
             {
                 throw new NotImplementedException("Case tag > 30 is not implemented. Check X.690: 8.1.2.4.3.");
             }
+        }
+
+        /// <summary>
+        /// Encapsulates a method that encode an object to a buffer.
+        /// </summary>
+        /// <typeparam name="T">Type of the object.</typeparam>
+        /// <param name="buffer">A buffer that will store the encoding result for obj.</param>
+        /// <param name="obj">The object to be encoded.</param>
+        public delegate void PerEncodeSingleObject<T>(IAsn1PerEncodingBuffer buffer, T obj);
+
+        /// <summary>
+        /// Encapsulates a method that decode an object from a buffer.
+        /// </summary>
+        /// <typeparam name="T">The type of the object.</typeparam>
+        /// <param name="buffer">A buffer that stores the encoding result of the object.</param>
+        /// <returns>The decoded object.</returns>
+        public delegate T PerDecodeSingleObject<T>(IAsn1DecodingBuffer buffer);
+
+        /// <summary>
+        /// Encodes an array of objects by PER.
+        /// </summary>
+        /// <typeparam name="T">The type of the objects.</typeparam>
+        /// <param name="buffer">A buffer that will store the encoding result of the objects.</param>
+        /// <param name="objs">The array of the objects.</param>
+        /// <param name="encoder">A method that provide the functionality of encoding a single object.</param>
+        /// <param name="minSize">Minimal size of the array.</param>
+        /// <param name="maxSize">Maximal size of the array.</param>
+        /// <param name="alignAfterEncodeLength">Indicates whether align after the length is encoded.</param>
+        public static void PerEncodeArray<T>(IAsn1PerEncodingBuffer buffer, T[] objs, PerEncodeSingleObject<T> encoder,
+            long? minSize = null, long? maxSize = null, bool alignAfterEncodeLength = false)
+        {
+            if (minSize == null && maxSize == null)
+            {
+                bool len16KMultiple = false;
+                int len = objs.Length;
+                if (len == 0)
+                {
+                    buffer.WriteByte(0);
+                    return;
+                }
+                int curIndex = 0;
+                while (curIndex != len)
+                {
+                    int writeContentNum = 0;
+                    int rest = len - curIndex;
+                    if (rest < 128) //X.691: 10.9 a)
+                    {
+                        buffer.WriteByte((byte)rest);
+                        writeContentNum = rest;
+                        len16KMultiple = false;
+                    }
+                    else if (rest < 16 * 1024) //X.691: 10.9 b) 16K
+                    {
+                        buffer.WriteByte((byte)(128 | (rest >> 8)));
+                        buffer.WriteByte((byte)(rest & 255));
+                        writeContentNum = rest;
+                        len16KMultiple = false;
+                    }
+                    else
+                    {
+                        int fragmentNum = rest / (16 * 1024);//number of 16K items, X.691: 10.9 c)
+                        if (fragmentNum > 4)
+                        {
+                            fragmentNum = 4;
+                        }
+                        buffer.WriteByte((byte)(192 + fragmentNum));
+                        writeContentNum = fragmentNum * 16 * 1024;
+                        len16KMultiple = true;
+                    }
+                    for (int i = 0; i < writeContentNum; i++, curIndex++)
+                    {
+                        encoder(buffer, objs[curIndex]);
+                    }
+                }
+                if (len16KMultiple)
+                {
+                    //throw new Asn1InvalidArgument("Objsys bug");
+                    buffer.WriteByte(0);
+                }
+            }
+            else if (minSize != null && maxSize != null)
+            {
+                if (minSize < 0 || maxSize < minSize)
+                {
+                    throw new Asn1UserDefinedTypeInconsistent(ExceptionMessages.UserDefinedTypeInconsistent + " Size constraints illegal.");
+                }
+                long range = (long)(maxSize - minSize + 1);
+                if (range > 256L * 256)
+                {
+                    throw new NotImplementedException("Array with big size constraints are not implemented yet.");
+                }
+                //range < 256 * 256
+                if (maxSize == 0) //Ref. X.691: 16.5
+                {
+                    return;
+                }
+                if (maxSize != minSize) //Ref. X.691: 16.8
+                {
+                    //Encode length 
+                    Asn1Integer ai = new Asn1Integer(objs.Length, minSize, maxSize);
+                    ai.PerEncode(buffer);
+                    if (alignAfterEncodeLength)
+                    {
+                        buffer.AlignData();
+                    }
+                }
+                foreach (T curObj in objs)
+                {
+                    encoder(buffer, curObj);
+                }
+            }
+            else
+            {
+                throw new NotImplementedException("Array with semi size constraints are not implemented yet.");
+            }
+        }
+
+        /// <summary>
+        /// Decodes an array of objects from a buffer.
+        /// </summary>
+        /// <typeparam name="T">Type of the objects.</typeparam>
+        /// <param name="buffer">A buffer that stores the encoding result of the objects.</param>
+        /// <param name="decoder">A method that provides the functionality of decoding a single object.</param>
+        /// <param name="minSize">Minimal size of the array.</param>
+        /// <param name="maxSize">Maximal size of the array.</param>
+        /// <param name="alignAfterDecodeLength">Indicates whether align when the length is decoded.</param>
+        /// <returns>An array of the objects that are decoded from the buffer.</returns>
+        public static T[] PerDecodeArray<T>(IAsn1DecodingBuffer buffer, PerDecodeSingleObject<T> decoder,
+            long? minSize = null, long? maxSize = null, bool alignAfterDecodeLength = false)
+        {
+            List<T> result = new List<T>();
+            long decodeNum = 0;
+            if (minSize == null && maxSize == null)
+            {
+                bool end = false;
+                while (!end)
+                {
+                    byte lenHead = buffer.ReadByte();
+                    if (lenHead > 196)
+                    {
+                        throw new Asn1DecodingUnexpectedData(ExceptionMessages.DecodingUnexpectedData + " Length in PER fragment illegal.");
+                    }
+                    else if (lenHead > 192)
+                    {
+                        long fraNum = lenHead - 192;
+                        decodeNum = fraNum * 16 * 1024;
+                        end = false;
+                    }
+                    else if (lenHead >= 128)
+                    {
+                        byte lenNext = buffer.ReadByte();
+                        decodeNum = 256L * (lenHead-128) + lenNext;
+                        end = true;
+                    }
+                    else //lenHead < 128
+                    {
+                        decodeNum = lenHead;
+                        end = true;
+                    }
+                    for (long i = 0; i < decodeNum; i++)
+                    {
+                        T t = decoder(buffer);
+                        result.Add(t);
+                    }
+                }
+                return result.ToArray();
+            }
+            else if (minSize != null && maxSize != null)
+            {
+                if (minSize < 0 || maxSize < minSize)
+                {
+                    throw new Asn1UserDefinedTypeInconsistent(ExceptionMessages.UserDefinedTypeInconsistent + " Size constraints illegal.");
+                }
+                long range = (long)(maxSize - minSize + 1);
+                if (range > 256L * 256)
+                {
+                    throw new NotImplementedException("Array with big size constraints are not implemented yet.");
+                }
+                //range < 256 * 256
+                if (maxSize == 0) //Ref. X.691: 16.5
+                {
+                    return new T[0];
+                }
+                if (maxSize != minSize) //Ref. X.691: 16.8
+                {
+                    //Decode length 
+                    Asn1Integer ai = new Asn1Integer(null, minSize, maxSize);
+                    ai.PerDecode(buffer);
+                    if (alignAfterDecodeLength)
+                    {
+                        buffer.AlignData();
+                    } 
+                    decodeNum = (long)ai.Value;
+                }
+                else
+                {
+                    decodeNum = minSize.Value;
+                }
+                for (long i = 0; i < decodeNum; i++)
+                {
+                    T t = decoder(buffer);
+                    result.Add(t);
+                }
+                return result.ToArray();
+            }
+            else
+            {
+                throw new NotImplementedException("Array with semi size constraints are not implemented yet.");
+            }
+
         }
     }
 }

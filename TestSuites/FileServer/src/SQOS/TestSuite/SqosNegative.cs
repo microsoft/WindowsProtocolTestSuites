@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
 {
@@ -49,9 +50,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
         public void Sqos_InvalidProtocolVersion()
         {
             ConnectToVHD();
-            STORAGE_QOS_CONTROL_Response? sqosResponse;
+            SqosResponsePacket sqosResponse;
             ushort invalidProtocolVersion = 0xFFFF;
-            STORAGE_QOS_CONTROL_Request sqosRequest = client.ConstructSqosRequest(
+            SqosRequestPacket sqosRequest = new SqosRequestPacket(TestConfig.SqosClientDialect == SQOS_PROTOCOL_VERSION.Sqos10 ? SqosRequestType.V10 : SqosRequestType.V11,
                 invalidProtocolVersion,
                 SqosOptions_Values.STORAGE_QOS_CONTROL_FLAG_SET_LOGICAL_FLOW_ID,
                 Guid.NewGuid(),
@@ -65,11 +66,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
                 "Client sends an SQOS request with an invalid protocol version ({0}) and expects STATUS_REVISION_MISMATCH",
                 invalidProtocolVersion);
             uint status = client.SendAndReceiveSqosPacket(
-                treeId,
-                fileId,
                 sqosRequest,
-                out sqosResponse,
-                checker: (header, response) => {});
+                out sqosResponse);
             BaseTestSite.Assert.AreEqual(
                 (uint)NtStatus.STATUS_REVISION_MISMATCH, 
                 status, 
@@ -86,9 +84,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep, 
                 "Client sends an SQOS request with an invalid option (0) and expects STATUS_INVALID_PARAMETER");
-            STORAGE_QOS_CONTROL_Response? sqosResponse;
-            STORAGE_QOS_CONTROL_Request sqosRequest = client.ConstructSqosRequest(
-                SqosConst.STORAGE_QOS_VERSION_1,
+            SqosResponsePacket sqosResponse;
+            SqosRequestPacket sqosRequest = new SqosRequestPacket(TestConfig.SqosClientDialect == SQOS_PROTOCOL_VERSION.Sqos10 ? SqosRequestType.V10 : SqosRequestType.V11,
+                (ushort)TestConfig.SqosClientDialect,
                 SqosOptions_Values.STORAGE_QOS_CONTROL_FLAG_NONE, // Invalid Option
                 Guid.NewGuid(),
                 TestConfig.SqosPolicyId,
@@ -97,11 +95,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
                 TestConfig.SqosInitiatorNodeName);
 
             uint status = client.SendAndReceiveSqosPacket(
-                treeId,
-                fileId,
                 sqosRequest,
-                out sqosResponse,
-                checker: (header, response) => { });
+                out sqosResponse);
 
             if (TestConfig.Platform == Platform.WindowsServer2016 && status != Smb2Status.STATUS_INVALID_PARAMETER)
             {
@@ -125,7 +120,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
         {
             ConnectToVHD();
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends an SQOS request with an invalid policy Id and expects STATUS_INVALID_PARAMETER");
-            STORAGE_QOS_CONTROL_Response? sqosResponse;
             // Section 3.2.5.1.2
             // The server MUST fail the request with error STATUS_INVALID_PARAMETER if it determines that any of the following fields has an invalid value<4>:
             //	Request.PolicyID
@@ -133,22 +127,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
             // According to the footnote<4>, Windows Server vNext fails the request with STATUS_INVALID_PARAMETER 
             // if Request.Limit is greater than 0 and Request.PolicyID is not equal to a NULL GUID
             Guid invalidPolicyId = Guid.NewGuid(); // Set Request.PolicyID to be a non-zero but invalid Guid.
-            STORAGE_QOS_CONTROL_Request sqosRequest = client.ConstructSqosRequest(
-                SqosConst.STORAGE_QOS_VERSION_1,
+            SqosResponsePacket sqosResponse;
+            SqosRequestPacket sqosRequest = new SqosRequestPacket(TestConfig.SqosClientDialect == SQOS_PROTOCOL_VERSION.Sqos10 ? SqosRequestType.V10 : SqosRequestType.V11,
+                (ushort)TestConfig.SqosClientDialect,
                 SqosOptions_Values.STORAGE_QOS_CONTROL_FLAG_PROBE_POLICY,
                 Guid.NewGuid(),
                 invalidPolicyId,
                 Guid.NewGuid(),
                 TestConfig.SqosInitiatorName,
-                TestConfig.SqosInitiatorNodeName);
-            sqosRequest.Limit = 1; // Set Request.Limit to be greater than 0
+                TestConfig.SqosInitiatorNodeName,
+                1); // Set Request.Limit to be greater than 0
 
             uint status = client.SendAndReceiveSqosPacket(
-                treeId,
-                fileId,
                 sqosRequest,
-                out sqosResponse,
-                checker: (header, response) => { });
+                out sqosResponse);
             BaseTestSite.Assert.AreEqual(
                 Smb2Status.STATUS_INVALID_PARAMETER, 
                 status,
@@ -165,31 +157,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep, 
                 "Client sends an SQOS request when Request.Reservation is greater than Request.Limit and expects STATUS_INVALID_PARAMETER");
-            STORAGE_QOS_CONTROL_Response? sqosResponse;
+            SqosResponsePacket sqosResponse;
             // Section 3.2.5.1.2
             // The server MUST fail the request with error STATUS_INVALID_PARAMETER if it determines that any of the following fields has an invalid value<4>:
             //	Request.Limit
             //	Request.Reservation
 
-            STORAGE_QOS_CONTROL_Request sqosRequest = client.ConstructSqosRequest(
-                SqosConst.STORAGE_QOS_VERSION_1,
+            SqosRequestPacket sqosRequest = new SqosRequestPacket(TestConfig.SqosClientDialect == SQOS_PROTOCOL_VERSION.Sqos10 ? SqosRequestType.V10 : SqosRequestType.V11,
+                (ushort)TestConfig.SqosClientDialect,
                 SqosOptions_Values.STORAGE_QOS_CONTROL_FLAG_PROBE_POLICY,
                 Guid.NewGuid(),
                 TestConfig.SqosPolicyId,
                 Guid.NewGuid(),
                 TestConfig.SqosInitiatorName,
-                TestConfig.SqosInitiatorNodeName);
-            // According to the footnote<4>, Windows Server vNext fails the request with STATUS_INVALID_PARAMETER 
-            // if Request.Limit is greater than 0 and Request.Reservation is greater than Request.Limit
-            sqosRequest.Limit = 1; // Set Request.Limit to be greater than 0
-            sqosRequest.Reservation = 2; // Set Request.Reservation is greater than Request.Limit
+                TestConfig.SqosInitiatorNodeName,
+                // According to the footnote<4>, Windows Server vNext fails the request with STATUS_INVALID_PARAMETER 
+                // if Request.Limit is greater than 0 and Request.Reservation is greater than Request.Limit
+                1,  // Set Request.Limit to be greater than 0
+                2); // Set Request.Reservation is greater than Request.Limit
 
             uint status = client.SendAndReceiveSqosPacket(
-                treeId,
-                fileId,
                 sqosRequest,
-                out sqosResponse,
-                checker: (header, response) => { });
+                out sqosResponse);
             BaseTestSite.Assert.AreEqual(
                 Smb2Status.STATUS_INVALID_PARAMETER, 
                 status,
@@ -240,18 +229,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
         {
             ConnectToVHD();
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends an SQOS request to set policy, but the open is not associated to a logical flow");
-            STORAGE_QOS_CONTROL_Response? sqosResponse;
-            uint status = client.SendAndReceiveSqosPacket(
-                treeId,
-                fileId,
+            SqosResponsePacket sqosResponse;
+            SqosRequestPacket sqosRequest = new SqosRequestPacket(TestConfig.SqosClientDialect == SQOS_PROTOCOL_VERSION.Sqos10 ? SqosRequestType.V10 : SqosRequestType.V11,
+                (ushort)TestConfig.SqosClientDialect,
                 SqosOptions_Values.STORAGE_QOS_CONTROL_FLAG_SET_POLICY,
                 Guid.NewGuid(),
                 TestConfig.SqosPolicyId,
                 Guid.NewGuid(),
                 TestConfig.SqosInitiatorName,
-                TestConfig.SqosInitiatorNodeName,
-                out sqosResponse,
-                checker: (header, response) => { });
+                TestConfig.SqosInitiatorNodeName);
+
+            uint status = client.SendAndReceiveSqosPacket(
+                sqosRequest,
+                out sqosResponse);
             BaseTestSite.Assert.AreEqual(
                 Smb2Status.STATUS_NOT_FOUND, 
                 status,
@@ -259,12 +249,39 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
                 "the server MUST fail the request with error STATUS_NOT_FOUND");
         }
 
+        [TestMethod]
+        [TestCategory(TestCategories.Sqos)]
+        [TestCategory(TestCategories.Compatibility)]
+        [Description("This test case is to test if server can handle an SQOS version 1.0 request with ProtocolVersion field is set to 1.1")]
+        public void Sqos_InvalidRequestType()
+        {
+            ConnectToVHD();
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends an SQOS request to set policy, uses a version 1.0 request structure, but sets ProtocolVersion field to 1.1");
+            SqosResponsePacket sqosResponse;
+            SqosRequestPacket sqosRequest = new SqosRequestPacket(SqosRequestType.V10,
+                (ushort)SQOS_PROTOCOL_VERSION.Sqos11,
+                SqosOptions_Values.STORAGE_QOS_CONTROL_FLAG_SET_POLICY,
+                Guid.NewGuid(),
+                TestConfig.SqosPolicyId,
+                Guid.NewGuid(),
+                TestConfig.SqosInitiatorName,
+                TestConfig.SqosInitiatorNodeName);
+
+            uint status = client.SendAndReceiveSqosPacket(
+                sqosRequest,
+                out sqosResponse);
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_INVALID_PARAMETER,
+                status,
+                "The server should return STATUS_INVALID_PARAMETER");
+        }
+
         private void InvalidOffset(VariableType variableType, InvalidOffsetType offsetType)
         {
             ConnectToVHD();
-            STORAGE_QOS_CONTROL_Response? sqosResponse;
-            STORAGE_QOS_CONTROL_Request sqosRequest = client.ConstructSqosRequest(
-                SqosConst.STORAGE_QOS_VERSION_1,
+            SqosResponsePacket sqosResponse;
+            SqosRequestPacket sqosRequest = new SqosRequestPacket(TestConfig.SqosClientDialect == SQOS_PROTOCOL_VERSION.Sqos10 ? SqosRequestType.V10 : SqosRequestType.V11,
+                (ushort)TestConfig.SqosClientDialect,
                 SqosOptions_Values.STORAGE_QOS_CONTROL_FLAG_PROBE_POLICY,
                 Guid.NewGuid(),
                 TestConfig.SqosPolicyId,
@@ -272,8 +289,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
                 TestConfig.SqosInitiatorName,
                 TestConfig.SqosInitiatorNodeName);
             ushort invalidOffset = 0;
-            ushort nameLength = variableType == VariableType.InitiatorName ? sqosRequest.InitiatorNameLength : sqosRequest.InitiatorNodeNameLength;
-            int requestSize = TypeMarshal.ToBytes<STORAGE_QOS_CONTROL_Request>(sqosRequest).Length;
+            int nameLength = variableType == VariableType.InitiatorName ? TestConfig.SqosInitiatorName.Length : TestConfig.SqosInitiatorNodeName.Length;
+            int requestSize = sqosRequest.ToBytes().Length;
             if (offsetType == InvalidOffsetType.Large)
             {
                 // Set the offset to make the sum of Length and offset be greater than RequestSize. 
@@ -295,29 +312,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
                 variableType,
                 invalidOffset);
             uint status = client.SendAndReceiveSqosPacket(
-                treeId,
-                fileId,
                 sqosRequest,
-                out sqosResponse,
-                checker: (header, response) => { });
+                out sqosResponse);
             string failReason = offsetType == InvalidOffsetType.Small ?
                 String.Format(
                     "if Request.{0}Length:{1} is greater than 0 and Request.{0}Offset:{2} is less than 104.", variableType, nameLength, invalidOffset) :
                 String.Format(
                     "if (Request.{0}Length:{1} + Request.{0}Offset:{2}) is greater than RequestSize:{3}.", variableType, nameLength, invalidOffset, requestSize);
 
-            if (TestConfig.Platform == Platform.WindowsServer2016 && status != Smb2Status.STATUS_INVALID_PARAMETER)
-            {
-
-            }
-            else
-            {
-                BaseTestSite.Assert.AreEqual(
-                    (uint)Smb2Status.STATUS_INVALID_PARAMETER,
-                    status,
-                    "3.2.5.1.2: The server MUST fail the request with error STATUS_INVALID_PARAMETER " +
-                    failReason);
-            }
+            BaseTestSite.Assert.AreEqual(
+                (uint)Smb2Status.STATUS_INVALID_PARAMETER,
+                status,
+                "3.2.5.1.2: The server MUST fail the request with error STATUS_INVALID_PARAMETER " +
+                failReason);
         }
     }
 }

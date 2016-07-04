@@ -514,7 +514,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.DurableHandl
             }
             else
             {
-                // TDI 71144
                 BaseTestSite.Assert.AreEqual(
                     Smb2Status.STATUS_INVALID_PARAMETER, status,
                     "If Open.Lease is not NULL and Open.FileName does not match the file name specified in the Buffer field of the SMB2 CREATE request, " +

@@ -57,12 +57,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="ConfigItemDependency.cs" />
     <Compile Include="Detector\CreateContextDetector.cs" />
     <Compile Include="DetectionResultControl.xaml.cs">
       <DependentUpon>DetectionResultControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Detector\FSDetector.cs" />
+    <Compile Include="Detector\RsvdDetector.cs" />
+    <Compile Include="Detector\SqosDetector.cs" />
     <Compile Include="FileServerValueDetector.cs" />
     <Compile Include="ImpersonationHelper.cs" />
     <Compile Include="Information.cs" />
@@ -78,6 +83,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\plugin.vhdx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Docs\domain.html" />
@@ -148,6 +154,10 @@
     <ProjectReference Include="..\..\..\..\ProtoSDK\MS-SMB\Smb.csproj">
       <Project>{c3c96860-5d29-4797-a311-cc568cc8b699}</Project>
       <Name>Smb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-SQOS\Sqos.csproj">
+      <Project>{014b338d-1b5e-434b-ba05-b2c6d6797d07}</Project>
+      <Name>Sqos</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\ProtoSDK\MS-SWN\Swn.csproj">
       <Project>{5be7e49e-5cb5-4115-98b1-e7e8b10cfccb}</Project>

@@ -66,6 +66,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Message\ClientClaimsInfo.cs" />
     <Compile Include="Message\DeviceClaimsInfo.cs" />
     <Compile Include="Message\PacDeviceInfo.cs" />
@@ -102,10 +105,6 @@
     <ProjectReference Include="..\Messages\Messages.csproj">
       <Project>{75544419-3F4E-4308-A676-165F45C1462E}</Project>
       <Name>Messages</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TransportStack\TransportStack.csproj">
-      <Project>{967D976A-C792-4893-9235-14615AE1FF58}</Project>
-      <Name>TransportStack</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
