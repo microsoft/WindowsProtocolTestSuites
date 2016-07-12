@@ -5,6 +5,9 @@ drop
 *.mdf
 *.ldf
 
+# Test result files
+TestResults
+
 # Generated files
 TestSuites/MS-SMB/src/Deploy/TestSuiteBatchFiles.wxs
 TestSuites/MS-SMB/src/Deploy/TestSuiteBinFiles.wxs
