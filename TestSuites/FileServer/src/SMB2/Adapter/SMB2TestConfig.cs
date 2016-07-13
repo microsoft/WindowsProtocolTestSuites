@@ -27,10 +27,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter
             return GetProperty("SMB2", propertyName, checkNullOrEmpty);
         }
 
-        /// <summary>
-        /// Timeout in milliseconds before current thread continues when use WaitHandle.WaitOne
-        /// </summary>
-        public static readonly int WAIT_TIMEOUT_IN_MILLISECONDS = 5000;
+        public int WaitTimeoutInMilliseconds
+        {
+            get
+            {
+                return Int32.Parse(GetProperty("WaitTimeoutInMilliseconds"));
+            }
+        }
 
         public IPAddress SutAlternativeIPAddress
         {
