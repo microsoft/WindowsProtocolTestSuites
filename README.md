@@ -50,7 +50,7 @@ build.cmd
 
 ###<a name="BuildTestSuite">Build a test suite
 
-If the test suite contain Model-Based Test cases, you should follow the below steps before building it. 
+If the test suite contains Model-Based Test cases, you should follow the steps below before building it. 
 
 * Install [Spec Explorer](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/), 
 * Install the **formodel** version of [Protocol Test Framework](https://github.com/microsoft/protocoltestframework). You can use a released MSI file or build it from source code by **formodel** option.
