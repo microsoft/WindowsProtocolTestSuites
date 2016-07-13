@@ -271,8 +271,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
                 // Wait until LEASE_BREAK_Notification is received
                 BaseTestSite.Assert.IsTrue(
-                    // Wait 5 seconds for notification arrival
-                    notificationReceived.WaitOne(SMB2TestConfig.WAIT_TIMEOUT_IN_MILLISECONDS),
+                    // Wait for notification arrival
+                    notificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
                     "LeaseBreakNotification should be raised.");
 
                 if (receivedLeaseBreakNotify.Flags == LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED)
