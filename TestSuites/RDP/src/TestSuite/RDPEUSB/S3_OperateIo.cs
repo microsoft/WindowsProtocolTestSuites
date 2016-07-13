@@ -323,7 +323,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
             Site.Assume.IsTrue(context.SelectedConfig.NumInterfaces > 0, "The configuration must contain at least 1 interface to be selected.");
 
             LogComment("7. Select the interface with index 0 by sending TS_URB_SELECT_INTERFACE request.");
-            uint requestId = 0; // TDI, so set to 0
+            uint requestId = 0;
             TS_URB_SELECT_INTERFACE sel = new UrbBuilder(
                 URB_FUNCTIONID.URB_FUNCTION_SELECT_INTERFACE,
                 requestId,

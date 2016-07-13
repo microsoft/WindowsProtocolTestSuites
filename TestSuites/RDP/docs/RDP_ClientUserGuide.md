@@ -191,9 +191,14 @@ Note
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
 
+>The RDP test suite has a known issue when used with the Windows 10 November Update. Previous releases of Windows 10 do not have this issue, and the issue should be fixed in the next update of Windows 10.
+
+![image2.png](./image/RDP_ClientUserGuide/image2.png)
+Note
+
 >To run the MS-RDPEUSB test cases, the SUT must be a physical machine, and **one OSR USB FX2 board is required**. Plug the OSR USB FX2 board into the SUT computer before running MS-RDPEUSB test cases.
 
-The OSR USB FX2 board can be bought from the [OSR Online Store](https://www.osronline.com/custom.cfm?name=index_fullframeset.cfm&pageURL=https://www.osronline.com/store/index.cfm).
+>The OSR USB FX2 board can be bought from the [OSR Online Store](https://www.osronline.com/custom.cfm?name=index_fullframeset.cfm&pageURL=https://www.osronline.com/store/index.cfm).
 
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
@@ -877,10 +882,7 @@ The following table describes the optional configuration properties and provides
 |  **SUTSystemDrive**| If the SUT is using a Windows operating system, specify the system drive letter of SUT machine.| 
 | | Default value: **C**| 
 |  **WaitTime**| The maximum time in seconds to wait for one SUT message.| 
-| | Default value: **40**| 
-|  **ASNIssueFixed**| Indicates whether the workaround for the Asn1ObjectIdentifier encode issue is needed. The possible values are **True** and **False**.| 
-| | Default value: **True**| 
-|  **isTDIXXXXFixed**| Ignore -- reserved for use by the test suite development team| 
+| | Default value: **40**|  
 
 ## <a name="_Toc421010910"/>Running Test Cases
 

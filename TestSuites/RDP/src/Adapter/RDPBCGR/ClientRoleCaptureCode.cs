@@ -167,18 +167,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             //<?>
             CaptureRequirement(securityPdu.securityExchangePduData.length != 0, 407);
-            //bug found
-            //expected: 0x01
-            //netmon:072
-            //code:272
-            //site.CaptureRequirementIfIsTrue((securityPdu.commonHeader.securityHeader.flags & TS_SECURITY_HEADER_flags_Values.SEC_EXCHANGE_PKT) == TS_SECURITY_HEADER_flags_Values.SEC_EXCHANGE_PKT, 411, 
-            //  "In Security Exchange PDU Data (TS_SECURITY_PACKET) the flags field of the security header MUST contain the SEC_EXCHANGE_PKT flag (0x0001).");
-
-            //following capture is wrong, as after decoding the length would changed
-            //site.CaptureRequirementIfAreEqual<uint>((uint)securityPdu.securityExchangePduData.clientRandom.Length, securityPdu.securityExchangePduData.length, 413, 
-            //    "In Security Exchange PDU Data (TS_SECURITY_PACKET) the length field indicates the size in bytes of the buffer containing the encrypted client random value, not including the header length.");
-
-            //<capture> if parser this Pdu successful, capture 413
         }
 
         /// <summary>
@@ -207,7 +195,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_56BIT ||
                 serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_128BIT)
             {
-                //<bug>sdk bug 
                 //site.CaptureRequirementIfIsInstanceOfType(clientInfo.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER1), 424,
                 //    @"[In Client Info PDU Data (CLIENT_INFO_PDU)]securityHeader (variable):The securityHeader in CLIENT_INFO_PDU structure is a Non-FIPS Security Header (section 2.2.8.1.1.2.2) if the Encryption LevelMethod selected by the server (see sections 5.3.2 and 2.2.1.4.3) is ENCRYPTION_LEVEL_LOW (1METHOD_40BIT (0x00000001), ENCRYPTION_LEVEL_CLIENT_COMPATIBLE (2METHOD_56BIT (0x00000008), or ENCRYPTION_LEVEL_HIGH (3METHOD_128BIT (0x00000002).");
             }
@@ -239,7 +226,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="confirmActivePdu"></param>
         public void VerifyPdu(Client_Confirm_Active_Pdu confirmActivePdu)
         {      
-            //bugbug || or &&?
             if (this.serverConfig.encryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE || this.serverConfig.encryptionMethod != EncryptionMethods.ENCRYPTION_METHOD_NONE)
             {
                 bool isR701Satisfied = confirmActivePdu.commonHeader.securityHeader.GetType() == typeof(TS_SECURITY_HEADER1) ||
@@ -583,7 +569,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         public void VerifyPdu(TS_INPUT_PDU inputPdu)
         {
             int versionLow = inputPdu.shareDataHeader.shareControlHeader.pduType.typeAndVersionLow>>4&0x0F;
-            //<bug> sdk bug, versionLow should be 1
             site.CaptureRequirementIfAreEqual<int>(1, versionLow, 1542,
                 @"In TS_SHARECONTROLHEADER structure, for PduType's subfield, versionLow field MUST be set to TS_PROTOCOL_VERSION (0x1).");
             // not capture 1543
@@ -852,7 +837,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     93,
                     "In Client Core Data, The User Data Header type field MUST be set to CS_CORE (0xC001).");
             //<capture> also capture 97
-            Site.CaptureRequirementIfIsTrue(core.version == version_Values.V1 || core.version == version_Values.V2 || core.version == version_Values.V3,
+            Site.CaptureRequirementIfIsTrue(core.version == version_Values.V1 || core.version == version_Values.V2 || core.version == version_Values.V3 || core.version == version_Values.V4 || core.version == version_Values.V5,
                 98,
                 "In Client Core Data, for RDP 4.0 clients, the major version number will be 0x00080001.");
             Site.CaptureRequirementIfIsTrue(core.desktopWidth >= 0,
@@ -861,7 +846,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             Site.CaptureRequirementIfIsTrue(core.desktopHeight >= 0,
                 103,
                 "In Client Core Data, desktopHeight must be positive.");
-            //bug bug in SDK. not define RNS_UD_COLOR_4BPP 0xCA00.
             Site.CaptureRequirementIfIsTrue((int)core.colorDepth == 51712 || core.colorDepth == colorDepth_Values.RNS_UD_COLOR_8BPP,
                 107,
                 "In Client Core Data (TS_UD_CS_CORE), colorDepth (2 bytes): colorDepth field can have the following "
@@ -878,7 +862,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             Site.CaptureRequirementIfIsTrue(core.imeFileName.Length <= 31,
                 133,
                 "In Client Core Data, the imeFileName field contains up to 31 Unicode characters plus a null terminator.");
-            //sdk bug postBeta2ColorDepth should be postBeta2ColorDepth_Values type
             bool isR136Satisfied = (postBeta2ColorDepth_Values)core.postBeta2ColorDepth.actualData == postBeta2ColorDepth_Values.RNS_UD_COLOR_4BPP || (postBeta2ColorDepth_Values)core.postBeta2ColorDepth.actualData == postBeta2ColorDepth_Values.RNS_UD_COLOR_8BPP
                 || (postBeta2ColorDepth_Values)core.postBeta2ColorDepth.actualData == postBeta2ColorDepth_Values.RNS_UD_COLOR_16BPP_555 || (postBeta2ColorDepth_Values)core.postBeta2ColorDepth.actualData == postBeta2ColorDepth_Values.RNS_UD_COLOR_16BPP_565
                 || (postBeta2ColorDepth_Values)core.postBeta2ColorDepth.actualData == postBeta2ColorDepth_Values.RNS_UD_COLOR_24BPP;
@@ -959,11 +942,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     + @" 0x20000000, CHANNEL_OPTION_ENCRYPT_CS 0x10000000, CHANNEL_OPTION_PRI_HIGH 0x08000000, CHANNEL_OPTION_PRI_MED"
                     + @" 0x04000000,CHANNEL_OPTION_PRI_LOW 0x02000000, CHANNEL_OPTION_COMPRESS_RDP 0x00800000, CHANNEL_OPTION_COMPRESS"
                     + @" 0x00400000, CHANNEL_OPTION_SHOW_PROTOCOL 0x00200000, REMOTE_CONTROL_PERSISTENT 0x00100000");
-                //net.channelDefArray[i].options
-                //<bug> sdk bug 
-                //As object.toString() cannot convert byte[] to Ascii correctly,  we should use ASCIIEncoding.GetString() instead of object.toString().
-                //Site.CaptureRequirementIfIsTrue(net.channelDefArray[i].name.Length <= 8, 232,
-                //    "In Channel Definition Structure (CHANNEL_DEF), the name field is an 8-byte array containing a unique 7-character ANSI channel name and a null terminator");
+                
             }
         }
 
@@ -1074,25 +1053,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                         @"[In Extended Info Packet (TS_EXTENDED_INFO_PACKET)]clientAddressFamily (2 bytes):clientAddressFamily can have the "
                         + @"following values: 1.AF_INET 0x00002 2.AF_INET6 0x0017");
                 }
-                //<bug> sdk bug
-                //As object.toString() cannot convert byte[] to Unicode correctly,  we should use UnicodeEncoding.GetString() instead of object.toString().
-                //site.CaptureRequirementIfAreEqual<int>(info.extraInfo.clientAddress.Length*2, info.extraInfo.cbClientAddress, 499,
-                //    @"In TS_EXTENDED_INFO_PACKET structure, cbClientAddress represents the size in bytes of the character data in the clientAddress field. This size includes the length of the mandatory null terminator.");
+             
                 Console.WriteLine("RS503, clientDir.Length = " + info.extraInfo.clientDir.Length);
                 Console.WriteLine("RS503, cbClientDir=" + info.extraInfo.cbClientDir);
-                //<bug> sdk bug
-                //As object.toString() cannot convert byte[] to Unicode correctly,  we should use UnicodeEncoding.GetString() instead of object.toString().
-                //site.CaptureRequirementIfAreEqual<int>(info.extraInfo.clientDir.Length*2, info.extraInfo.cbClientDir, 503,
-                //    @"In TS_EXTENDED_INFO_PACKET structure, cbClientDir represents the size in bytes of the character data in the clientDir field. This size includes the length of the mandatory null terminator.");
+                
                 bool isR505Satisfied = info.extraInfo.cbClientDir <= 512;
                 site.CaptureRequirementIfIsTrue(isR505Satisfied, 505,
                     @"[In Extended Info Packet (TS_EXTENDED_INFO_PACKET)] clientDir (variable):The maximum allowed length is 512 bytes "
                     + @"(including the mandatory null terminator).");
-                //<bug><change>
-                //expected:0
-                //actual: 1
-                //site.CaptureRequirementIfAreEqual<uint>(0,info.extraInfo.clientSessionId, 509,
-                //    @"In TS_EXTENDED_INFO_PACKET structure, clientSessionId SHOULD be set to 0.");
+               
                 bool isR528Satisfied = info.extraInfo.cbAutoReconnectLen <= 128;
                 site.CaptureRequirementIfIsTrue(isR528Satisfied, 528,
                     @"[Extended Info Packet (TS_EXTENDED_INFO_PACKET)]autoReconnectCookie (28 bytes):the maximum allowed length "
