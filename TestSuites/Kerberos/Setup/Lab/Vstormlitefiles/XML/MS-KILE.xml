@@ -1,0 +1,147 @@
+<lab>
+  <core>
+    <parentdisk>9200.amd64fre.server_en-us_vl.SERVERSTANDARD.win8_rtm.vhd</parentdisk>
+    <parentanswerfile>9200.amd64fre.server_en-us_vl.SERVERSTANDARD.win8_rtm.xml</parentanswerfile>
+    <username>Administrator</username>
+    <password>Password01!</password>
+    <legacyclient>true</legacyclient>
+    <basecpu>1</basecpu>
+    <Description>DC x 2 and Member x 4(NIC x 1), Kerberos sample setup static ip address</Description>
+  </core>
+  
+  <network>
+    <vnet>
+      <hostisgateway>true</hostisgateway>
+      <name>MS-KILE-Internal</name>
+      <ip>192.168.0.254</ip>
+      <subnet>255.255.255.0</subnet>
+    </vnet>
+  </network>
+
+  <servers>
+    <vm>
+      <installorder>1</installorder>
+      <hypervname>MS-KILE-DC01</hypervname>  
+      <name>DC01</name>
+      <username>Administrator</username>   
+      <password>Password01@</password>	  
+    <domain>contoso.com</domain>
+    <isdc>true</isdc>	  
+    <!-- Network configuration                    -->
+    <!-- Multiple DNS or IP settings cannot be    -->
+    <!-- handled by VSTORMLITE automatically.     -->
+    <!-- scripts to config multiple DNS or IP     -->
+    <!-- setting are required in the post script. -->  
+      <vnet>MS-KILE-Internal</vnet>
+      <ip>192.168.0.1</ip>
+      <subnet>255.255.255.0</subnet>
+      <gateway></gateway>	    
+      <dns>127.0.0.1;192.168.0.2</dns>		
+      <memory>1500</memory> 	  
+      <!-- PostScript are scripts to be executed      -->
+      <!-- by VSTORMLITE right after the VM is built, -->
+      <!-- before running any configuration scripts   -->
+      <!-- from the test suite.                       -->    
+      <postscript>Disable_Firewall.ps1;SetPasswordNeverExpires.ps1;MS-KILE-DC01-Postscript.ps1</postscript>
+      <!-- ConfigScript are the configuration scripts -->
+      <!-- in the test suite. These scripts will be   -->
+      <!-- executed after all the VMs are set up, and -->
+      <!-- will be called by Execute-ProtocolTest.ps1 -->
+      <!-- remotely.                                  --> 
+      <configscript>Config-DC01.ps1</configscript>
+    </vm>
+    
+    <vm>
+      <installorder>2</installorder>
+      <hypervname>MS-KILE-DC02</hypervname>
+      <name>DC02</name>
+      <username>Administrator</username>
+      <password>Password01#</password>
+    <domain>kerb.com</domain>
+    <isdc>true</isdc>
+      <vnet>MS-KILE-Internal</vnet>
+      <ip>192.168.0.2</ip>
+      <subnet>255.255.255.0</subnet>
+      <gateway></gateway>	  
+      <dns>127.0.0.1;192.168.0.1</dns>  
+      <memory>1500</memory>  	
+      <postscript>Disable_Firewall.ps1;SetPasswordNeverExpires.ps1;MS-KILE-DC02-Postscript.ps1</postscript>
+      <configscript>Config-DC02.ps1</configscript>
+    </vm>
+    
+    <vm>
+      <installorder>3</installorder>
+      <hypervname>MS-KILE-AP01</hypervname>
+      <name>AP01</name>
+      <username>Administrator</username>
+      <password>Password01!</password>
+    <domain>contoso.com</domain>
+      <vnet>MS-KILE-Internal</vnet>
+      <ip>192.168.0.10</ip>
+      <subnet>255.255.255.0</subnet>
+      <gateway></gateway>	  
+      <dns>192.168.0.1</dns>
+      <memory>1500</memory>
+      <installfeaturescript>Install-FSRM.ps1;Install-IIS.ps1</installfeaturescript>
+      <postscript>Disable_Firewall.ps1;SetPasswordNeverExpires.ps1;MS-KILE-AP01-Postscript.ps1</postscript>
+      <configscript>Config-AP01.ps1</configscript>	  
+    </vm>
+
+    <vm>
+      <installorder>4</installorder>
+      <hypervname>MS-KILE-AP02</hypervname>
+      <name>AP02</name>
+      <username>Administrator</username>
+      <password>Password01!</password>
+    <domain>kerb.com</domain>
+      <vnet>MS-KILE-Internal</vnet>
+      <ip>192.168.0.20</ip>
+      <subnet>255.255.255.0</subnet>
+      <gateway></gateway>
+      <dns>192.168.0.2</dns>
+      <memory>1500</memory>
+      <installfeaturescript>Install-FSRM.ps1;Install-IIS.ps1</installfeaturescript>
+      <postscript>Disable_Firewall.ps1;SetPasswordNeverExpires.ps1;MS-KILE-AP02-Postscript.ps1</postscript>
+      <configscript>Config-AP02.ps1</configscript>
+    </vm>
+
+    <vm>
+      <installorder>5</installorder>
+      <hypervname>MS-KILE-PROXY01</hypervname>
+      <name>PROXY01</name>
+      <username>Administrator</username>
+      <password>Password01!</password>
+    <domain>contoso.com</domain>
+      <vnet>MS-KILE-Internal</vnet>
+      <ip>192.168.0.3</ip>
+      <subnet>255.255.255.0</subnet>
+      <gateway></gateway>
+      <dns>192.168.0.1;192.168.0.2</dns>
+      <memory>1500</memory>
+      <postscript>Disable_Firewall.ps1;SetPasswordNeverExpires.ps1;MS-KILE-PROXY01-Postscript.ps1</postscript>
+      <configscript>Config-PROXY01.ps1</configscript>
+    </vm>
+
+    <vm>
+      <installorder>6</installorder>
+      <hypervname>MS-KILE-ENDPOINT01</hypervname>
+      <name>ENDPOINT01</name>
+      <username>Administrator</username>
+      <password>Password01!</password>
+      <domain>contoso.com</domain>
+      <vnet>MS-KILE-Internal</vnet>
+      <ip>192.168.0.101</ip>
+      <subnet>255.255.255.0</subnet>
+      <gateway></gateway>
+      <dns>192.168.0.1;192.168.0.2</dns>
+      <memory>4096</memory>
+      <postiso>VS2012.iso</postiso>		              
+      <postscript>Disable_Firewall.ps1;SetPasswordNeverExpires.ps1;Install_vs2012.ps1;InstallDotNet2.ps1;InstallMSIAndTools.ps1;MS-KILE-ENDPOINT01-Postscript.ps1</postscript>
+      <tools>	  	
+        <tool name="PTF" MSIName="ProtocolTestFramework.msi" version="1.0.2485.0" CPUArchitecture="x86" />
+        <TestsuiteMSI MSIName="Kerberos-TestSuite-ServerEP.msi" targetEndpoint="" />
+      </tools>
+      <configscript>Config-Driver.ps1</configscript>
+    </vm>
+  </servers>	
+</lab>

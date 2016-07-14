@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="TESTSUITE_BIN_DIR">
+            <Component Id="cmp0FB614A52774017FCB15D4EB351FFB7F" Guid="{5A84CD81-F85D-4CA1-B0B9-B3DDE7C74D17}">
+                <File Id="fil9430550526E1AA32ADA68FC19A263D3F" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\Kerberos_ServerAdapter.dll" />
+            </Component>
+            <Component Id="cmpB0D393C2BF05377EAA417CBD2340085B" Guid="{5F8226D6-F485-4AA8-A6CB-0DD1D5C43D1C}">
+                <File Id="fil03A4EAFCD99E46F6AB4AFD43038761F8" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\Kerberos_ServerAdapter.pdb" />
+            </Component>
+            <Component Id="cmp17C80B4F4A38F90C0808E0C5F6AFD903" Guid="{BDC0D55E-B84E-4D2A-A73C-D84E0E9565E6}">
+                <File Id="filBD10F2AD465D52EA2D7A16EFE4B65CF7" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\Kerberos_ServerTestSuite.deployment.ptfconfig" />
+            </Component>
+            <Component Id="cmpDC479B402AA7F0834F0893053D4D365A" Guid="{1505BB47-2C83-44CF-82DE-CCC29C3996C7}">
+                <File Id="fil2FBD38EBCD40BD9A61D6709609899830" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\Kerberos_ServerTestSuite.dll" />
+            </Component>
+            <Component Id="cmp00F7369CC3D4616F2C2E0E8654A92FAA" Guid="{8F05F67C-4EAF-4E9B-9C5D-847D131D8306}">
+                <File Id="filC196853B3F1B63FF7F79649D577E0225" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\Kerberos_ServerTestSuite.pdb" />
+            </Component>
+            <Component Id="cmp2B9F9027CF0E6EA98298F61CF49A327F" Guid="{C8FDCE92-194E-4B41-9962-B39560E7BD9D}">
+                <File Id="fil1EEEAF44DDE750B8069190B3F98DD0AF" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\Kerberos_ServerTestSuite.ptfconfig" />
+            </Component>
+            <Component Id="cmpDA8FAB7B7E76761560D8EC14FC4D5FAE" Guid="{4CDA387C-52C1-4D40-9A45-9FFBC2C53316}">
+                <File Id="filE3BBCFF25F47A9437BDE37854F0DC2A6" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\ServerLocalTestRun.testrunconfig" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="BIN_FILES">
+            <ComponentRef Id="cmp0FB614A52774017FCB15D4EB351FFB7F" />
+            <ComponentRef Id="cmpB0D393C2BF05377EAA417CBD2340085B" />
+            <ComponentRef Id="cmp17C80B4F4A38F90C0808E0C5F6AFD903" />
+            <ComponentRef Id="cmpDC479B402AA7F0834F0893053D4D365A" />
+            <ComponentRef Id="cmp00F7369CC3D4616F2C2E0E8654A92FAA" />
+            <ComponentRef Id="cmp2B9F9027CF0E6EA98298F61CF49A327F" />
+            <ComponentRef Id="cmpDA8FAB7B7E76761560D8EC14FC4D5FAE" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>
