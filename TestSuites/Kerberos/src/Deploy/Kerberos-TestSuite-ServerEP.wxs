@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- TODO: Update test suite name and endpoint -->
+<?define TESTSUITE_NAME=Kerberos?>
+<?define TESTSUITE_ENDPOINT=Server?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+	
+  <Product Id="*" 
+           Name="Microsoft $(var.TESTSUITE_NAME) $(var.TESTSUITE_ENDPOINT) Endpoint Test Suite" 
+           Language="1033" 
+           Version="$(env.TESTSUITE_VERSION)" 
+           Manufacturer="Microsoft Corporation" 
+           UpgradeCode="{0BF62FD6-5BDF-4877-8B53-15C819AF3C1D}">
+    
+    <Package Id="*" 
+             InstallScope="perMachine"
+             InstallPrivileges="elevated"
+             Description="Microsoft $(var.TESTSUITE_NAME) $(var.TESTSUITE_ENDPOINT) Endpoint Test Suite v$(env.TESTSUITE_VERSION)"
+             Manufacturer="Microsoft Corporation"
+             InstallerVersion="300"
+             Compressed="yes" />
+    
+    <Media Id="1" Cabinet="TestSuite_AllInOne.cab" EmbedCab="yes" />
+    <Feature Id="TestSuiteFeatures" Level="1" ConfigurableDirectory="TESTSUITE_ROOT_DIR" />
+    <MajorUpgrade DowngradeErrorMessage ="A later version of [ProductName] is already installed. Setup will now exit." />
+
+    <WixVariable Id="TESTSUITE_NAME" Value="$(var.TESTSUITE_NAME)" Overridable="no" />
+    <WixVariable Id="TESTSUITE_ENDPOINT" Value="$(var.TESTSUITE_ENDPOINT)" Overridable="no" />
+    <WixVariable Id="TESTSUITE_VERSION" Value="$(env.TESTSUITE_VERSION)" Overridable="no" />
+    
+    <WixVariable Id="TESTSUITE_BIN_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\Kerberos\Bin" />
+    <WixVariable Id="TESTSUITE_BATCH_DIR" Value="..\Batch" />
+    <WixVariable Id="TESTSUITE_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <WixVariable Id="PROTOSDK_DROP_DIR" Value="$(env.TestSuiteRoot)\drop\ProtoSDK\Bin" />
+    
+    <WixVariable Id="CONFIG_TESTSUITE_SCRIPT" Value="Config-TestSuite.cmd" />
+    <WixVariable Id="CONFIG_SUT_SCRIPT" Value="Config-SUT.cmd" />
+    <WixVariable Id="CONFIG_DOMAIN_SCRIPT" Value="Config-Domain.cmd" />
+
+    <WixVariable Id="DOMAIN_RUN_ALLTCS_COMMAND" Value="Domain_RunAllTestCases.cmd" />
+    <WixVariable Id="DOMAIN_RUN_BVT_COMMAND" Value="Domain_RunBVTTestCases.cmd" />
+    <WixVariable Id="WORKGROUP_RUN_ALLTCS_COMMAND" Value="Workgroup_RunAllTestCases.cmd" />
+    <WixVariable Id="WORKGROUP_RUN_BVT_COMMAND" Value="Workgroup_RunBVTTestCases.cmd" />
+    <WixVariable Id="RUN_TCS_BY_CATEGORY_COMMAND" Value="Domain_RunTestCasesByCategory.cmd" />
+    
+    <WixVariable Id="QUICK_START_GUIDE" Value="Kerberos_ServerUserGuide.docx" />
+
+    <DirectoryRef Id="TESTSUITE_ROOT_DIR">
+      <Component Id="LICENSE.rtf" Guid="{3CC4885E-A281-42BF-B71C-5BB316458549}">
+        <File Id="LICENSE.rtf" Source="LICENSE.rtf" />
+      </Component>
+    </DirectoryRef>
+
+  </Product>
+</Wix>
