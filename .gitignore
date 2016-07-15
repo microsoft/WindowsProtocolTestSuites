@@ -22,4 +22,6 @@ TestSuites/RDP/src/Deploy/TestSuiteDataFiles.wxs
 TestSuites/RDP/src/Deploy/TestSuiteScripts.wxs
 TestSuites/FileServer/src/Deploy/Batch.wxs
 TestSuites/FileServer/src/Deploy/Bin.wxs
-
+TestSuites/Kerberos/src/Deploy/TestSuiteBatchFiles.wxs
+TestSuites/Kerberos/src/Deploy/TestSuiteBinFiles.wxs
+TestSuites/Kerberos/src/Deploy/TestSuiteScripts.wxs
