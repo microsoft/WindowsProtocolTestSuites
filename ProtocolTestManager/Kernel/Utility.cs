@@ -819,13 +819,22 @@ namespace Microsoft.Protocols.TestManager.Kernel
             numberOfChecked = 0;
             numberOfNotfound = 0;
             TestCaseGroup.HoldUpdatingHeader();
-            foreach (var testcase in selectedCases) testcase.IsChecked = false;
+            foreach (var testcase in selectedCases)
+            {
+                if(!caselistCache.Contains(testcase.Name) && !testcase.IsChecked)
+                    testcase.IsChecked = false;
+            }
+            TestCaseGroup.ResumeUpdatingHeader();
+
             foreach (string name in caselistCache)
             {
                 var testcase = selectedCases.FirstOrDefault((v) => v.FullName == name);
                 if (testcase != null)
                 {
-                    testcase.IsChecked = true;
+                    if(!testcase.IsChecked)
+                    {
+                        testcase.IsChecked = true;
+                    }
                     numberOfChecked++;
                 }
                 else
@@ -833,7 +842,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     numberOfNotfound++;
                 }
             }
-            TestCaseGroup.ResumeUpdatingHeader();
+
         }
 
         /// <summary>
