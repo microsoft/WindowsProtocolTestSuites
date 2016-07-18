@@ -14,6 +14,20 @@ namespace Microsoft.Protocols.TestManager.Kernel
     {
         Dictionary<string, TestCaseGroup> testcasemap;
 
+        /// <summary>
+        /// Get the current page testcase name list.
+        /// </summary>
+        public List<string> TestCaseNameList
+        {
+            get
+            {
+                if (testcasemap == null)
+                    return null;
+                else
+                    return testcasemap.Keys.ToList();
+            }
+        }
+
         public void SetTestCaseList(List<TestCase> testcases)
         {
             NotRunTestCases = new TestCaseGroup("Not Run", testcases.Count);

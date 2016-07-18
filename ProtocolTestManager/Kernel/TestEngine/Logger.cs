@@ -58,6 +58,16 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// </summary>
         public List<TestCase> AllTestCases { get; set; }
 
+        /// <summary>
+        /// Return the current page case list.
+        /// </summary>
+        public List<string> CurrentPageCaseList
+        {
+            get
+            {
+                return GroupByOutcome.TestCaseNameList;
+            }
+        }
 
         private void NotifyPropertyChange(object sender, string propertyName)
         {
