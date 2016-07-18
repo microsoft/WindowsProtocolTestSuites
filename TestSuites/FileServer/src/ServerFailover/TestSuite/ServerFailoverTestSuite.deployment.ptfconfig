@@ -11,6 +11,13 @@
     <Group name="Cluster">
       <!--Tag named Description is used for the comment-->
 
+      <Property name="ClusterName" value ="cluster01.contoso.com">
+        <Description>
+          Computer name of Windows failover cluster which hosts Continuous Availability (CA) file server (the SUT)
+          If SUT is non-Windows implementation, leave it blank
+        </Description>
+      </Property>
+
       <Property name="ClusterNode01" value="node01.contoso.com">
         <Description>
           Name of one computer (i.e. node) constructing SUT which is Continuous Availability (CA) file server.
