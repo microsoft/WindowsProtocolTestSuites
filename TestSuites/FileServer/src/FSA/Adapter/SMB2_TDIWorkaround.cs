@@ -322,11 +322,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
         internal static MessageStatus WorkaroundCreateFile(FileNameStatus fileNameStatus, CreateOptions createOption, FileAccess desiredAccess, FileType openFileType, FileAttribute desiredFileAttribute, MessageStatus returnedStatus, ITestSite site)
         {
-            if (openFileType == FileType.DirectoryFile && desiredFileAttribute == FileAttribute.TEMPORARY)
-            {
-                returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(507, MessageStatus.INVALID_PARAMETER, returnedStatus, site);
-            }
-            else if (createOption == CreateOptions.SYNCHRONOUS_IO_ALERT
+            if (createOption == CreateOptions.SYNCHRONOUS_IO_ALERT
                && desiredAccess == FileAccess.FILE_READ_DATA)
             {
                 returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(369, MessageStatus.INVALID_PARAMETER, returnedStatus, site);
