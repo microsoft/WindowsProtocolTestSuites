@@ -21,6 +21,11 @@ if not defined WIX (
 	exit /b 1
 )
 
+if not exist "%programfiles(x86)%\Spec Explorer 2010\SpecExplorer.exe" (
+	echo Error: Spec Explorer 2010 v3.5.3146.0 should be installed
+	exit /b 1
+)
+
 if not exist "%programfiles(x86)%\Protocol Test Framework\bin\Microsoft.Protocols.TestTools.dll" (
         echo Error: Protocol Test Framework should be installed
 	exit /b 1
