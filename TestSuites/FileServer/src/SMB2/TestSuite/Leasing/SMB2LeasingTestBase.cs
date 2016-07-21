@@ -116,8 +116,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 LogEntryKind.Debug,
                 "Check if client received lease break notification");
             BaseTestSite.Assert.IsTrue(
-                // Wait 5 seconds for notification arrival
-                notificationReceived.WaitOne(SMB2TestConfig.WAIT_TIMEOUT_IN_MILLISECONDS),
+                // Wait for notification arrival
+                notificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
                 "LeaseBreakNotification should be raised.");
 
             uint treeId = (uint)obj;

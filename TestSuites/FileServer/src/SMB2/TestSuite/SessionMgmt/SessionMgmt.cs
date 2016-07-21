@@ -169,11 +169,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.SessionMgmt
                 null, // capability value will be set inside the method according to requested dialects.
                 clientGuid);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "The first client sends SESSION_SETUP request with SESSION_ID set to ZARO.");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "The first client sends SESSION_SETUP request with SESSION_ID set to ZERO.");
             client.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Disconnect the first client by sending DISCONNECT request.");
-            client.Disconnect();
 
             #region Reconnect and Do Session Setup with PreviousSessionId set.
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a second client by sending NEGOTIATE request.");
@@ -226,7 +223,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.SessionMgmt
             #endregion
 
             #region Tear Down Client
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Disconnect the second client by sending DISCONNECT request.");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Disconnect both clients by sending DISCONNECT request.");
+            client.Disconnect();
             client2.Disconnect();
             #endregion
         }

@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D3CC3CB3-57FD-437F-AA54-E43AD97BA3B9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Protocol.TestSuites.Kerberos.Adapter</RootNamespace>
+    <AssemblyName>Kerberos_ServerAdapter</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>Sdl7.0.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Protocols.TestTools">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.Protocols.TestTools.ExtendedLogging">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.Protocols.TestTools.VSTS">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.Xrt.Runtime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=x86">
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.Protocols" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="ApAdapter\HttpFunctionalTestClient.cs" />
+    <Compile Include="ApAdapter\Smb2FunctionalTestClient.cs" />
+    <Compile Include="ClaimHelper.cs" />
+    <Compile Include="IClientControlAdapter.cs" />
+    <Compile Include="ISutControlAdapter.cs" />
+    <Compile Include="KeyManager.cs" />
+    <Compile Include="PacHelper.cs" />
+    <Compile Include="ProtocolAdapter\KerberosTestClient.cs" />
+    <Compile Include="ProtocolAdapter\KpasswdTestClient.cs" />
+    <Compile Include="SutControlAdapter.cs" />
+    <Compile Include="TestCategories.cs" />
+    <Compile Include="TestConfig.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="IClientControlAdapter\ClearTrustRealmEncType.ps1" />
+    <Content Include="IClientControlAdapter\SetTrustRealmEncTypeAsAes.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Asn1Base\Asn1Base.csproj">
+      <Project>{deda188c-c97e-4968-bc31-594925631e9f}</Project>
+      <Name>Asn1Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Claim\Claim.csproj">
+      <Project>{0742b083-6193-4c12-9405-e0f7ba88c635}</Project>
+      <Name>Claim</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Common\Common.csproj">
+      <Project>{fe653643-6342-4300-871e-683c7ba31494}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\CryptoLib\CryptoLib.csproj">
+      <Project>{bf6afaf0-7592-467f-ad5c-18429d854057}</Project>
+      <Name>CryptoLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\KerberosLib\KerberosLib.csproj">
+      <Project>{3f0b2460-33f7-4a58-9cb5-bb38914c7845}</Project>
+      <Name>KerberosLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-ADTS-LDAP\MS-ADTS-LDAP.csproj">
+      <Project>{2fa90f03-31cd-4495-86bf-8da9cc14e210}</Project>
+      <Name>MS-ADTS-LDAP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-PAC\Pac.csproj">
+      <Project>{aefaf10d-d1bf-44c4-bd9f-5cff2afa432f}</Project>
+      <Name>Pac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj">
+      <Project>{c7f08825-d3c9-4ddd-9ba3-06733b1abe36}</Project>
+      <Name>Smb2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Sspi\Sspi.csproj">
+      <Project>{d0cb354b-2cd3-49c1-8eca-2f6ebadbccee}</Project>
+      <Name>Sspi</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Bin\" />
+  </Target>
+</Project>

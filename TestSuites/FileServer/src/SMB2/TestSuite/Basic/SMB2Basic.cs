@@ -126,8 +126,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client1.Cancel();
 
             BaseTestSite.Assert.IsTrue(
-                changeNotificationReceived.WaitOne(SMB2TestConfig.WAIT_TIMEOUT_IN_MILLISECONDS),
-                "Change notification should be received within {0} milliseconds", SMB2TestConfig.WAIT_TIMEOUT_IN_MILLISECONDS);
+                changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
 
             BaseTestSite.Assert.AreNotEqual(
                 Smb2Status.STATUS_SUCCESS,
