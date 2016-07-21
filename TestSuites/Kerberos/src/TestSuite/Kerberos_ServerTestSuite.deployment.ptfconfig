@@ -1,0 +1,455 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+  <Properties>
+    <!--Common properties-->
+    <Property name="TransportType" value="tcp">
+      <Description>
+        The default transport type
+      </Description>
+      <Choice>tcp,udp</Choice>
+    </Property>
+    <Property name="TransportBufferSize" value="1465">
+      <Description>
+        Maximum buffer size of transport stack in byte, in Vista, Win7, Win2k8, Win2k8r2, Win2012, Win2012R2 default 1465
+      </Description>
+    </Property>
+    <Property name="IpVersion" value="IPv4">
+      <Description>
+        The default ip version
+      </Description>
+      <Choice>IPv4,IPv6</Choice>
+    </Property>
+    <Property name="TrustType" value="Forest">
+      <Description>
+        Trust Type, Forest, Realm, NoTrust, Child (for single realm)
+      </Description>
+      <Choice>Forest,Realm,Notrust,Child</Choice>
+    </Property>
+    <Property name="SupportedOid" value="MSKerberosToken">
+      <Description>
+        Supported Oid in GSSAPI. Possible values are KerberosToken and MSKerberosToken.
+      </Description>
+      <Choice>MSKerberosToken,KerberosToken</Choice>
+    </Property>
+    <Property name="IsKileImplemented" value="true">
+      <Description>
+        Set it to true if KDC implements Kerberos extension MS-KILE; Otherwise, set it to false.
+      </Description>
+      <Choice>true,false</Choice>
+    </Property>
+    <Property name="IsClaimSupported" value="true">
+      <Description>
+        Set it to true if KDC supports claim based access control; Otherwise, set it to false.
+      </Description>
+      <Choice>true,false</Choice>
+    </Property>
+    <Property name="UseProxy" value="true">
+      <Description>
+        Set it to true, if Kerberos Proxy Servise is enabled; Otherwise, set it to false.
+      </Description>
+      <Choice>true,false</Choice>
+    </Property>
+    <Property name="KKDCPServerUrl" value="https://proxy01.contoso.com/KdcProxy">
+      <Description>
+        The Url of Kerberos Proxy Service. Applicable when UserProxy is true.
+      </Description>
+    </Property>
+    <Property name="KKDCPClientCertPath" value="">
+      <Description>
+        The client certificate used in Kerberos Proxy Service. Leave it blank if server does not require a client certificate. Applicable when UserProxy is true.
+      </Description>
+    </Property>
+    <Property name="KKDCPClientCertPassword" value="">
+      <Description>
+        The password used to protect the client certificate. Leave it blank if server does not require a client certificate. Applicable when UserProxy is true.
+      </Description>
+    </Property>
+    <Group name="LocalRealm" description="Settings for local realm">
+      <Property name="RealmName" value="CONTOSO.COM" />
+      <Property name="DomainControllerFunctionality" value="6">
+        <Description>
+            The KDC domainControllerFunctionality,[MS-ADTS] section 3.1.1.3.2.25.
+            0	DS_BEHAVIOR_WIN2000
+            2	DS_BEHAVIOR_WIN2003
+            3	DS_BEHAVIOR_WIN2008
+            4	DS_BEHAVIOR_WIN2008R2
+            5	DS_BEHAVIOR_WIN2012
+            6	DS_BEHAVIOR_WIN2012R2
+          </Description>
+        <Choice>0,2,3,4,5,6</Choice>
+      </Property>
+      <Group name="KDC01" description="Settings for the local realm KDC">
+        <Property name="IsWindows" value="true" />
+        <Property name="FQDN" value="DC01.contoso.com" />
+        <Property name="NetBiosName" value="DC01$" />
+        <Property name="Password" value="Password01!">
+          <Description>
+            This password is used for test cases serverSignature and kdcSignature.
+          </Description>
+        </Property>
+        <Property name="IPv4Address" value="192.168.0.1" />
+        <Property name="IPv6Address" value="2012::1">
+          <Description>
+            Leave the IPv6Address blank when IPv6 is not applied to test.
+          </Description>
+        </Property>
+        <Property name="Port" value="88" />
+      </Group>
+      <Group name="ClientComputer" description="Settings for client computer">
+        <Property name="FQDN" value="ENDPOINT01.contoso.com" />
+        <Property name="NetBiosName" value="ENDPOINT01$" />
+        <Property name="Password" value="Password05!" />
+        <Property name="IPv4Address" value="192.168.0.101" />
+        <Property name="IPv6Address" value="2012::101">
+          <Description>
+            Leave the IPv6Address blank when IPv6 is not applied to test.
+          </Description>
+        </Property>
+        <Property name="Port" value="88" />
+        <Property name="DefaultServiceName" value="host/endpoint01.contoso.com" />
+        <Property name="ServiceSalt" value="CONTOSO.COMhostendpoint01.contoso.com" />
+      </Group>
+      <Group name="FileServer01" description="Settings for the local realm File Server">
+        <Property name="FQDN" value="AP01.contoso.com" />
+        <Property name="NetBiosName" value="AP01$" />
+        <Property name="Password" value="Password02!" />
+        <Property name="IPv4Address" value="192.168.0.10" />
+        <Property name="IPv6Address" value="2012::10">
+          <Description>
+            Leave the IPv6Address blank when IPv6 is not applied to test.
+          </Description>
+        </Property>
+        <Property name="DefaultServiceName" value="host/ap01.contoso.com" />
+        <Property name="ServiceSalt" value="CONTOSO.COMhostap01.contoso.com" />
+        <Property name="Smb2ServiceName" value="cifs/ap01.contoso.com" />
+        <Property name="Smb2Dialect" value="Smb302" />
+        <!--The following are parameters only used for AZOD test cases -->
+        <Property name="DACShareFolder" value="Share">
+          <Description>
+            AZOD test cases: DAC Share
+          </Description>
+        </Property>
+        <Property name="CBACShareFolder" value="Share">
+          <Description>
+            AZOD test cases: CBAC aware share
+          </Description>
+        </Property>
+      </Group>
+      <Group name="LdapServer01" description="Settings for the local realm LDAP Server">
+        <Property name="FQDN" value="DC01.contoso.com" />
+        <Property name="NetBiosName" value="DC01$" />
+        <Property name="Password" value="Password03!" />
+        <Property name="IPv4Address" value="192.168.0.1" />
+        <Property name="IPv6Address" value="2012::1">
+          <Description>
+            Leave the IPv6Address blank when IPv6 is not applied to test.
+          </Description>
+        </Property>
+        <Property name="DefaultServiceName" value="ldap/dc01.contoso.com" />
+        <Property name="ServiceSalt" value="CONTOSO.COMhostdc01.contoso.com" />
+        <Property name="LdapServiceName" value="ldap/dc01.contoso.com" />
+        <Property name="LdapPort" value="389" />
+        <Property name="GssToken" value="GSSAPI" />
+      </Group>
+      <Group name="WebServer01" description="Settings for the local realm Web Server">
+        <!--The Web Server Information.-->
+        <Property name="FQDN" value="AP01.contoso.com" />
+        <Property name="NetBiosName" value="AP01$" />
+        <Property name="Password" value="Password02!" />
+        <Property name="IPv4Address" value="192.168.0.10" />
+        <Property name="IPv6Address" value="2012::10">
+          <Description>
+            Leave the IPv6Address blank when IPv6 is not applied to test.
+          </Description>
+        </Property>
+        <Property name="DefaultServiceName" value="host/ap01.contoso.com" />
+        <Property name="ServiceSalt" value="CONTOSO.COMhostap01.contoso.com" />
+        <Property name="HttpServiceName" value="http/ap01.contoso.com" />
+        <Property name="HttpUri" value="http://AP01.contoso.com" />
+      </Group>
+      <Group name="AuthNotRequired">
+        <Property name="FQDN" value="AuthNotRequired.contoso.com" />
+        <Property name="NetBiosName" value="AuthNotRequired$" />
+        <Property name="Password" value="Password01!" />
+        <Property name="DefaultServiceName" value="host/AuthNotRequired.contoso.com" />
+        <Property name="ServiceSalt" value="CONTOSO.COMhostauthnotrequired.contoso.com" />
+      </Group>
+      <Group name="localResource01">
+        <Property name="FQDN" value="localResource01.contoso.com" />
+        <Property name="NetBiosName" value="localResource01$" />
+        <Property name="Password" value="Password01!" />
+        <Property name="DefaultServiceName" value="host/localResource01.contoso.com" />
+        <Property name="ServiceSalt" value="CONTOSO.COMhostlocalresource01.contoso.com" />
+      </Group>
+      <Group name="localResource02">
+        <Property name="FQDN" value="localResource02.contoso.com" />
+        <Property name="NetBiosName" value="localResource02$" />
+        <Property name="Password" value="Password01!" />
+        <Property name="DefaultServiceName" value="host/localResource02.contoso.com" />
+        <Property name="ServiceSalt" value="CONTOSO.COMhostlocalresource02.contoso.com" />
+      </Group>
+      <Group name="resourceGroups">
+        <Property name="resourceGroupCount" value="2" />
+        <Group name ="resourceGroup01">
+          <Property name="GroupName" value="resourceGroup" />
+        </Group>
+        <Group name ="resourceGroup02">          
+          <Property name="GroupName" value="resourceGroup2" />
+        </Group>
+      </Group>
+      <!--The Users Information.-->
+      <Group name="Users" description="Settings for the local realm users information">
+          <Group name="Admin">
+            <Property name="Username" value="administrator" />
+            <Property name="Password" value="Password01@" />        
+          </Group>       
+        <!--The Krbtgt User Account usernames and passwords.-->
+          <Group name="krbtgt">
+            <Property name="Username" value="krbtgt" />
+            <Property name="Password" value="Password01$" />        
+          </Group>       
+        
+        <!--The Other User Accounts usernames and passwords.-->
+        <Group name="User01" description="For Kerberos Basic Features. User properties: KerberosEncryptionType = DES,RC4,AES128,AES256, group = testGroup ">           
+            <Property name="Username" value="test01" />                
+            <Property name="Password" value="Password01^" />
+            <Property name="Salt" value="CONTOSO.COMtest01" />
+            <Group name="DomainAccountInfo" >
+              <Property name="ScriptPath" value="c:\scripts\" />
+              <Property name="ProfilePath" value="c:\profiles\" />
+              <Property name="HomeDirectory" value="c:\home\" />
+              <Property name="HomeDrive" value="c:" />
+              <!--The following DomainAccountInfo should be left blank when the local realm DC is Windows or supports LDAP.-->
+              <Property name="UserID" value="" />
+              <Property name="PrimaryGroupId" value="" />
+              <Property name="UserAccountControl" value="" />
+              <Property name="GroupCount" value="" />
+            </Group>       
+        </Group> 
+      
+        <Group name="User02" description ="For Compound Identity Features.User properties: Support Compound identity, Department = HR, PasswordNeverExpires = true, KerberosEncryptionType DES,RC4,AES128,AES256">          
+          <Property name="Username" value="test02" />
+          <Property name="Password" value="Password01&amp;" />       
+          <!-- WARNING: ONLY support single value Claim, format is <claim ID#1>;<claim value#1>;<claim ID#2>;<claim value#2> -->
+          <Property name="TransformedClaims" value="ad://ext/Department;HR" />		  
+        </Group>
+        
+        <Group name="User03" description ="For Delegation Features. User properties: AccountNotDelegated = true ">
+          
+          <Property name="Username" value="UserDelegNotAllowed" />
+          <Property name="Password" value="Chenjialuo;" />         
+        </Group>
+      
+        <Group name="User04" description ="For Delegation Features. User properties: ServicePrincipalNames = abc/UserTrustedForDeleg?TrustedForDelegation = true">          
+          <Property name="Username" value="UserTrustedForDeleg" />
+          <Property name="Password" value="Yuanchengzhi;" />            
+          <Property name="ServiceName" value="abc/UserTrustedForDeleg" /> 
+        </Group>
+      
+        <Group name="User05" description ="For Delegation Features.   User properties: a common user without principal name set">          
+        
+          <Property name="Username" value="UserWithoutUPN" />
+          <Property name="Password" value="Zhangwuji;" />          
+        </Group>
+      
+       <Group name="User06" description ="For Kerberos Basic Features. User properties: a user that does not require pre-authentication">
+          <Property name="Username" value="UserPreAuthNotReq" />
+          <Property name="Password" value="Duanyu;" />                      
+        </Group>
+      
+        
+       <Group name="User07" description ="For Kerberos Basic Features. User properties: user is disabled">          
+          <Property name="Username" value="UserDisabled" />
+          <Property name="Password" value="Chenjinnan;" />        
+        </Group>
+        
+        <Group name="User08" description ="For Kerberos Basic Features. User properties: AccountExpirationDate = 1/1/2011">          
+          <Property name="Username" value="UserExpired" />
+          <Property name="Password" value="Guojing;" />            
+        </Group>
+      
+        <Group name="User09" description ="For Kerberos Basic Features. User properties: user is locked with wrong password">          
+          <Property name="Username" value="UserLocked" />
+          <Property name="Password" value="Qiaofeng;" />            
+          
+        </Group>
+      
+        <Group name="User10" description ="For Kerberos Basic Features. User properties: User is out of logon hours" >
+          <Property name="Username" value="UserOutofLogonHours" />
+          <Property name="Password" value="Huyidao;" />                      
+        </Group>
+      
+       <Group name="User11" description ="For Kerberos Basic Features. User properties: user is locked, ChangePasswordAtLogon = true, DoesNotRequirePreAuth = true">          
+          <Property name="Username" value="UserPwdMustChgPast" />
+          <Property name="Password" value="Weixiaobao;" />          
+        </Group>
+      
+        <Group name="User12" description ="For Kerberos Basic Features. User properties: ChangePasswordAtLogon = true, DoesNotRequirePreAuth = true">
+          <Property name="Username" value="UserPwdMustChgZero" />
+          <Property name="Password" value="Yangguo;" />          
+        </Group>
+      
+        <Group name="User13" description ="For Kerberos Basic Features. User Properties: group = testGroup2, KerberosEncryptionType = DES,RC4,AES128,AES256">          
+          <Property name="Username" value="UserLocalGroup" />
+          <Property name="Password" value="Yantengda;" />            
+        </Group>
+      
+       <Group name="User14" description ="For Kerberos Basic Features. User properties:UseDESKeyOnly = true, KerberosEncryptionType = DES">          
+          <Property name="Username" value="UserDesOnly"/>
+          <Property name="Password" value="Renyingying;" />          
+        </Group>
+      
+      <!--users for silo test-->
+        <Group name="User15" description ="For Silo Features. User properites: group = Protected Users, use des only= false, KerberosEncryptionType = DES">          
+          <Property name="Username" value="testsilo01" />
+          <Property name="Password" value="Password01!" />          
+        </Group>
+      
+        <Group name="User16" description ="For Silo Features. User properites: group = Protected Users, use des only= false, KerberosEncryptionType = AES, Department = HR, Silo Policy = UserDepartmentRestrictPolicy">          
+          <Property name="Username" value="testsilo02" />
+          <Property name="Password" value="Password01!" />          
+        </Group>
+      
+         <Group name="User17" description ="For Silo Features. User properites: group = Protected Users, use des only= false, KerberosEncryptionType = RC4">          
+          <Property name="Username" value="testsilo03" />
+          <Property name="Password" value="Password01!" />          
+        </Group>
+      
+        <Group name="User18" description ="For Silo Features. For Silo Features. User properites: use des only= false, KerberosEncryptionType = DES,RC4,AES128,AES256">        
+          <Property name="Username" value="testsilo04" />
+          <Property name="Password" value="Password01!" />          
+        </Group>     
+      
+        <Group name="User19" description ="For Silo Features. For Silo Features. User properites: group = Protected Users, use des only= false, KerberosEncryptionType = DES,RC4,AES128,AES256, Department = HR">          
+          <Property name="Username" value="testsilo05" />
+          <Property name="Password" value="Password01!" />          
+        </Group>
+
+        <Group name="User22" description ="For Kerberos password change. ">          
+          <Property name="Username" value="testpwd" />
+          <Property name="Password" value="Password01!" />          
+        </Group>
+      </Group>
+    </Group>
+    <Group name="TrustedRealm" description="Settings for Trust realm">
+      <!--The domain name of the trust realm-->
+      <Property name="TrustPassword" value="Password01!" />
+      <Property name="RealmName" value="KERB.COM" />
+      <Property name="DomainControllerFunctionality" value="6">
+        <Description>
+            The KDC domainControllerFunctionality,[MS-ADTS] section 3.1.1.3.2.25.
+            0	DS_BEHAVIOR_WIN2000
+            2	DS_BEHAVIOR_WIN2003
+            3	DS_BEHAVIOR_WIN2008
+            4	DS_BEHAVIOR_WIN2008R2
+            5	DS_BEHAVIOR_WIN2012
+            6	DS_BEHAVIOR_WIN2012R2
+          </Description>
+        <Choice>0,2,3,4,5,6</Choice>
+      </Property>
+      <Group name="KDC01" description="Settings for the trust realm KDC">
+        <Property name="IsWindows" value="true" />
+        <Property name="FQDN" value="DC02.kerb.com" />
+        <Property name="NetBiosName" value="DC02$" />
+        <Property name="Password" value="Password03!" />
+        <Property name="IPv4Address" value="192.168.0.2" />
+        <Property name="IPv6Address" value="2012::2">
+          <Description>
+            Leave the IPv6Address blank when IPv6 is not applied to test.
+          </Description>
+        </Property>
+        <Property name="Port" value="88" />
+        <Property name="DefaultServiceName" value="krbtgt/KERB.COM" />
+      </Group>
+      <Group name="FileServer01" description="Settings for the trust realm File Server">
+        <Property name="FQDN" value="AP02.kerb.com" />
+        <Property name="NetBiosName" value="AP02$" />
+        <Property name="Password" value="Password04!" />
+        <Property name="IPv4Address" value="192.168.0.20" />
+        <Property name="IPv6Address" value="2012::20">
+          <Description>
+            Leave the IPv6Address blank when IPv6 is not applied to test.
+          </Description>
+        </Property>
+        <Property name="DefaultServiceName" value="host/ap02.kerb.com" />
+        <Property name="ServiceSalt" value="KERB.COMhostap02.kerb.com" />
+        <Property name="Smb2ServiceName" value="cifs/ap02.kerb.com" />
+        <Property name="Smb2Dialect" value="Smb30" />
+        <Property name="CBACShareFolder" value="share">
+          <Description>
+              For AZOD test case: The CBAC aware share folder, which require claim transformation defined in trust realm DC.
+            </Description>
+        </Property>
+        <Property name="CBACShareFileName" value="CTAShareTest.txt">
+          <Description>
+              For AZOD test case: The file name to be created to CBAC aware share folder, which require claim transformation defined in trust realm DC.
+            </Description>
+        </Property>
+      </Group>
+      <!--The Server and Service Information.-->
+      <Group name="WebServer01">
+        <!--The Web Server Information.-->
+        <Property name="FQDN" value="AP02.kerb.com" />
+        <Property name="NetBiosName" value="AP02$" />
+        <Property name="Password" value="Password04!" />
+        <Property name="IPv4Address" value="192.168.0.20" />
+        <Property name="IPv6Address" value="2012::20">
+          <Description>
+            Leave the IPv6Address blank when IPv6 is not applied to test.
+          </Description>
+        </Property>
+        <Property name="DefaultServiceName" value="host/ap02.kerb.com" />
+        <Property name="ServiceSalt" value="KERB.COMhostap02.kerb.com" />
+        <Property name="HttpServiceName" value="http/ap02.kerb.com" />
+        <Property name="HttpUri" value="http://ap02.kerb.com" />
+      </Group>
+      <!--The Server and Service Information.-->
+      <Group name="LdapServer01">
+        <Property name="FQDN" value="dc02.kerb.com" />
+        <Property name="NetBiosName" value="dc02$" />
+        <Property name="Password" value="Password03!" />
+        <Property name="IPv4Address" value="192.168.0.2" />
+        <Property name="IPv6Address" value="2012::2">
+          <Description>
+            Leave the IPv6Address blank when IPv6 is not applied to test.
+          </Description>
+        </Property>
+        <Property name="DefaultServiceName" value="host/dc02.kerb.com" />
+        <Property name="ServiceSalt" value="CONTOSO.COMhostdc02.kerb.com" />
+        <Property name="LdapServiceName" value="ldap/dc02.kerb.com" />
+        <Property name="LdapPort" value="389" />
+        <Property name="GssToken" value="GSSAPI" />
+      </Group>
+      <!--The Users Information.-->
+      <Group name="Users" description="Settings for the trust realm users information">
+        
+        <Group name="Admin">
+          <Property name="Username" value="administrator" />
+          <Property name="Password" value="Password01#" />        
+        </Group>       
+      <!--The Krbtgt User Account usernames and passwords.-->
+      <Group name="krbtgt">
+        <Property name="Username" value="krbtgt" />
+        <Property name="Password" value="Password01%" />        
+      </Group>       
+        
+        <!--The Other User Accounts usernames and passwords.-->
+        <Group name="User01" description="For Kerberos Basic Features. User properties: KerberosEncryptionType = DES,RC4,AES128,AES256, group = testGroup">            
+            <Property name="Username" value="test03" />
+            <Property name="Password" value="Password01*" />
+        </Group> 
+      
+        <Group name="User02" description="For Kerberos Basic Features.User properties: KerberosEncryptionType = DES,RC4,AES128,AES256, group = testGroup">          
+          <Property name="Username" value="test04" />
+          <Property name="Password" value="Password01(" />            
+        </Group>
+      </Group>
+    </Group>
+  </Properties>
+  <TestLog defaultprofile="Verbose">
+    <Sinks>
+    </Sinks>
+    <Profiles>
+    </Profiles>
+  </TestLog>
+</TestSite>
