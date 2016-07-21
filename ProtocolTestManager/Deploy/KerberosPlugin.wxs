@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?define SRCDIR=$(env.TestSuiteRoot)\drop\ProtocolTestManager?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="KERBEROSDOCFOLDER">
+            <Component Id="cmpF197F2E013F44A158F54085CBDDBCC5F" Guid="{6D6D9CFE-CA48-4DBB-A0EC-7F1B3BECC7B8}">
+                <File Id="fil20889E67B71B42838F91CC928D938085" Source="..\Plugins\KerberosPlugin\KerberosPlugin\Docs\arrow_right.png" />
+            </Component>
+            <Component Id="cmpE35FA7EED9914AD792786DD8F4234969" Guid="{1D47C0D5-4AE7-407F-9B79-6ECA08DE1F03}">
+                <File Id="fil86F60998C14F44CCABDBCF3E73332CED" Source="..\Plugins\KerberosPlugin\KerberosPlugin\Docs\deployment.html" />
+            </Component>
+            <Component Id="cmpD5742732EA654F66846739D9AD1D82AB" Guid="{E09C6B64-0FCF-48D5-8847-680809D06633}">
+                <File Id="fil0D3900D753B24132BF8BFE3446C37E18" Source="..\Plugins\KerberosPlugin\KerberosPlugin\Docs\single-realm.html" />
+            </Component>
+            <Component Id="cmp0CD55C58D71B488099862A2F62D5BE32" Guid="{18BD7DC5-FC83-4B00-B41E-8DBE313EE35B}">
+                <File Id="filF87A6F15B8944632A323ED7237E3163B" Source="..\Plugins\KerberosPlugin\KerberosPlugin\Docs\single-realm.png" />
+            </Component>
+            <Component Id="cmpECFB8FF1559A4BC095BD7952E0FAFFEB" Guid="{D255E164-1B94-4D04-81AD-6EF0C7445CE3}">
+                <File Id="fil01525AD7E1AD413885E4D51C32BD3679" Source="..\Plugins\KerberosPlugin\KerberosPlugin\Docs\index.html" />
+            </Component>
+            <Component Id="cmp88FF631298E24C189021468D82D1001A" Guid="{9365B0E9-81A9-4045-8998-508842EB9B0E}">
+                <File Id="fil365A06B96A3547DF95B0C306D787935D" Source="..\Plugins\KerberosPlugin\KerberosPlugin\Docs\note.png" />
+            </Component>
+            <Component Id="cmpC6CA0D10D72F40F187B9DB2FB5DB3431" Guid="{F220056B-176A-477E-BED5-8560D6267596}">
+                <File Id="filC3644856674D44508468F5AE9422BF99" Source="..\Plugins\KerberosPlugin\KerberosPlugin\Docs\Cross-Realm.html" />
+            </Component>
+            <Component Id="cmp6BFF77E2F35C401BB618DEB71A2C55A0" Guid="{6BE855EE-3EF7-421B-8C42-1AC214F65568}">
+                <File Id="fil33BEFB3C0B0E43148E09F811B7EDB09B" Source="..\Plugins\KerberosPlugin\KerberosPlugin\Docs\Cross-Realm.png" />
+            </Component>
+            <Component Id="cmp8BB36C9EFDB34D21B020B59DA5C099F7" Guid="{49B99BE2-2A15-450E-A6FD-C73F4C326EA8}">
+              <File Id="fil4C55009B34284A54938FBE09E1685A48" Source="..\Plugins\KerberosPlugin\KerberosPlugin\Docs\cross-realm-IP.png" />
+            </Component>
+            <Component Id="cmp32853D24F53846E3AA1617C6BEAAAB7E" Guid="{EECA3472-738A-400B-9DD2-68D1D4B3F072}">
+              <File Id="fil4CAAF97615C743D6A002797C15FB3229" Source="..\Plugins\KerberosPlugin\KerberosPlugin\Docs\single-realm-IP.png" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="LIBFOLDER">
+	        <?if $(env.DEBUGVER) = 1?>
+                <Component Id="KerberosPlugin.pdb" Guid="{84258C1E-552C-4B6F-88A3-69CAF97594D9}">
+                    <File Id="KerberosPlugin.pdb" Source="$(var.SRCDIR)\lib\KerberosPlugin.pdb" />
+                </Component>
+            <?endif ?>
+            <Component Id="KerberosPlugin.dll" Guid="{7A67AE9E-F6A2-4EEF-93DB-2E3FB70ABD0C}">
+                <File Id="KerberosPlugin.dll" Source="$(var.SRCDIR)\lib\KerberosPlugin.dll" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="KERBEROSCONFIGFOLDER">
+            <Component Id="KerberosConfigFile" Guid="{24291C32-CD3C-4915-AFFE-A3E08EF06471}">
+                <File Id="KerberosConfigFile" Source="..\Plugins\KerberosPlugin\KerberosPlugin\config.xml" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="KERBEROS_PLUGIN">
+            <ComponentRef Id="cmpF197F2E013F44A158F54085CBDDBCC5F" />
+            <ComponentRef Id="cmpE35FA7EED9914AD792786DD8F4234969" />
+            <ComponentRef Id="cmpD5742732EA654F66846739D9AD1D82AB" />
+            <ComponentRef Id="cmp0CD55C58D71B488099862A2F62D5BE32" />
+            <ComponentRef Id="cmpECFB8FF1559A4BC095BD7952E0FAFFEB" />
+            <ComponentRef Id="cmp88FF631298E24C189021468D82D1001A" />
+            <ComponentRef Id="cmpC6CA0D10D72F40F187B9DB2FB5DB3431" />
+            <ComponentRef Id="cmp6BFF77E2F35C401BB618DEB71A2C55A0" />
+            <ComponentRef Id="cmp32853D24F53846E3AA1617C6BEAAAB7E" />
+            <ComponentRef Id="cmp8BB36C9EFDB34D21B020B59DA5C099F7" />
+            <ComponentRef Id="KerberosPlugin.dll" />
+            <ComponentRef Id="KerberosConfigFile" />
+	        <?if $(env.DEBUGVER) = 1?>
+              <ComponentRef Id="KerberosPlugin.pdb" />
+            <?endif ?>
+        </ComponentGroup>
+    </Fragment>
+</Wix>
