@@ -307,7 +307,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// into the given file at which to start the trim request
         /// </summary>
         public ulong Offset;
-        
+
         /// <summary>
         /// A 64-bit unsigned integer that contains the length, 
         /// in bytes, of how much of the file to trim, starting at Offset
@@ -338,7 +338,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// The file or directory is not configured to use integrity.
         /// </summary>
         CHECKSUM_TYPE_NONE = 0,
-        
+
         /// <summary>
         /// The file or directory is configured to use a CRC64 checksum to provide integrity.
         /// </summary>
@@ -376,12 +376,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// The file or directory should be set to not use integrity
         /// </summary>
         CHECKSUM_TYPE_NONE = 0,
-        
+
         /// <summary>
         /// The file or directory should be set to provide integrity using a CRC64 checksum. 
         /// </summary>
         CHECKSUM_TYPE_CRC64 = 0x0002,
-        
+
         /// <summary>
         /// The integrity status of the file or directory should be unchanged.
         /// </summary>
@@ -478,8 +478,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
     {
         NONE = 0,
     }
-	
-	public struct FSCTL_DUPLICATE_EXTENTS_TO_FILE_Request
+
+    public struct FSCTL_DUPLICATE_EXTENTS_TO_FILE_Request
     {
         public FILEID SourceFileId;
         public long SourceFileOffset;

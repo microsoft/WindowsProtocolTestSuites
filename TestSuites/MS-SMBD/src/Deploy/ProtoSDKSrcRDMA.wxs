@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+
+<?define var.Rdma.ProjectDir=$(env.INETROOT)\Infrastructure\src\ProtoSDK\RDMA?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="Rdma.Sources">
+            <Component Id="Rdma.vcxproj" Guid="{3F1505A4-E0E0-4467-99DD-953EE1FD2F54}">
+                <File Id="fil_Rdma.vcxproj" Source="$(var.Rdma.ProjectDir)\Rdma.vcxproj" />
+            </Component>
+            <Component Id="Rdma.vcxproj.filter" Guid="{e6280b0a-eb4b-44b5-b937-7b201bb1ebeb}">
+              <File Id="fil_Rdma.vcxproj.filter" Source="$(var.Rdma.ProjectDir)\Rdma.vcxproj.filters" />
+            </Component>
+            <Component Id="Rdma.h" Guid="{402b015e-8f26-4f60-a813-d5aa89b0d9f6}">
+              <File Id="fil_Rdma.h" Source="$(var.Rdma.ProjectDir)\Rdma.h" />
+            </Component>
+            <Component Id="RdmaAdapter.cpp" Guid="{dc842ff9-5ed1-4e46-9770-ca6bbcc2b527}">
+              <File Id="fil_RdmaAdapter.cpp" Source="$(var.Rdma.ProjectDir)\RdmaAdapter.cpp" />
+            </Component>
+            <Component Id="RdmaCompletionQueue.cpp" Guid="{559a18a1-9961-4741-87b6-a82ba5193aed}">
+              <File Id="fil_RdmaCompletionQueue.cpp" Source="$(var.Rdma.ProjectDir)\RdmaCompletionQueue.cpp" />
+            </Component>
+            <Component Id="RdmaConnector.cpp" Guid="{4bb93eb2-ed57-4463-b715-d4eda1070867}">
+              <File Id="fil_RdmaConnector.cpp" Source="$(var.Rdma.ProjectDir)\RdmaConnector.cpp" />
+            </Component>
+            <Component Id="RdmaEndpoint.cpp" Guid="{77eddc9f-c9ed-464c-889b-1e0f0842f0fc}">
+              <File Id="fil_RdmaEndpoint.cpp" Source="$(var.Rdma.ProjectDir)\RdmaEndpoint.cpp" />
+            </Component>
+            <Component Id="RdmaListen.cpp" Guid="{fae501cf-afc0-4037-9d62-8fa2c600b492}">
+              <File Id="fil_RdmaListen.cpp" Source="$(var.Rdma.ProjectDir)\RdmaListen.cpp" />
+            </Component>
+            <Component Id="RdmaMemoryWindow.cpp" Guid="{2b385a9f-2b91-4400-b821-71c7beea578c}">
+              <File Id="fil_RdmaMemoryWindow.cpp" Source="$(var.Rdma.ProjectDir)\RdmaMemoryWindow.cpp" />
+            </Component>
+            <Component Id="RdmaProvider.cpp" Guid="{d075a083-2fea-4e5b-8a28-df10633a0296}">
+              <File Id="fil_RdmaProvider.cpp" Source="$(var.Rdma.ProjectDir)\RdmaProvider.cpp" />
+            </Component>
+            <Directory Id="rdma_include" Name="Include">
+              <Component Id="ndspi.h" Guid="{233d4a10-ff14-4c5c-bab0-d511a91f264a}">
+                <File Id="fil_ndspi.h" Source="$(var.Rdma.ProjectDir)\include\ndspi.h" />
+              </Component>
+              <Component Id="ndstatus.h" Guid="{0fa8fa83-7c4e-4c55-b58b-e9b638456c0d}">
+                <File Id="fil_ndstatus.h" Source="$(var.Rdma.ProjectDir)\include\ndstatus.h" />
+              </Component>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="Rdma.Sources">
+            <ComponentRef Id="Rdma.vcxproj" />
+            <ComponentRef Id="Rdma.vcxproj.filter" />
+            <ComponentRef Id="Rdma.h" />
+            <ComponentRef Id="RdmaAdapter.cpp" />
+            <ComponentRef Id="RdmaCompletionQueue.cpp" />
+            <ComponentRef Id="RdmaConnector.cpp" />
+            <ComponentRef Id="RdmaEndpoint.cpp" />
+            <ComponentRef Id="RdmaListen.cpp" />
+            <ComponentRef Id="RdmaMemoryWindow.cpp" />
+            <ComponentRef Id="RdmaProvider.cpp" />
+            <ComponentRef Id="ndspi.h" />
+            <ComponentRef Id="ndstatus.h" />
+        </ComponentGroup>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="Rdma.Content" />
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="PROTOSDK_SRC_RDMA">
+          <ComponentRef Id="Rdma.vcxproj" />
+          <ComponentRef Id="Rdma.vcxproj.filter" />
+          <ComponentRef Id="Rdma.h" />
+          <ComponentRef Id="RdmaAdapter.cpp" />
+          <ComponentRef Id="RdmaCompletionQueue.cpp" />
+          <ComponentRef Id="RdmaConnector.cpp" />
+          <ComponentRef Id="RdmaEndpoint.cpp" />
+          <ComponentRef Id="RdmaListen.cpp" />
+          <ComponentRef Id="RdmaMemoryWindow.cpp" />
+          <ComponentRef Id="RdmaProvider.cpp" />
+          <ComponentRef Id="ndspi.h" />
+          <ComponentRef Id="ndstatus.h" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

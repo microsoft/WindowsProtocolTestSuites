@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+  <Properties>
+    <Property name="TestName" value="SMBD" />
+    <Property name="FeatureName" value="MS-SMBD" />
+
+    <!--Security package for SMB2 authentication. Supported value is one of "Negotiate", "Kerberos" and "Ntlm".-->
+    <Property name="SecurityPackageForSmb2UserAuthentication" value="Negotiate"/>
+    <!-- Set value for Smb2ConnectionTimeoutInSeconds greater than KeepAliveInterval -->
+    <Property name="Smb2ConnectionTimeoutInSeconds" value="125" />
+    <Property name="DisconnectionTimeoutInSeconds" value="12" />
+
+    <!-- The TCP port value for SMBD transport -->
+    <Property name="SmbdTcpPort" value="445" />
+    <!--SMBD parameters that initialized on connection-->
+    <Property name="ReceiveCreditMax" value="255" />
+    <Property name="SendCreditTarget" value="255" />
+    <Property name="MaxSendSize" value="1364" />
+    <Property name="MaxFragmentedSize" value="131072" />
+    <Property name="MaxReceiveSize" value="8192" />
+    <Property name="KeepAliveInterval" value="120" />
+
+    <!--maximum number of outstanding Receive requests for RDMA driver-->
+    <Property name="InboundEntries" value="63" />
+    <!--maximum number of outstanding Send, SendAndInvalidate, Bind, Invalidate, Read, and Write requests for RDMA driver.-->
+    <Property name="OutboundEntries" value="63" />
+    <!--maximum inbound read limit for the local Network Direct adapter. This value can be zero if you do not support-->
+    <Property name="InboundReadLimit" value="10" />
+    <!-- 
+      Endianness of BufferDescriptor returned from RDMA-NIC Driver. In MS-SMBD, 
+      all the messages MUST be transported as little-endian. If the buffer descriptor returned from RDMA-NIC Driver is big-endian,
+      the buffer descriptor MUST be reversed to little-endian.
+      Supported value are "BigEndian" & "LittleEndian"
+    -->
+    <Property name="EndianOfBufferDescriptor" value="BigEndian" />
+
+    <!--Active TDIs that would impact test, multiple values should be separated by semicolons-->
+    <Property name ="ActiveTDI" value="" />
+    <!--Set to true, if need RDMA layer verbose logging, otherwise set to false-->
+    <Property name ="RdmaLayerLoggingEnabled" value ="false" />
+  </Properties>
+  <Adapters>
+    <Adapter xsi:type="powershell" name="ISutProtocolControlAdapter" scriptdir=".\" />
+  </Adapters>
+
+  <TestLog defaultprofile="Verbose">
+    <Sinks>
+      <File id="Debug" directory=".\" file="MS-SMBD_Log.txt" format="text" />
+      <File id="XMLLog" directory=".\" file="MS-SMBD_Log.xml" format="xml" />
+      <Sink id="BeaconLog" type="Microsoft.Protocols.TestTools.Logging.BeaconLogSink" />
+    </Sinks>
+    <Profiles>
+      <Profile name="Verbose" extends="Error">
+
+        <!-- Show for CommandlineConsole -->
+        <Rule kind="TestStep" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="CheckFailed" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="CheckInconclusive" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="Comment" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="Warning" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="Debug" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="TestFailed" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="TestInconclusive" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="TestPassed" sink="CommandLineConsole" delete="false"/>
+
+        <!-- Show for Console -->
+        <Rule kind="TestStep" sink="Console" delete="false"/>
+        <Rule kind="Checkpoint" sink="Console" delete="false"/>
+        <Rule kind="Debug" sink="Console" delete="false"/>
+        <Rule kind="BeginGroup" sink="Console" delete="false"/>
+        <Rule kind="EndGroup" sink="Console" delete="false"/>
+
+        <!-- Show for XML log -->
+        <Rule kind="TestStep" sink="XMLLog" delete="false"/>
+        <Rule kind="Checkpoint" sink="XMLLog" delete="false"/>
+        <Rule kind="CheckSucceeded" sink="XMLLog" delete="false"/>
+        <Rule kind="CheckFailed" sink="XMLLog" delete="false"/>
+        <Rule kind="CheckInconclusive" sink="XMLLog" delete="false"/>
+        <Rule kind="Comment" sink="XMLLog" delete="false"/>
+        <Rule kind="Warning" sink="XMLLog" delete="false"/>
+        <Rule kind="Debug" sink="XMLLog" delete="false"/>
+        <Rule kind="TestFailed" sink="XMLLog" delete="false"/>
+        <Rule kind="TestInconclusive" sink="XMLLog" delete="false"/>
+        <Rule kind="TestPassed" sink="XMLLog" delete="false"/>
+
+        <!-- Show for debugging -->
+        <Rule kind="TestStep" sink="Debug" delete="false"/>
+        <Rule kind="BeginGroup" sink ="Debug"/>
+        <Rule kind="EndGroup" sink="Debug"/>
+        <Rule kind="Checkpoint" sink="Debug" delete="false"/>
+        <Rule kind="CheckSucceeded" sink="Debug" delete="false"/>
+        <Rule kind="CheckFailed" sink="Debug" delete="false"/>
+        <Rule kind="CheckInconclusive" sink="Debug" delete="false"/>
+        <Rule kind="EnterMethod" sink="Debug"/>
+        <Rule kind="ExitMethod" sink="Debug"/>
+        <Rule kind="Comment" sink="Debug" delete="false"/>
+        <Rule kind="Warning" sink="Debug" delete="false"/>
+        <Rule kind="Debug" sink="Debug" delete="false"/>
+        <Rule kind="TestFailed" sink="Debug" delete="false"/>
+        <Rule kind="TestInconclusive" sink="Debug" delete="false"/>
+        <Rule kind="TestPassed" sink="Debug" delete="false"/>
+      </Profile>
+    </Profiles>
+  </TestLog>
+</TestSite>
