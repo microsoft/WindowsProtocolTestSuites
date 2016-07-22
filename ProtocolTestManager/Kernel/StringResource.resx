@@ -197,4 +197,19 @@ The test suite is {2} {3}.</value>
   <data name="InvalidProfile" xml:space="preserve">
     <value>It is not a valid PTM test profile.</value>
   </data>
+  <data name="InprogressTag" xml:space="preserve">
+    <value>[TestInProgress]</value>
+  </data>
+  <data name="PipeName" xml:space="preserve">
+    <value>PTFToolPipe</value>
+  </data>
+  <data name="FailedTag" xml:space="preserve">
+    <value>[TestFailed]</value>
+  </data>
+  <data name="InconclusiveTag" xml:space="preserve">
+    <value>[TestInconclusive]</value>
+  </data>
+  <data name="PassedTag" xml:space="preserve">
+    <value>[TestPassed]</value>
+  </data>
 </root>

@@ -31,7 +31,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public void SetTestCaseList(List<TestCase> testcases)
         {
             NotRunTestCases = new TestCaseGroup("Not Run", testcases.Count);
-            InProgressTestCases = new TestCaseGroup("In Progress", testcases.Count);
             PassedTestCases = new TestCaseGroup("Passed", testcases.Count);
             FailedTestCases = new TestCaseGroup("Failed", testcases.Count);
             OtherTestCases = new TestCaseGroup("Inconclusive", testcases.Count);
@@ -57,8 +56,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                         testcasemap.Add(testcase.Name, OtherTestCases);
                         break;
                     case TestCaseStatus.Running:
-                        InProgressTestCases.AddTestCase(testcase);
-                        testcasemap.Add(testcase.Name, InProgressTestCases);
+                        RunningTestCase = testcase;
                         break;
                 }
             }
@@ -66,7 +64,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
         }
 
         public TestCaseGroup NotRunTestCases { get; set; }
-        public TestCaseGroup InProgressTestCases { get; set; }
         public TestCaseGroup PassedTestCases { get; set; }
         public TestCaseGroup FailedTestCases { get; set; }
         public TestCaseGroup OtherTestCases { get; set; }
@@ -79,7 +76,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
             if (groupList == null)
             {
                 groupList = new List<TestCaseGroup>();
-                groupList.Add(InProgressTestCases);
                 groupList.Add(PassedTestCases);
                 groupList.Add(FailedTestCases);
                 groupList.Add(OtherTestCases);
@@ -94,12 +90,29 @@ namespace Microsoft.Protocols.TestManager.Kernel
             TestCaseGroup to = OtherTestCases;
             if (from == null) return;
             TestCase testcase = from.TestCaseList.FirstOrDefault(c => c.Name == testCaseName);
-            if (status == TestCaseStatus.Running) RunningTestCase = testcase;
+            // If changed to Running/Waiting status, no need to change group.
+            if (status == TestCaseStatus.Running)
+            {
+                if (RunningTestCase != null)
+                {
+                    if (RunningTestCase.Status == TestCaseStatus.Running)
+                        RunningTestCase.Status = TestCaseStatus.Waiting;
+                }
+                RunningTestCase = testcase;
+                RunningTestCase.Status = status;
+                return;
+            }
+            if (status == TestCaseStatus.Waiting)
+            {
+                if (testcase.Status == TestCaseStatus.Running)
+                {
+                    testcase.Status = status;
+                    return;
+                }
+            }
+
             switch (status)
             {
-                case TestCaseStatus.Running:
-                    to = InProgressTestCases;
-                    break;
                 case TestCaseStatus.Passed:
                     testcase.IsChecked = false;
                     to = PassedTestCases;
@@ -115,7 +128,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     to = NotRunTestCases;
                     break;
             }
-
             testcase.Status = status;
             if (UpdateTestCaseStatus != null)
             {

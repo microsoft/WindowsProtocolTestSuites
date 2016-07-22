@@ -152,6 +152,33 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [TestFailed].
+        /// </summary>
+        internal static string FailedTag {
+            get {
+                return ResourceManager.GetString("FailedTag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [TestInconclusive].
+        /// </summary>
+        internal static string InconclusiveTag {
+            get {
+                return ResourceManager.GetString("InconclusiveTag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [TestInProgress].
+        /// </summary>
+        internal static string InprogressTag {
+            get {
+                return ResourceManager.GetString("InprogressTag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It is not a valid PTM test profile..
         /// </summary>
         internal static string InvalidProfile {
@@ -215,6 +242,24 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         internal static string LoadPtfconfigError {
             get {
                 return ResourceManager.GetString("LoadPtfconfigError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [TestPassed].
+        /// </summary>
+        internal static string PassedTag {
+            get {
+                return ResourceManager.GetString("PassedTag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PTFToolPipe.
+        /// </summary>
+        internal static string PipeName {
+            get {
+                return ResourceManager.GetString("PipeName", resourceCulture);
             }
         }
         

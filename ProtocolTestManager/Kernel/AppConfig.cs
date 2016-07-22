@@ -142,6 +142,11 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public string TestListName;
 
         /// <summary>
+        /// NamedPipe from PTF
+        /// </summary>
+        public string PipeName;
+
+        /// <summary>
         /// The path of VSTest.
         /// </summary>
         public string VSTestPath;
@@ -193,6 +198,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             config.TestSuiteName = testSuiteName;
             config.TestSuiteVersion = testSuiteVersion;
             config.InitFolders(testSuiteDir, installDir);
+            config.PipeName = StringResource.PipeName;
 
             XmlDocument doc = new XmlDocument();
             doc.XmlResolver = null;

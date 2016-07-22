@@ -653,6 +653,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 WorkingDirectory = testSuiteDir,
                 TestAssemblies = appConfig.TestSuiteAssembly,
                 TestSetting = appConfig.TestSetting,
+                PipeName = appConfig.PipeName,
             };
             testEngine.InitializeLogger(selectedCases);
         }
@@ -913,6 +914,38 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 File.SetAttributes(file, attributes & ~FileAttributes.ReadOnly);
             }
+        }
+
+        /// <summary>
+        /// Parse the file content to get the case status
+        /// Result format in file: "Result":"Result: Passed"
+        /// </summary>
+        public static bool ParseFileGetStatus(string filePath, out TestCaseStatus status)
+        {
+            status = TestCaseStatus.NotRun;
+
+            string content = File.ReadAllText(filePath);
+            int startIndex = content.IndexOf(AppConfig.ResultKeyword);
+            startIndex += AppConfig.ResultKeyword.Length;
+            int endIndex = content.IndexOf("\"", startIndex);
+            string statusStr = content.Substring(startIndex, endIndex - startIndex);
+            switch (statusStr)
+            {
+                case AppConfig.HtmlLogStatusPassed:
+                    status = TestCaseStatus.Passed;
+                    break;
+                case AppConfig.HtmlLogStatusFailed:
+                    status = TestCaseStatus.Failed;
+                    break;
+                case AppConfig.HtmlLogStatusInconclusive:
+                    status = TestCaseStatus.Other;
+                    break;
+                default:
+                    // The file name format is not correct
+                    return false;
+            }
+
+            return true;
         }
     }
 
