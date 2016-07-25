@@ -1141,8 +1141,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                                 break;
                             }
                             else
-                            { 
-                                throw new InvalidOperationException("Unexpected create context: " + createContextName + ", the GUID format is: " + createContextGuid.ToString()); 
+                            {
+                                throw new InvalidOperationException("Unexpected create context: " + createContextName + ", the GUID format is: " + createContextGuid.ToString());
                             }
                         }
                 }

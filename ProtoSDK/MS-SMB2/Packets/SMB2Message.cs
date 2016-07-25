@@ -1428,7 +1428,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
     public partial struct CREATE_APP_INSTANCE_VERSION
     {
         /// <summary>
-        /// The client MUST set this field to 20, indicating the size of this structure
+        /// The client MUST set this field to 20, indicating the size of this structure (possible TDI, suggest to be 24 instead)
         /// </summary>
         [StaticSize(2)]
         public ushort StructureSize;
