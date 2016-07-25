@@ -1,5 +1,5 @@
-﻿###MS-SMBD Protocol
-###Server Test Design Specification
+﻿###MS-SMBD Protocol Server Test Design Specification
+
 ##Contents
 * [Contents](#_Toc427489478)
 * [Introduction](#_Toc427489479)
