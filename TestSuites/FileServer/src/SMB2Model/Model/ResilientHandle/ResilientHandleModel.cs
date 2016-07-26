@@ -229,7 +229,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.ResilientHa
             Condition.IsNotNull(Open);
 
             ModelHelper.Log(LogType.Requirement, "3.3.7.1 Handling Loss of a Connection");
-            if (Config.IsLeasingSupported && Open.IsResilient)
+            if (Open.IsResilient)
             {
                 ModelHelper.Log(LogType.Requirement,
                     "If any of the following conditions is satisfied, it indicates that the Open is to be preserved for reconnect. ");
