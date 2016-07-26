@@ -185,19 +185,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.DurableHandl
             #endregion
         }
 
-        //
-        // [TestMethod]
-        // Exclude this test case It fails on 2012R2-Domain-NonCluster and 2012R2-Workgroup env,
-        // but succeed in 2012R2-Domain-Cluster. Root case is not found. But this case only has impact to 2012R2 env
-        //
-        [TestCategory(TestCategories.Smb2002)]
-        [TestCategory(TestCategories.DurableHandleV1BatchOplock)]
-        [Description("Test reconnect with DurableHandleV1, without log off or disconnect but with previous session id.")]
-        public void DurableHandleV1_Reconnect_WithoutLogoffOrDisconnect_WithPreviousSessionIdSet()
-        {
-            DurableHandleV1_Reconnect_WithoutLogoff(true);
-        }
-
         [TestMethod]
         [TestCategory(TestCategories.Smb2002)]
         [TestCategory(TestCategories.DurableHandleV1BatchOplock)]
