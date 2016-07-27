@@ -109,6 +109,14 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         public ShareInfo[] shareInfo;
 
+        public List<string> shareListWithForceLevel2AndSOFS = new List<string>();
+
+        public List<string> shareListWithForceLevel2WithoutSOFS = new List<string>();
+
+        public List<string> shareListWithoutForceLevel2WithSOFS = new List<string>();
+
+        public List<string> shareListWithoutForceLevel2OrSOFS = new List<string>();
+
         public string BasicShareName;
 
         public string SymbolicLink = string.Empty;
