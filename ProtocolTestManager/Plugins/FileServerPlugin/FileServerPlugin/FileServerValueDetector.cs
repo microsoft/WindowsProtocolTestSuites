@@ -357,6 +357,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             propertiesDic.Add("SMB2.SpecialShare", CreateShareList(GetSpecialShare()));
 
             // Oplock Model configuration
+            if (detectionInfo.platform == Platform.NonWindows)  // Use default value for Windows
             {
                 propertiesDic.Add("SMB2.ShareWithoutForceLevel2OrSOFS", detectionInfo.shareListWithoutForceLevel2OrSOFS);
                 propertiesDic.Add("SMB2.ShareWithoutForceLevel2WithSOFS", detectionInfo.shareListWithoutForceLevel2WithSOFS);
