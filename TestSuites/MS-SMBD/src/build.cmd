@@ -76,7 +76,7 @@ if not defined KeyFile (
 if exist "%TestSuiteRoot%drop\TestSuites\MS-SMBD" (
  rd /s /q "%TestSuiteRoot%drop\TestSuites\MS-SMBD"
 )
-
+call %windir%\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -file AddCheckPTFVersion.ps1 -WxsFile ".\Deploy\MS-SMBD-TestSuite-ServerEP.wxs"
 %buildtool% "%TestSuiteRoot%TestSuites\MS-SMBD\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:Platform="x64" /p:Configuration="Release"
 
 echo ==============================================

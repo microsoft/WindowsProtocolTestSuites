@@ -60,5 +60,6 @@ if exist "%TestSuiteRoot%drop\TestSuites\RDP" (
  rd /s /q "%TestSuiteRoot%drop\TestSuites\RDP"
 )
 
+call %windir%\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -file AddCheckPTFVersion.ps1 -WxsFile ".\Deploy\RDP-TestSuite-ClientEP.wxs"
 %buildtool% "%TestSuiteRoot%TestSuites\RDP\src\deploy\deploy.wixproj" /t:Clean;Rebuild
 
