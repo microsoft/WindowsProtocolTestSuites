@@ -99,5 +99,5 @@ namespace Microsoft.Protocols.TestManager.Kernel
     /// <summary>
     /// The status of a test case
     /// </summary>
-    public enum TestCaseStatus { NotRun, Running, Passed, Failed, Other, Waiting }
+    public enum TestCaseStatus { NotRun, Running, Passed, Failed, Waiting, Other}
 }

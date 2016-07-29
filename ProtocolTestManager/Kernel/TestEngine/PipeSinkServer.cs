@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,13 +11,13 @@ using System.Threading;
 namespace Microsoft.Protocols.TestManager.Kernel
 {
     // Use to get the output of QTAgent console.
-    class PipeSinkServer
+    public class PipeSinkServer
     {
         static string PipeName;
         static List<Listener> listeners;
         static IAsyncResult listenerResult = null;
         static NamedPipeServerStream waitingServer = null;
-        static void serverCallback(IAsyncResult result)
+        public static void serverCallback(IAsyncResult result)
         {
             NamedPipeServerStream server = (NamedPipeServerStream)result.AsyncState;
             server.EndWaitForConnection(result);
@@ -27,6 +29,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
             listenerResult = waitingServer.BeginWaitForConnection(new AsyncCallback(serverCallback), waitingServer);
         }
 
+        /// <summary>
+        /// Start PipeSink of PTF.
+        /// </summary>
         public static void Start(string pipeName)
         {
             listeners = new List<Listener>();
@@ -39,6 +44,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
             Listener.IgnoreLogs = false;
         }
 
+        /// <summary>
+        /// Stop PipeSink
+        /// </summary>
         public static void Stop()
         {
             Listener.IgnoreLogs = true;
@@ -50,9 +58,14 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         public delegate void ParseLogMessageCallback(string message);
         public static ParseLogMessageCallback ParseLogMessage;
+    
+    
     }
 
-    class Listener
+    /// <summary>
+    /// Listener of NamedPipe.
+    /// </summary>
+    public class Listener
     {
         public static bool IgnoreLogs;
         StreamReader SR;
@@ -65,6 +78,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
             thread = new Thread(new ThreadStart(Run));
             thread.Start();
         }
+        /// <summary>
+        /// Stop to get the stream.
+        /// </summary>
         public void Stop()
         {
             if (thread != null && thread.ThreadState == System.Threading.ThreadState.Running)
@@ -74,7 +90,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
             SR.Close();
             serverStream.Close();
         }
-        void Run()
+        /// <summary>
+        /// Start to get the output.
+        /// </summary>
+        public void Run()
         {
 
             string line;
