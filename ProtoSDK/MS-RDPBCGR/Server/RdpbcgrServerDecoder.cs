@@ -140,6 +140,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 case EncryptionLevel.ENCRYPTION_LEVEL_FIPS:
                 default: //To enable invalid encryption level test.
                     // The following logic is implemented according to actual situation observed,
+                    // since related TD section is involved with [TDI #39940]
                     if (serverSessionContext.RdpEncryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_40BIT
                         || serverSessionContext.RdpEncryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_56BIT
                         || serverSessionContext.RdpEncryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_128BIT)

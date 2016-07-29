@@ -487,7 +487,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     connectRespPdu.mcsCrsp.gccPdu.H221Key = "DnMc"; //ConstValue.H221_KEY "McDn";
                     SendPdu(connectRespPdu);
                     break;
-                case NegativeType.InvalidEncodedLength:
+                    case NegativeType.InvalidEncodedLength:
+                    //Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response_Ex invalidPdu = new Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response_Ex(connectRespPdu, sessionContext, invalidType, asnIssueFixed);
                     SendPdu(connectRespPdu);
                     break;
                 case NegativeType.InvalidEncodedLengthExternalSecurityProtocols:
