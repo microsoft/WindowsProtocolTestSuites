@@ -25,6 +25,7 @@
       <ComponentGroupRef Id="ProductComponents_etc" />
       <ComponentGroupRef Id="ProductComponents_ProtoSDK" />
       <ComponentGroupRef Id="fileserver_PLUGIN"/>
+      <ComponentGroupRef Id="KERBEROS_PLUGIN"/>
       <ComponentGroupRef Id="RDP_PLUGIN"/>
       <ComponentRef Id="ApplicationShortcut"/>
       <ComponentRef Id="DesktopShortcuts"/>
@@ -97,12 +98,14 @@
           <Directory Id="BINFOLDER" Name="bin" />
           <Directory Id="ETCFOLDER" Name="etc" >
             <Directory Id="FILESERVERCONFIG" Name="fileserver" />
-	    <Directory Id="RDPCONFIG" Name="rdp" />
+	          <Directory Id="RDPCONFIG" Name="rdp" />
+            <Directory Id="KERBEROSCONFIGFOLDER" Name="kerberos" />
           </Directory>
           <Directory Id="LIBFOLDER" Name="lib" />
           <Directory Id="DOCFOLDER" Name="doc" >
             <Directory Id="FILESERVERDOCFOLDER" Name="fileserver" />
-	    <Directory Id="RDPDOCFOLDER" Name="rdp" />
+	          <Directory Id="RDPDOCFOLDER" Name="rdp" />
+            <Directory Id="KERBEROSDOCFOLDER" Name="kerberos" />
           </Directory>
 		  <Directory Id="DATAFOLDER" Name="data" >
 			<Directory Id="FILESERVERDATAFOLDER" Name="fileserver" />
