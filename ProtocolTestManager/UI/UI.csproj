@@ -236,6 +236,7 @@
     -->
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\Bin\" />
+	<Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\Bin\" />
     <Copy SourceFiles="$(TargetDir)\TestSuiteIntro.xml" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\etc\" />
   </Target>
 </Project>

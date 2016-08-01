@@ -6,6 +6,7 @@
 echo ====================================================
 echo          Start to build Protocol Test Manager
 echo ====================================================
+:: build.cmd debug -- build debug version.
 
 if not defined buildtool (
 	for /f %%i in ('dir /b /ad /on "%windir%\Microsoft.NET\Framework\v4*"') do (@if exist "%windir%\Microsoft.NET\Framework\%%i\msbuild".exe set buildtool=%windir%\Microsoft.NET\Framework\%%i\msbuild.exe)
@@ -32,8 +33,16 @@ set versionStr="[assembly: AssemblyVersion("1.0.0.0")]"
 for /f "delims=" %%i in ('""%FindExe%" "AssemblyVersion" "%path%""') do set versionStr=%%i
 set TESTSUITE_VERSION=%versionStr:~28,-3%
 
+if /i "%~1"=="debug" (
+:: build debug version
+	set DEBUGVER=1  
+	echo Build Debug Version...
+) else (
+	set DEBUGVER=0
+)
+
 if exist "%TestSuiteRoot%drop\ProtocolTestManager" (
  rd /s /q "%TestSuiteRoot%drop\ProtocolTestManager"
 )
 
-%buildtool% "%TestSuiteRoot%ProtocolTestManager\deploy\ProtocolTestManagerInstaller.wixproj" /t:clean;Rebuild /p:NoWarn=1591
+%buildtool% "%TestSuiteRoot%ProtocolTestManager\deploy\ProtocolTestManagerInstaller.wixproj" /t:clean;Rebuild /p:NoWarn=1591 /p:FORDEBUG=%DEBUGVER%
