@@ -37,7 +37,7 @@ Some test suites use [Model-Based Testing](https://msdn.microsoft.com/en-us/libr
 
 * **SMB1 Server Test Suite**
 * **File Server Family Test Suite**
-* ** Kerberos Server Test Suite**
+* **Kerberos Server Test Suite**
 
 ## Build
 
