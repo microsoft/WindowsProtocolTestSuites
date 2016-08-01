@@ -223,8 +223,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
             utility.SendAndReceiveDFSReferral(out status, client, ReferralEntryType_Values.DFS_REFERRAL_V4, invalidRootPathDomain, false);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Verify server response.");
-            // Section 6 
-            // <22> Section 3.2.5.5: Windows NT Server 4.0, Windows 2000, Windows Server 2003, Windows Server 2003 R2, and Windows Server 2008 
+            // Section 6  
+            // <22> Section 3.2.5.5: Windows NT Server 4.0, Windows 2000, Windows Server 2003, Windows Server 2003 R2, Windows Server 2008, and Windows Server 2008 R2 
             // fail the referral request with a STATUS_NOT_FOUND (0xC0000225) return code.
             if (TestConfig.Platform == Platform.WindowsServer2008 || TestConfig.Platform == Platform.WindowsServer2008R2)
             {

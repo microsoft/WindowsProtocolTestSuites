@@ -248,6 +248,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle
                 if (modelHandleType == ModelHandleType.PersistentHandle
                     && !(Share_IsCA && ServerCapabilities_PersistentBitSet))
                 {
+                    // If client asks for a persistent handle to a non CA share or 
+                    // Connection.ServerCapabilities does not include SMB2_GLOBAL_CAP_PERSISTENT_HANDLES
+                    // The persistent handle is not granted.
                     ModelHelper.Log(
                         LogType.TestInfo, 
                         "Share is not a CA share or Connection.ServerCapabilities does not include SMB2_GLOBAL_CAP_PERSISTENT_HANDLES.");
@@ -380,7 +383,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle
         {
             Condition.IsTrue(Open != null);
 
-            if (Open.IsPersistent   
+            if (Open.IsPersistent   // TDI, server will preserve the open for reconnect if Open.IsPersistent is true.
                 || (Open.IsDurable 
                     && (Open.IsBatchOplockExisted 
                     || Open.IsLeaseExisted)))
@@ -1077,6 +1080,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle
                     return true;
                 }
 
+                // TDI 72308
                 if (Open.IsPersistent && modelOpenFileRequest.durableV2ReconnectContext == DurableV2ReconnectContext.DurableV2ReconnectContextExistWithoutPersistent)
                 {
                     ModelHelper.Log(LogType.Requirement,
@@ -1118,6 +1122,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle
                     return true;
                 }
 
+                // TDI, if Open.IsPersistent is true, then when reconnecting, if Open.Session is not NULL, the reconnect can still succeed.
                 if (!Open.IsPersistent && Open.IsSessionExisted)
                 {
                     ModelHelper.Log(LogType.Requirement, "If Open.Session is not NULL, the server MUST fail the request with STATUS_OBJECT_NAME_NOT_FOUND. ");
@@ -1188,6 +1193,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle
 
                 ModelHelper.Log(LogType.Requirement, "In the \"Response Construction\" phase:");
 
+                // TDI 71165
                 if (Config.IsDirectoryLeasingSupported
                     && modelOpenFileRequest.oplockLeaseType == OplockLeaseType.LeaseV2)
                 {
@@ -1200,6 +1206,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle
                         Condition.IsTrue(leaseResponseContext == LeaseResponseContext.SMB2_CREATE_RESPONSE_LEASE_V2);
                 }
 
+                // TDI 71165
                 if (modelOpenFileRequest.oplockLeaseType == OplockLeaseType.LeaseV1
                     && Config.IsLeasingSupported
                     && Open.IsLeaseExisted)
