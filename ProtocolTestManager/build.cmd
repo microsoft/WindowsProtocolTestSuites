@@ -7,13 +7,6 @@ echo ====================================================
 echo          Start to build Protocol Test Manager
 echo ====================================================
 
-:: build.cmd debug -- will build debug version with PDB file in package.
-if /i "%~1"=="debug" (
-	set DEBUGVER=0
-) else (
-	set DEBUGVER=1
-)
-
 if not defined buildtool (
 	for /f %%i in ('dir /b /ad /on "%windir%\Microsoft.NET\Framework\v4*"') do (@if exist "%windir%\Microsoft.NET\Framework\%%i\msbuild".exe set buildtool=%windir%\Microsoft.NET\Framework\%%i\msbuild.exe)
 )
