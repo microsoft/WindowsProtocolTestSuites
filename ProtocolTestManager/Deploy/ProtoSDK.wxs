@@ -6,6 +6,16 @@
   <Fragment Id="ProtoSDK">
 
     <ComponentGroup Id="ProductComponents_ProtoSDK" Directory="LIBFOLDER">
+      <?if $(env.DEBUGVER) = 1?>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.pdb" />
+        </Component>
+      <?endif ?>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Asn1Base.dll" Guid="{76A7792D-FDCD-4092-9BDE-9E5D3795BFC5}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestTools.StackSdk.Asn1Base.dll"
               Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Asn1Base.dll" />

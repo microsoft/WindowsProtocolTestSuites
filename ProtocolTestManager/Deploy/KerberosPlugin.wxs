@@ -38,6 +38,11 @@
     </Fragment>
     <Fragment>
         <DirectoryRef Id="LIBFOLDER">
+	        <?if $(env.DEBUGVER) = 1?>
+                <Component Id="KerberosPlugin.pdb" Guid="{84258C1E-552C-4B6F-88A3-69CAF97594D9}">
+                    <File Id="KerberosPlugin.pdb" Source="$(var.SRCDIR)\lib\KerberosPlugin.pdb" />
+                </Component>
+            <?endif ?>
             <Component Id="KerberosPlugin.dll" Guid="{7A67AE9E-F6A2-4EEF-93DB-2E3FB70ABD0C}">
                 <File Id="KerberosPlugin.dll" Source="$(var.SRCDIR)\lib\KerberosPlugin.dll" />
             </Component>
@@ -64,6 +69,9 @@
             <ComponentRef Id="cmp8BB36C9EFDB34D21B020B59DA5C099F7" />
             <ComponentRef Id="KerberosPlugin.dll" />
             <ComponentRef Id="KerberosConfigFile" />
+	        <?if $(env.DEBUGVER) = 1?>
+              <ComponentRef Id="KerberosPlugin.pdb" />
+            <?endif ?>
         </ComponentGroup>
     </Fragment>
 </Wix>
