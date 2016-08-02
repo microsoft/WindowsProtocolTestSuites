@@ -117,6 +117,7 @@
 	</Target>
   	-->
 	<Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)\en-us\$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\installer\" />
+    <Copy Condition="$(FORDEBUG)==1" SourceFiles="$(TargetDir)\en-us\$(TargetFileName)" DestinationFiles="$(TestSuiteRoot)\drop\ProtocolTestManager\installer\ProtocolTestManager_ForDebug.msi" />
+    <Copy Condition="$(FORDEBUG)!=1" SourceFiles="$(TargetDir)\en-us\$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\installer\" />
 	</Target>
 </Project>
