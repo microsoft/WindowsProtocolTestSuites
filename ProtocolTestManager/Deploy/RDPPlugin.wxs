@@ -29,6 +29,11 @@
     </Fragment>
     <Fragment>
         <DirectoryRef Id="LIBFOLDER">
+            <?if $(env.DEBUGVER) = 1?>
+              <Component Id="RDPPlugin.pdb" Guid="*">
+                <File Id="RDPPlugin.pdb" Source="$(var.SRCDIR)\lib\RDPPlugin.pdb" />
+              </Component>
+            <?endif ?>
             <Component Id="RDPPlugin.dll" Guid="{1D6934A3-0657-4B24-9CB9-D70AEE816791}">
                 <File Id="RDPPlugin.dll" Source="$(var.SRCDIR)\lib\RDPPlugin.dll" />
             </Component>
@@ -70,6 +75,9 @@
             <ComponentRef Id="cmpE33ABD3C9FC64AB29CE375FFD400ED3C" />
             <ComponentRef Id="RDPPlugin.dll" />
             <ComponentRef Id="RDPConfigFile" />
+            <?if $(env.DEBUGVER) = 1?>
+              <ComponentRef Id="RDPPlugin.pdb" />
+            <?endif ?>
         </ComponentGroup>
     </Fragment>
 </Wix>

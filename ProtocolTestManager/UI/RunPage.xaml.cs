@@ -160,9 +160,14 @@ namespace Microsoft.Protocols.TestManager.UI
         {
             if (!enableControls) return;
             List<TestCase> testcaselist = new List<TestCase>();
+            List<string> currentPageList = logger.CurrentPageCaseList;
+
             foreach (var test in testCaseList)
             {
-                if (test.IsChecked) testcaselist.Add(test);
+                if (test.IsChecked && currentPageList != null && currentPageList.Contains(test.Name))
+                {
+                    testcaselist.Add(test);
+                }
             }
             if (RunTestClicked != null) RunTestClicked(testcaselist);
         }

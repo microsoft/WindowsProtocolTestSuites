@@ -213,6 +213,7 @@
     <Resource Include="config-blue.ico" />
     <Resource Include="images\cross.png" />
     <Resource Include="images\find.png" />
+    <Resource Include="images\sandglass.PNG" />
     <Content Include="TestSuiteIntro.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -235,6 +236,7 @@
     -->
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\Bin\" />
+	<Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\Bin\" />
     <Copy SourceFiles="$(TargetDir)\TestSuiteIntro.xml" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\etc\" />
   </Target>
 </Project>

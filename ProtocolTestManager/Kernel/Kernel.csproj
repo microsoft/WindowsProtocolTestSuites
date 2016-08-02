@@ -70,6 +70,7 @@
     <Compile Include="TestEngine\GroupByOutcome.cs" />
     <Compile Include="TestEngine\HtmlResultChecker.cs" />
     <Compile Include="TestEngine\Logger.cs" />
+    <Compile Include="TestEngine\PipeSinkServer.cs" />
     <Compile Include="TestEngine\TestEngine.cs" />
     <Compile Include="TestSuiteIntro\TestSuiteFamilies.cs" />
     <Compile Include="TestSuiteIntro\TestSuiteFamily.cs" />
@@ -95,5 +96,6 @@
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\Bin\" />
     <Copy SourceFiles="$(TargetDir)$(DocumentationFile)" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\Bin\" />
+	<Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\Bin\" />
   </Target>
 </Project>
