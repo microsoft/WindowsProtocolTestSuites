@@ -443,8 +443,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public static ushort ccGlyphIndex = 999;
         public static ushort ccMaxGlyphSize = 1024;
         public static ushort ccMaxGlyphIndexNum = 4000;
-        public static ushort MaxBmpWidth = 32766;  
-        public static ushort MaxBmpHeight = 32766;
+        public static ushort MaxBmpWidth = 32766;  // TDI number is 0xffff. This value is default value of RDP8.0
+        public static ushort MaxBmpHeight = 32766; // TDI number is 0xffff. This value is default value of RDP8.0
         public static ushort ccLargeBandWidth = 256;
         public static ushort ccLargeBandHeight = 256;
         public static uint segmentPartSize = 65535; // The size of the pure data in a RDP8_BULK_ENCODED_DATA structure       

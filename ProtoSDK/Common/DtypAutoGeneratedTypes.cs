@@ -1862,6 +1862,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
 
             int dataLen = result.Count;
 
+            // This padding seems required. But it's not documented. Will check windows code and file TDI later.
             int paddingLen = BlockAlign(dataLen, 4) - dataLen;
             result.AddRange(new byte[paddingLen]);
 

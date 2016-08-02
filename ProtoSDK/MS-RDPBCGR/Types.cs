@@ -13122,7 +13122,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     public enum streamId_Values : byte
     {
         /// <summary>
-        ///  Undefined stream priority.
+        ///  Undefined stream priority. Refer to test suite bug #8341151
         /// </summary>
         STREAM_UNDEFINED = 0x00,
 
