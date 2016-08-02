@@ -222,7 +222,6 @@
   <ItemGroup>
     <Resource Include="images\failed-test.png" />
     <Resource Include="images\spinner.png" />
-    <Resource Include="images\waiting_detection_result.gif" />
     <Resource Include="images\warning-yellow.png" />
   </ItemGroup>
   <ItemGroup>
