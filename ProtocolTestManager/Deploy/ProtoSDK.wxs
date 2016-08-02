@@ -75,6 +75,14 @@
           <File Id="Microsoft.Protocols.TestTools.StackSdk.Transport.pdb" 
                 Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Transport.pdb" />
         </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.pdb" />
+        </Component>
         <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.pdb" Guid="*" Feature="PTM_Feature">
           <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.pdb" 
                 Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.pdb" />
@@ -187,6 +195,14 @@
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Transport.dll" Guid="{CE1D5237-8E9D-4032-938D-38C98DB6ED13}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestTools.StackSdk.Transport.dll"
               Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Transport.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll" Guid="{B7A49AEB-0B7C-4F01-A60D-D1F273B94C96}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.dll" Guid="{6358B77F-AB19-4A98-B22D-6E95A1B5C0C5}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.dll" />
       </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.dll" Guid="{48A2467D-F9DA-4DF1-9BBE-A54305284853}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.dll"
