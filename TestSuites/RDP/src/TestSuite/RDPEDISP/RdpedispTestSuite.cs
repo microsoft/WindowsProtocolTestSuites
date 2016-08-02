@@ -231,6 +231,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create a dynamic virtual channel for MS-RDPEDISP");
             this.rdpedispAdapter.ProtocolInitialize(rdpedycServer);
 
+            // send an orignal image wait for BUG 5670070 Fixed
+            //Image gridsImage = LoadImage();
+            //this.Site.Assume.AreNotEqual<Image>(null, gridsImage, "Cannot load the Grids image");
+            //this.rdpedispAdapter.RdprfxSendImage(gridsImage, changedDesktopWidth, changedDekstopHeight);
+            //System.Threading.Thread.Sleep(1000);
+
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send Display Control capability PDU");
             this.rdpedispAdapter.sendCapsPDU(maxNumMonitors, maxMonitorAreaFactorA, maxMonitorAreaFactorB);
         }

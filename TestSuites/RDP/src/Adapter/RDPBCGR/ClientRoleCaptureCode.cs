@@ -167,6 +167,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             //<?>
             CaptureRequirement(securityPdu.securityExchangePduData.length != 0, 407);
+            //Refer to test suite bug #8341151
+            //site.CaptureRequirementIfIsTrue((securityPdu.commonHeader.securityHeader.flags & TS_SECURITY_HEADER_flags_Values.SEC_EXCHANGE_PKT) == TS_SECURITY_HEADER_flags_Values.SEC_EXCHANGE_PKT, 411, 
+            //  "In Security Exchange PDU Data (TS_SECURITY_PACKET) the flags field of the security header MUST contain the SEC_EXCHANGE_PKT flag (0x0001).");
+
+            //following capture is wrong, as after decoding the length would changed
+            //site.CaptureRequirementIfAreEqual<uint>((uint)securityPdu.securityExchangePduData.clientRandom.Length, securityPdu.securityExchangePduData.length, 413, 
+            //"In Security Exchange PDU Data (TS_SECURITY_PACKET) the length field indicates the size in bytes of the buffer containing the encrypted client random value, not including the header length.");
         }
 
         /// <summary>
@@ -195,6 +202,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_56BIT ||
                 serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_128BIT)
             {
+                //<bug>sdk bug 
                 //site.CaptureRequirementIfIsInstanceOfType(clientInfo.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER1), 424,
                 //    @"[In Client Info PDU Data (CLIENT_INFO_PDU)]securityHeader (variable):The securityHeader in CLIENT_INFO_PDU structure is a Non-FIPS Security Header (section 2.2.8.1.1.2.2) if the Encryption LevelMethod selected by the server (see sections 5.3.2 and 2.2.1.4.3) is ENCRYPTION_LEVEL_LOW (1METHOD_40BIT (0x00000001), ENCRYPTION_LEVEL_CLIENT_COMPATIBLE (2METHOD_56BIT (0x00000008), or ENCRYPTION_LEVEL_HIGH (3METHOD_128BIT (0x00000002).");
             }
@@ -225,7 +233,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// </summary>
         /// <param name="confirmActivePdu"></param>
         public void VerifyPdu(Client_Confirm_Active_Pdu confirmActivePdu)
-        {      
+        {
+            //Bug to be confirmed
             if (this.serverConfig.encryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE || this.serverConfig.encryptionMethod != EncryptionMethods.ENCRYPTION_METHOD_NONE)
             {
                 bool isR701Satisfied = confirmActivePdu.commonHeader.securityHeader.GetType() == typeof(TS_SECURITY_HEADER1) ||
