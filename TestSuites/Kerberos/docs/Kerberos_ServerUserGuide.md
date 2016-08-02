@@ -67,45 +67,45 @@ The following checklist summarizes the steps required to get the test suite up a
 
 |  **Check**|  **Task**|  **Topic**| 
 | -------------| -------------| ------------- |
-| □| Download the test suite for the protocol implementation| For a list of the files that the download package contains, see [Installed Files and Folders](#_Installed_Files_and_1).| 
-| □| Confirm that your test environment and computers meet the requirements of the test suite| For information about the requirements of the test suite, see [Requirements](#_Requirements). | 
-| □| Install the software prerequisites| For information about software that must be installed on the computers in your test environment before the test suite is installed, see [Software](#_Prerequisite_Software).| 
-| □| Set up the Local-Realm Key Distribution Center (KDC) Computer| See [Set Up the Local-Realm/Trust-Realm KDC Computer](#_Set_Up_a).| 
-| □| Set up the Trust-Realm Key Distribution Center (KDC) Computer| See [Set Up the Local-Realm/Trust-Realm KDC Computer](#_Test_Client_Computer_1).| 
-| □| Set up the Local-Realm Application Server (AP) Computer| See [Set Up the Local-Realm/Trust-Realm Application Server Computer](#_Set_Up_a_1).| 
-| □| Set up the Trust-Realm Application Server (AP) Computer| See [Set Up the Local-Realm/Trust-Realm Application Server Computer](#_Set_Up_a_1).| 
-| □| Set up the Local-Realm KKDCP Computer| See [Set up the Local-Realm KKDCP Computer](#_Set_Up_the_3)| 
-| □| Set up the Driver (ENDPOINT) Computer| See [Set Up the Driver Computer](#_Set_Up_the_1).| 
-| □| Set up the network| See [Network Setup.](#_Setup)| 
-| □| Verify the connection from the driver computer to the SUT and other computers| See [Verify Connectivity](#_Verify_Connectivity).| 
-| □| Configure the Local-Realm KDC computer| See [Configure the Local-Realm KDC Computer](#_Configure_the_PDC).| 
-| □| Configure the Trust-Realm KDC computer| See [Configure the Trust-Realm KDC Computer](#_Configure_the_Client).| 
-| □| Configure the Local-Realm Application Server computer| See [Configure the Local-Realm Application Server Computer](#_Configure_the_Local-Realm_1).| 
-| □| Configure the Trust-Realm Application Server computer| See [Configure the Trust-Realm Application Server Computer](#_Configure_the_Driver_1).| 
-| □| Configure the Local-Realm KKDCP Computer | See [Configure the Local-Realm KKDCP Computer](#_Configure_the_Driver_2)| 
-| □| Configure the driver computer| See [Configure the Driver Computer](#_Configure_the_Driver_3).| 
-| □| Configure test suite settings| See [Configuring the Test Suite](#_Configuring_the_Test_3).| 
+| □| Download the test suite for the protocol implementation| For a list of the files that the download package contains, see [Installed Files and Folders](#_Toc427061840).| 
+| □| Confirm that your test environment and computers meet the requirements of the test suite| For information about the requirements of the test suite, see [Requirements](#_Toc427061822). | 
+| □| Install the software prerequisites| For information about software that must be installed on the computers in your test environment before the test suite is installed, see [Software](#_Toc427061831).| 
+| □| Set up the Local-Realm Key Distribution Center (KDC) Computer| See [Set Up the Local-Realm/Trust-Realm KDC Computer](#_Toc427061836).| 
+| □| Set up the Trust-Realm Key Distribution Center (KDC) Computer| See [Set Up the Local-Realm/Trust-Realm KDC Computer](#_Toc427061836).| 
+| □| Set up the Local-Realm Application Server (AP) Computer| See [Set Up the Local-Realm/Trust-Realm Application Server Computer](#_Toc427061837).| 
+| □| Set up the Trust-Realm Application Server (AP) Computer| See [Set Up the Local-Realm/Trust-Realm Application Server Computer](#_Toc427061837).| 
+| □| Set up the Local-Realm KKDCP Computer| See [Set up the Local-Realm KKDCP Computer](#_Toc427061838)| 
+| □| Set up the Driver (ENDPOINT) Computer| See [Set Up the Driver Computer](#_Toc427061839).| 
+| □| Set up the network| See [Network Setup.](#_Toc427061832)| 
+| □| Verify the connection from the driver computer to the SUT and other computers| See [Verify Connectivity](#_Toc427061834).| 
+| □| Configure the Local-Realm KDC computer| See [Configure the Local-Realm KDC Computer](#_Toc427061847).| 
+| □| Configure the Trust-Realm KDC computer| See [Configure the Trust-Realm KDC Computer](#_Toc427061844).| 
+| □| Configure the Local-Realm Application Server computer| See [Configure the Local-Realm Application Server Computer](#_Toc427061845).| 
+| □| Configure the Trust-Realm Application Server computer| See [Configure the Trust-Realm Application Server Computer](#_Toc427061846).| 
+| □| Configure the Local-Realm KKDCP Computer | See [Configure the Local-Realm KKDCP Computer](#_Toc427061847)| 
+| □| Configure the driver computer| See [Configure the Driver Computer](#_Toc427061848).| 
+| □| Configure test suite settings| See [Configuring the Test Suite](#_Toc427061855).| 
 
 ## <a name="_Toc427061821"/>How Do I?
 Use the following quick reference to learn how to complete common tasks.
 
 |  **How do I…?**|  **For more information…**| 
 | -------------| ------------- |
-| Set up the test environment| [Network Setup](#_Network_Setup) and [Computer Setup](#_Computer_Setup)| 
-| Verify the connection from the driver computer to other computers and between other computers in the test environment| [Verify Connectivity](#_Verify_Connectivity)| 
-| Setup the Local-Realm/Trust-Realm KDC Computer| [Set Up the Local-Realm/Trust-Realm KDC Computer](#_Test_Client_Computer_1)| 
-| Setup the Local-Realm/Trust-Realm Application Server Computer| [Set Up the Local-Realm/Trust-Realm Application Server Computer](#_Set_Up_the_4)| 
-| Setup the Driver Computer| [Set Up the Driver Computer](#_Set_Up_the_1)| 
-| Configure the Local-Realm KDC Computer| [Configure the Local-Realm KDC Computer](#_Configure_the_Test) or [Configure a KDC Computer that is Not Windows-based](#_Configuring_a_KDC)| 
-| Configure the Trust-Realm KDC Computer| [Configure the Trust-Realm KDC Computer](#_Configure_the_Client) or [Configure a KDC Computer that is Not Windows-based](#_Configuring_a_KDC)| 
-| Configure the Local-Realm Application Server Computer| [Configure the Local-Realm Application Server Computer](#_Configure_the_Local-Realm_1) | 
-| Configure the Trust-Realm Application Server Computer| [Configure the Trust-Realm Application Server Computer](#_Configure_the_Driver_1) | 
-| Configure the Driver Computer| [Configure the Driver Computer](#_Configure_the_Driver_3)| 
-| Configure the test suite settings| [Configuring the Test Suite](#_Configuring_the_Test_3)| 
-| Run test cases| [Run All Test Cases](#_Run_All_Test_1), [Run Specified Test Cases](#_Run_Specified_Test)| 
-| Debug my own test cases| [Debugging Test Cases](#_Debugging_Test_Cases)| 
-| Get the results of test runs| [Check Test Results](#_Analyzing_Test_Results)| 
-| Troubleshoot problems| [Troubleshooting](#_Troubleshooting_1)| 
+| Set up the test environment| [Network Setup](#_Toc427061832) and [Computer Setup](#_Toc427061835)| 
+| Verify the connection from the driver computer to other computers and between other computers in the test environment| [Verify Connectivity](#_Toc427061834)| 
+| Setup the Local-Realm/Trust-Realm KDC Computer| [Set Up the Local-Realm/Trust-Realm KDC Computer](#_Toc427061836)| 
+| Setup the Local-Realm/Trust-Realm Application Server Computer| [Set Up the Local-Realm/Trust-Realm Application Server Computer](#_Toc427061837)| 
+| Setup the Driver Computer| [Set Up the Driver Computer](#_Toc427061839)| 
+| Configure the Local-Realm KDC Computer| [Configure the Local-Realm KDC Computer](#_Toc427061843) or [Configure a KDC Computer that is Not Windows-based](#_Toc427061850)| 
+| Configure the Trust-Realm KDC Computer| [Configure the Trust-Realm KDC Computer](#_Toc427061844) or [Configure a KDC Computer that is Not Windows-based](#_Toc427061850)| 
+| Configure the Local-Realm Application Server Computer| [Configure the Local-Realm Application Server Computer](#_Toc427061845) | 
+| Configure the Trust-Realm Application Server Computer| [Configure the Trust-Realm Application Server Computer](#_Toc427061846) | 
+| Configure the Driver Computer| [Configure the Driver Computer](#_Toc427061848)| 
+| Configure the test suite settings| [Configuring the Test Suite](#_Toc427061855)| 
+| Run test cases| [Run All Test Cases](#_Toc427061860), [Run Specified Test Cases](#_Toc427061862)| 
+| Debug my own test cases| [Debugging Test Cases](#_Toc427061866)| 
+| Get the results of test runs| [Check Test Results](#_Toc427061863)| 
+| Troubleshoot problems| [Troubleshooting](#_Toc427061867)| 
 
 ## <a name="_Toc427061822"/>Requirements 
 
@@ -350,7 +350,7 @@ To set up a Windows-based Local-Realm/Trust-Realm KDC computer:
 
 * When options are promoted, select the option, **Install and configure Windows System Under Test (SUT)**.
 
-To set up a KDC that is not based on the Windows operating system, see [Configuring a KDC Computer that is Not Windows-based](#z3e851c98bb1f412da82c849d3ce30dd1).
+To set up a KDC that is not based on the Windows operating system, see [Configuring a KDC Computer that is Not Windows-based](#_Toc427061850).
 
 ### <a name="_Toc427061837"/>Set up the Local-Realm/Trust-Realm Application Server Computer
 This section provides information about how to set up a Windows-based Local-Realm/Trust-Realm Application Server Computer for use with this test suite.
@@ -369,7 +369,7 @@ To set up a Windows-based Local-Realm/Trust-Realm Application Server Computer:
 
 * When options are promoted, select the option, **Install and configure Windows System Under Test (SUT)**.
 
-To set up an Application Server that is not based on the Windows operating system, see [Configuring an Application Server Computer that is Not Windows-based](#_Configuring_Local-Realm_Application).
+To set up an Application Server that is not based on the Windows operating system, see [Configuring an Application Server Computer that is Not Windows-based](#_Toc427061851).
 
 ### <a name="_Toc427061838"/>Set up the Local-Realm KKDCP Computer
 This section provides information about how to set up a Windows-based Local-Realm KKDCP Computer for use with this test suite.
@@ -388,7 +388,7 @@ To set up a Windows-based Local-Realm KKDCP:
 
 * When options are promoted, select the option, **Install and configure Windows System Under Test (SUT)**.
 
-To set up a KKDCP that is not based on the Windows operating system, see [Configuring a KKDCP that is Not Windows-based](#_Configuring_Local-Realm_KKDCP).
+To set up a KKDCP that is not based on the Windows operating system, see [Configuring a KKDCP that is Not Windows-based](#_Toc427061854).
 
 ### <a name="_Toc427061839"/>Set up the Driver Computer
 This section provides information about how to set up the Windows-based Driver Computer for use with this test suite.
@@ -445,7 +445,7 @@ This section explains how to configure the network and computers in the test env
 
 ### <a name="_Toc427061842"/>Configuring Windows-Based Computers
 
-This section explains how to configure the test environment for computers running Windows-based operating systems. For general information about configuring the test environment for computers that are not based on Windows, see [Configuring Computers that are Not Based on Windows.](#_Configuring_Computers_that)
+This section explains how to configure the test environment for computers running Windows-based operating systems. For general information about configuring the test environment for computers that are not based on Windows, see [Configuring Computers that are Not Based on Windows.](#_Toc427061849)
 
 #### <a name="_Toc427061843"/>Configure the Local-Realm KDC Computer
 
@@ -787,7 +787,7 @@ This guide provides basic information about configuring the test environment for
 
 This section provides basic information about the configuration of a KDC computer that runs an operating system other than the Windows operating system.
 
-For information about how to configure a Windows-based KDC, see [Configure the Local-Realm KDC Computer](#_Configure_the_Local-Realm) or [Configure the Trust-Realm KDC Computer](#_Configure_the_Trust-Realm). 
+For information about how to configure a Windows-based KDC, see [Configure the Local-Realm KDC Computer](#_Toc427061843) or [Configure the Trust-Realm KDC Computer](#_Toc427061844). 
 
 For detailed instructions about how to complete the tasks that this process requires, see the administration guide for your operating system. 
 
@@ -913,7 +913,7 @@ To configure the KDC Computer
 
 This section provides basic information about the configuration of an Application Server that runs an operating system other than the Windows operating system.
 
-For information about how to configure a Windows-based Application Server, see [Configure the Local-Realm Application Server Computer](#_Configure_the_Local-Realm_1) or [Configure the Trust-Realm Application Server Computer](#_Configure_the_Driver_1). 
+For information about how to configure a Windows-based Application Server, see [Configure the Local-Realm Application Server Computer](#_Toc427061845) or [Configure the Trust-Realm Application Server Computer](#_Toc427061846). 
 
 For detailed instructions about how to complete the tasks that this process requires, see the administration guide for your operating system. 
 
@@ -951,7 +951,7 @@ To configure the Application Server Computer
 
 This section provides basic information about the configuration of a KDC computer that runs an operating system other than the Windows operating system.
 
-For information about how to configure a Windows-based KDC, see [Configure the Local-Realm KDC Computer](#_Configure_the_Local-Realm) or [Configure the Trust-Realm KDC Computer](#_Configure_the_Trust-Realm). 
+For information about how to configure a Windows-based KDC, see [Configure the Local-Realm KDC Computer](#_Toc427061843) or [Configure the Trust-Realm KDC Computer](#_Toc427061844). 
 Please refer to the administration guide for your operating system to finish equivalent steps.
 
 **To configure the Windows KDC Computer**
@@ -1022,17 +1022,17 @@ Please refer to the administration guide for your operating system to finish equ
 
 * Verify cross-realm trust relationship
 
-Cross-Realm Trust Relationship between MIT KDC and Windows KDC has been documented with more detailed information from the [Appendix](#_Appendix:_Build_the). 
+Cross-Realm Trust Relationship between MIT KDC and Windows KDC has been documented with more detailed information from the [Appendix](#_Toc427061869). 
 
 #### <a name="_Toc427061853"/>Configuring Cross-Realm Application Server Computer that is Not Windows-Based
 
-Please refer to section [Configuring Local realm Application Server Computer.](#_Configuring_Local_Realm)
+Please refer to section [Configuring Local realm Application Server Computer.](#_Toc427061851)
 
 #### <a name="_Toc427061854"/>Configuring Local-Realm KKDCP Computer that is Not Windows-Based
 
 This section provides basic information about the configuration of a KKDCP server that runs an operating system other than the Windows operating system.
 
-For information about how to configure a Windows-based KKDCP, see [Configure the Local-Realm KKDCP Computer](#_Configure_the_Driver_2). 
+For information about how to configure a Windows-based KKDCP, see [Configure the Local-Realm KKDCP Computer](#_Toc427061847). 
 
 For detailed instructions about how to complete the tasks that this process requires, see the administration guide for your operating system. 
 
@@ -1569,6 +1569,7 @@ You can follow below steps to configure the test suite:
 
 * **Filter Test Cases**: Select the test cases you want to run.
 
+<a name="_ConfigureMethodPage"/>
 * **Load Profile**: The Profile includes the information of previously selected test cases and the configuration. 
 
 * Click **Load Profile**, select an existing profile and jump to **Filter Test Cases**.
@@ -1607,7 +1608,7 @@ You can follow below steps to configure the test suite:
 
 ![image20.png](./image/image20.png)
 
-* **Save and Load Configurations**: Click **Save Profile …** to save all the settings as a profile. The settings include the test case selection and the property values. You may load the saved settings by **Load Profile** in the [Configure Method page](#OLE_LINK6).
+* **Save and Load Configurations**: Click **Save Profile …** to save all the settings as a profile. The settings include the test case selection and the property values. You may load the saved settings by **Load Profile** in the [Configure Method page](#_ConfigureMethodPage).
 
 * 
 
