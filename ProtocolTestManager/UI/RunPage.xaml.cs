@@ -142,6 +142,20 @@ namespace Microsoft.Protocols.TestManager.UI
                                 );
                         }
                     }
+                    if (arg.PropertyName == "Status")
+                    {
+                        var dispatcher = item.Dispatcher;
+                        if (dispatcher.CheckAccess())
+                        {
+                            item.ItemsSource = i.TestCaseList;
+                        }
+                        else
+                        {
+                            item.Dispatcher.Invoke(
+                                new Action(() => item.ItemsSource = i.TestCaseList)
+                                );
+                        }
+                    }
                 };
                 TestOutcome.Items.Add(item);
             }

@@ -311,6 +311,17 @@ namespace Microsoft.Protocols.TestManager.UI
                     to.AddTestCase(testcase);
                 }));
             };
+            logger.GroupByOutcome.UpdateTestCaseList = (group, runningcase) =>
+            {
+                this.Dispatcher.Invoke((Action)(() => 
+                {
+                    int index = group.TestCaseList.IndexOf(runningcase);
+                    if(index > 0)
+                    {
+                        group.TestCaseList.Move(index, 0);
+                    }
+                }));
+            };
             Pages.RunPage.SetLogger(logger);
         }
 

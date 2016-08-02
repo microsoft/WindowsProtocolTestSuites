@@ -100,6 +100,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 }
                 RunningTestCase = testcase;
                 RunningTestCase.Status = status;
+                if(UpdateTestCaseList != null)
+                {
+                    UpdateTestCaseList(from, RunningTestCase);
+                }
                 return;
             }
             if (status == TestCaseStatus.Waiting)
@@ -144,5 +148,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
 
         public UpdateTestCaseStatusCallback UpdateTestCaseStatus;
+        public UpdateTestCaseListCallback UpdateTestCaseList;
     }
 }

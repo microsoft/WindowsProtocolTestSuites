@@ -235,7 +235,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             testcase.PropertyChanged += TestcasePropertyChanged;
             if (testcase.IsChecked) checkedNumber++;
-            TestCaseList.Insert(0, testcase);
+            int insertIndex = 0;
+            if (TestCaseList.Count > 0 && (TestCaseList.First<TestCase>().Status == TestCaseStatus.Running))
+            {
+                insertIndex = 1;
+            }
+            TestCaseList.Insert(insertIndex, testcase);
             OnPropertyChanged("Visibility");
             OnPropertyChanged("HeaderText");
             OnPropertyChanged("IsChecked");
@@ -291,6 +296,23 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 UpdateHeader();
             }
+            TestCase curCase = sender as TestCase;
+            if (args.PropertyName == "Status" && curCase.Status == TestCaseStatus.Running)
+            {
+                ChangeRunningCaseToTop(curCase);
+            }
+        }
+
+        /// <summary>
+        /// Update running case to be the first case in a group.
+        /// </summary>
+        /// <param name="runningTestCase"></param>
+        private void ChangeRunningCaseToTop(TestCase runningTestCase)
+        {
+            if (TestCaseList.Contains(runningTestCase))
+            {
+                OnPropertyChanged("Status");
+            }
         }
 
         /// <summary>
@@ -344,5 +366,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
     }
 
     public delegate void UpdateTestCaseStatusCallback(TestCaseGroup from, TestCaseGroup to, TestCase testcase);
+    public delegate void UpdateTestCaseListCallback(TestCaseGroup group, TestCase runningcase);
 
 }
