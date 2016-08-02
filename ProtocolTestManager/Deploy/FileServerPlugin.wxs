@@ -45,6 +45,11 @@
 	</Fragment>
     <Fragment>
         <DirectoryRef Id="LIBFOLDER">
+            <?if $(env.DEBUGVER) = 1?>
+              <Component Id="fileserverPlugin.pdb" Guid="{BA63A8D0-F23C-44F7-8F48-2092A93523D6}">
+                <File Id="fileserverPlugin.pdb" Source="$(var.SRCDIR)\lib\FileServerPlugin.pdb" />
+              </Component>
+            <?endif ?>
             <Component Id="fileserverPlugin.dll" Guid="{E0D2D3A4-149C-483B-953A-44E6BCD77BC9}">
                 <File Id="fileserverPlugin.dll" Source="$(var.SRCDIR)\lib\FileServerPlugin.dll" />
             </Component>
@@ -72,10 +77,13 @@
             <ComponentRef Id="cmp19B67EFB6E55775206085788F36569FF" />
             <ComponentRef Id="cmp3DE29B63C16D4C6BBC74FE25B62D5182" />
             <ComponentRef Id="cmp83F6DA28F3424788AC24B95F52965ECC" />
-			<ComponentRef Id="cmp183F3AF02B744E51BC19D19ADBCE0444" />
+			      <ComponentRef Id="cmp183F3AF02B744E51BC19D19ADBCE0444" />
             <ComponentRef Id="fileserverPlugin.dll" />
             <ComponentRef Id="fileserverConfigFile" />
             <ComponentRef Id="fileserverTestCategoryFile" />
+            <?if $(env.DEBUGVER) = 1?>
+              <ComponentRef Id="fileserverPlugin.pdb" />
+            <?endif ?>
         </ComponentGroup>
     </Fragment>
 </Wix>

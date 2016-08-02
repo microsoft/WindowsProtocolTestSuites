@@ -653,6 +653,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 WorkingDirectory = testSuiteDir,
                 TestAssemblies = appConfig.TestSuiteAssembly,
                 TestSetting = appConfig.TestSetting,
+                PipeName = appConfig.PipeName,
             };
             testEngine.InitializeLogger(selectedCases);
         }
@@ -819,13 +820,22 @@ namespace Microsoft.Protocols.TestManager.Kernel
             numberOfChecked = 0;
             numberOfNotfound = 0;
             TestCaseGroup.HoldUpdatingHeader();
-            foreach (var testcase in selectedCases) testcase.IsChecked = false;
+            foreach (var testcase in selectedCases)
+            {
+                if(!caselistCache.Contains(testcase.Name) && !testcase.IsChecked)
+                    testcase.IsChecked = false;
+            }
+            TestCaseGroup.ResumeUpdatingHeader();
+
             foreach (string name in caselistCache)
             {
                 var testcase = selectedCases.FirstOrDefault((v) => v.FullName == name);
                 if (testcase != null)
                 {
-                    testcase.IsChecked = true;
+                    if(!testcase.IsChecked)
+                    {
+                        testcase.IsChecked = true;
+                    }
                     numberOfChecked++;
                 }
                 else
@@ -833,7 +843,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     numberOfNotfound++;
                 }
             }
-            TestCaseGroup.ResumeUpdatingHeader();
+
         }
 
         /// <summary>
@@ -904,6 +914,38 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 File.SetAttributes(file, attributes & ~FileAttributes.ReadOnly);
             }
+        }
+
+        /// <summary>
+        /// Parse the file content to get the case status
+        /// Result format in file: "Result":"Result: Passed"
+        /// </summary>
+        public static bool ParseFileGetStatus(string filePath, out TestCaseStatus status)
+        {
+            status = TestCaseStatus.NotRun;
+
+            string content = File.ReadAllText(filePath);
+            int startIndex = content.IndexOf(AppConfig.ResultKeyword);
+            startIndex += AppConfig.ResultKeyword.Length;
+            int endIndex = content.IndexOf("\"", startIndex);
+            string statusStr = content.Substring(startIndex, endIndex - startIndex);
+            switch (statusStr)
+            {
+                case AppConfig.HtmlLogStatusPassed:
+                    status = TestCaseStatus.Passed;
+                    break;
+                case AppConfig.HtmlLogStatusFailed:
+                    status = TestCaseStatus.Failed;
+                    break;
+                case AppConfig.HtmlLogStatusInconclusive:
+                    status = TestCaseStatus.Other;
+                    break;
+                default:
+                    // The file name format is not correct
+                    return false;
+            }
+
+            return true;
         }
     }
 

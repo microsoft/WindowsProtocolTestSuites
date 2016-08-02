@@ -58,6 +58,16 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// </summary>
         public List<TestCase> AllTestCases { get; set; }
 
+        /// <summary>
+        /// Return the current page case list.
+        /// </summary>
+        public List<string> CurrentPageCaseList
+        {
+            get
+            {
+                return GroupByOutcome.TestCaseNameList;
+            }
+        }
 
         private void NotifyPropertyChange(object sender, string propertyName)
         {
@@ -77,7 +87,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
         }
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private TestCase runningTestCase = null;
 
         /// <summary>
         /// The running test case.
@@ -87,6 +96,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
             get
             {
                 return GroupByOutcome.RunningTestCase;
+            }
+            set
+            {
+                GroupByOutcome.RunningTestCase = value;
             }
         }
 
@@ -104,11 +117,11 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// </summary>
         public void UpdateCaseFromHtmlLog(TestCaseStatus status, string testCaseName, string testCaseLogPath)
         {
-            runningTestCase = AllTestCases.FirstOrDefault(c => c.Name == testCaseName);
-            if (runningTestCase == null) return;
+            RunningTestCase = AllTestCases.FirstOrDefault(c => c.Name == testCaseName);
+            if (RunningTestCase == null) return;
             GroupByOutcome.ChangeStatus(testCaseName, status);
-            runningTestCase.LogUri = new Uri(testCaseLogPath);
-            runningTestCase = null;
+            RunningTestCase.LogUri = new Uri(testCaseLogPath);
+            RunningTestCase = null;
         }
 
         /// <summary>
@@ -116,9 +129,33 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// </summary>
         public void FinishTest()
         {
-            if (runningTestCase != null)
+            // Clear RunningTestCase
+            if (RunningTestCase != null)
             {
-                GroupByOutcome.ChangeStatus(runningTestCase.Name, TestCaseStatus.Other);
+                if(RunningTestCase.Status == TestCaseStatus.Running)
+                {
+                    GroupByOutcome.ChangeStatus(RunningTestCase.Name, TestCaseStatus.NotRun);
+                }
+                RunningTestCase = null;
+            }
+            foreach (var testcase in AllTestCases)
+            {
+                // Clear Waiting cases.
+                if (testcase.Status == TestCaseStatus.Waiting && CurrentPageCaseList.Contains(testcase.Name))
+                {
+                    TestCaseStatus status = TestCaseStatus.NotRun;
+                    if(testcase.LogUri != null && System.IO.File.Exists(testcase.LogUri.AbsolutePath))
+                    {
+                        Utility.ParseFileGetStatus(testcase.LogUri.AbsolutePath, out status); 
+                    }
+                    testcase.Status = status;
+                }
+                // Clear Running cases. Should not be here
+                if(testcase.Status == TestCaseStatus.Running && CurrentPageCaseList.Contains(testcase.Name))
+                {
+                    testcase.Status = TestCaseStatus.NotRun;
+                    RunningTestCase = null;
+                }
             }
         }
     }
