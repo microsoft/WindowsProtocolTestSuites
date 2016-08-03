@@ -21,6 +21,9 @@ if errorlevel 1 exit /b 1
 call TestSuites\Kerberos\src\build.cmd
 if errorlevel 1 exit /b 1
 
+call TestSuites\MS-SMBD\src\build.cmd
+if errorlevel 1 exit /b 1
+
 call ProtocolTestManager\build.cmd
 if errorlevel 1 exit /b 1
 

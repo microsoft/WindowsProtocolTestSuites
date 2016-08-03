@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig" 
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+
+  <Properties>
+    <!--Computer name of system under test (SUT)-->
+    <Property name="SutComputerName" value="SMBD-SUT01" />
+    <!--IP address of R-NIC on SUT-->
+    <Property name="ServerRNicIp" value="192.168.1.12" />
+    <!--IP address of non R-NIC on SUT-->
+    <Property name="ServerNonRNicIp" value="192.168.1.112" />
+    <!--
+        Domain name where the SUT locates
+        If SUT is in WORKGROUP, set it to the value of SutComputerName
+    -->
+    <Property name="DomainName" value="SMBD-SUT01" />
+    <!--User account name of the SUT-->
+    <Property name="SutUserName" value="Administrator" />
+    <!--Password for user account which indicated by SutUserName-->
+    <Property name="SutPassword" value="Password01!" />
+    <!--Name of file share on the SUT-->
+    <Property name="ShareFolder" value="SMBDTest" />
+    
+    <!--IP address of R-NIC on local driver computer-->
+    <Property name="ClientRNicIp" value="192.168.1.11" />
+    <!--IP address of non R-NIC on local driver computer-->
+    <Property name="ClientNonRNicIp" value="192.168.1.111" />
+    <!--
+        Platform type of the SUT
+        NonWindows = 0x00000000,
+        WindowsServer2012 = 0x10000006,
+        WindowsServer2012R2 = 0x10000008,
+    -->
+    <Property name="Platform" value="WindowsServer2012R2"/>
+
+    <!--Name of file which is used in test read large content-->
+    <Property name="TestFile_ReadLargeFile" value="testFile_ReadLargeFile.txt"/>
+    <!--
+        Supported value for SmallFileSizeInByte is from 128 bytes to SMBD negotiated MaxSendSize 
+        (Default value of SMBD negotiated MaxSendSize is 1364 bytes)
+    -->
+    <Property name="SmallFileSizeInByte" value="500" />
+    <!--
+        Supported value for ModerateFileSizeInByte is from SMBD negotiated MaxSendSize (Default value of SMBD negotiated MaxSendSize is 1364 bytes)
+        to SMBD negotiated MaxFragmentedSize (Default value of SMBD negotiated MaxFragmentedSize is 131072 bytes)
+    -->
+    <Property name="ModerateFileSizeInByte" value="65536" />
+    <!--
+        Supported value for LargeFileSizeInKB is from SMBD negotiated MaxFragmentedSize (Default value of SMBD negotiated MaxFragmentedSize is 128KB)
+        to smaller of SMB2 negotiated MaxReadSize and MaxWriteSize (Windows Server 2012 without [MSKB-2934016] limits MaxReadWriteSize to 1048576 (1024KB). Otherwise, the limit is 8388608 (8192KB).)
+    -->
+    <Property name="LargeFileSizeInKB" value="1000" />
+
+    <!--
+      The switch which control whether the SUT will check 
+      “The sum of the received DataOffset and DataLength fields are less than or equal to the length of the received message.”.
+    -->
+    <Property name="CheckDataLengthRemainingDataLength" value="false" />
+  </Properties>
+</TestSite>
