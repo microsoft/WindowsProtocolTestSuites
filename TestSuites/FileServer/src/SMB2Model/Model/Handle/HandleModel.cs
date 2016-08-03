@@ -248,6 +248,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle
                 if (modelHandleType == ModelHandleType.PersistentHandle
                     && !(Share_IsCA && ServerCapabilities_PersistentBitSet))
                 {
+                    // If client asks for a persistent handle to a non CA share or 
+                    // Connection.ServerCapabilities does not include SMB2_GLOBAL_CAP_PERSISTENT_HANDLES
+                    // The persistent handle is not granted.
                     ModelHelper.Log(
                         LogType.TestInfo, 
                         "Share is not a CA share or Connection.ServerCapabilities does not include SMB2_GLOBAL_CAP_PERSISTENT_HANDLES.");
@@ -380,7 +383,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle
         {
             Condition.IsTrue(Open != null);
 
-            if (Open.IsPersistent   
+            if (Open.IsPersistent   // Server will preserve the open for reconnect if Open.IsPersistent is true.
                 || (Open.IsDurable 
                     && (Open.IsBatchOplockExisted 
                     || Open.IsLeaseExisted)))
@@ -1118,6 +1121,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle
                     return true;
                 }
 
+                // TDI, if Open.IsPersistent is true, then when reconnecting, if Open.Session is not NULL, the reconnect can still succeed.
                 if (!Open.IsPersistent && Open.IsSessionExisted)
                 {
                     ModelHelper.Log(LogType.Requirement, "If Open.Session is not NULL, the server MUST fail the request with STATUS_OBJECT_NAME_NOT_FOUND. ");
@@ -1191,7 +1195,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Handle
                 if (Config.IsDirectoryLeasingSupported
                     && modelOpenFileRequest.oplockLeaseType == OplockLeaseType.LeaseV2)
                 {
-                    ModelHelper.Log(LogType.Requirement, "If the server supports directory leasing, and the request contains SMB2_CREATE_REQUEST_LEASE_V2 Create Context, " + 
+                    ModelHelper.Log(LogType.Requirement, "If the server supports directory leasing, and the request contains SMB2_CREATE_REQUEST_LEASE_V2 Create Context, " +
                         "then the server MUST construct an SMB2_CREATE_RESPONSE_LEASE_V2 Create Context");
                     ModelHelper.Log(LogType.TestInfo, "All the above conditions are met. So create response should contain an SMB2_CREATE_RESPONSE_LEASE_V2 Create Context.");
                     if (Open.LeaseVersion == 1)

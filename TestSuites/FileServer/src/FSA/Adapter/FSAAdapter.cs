@@ -309,6 +309,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             //Error Code Handling
             this.isErrorCodeMappingRequired = bool.Parse(testConfig.GetProperty("IsErrorCodeMappingRequired"));
 
+            //TDI Configurations
             this.activeTDIs = new List<string>(testConfig.GetProperty("FsaActiveTDIs").Split(';'));
 
             //Other Configurations
