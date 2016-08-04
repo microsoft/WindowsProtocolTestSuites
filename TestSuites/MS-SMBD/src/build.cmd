@@ -44,20 +44,20 @@ if not defined vspath (
 	)
 )
 
-if not exist "..\..\..\ProtoSDK\RDMA\include\ndspi.h" (
-	echo Error: WindowsProtocolTestSuites\ProtoSDK\RDMA\include\ndspi.h does not exist, it can be extracted from NetworkDirect_DDK.zip in HPC Pack 2008 R2 SDK @ http://www.microsoft.com/en-us/download/details.aspx?id=12218
-	exit /b 1
-) 
-
-if not exist "..\..\..\ProtoSDK\RDMA\include\ndstatus.h" (
-	echo Error: WindowsProtocolTestSuites\ProtoSDK\RDMA\include\ndstatus.h does not exist, it can be extracted from NetworkDirect_DDK.zip in HPC Pack 2008 R2 SDK @ http://www.microsoft.com/en-us/download/details.aspx?id=12218
-	exit /b 1
-) 
-
 set CurrentPath=%~dp0
 if not defined TestSuiteRoot (
 	set TestSuiteRoot=%CurrentPath%..\..\..\
 )
+
+if not exist "%TestSuiteRoot%ProtoSDK\RDMA\include\ndspi.h" (
+	echo Error: WindowsProtocolTestSuites\ProtoSDK\RDMA\include\ndspi.h does not exist, it can be extracted from NetworkDirect_DDK.zip in HPC Pack 2008 R2 SDK @ http://www.microsoft.com/en-us/download/details.aspx?id=12218
+	exit /b 1
+) 
+
+if not exist "%TestSuiteRoot%ProtoSDK\RDMA\include\ndstatus.h" (
+	echo Error: WindowsProtocolTestSuites\ProtoSDK\RDMA\include\ndstatus.h does not exist, it can be extracted from NetworkDirect_DDK.zip in HPC Pack 2008 R2 SDK @ http://www.microsoft.com/en-us/download/details.aspx?id=12218
+	exit /b 1
+) 
 
 ::Get build version from AssemblyInfo
 set path=%TestSuiteRoot%AssemblyInfo\SharedAssemblyInfo.cs
