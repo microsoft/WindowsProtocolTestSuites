@@ -75,7 +75,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Resilient
             resilientHandleConfig = new ResilientHandleServerConfig
             {
                 MaxSmbVersionSupported = ModelUtility.GetModelDialectRevision(testConfig.MaxSmbVersionSupported),
-                IsLeasingSupported = testConfig.IsLeasingSupported,
                 IsIoCtlCodeResiliencySupported = testConfig.IsIoCtlCodeSupported(CtlCode_Values.FSCTL_LMR_REQUEST_RESILIENCY),
                 Platform = testConfig.Platform
             };
