@@ -1248,7 +1248,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             ResponseChecker<WRITE_Response> checker = null,
             bool isReplay = false)
         {
-            return Write(treeId, fileId, Encoding.ASCII.GetBytes(data), offset, checker);
+            return Write(treeId, fileId, Encoding.ASCII.GetBytes(data), offset, checker, isReplay);
         }
 
         public uint Write(
