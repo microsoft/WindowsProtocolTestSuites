@@ -6,6 +6,128 @@
   <Fragment Id="ProtoSDK">
 
     <ComponentGroup Id="ProductComponents_ProtoSDK" Directory="LIBFOLDER">
+      <?if $(env.DEBUGVER) = 1?>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.Asn1Base.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.Asn1Base.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Asn1Base.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Dfsc.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Dfsc.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Dfsc.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fsrvp.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fsrvp.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fsrvp.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.Messages.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.Messages.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Messages.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.Swn.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.Swn.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Swn.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.Transport.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.Transport.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Transport.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedisp.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedisp.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedisp.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegt.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegt.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegt.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeusb.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeusb.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeusb.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpevor.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpevor.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpevor.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx.pdb" 
+                Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx.pdb" />
+        </Component>
+      <?endif ?>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Asn1Base.dll" Guid="{76A7792D-FDCD-4092-9BDE-9E5D3795BFC5}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestTools.StackSdk.Asn1Base.dll"
               Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Asn1Base.dll" />
@@ -73,6 +195,14 @@
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Transport.dll" Guid="{CE1D5237-8E9D-4032-938D-38C98DB6ED13}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestTools.StackSdk.Transport.dll"
               Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Transport.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll" Guid="{B7A49AEB-0B7C-4F01-A60D-D1F273B94C96}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.dll" Guid="{6358B77F-AB19-4A98-B22D-6E95A1B5C0C5}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.dll" />
       </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.dll" Guid="{48A2467D-F9DA-4DF1-9BBE-A54305284853}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.dll"

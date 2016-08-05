@@ -165,7 +165,16 @@ $Credential = New-Object -TypeName System.Management.Automation.PSCredential -Ar
 
 #SUTOsVersion is like 6.3.9600
 $SUTOsVersion =  (Get-WmiObject -comp "SUT01" -Credential $Credential -class Win32_OperatingSystem ).Version
-$SUTOsVersion = $SUTOsVersion.substring(0,$SUTOsVersion.length-5)
+$FirstDotIndex = $SUTOSVersion.IndexOf('.')
+$SecondDotIndex = $SUTOSVersion.IndexOf('.', $FirstDotIndex+1)
+if ($SecondDotIndex -eq -1)
+{
+	## The version has only one dot, no need to cut the tail
+}
+else
+{
+	$SUTOsVersion = $SUTOsVersion.substring(0,$SecondDotIndex)
+}
 
 if([double]$SUTOsVersion -ge [double]$os2008R2)
 {

@@ -111,7 +111,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S2\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb302,ValidAppInstanceId,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -164,7 +164,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb302,AppInstanceIdIsZero,CreateDurableThenDisc" +
                         "onnect)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.CreateDurableThenDisconnect);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S9\'");
@@ -355,7 +355,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S105\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,OtherContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.OtherContext);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S106\'");
@@ -464,7 +464,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S34\'");
             this.Manager.Comment("executing step \'call PrepareOpen(Smb2002,ValidAppInstanceId,NoContext)\'");
             this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb2002, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(0)));
-            this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+            this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                     "the server MUST initialize the following:\"");
             this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
             this.Manager.Comment("reaching state \'S35\'");
@@ -630,7 +630,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S116\'");
             this.Manager.Comment("executing step \'call PrepareOpen(Smb2002,ValidAppInstanceId,NoContext)\'");
             this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb2002, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(0)));
-            this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+            this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                     "the server MUST initialize the following:\"");
             this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
             this.Manager.Comment("reaching state \'S117\'");
@@ -726,7 +726,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S124\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb2002,ValidAppInstanceId,NoContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb2002, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(0)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S125\'");
@@ -818,7 +818,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S132\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb2002,ValidAppInstanceId,NoContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb2002, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(0)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S133\'");
@@ -933,7 +933,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S143\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -1062,7 +1062,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S154\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -1169,7 +1169,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S162\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -1295,7 +1295,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S173\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -1393,7 +1393,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S181\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -1491,7 +1491,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S189\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -1589,7 +1589,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S197\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -1683,7 +1683,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S205\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -1837,7 +1837,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S219\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -1935,7 +1935,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S227\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -2033,7 +2033,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S235\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -2131,7 +2131,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S243\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -2229,7 +2229,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S251\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -2259,7 +2259,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S254\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,OtherContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.OtherContext);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S255\'");
@@ -2361,7 +2361,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,CreateDurableThenDiscon" +
                         "nect)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.CreateDurableThenDisconnect);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S29\'");
@@ -2461,7 +2461,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S262\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -2494,7 +2494,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S265\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,OtherContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.OtherContext);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S266\'");
@@ -2571,7 +2571,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S270\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,OtherContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.OtherContext);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S271\'");
@@ -2648,7 +2648,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S275\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,OtherContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.OtherContext);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S276\'");
@@ -2740,7 +2740,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S283\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,OtherContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.OtherContext);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S284\'");
@@ -2832,7 +2832,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S291\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -2933,7 +2933,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S299\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -3059,7 +3059,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S310\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -3157,7 +3157,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S318\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -3255,7 +3255,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S326\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -3353,7 +3353,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S334\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -3451,7 +3451,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S342\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -4079,7 +4079,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,CreateDurableThenDisco" +
                         "nnect)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.CreateDurableThenDisconnect);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S399\'");
@@ -4167,7 +4167,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,CreateDurableThenDisco" +
                         "nnect)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.CreateDurableThenDisconnect);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S407\'");
@@ -4255,7 +4255,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,CreateDurableThenDisco" +
                         "nnect)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.CreateDurableThenDisconnect);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S415\'");
@@ -4342,7 +4342,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S422\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb21,ValidAppInstanceId,NoContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb21, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(0)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S423\'");
@@ -4438,7 +4438,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S430\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,NoContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(0)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S431\'");
@@ -4530,7 +4530,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S438\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,OtherContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.OtherContext);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S439\'");
@@ -4622,7 +4622,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S446\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,NoContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(0)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S447\'");
@@ -4714,7 +4714,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S454\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb2002,ValidAppInstanceId,NoContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb2002, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(0)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S455\'");
@@ -4807,7 +4807,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,CreateDurableThenDiscon" +
                         "nect)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.CreateDurableThenDisconnect);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S463\'");
@@ -4875,7 +4875,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S48\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb2002,ValidAppInstanceId,NoContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb2002, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(0)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S49\'");
@@ -4900,7 +4900,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,CreateDurableThenDiscon" +
                         "nect)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.CreateDurableThenDisconnect);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S52\'");
@@ -4987,7 +4987,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S470\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb302,ValidAppInstanceId,NoContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(0)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S471\'");
@@ -5060,7 +5060,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S475\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb302,ValidAppInstanceId,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -5090,7 +5090,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S478\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -5197,7 +5197,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S486\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb302,ValidAppInstanceId,OtherContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.OtherContext);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S487\'");
@@ -5221,7 +5221,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S489\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -5301,7 +5301,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,CreateDurableThenDisco" +
                         "nnect)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.CreateDurableThenDisconnect);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S495\'");
@@ -5320,7 +5320,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S497\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -5400,7 +5400,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb302,ValidAppInstanceId,CreateDurableThenDisco" +
                         "nnect)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.CreateDurableThenDisconnect);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S503\'");
@@ -5419,7 +5419,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S505\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -5498,7 +5498,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S510\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb302,AppInstanceIdIsZero,NoContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(0)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S511\'");
@@ -5522,7 +5522,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S513\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -5601,7 +5601,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S518\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,OtherContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.OtherContext);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S519\'");
@@ -5625,7 +5625,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S521\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -5704,7 +5704,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S526\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb302,AppInstanceIdIsZero,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -5737,7 +5737,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S529\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -5819,7 +5819,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S534\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -5852,7 +5852,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S537\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb2002,ValidAppInstanceId,NoContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb2002, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(0)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S538\'");
@@ -5925,7 +5925,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S56\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb2002,ValidAppInstanceId,NoContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb2002, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(0)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S57\'");
@@ -5950,7 +5950,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,CreateDurableThenDiscon" +
                         "nect)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.CreateDurableThenDisconnect);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S60\'");
@@ -6018,7 +6018,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S542\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb302,AppInstanceIdIsZero,OtherContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.OtherContext);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Comment("reaching state \'S543\'");
@@ -6042,7 +6042,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S545\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb21,ValidAppInstanceId,NoContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb21, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(0)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S546\'");
@@ -6115,7 +6115,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S550\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb30.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -6148,7 +6148,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S553\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,OtherContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.OtherContext);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S554\'");
@@ -6225,7 +6225,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S558\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,NoContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(0)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S559\'");
@@ -6303,7 +6303,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,CreateDurableThenDiscon" +
                         "nect)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.CreateDurableThenDisconnect);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S564\'");
@@ -6376,7 +6376,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,CreateDurableThenDisco" +
                         "nnect)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.CreateDurableThenDisconnect);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S569\'");
@@ -6449,7 +6449,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S573\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,OtherContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.OtherContext);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S574\'");
@@ -6526,7 +6526,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S578\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -6613,7 +6613,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S583\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,NoContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(0)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S584\'");
@@ -6691,7 +6691,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb302,AppInstanceIdIsZero,CreateDurableThenDisc" +
                         "onnect)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.CreateDurableThenDisconnect);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S589\'");
@@ -6764,7 +6764,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb302,ValidAppInstanceId,CreateDurableThenDisco" +
                         "nnect)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.CreateDurableThenDisconnect);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S594\'");
@@ -6837,7 +6837,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S598\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb302,ValidAppInstanceId,NoContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(0)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S599\'");
@@ -6915,7 +6915,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S603\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb302,ValidAppInstanceId,OtherContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.OtherContext);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S604\'");
@@ -6993,7 +6993,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S608\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb302,AppInstanceIdIsZero,OtherContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.OtherContext);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S609\'");
@@ -7071,7 +7071,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S613\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb302,AppInstanceIdIsZero,NoContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(0)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S614\'");
@@ -7148,7 +7148,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S618\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,AppInstanceIdIsZero,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -7249,7 +7249,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S70\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,OtherContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.OtherContext);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S71\'");
@@ -7326,7 +7326,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S623\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb302,AppInstanceIdIsZero,CreateDurable)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType)(1)));
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: Open.AppInstanceId MUST be set to AppInstanceId in the SMB2_C" +
@@ -7427,7 +7427,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S81\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,OtherContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.OtherContext);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S82\'");
@@ -7519,7 +7519,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S89\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,OtherContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.OtherContext);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S90\'");
@@ -7611,7 +7611,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("reaching state \'S97\'");
                 this.Manager.Comment("executing step \'call PrepareOpen(Smb30,ValidAppInstanceId,OtherContext)\'");
                 this.IAppInstanceIdAdapterInstance.PrepareOpen(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.AppInstanceIdType.ValidAppInstanceId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.CreateType.OtherContext);
-                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family, " +
+                this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server implements the SMB 3.x dialect family, " +
                         "the server MUST initialize the following:\"");
                 this.Manager.Checkpoint("\"[TestInfo] Server supports dialect Smb302.\"");
                 this.Manager.Comment("reaching state \'S98\'");

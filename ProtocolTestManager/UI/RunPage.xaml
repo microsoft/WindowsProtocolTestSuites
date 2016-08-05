@@ -99,6 +99,9 @@
                 <DataTrigger Binding="{Binding Status}" Value="Running">
                     <Setter TargetName="StatusIcon" Property="Source" Value="pack://application:,,,/images/running-test.png"/>
                 </DataTrigger>
+                <DataTrigger Binding="{Binding Status}" Value="Waiting">
+                    <Setter TargetName="StatusIcon" Property="Source" Value="pack://application:,,,/images/sandglass.png"/>
+                </DataTrigger>
             </DataTemplate.Triggers>
         </DataTemplate>
     </Page.Resources>

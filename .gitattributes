@@ -52,6 +52,7 @@
 *.zip   binary
 *.ico   binary
 *.xlsm  binary
+*.ico	binary
 
 #Images (Binary)
 *.png binary
