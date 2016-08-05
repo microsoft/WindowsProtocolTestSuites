@@ -74,14 +74,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public void RDPEGFX_CacheManagement_PositiveTest_SurfaceToCache_MaxCacheSlot()
         {
             ushort maxCacheSlot = RdpegfxTestUtility.maxCacheSlot;
+
+            // Init for capability exchange
+            RDPEGFX_CapabilityExchange();
+
             if (this.isSmallCache)
             {
                 maxCacheSlot = RdpegfxTestUtility.maxCacheSlotForSmallCache;
             }
-            // Init for capability exchange
-            RDPEGFX_CapabilityExchange();
 
-            
             // Create a surface 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create a Surface.");
             RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
@@ -116,13 +117,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public void RDPEGFX_CacheManagement_PositiveTest_SurfaceToCache_MaxCacheSize()
         {
             int maxCacheSize = RdpegfxTestUtility.maxCacheSize;
+
+            // Init for capability exchange
+            RDPEGFX_CapabilityExchange();
+
             if (this.isSmallCache)
             {
                 maxCacheSize = RdpegfxTestUtility.maxCacheSizeForSmallCache;
             }
-            // Init for capability exchange
-            RDPEGFX_CapabilityExchange();
-
             // Create a surface 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create a Surface.");
             RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.largeSurfWidth, RdpegfxTestUtility.largeSurfHeight);
@@ -153,12 +155,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public void RDPEGFX_CacheManagement_PositiveTest_SurfaceToCache_SrcRectBorderOverlapSurface()
         {
             ushort maxCacheSlot = RdpegfxTestUtility.maxCacheSlot;
+
+            // Init for capability exchange
+            RDPEGFX_CapabilityExchange();
+
             if (this.isSmallCache)
             {
                 maxCacheSlot = RdpegfxTestUtility.maxCacheSlotForSmallCache;
             }
-            // Init for capability exchange
-            RDPEGFX_CapabilityExchange();
             
             // Create a surface 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create a Surface.");
