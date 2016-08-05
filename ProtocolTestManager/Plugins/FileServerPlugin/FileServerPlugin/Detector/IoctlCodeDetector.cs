@@ -200,6 +200,48 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                         throw new Exception("CREATE failed with " + Smb2Status.GetStatusCode(header.Status));
                     }
 
+                    // Bug 8016334
+                    // The destination file of CopyOffload Write should not be zero, it should be at least 512 bytes, which is the sector size.
+                    client.Write(
+                        1,
+                        1,
+                        info.smb2Info.IsRequireMessageSigning ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                        messageId++,
+                        sessionId,
+                        treeId,
+                        0,
+                        fileIdDes,
+                        Channel_Values.CHANNEL_NONE,
+                        WRITE_Request_Flags_Values.None,
+                        new byte[0],
+                        Smb2Utility.CreateRandomByteArray(512),
+                        out header,
+                        out writeResponse,
+                        0);
+
+                    if (header.Status != Smb2Status.STATUS_SUCCESS)
+                    {
+                        LogFailedStatus("WRITE", header.Status);
+                        throw new Exception("WRITE failed with " + Smb2Status.GetStatusCode(header.Status));
+                    }
+
+                    client.Flush(
+                        1,
+                        1,
+                        info.smb2Info.IsRequireMessageSigning ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                        messageId++,
+                        sessionId,
+                        treeId,
+                        fileIdDes,
+                        out header,
+                        out flushResponse);
+
+                    if (header.Status != Smb2Status.STATUS_SUCCESS)
+                    {
+                        LogFailedStatus("FLUSH", header.Status);
+                        throw new Exception("FLUSH failed with " + Smb2Status.GetStatusCode(header.Status));
+                    }
+
                     if (responseOutput != null)
                     {
                         var offloadReadOutput = TypeMarshal.ToStruct<FSCTL_OFFLOAD_READ_OUTPUT>(responseOutput);
