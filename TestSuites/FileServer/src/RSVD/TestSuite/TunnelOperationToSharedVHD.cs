@@ -170,7 +170,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             // Open the shared virtual disk file with no initiator id. Thus read request will fail with status key returned.
             OpenSharedVHD(TestConfig.NameOfSharedVHDX, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1, hasInitiatorId:false);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client sends a Read request and expects error.");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client sends a Read request and expects error since initiator id is not specified when opening.");
 
             byte[] readContent;
             uint status = client.Read(0, 512, out readContent);
