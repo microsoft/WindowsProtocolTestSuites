@@ -65,6 +65,16 @@ if exist "%TestSuiteRoot%drop\TestSuites\MS-SMB" (
  rd /s /q "%TestSuiteRoot%drop\TestSuites\MS-SMB" 
 )
 
-call %windir%\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -file AddCheckPTFVersion.ps1 -WxsFile ".\Deploy\MS-SMB-TestSuite-ServerEP.wxs"
+::copy wxs file
+COPY ".\Deploy\MS-SMB-TestSuite-ServerEP.wxs" ".\Deploy\MS-SMB-TestSuite-ServerEP_.wxs"
+
+call %windir%\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -file "..\..\..\Check-PTFVersion.ps1" -WxsFile ".\Deploy\MS-SMB-TestSuite-ServerEP.wxs"
 %buildtool% "%TestSuiteRoot%TestSuites\MS-SMB\src\deploy\deploy.wixproj" /t:Clean;Rebuild
 
+::replace wxs file
+DEL ".\Deploy\MS-SMB-TestSuite-ServerEP.wxs"
+rename ".\Deploy\MS-SMB-TestSuite-ServerEP_.wxs" MS-SMB-TestSuite-ServerEP.wxs
+
+echo ==============================================
+echo          Build MS-SMB test suite successfully
+echo ==============================================

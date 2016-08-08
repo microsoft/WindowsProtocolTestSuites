@@ -1,5 +1,11 @@
-﻿param(
-[string]$WxsFile=$(throw "Parameter missing: -WxsFile is missing")
+﻿# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+Param
+(
+    [parameter(Mandatory=$true,
+    ValueFromPipeline=$true)]
+    [String]$WxsFile
 )
 
 ## Check if wxs file is exists
@@ -52,12 +58,8 @@ if ($content -match '(?<verstart>\<\?define\s+CurrentPTFVersion=)"(?<verNum>[\d\
       </RegistrySearch>
     </Property>
 
-    <Condition Message="Protocol Test Framework does not installed on current machine.">
-      <![CDATA[Installed OR PTFVERSION]]>
-    </Condition>
-
     <Condition Message="Required version $(var.CurrentPTFVersion) of Protocol Test Framework does not installed on current machine.">
-      <![CDATA[Installed OR PTFVERSION << "$(var.CurrentPTFVersion)"]]>
+      <![CDATA[Installed OR (PTFVERSION AND PTFVERSION << "$(var.CurrentPTFVersion)")]]>
     </Condition>'
 
     $newContent = $newContent -replace "(<\/Product>)", ($ptfVersionCheck + '
