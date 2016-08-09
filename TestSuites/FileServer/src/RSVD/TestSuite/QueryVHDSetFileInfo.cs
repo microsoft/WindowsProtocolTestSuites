@@ -44,7 +44,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             OpenSharedVHD(TestConfig.NameOfSharedVHDS, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_2);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client sends tunnel operation SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_REQUEST to server and expects success.");
-            SetFile_InformationType setFileInforType = SetFile_InformationType.SvhdxSetFileInformationTypeSnapshotList;
+            VHDSet_InformationType setFileInforType = VHDSet_InformationType.SvhdxVHDSetInformationTypeSnapshotList;
             Snapshot_Type snapshotType = Snapshot_Type.SvhdxSnapshotTypeVM;
             //SnapshotId is set to empty when SetFileInformationType is SvhdxSetFileInformationTypeSnapshotList because 
             //this message is intending to get the snapshot id list from server, when you need to get a snapshot entry, you need to pass in the specific snapshot id
@@ -56,8 +56,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 snapshotType,
                 snapshotId);
             SVHDX_TUNNEL_OPERATION_HEADER? header;
-            SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_SNAPSHOT_LIST_RESPONSE? response;
-            uint status = client.TunnelOperation<SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_SNAPSHOT_LIST_RESPONSE>(
+            SVHDX_TUNNEL_VHDSET_QUERY_INFORMATION_SNAPSHOT_LIST_RESPONSE? response;
+            uint status = client.TunnelOperation<SVHDX_TUNNEL_VHDSET_QUERY_INFORMATION_SNAPSHOT_LIST_RESPONSE>(
                 false,//true for Async operation, false for non-async operation
                 RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_VHDSET_QUERY_INFORMATION,
                 ++RequestIdentifier,
@@ -72,7 +72,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
 
             VerifyTunnelOperationHeader(header.Value, RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_VHDSET_QUERY_INFORMATION, (uint)RsvdStatus.STATUS_SVHDX_SUCCESS, RequestIdentifier);
 
-            VerifyFieldInResponse("SetFileInformationType", SetFile_InformationType.SvhdxSetFileInformationTypeSnapshotList, response.Value.SetFileInformationType);
+            VerifyFieldInResponse("SetFileInformationType", VHDSet_InformationType.SvhdxVHDSetInformationTypeSnapshotList, response.Value.VHDSetInformationType);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "3.	Client closes the file.");
             client.CloseSharedVirtualDisk();
@@ -91,15 +91,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             CreateSnapshot(snapshotId);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client sends tunnel operation SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_REQUEST to server and expects success.");
-            SetFile_InformationType setFileInforType = SetFile_InformationType.SvhdxSetFileInformationTypeSnapshotEntry;
+            VHDSet_InformationType setFileInforType = VHDSet_InformationType.SvhdxVHDSetInformationTypeSnapshotEntry;
             Snapshot_Type snapshotType = Snapshot_Type.SvhdxSnapshotTypeVM;
             SVHDX_TUNNEL_OPERATION_HEADER? header;
-            SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_SNAPSHOT_ENTRY_RESPONSE? snapshotEntryResponse;
+            SVHDX_TUNNEL_VHDSET_QUERY_INFORMATION_SNAPSHOT_ENTRY_RESPONSE? snapshotEntryResponse;
             byte[] payload = client.CreateTunnelGetVHDSetFileInfoRequest(
                 setFileInforType,
                 snapshotType,
                 snapshotId);
-            uint status = client.TunnelOperation<SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_SNAPSHOT_ENTRY_RESPONSE>(
+            uint status = client.TunnelOperation<SVHDX_TUNNEL_VHDSET_QUERY_INFORMATION_SNAPSHOT_ENTRY_RESPONSE>(
                 false,//true for Async operation, false for non-async operation
                 RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_VHDSET_QUERY_INFORMATION,
                 ++RequestIdentifier,
@@ -114,7 +114,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
 
             VerifyTunnelOperationHeader(header.Value, RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_VHDSET_QUERY_INFORMATION, (uint)RsvdStatus.STATUS_SVHDX_SUCCESS, RequestIdentifier);
 
-            VerifyFieldInResponse("SetFileInformationType", SetFile_InformationType.SvhdxSetFileInformationTypeSnapshotEntry, snapshotEntryResponse.Value.SetFileInformationType);
+            VerifyFieldInResponse("SetFileInformationType", VHDSet_InformationType.SvhdxVHDSetInformationTypeSnapshotEntry, snapshotEntryResponse.Value.VHDSetInformationType);
 
             DeleteSnapshot(snapshotId);
 

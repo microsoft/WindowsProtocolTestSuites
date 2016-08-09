@@ -273,15 +273,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
 
         private void CheckSnapshotExisted(Guid snapshotId)
         {
-            SetFile_InformationType setFileInforType = SetFile_InformationType.SvhdxSetFileInformationTypeSnapshotEntry;
+            VHDSet_InformationType setFileInforType = VHDSet_InformationType.SvhdxVHDSetInformationTypeSnapshotEntry;
             Snapshot_Type snapshotType = Snapshot_Type.SvhdxSnapshotTypeVM;
             SVHDX_TUNNEL_OPERATION_HEADER? header;
-            SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_SNAPSHOT_ENTRY_RESPONSE? snapshotEntryResponse;
+            SVHDX_TUNNEL_VHDSET_QUERY_INFORMATION_SNAPSHOT_ENTRY_RESPONSE? snapshotEntryResponse;
             byte[] payload = client.CreateTunnelGetVHDSetFileInfoRequest(
                 setFileInforType,
                 snapshotType,
                 snapshotId);
-            uint status = client.TunnelOperation<SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_SNAPSHOT_ENTRY_RESPONSE>(
+            uint status = client.TunnelOperation<SVHDX_TUNNEL_VHDSET_QUERY_INFORMATION_SNAPSHOT_ENTRY_RESPONSE>(
                 false,//true for Async operation, false for non-async operation
                 RSVD_TUNNEL_OPERATION_CODE.RSVD_TUNNEL_VHDSET_QUERY_INFORMATION,
                 ++RequestIdentifier,

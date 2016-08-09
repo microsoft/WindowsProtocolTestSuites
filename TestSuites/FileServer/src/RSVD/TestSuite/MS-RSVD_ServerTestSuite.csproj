@@ -52,6 +52,7 @@
     <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ChangTracking.cs" />
     <Compile Include="ConvertVHDtoVHDSet.cs" />
     <Compile Include="CreateAndDeleteCheckpoint.cs" />
     <Compile Include="Resize.cs" />

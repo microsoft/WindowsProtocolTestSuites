@@ -346,21 +346,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         }
 
         /// <summary>
-        /// Create an SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_REQUEST structure and marshal it to a byte array
+        /// Create an SVHDX_TUNNEL_VHDSET_QUERY_INFORMATION_REQUEST structure and marshal it to a byte array
         /// </summary>
-        /// <param name="setFileInformationType">The set file information type requested</param>
+        /// <param name="setInformationType">The set file information type requested</param>
         /// <param name="snapshotType">The snapshot type queried by this operation</param>
         /// <param name="snapshotId">The snapshot ID relevant to the particular request</param>
         /// <returns>The marshalled byte array</returns>
         public byte[] CreateTunnelGetVHDSetFileInfoRequest(
-            SetFile_InformationType setFileInformationType,
+            VHDSet_InformationType setInformationType,
             Snapshot_Type snapshotType,
             Guid snapshotId)
         {
-            SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_REQUEST getVHDSetFileInfoRequest = new SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_REQUEST();
+            SVHDX_TUNNEL_VHDSET_QUERY_INFORMATION_REQUEST getVHDSetFileInfoRequest = new SVHDX_TUNNEL_VHDSET_QUERY_INFORMATION_REQUEST();
 
-            getVHDSetFileInfoRequest.SetFileInformationType = setFileInformationType;
-            getVHDSetFileInfoRequest.SetFileInformationSnapshotType = snapshotType;
+            getVHDSetFileInfoRequest.VHDSetInformationType = setInformationType;
+            getVHDSetFileInfoRequest.SnapshotType = snapshotType;
             getVHDSetFileInfoRequest.SnapshotId = snapshotId;
 
             return TypeMarshal.ToBytes(getVHDSetFileInfoRequest);

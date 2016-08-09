@@ -142,7 +142,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
     /// </summary>
     public enum OriginatorFlag : uint
     {
+        /// <summary>
+        /// Shared virtual disk file to be opened as a virtual SCSI disk device
+        /// </summary>
         SVHDX_ORIGINATOR_PVHDPARSER = 0x00000001,
+
+        /// <summary>
+        /// Shared virtual disk file to be opened in underlying object store
+        /// </summary>
         SVHDX_ORIGINATOR_VHDMP = 0x00000004
     }
     /// <summary>
@@ -181,6 +188,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
     /// </summary>
     public enum SRB_FLAGS : uint
     {
+        
         SRB_FLAGS_NO_DATA_TRANSFER = 0,
         SRB_FLAGS_QUEUE_ACTION_ENABLE = 0x00000002,
         SRB_FLAGS_DISABLE_DISCONNECT = 0x00000004,
@@ -406,44 +414,39 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
     }
 
     /// <summary>
-    /// The set file information type requested
+    /// The information type requested
     /// </summary>
-    public enum SetFile_InformationType : uint
+    public enum VHDSet_InformationType : uint
     {
         /// <summary>
         /// Returns a list of snapshots
         /// </summary>
-        SvhdxSetFileInformationTypeSnapshotList = 0x00000002,
+        SvhdxVHDSetInformationTypeSnapshotList = 0x00000002,
 
         /// <summary>
         /// Returns the details about a specific snapshot entry
         /// </summary>
-        SvhdxSetFileInformationTypeSnapshotEntry = 0x00000005,
+        SvhdxVHDSetInformationTypeSnapshotEntry = 0x00000005,
 
         /// <summary>
         /// Queries whether the target set file needs optimization
         /// </summary>
-        SvhdxSetFileInformationTypeOptimizeNeeded = 0x00000008,
+        SvhdxVHDSetInformationTypeOptimizeNeeded = 0x00000008,
 
         /// <summary>
         /// Returns the oldest CDP snapshot present in the target VHD set file
         /// </summary>
-        SvhdxSetFileInformationTypeCdpSnapshotRoot = 0x00000009,
+        SvhdxVHDSetInformationTypeCdpSnapshotRoot = 0x00000009,
 
         /// <summary>
         /// Returns the list of CDP snapshot IDs that are active for the VHD set file
         /// </summary>
-        SvhdxSetFileInformationTypeCdpSnapshotActiveList = 0x0000000A,
-
-        /// <summary>
-        /// Returns the list of CDP snapshots that are active in the VHD set file, along with details of each snapshot
-        /// </summary>
-        SvdxSetFileInformationTypeCdpSnapshotActiveListDetails = 0x0000000B,
+        SvhdxVHDSetInformationTypeCdpSnapshotActiveList = 0x0000000A,
 
         /// <summary>
         /// Returns the list of CDP snapshot IDs that are inactive in the VHD set file
         /// </summary>
-        SvhdxSetFileInformationTypeCdpSnapshotInactiveList = 0x0000000C
+        SvhdxVHDSetInformationTypeCdpSnapshotInactiveList = 0x0000000C
     }
 
     /// <summary>
@@ -1383,21 +1386,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
     }
 
     /// <summary>
-    /// This packet is sent by a client as part of an SVHDX_TUNNEL_OP_VHDSET_FILE_QUERY_INFORMATION request
+    /// This packet is sent by a client as part of an RSVD_TUNNEL_VHDSET_QUERY_INFORMATION request
     /// </summary>
-    public struct SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_REQUEST
+    public struct SVHDX_TUNNEL_VHDSET_QUERY_INFORMATION_REQUEST
     {
         /// <summary>
         /// The set file information type requested
         /// </summary>
         [StaticSize(4)]
-        public SetFile_InformationType SetFileInformationType;
+        public VHDSet_InformationType VHDSetInformationType;
 
         /// <summary>
         /// The snapshot type queried by this operation
         /// </summary>
         [StaticSize(4)]
-        public Snapshot_Type SetFileInformationSnapshotType;
+        public Snapshot_Type SnapshotType;
 
         /// <summary>
         /// The snapshot ID relevant to the particular request
@@ -1407,28 +1410,35 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
     }
 
     /// <summary>
-    /// This packet is sent by a server in response to an SVHDX_TUNNEL_OP_VHDSET_FILE_QUERY request 
-    /// where the SetFileInformationType is SvhdxSetFileInformationTypeSnapshotList
+    /// This packet is sent by a server in response to an RSVD_TUNNEL_VHDSET_QUERY_INFORMATION request 
+    /// where the VHDSetInformationType is SvhdxVHDSetInformationTypeSnapshotList
     /// </summary>
-    public struct SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_SNAPSHOT_LIST_RESPONSE
+    public struct SVHDX_TUNNEL_VHDSET_QUERY_INFORMATION_SNAPSHOT_LIST_RESPONSE
     {
         /// <summary>
         /// The set file information type
-        /// The server MUST set this to SvhdxSetFileInformationTypeSnapshotList
+        /// The server MUST set this to SvhdxVHDSetInformationTypeSnapshotList
         /// </summary>
         [StaticSize(4)]
-        public SetFile_InformationType SetFileInformationType;
+        public VHDSet_InformationType VHDSetInformationType;
 
+        // This field is set to any value by the server and MUST be ignored by the client.
         [StaticSize(4)]
         public uint Padding;
 
         /// <summary>
-        /// Indicates if the reply contains snapshot IDs in the SnapshotIds field
-        /// Zero (0x00000000) indicates that the SnapshotIds field is not present
-        /// One (0x00000001) indicates that the SnapshotIds field is present
+        /// Indicates if the reply contains all snapshot IDs in the SnapshotIds field. 
+        /// Zero (0x00) indicates that the SnapshotIds field is not present. 
+        /// One (0x01) indicates that all snapshot IDs are present in the SnapshotIds field.
         /// </summary>
-        [StaticSize(4)]
-        public uint SnapshotsFilled;
+        [StaticSize(1)]
+        public byte ResponseComplete;
+
+        /// <summary>
+        /// This field MUST be set to 0 by the server and MUST be ignored by the client.
+        /// </summary>
+        [StaticSize(3)]
+        public byte[] Reserved;
 
         /// <summary>
         /// The number of snapshots contained in the SnapshotIds field
@@ -1444,17 +1454,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
     }
 
     /// <summary>
-    /// This packet is sent by a server in response to an SVHDX_TUNNEL_OP_VHDSET_FILE_QUERY request 
-    /// where the SetFileInformationType is SvhdxSetFileInformationTypeSnapshotEntry
+    /// This packet is sent by a server in response to an SVHDX_TUNNEL_OP_VHDSET_QUERY request 
+    /// where the VHDSetInformationType is SvhdxVHDSetInformationTypeSnapshotEntry
     /// </summary>
-    public struct SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_SNAPSHOT_ENTRY_RESPONSE
+    public struct SVHDX_TUNNEL_VHDSET_QUERY_INFORMATION_SNAPSHOT_ENTRY_RESPONSE
     {
         /// <summary>
         /// The set file information type
-        /// The server MUST set this to SvhdxSetFileInformationTypeSnapshotEntry
+        /// The server MUST set this to SvhdxVHDSetInformationTypeSnapshotEntry
         /// </summary>
         [StaticSize(4)]
-        public SetFile_InformationType SetFileInformationType;
+        public VHDSet_InformationType VHDSetInformationType;
 
         /// <summary>
         /// The time, in milliseconds since Jan 1, 1970, when the snapshot was created
@@ -1496,17 +1506,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
     }
 
     /// <summary>
-    /// This packet is sent by a server in response to an SVHDX_TUNNEL_OP_VHDSET_FILE_QUERY request 
-    /// where the SetFileInformationType is SvhdxSetFileInformationTypeOptimizeNeeded
+    /// This packet is sent by a server in response to an RSVD_TUNNEL_VHDSET_QUERY_INFORMATION request 
+    /// where the VHDSetInformationType is SvhdxVHDSetInformationTypeOptimizeNeeded
     /// </summary>
-    public struct SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_OPTIMIZE_RESPONSE
+    public struct SVHDX_TUNNEL_VHDSET_QUERY_INFORMATION_OPTIMIZE_RESPONSE
     {
         /// <summary>
-        /// The set file information type
-        /// The server MUST set this to SvhdxSetFileInformationTypeOptimizeNeeded
+        /// The information type.
+        /// The server MUST set this to SvhdxVHDSetInformationTypeOptimizeNeeded
         /// </summary>
         [StaticSize(4)]
-        public SetFile_InformationType SetFileInformationType;
+        public VHDSet_InformationType VHDSetInformationType;
 
         /// <summary>
         /// Indicates whether optimization is needed for the target file
@@ -1628,6 +1638,24 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         /// </summary>
         [Size("LogFileNameLength")]
         public string LogFileName;
+    }
+
+    /// <summary>
+    /// The SVHDX_CHANGE_TRACKING_GET_PARAMETERS_RESPONSE packet is sent by the server in response to a RSVD_TUNNEL_CHANGE_TRACKING_GET_PARAMETERS operation.
+    /// </summary>
+    public struct SVHDX_CHANGE_TRACKING_GET_PARAMETERS_RESPONSE
+    {
+        /// <summary>
+        /// The current status of change tracking on the server. 
+        /// </summary>
+        [StaticSize(8)]
+        public ulong ChangeTrackingStatus;
+
+        /// <summary>
+        /// The number of bytes consumed by the log file used to conduct change tracking. 
+        /// </summary>
+        [StaticSize(8)]
+        public ulong LogFileSize;
     }
 
     /// <summary>
