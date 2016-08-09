@@ -378,7 +378,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
                 bool SupportedByThisProvider;
                 ret = fsrvpClientForQuery.IsPathSupported(shareName, out SupportedByThisProvider, out FsrvpServerName);
                 BaseTestSite.Assert.AreEqual<FsrvpErrorCode>(FsrvpErrorCode.FSRVP_SUCCESS, (FsrvpErrorCode)ret,
-                    "The server is expected to return 0x00000000. The server actually returns 0x{0:x8}.", ret);
+                    "The return value of IsPathSupported is expected to be 0x{0:x8}. The server actually returns 0x{1:x8}.",
+                    (int)FsrvpErrorCode.FSRVP_SUCCESS, ret);
                 BaseTestSite.Assert.IsTrue(SupportedByThisProvider,
                     "Expect that shadow copies of this share are supported by the server.");
                 BaseTestSite.Assert.IsFalse(string.IsNullOrEmpty(FsrvpServerName),
@@ -438,7 +439,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
             uint MaxVersion;
             ret = fsrvpClientForCreation.GetSupportedVersion(out MinVersion, out MaxVersion);
             BaseTestSite.Assert.AreEqual<FsrvpErrorCode>(FsrvpErrorCode.FSRVP_SUCCESS, (FsrvpErrorCode)ret,
-                "The server is expected to return 0x00000000. The server actually returns 0x{0:x8}.", ret);
+                "The return value of GetSupportedVersion is expected to be 0x{0:x8}. The server actually returns 0x{1:x8}.",
+                (int)FsrvpErrorCode.FSRVP_SUCCESS, ret);
             BaseTestSite.Assert.AreEqual<uint>((uint)FsrvpVersionValues.FSRVP_RPC_VERSION_1,
                 MinVersion,
                 "Expect that the minimum version of the protocol supported by the server is 0x{0:x8}. The server actually returns 0x{1:x8}.",
@@ -455,7 +457,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
             BaseTestSite.Log.Add(LogEntryKind.Debug, "Start to call SetContext(0x{0:x8}).", context);
             ret = fsrvpClientForCreation.SetContext(context);
             BaseTestSite.Assert.AreEqual<FsrvpErrorCode>(FsrvpErrorCode.FSRVP_E_UNSUPPORTED_CONTEXT, (FsrvpErrorCode)ret,
-                "The server is expected to return 0x{0:x8}. The server actually returns 0x{1:x8}.",
+                "The return value of SetContext is expected to be 0x{0:x8}. The server actually returns 0x{1:x8}.",
                 (uint)FsrvpErrorCode.FSRVP_E_UNSUPPORTED_CONTEXT, ret);
             #endregion
         }
@@ -493,7 +495,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
             uint MaxVersion;
             ret = fsrvpClientForCreation.GetSupportedVersion(out MinVersion, out MaxVersion);
             BaseTestSite.Assert.AreEqual<FsrvpErrorCode>(FsrvpErrorCode.FSRVP_SUCCESS, (FsrvpErrorCode)ret,
-                "The server is expected to return 0x00000000. The server actually returns 0x{0:x8}.", ret);
+                "The return value of GetSupportedVersion is expected to be 0x{0:x8}. The server actually returns 0x{1:x8}.",
+                (int)FsrvpErrorCode.FSRVP_SUCCESS, ret);
             BaseTestSite.Assert.AreEqual<uint>((uint)FsrvpVersionValues.FSRVP_RPC_VERSION_1,
                 MinVersion,
                 "Expect that the minimum version of the protocol supported by the server is 0x{0:x8}. The server actually returns 0x{1:x8}.",
@@ -511,7 +514,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
             BaseTestSite.Log.Add(LogEntryKind.Debug, "Start to call SetContext(0x{0:x8}).", context);
             ret = fsrvpClientForCreation.SetContext(context);
             BaseTestSite.Assert.AreEqual<FsrvpErrorCode>(FsrvpErrorCode.FSRVP_SUCCESS, (FsrvpErrorCode)ret,
-                "The server is expected to return 0x00000000. The server actually returns 0x{0:x8}.", ret);
+                "The return value of SetContext is expected to be 0x{0:x8}. The server actually returns 0x{1:x8}.",
+                (int)FsrvpErrorCode.FSRVP_SUCCESS, ret);
             #endregion
 
             #region StartShadowCopySet
@@ -522,7 +526,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
                 clientShadowCopySetId);
             ret = fsrvpClientForCreation.StartShadowCopySet(clientShadowCopySetId, out shadowCopySetId);
             BaseTestSite.Assert.AreEqual<FsrvpErrorCode>(FsrvpErrorCode.FSRVP_SUCCESS, (FsrvpErrorCode)ret,
-                "The server is expected to return 0x00000000. The server actually returns 0x{0:x8}.", ret);
+                "The return value of StartShadowCopySet is expected to be 0x{0:x8}. The server actually returns 0x{1:x8}.",
+                (int)FsrvpErrorCode.FSRVP_SUCCESS, ret);
             BaseTestSite.Assert.AreNotEqual<Guid>(Guid.Empty, shadowCopySetId,
                 "The server is expected to return a valid shadowCopySetId. But the shadowCopySetId which the server returns is empty.");
             fsrvpStatus = FsrvpStatus.Started;
@@ -536,7 +541,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
                     shadowCopySetId);
                 ret = fsrvpClientForCreation.AbortShadowCopySet(shadowCopySetId);
                 BaseTestSite.Assert.AreEqual<FsrvpErrorCode>(FsrvpErrorCode.FSRVP_SUCCESS, (FsrvpErrorCode)ret,
-                    "The server is expected to return 0x00000000. The server actually returns 0x{0:x8}.", ret);
+                    "The return value of AbortShadowCopySet is expected to be 0x{0:x8}. The server actually returns 0x{1:x8}.",
+                    (int)FsrvpErrorCode.FSRVP_SUCCESS, ret);
                 return;
             }
 
@@ -561,7 +567,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
                     out shadowCopy.serverShadowCopyId);
 
                 BaseTestSite.Assert.AreEqual<FsrvpErrorCode>(FsrvpErrorCode.FSRVP_SUCCESS, (FsrvpErrorCode)ret,
-                    "The server is expected to return 0x00000000. The server actually returns 0x{0:x8}.", ret);
+                    "The return value of AddToShadowCopySet is expected to be 0x{0:x8}. The server actually returns 0x{1:x8}.",
+                    (int)FsrvpErrorCode.FSRVP_SUCCESS, ret);
                 BaseTestSite.Assert.AreNotEqual<Guid>(Guid.Empty, shadowCopy.serverShadowCopyId,
                     "The server is expected to send a valid shadowCopyId.  But the shadowCopyId which the server returns is empty.");
                 shadowCopyList.Add(shadowCopy);
@@ -581,7 +588,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
                     out shadowCopy.serverShadowCopyId);
 
                 BaseTestSite.Assert.AreEqual<FsrvpErrorCode>(FsrvpErrorCode.FSRVP_E_INVALIDARG, (FsrvpErrorCode)ret,
-                    "The server is expected to return 0x{0:x8}. The server actually returns 0x{1:x8}.",
+                    "The return value of AddToShadowCopySet is expected to be 0x{0:x8}. The server actually returns 0x{1:x8}.",
                     (uint)FsrvpErrorCode.FSRVP_E_INVALIDARG, ret);
                 BaseTestSite.Assert.AreEqual<Guid>(Guid.Empty, shadowCopy.serverShadowCopyId,
                     "The server is expected to send an empty shadowCopyId.  The actual shadowCopyId which the server returns is {0}.",
@@ -605,7 +612,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
                         out shadowCopy.serverShadowCopyId);
 
                     BaseTestSite.Assert.AreEqual<FsrvpErrorCode>(FsrvpErrorCode.FSRVP_SUCCESS, (FsrvpErrorCode)ret,
-                        "The server is expected to return 0x00000000. The server actually returns 0x{0:x8}.", ret);
+                        "The return value of AddToShadowCopySet is expected to be 0x{0:x8}. The server actually returns 0x{1:x8}.",
+                        (int)FsrvpErrorCode.FSRVP_SUCCESS, ret);
                     BaseTestSite.Assert.AreNotEqual<Guid>(Guid.Empty, shadowCopy.serverShadowCopyId,
                         "The server is expected to send a valid shadowCopyId.  But the shadowCopyId which the server returns is empty.");
                     shadowCopyList.Add(shadowCopy);
@@ -623,7 +631,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
                     shadowCopySetId);
                 ret = fsrvpClientForCreation.AbortShadowCopySet(shadowCopySetId);
                 BaseTestSite.Assert.AreEqual<FsrvpErrorCode>(FsrvpErrorCode.FSRVP_SUCCESS, (FsrvpErrorCode)ret,
-                    "The server is expected to return 0x00000000. The server actually returns 0x{0:x8}.", ret);
+                    "The return value of AbortShadowCopySet is expected to be 0x{0:x8}. The server actually returns 0x{1:x8}.",
+                    (int)FsrvpErrorCode.FSRVP_SUCCESS, ret);
                 return;
             }
 
@@ -635,7 +644,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
             ret = fsrvpClientForCreation.PrepareShadowCopySet(shadowCopySetId,
                 (uint)FsrvpUtility.FSRVPPrepareTimeoutInSeconds * 1000);
             BaseTestSite.Assert.AreEqual<FsrvpErrorCode>(FsrvpErrorCode.FSRVP_SUCCESS, (FsrvpErrorCode)ret,
-                "The server is expected to return 0x00000000. The server actually returns 0x{0:x8}.", ret);
+                "The return value of PrepareShadowCopySet is expected to be 0x{0:x8}. The server actually returns 0x{1:x8}.",
+                (int)FsrvpErrorCode.FSRVP_SUCCESS, ret);
             fsrvpStatus = FsrvpStatus.CreateInProgress;
             #endregion
 
@@ -648,7 +658,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
             ret = fsrvpClientForCreation.CommitShadowCopySet(shadowCopySetId,
                 (uint)FsrvpUtility.FSRVPCommitTimeoutInSeconds * 1000);
             BaseTestSite.Assert.AreEqual<FsrvpErrorCode>(FsrvpErrorCode.FSRVP_SUCCESS, (FsrvpErrorCode)ret,
-                "The server is expected to return 0x00000000. The server actually returns 0x{0:x8}.", ret);
+                "The return value of CommitShadowCopySet is expected to be 0x{0:x8}. The server actually returns 0x{1:x8}.",
+                (int)FsrvpErrorCode.FSRVP_SUCCESS, ret);
             fsrvpStatus = FsrvpStatus.Committed;
             #endregion
             
@@ -661,7 +672,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
             ret = fsrvpClientForCreation.ExposeShadowCopySet(shadowCopySetId,
                 (uint)FsrvpUtility.FSRVPExposeTimeoutInSeconds * 1000);
             BaseTestSite.Assert.AreEqual<FsrvpErrorCode>(FsrvpErrorCode.FSRVP_SUCCESS, (FsrvpErrorCode)ret,
-                "The server is expected to return 0x00000000. The server actually returns 0x{0:x8}.", ret);
+                "The return value of ExposeShadowCopySet is expected to be 0x{0:x8}. The server actually returns 0x{1:x8}.",
+                (int)FsrvpErrorCode.FSRVP_SUCCESS, ret);
             fsrvpStatus = FsrvpStatus.Exposed;
             #endregion
 
@@ -683,7 +695,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
                     (uint)FsrvpLevel.FSRVP_LEVEL_1,
                     out mapping);
                 BaseTestSite.Assert.AreEqual<FsrvpErrorCode>(FsrvpErrorCode.FSRVP_SUCCESS, (FsrvpErrorCode)ret,
-                    "The server is expected to return 0x00000000. The server actually returns 0x{0:x8}.", ret);
+                    "The return value of GetShareMapping is expected to be 0x{0:x8}. The server actually returns 0x{1:x8}.",
+                    (int)FsrvpErrorCode.FSRVP_SUCCESS, ret);
                 BaseTestSite.Assert.IsFalse(mapping.ShareMapping1IsNull,
                     "Expect ShareMapping.ShareMapping1 the server returns is not null.");
                 string exposedName = GetExposedShareName(shadowCopy.shareName, shadowCopy.serverShadowCopyId);
@@ -730,7 +743,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
                 shadowCopySetId);
             ret = fsrvpClientForCreation.RecoveryCompleteShadowCopySet(shadowCopySetId);
             BaseTestSite.Assert.AreEqual<FsrvpErrorCode>(FsrvpErrorCode.FSRVP_SUCCESS, (FsrvpErrorCode)ret,
-                "The server is expected to return 0x00000000. The server actually returns 0x{0:x8}.", ret);
+                "The return value of RecoveryCompleteShadowCopySet is expected to be 0x{0:x8}. The server actually returns 0x{1:x8}.",
+                (int)FsrvpErrorCode.FSRVP_SUCCESS, ret);
             fsrvpStatus = FsrvpStatus.Recovered;
             #endregion
 
@@ -742,7 +756,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
                     shadowCopySetId);
                 ret = fsrvpClientForCreation.AbortShadowCopySet(shadowCopySetId);
                 BaseTestSite.Assert.AreEqual<FsrvpErrorCode>(FsrvpErrorCode.FSRVP_E_BAD_STATE, (FsrvpErrorCode)ret,
-                    "The server is expected to return 0x{0:x8}. The server actually returns 0x{1:x8}.",
+                    "The return value of AbortShadowCopySet is expected to be 0x{0:x8}. The server actually returns 0x{1:x8}.",
                     (uint)FsrvpErrorCode.FSRVP_E_BAD_STATE, ret);
             }
 
@@ -757,7 +771,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
                 long ShadowCopyCompatibility = 0;
                 ret = fsrvpClientForCreation.IsPathShadowCopied(shareName, out ShadowCopyPresent, out ShadowCopyCompatibility);
                 BaseTestSite.Assert.AreEqual<FsrvpErrorCode>(FsrvpErrorCode.FSRVP_SUCCESS, (FsrvpErrorCode)ret,
-                    "The server is expected to return 0x00000000. The server actually returns 0x{0:x8}.", ret);
+                    "The return value of IsPathShadowCopied is expected to be 0x{0:x8}. The server actually returns 0x{1:x8}.",
+                    (int)FsrvpErrorCode.FSRVP_SUCCESS, ret);
                 BaseTestSite.Assert.IsTrue(ShadowCopyPresent,
                     "Expect that ShadowCopyPresent returned by the server is true.");
                 BaseTestSite.Assert.IsTrue((ShadowCopyCompatibility == 0)
@@ -782,7 +797,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
                     shadowCopy.serverShadowCopyId,
                     shadowCopy.shareName);
                 BaseTestSite.Assert.AreEqual<FsrvpErrorCode>(FsrvpErrorCode.FSRVP_SUCCESS, (FsrvpErrorCode)ret,
-                    "The server is expected to return 0x00000000. The server actually returns 0x{0:x8}.", ret);
+                    "The return value of DeleteShareMapping is expected to be 0x{0:x8}. The server actually returns 0x{1:x8}.",
+                    (int)FsrvpErrorCode.FSRVP_SUCCESS, ret);
             }
             shadowCopyList.Clear();
             #endregion
