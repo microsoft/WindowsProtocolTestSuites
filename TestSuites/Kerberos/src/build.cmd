@@ -65,4 +65,16 @@ if exist "%TestSuiteRoot%drop\TestSuites\Kerberos" (
  rd /s /q "%TestSuiteRoot%drop\TestSuites\Kerberos"
 )
 
+::copy wxs file
+COPY ".\Deploy\Kerberos-TestSuite-ServerEP.wxs" ".\Deploy\Kerberos-TestSuite-ServerEP_.wxs"
+
+call %windir%\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -file "..\..\..\Check-PTFVersion.ps1" -WxsFile ".\Deploy\Kerberos-TestSuite-ServerEP.wxs"
 %buildtool% "%TestSuiteRoot%TestSuites\Kerberos\src\deploy\deploy.wixproj" /t:Clean;Rebuild
+
+::replace wxs file
+DEL ".\Deploy\Kerberos-TestSuite-ServerEP.wxs"
+rename ".\Deploy\Kerberos-TestSuite-ServerEP_.wxs" Kerberos-TestSuite-ServerEP.wxs
+
+echo ==============================================
+echo          Build Kerberos test suite successfully
+echo ==============================================
