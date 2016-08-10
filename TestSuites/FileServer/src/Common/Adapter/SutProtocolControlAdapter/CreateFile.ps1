@@ -16,7 +16,8 @@ if([System.String]::IsNullOrEmpty($domain))
 }
 else
 {
-    $account = "$Domain\$UserName"
+    $NetBiosName = $Domain.Split(".")[0]
+    $account = "$NetBiosName\$UserName"
 }
 
 $result = $FALSE
