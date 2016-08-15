@@ -17,7 +17,8 @@ if($domain -eq $null -or $domain.trim() -eq "")
 }
 else
 {
-    $account = "$domain\$userName"
+    $NetBIOSName = $Domain.Split(".")[0]
+    $account = "$NetBIOSName\$UserName"
 }
 
 for($i=0; $i -lt $password.Length; $i++)
