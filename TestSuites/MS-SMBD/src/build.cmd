@@ -78,13 +78,13 @@ if exist "%TestSuiteRoot%drop\TestSuites\MS-SMBD" (
 )
 
 ::copy wxs file
-COPY ".\Deploy\MS-SMBD-TestSuite-ServerEP.wxs" ".\Deploy\MS-SMBD-TestSuite-ServerEP_.wxs"
+COPY "%TestSuiteRoot%TestSuites\MS-SMBD\src\Deploy\MS-SMBD-TestSuite-ServerEP.wxs" "%TestSuiteRoot%TestSuites\MS-SMBD\src\Deploy\MS-SMBD-TestSuite-ServerEP_.wxs"
 
-call %windir%\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -file "..\..\..\Check-PTFVersion.ps1" -WxsFile ".\Deploy\MS-SMBD-TestSuite-ServerEP.wxs"
+call %windir%\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -file "%TestSuiteRoot%Check-PTFVersion.ps1" -WxsFile "%TestSuiteRoot%TestSuites\MS-SMBD\src\Deploy\MS-SMBD-TestSuite-ServerEP.wxs"
 %buildtool% "%TestSuiteRoot%TestSuites\MS-SMBD\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:Platform="x64" /p:Configuration="Release"
 ::replace wxs file
-DEL ".\Deploy\MS-SMBD-TestSuite-ServerEP.wxs"
-rename ".\Deploy\MS-SMBD-TestSuite-ServerEP_.wxs" MS-SMBD-TestSuite-ServerEP.wxs
+DEL "%TestSuiteRoot%TestSuites\MS-SMBD\src\Deploy\MS-SMBD-TestSuite-ServerEP.wxs"
+rename "%TestSuiteRoot%TestSuites\MS-SMBD\src\Deploy\MS-SMBD-TestSuite-ServerEP_.wxs" MS-SMBD-TestSuite-ServerEP.wxs
 
 echo ==============================================
 echo          Build MS-SMBD test suite successfully
