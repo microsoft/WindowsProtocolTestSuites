@@ -66,14 +66,14 @@ if exist "%TestSuiteRoot%drop\TestSuites\Kerberos" (
 )
 
 ::copy wxs file
-COPY ".\Deploy\Kerberos-TestSuite-ServerEP.wxs" ".\Deploy\Kerberos-TestSuite-ServerEP_.wxs"
+COPY "%TestSuiteRoot%TestSuites\Kerberos\src\Deploy\Kerberos-TestSuite-ServerEP.wxs" "%TestSuiteRoot%TestSuites\Kerberos\src\Deploy\Kerberos-TestSuite-ServerEP_.wxs"
 
-call %windir%\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -file "..\..\..\Check-PTFVersion.ps1" -WxsFile ".\Deploy\Kerberos-TestSuite-ServerEP.wxs"
+call %windir%\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -file "%TestSuiteRoot%Check-PTFVersion.ps1" -WxsFile "%TestSuiteRoot%TestSuites\Kerberos\src\Deploy\Kerberos-TestSuite-ServerEP.wxs"
 %buildtool% "%TestSuiteRoot%TestSuites\Kerberos\src\deploy\deploy.wixproj" /t:Clean;Rebuild
 
 ::replace wxs file
-DEL ".\Deploy\Kerberos-TestSuite-ServerEP.wxs"
-rename ".\Deploy\Kerberos-TestSuite-ServerEP_.wxs" Kerberos-TestSuite-ServerEP.wxs
+DEL "%TestSuiteRoot%TestSuites\Kerberos\src\Deploy\Kerberos-TestSuite-ServerEP.wxs"
+rename "%TestSuiteRoot%TestSuites\Kerberos\src\Deploy\Kerberos-TestSuite-ServerEP_.wxs" Kerberos-TestSuite-ServerEP.wxs
 
 echo ==============================================
 echo          Build Kerberos test suite successfully
