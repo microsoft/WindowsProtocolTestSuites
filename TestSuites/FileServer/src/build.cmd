@@ -66,14 +66,14 @@ if exist "%TestSuiteRoot%drop\TestSuites\FileServer" (
 )
 
 ::copy wxs file
-COPY ".\Deploy\FileServer-TestSuite-ServerEP.wxs" ".\Deploy\FileServer-TestSuite-ServerEP_.wxs"
+COPY "%TestSuiteRoot%TestSuites\FileServer\src\Deploy\FileServer-TestSuite-ServerEP.wxs" "%TestSuiteRoot%TestSuites\FileServer\src\Deploy\FileServer-TestSuite-ServerEP_.wxs"
 
-call %windir%\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -file "..\..\..\Check-PTFVersion.ps1" -WxsFile ".\Deploy\FileServer-TestSuite-ServerEP.wxs"
+call %windir%\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -file "%TestSuiteRoot%Check-PTFVersion.ps1" -WxsFile "%TestSuiteRoot%TestSuites\FileServer\src\Deploy\FileServer-TestSuite-ServerEP.wxs"
 %buildtool% "%TestSuiteRoot%TestSuites\FileServer\src\deploy\deploy.wixproj" /t:Clean;Rebuild
 
 ::replace wxs file
-DEL ".\Deploy\FileServer-TestSuite-ServerEP.wxs"
-rename ".\Deploy\FileServer-TestSuite-ServerEP_.wxs" FileServer-TestSuite-ServerEP.wxs
+DEL "%TestSuiteRoot%TestSuites\FileServer\src\Deploy\FileServer-TestSuite-ServerEP.wxs"
+rename "%TestSuiteRoot%TestSuites\FileServer\src\Deploy\FileServer-TestSuite-ServerEP_.wxs" FileServer-TestSuite-ServerEP.wxs
 
 echo ==============================================
 echo          Build FileServer test suite successfully
