@@ -106,6 +106,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                         Smb2Status.STATUS_SUCCESS,
                         header.Status,
                         "{0} should succeed, actually server returns {1}.", header.Command, Smb2Status.GetStatusCode(header.Status));
+                    CheckServerCapabilities(response);
                 });
         }
 
@@ -127,10 +128,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     BaseTestSite.Log.Add(
                         LogEntryKind.Debug,
                         "The selected dialect is " + response.DialectRevision);
-                        BaseTestSite.Assert.AreEqual(
-                            DialectRevision.Smb2002,
-                            response.DialectRevision,
-                            "The server is expected to use dialect: {0}", DialectRevision.Smb2002);
+                    BaseTestSite.Assert.AreEqual(
+                        DialectRevision.Smb2002,
+                        response.DialectRevision,
+                        "The server is expected to use dialect: {0}", DialectRevision.Smb2002);
+                    CheckServerCapabilities(response);
                 });
         }
 
@@ -154,6 +156,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                         Smb2Status.STATUS_SUCCESS,
                         header.Status,
                         "{0} should succeed, actually server returns {1}.", header.Command, Smb2Status.GetStatusCode(header.Status));
+                    CheckServerCapabilities(response);
                 });
         }
 
@@ -223,8 +226,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 checker: (Packet_Header header, NEGOTIATE_Response response) =>
                 {
                     CheckNegotiateResponse(header, response, clientMaxDialectSupported, encryptionAlgs);
-                }
-                );
+                });
         }
 
         [TestMethod]
@@ -251,8 +253,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 checker: (Packet_Header header, NEGOTIATE_Response response) =>
                 {
                     CheckNegotiateResponse(header, response, clientMaxDialectSupported, null);
-                }
-                );
+                });
         }
 
 
@@ -285,8 +286,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 checker: (Packet_Header header, NEGOTIATE_Response response) =>
                 {
                     CheckNegotiateResponse(header, response, clientMaxDialectSupported, encryptionAlgs);
-                }
-                );
+                });
         }
 
         [TestMethod]
@@ -318,8 +318,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 checker: (Packet_Header header, NEGOTIATE_Response response) =>
                 {
                     CheckNegotiateResponse(header, response, clientMaxDialectSupported, encryptionAlgs);
-                }
-                );
+                });
         }
 
         [TestMethod]
@@ -340,12 +339,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 preauthHashAlgs: null,
                 encryptionAlgs: null,
                 checker: (Packet_Header header, NEGOTIATE_Response response) =>
-                    {
-                        BaseTestSite.Log.Add(LogEntryKind.TestStep, "Verify server fails the negotiate request with STATUS_INVALID_PARAMETER.");
-                        BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_INVALID_PARAMETER, header.Status,
-                            "[MS-SMB2] 3.3.5.4 If the negotiate context list does not contain exactly one SMB2_PREAUTH_INTEGRITY_CAPABILITIES negotiate context, " + 
-                            "then the server MUST fail the negotiate request with STATUS_INVALID_PARAMETER.");
-                    });
+                {
+                    BaseTestSite.Log.Add(LogEntryKind.TestStep, "Verify server fails the negotiate request with STATUS_INVALID_PARAMETER.");
+                    BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_INVALID_PARAMETER, header.Status,
+                        "[MS-SMB2] 3.3.5.4 If the negotiate context list does not contain exactly one SMB2_PREAUTH_INTEGRITY_CAPABILITIES negotiate context, " + 
+                        "then the server MUST fail the negotiate request with STATUS_INVALID_PARAMETER.");
+                });
         }
 
         [TestMethod]
@@ -434,8 +433,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     BaseTestSite.Log.Add(LogEntryKind.TestStep, "Verify that server sets Connection.CipherId to 0 from the response.");
                     BaseTestSite.Assert.AreEqual((EncryptionAlgorithm)0, client.SelectedCipherID, 
                         "[MS-SMB2] 3.3.5.4 If the client and server have no common cipher, then the server must set Connection.CipherId to 0.");
-                }
-                );
+                });
         }
         #endregion
 
@@ -468,6 +466,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                                 header.Status,
                                 "{0} should succeed, actually server returns {1}.", header.Command, Smb2Status.GetStatusCode(header.Status));
                     BaseTestSite.Assert.AreEqual(expectedDialect, response.DialectRevision, "Selected dialect should be {0}", expectedDialect);
+                    CheckServerCapabilities(response);
                 });
         }
 
@@ -546,6 +545,75 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     EncryptionAlgorithm.ENCRYPTION_NONE,
                     client.SelectedCipherID,
                     "[MS-SMB2] The server must ignore the SMB2_ENCRYPTION_CAPABILITIES context if Connection.Dialect is less than 3.11. ");
+            }
+
+            CheckServerCapabilities(response);
+        }
+
+        private void CheckServerCapabilities(NEGOTIATE_Response response)
+        {
+            // Check capability: Leasing
+            if (TestConfig.IsLeasingSupported
+                && response.DialectRevision != DialectRevision.Smb2002)
+            {
+                BaseTestSite.Assert.AreEqual<NEGOTIATE_Response_Capabilities_Values>(
+                    NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LEASING,
+                    response.Capabilities & NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LEASING,
+                    "The \"Capabilities\" of Negotiate Response should has flag GLOBAL_CAP_LEASING set.");
+            }
+
+            // Check capability: Large MTU
+            if (TestConfig.IsMultiCreditSupported
+                && response.DialectRevision != DialectRevision.Smb2002)
+            {
+                BaseTestSite.Assert.AreEqual<NEGOTIATE_Response_Capabilities_Values>(
+                    NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LARGE_MTU,
+                    response.Capabilities & NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LARGE_MTU,
+                    "The \"Capabilities\" of Negotiate Response should has flag GLOBAL_CAP_LARGE_MTU set.");
+            }
+
+            // Check capability: MultiChannel
+            if (TestConfig.IsMultiChannelCapable
+                && response.DialectRevision != DialectRevision.Smb2002
+                && response.DialectRevision != DialectRevision.Smb21)
+            {
+                BaseTestSite.Assert.AreEqual<NEGOTIATE_Response_Capabilities_Values>(
+                    NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL,
+                    response.Capabilities & NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL,
+                    "The \"Capabilities\" of Negotiate Response should has flag GLOBAL_CAP_MULTI_CHANNEL set.");
+            }
+
+            // Check capability: Persistent Handle
+            if (TestConfig.IsPersistentHandlesSupported
+                && response.DialectRevision != DialectRevision.Smb2002
+                && response.DialectRevision != DialectRevision.Smb21)
+            {
+                BaseTestSite.Assert.AreEqual<NEGOTIATE_Response_Capabilities_Values>(
+                    NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES,
+                    response.Capabilities & NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES,
+                    "The \"Capabilities\" of Negotiate Response should has flag GLOBAL_CAP_PERSISTENT_HANDLES set.");
+            }
+
+            // Check capability: Directory Leasing
+            if (TestConfig.IsDirectoryLeasingSupported
+                && response.DialectRevision != DialectRevision.Smb2002
+                && response.DialectRevision != DialectRevision.Smb21)
+            {
+                BaseTestSite.Assert.AreEqual<NEGOTIATE_Response_Capabilities_Values>(
+                    NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING,
+                    response.Capabilities & NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING,
+                    "The \"Capabilities\" of Negotiate Response should has flag GLOBAL_CAP_DIRECTORY_LEASING set.");
+            }
+
+            // Check capability: Encryption
+            if (TestConfig.IsEncryptionSupported
+                && response.DialectRevision == DialectRevision.Smb30
+                && response.DialectRevision == DialectRevision.Smb302)
+            {
+                BaseTestSite.Assert.AreEqual<NEGOTIATE_Response_Capabilities_Values>(
+                    NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_ENCRYPTION,
+                    response.Capabilities & NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_ENCRYPTION,
+                    "The \"Capabilities\" of Negotiate Response should has flag GLOBAL_CAP_ENCRYPTION set.");
             }
         }
 
