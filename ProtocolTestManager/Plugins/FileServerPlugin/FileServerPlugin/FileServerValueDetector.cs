@@ -381,7 +381,9 @@ namespace Microsoft.Protocols.TestManager.Detector
                 {
                     versionvalue = "0x00000002";
                 }
+
                 propertiesDic.Add("RSVD.ServerServiceVersion", new List<string>() { versionvalue });
+                propertiesDic.Add("RSVD.FileServerIPContainingSharedVHD", new List<string>() { detectionInfo.networkInfo.SUTIpList[0].ToString() });
             }
             #endregion
 

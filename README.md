@@ -25,7 +25,7 @@ Windows Protocol Test Suites contain 4 components:
 The Test Suites are developed and must be installed on a Windows platform.
 You should install the following list of software in order to build Test Suites from source code.
 
-* .Net framework 3.5
+* .Net framework 4.0 or higher
 * [Wix toolset](http://wixtoolset.org/) v3.7 or higher
 * [Visual Studio](https://www.microsoft.com/en-us/download/details.aspx?id=30682) or [Visual Studio Agent](https://www.microsoft.com/en-us/download/details.aspx?id=38186), version 2012 or higher
 * [Protocol Test Framework](https://github.com/microsoft/protocoltestframework). You can use a released MSI file or build it from source code.

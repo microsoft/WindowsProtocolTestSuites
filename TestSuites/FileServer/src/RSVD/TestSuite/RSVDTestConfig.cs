@@ -104,7 +104,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         {
             get
             {
-                return GetProperty("InitiatorHostName");
+                return "Client01";
             }
         }
 

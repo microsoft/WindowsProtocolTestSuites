@@ -66,14 +66,14 @@ if exist "%TestSuiteRoot%drop\TestSuites\MS-SMB" (
 )
 
 ::copy wxs file
-COPY ".\Deploy\MS-SMB-TestSuite-ServerEP.wxs" ".\Deploy\MS-SMB-TestSuite-ServerEP_.wxs"
+COPY "%TestSuiteRoot%TestSuites\MS-SMB\src\Deploy\MS-SMB-TestSuite-ServerEP.wxs" "%TestSuiteRoot%TestSuites\MS-SMB\src\Deploy\MS-SMB-TestSuite-ServerEP_.wxs"
 
-call %windir%\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -file "..\..\..\Check-PTFVersion.ps1" -WxsFile ".\Deploy\MS-SMB-TestSuite-ServerEP.wxs"
+call %windir%\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -file "%TestSuiteRoot%Check-PTFVersion.ps1" -WxsFile "%TestSuiteRoot%TestSuites\MS-SMB\src\Deploy\MS-SMB-TestSuite-ServerEP.wxs"
 %buildtool% "%TestSuiteRoot%TestSuites\MS-SMB\src\deploy\deploy.wixproj" /t:Clean;Rebuild
 
 ::replace wxs file
-DEL ".\Deploy\MS-SMB-TestSuite-ServerEP.wxs"
-rename ".\Deploy\MS-SMB-TestSuite-ServerEP_.wxs" MS-SMB-TestSuite-ServerEP.wxs
+DEL "%TestSuiteRoot%TestSuites\MS-SMB\src\Deploy\MS-SMB-TestSuite-ServerEP.wxs"
+rename "%TestSuiteRoot%TestSuites\MS-SMB\src\Deploy\MS-SMB-TestSuite-ServerEP_.wxs" MS-SMB-TestSuite-ServerEP.wxs
 
 echo ==============================================
 echo          Build MS-SMB test suite successfully

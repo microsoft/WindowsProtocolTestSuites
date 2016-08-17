@@ -22,13 +22,6 @@
         </Description>
       </Property>
 
-      <Property name="InitiatorHostName" value="client01">
-        <Description>
-          Specifies the computer name on which the initiator resides
-          Could be set to application-provided initiator name
-        </Description>
-      </Property>
-
       <Property name="ServerServiceVersion" value="0x00000002">
         <Choice>0x00000001,0x00000002</Choice>
         <Description>
