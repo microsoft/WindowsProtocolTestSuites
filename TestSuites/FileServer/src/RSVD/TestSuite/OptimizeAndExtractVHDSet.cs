@@ -55,7 +55,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             extract.snapshotType = Snapshot_Type.SvhdxSnapshotTypeVM;
             extract.flags = ExtractSnapshot_Flags.SVHDX_EXTRACT_SNAPSHOTS_FLAG_ZERO;
             extract.SourceSnapshotId = snapshotId;
-            extract.SourceLimitSnapshotId = snapshotId;
+
+            //Zero indicates that there MUST be no base snapshot and that the extracted disk will not be a differencing VHD.
+            extract.SourceLimitSnapshotId = System.Guid.Empty; 
+
             extract.DestinationFileName = Encoding.Unicode.GetBytes(System.Guid.NewGuid().ToString() + "\0");
             extract.DestinationFileNameLength = (uint)extract.DestinationFileName.Length;
             
