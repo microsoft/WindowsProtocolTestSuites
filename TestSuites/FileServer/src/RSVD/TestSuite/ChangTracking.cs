@@ -52,7 +52,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             SVHDX_CHANGE_TRACKING_START_REQUEST request = new SVHDX_CHANGE_TRACKING_START_REQUEST();
             request.TransactionId = System.Guid.NewGuid();
             request.LogFileId = System.Guid.NewGuid();
-            request.LogFilePathOffset = 40; // TODO: the offset is not defined in current TD. Need to update case when the doc is updated.
+            request.LogFileNameOffset = 56; 
             request.LogFileName = logFileName; 
             request.LogFileNameLength = (uint)(request.LogFileName.Length + 1) * 2;
             byte[] payload = client.CreateChangeTrackingStartRequest(request);

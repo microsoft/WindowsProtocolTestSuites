@@ -1596,11 +1596,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         public Guid TransactionId;
 
         /// <summary>
-        /// Offset from the beginning of the buffer in which this structure is contained from which the log path  
+        /// The offset, in bytes, of the LogFileName field.  
         /// starts. 
         /// </summary>
         [StaticSize(4)]
-        public uint LogFilePathOffset;
+        public uint LogFileNameOffset;
 
         /// <summary>
         /// The length, in bytes, of the name string. This length MUST include a NULL terminating character.
