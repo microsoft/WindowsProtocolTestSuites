@@ -44,6 +44,29 @@ if not defined vspath (
 	)
 )
 
+:: Get PTF version
+C:\Windows\System32\REG.exe QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework > NUL
+IF NOT ERRORLEVEL 1 (
+	set KEY_NAME="HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework"
+	FOR /F "usebackq skip=2 tokens=1-3" %%A IN (`C:\Windows\System32\REG.exe QUERY %KEY_NAME% /v %VALUE_NAME% 2^>nul`) DO (
+		set ValueName=%%A
+		set ValueValue=%%C
+	)
+) ELSE (
+	set KEY_NAME="HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ProtocolTestFramework"
+	FOR /F "usebackq skip=2 tokens=1-3" %%A IN (`C:\Windows\System32\REG.exe QUERY %KEY_NAME% /v %VALUE_NAME% 2^>nul`) DO (
+		set ValueName=%%A
+		set ValueValue=%%C
+	)
+)
+
+if defined ValueName (
+	set PTF_VERSION=%ValueValue%
+) else (
+    echo Error: Windows Protocol Test Framework Should be installed.
+	exit /b 1
+)
+
 set CurrentPath=%~dp0
 set TestSuiteRoot=%CurrentPath%..\..\..\
 
@@ -65,15 +88,7 @@ if exist "%TestSuiteRoot%drop\TestSuites\Kerberos" (
  rd /s /q "%TestSuiteRoot%drop\TestSuites\Kerberos"
 )
 
-::copy wxs file
-COPY "%TestSuiteRoot%TestSuites\Kerberos\src\Deploy\Kerberos-TestSuite-ServerEP.wxs" "%TestSuiteRoot%TestSuites\Kerberos\src\Deploy\Kerberos-TestSuite-ServerEP_.wxs"
-
-call %windir%\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -file "%TestSuiteRoot%Check-PTFVersion.ps1" -WxsFile "%TestSuiteRoot%TestSuites\Kerberos\src\Deploy\Kerberos-TestSuite-ServerEP.wxs"
 %buildtool% "%TestSuiteRoot%TestSuites\Kerberos\src\deploy\deploy.wixproj" /t:Clean;Rebuild
-
-::replace wxs file
-DEL "%TestSuiteRoot%TestSuites\Kerberos\src\Deploy\Kerberos-TestSuite-ServerEP.wxs"
-rename "%TestSuiteRoot%TestSuites\Kerberos\src\Deploy\Kerberos-TestSuite-ServerEP_.wxs" Kerberos-TestSuite-ServerEP.wxs
 
 echo ==============================================
 echo          Build Kerberos test suite successfully
