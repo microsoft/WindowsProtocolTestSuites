@@ -58,6 +58,8 @@ IF NOT ERRORLEVEL 1 (
 if defined ValueName (
 	set PTF_VERSION=%ValueValue%
 ) else (
+	:: SET envrionment value incase build deploy.wixproj failed
+	set PTF_VERSION="0.0" 
     echo Warning: Windows Protocol Test Framework Should be installed.
 )
 
