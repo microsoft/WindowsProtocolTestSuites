@@ -79,7 +79,6 @@
 	
 	<!-- Visual Studio 2012 Test Agent dependency check-->
 	<PropertyRef Id="VS2013_IDE_VCSHARP_PROJECTSYSTEM_INSTALLED"/>
-	<PropertyRef Id="VS2015_IDE_VCSHARP_PROJECTSYSTEM_INSTALLED"/>
 	
 	<Property Id="VSTA2013">
       <DirectorySearch Id="TestAgentSearch2013" Path="[ProgramFilesFolder]Microsoft Visual Studio 12.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow" Depth="1">

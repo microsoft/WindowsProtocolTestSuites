@@ -75,10 +75,6 @@
     </SetProperty>
 	
 	<!-- Visual Studio 2012 Test Agent dependency check-->
-	<PropertyRef Id="VS2012_IDE_VCSHARP_PROJECTSYSTEM_INSTALLED"/>
-	<PropertyRef Id="VS2013_IDE_VCSHARP_PROJECTSYSTEM_INSTALLED"/>
-	<PropertyRef Id="VS2015_IDE_VCSHARP_PROJECTSYSTEM_INSTALLED"/>
-	
     <Property Id="VSTA2012">
       <DirectorySearch Id="TestAgentSearch2012" Path="[ProgramFilesFolder]Microsoft Visual Studio 11.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow" Depth="1">
         <FileSearch Name="vstest.console.exe"
@@ -103,7 +99,7 @@
 	<!-- Check if VS12 or VSTest Agent 2012 or higher version-->
 	<InstallUISequence>
       <Custom Action="SET_VSTEST_AGENT_OR_VS_NOT_INSTALLED_WARNING_TEXT_2012ORHigher" After="AppSearch">
-        <![CDATA[$(var.VS12H) AND NOT (VS2012_IDE_VCSHARP_PROJECTSYSTEM_INSTALLED OR VS2013_IDE_VCSHARP_PROJECTSYSTEM_INSTALLED OR VS2015_IDE_VCSHARP_PROJECTSYSTEM_INSTALLED OR VSTA2012 OR VSTA2013 OR VSTA2015)]]>
+        <![CDATA[$(var.VS12H) AND NOT (VSTA2012 OR VSTA2013 OR VSTA2015)]]>
       </Custom>
     </InstallUISequence>
 	
@@ -129,7 +125,7 @@
     </InstallUISequence>
 	
 	<SetProperty Id="VSInstalled" After="AppSearch" Value="1">
-        <![CDATA[(VSTA2012 OR VS2012_IDE_VCSHARP_PROJECTSYSTEM_INSTALLED) OR (VSTA2013 OR VS2013_IDE_VCSHARP_PROJECTSYSTEM_INSTALLED) OR (VSTA2015 OR VS2015_IDE_VCSHARP_PROJECTSYSTEM_INSTALLED)]]>
+        <![CDATA[VSTA2012 OR VSTA2013 OR VSTA2015]]>
     </SetProperty>
 	
     <!-- Directory structure -->

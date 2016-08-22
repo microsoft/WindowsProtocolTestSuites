@@ -45,24 +45,19 @@ if not defined vspath (
 )
  
 :: Get PTF version
-C:\Windows\System32\REG.exe QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework > NUL
-IF NOT ERRORLEVEL 1 (
-	set KEY_NAME="HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework"
-	FOR /F "usebackq skip=2 tokens=1-3" %%A IN (`C:\Windows\System32\REG.exe QUERY %KEY_NAME% /v %VALUE_NAME% 2^>nul`) DO (
-		set ValueName=%%A
-		set ValueValue=%%C
-	)
-) ELSE (
-	set KEY_NAME="HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ProtocolTestFramework"
-	FOR /F "usebackq skip=2 tokens=1-3" %%A IN (`C:\Windows\System32\REG.exe QUERY %KEY_NAME% /v %VALUE_NAME% 2^>nul`) DO (
-		set ValueName=%%A
-		set ValueValue=%%C
+SET PTFVersion=
+:: Try get PTFVersion from registry under Wow6432Node
+FOR /F "usebackq tokens=3" %%A IN (`%SystemRoot%\System32\REG.exe QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework /v PTFVersion`) DO (
+	SET PTFVersion=%%A
+)
+:: not found in Wow6432
+if not defined PTFVersion (
+	FOR /F "usebackq tokens=3" %%A IN (`%SystemRoot%\System32\REG.exe QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ProtocolTestFramework /v PTFVersion`) DO (
+		SET PTFVersion=%%A
 	)
 )
-
-if defined ValueName (
-	set PTF_VERSION=%ValueValue%
-) else (
+:: check if get PTFVersion
+if not defined PTFVersion (
 	:: SET envrionment value incase build deploy.wixproj failed
 	set PTF_VERSION="0.0" 
     echo Warning: Windows Protocol Test Framework Should be installed.
