@@ -86,7 +86,7 @@ if not defined KeyFile (
 if exist "%TestSuiteRoot%drop\TestSuites\Kerberos" (
  rd /s /q "%TestSuiteRoot%drop\TestSuites\Kerberos"
 )
-
+ 
 %buildtool% "%TestSuiteRoot%TestSuites\Kerberos\src\deploy\deploy.wixproj" /t:Clean;Rebuild
 
 echo ==============================================

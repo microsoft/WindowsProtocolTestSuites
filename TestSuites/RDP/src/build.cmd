@@ -54,7 +54,7 @@ IF NOT ERRORLEVEL 1 (
 		set ValueValue=%%C
 	)
 )
-
+ 
 if defined ValueName (
 	set PTF_VERSION=%ValueValue%
 ) else (

@@ -43,7 +43,7 @@ if not defined vspath (
 		exit /b 1
 	)
 )
-
+ 
 :: Get PTF version
 C:\Windows\System32\REG.exe QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework > NUL
 IF NOT ERRORLEVEL 1 (

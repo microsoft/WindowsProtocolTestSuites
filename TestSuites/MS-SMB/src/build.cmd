@@ -65,7 +65,7 @@ if defined ValueName (
 ) else (
     echo Warning: Windows Protocol Test Framework Should be installed.
 )
-
+ 
 set CurrentPath=%~dp0
 set TestSuiteRoot=%CurrentPath%..\..\..\
 
