@@ -26,7 +26,7 @@ The Test Suites are developed and must be installed on a Windows platform.
 You should install the following list of software in order to build Test Suites from source code.
 
 * .Net framework 4.0 or higher
-* [Wix toolset](http://wixtoolset.org/) v3.7 or higher
+* [Wix toolset](http://wixtoolset.org/) v3.10 or higher
 * [Visual Studio](https://www.microsoft.com/en-us/download/details.aspx?id=30682) or [Visual Studio Agent](https://www.microsoft.com/en-us/download/details.aspx?id=38186), version 2012 or higher
 * [Protocol Test Framework](https://github.com/microsoft/protocoltestframework). You can use a released MSI file or build it from source code.
 * [Spec Explorer](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/). It is only required for the test suites that contain Model-Based Test cases. If you want to regenerate Model-Based Test cases, you must install Visual Studio 2012, otherwise higher versions of Visual Studio are supported.
