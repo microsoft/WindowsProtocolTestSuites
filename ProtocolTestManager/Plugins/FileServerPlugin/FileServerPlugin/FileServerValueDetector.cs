@@ -1007,16 +1007,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                 catch (Exception ex)
                 {
                     detectionInfo.F_ValidateNegotiateInfo = DetectResult.DetectFail;
-                    if (detectionInfo.CheckHigherDialect(detectionInfo.smb2Info.MaxSupportedDialectRevision, DialectRevision.Smb311))
-                    {
-                        detectionInfo.detectExceptions.Add(
-                            CtlCode_Values.FSCTL_VALIDATE_NEGOTIATE_INFO.ToString(),
-                            "FSCTL_VALIDATE_NEGOTIATE_INFO is not applicable when the Connection.Dialect is 3.1.1.");
-                    }
-                    else
-                    {
-                        detectionInfo.detectExceptions.Add(CtlCode_Values.FSCTL_VALIDATE_NEGOTIATE_INFO.ToString(), string.Format("Detect FSCTL_VALIDATE_NEGOTIATE_INFO failed: {0}", ex.Message));
-                    }
+                    detectionInfo.detectExceptions.Add(CtlCode_Values.FSCTL_VALIDATE_NEGOTIATE_INFO.ToString(), string.Format("Detect FSCTL_VALIDATE_NEGOTIATE_INFO failed: {0}", ex.Message));
                 }
 
                 //Add the unsupported IoctlCodes to the list
