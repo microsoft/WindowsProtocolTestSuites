@@ -24,7 +24,9 @@ Windows Protocol Test Suites contain 4 components:
 ## Prerequisites
 The Test Suites are developed and must be installed on a Windows platform.
 You should install the following list of software in order to build Test Suites from source code.
+You can use the script in **InstallPrerequisites** folder to automatically download and install these software.
 
+* .NET Framework 3.5
 * .Net framework 4.0 or higher
 * [Wix toolset](http://wixtoolset.org/) v3.7 or higher
 * [Visual Studio](https://www.microsoft.com/en-us/download/details.aspx?id=30682) or [Visual Studio Agent](https://www.microsoft.com/en-us/download/details.aspx?id=38186), version 2012 or higher
@@ -38,6 +40,7 @@ Some test suites use [Model-Based Testing](https://msdn.microsoft.com/en-us/libr
 * **SMB1 Server Test Suite**
 * **File Server Family Test Suite**
 * **Kerberos Server Test Suite**
+* **SMBD Server Test Suite**
 
 ## Build
 
