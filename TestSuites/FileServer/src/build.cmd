@@ -46,24 +46,18 @@ if not defined vspath (
 
 :: Get PTF version
 set REGEXE="%SystemRoot%\System32\REG.exe"
-set PTF_VERSION=
+set PTF_VERSION="0.0"
 :: Try get PTF_VERSION from registry under Wow6432Node
 FOR /F "usebackq tokens=3" %%A IN (`%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework /v PTFVersion`) DO (
 	set PTF_VERSION=%%A
 )
 :: not found in Wow6432
-if not defined PTF_VERSION (
+if PTF_VERSION == "0.0" (
 	FOR /F "usebackq tokens=3" %%A IN (`%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ProtocolTestFramework /v PTFVersion`) DO (
 		set PTF_VERSION=%%A
 	)
 )
-:: check if get PTF_VERSION
-if not defined PTF_VERSION (
-	:: set envrionment value incase build deploy.wixproj failed
-	set PTF_VERSION="0.0" 
-    echo Warning: Windows Protocol Test Framework Should be installed.
-)
- 
+
 set CurrentPath=%~dp0
 set TestSuiteRoot=%CurrentPath%..\..\..\
 
