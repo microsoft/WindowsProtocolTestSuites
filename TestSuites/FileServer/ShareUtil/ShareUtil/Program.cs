@@ -165,13 +165,13 @@ namespace ShareUtil
         {
             if (args.Length == 2)
             {
-                Console.WriteLine("Retrieve share caching info for share {0} on server {1}:", args[0], args[1]);
+                Console.WriteLine("Retrieve share caching info for share {0} on server {1}:", args[1], args[0]);
                 uint uFlag = (uint)ShareCache.GetShareCachingInfo(args[0], args[1]);
                 Console.WriteLine((SHARE_INFO_1005_Flags)uFlag);
             }
             else if(args.Length == 4)
             {
-                Console.WriteLine("Retrieve share caching info for share {0} on server {1}", args[0], args[1]);
+                Console.WriteLine("Retrieve share caching info for share {0} on server {1}", args[1], args[0]);
 
                 uint uFlag = (uint)ShareCache.GetShareCachingInfo(args[0], args[1]);
                 Console.WriteLine((SHARE_INFO_1005_Flags)uFlag);
@@ -188,7 +188,7 @@ namespace ShareUtil
                     flags = (SHARE_INFO_1005_Flags)uFlag & ~(flags);
                 }
 
-                Console.WriteLine("Share caching info for share {0} on server {1} to flags: {2}", args[0], args[1], flags);
+                Console.WriteLine("Share caching info for share {0} on server {1} to flags: {2}", args[1], args[0], flags);
 
                 ShareCache.SetShareCachingInfo(args[0], args[1], (int)flags);
                 uFlag = (uint)ShareCache.GetShareCachingInfo(args[0], args[1]);
