@@ -43,6 +43,20 @@ if not defined vspath (
 		exit /b 1
 	)
 )
+ 
+:: Get PTF version
+set REGEXE="%SystemRoot%\System32\REG.exe"
+set PTF_VERSION="0.0"
+:: Try get PTF_VERSION from registry under Wow6432Node
+FOR /F "usebackq tokens=3" %%A IN (`%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework /v PTFVersion`) DO (
+	set PTF_VERSION=%%A
+)
+:: not found in Wow6432
+if PTF_VERSION == "0.0" (
+	FOR /F "usebackq tokens=3" %%A IN (`%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ProtocolTestFramework /v PTFVersion`) DO (
+		set PTF_VERSION=%%A
+	)
+)
 
 set CurrentPath=%~dp0
 if not defined TestSuiteRoot (
@@ -55,7 +69,7 @@ if not exist "%TestSuiteRoot%ProtoSDK\RDMA\include\ndspi.h" (
 ) 
 
 if not exist "%TestSuiteRoot%ProtoSDK\RDMA\include\ndstatus.h" (
-	echo Error: WindowsProtocolTestSuites\ProtoSDK\RDMA\include\ndstatus.h does not exist, it can be extracted from NetworkDirect_DDK.zip in HPC Pack 2008 R2 SDK @ http://www.microsoft.com/en-us/download/details.aspx?id=12218
+	echo Warning: WindowsProtocolTestSuites\ProtoSDK\RDMA\include\ndstatus.h does not exist, it can be extracted from NetworkDirect_DDK.zip in HPC Pack 2008 R2 SDK @ http://www.microsoft.com/en-us/download/details.aspx?id=12218
 	exit /b 1
 ) 
 
@@ -77,14 +91,7 @@ if exist "%TestSuiteRoot%drop\TestSuites\MS-SMBD" (
  rd /s /q "%TestSuiteRoot%drop\TestSuites\MS-SMBD"
 )
 
-::copy wxs file
-COPY "%TestSuiteRoot%TestSuites\MS-SMBD\src\Deploy\MS-SMBD-TestSuite-ServerEP.wxs" "%TestSuiteRoot%TestSuites\MS-SMBD\src\Deploy\MS-SMBD-TestSuite-ServerEP_.wxs"
-
-call %windir%\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -file "%TestSuiteRoot%Check-PTFVersion.ps1" -WxsFile "%TestSuiteRoot%TestSuites\MS-SMBD\src\Deploy\MS-SMBD-TestSuite-ServerEP.wxs"
 %buildtool% "%TestSuiteRoot%TestSuites\MS-SMBD\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:Platform="x64" /p:Configuration="Release"
-::replace wxs file
-DEL "%TestSuiteRoot%TestSuites\MS-SMBD\src\Deploy\MS-SMBD-TestSuite-ServerEP.wxs"
-rename "%TestSuiteRoot%TestSuites\MS-SMBD\src\Deploy\MS-SMBD-TestSuite-ServerEP_.wxs" MS-SMBD-TestSuite-ServerEP.wxs
 
 echo ==============================================
 echo          Build MS-SMBD test suite successfully

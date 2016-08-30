@@ -145,12 +145,10 @@ All of the following software must be installed on the driver computer before in
 
 |  **Required Software** | 
 | ------------- |
-|  **Microsoft® Visual Studio® 2012** | 
+|  **Microsoft® Visual Studio® 2013** | 
 |      ![image3.png](./image/MS-SMBD_ServerUserGuide/image3.png)Note| 
-|            You can download Visual Studio Ultimate 2012 Trial (30 days) from below website| 
-|            [http://www.microsoft.com/en-us/download/details.aspx?id=30678](http://www.microsoft.com/en-us/download/details.aspx?id=30678)| 
-|            You can download Visual Studio 2012 Update 4 or later from below website| 
-|            [http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305](http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305)| 
+|            You can download Visual Studio Ultimate 2013 Trial (30 days) from below website| 
+|            [http://www.microsoft.com/en-us/download/details.aspx?id=48144](http://www.microsoft.com/en-us/download/details.aspx?id=48144)| 
 | **Microsoft Protocol Test Framework**| 
 | Microsoft Protocol Test Framework is a common framework to support protocol test suite. | 
 | ![image2.png](./image/MS-SMBD_ServerUserGuide/image2.png)Note| 
@@ -231,7 +229,7 @@ This section describes how to set up the driver computer.
 ![image5.png](./image/MS-SMBD_ServerUserGuide/image5.png)
 Important 
 
->Microsoft Visual Studio 2012 and Protocol Test Framework must be installed on the driver computer before you run the test suite installer.
+>Microsoft Visual Studio 2013 and Protocol Test Framework must be installed on the driver computer before you run the test suite installer.
 
 To set up the driver computer
 

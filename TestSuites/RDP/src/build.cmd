@@ -39,6 +39,20 @@ if not defined vspath (
 	)
 )
 
+:: Get PTF version
+set REGEXE="%SystemRoot%\System32\REG.exe"
+set PTF_VERSION="0.0"
+:: Try get PTF_VERSION from registry under Wow6432Node
+FOR /F "usebackq tokens=3" %%A IN (`%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework /v PTFVersion`) DO (
+	set PTF_VERSION=%%A
+)
+:: not found in Wow6432
+if PTF_VERSION == "0.0" (
+	FOR /F "usebackq tokens=3" %%A IN (`%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ProtocolTestFramework /v PTFVersion`) DO (
+		set PTF_VERSION=%%A
+	)
+)
+
 set CurrentPath=%~dp0
 set TestSuiteRoot=%CurrentPath%..\..\..\
 
@@ -60,15 +74,7 @@ if exist "%TestSuiteRoot%drop\TestSuites\RDP" (
  rd /s /q "%TestSuiteRoot%drop\TestSuites\RDP"
 )
 
-::copy wxs file
-COPY "%TestSuiteRoot%TestSuites\RDP\src\Deploy\RDP-TestSuite-ClientEP.wxs" "%TestSuiteRoot%TestSuites\RDP\src\Deploy\RDP-TestSuite-ClientEP_.wxs"
-
-call %windir%\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -file "%TestSuiteRoot%Check-PTFVersion.ps1" -WxsFile "%TestSuiteRoot%TestSuites\RDP\src\Deploy\RDP-TestSuite-ClientEP.wxs"
 %buildtool% "%TestSuiteRoot%TestSuites\RDP\src\deploy\deploy.wixproj" /t:Clean;Rebuild
-
-::replace wxs file
-DEL "%TestSuiteRoot%TestSuites\RDP\src\Deploy\RDP-TestSuite-ClientEP.wxs"
-rename "%TestSuiteRoot%TestSuites\RDP\src\Deploy\RDP-TestSuite-ClientEP_.wxs" RDP-TestSuite-ClientEP.wxs
 
 echo ==============================================
 echo          Build RDP test suite successfully
