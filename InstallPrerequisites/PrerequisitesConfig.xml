@@ -29,6 +29,7 @@
 		<tool>SE</tool>
 		<tool>PTF_ForModel</tool>
 		<tool>Wix310</tool>
+		<tool>TestAgent2012</tool>
 	</Kerberos>
 	<SMB>
 		<tool>NET40</tool>
@@ -36,6 +37,7 @@
 		<tool>SE</tool>
 		<tool>PTF_ForModel</tool>
 		<tool>Wix310</tool>
+		<tool>TestAgent2012</tool>
 	</SMB>
 	<SMBD>
 		<tool>NET40</tool>
@@ -43,11 +45,13 @@
 		<tool>SE</tool>
 		<tool>PTF_ForModel</tool>
 		<tool>Wix310</tool>
+		<tool>TestAgent2012</tool>
 	</SMBD>
 	<RDP>
 		<tool>NET40</tool>
 		<tool>VCRedist_x86</tool>
 		<tool>PTF</tool>
 		<tool>Wix310</tool>
+		<tool>TestAgent2012</tool>
 	</RDP>
 </Dependency>

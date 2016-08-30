@@ -138,7 +138,7 @@ Function UnmountDisk{
 
     $DriveLetter = (Get-Item $appPath).PSDrive.Name
     $ShellApplication = New-Object -ComObject Shell.Application
-    Write-Host "Eject Drive: "$DriveLetter
+    Write-Host "Eject DVD Drive: "$DriveLetter
     $ShellApplication.Namespace(17).ParseName($DriveLetter+":").InvokeVerb("Eject")
 }
 
@@ -201,7 +201,7 @@ Function CreateTemporaryFolder{
     $tempPath = (get-location).ToString() + "\" + [system.guid]::newguid().ToString()
     Write-Host "Create temporary folder for downloading files"
     $outFile = New-Item -ItemType Directory -Path $tempPath
-    Write-Host "Temporary folder $outFile is Created"
+    Write-Host "Temporary folder $outFile is created"
 
     return $outFile.FullName
 }
