@@ -81,15 +81,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         /// <param name="openRequestId">OpenRequestId, same with other operations' request id</param>
         /// <param name="hasInitiatorId">If the SVHDX_OPEN_DEVICE_CONTEXT contains InitiatorId</param>
         /// <param name="rsvdClient">The instance of rsvd client. NULL stands for the default client</param>
+        /// <param name="initiatorHostName">It specifies the computer name on which the initiator resides</param>
         public void OpenSharedVHD(
             string fileName,
             RSVD_PROTOCOL_VERSION version, 
             ulong? openRequestId = null, 
             bool hasInitiatorId = true, 
-            RsvdClient rsvdClient = null)
+            RsvdClient rsvdClient = null,
+            string initiatorHostName = null)
         {
             Smb2CreateContextResponse[] serverContextResponse;
-            OpenSharedVHD(fileName, version, openRequestId, hasInitiatorId, rsvdClient, out serverContextResponse);
+            OpenSharedVHD(fileName, version, openRequestId, hasInitiatorId, rsvdClient, out serverContextResponse, initiatorHostName);
         }
 
         /// <summary>
@@ -101,13 +103,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         /// <param name="hasInitiatorId">If the SVHDX_OPEN_DEVICE_CONTEXT contains InitiatorId</param>
         /// <param name="rsvdClient">The instance of rsvd client. NULL stands for the default client</param>
         /// <param name="serverContextResponse">The create context response returned by server</param>
+        /// <param name="initiatorHostName">It specifies the computer name on which the initiator resides</param>
         public void OpenSharedVHD(
             string fileName,
             RSVD_PROTOCOL_VERSION version, 
             ulong? openRequestId, 
             bool hasInitiatorId, 
             RsvdClient rsvdClient,
-            out Smb2CreateContextResponse[] serverContextResponse)
+            out Smb2CreateContextResponse[] serverContextResponse,
+            string initiatorHostName)
         {
             if (rsvdClient == null)
                 rsvdClient = this.client;
@@ -123,6 +127,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 TestConfig.ShareContainingSharedVHD);
 
             Smb2CreateContextRequest[] contexts = null;
+            string tempInitiatorHostName = initiatorHostName == null ? TestConfig.InitiatorHostName : initiatorHostName;
             if (version == RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1)
             {
                 contexts = new Smb2CreateContextRequest[]
@@ -131,8 +136,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                     {
                         Version = (uint)version,
                         OriginatorFlags = (uint)OriginatorFlag.SVHDX_ORIGINATOR_PVHDPARSER, 
-                        InitiatorHostName = TestConfig.InitiatorHostName,
-                        InitiatorHostNameLength = (ushort)(TestConfig.InitiatorHostName.Length * 2),
+                        InitiatorHostName = tempInitiatorHostName,
+                        InitiatorHostNameLength = (ushort)(tempInitiatorHostName.Length * 2),
                         OpenRequestId = openRequestId == null ? RequestIdentifier : openRequestId.Value,
                         InitiatorId = hasInitiatorId ? Guid.NewGuid():Guid.Empty,
                         HasInitiatorId = hasInitiatorId

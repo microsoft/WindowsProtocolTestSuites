@@ -94,6 +94,7 @@
 		* [ Checkpoint ](#3.6.9)
 		* [ ExtractAndOptimizeVHDSet ](#3.6.10)
 		* [ Resize ](#3.6.11)
+		* [ SCSI Persistent Reservation ](#3.6.12)
 	* [ DFSC Test](#3.7)
 		* [ Domain\_referral\_to\_DC](#3.7.1)
 		* [ DC\_referral\_to\_DC](#3.7.2)
@@ -7444,6 +7445,76 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||Client closes the file.|
 ||Client reopens the virtual disk file and expects VirtualSize is changed to 2G.|
 ||Client closes the file.|
+|**Cleanup**|N/A|
+
+####<a name="3.6.12"> SCSI Persistent Reservation
+
+#####<a name="3.6.12.1"> Scenario
+
+|||
+|---|---|
+|**Description**|Check if server supports SCSI Persistent Reservation by using RSVD as transport.|
+|**Message Sequence**|OpenSharedVirtualDisk|
+||SCSI Persistent Reserver Out Command |
+||CloseSharedVirtualDisk|
+|**Cluster Involved Scenario**|YES|
+
+#####<a name="3.6.12.2"> Test Case
+
+|||
+|---|---|
+|**Test ID**|BVT_TunnelSCSIPersistentReserve_RegisterAndReserve|
+|**Description**|Check if server supports SCSI persistent reservation service actions: Register and Reserve, by tunnel operation RSVD_TUNNEL_SCSI_OPERATION.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client opens a shared virtual disk file and expects success.|
+||Client sends Register service action of SCSI Persistent Reserve Out command by tunnel operation RSVD_TUNNEL_SCSI_OPERATION to server and expects success.|
+||Client sends Reserve service action of SCSI Persistent Reserve Out command by tunnel operation RSVD_TUNNEL_SCSI_OPERATION to server and expects success.|
+||Client closes the file.|
+|**Cleanup**|N/A|
+
+|||
+|---|---|
+|**Test ID**|BVT_TunnelSCSIPersistentReserve_ReserveConflict|
+|**Description**|Check if server can handle SCSI Persistent Reservation Conflict by tunnel operation RSVD_TUNNEL_SCSI_OPERATION.|
+|**Prerequisites**||
+|**Test Execution Steps**|The first client opens a shared virtual disk file and expects success.|
+||The second client opens a shared virtual disk file and expects success.|
+||The first client sends Register service action of SCSI Persistent Reserve Out command by tunnel operation RSVD_TUNNEL_SCSI_OPERATION to server and expects success.|
+||The first client sends Reserve service action of SCSI Persistent Reserve Out command by tunnel operation RSVD_TUNNEL_SCSI_OPERATION to server and expects success.|
+||The second client sends Register service action of SCSI Persistent Reserve Out command by tunnel operation RSVD_TUNNEL_SCSI_OPERATION to server and expects success|
+||The second client sends Reserve service action of SCSI Persistent Reserve Out command by tunnel operation RSVD_TUNNEL_SCSI_OPERATION to server and expects server returns Reservation Conflict.|
+||The first client closes the file.|
+||The second client closes the file.|
+
+|||
+|---|---|
+|**Test ID**|BVT_TunnelSCSIPersistentReserve_ReserveAndRelease|
+|**Description**|Check if server supports SCSI persistent reservation service actions: Reserve and Release, by tunnel operation RSVD_TUNNEL_SCSI_OPERATION.|
+|**Prerequisites**||
+|**Test Execution Steps**|The first client opens a shared virtual disk file and expects success.|
+||The second client opens a shared virtual disk file and expects success.|
+||The first client sends Register service action of SCSI Persistent Reserve Out command by tunnel operation RSVD_TUNNEL_SCSI_OPERATION to server and expects success.|
+||The first client sends Reserve service action of SCSI Persistent Reserve Out command by tunnel operation RSVD_TUNNEL_SCSI_OPERATION to server and expects success.|
+||The first client sends Release service action of SCSI Persistent Reserve Out command by tunnel operation RSVD_TUNNEL_SCSI_OPERATION to server and expects success.|
+||The second client sends Register service action of SCSI Persistent Reserve Out command by tunnel operation RSVD_TUNNEL_SCSI_OPERATION to server and expects success|
+||The second client sends Reserve service action of SCSI Persistent Reserve Out command by tunnel operation RSVD_TUNNEL_SCSI_OPERATION to server and expects success.|
+||The first client closes the file.|
+||The second client closes the file.|
+
+|||
+|---|---|
+|**Test ID**|BVT_TunnelSCSIPersistentReserve_Preempt|
+|**Description**|Check if server supports SCSI persistent reservation service action: Preempt, by tunnel operation RSVD_TUNNEL_SCSI_OPERATION.|
+|**Prerequisites**||
+|**Test Execution Steps**|The first client opens a shared virtual disk file and expects success.|
+||The second client opens a shared virtual disk file and expects success.|
+||The first client sends Register service action of SCSI Persistent Reserve Out command by tunnel operation RSVD_TUNNEL_SCSI_OPERATION to server and expects success.|
+||The first client sends Reserve service action of SCSI Persistent Reserve Out command by tunnel operation RSVD_TUNNEL_SCSI_OPERATION to server and expects success.|
+||The second client sends Register service action of SCSI Persistent Reserve Out command by tunnel operation RSVD_TUNNEL_SCSI_OPERATION to server and expects success|
+||The second client sends Preempt service action of SCSI Persistent Reserve Out command by tunnel operation RSVD_TUNNEL_SCSI_OPERATION to server and expects success.|
+||The first client closes the file.|
+||The second client closes the file.|
+
 |**Cleanup**|N/A|
 
 ###<a name="3.7"> DFSC Test
