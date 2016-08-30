@@ -44,6 +44,20 @@ if not defined vspath (
 	)
 )
 
+:: Get PTF version
+set REGEXE="%SystemRoot%\System32\REG.exe"
+set PTF_VERSION="0.0"
+:: Try get PTF_VERSION from registry under Wow6432Node
+FOR /F "usebackq tokens=3" %%A IN (`%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework /v PTFVersion`) DO (
+	set PTF_VERSION=%%A
+)
+:: not found in Wow6432
+if PTF_VERSION == "0.0" (
+	FOR /F "usebackq tokens=3" %%A IN (`%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ProtocolTestFramework /v PTFVersion`) DO (
+		set PTF_VERSION=%%A
+	)
+)
+
 set CurrentPath=%~dp0
 set TestSuiteRoot=%CurrentPath%..\..\..\
 
@@ -65,15 +79,7 @@ if exist "%TestSuiteRoot%drop\TestSuites\MS-SMB" (
  rd /s /q "%TestSuiteRoot%drop\TestSuites\MS-SMB" 
 )
 
-::copy wxs file
-COPY "%TestSuiteRoot%TestSuites\MS-SMB\src\Deploy\MS-SMB-TestSuite-ServerEP.wxs" "%TestSuiteRoot%TestSuites\MS-SMB\src\Deploy\MS-SMB-TestSuite-ServerEP_.wxs"
-
-call %windir%\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -file "%TestSuiteRoot%Check-PTFVersion.ps1" -WxsFile "%TestSuiteRoot%TestSuites\MS-SMB\src\Deploy\MS-SMB-TestSuite-ServerEP.wxs"
 %buildtool% "%TestSuiteRoot%TestSuites\MS-SMB\src\deploy\deploy.wixproj" /t:Clean;Rebuild
-
-::replace wxs file
-DEL "%TestSuiteRoot%TestSuites\MS-SMB\src\Deploy\MS-SMB-TestSuite-ServerEP.wxs"
-rename "%TestSuiteRoot%TestSuites\MS-SMB\src\Deploy\MS-SMB-TestSuite-ServerEP_.wxs" MS-SMB-TestSuite-ServerEP.wxs
 
 echo ==============================================
 echo          Build MS-SMB test suite successfully
