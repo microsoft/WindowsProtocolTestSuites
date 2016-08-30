@@ -7485,6 +7485,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||The second client sends Reserve service action of SCSI Persistent Reserve Out command by tunnel operation RSVD_TUNNEL_SCSI_OPERATION to server and expects server returns Reservation Conflict.|
 ||The first client closes the file.|
 ||The second client closes the file.|
+|**Cleanup**|N/A|
 
 |||
 |---|---|
@@ -7500,6 +7501,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||The second client sends Reserve service action of SCSI Persistent Reserve Out command by tunnel operation RSVD_TUNNEL_SCSI_OPERATION to server and expects success.|
 ||The first client closes the file.|
 ||The second client closes the file.|
+|**Cleanup**|N/A|
 
 |||
 |---|---|
@@ -7514,7 +7516,6 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||The second client sends Preempt service action of SCSI Persistent Reserve Out command by tunnel operation RSVD_TUNNEL_SCSI_OPERATION to server and expects success.|
 ||The first client closes the file.|
 ||The second client closes the file.|
-
 |**Cleanup**|N/A|
 
 ###<a name="3.7"> DFSC Test

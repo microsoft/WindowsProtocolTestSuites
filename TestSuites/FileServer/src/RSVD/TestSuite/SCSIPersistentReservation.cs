@@ -82,7 +82,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 this.client,
                 10, // The size of SCSI Persistent Reserve Out command is 10
                 CreateCDBBuffer_PersistentReserveOut(PERSISTENT_RESERVE_OUT_SERVICE_ACTION.REGISTER_AND_IGNORE_EXISTING_KEY, 0),
-                CreateDatabuffer_PersistentReserveOut(0, System.BitConverter.ToUInt64(key, 0)),
+                CreateDataBuffer_PersistentReserveOut(0, System.BitConverter.ToUInt64(key, 0)),
                 out scsiStatus);
             VerifyFieldInResponse("SCSIStatus", 0, scsiStatus); // Status code 0 indicates that the device has completed the task successfully.
 
@@ -92,7 +92,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 this.client,
                 10,
                 CreateCDBBuffer_PersistentReserveOut(PERSISTENT_RESERVE_OUT_SERVICE_ACTION.RESERVE, PERSISTENT_RESERVATION_SCOPE_AND_TYPE_CODE.WriteExclusiveRegistrantsOnly),
-                CreateDatabuffer_PersistentReserveOut(System.BitConverter.ToUInt64(key, 0), 0),
+                CreateDataBuffer_PersistentReserveOut(System.BitConverter.ToUInt64(key, 0), 0),
                 out scsiStatus);
             VerifyFieldInResponse("SCSIStatus", 0, scsiStatus);
 
@@ -126,7 +126,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 this.client,
                 10,
                 CreateCDBBuffer_PersistentReserveOut(PERSISTENT_RESERVE_OUT_SERVICE_ACTION.REGISTER_AND_IGNORE_EXISTING_KEY, 0),
-                CreateDatabuffer_PersistentReserveOut(0, System.BitConverter.ToUInt64(firstReservationkey, 0)),
+                CreateDataBuffer_PersistentReserveOut(0, System.BitConverter.ToUInt64(firstReservationkey, 0)),
                 out scsiStatus);
             VerifyFieldInResponse("SCSIStatus", 0, scsiStatus);
 
@@ -136,7 +136,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 this.client,
                 10,
                 CreateCDBBuffer_PersistentReserveOut(PERSISTENT_RESERVE_OUT_SERVICE_ACTION.RESERVE, PERSISTENT_RESERVATION_SCOPE_AND_TYPE_CODE.WriteExclusiveRegistrantsOnly),
-                CreateDatabuffer_PersistentReserveOut(System.BitConverter.ToUInt64(firstReservationkey, 0), 0),
+                CreateDataBuffer_PersistentReserveOut(System.BitConverter.ToUInt64(firstReservationkey, 0), 0),
                 out scsiStatus);
             VerifyFieldInResponse("SCSIStatus", 0, scsiStatus);
 
@@ -146,7 +146,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 secondClient,
                 10,
                 CreateCDBBuffer_PersistentReserveOut(PERSISTENT_RESERVE_OUT_SERVICE_ACTION.REGISTER_AND_IGNORE_EXISTING_KEY, 0),
-                CreateDatabuffer_PersistentReserveOut(0, System.BitConverter.ToUInt64(secondReservationKey, 0)),
+                CreateDataBuffer_PersistentReserveOut(0, System.BitConverter.ToUInt64(secondReservationKey, 0)),
                 out scsiStatus);
             VerifyFieldInResponse("SCSIStatus", 0, scsiStatus);
 
@@ -157,7 +157,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 secondClient,
                 10,
                 CreateCDBBuffer_PersistentReserveOut(PERSISTENT_RESERVE_OUT_SERVICE_ACTION.RESERVE, PERSISTENT_RESERVATION_SCOPE_AND_TYPE_CODE.WriteExclusiveRegistrantsOnly),
-                CreateDatabuffer_PersistentReserveOut(System.BitConverter.ToUInt64(secondReservationKey, 0), 0),
+                CreateDataBuffer_PersistentReserveOut(System.BitConverter.ToUInt64(secondReservationKey, 0), 0),
                 out scsiStatus);
             VerifyFieldInResponse("SCSIStatus", 24, scsiStatus);  // Status code 24 indicates Reservation Conflict
 
@@ -194,7 +194,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 this.client,
                 10,
                 CreateCDBBuffer_PersistentReserveOut(PERSISTENT_RESERVE_OUT_SERVICE_ACTION.REGISTER_AND_IGNORE_EXISTING_KEY, 0),
-                CreateDatabuffer_PersistentReserveOut(0, System.BitConverter.ToUInt64(firstReservationkey, 0)),
+                CreateDataBuffer_PersistentReserveOut(0, System.BitConverter.ToUInt64(firstReservationkey, 0)),
                 out scsiStatus);
             VerifyFieldInResponse("SCSIStatus", 0, scsiStatus); // Status code 0 indicates that the device has completed the task successfully.
 
@@ -204,7 +204,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 this.client,
                 10,
                 CreateCDBBuffer_PersistentReserveOut(PERSISTENT_RESERVE_OUT_SERVICE_ACTION.RESERVE, PERSISTENT_RESERVATION_SCOPE_AND_TYPE_CODE.WriteExclusiveRegistrantsOnly),
-                CreateDatabuffer_PersistentReserveOut(System.BitConverter.ToUInt64(firstReservationkey, 0), 0),
+                CreateDataBuffer_PersistentReserveOut(System.BitConverter.ToUInt64(firstReservationkey, 0), 0),
                 out scsiStatus);
             VerifyFieldInResponse("SCSIStatus", 0, scsiStatus); // Status code 0 indicates that the device has completed the task successfully.
 
@@ -214,7 +214,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 this.client,
                 10,
                 CreateCDBBuffer_PersistentReserveOut(PERSISTENT_RESERVE_OUT_SERVICE_ACTION.RELEASE, PERSISTENT_RESERVATION_SCOPE_AND_TYPE_CODE.WriteExclusiveRegistrantsOnly),
-                CreateDatabuffer_PersistentReserveOut(System.BitConverter.ToUInt64(firstReservationkey, 0), 0),
+                CreateDataBuffer_PersistentReserveOut(System.BitConverter.ToUInt64(firstReservationkey, 0), 0),
                 out scsiStatus);
             VerifyFieldInResponse("SCSIStatus", 0, scsiStatus); // Status code 0 indicates that the device has completed the task successfully.
 
@@ -224,7 +224,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 secondClient,
                 10,
                 CreateCDBBuffer_PersistentReserveOut(PERSISTENT_RESERVE_OUT_SERVICE_ACTION.REGISTER_AND_IGNORE_EXISTING_KEY, 0),
-                CreateDatabuffer_PersistentReserveOut(0, System.BitConverter.ToUInt64(secondReservationKey, 0)),
+                CreateDataBuffer_PersistentReserveOut(0, System.BitConverter.ToUInt64(secondReservationKey, 0)),
                 out scsiStatus);
             VerifyFieldInResponse("SCSIStatus", 0, scsiStatus); // Status code 0 indicates that the device has completed the task successfully.
 
@@ -234,7 +234,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 secondClient,
                 10,
                 CreateCDBBuffer_PersistentReserveOut(PERSISTENT_RESERVE_OUT_SERVICE_ACTION.RESERVE, PERSISTENT_RESERVATION_SCOPE_AND_TYPE_CODE.WriteExclusiveRegistrantsOnly),
-                CreateDatabuffer_PersistentReserveOut(System.BitConverter.ToUInt64(secondReservationKey, 0), 0),
+                CreateDataBuffer_PersistentReserveOut(System.BitConverter.ToUInt64(secondReservationKey, 0), 0),
                 out scsiStatus);
             VerifyFieldInResponse("SCSIStatus", 0, scsiStatus); // Status code 0 indicates that the device has completed the task successfully.
 
@@ -270,7 +270,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 this.client,
                 10,
                 CreateCDBBuffer_PersistentReserveOut(PERSISTENT_RESERVE_OUT_SERVICE_ACTION.REGISTER_AND_IGNORE_EXISTING_KEY, 0),
-                CreateDatabuffer_PersistentReserveOut(0, System.BitConverter.ToUInt64(firstReservationkey, 0)),
+                CreateDataBuffer_PersistentReserveOut(0, System.BitConverter.ToUInt64(firstReservationkey, 0)),
                 out scsiStatus);
             VerifyFieldInResponse("SCSIStatus", 0, scsiStatus); // Status code 0 indicates that the device has completed the task successfully.
 
@@ -280,7 +280,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 this.client,
                 10,
                 CreateCDBBuffer_PersistentReserveOut(PERSISTENT_RESERVE_OUT_SERVICE_ACTION.RESERVE, PERSISTENT_RESERVATION_SCOPE_AND_TYPE_CODE.WriteExclusiveRegistrantsOnly),
-                CreateDatabuffer_PersistentReserveOut(System.BitConverter.ToUInt64(firstReservationkey, 0), 0),
+                CreateDataBuffer_PersistentReserveOut(System.BitConverter.ToUInt64(firstReservationkey, 0), 0),
                 out scsiStatus);
             VerifyFieldInResponse("SCSIStatus", 0, scsiStatus); // Status code 0 indicates that the device has completed the task successfully.
 
@@ -290,7 +290,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 secondClient,
                 10,
                 CreateCDBBuffer_PersistentReserveOut(PERSISTENT_RESERVE_OUT_SERVICE_ACTION.REGISTER_AND_IGNORE_EXISTING_KEY, 0),
-                CreateDatabuffer_PersistentReserveOut(0, System.BitConverter.ToUInt64(secondReservationKey, 0)),
+                CreateDataBuffer_PersistentReserveOut(0, System.BitConverter.ToUInt64(secondReservationKey, 0)),
                 out scsiStatus);
             VerifyFieldInResponse("SCSIStatus", 0, scsiStatus); // Status code 0 indicates that the device has completed the task successfully.
 
@@ -300,7 +300,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 secondClient,
                 10,
                 CreateCDBBuffer_PersistentReserveOut(PERSISTENT_RESERVE_OUT_SERVICE_ACTION.PREEMPT, PERSISTENT_RESERVATION_SCOPE_AND_TYPE_CODE.WriteExclusiveRegistrantsOnly),
-                CreateDatabuffer_PersistentReserveOut(System.BitConverter.ToUInt64(secondReservationKey, 0), System.BitConverter.ToUInt64(firstReservationkey, 0)),
+                CreateDataBuffer_PersistentReserveOut(System.BitConverter.ToUInt64(secondReservationKey, 0), System.BitConverter.ToUInt64(firstReservationkey, 0)),
                 out scsiStatus);
 
             VerifyFieldInResponse("SCSIStatus", 0, scsiStatus); // Status code 0 indicates that the device has completed the task successfully.
@@ -346,7 +346,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             scsiStatus = response.Value.ScsiStatus;
         }
 
-        private byte[] CreateDatabuffer_PersistentReserveOut(ulong reservationKey, ulong ServiceActionReservationKey)
+        private byte[] CreateDataBuffer_PersistentReserveOut(ulong reservationKey, ulong ServiceActionReservationKey)
         {
             PERSISTENT_RESERVE_OUT_PARAMETER_LIST persistentReserveOutParameterList = new PERSISTENT_RESERVE_OUT_PARAMETER_LIST();
             persistentReserveOutParameterList.ReservationKey = reservationKey;
