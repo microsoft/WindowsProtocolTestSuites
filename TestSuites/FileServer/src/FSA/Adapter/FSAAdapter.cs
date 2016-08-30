@@ -535,6 +535,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 }
             }
 
+            if ((fileSystem == FileSystem.FAT32) && (randomFile.Contains("::$DATA") || randomFile.Contains("::$INDEX_ALLOCATION"))) {
+                Site.Assert.Inconclusive("Stream is not supported in a FAT32 file system.");
+            }
+
             MessageStatus returnedStatus = transAdapter.CreateFile(
                 randomFile,
                 (uint)desiredFileAttribute,
