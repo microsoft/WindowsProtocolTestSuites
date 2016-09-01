@@ -7421,17 +7421,17 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||Client closes the file.|
 |**Cleanup**|N/A|
 
-####<a name="3.6.11"> ChangeTracking 
+####<a name="3.6.11"> Resize
 
 #####<a name="3.6.11.1"> Scenario
 
 |||
 |---|---|
-|**Description**|Check if server supports change tracking.|
+|**Description**|Check if server supports Resize.|
 |**Message Sequence**|OpenSharedVirtualDisk|
-||Start Change Tracking |
-||Make some changes|
-||Stop Change Tracking|
+||Resize |
+||CloseSharedVirtualDisk|
+||OpenSharedVirtualDisk again and verify if the size is changed|
 ||CloseSharedVirtualDisk|
 |**Cluster Involved Scenario**|YES|
 
@@ -7439,14 +7439,13 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 |||
 |---|---|
-|**Test ID**|BVT_ChangeTracking|
-|**Description**|Check if server supports handling change tracking.|
+|**Test ID**|BVT_Resize|
+|**Description**|Check if server supports handling tunnel operation to resize a VHDSet file.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client opens a shared virtual disk set file successfully.|
-||Client sends the tunnel operation SVHDX_CHANGE_TRACKING_START_REQUEST to start change tracking.|
-||Client sends Write request to change the vhds file.|
-||Client sends the tunnel operation RSVD_TUNNEL_CHANGE_TRACKING_GET_PARAMETERS to get the change tracking status.|
-||Client sends the tunnel operation SVHDX_CHANGE_TRACKING_STOP_REQUEST to stop change tracking.|
+||Client sends the tunnel operation SVHDX_META_OPERATION_START_REQUEST to resize a VHDSet file and expects success.|
+||Client closes the file.|
+||Client reopens the virtual disk file and expects VirtualSize is changed to 2G.|
 ||Client closes the file.|
 |**Cleanup**|N/A|
 
@@ -7521,17 +7520,17 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||The second client closes the file.|
 |**Cleanup**|N/A|
 
-####<a name="3.6.13"> Resize
+####<a name="3.6.13"> ChangeTracking 
 
 #####<a name="3.6.13.1"> Scenario
 
 |||
 |---|---|
-|**Description**|Check if server supports Resize.|
+|**Description**|Check if server supports change tracking.|
 |**Message Sequence**|OpenSharedVirtualDisk|
-||Resize |
-||CloseSharedVirtualDisk|
-||OpenSharedVirtualDisk again and verify if the size is changed|
+||Start Change Tracking |
+||Make some changes|
+||Stop Change Tracking|
 ||CloseSharedVirtualDisk|
 |**Cluster Involved Scenario**|YES|
 
@@ -7539,13 +7538,14 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 |||
 |---|---|
-|**Test ID**|BVT_Resize|
-|**Description**|Check if server supports handling tunnel operation to resize a VHDSet file.|
+|**Test ID**|BVT_ChangeTracking|
+|**Description**|Check if server supports handling change tracking.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client opens a shared virtual disk set file successfully.|
-||Client sends the tunnel operation SVHDX_META_OPERATION_START_REQUEST to resize a VHDSet file and expects success.|
-||Client closes the file.|
-||Client reopens the virtual disk file and expects VirtualSize is changed to 2G.|
+||Client sends the tunnel operation SVHDX_CHANGE_TRACKING_START_REQUEST to start change tracking.|
+||Client sends Write request to change the vhds file.|
+||Client sends the tunnel operation RSVD_TUNNEL_CHANGE_TRACKING_GET_PARAMETERS to get the change tracking status.|
+||Client sends the tunnel operation SVHDX_CHANGE_TRACKING_STOP_REQUEST to stop change tracking.|
 ||Client closes the file.|
 |**Cleanup**|N/A|
 
