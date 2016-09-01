@@ -80,7 +80,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
 
             RequestIdentifier = 0;
             Smb2CreateContextResponse[] serverContextResponse;
-            OpenSharedVHD(TestConfig.NameOfSharedVHDS, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_2, null, true, null, out serverContextResponse);
+            OpenSharedVHD(TestConfig.NameOfSharedVHDS, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_2, null, true, null, out serverContextResponse, null);
 
             foreach (var context in serverContextResponse)
             {
