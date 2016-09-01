@@ -127,7 +127,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 TestConfig.ShareContainingSharedVHD);
 
             Smb2CreateContextRequest[] contexts = null;
-            string tempInitiatorHostName = initiatorHostName == null ? TestConfig.InitiatorHostName : initiatorHostName;
+            string tempInitiatorHostName = initiatorHostName ?? TestConfig.InitiatorHostName;
             if (version == RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1)
             {
                 contexts = new Smb2CreateContextRequest[]

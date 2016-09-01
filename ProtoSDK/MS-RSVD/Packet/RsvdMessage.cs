@@ -1857,6 +1857,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
     /// </summary>
     public enum PERSISTENT_RESERVATION_SCOPE_AND_TYPE_CODE: byte
     {
+        Obsolete = 0x00,
+
         /// <summary>
         /// Access Restrictions: Some commands (e.g., media-access write commands) are only allowed for the persistent reservation holder.
         /// Persistent Reservation Holder: There is only one persistent reservation holder.
