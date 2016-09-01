@@ -34,6 +34,15 @@
 		* [FsCtl_IsReparsePointSupported](#_Toc427488674)
 		* [FsCtl_ IsSparseFileSupported](#_Toc427488675)
 		* [FsCtl_IsZeroDataSupported](#_Toc427488676)
+	* [Scenarios for Alternate Data Stream](#_Toc427488822)
+		* [AlternateDataStream_CreateStream](#_Toc427488823)
+		* [AlternateDataStream_ListStreams](#_Toc427488824)
+		* [AlternateDataStream_DeleteStream](#_Toc427488825)
+		* [AlternateDataStream_RenameStream](#_Toc427488826)
+		* [AlternateDataStream_WriteAndRead](#_Toc427488827)
+		* [AlternateDataStream_LockAndUnlock](#_Toc427488828)
+		* [AlternateDataStream_QueryAndSet_FileInformation](#_Toc427488829)
+		* [AlternateDataStream_FsControl](#_Toc427488830)
 * [Traditional Test Case Design](#_Toc427488677)
     * [Test cases for Win8 new added algorithm](#_Toc427488678)
 		* [FsCtl_Get_IntegrityInformation_File_IsIntegritySupported (BVT)](#_Toc427488679)
@@ -125,13 +134,60 @@
     * [IsZeroDataSupported](#_Toc427488765)
 		* [FsCtl_Set_ZeroData_File_IsSetZeroDataSupported](#_Toc427488766)
 		* [FsCtl_Set_ZeroData_Dir_IsZeroDataSupported](#_Toc427488767)
-* [MBT Test Design](#_Toc427488768)
-    * [Model Design](#_Toc427488769)
-    * [Adapter Design](#_Toc427488770)
-		* [Protocol Adapter](#_Toc427488771)
-		* [Transport Adapter](#_Toc427488772)
-		* [Message Sequence](#_Toc427488773)
-    * [Scenarios](#_Toc427488774)
+* [Test cases for Alternate Data Stream](#_Toc427488768)
+		* [AlternateDataStream_CreateStream](#_Toc427488769)
+			* [BVT_AlternateDataStream_CreateStream_File (BVT)](#_Toc427488770)
+			* [BVT_AlternateDataStream_CreateStream_Dir (BVT)](#_Toc427488771)
+		* [AlternateDataStream_ListStreams](#_Toc427488772)
+			* [BVT_AlternateDataStream_ListStreams_File (BVT)](#_Toc427488773)
+			* [BVT_AlternateDataStream_ListStreams_Dir (BVT)](#_Toc427488774)		
+		* [AlternateDataStream_DeleteStream](#_Toc427488775)
+			* [BVT_AlternateDataStream_DeleteStream_File (BVT)](#_Toc427488776)
+			* [BVT_AlternateDataStream_DeleteStream_Dir (BVT)](#_Toc427488777)
+		* [AlternateDataStream_RenameStream](#_Toc427488778)
+			* [BVT_AlternateDataStream_RenameStream_File (BVT)](#_Toc427488779)
+			* [BVT_AlternateDataStream_RenameStream_Dir (BVT)](#_Toc427488780)
+		* [AlternateDataStream_WriteAndRead](#_Toc427488781)
+			* [BVT_AlternateDataStream_WriteAndRead_File (BVT)](#_Toc427488782)
+			* [BVT_AlternateDataStream_WriteAndRead_Dir (BVT)](#_Toc427488783)
+		* [AlternateDataStream_LockAndUnlock](#_Toc427488784)
+			* [BVT_AlternateDataStream_LockAndUnlock_File (BVT)](#_Toc427488785)
+			* [BVT_AlternateDataStream_LockAndUnlock_Dir (BVT)](#_Toc427488786)
+		* [AlternateDataStream_QueryAndSet_FileInformation](#_Toc427488787)
+			* [AlternateDataStream_Query_FileAccessInformation_File](#_Toc427488788)
+			* [AlternateDataStream_Query_FileAccessInformation_Dir](#_Toc427488789)
+			* [AlternateDataStream_Query_FileBasicInformation_File](#_Toc427488790)
+			* [AlternateDataStream_Query_FileBasicInformation_Dir](#_Toc427488791)
+			* [AlternateDataStream_Query_FileCompressionInformation_File](#_Toc427488792)
+			* [AlternateDataStream_Query_FileCompressionInformation_Dir](#_Toc427488793)
+			* [AlternateDataStream_Query_FileNetworkOpenInformation_File](#_Toc427488794)
+			* [AlternateDataStream_Query_FileNetworkOpenInformation_Dir](#_Toc427488795)
+			* [AlternateDataStream_Query_FileStandardInformation_File](#_Toc427488796)
+			* [AlternateDataStream_Query_FileStandardInformation_Dir](#_Toc427488797)
+			* [AlternateDataStream_Set_FileEaInformation_File](#_Toc427488798)
+			* [AlternateDataStream_Set_FileEaInformation_Dir](#_Toc427488799)
+			* [AlternateDataStream_Set_FileShortNameInformation_File](#_Toc427488800)
+			* [AlternateDataStream_Set_FileShortNameInformation_Dir](#_Toc427488801)
+			* [AlternateDataStream_Set_FileValidDataLengthInformation_File](#_Toc427488802)
+			* [AlternateDataStream_Set_FileValidDataLengthInformation_Dir](#_Toc427488803)
+		* [AlternateDataStream_FsControl](#_Toc427488804)
+			* [AlternateDataStream_FsCtl_Get_Compression_File](#_Toc427488805)
+			* [AlternateDataStream_FsCtl_Get_Compression_Dir](#_Toc427488806)
+			* [AlternateDataStream_FsCtl_Get_IntegrityInformation_File](#_Toc427488807)
+			* [AlternateDataStream_FsCtl_Get_IntegrityInformation_Dir](#_Toc427488808)
+			* [AlternateDataStream_FsCtl_Query_AllocatedRanges_File](#_Toc427488809)
+			* [AlternateDataStream_FsCtl_Query_AllocatedRanges_Dir](#_Toc427488810)
+			* [AlternateDataStream_FsCtl_Set_Compression_File](#_Toc427488811)
+			* [AlternateDataStream_FsCtl_Set_Compression_Dir](#_Toc427488812)
+			* [AlternateDataStream_FsCtl_Set_ZeroData_File](#_Toc427488813)
+			* [AlternateDataStream_FsCtl_Set_ZeroData_Dir](#_Toc427488814)
+* [MBT Test Design](#_Toc427488815)
+    * [Model Design](#_Toc427488816)
+    * [Adapter Design](#_Toc427488817)
+		* [Protocol Adapter](#_Toc427488818)
+		* [Transport Adapter](#_Toc427488819)
+		* [Message Sequence](#_Toc427488820)
+    * [Scenarios](#_Toc427488821)
 
 ## <a name="_Toc427488645"/>Introduction
 This document provides information about how MS-FSA test suite is designed to test MS-FSA technical document usability and accuracy. It gives the analysis of MS-FSA technical document content, and describes test assumptions, scope and constraints of the test suite. It also specifies test approach, test scenarios, detail test cases, test suite architecture and adapter design.
@@ -184,15 +240,15 @@ The following diagram shows the basic test environment for MS-FSA. The DC01 is o
 ## <a name="_Toc427488651"/>Scenario and Test Case Summary
 
 ### <a name="_Toc427488652"/>Traditional Test cases
-Traditional Test cases are designed specific to Win8 new algorithms and REFS file system.
-There are 88 test cases in total:
+Traditional Test cases are designed specific to Win8 new algorithms, REFS file system and Alternate Data Stream.
+There are 126 test cases in total:
 
 
 |  **Category**|  **Scenarios**|  **Test cases (BVT)**| 
 | -------------| -------------| ------------- |
 | Scenarios for Win8 new added algorithm| 5| 37 (7)| 
 | Scenarios for ReFS file system| 15| 51 (7)| 
-
+| Scenarios for Alternate Data Stream| 19|38 (12)| 
 
 
 
@@ -707,7 +763,155 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 
 
 
+### <a name="_Toc427488822"/>Scenarios for Alternate Data Stream
 
+
+
+
+#### <a name="_Toc427488823"/>AlternateDataStream_CreateStream
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To create Alternate Data Streams on a file in the file system.| 
+| | Test environment: NTFS, ReFS| 
+| | Test object: DataFile, DirectoryFile| 
+| | Test coverage:|
+| Message Sequence| CreateFile | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Create another Alternate Data Stream and write 4096 bytes to the stream|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|  
+
+
+
+
+#### <a name="_Toc427488824"/>AlternateDataStream_ListStreams
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To list the Alternate Data Streams on a file in the file system.| 
+| | Test environment: NTFS, ReFS| 
+| | Test object: DataFile, DirectoryFile| 
+| | Test coverage:|
+| Message Sequence| CreateFile | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Create another Alternate Data Stream and write 4096 bytes to the stream|
+| | List all the Alternate Data Streams created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | Verify server return with streamname and streamsize|
+
+
+
+
+#### <a name="_Toc427488825"/>AlternateDataStream_DeleteStream
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To delete the Alternate Data Streams on a file in the file system.| 
+| | Test environment: NTFS, ReFS| 
+| | Test object: DataFile, DirectoryFile| 
+| | Test coverage:|
+| Message Sequence| CreateFile | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Create another Alternate Data Stream and write 4096 bytes to the stream|
+| | Delete the second Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | List all the Alternate Data Streams created on this file|
+| | Verify server return with streamname and streamsize|
+
+
+
+
+
+#### <a name="_Toc427488826"/>AlternateDataStream_RenameStream
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To rename the Alternate Data Streams on a file in the file system.| 
+| | Test environment: NTFS, ReFS| 
+| | Test object: DataFile, DirectoryFile| 
+| | Test coverage:|
+| Message Sequence| CreateFile | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Create another Alternate Data Stream and write 4096 bytes to the stream|
+| | List all the Alternate Data Streams created on this file|
+| | Verify server return with streamname and streamsize|
+| | Rename the second Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | List all the Alternate Data Streams created on this file|
+| | Verify server return with streamname and streamsize|
+
+
+
+
+
+#### <a name="_Toc427488827"/>AlternateDataStream_WriteAndRead
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To write and read from the Alternate Data Streams on a file in the file system.| 
+| | Test environment: NTFS, ReFS| 
+| | Test object: DataFile, DirectoryFile| 
+| | Test coverage:|
+| Message Sequence| CreateFile | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Read the bytes from the Alternate Data Streams created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | Verify the bytes read and the bytes written on this stream|
+| | Create another Alternate Data Stream and write 4096 bytes to the stream|
+| | Read the bytes from the Alternate Data Streams created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | Verify the bytes read and the bytes written on this stream|
+
+
+
+
+#### <a name="_Toc427488828"/>AlternateDataStream_LockAndUnlock
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To lock and unlock a byte range of the Alternate Data Streams on a file in the file system.| 
+| | Test environment: NTFS, ReFS| 
+| | Test object: DataFile, DirectoryFile| 
+| | Test coverage:|
+| Message Sequence| CreateFile | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Create another Alternate Data Stream and write 4096 bytes to the stream|
+| | Lock a byte range of the second Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | Unlock the byte range of the second Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+
+#### <a name="_Toc427488829"/>AlternateDataStream_QueryAndSet_FileInformation
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To query or set the file information of the Alternate Data Streams on a file in the file system.| 
+| | Test environment: NTFS, ReFS| 
+| | Test object: DataFile, DirectoryFile| 
+| | Test coverage:|
+| Message Sequence| CreateFile | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Query or set the file information on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+
+#### <a name="_Toc427488830"/>AlternateDataStream_FsControl
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To request a FsControl on the Alternate Data Streams on a file in the file system.| 
+| | Test environment: NTFS, ReFS| 
+| | Test object: DataFile, DirectoryFile| 
+| | Test coverage:|
+| Message Sequence| CreateFile | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Request a FsControl on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
 
 
 
@@ -2594,6 +2798,560 @@ Parameter combination
 
 
 
+### <a name="_Toc427488768"/>Test cases for Alternate Data Stream
+
+#### <a name="_Toc427488770"/>BVT_AlternateDataStream_CreateStream_File (BVT)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if Alternate Data Stream create is supported on a Data file|
+| | Test environment: NTFS, ReFS|
+| Message Sequence| CreateFile (DataFile)|
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Create another Alternate Data Stream and write 4096 bytes to the stream|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|  
+
+
+
+
+#### <a name="_Toc427488771"/>BVT_AlternateDataStream_CreateStream_Dir (BVT)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if Alternate Data Stream create is supported on a Directory file|
+| | Test environment: NTFS, ReFS|
+| Message Sequence| CreateFile (DirectoryFile)|
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Create another Alternate Data Stream and write 4096 bytes to the stream|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|  
+
+
+
+#### <a name="_Toc427488773"/>BVT_AlternateDataStream_ListStreams_File (BVT)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if Alternate Data Stream list is supported on a Data file|
+| | Test environment: NTFS, ReFS|
+| Message Sequence| CreateFile (DataFile)| 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Create another Alternate Data Stream and write 4096 bytes to the stream|
+| | List all the Alternate Data Streams created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | Verify server return with streamname and streamsize|
+
+
+
+
+#### <a name="_Toc427488774"/>BVT_AlternateDataStream_ListStreams_Dir (BVT)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if Alternate Data Stream list is supported on a Directory file|
+| | Test environment: NTFS, ReFS|
+| Message Sequence| CreateFile (Directory)| 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Create another Alternate Data Stream and write 4096 bytes to the stream|
+| | List all the Alternate Data Streams created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | Verify server return with streamname and streamsize|
+
+
+
+
+#### <a name="_Toc427488776"/>BVT_AlternateDataStream_DeleteStream_File (BVT)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if Alternate Data Stream delete is supported on a Data file| 
+| | Test environment: NTFS, ReFS|
+| Message Sequence| CreateFile (Data)|
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Create another Alternate Data Stream and write 4096 bytes to the stream|
+| | Delete the second Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | List all the Alternate Data Streams created on this file|
+| | Verify server return with streamname and streamsize|
+
+
+
+
+#### <a name="_Toc427488777"/>BVT_AlternateDataStream_DeleteStream_Dir (BVT)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if Alternate Data Stream delete is supported on a Directory file| 
+| | Test environment: NTFS, ReFS|
+| Message Sequence| CreateFile (Directory)|
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Create another Alternate Data Stream and write 4096 bytes to the stream|
+| | Delete the second Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | List all the Alternate Data Streams created on this file|
+| | Verify server return with streamname and streamsize|
+
+
+
+
+#### <a name="_Toc427488779"/>BVT_AlternateDataStream_RenameStream_File (BVT)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if Alternate Data Stream rename is supported on a Data file|
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Data) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Create another Alternate Data Stream and write 4096 bytes to the stream|
+| | List all the Alternate Data Streams created on this file|
+| | Verify server return with streamname and streamsize|
+| | Rename the second Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | List all the Alternate Data Streams created on this file|
+| | Verify server return with streamname and streamsize|
+
+
+
+
+#### <a name="_Toc427488780"/>BVT_AlternateDataStream_RenameStream_Dir (BVT)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if Alternate Data Stream rename is supported on a Directory file|
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Create another Alternate Data Stream and write 4096 bytes to the stream|
+| | List all the Alternate Data Streams created on this file|
+| | Verify server return with streamname and streamsize|
+| | Rename the second Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | List all the Alternate Data Streams created on this file|
+| | Verify server return with streamname and streamsize|
+
+
+
+
+
+#### <a name="_Toc427488782"/>BVT_AlternateDataStream_WriteAndRead_File (BVT)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if write and read from the Alternate Data Streams is supported on a Data file| 
+| | Test environment: NTFS, ReFS|
+| Message Sequence| CreateFile (Data) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Read the bytes from the Alternate Data Streams created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | Verify the bytes read and the bytes written on this stream|
+| | Create another Alternate Data Stream and write 4096 bytes to the stream|
+| | Read the bytes from the Alternate Data Streams created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | Verify the bytes read and the bytes written on this stream|
+
+
+
+
+#### <a name="_Toc427488783"/>BVT_AlternateDataStream_WriteAndRead_Dir (BVT)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if write and read from the Alternate Data Streams is supported on a Directory file| 
+| | Test environment: NTFS, ReFS|
+| Message Sequence| CreateFile (Directory) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Read the bytes from the Alternate Data Streams created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | Verify the bytes read and the bytes written on this stream|
+| | Create another Alternate Data Stream and write 4096 bytes to the stream|
+| | Read the bytes from the Alternate Data Streams created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | Verify the bytes read and the bytes written on this stream|
+
+
+
+
+#### <a name="_Toc427488785"/>BVT_AlternateDataStream_LockAndUnlock_File (BVT)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if lock and unlock a byte range of the Alternate Data Streams is supported on a Data file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Data) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Create another Alternate Data Stream and write 4096 bytes to the stream|
+| | Lock a byte range of the second Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | Unlock the byte range of the second Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+
+#### <a name="_Toc427488785"/>BVT_AlternateDataStream_LockAndUnlock_File (BVT)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if lock and unlock a byte range of the Alternate Data Streams is supported on a Directory file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Create another Alternate Data Stream and write 4096 bytes to the stream|
+| | Lock a byte range of the second Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | Unlock the byte range of the second Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+
+#### <a name="_Toc427488788"/>AlternateDataStream_Query_FileAccessInformation_File
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FileAccessInformation query of the Alternate Data Streams on a file is supported on a Data file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Data) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Query or set the file information on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+#### <a name="_Toc427488789"/>AlternateDataStream_Query_FileAccessInformation_Dir
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FileAccessInformation query of the Alternate Data Streams on a file is supported on a Directory file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Query or set the file information on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+#### <a name="_Toc427488790"/>AlternateDataStream_Query_FileBasicInformation_File
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FileBasicInformation query of the Alternate Data Streams on a file is supported on a Data file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Data) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Query or set the file information on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+#### <a name="_Toc427488791"/>AlternateDataStream_Query_FileBasicInformation_Dir
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FileBasicInformation query of the Alternate Data Streams on a file is supported on a Directory file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Query or set the file information on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+
+#### <a name="_Toc427488792"/>AlternateDataStream_Query_FileCompressionInformation_File
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FileCompressionInformation query of the Alternate Data Streams on a file is supported on a Data file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Data) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Query or set the file information on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+#### <a name="_Toc427488793"/>AlternateDataStream_Query_FileCompressionInformation_Dir
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FileCompressionInformation query of the Alternate Data Streams on a file is supported on a Directory file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Query or set the file information on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+#### <a name="_Toc427488794"/>AlternateDataStream_Query_FileNetworkOpenInformation_File
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FileNetworkOpenInformation query of the Alternate Data Streams on a file is supported on a Data file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Data) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Query or set the file information on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+#### <a name="_Toc427488795"/>AlternateDataStream_Query_FileNetworkOpenInformation_Dir
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FileNetworkOpenInformation query of the Alternate Data Streams on a file is supported on a Directory file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Query or set the file information on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+
+#### <a name="_Toc427488796"/>AlternateDataStream_Query_FileStandardInformation_File
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FileStandardInformation query of the Alternate Data Streams on a file is supported on a Data file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Data) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Query or set the file information on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+#### <a name="_Toc427488797"/>AlternateDataStream_Query_FileStandardInformation_Dir
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FileStandardInformation query of the Alternate Data Streams on a file is supported on a Directory file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Query or set the file information on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+#### <a name="_Toc427488798"/>AlternateDataStream_Set_FileEaInformation_File
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FileEaInformation set of the Alternate Data Streams on a file is supported on a Data file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Data) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Query or set the file information on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+#### <a name="_Toc427488799"/>AlternateDataStream_Set_FileEaInformation_Dir
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FileEaInformation set of the Alternate Data Streams on a file is supported on a Directory file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Query or set the file information on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+
+#### <a name="_Toc427488798"/>AlternateDataStream_Set_FileShortNameInformation_File
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FileShortNameInformation set of the Alternate Data Streams on a file is supported on a Data file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Data) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Query or set the file information on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+#### <a name="_Toc427488799"/>AlternateDataStream_Set_FileShortNameInformation_Dir
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FileShortNameInformation set of the Alternate Data Streams on a file is supported on a Directory file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Query or set the file information on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+
+#### <a name="_Toc427488802"/>AlternateDataStream_Set_FileValidDataLengthInformation_File
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FileValidDataLengthInformation set of the Alternate Data Streams on a file is supported on a Data file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Data) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Query or set the file information on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+#### <a name="_Toc427488803"/>AlternateDataStream_Set_FileValidDataLengthInformation_Dir
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FileValidDataLengthInformation set of the Alternate Data Streams on a file is supported on a Directory file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Query or set the file information on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+#### <a name="_Toc427488805"/>AlternateDataStream_FsCtl_Get_Compression_File
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FSCTL_GET_COMPRESSION request and response on the Alternate Data Streams are supported on a Data file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Data) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Request a FsControl on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+#### <a name="_Toc427488806"/>AlternateDataStream_FsCtl_Get_Compression_Dir
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FSCTL_GET_COMPRESSION request and response on the Alternate Data Streams are supported on a Directory file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Request a FsControl on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+
+#### <a name="_Toc427488807"/>AlternateDataStream_FsCtl_Get_IntegrityInformation_File
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FSCTL_GET_INTEGRITY_INFORMATION request and response on the Alternate Data Streams are supported on a Data file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Data) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Request a FsControl on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+#### <a name="_Toc427488808"/>AlternateDataStream_FsCtl_Get_IntegrityInformation_Dir
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FSCTL_GET_INTEGRITY_INFORMATION request and response on the Alternate Data Streams are supported on a Directory file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Request a FsControl on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+
+#### <a name="_Toc427488809"/>AlternateDataStream_FsCtl_Query_AllocatedRanges_File
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FSCTL_QUERY_ALLOCATED_RANGES request and response on the Alternate Data Streams are supported on a Data file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Data) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Request a FsControl on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+#### <a name="_Toc427488810"/>AlternateDataStream_FsCtl_Query_AllocatedRanges_Dir
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FSCTL_QUERY_ALLOCATED_RANGES request and response on the Alternate Data Streams are supported on a Directory file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Request a FsControl on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+
+#### <a name="_Toc427488811"/>AlternateDataStream_FsCtl_Set_Compression_File
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FSCTL_SET_COMPRESSION request and response on the Alternate Data Streams are supported on a Data file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Data) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Request a FsControl on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+#### <a name="_Toc427488812"/>AlternateDataStream_FsCtl_Set_Compression_Dir
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FSCTL_SET_COMPRESSION request and response on the Alternate Data Streams are supported on a Directory file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Request a FsControl on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+
+#### <a name="_Toc427488813"/>AlternateDataStream_FsCtl_Set_ZeroData_File
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FSCTL_SET_ZERO_DATA request and response on the Alternate Data Streams are supported on a Data file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Data) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Request a FsControl on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+#### <a name="_Toc427488814"/>AlternateDataStream_FsCtl_Set_ZeroData_Dir
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if the FSCTL_SET_ZERO_DATA request and response on the Alternate Data Streams are supported on a Directory file| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory) | 
+| | Create an Alternate Data Stream and write 2048 bytes to the stream|
+| | Request a FsControl on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+
+
+
+		
 
 
 
@@ -2607,17 +3365,16 @@ Parameter combination
 
 
 
+## <a name="_Toc427488815"/>MBT Test Design
 
-## <a name="_Toc427488768"/>MBT Test Design
-
-### <a name="_Toc427488769"/>Model Design
+### <a name="_Toc427488816"/>Model Design
 Here is a list for Win8 new added algorithms, the designed scenarios are based on them.
 
 
 
 
 
-### <a name="_Toc427488770"/>Adapter Design
+### <a name="_Toc427488817"/>Adapter Design
 The MS-FSA test suite implements 2 adapters: 
 
 * Protocol Adapter 
@@ -2627,7 +3384,7 @@ The MS-FSA test suite implements 2 adapters:
 
 
 
-#### <a name="_Toc427488771"/>Protocol Adapter
+#### <a name="_Toc427488818"/>Protocol Adapter
 The MS-FSA Protocol adapter is called FSAAdapter in the Test Suite. It implements the interface IFSAAdapter. Its functionality is to communicate with the transport adapter, where called relevant methods to interact with the file system. Another functionality of the Protocol Adapter is when the server replies, it parses the messages, set the output value for test.
 Class Diagram
 
@@ -2636,7 +3393,7 @@ Class Diagram
 
 
 
-#### <a name="_Toc427488772"/>Transport Adapter
+#### <a name="_Toc427488819"/>Transport Adapter
 There are 3 transport adapters implement the interface ITransportAdapter.
 
 * SMBTransportAdapter
@@ -2674,14 +3431,14 @@ Class Diagram
 
 
 
-#### <a name="_Toc427488773"/>Message Sequence
+#### <a name="_Toc427488820"/>Message Sequence
 Below diagram shows the message sequence between FSA adapter, transport adapter and SMB server.
 
 
 ![image5.png](./image/MS-FSA_ServerTestDesignSpecification/image5.png)
 
 
-### <a name="_Toc427488774"/>Scenarios
+### <a name="_Toc427488821"/>Scenarios
 Here is a list for MBT scenarios:
 
 
@@ -2704,14 +3461,3 @@ Here is a list for MBT scenarios:
 | S15_MS-FSA_SetFSInfo| To test all requirements of setting file system information.| 
 | S16_MS-FSA_SetSecurityInfo| To test all requirements of setting security information.| 
 | S17_MS-FSA_Oplock| To test all requirements of oplock.| 
-
-
-
-
-
-
-
-.
-
-
-
