@@ -123,6 +123,26 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ModelTestCases\WriteFileTestCase.cs" />
+    <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStreamTestCases.cs" />
+    <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_CreateStream.cs" />
+    <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_DeleteStream.cs" />
+    <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_FileInfo_Query_FileAccessInformation.cs" />
+    <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_FileInfo_Query_FileCompressionInformation.cs" />
+    <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_FileInfo_Query_FileNetworkOpenInformation.cs" />
+    <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_FileInfo_Query_FileStandardInformation.cs" />
+    <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_FileInfo_Set_FileEaInformation.cs" />
+    <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_FileInfo_Set_FileShortNameInformation.cs" />
+    <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_FSCTL_GET_COMPRESSION.cs" />
+    <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_FSCTL_GET_INTEGRITY_INFORMATION.cs" />
+    <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_FSCTL_QUERY_ALLOCATED_RANGES.cs" />
+    <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_FSCTL_SET_COMPRESSION.cs" />
+    <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_FSCTL_SET_ZERO_DATA.cs" />
+    <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_ListStreams.cs" />
+    <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_FileInfo_Query_FileBasicInformation.cs" />
+    <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_LockAndUnlock.cs" />
+    <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_RenameStream.cs" />
+    <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_FileInfo_Set_FileValidDataLengthInformation.cs" />
+    <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_WriteAndRead.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfoTestCases.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileAttributeTagInformation.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileBasicInformation.cs" />
