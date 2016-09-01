@@ -1026,8 +1026,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
 
     #endregion
 
-    #region SVHDX_SHARED_VIRTUAL_DISK_SUPPORT
-
     /// <summary>
     /// The SVHDX_SHARED_VIRTUAL_DISK_SUPPORT_RESPONSE packet is sent 
     /// by the server in a response to an FSCTL_QUERY_SHARED_VIRTUAL_DISK_SUPPORT request.
@@ -1810,5 +1808,190 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         public Guid SnapshotID;
     }
 
-    #endregion
+    #region SCSI Primary Commands used in SVHDX_TUNNEL_SCSI_REQUEST Structure
+
+    /// <summary>
+    /// OPERATION CODE is the first byte of a SCSI CDB. It is used to identify the operation being requested by the CDB.
+    /// </summary>
+    public enum OPERATION_CODE: byte
+    {
+        /// <summary>
+        /// The READ CAPACITY (10) command requests that the device server transfer 8 bytes of
+        /// parameter data describing the capacity and medium format of the direct-access block device to the data-in buffer.
+        /// </summary>
+        READ_CAPACITY = 0x25, 
+
+        /// <summary>
+        /// The PERSISTENT RESERVE IN command is used to obtain information about persistent reservations
+        /// and reservation keys (i.e., registrations) that are active within a device server.
+        /// </summary>
+        PERSISTENT_RESERVE_IN = 0x5E,
+
+        /// The PERSISTENT RESERVE OUT command is used to request service actions that reserve a
+        /// logical unit for the exclusive or shared use of a particular I_T nexus. 
+        PERSISTENT_RESERVE_OUT = 0x5F,
+    }
+
+    /// <summary>
+    /// Service Action identifies a function to be performed under the more general command function specified in the OPERATION CODE field.
+    /// The followings are service actions of Persistent Reserve Out command
+    /// </summary>
+    public enum PERSISTENT_RESERVE_OUT_SERVICE_ACTION: byte
+    {
+        /// <summary>
+        /// Registers a reservation key with the device server or unregisters a reservation key.
+        /// </summary>
+        REGISTER = 0x00,
+
+        /// <summary>
+        /// Creates a persistent reservation having a specified SCOPE and TYPE
+        /// </summary>
+        RESERVE = 0x01,
+
+        /// <summary>
+        /// Releases the selected persistent reservation
+        /// </summary>
+        RELEASE = 0x02,
+
+        /// <summary>
+        /// Clears all reservation keys (i.e., registrations) and all persistent reservations
+        /// </summary>
+        CLEAR = 0x03,
+
+        /// <summary>
+        /// Preempts persistent reservations and/or removes registrations
+        /// </summary>
+        PREEMPT = 0x04,
+
+        /// <summary>
+        /// Preempts persistent reservations and/or removes registrations and aborts all tasks for all preempted I_T nexuses
+        /// </summary>
+        PREEMPT_AND_ABORT = 0x05,
+
+        /// <summary>
+        /// Registers a reservation key with the device server or unregisters a reservation key
+        /// </summary>
+        REGISTER_AND_IGNORE_EXISTING_KEY = 0x06,
+
+        /// <summary>
+        /// Registers a reservation key for another I_T nexus with the device server and moves a persistent reservation to that I_T nexus
+        /// </summary>
+        REGISTER_AND_MOVE = 0x07,
+    }
+
+    /// <summary>
+    /// Scope must be set to LU_SCOPE (0)
+    /// So this enum is based on "Type" code.
+    /// </summary>
+    public enum PERSISTENT_RESERVATION_SCOPE_AND_TYPE_CODE: byte
+    {
+        Obsolete = 0x00,
+
+        /// <summary>
+        /// Access Restrictions: Some commands (e.g., media-access write commands) are only allowed for the persistent reservation holder.
+        /// Persistent Reservation Holder: There is only one persistent reservation holder.
+        /// </summary>
+        WriteExclusive = 0x01,
+
+        /// <summary>
+        /// Access Restrictions: Some commands (e.g., media-access commands) are only allowed for the persistent reservation holder.
+        /// Persistent Reservation Holder: There is only one persistent reservation holder.
+        /// </summary>
+        ExclusiveAccess = 0x03,
+
+        /// <summary>
+        /// Access Restrictions: Some commands (e.g., media-access write commands) are only allowed for registered I_T nexuses.
+        /// Persistent Reservation Holder: There is only one persistent reservation holder.
+        /// </summary>
+        WriteExclusiveRegistrantsOnly = 0x05,
+
+        /// <summary>
+        /// Access Restrictions: Some commands (e.g., media-access commands) are only allowed for registered I_T nexuses.
+        /// Persistent Reservation Holder: There is only one persistent reservation holder.
+        /// </summary>
+        ExclusiveAccessRegistrantsOnly = 0x06,
+
+        /// <summary>
+        /// Access Restrictions: Some commands (e.g., media-access write commands) are only allowed for registered I_T nexuses.
+        /// Persistent Reservation Holder: Each registered I_T nexus is a persistent reservation holder.
+        /// </summary>
+        WriteExclusiveAllRegistrants = 0x07,
+
+        /// <summary>
+        /// Access Restrictions: Some commands (e.g., media-access commands) are only allowed for registered I_T nexuses.
+        /// Persistent Reservation Holder: Each registered I_T nexus is a persistent reservation holder.
+        /// </summary>
+        ExclusiveAccessAllRegistrants = 0x08
+    }
+
+    /// <summary>
+    /// Structure definition of PERSISTENT RESERVE OUT command.
+    /// The PERSISTENT RESERVE OUT command is used to request service actions that reserve a logical unit for the exclusive or shared use of a particular I_T nexus. 
+    /// The command uses other service actions to manage and remove such persistent reservations.
+    /// </summary>
+    public struct PERSISTENT_RESERVE_OUT
+    {
+        /// <summary>
+        /// OPERATION CODE of PERSISTENT RESERVE OUT command is 0x5F
+        /// </summary>
+        [StaticSize(1)]
+        public OPERATION_CODE OperationCode;
+
+        /// <summary>
+        /// It's used to reserve, manage and remove persistent reservations
+        /// </summary>
+        [StaticSize(1)]
+        public PERSISTENT_RESERVE_OUT_SERVICE_ACTION ServiceAction;
+
+        /// <summary>
+        /// The SCOPE field (4 bits) shall be set to LU_SCOPE (0), specifying that the persistent reservation applies to the entire logical unit.
+        /// The TYPE field (4 bits) specifies the characteristics of the persistent reservation being established for all logical blocks within the logical unit.
+        /// </summary>
+        [StaticSize(1)]
+        public PERSISTENT_RESERVATION_SCOPE_AND_TYPE_CODE ScopeAndType;
+
+        [StaticSize(2)]
+        [ByteOrder(EndianType.BigEndian)]
+        public ushort Reserved;
+
+        /// <summary>
+        /// It specifies the number of bytes of parameter data for the PERSISTENT RESERVE OUT command.
+        /// </summary>
+        [StaticSize(4)]
+        [ByteOrder(EndianType.BigEndian)]
+        public uint ParameterListLength;
+
+        /// <summary>
+        /// The CONTROL byte has the same definition for all commands.
+        /// </summary>
+        [StaticSize(1)]
+        public byte Control;
+    }
+
+    /// <summary>
+    /// The parameter list format used by the PERSISTENT RESERVE OUT command with any service action except the REGISTER AND MOVE service action.
+    /// </summary>
+    public struct PERSISTENT_RESERVE_OUT_PARAMETER_LIST
+    {
+        /// <summary>
+        /// It is provided by the application client to the device server to
+        /// identify the I_T nexus that is the source of the PERSISTENT RESERVE OUT command.
+        /// </summary>
+        [ByteOrder(EndianType.BigEndian)]
+        public ulong ReservationKey;
+
+        /// <summary>
+        /// It contains information needed for the following service actions:
+        /// REGISTER, REGISTER AND IGNORE EXISTING KEY, PREEMPT, and PREEMPT AND ABORT.
+        /// </summary>
+        [ByteOrder(EndianType.BigEndian)]
+        public ulong ServiceActionReservationKey;
+
+        /// <summary>
+        /// Serveral other fields are ignored in the test suite.
+        /// </summary>
+        [ByteOrder(EndianType.BigEndian)]    
+        public ulong Reserved;
+    }
+#endregion
 }
