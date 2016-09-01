@@ -487,7 +487,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     connectRespPdu.mcsCrsp.gccPdu.H221Key = "DnMc"; //ConstValue.H221_KEY "McDn";
                     SendPdu(connectRespPdu);
                     break;
-                    case NegativeType.InvalidEncodedLength:
+                case NegativeType.InvalidEncodedLength:
                     //Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response_Ex invalidPdu = new Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response_Ex(connectRespPdu, sessionContext, invalidType, asnIssueFixed);
                     SendPdu(connectRespPdu);
                     break;
@@ -1256,7 +1256,16 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             | (((int)fragmentation_Value.FASTPATH_FRAGMENT_SINGLE) << 4)
             | ((int)compressedType_Values.None << 6));
             surfCmds.compressionFlags = compressedType_Values.None;
-            surfCmds.size = (ushort)(22 + streamCmd.bitmapData.bitmapDataLength); //size of TS_SURFCMD_STREAM_SURF_BITS;
+            // size of cmdType + destLeft + destTop + destRight + destBottom = 10
+            // size of bpp + flags + reserved + codecId + width + height + bitmapDataLength = 12
+            // size of exBitmapDataHeader = 24, if bitmapData.flags contains TSBitmapDataExFlags_Values.EX_COMPRESSED_BITMAP_HEADER_PRESENT
+            int subLength = 22;
+            if(streamCmd.bitmapData.exBitmapDataHeader != null)
+            {
+                subLength += 24;
+            }
+            surfCmds.size = (ushort)(subLength + streamCmd.bitmapData.bitmapDataLength); //size of TS_SURFCMD_STREAM_SURF_BITS;
+
             surfCmds.surfaceCommands = new TS_SURFCMD[1];
             surfCmds.surfaceCommands[0] = streamCmd;
             SendSurfaceCommandsUpdate(surfCmds);

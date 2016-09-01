@@ -2869,8 +2869,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             surfBitsCmd.destRight = ConstValue.DEST_RIGHT;
             surfBitsCmd.destBottom = ConstValue.DEST_BOTTOM;
             surfBitsCmd.bitmapData.bpp = ConstValue.BPP;
-            surfBitsCmd.bitmapData.reserved1 = 0;
-            surfBitsCmd.bitmapData.reserved2 = 0;
+            // TODO Alignment 2016: What about flags = TSBitmapDataExFlags_Values.TSBitmapDataExFlags_Values
+            surfBitsCmd.bitmapData.flags = TSBitmapDataExFlags_Values.None;
+            surfBitsCmd.bitmapData.reserved = 0;
             surfBitsCmd.bitmapData.codecID = 0;
             surfBitsCmd.bitmapData.width = 0;
             surfBitsCmd.bitmapData.height = 0;

@@ -54,47 +54,95 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         public byte[] capsData;
     }
 
-    /// <summary>
-    /// This structure specifies an RDP 8.0 graphic capability set.
-    /// </summary>
-    public struct RDPGFX_CAPSET_VERSION8
-    {
-        /// <summary>
-        /// UINT32. The value of this integer indicates the version of the capability set.
-        /// this MUST be set to 0x00080004
-        /// </summary>
-        public CapsVersions version;
-        /// <summary>
-        /// UINT32. The value of this integer indicates the size, in bytes, of the capability set data 
-        /// present in the capsData field. it MUST be set to 0x00000004
-        /// </summary>
-        public uint capsDataLength;
-        /// <summary>
-        /// UINT32, The value of this integer indicates capability flags.
-        /// </summary>
-        public CapsFlags flags;
-    }
+    ///// <summary>
+    ///// This structure specifies an RDP 8.0 graphic capability set.
+    ///// </summary>
+    //public struct RDPGFX_CAPSET_VERSION8
+    //{
+    //    /// <summary>
+    //    /// UINT32. The value of this integer indicates the version of the capability set.
+    //    /// this MUST be set to 0x00080004
+    //    /// </summary>
+    //    public CapsVersions version;
+    //    /// <summary>
+    //    /// UINT32. The value of this integer indicates the size, in bytes, of the capability set data 
+    //    /// present in the capsData field. it MUST be set to 0x00000004
+    //    /// </summary>
+    //    public uint capsDataLength;
+    //    /// <summary>
+    //    /// UINT32, The value of this integer indicates capability flags.
+    //    /// </summary>
+    //    public CapsFlags flags;
+    //}
 
-    /// <summary>
-    /// This structure specifies an RDP 8.1 graphic capability set.
-    /// </summary>
-    public struct RDPGFX_CAPSET_VERSION81
-    {
-        /// <summary>
-        /// UINT32. The value of this integer indicates the version of the capability set.
-        /// this MUST be set to 0x00080105
-        /// </summary>
-        public CapsVersions version;
-        /// <summary>
-        /// UINT32. The value of this integer indicates the size, in bytes, of the capability set data 
-        /// present in the capsData field. it MUST be set to 0x00000004
-        /// </summary>
-        public uint capsDataLength;
-        /// <summary>
-        /// UINT32, The value of this integer indicates capability flags.
-        /// </summary>
-        public CapsFlags flags;
-    }
+    ///// <summary>
+    ///// This structure specifies an RDP 8.1 graphic capability set.
+    ///// </summary>
+    //public struct RDPGFX_CAPSET_VERSION81
+    //{
+    //    /// <summary>
+    //    /// UINT32. The value of this integer indicates the version of the capability set.
+    //    /// this MUST be set to 0x00080105
+    //    /// </summary>
+    //    public CapsVersions version;
+    //    /// <summary>
+    //    /// UINT32. The value of this integer indicates the size, in bytes, of the capability set data 
+    //    /// present in the capsData field. it MUST be set to 0x00000004
+    //    /// </summary>
+    //    public uint capsDataLength;
+    //    /// <summary>
+    //    /// UINT32, The value of this integer indicates capability flags.
+    //    /// </summary>
+    //    public CapsFlags flags;
+    //}
+
+    ///// <summary>
+    ///// This structure specifies an RDP 10.0 graphic capability set.
+    ///// </summary>
+    //public struct RDPGFX_CAPSET_VERSION10
+    //{
+    //    /// <summary>
+    //    /// A 32-bit unsigned integer that specifies the version of the capability set. 
+    //    /// This field MUST be set to RDPGFX_CAPVERSION_10 (0x000A0002).
+    //    /// </summary>
+    //    public CapsVersions version;
+
+    //    /// <summary>
+    //    /// A 32-bit unsigned integer that specifies the size, in bytes, of the capability set data. 
+    //    /// This field MUST be set to 0x00000004.
+    //    /// </summary>
+    //    public uint capsDataLength;
+
+    //    /// <summary>
+    //    /// A 32-bit unsigned integer that specifies capability flags.
+    //    /// RDPGFX_CAPS_FLAG_SMALL_CACHE (0x00000002), RDPGFX_CAPS_FLAG_AVC_DISABLED (0x00000020)
+    //    /// </summary>
+    //    public CapsFlags flags;
+    //}
+
+    ///// <summary>
+    ///// This structure specifies an RDP 10.2 graphic capability set.
+    ///// </summary>
+    //public struct RDPGFX_CAPSET_VERSION102
+    //{
+    //    /// <summary>
+    //    /// A 32-bit unsigned integer that specifies the version of the capability set. 
+    //    /// This field MUST be set to RDPGFX_CAPVERSION_102 (0x000A0200).
+    //    /// </summary>
+    //    public CapsVersions version;
+
+    //    /// <summary>
+    //    /// A 32-bit unsigned integer that specifies the size, in bytes, of the capability set data. 
+    //    /// This field MUST be set to 0x00000004.
+    //    /// </summary>
+    //    public uint capsDataLength;
+
+    //    /// <summary>
+    //    /// A 32-bit unsigned integer that specifies capability flags.
+    //    /// RDPGFX_CAPS_FLAG_SMALL_CACHE (0x00000002), RDPGFX_CAPS_FLAG_AVC_DISABLED (0x00000020)
+    //    /// </summary>
+    //    public CapsFlags flags;
+    //}
 
     /// <summary>
     /// This structure specifies a point relative to the virtual-desktop origin.

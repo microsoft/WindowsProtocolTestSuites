@@ -5872,6 +5872,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         RESTRICTED_ADMIN_MODE_REQUIRED = 0x01,
 
         /// <summary>
+        /// Indicates that the client requires credential-less logon over CredSSP with redirected authentication over CredSSP (also known as "Remote Credential Guard"). 
+        /// If the server supports this mode, the client can send a redirected logon buffer in the TSRemoteGuardCreds structure defined in [MS-CSSP] section 2.2.1.2.3.
+        /// </summary>
+        REDIRECTED_AUTHENTICATION_MODE_REQUIRED = 0x02,
+
+        /// <summary>
         /// The optional rdpCorrelationInfo field of the 224 Connection Request PDU (section 2.2.1.1) is present.
         /// </summary>
         CORRELATION_INFO_PRESENT = 0x08
@@ -6347,7 +6353,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// Indicates that the server supports credential-less logon over CredSSP (also known as "restricted admin mode") 
         /// and it is acceptable for the client to send empty credentials in the TSPasswordCreds structure defined in [MS-CSSP] section 2.2.1.2.1.
         /// </summary>
-        RESTRICTED_ADMIN_MODE_SUPPORTED = 0x08
+        RESTRICTED_ADMIN_MODE_SUPPORTED = 0x08,
+
+        /// <summary>
+        /// Indicates that the server supports credential-less logon over CredSSP with credential redirection (also known as "Remote Credential Guard"). 
+        /// The client can send a redirected logon buffer in the TSRemoteGuardCreds structure defined in [MS-CSSP] section 2.2.1.2.3.
+        /// </summary>
+        REDIRECTED_AUTHENTICATION_MODE_SUPPORTED = 0x10
 
     }
 
@@ -7811,7 +7823,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// RDP 10.0 servers
         /// </summary>
-        V3 = 0x00080005
+        V3 = 0x00080005,
+
+        /// <summary>
+        /// RDP 10.1 servers
+        /// </summary>
+        V4 = 0x00080006,
+
+        /// <summary>
+        /// RDP 10.2 servers
+        /// </summary>
+        V5 = 0x00080007
     }
 
     /// <summary>
@@ -8016,6 +8038,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
         /// <summary>
         /// Indicates that switching dynamic virtual channels from the TCP to UDP transport is supported.
+        /// If the server advertises the SOFTSYNC_TCP_TO_UDP flag, then the server MUST support processing success responses in the Initiate Multitransport Response PDU.
         /// </summary>
         SOFTSYNC_TCP_TO_UDP = 0x200,
 
@@ -8066,14 +8089,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         public RSA_PUBLIC_KEY PublicKeyBlob;
 
         /// <summary>
-        ///  A 16-bit unsigned integer. The type of data in the SignatureKeyBlob
+        ///  A 16-bit unsigned integer. The type of data in the SignatureBlob
         ///  field. This field is set to BB_RSA_SIGNATURE_BLOB (0x0008).
         /// </summary>
         public wSignatureBlobType_Values wSignatureBlobType;
 
         /// <summary>
         ///  A 16-bit unsigned integer. The size in bytes of the
-        ///  SignatureKeyBlob field.
+        ///  SignatureBlob field.
         /// </summary>
         public ushort wSignatureBlobLen;
 
@@ -10689,7 +10712,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// Android platform
         /// </summary>
-        OSMAJORTYPE_ANDROID = 0x0007
+        OSMAJORTYPE_ANDROID = 0x0007,
+
+        /// <summary>
+        /// Chrome OS platform
+        /// </summary>
+        OSMAJORTYPE_CHROME_OS = 0x0008
 
     }
 
@@ -16716,12 +16744,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.destRight);
             RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.destBottom);
             RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.bpp);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.reserved1);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.reserved2);
+            RdpbcgrEncoder.EncodeStructure(buffer, (byte)surfBitsData.bitmapData.flags);
+            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.reserved);
             RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.codecID);
             RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.width);
             RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.height);
             RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.bitmapDataLength);
+            if (surfBitsData.bitmapData.exBitmapDataHeader != null)
+            {
+                RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.exBitmapDataHeader.highUniqueId);
+                RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.exBitmapDataHeader.lowUniqueId);
+                RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.exBitmapDataHeader.tmMilliseconds);
+                RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.exBitmapDataHeader.tmSeconds);
+            }
             if (surfBitsData.bitmapData.bitmapData != null)
             {
                 RdpbcgrEncoder.EncodeBytes(buffer, surfBitsData.bitmapData.bitmapData);
@@ -16740,12 +16775,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.destRight);
             RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.destBottom);
             RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.bpp);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.reserved1);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.reserved2);
+            RdpbcgrEncoder.EncodeStructure(buffer, (byte)surfStreamData.bitmapData.flags);
+            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.reserved);
             RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.codecID);
             RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.width);
             RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.height);
             RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.bitmapDataLength);
+            if(surfStreamData.bitmapData.exBitmapDataHeader != null)
+            {
+                RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.exBitmapDataHeader.highUniqueId);
+                RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.exBitmapDataHeader.lowUniqueId);
+                RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.exBitmapDataHeader.tmMilliseconds);
+                RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.exBitmapDataHeader.tmSeconds);
+            }
             if (surfStreamData.bitmapData.bitmapData != null)
             {
                 RdpbcgrEncoder.EncodeBytes(buffer, surfStreamData.bitmapData.bitmapData);
@@ -16841,12 +16883,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     {
 
         /// <summary>
-        ///  An 8-bit unsigned integer. The TS_FP_UPDATE structure
-        ///  begins with a one- byte bit-packed update header field.
-        ///  Two pieces of information are collapsed into this byte:Fast-path
-        ///  update typeCompression usage indication The format of
-        ///  the updateHeader byte is described by the following
-        ///  bitmask diagram:
+        ///  An 8-bit unsigned integer.
+        ///  Three pieces of information are collapsed into this byte:
+        ///  Fast-path update byte
+        ///  Fast-path fragment sequencing
+        ///  Compression usage indication
         /// </summary>
         public byte updateHeader;
 
@@ -17112,14 +17153,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         public byte bpp;
 
         /// <summary>
-        /// An 8-bit, unsigned integer. This field is reserved for future use.
+        /// An 8-bit, unsigned integer.
         /// </summary>
-        public byte reserved1;
+        public TSBitmapDataExFlags_Values flags;
 
         /// <summary>
-        /// An 8-bit, unsigned integer. This field is reserved for future use.
+        /// An 8-bit, unsigned integer. This field is reserved for future use. It MUST be set to zero
         /// </summary>
-        public byte reserved2;
+        public byte reserved;
 
         /// <summary>
         /// An 8-bit, unsigned integer. The client-assigned ID that identifies 
@@ -17146,10 +17187,58 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         public uint bitmapDataLength;
 
         /// <summary>
+        /// An optional Extended Compressed Bitmap Header (section 2.2.9.2.1.1.1) structure that contains nonessential information associated with bitmap data in the bitmapData field. 
+        /// This field MUST be present if the EX_COMPRESSED_BITMAP_HEADER_PRESENT (0x01) flag is present.
+        /// </summary>
+        public TS_COMPRESSED_BITMAP_HEADER_EX exBitmapDataHeader;
+
+        /// <summary>
         /// A variable-size array of bytes containing bitmap data encoded using the
         /// codec identified by the ID in the codecID field.
         /// </summary>
         public byte[] bitmapData;
+    }
+
+    /// <summary>
+    /// Flags of TS_BITMAP_DATA_EX
+    /// </summary>
+    public enum TSBitmapDataExFlags_Values : byte
+    {
+        /// <summary>
+        /// None.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// Indicates that the optional exBitmapDataHeader field is present.
+        /// </summary>
+        EX_COMPRESSED_BITMAP_HEADER_PRESENT = 0x01
+    }
+
+    public class TS_COMPRESSED_BITMAP_HEADER_EX
+    {
+        /// <summary>
+        /// A 32-bit, unsigned integer that contains the high-order bits of a unique 64-bit identifier for the bitmap data.
+        /// </summary>
+        public uint highUniqueId;
+        
+        /// <summary>
+        /// A 32-bit, unsigned integer that contains the low-order bits of a unique 64-bit identifier for the bitmap data.
+        /// </summary>
+        public uint lowUniqueId;
+
+        /// <summary>
+        /// A 64-bit, unsigned integer that contains the milliseconds component of the timestamp that indicates when the bitmap data was generated. 
+        /// The timestamp (composed of the tmMilliseconds and tmSeconds fields), denotes the period of time that has elapsed since January 1, 1970 (midnight UTC/GMT), not counting leap seconds.
+        /// </summary>
+        public ulong tmMilliseconds;
+
+        /// <summary>
+        /// A 64-bit, unsigned integer that contains the seconds component of the timestamp that indicates when the bitmap data was generated. 
+        /// The timestamp (composed of the tmMilliseconds and tmSeconds fields), denotes the period of time that has elapsed since January 1, 1970 (midnight UTC/GMT), not counting leap seconds.
+        /// </summary>
+        public ulong tmSeconds;
+
     }
 
     /// <summary>
