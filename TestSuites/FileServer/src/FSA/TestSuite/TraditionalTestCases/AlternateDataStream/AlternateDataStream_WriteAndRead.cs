@@ -49,7 +49,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             //Step 1: Create a new File, it could be a DataFile or a DirectoryFile
             string fileName = this.fsaAdapter.ComposeRandomFileName(8);
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create a file with type: " + fileType.ToString() + " and name: " + fileName);
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "{0}. Create a file with type: " + fileType.ToString() + " and name: " + fileName, ++testStep);
             CreateOptions createFileType = (fileType == FileType.DataFile ? CreateOptions.NON_DIRECTORY_FILE : CreateOptions.DIRECTORY_FILE);
             status = this.fsaAdapter.CreateFile(
                         fileName,
@@ -68,7 +68,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                 bytesWritten = 0;
                 streamList.Add("::$DATA", bytesToWrite);
 
-                BaseTestSite.Log.Add(LogEntryKind.TestStep, "2. Write the file with " + bytesToWrite + " bytes data.");
+                BaseTestSite.Log.Add(LogEntryKind.TestStep, "{0}. Write the file with " + bytesToWrite + " bytes data.", ++testStep);
                 status = this.fsaAdapter.WriteFile(0, bytesToWrite, out bytesWritten);
                 this.fsaAdapter.AssertIfNotSuccess(status, "Write data to file operation failed.");
             }
@@ -76,13 +76,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             {
                 //Do not write data into DirectoryFile.
                 bytesToWrite = 0;
-                BaseTestSite.Log.Add(LogEntryKind.TestStep, "2. Do not write data into DirectoryFile.");
+                BaseTestSite.Log.Add(LogEntryKind.TestStep, "{0}. Do not write data into DirectoryFile.", ++testStep);
             }
 
             //Step 3: Create an Alternate Data Stream <Stream1> in the newly created file
             string streamName1 = this.fsaAdapter.ComposeRandomFileName(8);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Create an Alternate Data Stream with name: " + streamName1 + " on this file.");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "{0}. Create an Alternate Data Stream with name: " + streamName1 + " on this file.", ++testStep);
             status = this.fsaAdapter.CreateFile(
                         fileName + ":" + streamName1 + ":$DATA",
                         FileAttribute.NORMAL,
@@ -97,20 +97,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             bytesWritten = 0;
             streamList.Add(":" + streamName1 + ":$DATA", bytesToWrite);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. Write the stream with " + bytesToWrite + " bytes data.");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "{0}. Write the stream with " + bytesToWrite + " bytes data.", ++testStep);
             status = this.fsaAdapter.WriteFile(0, bytesToWrite, out bytesWritten);
             this.fsaAdapter.AssertIfNotSuccess(status, "Write data to stream operation failed.");
 
             //Step 5: Read some bytes from the Alternate Data Stream <Stream1> in the file
             bytesToRead = (int)bytesWritten;
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "5. Read the stream from offset: 0 and length: " + bytesToRead.ToString());
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "{0}. Read the stream from offset: 0 and length: " + bytesToRead.ToString(), ++testStep);
             status = this.fsaAdapter.ReadFile(0, bytesToRead, out bytesRead);
             this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.INVALID_PARAMETER, status, "If IsUnbuffered is TRUE & (ByteOffset >= 0), the operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions: (1) (ByteOffset % Open.File.Volume.LogicalBytesPerSector) is not zero. (2) (ByteCount % Open.File.Volume.LogicalBytesPerSector) is not zero.");
 
             //Step 6: Create another Alternate Data Stream <Stream2> in the newly created file
             string streamName2 = this.fsaAdapter.ComposeRandomFileName(8);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "6. Create an Alternate Data Stream with name: " + streamName2 + " on this file.");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "{0}. Create an Alternate Data Stream with name: " + streamName2 + " on this file.", ++testStep);
             status = this.fsaAdapter.CreateFile(
                         fileName + ":" + streamName2 + ":$DATA",
                         FileAttribute.NORMAL,
@@ -125,13 +125,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             bytesWritten = 0;
             streamList.Add(":" + streamName2 + ":$DATA", bytesToWrite);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "7. Write the stream with " + bytesToWrite + " bytes data.");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "{0}. Write the stream with " + bytesToWrite + " bytes data.", ++testStep);
             status = this.fsaAdapter.WriteFile(0, bytesToWrite, out bytesWritten);
             this.fsaAdapter.AssertIfNotSuccess(status, "Write data to stream operation failed.");
 
             //Step 8: Read some bytes from the Alternate Data Stream <Stream2> in the file
             bytesToRead = (int)bytesWritten;
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "8. Read the stream from offset: 0 and length: " + bytesToRead.ToString());
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "{0}. Read the stream from offset: 0 and length: " + bytesToRead.ToString(), ++testStep);
             status = this.fsaAdapter.ReadFile(0, bytesToRead, out bytesRead);
             this.fsaAdapter.AssertIfNotSuccess(status, "Read data from stream operation failed.");
         }
