@@ -294,6 +294,9 @@
         <Rule name = "SetSecurityInformation">
           <Category name = "SetSecurityInformation"/>
         </Rule>
+        <Rule name = "AlternateDataStream">
+          <Category name = "AlternateDataStream"/>
+        </Rule>
       </Rule>
     </Group>
   </ConfigCaseRule>

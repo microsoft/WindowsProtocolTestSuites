@@ -40,13 +40,6 @@
         </Description>
       </Property>
 
-      <Property name ="SiteName" value ="External">
-        <Description>
-          Name of domain site where the client locates
-          If the client is not in a domain, leave it blank
-        </Description>
-      </Property>
-
       <Property name="TransportPreferredSMB" value ="false">
         <Choice>true,false</Choice>
         <Description>

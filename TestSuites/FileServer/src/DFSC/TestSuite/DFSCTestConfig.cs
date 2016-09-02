@@ -183,11 +183,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
             }
         }
 
+        //SiteName is a Unicode string specifying the name of the site to which the DFS client computer belongs
+        //Use the default value "External". This field is set in a implementation specific function by client side.
         public string SiteName
         {
             get
             {
-                return GetProperty("SiteName");
+                return "External";
             }
         }
 

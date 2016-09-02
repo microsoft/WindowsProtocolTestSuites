@@ -62,6 +62,7 @@
     <Compile Include="ReadWriteSharedVHD.cs" />
     <Compile Include="RSVDTestBase.cs" />
     <Compile Include="RSVDTestConfig.cs" />
+    <Compile Include="SCSIPersistentReservation.cs" />
     <Compile Include="TunnelOperationToSharedVHD.cs" />
     <Compile Include="TwoClientsAccessSameSharedVHD.cs" />
   </ItemGroup>
