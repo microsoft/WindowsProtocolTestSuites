@@ -21,6 +21,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
     {
         Reliable,
         Lossy
+
     }
 
     /// <summary>
