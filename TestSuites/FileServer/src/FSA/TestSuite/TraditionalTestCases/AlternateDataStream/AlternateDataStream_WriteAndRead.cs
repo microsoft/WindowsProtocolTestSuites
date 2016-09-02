@@ -18,7 +18,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.AlternateDataStream)]
         [Description("Write and Read from an Alternate Data Stream on a DataFile.")]
-        public void AlternateDataStream_WriteAndRead_File()
+        public void BVT_AlternateDataStream_WriteAndRead_File()
         {
             AlternateDataStream_WriteAndRead(FileType.DataFile);
         }
@@ -28,7 +28,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.AlternateDataStream)]
         [Description("Write and Read from an Alternate Data Stream on a DirectoryFile.")]
-        public void AlternateDataStream_WriteAndRead_Dir()
+        public void BVT_AlternateDataStream_WriteAndRead_Dir()
         {
             AlternateDataStream_WriteAndRead(FileType.DirectoryFile);
         }
@@ -82,7 +82,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             //Step 3: Create an Alternate Data Stream <Stream1> in the newly created file
             string streamName1 = this.fsaAdapter.ComposeRandomFileName(8);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Create an Alternate Data Stream with name: " + streamName1 + "on this file.");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Create an Alternate Data Stream with name: " + streamName1 + " on this file.");
             status = this.fsaAdapter.CreateFile(
                         fileName + ":" + streamName1 + ":$DATA",
                         FileAttribute.NORMAL,
@@ -110,7 +110,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             //Step 6: Create another Alternate Data Stream <Stream2> in the newly created file
             string streamName2 = this.fsaAdapter.ComposeRandomFileName(8);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "6. Create an Alternate Data Stream with name: " + streamName2 + "on this file.");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "6. Create an Alternate Data Stream with name: " + streamName2 + " on this file.");
             status = this.fsaAdapter.CreateFile(
                         fileName + ":" + streamName2 + ":$DATA",
                         FileAttribute.NORMAL,

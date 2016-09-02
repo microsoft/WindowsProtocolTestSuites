@@ -389,9 +389,9 @@ To check the connectivity from the driver computer to the SUT:
 2.  In the **Run** dialog box, type `cmd` and then click **OK**.
 
 3.  At the command prompt, type `ping` followed by the hostname or IP address of the SUT, and then press **Enter**. The following example checks the connectivity from driver to an SUT named `Node01`:
-```
-	ping Node01
-```
+	```
+		ping Node01
+	```
 
 4.  Repeat these steps until you confirm the connectivity between all computers in the test environment.
 
@@ -431,9 +431,9 @@ To setup the driver computer:
 3.  Install the required and optional software. See [3.7. Software](#3.7).
 
 4.  Start Windows PowerShell (x64) from `%SystemRoot%\System32\WindowsPowerShell\v1.0\` with Administrator privilege, and then type following command.
-```
-	Set-ExecutionPolicy Unrestricted
-```
+	```
+		Set-ExecutionPolicy Unrestricted
+	```
 
 5.  Start Windows PowerShell (x86) from `%SystemRoot%\syswow64\WindowsPowerShell\v1.0\` with Administrator privilege, and execute the same command as above.
 
@@ -476,7 +476,6 @@ This configuration is used to test **Basic** features of **[MS-SMB2]** protocol.
 1.  Create a share named **SMBBasic** on `Node01`.
 
 2.  Share it with **Read/Write** permission level to the local Administrator account **Administrator**.
-
 >	For Windows platform, please refer to [5.3.1. Create a share named SMBBasic](#5.3.1).
 
 ######<a name="5.1.2.2.2"/> 5.1.2.2.2. Create a share with Encrypt data access enabled
@@ -486,11 +485,9 @@ This configuration is used to test **Encryption** feature of **[MS-SMB2]** proto
 1.  Create a share named **SMBEncrypted** on `Node01`.
 
 2.  Share it with **Read/Write** permission level to the local Administrator account **Administrator**.
-
 >	For Windows platform, please refer to [5.3.1. Create a share named SMBBasic](#5.3.1).
 
 3.  Enable **Encrypt data access** on the share which indicates that the server requires messages to be encrypted when accessing this share.
-
 >	For Windows platform, please refer to [5.3.6. Enable Encrypt Data Access on a share named SMBEncrypted](#5.3.6).
 
 ######<a name="5.1.2.2.3"/> 5.1.2.2.3. Other configurations
@@ -502,11 +499,9 @@ This configuration is used to test **Oplock** feature of **[MS-SMB2]** protocol.
 1.  Create a share named **ShareForceLevel2** on `Node01`.
 
 2.  Share it with **Read/Write** permission level to the local Administrator account **Administrator**.
-
 >	For Windows platform, please refer to [5.3.1. Create a share named SMBBasic](#5.3.1).
 
 3.  Enable **FORCE_LEVELII_OPLOCK** on the share.
-
 >	For Windows platform, please refer to [5.3.7. Enable FORCE_LEVELII_OPLOCK on a share named ShareForceLevel2](#5.3.7).
 
 #######<a name="5.1.2.2.3.2"/> 5.1.2.2.3.2. Create a share named SameWithSMBBasic
@@ -514,7 +509,6 @@ This configuration is used to test **Oplock** feature of **[MS-SMB2]** protocol.
 This configuration is used to test some negative cases of **AppInstanceId** feature of **[MS-SMB2]** protocol. If **AppInstanceId** is not supported, this section can be ignored.
 
 1.	Create a share named **SameWithSMBBasic** on `Node01`, this share should have the same path as the **SMBBasic** share.
-
 >	For Windows platform, please refer to [5.3.4. Add a share SameWithSMBBasic to an existing share SMBBasic](#5.3.4).
 
 Summary of the test case design:
@@ -532,7 +526,6 @@ This configuration is used to test some negative cases (similar to [5.1.2.2.3.2.
 1.  Create a share named **DifferentFromSMBBasic** on `Node01`, this share should have a different path from **SMBBasic** share. For example, if **SMBBasic** has path `%SystemDrive%\SMBBasic`, then **DifferentFromSMBBasic** should have path `%SystemDrive%\DifferentFromSMBBasic`.
 
 2.  Share it with **Read/Write** permission level to the local Administrator account **Administrator**.
-
 >	For Windows platform, please refer to [5.3.1. Create a share named SMBBasic](#5.3.1).
 
 #######<a name="5.1.2.2.3.4"/> 5.1.2.2.3.4. Create Symbolic Links
@@ -666,11 +659,9 @@ To setup the Domain Controller:
 This configuration is for routing two different networks which are used in multiple channel test cases.
 
 1. Install Remote Access Role and configure the Routing and Remote Access service.
-
 >	For Windows platform, please refer to [5.3.9.2. Install Routing Service](#5.3.9.2).
 
 2. Configure and start the Routing service.
-
 >	For Windows platform, please refer to [5.3.9.3. Configure and start Routing service](#5.3.9.3).
 
 #####<a name="5.2.1.3"/> 5.2.1.3. Create Domain User accounts 
@@ -728,14 +719,14 @@ This section describes how to setup the SUT computer. For the two SUT computers 
 To setup the SUT computer:
 
 1.  Join the SUT to the domain provided by the DC. And logon with domain administrator account.
-	-	If there are two SUT computers in the environment (i.e. `Node01` and `Node02`), join both to the domain then continue.
+>	If there are two SUT computers in the environment (i.e. `Node01` and `Node02`), join both to the domain then continue.
 
 2.  Complete [5.1.2.1. Common Setup](#5.1.2.1) specified in the **WORKGROUP** environment. See [4.2. Domain Environment](#4.2) for hostname and IP address configurations.
 
 3.  Setup the computer password for SUT.
 >	For Windows platform, please refer to [5.3.22. Manually Setup Computer Password](#5.3.22).
 
-4.	Configure the following steps from [5.1.2.2. Setup to test SMB2](#5.2.4.2) to [5.2.4.7. Setup to test Authorization](#5.2.4.7) regarding to your test requirements.
+4.	Configure the following steps from [5.2.4.2. Setup to test SMB2](#5.2.4.2) to [5.2.4.7. Setup to test Authorization](#5.2.4.7) regarding to your test requirements.
 
 #####<a name="5.2.4.2"/> 5.2.4.2. Setup to test SMB2
 
@@ -1699,12 +1690,11 @@ This section describes detailed setup steps on a Windows platform.
 2.	Navigate to **Server Manager** -&gt; **Tools** -&gt; **Failover Cluster Manager** to open the management console.
 
 3.	Create cluster using **Create Cluster...** wizard.
+>	![](./image/FileServerUserGuide/image1.png)Note
+
+>	&emsp;&emsp;Prior to creating the cluster, the shared storage needs to be created and added to the failover cluster nodes. For more information about how to do this, please see [5.3.11. Setup SAN Storage Server](#5.3.11)
 
 	![](./image/FileServerUserGuide/image117.png)
-
-	>	![](./image/FileServerUserGuide/image1.png)Note
-
-	>	&emsp;&emsp;Prior to creating the cluster, the shared storage needs to be created and added to the failover cluster nodes. For more information about how to do this, please see [5.3.11. Setup SAN Storage Server](#5.3.11)
 
 4.	Type the computer name of failover cluster nodes.
 
