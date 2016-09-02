@@ -18,6 +18,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
 
         #region Test Suite Initialization
 
+        #region Variables
+        Smb2FunctionalClient clientBeforeDisconnect = null;
+        Smb2FunctionalClient clientAfterDisconnect = null;
+        uint treeIdBeforeDisconnect;
+        uint treeIdAfterDisconnect;
+        FILEID fileIdBeforeDisconnect;
+        FILEID fileIdAfterDisconnect;
+        #endregion
+
         // Use ClassInitialize to run code before running the first test in the class
         [ClassInitialize()]
         public static void ClassInitialize(TestContext testContext)
@@ -30,6 +39,43 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         public static void ClassCleanup()
         {
             TestClassBase.Cleanup();
+        }
+
+        protected override void TestCleanup()
+        {
+            // The persistent handle requested by the clientBeforeDisconnect needs to be closed t make sure that server will not preserve the handle.
+            // Or else others test cases execution will be affected 
+            if (clientBeforeDisconnect != null)
+            {
+                try
+                {
+                    clientBeforeDisconnect.Close(treeIdBeforeDisconnect, fileIdBeforeDisconnect);
+                    clientBeforeDisconnect.TreeDisconnect(treeIdBeforeDisconnect);
+                    clientBeforeDisconnect.LogOff();
+                    clientBeforeDisconnect.Disconnect();
+                }
+                catch (Exception ex)
+                {
+                    BaseTestSite.Log.Add(LogEntryKind.Debug, "Unexpected exception when release clientBeforeDisconnect: {0}", ex.ToString());
+                }
+            }
+
+            if (clientAfterDisconnect != null)
+            {
+                try
+                {
+                    clientAfterDisconnect.Close(treeIdBeforeDisconnect, fileIdBeforeDisconnect);
+                    clientAfterDisconnect.TreeDisconnect(treeIdBeforeDisconnect);
+                    clientAfterDisconnect.LogOff();
+                    clientAfterDisconnect.Disconnect();
+                }
+                catch (Exception ex)
+                {
+                    BaseTestSite.Log.Add(LogEntryKind.Debug, "Unexpected exception when release clientAfterDisconnect: {0}", ex.ToString());
+                }
+            }
+
+            base.TestCleanup();
         }
 
         #endregion
@@ -76,17 +122,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 "1.	Client opens a shared virtual disk file with SMB2 create contexts " +
                 "SVHDX_OPEN_DEVICE_CONTEXT and SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (persistent bit is set). ");
 
-            Smb2FunctionalClient clientBeforeDisconnect = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
-            uint treeId;
+            clientBeforeDisconnect = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             Guid clientGuid = Guid.NewGuid();
-            ConnectToShare(clientBeforeDisconnect, clientGuid, TestConfig.FullPathShareContainingSharedVHD, out treeId);
+            ConnectToShare(clientBeforeDisconnect, clientGuid, TestConfig.FullPathShareContainingSharedVHD, out treeIdBeforeDisconnect);
 
             Guid createGuid = Guid.NewGuid();
             Guid initiatorId = Guid.NewGuid();
             Smb2CreateContextResponse[] serverCreateContexts;
-            FILEID fileIdBeforeDisconnect;
             clientBeforeDisconnect.Create
-                (treeId,
+                (treeIdBeforeDisconnect,
                 TestConfig.NameOfSharedVHDX + fileNameSuffix,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileIdBeforeDisconnect,
@@ -94,10 +138,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE,
                 new Smb2CreateContextRequest[]
                 {
-                    new Smb2CreateSvhdxOpenDeviceContext 
+                    new Smb2CreateSvhdxOpenDeviceContext
                     {
                         Version = (uint)RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1,
-                        OriginatorFlags = (uint)OriginatorFlag.SVHDX_ORIGINATOR_PVHDPARSER, 
+                        OriginatorFlags = (uint)OriginatorFlag.SVHDX_ORIGINATOR_PVHDPARSER,
                         InitiatorHostName = TestConfig.InitiatorHostName,
                         InitiatorHostNameLength = (ushort)(TestConfig.InitiatorHostName.Length * 2),  // InitiatorHostName is a null-terminated Unicode UTF-16 string 
                         InitiatorId = initiatorId
@@ -126,11 +170,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 "2.	Client disconnects from the server.");
             clientBeforeDisconnect.Disconnect();
 
-            Smb2FunctionalClient clientAfterDisconnect = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
-            ConnectToShare(clientAfterDisconnect, clientGuid, TestConfig.FullPathShareContainingSharedVHD, out treeId);
-            FILEID fileIdAfterDisconnect;
+            clientAfterDisconnect = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            ConnectToShare(clientAfterDisconnect, clientGuid, TestConfig.FullPathShareContainingSharedVHD, out treeIdAfterDisconnect);
             uint status = clientAfterDisconnect.Create
-                (treeId,
+                (treeIdAfterDisconnect,
                 TestConfig.NameOfSharedVHDX + fileNameSuffix,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileIdAfterDisconnect,
@@ -152,11 +195,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 status,
                 "3. Client reconnects the persistent handle without create context SVHDX_OPEN_DEVICE_CONTEXT and expects success. Actual status is: {0}",
                 GetStatus(status));
-
-            clientAfterDisconnect.Close(treeId, fileIdAfterDisconnect);
-            clientAfterDisconnect.TreeDisconnect(treeId);
-            clientAfterDisconnect.LogOff();
-            clientAfterDisconnect.Disconnect();
         }
 
         private void ConnectToShare(Smb2FunctionalClient client, Guid clientGuid, string uncShareName, out uint treeId)
@@ -177,7 +215,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             // <9> Section 3.2.5.1:  Windows Server 2012 R2 without [MSKB-3025091] doesn't return SVHDX_OPEN_DEVICE_CONTEXT_RESPONSE.
             if (TestConfig.Platform == Platform.WindowsServer2012R2)
                 return;
-                
+
             foreach (var context in servercreatecontexts)
             {
                 Type type = context.GetType();
