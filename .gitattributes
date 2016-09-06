@@ -53,6 +53,7 @@
 *.ico   binary
 *.xlsm  binary
 *.ico	binary
+*.rc	binary
 
 #Images (Binary)
 *.png binary

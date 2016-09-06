@@ -30,6 +30,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Rdma.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RdmaAdapter.cpp" />
@@ -39,6 +40,9 @@
     <ClCompile Include="RdmaListen.cpp" />
     <ClCompile Include="RdmaMemoryWindow.cpp" />
     <ClCompile Include="RdmaProvider.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{94267900-7F95-48DB-AAC4-ADFF00492BF5}</ProjectGuid>
