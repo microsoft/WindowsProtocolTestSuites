@@ -108,6 +108,9 @@
     <Content Include="MS-SMBD_ServerTestSuite.ptfconfig" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Smb2OverSmbdTestBase.cs" />
     <Compile Include="SMB2overSMBD\Smb2MultiChannelOverRdma.cs" />
     <Compile Include="SMB2overSMBD\Smb2OverRdmaChannel.cs" />
