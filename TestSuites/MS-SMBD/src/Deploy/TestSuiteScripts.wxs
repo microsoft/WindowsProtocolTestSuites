@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="TESTSUITE_SCRIPTS_DIR">
+            <Component Id="cmpABD95FA2C4CED369A395AA50DA4DBE10" Guid="{46812CC3-9A94-4BAF-9E8A-1BCFE917D639}">
+                <File Id="fil9468057287EB9D7120B00DA433B453CF" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Config-DriverComputer.ps1" />
+            </Component>
+            <Component Id="cmp56DE49FF5CCFFA8624370B22B12AB84D" Guid="{3987346E-AEA7-4C0D-ACC9-CC85734F9957}">
+                <File Id="fil49411D70D84E9B0A22DBB9F681D92B4B" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Config-OpenSM.ps1" />
+            </Component>
+            <Component Id="cmpC29664C0691E50DB2F28F241998503DC" Guid="{61B3E1E2-3ABC-40CF-8FD4-113AEA56556B}">
+                <File Id="filAC23A885E318A340D3995D50F7FD2437" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Config-Server.ps1" />
+            </Component>
+            <Component Id="cmpBE54976D0AB10263BC1B59EC92707B7D" Guid="{8005F536-AF88-4D22-87F9-47055C2B207C}">
+                <File Id="fil37D2351C7786523EB0BD004C567D2575" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\ParamConfig.xml" />
+            </Component>
+            <Component Id="cmpBDE8B9B9233D102E384C99199CB139B3" Guid="{9A14EEBD-3C85-4D74-B598-A0649E619A29}">
+                <File Id="filA1F0B1EC21111953804FDEFBED4DB995" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Write-NetworkIPAddress.ps1" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="TESTSUITE_SCRIPTS_FILES">
+            <ComponentRef Id="cmpABD95FA2C4CED369A395AA50DA4DBE10" />
+            <ComponentRef Id="cmp56DE49FF5CCFFA8624370B22B12AB84D" />
+            <ComponentRef Id="cmpC29664C0691E50DB2F28F241998503DC" />
+            <ComponentRef Id="cmpBE54976D0AB10263BC1B59EC92707B7D" />
+            <ComponentRef Id="cmpBDE8B9B9233D102E384C99199CB139B3" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

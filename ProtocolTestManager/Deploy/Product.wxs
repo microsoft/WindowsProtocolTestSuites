@@ -25,6 +25,7 @@
       <ComponentGroupRef Id="ProductComponents_etc" />
       <ComponentGroupRef Id="ProductComponents_ProtoSDK" />
       <ComponentGroupRef Id="fileserver_PLUGIN"/>
+      <ComponentGroupRef Id="KERBEROS_PLUGIN"/>
       <ComponentGroupRef Id="RDP_PLUGIN"/>
       <ComponentRef Id="ApplicationShortcut"/>
       <ComponentRef Id="DesktopShortcuts"/>
@@ -97,12 +98,14 @@
           <Directory Id="BINFOLDER" Name="bin" />
           <Directory Id="ETCFOLDER" Name="etc" >
             <Directory Id="FILESERVERCONFIG" Name="fileserver" />
-	    <Directory Id="RDPCONFIG" Name="rdp" />
+	          <Directory Id="RDPCONFIG" Name="rdp" />
+            <Directory Id="KERBEROSCONFIGFOLDER" Name="kerberos" />
           </Directory>
           <Directory Id="LIBFOLDER" Name="lib" />
           <Directory Id="DOCFOLDER" Name="doc" >
             <Directory Id="FILESERVERDOCFOLDER" Name="fileserver" />
-	    <Directory Id="RDPDOCFOLDER" Name="rdp" />
+	          <Directory Id="RDPDOCFOLDER" Name="rdp" />
+            <Directory Id="KERBEROSDOCFOLDER" Name="kerberos" />
           </Directory>
 		  <Directory Id="DATAFOLDER" Name="data" >
 			<Directory Id="FILESERVERDATAFOLDER" Name="fileserver" />
@@ -159,6 +162,24 @@
 
   <Fragment>
     <ComponentGroup Id="ProductComponents_bin" Directory="BINFOLDER">
+      <?if $(env.DEBUGVER) = 1?>
+        <Component Id="Microsoft.Protocols.TestManager.Detector.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestManager.Detector.pdb"
+               Source="$(var.SRCDIR)\bin\Microsoft.Protocols.TestManager.Detector.pdb" />
+        </Component>
+        <Component Id="Microsoft.Protocols.TestManager.Kernel.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="Microsoft.Protocols.TestManager.Kernel.pdb"
+               Source="$(var.SRCDIR)\bin\Microsoft.Protocols.TestManager.Kernel.pdb" />
+        </Component>
+        <Component Id="ProtocolTestManager.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="ProtocolTestManager.pdb"
+               Source="$(var.SRCDIR)\bin\ProtocolTestManager.pdb" />
+        </Component>
+        <Component Id="PtmCli.pdb" Guid="*" Feature="PTM_Feature">
+          <File Id="PtmCli.pdb"
+                Source="$(var.SRCDIR)\bin\PtmCli.pdb" />
+        </Component>
+      <?endif ?>
       <Component Id="ProtocolTestManager.exe" Guid="{D57A5D09-1B75-433D-890F-829E5C350276}" Feature="PTM_Feature">
         <File Id="ProtocolTestManager.exe"
               Source="$(var.SRCDIR)\bin\ProtocolTestManager.exe" />
@@ -182,7 +203,7 @@
       <Component Id="Microsoft.Protocols.TestManager.Kernel.XML" Guid="{A792E1AF-4BD2-415C-AE99-9271547793A4}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestManager.Kernel.XML"
               Source="$(var.SRCDIR)\bin\Microsoft.Protocols.TestManager.Kernel.XML" />
-      </Component>
+      </Component> 
     </ComponentGroup>
     <ComponentGroup Id="ProductComponents_etc" Directory="ETCFOLDER">
 

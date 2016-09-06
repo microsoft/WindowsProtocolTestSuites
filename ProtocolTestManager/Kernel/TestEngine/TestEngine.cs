@@ -13,6 +13,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
     {
         private string EnginePath;
         private Logger logger;
+        public string PipeName { get; set; }
 
         public List<string> TestAssemblies { get; set; }
         public string TestSetting { get; set; }
@@ -125,7 +126,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
             return args;
         }
 
-        private string runArgs;
         HtmlResultChecker htmlResultChecker;
 
         private delegate void RunByCaseDelegate(Stack<TestCase> caseStack);
@@ -138,30 +138,18 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public void RunByCase(Stack<TestCase> caseStack)
         {
             runningCaseStack = caseStack;
+
             htmlResultChecker = HtmlResultChecker.GetHtmlResultChecker();
             htmlResultChecker.UpdateCase = logger.UpdateCaseFromHtmlLog;
             htmlResultChecker.Start(this.WorkingDirectory);
+
             Exception exception = null;
             try
             {
                 while (caseStack != null && caseStack.Count > 0)
                 {
                     StringBuilder args = ConstructVstestArgs(caseStack);
-                    runArgs = args.ToString();
-
-                    vstestProcess = new Process()
-                    {
-                        StartInfo = new ProcessStartInfo()
-                        {
-                            WorkingDirectory = WorkingDirectory,
-                            FileName = EnginePath,
-                            UseShellExecute = false,
-                            CreateNoWindow = false,
-                            Arguments = runArgs
-                        }
-                    };
-                    vstestProcess.Start();
-                    vstestProcess.WaitForExit();
+                    Run(args.ToString());
                 }
             }
             catch (Exception e)
@@ -170,6 +158,60 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
             ExecutionFinished(exception);
         }
+
+        private Exception Run(string runArgs)
+        {
+            try
+            {
+                vstestProcess = new Process()
+                {
+                    StartInfo = new ProcessStartInfo()
+                    {
+                        WorkingDirectory = WorkingDirectory,
+                        FileName = EnginePath,
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        Arguments = runArgs
+                    }
+                };
+
+                PipeSinkServer.ParseLogMessage = ParseLogMessage;
+                PipeSinkServer.Start(PipeName);
+
+                vstestProcess.Start();
+                vstestProcess.WaitForExit();
+            }
+            catch (Exception exception)
+            {
+                return exception;
+            }
+            return null;
+        }
+
+        private void ParseLogMessage(string message)
+        {
+
+            if (message.IndexOf(StringResource.InprogressTag) != -1 || 
+                message.IndexOf(StringResource.PassedTag) != -1 || 
+                message.IndexOf(StringResource.FailedTag) != -1 || 
+                message.IndexOf(StringResource.InconclusiveTag) != -1)
+            {
+                string[] strings = message.Split('.');
+                string testCaseName = strings[strings.Length - 1];
+
+                if(message.IndexOf(StringResource.InprogressTag) != -1)
+                {
+                    logger.GroupByOutcome.ChangeStatus(testCaseName, TestCaseStatus.Running);
+                }
+                else
+                {
+                    // Case status from Running -> Waiting.
+                    // Waiting QT close or Html Report.
+                    logger.GroupByOutcome.ChangeStatus(testCaseName, TestCaseStatus.Waiting);
+                }
+            }
+        }
+
 
         private delegate void RunByFilterDelegate(string filterExpr);
 
@@ -188,20 +230,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
                 StringBuilder args = ConstructVstestArgs();
                 args.AppendFormat("/TestCaseFilter:\"{0}\" ", filterExpr);
-                runArgs = args.ToString();
-                vstestProcess = new Process()
-                {
-                    StartInfo = new ProcessStartInfo()
-                    {
-                        WorkingDirectory = WorkingDirectory,
-                        FileName = EnginePath,
-                        UseShellExecute = false,
-                        CreateNoWindow = false,
-                        Arguments = runArgs
-                    }
-                };
-                vstestProcess.Start();
-                vstestProcess.WaitForExit();
+                Run(args.ToString());
 
             }
             catch (Exception e)
@@ -226,7 +255,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             htmlResultChecker.Stop();
             logger.IndexHtmlFilePath = htmlResultChecker.IndexHtmlFilePath;
             logger.FinishTest();
-            logger.GroupByOutcome.InProgressTestCases.Autohide = true;
+            PipeSinkServer.Stop();
         }
 
         /// <summary>

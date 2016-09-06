@@ -10,6 +10,12 @@
     <Group name="SMB2">
       <!--Tag named Description is used for the comment-->
 
+      <Property name="WaitTimeoutInMilliseconds" value="5000">
+        <Description>
+          Timeout in milliseconds before current thread continues when use WaitHandle.WaitOne
+        </Description>
+      </Property>
+
       <Property name="SutAlternativeIPAddress" value="192.168.2.11">
         <Description>
           Alternative IP address of SUT to establish connection

@@ -276,8 +276,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestMethod]
         [Priority(1)]
         [TestCategory("RDP7.0")]
-        [TestCategory("RDPBCGR")]        
-        [Description(@"This test case verifies that SUT drops the connection when the encryptionMethod field in the Server Security Data is not valid or not supported.")]
+        [TestCategory("RDPBCGR")]
+        [Description(@"Potential TDI. This test case verifies that SUT drops the connection when the encryptionMethod field in the Server Security Data is not valid or not supported.")]
         public void S1_ConnectionTest_BasicSettingExchange_NegativeTest_InvalidEncryptionMethod()
         {
             #region Test Steps
@@ -320,6 +320,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             if (isWindowsImplementation)
             {
+                //According to TDI#66010, the Server Security Data is only evaluated when the client security layer is connected, which is after the channels have been joined.
                 #region Channel Connection phase
                 //Expect a Client MCS Erect Domain Request PDU.
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client MCS Erect Domain Request PDU.");
@@ -399,6 +400,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             if (isWindowsImplementation)
             {
+                //According to TDI#66010, the Server Security Data is only evaluated when the client security layer is connected, which is after the channels have been joined.
                 #region Channel Connection phase
                 //Expect a Client MCS Erect Domain Request PDU.
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client MCS Erect Domain Request PDU.");
@@ -478,6 +480,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             if (isWindowsImplementation)
             {
+                //According to TDI#66010, the Server Security Data is only evaluated when the client security layer is connected, which is after the channels have been joined.
                 #region Channel Connection phase
                 //Expect a Client MCS Erect Domain Request PDU.
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client MCS Erect Domain Request PDU.");

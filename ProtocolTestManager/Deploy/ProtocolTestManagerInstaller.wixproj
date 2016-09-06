@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-	<DefineSolutionProperties>false</DefineSolutionProperties>
+	  <DefineSolutionProperties>false</DefineSolutionProperties>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>3.0</ProductVersion>
@@ -26,6 +26,7 @@
   <Import Project="$(WixTargetsPath)" />
   <ItemGroup>
     <Compile Include="RDPPlugin.wxs" />
+    <Compile Include="KerberosPlugin.wxs" />
     <Compile Include="Product.wxs" />
     <Compile Include="PrivacyDlg.wxs" />
     <Compile Include="ProtoSDK.wxs" />
@@ -92,7 +93,15 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLLOCATION</RefTargetDir>
     </ProjectReference>
-   <ProjectReference Include="..\Plugins\RDPPlugin\RDPPlugin\RDPPlugin.csproj">
+    <ProjectReference Include="..\Plugins\KerberosPlugin\KerberosPlugin\KerberosPlugin.csproj">
+      <Name>KerberosPlugin</Name>
+      <Project>{E18054D7-60B6-4D02-A95C-F752A61DC8D8}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Plugins\RDPPlugin\RDPPlugin\RDPPlugin.csproj">
       <Name>RDPPlugin</Name>
       <Project>{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}</Project>
       <Private>True</Private>
@@ -108,7 +117,7 @@
 	</Target>
   	-->
 	<Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)\en-us\$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\installer\" />
+    <Copy Condition="$(FORDEBUG)==1" SourceFiles="$(TargetDir)\en-us\$(TargetFileName)" DestinationFiles="$(TestSuiteRoot)\drop\ProtocolTestManager\installer\ProtocolTestManager_ForDebug.msi" />
+    <Copy Condition="$(FORDEBUG)!=1" SourceFiles="$(TargetDir)\en-us\$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\installer\" />
 	</Target>
-
 </Project>

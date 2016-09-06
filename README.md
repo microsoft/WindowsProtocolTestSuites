@@ -10,6 +10,8 @@ Windows Protocol Test Suites provide interoperability testing against the implem
 * **SMB1 Server Test Suite**. It covers the requirements documented by [MS-SMB], and those documented by other protocols which are related to [MS-SMB], i.e. [MS-FSCC] and [MS-CIFS].
 * **File Server Family Test Suite**. It is designed to test implementations of file server protocol family including [MS-SMB2], [MS-DFSC], [MS-SWN], [MS-FSRVP], [MS-FSA], [MS-RSVD] and [MS-SQOS].
 * **RDP Client Family Test Suite**. It provides interoperability testing for client implementation of RDP family protocols including [MS-RDPBCGR], [MS-RDPEDISP], [MS-RDPEDYC], [MS-RDPEGFX], [MS-RDPEGT], [MS-RDPEI], [MS-RDPEMT], [MS-RDPEUDP], [MS-RDPEUSB], [MS-RDPEVOR] and [MS-RDPRFX].  
+* **Kerberos Server Test Suite**. It is designed to test server implementations of Kerberos protocols including [MS-KILE], [MS-KKDCP] and [MS-PAC].
+* **SMBD Server Test Suite**. It is designed to test the implementations of SMB2&3 direct (RDMA) protocol, as specified in [MS-SMBD].
 
 ## Components
 Windows Protocol Test Suites contain 4 components:
@@ -23,9 +25,11 @@ Windows Protocol Test Suites contain 4 components:
 ## Prerequisites
 The Test Suites are developed and must be installed on a Windows platform.
 You should install the following list of software in order to build Test Suites from source code.
+You can use the script in **InstallPrerequisites** folder to automatically download and install these software.
 
-* .Net framework 3.5
-* [Wix toolset](http://wixtoolset.org/) v3.7 or higher
+* .NET Framework 3.5
+* .Net framework 4.0 or higher
+* [Wix toolset](http://wixtoolset.org/) v3.10 or higher
 * [Visual Studio](https://www.microsoft.com/en-us/download/details.aspx?id=30682) or [Visual Studio Agent](https://www.microsoft.com/en-us/download/details.aspx?id=38186), version 2012 or higher
 * [Protocol Test Framework](https://github.com/microsoft/protocoltestframework). You can use a released MSI file or build it from source code.
 * [Spec Explorer](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/). It is only required for the test suites that contain Model-Based Test cases. If you want to regenerate Model-Based Test cases, you must install Visual Studio 2012, otherwise higher versions of Visual Studio are supported.
@@ -36,6 +40,8 @@ Some test suites use [Model-Based Testing](https://msdn.microsoft.com/en-us/libr
 
 * **SMB1 Server Test Suite**
 * **File Server Family Test Suite**
+* **Kerberos Server Test Suite**
+* **SMBD Server Test Suite**
 
 ## Build
 
@@ -50,7 +56,7 @@ build.cmd
 
 ###<a name="BuildTestSuite">Build a test suite
 
-If the test suite contain Model-Based Test cases, you should follow the below steps before building it. 
+If the test suite contains Model-Based Test cases, you should follow the steps below before building it. 
 
 * Install [Spec Explorer](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/), 
 * Install the **formodel** version of [Protocol Test Framework](https://github.com/microsoft/protocoltestframework). You can use a released MSI file or build it from source code by **formodel** option.
@@ -101,3 +107,5 @@ The following resources are for Windows protocol test suite news, discussion, an
 * Discuss test suites issues [here](https://github.com/Microsoft/WindowsProtocolTestSuites/issues) on the github.
 * For [Open Specifications Protocols](https://msdn.microsoft.com/en-us/library/gg685446.aspx) support, contact dochelp@microsoft.com.
 
+## Microsoft Open Source Code of Conduct
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.

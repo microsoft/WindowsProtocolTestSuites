@@ -355,17 +355,16 @@ namespace Microsoft.Protocols.TestManager.Detector
 
 
             propertiesDic.Add("SMB2.SpecialShare", CreateShareList(GetSpecialShare()));
-            propertiesDic.Add("SMB2.ShareWithoutForceLevel2OrSOFS", CreateShareList());
 
-            string scaleoutShare = GetShare(ShareFlags_Values.SHAREFLAG_ACCESS_BASED_DIRECTORY_ENUM, Share_Capabilities_Values.SHARE_CAP_SCALEOUT);
-            if (!string.IsNullOrEmpty(scaleoutShare) || detectionInfo.platform == Platform.NonWindows)  // Keep default value for windows
+            // Oplock Model configuration
+            if (detectionInfo.platform == Platform.NonWindows)  // Use default value for Windows
             {
-                propertiesDic.Add("SMB2.ShareWithoutForceLevel2WithSOFS", CreateShareList(scaleoutShare));
-                propertiesDic.Add("SMB2.ShareWithForceLevel2AndSOFS", CreateShareList(scaleoutShare));
-                propertiesDic.Add("SMB2.ScaleOutFileServerName", new List<string>() { string.Empty });
+                propertiesDic.Add("SMB2.ShareWithoutForceLevel2OrSOFS", detectionInfo.shareListWithoutForceLevel2OrSOFS);
+                propertiesDic.Add("SMB2.ShareWithoutForceLevel2WithSOFS", detectionInfo.shareListWithoutForceLevel2WithSOFS);
+                propertiesDic.Add("SMB2.ShareWithForceLevel2WithoutSOFS", detectionInfo.shareListWithForceLevel2WithoutSOFS);
+                propertiesDic.Add("SMB2.ShareWithForceLevel2AndSOFS", detectionInfo.shareListWithForceLevel2AndSOFS);
             }
 
-            propertiesDic.Add("SMB2.ShareWithForceLevel2WithoutSOFS", CreateShareList(GetShare(ShareFlags_Values.SHAREFLAG_FORCE_LEVELII_OPLOCK)));
             propertiesDic.Add("SMB2.SameShareWithSMBBasic", HasShare("SameWithSMBBasic") ? CreateShareList("SameWithSMBBasic") : CreateShareList(string.Empty));
             propertiesDic.Add("SMB2.DifferentShareFromSMBBasic", HasShare("DifferentFromSMBBasic") ? CreateShareList("DifferentFromSMBBasic") : CreateShareList(string.Empty));
 
@@ -382,7 +381,9 @@ namespace Microsoft.Protocols.TestManager.Detector
                 {
                     versionvalue = "0x00000002";
                 }
+
                 propertiesDic.Add("RSVD.ServerServiceVersion", new List<string>() { versionvalue });
+                propertiesDic.Add("RSVD.FileServerIPContainingSharedVHD", new List<string>() { detectionInfo.networkInfo.SUTIpList[0].ToString() });
             }
             #endregion
 
@@ -463,7 +464,20 @@ namespace Microsoft.Protocols.TestManager.Detector
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.Session"));
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.Tree"));
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.CreateClose"));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock"));
+
+            if (detectionInfo.platform == Platform.NonWindows)
+            {
+                selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock.OplockOnShareWithForceLevel2AndSOFS", detectionInfo.shareListWithForceLevel2AndSOFS.Count != 0));
+                selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock.OplockOnShareWithForceLevel2WithoutSOFS", detectionInfo.shareListWithForceLevel2WithoutSOFS.Count != 0));
+                selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock.OplockOnShareWithoutForceLevel2WithSOFS", detectionInfo.shareListWithoutForceLevel2WithSOFS.Count != 0));
+                selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock.OplockOnShareWithoutForceLevel2OrSOFS", detectionInfo.shareListWithoutForceLevel2OrSOFS.Count != 0));
+            }
+            else
+            {
+                // Check all Oplock categories
+                selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock"));                
+            }
+            
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.OperateOneFileFromTwoNodes"));
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.Compound"));
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.ChangeNotify"));
@@ -885,6 +899,33 @@ namespace Microsoft.Protocols.TestManager.Detector
                     logWriter.AddLog(LogLevel.Information, string.Format("\tShare Type: {0}", item.ShareType));
                     logWriter.AddLog(LogLevel.Information, string.Format("\tShare Flags: {0}", item.ShareFlags));
                     logWriter.AddLog(LogLevel.Information, string.Format("\tShare Capabilities: {0}", item.ShareCapabilities));
+
+                    if (item.ShareType != ShareType_Values.SHARE_TYPE_DISK || item.ShareName.Contains("$"))
+                        continue;
+
+                    // Identify the shares for Oplock model
+                    if (item.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_FORCE_LEVELII_OPLOCK))
+                    {
+                        if (item.ShareCapabilities.HasFlag(Share_Capabilities_Values.SHARE_CAP_SCALEOUT))
+                        {
+                            detectionInfo.shareListWithForceLevel2AndSOFS.Add(item.ShareName);
+                        }
+                        else
+                        {
+                            detectionInfo.shareListWithForceLevel2WithoutSOFS.Add(item.ShareName);
+                        }
+                    }
+                    else
+                    {
+                        if (item.ShareCapabilities.HasFlag(Share_Capabilities_Values.SHARE_CAP_SCALEOUT))
+                        {
+                            detectionInfo.shareListWithoutForceLevel2WithSOFS.Add(item.ShareName);
+                        }
+                        else
+                        {
+                            detectionInfo.shareListWithoutForceLevel2OrSOFS.Add(item.ShareName);
+                        }
+                    }
                 }
                 logWriter.AddLineToLog(LogLevel.Information);
             }
@@ -966,16 +1007,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                 catch (Exception ex)
                 {
                     detectionInfo.F_ValidateNegotiateInfo = DetectResult.DetectFail;
-                    if (detectionInfo.CheckHigherDialect(detectionInfo.smb2Info.MaxSupportedDialectRevision, DialectRevision.Smb311))
-                    {
-                        detectionInfo.detectExceptions.Add(
-                            CtlCode_Values.FSCTL_VALIDATE_NEGOTIATE_INFO.ToString(),
-                            "FSCTL_VALIDATE_NEGOTIATE_INFO is not applicable when the Connection.Dialect is 3.1.1.");
-                    }
-                    else
-                    {
-                        detectionInfo.detectExceptions.Add(CtlCode_Values.FSCTL_VALIDATE_NEGOTIATE_INFO.ToString(), string.Format("Detect FSCTL_VALIDATE_NEGOTIATE_INFO failed: {0}", ex.Message));
-                    }
+                    detectionInfo.detectExceptions.Add(CtlCode_Values.FSCTL_VALIDATE_NEGOTIATE_INFO.ToString(), string.Format("Detect FSCTL_VALIDATE_NEGOTIATE_INFO failed: {0}", ex.Message));
                 }
 
                 //Add the unsupported IoctlCodes to the list
@@ -1284,9 +1316,9 @@ namespace Microsoft.Protocols.TestManager.Detector
             {
                 foreach (var item in detectionInfo.shareInfo)
                 {
-                    ShareFlags_Values itemshareFlags = item.ShareFlags & shareFlags;
-                    Share_Capabilities_Values itemshareCap = item.ShareCapabilities & shareCap;
-                    if (item.ShareType == ShareType_Values.SHARE_TYPE_DISK && itemshareFlags == shareFlags && itemshareCap == shareCap)
+                    if (item.ShareType == ShareType_Values.SHARE_TYPE_DISK
+                        && item.ShareFlags.HasFlag(shareFlags)
+                        && item.ShareCapabilities.HasFlag(shareCap))
                         return item.ShareName;
                 }
             }

@@ -14,7 +14,12 @@ if($Domain -eq $null -or $Domain.trim() -eq "")
 {
 	$account = $UserName
 }
-$account = "$Domain\$UserName"
+else
+{
+    $NetBIOSName = $Domain.Split(".")[0]
+    $account = "$NetBIOSName\$UserName"
+}
+
 for($i=0; $i -lt $Password.Length; $i++)
 {
 	$SecurePassword.AppendChar($Password[$i])

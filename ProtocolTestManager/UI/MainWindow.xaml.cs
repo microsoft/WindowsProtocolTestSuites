@@ -138,8 +138,8 @@ namespace Microsoft.Protocols.TestManager.UI
                     isAutoDetected = false;
                     util.LoadPtfconfig();
                     util.InitializeDetector();
-                    UpdateCaseFilter();
                     ListBox_Step.SelectedIndex = ruleIndex;
+                    UpdateCaseFilter();
                     DisableFollowingItems();
                     DisableDetectSteps();
                 };
@@ -227,13 +227,29 @@ namespace Microsoft.Protocols.TestManager.UI
             util.GetFilter().ContentModified += () =>
                 {
                     DisableFollowingItems();
-                    var caselist = util.GetSelectedCaseList();
-                    Pages.RulePage.CaseList.ItemsSource = caselist;
-                    Pages.RulePage.CaseNumberTextBlock.Text = caselist.Count.ToString();
+                    UpdateSelectedPageStatus();
                 };
-            var caselist1 = util.GetSelectedCaseList();
-            Pages.RulePage.CaseList.ItemsSource = caselist1;
-            Pages.RulePage.CaseNumberTextBlock.Text = caselist1.Count.ToString();
+            UpdateSelectedPageStatus();
+        }
+
+        // Update case number and Next button status according to the selected case number.
+        private void UpdateSelectedPageStatus()
+        {
+            var selectedCaseList = util.GetSelectedCaseList();
+            Pages.RulePage.CaseList.ItemsSource = selectedCaseList;
+            int caseCount = selectedCaseList.Count;
+            Pages.RulePage.CaseNumberTextBlock.Text = caseCount.ToString();
+            this.ButtonNext.IsEnabled = IsCaseSeleted(caseCount);
+        }
+
+        private bool IsCaseSeleted(int? caseCount = null)
+        {
+            if(caseCount == null)
+            {
+                caseCount = util.GetSelectedCaseList().Count;
+            }
+
+            return caseCount > 0 ? true : false;
         }
 
         private void GotoConfigPage()
@@ -293,6 +309,17 @@ namespace Microsoft.Protocols.TestManager.UI
                 {
                     from.RemoveTestCase(testcase);
                     to.AddTestCase(testcase);
+                }));
+            };
+            logger.GroupByOutcome.UpdateTestCaseList = (group, runningcase) =>
+            {
+                this.Dispatcher.Invoke((Action)(() => 
+                {
+                    int index = group.TestCaseList.IndexOf(runningcase);
+                    if(index > 0)
+                    {
+                        group.TestCaseList.Move(index, 0);
+                    }
                 }));
             };
             Pages.RunPage.SetLogger(logger);
@@ -513,7 +540,7 @@ namespace Microsoft.Protocols.TestManager.UI
             ContentFrame.Navigate(Pages.RulePage);
             PageInfoTextBlock.Text = StringResources.FilterTestCases;
             SetButtonsVisibility(true, true);
-            SetButtonsStatus(true, true);
+            SetButtonsStatus(true, IsCaseSeleted());
         }
 
         private void Item_Run_Selected(object sender, RoutedEventArgs e)

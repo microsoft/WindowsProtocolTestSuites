@@ -200,6 +200,48 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                         throw new Exception("CREATE failed with " + Smb2Status.GetStatusCode(header.Status));
                     }
 
+                    // Bug 8016334
+                    // The destination file of CopyOffload Write should not be zero, it should be at least 512 bytes, which is the sector size.
+                    client.Write(
+                        1,
+                        1,
+                        info.smb2Info.IsRequireMessageSigning ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                        messageId++,
+                        sessionId,
+                        treeId,
+                        0,
+                        fileIdDes,
+                        Channel_Values.CHANNEL_NONE,
+                        WRITE_Request_Flags_Values.None,
+                        new byte[0],
+                        Smb2Utility.CreateRandomByteArray(512),
+                        out header,
+                        out writeResponse,
+                        0);
+
+                    if (header.Status != Smb2Status.STATUS_SUCCESS)
+                    {
+                        LogFailedStatus("WRITE", header.Status);
+                        throw new Exception("WRITE failed with " + Smb2Status.GetStatusCode(header.Status));
+                    }
+
+                    client.Flush(
+                        1,
+                        1,
+                        info.smb2Info.IsRequireMessageSigning ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                        messageId++,
+                        sessionId,
+                        treeId,
+                        fileIdDes,
+                        out header,
+                        out flushResponse);
+
+                    if (header.Status != Smb2Status.STATUS_SUCCESS)
+                    {
+                        LogFailedStatus("FLUSH", header.Status);
+                        throw new Exception("FLUSH failed with " + Smb2Status.GetStatusCode(header.Status));
+                    }
+
                     if (responseOutput != null)
                     {
                         var offloadReadOutput = TypeMarshal.ToStruct<FSCTL_OFFLOAD_READ_OUTPUT>(responseOutput);
@@ -540,30 +582,130 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
             using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
             {
-                ulong messageId;
-                ulong sessionId;
+                ulong messageId = 1;
+                ulong sessionId = 0;
                 uint treeId;
                 NEGOTIATE_Response negotiateResponse;
                 Guid clientGuid;
                 bool encryptionRequired = false;
-                UserLogon(info, client, out messageId, out sessionId, out clientGuid, out negotiateResponse, out encryptionRequired);
+                DialectRevision[] preferredDialects;
+
+                logWriter.AddLog(LogLevel.Information, "Client connects to server");
+                client.ConnectOverTCP(SUTIpAddress);
+
+                if (info.CheckHigherDialect(info.smb2Info.MaxSupportedDialectRevision, DialectRevision.Smb311))
+                {
+                    // VALIDATE_NEGOTIATE_INFO request is only used in 3.0 and 3.0.2
+                    preferredDialects = Smb2Utility.GetDialects(DialectRevision.Smb302);
+                }
+                else
+                {
+                    preferredDialects = info.requestDialect;
+                }
+
+                #region Negotiate
+
+                DialectRevision selectedDialect;
+                byte[] gssToken;
+                Packet_Header header;
+                clientGuid = Guid.NewGuid();
+                logWriter.AddLog(LogLevel.Information, "Client sends multi-protocol Negotiate to server");
+                MultiProtocolNegotiate(
+                    client,
+                    1,
+                    1,
+                    Packet_Header_Flags_Values.NONE,
+                    messageId++,
+                    preferredDialects,
+                    SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
+                    Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU
+                    | Capabilities_Values.GLOBAL_CAP_LEASING | Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL | Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES | Capabilities_Values.GLOBAL_CAP_ENCRYPTION,
+                    clientGuid,
+                    out selectedDialect,
+                    out gssToken,
+                    out header,
+                    out negotiateResponse);
+
+                if (header.Status != Smb2Status.STATUS_SUCCESS)
+                {
+                    LogFailedStatus("NEGOTIATE", header.Status);
+                    throw new Exception(string.Format("NEGOTIATE failed with {0}", Smb2Status.GetStatusCode(header.Status)));
+                }
+
+                #endregion
+
+                #region Session Setup
+
+                SESSION_SETUP_Response sessionSetupResp;
+
+                SspiClientSecurityContext sspiClientGss =
+                    new SspiClientSecurityContext(
+                        SecurityPackageType,
+                        Credential,
+                        Smb2Utility.GetCifsServicePrincipalName(SUTName),
+                        ClientSecurityContextAttribute.None,
+                        SecurityTargetDataRepresentation.SecurityNativeDrep);
+
+                // Server GSS token is used only for Negotiate authentication when enabled
+                if (SecurityPackageType == SecurityPackageType.Negotiate)
+                    sspiClientGss.Initialize(gssToken);
+                else
+                    sspiClientGss.Initialize(null);
+
+                do
+                {
+                    logWriter.AddLog(LogLevel.Information, "Client sends SessionSetup to server");
+                    client.SessionSetup(
+                        1,
+                        64,
+                        Packet_Header_Flags_Values.NONE,
+                        messageId++,
+                        sessionId,
+                        SESSION_SETUP_Request_Flags.NONE,
+                        SESSION_SETUP_Request_SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
+                        SESSION_SETUP_Request_Capabilities_Values.GLOBAL_CAP_DFS,
+                        0,
+                        sspiClientGss.Token,
+                        out sessionId,
+                        out gssToken,
+                        out header,
+                        out sessionSetupResp);
+
+                    if ((header.Status == Smb2Status.STATUS_MORE_PROCESSING_REQUIRED || header.Status == Smb2Status.STATUS_SUCCESS) && gssToken != null && gssToken.Length > 0)
+                    {
+                        sspiClientGss.Initialize(gssToken);
+                    }
+                } while (header.Status == Smb2Status.STATUS_MORE_PROCESSING_REQUIRED);
+
+                if (header.Status != Smb2Status.STATUS_SUCCESS)
+                {
+                    LogFailedStatus("SESSIONSETUP", header.Status);
+                    throw new Exception(string.Format("SESSIONSETUP failed with {0}", Smb2Status.GetStatusCode(header.Status)));
+                }
+
+                byte[] sessionKey;
+                sessionKey = sspiClientGss.SessionKey;
+                encryptionRequired = sessionSetupResp.SessionFlags == SessionFlags_Values.SESSION_FLAG_ENCRYPT_DATA;
+                client.GenerateCryptoKeys(
+                    sessionId,
+                    sessionKey,
+                    info.smb2Info.IsRequireMessageSigning, // Enable signing according to the configuration of SUT
+                    encryptionRequired,
+                    null,
+                    false);
+
+                #endregion
 
                 #region TreeConnect
 
                 TREE_CONNECT_Response treeConnectResp;
                 string uncShare = string.Format(@"\\{0}\{1}", SUTName, sharename);
 
-                Packet_Header header;
-
                 logWriter.AddLog(LogLevel.Information, "Client sends TreeConnect to server");
-                if (info.smb2Info.MaxSupportedDialectRevision == DialectRevision.Smb311) // When dialect is 3.11, TreeConnect must be signed or encrypted.
-                {
-                    client.EnableSessionSigningAndEncryption(sessionId, true, encryptionRequired);
-                }
                 client.TreeConnect(
                     1,
                     1,
-                    (info.smb2Info.IsRequireMessageSigning || info.smb2Info.MaxSupportedDialectRevision == DialectRevision.Smb311) ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                    info.smb2Info.IsRequireMessageSigning ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
                     messageId++,
                     sessionId,
                     uncShare,
@@ -576,13 +718,6 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     LogFailedStatus("TREECONNECT", header.Status);
                     throw new Exception("TREECONNECT failed with " + Smb2Status.GetStatusCode(header.Status));
                 }
-
-                // When dialect is 3.11, for the messages other than TreeConnect, signing is not required.
-                // Set it back to the configuration of the SUT.
-                if (info.smb2Info.MaxSupportedDialectRevision == DialectRevision.Smb311)
-                {
-                    client.EnableSessionSigningAndEncryption(sessionId, info.smb2Info.IsRequireMessageSigning, encryptionRequired);
-                }       
 
                 #endregion
 
@@ -597,8 +732,8 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     | Capabilities_Values.GLOBAL_CAP_LEASING | Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL | Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES
                     | Capabilities_Values.GLOBAL_CAP_ENCRYPTION;
                 validateNegotiateInfoReq.SecurityMode = SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED;
-                validateNegotiateInfoReq.DialectCount = (ushort)(info.requestDialect.Length);
-                validateNegotiateInfoReq.Dialects = info.requestDialect;
+                validateNegotiateInfoReq.DialectCount = (ushort)(preferredDialects.Length);
+                validateNegotiateInfoReq.Dialects = preferredDialects;
                 byte[] inputBuffer = TypeMarshal.ToBytes<VALIDATE_NEGOTIATE_INFO_Request>(validateNegotiateInfoReq);
                 byte[] outputBuffer;
                 VALIDATE_NEGOTIATE_INFO_Response validateNegotiateInfoResp;

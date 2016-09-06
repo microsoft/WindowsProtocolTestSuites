@@ -26,13 +26,6 @@
           Active TDIs that would impact test, multiple values should be separated by semicolons
         </Description>
       </Property>
-
-      <Property name="ClusterName" value ="cluster01.contoso.com">
-        <Description>
-          Computer name of Windows failover cluster which hosts Continuous Availability (CA) file server (the SUT)
-          If SUT is non-Windows implementation, leave it blank
-        </Description>
-      </Property>
     </Group>
   </Properties>
 

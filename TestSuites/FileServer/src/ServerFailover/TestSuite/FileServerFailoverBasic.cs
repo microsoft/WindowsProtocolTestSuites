@@ -106,6 +106,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Cluster)]
         [TestCategory(TestCategories.Smb30)]
+        [TestCategory(TestCategories.Swn)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether server can handle failover to another node of continuous available file servers.")]
         public void FileServerFailover_FileServer()
@@ -121,6 +122,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Cluster)]
         [TestCategory(TestCategories.Smb30)]
+        [TestCategory(TestCategories.Swn)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether server can handle failover to another node of continuous available scale out file servers.")]
         public void FileServerFailover_ScaleOutFileServer()
@@ -136,6 +138,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Cluster)]
         [TestCategory(TestCategories.Smb30)]
+        [TestCategory(TestCategories.Swn)]
         [TestCategory(TestCategories.Positive)]
         [Description("Ensure persistent handle could be re-connected via connection with another node without failover.")]
         public void FileServerFailover_ScaleOutFileServer_ReconnectWithoutFailover()

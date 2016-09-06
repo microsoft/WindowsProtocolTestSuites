@@ -1371,6 +1371,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         {
             try
             {
+                // If the server name is an IP address. No need to query DNS.
+                // The server may not support kerberos. Use NTLM instead.
+                IPAddress address;
+                if (IPAddress.TryParse(serverName, out address))
+                {
+                    return null;
+                }
+
                 // If both client and server are in domain, it will use DNS to get the FQDN.
                 // Otherwise, if client is not in domain, but server is, LLMNR is used to get the hostname.
                 IPHostEntry hostEntry = Dns.GetHostEntry(serverName);

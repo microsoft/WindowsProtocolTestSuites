@@ -209,6 +209,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 case EncryptionLevel.ENCRYPTION_LEVEL_HIGH:
                 case EncryptionLevel.ENCRYPTION_LEVEL_FIPS:
                     // The following logic is implemented according to actual situation observed,
+                    // since related TD section is involved with [TDI #39940]
                     if (clientContext.RdpEncryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_40BIT
                         || clientContext.RdpEncryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_56BIT
                         || clientContext.RdpEncryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_128BIT)
@@ -2740,6 +2741,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             // TS_UPDATE_PALETTE: paletteData
             pduData.paletteData = ParseTsUpdatePaletteData(updateData, ref index);
 
+            // [Commented out for TDI #41402]
             // Check if data length exceeded expectation
             // VerifyDataLength(updateData.Length, index, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
             return pduData;
@@ -3760,6 +3762,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             int index = 0;
             attribute.newPointerUpdateData = ParseTsPointerAttribute(updateData, ref index);
 
+            // [Commented out for TDI #41402]
             // Check if data length exceeded expectation
             // VerifyDataLength(updateData.Length, index, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
             return attribute;

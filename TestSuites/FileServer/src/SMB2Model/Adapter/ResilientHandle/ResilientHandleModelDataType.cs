@@ -23,11 +23,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Resilient
         public bool IsIoCtlCodeResiliencySupported;
 
         /// <summary>
-        /// Indicate whether Leasing is supported
-        /// </summary>
-        public bool IsLeasingSupported;
-
-        /// <summary>
         /// Indicate the platform of SUT
         /// </summary>
         public Platform Platform;
@@ -42,7 +37,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Resilient
             outputInfo.AppendFormat("{0}: \r\n", "ResilientHandleServerConfig State");
             outputInfo.AppendFormat("{0}: {1} \r\n", "MaxSmbVersionSupported", this.MaxSmbVersionSupported.ToString());
             outputInfo.AppendFormat("{0}: {1} \r\n", "IsIoCtlCodeResiliencySupported", this.IsIoCtlCodeResiliencySupported.ToString());
-            outputInfo.AppendFormat("{0}: {1} \r\n", "IsLeasingSupported", this.IsLeasingSupported.ToString());
             outputInfo.AppendFormat("{0}: {1} \r\n", "Platform", this.Platform.ToString());
 
             return outputInfo.ToString();

@@ -60,12 +60,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.ResilientHan
             /// 4. Open the same file from different client (different client guid)
             /// 5. The expected result of OPEN is successful.            
             /// 
-            /// Covered TD, section 
-            /// If Connection.Dialect is "3.000" and the request does not contain SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context 
-            /// or SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2 Create Context, the server MUST look up an existing open in the 
-            /// GlobalOpenTable where Open.FileName matches the file name in the Buffer field of the request. If an Open entry is found, 
-            /// if Open.IsPersistent is TRUE, *Open.IsResilient is TRUE* and if Open.Connection is NULL, the server MUST fail the request with STATUS_FILE_NOT_AVAILABLE.
-            /// 
+
             #region Check Applicability
             TestConfig.CheckDialect(DialectRevision.Smb30);
             TestConfig.CheckCapabilities(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES);

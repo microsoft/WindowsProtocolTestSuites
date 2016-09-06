@@ -307,7 +307,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Model.Replay
                 {
                     if (requestedOplockLevel != ReplayModelRequestedOplockLevel.OplockLevelBatch &&
                         !((requestedOplockLevel == ReplayModelRequestedOplockLevel.OplockLevelLeaseV1 ||
-                           requestedOplockLevel == ReplayModelRequestedOplockLevel.OplockLevelLeaseV2) && 
+                           requestedOplockLevel == ReplayModelRequestedOplockLevel.OplockLevelLeaseV2) && //TODO:TDI, TD does not mention skipping the section if contains SMB2_CREATE_REQUEST_LEASE_V2 without H
                           leaseState == ReplayModelLeaseState.LeaseStateIncludeH))
                     {
                         ModelHelper.Log(
@@ -524,6 +524,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Model.Replay
                             "LeaseState is {0}", Open.Lease.LeaseState);
                     }
 
+                    // TDI: TD does not states the open is preserved when multi channels exist.
+                    // todo: TDI # TBD
                     if (switchChannelType == ReplayModelSwitchChannelType.AlternativeChannelWithDisconnectMainChannel)
                     {
                         ModelHelper.Log(
@@ -546,7 +548,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Model.Replay
                             "Open is to be preserved for reconnect");
                     }
                     else if (((Open.OplockLevel == ReplayModelRequestedOplockLevel.OplockLevelLeaseV1 ||
-                               Open.OplockLevel == ReplayModelRequestedOplockLevel.OplockLevelLeaseV2) && 
+                               Open.OplockLevel == ReplayModelRequestedOplockLevel.OplockLevelLeaseV2) && //TODO: TDI for Open.OplockLevel is equal to SMB2_OPLOCK_LEVEL_LEASE_V2
                               Open.Lease != null &&
                               Open.Lease.LeaseState == ReplayModelLeaseState.LeaseStateIncludeH &&
                               Open.OplockStateIsHeld &&
@@ -629,6 +631,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Model.Replay
             {
                 do
                 {
+                    // TDI: TD does not state this.
+                    // todo: TDI# TBD
                     if (createRequest.switchChannelType == ReplayModelSwitchChannelType.ReconnectMainChannel && 
                         LastOpen != null &&
                         LastOpen.IsPersistent &&
@@ -651,6 +655,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Model.Replay
 
                     #region 3.3.6.1 Handle Oplock Break Acknowledgment Timer Event
 
+                    // TDI: TD does not state this.
+                    // todo: TDI# TBD
                     if (createRequest.switchChannelType == ReplayModelSwitchChannelType.ReconnectMainChannel ||
                         createRequest.switchChannelType == ReplayModelSwitchChannelType.AlternativeChannelWithDisconnectMainChannel)
                     {
@@ -684,6 +690,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Model.Replay
 
                             Open.Lease.LeaseState = ReplayModelLeaseState.LeaseStateIsNone;
 
+                            // TDI:
+                            // todo: TDI# TBD
                             if (createRequest.createGuid == ReplayModelCreateGuid.DefaultCreateGuid)
                             {
                                 Open.ConnectionIsNotNull = true;
@@ -914,7 +922,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Model.Replay
                                 "3.3.5.9.10: If an Open is found and the SMB2_FLAGS_REPLAY_OPERATION bit is set in the SMB2 header, the server MUST verify the following:");
 
                             if (!Open.IsDurable ||
-                                (Open.Lease == null && hasLeaseCreateContext) || 
+                                (Open.Lease == null && hasLeaseCreateContext) || // TODO: TDI, TD does not mention Open.Lease is NULL but request has lease context
                                 (Open.Lease != null && !hasLeaseCreateContext) || // Open is NOT NULL but request does not have lease context
                                 (Open.Lease != null && hasLeaseCreateContext &&
                                  createRequest.leaseKey != ReplayModelLeaseKey.DefaultLeaseKey))
@@ -966,6 +974,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Model.Replay
                                     LogType.Requirement,
                                     "If Open.FileAttributes does not match the FileAttributes field of the SMB2 CREATE request, the server MUST fail the request with STATUS_INVALID_PARAMETER.");
 
+                                // TODO: TDI, TDI#?
+                                //Condition.IsTrue(status == ModelSmb2Status.STATUS_INVALID_PARAMETER);
                                 break;
                             }
 
@@ -974,6 +984,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Model.Replay
                                 ModelHelper.Log(
                                     LogType.Requirement,
                                     "If Open.CreateDisposition does not match the CreateDisposition field of the SMB2 CREATE request, the server MUST fail the request with STATUS_INVALID_PARAMETER");
+                                // TDI: TDI#?
+                                //Condition.IsTrue(status == ModelSmb2Status.STATUS_INVALID_PARAMETER);
+                                //break;
                             }
 
                             if (Open.IsPersistent && createRequest.modelDurableHandle != ReplayModelDurableHandle.DurableHandleV2Persistent)
@@ -981,6 +994,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Model.Replay
                                 ModelHelper.Log(
                                     LogType.Requirement,
                                     "If Open.IsPersistent is TRUE and the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context, the server MUST fail the request with STATUS_INVALID_PARAMETER");
+                                // TDI: TDI#?
+                                //Condition.IsTrue(status == ModelSmb2Status.STATUS_INVALID_PARAMETER);
+                                //break;
                             }
                         }
 
@@ -1008,6 +1024,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Model.Replay
                             break;
                         }
 
+                        // TDI: TD does not state this. TDI#?
                         if (createRequest.modelDurableHandle == ReplayModelDurableHandle.DurableHandleV2Persistent &&
                             createRequest.requestedOplockLevel != ReplayModelRequestedOplockLevel.OplockLevelBatch && (
                                 !hasLeaseCreateContext || (
@@ -1113,7 +1130,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Model.Replay
                 {
                     if (!(createRequest.requestedOplockLevel == ReplayModelRequestedOplockLevel.OplockLevelBatch ||
                           ((createRequest.requestedOplockLevel == ReplayModelRequestedOplockLevel.OplockLevelLeaseV1 ||
-                            createRequest.requestedOplockLevel == ReplayModelRequestedOplockLevel.OplockLevelLeaseV2) && 
+                            createRequest.requestedOplockLevel == ReplayModelRequestedOplockLevel.OplockLevelLeaseV2) && //TODO:TDI, TD does not mention skipping the section if contains SMB2_CREATE_REQUEST_LEASE_V2 without H
                            createRequest.leaseState == ReplayModelLeaseState.LeaseStateIncludeH)))
                     {
                         ModelHelper.Log(

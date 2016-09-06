@@ -186,6 +186,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             rdpedycServer.Dispose();
             this.sutControlAdapter.TriggerClientDisconnect();
 
+            // TODO: Solve the conflict between rdpbcgr and rdpedyc BUG #6736 and merge two cases
             RDPConnect(NotificationType.DeactivationReactivation, false);
 
             ChangeDesktopOrientation(MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT_FLIPPED);                       

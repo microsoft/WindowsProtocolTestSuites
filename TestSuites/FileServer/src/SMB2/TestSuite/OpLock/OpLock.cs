@@ -118,8 +118,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.OpLock
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "The second client sends CREATE request on the same file with the first client.");
             client2.CreateRequest(client2TreeId, fileName, CreateOptions_Values.FILE_NON_DIRECTORY_FILE, out createRequestId);
 
-            BaseTestSite.Assert.IsTrue(OpLockNotificationReceived.WaitOne(SMB2TestConfig.WAIT_TIMEOUT_IN_MILLISECONDS),
-                "The expected OPLOCK_BREAK_NOTIFY should be received within {0} milliseconds", SMB2TestConfig.WAIT_TIMEOUT_IN_MILLISECONDS);
+            BaseTestSite.Assert.IsTrue(OpLockNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "The expected OPLOCK_BREAK_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "The first client sends OPLOCK_ACKNOWLEDGEMENT request after received OPLOCK_BREAK_NOTIFICATION response from server.");
             OplockBreakAcknowledgment(client1);

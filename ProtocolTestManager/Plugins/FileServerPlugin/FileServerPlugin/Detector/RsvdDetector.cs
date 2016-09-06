@@ -140,12 +140,23 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         private bool CheckOpenDeviceContext(Smb2CreateContextResponse[] servercreatecontexts, RSVD_PROTOCOL_VERSION expectVersion)
         {
             if (servercreatecontexts == null)
-                return false;
+            {
+                if (expectVersion == RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1)
+                {
+                    // <10> Section 3.2.5.1:  Windows Server 2012 R2 without [MSKB-3025091] doesn't return SVHDX_OPEN_DEVICE_CONTEXT_RESPONSE.
+                    // So if the open device context returns success, but without SVHDX_OPEN_DEVICE_CONTEXT_RESPONSE, the SUT may still support RSVD version 1.
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
 
             foreach (var context in servercreatecontexts)
             {
                 Type type = context.GetType();
-                if (type.Name == "Smb2CreateSvhdxOpenDeviceContext")
+                if (type.Name == "Smb2CreateSvhdxOpenDeviceContextResponse")
                 {
                     Smb2CreateSvhdxOpenDeviceContextResponse openDeviceContext = context as Smb2CreateSvhdxOpenDeviceContextResponse;
                     if ((openDeviceContext != null) && (openDeviceContext.Version == (uint)expectVersion))
@@ -164,6 +175,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     }
                 }
             }
+
             return false;
         }
 

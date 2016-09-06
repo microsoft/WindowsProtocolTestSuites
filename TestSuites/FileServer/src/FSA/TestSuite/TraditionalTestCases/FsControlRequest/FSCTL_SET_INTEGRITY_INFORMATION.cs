@@ -144,7 +144,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Send FSCTL_SET_INTEGRITY_INFORMATION request to a directory with Undefined Checksum Algorithm and check if server responses correctly.")]
         public void FsCtl_Set_IntegrityInformation_Dir_UndefinedChecksumAlgorithm()
         {
-            FsCtl_Set_IntegrityInformation_UndefinedChecksumAlgorithm(FileType.DataFile);
+            FsCtl_Set_IntegrityInformation_UndefinedChecksumAlgorithm(FileType.DirectoryFile);
         }
 
         #endregion

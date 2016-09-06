@@ -104,6 +104,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 out fileIdDest,
                 out serverCreateContexts);
 
+            // Bug 8016334
+            // The destination file of CopyOffload Write should not be zero, it should be at least 512 bytes, which is the sector size.
+            client.Write(treeId, fileIdDest, Smb2Utility.CreateRandomStringInByte(512));
+            client.Flush(treeId, fileIdDest);
+
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. Client sends IOCTL request with FSCTL_OFFLOAD_WRITE to ask server to copy the content from source to destination.");
             ulong fileOffsetToWrite = 0; //FileOffset should be aligned to logical sector boundary on the volume, e.g. 512 bytes
             ulong copyLengthToWrite = transferLength; //CopyLength should be aligned to logical sector boundary on the volume, e.g. 512 bytes

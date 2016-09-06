@@ -873,8 +873,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             {
                 BaseTestSite.Assert.AreEqual(
                     true,
-                    // Wait 5 seconds for notification arrival
-                    manualEvent.WaitOne(SMB2TestConfig.WAIT_TIMEOUT_IN_MILLISECONDS),
+                    // Wait for notification arrival
+                    manualEvent.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
                     "LeaseBreakNotification should be raised.");
             }
             BaseTestSite.Assert.AreEqual(

@@ -574,7 +574,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             if (null == capabilityValue)
             {
                 if (Array.IndexOf(dialects, DialectRevision.Smb30) >= 0)
-                    capabilityValue = Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU;
+                    capabilityValue = Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU | Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL | Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_ENCRYPTION;
                 else
                     capabilityValue = Capabilities_Values.NONE;
             }
@@ -1248,7 +1248,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             ResponseChecker<WRITE_Response> checker = null,
             bool isReplay = false)
         {
-            return Write(treeId, fileId, Encoding.ASCII.GetBytes(data), offset, checker);
+            return Write(treeId, fileId, Encoding.ASCII.GetBytes(data), offset, checker, isReplay);
         }
 
         public uint Write(

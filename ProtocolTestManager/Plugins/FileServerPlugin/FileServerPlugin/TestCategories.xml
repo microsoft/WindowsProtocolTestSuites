@@ -5845,386 +5845,326 @@
   <TestCase name="RequestPersistentHandleTestCaseS30">
     <Category name="UnexpectedContext" />
   </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS903">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS923">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS935">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS947">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS959">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS989">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS778">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS790">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS809">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS833">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS865">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS624">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS636">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS674">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS706">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS725">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1822">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS306">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS403">
+  <TestCase name="ResilientHandleBasicTestCaseS919">
     <Category name="Positive" />
   </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS496">
+  <TestCase name="ResilientHandleBasicTestCaseS686">
+    <Category name="Compatibility" />
+  </TestCase>
+  <TestCase name="ResilientHandleBasicTestCaseS752">
+    <Category name="InvalidIdentifier" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleBasicTestCaseS764">
+    <Category name="InvalidIdentifier" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleBasicTestCaseS582">
+    <Category name="InvalidIdentifier" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleBasicTestCaseS600">
+    <Category name="InvalidIdentifier" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleBasicTestCaseS642">
+    <Category name="Compatibility" />
+  </TestCase>
+  <TestCase name="ResilientHandleBasicTestCaseS3036">
+    <Category name="Compatibility" />
+    <Category name="InvalidIdentifier" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleBasicTestCaseS470">
+    <Category name="InvalidIdentifier" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleBasicTestCaseS536">
     <Category name="Positive" />
   </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS560">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1727">
-    <Category name="Compatibility" />
+  <TestCase name="ResilientHandleBasicTestCaseS2964">
+    <Category name="InvalidIdentifier" />
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1747">
-    <Category name="Compatibility" />
+  <TestCase name="ResilientHandleBasicTestCaseS2982">
+    <Category name="InvalidIdentifier" />
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1754">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1774">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1794">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1801">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1808">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS165">
+  <TestCase name="ResilientHandleBasicTestCaseS2777">
     <Category name="Positive" />
   </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1660">
-    <Category name="Compatibility" />
+  <TestCase name="ResilientHandleBasicTestCaseS2843">
+    <Category name="InvalidIdentifier" />
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1667">
-    <Category name="Compatibility" />
+  <TestCase name="ResilientHandleBasicTestCaseS2898">
+    <Category name="InvalidIdentifier" />
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1680">
-    <Category name="Compatibility" />
+  <TestCase name="ResilientHandleBasicTestCaseS2670">
+    <Category name="InvalidIdentifier" />
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1700">
-    <Category name="Compatibility" />
+  <TestCase name="ResilientHandleBasicTestCaseS2729">
+    <Category name="InvalidIdentifier" />
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1707">
+  <TestCase name="ResilientHandleBasicTestCaseS2508">
     <Category name="Compatibility" />
+  </TestCase>
+  <TestCase name="ResilientHandleBasicTestCaseS2556">
+    <Category name="InvalidIdentifier" />
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1720">
+  <TestCase name="ResilientHandleBasicTestCaseS2412">
     <Category name="Compatibility" />
+  </TestCase>
+  <TestCase name="ResilientHandleBasicTestCaseS2454">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="ResilientHandleBasicTestCaseS2368">
+    <Category name="Compatibility" />
+  </TestCase>
+  <TestCase name="ResilientHandleBasicTestCaseS238">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="ResilientHandleBasicTestCaseS2246">
+    <Category name="Compatibility" />
+  </TestCase>
+  <TestCase name="ResilientHandleBasicTestCaseS2326">
+    <Category name="Compatibility" />
+    <Category name="InvalidIdentifier" />
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1549">
+  <TestCase name="ResilientHandleBasicTestCaseS2204">
     <Category name="Compatibility" />
+    <Category name="InvalidIdentifier" />
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1600">
+  <TestCase name="ResilientHandleBasicTestCaseS2148">
     <Category name="Compatibility" />
+    <Category name="InvalidIdentifier" />
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1625">
+  <TestCase name="ResilientHandleBasicTestCaseS1938">
     <Category name="Compatibility" />
+  </TestCase>
+  <TestCase name="ResilientHandleBasicTestCaseS2028">
+    <Category name="Compatibility" />
+    <Category name="InvalidIdentifier" />
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1419">
+  <TestCase name="ResilientHandleBasicTestCaseS1860">
     <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1439">
-    <Category name="Compatibility" />
+    <Category name="InvalidIdentifier" />
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1498">
+  <TestCase name="ResilientHandleBasicTestCaseS1926">
     <Category name="Compatibility" />
+    <Category name="InvalidIdentifier" />
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1343">
+  <TestCase name="ResilientHandleBasicTestCaseS1799">
     <Category name="Compatibility" />
+    <Category name="InvalidIdentifier" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleBasicTestCaseS1817">
+    <Category name="Compatibility" />
+    <Category name="InvalidIdentifier" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleBasicTestCaseS1654">
+    <Category name="Compatibility" />
+    <Category name="InvalidIdentifier" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleBasicTestCaseS1733">
+    <Category name="Compatibility" />
+    <Category name="InvalidIdentifier" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleBasicTestCaseS1566">
+    <Category name="Compatibility" />
+    <Category name="InvalidIdentifier" />
+    <Category name="OutOfBoundary" />
   </TestCase>
   <TestCase name="ResilientHandleBasicTestCaseS1375">
     <Category name="Compatibility" />
+    <Category name="InvalidIdentifier" />
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1395">
+  <TestCase name="ResilientHandleBasicTestCaseS1267">
     <Category name="Compatibility" />
+  </TestCase>
+  <TestCase name="ResilientHandleBasicTestCaseS1333">
+    <Category name="InvalidIdentifier" />
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1407">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1173">
-    <Category name="Compatibility" />
+  <TestCase name="ResilientHandleBasicTestCaseS1199">
+    <Category name="InvalidIdentifier" />
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1211">
+  <TestCase name="ResilientHandleBasicTestCaseS1217">
     <Category name="Compatibility" />
+  </TestCase>
+  <TestCase name="ResilientHandleBasicTestCaseS1109">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="ResilientHandleBasicTestCaseS1031">
+    <Category name="InvalidIdentifier" />
     <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1249">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1294">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1074">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1111">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1123">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1148">
-    <Category name="Compatibility" />
   </TestCase>
   <TestCase name="ResilientHandleBasicTestCaseS0">
     <Category name="Compatibility" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS894">
+    <Category name="Compatibility" />
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleBasicTestCaseS1048">
+  <TestCase name="ResilientHandleDurableTestCaseS976">
+    <Category name="Compatibility" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS697">
+    <Category name="Compatibility" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS781">
+    <Category name="Compatibility" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS583">
+    <Category name="Compatibility" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS4052">
+    <Category name="Compatibility" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS476">
+    <Category name="Compatibility" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS3923">
+    <Category name="Compatibility" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS3980">
+    <Category name="Compatibility" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS3754">
     <Category name="Compatibility" />
   </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS996">
+  <TestCase name="ResilientHandleDurableTestCaseS3831">
     <Category name="Compatibility" />
   </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS725">
+  <TestCase name="ResilientHandleDurableTestCaseS3611">
+    <Category name="Compatibility" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS3674">
+    <Category name="Compatibility" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS3502">
+    <Category name="Compatibility" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS3307">
+    <Category name="Compatibility" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS3392">
+    <Category name="Compatibility" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS3152">
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS3220">
+    <Category name="Compatibility" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS3056">
+    <Category name="Compatibility" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS2894">
+    <Category name="Compatibility" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS2967">
+    <Category name="Compatibility" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS2743">
     <Category name="Positive" />
   </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS805">
+  <TestCase name="ResilientHandleDurableTestCaseS2816">
     <Category name="Compatibility" />
   </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS886">
+  <TestCase name="ResilientHandleDurableTestCaseS2655">
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS948">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS547">
+  <TestCase name="ResilientHandleDurableTestCaseS2467">
     <Category name="Compatibility" />
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS597">
+  <TestCase name="ResilientHandleDurableTestCaseS2516">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS2356">
+    <Category name="Compatibility" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS2420">
+    <Category name="Compatibility" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS244">
     <Category name="Compatibility" />
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS687">
+  <TestCase name="ResilientHandleDurableTestCaseS2255">
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS2317">
     <Category name="Compatibility" />
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS2270">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
+  <TestCase name="ResilientHandleDurableTestCaseS2123">
+    <Category name="Positive" />
   </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS2282">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
+  <TestCase name="ResilientHandleDurableTestCaseS2192">
+    <Category name="Positive" />
   </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS2289">
+  <TestCase name="ResilientHandleDurableTestCaseS1967">
     <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS2296">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS338">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS457">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS2160">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS2185">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS2210">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS2234">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS2258">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS2058">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS2109">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS2128">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1968">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1987">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
   </TestCase>
   <TestCase name="ResilientHandleDurableTestCaseS2039">
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS1856">
     <Category name="Compatibility" />
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS204">
+  <TestCase name="ResilientHandleDurableTestCaseS1935">
+    <Category name="Compatibility" />
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS1753">
+    <Category name="Compatibility" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS1504">
+    <Category name="OutOfBoundary" />
+  </TestCase>
+  <TestCase name="ResilientHandleDurableTestCaseS1627">
     <Category name="Positive" />
   </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1844">
-    <Category name="Compatibility" />
+  <TestCase name="ResilientHandleDurableTestCaseS1367">
     <Category name="OutOfBoundary" />
   </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1873">
+  <TestCase name="ResilientHandleDurableTestCaseS1134">
     <Category name="Positive" />
   </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1930">
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1694">
-    <Category name="Positive" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1726">
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1768">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1793">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1546">
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1583">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1613">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1625">
-    <Category name="Positive" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1651">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1670">
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1459">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1515">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1319">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1350">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1401">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1436">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1259">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1289">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1160">
-    <Category name="Compatibility" />
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1227">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1091">
-    <Category name="OutOfBoundary" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1148">
-    <Category name="Compatibility" />
-  </TestCase>
-  <TestCase name="ResilientHandleDurableTestCaseS1046">
+  <TestCase name="ResilientHandleDurableTestCaseS1066">
     <Category name="Compatibility" />
     <Category name="OutOfBoundary" />
   </TestCase>
@@ -8784,4 +8724,83 @@
   <TestCase name="QuotaInfo_Set_QuotaInformation_IsQuotaInfoSupported">
     <Category name="OtherThanAbove" />
   </TestCase>
+  <TestCase name="AlternateDataStream_Query_FileAccessInformation_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Query_FileAccessInformation_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Query_FileBasicInformation_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Query_FileBasicInformation_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Query_FileCompressionInformation_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Query_FileCompressionInformation_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Query_FileNetworkOpenInformation_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Query_FileNetworkOpenInformation_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Query_FileStandardInformation_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Query_FileStandardInformation_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Set_FileEaInformation_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Set_FileEaInformation_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Set_FileShortNameInformation_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Set_FileShortNameInformation_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Set_FileValidDataLengthInformation_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Set_FileValidDataLengthInformation_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_FsCtl_Get_Compression_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_FsCtl_Get_Compression_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_FsCtl_Get_IntegrityInformation_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_FsCtl_Get_IntegrityInformation_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_FsCtl_Query_AllocatedRanges_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_FsCtl_Query_AllocatedRanges_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_FsCtl_Set_Compression_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_FsCtl_Set_Compression_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_FsCtl_Set_ZeroData_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_FsCtl_Set_ZeroData_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  
 </TestCategories>

@@ -309,6 +309,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             //Error Code Handling
             this.isErrorCodeMappingRequired = bool.Parse(testConfig.GetProperty("IsErrorCodeMappingRequired"));
 
+            //TDI Configurations
             this.activeTDIs = new List<string>(testConfig.GetProperty("FsaActiveTDIs").Split(';'));
 
             //Other Configurations
@@ -532,6 +533,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 {
                     randomFile = randomFile + "::$TEST";
                 }
+            }
+
+            if ((fileSystem == FileSystem.FAT32) && (randomFile.Contains("::$DATA") || randomFile.Contains("::$INDEX_ALLOCATION"))) {
+                Site.Assert.Inconclusive("Stream is not supported in a FAT32 file system.");
             }
 
             MessageStatus returnedStatus = transAdapter.CreateFile(
@@ -4179,7 +4184,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             )
         {
             bool replaceIfExists = (replacementType == ReplacementType.ReplaceIfExists);
-            bool isReturnStatus = false;
             string streamNameString = this.ComposeRandomFileName();
             string streamTypeString = gStreamType == StreamType.DirectoryStream ? "$INDEX_ALLOCATION" : "$DATA";
 
@@ -4243,6 +4247,27 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 newStreamName = string.Format(":{0}:{1}", streamNameString, streamTypeString);
             }
 
+            return StreamRenameWithNewName(newStreamName, newStreamNameFormat, streamTypeNameFormat, replacementType);
+        }
+
+        /// <summary>
+        /// Implement StreamRenameWithNewName method
+        /// </summary>
+        /// <param name="newStreamName">The new stream name in String format</param>
+        /// <param name="newStreamNameFormat">The format of NewStreamName</param>
+        /// <param name="streamTypeNameFormat">The format of StreamType</param>
+        /// <param name="replacementType">Indicate if replace target file if exists.</param>
+        /// <returns>An NTSTATUS code indicating the result of the operation</returns>
+        public MessageStatus StreamRenameWithNewName(
+            string newStreamName,
+            InputBufferFileName newStreamNameFormat,
+            InputBufferFileName streamTypeNameFormat,
+            ReplacementType replacementType
+            )
+        {
+            bool replaceIfExists = (replacementType == ReplacementType.ReplaceIfExists);
+            bool isReturnStatus = false;
+
             MessageStatus returnedStatus = MessageStatus.SUCCESS;
 
             if (this.transport == Transport.SMB)
@@ -4283,6 +4308,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
                 returnedStatus = SMB2_TDIWorkaround.WorkaroundStreamRename(this.fileSystem, newStreamNameFormat, streamTypeNameFormat, replaceIfExists, returnedStatus, site);
             }
+
             return returnedStatus;
         }
 
