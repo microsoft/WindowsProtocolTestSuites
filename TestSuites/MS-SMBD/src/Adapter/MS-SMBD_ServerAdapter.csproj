@@ -95,6 +95,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="ISutProtocolControlAdapter.cs" />
     <Compile Include="SmbdAdapter.cs" />
     <Compile Include="Smb2OverSmbdTestClient.cs" />
