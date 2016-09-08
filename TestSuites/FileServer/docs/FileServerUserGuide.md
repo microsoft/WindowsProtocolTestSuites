@@ -1491,7 +1491,7 @@ This section describes detailed setup steps on a Windows platform.
 
 	![](./image/FileServerUserGuide/image78.png)
 
-######<a name="5.3.10.4.3"/> 5.3.10.4.3. Add two folders to namespace: DomainBased (TBD)
+######<a name="5.3.10.4.3"/> 5.3.10.4.3. Add two folders to namespace: DomainBased
 
 1.	In **DFS Management**, right-click the newly created namespace **\\\\contoso.com\\DomainBased** and click **New Folder...** to add two new folders to this namespace.
 
@@ -1627,7 +1627,7 @@ This section describes detailed setup steps on a Windows platform.
 
 	![](./image/FileServerUserGuide/image104.png)
 
-4.	On either of the failover cluster nodes, open **Run** and type `diskmgmt.msc` to launch disk manager. The three disks can be found if you have followed the recommended disk settings. **Online** and **initiate** them as **GPT** or **MBR** disk, and then create simple volumes with **NTFS** format by following the next steps. Do not forget to formatting the disks before you go on any further configurations.
+4.	On either of the failover cluster nodes, open **Run** and type `diskmgmt.msc` to launch disk manager. The three disks can be found if you have followed the recommended disk settings. **Online** and **initiate** them as either **GPT** or **MBR** disk, and then create simple volumes with **NTFS** format by following the next steps. Do not forget to formatting the disks before you go on any further configurations.
 
 	![](./image/FileServerUserGuide/image105.png)
 
@@ -1635,7 +1635,7 @@ This section describes detailed setup steps on a Windows platform.
 
 	![](./image/FileServerUserGuide/image106.png)
 
-6.	Select **MBR**, and click **OK**.
+6.	Select either **MBR** or **GPT**, and click **OK**.
 
 	![](./image/FileServerUserGuide/image107.png)
 
