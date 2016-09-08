@@ -38,12 +38,55 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create a Lossy UDP connection.");
             this.EstablishUDPConnection(TransportMode.Lossy, waitTime, true);
         }
-
-        
         #endregion BVT Test Cases
 
         #region Normal Test Cases
-        
+        [TestMethod]
+        [Priority(1)]
+        [TestCategory("Positive")]
+        [TestCategory("RDP8.0")]
+        [TestCategory("RDPEUDP")]
+        [Description("Verify the RDP client can initiate a reliable RDP-UDP (RDP-UDP-R) connection and a lossy RDP-UDP (RDP-UDP-L) connection. Server support only RDPUDP_PROTOCOL_VERSION_1.")]
+        public void S1_Connection_Initialization_InitialUDPConnection_UUDPVer1()
+        {
+            Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
+            StartRDPConnection();
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Create a reliable UDP connection with uUdpVer RDPUDP_PROTOCOL_VERSION_1.");
+            this.EstablishUDPConnection(TransportMode.Reliable, waitTime, true, false, uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_1);
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Create a Lossy UDP connection with uUdpVer RDPUDP_PROTOCOL_VERSION_1.");
+            this.EstablishUDPConnection(TransportMode.Lossy, waitTime, true, false, uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_1);
+
+            Site.Log.Add(LogEntryKind.Debug, "Client accept the server's UDP connection with uUdpVer RDPUDP_PROTOCOL_VERSION_1.");
+        }
+
+        [TestMethod]
+        [Priority(1)]
+        [TestCategory("Positive")]
+        [TestCategory("RDP8.1")]
+        [TestCategory("RDPEUDP")]
+        [Description("Verify the RDP client can initiate a reliable RDP-UDP (RDP-UDP-R) connection and a lossy RDP-UDP (RDP-UDP-L) connection. Server supports highest version RDPUDP_PROTOCOL_VERSION_2.")]
+        public void S1_Connection_Initialization_InitialUDPConnection_UUDPVer2()
+        {
+            double rdpVersion = double.Parse(this.Site.Properties["RDP.Version"]);
+            if (rdpVersion < 8.1)
+            {
+                this.Site.Assume.Inconclusive("The client RDP version is below 8.1, which does not support the uUdpVer RDPUDP_PROTOCOL_VERSION_2.");
+            }
+            Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
+            StartRDPConnection();
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Create a reliable UDP connection with uUdpVer RDPUDP_PROTOCOL_VERSION_2.");
+            this.EstablishUDPConnection(TransportMode.Reliable, waitTime, true, false, uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_1 | uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_2);
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Create a Lossy UDP connection with uUdpVer RDPUDP_PROTOCOL_VERSION_2.");
+            this.EstablishUDPConnection(TransportMode.Lossy, waitTime, true, false, uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_1 | uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_2);
+
+            Site.Log.Add(LogEntryKind.Debug, "Client accept the server's UDP connection with uUdpVer RDPUDP_PROTOCOL_VERSION_2.");
+        }
+
+
         [TestMethod]
         [Priority(1)]
         [TestCategory("Positive")]
@@ -74,7 +117,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
                 Site.Assert.IsNotNull(ackpacket, "Client should resend the ACK packet to keep alive. Transport mode is {0}", transportMode);                
             }
         }
-            
+        
+
         #endregion Normal Test Cases
 
     }
