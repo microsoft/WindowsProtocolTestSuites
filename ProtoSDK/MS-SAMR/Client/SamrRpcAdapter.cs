@@ -89,6 +89,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
                     SamrRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList);
 
             return outParamList;

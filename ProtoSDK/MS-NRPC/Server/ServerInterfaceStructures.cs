@@ -457,7 +457,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringUni(outParamList[0]);
                 UserName = Marshal.PtrToStringUni(outParamList[1]);
@@ -577,7 +578,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringUni(outParamList[0]);
                 UserName = Marshal.PtrToStringUni(outParamList[1]);
@@ -715,7 +717,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatString,
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                     false,
-                    requestStub))
+                    requestStub,
+                    sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 LogonServer = Marshal.PtrToStringUni(outParamList[0]);
                 ComputerName = Marshal.PtrToStringUni(outParamList[1]);
@@ -874,7 +877,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 LogonServer = Marshal.PtrToStringUni(outParamList[0]);
                 ComputerName = Marshal.PtrToStringUni(outParamList[1]);
@@ -997,7 +1001,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatString,
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                     false,
-                    requestStub))
+                    requestStub,
+                    sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 PrimaryName = Marshal.PtrToStringUni(outParamList[0]);
                 ComputerName = Marshal.PtrToStringUni(outParamList[1]);
@@ -1126,7 +1131,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatString,
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                     false,
-                    requestStub))
+                    requestStub,
+                    sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 PrimaryName = Marshal.PtrToStringUni(outParamList[0]);
                 AccountName = Marshal.PtrToStringUni(outParamList[1]);
@@ -1264,7 +1270,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatString,
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                     false,
-                    requestStub))
+                    requestStub,
+                    sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 PrimaryName = Marshal.PtrToStringUni(outParamList[0]);
                 AccountName = Marshal.PtrToStringUni(outParamList[1]);
@@ -1407,7 +1414,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 PrimaryName = Marshal.PtrToStringUni(outParamList[0]);
                 ComputerName = Marshal.PtrToStringUni(outParamList[1]);
@@ -1568,7 +1576,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 PrimaryName = Marshal.PtrToStringUni(outParamList[0]);
                 ComputerName = Marshal.PtrToStringUni(outParamList[1]);
@@ -1734,7 +1743,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 PrimaryName = Marshal.PtrToStringUni(outParamList[0]);
                 ComputerName = Marshal.PtrToStringUni(outParamList[1]);
@@ -1912,7 +1922,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 PrimaryName = Marshal.PtrToStringUni(outParamList[0]);
                 ComputerName = Marshal.PtrToStringUni(outParamList[1]);
@@ -2071,7 +2082,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringUni(outParamList[0]);
                 DomainName = Marshal.PtrToStringUni(outParamList[1]);
@@ -2188,7 +2200,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringUni(outParamList[0]);
                 FunctionCode = (FunctionCode_Values)outParamList[1].ToUInt32();
@@ -2300,7 +2313,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringUni(outParamList[0]);
                 DomainName = Marshal.PtrToStringUni(outParamList[1]);
@@ -2422,7 +2436,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringUni(outParamList[0]);
                 FunctionCode = (FunctionCode_Values)outParamList[1].ToUInt32();
@@ -2556,7 +2571,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatString,
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                     false,
-                    requestStub))
+                    requestStub,
+                    sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 PrimaryName = Marshal.PtrToStringUni(outParamList[0]);
                 AccountName = Marshal.PtrToStringUni(outParamList[1]);
@@ -2713,7 +2729,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 PrimaryName = Marshal.PtrToStringUni(outParamList[0]);
                 ComputerName = Marshal.PtrToStringUni(outParamList[1]);
@@ -2871,7 +2888,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 PrimaryName = Marshal.PtrToStringUni(outParamList[0]);
                 ComputerName = Marshal.PtrToStringUni(outParamList[1]);
@@ -3008,7 +3026,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringUni(outParamList[0]);
                 FunctionCode = (FunctionCode_Values)outParamList[1].ToUInt32();
@@ -3118,7 +3137,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringUni(outParamList[0]);
             }
@@ -3243,7 +3263,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ComputerName = Marshal.PtrToStringUni(outParamList[0]);
                 DomainName = Marshal.PtrToStringUni(outParamList[1]);
@@ -3377,7 +3398,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringUni(outParamList[0]);
                 ComputerName = Marshal.PtrToStringUni(outParamList[1]);
@@ -3507,7 +3529,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringUni(outParamList[0]);
                 ServiceBitsOfInterest = outParamList[1].ToUInt32();
@@ -3605,7 +3628,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringUni(outParamList[0]);
                 DomainName = Marshal.PtrToStringUni(outParamList[1]);
@@ -3726,7 +3750,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringUni(outParamList[0]);
                 Rid = outParamList[1].ToUInt32();
@@ -3861,7 +3886,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringUni(outParamList[0]);
                 DomainName = Marshal.PtrToStringUni(outParamList[1]);
@@ -4006,7 +4032,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 PrimaryName = Marshal.PtrToStringUni(outParamList[0]);
                 AccountName = Marshal.PtrToStringUni(outParamList[1]);
@@ -4155,7 +4182,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ComputerName = Marshal.PtrToStringUni(outParamList[0]);
                 DomainName = Marshal.PtrToStringUni(outParamList[1]);
@@ -4267,7 +4295,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ComputerName = Marshal.PtrToStringUni(outParamList[0]);
             }
@@ -4397,7 +4426,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringUni(outParamList[0]);
                 ComputerName = Marshal.PtrToStringUni(outParamList[1]);
@@ -4543,7 +4573,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 PrimaryName = Marshal.PtrToStringUni(outParamList[0]);
                 AccountName = Marshal.PtrToStringUni(outParamList[1]);
@@ -4677,7 +4708,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 PrimaryName = Marshal.PtrToStringUni(outParamList[0]);
                 AccountName = Marshal.PtrToStringUni(outParamList[1]);
@@ -4817,7 +4849,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 PrimaryName = Marshal.PtrToStringUni(outParamList[0]);
                 ComputerName = Marshal.PtrToStringUni(outParamList[1]);
@@ -4938,7 +4971,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ComputerName = Marshal.PtrToStringUni(outParamList[0]);
                 EntryCount = outParamList[1].ToUInt32();
@@ -5081,7 +5115,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ComputerName = Marshal.PtrToStringUni(outParamList[0]);
                 AccountName = Marshal.PtrToStringUni(outParamList[1]);
@@ -5199,7 +5234,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringUni(outParamList[0]);
             }
@@ -5315,7 +5351,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringUni(outParamList[0]);
             }
@@ -5430,7 +5467,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ComputerName = Marshal.PtrToStringUni(outParamList[0]);
                 EntryCount = outParamList[1].ToUInt32();
@@ -5543,7 +5581,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringUni(outParamList[0]);
             }
@@ -5680,7 +5719,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ContextHandle = sessionContext.RpceLayerSessionContext.Handle;
                 LogonServer = Marshal.PtrToStringUni(outParamList[0]);
@@ -5817,7 +5857,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringUni(outParamList[0]);
                 Flags = outParamList[1].ToUInt32();
@@ -5945,7 +5986,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringUni(outParamList[0]);
                 DnsDomainName = Marshal.PtrToStringUni(outParamList[1]);
@@ -6064,7 +6106,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 TrustedDcName = Marshal.PtrToStringUni(outParamList[0]);
                 AccountName = Marshal.PtrToStringUni(outParamList[1]);
@@ -6203,7 +6246,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringUni(outParamList[0]);
                 TrustedDomainName = Marshal.PtrToStringUni(outParamList[1]);
@@ -6330,7 +6374,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringUni(outParamList[0]);
                 ComputerName = Marshal.PtrToStringUni(outParamList[1]);
@@ -6485,7 +6530,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 LogonServer = Marshal.PtrToStringUni(outParamList[0]);
                 ComputerName = Marshal.PtrToStringUni(outParamList[1]);
@@ -6647,7 +6693,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 TrustedDcName = Marshal.PtrToStringUni(outParamList[0]);
                 AccountName = Marshal.PtrToStringUni(outParamList[1]);
@@ -6872,7 +6919,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringUni(outParamList[0]);
                 ComputerName = Marshal.PtrToStringUni(outParamList[1]);
@@ -7035,7 +7083,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatString,
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 PrimaryName = Marshal.PtrToStringUni(outParamList[0]);
                 ChainedFromServerName = Marshal.PtrToStringUni(outParamList[1]);

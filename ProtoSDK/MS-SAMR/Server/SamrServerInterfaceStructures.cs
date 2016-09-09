@@ -483,7 +483,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
                 SamrRpcStubFormatString.ProcFormatString,
                 SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 IntPtr pServerName = inParams[0].ToIntPtr();
                 ServerName = Marshal.PtrToStringUni(pServerName);
@@ -599,7 +600,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
                 SamrRpcStubFormatString.ProcFormatString,
                 SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 IntPtr pSamHandle = inParams[0].ToIntPtr();
                 SamHandle = Marshal.ReadIntPtr(pSamHandle);
@@ -720,7 +722,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
                 SamrRpcStubFormatString.ProcFormatString,
                 SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ObjectHandle = inParams[0].ToIntPtr();
                 SecurityInformation = (SecurityInformation_Values)inParams[1].ToUInt32();
@@ -824,7 +827,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ObjectHandle = inParams[0].ToIntPtr();
                 SecurityInformation = (SamrQuerySecurityObject_SecurityInformation_Values)(inParams[1].ToInt32());
@@ -996,7 +1000,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerHandle = inParams[0].ToIntPtr();
                 Name = TypeMarshal.ToStruct<_RPC_UNICODE_STRING>(inParams[1]);
@@ -1121,7 +1126,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerHandle = inParams[0].ToIntPtr();
                 EnumerationContext = TypeMarshal.ToStruct<UInt32>(inParams[1]);
@@ -1263,7 +1269,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerHandle = inParams[0].ToIntPtr();
                 DesiredAccess = inParams[1].ToUInt32();
@@ -1383,7 +1390,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 DomainHandle = inParams[0].ToIntPtr();
                 DomainInformationClass = (_DOMAIN_INFORMATION_CLASS)(inParams[1].ToInt32());
@@ -1513,7 +1521,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 DomainHandle = inParams[0].ToIntPtr();
                 DomainInformationClass = (_DOMAIN_INFORMATION_CLASS)inParams[1].ToInt32();
@@ -1625,7 +1634,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 DomainHandle = inParams[0].ToIntPtr();
                 Name = TypeMarshal.ToStruct<_RPC_UNICODE_STRING>(inParams[1]);
@@ -1758,7 +1768,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 DomainHandle = inParams[0].ToIntPtr();
                 EnumerationContext = TypeMarshal.ToStruct<uint>(inParams[1]);
@@ -1900,7 +1911,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 DomainHandle = inParams[0].ToIntPtr();
                 Name = TypeMarshal.ToStruct<_RPC_UNICODE_STRING>(inParams[1]);
@@ -2038,7 +2050,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 DomainHandle = inParams[0].ToIntPtr();
                 EnumerationContext = TypeMarshal.ToStruct<uint>(inParams[1]);
@@ -2182,7 +2195,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 DomainHandle = inParams[0].ToIntPtr();
                 AccountName = TypeMarshal.ToStruct<_RPC_UNICODE_STRING>(inParams[1]);
@@ -2315,7 +2329,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 DomainHandle = inParams[0].ToIntPtr();
                 EnumerationContext = TypeMarshal.ToNullableStruct<uint>(inParams[1]);
@@ -2452,7 +2467,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 DomainHandle = inParams[0].ToIntPtr();
                 SidArray = TypeMarshal.ToStruct<_SAMPR_PSID_ARRAY>(inParams[1].ToIntPtr());
@@ -2574,7 +2590,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 DomainHandle = inParams[0].ToIntPtr();
                 Count = inParams[1].ToUInt32();
@@ -2706,7 +2723,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 DomainHandle = inParams[0].ToIntPtr();
                 Count = inParams[1].ToUInt32();
@@ -2838,7 +2856,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 DomainHandle = inParams[0].ToIntPtr();
                 DesiredAccess = inParams[1].ToUInt32();
@@ -2958,7 +2977,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 GroupHandle = inParams[0].ToIntPtr();
                 GroupInformationClass = (_GROUP_INFORMATION_CLASS)inParams[1].ToInt32();
@@ -3088,7 +3108,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 GroupHandle = inParams[0].ToIntPtr();
                 GroupInformationClass = (_GROUP_INFORMATION_CLASS)inParams[1].ToInt32();
@@ -3199,7 +3220,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 GroupHandle = inParams[0].ToIntPtr();
                 MemberId = inParams[1].ToUInt32();
@@ -3299,7 +3321,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 GroupHandle = TypeMarshal.ToStruct<IntPtr>(inParams[0]);
             }
@@ -3414,7 +3437,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 GroupHandle = inParams[0].ToIntPtr();
                 MemberId = inParams[1].ToUInt32();
@@ -3511,7 +3535,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 GroupHandle = inParams[0].ToIntPtr();
             }
@@ -3634,7 +3659,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 GroupHandle = inParams[0].ToIntPtr();
                 MemberId = inParams[1].ToUInt32();
@@ -3743,7 +3769,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 DomainHandle = inParams[0].ToIntPtr();
                 DesiredAccess = inParams[1].ToUInt32();
@@ -3863,7 +3890,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 AliasHandle = inParams[0].ToIntPtr();
                 AliasInformationClass = (_ALIAS_INFORMATION_CLASS)inParams[1].ToInt32();
@@ -3994,7 +4022,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 AliasHandle = inParams[0].ToIntPtr();
                 AliasInformationClass = (_ALIAS_INFORMATION_CLASS)inParams[1].ToInt32();
@@ -4095,7 +4124,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 AliasHandle = TypeMarshal.ToStruct<IntPtr>(inParams[0]);
             }
@@ -4210,7 +4240,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 AliasHandle = inParams[0].ToIntPtr();
                 MemberId = TypeMarshal.ToStruct<_RPC_SID>(inParams[1]);
@@ -4313,7 +4344,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 AliasHandle = inParams[0].ToIntPtr();
                 MemberId = TypeMarshal.ToStruct<_RPC_SID>(inParams[1]);
@@ -4412,7 +4444,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 AliasHandle = inParams[0].ToIntPtr();
             }
@@ -4532,7 +4565,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 DomainHandle = inParams[0].ToIntPtr();
                 DesiredAccess = inParams[1].ToUInt32();
@@ -4648,7 +4682,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 UserHandle = TypeMarshal.ToStruct<IntPtr>(inParams[0]);
             }
@@ -4763,7 +4798,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 UserHandle = inParams[0].ToIntPtr();
                 UserInformationClass = (_USER_INFORMATION_CLASS)inParams[1].ToInt32();
@@ -4894,7 +4930,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 UserHandle = inParams[0].ToIntPtr();
                 UserInformationClass = (_USER_INFORMATION_CLASS)inParams[1].ToInt32();
@@ -5045,7 +5082,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 UserHandle = inParams[0].ToIntPtr();
                 LmPresent = (byte)inParams[1].ToInt32();
@@ -5161,7 +5199,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 UserHandle = inParams[0].ToIntPtr();
             }
@@ -5294,7 +5333,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 DomainHandle = inParams[0].ToIntPtr();
                 DisplayInformationClass = (_DOMAIN_DISPLAY_INFORMATION)inParams[1].ToInt32();
@@ -5444,7 +5484,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 DomainHandle = inParams[0].ToIntPtr();
                 DisplayInformationClass = (_DOMAIN_DISPLAY_INFORMATION)(inParams[1].ToInt32());
@@ -5662,7 +5703,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 UserHandle = inParams[0].ToIntPtr();
             }
@@ -5777,7 +5819,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 DomainHandle = inParams[0].ToIntPtr();
                 MemberSid = TypeMarshal.ToStruct<_RPC_SID>(inParams[1]);
@@ -5880,7 +5923,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 DomainHandle = inParams[0].ToIntPtr();
                 DomainInformationClass = (_DOMAIN_INFORMATION_CLASS)(inParams[1].ToInt32());
@@ -6006,7 +6050,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 UserHandle = inParams[0].ToIntPtr();
                 UserInformationClass = (_USER_INFORMATION_CLASS)(inParams[1].ToInt32());
@@ -6146,7 +6191,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 DomainHandle = inParams[0].ToIntPtr();
                 DisplayInformationClass = (_DOMAIN_DISPLAY_INFORMATION)(inParams[1].ToInt32());
@@ -6295,7 +6341,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 DomainHandle = inParams[0].ToIntPtr();
                 DisplayInformationClass = (_DOMAIN_DISPLAY_INFORMATION)(inParams[1].ToInt32());
@@ -6424,7 +6471,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 DomainHandle = inParams[0].ToIntPtr();
                 Name = TypeMarshal.ToStruct<_RPC_UNICODE_STRING>(inParams[1]);
@@ -6577,7 +6625,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 DomainHandle = inParams[0].ToIntPtr();
                 DisplayInformationClass = (_DOMAIN_DISPLAY_INFORMATION)(inParams[1].ToInt32());
@@ -6722,7 +6771,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 AliasHandle = inParams[0].ToIntPtr();
                 MembersBuffer = TypeMarshal.ToNullableStruct<_SAMPR_PSID_ARRAY>(inParams[1]);
@@ -6825,7 +6875,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 AliasHandle = inParams[0].ToIntPtr();
                 MembersBuffer = TypeMarshal.ToNullableStruct<_SAMPR_PSID_ARRAY>(inParams[1]);
@@ -6937,7 +6988,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 //BindingHandle = inParams[0].ToIntPtr();
                 ServerName = TypeMarshal.ToStruct<_RPC_STRING>(inParams[0]);
@@ -7069,7 +7121,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = TypeMarshal.ToStruct<_RPC_UNICODE_STRING>(inParams[0]);
                 UserName = TypeMarshal.ToStruct<_RPC_UNICODE_STRING>(inParams[1]);
@@ -7176,7 +7229,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 Unused = TypeMarshal.ToStruct<_RPC_UNICODE_STRING>(inParams[0]);
             }
@@ -7290,7 +7344,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringAuto(inParams[0]);
                 DesiredAccess = inParams[1].ToUInt32();
@@ -7413,7 +7468,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 UserHandle = inParams[0].ToIntPtr();
                 UserInformationClass = (_USER_INFORMATION_CLASS)(inParams[1].ToInt32());
@@ -7678,7 +7734,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringAuto(inParams[0]);
                 ClientRevision = inParams[2].ToUInt32();
@@ -7859,7 +7916,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ServerName = Marshal.PtrToStringAuto(inParams[0]);
                 DesiredAccess = inParams[1].ToUInt32();
@@ -7997,7 +8055,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ObjectHandle = inParams[0].ToIntPtr();
                 Rid = inParams[1].ToUInt32();
@@ -8121,7 +8180,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 Unused = TypeMarshal.ToStruct<_RPC_UNICODE_STRING>(inParams[0]);
                 UserId = inParams[1].ToUInt32();
@@ -8225,7 +8285,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             SamrRpcStubFormatString.ProcFormatString,
             SamrRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
             false,
-            requestStub))
+            requestStub,
+            sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ValidationType = (_PASSWORD_POLICY_VALIDATION_TYPE)inParams[0].ToInt32();
                 InputArg = TypeMarshal.ToStruct<_SAM_VALIDATE_INPUT_ARG>(inParams[1], ValidationType, null, null);
