@@ -1303,6 +1303,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="earlyCapabilityFlagsValue">The value of earlyCapabilityFlags</param>
         /// <param name="mcsChannelId_Net">MCSChannelId value for Server Network Data</param>
         /// <param name="mcsChannelId_MSGChannel">MCSChannelId value for Server Message Channel Data</param>
+        /// <param name="isSoftSyncSupported">Indicates soft sync is supported</param>
         /// <returns>MCS Connect Initial PDU.</returns>
         public Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response
             CreateMCSConnectResponsePduWithGCCConferenceCreateResponsePdu(

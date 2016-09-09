@@ -1094,6 +1094,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         {
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public SoftSyncReqDvcPDU(uint length, SoftSyncReqFlags_Value flags, ushort numberOfTunnels, SoftSyncChannelList[] softSyncChannelLists)
         {
             HeaderBits = new Header(Cmd_Values.SoftSyncReq, 0, 0);
@@ -1179,6 +1182,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// </summary>
         public uint[] ListOfDVCIds;
 
+        /// <summary>
+        /// Encode method.
+        /// </summary>
+        /// <returns>Binary value of SoftSyncChannelList</returns>
         public byte[] Encode()
         {
             List<byte> buffer = new List<byte>();
@@ -1191,6 +1198,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             return buffer.ToArray();
         }
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public SoftSyncChannelList(uint tunnelType, ushort numberOfDVCs, List<uint> listOfIds = null)
         {
             this.TunnelType = (TunnelType_Value)tunnelType;

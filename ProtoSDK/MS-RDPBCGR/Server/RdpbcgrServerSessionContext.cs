@@ -656,7 +656,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         }
 
         /// <summary>
-        /// Get the flag value of client MCS connect intial PDU.
+        /// Get the flags of client MCS connect intial PDU.
         /// </summary>
         public MULTITRANSPORT_TYPE_FLAGS MultitransportTypeFlagsInMCSConnectIntialPdu
         {

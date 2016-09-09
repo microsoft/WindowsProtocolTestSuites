@@ -239,6 +239,26 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
             }
         }
 
+        #region Soft-Sync connection
+        private void StartSoftSyncConnection(TransportMode mode)
+        {
+            StartRDPConnection(false, true);
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} UDP connection.", mode);
+            this.EstablishUDPConnection(mode, waitTime);
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} RDPEMT connection.", mode);
+            this.EstablishRdpemtConnection(mode, waitTime, true);
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect for Client Initiate Multitransport PDU to indicate that the client was able to successfully complete the multitransport initiation request.");
+            this.rdpbcgrAdapter.WaitForPacket<Client_Initiate_Multitransport_Response_PDU>(waitTime);
+
+            // This response code MUST only be sent to a server that advertises the SOFTSYNC_TCP_TO_UDP (0x200) flag in the Server Multitransport Channel Data.
+            // Indicates that the client was able to successfully complete the multitransport initiation request.
+            if (requestIdList.Count == 1)
+                VerifyClientInitiateMultitransportResponsePDU(rdpbcgrAdapter.SessionContext.ClientInitiateMultitransportResponsePDU, requestIdList[0], HrResponse_Value.S_OK);
+        }
+        #endregion 
+
         #region RTT Measure
         /// <summary>
         /// Send a Tunnel Data PDU with RTT Measure Request in its subheader
@@ -593,6 +613,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         /// </summary>
         /// <param name="multitransportResponsePdu">Client Initiate Multitransport Response PDU</param>
         /// <param name="expectedRequestId">Expected requestId</param>
+        /// <param name="value">Expected response value</param>
         private void VerifyClientInitiateMultitransportResponsePDU(Client_Initiate_Multitransport_Response_PDU multitransportResponsePdu, uint expectedRequestId, HrResponse_Value value = HrResponse_Value.E_ABORT)
         {
             if (multitransportResponsePdu == null)

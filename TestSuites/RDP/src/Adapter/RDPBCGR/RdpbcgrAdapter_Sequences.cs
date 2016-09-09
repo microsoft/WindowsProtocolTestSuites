@@ -29,6 +29,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="isMultitransportSupported">Whether support multitransport</param>
         /// <param name="supportRDPEGFX">Whether support RDPEGFX</param>
         /// <param name="supportRestrictedAdminMode">Whether support restricted admin mode</param>
+        /// <param name="isSoftSyncSupported">Indicates soft sync connection is supported</param>
         public void EstablishRDPConnection( 
             selectedProtocols_Values serverSelectedProtocol, 
             EncryptionMethods enMethod, 

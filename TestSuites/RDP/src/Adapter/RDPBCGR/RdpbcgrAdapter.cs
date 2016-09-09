@@ -432,6 +432,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="earlyCapabilityFlagsValue">The value of earlyCapabilityFlags</param>
         /// <param name="mcsChannelId_Net">MCSChannelId value for Server Network Data</param>
         /// <param name="mcsChannelId_MSGChannel">MCSChannelId value for Server Message Channel Data</param>
+        /// <param name="isSoftSyncSupported">Indicates soft sync connection is supported</param>
         public void Server_MCS_Connect_Response(
             EncryptionMethods enMothod, 
             EncryptionLevel enLevel, 
