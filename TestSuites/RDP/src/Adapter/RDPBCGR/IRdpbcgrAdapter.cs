@@ -215,7 +215,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             bool hasEarlyCapabilityFlags = false, 
             SC_earlyCapabilityFlags_Values earlyCapabilityFlagsValue = SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED, 
             UInt16 mcsChannelId_Net = ConstValue.IO_CHANNEL_ID, 
-            UInt16 mcsChannelId_MSGChannel = ConstValue.MCS_MESSAGE_CHANNEL_ID);
+            UInt16 mcsChannelId_MSGChannel = ConstValue.MCS_MESSAGE_CHANNEL_ID,
+            bool isSoftSyncSupported = false);
 
         /// <summary>
         /// Send MCS Attach User Confirm Pdu to client.
@@ -632,7 +633,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             bool expectAutoReconnect,
             TS_UD_SC_CORE_version_Values rdpServerVersion,
             bool isMultitransportSupported = false,
-            bool supportRDPEGFX = false, bool supportRestrictedAdminMode = false);
+            bool supportRDPEGFX = false, 
+            bool supportRestrictedAdminMode = false,
+            bool isSoftSyncSupported = false);
 
         /// <summary>
         /// Start a server Initiated disconnection sequence

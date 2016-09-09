@@ -109,5 +109,36 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
             if (requestIdList.Count == 1)
                 VerifyClientInitiateMultitransportResponsePDU(rdpbcgrAdapter.SessionContext.ClientInitiateMultitransportResponsePDU, requestIdList[0]);
         }
+
+        [TestMethod]
+        [Priority(1)]
+        [TestCategory("Negative")]
+        [TestCategory("RDP8.1")]
+        [TestCategory("RDPEMT")]
+        [Description("Verify the RDP client can handle soft sync.")]
+        public void S1_Connection_SoftSync()
+        {
+            this.TestSite.Assert.IsTrue(isClientSupportSoftSync, "SUT should support Soft-Sync.");
+            StartRDPConnection(false, true);
+            TransportMode mode = TransportMode.Reliable;
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} UDP connection.", mode);
+            this.EstablishUDPConnection(mode, waitTime);
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} RDPEMT connection.", mode);
+            this.EstablishRdpemtConnection(mode, waitTime, true);
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect for Client Initiate Multitransport PDU to indicate that the client was able to successfully complete the multitransport initiation request.");
+            this.rdpbcgrAdapter.WaitForPacket<Client_Initiate_Multitransport_Response_PDU>(waitTime);
+
+            // This response code MUST only be sent to a server that advertises the SOFTSYNC_TCP_TO_UDP (0x200) flag in the Server Multitransport Channel Data.
+            // Indicates that the client was able to successfully complete the multitransport initiation request.
+            if (requestIdList.Count == 1)
+                VerifyClientInitiateMultitransportResponsePDU(rdpbcgrAdapter.SessionContext.ClientInitiateMultitransportResponsePDU, requestIdList[0], HrResponse_Value.S_OK);
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Server send Soft-Sync request to client.");
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect for Client Soft-Sync response.");
+
+        }
     }
 }

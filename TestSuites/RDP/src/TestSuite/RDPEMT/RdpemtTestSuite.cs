@@ -105,7 +105,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         /// <summary>
         /// Start RDP connection.
         /// </summary>
-        private void StartRDPConnection(bool useRDPEncryption = false)
+        private void StartRDPConnection(bool useRDPEncryption = false, bool isSoftSync = false)
         {
 
             if (useRDPEncryption)
@@ -140,7 +140,17 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
 
             //Waiting for the RDP connection sequence.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Establishing RDP connection.");
-            this.rdpbcgrAdapter.EstablishRDPConnection(selectedProtocol, enMethod, enLevel, true, false, rdpServerVersion, true);
+            this.rdpbcgrAdapter.EstablishRDPConnection(
+                selectedProtocol, 
+                enMethod, 
+                enLevel, 
+                true, 
+                false, 
+                rdpServerVersion, 
+                true,
+                false,
+                false,
+                isSoftSync);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server Save Session Info PDU to SUT to notify user has logged on.");
             this.rdpbcgrAdapter.ServerSaveSessionInfo(LogonNotificationType.UserLoggedOn, ErrorNotificationType_Values.LOGON_FAILED_OTHER);
@@ -583,14 +593,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         /// </summary>
         /// <param name="multitransportResponsePdu">Client Initiate Multitransport Response PDU</param>
         /// <param name="expectedRequestId">Expected requestId</param>
-        private void VerifyClientInitiateMultitransportResponsePDU(Client_Initiate_Multitransport_Response_PDU multitransportResponsePdu, uint expectedRequestId)
+        private void VerifyClientInitiateMultitransportResponsePDU(Client_Initiate_Multitransport_Response_PDU multitransportResponsePdu, uint expectedRequestId, HrResponse_Value value = HrResponse_Value.E_ABORT)
         {
             if (multitransportResponsePdu == null)
             {
                 Site.Assert.Fail("Not get Client Initiate Multitransport Error PDU");
             }
             Site.Assert.AreEqual(expectedRequestId, multitransportResponsePdu.requestId, "Expected request id is {0}, but request id in received Multitransport Error Pdu is {1}.", expectedRequestId, multitransportResponsePdu.requestId);
-            Site.Assert.AreEqual(HrResponse_Value.E_ABORT, multitransportResponsePdu.hrResponse, "hrResponse field must be 0x80004004");
+            Site.Assert.AreEqual(value, multitransportResponsePdu.hrResponse, "hrResponse field must be {0}", value);
         }
 
         /// <summary>

@@ -1315,7 +1315,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             bool hasEarlyCapabilityFlags = false,
             SC_earlyCapabilityFlags_Values earlyCapabilityFlagsValue = SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED,
             UInt16 mcsChannelId_Net = ConstValue.IO_CHANNEL_ID,
-            UInt16 mcsChannelId_MSGChannel = ConstValue.MCS_MESSAGE_CHANNEL_ID)
+            UInt16 mcsChannelId_MSGChannel = ConstValue.MCS_MESSAGE_CHANNEL_ID,
+            bool isSoftSyncSupported = false)
         {
             if (sessionContext == null)
             {
@@ -1460,6 +1461,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             else
                 serverMultitransportChannelData.flags = 0;
             serverMultitransportChannelData.header.length = 8;
+
+            if(isMultitransportSupported & isSoftSyncSupported)
+            {
+                serverMultitransportChannelData.flags |= MULTITRANSPORT_TYPE_FLAGS.SOFTSYNC_TCP_TO_UDP;
+            }
 
             #endregion
 

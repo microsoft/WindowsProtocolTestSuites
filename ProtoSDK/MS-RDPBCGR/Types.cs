@@ -19983,8 +19983,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     /// </summary>
     public enum HrResponse_Value : uint
     {
-        None = 0x0,
-
         /// <summary>
         /// Indicates that the client was unable to complete the multitransport initiation request.
         /// </summary>

@@ -441,7 +441,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             bool hasEarlyCapabilityFlags = false, 
             SC_earlyCapabilityFlags_Values earlyCapabilityFlagsValue = SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED, 
             UInt16 mcsChannelId_Net = ConstValue.IO_CHANNEL_ID,
-            UInt16 mcsChannelId_MSGChannel = ConstValue.MCS_MESSAGE_CHANNEL_ID)
+            UInt16 mcsChannelId_MSGChannel = ConstValue.MCS_MESSAGE_CHANNEL_ID,
+            bool isSoftSyncSupported = false)
         {
             SERVER_CERTIFICATE cert = null;
             int certLen = 0;
@@ -465,7 +466,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     isMultitransportSupported,
                     hasEarlyCapabilityFlags,
                     earlyCapabilityFlagsValue,
-                    mcsChannelId_Net);
+                    mcsChannelId_Net,
+                    ConstValue.MCS_MESSAGE_CHANNEL_ID,
+                    isSoftSyncSupported);
             connectRespPdu.mcsCrsp.gccPdu.serverCoreData.version = rdpVersion;
             connectRespPdu = new Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response_Ex(connectRespPdu, sessionContext, invalidType);
 
