@@ -120,7 +120,7 @@ MS-RDPEUDP has two scenarios:
 
 |  **Scenario**|  **Description**|  **Test Cases**|  **BVTs**| 
 | -------------| -------------| -------------| ------------- |
-| S1_Connection| Verify the RDP-UDP connection phase and keep alive behavior.| 2| 1| 
+| S1_Connection| Verify the RDP-UDP connection phase and keep alive behavior.| 4| 1| 
 | S2_DataTransfer| Verify data transfer over RDP-UDP connection.| 8| 5| 
 
 For more details about MS-RDPEUDP scenarios design, please refer to sections 2.2 and 2.3 of **MS-RDPEUDP_ClientTestDesignSpecification.md**.
