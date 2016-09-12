@@ -1113,9 +1113,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             marshaler.WriteUInt32(Length);
             marshaler.WriteUInt16((ushort)Flags);
             marshaler.WriteUInt16((ushort)NumberOfTunnels);
-            foreach (var li in SoftSyncChannelLists)
+            if(SoftSyncChannelLists != null)
             {
-                marshaler.WriteBytes(li.Encode());
+                foreach (var li in SoftSyncChannelLists)
+                {
+                    marshaler.WriteBytes(li.Encode());
+                }
             }
         }
 
@@ -1129,7 +1132,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
             for (int i = 0; i < NumberOfTunnels; ++i)
             {
-                SoftSyncChannelList channel = new SoftSyncChannelList(marshaler.ReadUInt32(), marshaler.ReadUInt16());
+                SoftSyncChannelList channel = new SoftSyncChannelList((TunnelType_Value)marshaler.ReadUInt32(), marshaler.ReadUInt16());
 
                 List<uint> Ids = new List<uint>();
                 for (int k = 0; k < channel.NumberOfDVCs; ++k)
@@ -1201,15 +1204,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// <summary>
         /// Constructor.
         /// </summary>
-        public SoftSyncChannelList(uint tunnelType, ushort numberOfDVCs, List<uint> listOfIds = null)
+        public SoftSyncChannelList(TunnelType_Value tunnelType, ushort numberOfDVCs, List<uint> listOfIds = null)
         {
-            this.TunnelType = (TunnelType_Value)tunnelType;
+            this.TunnelType = tunnelType;
             this.NumberOfDVCs = numberOfDVCs;
             if (listOfIds != null)
                 this.ListOfDVCIds = listOfIds.ToArray();
         }
 
+        public uint GetSize()
+        {
+            // TunnelType: 4 bytes; NumberOfDVCs: 2 bytes; ListOfDVCIds: NumberOfDVCs * 4 bytes.
+            return (uint)(4 + 2 + NumberOfDVCs * 4);
+        }
+
         public SoftSyncChannelList() { }
+
     }
 
     /// <summary>
@@ -1253,6 +1263,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             {
                 DynamicVCException.Throw("CapsVer1ReqDvcPdu doesn't support  channel ID.");
             }
+        }
+
+        public SoftSyncResDvcPdu() { }
+        
+        public SoftSyncResDvcPdu(uint numberOfTunnels, TunnelType_Value[] tunnelsToSwitch)
+        {
+            NumberOfTunnels = numberOfTunnels;
+            TunnelsToSwitch = tunnelsToSwitch;
         }
 
         protected override void DoMarshal(PduMarshaler marshaler)

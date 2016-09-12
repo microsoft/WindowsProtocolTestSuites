@@ -89,14 +89,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Basic Setting Exchange
             ExpectPacket<Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request>(sessionContext, pduWaitTimeSpan);
 
-            // BUG: Will failed on 14393 and 9600
-            // MultitransportTypeFlagsInMCSConnectIntialPdu = 0, should have SOFTSYNC_TCP_TO_UDP.
-            //if (isSoftSyncSupported)
-            //{
-            //    Site.Assert.IsTrue(sessionContext.MultitransportTypeFlagsInMCSConnectIntialPdu.HasFlag(MULTITRANSPORT_TYPE_FLAGS.SOFTSYNC_TCP_TO_UDP),
-            //        "Client Should support Soft-Sync, flags: {0}",
-            //        sessionContext.MultitransportTypeFlagsInMCSConnectIntialPdu);
-            //}
+            if (isSoftSyncSupported)
+            {
+                Site.Assert.IsTrue(sessionContext.MultitransportTypeFlagsInMCSConnectIntialPdu.HasFlag(MULTITRANSPORT_TYPE_FLAGS.SOFTSYNC_TCP_TO_UDP),
+                    "Client Should support Soft-Sync, flags: {0}",
+                    sessionContext.MultitransportTypeFlagsInMCSConnectIntialPdu);
+            }
 
             Server_MCS_Connect_Response(
                 enMethod, 

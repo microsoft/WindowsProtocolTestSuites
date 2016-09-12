@@ -178,6 +178,32 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             return channel;
         }
 
+        public void SoftSync(TimeSpan timeout, SoftSyncReqFlags_Value flags, ushort numberOfTunnels, SoftSyncChannelList[] channelList)
+        {
+            this.SendSoftSyncRequestPDU(flags, numberOfTunnels, channelList);
+            SoftSyncResDvcPdu pdu = this.ExpectSoftSyncResponsePDU(timeout);
+            if (pdu == null)
+            {
+                throw new System.IO.IOException("Cannot receive a Soft Sync Response PDU!");
+            }
+        }
+
+        public void SoftSync(TimeSpan timeout, List<uint> DVCIds = null)
+        {
+            SoftSyncReqFlags_Value flags = SoftSyncReqFlags_Value.SOFT_SYNC_TCP_FLUSHED;
+             if(DVCIds == null)
+             {
+                 SoftSync(timeout, flags, 0, null);
+             }
+             else
+             {
+                 flags |= SoftSyncReqFlags_Value.SOFT_SYNC_CHANNEL_LIST_PRESENT;
+                 TunnelType_Value tunnelType = TunnelType_Value.TUNNELTYPE_UDPFECR;
+                 SoftSyncChannelList channel = new SoftSyncChannelList(tunnelType, 1, DVCIds);
+                 SoftSyncChannelList[] channelList = new SoftSyncChannelList[] { channel };
+                 SoftSync(timeout, flags, 1, channelList);
+             }
+        }
         /// <summary>
         /// Close a DVC
         /// </summary>
@@ -227,6 +253,42 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         #endregion Public Methods
 
         #region Private Methods
+
+        private void SendSoftSyncRequestPDU(SoftSyncReqFlags_Value flags, ushort numberOfTunnels = 0, SoftSyncChannelList[] channelList = null, DynamicVC_TransportType transportType = DynamicVC_TransportType.RDP_TCP)
+        {
+            SoftSyncReqDvcPDU pdu = pduBuilder.CreateSoftSyncReqPdu(flags, numberOfTunnels, channelList);
+            this.Send(pdu, transportType);
+        }
+
+        private SoftSyncResDvcPdu ExpectSoftSyncResponsePDU(TimeSpan timeout, DynamicVC_TransportType transportType = DynamicVC_TransportType.RDP_TCP)
+        {
+            DateTime endTime = DateTime.Now + timeout;
+            while (DateTime.Now < endTime)
+            {
+                if (unprocessedDVCPacketBuffer.Count > 0)
+                {
+                    lock (unprocessedDVCPacketBuffer)
+                    {
+                        if (unprocessedDVCPacketBuffer.Count > 0)
+                        {
+                            for (int i = 0; i < unprocessedDVCPacketBuffer.Count; i++)
+                            {
+                                if (transportType == unprocessedDVCPacketBuffer[i].TransportType
+                                    && unprocessedDVCPacketBuffer[i].PDU is SoftSyncResDvcPdu)
+                                {
+                                    SoftSyncResDvcPdu capResp = unprocessedDVCPacketBuffer[i].PDU as SoftSyncResDvcPdu;
+                                    unprocessedDVCPacketBuffer.RemoveAt(i);
+                                    return capResp;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Thread.Sleep(this.waitInterval);
+            }
+            return null;
+        }
 
         /// <summary>
         /// Send DVC Capabilities Request PDU

@@ -256,6 +256,17 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
             // Indicates that the client was able to successfully complete the multitransport initiation request.
             if (requestIdList.Count == 1)
                 VerifyClientInitiateMultitransportResponsePDU(rdpbcgrAdapter.SessionContext.ClientInitiateMultitransportResponsePDU, requestIdList[0], HrResponse_Value.S_OK);
+
+            #region Start EDYC soft sync
+            Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc.RdpedycServer rdpedycServer =
+                new Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc.RdpedycServer(this.rdpbcgrAdapter.ServerStack, this.rdpbcgrAdapter.SessionContext);
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Start Dynamic VC Version Negotiation");
+            rdpedycServer.ExchangeCapabilities(waitTime);
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Start Soft-Sync");
+            rdpedycServer.SoftSync(waitTime);
+            #endregion
         }
         #endregion 
 

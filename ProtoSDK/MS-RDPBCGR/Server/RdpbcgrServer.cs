@@ -1458,15 +1458,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             TS_UD_SC_MULTITRANSPORT serverMultitransportChannelData = new TS_UD_SC_MULTITRANSPORT();
             serverMultitransportChannelData.header.type = TS_UD_HEADER_type_Values.SC_MULTITRANSPORT;
             if(isMultitransportSupported)
+            {
                 serverMultitransportChannelData.flags = MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECL | MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECR | MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDP_PREFERRED;
+                if(isSoftSyncSupported)
+                    serverMultitransportChannelData.flags |= MULTITRANSPORT_TYPE_FLAGS.SOFTSYNC_TCP_TO_UDP;
+            } 
+
             else
                 serverMultitransportChannelData.flags = 0;
             serverMultitransportChannelData.header.length = 8;
-
-            if(isMultitransportSupported & isSoftSyncSupported)
-            {
-                serverMultitransportChannelData.flags |= MULTITRANSPORT_TYPE_FLAGS.SOFTSYNC_TCP_TO_UDP;
-            }
 
             #endregion
 

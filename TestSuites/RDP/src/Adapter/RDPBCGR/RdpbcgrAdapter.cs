@@ -341,7 +341,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="bSupportEGFX">Indicates the server supports MS-RDPEGFX</param>
         /// <param name="bSupportRestrictedAdminMode">Indicates the server supports Restricted admin mode</param>
         /// <param name="bReservedSet">Indicates the value of NEGRSP_FLAG_RESERVED in the flags field of RDP Negotiation Response</param>
-        public void Server_X_224_Connection_Confirm(selectedProtocols_Values protocol, bool bSupportExtClientData, bool setRdpNegData, NegativeType invalidType, bool bSupportEGFX = false, bool bSupportRestrictedAdminMode = false, bool bReservedSet = false)
+        public void Server_X_224_Connection_Confirm(selectedProtocols_Values protocol, bool bSupportExtClientData, bool setRdpNegData, NegativeType invalidType, bool bSupportEGFX = false, bool bSupportRestrictedAdminMode = false, bool bReservedSet = false, bool bSupportRestrictedAuthenticationMode = false)
         {
             //ExpectPacket<Client_X_224_Connection_Request_Pdu>(sessionContext, timeout);
             serverConfig.selectedProtocol = protocol;
@@ -364,6 +364,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             if(bReservedSet)
             {
                 confirmPdu.rdpNegData.flags |= RDP_NEG_RSP_flags_Values.NEGRSP_FLAG_RESERVED;
+            }
+            if (bSupportRestrictedAuthenticationMode)
+            {
+                confirmPdu.rdpNegData.flags |= RDP_NEG_RSP_flags_Values.REDIRECTED_AUTHENTICATION_MODE_SUPPORTED;
             }
 
             switch (invalidType)

@@ -128,6 +128,26 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             return new CreateRespDvcPdu(channelId, creationStatus);
         }
 
+        public SoftSyncReqDvcPDU CreateSoftSyncReqPdu(SoftSyncReqFlags_Value flags, ushort numberOfTunnels, SoftSyncChannelList[] channelList = null)
+        {
+            uint length = sizeof(uint) + sizeof(ushort) + sizeof(ushort);
+
+            if(flags.HasFlag(SoftSyncReqFlags_Value.SOFT_SYNC_CHANNEL_LIST_PRESENT))
+            {
+                foreach (var channel in channelList)
+                {
+                    length += (uint)channel.GetSize();
+                }
+            }
+
+            return new SoftSyncReqDvcPDU(length, flags, numberOfTunnels, channelList);
+        }
+
+        public SoftSyncResDvcPdu CreateSoftSyncRespPdu()
+        {
+            return new SoftSyncResDvcPdu();
+        }
+
         public CloseDvcPdu CreateCloseDvcPdu(uint channelId)
         {
             return new CloseDvcPdu(channelId);
@@ -196,8 +216,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             // The DYNVC_CREATE_RSP (section 2.2.2.2) PDU is sent by the DVC client manager to 
             // indicate the status of the client dynamic virtual channel create operation.
             regsiteredPDUs.Add(new CreateRespDvcPdu());
+            regsiteredPDUs.Add(new SoftSyncResDvcPdu());
             regsiteredPDUs.Add(new CloseDvcPdu());
             regsiteredPDUs.Add(new UnknownDynamicVCPDU());
+            
         }
     }
 
@@ -223,6 +245,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             regsiteredPDUs.Add(new CreateReqDvcPdu());
             regsiteredPDUs.Add(new CloseDvcPdu());
             regsiteredPDUs.Add(new UnknownDynamicVCPDU());
+            regsiteredPDUs.Add(new SoftSyncReqDvcPDU());
         }
     }
 }
