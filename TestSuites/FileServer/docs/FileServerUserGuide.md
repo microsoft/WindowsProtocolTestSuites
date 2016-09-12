@@ -879,47 +879,47 @@ This section describes detailed setup steps on a Windows platform.
 
 	-	Open the **File Explorer** and go to **%SystemDrive%**, right click in the blank space and select **New** -&gt; **Folder** to create a new folder.
 
-		![](./image/FileServerUserGuide/image168.png)
+![](./image/FileServerUserGuide/image168.png)
 
 	-	Type `SMBBasic` for the new folder's name.
 
-		![](./image/FileServerUserGuide/image169.png)
+![](./image/FileServerUserGuide/image169.png)
 
 2.	Share it with name **SMBBasic** and Read/Write permission level to **Node01\\Administrator** (and **CONTOSO\\Administrator** if **DOMAIN** environment).
 
 	-	Right click the **SMBBasic** folder and select **Properties**.
 
-		![](./image/FileServerUserGuide/image170.png)
+![](./image/FileServerUserGuide/image170.png)
 
 	-	On **Sharing** tab, click the **Share...** button.
 
-		![](./image/FileServerUserGuide/image171.png)
+![](./image/FileServerUserGuide/image171.png)
 
 	-	In the **Choose people to share with** panel, verify if the **Node01\\Administrator** account is there. If not, type `Node01\Administrator` and click **Add**.
 
-		![](./image/FileServerUserGuide/image172.png)
+![](./image/FileServerUserGuide/image172.png)
 
 	-	Click the arrow in the **Permission Level** column of the **Node01\\Administrator** account and select **Read/Write**. Then click **Share**.
 
-		![](./image/FileServerUserGuide/image173.png)
+![](./image/FileServerUserGuide/image173.png)
 
 	-	In the **Your folder is shared.** panel, click **Done**. Then click **Close** in the **SMBBasic Properties** panel.
 
-		![](./image/FileServerUserGuide/image174.png)
+![](./image/FileServerUserGuide/image174.png)
 
 ####<a name="5.3.2"/ 5.3.2. Set NTFS Permissions
 
 1.	Right the shared folder and select **Properties**.
 
-	![](./image/FileServerUserGuide/image210.png)
+![](./image/FileServerUserGuide/image210.png)
 
 2.	In the **Security** tab, click **Advanced**.
 
-	![](./image/FileServerUserGuide/image211.png)
+![](./image/FileServerUserGuide/image211.png)
 
 3.	In the **Permissions** tab, click **Add** or **Remove** to edit NTFS Permissions.
 
-	![](./image/FileServerUserGuide/image8.png)
+![](./image/FileServerUserGuide/image8.png)
 
 ####<a name="5.3.3"/> 5.3.3. Set Share Permissions
 
@@ -930,7 +930,7 @@ This section describes detailed setup steps on a Windows platform.
 
 3.	Expand **Shared Folders** -&gt; **Shares** on the left, then choose the folder to set Share Permissions.
 
-	![](./image/FileServerUserGuide/image9.png)
+![](./image/FileServerUserGuide/image9.png)
 
 ####<a name="5.3.4"/> 5.3.4. Add a share SameWithSMBBasic to an existing share SMBBasic 
 
@@ -941,19 +941,19 @@ This section describes detailed setup steps on a Windows platform.
 
 	-	Right click the **SMBBasic** folder and select **Properties**.
 
-		![](./image/FileServerUserGuide/image170.png)
+![](./image/FileServerUserGuide/image170.png)
 
 	- 	On **Sharing** tab, click the **Advanced Sharing...** button.
 
-		![](./image/FileServerUserGuide/image171.png)
+![](./image/FileServerUserGuide/image171.png)
 
 	-	In the **Advanced Sharing** panel, click the **Add** button.
 
-		![](./image/FileServerUserGuide/image179.png)
+![](./image/FileServerUserGuide/image179.png)
 
 	-	In the **New Share** panel, type `SameWithSMBBasic` in the **Share name** textbox. Then click **OK**.
 
-		![](./image/FileServerUserGuide/image180.png)
+![](./image/FileServerUserGuide/image180.png)
 
 ####<a name="5.3.5"/> 5.3.5. Create symbolic links in SMBBasic
 
@@ -978,15 +978,15 @@ This section describes detailed setup steps on a Windows platform.
 
 	-	Open **Server Manager**, and then click **File and Storage Services** on the left.
 
-		![](./image/FileServerUserGuide/image175.png)
+![](./image/FileServerUserGuide/image175.png)
 
 	-	Click **Shares**, and find **SMBEncrypted** share in the listview. Right click the **SMBEncrypted** share and select **Properties**.
 
-		![](./image/FileServerUserGuide/image176.png)
+![](./image/FileServerUserGuide/image176.png)
 
 	-	In the **SMBEncrypted Properties** panel, click **Settings** on the left, and then select the **Encrypt data access** checkbox.
 
-		![](./image/FileServerUserGuide/image177.png)
+![](./image/FileServerUserGuide/image177.png)
 
 	-	Click **OK** to apply the changes and close the panel.
 
@@ -1027,23 +1027,23 @@ This section describes detailed setup steps on a Windows platform.
 
 	-	 If you do not have **Unallocated** space on **Disk 0**, right-click **Disk 0** and select **Shrink volume** to free some spaces first.
 
-	![](./image/FileServerUserGuide/image181.png)
+![](./image/FileServerUserGuide/image181.png)
 
 	-	In the **Shrink C:** panel, type `5120` in the **Enter the amount of space to shrink in MB:** textbox. Then click **Shrink**.
 
-	![](./image/FileServerUserGuide/image182.png)
+![](./image/FileServerUserGuide/image182.png)
 
 3. 	Right-click the **Unallocated** space on **Disk 0**, and select **New Simple Volume...**.
 
-	![](./image/FileServerUserGuide/image183.png)
+![](./image/FileServerUserGuide/image183.png)
 
 4.	Click **Next** until you reach the **Format Partition** page. Select **ReFS** for **File system** in the **Format this volume with the following settings** radio button. And click **Next** then **Finish**.
 
-	![](./image/FileServerUserGuide/image184.png)
+![](./image/FileServerUserGuide/image184.png)
 
 5.	After the new volume is created, click **Start** in the prompt **Format New Volume** panel. Then click **Close**.
 
-	![](./image/FileServerUserGuide/image185.png)
+![](./image/FileServerUserGuide/image185.png)
 
 6.	Create a share in the new volume with share name **SMBReFSShare** and share it with **Read/Write** permission level to **Node01\\Administrator** (and **CONTOSO\\Administrator** if **DOMAIN** environment).
 >	For more details, please refer to [5.3.1. Create a share named SMBBasic](#5.3.1).
@@ -1054,89 +1054,89 @@ This section describes detailed setup steps on a Windows platform.
 
 1.	In **Server Manager** -&gt; **Dashboard**, click **Manage** on the upper right corner and then click **Add Roles and Features**. 
 
-	![](./image/FileServerUserGuide/image186.png)
+![](./image/FileServerUserGuide/image186.png)
 
 2.	Click **Next** under the **Select server roles** tab. In the **Roles** treeview, select **Active Directory Domain Services**.
 
-	![](./image/FileServerUserGuide/image193.png)
+![](./image/FileServerUserGuide/image193.png)
 
 3.	Click **Add Features** in the pop-up window to install **AD DS Tools**.
 
-	![](./image/FileServerUserGuide/image191.png)
+![](./image/FileServerUserGuide/image191.png)
 
 4.	In the **Roles** treeview, select **DNS server**.
 
-	![](./image/FileServerUserGuide/image194.png)
+![](./image/FileServerUserGuide/image194.png)
 
 5.	Click **Add Features** in the pop-up window to install **DNS Server Tools**.
 
-	![](./image/FileServerUserGuide/image191.png)
+![](./image/FileServerUserGuide/image191.png)
 
 6.	Click **Next** until you get to the **Confirmation** page. And click **Install** to start installation. Wait for the installation to complete.
 
 7.	Click **Promote this server to a domain controller** to create a new domain (e.g. `contoso.com`). 
 
-	![](./image/FileServerUserGuide/image195.png)
+![](./image/FileServerUserGuide/image195.png)
 
 8.	Select **Add a new forest**, and type `contoso.com` in the **Root domain name** textbox. Click **Next**.
 
-	![](./image/FileServerUserGuide/image196.png)
+![](./image/FileServerUserGuide/image196.png)
 
 9.	Type `Password01!` in both **Password** and **Confirm password** textboxes. Click **Next**.
 
-	![](./image/FileServerUserGuide/image197.png)
+![](./image/FileServerUserGuide/image197.png)
 
 10.	Click **Next** until **Prerequisites Check**, then click **Install**. If your machine did not automatically restart, restart it by yourself.
 
-	![](./image/FileServerUserGuide/image198.png)
+![](./image/FileServerUserGuide/image198.png)
 
 #####<a name="5.3.9.2"/> 5.3.9.2. Install Routing Service
 
 1.	In **Server Manager** -&gt; **Dashboard**, click **Manage** on the upper right corner and then click **Add Roles and Features**. 
 
-	![](./image/FileServerUserGuide/image186.png)
+![](./image/FileServerUserGuide/image186.png)
 
 2.	Click **Next** under the **Select server roles** tab. In the **Roles** treeview, select **Remote Access** and **Web Server (IIS)**.
 
-	![](./image/FileServerUserGuide/image200.png)
+![](./image/FileServerUserGuide/image200.png)
 
 3.	Click **Add Features** in the pop-up window to install **IIS Management Console** tools.
 
-	![](./image/FileServerUserGuide/image199.png)
+![](./image/FileServerUserGuide/image199.png)
 
 4.	Click **Next** until **Role Services** tab, and check **Routing**. **DirectAccess and VPN (RAS)** will be automatically selected.
 
-	![](./image/FileServerUserGuide/image202.png)
+![](./image/FileServerUserGuide/image202.png)
 
 5.	Click **Add Features** in the pop-up window to install all the tools.
 
-	![](./image/FileServerUserGuide/image201.png)
+![](./image/FileServerUserGuide/image201.png)
 
 6.	Click **Next** until the **Confirmation** tab, and click **Install** to submit Confirmation. Then click **Close**.
 
-	![](./image/FileServerUserGuide/image18.png)
+![](./image/FileServerUserGuide/image18.png)
 
 #####<a name="5.3.9.3"/> 5.3.9.3. Configure and start Routing service
 
 1.  In **Server Manager** -&gt; **Dashboard**, click **Tools** on the upper right corner and then click **Routing and Remote Access**.
 
-	![](./image/FileServerUserGuide/image203.png)
+![](./image/FileServerUserGuide/image203.png)
 
 2. 	Right-click **DC01**, and select **Configure and Enable Routing and Remote Access**.
 
-	![](./image/FileServerUserGuide/image204.png)
+![](./image/FileServerUserGuide/image204.png)
 
 3.	Click **Next** until the **Configuration** page, then select **Custom configuration** in , and click **Next**.
 
-	![](./image/FileServerUserGuide/image205.png)
+![](./image/FileServerUserGuide/image205.png)
 
 4.	Select **LAN routing** in the **Custom Configuration** page, and click **Next**.
 
-	![](./image/FileServerUserGuide/image206.png)
+![](./image/FileServerUserGuide/image206.png)
 
 5.	Then click **Finish** and **Start service** to start the service.
 
-	![](./image/FileServerUserGuide/image207.png)
+![](./image/FileServerUserGuide/image207.png)
 
 #####<a name="5.3.9.4"/> 5.3.9.4. Create a Domain Non-Admin user account 
 
@@ -1154,11 +1154,11 @@ This section describes detailed setup steps on a Windows platform.
 
 2.	Right Click **Guest**, click **Enable Account** in the popup menu.
 
-	![](./image/FileServerUserGuide/image23.png)
+![](./image/FileServerUserGuide/image23.png)
 
 3.	Right Click **Guest**, click **Reset Password...**, and set the password to **Password01!**.
 
-	![](./image/FileServerUserGuide/image24.png)
+![](./image/FileServerUserGuide/image24.png)
 
 #####<a name="5.3.9.6"/> 5.3.9.6. Create a Domain group
 
@@ -1186,65 +1186,65 @@ This section describes detailed setup steps on a Windows platform.
 
 1.  In **Server Manager** -&gt; **Dashboard**, click **Tools** on the upper right corner and then click **Active Directory Administrative Center**.
 
-	![](./image/FileServerUserGuide/image25.png)
+![](./image/FileServerUserGuide/image25.png)
 
 2.	In **Active Directory Administrative Center**, select **Dynamic Access Control**, then select **Claim Types**. On the right, click **New**, then **Claim Type**.
 
-	![](./image/FileServerUserGuide/image26.png)
+![](./image/FileServerUserGuide/image26.png)
 
 3.	Type `department` in the **Filter** to select the department attribute as the base claim, and select the `department` attribute in the listview.
 
-	![](./image/FileServerUserGuide/image27.png)
+![](./image/FileServerUserGuide/image27.png)
 
 5.	Type `Department` in the **Display Name** textbox for this claim, and then add value `IT` and `Payroll` to **Suggested Values** by clicking **Add...**.
 
-	![](./image/FileServerUserGuide/image28.png)
+![](./image/FileServerUserGuide/image28.png)
 
 6.	Repeat step 2-5, and add another claim based on the `countryCode` attribute, and set **Suggested Values** to `156`, `840` and `392`.
 
-	![](./image/FileServerUserGuide/image29.png)
+![](./image/FileServerUserGuide/image29.png)
 
 ######<a name="5.3.9.8.2"/> 5.3.9.8.2. Create Central Access Rules
 
 1.  In **Server Manager** -&gt; **Dashboard**, click **Tools** on the upper right corner and then click **Active Directory Administrative Center**.
 
-	![](./image/FileServerUserGuide/image25.png)
+![](./image/FileServerUserGuide/image25.png)
 
 2.	In **Active Directory Administrative Center**, select **Dynamic Access Control**, then select **Central Access Rules**. On the right, click **New**, then **Central Access Rule**.
 
-	![](./image/FileServerUserGuide/image30.png)
+![](./image/FileServerUserGuide/image30.png)
 
 3.	Type `CountryCodeEquals156Rule` in the **Name** textbox.
 
-	![](./image/FileServerUserGuide/image31.png)
+![](./image/FileServerUserGuide/image31.png)
 
 4.	In the **Permissions** tab, click **Edit**.
 
-	![](./image/FileServerUserGuide/image32.png)
+![](./image/FileServerUserGuide/image32.png)
 
 5.	In the **Advanced Security Settings for Permissions** panel, click **Add**.
 
-	![](./image/FileServerUserGuide/image33.png)
+![](./image/FileServerUserGuide/image33.png)
 
 6.	In the **Permission Entry for Permissions** panel, click **Select a principal**
 
-	![](./image/FileServerUserGuide/image34.png)
+![](./image/FileServerUserGuide/image34.png)
 
 7.	Type `Authenticated Users` in the object name textbox, then click **Check Names** and **OK**.
 
-	![](./image/FileServerUserGuide/image35.png)
+![](./image/FileServerUserGuide/image35.png)
 
 8.	Select **Full Control** in **Basic permissions**, click **Add a condition**, and select `CountryCode` Equals `156` and click **OK**.
 
-	![](./image/FileServerUserGuide/image36.png)
+![](./image/FileServerUserGuide/image36.png)
 	
 9.	In the **Create Central Access Rule** page, and click **OK**.
 
-	![](./image/FileServerUserGuide/image37.png)
+![](./image/FileServerUserGuide/image37.png)
 
 10.	Repeat steps 2-9 to create the rest of the 9 rules.
 
-	![](./image/FileServerUserGuide/image38.png)
+![](./image/FileServerUserGuide/image38.png)
 
 -	Conditions of the 9 rules:
 
@@ -1272,63 +1272,63 @@ This section describes detailed setup steps on a Windows platform.
 
 2.	In the right panel, select **New** -&gt; **Central Access Policy**.
 
-	![](./image/FileServerUserGuide/image39.png)
+![](./image/FileServerUserGuide/image39.png)
 
 3.	In the **Create Central Access Policy** page, type `CountryCodeEquals156Policy` in **Name** textbox, and click **Add** to select rule `CountryCodeEquals156Rule`, then click **OK**.
 
-	![](./image/FileServerUserGuide/image40.png)
+![](./image/FileServerUserGuide/image40.png)
 
-	![](./image/FileServerUserGuide/image41.png)
+![](./image/FileServerUserGuide/image41.png)
 
 4.	Repeat steps 2-3 and add the rest of the 9 policies.
 
-	![](./image/FileServerUserGuide/image42.png)
+![](./image/FileServerUserGuide/image42.png)
 
 ######<a name="5.3.9.8.4"/> 5.3.9.8.4. Create Users
 
 1.	Navigate to **Server Manager** -&gt; **Tools** -&gt; **ADSI Edit**.
 
-	![](./image/FileServerUserGuide/image43.png)
+![](./image/FileServerUserGuide/image43.png)
 
 2.	In the right panel, right click **ADSI Edit**, and select **Connect to**.
 
-	![](./image/FileServerUserGuide/image44.png)
+![](./image/FileServerUserGuide/image44.png)
 
 3.	Click **OK**.
 
-	![](./image/FileServerUserGuide/image45.png)
+![](./image/FileServerUserGuide/image45.png)
 
 4.	Expand **Default naming context** -&gt; **DC=contoso,DC=com**, right click **CN=Users**, select **New** -&gt; **Object**.
 
-	![](./image/FileServerUserGuide/image46.png)
+![](./image/FileServerUserGuide/image46.png)
 
 5.	Select **user** and click **Next** to create a user object.
 
-	![](./image/FileServerUserGuide/image47.png)
+![](./image/FileServerUserGuide/image47.png)
 
 6.	Type `ITadmin01` for the **cn** attribute and then **Next**.
 
-	![](./image/FileServerUserGuide/image48.png)
+![](./image/FileServerUserGuide/image48.png)
 
 7.	Type `ITadmin01` for the **sAMAccountName** attribute and then **Next**
 
-	![](./image/FileServerUserGuide/image49.png)
+![](./image/FileServerUserGuide/image49.png)
 
 8.	Press **Finish**.
 
-	![](./image/FileServerUserGuide/image50.png)
+![](./image/FileServerUserGuide/image50.png)
 
 9.	Right click the newly created user object **CN=ITadmin01**, and select **Properties**.
 
-	![](./image/FileServerUserGuide/image51.png)
+![](./image/FileServerUserGuide/image51.png)
 
 10.	Select **countryCode** in **Attribute Editor** tab, type `156`, and then click **OK**.
 
-	![](./image/FileServerUserGuide/image52.png)
+![](./image/FileServerUserGuide/image52.png)
 
 11.	Select **department**  in **Attribute Editor** tab, type `IT`, and then click **OK**.
 
-	![](./image/FileServerUserGuide/image53.png)
+![](./image/FileServerUserGuide/image53.png)
 
 12.	Repeat steps 4-11 to add the 4 users and their corresponding attributes as the following:
 
@@ -1344,19 +1344,19 @@ This section describes detailed setup steps on a Windows platform.
 
 1.	Open **Run** -&gt; type `gpme.msc`, select **Default Domain Policy** and click **OK**.
 
-	![](./image/FileServerUserGuide/image54.png)
+![](./image/FileServerUserGuide/image54.png)
 
 2.	In the right panel, navigate to **Computer Configuration** -&gt; **Policies** -&gt; **Windows Settings** -&gt; **Security Settings** -&gt; **File System** -&gt; **Central Access Policy**.
 
-	![](./image/FileServerUserGuide/image55.png)
+![](./image/FileServerUserGuide/image55.png)
 
 3.	Right click **Central Access Policy** and select **Manage Central Access Policies...**.
 
-	![](./image/FileServerUserGuide/image56.png)
+![](./image/FileServerUserGuide/image56.png)
 
 4.	Select all the 10 rules added in [5.3.9.8.2. Create Central Access Rules](#5.3.9.8.2), click **Add**, and then click **OK**.
 
-	![](./image/FileServerUserGuide/image57.png)
+![](./image/FileServerUserGuide/image57.png)
 
 5.	Start Windows PowerShell (x86) from `%SystemRoot%\syswow64\WindowsPowerShell\v1.0\` with Administrator privilege, and update group policies first in `DC01`, and then in `Node01` by executing the following command:
 ```
@@ -1369,19 +1369,19 @@ This section describes detailed setup steps on a Windows platform.
 
 1.	In **Server Manager** -&gt; **Dashboard**, click **Manage** on the upper right corner and then click **Add Roles and Features**. 
 
-	![](./image/FileServerUserGuide/image186.png)
+![](./image/FileServerUserGuide/image186.png)
 
 2.	Click **Next** under the **Select server roles** tab. In the **Roles** treeview, expand **File And Storage Services** -&gt; **File and iSCSI Services** and select **DFS Namespaces**.
 
-	![](./image/FileServerUserGuide/image187.png)
+![](./image/FileServerUserGuide/image187.png)
 
 3.	Click **Add Features** in the pop-up window to install **DFS Management Tools**.
 
-	![](./image/FileServerUserGuide/image188.png)
+![](./image/FileServerUserGuide/image188.png)
 
 4.	Click **Next** until you get to the **Confirmation** page. And click **Install** to start installation. Wait for the installation to complete and click **Close**.
 
-	![](./image/FileServerUserGuide/image189.png)
+![](./image/FileServerUserGuide/image189.png)
 
 #####<a name="5.3.10.2"/> 5.3.10.2. Create a share named FileShare 
 
@@ -1399,31 +1399,31 @@ This section describes detailed setup steps on a Windows platform.
 
 1.  In **Server Manager** -&gt; **Dashboard**, click **Tools** on the upper right corner and then click **DFS Management** to launch **DFS Management** on `Node01`.
 
-	![](./image/FileServerUserGuide/image61.png)
+![](./image/FileServerUserGuide/image61.png)
 
 2.  Right-click **Namespace** and select **New Namespace...**.
 
-	![](./image/FileServerUserGuide/image62.png)
+![](./image/FileServerUserGuide/image62.png)
 
 3.  Type `Node01` in the **Server** textbox to specify the server name that will host the namespace. Then click **Next**.
 
-	![](./image/FileServerUserGuide/image63.png)
+![](./image/FileServerUserGuide/image63.png)
 
 4.  Type `SMBDfs` in the **Name** textbox to specify the name of the namespace. Then click **Edit Settings...** to set access permissions.
 
-	![](./image/FileServerUserGuide/image64.png)
+![](./image/FileServerUserGuide/image64.png)
 
 5.	In the **Edit Settings** panel, select **Administrators have full access; other users have read-only permissions**, and click **OK**. Then click **Next**.
 
-	![](./image/FileServerUserGuide/image65.png)
+![](./image/FileServerUserGuide/image65.png)
 
 6.  Select **Stand-alone namespace** as namespace type and click **Next**.
 
-	![](./image/FileServerUserGuide/image66.png)
+![](./image/FileServerUserGuide/image66.png)
 
 7.	Click **Create**, then **Close** to complete the wizard.
 
-	![](./image/FileServerUserGuide/image67.png)
+![](./image/FileServerUserGuide/image67.png)
 
 ######<a name="5.3.10.3.2"/> 5.3.10.3.2. Create Stand-alone namespace: Standalone
 
@@ -1435,11 +1435,11 @@ This section describes detailed setup steps on a Windows platform.
 
 2.	Select **Domain-based namespace** and click **Next**.
 
-	![](./image/FileServerUserGuide/image68.png)
+![](./image/FileServerUserGuide/image68.png)
 
 3.	Click **Create** to complete the wizard.
 
-	![](./image/FileServerUserGuide/image69.png)
+![](./image/FileServerUserGuide/image69.png)
 
 #####<a name="5.3.10.4"/> 5.3.10.4. Create DFS link for the namespaces
 
@@ -1447,77 +1447,77 @@ This section describes detailed setup steps on a Windows platform.
 
 1.	In **DFS Management**, right-click the newly created namespace **\\\\Node01\\SMBDfs** and click **New Folder...** to add new folder to this share.
 
-	![](./image/FileServerUserGuide/image70.png)
+![](./image/FileServerUserGuide/image70.png)
 
 2.	Type `SMBDfsLink` in **Name** textbox to specify the folder name, and click **Add...** to add the folder target.
 
-	![](./image/FileServerUserGuide/image71.png)
+![](./image/FileServerUserGuide/image71.png)
 
 3.	Type  `\\Node02\FileShare` in **Path to folder target** textbox, and click **Browse...** button.
 
 	-	If there is no `Node02` in the environment, set the target to **\\\\Node01\\FileShare**. Whether the `FileShare` is located on `Node01` or `Node02` depend on whether you want to test cluster environment, see [5.3.10.2. Create a share named FileShare](#5.3.10.2)
 
-	![](./image/FileServerUserGuide/image72.png)
+![](./image/FileServerUserGuide/image72.png)
 
 4.	In the **Browse for Shared Folders** panel, select **FileShare** in the **Shared folders** listview. Then click **OK**.
 
-	![](./image/FileServerUserGuide/image73.png)
+![](./image/FileServerUserGuide/image73.png)
 
 ######<a name="5.3.10.4.2"/> 5.3.10.4.2. Add two folders to namespace: Standalone
 
 1.	In **DFS Management**, right-click the newly created namespace **\\\\Node01\\Standalone** and click **New Folder...** to add two new folders to this namespace.
 
-	![](./image/FileServerUserGuide/image190.png)
+![](./image/FileServerUserGuide/image190.png)
 
 2.	Type `DFSLink` in **Name** textbox to specify the folder name, and click **Add...** to add the folder target.
 
-	![](./image/FileServerUserGuide/image74.png)
+![](./image/FileServerUserGuide/image74.png)
 
 3.	Type `\\Node02\FileShare` in **Path to folder target** textbox, and click **Browse...** button. Then click **OK**.
 
 	-	If there is no `Node02` in the environment, set the target to **\\\\Node01\\FileShare**. Whether the `FileShare` is located on `Node01` or `Node02` depend on whether you want to test cluster environment, see [5.3.10.2. Create a share named FileShare](#5.3.10.2)
 
-	![](./image/FileServerUserGuide/image75.png)
+![](./image/FileServerUserGuide/image75.png)
 
 4.	Repeat step 1, then type `Interlink` in **Name** textbox to specify the folder name, and click **Add...** to add the folder target.
 
-	![](./image/FileServerUserGuide/image76.png)
+![](./image/FileServerUserGuide/image76.png)
 
 5.	Type  `\\Node01\SMBDfs\SMBDfsLink` in **Path to folder target** textbox, and click **Browse...** button. Then click **OK**. 
 
-	![](./image/FileServerUserGuide/image77.png)
+![](./image/FileServerUserGuide/image77.png)
 
 6. 	Verify the two folders under the **Standalone** namespace.
 
-	![](./image/FileServerUserGuide/image78.png)
+![](./image/FileServerUserGuide/image78.png)
 
 ######<a name="5.3.10.4.3"/> 5.3.10.4.3. Add two folders to namespace: DomainBased
 
 1.	In **DFS Management**, right-click the newly created namespace **\\\\contoso.com\\DomainBased** and click **New Folder...** to add two new folders to this namespace.
 
-	![](./image/FileServerUserGuide/image208.png)
+![](./image/FileServerUserGuide/image208.png)
 
 2.	Type `DFSLink` in **Name** textbox to specify the folder name, and click **Add...** to add the folder target.
 
-	![](./image/FileServerUserGuide/image79.png)
+![](./image/FileServerUserGuide/image79.png)
 
 3.	Type `\\Node02\FileShare` in **Path to folder target** textbox, and click **Browse...** button. Then click **OK**.
 
 	-	If there is no `Node02` in the environment, set the target to **\\\\Node01\\FileShare**. Whether the `FileShare` is located on `Node01` or `Node02` depend on whether you want to test cluster environment, see [5.3.10.2. Create a share named FileShare](#5.3.10.2)
 
-	![](./image/FileServerUserGuide/image80.png)
+![](./image/FileServerUserGuide/image80.png)
 
 4.	Repeat step 1, then type `Interlink` in **Name** textbox to specify the folder name, and click **Add...** to add the folder target.
 
-	![](./image/FileServerUserGuide/image81.png)
+![](./image/FileServerUserGuide/image81.png)
 
 5.	Type  `\\Node01\SMBDfs\SMBDfsLink` in **Path to folder target** textbox, and click **Browse...** button. Then click **OK**.
 
-	![](./image/FileServerUserGuide/image82.png)
+![](./image/FileServerUserGuide/image82.png)
 
 6. Verify the two folders under the **DomainBased** namespace.
 
-	![](./image/FileServerUserGuide/image83.png)
+![](./image/FileServerUserGuide/image83.png)
 
 ####<a name="5.3.11"/> 5.3.11. Setup SAN Storage Server
 
@@ -1531,47 +1531,47 @@ This section describes detailed setup steps on a Windows platform.
 
 1.	From **Server Manager**, click **Add Roles and Features**, and click **Next** with default settings until **Server Roles** page.
 
-	![](./image/FileServerUserGuide/image84.png)
+![](./image/FileServerUserGuide/image84.png)
 
 2.  Expand **File And Storage Services**, select **File Server** and **iSCSI Target Server** to install.
 
-	![](./image/FileServerUserGuide/image85.png)
+![](./image/FileServerUserGuide/image85.png)
 
 3. 	Confirm to add required features for iSCSI Target Server by clicking **Add Features**.
 
-	![](./image/FileServerUserGuide/image86.png)
+![](./image/FileServerUserGuide/image86.png)
 
 4.	Click **Next** with default settings until last **Confirmation** tab and click **Install**.
 
-	![](./image/FileServerUserGuide/image87.png)
+![](./image/FileServerUserGuide/image87.png)
 
 #####<a name="5.3.11.2"/> 5.3.11.2. Create virtual disks for failover cluster nodes
 
 1.	After installing the [iSCSI Target](#5.3.11.1), navigate to **Server Manager** -&gt; **File and Storage Services** -&gt; **iSCSI Virtual Disks** and click **launch the New Virtual Disk wizard to create a virtual disk**.
 
-	![](./image/FileServerUserGuide/image88.png)
+![](./image/FileServerUserGuide/image88.png)
 
 2.	Choose either **Select by volume** or **Type a custom path** for the new virtual disk location.
 
-	![](./image/FileServerUserGuide/image89.png)
+![](./image/FileServerUserGuide/image89.png)
 
 3.	Specify the name as `Quorumdisk` and size as `1 GB` for the virtual disk.
 
-	![](./image/FileServerUserGuide/image90.png)
+![](./image/FileServerUserGuide/image90.png)
 
-	![](./image/FileServerUserGuide/image91.png)
+![](./image/FileServerUserGuide/image91.png)
 
 4. 	Select **New iSCSI target** for failover cluster node access.
 
-	![](./image/FileServerUserGuide/image92.png)
+![](./image/FileServerUserGuide/image92.png)
 
 5.	Specify the **Name** of the iSCSI target as `TargetForCluster01`.
 
-	![](./image/FileServerUserGuide/image93.png)
+![](./image/FileServerUserGuide/image93.png)
 
 6.	Specify the initiators of failover cluster nodes which need to access the virtual disk and target by clicking **Add...**
 
-	![](./image/FileServerUserGuide/image94.png)
+![](./image/FileServerUserGuide/image94.png)
 
 7. 	There're multiple ways for you to give the target access to a specific machine.
 
@@ -1579,23 +1579,23 @@ This section describes detailed setup steps on a Windows platform.
 
 	-	You could add the values in specific type of the failover cluster nodes if the **Enter a value for the selected type** option is selected and a type is specified. Here, **IP Address** type will be used in this example.
 
-	![](./image/FileServerUserGuide/image95.png)
+![](./image/FileServerUserGuide/image95.png)
 
-	![](./image/FileServerUserGuide/image96.png)
+![](./image/FileServerUserGuide/image96.png)
 
 8.	Click **Next** with default settings and click **Create** in the **Confirmation** tab to complete the wizard.
 
-	![](./image/FileServerUserGuide/image97.png)
+![](./image/FileServerUserGuide/image97.png)
 
 9.	After the first virtual disk has been created, right click from the blank space in **iSCSI VIRTUAL DISKS** listview and select **New iSCSI Virtual Disk...** to launch a new wizard.
 
-	![](./image/FileServerUserGuide/image98.png)
+![](./image/FileServerUserGuide/image98.png)
 
 10. Repeat steps 2-9 to create more virtual disks as shared storages for the failover cluster use.
 
 	-	Please notice that you must select the **Existing iSCSI target** which was created in the previous step [5.3.11.1. Install iSCSI Target](#5.3.11.1).
 
-	![](./image/FileServerUserGuide/image99.png)
+![](./image/FileServerUserGuide/image99.png)
 
 	-	The following table gives recommended settings for virtual disks used by this test suite:
 
@@ -1607,7 +1607,7 @@ This section describes detailed setup steps on a Windows platform.
 
 11.	After iSCSI target is created, you could find iSCSI target name as below when selecting any one of the virtual disks in the listview.
 
-	![](./image/FileServerUserGuide/image100.png)
+![](./image/FileServerUserGuide/image100.png)
 
 ####<a name="5.3.12"/> 5.3.12. Setup Cluster 
 
@@ -1615,53 +1615,53 @@ This section describes detailed setup steps on a Windows platform.
 
 1.	From **Server Manager** of each failover cluster node (i.e. **Node01** and **Node02**), click **iSCSI Initiator** and select **Yes** to start **Microsoft® iSCSI service** when prompted for its first use.
 
-	![](./image/FileServerUserGuide/image101.png)
+![](./image/FileServerUserGuide/image101.png)
 
-	![](./image/FileServerUserGuide/image102.png)
+![](./image/FileServerUserGuide/image102.png)
 
 2.	Add the **IP address** of the SAN storage server in the **Discover Target Portal** prompt from the **Discovery** tab.
 
-	![](./image/FileServerUserGuide/image103.png)
+![](./image/FileServerUserGuide/image103.png)
 
 3.	Navigate to **Targets** tab, click **Refresh** and then **Connect**.
 
-	![](./image/FileServerUserGuide/image104.png)
+![](./image/FileServerUserGuide/image104.png)
 
 4.	On either of the failover cluster nodes, open **Run** and type `diskmgmt.msc` to launch disk manager. The three disks can be found if you have followed the recommended disk settings. **Online** and **initiate** them as either **GPT** or **MBR** disk, and then create simple volumes with **NTFS** format by following the next steps. Do not forget to formatting the disks before you go on any further configurations.
 
-	![](./image/FileServerUserGuide/image105.png)
+![](./image/FileServerUserGuide/image105.png)
 
 5.	Right click **Disk 1** in the left panel, select **Online**. And then select **Initialize Disk**.
 
-	![](./image/FileServerUserGuide/image106.png)
+![](./image/FileServerUserGuide/image106.png)
 
 6.	Select either **MBR** or **GPT**, and click **OK**.
 
-	![](./image/FileServerUserGuide/image107.png)
+![](./image/FileServerUserGuide/image107.png)
 
 7.	Then right click **Disk 1** in the right panel, select **New Simple Volume...**
 
-	![](./image/FileServerUserGuide/image108.png)
+![](./image/FileServerUserGuide/image108.png)
 
 8.	Press **Next**.
 
-	![](./image/FileServerUserGuide/image109.png)
+![](./image/FileServerUserGuide/image109.png)
 
 9.	Press **Next**.
 
-	![](./image/FileServerUserGuide/image110.png)
+![](./image/FileServerUserGuide/image110.png)
 
 10.	Press **Next**.
 
-	![](./image/FileServerUserGuide/image111.png)
+![](./image/FileServerUserGuide/image111.png)
 
 11.	Press **Next**.
 
-	![](./image/FileServerUserGuide/image112.png)
+![](./image/FileServerUserGuide/image112.png)
 
 12.	Press **Finish**.
 
-	![](./image/FileServerUserGuide/image113.png)
+![](./image/FileServerUserGuide/image113.png)
 
 13. Repeat steps 5-12 to format the other two disks.
 
@@ -1671,15 +1671,15 @@ This section describes detailed setup steps on a Windows platform.
 
 2.	In **Server Roles** -&gt; **File And Storage Services**, select **File Server**, **File Server Resource Manager**, **File Server VSS Agent Service**.
 
-	![](./image/FileServerUserGuide/image114.png)
+![](./image/FileServerUserGuide/image114.png)
 
 3.	In **Features** tab, select **Failover Clustering**.
 
-	![](./image/FileServerUserGuide/image115.png)
+![](./image/FileServerUserGuide/image115.png)
 
 4.	Click **Add Features** when prompt to install the **Failover Clustering Tools**.
 
-	![](./image/FileServerUserGuide/image116.png)
+![](./image/FileServerUserGuide/image116.png)
 
 5.	Click **Install** in the **Confirmation** tab to complete the wizard.
 
@@ -1694,23 +1694,23 @@ This section describes detailed setup steps on a Windows platform.
 
 >	&emsp;&emsp;Prior to creating the cluster, the shared storage needs to be created and added to the failover cluster nodes. For more information about how to do this, please see [5.3.11. Setup SAN Storage Server](#5.3.11)
 
-	![](./image/FileServerUserGuide/image117.png)
+![](./image/FileServerUserGuide/image117.png)
 
 4.	Type the computer name of failover cluster nodes.
 
-	![](./image/FileServerUserGuide/image118.png)
+![](./image/FileServerUserGuide/image118.png)
 
 5.	(Optional) Select **Yes** if you want do cluster configuration validation tests. For simplicity, you can select **No** to skip this step.
 
-	![](./image/FileServerUserGuide/image119.png)
+![](./image/FileServerUserGuide/image119.png)
 
 6.	Specify the cluster name as `Cluster01` and IP addresses of the cluster if the cluster nodes are using static IP addresses in a subnet  (e.g. `192.168.1.100`, and `192.168.2.100`). You could ignore specifying the IP addresses in the subnet which are used for cluster internal traffic.
 
-	![](./image/FileServerUserGuide/image120.png)
+![](./image/FileServerUserGuide/image120.png)
 
-	![](./image/FileServerUserGuide/image121.png)
+![](./image/FileServerUserGuide/image121.png)
 
-	![](./image/FileServerUserGuide/image122.png)
+![](./image/FileServerUserGuide/image122.png)
 
 7.	Press **Finish**.
 
@@ -1718,35 +1718,35 @@ This section describes detailed setup steps on a Windows platform.
 
 1.	In **Failover Cluster Manager** from either failover cluster node (i.e. `Node01` and `Node02`), right click on **Roles**, and select **Configure Role...**
 
-	![](./image/FileServerUserGuide/image123.png)
+![](./image/FileServerUserGuide/image123.png)
 
-	![](./image/FileServerUserGuide/image124.png)
+![](./image/FileServerUserGuide/image124.png)
 
 2.	Select **File Server for general use**.
 
-	![](./image/FileServerUserGuide/image125.png)
+![](./image/FileServerUserGuide/image125.png)
 
 3.	Specify the access point name as `GeneralFS` and IP addresses of the cluster if the cluster nodes are using static IP addresses in a subnet (e.g. `192.168.1.200`, `192.168.2.200`).
 
-	![](./image/FileServerUserGuide/image126.png)
+![](./image/FileServerUserGuide/image126.png)
 
 4.	Select a disk for the file server consumption.
 
-	![](./image/FileServerUserGuide/image127.png)
+![](./image/FileServerUserGuide/image127.png)
 
 5.	Click **Next** in following pages, and then **Finish** to complete the wizard.
 
-	![](./image/FileServerUserGuide/image128.png)
+![](./image/FileServerUserGuide/image128.png)
 
 6.	Repeat steps 1-5 with the following differences:
 
 	-	In step 2, select **Scale-Out File Server for application data** to create file server for scale-out application data.
 
-	![](./image/FileServerUserGuide/image209.png)
+![](./image/FileServerUserGuide/image209.png)
 
 	-	In step 3, specify the access point name as `ScaleOutFS`.
 
-	![](./image/FileServerUserGuide/image129.png)	
+![](./image/FileServerUserGuide/image129.png)	
 
 ##### <a name="5.3.12.5"/> 5.3.12.5. Add Scale-out Share volume
 
@@ -1754,7 +1754,7 @@ This section describes detailed setup steps on a Windows platform.
 
 2.	Right click the Cluster Disk, and select **Add to Cluster Shared Volumes** to create a file share on the file server for scale-out application data.
 
-	![](./image/FileServerUserGuide/image141.png)
+![](./image/FileServerUserGuide/image141.png)
 
 #####<a name="5.3.12.6"/> 5.3.12.6. Create file share for cluster
 
@@ -1762,41 +1762,41 @@ This section describes detailed setup steps on a Windows platform.
 
 2.	Right click the File Server item, and select **Add Shared Folder** to create a file share on file server for general use.
 
-	![](./image/FileServerUserGuide/image130.png)
+![](./image/FileServerUserGuide/image130.png)
 
 3.	Select **SMB Share – Quick**.
 
-	![](./image/FileServerUserGuide/image131.png)
+![](./image/FileServerUserGuide/image131.png)
 
 4.	Select **Select by volume**.
 
-	![](./image/FileServerUserGuide/image132.png)
+![](./image/FileServerUserGuide/image132.png)
 
 5.	Specify the share name as `SMBClustered`.
 
-	![](./image/FileServerUserGuide/image133.png)
+![](./image/FileServerUserGuide/image133.png)
 
 6.	Check **Enable continuous availability** and **Allow caching of share** in **Other Settings** tab.
 
-	![](./image/FileServerUserGuide/image134.png)
+![](./image/FileServerUserGuide/image134.png)
 
 7.	Grant **Full Control** to the account that will be used to access the file share.
 
-	![](./image/FileServerUserGuide/image135.png)
+![](./image/FileServerUserGuide/image135.png)
 
-	![](./image/FileServerUserGuide/image136.png)
+![](./image/FileServerUserGuide/image136.png)
 
-	![](./image/FileServerUserGuide/image137.png)
+![](./image/FileServerUserGuide/image137.png)
 
-	![](./image/FileServerUserGuide/image138.png)
+![](./image/FileServerUserGuide/image138.png)
 
-	![](./image/FileServerUserGuide/image139.png)
+![](./image/FileServerUserGuide/image139.png)
 
-	![](./image/FileServerUserGuide/image140.png)
+![](./image/FileServerUserGuide/image140.png)
 
 8.	Repeat steps 1-7 for the other File Server item (e.g. `ScaleOutFS`).
 
-	![](./image/FileServerUserGuide/image167.png)
+![](./image/FileServerUserGuide/image167.png)
 
 #####<a name="5.3.12.7"/> 5.3.12.7. Create file share with Oplock Force Level 2 enabled for cluster 
 
@@ -1855,17 +1855,17 @@ This section describes detailed setup steps on a Windows platform.
 
 3.	If the operating system of the SUT is a Windows client SKU, you need to grant the **Guest** user "log on" access right as the following:
 
-	-	Open the **Group Policy Management Editor**. To do so, click **Start**, type `gpedit.msc`, and then press **Enter**.
+	-	Open the **Group Policy Management Editor**. To do so, click **Start**, type `gpedit.msc`, and then press **Enter**.
 
-	-	If the **User Account Control** dialog box appears, confirm that the action it displays is what you want, and then click **Continue**.
+	-	If the **User Account Control** dialog box appears, confirm that the action it displays is what you want, and then click **Continue**.
 
-	-	In the navigation pane, navigate to **Computer Configuration** -&gt; **Windows Settings** -&gt; **Security Settings** -&gt; **Local Policies** -&gt; **User Rights Assignment**.
+	-	In the navigation pane, navigate to **Computer Configuration** -&gt; **Windows Settings** -&gt; **Security Settings** -&gt; **Local Policies** -&gt; **User Rights Assignment**.
 
 	-	In the details pane, double-click **Deny log on locally** or **Deny access to this computer from the network**.
 
-	-	Select the user or group account you want to remove, and then click **Remove**.
+	-	Select the user or group account you want to remove, and then click **Remove**.
 
-	-	Click **OK** to save your changes to the GPO.
+	-	Click **OK** to save your changes to the GPO.
 
 	-	Users that are currently logged on must log off and back on to make the changed GPO settings take effect.
 
@@ -1910,19 +1910,19 @@ For example, if we want to create a virtual hard disk named `rsvd.vhdx`.
 
 	-	Choose **VHDX** for **Disk Format**.
 
-	![](./image/FileServerUserGuide/image142.png)
+![](./image/FileServerUserGuide/image142.png)
 
 	-	Choose **Dynamically expanding** for **Disk Type**.
 
-	![](./image/FileServerUserGuide/image143.png)
+![](./image/FileServerUserGuide/image143.png)
 
 	-	Type the name of the virtual hard disk file in the **Name** field.
 
-	![](./image/FileServerUserGuide/image144.png)
+![](./image/FileServerUserGuide/image144.png)
 
 	-	Type `1` for the **Size** field. And click **Finish** to create the virtual disk file.
 
-	![](./image/FileServerUserGuide/image145.png)
+![](./image/FileServerUserGuide/image145.png)
 
 ####<a name="5.3.20"/> 5.3.20. Create the virtual hard disk set file
 
@@ -1943,19 +1943,19 @@ For example, if we want to create a virtual hard disk set named `rsvd.vhds`.
 
 	-	Choose **VHD Set** for **Disk Format**.
 
-	![](./image/FileServerUserGuide/image146.png)
+![](./image/FileServerUserGuide/image146.png)
 
-	![](./image/FileServerUserGuide/image147.png)
+![](./image/FileServerUserGuide/image147.png)
 	
 	-	Choose **Fixed size** for **Disk Type**.
 
 	-	Type the name of the virtual hard disk set file in the **Name** field.
 
-	![](./image/FileServerUserGuide/image148.png)
+![](./image/FileServerUserGuide/image148.png)
 
 	-	Type `1` for **Size** field. And click **Finish** to create the virtual disk file.
 
-	![](./image/FileServerUserGuide/image149.png)
+![](./image/FileServerUserGuide/image149.png)
 
 ####<a name="5.3.21"/> 5.3.21. Modify the Signing configuration
 
@@ -2006,7 +2006,7 @@ To start the console window with Administrator privilege.
 
 1.	Click **Start**, and type `cmd`. Then right click **Command Prompt**, and select **Run as Administrator**.
 
-	![](./image/FileServerUserGuide/image178.png)
+![](./image/FileServerUserGuide/image178.png)
 
 ##<a name="6"/> 6. Installed Files and Folders
 
@@ -2044,19 +2044,19 @@ You can follow the steps below to configure your test suite:
 
 3.	In the **Select Test Suite** tab, selected the test suite you want to configure, and click **Configure Wizard**.
 
-	![](./image/FileServerUserGuide/image150.png)
+![](./image/FileServerUserGuide/image150.png)
 
 4.  In the **Test Suite Introduction** tab, general information about the test suite is provided. Click **Deployment Guide**.
 
-	![](./image/FileServerUserGuide/image151.png)
+![](./image/FileServerUserGuide/image151.png)
 
 5.  In the **Test Environment** page, information about the test environment is provided. Click **Next**.
 
-	![](./image/FileServerUserGuide/image152.png)
+![](./image/FileServerUserGuide/image152.png)
 
 6.  In the **Configure Method** tab, select a method for configuration. **Protocol Test Manager** supports three ways of configuration, namely **Auto-Detection**, **Manual Configuration** and **Load Profile**.
 
-	![](./image/FileServerUserGuide/image153.png)
+![](./image/FileServerUserGuide/image153.png)
 
 	-	Configure the test suite by **Auto-Detection**:
 
@@ -2066,7 +2066,7 @@ You can follow the steps below to configure your test suite:
 
 		-	Click **Detect**. If your SUT is in **WORKGROUP** environment, set the **Domain Name** field to the same value as **Target SUT**.
 
-		![](./image/FileServerUserGuide/image154.png)
+![](./image/FileServerUserGuide/image154.png)
 
 		-   After detection has been finished, click **Next** to check the **Detection Result**.
 
@@ -2074,11 +2074,11 @@ You can follow the steps below to configure your test suite:
 
 		-	Click **Next**.
 
-		![](./image/FileServerUserGuide/image155.png)
+![](./image/FileServerUserGuide/image155.png)
 
 		-   In the **Filter Test Cases** tab, the test cases are automatically selected by the detection results in the previous step. If detection result shows that your SUT is not supporting some feature, the feature name will become italic. You can also edit the selection on demand.
 
-		![](./image/FileServerUserGuide/image156.png)
+![](./image/FileServerUserGuide/image156.png)
 
 	-	Configure the test suite **Manually**:
 		
@@ -2086,7 +2086,7 @@ You can follow the steps below to configure your test suite:
 		
 		-   In the **Filter Test Cases** tab, select the test cases that you want to run.
 
-		![](./image/FileServerUserGuide/image157.png)
+![](./image/FileServerUserGuide/image157.png)
 
 	-	Configure the test suite by **Load Profile**:
 		
@@ -2094,19 +2094,19 @@ You can follow the steps below to configure your test suite:
 		
 		-   Click **Load Profile**, select an existing profile and navigate directly to the **Filter Test Cases** tab.
 
-		![](./image/FileServerUserGuide/image158.png)
+![](./image/FileServerUserGuide/image158.png)
 
 		-	In the **Filter Test Cases** tab, the checked cases are read from the **Profile**. You can also edit the selection on demand.
 
-		![](./image/FileServerUserGuide/image159.png)
+![](./image/FileServerUserGuide/image159.png)
 
 7.  In the **Configure Test Cases** tab, verify the default property values set according to the detection result. You can still edit the values on demand. Click **Next** when everything looks fine to you.
 
-	![](./image/FileServerUserGuide/image160.png)
+![](./image/FileServerUserGuide/image160.png)
 
 8.  In the **Configure Adapter** tab, choose an **SUT control adapter** type. Click **Next**.
 
-	![](./image/FileServerUserGuide/image161.png)
+![](./image/FileServerUserGuide/image161.png)
 
 9.  In the **Run Selected Test Cases** tab, there are several ways to run test cases:
 
@@ -2120,21 +2120,21 @@ You can follow the steps below to configure your test suite:
 
 	>	&emsp;&emsp;You can drag the seperator between the case list and the log to adjust the width of the window.
 
-	![](./image/FileServerUserGuide/image162.png)
+![](./image/FileServerUserGuide/image162.png)
 
 	>	![](./image/FileServerUserGuide/image1.png)Note
 
 	>	&emsp;&emsp;You can right-click on test case treeview, and click **Uncheck All** to uncheck all the selected test cases.
 
-	![](./image/FileServerUserGuide/image165.png)
+![](./image/FileServerUserGuide/image165.png)
 
 10.	After the test execution completes, click the hyperlink at the upper-right corner to open the **Result** folder of the test suite run.
 
-	![](./image/FileServerUserGuide/image163.png)
+![](./image/FileServerUserGuide/image163.png)
 
 11. After the test execution completes, click the **Export/Import** menu and select **Save Profile** to save the selected test cases of the previous run and all your configurations.
 
-	![](./image/FileServerUserGuide/image164.png)
+![](./image/FileServerUserGuide/image164.png)
 
 12.	Protocol Test Manager has a **command line interface (ptmcli.exe)** which can be used for automation test run.
 
