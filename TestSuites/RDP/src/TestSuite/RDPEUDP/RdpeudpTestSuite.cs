@@ -760,26 +760,26 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             if ((synPacket.SynDataEx == null) ^ ((synPacket.fecHeader.uFlags & RDPUDP_FLAG.RDPUDP_FLAG_SYNEX) == 0))
             {
                 this.Site.Assert.Fail("Section 3.1.5.1.1: The RDPUDP_FLAG_SYNEX flag MUST be set only when the RDPUDP_SYNDATAEX_PAYLOAD structure is included. Section 3.1.5.1.1: The RDPUDP_SYNEX_PAYLOAD structure MUST be appended to the UDP datagram if the RDPUDP_FLAG_SYNEX flag is set in uFlags.");
-            }
-           
-            //Section 3.1.5.1.1: The RDPUDP_VERSION_INFO_VALID flag MUST be set only if the structure contains a valid RDP-UDP protocol version.
-            if (synPacket.SynDataEx.Value.uSynExFlags.HasFlag(uSynExFlags_Values.RDPUDP_VERSION_INFO_VALID) && ((int)synPacket.SynDataEx.Value.uUdpVer & 0xfffc) != 0)
-            {
-                this.Site.Assert.Fail("Section 3.1.5.1.1: The RDPUDP_VERSION_INFO_VALID flag MUST be set only if the structure contains a valid RDP-UDP protocol version");
-            }
+            }           
             
             //Section 3.1.5.1.1: Not appending RDPUDP_SYNDATAEX_PAYLOAD structure implies that RDPUDP_PROTOCOL_VERSION_1 is the highest protocol version supported. 
             if (synPacket.SynDataEx == null)
-            {
-                this.Site.Assert.AreEqual<uUdpVer_Values>(uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_1, synPacket.SynDataEx.Value.uUdpVer, "Section 3.1.5.1.1: Not appending RDPUDP_SYNDATAEX_PAYLOAD structure implies that RDPUDP_PROTOCOL_VERSION_1 is the highest protocol version supported.");
+            {                
                 this.clientUUdpVer = uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_1;
                 this.clientRdpudpVerfionInfoValidFlag = null;
             }
             else
             {                
                 this.clientUUdpVer = synPacket.SynDataEx.Value.uUdpVer;
-                this.clientRdpudpVerfionInfoValidFlag = synPacket.SynDataEx.Value.uSynExFlags;                
-            }    
+                this.clientRdpudpVerfionInfoValidFlag = synPacket.SynDataEx.Value.uSynExFlags;
+
+                //Section 3.1.5.1.1: The RDPUDP_VERSION_INFO_VALID flag MUST be set only if the structure contains a valid RDP-UDP protocol version.
+                if (synPacket.SynDataEx.Value.uSynExFlags.HasFlag(uSynExFlags_Values.RDPUDP_VERSION_INFO_VALID) && ((int)synPacket.SynDataEx.Value.uUdpVer & 0xfffc) != 0)
+                {
+                    this.Site.Assert.Fail("Section 3.1.5.1.1: The RDPUDP_VERSION_INFO_VALID flag MUST be set only if the structure contains a valid RDP-UDP protocol version");
+                }
+
+            }
         }
 
         /// <summary>
