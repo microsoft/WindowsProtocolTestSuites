@@ -341,6 +341,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="bSupportEGFX">Indicates the server supports MS-RDPEGFX</param>
         /// <param name="bSupportRestrictedAdminMode">Indicates the server supports Restricted admin mode</param>
         /// <param name="bReservedSet">Indicates the value of NEGRSP_FLAG_RESERVED in the flags field of RDP Negotiation Response</param>
+        /// <param name="bSupportRestrictedAuthenticationMode">Indicates the server supports Restricted Authentication mode</param>
         public void Server_X_224_Connection_Confirm(selectedProtocols_Values protocol, bool bSupportExtClientData, bool setRdpNegData, NegativeType invalidType, bool bSupportEGFX = false, bool bSupportRestrictedAdminMode = false, bool bReservedSet = false, bool bSupportRestrictedAuthenticationMode = false)
         {
             //ExpectPacket<Client_X_224_Connection_Request_Pdu>(sessionContext, timeout);

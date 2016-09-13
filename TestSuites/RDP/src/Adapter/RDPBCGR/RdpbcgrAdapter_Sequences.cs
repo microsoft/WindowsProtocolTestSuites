@@ -191,6 +191,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #endregion
         }
 
+
        /// <summary>
        /// Start a server Initiated disconnection sequence
        /// </summary>

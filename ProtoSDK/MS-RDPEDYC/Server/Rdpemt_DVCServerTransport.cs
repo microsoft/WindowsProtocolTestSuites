@@ -193,6 +193,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
                     }
                 }
             }
+            else
+            {
+                rdpeudpServer.Start();
+            }
         }
 
         #endregion Priate Methods

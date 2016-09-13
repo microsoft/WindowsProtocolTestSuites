@@ -143,11 +143,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             return new SoftSyncReqDvcPDU(length, flags, numberOfTunnels, channelList);
         }
 
-        public SoftSyncResDvcPdu CreateSoftSyncRespPdu()
-        {
-            return new SoftSyncResDvcPdu();
-        }
-
         public CloseDvcPdu CreateCloseDvcPdu(uint channelId)
         {
             return new CloseDvcPdu(channelId);
@@ -219,7 +214,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             regsiteredPDUs.Add(new SoftSyncResDvcPdu());
             regsiteredPDUs.Add(new CloseDvcPdu());
             regsiteredPDUs.Add(new UnknownDynamicVCPDU());
-            
         }
     }
 

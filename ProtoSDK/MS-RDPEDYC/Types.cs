@@ -947,10 +947,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
     {
         public uint Length { get; set; }
 
-        public DataFirstCompressedDvcPdu()
-        {
-
-        }
+        public DataFirstCompressedDvcPdu(){ }
 
         public DataFirstCompressedDvcPdu(uint channelId, uint length, byte[] data)
         {
@@ -994,10 +991,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
     /// </summary>
     public class DataCompressedDvcPdu : DataDvcBasePdu
     {
-        public DataCompressedDvcPdu()
-        {
-
-        }
+        public DataCompressedDvcPdu(){ }
 
         public DataCompressedDvcPdu(uint channelId, byte[] data)
         {
@@ -1090,9 +1084,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             }
         }
 
-        public SoftSyncReqDvcPDU()
-        {
-        }
+        public SoftSyncReqDvcPDU(){ }
 
         /// <summary>
         /// Constructor
@@ -1296,7 +1288,5 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         }
     }
     #endregion 
-
-
     #endregion
 }

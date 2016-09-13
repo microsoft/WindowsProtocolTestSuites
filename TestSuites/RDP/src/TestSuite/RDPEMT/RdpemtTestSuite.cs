@@ -240,6 +240,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         }
 
         #region Soft-Sync connection
+        /// <summary>
+        /// Establish EMT connection and soft sync.
+        /// </summary>
         private void StartSoftSyncConnection(TransportMode mode)
         {
             StartRDPConnection(false, true);

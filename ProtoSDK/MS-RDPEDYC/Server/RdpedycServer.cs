@@ -145,15 +145,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// <param name="transportType">Transport type</param>
         /// <param name="receiveCallBack">Callback method called when received data</param>
         /// <returns>DVC created</returns>
-        public DynamicVirtualChannel CreateChannel(TimeSpan timeout, ushort priority, string channelName, DynamicVC_TransportType transportType, ReceiveData receiveCallBack = null)
+        public DynamicVirtualChannel CreateChannel(TimeSpan timeout, ushort priority, string channelName, DynamicVC_TransportType transportType, ReceiveData receiveCallBack = null, uint? channelId = null)
         {
             if(!transportDic.ContainsKey(transportType))
             {
                 throw new InvalidOperationException("Not create DVC transport:" + transportType);
             }
 
-            UInt32 channelId = DynamicVirtualChannel.NewChannelId();
-            DynamicVirtualChannel channel = new DynamicVirtualChannel(channelId, channelName, priority, transportDic[transportType]);
+            if(channelId == null)
+                channelId = DynamicVirtualChannel.NewChannelId();
+            DynamicVirtualChannel channel = new DynamicVirtualChannel((UInt32)channelId, channelName, priority, transportDic[transportType]);
             
             if (receiveCallBack != null)
             {
@@ -161,10 +162,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
                 channel.Received += receiveCallBack;
             }
 
-            channelDicbyId.Add(channelId, channel);
+            channelDicbyId.Add((UInt32)channelId, channel);
 
-            this.SendDVCCreateRequestPDU(priority, channelId, channelName, transportType);
-            CreateRespDvcPdu createResp = this.ExpectDVCCreateResponsePDU(timeout, channelId, transportType);
+            this.SendDVCCreateRequestPDU(priority, (UInt32)channelId, channelName, transportType);
+            CreateRespDvcPdu createResp = this.ExpectDVCCreateResponsePDU(timeout, (UInt32)channelId, transportType);
             if (createResp == null)
             {
                 throw new System.IO.IOException("Creation of channel: " + channelName +" failed, cannot receive a Create Response PDU");
@@ -178,7 +179,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             return channel;
         }
 
-        public void SoftSync(TimeSpan timeout, SoftSyncReqFlags_Value flags, ushort numberOfTunnels, SoftSyncChannelList[] channelList)
+        /// <summary>
+        /// Send Soft Sync request and wait for Soft Sync response.
+        /// </summary>
+        /// <param name="timeout">wait time</param>
+        /// <param name="flags">specifies the contents of this PDU</param>
+        /// <param name="numberOfTunnels">tunnel numbers</param>
+        /// <param name="channelList">DYNVC_SOFT_SYNC_CHANNEL_LISTs</param>
+        public void SoftSync(TimeSpan timeout, SoftSyncReqFlags_Value flags, ushort numberOfTunnels, SoftSyncChannelList[] channelList = null)
         {
             this.SendSoftSyncRequestPDU(flags, numberOfTunnels, channelList);
             SoftSyncResDvcPdu pdu = this.ExpectSoftSyncResponsePDU(timeout);
@@ -188,22 +196,34 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             }
         }
 
-        public void SoftSync(TimeSpan timeout, List<uint> DVCIds = null)
+        /// <summary>
+        /// Send Soft Sync requst.
+        /// </summary>
+        /// <param name="timeout">wait time</param>
+        /// <param name="channelListDic">TunnelType value & Channel Ids</param>
+        public void SoftSync(TimeSpan timeout, Dictionary<TunnelType_Value, List<uint>> channelListDic = null)
         {
             SoftSyncReqFlags_Value flags = SoftSyncReqFlags_Value.SOFT_SYNC_TCP_FLUSHED;
-             if(DVCIds == null)
-             {
-                 SoftSync(timeout, flags, 0, null);
-             }
-             else
-             {
-                 flags |= SoftSyncReqFlags_Value.SOFT_SYNC_CHANNEL_LIST_PRESENT;
-                 TunnelType_Value tunnelType = TunnelType_Value.TUNNELTYPE_UDPFECR;
-                 SoftSyncChannelList channel = new SoftSyncChannelList(tunnelType, 1, DVCIds);
-                 SoftSyncChannelList[] channelList = new SoftSyncChannelList[] { channel };
-                 SoftSync(timeout, flags, 1, channelList);
-             }
+            if(channelListDic != null)
+            {
+                flags |= SoftSyncReqFlags_Value.SOFT_SYNC_CHANNEL_LIST_PRESENT;
+            }
+
+            List<SoftSyncChannelList> channelList = new List<SoftSyncChannelList>();
+            int numberOfTunnels = 0;
+            if(channelListDic != null)
+            {
+                foreach (KeyValuePair<TunnelType_Value, List<uint>> kvp in channelListDic)
+                {
+                    SoftSyncChannelList channel = new SoftSyncChannelList(kvp.Key, (ushort)kvp.Value.Count, kvp.Value);
+                    channelList.Add(channel);
+                }
+                numberOfTunnels = channelListDic.Count;
+            }
+
+            SoftSync(timeout, flags, (ushort)numberOfTunnels, channelList.ToArray());
         }
+
         /// <summary>
         /// Close a DVC
         /// </summary>
@@ -253,13 +273,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         #endregion Public Methods
 
         #region Private Methods
-
+        /// <summary>
+        /// Send DYNVC_SOFT_SYNC_REQUEST PDU.
+        /// </summary>
         private void SendSoftSyncRequestPDU(SoftSyncReqFlags_Value flags, ushort numberOfTunnels = 0, SoftSyncChannelList[] channelList = null, DynamicVC_TransportType transportType = DynamicVC_TransportType.RDP_TCP)
         {
             SoftSyncReqDvcPDU pdu = pduBuilder.CreateSoftSyncReqPdu(flags, numberOfTunnels, channelList);
             this.Send(pdu, transportType);
         }
 
+        /// <summary>
+        /// Expect a DYNVC_SOFT_SYNC_RESPONSE PDU.
+        /// </summary>
         private SoftSyncResDvcPdu ExpectSoftSyncResponsePDU(TimeSpan timeout, DynamicVC_TransportType transportType = DynamicVC_TransportType.RDP_TCP)
         {
             DateTime endTime = DateTime.Now + timeout;

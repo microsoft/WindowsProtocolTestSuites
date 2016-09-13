@@ -76,11 +76,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                 rdpedycServer.Dispose();
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to close all RDP connections for clean up.");
-            //int iResult = this.sutControlAdapter.TriggerClientDisconnectAll();
-            //this.TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
             StopRDPConnection();
-            
-
             this.TestSite.Log.Add(LogEntryKind.Comment, "Stop RDP listening.");
             this.rdpbcgrAdapter.StopRDPListening();
 
@@ -104,7 +100,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <summary>
         /// Start RDP connection
         /// </summary>
-        private void StartRDPConnection()
+        private void StartRDPConnection(bool isSoftSync = false)
         {
 
             #region Trigger client to connect
@@ -125,7 +121,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             // Waiting for the RDP connection sequence.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Establishing RDP connection.");
-            this.rdpbcgrAdapter.EstablishRDPConnection(selectedProtocol, enMethod, enLevel, true, false, rdpServerVersion, false, true);
+
+            if(isSoftSync)
+                this.rdpbcgrAdapter.EstablishRDPConnection(selectedProtocol, enMethod, enLevel, true, false, rdpServerVersion, true, true, true, true);
+            else
+                this.rdpbcgrAdapter.EstablishRDPConnection(selectedProtocol, enMethod, enLevel, true, false, rdpServerVersion, false, true);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server Save Session Info PDU to SUT to notify user has logged on.");
             this.rdpbcgrAdapter.ServerSaveSessionInfo(LogonNotificationType.UserLoggedOn, ErrorNotificationType_Values.LOGON_FAILED_OTHER);
@@ -135,6 +135,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpedycServer = new RdpedycServer(this.rdpbcgrAdapter.ServerStack, this.rdpbcgrAdapter.SessionContext);
             rdpegfxAdapter.AttachRdpbcgrAdapter(this.rdpbcgrAdapter);
             rdpedycServer.ExchangeCapabilities(waitTime);
+            
         }
 
         /// <summary>
@@ -214,13 +215,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// Method to do capability exchange with RDP client.
         /// This function is recommended to be called by other test cases to do capability exchange.
         /// </summary>
-        private void RDPEGFX_CapabilityExchange()
+        private void RDPEGFX_CapabilityExchange(DynamicVC_TransportType transportType = DynamicVC_TransportType.RDP_TCP, bool isSoftSync = false)
         {
             this.TestSite.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
-            StartRDPConnection();
+            StartRDPConnection(isSoftSync);
 
             this.TestSite.Log.Add(LogEntryKind.Debug, "Creating dynamic virtual channels for MS-RDPEGFX ...");
-            bool bProtocolSupported = this.rdpegfxAdapter.ProtocolInitialize(this.rdpedycServer);
+            bool bProtocolSupported = isSoftSync? InitializeForSoftSync(transportType) : this.rdpegfxAdapter.ProtocolInitialize(this.rdpedycServer, transportType);
             TestSite.Assert.IsTrue(bProtocolSupported, "Client should support this protocol.");
 
             this.TestSite.Log.Add(LogEntryKind.Debug, "Expecting capability advertise from client.");
@@ -265,6 +266,43 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                 }
             }
             this.rdpegfxAdapter.SendCapabilityConfirm(capFlag, version);
+        }
+
+        /// <summary>
+        /// Create graphic dynamic virtual channel over UDP transport.
+        /// </summary>
+        private bool InitializeForSoftSync(DynamicVC_TransportType transportType = DynamicVC_TransportType.RDP_UDP_Reliable)
+        {
+            uint? channelId = null;
+
+            if (!rdpedycServer.IsMultipleTransportCreated(transportType))
+            {
+                rdpedycServer.CreateMultipleTransport(transportType);
+
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Expect for Client Initiate Multitransport PDU to indicate that the client was able to successfully complete the multitransport initiation request.");
+                rdpbcgrAdapter.WaitForPacket<Client_Initiate_Multitransport_Response_PDU>(waitTime);
+                TestSite.Assert.IsTrue(
+                    rdpbcgrAdapter.SessionContext.ClientInitiateMultitransportResponsePDU.hrResponse == HrResponse_Value.S_OK,
+                    "hrResponse field should be {0}", HrResponse_Value.S_OK);
+
+                channelId = DynamicVirtualChannel.NewChannelId();
+
+                List<uint> list = new List<uint>();
+                list.Add((uint)channelId);
+
+                Dictionary<TunnelType_Value, List<uint>> channelListDic = new Dictionary<TunnelType_Value, List<uint>>();
+
+                TunnelType_Value tunnelType = TunnelType_Value.TUNNELTYPE_UDPFECR;
+                if (transportType == DynamicVC_TransportType.RDP_UDP_Lossy)
+                {
+                    tunnelType = TunnelType_Value.TUNNELTYPE_UDPFECL;
+                }
+                channelListDic.Add(tunnelType, list);
+
+                rdpedycServer.SoftSync(waitTime, channelListDic);
+
+            }
+            return this.rdpegfxAdapter.CreateEGFXDvc(rdpedycServer, transportType, channelId);
         }
 
         /// <summary>
