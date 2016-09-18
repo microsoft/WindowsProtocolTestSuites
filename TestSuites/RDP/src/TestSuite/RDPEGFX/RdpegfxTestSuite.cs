@@ -251,7 +251,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                     {
                         this.isH264AVC420Supported = true;
                     }
-                    else if (capSet.version == CapsVersions.RDPGFX_CAPVERSION_10
+                    else if (capSet.version >= CapsVersions.RDPGFX_CAPVERSION_10  //RDPGFX_CAPVERSION_10 and RDPGFX_CAPVERSION_102
                         && (flag & CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED) == 0)
                     {
                         this.isH264AVC420Supported = true;

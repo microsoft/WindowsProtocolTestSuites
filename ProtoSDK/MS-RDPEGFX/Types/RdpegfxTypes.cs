@@ -642,7 +642,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <summary>
         /// Decode this PDU from the PduMarshaler.
         /// </summary>
-        /// <param name="marshaler">This is used to encode the fields of this PDU.</param>
+        /// <param name="marshaler">This is used to decode the fields of this PDU.</param>
         public override bool Decode(PduMarshaler marshaler)
         {
             try

@@ -508,7 +508,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             // Check PDU length.
             Site.Assert.AreEqual(adv.Header.pduLength, adv.pduLen,
-                "The actual length ({0}) of Capability Advertise PDU is different from pduLength({1}) in header!", adv.pduLen, adv.Header.pduLength);
+                "The actual length ({0}) of Capability Advertise PDU is expected to be same with pduLength({1}) in header!", adv.pduLen, adv.Header.pduLength);
 
             // Check capability version, capLen, and flags.
             for (ushort index = 0; index < adv.capsSetCount; index++)
@@ -532,7 +532,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                                     capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE ||
                                     capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_THINCLIENT ||
                                     capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC420_ENABLED) ||
-                                    capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_THINCLIENT | CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC420_ENABLED));
+                                    capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_THINCLIENT | CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC420_ENABLED)||
+                                    capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED)
+                                    );
                 Site.Assert.IsTrue(validFlag, "Unknown capability flags {0}", capsFlag);
             }
 
@@ -1041,7 +1043,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             // Check PDU length
             Site.Assert.AreEqual(impOffer.Header.pduLength, impOffer.pduLen,
-                "The actual length ({0}) of Capability Advertise PDU is different from pduLength({1}) in header!", impOffer.pduLen, impOffer.Header.pduLength);
+                "The actual length ({0}) of Capability Advertise PDU is is expected to be same with pduLength({1}) in header!", impOffer.pduLen, impOffer.Header.pduLength);
 
             return true;
         }
