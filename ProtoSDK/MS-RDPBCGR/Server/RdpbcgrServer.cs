@@ -1289,21 +1289,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// 
         /// Then call SendPdu to send the packet.
         /// </summary>
-        /// <param name="clientName">The name of the client computer. This argument can be null.
-        /// If it is null, then the size field will be 0, the content field will be the same with TD.</param>
-        /// <param name="clientBuild">The build number of the client.</param>
-        /// <param name="clientDigProductId">Contains a value that uniquely identifies the client. 
-        /// This argument can be null. If it is null, then the size field will be 0, the content field will be the
-        /// same with TD.</param>
+        /// <param name="sessionContext">Server session context</param>
         /// <param name="encryptionMethod">Cryptographic methods supported by the client and used in conjunction 
         /// with Standard RDP Security.</param>
-        /// <param name="virtualChannels">The static virtual channels to be requested with their option flag.
-        /// This argument can be null. If it is null, then no channel will join.</param>
+        /// <param name="encryptionLevel">Encryption Level</param>
+        /// <param name="serverCertificate">Certificate of server</param>
+        /// <param name="serverCerLen">Length of server certificate</param>
+        /// <param name="multiTransportTypeFlags">Flags of Multitransport Channel Data</param>
         /// <param name="hasEarlyCapabilityFlags">Indicates the existing of the earlyCapabilityFlags</param>
         /// <param name="earlyCapabilityFlagsValue">The value of earlyCapabilityFlags</param>
         /// <param name="mcsChannelId_Net">MCSChannelId value for Server Network Data</param>
         /// <param name="mcsChannelId_MSGChannel">MCSChannelId value for Server Message Channel Data</param>
-        /// <param name="isSoftSyncSupported">Indicates soft sync is supported</param>
         /// <returns>MCS Connect Initial PDU.</returns>
         public Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response
             CreateMCSConnectResponsePduWithGCCConferenceCreateResponsePdu(
@@ -1312,12 +1308,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             EncryptionLevel encryptionLevel,
             SERVER_CERTIFICATE serverCertificate,
             int serverCerLen,
-            bool isMultitransportSupported = false,
+            MULTITRANSPORT_TYPE_FLAGS multiTransportTypeFlags = MULTITRANSPORT_TYPE_FLAGS.None,
             bool hasEarlyCapabilityFlags = false,
             SC_earlyCapabilityFlags_Values earlyCapabilityFlagsValue = SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED,
             UInt16 mcsChannelId_Net = ConstValue.IO_CHANNEL_ID,
-            UInt16 mcsChannelId_MSGChannel = ConstValue.MCS_MESSAGE_CHANNEL_ID,
-            bool isSoftSyncSupported = false)
+            UInt16 mcsChannelId_MSGChannel = ConstValue.MCS_MESSAGE_CHANNEL_ID)
         {
             if (sessionContext == null)
             {
@@ -1457,15 +1452,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             TS_UD_SC_MULTITRANSPORT serverMultitransportChannelData = new TS_UD_SC_MULTITRANSPORT();
             serverMultitransportChannelData.header.type = TS_UD_HEADER_type_Values.SC_MULTITRANSPORT;
-            if(isMultitransportSupported)
-            {
-                serverMultitransportChannelData.flags = MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECL | MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECR | MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDP_PREFERRED;
-                if(isSoftSyncSupported)
-                    serverMultitransportChannelData.flags |= MULTITRANSPORT_TYPE_FLAGS.SOFTSYNC_TCP_TO_UDP;
-            } 
-
-            else
-                serverMultitransportChannelData.flags = 0;
+            serverMultitransportChannelData.flags = multiTransportTypeFlags;
             serverMultitransportChannelData.header.length = 8;
 
             #endregion

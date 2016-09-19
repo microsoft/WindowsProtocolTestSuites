@@ -122,10 +122,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             // Waiting for the RDP connection sequence.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Establishing RDP connection.");
 
-            if(isSoftSync)
-                this.rdpbcgrAdapter.EstablishRDPConnection(selectedProtocol, enMethod, enLevel, true, false, rdpServerVersion, true, true, true, true);
-            else
-                this.rdpbcgrAdapter.EstablishRDPConnection(selectedProtocol, enMethod, enLevel, true, false, rdpServerVersion, false, true);
+            MULTITRANSPORT_TYPE_FLAGS flags = MULTITRANSPORT_TYPE_FLAGS.None;
+            if (isSoftSync)
+            {
+                flags = MULTITRANSPORT_TYPE_FLAGS.SOFTSYNC_TCP_TO_UDP | MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECL | MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECR;
+            }
+            this.rdpbcgrAdapter.EstablishRDPConnection(selectedProtocol, enMethod, enLevel, true, false, rdpServerVersion, flags, true, isSoftSync);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server Save Session Info PDU to SUT to notify user has logged on.");
             this.rdpbcgrAdapter.ServerSaveSessionInfo(LogonNotificationType.UserLoggedOn, ErrorNotificationType_Values.LOGON_FAILED_OTHER);

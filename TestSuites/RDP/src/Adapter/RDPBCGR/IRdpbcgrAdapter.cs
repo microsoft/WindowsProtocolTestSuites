@@ -206,18 +206,16 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="earlyCapabilityFlagsValue">The value of earlyCapabilityFlags</param>
         /// <param name="mcsChannelId_Net">MCSChannelId value for Server Network Data</param>
         /// <param name="mcsChannelId_MSGChannel">MCSChannelId value for Server Message Channel Data</param>
-        /// <param name="isSoftSyncSupported">Indicates soft sync connection is supported</param>
         void Server_MCS_Connect_Response(
             EncryptionMethods enMothod, 
             EncryptionLevel enLevel, 
             TS_UD_SC_CORE_version_Values rdpVersion, 
-            NegativeType invalidType, 
-            bool isMultitransportSupported = false, 
+            NegativeType invalidType,
+            MULTITRANSPORT_TYPE_FLAGS multiTransportTypeFlags = MULTITRANSPORT_TYPE_FLAGS.None, 
             bool hasEarlyCapabilityFlags = false, 
             SC_earlyCapabilityFlags_Values earlyCapabilityFlagsValue = SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED, 
             UInt16 mcsChannelId_Net = ConstValue.IO_CHANNEL_ID, 
-            UInt16 mcsChannelId_MSGChannel = ConstValue.MCS_MESSAGE_CHANNEL_ID,
-            bool isSoftSyncSupported = false);
+            UInt16 mcsChannelId_MSGChannel = ConstValue.MCS_MESSAGE_CHANNEL_ID);
 
         /// <summary>
         /// Send MCS Attach User Confirm Pdu to client.
@@ -623,10 +621,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="isExtendedClientDataSupported">Indicates if server supports Extended Client Data Blocks.</param>
         /// <param name="expectAutoReconnect">Indicates if expect an Auto-Connect sequence.</param>
         /// <param name="rdpServerVersion">The RDP Sever version</param>
-        /// <param name="isMultitransportSupported">Whether support multitransport</param>
+        /// <param name="multiTransportTypeFlags">Flags of Multitransport Channel Data</param>
         /// <param name="supportRDPEGFX">Whether support RDPEGFX</param>
         /// <param name="supportRestrictedAdminMode">Whether support restricted admin mode</param>
-        /// <param name="isSoftSyncSupported">Indicates soft sync connection is supported</param>
         void EstablishRDPConnection(
             selectedProtocols_Values serverSelectedProtocol,
             EncryptionMethods enMethod,
@@ -634,10 +631,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             bool isExtendedClientDataSupported,
             bool expectAutoReconnect,
             TS_UD_SC_CORE_version_Values rdpServerVersion,
-            bool isMultitransportSupported = false,
+            MULTITRANSPORT_TYPE_FLAGS multiTransportTypeFlags = MULTITRANSPORT_TYPE_FLAGS.None,
             bool supportRDPEGFX = false, 
-            bool supportRestrictedAdminMode = false,
-            bool isSoftSyncSupported = false);
+            bool supportRestrictedAdminMode = false);
 
         /// <summary>
         /// Start a server Initiated disconnection sequence

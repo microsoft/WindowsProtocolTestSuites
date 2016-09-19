@@ -432,23 +432,21 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="enLevel">Server selected encryption level.</param>
         /// <param name="rdpVersion">The RDP Server version</param>
         /// <param name="invalidType">Indicates the invalid type</param>
-        /// <param name="isMultitransportSupported">Whether support Multitransport</param>
+        /// <param name="multiTransportTypeFlags">Flags of Multitransport Channel Data</param>
         /// <param name="hasEarlyCapabilityFlags">Indicates the existing of the earlyCapabilityFlags</param>
         /// <param name="earlyCapabilityFlagsValue">The value of earlyCapabilityFlags</param>
         /// <param name="mcsChannelId_Net">MCSChannelId value for Server Network Data</param>
         /// <param name="mcsChannelId_MSGChannel">MCSChannelId value for Server Message Channel Data</param>
-        /// <param name="isSoftSyncSupported">Indicates soft sync connection is supported</param>
         public void Server_MCS_Connect_Response(
             EncryptionMethods enMothod, 
             EncryptionLevel enLevel, 
             TS_UD_SC_CORE_version_Values rdpVersion, 
-            NegativeType invalidType, 
-            bool isMultitransportSupported = false, 
+            NegativeType invalidType,
+            MULTITRANSPORT_TYPE_FLAGS multiTransportTypeFlags = MULTITRANSPORT_TYPE_FLAGS.None, 
             bool hasEarlyCapabilityFlags = false, 
             SC_earlyCapabilityFlags_Values earlyCapabilityFlagsValue = SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED, 
             UInt16 mcsChannelId_Net = ConstValue.IO_CHANNEL_ID,
-            UInt16 mcsChannelId_MSGChannel = ConstValue.MCS_MESSAGE_CHANNEL_ID,
-            bool isSoftSyncSupported = false)
+            UInt16 mcsChannelId_MSGChannel = ConstValue.MCS_MESSAGE_CHANNEL_ID)
         {
             SERVER_CERTIFICATE cert = null;
             int certLen = 0;
@@ -469,12 +467,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     enLevel,
                     cert,
                     certLen,
-                    isMultitransportSupported,
+                    multiTransportTypeFlags,
                     hasEarlyCapabilityFlags,
                     earlyCapabilityFlagsValue,
                     mcsChannelId_Net,
-                    ConstValue.MCS_MESSAGE_CHANNEL_ID,
-                    isSoftSyncSupported);
+                    ConstValue.MCS_MESSAGE_CHANNEL_ID);
             connectRespPdu.mcsCrsp.gccPdu.serverCoreData.version = rdpVersion;
             connectRespPdu = new Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response_Ex(connectRespPdu, sessionContext, invalidType);
 

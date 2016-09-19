@@ -95,6 +95,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
                 rdpemtServerR.Dispose();
             if (rdpeudpServer != null && rdpeudpServer.Running)
                 rdpeudpServer.Stop();
+            if (rdpeudpSocketR != null && rdpeudpSocketR.Connected)
+                rdpeudpSocketR.Close();
+            if (rdpeudpSocketL != null && rdpeudpSocketL.Connected)
+                rdpeudpSocketL.Close();
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Stop RDP listening.");
             this.rdpbcgrAdapter.StopRDPListening();
@@ -140,6 +144,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
 
             //Waiting for the RDP connection sequence.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Establishing RDP connection.");
+            MULTITRANSPORT_TYPE_FLAGS flags = MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECL | MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECR;
+            if(isSoftSync)
+            {
+                flags |= MULTITRANSPORT_TYPE_FLAGS.SOFTSYNC_TCP_TO_UDP;
+            }
             this.rdpbcgrAdapter.EstablishRDPConnection(
                 selectedProtocol, 
                 enMethod, 
@@ -147,10 +156,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
                 true, 
                 false, 
                 rdpServerVersion, 
-                true,
+                flags,
                 false,
-                false,
-                isSoftSync);
+                false);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server Save Session Info PDU to SUT to notify user has logged on.");
             this.rdpbcgrAdapter.ServerSaveSessionInfo(LogonNotificationType.UserLoggedOn, ErrorNotificationType_Values.LOGON_FAILED_OTHER);
