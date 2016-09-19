@@ -214,6 +214,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             bindPdu.pfc_flags = pfcFlags
                 | RpceCoPfcFlags.PFC_FIRST_FRAG
                 | RpceCoPfcFlags.PFC_LAST_FRAG;
+            // test suite always sends packets in little endian
             bindPdu.packed_drep.dataRepFormat = RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII;
             bindPdu.packed_drep.reserved = 0;
             bindPdu.call_id = callId;
@@ -310,7 +311,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             alterContextPdu.rpc_vers_minor = context.RpcVersionMinor;
             alterContextPdu.PTYPE = RpcePacketType.AlterContext;
             alterContextPdu.pfc_flags = RpceUtility.GeneratePfcFlags(context, RpcePacketType.AlterContext);
-            alterContextPdu.packed_drep.dataRepFormat = context.PackedDataRepresentationFormat;
+            // test suite always sends packets in little endian
+            alterContextPdu.packed_drep.dataRepFormat = RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII;
             alterContextPdu.packed_drep.reserved = 0;
             alterContextPdu.call_id = ComputeNextCallId();
 
@@ -367,7 +369,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             auth3Pdu.rpc_vers_minor = context.RpcVersionMinor;
             auth3Pdu.PTYPE = RpcePacketType.Auth3;
             auth3Pdu.pfc_flags = RpceUtility.GeneratePfcFlags(context, RpcePacketType.Auth3);
-            auth3Pdu.packed_drep.dataRepFormat = context.PackedDataRepresentationFormat;
+            // test suite always sends packets in little endian
+            auth3Pdu.packed_drep.dataRepFormat = RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII;
             auth3Pdu.packed_drep.reserved = 0;
             auth3Pdu.call_id = ComputeNextCallId();
 
@@ -408,7 +411,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             requestPdu.rpc_vers_minor = context.RpcVersionMinor;
             requestPdu.PTYPE = RpcePacketType.Request;
             requestPdu.pfc_flags = RpceUtility.GeneratePfcFlags(context, RpcePacketType.Request);
-            requestPdu.packed_drep.dataRepFormat = context.PackedDataRepresentationFormat;
+            // test suite always sends packets in little endian
+            requestPdu.packed_drep.dataRepFormat = RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII;
             requestPdu.packed_drep.reserved = 0;
             requestPdu.call_id = ComputeNextCallId();
 
@@ -452,7 +456,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             responsePdu.rpc_vers_minor = context.RpcVersionMinor;
             responsePdu.PTYPE = RpcePacketType.Response;
             responsePdu.pfc_flags = RpceUtility.GeneratePfcFlags(context, RpcePacketType.Response);
-            responsePdu.packed_drep.dataRepFormat = context.PackedDataRepresentationFormat;
+            // test suite always sends packets in little endian
+            responsePdu.packed_drep.dataRepFormat = RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII;
             responsePdu.packed_drep.reserved = 0;
             responsePdu.call_id = callId;
 
@@ -487,7 +492,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             cancelPdu.rpc_vers_minor = context.RpcVersionMinor;
             cancelPdu.PTYPE = RpcePacketType.CoCancel;
             cancelPdu.pfc_flags = RpceUtility.GeneratePfcFlags(context, RpcePacketType.CoCancel);
-            cancelPdu.packed_drep.dataRepFormat = context.PackedDataRepresentationFormat;
+            // test suite always sends packets in little endian
+            cancelPdu.packed_drep.dataRepFormat = RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII;
             cancelPdu.packed_drep.reserved = 0;
             cancelPdu.call_id = callId;
 
@@ -516,7 +522,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             orphanedPdu.rpc_vers_minor = context.RpcVersionMinor;
             orphanedPdu.PTYPE = RpcePacketType.Orphaned;
             orphanedPdu.pfc_flags = RpceUtility.GeneratePfcFlags(context, RpcePacketType.Orphaned);
-            orphanedPdu.packed_drep.dataRepFormat = context.PackedDataRepresentationFormat;
+            // test suite always sends packets in little endian
+            orphanedPdu.packed_drep.dataRepFormat = RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII;
             orphanedPdu.packed_drep.reserved = 0;
             orphanedPdu.call_id = callId;
 
