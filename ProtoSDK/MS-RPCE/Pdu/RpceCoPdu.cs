@@ -174,6 +174,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             frag_length = binaryReader.ReadUInt16();
             auth_length = binaryReader.ReadUInt16();
             call_id = binaryReader.ReadUInt32();
+
+            if (context.PackedDataRepresentationFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
+            {
+                frag_length = EndianUtility.ReverseByteOrder(frag_length);
+                auth_length = EndianUtility.ReverseByteOrder(auth_length);
+                call_id = EndianUtility.ReverseByteOrder(call_id);
+            }
         }
 
 

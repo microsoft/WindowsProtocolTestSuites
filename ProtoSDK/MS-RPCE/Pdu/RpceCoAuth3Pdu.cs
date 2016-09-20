@@ -88,6 +88,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                 binaryReader, 
                 auth_length);
             pad = binaryReader.ReadUInt32();
+
+            if (context.PackedDataRepresentationFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
+            {
+                pad = EndianUtility.ReverseByteOrder(pad);
+            }
         }
     }
 }

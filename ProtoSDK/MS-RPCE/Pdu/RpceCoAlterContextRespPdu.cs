@@ -165,8 +165,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             max_recv_frag = binaryReader.ReadUInt16();
             assoc_group_id = binaryReader.ReadUInt32();
 
+            if (context.PackedDataRepresentationFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
+            {
+                max_xmit_frag = EndianUtility.ReverseByteOrder(max_xmit_frag);
+                max_recv_frag = EndianUtility.ReverseByteOrder(max_recv_frag);
+                assoc_group_id = EndianUtility.ReverseByteOrder(assoc_group_id);
+            }
+
             sec_addr = new port_any_t();
             sec_addr.length = binaryReader.ReadUInt16();
+            if (context.PackedDataRepresentationFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
+            {
+                sec_addr.length = EndianUtility.ReverseByteOrder(sec_addr.length);
+            }
             sec_addr.port_spec = binaryReader.ReadBytes(sec_addr.length);
 
             // restore 4-octet alignment
@@ -182,8 +193,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             p_result_list.p_results = new p_result_t[p_result_list.n_results];
             for (int i = 0; i < p_result_list.n_results; i++)
             {
-                p_result_list.p_results[i].result = (p_cont_def_result_t)binaryReader.ReadUInt16();
-                p_result_list.p_results[i].reason = (p_provider_reason_t)binaryReader.ReadUInt16();
+                if (context.PackedDataRepresentationFormat == RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
+                {
+                    p_result_list.p_results[i].result = (p_cont_def_result_t)binaryReader.ReadUInt16();
+                    p_result_list.p_results[i].reason = (p_provider_reason_t)binaryReader.ReadUInt16();
+                }
+                else
+                {
+
+                    p_result_list.p_results[i].result = (p_cont_def_result_t)EndianUtility.ReverseByteOrder(binaryReader.ReadUInt16());
+                    p_result_list.p_results[i].reason = (p_provider_reason_t)EndianUtility.ReverseByteOrder(binaryReader.ReadUInt16());
+                }
+
                 p_result_list.p_results[i].transfer_syntax = new p_syntax_id_t();
                 p_result_list.p_results[i].transfer_syntax.if_uuid
                     = new Guid(binaryReader.ReadBytes(RpceUtility.GUID_SIZE));
@@ -191,6 +212,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                     = binaryReader.ReadUInt16();
                 p_result_list.p_results[i].transfer_syntax.if_vers_minor
                     = binaryReader.ReadUInt16();
+
+                if (context.PackedDataRepresentationFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
+                {
+                    p_result_list.p_results[i].transfer_syntax.if_uuid = EndianUtility.ReverseByteOrder(p_result_list.p_results[i].transfer_syntax.if_uuid);
+                    p_result_list.p_results[i].transfer_syntax.if_vers_major = EndianUtility.ReverseByteOrder(p_result_list.p_results[i].transfer_syntax.if_vers_major);
+                    p_result_list.p_results[i].transfer_syntax.if_vers_minor = EndianUtility.ReverseByteOrder(p_result_list.p_results[i].transfer_syntax.if_vers_minor);
+                }
             }
         }
     }

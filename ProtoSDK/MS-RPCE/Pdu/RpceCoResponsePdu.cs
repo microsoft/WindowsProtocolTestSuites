@@ -125,6 +125,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             cancel_count = binaryReader.ReadByte();
             reserved = binaryReader.ReadByte();
 
+            if (context.PackedDataRepresentationFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
+            {
+                alloc_hint = EndianUtility.ReverseByteOrder(alloc_hint);
+                p_cont_id = EndianUtility.ReverseByteOrder(p_cont_id);
+            }
+
             // read stub.
             int stubLength = frag_length;
             stubLength -= GetSize();

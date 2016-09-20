@@ -766,6 +766,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                 ushort fragmentLength = BitConverter.ToUInt16(
                     messageBytes,
                     consumedLength + RpceUtility.FRAG_LENGTH_FIELD_OFFSET);
+                if (context.PackedDataRepresentationFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
+                {
+                    fragmentLength = EndianUtility.ReverseByteOrder(fragmentLength);
+                }
+
                 if ((messageBytes.Length - consumedLength) < fragmentLength)
                 {
                     expectedLength = fragmentLength;
