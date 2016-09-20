@@ -322,20 +322,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         {
             using (SrvsClient srvsClient = new SrvsClient(TestConfig.Timeout))
             {
-                ClientSecurityContext securityContext =
-                new SspiClientSecurityContext(
-                    TestConfig.DefaultSecurityPackage,
-                    TestConfig.AccountCredential,
-                    Smb2Utility.GetCifsServicePrincipalName(TestConfig.SutComputerName),
-                    ClientSecurityContextAttribute.Connection
-                        | ClientSecurityContextAttribute.DceStyle
-                        | ClientSecurityContextAttribute.Integrity
-                        | ClientSecurityContextAttribute.ReplayDetect
-                        | ClientSecurityContextAttribute.SequenceDetect
-                        | ClientSecurityContextAttribute.UseSessionKey,
-                    SecurityTargetDataRepresentation.SecurityNativeDrep);
-
-                srvsClient.Bind(TestConfig.SutComputerName, TestConfig.AccountCredential, securityContext);
+                srvsClient.Bind(TestConfig.SutComputerName, TestConfig.AccountCredential, null);
                 SHARE_INFO info = new SHARE_INFO { ShareInfo502 = shareInfo };
                 uint? parmErr = 0;
                 uint retVal = srvsClient.NetrShareSetInfo(@"\\" + TestConfig.SutComputerName, sharePath, SHARE_ENUM_STRUCT_LEVEL.Level502, info, ref parmErr);
@@ -351,20 +338,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         {
             using (SrvsClient srvsClient = new SrvsClient(TestConfig.Timeout))
             {
-                ClientSecurityContext securityContext =
-                new SspiClientSecurityContext(
-                    TestConfig.DefaultSecurityPackage,
-                    TestConfig.AccountCredential,
-                    Smb2Utility.GetCifsServicePrincipalName(TestConfig.SutComputerName),
-                    ClientSecurityContextAttribute.Connection
-                        | ClientSecurityContextAttribute.DceStyle
-                        | ClientSecurityContextAttribute.Integrity
-                        | ClientSecurityContextAttribute.ReplayDetect
-                        | ClientSecurityContextAttribute.SequenceDetect
-                        | ClientSecurityContextAttribute.UseSessionKey,
-                    SecurityTargetDataRepresentation.SecurityNativeDrep);
-
-                srvsClient.Bind(TestConfig.SutComputerName, TestConfig.AccountCredential, securityContext);
+                srvsClient.Bind(TestConfig.SutComputerName, TestConfig.AccountCredential, null);
 
                 SHARE_INFO? shareInfo;
                 uint retVal = srvsClient.NetrShareGetInfo(@"\\" + TestConfig.SutComputerName, sharePath, SHARE_ENUM_STRUCT_LEVEL.Level502, out shareInfo);
