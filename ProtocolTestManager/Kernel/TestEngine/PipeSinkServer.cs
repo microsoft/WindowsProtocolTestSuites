@@ -19,6 +19,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         static NamedPipeServerStream waitingServer = null;
         public static void serverCallback(IAsyncResult result)
         {
+            CleanUnusedListener();
             NamedPipeServerStream server = (NamedPipeServerStream)result.AsyncState;
             server.EndWaitForConnection(result);
             StreamReader reader = new StreamReader(server);
@@ -38,7 +39,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             PipeName = pipeName;
             if (waitingServer == null)
             {
-                waitingServer = new NamedPipeServerStream(PipeName, PipeDirection.InOut, 10, PipeTransmissionMode.Message, PipeOptions.Asynchronous);
+                waitingServer = new NamedPipeServerStream(PipeName, PipeDirection.InOut, NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Message, PipeOptions.Asynchronous);
                 listenerResult = waitingServer.BeginWaitForConnection(new AsyncCallback(serverCallback), waitingServer);
             }
             Listener.IgnoreLogs = false;
@@ -50,15 +51,26 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public static void Stop()
         {
             Listener.IgnoreLogs = true;
-            foreach (var listener in listeners)
-            {
-                listener.Stop();
-            }
+            if(listeners != null && listeners.Count > 0)
+                foreach (var listener in listeners)
+                {
+                    listener.Stop();
+                }
         }
 
         public delegate void ParseLogMessageCallback(string message);
         public static ParseLogMessageCallback ParseLogMessage;
-    
+        
+        private static void CleanUnusedListener()
+        {
+            if(listeners != null && listeners.Count > 0)
+            {
+                foreach (var listener in listeners)
+                    listener.Stop();
+
+                listeners.Clear();
+            }
+        }
     
     }
 
@@ -87,8 +99,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 thread.Abort();
             }
-            SR.Close();
-            serverStream.Close();
+
+            if(SR != null)
+                SR.Close();
+
+            if(serverStream != null)
+                serverStream.Close();
         }
         /// <summary>
         /// Start to get the output.

@@ -183,6 +183,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
             catch (Exception exception)
             {
+                PipeSinkServer.Stop();
                 return exception;
             }
             return null;
