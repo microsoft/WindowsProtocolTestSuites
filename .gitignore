@@ -1,5 +1,6 @@
 bin
 obj
+objd
 drop
 *.suo
 *.mdf
@@ -25,3 +26,5 @@ TestSuites/FileServer/src/Deploy/Bin.wxs
 TestSuites/Kerberos/src/Deploy/TestSuiteBatchFiles.wxs
 TestSuites/Kerberos/src/Deploy/TestSuiteBinFiles.wxs
 TestSuites/Kerberos/src/Deploy/TestSuiteScripts.wxs
+TestSuites/BranchCache/src/Deploy/TestSuiteBatchFiles.wxs
+TestSuites/BranchCache/src/Deploy/TestSuiteBinFiles.wxs

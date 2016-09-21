@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{61EADAB7-919C-42E0-BF66-5A1F5407ABB6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Protocols.TestSuites.BranchCache</RootNamespace>
+    <AssemblyName>BranchCache_TestSuite</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>Sdl6.1.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>Sdl6.1.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Protocols.TestTools">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(PTFPATH_BRANCHCACHE)\Microsoft.Protocols.TestTools.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Protocols.TestTools.Extension">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(PTFPATH_BRANCHCACHE)\Microsoft.Protocols.TestTools.Extension.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Protocols.TestTools.Messages.Runtime">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(PTFPATH_BRANCHCACHE)\Microsoft.Protocols.TestTools.Messages.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Protocols.TestTools.VSTS">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(PTFPATH_BRANCHCACHE)\Microsoft.Protocols.TestTools.VSTS.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(PkgVisualStudio_UnitTest_Corext)\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="ContentInformationUtility.cs" />
+    <Compile Include="ContentServer\ContentInformationRetrieval.cs" />
+    <Compile Include="ContentServer\ForcedHashGenerationContentInformationRetrieval.cs" />
+    <Compile Include="ContentServer\MissingContentRetrievalHTTPOnly.cs" />
+    <Compile Include="ContentServer\PccrcServer.cs" />
+    <Compile Include="ContentServer\PccrtpServer.cs" />
+    <Compile Include="ContentServer\SmbServer.cs" />
+    <Compile Include="HostedCacheServer\ContentOfferingRetrieval.cs" />
+    <Compile Include="HostedCacheServer\PccrrClientBlocks.cs" />
+    <Compile Include="HostedCacheServer\PccrrClientMessageHeader.cs" />
+    <Compile Include="HostedCacheServer\PccrrServerGetSegList.cs" />
+    <Compile Include="HostedCacheServer\PccrrServerGetBlocks.cs" />
+    <Compile Include="HostedCacheServer\PccrrServerGetBlockList.cs" />
+    <Compile Include="HostedCacheServer\PccrrServerMessageHeader.cs" />
+    <Compile Include="HostedCacheServer\PccrrTestServer.cs" />
+    <Compile Include="HostedCacheServer\PchcServerBatchedOffer.cs" />
+    <Compile Include="HostedCacheServer\PchcServerInitialOffer.cs" />
+    <Compile Include="HostedCacheServer\PchcServerMessageHeader.cs" />
+    <Compile Include="HostedCacheServer\PchcServerSegmentInfo.cs" />
+    <Compile Include="RequirementCategory.cs" />
+    <Compile Include="TestConfig.cs" />
+    <Compile Include="TestUtility.cs" />
+    <Compile Include="BranchCacheTestClassBase.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Common\Common.csproj">
+      <Project>{fe653643-6342-4300-871e-683c7ba31494}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\FileAccessService\FileAccessService.csproj">
+      <Project>{ab191b32-b12d-42cb-976d-cea2c5bad8be}</Project>
+      <Name>FileAccessService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Messages\Messages.csproj">
+      <Project>{75544419-3f4e-4308-a676-165f45c1462e}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj">
+      <Project>{c7f08825-d3c9-4ddd-9ba3-06733b1abe36}</Project>
+      <Name>Smb2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Sspi\Sspi.csproj">
+      <Project>{d0cb354b-2cd3-49c1-8eca-2f6ebadbccee}</Project>
+      <Name>Sspi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Adapter\Adapter.csproj">
+      <Project>{418CF4CF-F013-4378-B5AA-8A189BECFC17}</Project>
+      <Name>Adapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\COMMON\CommonStack\CommonStack.csproj">
+      <Project>{F3CA3AD9-94A6-4FE1-BA05-0C798E477673}</Project>
+      <Name>CommonStack</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MS-PCCRC\Shared\PccrcStack\PccrcStack.csproj">
+      <Project>{CD34EB17-A5B5-49A1-A539-E45EF848FAB1}</Project>
+      <Name>PccrcStack</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MS-PCCRC_Tool\Source\MS-PCCRC_TestTool\MS-PCCRC_TestTool.csproj">
+      <Project>{c91dbda8-6d90-4320-99c4-747ddbc839e8}</Project>
+      <Name>MS-PCCRC_TestTool</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ms-pccrd\Shared\PccrdStack\PccrdStack.csproj">
+      <Project>{6CDA2C3E-F9CE-4A18-A06C-818C3C779C35}</Project>
+      <Name>PccrdStack</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MS-PCCRD\Shared\WsDiscovery\WsDiscovery.csproj">
+      <Project>{334C9601-ABF7-4830-9793-8F9259D0D7EB}</Project>
+      <Name>WsDiscovery</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MS-PCCRR\Shared\PccrrStack\PccrrStack.csproj">
+      <Project>{E740266B-2CDF-43A8-9F24-EE6FF55149EA}</Project>
+      <Name>PccrrStack</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MS-PCCRTP\Shared\PccrtpStack\PccrtpStack.csproj">
+      <Project>{C87577F2-FFB9-4584-B109-E8D4F62999E2}</Project>
+      <Name>PccrtpStack</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MS-PCHC\Shared\PchcStack\PchcStack.csproj">
+      <Project>{77239ADF-01DC-4C41-948F-283511840692}</Project>
+      <Name>PchcStack</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="BranchCache_TestSuite.deployment.ptfconfig">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="BranchCache_TestSuite.ptfconfig">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TestSuite.licenseheader" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin\" />
+  </Target>
+</Project>
