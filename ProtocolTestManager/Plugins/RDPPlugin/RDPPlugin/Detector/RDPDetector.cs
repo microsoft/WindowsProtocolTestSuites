@@ -344,7 +344,7 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
                     EncryptionLevel.ENCRYPTION_LEVEL_LOW,
                     cert,
                     certLen,
-                    true);
+                    MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECL | MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECR);
             SendPdu(connectRespPdu);
 
             sessionContext.ServerPrivateExponent = new byte[privateExp.Length];
