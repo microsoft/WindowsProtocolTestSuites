@@ -186,7 +186,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// <param name="flags">specifies the contents of this PDU</param>
         /// <param name="numberOfTunnels">tunnel numbers</param>
         /// <param name="channelList">DYNVC_SOFT_SYNC_CHANNEL_LISTs</param>
-        public void SoftSync(TimeSpan timeout, SoftSyncReqFlags_Value flags, ushort numberOfTunnels, SoftSyncChannelList[] channelList = null)
+        public void SoftSyncNegotiate(TimeSpan timeout, SoftSyncReqFlags_Value flags, ushort numberOfTunnels, SoftSyncChannelList[] channelList = null)
         {
             this.SendSoftSyncRequestPDU(flags, numberOfTunnels, channelList);
             SoftSyncResDvcPdu pdu = this.ExpectSoftSyncResponsePDU(timeout);
@@ -201,7 +201,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// </summary>
         /// <param name="timeout">wait time</param>
         /// <param name="channelListDic">TunnelType value & Channel Ids</param>
-        public void SoftSync(TimeSpan timeout, Dictionary<TunnelType_Value, List<uint>> channelListDic = null)
+        public void SoftSyncNegotiate(TimeSpan timeout, Dictionary<TunnelType_Value, List<uint>> channelListDic = null)
         {
             SoftSyncReqFlags_Value flags = SoftSyncReqFlags_Value.SOFT_SYNC_TCP_FLUSHED;
             if(channelListDic != null)
@@ -221,7 +221,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
                 numberOfTunnels = channelListDic.Count;
             }
 
-            SoftSync(timeout, flags, (ushort)numberOfTunnels, channelList.ToArray());
+            SoftSyncNegotiate(timeout, flags, (ushort)numberOfTunnels, channelList.ToArray());
         }
 
         /// <summary>

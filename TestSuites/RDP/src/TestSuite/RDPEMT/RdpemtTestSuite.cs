@@ -276,7 +276,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
             rdpedycServer.ExchangeCapabilities(waitTime);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Start Soft-Sync");
-            rdpedycServer.SoftSync(waitTime);
+            rdpedycServer.SoftSyncNegotiate(waitTime);
             #endregion
         }
         #endregion 

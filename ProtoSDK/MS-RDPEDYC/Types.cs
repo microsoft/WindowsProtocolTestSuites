@@ -1089,14 +1089,30 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// <summary>
         /// Constructor
         /// </summary>
-        public SoftSyncReqDvcPDU(uint length, SoftSyncReqFlags_Value flags, ushort numberOfTunnels, SoftSyncChannelList[] softSyncChannelLists)
+        public SoftSyncReqDvcPDU(SoftSyncReqFlags_Value flags, ushort numberOfTunnels, SoftSyncChannelList[] softSyncChannelLists)
         {
             HeaderBits = new Header(Cmd_Values.SoftSyncReq, 0, 0);
-            this.Pad = 0;
-            this.Length = length;
+            this.Pad = 0;            
             this.Flags = flags;
             this.NumberOfTunnels = numberOfTunnels;
             this.SoftSyncChannelLists = softSyncChannelLists;
+            // Section 2.2.5.1, Length (4 bytes): A 32-bit, unsigned integer indicating the total size, in bytes, of SoftSyncChannelLists field.
+            // TDI: this length should also including the length of Length(4 bytes), Flags(2 bytes) and NumberOfTunnels(2 bytes) in DYNVC_SOFT_SYNC_REQUEST PDU.
+            // this length value is Length(4) + Flags(2) + NumberOfTunnels(2) = 8.  
+            this.Length = 8;
+
+            if(flags.HasFlag(SoftSyncReqFlags_Value.SOFT_SYNC_CHANNEL_LIST_PRESENT))
+            {
+                if (softSyncChannelLists == null)
+                {
+                    DynamicVCException.Throw("Should have one or more Soft-Sync Channel Lists.");
+                }
+
+                foreach (var channel in softSyncChannelLists)
+                {
+                    this.Length += (uint)channel.GetSize();
+                }
+            }
         }
 
         protected override void DoMarshal(PduMarshaler marshaler)

@@ -125,7 +125,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             MULTITRANSPORT_TYPE_FLAGS flags = MULTITRANSPORT_TYPE_FLAGS.None;
             if (isSoftSync)
             {
-                flags = MULTITRANSPORT_TYPE_FLAGS.SOFTSYNC_TCP_TO_UDP | MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECL | MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECR;
+                flags = MULTITRANSPORT_TYPE_FLAGS.SOFTSYNC_TCP_TO_UDP | MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECL;
             }
             this.rdpbcgrAdapter.EstablishRDPConnection(selectedProtocol, enMethod, enLevel, true, false, rdpServerVersion, flags, true, isSoftSync);
 
@@ -301,7 +301,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                 }
                 channelListDic.Add(tunnelType, list);
 
-                rdpedycServer.SoftSync(waitTime, channelListDic);
+                rdpedycServer.SoftSyncNegotiate(waitTime, channelListDic);
 
             }
             return this.rdpegfxAdapter.CreateEGFXDvc(rdpedycServer, transportType, channelId);

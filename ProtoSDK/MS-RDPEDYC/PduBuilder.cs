@@ -128,19 +128,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             return new CreateRespDvcPdu(channelId, creationStatus);
         }
 
+        /// <summary>
+        ///  Create DYNVC_SOFT_SYNC_REQUEST PDU. 
+        /// </summary>
         public SoftSyncReqDvcPDU CreateSoftSyncReqPdu(SoftSyncReqFlags_Value flags, ushort numberOfTunnels, SoftSyncChannelList[] channelList = null)
         {
-            uint length = sizeof(uint) + sizeof(ushort) + sizeof(ushort);
-
-            if(flags.HasFlag(SoftSyncReqFlags_Value.SOFT_SYNC_CHANNEL_LIST_PRESENT))
-            {
-                foreach (var channel in channelList)
-                {
-                    length += (uint)channel.GetSize();
-                }
-            }
-
-            return new SoftSyncReqDvcPDU(length, flags, numberOfTunnels, channelList);
+            return new SoftSyncReqDvcPDU(flags, numberOfTunnels, channelList);
         }
 
         public CloseDvcPdu CreateCloseDvcPdu(uint channelId)
