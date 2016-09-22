@@ -478,6 +478,24 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             // Convert
             return BitConverter.ToUInt32(bytes, 0);
         }
+
+        /// <summary>
+        /// Parse UInt64
+        /// </summary>
+        /// <param name="data">data to be parsed</param>
+        /// <param name="index">parser index</param>
+        /// <param name="isBigEndian">big endian format flag</param>
+        /// <returns>parsed UInt64 number</returns>
+        private UInt64 ParseUInt64(byte[] data, ref int index, bool isBigEndian = false)
+        {
+            byte[] bytes = GetBytes(data, ref index, sizeof(UInt64));
+            if(isBigEndian)
+            {
+                Array.Reverse(bytes, 0, sizeof(UInt64));
+            }
+
+            return BitConverter.ToUInt64(bytes, 0);
+        }
         #endregion Private Methods: Base Type Parsers
 
 
@@ -3450,11 +3468,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             // TS_BITMAP_DATA_EX: bpp
             bitmapDataEx.bpp = ParseByte(data, ref currentIndex);
 
-            // TS_BITMAP_DATA_EX: reserved1
-            bitmapDataEx.reserved1 = ParseByte(data, ref currentIndex);
+            // TS_BITMAP_DATA_EX: flags
+            bitmapDataEx.flags = (TSBitmapDataExFlags_Values)ParseByte(data, ref currentIndex);
 
-            // TS_BITMAP_DATA_EX: reserved2
-            bitmapDataEx.reserved2 = ParseByte(data, ref currentIndex);
+            // TS_BITMAP_DATA_EX: reserved
+            bitmapDataEx.reserved = ParseByte(data, ref currentIndex);
 
             // TS_BITMAP_DATA_EX: codecID
             bitmapDataEx.codecID = ParseByte(data, ref currentIndex);
@@ -3468,10 +3486,34 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             // TS_BITMAP_DATA_EX: bitmapDataLength
             bitmapDataEx.bitmapDataLength = ParseUInt32(data, ref currentIndex, false);
 
+            if (IsFlagExist((byte)bitmapDataEx.flags, (byte)TSBitmapDataExFlags_Values.EX_COMPRESSED_BITMAP_HEADER_PRESENT))
+            {
+                bitmapDataEx.exBitmapDataHeader = ParseExBitmapdataHeader(data, ref currentIndex);
+            }
+            
             // TS_BITMAP_DATA_EX: bitmapData
             bitmapDataEx.bitmapData = GetBytes(data, ref currentIndex, (int)bitmapDataEx.bitmapDataLength);
 
             return bitmapDataEx;
+        }
+
+        /// <summary>
+        /// Parse TS_COMPRESSED_BITMAP_HEADER_EX
+        /// </summary>
+        /// <param name="data">data to be parsed</param>
+        /// <param name="currentIndex">current parser index</param>
+        /// <returns></returns>
+        private TS_COMPRESSED_BITMAP_HEADER_EX ParseExBitmapdataHeader(
+            byte[] data, 
+            ref int currentIndex)
+        {
+            TS_COMPRESSED_BITMAP_HEADER_EX exTsCompressedBitmapHeader = new TS_COMPRESSED_BITMAP_HEADER_EX();
+            exTsCompressedBitmapHeader.highUniqueId = ParseUInt32(data, ref currentIndex, false);
+            exTsCompressedBitmapHeader.lowUniqueId = ParseUInt32(data, ref currentIndex, false);
+            exTsCompressedBitmapHeader.tmMilliseconds = ParseUInt64(data, ref currentIndex, false);
+            exTsCompressedBitmapHeader.tmSeconds = ParseUInt64(data, ref currentIndex, false);
+
+            return exTsCompressedBitmapHeader;
         }
 
 

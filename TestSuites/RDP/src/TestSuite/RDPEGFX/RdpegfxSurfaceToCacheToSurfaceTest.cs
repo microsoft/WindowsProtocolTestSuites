@@ -24,44 +24,31 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Description("This test case is used to test SurfacetoCache, and CacheToSurface command.")]
         public void RDPEGFX_CacheManagement_PositiveTest()
         {
-            // Init for capability exchange
-            RDPEGFX_CapabilityExchange();
+            RDPEGFX_CacheManagement(DynamicVC_TransportType.RDP_TCP, false);
+        }
 
-            // Create a surface 
-            RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
-            Surface surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_ARGB_8888);
-            this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf.Id);
+        [TestMethod]
+        [Priority(1)]
+        [TestCategory("Non-BVT")]
+        [TestCategory("Positive")]
+        [TestCategory("RDP8.1")]
+        [TestCategory("RDPEGFX")]
+        [Description("This test case is used to test SurfacetoCache, and CacheToSurface command over reliable UDP transport using Soft Sync Negotiation.")]
+        public void RDPEGFX_CacheManagement_PositiveTest_OverUDP_Reliable_SoftSync()
+        {
+            RDPEGFX_CacheManagement(DynamicVC_TransportType.RDP_UDP_Reliable, true);
+        }
 
-            // Build muliple cache to surface messages to cover the surface by cacheRect 
-            ushort cacheW = (ushort)(RdpegfxTestUtility.cacheRect.right - RdpegfxTestUtility.cacheRect.left);
-            ushort cacheH = (ushort)(RdpegfxTestUtility.cacheRect.bottom - RdpegfxTestUtility.cacheRect.top);
-
-            ushort currRectTop = 0;
-
-            List<RDPGFX_POINT16> destPointList = new List<RDPGFX_POINT16>();
-            while (currRectTop < surf.Height)
-            {
-                ushort currRectLeft = 0;
-                while (currRectLeft < surf.Width)
-                {
-                    RDPGFX_POINT16 pos = new RDPGFX_POINT16(currRectLeft, currRectTop);
-                    destPointList.Add(pos);
-                    currRectLeft += cacheW;
-                }
-                currRectTop += cacheH;
-            }
-
-            uint fid = this.rdpegfxAdapter.FillSurfaceByCachedBitmap(surf, RdpegfxTestUtility.cacheRect, RdpegfxTestUtility.cacheKey, destPointList.ToArray(), null, RdpegfxTestUtility.fillColorRed);
-            this.TestSite.Log.Add(LogEntryKind.Debug, "Surface is filled by cached bitmap in frame: {0}", fid);
-
-            this.rdpegfxAdapter.ExpectFrameAck(fid);
-
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(false, surfRect);
-            
-            // Delete the surface after wait 3 seconds.
-            this.rdpegfxAdapter.DeleteSurface(surf.Id);
-            this.TestSite.Log.Add(LogEntryKind.Debug, "Surface {0} is deleted", surf.Id);
+        [TestMethod]
+        [Priority(1)]
+        [TestCategory("Non-BVT")]
+        [TestCategory("Positive")]
+        [TestCategory("RDP8.1")]
+        [TestCategory("RDPEGFX")]
+        [Description("This test case is used to test SurfacetoCache, and CacheToSurface command over lossy UDP transport using Soft Sync Negotiation.")]
+        public void RDPEGFX_CacheManagement_PositiveTest_OverUDP_Lossy_SoftSync()
+        {
+            RDPEGFX_CacheManagement(DynamicVC_TransportType.RDP_UDP_Lossy, true);
         }
 
         [TestMethod]
@@ -568,6 +555,52 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
             bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
             this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
+        }
+
+        private void RDPEGFX_CacheManagement(DynamicVC_TransportType transport, bool isSoftSync)
+        {
+            // Check if SUT supports Soft Sync.
+            if(isSoftSync)
+                this.TestSite.Assert.IsTrue(isClientSupportSoftSync, "SUT should support Soft-Sync.");
+
+            // Init for capability exchange
+            RDPEGFX_CapabilityExchange(transport, isSoftSync);
+
+            // Create a surface 
+            RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
+            Surface surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_ARGB_8888);
+            this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf.Id);
+
+            // Build muliple cache to surface messages to cover the surface by cacheRect 
+            ushort cacheW = (ushort)(RdpegfxTestUtility.cacheRect.right - RdpegfxTestUtility.cacheRect.left);
+            ushort cacheH = (ushort)(RdpegfxTestUtility.cacheRect.bottom - RdpegfxTestUtility.cacheRect.top);
+
+            ushort currRectTop = 0;
+
+            List<RDPGFX_POINT16> destPointList = new List<RDPGFX_POINT16>();
+            while (currRectTop < surf.Height)
+            {
+                ushort currRectLeft = 0;
+                while (currRectLeft < surf.Width)
+                {
+                    RDPGFX_POINT16 pos = new RDPGFX_POINT16(currRectLeft, currRectTop);
+                    destPointList.Add(pos);
+                    currRectLeft += cacheW;
+                }
+                currRectTop += cacheH;
+            }
+
+            uint fid = this.rdpegfxAdapter.FillSurfaceByCachedBitmap(surf, RdpegfxTestUtility.cacheRect, RdpegfxTestUtility.cacheKey, destPointList.ToArray(), null, RdpegfxTestUtility.fillColorRed);
+            this.TestSite.Log.Add(LogEntryKind.Debug, "Surface is filled by cached bitmap in frame: {0}", fid);
+
+            this.rdpegfxAdapter.ExpectFrameAck(fid);
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
+            this.VerifySUTDisplay(false, surfRect);
+
+            // Delete the surface after wait 3 seconds.
+            this.rdpegfxAdapter.DeleteSurface(surf.Id);
+            this.TestSite.Log.Add(LogEntryKind.Debug, "Surface {0} is deleted", surf.Id);
         }
     }
 }

@@ -634,7 +634,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
                 return;
             }
 
-            TS_SURFCMD_STREAM_SURF_BITS surfStreamCmd = Create_TS_SURFCMD_STREAM_SURF_BITS(0);
+            TS_SURFCMD_STREAM_SURF_BITS surfStreamCmd = Create_TS_SURFCMD_STREAM_SURF_BITS(TSBitmapDataExFlags_Values.None, 0);
             MemoryStream memoryStream = new MemoryStream();
             image.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Bmp);
             Byte[] byteImage = memoryStream.ToArray();
@@ -692,7 +692,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
                 {
                     LogServerADMInfo();
 
-                    TS_SURFCMD_STREAM_SURF_BITS surfStreamCmd = Create_TS_SURFCMD_STREAM_SURF_BITS();
+                    TS_SURFCMD_STREAM_SURF_BITS surfStreamCmd = Create_TS_SURFCMD_STREAM_SURF_BITS(TSBitmapDataExFlags_Values.None, remoteFXCodecID);
                     surfStreamCmd.bitmapData.bitmapDataLength = (uint)(pendingBuffer.Count);
                     surfStreamCmd.bitmapData.bitmapData = pendingBuffer.ToArray();
                     pendingBuffer.Clear();
@@ -787,7 +787,12 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
                 | (((int)fragmentation_Value.FASTPATH_FRAGMENT_SINGLE) << 4)
                 | ((int)compressedType_Values.None << 6));
                 surfCmds.compressionFlags = compressedType_Values.None;
-                surfCmds.size = (ushort)(8 + 8 + 22 + surfStreamCmd.bitmapData.bitmapDataLength);//size of TS_SURFCMD_STREAM_SURF_BITS;
+                int subLength = 8 + 8 + 22;
+                if(surfStreamCmd.bitmapData.exBitmapDataHeader != null)
+                {
+                    subLength += 24;
+                }
+                surfCmds.size = (ushort)(subLength + surfStreamCmd.bitmapData.bitmapDataLength);//size of TS_SURFCMD_STREAM_SURF_BITS;
                 surfCmds.surfaceCommands = new TS_SURFCMD[1];
                 surfCmds.surfaceCommands[0] = surfStreamCmd;
 
@@ -831,8 +836,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
 
             return rtnValue;
         }
-
-        private TS_SURFCMD_STREAM_SURF_BITS Create_TS_SURFCMD_STREAM_SURF_BITS()
+        // TODO: alignment need captures to verifty flags = TSBitmapDataExFlags_Values.EX_COMPRESSED_BITMAP_HEADER_PRESENT
+        private TS_SURFCMD_STREAM_SURF_BITS Create_TS_SURFCMD_STREAM_SURF_BITS(TSBitmapDataExFlags_Values flags, byte codecId)
         {
             TS_SURFCMD_STREAM_SURF_BITS surfStreamCmd = new TS_SURFCMD_STREAM_SURF_BITS();
             surfStreamCmd.cmdType = cmdType_Values.CMDTYPE_STREAM_SURFACE_BITS;
@@ -840,32 +845,37 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             surfStreamCmd.destTop = 0;
             surfStreamCmd.destRight = 0;
             surfStreamCmd.destBottom = 0;
-            surfStreamCmd.bitmapData = new TS_BITMAP_DATA_EX();
-            surfStreamCmd.bitmapData.bpp = 32;
-            surfStreamCmd.bitmapData.reserved1 = 0;
-            surfStreamCmd.bitmapData.reserved2 = 0;
-            surfStreamCmd.bitmapData.codecID = remoteFXCodecID;
-            surfStreamCmd.bitmapData.width = 0;
-            surfStreamCmd.bitmapData.height = 0;
+            surfStreamCmd.bitmapData = Create_TS_BITMAP_DATA_EX(flags, codecId);
             return surfStreamCmd;
         }
 
-        private TS_SURFCMD_STREAM_SURF_BITS Create_TS_SURFCMD_STREAM_SURF_BITS(byte codecId)
+        private TS_BITMAP_DATA_EX Create_TS_BITMAP_DATA_EX(TSBitmapDataExFlags_Values flags, byte codecId)
         {
-            TS_SURFCMD_STREAM_SURF_BITS surfStreamCmd = new TS_SURFCMD_STREAM_SURF_BITS();
-            surfStreamCmd.cmdType = cmdType_Values.CMDTYPE_STREAM_SURFACE_BITS;
-            surfStreamCmd.destLeft = 0;
-            surfStreamCmd.destTop = 0;
-            surfStreamCmd.destRight = 0;
-            surfStreamCmd.destBottom = 0;
-            surfStreamCmd.bitmapData = new TS_BITMAP_DATA_EX();
-            surfStreamCmd.bitmapData.bpp = 32;
-            surfStreamCmd.bitmapData.reserved1 = 0;
-            surfStreamCmd.bitmapData.reserved2 = 0;
-            surfStreamCmd.bitmapData.codecID = codecId;
-            surfStreamCmd.bitmapData.width = 0;
-            surfStreamCmd.bitmapData.height = 0;
-            return surfStreamCmd;
+            TS_BITMAP_DATA_EX tsBitmapDataEx = new TS_BITMAP_DATA_EX();
+            tsBitmapDataEx.bpp = 32; // Hard code
+            tsBitmapDataEx.flags = flags;
+            tsBitmapDataEx.reserved = 0; // It Must be set to zero.
+            tsBitmapDataEx.codecID = codecId;
+            tsBitmapDataEx.width = 0;
+            tsBitmapDataEx.height = 0;
+            // bitmapDataLength and bitmapData was handled in call method. 
+            if(flags.HasFlag(TSBitmapDataExFlags_Values.EX_COMPRESSED_BITMAP_HEADER_PRESENT))
+            {
+                tsBitmapDataEx.exBitmapDataHeader = Create_TS_COMPRESSED_BITMAP_HEADER_EX();
+            }
+            return tsBitmapDataEx;
+        }
+
+        private TS_COMPRESSED_BITMAP_HEADER_EX Create_TS_COMPRESSED_BITMAP_HEADER_EX()
+        {
+            Random rnd = new Random(DateTime.Now.Millisecond);
+            TS_COMPRESSED_BITMAP_HEADER_EX tsCompressedBitmapHeaderEx = new TS_COMPRESSED_BITMAP_HEADER_EX();
+            tsCompressedBitmapHeaderEx.highUniqueId = (uint)rnd.Next();
+            tsCompressedBitmapHeaderEx.lowUniqueId = (uint)rnd.Next();
+            ulong creatTime = (ulong)DateTime.UtcNow.ToUniversalTime().Subtract(new DateTime(1970,1,1,0,0,0, DateTimeKind.Utc)).TotalMilliseconds;
+            tsCompressedBitmapHeaderEx.tmMilliseconds = creatTime % 1000;
+            tsCompressedBitmapHeaderEx.tmSeconds = creatTime / 1000;
+            return tsCompressedBitmapHeaderEx;
         }
 
         private void LogServerADMInfo()

@@ -55,48 +55,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
     }
 
     /// <summary>
-    /// This structure specifies an RDP 8.0 graphic capability set.
-    /// </summary>
-    public struct RDPGFX_CAPSET_VERSION8
-    {
-        /// <summary>
-        /// UINT32. The value of this integer indicates the version of the capability set.
-        /// this MUST be set to 0x00080004
-        /// </summary>
-        public CapsVersions version;
-        /// <summary>
-        /// UINT32. The value of this integer indicates the size, in bytes, of the capability set data 
-        /// present in the capsData field. it MUST be set to 0x00000004
-        /// </summary>
-        public uint capsDataLength;
-        /// <summary>
-        /// UINT32, The value of this integer indicates capability flags.
-        /// </summary>
-        public CapsFlags flags;
-    }
-
-    /// <summary>
-    /// This structure specifies an RDP 8.1 graphic capability set.
-    /// </summary>
-    public struct RDPGFX_CAPSET_VERSION81
-    {
-        /// <summary>
-        /// UINT32. The value of this integer indicates the version of the capability set.
-        /// this MUST be set to 0x00080105
-        /// </summary>
-        public CapsVersions version;
-        /// <summary>
-        /// UINT32. The value of this integer indicates the size, in bytes, of the capability set data 
-        /// present in the capsData field. it MUST be set to 0x00000004
-        /// </summary>
-        public uint capsDataLength;
-        /// <summary>
-        /// UINT32, The value of this integer indicates capability flags.
-        /// </summary>
-        public CapsFlags flags;
-    }
-
-    /// <summary>
     /// This structure specifies a point relative to the virtual-desktop origin.
     /// </summary>
     public struct RDPGFX_POINT16

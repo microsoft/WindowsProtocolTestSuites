@@ -655,6 +655,26 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             }
         }
 
+        /// <summary>
+        /// Get the flags of client MCS connect intial PDU.
+        /// </summary>
+        public MULTITRANSPORT_TYPE_FLAGS MultitransportTypeFlagsInMCSConnectIntialPdu
+        {
+            get
+            {
+                lock(contextLock)
+                {
+                    if (mcsConnectInitialPdu != null)
+                    {
+                        return mcsConnectInitialPdu.gccPdu.clientMultitransportChannelData.flags;
+                    }
+                    else
+                    {
+                        return MULTITRANSPORT_TYPE_FLAGS.None;
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// The failure code of x224 connection.

@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc.Utility;
+using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 {
@@ -68,19 +69,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         }
     }
 
-    public enum Version_Values : ushort
-    {
-        /// <summary>
-        ///  Version level one is supported.
-        /// </summary>
-        V1 = 0x0001,
-
-        /// <summary>
-        ///  Version level two is supported.
-        /// </summary>
-        V2 = 0x0002,
-    }
-
     public enum Cmd_Values : int {
         
         /// <summary>
@@ -113,6 +101,30 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         ///  PDU.
         /// </summary>
         Capability = 0x05,
+
+        /// <summary>
+        /// The message contained in the optionalFields field is 
+        /// a Data First Compressed PDU (section 2.2.3.3).
+        /// </summary>
+        FirstDataCompressed = 0x06,
+
+        /// <summary>
+        /// The message contained in the optionalFields field is 
+        /// a Data Compressed PDU (section 2.2.3.4).
+        /// </summary>
+        DataCompressed = 0x07,
+
+        /// <summary>
+        /// The message contained in the optionalFields field is 
+        /// a Soft-Sync Request PDU (section 2.2.5.1).
+        /// </summary>
+        SoftSyncReq = 0x08,
+
+        /// <summary>
+        /// The message contained in the optionalFields field is 
+        /// a Soft-Sync Response PDU (section 2.2.5.2).
+        /// </summary>
+        SoftSyncRes = 0x09,
 
         /// <summary>
         /// Not supported by the protocol. Only apply to marshalinhg
@@ -395,7 +407,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
                 HeaderBits.Sp = (int)Len_Values.FourBytes;
             }
         }
-
 
         private void SetRawData(bool marshaling, PduMarshaler marshaler)
         {
@@ -793,6 +804,59 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
     public abstract class DataDvcBasePdu : DynamicVCPDU
     {
         public byte[] Data { get; set; }
+
+        /// <summary>
+        /// Compute the Non Data size.
+        /// </summary>
+        /// <param name="isSp">Indicates the 4-5 bits are Sp or Len</param>
+        /// <returns></returns>
+        public int NonDataSize(bool isSp)
+        {
+            // Header length = 1;
+            int len = 1;
+
+            // cbChId indicates the length of the ChannelId field.
+            switch (this.HeaderBits.CbChannelId)
+            {
+                case cbChId_Values.OneByte:
+                    len += 1;
+                    break;
+                case cbChId_Values.TwoBytes:
+                    len += 2;
+                    break;
+                case cbChId_Values.FourBytes:
+                    len += 4;
+                    break;
+                case cbChId_Values.Invalid:
+                default:
+                    DynamicVCException.Throw("channelIdSize is invalid.");
+                    break;
+            }
+
+            if(!isSp)
+            {
+                // If the 4-5 bit is Len, this value indicates the Length of Length field.
+                // DYNVC_DATA_FIRST and DYNVC_DATA_FIRST_COMPRESSED have Length field.
+                switch ((Len_Values)this.HeaderBits.Sp)
+                {
+                    case Len_Values.OneByte:
+                        len += 1;
+                        break;
+                    case Len_Values.TwoBytes:
+                        len += 2;
+                        break;
+                    case Len_Values.FourBytes:
+                        len += 4;
+                        break;
+                    case Len_Values.Invalid:
+                    default:
+                        DynamicVCException.Throw("lengthSize is invalid.");
+                        break;
+                }
+            }
+
+            return len;
+        }
     }
 
     public class DataFirstDvcPdu : DataDvcBasePdu
@@ -815,46 +879,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
         public int GetNonDataSize()
         {
-            int channelIdSize = 0;
-            int lengthSize = 0;
-            const int headerSize = 1;
-
-            // TODO: refine
-            switch (this.HeaderBits.CbChannelId)
-            {
-                case cbChId_Values.OneByte:
-                    channelIdSize = 1;
-                    break;
-                case cbChId_Values.TwoBytes:
-                    channelIdSize = 2;
-                    break;
-                case cbChId_Values.FourBytes:
-                    channelIdSize = 4;
-                    break;
-                case cbChId_Values.Invalid:
-                default:
-                    DynamicVCException.Throw("channelIdSize is invalid.");
-                    break;
-            }
-
-            switch ((Len_Values)this.HeaderBits.Sp)
-            {
-                case Len_Values.OneByte:
-                    lengthSize = 1;
-                    break;
-                case Len_Values.TwoBytes:
-                    lengthSize = 2;
-                    break;
-                case Len_Values.FourBytes:
-                    lengthSize = 4;
-                    break;
-                case Len_Values.Invalid:
-                default:
-                    DynamicVCException.Throw("lengthSize is invalid.");
-                    break;
-            }
-
-            return (headerSize + channelIdSize + lengthSize);
+            return NonDataSize(false);
         }
 
         protected override Cmd_Values Cmd
@@ -893,28 +918,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
         public int GetNonDataSize()
         {
-            int channelIdSize = 0;
-            const int headerSize = 1;
-
-            // TODO: refine
-            switch (this.HeaderBits.CbChannelId)
-            {
-                case cbChId_Values.OneByte:
-                    channelIdSize = 1;
-                    break;
-                case cbChId_Values.TwoBytes:
-                    channelIdSize = 2;
-                    break;
-                case cbChId_Values.FourBytes:
-                    channelIdSize = 4;
-                    break;
-                case cbChId_Values.Invalid:
-                default:
-                    DynamicVCException.Throw("channelIdSize is invalid.");
-                    break;
-            }
-
-            return (headerSize + channelIdSize);
+            return NonDataSize(true);
         }
 
         protected override Cmd_Values Cmd
@@ -935,6 +939,89 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         }
     }
 
+    /// <summary>
+    /// The DYNVC_DATA_FIRST_COMPRESSED PDU is used to send the first block of data of a fragmented message 
+    /// when the data block is compressed.
+    /// </summary>
+    public class DataFirstCompressedDvcPdu : DataDvcBasePdu
+    {
+        public uint Length { get; set; }
+
+        public DataFirstCompressedDvcPdu(){ }
+
+        public DataFirstCompressedDvcPdu(uint channelId, uint length, byte[] data)
+        {
+            this.ChannelId = channelId;
+            this.Length = length;
+            this.Data = data;
+
+            UpdateCbChannelId();
+            UpdateLengthOfLength(length);
+        }
+    
+        public int GetNonDataSize()
+        {
+            return NonDataSize(false);
+        }
+
+        protected override Cmd_Values Cmd
+        {
+            get { return Cmd_Values.FirstDataCompressed; }
+        }
+
+        protected override void DoMarshal(PduMarshaler marshaler)
+        {
+            WriteChannelId(marshaler);
+            WriteLength(marshaler, this.Length);
+            marshaler.WriteBytes(this.Data);
+        }
+
+        protected override void DoUnmarshal(PduMarshaler marshaler)
+        {
+            ReadChannelId(marshaler);
+            Length = ReadLength(marshaler);
+            Data = marshaler.ReadToEnd();
+        }
+    
+    }
+
+    /// <summary>
+    /// The DYNVC_DATA_COMPRESSED PDU is used to send both single messages and blocks of fragmented messages 
+    /// when the data block is compressed.
+    /// </summary>
+    public class DataCompressedDvcPdu : DataDvcBasePdu
+    {
+        public DataCompressedDvcPdu(){ }
+
+        public DataCompressedDvcPdu(uint channelId, byte[] data)
+        {
+            this.ChannelId = channelId;
+            this.Data = data;
+            UpdateCbChannelId();
+        }
+
+        public int GetNonDataSize()
+        {
+            return NonDataSize(true);
+        }
+
+        protected override Cmd_Values Cmd
+        {
+            get { return Cmd_Values.DataCompressed; }
+        }
+
+        protected override void DoMarshal(PduMarshaler marshaler)
+        {
+            WriteChannelId(marshaler);
+            marshaler.WriteBytes(Data);
+        }
+
+        protected override void DoUnmarshal(PduMarshaler marshaler)
+        {
+            ReadChannelId(marshaler);
+            this.Data = marshaler.ReadToEnd();
+        }
+    }
     #endregion
 
     #region Closing Dynamic Virtual Channel PDUs
@@ -968,6 +1055,254 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
     #endregion
 
+    #region Soft-Sync
+    /// <summary>
+    /// A DYNVC_SOFT_SYNC_REQUEST PDU is sent by a DVC server manager over the DRDYNVC static virtual channel 
+    /// on the main RDP connection.
+    /// </summary>
+    public class SoftSyncReqDvcPDU : RequestDvcPDU
+    {
+        protected override Cmd_Values Cmd
+        {
+            get { return Cmd_Values.SoftSyncReq; }
+        }
+        public byte Pad;
+        public UInt32 Length;
+        public SoftSyncReqFlags_Value Flags;
+        public ushort NumberOfTunnels;
+        public SoftSyncChannelList[] SoftSyncChannelLists;
+        public override uint ChannelId
+        {
+            get
+            {
+                DynamicVCException.Throw("CapsVer1ReqDvcPdu doesn't support channel ID.");
+                return 0;
+            }
+            set
+            {
+                DynamicVCException.Throw("CapsVer1ReqDvcPdu doesn't support  channel ID.");
+            }
+        }
 
+        public SoftSyncReqDvcPDU(){ }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public SoftSyncReqDvcPDU(SoftSyncReqFlags_Value flags, ushort numberOfTunnels, SoftSyncChannelList[] softSyncChannelLists)
+        {
+            HeaderBits = new Header(Cmd_Values.SoftSyncReq, 0, 0);
+            this.Pad = 0;            
+            this.Flags = flags;
+            this.NumberOfTunnels = numberOfTunnels;
+            this.SoftSyncChannelLists = softSyncChannelLists;
+            // Section 2.2.5.1, Length (4 bytes): A 32-bit, unsigned integer indicating the total size, in bytes, of SoftSyncChannelLists field.
+            // TDI: this length should also including the length of Length(4 bytes), Flags(2 bytes) and NumberOfTunnels(2 bytes) in DYNVC_SOFT_SYNC_REQUEST PDU.
+            // this length value is Length(4) + Flags(2) + NumberOfTunnels(2) = 8.  
+            this.Length = 8;
+
+            if(flags.HasFlag(SoftSyncReqFlags_Value.SOFT_SYNC_CHANNEL_LIST_PRESENT))
+            {
+                if (softSyncChannelLists == null)
+                {
+                    DynamicVCException.Throw("Should have one or more Soft-Sync Channel Lists.");
+                }
+
+                foreach (var channel in softSyncChannelLists)
+                {
+                    this.Length += (uint)channel.GetSize();
+                }
+            }
+        }
+
+        protected override void DoMarshal(PduMarshaler marshaler)
+        {
+            marshaler.WriteByte(Pad);
+            marshaler.WriteUInt32(Length);
+            marshaler.WriteUInt16((ushort)Flags);
+            marshaler.WriteUInt16((ushort)NumberOfTunnels);
+            if(SoftSyncChannelLists != null)
+            {
+                foreach (var li in SoftSyncChannelLists)
+                {
+                    marshaler.WriteBytes(li.Encode());
+                }
+            }
+        }
+
+        protected override void DoUnmarshal(PduMarshaler marshaler)
+        {
+            this.Pad = marshaler.ReadByte();
+            this.Length = marshaler.ReadUInt32();
+            this.Flags = (SoftSyncReqFlags_Value)marshaler.ReadUInt16();
+            this.NumberOfTunnels = marshaler.ReadUInt16();
+            List<SoftSyncChannelList> list = new List<SoftSyncChannelList>();
+
+            for (int i = 0; i < NumberOfTunnels; ++i)
+            {
+                SoftSyncChannelList channel = new SoftSyncChannelList((TunnelType_Value)marshaler.ReadUInt32(), marshaler.ReadUInt16());
+
+                List<uint> Ids = new List<uint>();
+                for (int k = 0; k < channel.NumberOfDVCs; ++k)
+                {
+                    Ids.Add(marshaler.ReadUInt32());
+                }
+                channel.ListOfDVCIds = Ids.ToArray();
+                list.Add(channel);
+            }
+            this.SoftSyncChannelLists = list.ToArray();
+        }
+        
+    }
+
+    /// <summary>
+    /// A 16-bit, unsigned integer that specifies the contents of this PDU.
+    /// </summary>
+    public enum SoftSyncReqFlags_Value : ushort
+    {
+        /// <summary>
+        /// Indicates that no more data will be sent over TCP for the specified DVCs. This flag MUST be set.
+        /// </summary>
+        SOFT_SYNC_TCP_FLUSHED = 0x01,
+
+        /// <summary>
+        /// Indicates that one or more Soft-Sync Channel Lists (section 3.1.5.1.1) are present in this PDU.
+        /// </summary>
+        SOFT_SYNC_CHANNEL_LIST_PRESENT = 0x02
+    }
+
+    /// <summary>
+    /// One or more DYNVC_SOFT_SYNC_CHANNEL_LISTs are contained in a Soft-Sync Request PDU to indicate 
+    /// which dynamic virtual channels have data written by the server on the specified multitransport tunnel
+    /// </summary>
+    public class SoftSyncChannelList
+    {
+        /// <summary>
+        /// Indicates the target tunnel type for the transport switch.
+        /// </summary>
+        public TunnelType_Value TunnelType;
+
+        /// <summary>
+        /// A 16-bit, unsigned integer indicating the number of DVCs that will have data written by the server manager on this tunnel.
+        /// </summary>
+        public ushort NumberOfDVCs;
+
+        /// <summary>
+        /// One or more 32-bit, unsigned integers, as indicated by the NumberOfDVCs field, 
+        /// containing the channel ID of each DVC that will have data written by the server manager on this tunnel.
+        /// </summary>
+        public uint[] ListOfDVCIds;
+
+        /// <summary>
+        /// Encode method.
+        /// </summary>
+        /// <returns>Binary value of SoftSyncChannelList</returns>
+        public byte[] Encode()
+        {
+            List<byte> buffer = new List<byte>();
+            buffer.AddRange(TypeMarshal.ToBytes<TunnelType_Value>(TunnelType));
+            buffer.AddRange(TypeMarshal.ToBytes<ushort>(NumberOfDVCs));
+            foreach(uint i in ListOfDVCIds)
+            {
+                buffer.AddRange(TypeMarshal.ToBytes<uint>(i));
+            }
+            return buffer.ToArray();
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public SoftSyncChannelList(TunnelType_Value tunnelType, ushort numberOfDVCs, List<uint> listOfIds = null)
+        {
+            this.TunnelType = tunnelType;
+            this.NumberOfDVCs = numberOfDVCs;
+            if (listOfIds != null)
+                this.ListOfDVCIds = listOfIds.ToArray();
+        }
+
+        public uint GetSize()
+        {
+            // TunnelType: 4 bytes; NumberOfDVCs: 2 bytes; ListOfDVCIds: NumberOfDVCs * 4 bytes.
+            return (uint)(4 + 2 + NumberOfDVCs * 4);
+        }
+
+        public SoftSyncChannelList() { }
+
+    }
+
+    /// <summary>
+    /// Indicates the target tunnel type for the transport switch
+    /// </summary>
+    public enum TunnelType_Value : uint
+    {
+        /// <summary>
+        /// RDP-UDP Forward Error Correction (FEC) multitransport tunnel ([MS-RDPEMT] section 1.3).
+        /// </summary>
+        TUNNELTYPE_UDPFECR = 0x00000001,
+
+        /// <summary>
+        /// RDP-UDP FEC lossy multitransport tunnel ([MS-RDPEMT] section 1.3).
+        /// </summary>
+        TUNNELTYPE_UDPFECL = 0x00000003
+    }
+
+    /// <summary>
+    /// A DYNVC_SOFT_SYNC_RESPONSE PDU is sent by a DVC client manager over the DRDYNVC static virtual channel 
+    /// on the main RDP connection in response to a Soft-Sync Request PDU (section 2.2.5.1). 
+    /// </summary>
+    public class SoftSyncResDvcPdu : ResponseDvcPDU
+    {
+        protected override Cmd_Values Cmd
+        {
+            get { return Cmd_Values.SoftSyncRes; }
+        }
+
+        public byte Pad;
+        public uint NumberOfTunnels;
+        public TunnelType_Value[] TunnelsToSwitch;
+        public override uint ChannelId
+        {
+            get
+            {
+                DynamicVCException.Throw("CapsVer1ReqDvcPdu doesn't support channel ID.");
+                return 0;
+            }
+            set
+            {
+                DynamicVCException.Throw("CapsVer1ReqDvcPdu doesn't support  channel ID.");
+            }
+        }
+
+        public SoftSyncResDvcPdu() { }
+        
+        public SoftSyncResDvcPdu(uint numberOfTunnels, TunnelType_Value[] tunnelsToSwitch)
+        {
+            NumberOfTunnels = numberOfTunnels;
+            TunnelsToSwitch = tunnelsToSwitch;
+        }
+
+        protected override void DoMarshal(PduMarshaler marshaler)
+        {
+            marshaler.WriteByte(Pad);
+            marshaler.WriteUInt32(NumberOfTunnels);
+            foreach (var tunnel in TunnelsToSwitch)
+            {
+                marshaler.WriteBytes(TypeMarshal.ToBytes<TunnelType_Value>(tunnel));
+            }
+        }
+
+        protected override void DoUnmarshal(PduMarshaler marshaler)
+        {
+            this.Pad = marshaler.ReadByte();
+            this.NumberOfTunnels = marshaler.ReadUInt32();
+            List<TunnelType_Value> tunnelsToSwitchList = new List<TunnelType_Value>();
+            for (int i = 0; i < NumberOfTunnels; ++i)
+            {
+                tunnelsToSwitchList.Add((TunnelType_Value)marshaler.ReadUInt32());
+            }
+            this.TunnelsToSwitch = tunnelsToSwitchList.ToArray();
+        }
+    }
+    #endregion 
     #endregion
 }

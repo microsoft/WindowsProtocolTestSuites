@@ -99,8 +99,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// <summary>
         /// Specifies that the RDPUDP_CORRELATION_ID_PAYLOAD Structure (section 2.2.2.8) is present.
         /// </summary>
-        RDPUDP_FLAG_CORRELATION_ID = 0x0800
+        RDPUDP_FLAG_CORRELATION_ID = 0x0800,
 
+        /// <summary>
+        /// Specifies that the optional RDPUDP_SYNDATAEX_PAYLOAD Structure (section 2.2.2.9) is present.
+        /// </summary>
+        RDPUDP_FLAG_SYNEX = 0x1000
     }
 
     /// <summary>
@@ -277,6 +281,52 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         public byte[] uReserved; 
     }
 
+    public struct RDPUDP_SYNDATAEX_PAYLOAD
+    {
+        /// <summary>
+        /// A 16-bit unsigned integer that indicates supported options.
+        /// </summary>
+        public uSynExFlags_Values uSynExFlags;
+
+        /// <summary>
+        /// A 16-bit unsigned value. When the RDPUDP_VERSION_INFO_VALID flag is present, 
+        /// this specifies a supported version of the UDP Transport Extension, used to negotiate with the other endpoint.
+        /// </summary>
+        public uUdpVer_Values uUdpVer;
+    }
+
+    /// <summary>
+    /// A 16-bit unsigned integer that indicates supported options. 
+    /// </summary>
+    [Flags]
+    public enum uSynExFlags_Values : ushort
+    {
+        None = 0x0000,
+
+        /// <summary>
+        /// The uUdpVer field indicates a supported version of the RDP-UDP protocol.
+        /// </summary>
+        RDPUDP_VERSION_INFO_VALID = 0x0001
+    }
+
+    /// <summary>
+    /// Supported Version flags value.
+    /// </summary>
+    public enum uUdpVer_Values : ushort
+    {
+        None = 0x0000,
+
+        /// <summary>
+        /// The minimum retransmit time-out is 500 ms (section 3.1.6.1), and the minimum delayed ACK time-out is 200 ms (section 3.1.6.3).<1>
+        /// </summary>
+        RDPUDP_PROTOCOL_VERSION_1 = 0x0001,
+
+        /// <summary>
+        /// The minimum retransmit time-out is 300 ms (section 3.1.6.1), and the minimum delayed ACK time-out is 50 ms (section 3.1.6.3).<2>
+        /// </summary>
+        RDPUDP_PROTOCOL_VERSION_2 = 0x0002
+    }
+
     /// <summary>
     /// The base packet type for Rdpeudp.
     /// </summary>
@@ -296,6 +346,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// CorrelationId
         /// </summary>
         public RDPUDP_CORRELATION_ID_PAYLOAD? CorrelationId;
+
+        /// <summary>
+        /// SYNEX data
+        /// </summary>
+        public RDPUDP_SYNDATAEX_PAYLOAD? SynDataEx;
 
         /// <summary>
         /// RDPUDP_ACK_VECTOR_HEADER
@@ -365,6 +420,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                     length += 16;
                     marshaler.WriteBytes(CorrelationId.Value.uReserved);
                     length += 16;
+                }
+
+                if(SynDataEx.HasValue)
+                {
+                    marshaler.WriteUInt16((ushort)SynDataEx.Value.uSynExFlags);
+                    marshaler.WriteUInt16((ushort)SynDataEx.Value.uUdpVer);
+                    length += 4;
                 }
 
                 byte[] padBytes = new byte[1232 - length];
@@ -455,6 +517,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                         correlationId.uCorrelationId = marshaler.ReadBytes(16);
                         this.CorrelationId = correlationId;
                         correlationId.uReserved = marshaler.ReadBytes(16);
+                    }
+
+                    if (fecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_SYNEX))
+                    {
+                        RDPUDP_SYNDATAEX_PAYLOAD synDataEx = new RDPUDP_SYNDATAEX_PAYLOAD();
+                        synDataEx.uSynExFlags = (uSynExFlags_Values)marshaler.ReadUInt16();
+                        synDataEx.uUdpVer = (uUdpVer_Values)marshaler.ReadUInt16();
+                        this.SynDataEx = synDataEx;
                     }
 
                     this.padding = marshaler.ReadToEnd();
