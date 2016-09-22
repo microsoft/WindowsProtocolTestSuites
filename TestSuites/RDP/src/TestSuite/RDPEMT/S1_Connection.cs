@@ -109,5 +109,30 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
             if (requestIdList.Count == 1)
                 VerifyClientInitiateMultitransportResponsePDU(rdpbcgrAdapter.SessionContext.ClientInitiateMultitransportResponsePDU, requestIdList[0]);
         }
+
+        [TestMethod]
+        [Priority(1)]
+        [TestCategory("Positive")]
+        [TestCategory("RDP8.1")]
+        [TestCategory("RDPEMT")]
+        [Description("Verify the RDP client can handle soft sync connection using RDP-UDP-L.")]
+        public void S1_Connection_SoftSync_Lossy()
+        {
+            this.TestSite.Assert.IsTrue(isClientSupportSoftSync, "SUT should support Soft-Sync.");
+            StartSoftSyncConnection(TransportMode.Lossy);
+        }
+
+        [TestMethod]
+        [Priority(1)]
+        [TestCategory("Positive")]
+        [TestCategory("RDP8.1")]
+        [TestCategory("RDPEMT")]
+        [Description("Verify the RDP client can handle soft sync connection using RDP-UDP-R.")]
+        public void S1_Connection_SoftSync_Reliable()
+        {
+            this.TestSite.Assert.IsTrue(isClientSupportSoftSync, "SUT should support Soft-Sync.");
+            StartSoftSyncConnection(TransportMode.Reliable);
+        }
+            
     }
 }

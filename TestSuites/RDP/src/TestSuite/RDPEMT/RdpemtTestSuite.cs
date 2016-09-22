@@ -95,6 +95,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
                 rdpemtServerR.Dispose();
             if (rdpeudpServer != null && rdpeudpServer.Running)
                 rdpeudpServer.Stop();
+            if (rdpeudpSocketR != null && rdpeudpSocketR.Connected)
+                rdpeudpSocketR.Close();
+            if (rdpeudpSocketL != null && rdpeudpSocketL.Connected)
+                rdpeudpSocketL.Close();
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Stop RDP listening.");
             this.rdpbcgrAdapter.StopRDPListening();
@@ -105,7 +109,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         /// <summary>
         /// Start RDP connection.
         /// </summary>
-        private void StartRDPConnection(bool useRDPEncryption = false)
+        private void StartRDPConnection(bool useRDPEncryption = false, bool isSoftSync = false)
         {
 
             if (useRDPEncryption)
@@ -140,7 +144,21 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
 
             //Waiting for the RDP connection sequence.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Establishing RDP connection.");
-            this.rdpbcgrAdapter.EstablishRDPConnection(selectedProtocol, enMethod, enLevel, true, false, rdpServerVersion, true);
+            MULTITRANSPORT_TYPE_FLAGS flags = MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECL | MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECR;
+            if(isSoftSync)
+            {
+                flags |= MULTITRANSPORT_TYPE_FLAGS.SOFTSYNC_TCP_TO_UDP;
+            }
+            this.rdpbcgrAdapter.EstablishRDPConnection(
+                selectedProtocol, 
+                enMethod, 
+                enLevel, 
+                true, 
+                false, 
+                rdpServerVersion, 
+                flags,
+                false,
+                false);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server Save Session Info PDU to SUT to notify user has logged on.");
             this.rdpbcgrAdapter.ServerSaveSessionInfo(LogonNotificationType.UserLoggedOn, ErrorNotificationType_Values.LOGON_FAILED_OTHER);
@@ -228,6 +246,40 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
                 rdpemtServerL = rdpemtServer;
             }
         }
+
+        #region Soft-Sync connection
+        /// <summary>
+        /// Establish EMT connection and soft sync.
+        /// </summary>
+        private void StartSoftSyncConnection(TransportMode mode)
+        {
+            StartRDPConnection(false, true);
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} UDP connection.", mode);
+            this.EstablishUDPConnection(mode, waitTime);
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} RDPEMT connection.", mode);
+            this.EstablishRdpemtConnection(mode, waitTime, true);
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect for Client Initiate Multitransport PDU to indicate that the client was able to successfully complete the multitransport initiation request.");
+            this.rdpbcgrAdapter.WaitForPacket<Client_Initiate_Multitransport_Response_PDU>(waitTime);
+
+            // This response code MUST only be sent to a server that advertises the SOFTSYNC_TCP_TO_UDP (0x200) flag in the Server Multitransport Channel Data.
+            // Indicates that the client was able to successfully complete the multitransport initiation request.
+            if (requestIdList.Count == 1)
+                VerifyClientInitiateMultitransportResponsePDU(rdpbcgrAdapter.SessionContext.ClientInitiateMultitransportResponsePDU, requestIdList[0], HrResponse_Value.S_OK);
+
+            #region Start EDYC soft sync
+            Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc.RdpedycServer rdpedycServer =
+                new Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc.RdpedycServer(this.rdpbcgrAdapter.ServerStack, this.rdpbcgrAdapter.SessionContext);
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Start Dynamic VC Version Negotiation");
+            rdpedycServer.ExchangeCapabilities(waitTime);
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Start Soft-Sync");
+            rdpedycServer.SoftSyncNegotiate(waitTime);
+            #endregion
+        }
+        #endregion 
 
         #region RTT Measure
         /// <summary>
@@ -583,14 +635,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         /// </summary>
         /// <param name="multitransportResponsePdu">Client Initiate Multitransport Response PDU</param>
         /// <param name="expectedRequestId">Expected requestId</param>
-        private void VerifyClientInitiateMultitransportResponsePDU(Client_Initiate_Multitransport_Response_PDU multitransportResponsePdu, uint expectedRequestId)
+        /// <param name="value">Expected response value</param>
+        private void VerifyClientInitiateMultitransportResponsePDU(Client_Initiate_Multitransport_Response_PDU multitransportResponsePdu, uint expectedRequestId, HrResponse_Value value = HrResponse_Value.E_ABORT)
         {
             if (multitransportResponsePdu == null)
             {
                 Site.Assert.Fail("Not get Client Initiate Multitransport Error PDU");
             }
             Site.Assert.AreEqual(expectedRequestId, multitransportResponsePdu.requestId, "Expected request id is {0}, but request id in received Multitransport Error Pdu is {1}.", expectedRequestId, multitransportResponsePdu.requestId);
-            Site.Assert.AreEqual(HrResponse_Value.E_ABORT, multitransportResponsePdu.hrResponse, "hrResponse field must be 0x80004004");
+            Site.Assert.AreEqual(value, multitransportResponsePdu.hrResponse, "hrResponse field must be {0}", value);
         }
 
         /// <summary>

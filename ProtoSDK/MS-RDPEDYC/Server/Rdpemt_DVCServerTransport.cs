@@ -22,7 +22,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         private RdpbcgrServer rdpbcgrServer = null;
         private RdpbcgrServerSessionContext serverSessionContext = null;
         private RdpemtServer rdpemtServer = null;
-        private static RdpeudpServer rdpeudpServer = null;
+        private RdpeudpServer rdpeudpServer = null;
         private static readonly object rdpeudpServerLock = new object();
         private static uint multitransportId = 0;
         private RdpeudpSocket rdpeudpSocket = null;
@@ -111,6 +111,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             {
                 rdpeudpServer.Dispose();
             }
+            if (rdpeudpSocket != null && rdpeudpSocket.Connected)
+            {
+                rdpeudpSocket.Close();
+            }
         }
 
         #endregion Public Methods
@@ -152,6 +156,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             }
 
             rdpeudpSocket = rdpeudpServer.Accept(((IPEndPoint)serverSessionContext.Identity).Address, transMode, timeout);
+            if(rdpeudpSocket == null)
+            {
+                if (rdpeudpServer != null && rdpeudpServer.Running)
+                    rdpeudpServer.Dispose();
+
+                throw new NotSupportedException("RDPEMT Server create rdpedupSocket failed.");
+            }
             rdpemtServer = new RdpemtServer(rdpeudpSocket, rdpbcgrServer.AuthCertificate, true);
             rdpemtServer.Received += ReceivedBytes;
 
@@ -180,19 +191,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// Only on RDPEUDP Server can exist
         /// </summary>
         /// <param name="context"></param>
-        private static void CreateRdpeudpServer(RdpbcgrServerSessionContext context)
+        private void CreateRdpeudpServer(RdpbcgrServerSessionContext context)
         {
             if (rdpeudpServer == null)
             {
-                lock (rdpeudpServerLock)
-                {
-                    if (rdpeudpServer == null)
-                    {
-                        rdpeudpServer = new RdpeudpServer((IPEndPoint)context.LocalIdentity);
-                        rdpeudpServer.Start();
-                    }
-                }
+                rdpeudpServer = new RdpeudpServer((IPEndPoint)context.LocalIdentity);
             }
+            if(!rdpeudpServer.Running)
+                rdpeudpServer.Start();
         }
 
         #endregion Priate Methods

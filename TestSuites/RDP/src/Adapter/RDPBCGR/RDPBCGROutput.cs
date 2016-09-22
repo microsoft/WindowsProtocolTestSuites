@@ -307,7 +307,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             surfCmds.compressionFlags = compressedType_Values.None;
             surfCmds.surfaceCommands = new TS_SURFCMD[1];
             surfCmds.surfaceCommands[0] = setSurfBits;
-            surfCmds.size = (ushort)(22 + setSurfBits.bitmapData.bitmapDataLength);
+            int subLength = 22;
+            if (setSurfBits.bitmapData.exBitmapDataHeader != null)
+            {
+                subLength += 24;
+            }
+            surfCmds.size = (ushort)(subLength + setSurfBits.bitmapData.bitmapDataLength);
 
             return surfCmds;
         }
