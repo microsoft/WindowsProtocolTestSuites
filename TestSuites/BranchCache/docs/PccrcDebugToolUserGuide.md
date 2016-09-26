@@ -35,7 +35,7 @@ You can use MS-PCCRC debug tool to read a file to generate the hash data. The to
 You need to install Net Framework 4.0 before using the MS-PCCRC Debug Tool
 
 #### <a name="_Toc314234425"/>**Supported Operating Systems**
-MS-PCCRC Debug Tool supports the operating systems Windows 7 and Win2K8 R2, above version is also supported. Other OS is not tested and not official supported.
+MS-PCCRC Debug Tool supports the operating systems Windows 7 and Win2K8 R2(or above version). Other OS is not tested and not official supported.
 
 ### <a name="_Toc314234426"/>**Installing MS-PCCRC Debug Tool**
 The MS-PCCRC Debug Tool is available as an .exe file. Double Click the .exe file.

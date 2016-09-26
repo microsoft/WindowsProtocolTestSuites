@@ -132,15 +132,15 @@ Run this test suite in an environment that contains the following networks and c
 
 * Two separated networks.
 
-* A computer set up as DC which runs Windows Server 2012 R2, above version is also supported.
+* A computer set up as DC which runs Windows Server 2012 R2(or above version).
 
-* A computer set up as Content Server computer which runs Windows Server 2012 R2, above version is also supported.
+* A computer set up as Content Server computer which runs Windows Server 2012 R2(or above version).
 
-* A computer set up as BranchDC computer which runs Windows Server 2012 R2, above version is also supported.
+* A computer set up as BranchDC computer which runs Windows Server 2012 R2(or above version).
 
-* (Optional) A computer set up as HostedCacheServer computer which runs Windows Server 2012 R2, above version is also supported. 
+* (Optional) A computer set up as HostedCacheServer computer which runs Windows Server 2012 R2(or above version). 
 
-* Two computer set up as Client1 and Client2 which runs Windows 8.1, above version is also supported.
+* Two computer set up as Client1 and Client2 which runs Windows 8.1(or above version).
 
 ### <a name="_Toc395793791"/>Hosted Cache Mode
 

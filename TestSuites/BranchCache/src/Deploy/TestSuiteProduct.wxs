@@ -16,7 +16,7 @@
     <Property Id="SAVED_TARGET_ENDPOINT">
       <RegistrySearch Id="LoadTargetEndpoint"
                       Root="HKLM"
-                      Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"
+                      Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_VERSION)"
                       Name="TargetEndpoint"
                       Type="raw" />
     </Property>
@@ -26,7 +26,7 @@
 	<Component Id="SaveTargetEndpoint" Guid="*" Directory="TESTSUITE_ROOT_DIR">
       <RegistryValue Id="SaveTargetEndpoint"
                      Root="HKLM"
-                     Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"
+                     Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_VERSION)"
                      Name="TargetEndpoint"
                      Type="string"
                      Value="[TARGET_ENDPOINT]" />
@@ -133,7 +133,6 @@
       <Directory Id="WindowsVolumeDir">
         <Directory Id="ProtocolTestDir" Name="MicrosoftProtocolTests">
           <Directory Id="TestSuiteNameDir" Name="!(wix.TESTSUITE_NAME)">
-            <Directory Id="TestSuiteEndpointDir" Name="!(wix.TESTSUITE_ENDPOINT)-Endpoint">
               <!-- Protocol Code Directory -->
               <Directory Id="TESTSUITE_ROOT_DIR" Name="!(wix.TESTSUITE_VERSION)">
                 <Directory Id="TESTSUITE_BATCH_DIR" Name="Batch" />
@@ -141,7 +140,6 @@
                   <Directory Id="PROTOCOLSDK_BIN_DIR" Name="." />
                 </Directory>
                 <Directory Id="TESTSUITE_SCRIPTS_DIR" Name="Scripts" />
-              </Directory>
             </Directory>
           </Directory>
         </Directory>
@@ -151,7 +149,7 @@
 
       <Directory Id="ProgramMenuFolder">
         <Directory Id="TestSuiteProgramsMenuFolder"
-                   Name="!(wix.TESTSUITE_NAME) !(wix.TESTSUITE_ENDPOINT)-EP Test Suite" />
+                   Name="!(wix.TESTSUITE_NAME) Test Suite" />
       </Directory>
 
       <Directory Id="DesktopFolder" />
@@ -180,7 +178,7 @@
 				  
         <RegistryValue Id="GeneralShortcutsKeyPath"
                        Root="HKCU"
-                       Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"
+                       Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_VERSION)"
                        Name="Installed"
                        Type="integer"
                        Value="1"
@@ -203,7 +201,7 @@
 				  
 		<RegistryValue Id="TestSuiteShortcutsKeyPath"
                        Root="HKCU"
-                       Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"
+                       Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_VERSION)"
                        Name="TestSuite"
                        Type="integer"
                        Value="1"
@@ -219,7 +217,7 @@
                   WorkingDirectory="TESTSUITE_ROOT_DIR"/>
         <RegistryValue Id="SutShortcutsKeyPath"
                        Root="HKCU"
-                       Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"
+                       Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_VERSION)"
                        Name="SUT"
                        Type="integer"
                        Value="1"
@@ -235,7 +233,7 @@
                   WorkingDirectory="TESTSUITE_ROOT_DIR"/>
 		<RegistryValue Id="DomainShortcutsKeyPath"
                        Root="HKCU"
-                       Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"
+                       Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_VERSION)"
                        Name="Domain"
                        Type="integer"
                        Value="1"
@@ -247,18 +245,18 @@
     <DirectoryRef Id="DesktopFolder">
       <Component Id="DesktopShortcuts" Guid="*">
         <Shortcut Id="OpenTestSuiteDirShortcut_Desktop"
-                  Name="Open !(wix.TESTSUITE_NAME) !(wix.TESTSUITE_ENDPOINT)-EP Test Suite Directory"
+                  Name="Open !(wix.TESTSUITE_NAME) Test Suite Directory"
                   Description="Open root directory of the test suite"
                   Target="[WindowsFolder]explorer.exe"
                   Arguments="."
                   WorkingDirectory="TESTSUITE_ROOT_DIR"/>
         <Shortcut Id="RunTestCasesShortcut_Desktop"
-                  Name="Run !(wix.TESTSUITE_NAME) !(wix.TESTSUITE_ENDPOINT)-EP Test Cases"
+                  Name="Run !(wix.TESTSUITE_NAME) Test Cases"
                   Description="Run all test cases in the test suite"
                   Target="[TESTSUITE_BATCH_DIR]!(wix.DOMAIN_RUN_ALLTCS_COMMAND)"
                   WorkingDirectory="TESTSUITE_BATCH_DIR" />
         <Shortcut Id="QuickStartGuideShortcut"
-                 Name="Open !(wix.TESTSUITE_NAME) !(wix.TESTSUITE_ENDPOINT)-EP User Guide"
+                 Name="Open !(wix.TESTSUITE_NAME) User Guide"
                  Description="User Guide for !(wix.TESTSUITE_NAME)"
                  Target="[TESTSUITE_DOCS_DIR]!(wix.QUICK_START_GUIDE)"
                  WorkingDirectory="TESTSUITE_DOCS_DIR" />
@@ -269,7 +267,7 @@
                   WorkingDirectory="TESTSUITE_BATCH_DIR" />
         <RegistryValue Id="TestSuiteShortcutsKeyPath_Desktop"
                         Root="HKCU"
-                        Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"
+                        Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_VERSION)"
                         Name="Desktop"
                         Type="integer"
                         Value="1"
