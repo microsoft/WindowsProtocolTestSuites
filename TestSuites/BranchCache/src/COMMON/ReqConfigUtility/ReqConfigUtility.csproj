@@ -47,6 +47,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="CommonConfigPropNames.cs" />
     <Compile Include="CommonUtility.cs" />
     <Compile Include="ReqConfigurableSite.cs" />

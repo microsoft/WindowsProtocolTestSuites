@@ -268,6 +268,9 @@ All of the following software must be installed on the driver computer. They hav
 |      ![image4.png](./image/BranchCache_UserGuide/image4.png)Note| 
 |            You can download Microsoft protocol Test Framework from below website| 
 |            [https://github.com/microsoft/protocoltestframework](https://github.com/microsoft/protocoltestframework) | 
+| Spec Explorer (build 3.5.3146.0 or later)| 
+|    You can download Spec Explorer from below website| 
+|    [http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/](http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)| 
 |  **Optional Software**| 
 | Microsoft Message Analyzer| 
 | ![image3.png](./image/BranchCache_UserGuide/image3.png)Note| 

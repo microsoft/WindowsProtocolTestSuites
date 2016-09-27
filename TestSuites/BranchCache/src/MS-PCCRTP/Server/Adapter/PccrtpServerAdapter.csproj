@@ -44,6 +44,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="..\..\Shared\CaptureCode\PccrtpBothRoleCaptureCode.cs">
       <Link>Capture\PccrtpBothRoleCaptureCode.cs</Link>
     </Compile>
