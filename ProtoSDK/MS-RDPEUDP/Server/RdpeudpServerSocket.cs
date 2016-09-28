@@ -71,13 +71,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// </summary>
         /// <param name="initSequenceNumber">Specify an initial sequence number</param>
         /// <returns></returns>
-        public bool SendSynAndAckPacket(uint? initSequenceNumber = null)
+        public bool SendSynAndAckPacket(uint? initSequenceNumber = null, uUdpVer_Values? version = null)
         {
             if (Connected) return false;
             RdpeudpPacket SynAndAckPacket = new RdpeudpPacket();
             SynAndAckPacket.fecHeader.snSourceAck = SnSourceAck;
             SynAndAckPacket.fecHeader.uReceiveWindowSize = UReceiveWindowSize;
             SynAndAckPacket.fecHeader.uFlags = RDPUDP_FLAG.RDPUDP_FLAG_SYN | RDPUDP_FLAG.RDPUDP_FLAG_ACK;
+            if(version != null)
+            {
+                SynAndAckPacket.fecHeader.uFlags |= RDPUDP_FLAG.RDPUDP_FLAG_SYNEX;
+                SynAndAckPacket.SynDataEx = CreateSynExData((uUdpVer_Values)version);
+            }
             SynAndAckPacket.SynData = CreateSynData(initSequenceNumber);
             SendPacket(SynAndAckPacket);
             // Set the OutSnAckOfAcksSeqNum value, number from which the receive thread decoding the state of the send packet.

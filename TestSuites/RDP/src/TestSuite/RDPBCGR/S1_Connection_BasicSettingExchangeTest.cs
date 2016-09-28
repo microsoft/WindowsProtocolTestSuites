@@ -726,7 +726,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             //Respond A Server MCS Connect Response PDU with GCC Conference Create Response.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server MCS Connect Response PDU to SUT. Encryption Method {0}; Encryption Level: {1}; RDP Version Code: {2}; EarlyCapabilityFlags: {3}.", enMethod.ToString(), enLevel.ToString(), TS_UD_SC_CORE_version_Values.V2.ToString(), SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED.ToString());
-            this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, TS_UD_SC_CORE_version_Values.V2, NegativeType.None, false, true, SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED);
+            this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, TS_UD_SC_CORE_version_Values.V2, NegativeType.None, MULTITRANSPORT_TYPE_FLAGS.None, true, SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED);
 
             //Expect a Client MCS Erect Domain Request PDU.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client MCS Erect Domain Request PDU.");
@@ -782,7 +782,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             //Respond A Server MCS Connect Response PDU with GCC Conference Create Response.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server MCS Connect Response PDU to SUT. Encryption Method {0}; Encryption Level: {1}; RDP Version Code: {2}; EarlyCapabilityFlags: {3}.", enMethod.ToString(), enLevel.ToString(), TS_UD_SC_CORE_version_Values.V2.ToString(), SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED_V2.ToString());
-            this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, rdpServerVersion, NegativeType.None, false, true, SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED_V2);
+            this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, rdpServerVersion, NegativeType.None, MULTITRANSPORT_TYPE_FLAGS.None, true, SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED_V2);
 
             //Expect a Client MCS Erect Domain Request PDU.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client MCS Erect Domain Request PDU.");
@@ -859,7 +859,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             //Respond A Server MCS Connect Response PDU with GCC Conference Create Response.
             SC_earlyCapabilityFlags_Values earlyCapabilityFlagsValue = SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED | SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED_V2;
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server MCS Connect Response PDU to SUT. Encryption Method {0}; Encryption Level: {1}; RDP Version Code: {2}; EarlyCapabilityFlags: {3}.", enMethod.ToString(), enLevel.ToString(), TS_UD_SC_CORE_version_Values.V2.ToString(), SC_earlyCapabilityFlags_Values.RNS_UD_SC_DYNAMIC_DST_SUPPORTED.ToString() + " | " + SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED_V2.ToString());
-            this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, TS_UD_SC_CORE_version_Values.V2, NegativeType.None, false, true, earlyCapabilityFlagsValue);
+            this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, TS_UD_SC_CORE_version_Values.V2, NegativeType.None, MULTITRANSPORT_TYPE_FLAGS.None, true, earlyCapabilityFlagsValue);
 
             //Expect a Client MCS Erect Domain Request PDU.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client MCS Erect Domain Request PDU.");
@@ -914,7 +914,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             //Respond A Server MCS Connect Response PDU with GCC Conference Create Response.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server MCS Connect Response PDU to SUT. Encryption Method {0}; Encryption Level: {1}; RDP Version Code: {2}; EarlyCapabilityFlags: {3}.", enMethod.ToString(), enLevel.ToString(), TS_UD_SC_CORE_version_Values.V2.ToString(), SC_earlyCapabilityFlags_Values.RNS_UD_SC_DYNAMIC_DST_SUPPORTED.ToString());
-            this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, rdpServerVersion, NegativeType.None, false, true, SC_earlyCapabilityFlags_Values.RNS_UD_SC_DYNAMIC_DST_SUPPORTED);
+            this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, rdpServerVersion, NegativeType.None, MULTITRANSPORT_TYPE_FLAGS.None, true, SC_earlyCapabilityFlags_Values.RNS_UD_SC_DYNAMIC_DST_SUPPORTED);
 
             //Expect a Client MCS Erect Domain Request PDU.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client MCS Erect Domain Request PDU.");
@@ -1042,7 +1042,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             //Respond A Server MCS Connect Response PDU with GCC Conference Create Response.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server MCS Connect Response PDU to SUT. Encryption Method {0}; Encryption Level: {1}; RDP Version Code: {2}; MCSChannelId: {3}", enMethod.ToString(), enLevel.ToString(), TS_UD_SC_CORE_version_Values.V2.ToString(), ConstValue.ID_LessMax);
-            this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, TS_UD_SC_CORE_version_Values.V2, NegativeType.None, false, false, 0, ConstValue.ID_LessMax);
+            this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, TS_UD_SC_CORE_version_Values.V2, NegativeType.None, MULTITRANSPORT_TYPE_FLAGS.None, false, 0, ConstValue.ID_LessMax);
             // TODO: give 65535 would failed, need to recheck the boundary of MCSChannelID.
 
             //Expect a Client MCS Erect Domain Request PDU.
@@ -1109,7 +1109,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             //Respond A Server MCS Connect Response PDU with GCC Conference Create Response.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server MCS Connect Response PDU to SUT. Encryption Method {0}; Encryption Level: {1}; RDP Version Code: {2}; MCSChannelId: {3}", enMethod.ToString(), enLevel.ToString(), TS_UD_SC_CORE_version_Values.V2.ToString(), ConstValue.ID_ONE);
-            this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, TS_UD_SC_CORE_version_Values.V2, NegativeType.None, false, false, 0, ConstValue.ID_ONE);
+            this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, TS_UD_SC_CORE_version_Values.V2, NegativeType.None, MULTITRANSPORT_TYPE_FLAGS.None, false, 0, ConstValue.ID_ONE);
             // TODO: give 65535 would failed, need to recheck the boundary of MCSChannelID.
 
             //Expect a Client MCS Erect Domain Request PDU.
@@ -1176,7 +1176,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             //Respond A Server MCS Connect Response PDU with GCC Conference Create Response.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server MCS Connect Response PDU to SUT. Encryption Method {0}; Encryption Level: {1}; RDP Version Code: {2}; MCSChannelId: {3}", enMethod.ToString(), enLevel.ToString(), TS_UD_SC_CORE_version_Values.V2.ToString(), ConstValue.ID_ZERO);
-            this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, TS_UD_SC_CORE_version_Values.V2, NegativeType.None, false, false, 0, ConstValue.ID_ZERO);
+            this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, TS_UD_SC_CORE_version_Values.V2, NegativeType.None, MULTITRANSPORT_TYPE_FLAGS.None, false, 0, ConstValue.ID_ZERO);
             // TODO: give 65535 would failed, need to recheck the boundary of MCSChannelID.
 
             //Expect a Client MCS Erect Domain Request PDU.
@@ -1245,7 +1245,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             //Respond A Server MCS Connect Response PDU with GCC Conference Create Response.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server MCS Connect Response PDU to SUT. Encryption Method {0}; Encryption Level: {1}; RDP Version Code: {2}; MCSChannelId: {3}", enMethod.ToString(), enLevel.ToString(), TS_UD_SC_CORE_version_Values.V2.ToString(), ConstValue.ID_MAX);
-            this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, TS_UD_SC_CORE_version_Values.V2, NegativeType.None, false, false, 0, ConstValue.IO_CHANNEL_ID, ConstValue.ID_MAX);
+            this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, TS_UD_SC_CORE_version_Values.V2, NegativeType.None, MULTITRANSPORT_TYPE_FLAGS.None, false, 0, ConstValue.IO_CHANNEL_ID, ConstValue.ID_MAX);
 
             //Expect a Client MCS Erect Domain Request PDU.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client MCS Erect Domain Request PDU.");
@@ -1311,7 +1311,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             //Respond A Server MCS Connect Response PDU with GCC Conference Create Response.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server MCS Connect Response PDU to SUT. Encryption Method {0}; Encryption Level: {1}; RDP Version Code: {2}; MCSChannelId: {3}", enMethod.ToString(), enLevel.ToString(), TS_UD_SC_CORE_version_Values.V2.ToString(), ConstValue.ID_LessMax);
-            this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, TS_UD_SC_CORE_version_Values.V2, NegativeType.None, false, false, 0, ConstValue.IO_CHANNEL_ID, ConstValue.ID_LessMax);
+            this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, TS_UD_SC_CORE_version_Values.V2, NegativeType.None, MULTITRANSPORT_TYPE_FLAGS.None, false, 0, ConstValue.IO_CHANNEL_ID, ConstValue.ID_LessMax);
 
             //Expect a Client MCS Erect Domain Request PDU.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client MCS Erect Domain Request PDU.");
@@ -1377,7 +1377,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             //Respond A Server MCS Connect Response PDU with GCC Conference Create Response.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server MCS Connect Response PDU to SUT. Encryption Method {0}; Encryption Level: {1}; RDP Version Code: {2}; MCSChannelId: {3}", enMethod.ToString(), enLevel.ToString(), TS_UD_SC_CORE_version_Values.V2.ToString(), ConstValue.ID_ONE);
-            this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, TS_UD_SC_CORE_version_Values.V2, NegativeType.None, false, false, 0, ConstValue.IO_CHANNEL_ID, ConstValue.ID_ONE);
+            this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, TS_UD_SC_CORE_version_Values.V2, NegativeType.None, MULTITRANSPORT_TYPE_FLAGS.None, false, 0, ConstValue.IO_CHANNEL_ID, ConstValue.ID_ONE);
 
             //Expect a Client MCS Erect Domain Request PDU.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client MCS Erect Domain Request PDU.");
@@ -1444,7 +1444,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             //Respond A Server MCS Connect Response PDU with GCC Conference Create Response.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server MCS Connect Response PDU to SUT. Encryption Method {0}; Encryption Level: {1}; RDP Version Code: {2}; MCSChannelId: {3}", enMethod.ToString(), enLevel.ToString(), TS_UD_SC_CORE_version_Values.V2.ToString(), ConstValue.ID_ZERO);
-            this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, TS_UD_SC_CORE_version_Values.V2, NegativeType.None, false, false, 0, ConstValue.IO_CHANNEL_ID, ConstValue.ID_ZERO);
+            this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, TS_UD_SC_CORE_version_Values.V2, NegativeType.None, MULTITRANSPORT_TYPE_FLAGS.None, false, 0, ConstValue.IO_CHANNEL_ID, ConstValue.ID_ZERO);
 
             //Expect a Client MCS Erect Domain Request PDU.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client MCS Erect Domain Request PDU.");

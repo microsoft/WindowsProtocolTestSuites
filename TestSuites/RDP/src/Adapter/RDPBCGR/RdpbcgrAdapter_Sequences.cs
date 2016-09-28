@@ -26,7 +26,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="isExtendedClientDataSupported">Indicates if server supports Extended Client Data Blocks.</param>
         /// <param name="expectAutoReconnect">Indicates if expect an Auto-Connect sequence.</param>
         /// <param name="rdpServerVersion">The RDP Sever version</param>
-        /// <param name="isMultitransportSupported">Whether support multitransport</param>
+        /// <param name="multiTransportTypeFlags">Flags of Multitransport Channel Data</param>
         /// <param name="supportRDPEGFX">Whether support RDPEGFX</param>
         /// <param name="supportRestrictedAdminMode">Whether support restricted admin mode</param>
         public void EstablishRDPConnection( 
@@ -36,8 +36,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             bool isExtendedClientDataSupported,
             bool expectAutoReconnect,
             TS_UD_SC_CORE_version_Values rdpServerVersion,
-            bool isMultitransportSupported = false,
-            bool supportRDPEGFX = false, bool supportRestrictedAdminMode = false)
+            MULTITRANSPORT_TYPE_FLAGS multiTransportTypeFlags = MULTITRANSPORT_TYPE_FLAGS.None,
+            bool supportRDPEGFX = false, 
+            bool supportRestrictedAdminMode = false)
         {
             #region Logging
             this.site.Log.Add(LogEntryKind.Comment, @"EstablishRDPConnection(
@@ -86,7 +87,24 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Basic Setting Exchange
             ExpectPacket<Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request>(sessionContext, pduWaitTimeSpan);
 
-            Server_MCS_Connect_Response(enMethod, enLevel, rdpServerVersion, NegativeType.None, isMultitransportSupported);
+            if (multiTransportTypeFlags.HasFlag(MULTITRANSPORT_TYPE_FLAGS.SOFTSYNC_TCP_TO_UDP))
+            {
+                Site.Assert.IsTrue(sessionContext.MultitransportTypeFlagsInMCSConnectIntialPdu.HasFlag(MULTITRANSPORT_TYPE_FLAGS.SOFTSYNC_TCP_TO_UDP),
+                    "Client Should support Soft-Sync, flags: {0}",
+                    sessionContext.MultitransportTypeFlagsInMCSConnectIntialPdu);
+            }
+
+            Server_MCS_Connect_Response(
+                enMethod, 
+                enLevel, 
+                rdpServerVersion, 
+                NegativeType.None,
+                multiTransportTypeFlags,
+                false,
+                SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED,
+                ConstValue.IO_CHANNEL_ID,
+                ConstValue.MCS_MESSAGE_CHANNEL_ID);
+
             #endregion
 
             #region Channel Connection
@@ -169,6 +187,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             ServerFontMap(); 
             #endregion
         }
+
 
        /// <summary>
        /// Start a server Initiated disconnection sequence

@@ -35,7 +35,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Srvs
         public SrvsClient(TimeSpan timeout)
         {
             RpceTimeout = timeout;
-            AuthenticationLevel = RpceAuthenticationLevel.RPC_C_AUTHN_LEVEL_PKT_INTEGRITY;
+            AuthenticationLevel = RpceAuthenticationLevel.RPC_C_AUTHN_LEVEL_NONE;
         }
 
         #endregion

@@ -1289,16 +1289,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// 
         /// Then call SendPdu to send the packet.
         /// </summary>
-        /// <param name="clientName">The name of the client computer. This argument can be null.
-        /// If it is null, then the size field will be 0, the content field will be the same with TD.</param>
-        /// <param name="clientBuild">The build number of the client.</param>
-        /// <param name="clientDigProductId">Contains a value that uniquely identifies the client. 
-        /// This argument can be null. If it is null, then the size field will be 0, the content field will be the
-        /// same with TD.</param>
+        /// <param name="sessionContext">Server session context</param>
         /// <param name="encryptionMethod">Cryptographic methods supported by the client and used in conjunction 
         /// with Standard RDP Security.</param>
-        /// <param name="virtualChannels">The static virtual channels to be requested with their option flag.
-        /// This argument can be null. If it is null, then no channel will join.</param>
+        /// <param name="encryptionLevel">Encryption Level</param>
+        /// <param name="serverCertificate">Certificate of server</param>
+        /// <param name="serverCerLen">Length of server certificate</param>
+        /// <param name="multiTransportTypeFlags">Flags of Multitransport Channel Data</param>
         /// <param name="hasEarlyCapabilityFlags">Indicates the existing of the earlyCapabilityFlags</param>
         /// <param name="earlyCapabilityFlagsValue">The value of earlyCapabilityFlags</param>
         /// <param name="mcsChannelId_Net">MCSChannelId value for Server Network Data</param>
@@ -1311,7 +1308,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             EncryptionLevel encryptionLevel,
             SERVER_CERTIFICATE serverCertificate,
             int serverCerLen,
-            bool isMultitransportSupported = false,
+            MULTITRANSPORT_TYPE_FLAGS multiTransportTypeFlags = MULTITRANSPORT_TYPE_FLAGS.None,
             bool hasEarlyCapabilityFlags = false,
             SC_earlyCapabilityFlags_Values earlyCapabilityFlagsValue = SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED,
             UInt16 mcsChannelId_Net = ConstValue.IO_CHANNEL_ID,
@@ -1455,10 +1452,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             TS_UD_SC_MULTITRANSPORT serverMultitransportChannelData = new TS_UD_SC_MULTITRANSPORT();
             serverMultitransportChannelData.header.type = TS_UD_HEADER_type_Values.SC_MULTITRANSPORT;
-            if(isMultitransportSupported)
-                serverMultitransportChannelData.flags = MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECL | MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECR | MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDP_PREFERRED;
-            else
-                serverMultitransportChannelData.flags = 0;
+            serverMultitransportChannelData.flags = multiTransportTypeFlags;
             serverMultitransportChannelData.header.length = 8;
 
             #endregion
@@ -2869,8 +2863,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             surfBitsCmd.destRight = ConstValue.DEST_RIGHT;
             surfBitsCmd.destBottom = ConstValue.DEST_BOTTOM;
             surfBitsCmd.bitmapData.bpp = ConstValue.BPP;
-            surfBitsCmd.bitmapData.reserved1 = 0;
-            surfBitsCmd.bitmapData.reserved2 = 0;
+            // TODO: flags equals TSBitmapDataExFlags_Values.TSBitmapDataExFlags_Values
+            surfBitsCmd.bitmapData.flags = TSBitmapDataExFlags_Values.None;
+            surfBitsCmd.bitmapData.reserved = 0;
             surfBitsCmd.bitmapData.codecID = 0;
             surfBitsCmd.bitmapData.width = 0;
             surfBitsCmd.bitmapData.height = 0;
