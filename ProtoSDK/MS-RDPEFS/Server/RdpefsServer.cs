@@ -11,10 +11,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpefs
     public class RdpefsServer
     {
         #region variable
-        const string rdpefsChannelName = "rdpdr";
-        RdpedycServer rdpedycServer;
-        DynamicVirtualChannel rdpefsDVC;
-        List<RdpefsPDU> receivedList;     
+        private const string rdpefsChannelName = "rdpdr";
+        private RdpedycServer rdpedycServer;
+        private DynamicVirtualChannel rdpefsDVC;
+        private List<RdpefsPDU> receivedList;     
         #endregion
 
         #region Contructor
@@ -28,6 +28,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpefs
         #endregion 
 
         #region Dispose
+        /// <summary>
+        /// Clear received list pdu.
+        /// </summary>
         public void ClearReceivedList()
         {
             if (this.receivedList != null)
@@ -164,9 +167,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpefs
                         DR_CORE_CLIENT_ANNOUNCE_RSP response = new DR_CORE_CLIENT_ANNOUNCE_RSP();
                         if(PduMarshaler.Unmarshal(data, response))
                         {
-                            pdu = response;
+                            receivedList.Add(response);
                         }
-                        receivedList.Add(pdu);
                     }
                     else if(pdu.Header.PacketId == PacketId_Values.PAKID_CORE_CLIENT_NAME)
                     {
@@ -174,9 +176,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpefs
                         DR_CORE_CLIENT_NAME_REQ request = new DR_CORE_CLIENT_NAME_REQ();
                         if(PduMarshaler.Unmarshal(data, request))
                         {
-                            pdu = request;
+                            receivedList.Add(request);
                         }
-                        receivedList.Add(pdu);
                     }
                     else if(pdu.Header.PacketId == PacketId_Values.PAKID_CORE_CLIENT_CAPABILITY)
                     {
@@ -184,9 +185,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpefs
                         DR_CORE_CAPABILITY_RSP response = new DR_CORE_CAPABILITY_RSP();
                         if(PduMarshaler.Unmarshal(data, response))
                         {
-                            pdu = response;
+                            receivedList.Add(response);
                         }
-                        receivedList.Add(pdu);
                     }
                     else if(pdu.Header.PacketId == PacketId_Values.PAKID_CORE_DEVICELIST_ANNOUNCE)
                     {
@@ -194,9 +194,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpefs
                         DR_CORE_DEVICELIST_ANNOUNCE_REQ request = new DR_CORE_DEVICELIST_ANNOUNCE_REQ();
                         if(PduMarshaler.Unmarshal(data, request))
                         {
-                            pdu = request;
+                            receivedList.Add(request);
                         }
-                        receivedList.Add(pdu);
                     }
                 }
                 if (!fSucceed || !fResult)
@@ -204,11 +203,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpefs
                     RdpefsUnknownPdu unknown = new RdpefsUnknownPdu();
                     if(PduMarshaler.Unmarshal(data, unknown))
                     {
-                        pdu = unknown;
+                        receivedList.Add(unknown);
                     }
-                    receivedList.Add(pdu);
                 }
-                
             }
         }
         #endregion

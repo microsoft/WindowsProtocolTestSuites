@@ -618,33 +618,4 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpefs
         /// </summary>
         V1 = 0x00000000,
     }
-
-    /// <summary>
-    /// Operation_Values
-    /// </summary>
-    [Flags()]
-    public enum Operation_Values : uint
-    {
-        /// <summary>
-        ///  The server is requesting a shared lock.
-        /// </summary>
-        RDP_LOWIO_OP_SHAREDLOCK = 0x0000002,
-
-        /// <summary>
-        ///  The server is requesting an exclusive lock.
-        /// </summary>
-        RDP_LOWIO_OP_EXCLUSIVELOCK = 0x0000003,
-
-        /// <summary>
-        ///  The server is requesting to unlock multiple portions
-        ///  of the file.
-        /// </summary>
-        RDP_LOWIO_OP_UNLOCK_MULTIPLE = 0x0000005,
-
-        /// <summary>
-        /// The server is requesting to unlock a file.
-        /// </summary>
-        RDP_LOWIO_OP_UNLOCK = 0x0000004,
-    }
-
 }

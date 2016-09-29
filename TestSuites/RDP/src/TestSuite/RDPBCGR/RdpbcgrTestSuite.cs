@@ -9,7 +9,7 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestSuites.Rdp;
-using Microsoft.Protocols.TestSuites.Rdp.RDPEFS;
+using Microsoft.Protocols.TestSuites.Rdp.Rdpefs;
 
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 {
@@ -167,6 +167,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 this.rdpefsAdapter.AttachRdpbcgrAdapter(this.rdpbcgrAdapter);
             }
 
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Start to sending ref traffics.");
             this.rdpefsAdapter.GenerateStaticVirtualChannelTraffics(invalidType);
         }
     }

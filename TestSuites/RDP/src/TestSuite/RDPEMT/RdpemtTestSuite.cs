@@ -14,7 +14,7 @@ using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpefs;
-using Microsoft.Protocols.TestSuites.Rdp.RDPEFS;
+using Microsoft.Protocols.TestSuites.Rdp.Rdpefs;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
 
 namespace Microsoft.Protocols.TestSuites.Rdpemt
@@ -281,9 +281,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         /// <summary>
         /// Establish EMT connection and soft sync.
         /// </summary>
-        private void StartSoftSyncConnection(TransportMode mode, bool isUDPPreferred = false)
+        private void StartSoftSyncConnection(TransportMode mode)
         {
-            StartRDPConnection(false, true, isUDPPreferred);
+            StartRDPConnection(false, true);
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} UDP connection.", mode);
             this.EstablishUDPConnection(mode, waitTime);
 
@@ -314,7 +314,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         #endregion 
 
         #region Tunneling Static VC Traffic
-        // Default is using RDPEFS static virtual channel.
+        // Default is using RDPEFS static virtual channel. Now is using DVC named "rdpdr".
         private void EstablishTunnelingStaticVCTrafficConnection(string staticChannelName = "RDPDR")
         {
             this.TestSite.Log.Add(LogEntryKind.Comment, "Start RDP connection, support soft sync and UDP perferred.");

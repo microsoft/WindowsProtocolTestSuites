@@ -18,13 +18,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         [TestCategory("RDPBCGR")]
         [TestCategory("StaticVirtualChannel")]
         [Description("This test case is used to verify client could tunneling static virtual channel traffic over UDP.")]
-        public void S11_Tunneling_StaticVirtualChannel_PositiveTest()
+        public void S3_Tunneling_StaticVirtualChannel_PositiveTest()
         {
-            /* Test Steps:
-             * 1. 
-             
-             */
-
             this.TestSite.Assert.IsTrue(isClientSupportTunnelingStaticVCTraffic, "To execute test cases of S10, RDP client should support tunneling of static virtual channel traffic over UDP.");
             this.TestSite.Assert.IsTrue(isClientSupportRDPEFS, "To execut this case, RDP client should support [MS-RDPEFS]: Remote Desktop Protocol: File System Virtual Channel Extension.");
             EstablishTunnelingStaticVCTrafficConnection();

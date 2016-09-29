@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -113,7 +113,7 @@
     <Compile Include="RDPEI\RdpeiTestSuite.cs" />
     <Compile Include="RDPEI\S1_TouchInputTest.cs" />
     <Compile Include="RDPEI\S2_TouchControlTest.cs" />
-    <Compile Include="RDPEMT\S11_Tunneling_StaticVC_Traffic.cs" />
+    <Compile Include="RDPEMT\S3_Tunneling_StaticVC_Traffic.cs" />
     <Compile Include="RDPEUDP\RdpeudpTestSuite.cs" />
     <Compile Include="RDPEUDP\S1_Connection.cs" />
     <Compile Include="RDPEUDP\S2_DataTransfer.cs" />

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Microsoft.Protocols.TestSuites.Rdp.RDPEFS
+namespace Microsoft.Protocols.TestSuites.Rdp.Rdpefs
 {
     public interface IRdpefsAdapter : IAdapter
     {
