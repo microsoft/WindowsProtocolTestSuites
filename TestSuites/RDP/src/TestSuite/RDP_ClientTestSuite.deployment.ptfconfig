@@ -46,7 +46,7 @@
       <Description>Indicates if SUT is Windows Implementation.</Description>
     </Property>
     <!--The version of the RDP intends to test, it should be one of 7.0, 7.1, 8.0, 8.1, 10.0.-->
-    <Property name="RDP.Version" value="8.1">
+    <Property name="RDP.Version" value="10.0">
       <Choice>7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2</Choice>
       <Description>The version of the RDP intends to test, it should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2.</Description>
     </Property>
@@ -290,10 +290,15 @@
       <Description>RDPEDISP Advanced Adapter Image file.</Description>
     </Property>
     <!-- Block End -->
-    <!--RDP Client support Soft Sync-->
+    <!--RDP Client supports Soft Sync-->
     <Property name="RDP.Client.SupportSoftSync" value="true">
       <Choice>true, false</Choice>
       <Description>Soft-Sync is an optional feature used to defer the user the multitransport tunnels as a transport for dynamic virtual channels until after these tunnels have been successfully created.</Description>
+    </Property>
+    <!--RDP Client supports Tunneling Static VC Traffic-->
+    <Property name="RDP.Client.SupportTunnelingStaticVCTraffic" value="true">
+      <Choice>true, false</Choice>
+      <Description>Static virtual channel traffic can optionally be tunneled over a reliable multitransport tunnel, using dynamic virtual channels, if this capability is supported by the server and client.</Description>
     </Property>
   </Properties>
   <Adapters>

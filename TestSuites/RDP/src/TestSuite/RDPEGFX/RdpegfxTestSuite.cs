@@ -129,6 +129,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             }
             this.rdpbcgrAdapter.EstablishRDPConnection(selectedProtocol, enMethod, enLevel, true, false, rdpServerVersion, flags, true, isSoftSync);
 
+            if(isSoftSync)
+            {
+                Site.Assert.IsTrue(this.rdpbcgrAdapter.SessionContext.MultitransportTypeFlagsInMCSConnectIntialPdu.HasFlag(MULTITRANSPORT_TYPE_FLAGS.SOFTSYNC_TCP_TO_UDP),
+                   "Client Should support Soft-Sync, flags: {0}",
+                   this.rdpbcgrAdapter.SessionContext.MultitransportTypeFlagsInMCSConnectIntialPdu);
+            }
+            
+
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server Save Session Info PDU to SUT to notify user has logged on.");
             this.rdpbcgrAdapter.ServerSaveSessionInfo(LogonNotificationType.UserLoggedOn, ErrorNotificationType_Values.LOGON_FAILED_OTHER);
 

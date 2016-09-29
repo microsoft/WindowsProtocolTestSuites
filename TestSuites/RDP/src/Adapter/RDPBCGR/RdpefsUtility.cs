@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Microsoft.Protocols.TestSuites.Rdpbcgr
+namespace Microsoft.Protocols.TestSuites.Rdpbcgr.efs
 {
     /// <summary>
     /// Encode/Decode MS-RDPEFS packets.

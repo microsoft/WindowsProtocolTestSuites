@@ -9,6 +9,7 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestSuites.Rdp;
+using Microsoft.Protocols.TestSuites.Rdp.RDPEFS;
 
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 {
@@ -47,6 +48,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         private const int PointerMoveStep = 10;
         // Random value generator
         private Random random = new Random();
+
+        private IRdpefsAdapter rdpefsAdapter = null;
         #endregion Variables
 
         #region Class Initialization and Cleanup
@@ -80,6 +83,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Stop RDP listening.");
             this.rdpbcgrAdapter.StopRDPListening();
+
+            if (this.rdpefsAdapter != null)
+                this.rdpefsAdapter.Dispose();
         }
         #endregion
 
@@ -150,6 +156,18 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
 
             return result;
+        }
+    
+        private void SendStaticVirtualChannelTraffics(StaticVirtualChannel_InvalidType invalidType)
+        {
+            if (this.rdpefsAdapter == null)
+            {
+                this.rdpefsAdapter = (IRdpefsAdapter)this.TestSite.GetAdapter(typeof(IRdpefsAdapter));
+                this.rdpefsAdapter.Reset();
+                this.rdpefsAdapter.AttachRdpbcgrAdapter(this.rdpbcgrAdapter);
+            }
+
+            this.rdpefsAdapter.GenerateStaticVirtualChannelTraffics(invalidType);
         }
     }
 }
