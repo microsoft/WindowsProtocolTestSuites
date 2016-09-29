@@ -1,7 +1,6 @@
 ﻿###BranchCache Protocol Test Design Specification
 
 ##Contents
-* Contents1
 * [Test Environment](#_Toc462327666)
     * [Windows Test Environment](#_Toc462327667)
     * [Partner Test Environment](#_Toc462327668)
