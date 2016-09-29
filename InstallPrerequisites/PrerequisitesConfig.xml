@@ -19,39 +19,39 @@
 		<tool>NET40</tool>
 		<tool>VCRedist_x86</tool>
 		<tool>SE</tool>
-		<tool>PTF_ForModel</tool>
 		<tool>Wix310</tool>
 		<tool>TestAgent2012</tool>
+		<tool>PTF_ForModel</tool>
 	</FileServer>
 	<Kerberos>
 		<tool>NET40</tool>
 		<tool>VCRedist_x86</tool>
 		<tool>SE</tool>
-		<tool>PTF_ForModel</tool>
 		<tool>Wix310</tool>
 		<tool>TestAgent2012</tool>
+		<tool>PTF_ForModel</tool>
 	</Kerberos>
 	<SMB>
 		<tool>NET40</tool>
 		<tool>VCRedist_x86</tool>
 		<tool>SE</tool>
-		<tool>PTF_ForModel</tool>
 		<tool>Wix310</tool>
 		<tool>TestAgent2012</tool>
+		<tool>PTF_ForModel</tool>
 	</SMB>
 	<SMBD>
 		<tool>NET40</tool>
 		<tool>VCRedist_x86</tool>
 		<tool>SE</tool>
-		<tool>PTF_ForModel</tool>
 		<tool>Wix310</tool>
 		<tool>TestAgent2012</tool>
+		<tool>PTF_ForModel</tool>
 	</SMBD>
 	<RDP>
 		<tool>NET40</tool>
 		<tool>VCRedist_x86</tool>
-		<tool>PTF</tool>
 		<tool>Wix310</tool>
 		<tool>TestAgent2012</tool>
+		<tool>PTF</tool>
 	</RDP>
 </Dependency>
