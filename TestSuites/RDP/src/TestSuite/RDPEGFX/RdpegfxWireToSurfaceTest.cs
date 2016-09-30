@@ -42,7 +42,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "The bitmap is sent to the client for frame {0}.", fid);
-            byte compFlag = RdpSegmentedPdu.PACKET_COMPR_TYPE_RDP8;
+            byte compFlag = (byte)PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_RDP8;
             Image bgImage;
             Image compImage = RdpegfxTestUtility.captureFromImage(image_64X64, RdpegfxTestUtility.imgPos,
                                                 RdpegfxTestUtility.smallWidth, RdpegfxTestUtility.smallHeight, out bgImage);
@@ -87,7 +87,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             Image bgImage;
             Image compImage = RdpegfxTestUtility.captureFromImage(image_64X64, RdpegfxTestUtility.imgPos,
                                                 RdpegfxTestUtility.smallWidth, RdpegfxTestUtility.smallHeight, out bgImage);
-            byte compFlag = RdpSegmentedPdu.PACKET_COMPR_TYPE_RDP8;
+            byte compFlag = (byte)PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_RDP8;
 
             // Top-right corner
             this.TestSite.Log.Add(LogEntryKind.Comment, "The bitmap is sent to the client by frame {0}. whose top and right borders are overlapped with surface.", fid);

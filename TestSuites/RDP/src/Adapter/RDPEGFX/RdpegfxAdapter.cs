@@ -24,7 +24,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         TimeSpan waitTime;
         IRdpbcgrAdapter bcgrAdapter;
         RdpegfxServer egfxServer;
-        RdpSegmentedPdu segPdu;
+        EGFXRdpSegmentedPdu segPdu;
         SurfaceManager surfManager;
         bool frAckSuspend = false;
         RdpegfxNegativeTypes currentTestType;
@@ -381,8 +381,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             rdpegfxPdusToSent = new List<RdpegfxPdu>();
 
             // Set no rdp8.0 compression temperarily.
-            byte compFlag = RdpSegmentedPdu.PACKET_COMPR_TYPE_RDP8;
-            segPdu = new RdpSegmentedPdu(compFlag);
+            byte compFlag = (byte) PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_RDP8;
+            segPdu = new EGFXRdpSegmentedPdu(compFlag);
 
             surfManager = new SurfaceManager();
 
@@ -412,8 +412,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public override void Reset()
         {
             base.Reset();      
-            segPdu.compressFlag = RdpSegmentedPdu.PACKET_COMPR_TYPE_RDP8;
-            //rdpegfxServer = new RdpegfxServer();
+            segPdu.compressFlag = (byte)PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_RDP8;
+            
             rdpegfxPdusToSent.Clear();
             currentTestType = RdpegfxNegativeTypes.None;
 

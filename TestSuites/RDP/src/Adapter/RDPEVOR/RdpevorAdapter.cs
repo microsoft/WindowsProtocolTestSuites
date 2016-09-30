@@ -16,13 +16,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
 
         const string RdpevorControlChannelName = "Microsoft::Windows::RDS::Video::Control::v08.01";
         const string RdpevorDataChannelName = "Microsoft::Windows::RDS::Video::Data::v08.01";
-        const int LargestSampleSize = 959; //used 959, according to the max size of DTLS encryption
+        const int LargestSampleSize =  959; //used 959, according to the max size of DTLS encryption
         
         RdpevorServer rdpevorServer;
-       
         TimeSpan waitTime;
-        RdpevorNegativeType testType;
-
+        RdpevorNegativeType testType;        
         #endregion
 
         #region IAdapter Members
@@ -30,6 +28,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
         public override void Initialize(ITestSite testSite)
         {
             base.Initialize(testSite);
+           
             #region WaitTime
             string strWaitTime = Site.Properties["WaitTime"];
             if (strWaitTime != null)
@@ -123,16 +122,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
             rdpevorServer.SendRdpevorControlPdu(request);
         }
 
-        /// <summary>
-        /// Method to send a TSMM_VIDEO_DATA to client.
-        /// </summary>
-        /// <param name="presentationId">This is the same number as the PresentationId field in the TSMM_PRESENTATION_REQUEST message.</param>
-        /// <param name="flags">The bits of this integer indicate attributes of this message. </param>
-        /// <param name="packetIndex">This field contains the index of the current packet within the larger sample. </param>
-        /// <param name="totalPacketsInSample">This field contains the number of packets that make up the current sample.</param>
-        /// <param name="SampleNumber">This field contains the index of current sample in current presentation.</param>
-        /// <param name="packetData">The video data in bytes which to be sent.</param>
-        public void SendVideoPacket(byte presentationId, TsmmVideoData_FlagsValues flags, ushort packetIndex, ushort totalPacketsInSample, uint SampleNumber, byte[] packetData, ulong timeStamp)
+        public void SendVideoPacket(byte presentationId, TsmmVideoData_FlagsValues flags, ushort packetIndex, ushort totalPacketsInSample, uint SampleNumber, byte[] packetData, ulong timeStamp, bool isCompressed = false)
         {
             TSMM_VIDEO_DATA videoDataPacket = rdpevorServer.CreateVideoDataPacket(presentationId, flags, packetIndex, totalPacketsInSample, SampleNumber, packetData, timeStamp);
             if (this.testType == RdpevorNegativeType.VideoData_InvalidPacketLength)
@@ -145,8 +135,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
                 //Set version to an invalid value.
                 videoDataPacket.Version = RdpevorVersionValues.InvalidValue;
             }
-
-            rdpevorServer.SendRdpevorDataPdu(videoDataPacket);
+            
+            rdpevorServer.SendRdpevorDataPdu(videoDataPacket, isCompressed);
         }
 
         /// <summary>
@@ -155,8 +145,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
         /// <param name="presentationId">This is the same number as the PresentationId field in the TSMM_PRESENTATION_REQUEST message.</param>
         /// <param name="isKeyFrame">Is the sample a key frame.</param>
         /// <param name="SampleNumber">The number of sample in the video stream.</param>
-        /// <param name="sampleData">The sample data in bytes which to be sent.</param>
-        public void SendVideoSample(byte presentationId, bool isKeyFrame, uint SampleNumber, byte[] sampleData, ulong timeStamp)
+        /// <param name="isCompressed">Whether the packet will be compressed before sent.</param>
+        public void SendVideoSample(byte presentationId, bool isKeyFrame, uint SampleNumber, byte[] sampleData, ulong timeStamp, bool isCompressed=false)
         {
             if (sampleData == null)
             {
@@ -178,11 +168,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
                 }
                 byte[] packetData = new byte[packetSize];
                 Array.Copy(sampleData, (packetIndex - 1) * LargestSampleSize, packetData, 0, packetSize);
-                SendVideoPacket(presentationId, flags, packetIndex, totalPackets, SampleNumber, packetData, timeStamp);
+                              
+                SendVideoPacket(presentationId, flags, packetIndex, totalPackets, SampleNumber, packetData, timeStamp, isCompressed);                
                 //System.Threading.Thread.Sleep(100);//Sleep 0.1 second to avoid this packet is merged with next one in TCP layer.
             }
-
-        }
+        }       
 
         /// <summary>
         /// Method to expect a TSMM_PRESENTATION_RESPONSE from client.

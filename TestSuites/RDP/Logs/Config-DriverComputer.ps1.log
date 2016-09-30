@@ -1,0 +1,271 @@
+**********************
+Windows PowerShell transcript start
+Start time: 20160902013812
+Username: RDPSERVER\Administrator
+RunAs User: RDPSERVER\Administrator
+Machine: RDPSERVER (Microsoft Windows NT 10.0.14393.0)
+Host Application: powershell C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\Config-DriverComputer.ps1
+Process ID: 3532
+PSVersion: 5.1.14393.66
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.66
+BuildVersion: 10.0.14393.66
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is .\..\Logs\Config-DriverComputer.ps1.log
+EXECUTING [Config-DriverComputer.ps1] ...
+$scriptsPath        = C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts
+$logPath            = .\..\Logs
+$logFile            = .\..\Logs\Config-DriverComputer.ps1.log
+$userNameInTC       = administrator
+$userPwdInTC        = Password01!
+$CredSSPUser        = administrator
+$CredSSPPwd         = Password01!
+$domainName         = contoso.com
+$dcComputerName     = DC01
+$tcComputerName     = 192.168.173.101
+$driverComputerName = 192.168.173.1
+$listeningPort      = 3389
+$ipVersion          = IPv4
+$osVersion          = Windows
+$RDPVersion         = 10.0
+$workgroupDomain    = Workgroup
+$tcSystemDrive      = C
+Turn off firewall
+Ok.
+
+Create a self-signed certificate and export it out...
+
+TurnOff FileReadonly for C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment.ptfconfig...
+EXECUTING [TurnOff-FileReadonly.ps1] ...
+$filePath = C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment.ptfconfig
+EXECUTE [TurnOff-FileReadonly.ps1] SUCCEED.
+Begin to update RDP_ClientTestSuite.deployment.ptfconfig...
+EXECUTING [Modify-ConfigFileNode.ps1] ...
+$sourceFileName = C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment.ptfconfig
+$nodeName       = RDP.ServerPort
+$newContent     = 3389
+EXECUTING [Modify-ConfigFileNode.ps1] ...
+$sourceFileName = C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment
+.ptfconfig
+$nodeName       = RDP.ServerPort
+$newContent     = 3389
+
+Config success: Set RDP.ServerPort to 3389
+EXECUTING [Modify-ConfigFileNode.ps1] ...
+$sourceFileName = C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment.ptfconfig
+$nodeName       = RDP.IpVersion
+$newContent     = IPv4
+
+
+Config success: Set RDP.IpVersion to IPv4
+EXECUTING [Modify-ConfigFileNode.ps1] ...
+$sourceFileName = C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment.ptfconfig
+$nodeName       = CertificatePath
+$newContent     = C:\192.168.173.1.pfx
+$nodeName       = CertificatePath
+$newContent     = C:\192.168.173.1.pfx
+
+Config success: Set CertificatePath to C:\192.168.173.1.pfx
+EXECUTING [Modify-ConfigFileNode.ps1] ...
+$sourceFileName = C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment.ptfconfig
+$nodeName       = CertificatePassword
+$newContent     = Password01!
+$nodeName       = CertificatePassword
+$newContent     = Password01!
+
+Config success: Set CertificatePassword to Password01!
+EXECUTING [Modify-ConfigFileNode.ps1] ...
+$sourceFileName = C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment.ptfconfig
+$nodeName       = SUTName
+$newContent     = 192.168.173.101
+Config success: Set CertificatePassword to Password01!
+EXECUTING [Modify-ConfigFileNode.ps1] ...
+$sourceFileName = C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment
+.ptfconfig
+$nodeName       = SUTName
+$newContent     = 192.168.173.101
+
+Config success: Set SUTName to 192.168.173.101
+EXECUTING [Modify-ConfigFileNode.ps1] ...
+$sourceFileName = C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment.ptfconfig
+$nodeName       = SUTUserPassword
+$newContent     = Password01!
+$nodeName       = SUTUserPassword
+$newContent     = Password01!
+
+Config success: Set SUTUserPassword to Password01!
+EXECUTING [Modify-ConfigFileNode.ps1] ...
+$sourceFileName = C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment.ptfconfig
+$nodeName       = SUTSystemDrive
+$newContent     = C
+$nodeName       = SUTSystemDrive
+$newContent     = C
+
+Config success: Set SUTSystemDrive to C
+EXECUTING [Modify-ConfigFileNode.ps1] ...
+$sourceFileName = C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment.ptfconfig
+$nodeName       = RDP.ServerDomain
+$newContent     = contoso.com
+$nodeName       = RDP.ServerDomain
+$newContent     = contoso.com
+
+Config success: Set RDP.ServerDomain to contoso.com
+EXECUTING [Modify-ConfigFileNode.ps1] ...
+$sourceFileName = C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment.ptfconfig
+$nodeName       = RDP.ServerUserName
+$newContent     = administrator
+EXECUTING [Modify-ConfigFileNode.ps1] ...
+$sourceFileName = C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment
+.ptfconfig
+$nodeName       = RDP.ServerUserName
+$newContent     = administrator
+
+Config success: Set RDP.ServerUserName to administrator
+EXECUTING [Modify-ConfigFileNode.ps1] ...
+$sourceFileName = C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment.ptfconfig
+$nodeName       = RDP.ServerUserPassword
+$newContent     = Password01!
+EXECUTING [Modify-ConfigFileNode.ps1] ...
+$sourceFileName = C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment
+.ptfconfig
+$nodeName       = RDP.ServerUserPassword
+$newContent     = Password01!
+
+Config success: Set RDP.ServerUserPassword to Password01!
+EXECUTING [Modify-ConfigFileNode.ps1] ...
+$sourceFileName = C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment.ptfconfig
+$nodeName       = RDP.Version
+$newContent     = 10.0
+$nodeName       = RDP.Version
+$newContent     = 10.0
+
+Config success: Set RDP.Version to 10.0
+EXECUTING [Modify-ConfigFileNode.ps1] ...
+$sourceFileName = C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment.ptfconfig
+$nodeName       = IsWindowsImplementation
+$newContent     = true
+$nodeName       = IsWindowsImplementation
+$newContent     = true
+
+Config success: Set IsWindowsImplementation to true
+EXECUTING [Modify-ConfigFileNode.ps1] ...
+$sourceFileName = C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment.ptfconfig
+$nodeName       = SUTUserName
+$newContent     = administrator
+$nodeName       = SUTUserName
+$newContent     = administrator
+
+Config success: Set SUTUserName to administrator
+EXECUTING [Modify-ConfigFileNode.ps1] ...
+$sourceFileName = C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment.ptfconfig
+$nodeName       = RDP.ServerDomain
+$newContent     = 192.168.173.1
+EXECUTING [Modify-ConfigFileNode.ps1] ...
+$sourceFileName = C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment
+.ptfconfig
+$nodeName       = RDP.ServerDomain
+$newContent     = 192.168.173.1
+Config success: Set RDP.ServerDomain to 192.168.173.1
+TurnOff FileReadonly for C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment.ptfconfig due to Execution Console...
+EXECUTING [TurnOff-FileReadonly.ps1] ...
+$filePath = C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\..\Bin\RDP_ClientTestSuite.deployment.ptfconfig
+EXECUTE [TurnOff-FileReadonly.ps1] SUCCEED.
+PS>TerminatingError(Copy-Item): "Could not find a part of the path 'C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Source\Client\TestCode\TestSuite'."
+Copy-Item : Could not find a part of the path 
+'C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Source\Client\TestCode\TestSuite'.
+At C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\Config-DriverComputer.ps1:238 char:1
++ Copy-Item $DepPtfConfig $SourcePath -Force
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [Copy-Item], DirectoryNotFoundException
+    + FullyQualifiedErrorId : System.IO.DirectoryNotFoundException,Microsoft.PowerShell.Commands.CopyItemCommand
+Copy-Item : Could not find a part of the path
+'C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Source\Client\TestCode\TestSuite'.
+At C:\MicrosoftProtocolTests\RDP\Client-Endpoint\1.0.5000.0\Scripts\Config-DriverComputer.ps1:238 char:1
++ Copy-Item $DepPtfConfig $SourcePath -Force
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [Copy-Item], DirectoryNotFoundException
+    + FullyQualifiedErrorId : System.IO.DirectoryNotFoundException,Microsoft.PowerShell.Commands.CopyItemCommand
+
+Modify ClientLocal.testsettings fileg...
+Change Adapter\SUTControlAdapter\TriggerClientDisconnectAll.ps1 to .\TriggerClientDisconnectAll.ps1.
+Change TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_8.png to .\OriginalPic_8.png.
+Change TestSuite\Rdprfx.bmp to .\Rdprfx.bmp.
+Change Adapter\SUTControlAdapter\Check-PSRemoting.ps1 to .\Check-PSRemoting.ps1.
+Change Adapter\SUTControlAdapter\RDPConnectWithDirectTLSFullScreen.ps1 to .\RDPConnectWithDirectTLSFullScreen.ps1.
+Change TestSuite\RDPEDISP\RdpedispEnhancedAdapterImages\OrientationChange2.png to .\OrientationChange2.png.
+Change TestSuite\RDPEDISP\RdpedispEnhancedAdapterImages\OrientationChange3.png to .\OrientationChange3.png.
+Change Adapter\RdpedispSUTControlAdapter\TriggerInitializeDisplaySettings.ps1 to .\TriggerInitializeDisplaySettings.ps1.
+Change TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_Large_3.png to .\OriginalPic_Large_3.png.
+Change TestSuite\RDPEGFX\H264TestData\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile_LargeSize.xml to .\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile_LargeSize.xml.
+Change TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_3.png to .\OriginalPic_3.png.
+Change TestSuite\RDP_ClientTestSuite.ptfconfig to .\RDP_ClientTestSuite.ptfconfig.
+Change Adapter\SUTControlAdapter\TriggerInputEvents.ps1 to .\TriggerInputEvents.ps1.
+Change TestSuite\RDPEDISP\RdpedispEnhancedAdapterImages\MonitorAdd.png to .\MonitorAdd.png.
+Change TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_Large_4.png to .\OriginalPic_Large_4.png.
+Change Adapter\SUTControlAdapter\RDPConnectWithNegotiationApproachFullScreen.ps1 to .\RDPConnectWithNegotiationApproachFullScreen.ps1.
+Change TestSuite\RDPEGFX\H264TestData\RDPEGFX_H264Codec_PositiveTest_AVC420_MainProfile.xml to .\RDPEGFX_H264Codec_PositiveTest_AVC420_MainProfile.xml.
+Change TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_Large_2.png to .\OriginalPic_Large_2.png.
+Change TestSuite\RDPEGFX\H264TestData\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Chroma420Together_MainProfile_LargeSize.xml to .\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Chroma420Together_MainProfile_LargeSize.xml.
+Change TestSuite\RDP_ClientTestSuite.deployment.ptfconfig to .\RDP_ClientTestSuite.deployment.ptfconfig.
+Change TestSuite\RdpegfxClearCodecTestImage.bmp to .\RdpegfxClearCodecTestImage.bmp.
+Change TestSuite\RDPEGFX\H264TestData\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile_CABACEnabled.xml to .\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile_CABACEnabled.xml.
+Change Adapter\SUTControlAdapter\TriggerClientDisconnect.ps1 to .\TriggerClientDisconnect.ps1.
+Change TestSuite\RdprfxVideoMode.bmp to .\RdprfxVideoMode.bmp.
+Change TestSuite\RDPEDISP\RdpedispEnhancedAdapterImages\MonitorRemove.png to .\MonitorRemove.png.
+Change TestSuite\RDPEGFX\H264TestData\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile.xml to .\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile.xml.
+Change TestSuite\RdpegfxRfxProgressiveCodecTestImage.bmp to .\RdpegfxRfxProgressiveCodecTestImage.bmp.
+Change TestSuite\RDPEGFX\H264TestData\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile_ISliceOnly.xml to .\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile_ISliceOnly.xml.
+Change TestSuite\RdpevorTestData.xml to .\RdpevorTestData.xml.
+Change Adapter\SUTControlAdapter\RDPConnectWithDirectCredSSPFullScreen.ps1 to .\RDPConnectWithDirectCredSSPFullScreen.ps1.
+Change TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_Large_5.png to .\OriginalPic_Large_5.png.
+Change TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_7.png to .\OriginalPic_7.png.
+Change TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_6.png to .\OriginalPic_6.png.
+Change TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_2.png to .\OriginalPic_2.png.
+Change TestSuite\RDPEGFX\H264TestData\RDPEGFX_H264Codec_PositiveTest_AVC420_MainProfile_CABACEnabled.xml to .\RDPEGFX_H264Codec_PositiveTest_AVC420_MainProfile_CABACEnabled.xml.
+Change TestSuite\RDPEGFX\H264TestData\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Chroma420Together_MainProfile.xml to .\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Chroma420Together_MainProfile.xml.
+Change TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_9.png to .\OriginalPic_9.png.
+Change TestSuite\RDPEDISP\RdpedispEnhancedAdapterImages\End.png to .\End.png.
+Change Adapter\RdpedispSUTControlAdapter\TriggerOrientationChangeOnClient.ps1 to .\TriggerOrientationChangeOnClient.ps1.
+Change TestSuite\RDPEGFX\H264TestData\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_BaseProfile.xml to .\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_BaseProfile.xml.
+Change TestSuite\RDPEGFX\H264TestData\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_HighProfile.xml to .\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_HighProfile.xml.
+Change Adapter\RdpeiSUTControlAdapter\TriggerOneTouchEventOnClient.ps1 to .\TriggerOneTouchEventOnClient.ps1.
+Change TestSuite\RDPEGFX\H264TestData\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Chroma420Separated_MainProfile.xml to .\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Chroma420Separated_MainProfile.xml.
+Change TestSuite\RDPEGFX\H264TestData\RDPEGFX_H264Codec_PositiveTest_AVC420_HighProfile.xml to .\RDPEGFX_H264Codec_PositiveTest_AVC420_HighProfile.xml.
+Change Adapter\RdpedispSUTControlAdapter\TriggerResolutionChangeOnClient.ps1 to .\TriggerResolutionChangeOnClient.ps1.
+Change TestSuite\RDPEDISP\RdpedispEnhancedAdapterImages\OrientationChange4.png to .\OrientationChange4.png.
+Change Adapter\RdpeiSUTControlAdapter\TriggerDismissHoveringContactPduOnClient.ps1 to .\TriggerDismissHoveringContactPduOnClient.ps1.
+Change Adapter\RdpedispSUTControlAdapter\TriggerMaximizeRDPClientWindow.ps1 to .\TriggerMaximizeRDPClientWindow.ps1.
+Change Adapter\SUTControlAdapter\TriggerClientAutoReconnect.ps1 to .\TriggerClientAutoReconnect.ps1.
+Change TestSuite\RDPEGFX\H264TestData\RDPEGFX_H264Codec_PositiveTest_AVC420_BaseProfile.xml to .\RDPEGFX_H264Codec_PositiveTest_AVC420_BaseProfile.xml.
+Change TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_1.png to .\OriginalPic_1.png.
+Change Adapter\RdpeiSUTControlAdapter\TriggerMultiTouchEventOnClient.ps1 to .\TriggerMultiTouchEventOnClient.ps1.
+Change Adapter\SUTControlAdapter\RDPConnectWithDirectCredSSP.ps1 to .\RDPConnectWithDirectCredSSP.ps1.
+Change TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_4.png to .\OriginalPic_4.png.
+Change TestSuite\RdpedispTestImage.bmp to .\RdpedispTestImage.bmp.
+Change TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_5.png to .\OriginalPic_5.png.
+Change Adapter\RdpeiSUTControlAdapter\TriggerPositionSpecifiedTouchEventOnClient.ps1 to .\TriggerPositionSpecifiedTouchEventOnClient.ps1.
+Change TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_Large_1.png to .\OriginalPic_Large_1.png.
+Change Adapter\SUTControlAdapter\RDPConnectWithDirectTLS.ps1 to .\RDPConnectWithDirectTLS.ps1.
+Change Adapter\RdpeiSUTControlAdapter\TriggerContinuousTouchEventOnClient.ps1 to .\TriggerContinuousTouchEventOnClient.ps1.
+Change TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_10.png to .\OriginalPic_10.png.
+Change TestSuite\RDPEDISP\RdpedispEnhancedAdapterImages\OrientationChange1.png to .\OrientationChange1.png.
+Change Adapter\SUTControlAdapter\Run-TaskWithPSRemoting.ps1 to .\Run-TaskWithPSRemoting.ps1.
+Change Adapter\SUTControlAdapter\RDPConnectWithNegotiationApproach.ps1 to .\RDPConnectWithNegotiationApproach.ps1.
+Creating task to detect whether the SUT Adapter works and try 10 times if fails ...
+SUCCESS: The scheduled task "WaitForSUTControlAdapterReady" has successfully been created.
+Write signal file: config.finished.signal to system drive.
+
+Config finished.
+EXECUTE [Config-DriverComputer.ps1] FINISHED (NOT VERIFIED).
+
+
+PS>$global:?
+True
+**********************
+Windows PowerShell transcript end
+End time: 20160902013902
+**********************

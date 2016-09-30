@@ -203,7 +203,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 return simulatedScreen;
             }
-        }        
+        }
+        
+        public UInt16 RDPDRChannelId
+        {
+            get
+            {
+                return RDPDR_ChannelId;
+            }
+        }
         #endregion
 
         #region Server Methods
