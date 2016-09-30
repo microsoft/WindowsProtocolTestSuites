@@ -90,8 +90,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpefs
                 throw new InvalidOperationException("DVC instance of RDPEFS is null, Dynamic virtual channel must be created before sending data.");
             }
 
+            //Will send compressed packet with "true" as parameter: rdpefsDVC.Send(data, true);            
             rdpefsDVC.Send(data);
-            //rdpefsDVC.Send(data, true);
         }
 
         /// <summary>
