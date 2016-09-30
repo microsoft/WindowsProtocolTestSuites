@@ -12,6 +12,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
 {
     public partial class RdpemtTestSuite : RdpTestClassBase
     {
+
         [TestMethod]
         [Priority(1)]
         [TestCategory("RDP10.0")]

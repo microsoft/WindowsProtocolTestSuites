@@ -66,7 +66,6 @@
     <Compile Include="Codecs\SurfaceManager.cs" />
     <Compile Include="Codecs\RdpegfxTileTypes.cs" />
     <Compile Include="Codecs\RdpegfxTileUtils.cs" />
-    <Compile Include="CompressFactory.cs" />
     <Compile Include="Server\RdpegfxServer.cs" />
     <Compile Include="Types\AlphaCodecBitmapStream.cs" />
     <Compile Include="Types\ClearCodecBitmapStream.cs" />
@@ -89,6 +88,10 @@
     <ProjectReference Include="..\MS-RDPEDYC\Rdpedyc.csproj">
       <Project>{cfbafde2-f509-4ac8-817a-0c26c1b27653}</Project>
       <Name>Rdpedyc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MS-RDPEFS\Rdpefs.csproj">
+      <Project>{e5a90e66-44b4-4f13-b2a6-f7990770a977}</Project>
+      <Name>Rdpefs</Name>
     </ProjectReference>
     <ProjectReference Include="..\MS-RDPRFX\Rdprfx.csproj">
       <Project>{9dd86de1-3231-4713-9b45-493f4fe4199c}</Project>

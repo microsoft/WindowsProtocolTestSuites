@@ -136,11 +136,76 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             return new SoftSyncReqDvcPDU(flags, numberOfTunnels, channelList);
         }
 
+        public byte[] CompressDataToRdp8BulkEncodedData(byte[] data, PACKET_COMPR_FLAG compressedFlag)
+        {
+            //When the length of the original uncompressed message data being sent exceeds 1,590 bytes, 
+            //and bulk data compression of the channel data is desired, the DYNVC_DATA_FIRST_COMPRESSED (section 2.2.3.3) PDU is sent as the first data PDU.             
+            if (compressedFlag == (PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_LITE | PACKET_COMPR_FLAG.PACKET_COMPRESSED))
+            {
+                CompressFactory cpf = new CompressFactory(
+                   (int)SEGMENT_PART_SISE.MAX_PACKET_COMPR_TYPE_RDP8_LITE_MATCH_DISTANCE,
+                   (int)SEGMENT_PART_SISE.MAX_PACKET_COMPR_TYPE_RDP8_LITE_SEGMENT_PART_SIZE);
+                return cpf.Compress(data);
+
+            }
+            if (compressedFlag == (PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_RDP8 | PACKET_COMPR_FLAG.PACKET_COMPRESSED)
+                )
+            {
+                CompressFactory cpf = new CompressFactory(
+                   (int)SEGMENT_PART_SISE.MAX_PACKET_COMPR_TYPE_RDP8_MATCH_DISTANCE,
+                   (int)SEGMENT_PART_SISE.MAX_PACKET_COMPR_TYPE_RDP8_SEGMENT_PART_SIZE);
+                return cpf.Compress(data);
+            }
+            //Otherwise, no compress
+            return data;
+        }
+
+        /// <summary>
+        ///  Create DYNVC_DATA_FIRST_COMPRESSED 
+        /// </summary>        
+        public DataFirstCompressedDvcPdu CreateDataFristCompressedReqPdu(uint channelId, byte[] data)
+        {
+            DataFirstCompressedDvcPdu firstCompressedPdu = null;
+            //int maxDataBlockLen = 1599- 
+            if (data.Length < 1599)
+            {
+                firstCompressedPdu = new DataFirstCompressedDvcPdu(channelId, (uint)data.Length, data);
+            }
+            else
+            {
+
+                byte[] firstBlockData = new byte[(int)SEGMENT_PART_SISE.MAX_PACKET_COMPR_TYPE_RDP8_LITE_SEGMENT_PART_SIZE];
+                Array.Copy(data, firstBlockData, (long)SEGMENT_PART_SISE.MAX_PACKET_COMPR_TYPE_RDP8_LITE_SEGMENT_PART_SIZE);
+
+                firstCompressedPdu = new DataFirstCompressedDvcPdu(channelId, (uint)data.Length, firstBlockData);
+            }
+            firstCompressedPdu.GetNonDataSize();
+
+
+            return firstCompressedPdu;
+        }
+
+        /// <summary>
+        ///  Create DYNVC_DATA_COMPRESSED 
+        /// </summary>
+        public DataCompressedDvcPdu CreateDataCompressedReqPdu(uint channelId, byte[] data)
+        {
+            DataCompressedDvcPdu compressedPdu = new DataCompressedDvcPdu(channelId, data);
+            compressedPdu.GetNonDataSize();
+            return compressedPdu;
+        }
+
         public CloseDvcPdu CreateCloseDvcPdu(uint channelId)
         {
             return new CloseDvcPdu(channelId);
         }
-
+        /// <summary>
+        /// Create the DYNVC_DATA PDU
+        /// </summary>
+        /// <param name="channelId">The channelId</param>
+        /// <param name="data">The uncompressed data</param>
+        /// <param name="channelChunkLength">The maximum number of uncompressed bytes in a single segment </param>        
+        /// <returns>Return the first and second PDUs in an array</returns>
         public DataDvcBasePdu[] CreateDataPdu(uint channelId, byte[] data, int channelChunkLength)
         {
             DataFirstDvcPdu first = new DataFirstDvcPdu(channelId, (uint)data.Length, null);
@@ -187,7 +252,46 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
             return pdus.ToArray();
         }
+
+        /// <summary>
+        /// Create a DataCompressedDvcPdu
+        /// </summary>
+        /// <param name="channelId"></param>
+        /// <param name="data"></param>
+        /// <param name="channelChunkLength"></param>
+        /// <returns></returns>
+        public DataCompressedDvcPdu[] CreateCompressedDataPdu(uint channelId, byte[] data, int channelChunkLength = 1599)
+        {
+            MemoryStream ms = new MemoryStream(data);
+            List<DataCompressedDvcPdu> pdus = new List<DataCompressedDvcPdu>();
+
+            //TODO: Here the compress algorithm has bug and cannot compress the data correctly. The size will become bigger than before comprssion
+            byte[] compressed = CompressDataToRdp8BulkEncodedData(data, PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_LITE | PACKET_COMPR_FLAG.PACKET_COMPRESSED);
+            
+            DataCompressedDvcPdu pdu = new DataCompressedDvcPdu();
+            pdu.HeaderBits.Cmd = Cmd_Values.DataCompressed;
+            pdu.HeaderBits.Sp = 0x0;
+            pdu.HeaderBits.CbChannelId = cbChId_Values.OneByte;
+            pdu.ChannelId = channelId;
+
+            //RDP8_BULK_ENCODED_DATA rdp8BulkEncodedData = new RDP8_BULK_ENCODED_DATA();
+            //rdp8BulkEncodedData.descriptor = 0xE0; //Single 
+            //rdp8BulkEncodedData.header = 0x26;//PACKET_COMPRESSED (0x2), PACKET_CMPR_TYPE_RDP8_LITE (0x06)
+            //rdp8BulkEncodedData.data = compressed;
+            
+            byte[] rdp8Header = new byte[] { 0xE0, 0x26 }; //0xE0; Single 0x26:PACKET_COMPRESSED (0x2), PACKET_CMPR_TYPE_RDP8_LITE (0x06)
+
+            var s = new MemoryStream();
+            s.Write(rdp8Header, 0, rdp8Header.Length);
+            s.Write(compressed, 0, compressed.Length);
+            byte[] rdp8BulkEncodedData = s.ToArray();
+            pdu.Data = rdp8BulkEncodedData;
+            pdus.Add(pdu);
+            return pdus.ToArray();
+        }
+        
     }
+
 
     /// <summary>
     /// This builder is used to decode all PDU types possibly received by the server role.
@@ -205,6 +309,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             // indicate the status of the client dynamic virtual channel create operation.
             regsiteredPDUs.Add(new CreateRespDvcPdu());
             regsiteredPDUs.Add(new SoftSyncResDvcPdu());
+            regsiteredPDUs.Add(new DataFirstCompressedDvcPdu());
+            regsiteredPDUs.Add(new DataCompressedDvcPdu());
             regsiteredPDUs.Add(new CloseDvcPdu());
             regsiteredPDUs.Add(new UnknownDynamicVCPDU());
         }
@@ -232,6 +338,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             regsiteredPDUs.Add(new CreateReqDvcPdu());
             regsiteredPDUs.Add(new CloseDvcPdu());
             regsiteredPDUs.Add(new UnknownDynamicVCPDU());
+            regsiteredPDUs.Add(new DataFirstCompressedDvcPdu());
+            regsiteredPDUs.Add(new DataCompressedDvcPdu());
             regsiteredPDUs.Add(new SoftSyncReqDvcPDU());
         }
     }

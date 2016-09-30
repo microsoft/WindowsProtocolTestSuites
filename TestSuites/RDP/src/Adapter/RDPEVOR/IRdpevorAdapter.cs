@@ -24,7 +24,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
         /// <param name="transportType">selected transport type for created channels</param>
         /// <returns>true if client supports this protocol; otherwise, return false.</returns>
         bool ProtocolInitialize(RdpedycServer rdpedycServer, DynamicVC_TransportType transportType = DynamicVC_TransportType.RDP_TCP);
-
+      
         /// <summary>
         /// Method to send a TSMM_PRESENTATION_REQUEST to client.
         /// </summary>
@@ -56,7 +56,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
         /// <param name="totalPacketsInSample">This field contains the number of packets that make up the current sample.</param>
         /// <param name="SampleNumber">This field contains the index of current sample in current presentation.</param>
         /// <param name="packetData">The video data in bytes which to be sent.</param>
-        void SendVideoPacket(byte presentationId, TsmmVideoData_FlagsValues flags, ushort packetIndex, ushort totalPacketsInSample, uint SampleNumber, byte[] packetData, ulong timeStamp);
+        /// <param name="isCompressed">Whether to compress the data before sent.</param>
+        void SendVideoPacket(byte presentationId, TsmmVideoData_FlagsValues flags, ushort packetIndex, ushort totalPacketsInSample, uint SampleNumber, byte[] packetData, ulong timeStamp, bool isCompressed =false);
 
         /// <summary>
         /// Method to sent a sample to client.
@@ -65,7 +66,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
         /// <param name="isKeyFrame">Is the sample a key frame.</param>
         /// <param name="SampleNumber">The number of sample in the video stream.</param>
         /// <param name="sampleData">The sample data in bytes which to be sent.</param>
-        void SendVideoSample(byte presentationId, bool isKeyFrame, uint SampleNumber, byte[] sampleData, ulong timeStamp);
+        /// <param name="isCompressed">Whether the packet will be compressed before sent.</param>
+        void SendVideoSample(byte presentationId, bool isKeyFrame, uint SampleNumber, byte[] sampleData, ulong timeStamp, bool isCompressed =false);
              
         /// <summary>
         /// Method to expect a TSMM_PRESENTATION_RESPONSE from client.

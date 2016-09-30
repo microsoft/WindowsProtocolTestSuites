@@ -80,6 +80,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
 
         private uint? initSequenceNumber = null;
 
+        private uUdpVer_Values? clientUUdpVer = null;
+
+        private uSynExFlags_Values? clientRdpudpVerfionInfoValidFlag = null;
+
         #endregion
 
         #region Class Initialization And Cleanup
@@ -106,6 +110,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         protected override void TestCleanup()
         {
             base.TestCleanup();
+
+            //Reset the client status to avoid dirty data for the next test case.
+            this.clientUUdpVer = null;
+            this.clientRdpudpVerfionInfoValidFlag = null;
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to close all RDP connections for clean up.");
             int iResult = this.sutControlAdapter.TriggerClientDisconnectAll();
@@ -192,7 +200,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         /// </summary>
         /// <param name="udpTransportMode">Transport mode: Reliable or Lossy</param>
         /// <param name="invalidType">invalid type</param>
-        public void SendSynAndAckPacket(TransportMode udpTransportMode, SynAndAck_InvalidType invalidType, uint? initSequenceNumber = null)
+        public void SendSynAndAckPacket(TransportMode udpTransportMode, SynAndAck_InvalidType invalidType, uint? initSequenceNumber = null, uUdpVer_Values? uUdpVer= null)
         {
             RdpeudpServerSocket rdpeudpSocket = rdpeudpSocketR;
             if (udpTransportMode == TransportMode.Lossy)
@@ -203,7 +211,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             if (invalidType == SynAndAck_InvalidType.None)
             {
                 // If invalid type is None, send the packet directly.
-                rdpeudpSocket.SendSynAndAckPacket(initSequenceNumber);
+                rdpeudpSocket.SendSynAndAckPacket(initSequenceNumber,uUdpVer);
                 return;
             }
 
@@ -221,7 +229,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         /// <param name="timeout">Wait time.</param>
         /// <param name="verifyPacket">Whether verify the received packet.</param>
         /// <returns>The accepted socket.</returns>
-        private RdpeudpSocket EstablishUDPConnection(TransportMode udpTransportMode, TimeSpan timeout, bool verifyPacket = false, bool autoHanlde = false)
+        private RdpeudpSocket EstablishUDPConnection(TransportMode udpTransportMode, TimeSpan timeout, bool verifyPacket = false, bool autoHanlde = false, uUdpVer_Values? uUdpVer =null)
         {
             // Start UDP listening.
             if(rdpeudpServer == null)
@@ -270,7 +278,23 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             }
 
             // Send a SYN and ACK packet.
-            SendSynAndAckPacket(udpTransportMode, SynAndAck_InvalidType.None, initSequenceNumber);
+            if (this.clientRdpudpVerfionInfoValidFlag == uSynExFlags_Values.RDPUDP_VERSION_INFO_VALID) 
+            {
+                //Section 3.1.5.1.3: The uUdpVer field MUST be set to the highest RDP-UDP protocol version supported by both endpoints. 
+                uUdpVer = uUdpVer > this.clientUUdpVer ? this.clientUUdpVer : uUdpVer;
+                SendSynAndAckPacket(udpTransportMode, SynAndAck_InvalidType.None, initSequenceNumber, uUdpVer);                
+            }
+            else if(this.clientRdpudpVerfionInfoValidFlag == uSynExFlags_Values.None)
+            {
+                //Section 3.1.5.1.3: The highest version supported by both endpoints, which is RDPUDP_PROTOCOL_VERSION_1 if either this packet or the SYN packet does not specify a version, is the version that MUST be used by both endpoints.
+                SendSynAndAckPacket(udpTransportMode, SynAndAck_InvalidType.None, initSequenceNumber, uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_1);
+            }
+            else
+            {
+                //Section 3.1.5.1.3: The RDPUDP_SYNEX_PAYLOAD structure (section 2.2.2.9) SHOULD only be present if it is also present in the received SYN packet. 
+                // When the 
+                SendSynAndAckPacket(udpTransportMode, SynAndAck_InvalidType.None, initSequenceNumber,null);
+            }
             
 
             // Expect an ACK packet or ACK and Source Packet.
@@ -690,6 +714,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         /// <param name="udpTransportMode">Transport mode: reliable or lossy.</param>
         private void VerifySYNPacket(RdpeudpPacket synPacket, TransportMode udpTransportMode)
         {
+            
             if (synPacket == null)
             {
                 this.Site.Assert.Fail("The SYN Packet should not be null!");
@@ -734,7 +759,31 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             {
                 this.Site.Assert.Fail("The uDownStreamMtu field MUST be set to a value in the range of 1132 to 1232.");
             }
+
+            // The RDPUDP_FLAG_SYNEX flag and RDPUDP_SYNDATAEX_PAYLOAD structure should appear at the same time.
+            if ((synPacket.SynDataEx == null) ^ ((synPacket.fecHeader.uFlags & RDPUDP_FLAG.RDPUDP_FLAG_SYNEX) == 0))
+            {
+                this.Site.Assert.Fail("Section 3.1.5.1.1: The RDPUDP_FLAG_SYNEX flag MUST be set only when the RDPUDP_SYNDATAEX_PAYLOAD structure is included. Section 3.1.5.1.1: The RDPUDP_SYNEX_PAYLOAD structure MUST be appended to the UDP datagram if the RDPUDP_FLAG_SYNEX flag is set in uFlags.");
+            }           
             
+            //Section 3.1.5.1.1: Not appending RDPUDP_SYNDATAEX_PAYLOAD structure implies that RDPUDP_PROTOCOL_VERSION_1 is the highest protocol version supported. 
+            if (synPacket.SynDataEx == null)
+            {                
+                this.clientUUdpVer = uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_1;
+                this.clientRdpudpVerfionInfoValidFlag = null;
+            }
+            else
+            {                
+                this.clientUUdpVer = synPacket.SynDataEx.Value.uUdpVer;
+                this.clientRdpudpVerfionInfoValidFlag = synPacket.SynDataEx.Value.uSynExFlags;
+
+                //Section 3.1.5.1.1: The RDPUDP_VERSION_INFO_VALID flag MUST be set only if the structure contains a valid RDP-UDP protocol version.
+                if (synPacket.SynDataEx.Value.uSynExFlags.HasFlag(uSynExFlags_Values.RDPUDP_VERSION_INFO_VALID) && ((int)synPacket.SynDataEx.Value.uUdpVer & 0xfffc) != 0)
+                {
+                    this.Site.Assert.Fail("Section 3.1.5.1.1: The RDPUDP_VERSION_INFO_VALID flag MUST be set only if the structure contains a valid RDP-UDP protocol version");
+                }
+
+            }
         }
 
         /// <summary>

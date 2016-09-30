@@ -1,0 +1,214 @@
+protocol RDPEDYCTest;
+
+using Etw;
+using EtwEvent;
+using WindowsReference;
+using Utility;
+using RDPEDYC;
+using Protocol_Test_Suite;
+
+
+public autostart actor RDPEDYCEncActor (Protocol_Test_Suite.ep_Protocol_Test_Suite node)
+{
+    map<uint, string> channelNameMap = {};
+    uint channelID = 0;
+    
+   	process node accepts
+  		m:Event_2 where (Contains(m.MessageName, "RDPEDYC:"))
+    {
+        switch(m.MessageName)
+        {
+            case "RDPEDYC:ReceivedPDU" =>
+            // DVCCapabilitiesResponsePDU
+            if ((m.Payload[0] & 0xF0) == 0x50)
+            {
+                var pdu = BinaryDecoder<DVCCapabilitiesResponsePDU>(m.Payload);
+                if (pdu != nothing)
+                {
+                    DVCCapabilitiesResponsePDU msg = pdu as DVCCapabilitiesResponsePDU;
+                    dispatch (endpoint RDPEDYC.Server[0]) accepts msg;
+                }
+                else
+                {
+                    ThrowDecodingException("RDPEDYC", "DVCCapabilitiesResponsePDU");
+                }
+            }
+            // DVCCreateResponsePDU
+            else if ((m.Payload[0] & 0xF0) == 0x10)
+            {
+                var pdu = BinaryDecoder<DVCCreateResponsePDU>(m.Payload);
+                if (pdu != nothing)
+                {
+                    DVCCreateResponsePDU msg = pdu as DVCCreateResponsePDU;
+                    channelID = msg.ChannelId;
+                    dispatch (endpoint RDPEDYC.Server[channelID]) accepts msg;
+                }
+                else
+                {
+                    ThrowDecodingException("RDPEDYC", "DVCCreateResponsePDU");
+                }
+            }
+            // DVCClose
+            else if ((m.Payload[0] & 0xF0) == 0x40)
+            {
+                var pdu = BinaryDecoder<DVCClose>(m.Payload);
+                if (pdu != nothing)
+                {
+                    DVCClose msg = pdu as DVCClose;
+                    channelID = msg.ChannelId;
+                    dispatch (endpoint RDPEDYC.Server[channelID]) accepts msg;
+                    channelNameMap = channelNameMap.Remove(channelID);
+                }
+                else
+                {
+                    ThrowDecodingException("RDPEDYC", "DVCClose");
+                }
+            }
+            // DVCDataFirstPDU
+            else if ((m.Payload[0] & 0xF0) == 0x20)
+            {
+                var pdu = BinaryDecoder<DVCDataFirstPDU>(m.Payload);
+                if (pdu != nothing)
+                {
+                    DVCDataFirstPDU msg = pdu as DVCDataFirstPDU;
+                    channelID = msg.ChannelId;
+                    dispatch (endpoint RDPEDYC.ReassemblyServer[channelID]) accepts msg;
+                }
+                else
+                {
+                    ThrowDecodingException("RDPEDYC", "DVCDataFirstPDU");
+                }
+            }
+            // DVCDataPDU
+            else if ((m.Payload[0] & 0xF0) == 0x30)
+            {
+                var pdu = BinaryDecoder<DVCDataPDU>(m.Payload);
+                if (pdu != nothing)
+                {
+                    DVCDataPDU msg = pdu as DVCDataPDU;
+                    channelID = msg.ChannelId;
+                    dispatch (endpoint RDPEDYC.ReassemblyServer[channelID]) accepts msg;
+                    if (channelID in channelNameMap.Keys)
+                    {
+                        msg#EDYCChannelName = channelNameMap[channelID];
+                    }
+                }
+                else
+                {
+                    ThrowDecodingException("RDPEDYC", "DVCDataPDU");
+                }
+            }
+            else 
+            {
+                ThrowDecodingException("RDPEDYC", "invalid Cmd value");
+            }
+            case "RDPEDYC:sentPDU" =>
+            if ((m.Payload[0] & 0xF0) == 0x50)
+            {
+                // DVCCapabilitiesRequestPDUV1
+                if (m.Payload[2] == 0x01)
+                {
+                    var pdu = BinaryDecoder<DVCCapabilitiesRequestPDUV1>(m.Payload);
+                    if (pdu != nothing)
+                    {
+                        dispatch (endpoint RDPEDYC.Server[0]) issues (pdu as DVCCapabilitiesRequestPDUV1);
+                    }
+                    else
+                    {
+                        ThrowDecodingException("RDPEDYC", "DVCCapabilitiesRequestPDUV1");
+                    }
+                }
+                // DVCCapabilitiesRequestPDUV2
+                else if (m.Payload[2] == 0x02)
+                {
+                    var pdu = BinaryDecoder<DVCCapabilitiesRequestPDUV2>(m.Payload);
+                    if (pdu != nothing)
+                    {
+                        dispatch (endpoint RDPEDYC.Server[0]) issues (pdu as DVCCapabilitiesRequestPDUV2);
+                    }
+                    else
+                    {
+                        ThrowDecodingException("RDPEDYC", "DVCCapabilitiesRequestPDUV2");
+                    }
+                }
+                else
+                {
+                    ThrowDecodingException("RDPEDYC", "DVCCapabilitiesRequestPDU");
+                }
+            } 
+            // DVCCreateRequestPDU
+            else if ((m.Payload[0] & 0xF0) == 0x10)
+            {
+                var pdu = BinaryDecoder<DVCCreateRequestPDU>(m.Payload);
+                if (pdu != nothing)
+                {
+                    DVCCreateRequestPDU msg = pdu as DVCCreateRequestPDU;
+                    channelID = msg.ChannelId;
+                    dispatch (endpoint RDPEDYC.Server[channelID]) issues msg;
+                    ValidationCheck((!(channelID in channelNameMap) || channelNameMap[channelID] == ""), msg, 
+                    () => "RDPEDYC: Missing DVCClose message for ChannelID " + Utility.DecToHexFormat(channelID) + ".");
+                    channelNameMap[channelID] = msg.ChannelName;
+                }
+                else
+                {
+                    ThrowDecodingException("RDPEDYC", "DVCCreateRequestPDU");
+                }
+            }
+            // DVCClose
+            else if ((m.Payload[0] & 0xF0) == 0x40)
+            {
+                var pdu = BinaryDecoder<DVCClose>(m.Payload);
+                if (pdu != nothing)
+                {
+                    DVCClose msg = pdu as DVCClose;
+                    channelID = msg.ChannelId;
+                    dispatch (endpoint RDPEDYC.Server[channelID]) issues msg;
+                    channelNameMap = channelNameMap.Remove(channelID);
+                }
+                else
+                {
+                    ThrowDecodingException("RDPEDYC", "DVCClose");
+                }
+            }
+            // DVCDataFirstPDU
+            else if ((m.Payload[0] & 0xF0) == 0x20)
+            {
+                var pdu = BinaryDecoder<DVCDataFirstPDU>(m.Payload);
+                if (pdu != nothing)
+                {
+                    DVCDataFirstPDU msg = pdu as DVCDataFirstPDU;
+                    channelID = msg.ChannelId;
+                    dispatch (endpoint RDPEDYC.ReassemblyServer[channelID]) issues msg;
+                }
+                else
+                {
+                    ThrowDecodingException("RDPEDYC", "DVCDataFirstPDU");
+                }
+            }
+            // DVCDataPDU
+            else if ((m.Payload[0] & 0xF0) == 0x30)
+            {
+                var pdu = BinaryDecoder<DVCDataPDU>(m.Payload);
+                if (pdu != nothing)
+                {
+                    DVCDataPDU msg = pdu as DVCDataPDU;
+                    channelID = msg.ChannelId;
+                    dispatch (endpoint RDPEDYC.ReassemblyServer[channelID]) issues msg;
+                    if (channelID in channelNameMap.Keys)
+                    {
+                        msg#EDYCChannelName = channelNameMap[channelID];
+                    }
+                }
+                else
+                {
+                    ThrowDecodingException("RDPEDYC", "DVCDataPDU");
+                }
+            }
+            else
+            {
+                ThrowDecodingException("RDPEDYC", "invalid Cmd value");
+            }
+        }
+    }
+}
+

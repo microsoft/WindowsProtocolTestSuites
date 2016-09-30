@@ -125,9 +125,38 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// Send data using this DVC
         /// </summary>
         /// <param name="data"></param>
-        public void Send(byte[] data)
+        public void Send(byte[] data, bool isCompressed = false)
         {
-            DataDvcBasePdu[] dataPdus = pduBuilder.CreateDataPdu(channelId, data, MAX_CHUNK_LEN);
+            DataDvcBasePdu[] dataPdus = null;
+            if (isCompressed)
+            {
+                dataPdus = pduBuilder.CreateCompressedDataPdu(
+                    channelId, 
+                    data);
+            }
+            else
+            {
+                dataPdus = pduBuilder.CreateDataPdu(channelId, data, MAX_CHUNK_LEN);
+            }
+
+            if (dataPdus != null)
+            {
+                foreach (DataDvcBasePdu pdu in dataPdus)
+                {
+                    transport.Send(pdu);
+                }
+            }
+        }
+
+        public void SendFirstCompressedData(byte[] data)
+        {
+            DataDvcBasePdu[] dataPdus = null;
+            
+            dataPdus = pduBuilder.CreateCompressedDataPdu(
+                channelId,
+                pduBuilder.CompressDataToRdp8BulkEncodedData(data, PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_LITE | PACKET_COMPR_FLAG.PACKET_COMPRESSED),
+                1599);
+           
 
             if (dataPdus != null)
             {

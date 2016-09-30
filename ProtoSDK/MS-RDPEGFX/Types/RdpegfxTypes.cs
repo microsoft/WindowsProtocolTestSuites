@@ -77,6 +77,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
 
     /// <summary>
     /// This structure specifies a rectangle relative to the virtual-desktop origin.
+    /// Section 2.2.4.4 Note that the width and height of the MPEG-4 AVC/H.264 codec bitstream MUST be aligned to a multiple of 16     
     /// </summary>
     public struct RDPGFX_RECT16
     {
@@ -552,7 +553,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <summary>
         /// Decode this PDU from the PduMarshaler.
         /// </summary>
-        /// <param name="marshaler">This is used to encode the fields of this PDU.</param>
+        /// <param name="marshaler">This is used to decode the fields of this PDU.</param>
         public override bool Decode(PduMarshaler marshaler)
         {
             try
@@ -2080,164 +2081,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         
     #endregion
 
-    #region Data Packaging
-
-    /// <summary>
-    /// The RDP_SEGMENTED_DATA structure is used to wrap one or more RDP_DATA_SEGMENT (section 2.2.5.2) structures.
-    /// Each segment contains data that has been encoded using RDP 8.0 Bulk Compression techniques (section 3.1.9.1).
-    /// </summary>
-    public class RDP_SEGMENTED_DATA : BasePDU
-    {
-        #region Message Fields
-
-        /// <summary>
-        /// An 8-bit unsigned integer that specifies whether the RDP_SEGMENTED_DATA structure wraps a single segment or multiple segments
-        /// </summary>
-        public DescriptorTypes descriptor;
-
-        /// <summary>
-        /// An optional 16-bit unsigned integer that specifies the number of elements in the segmentArray field.
-        /// </summary>
-        public ushort segmentCount;
-
-        /// <summary>
-        /// An optional 32-bit unsigned integer that specifies the size, in bytes, 
-        /// of the data present in the segmentArray field once it has been reassembled and decompressed.
-        /// </summary>
-        public uint uncompressedSize;
-
-        /// <summary>
-        /// An optional variable-length RDP8_BULK_ENCODED_DATA structure (section 2.2.5.3).
-        /// </summary>
-        public RDP8_BULK_ENCODED_DATA bulkData;
-
-        /// <summary>
-        /// An optional variable-length array of RDP_DATA_SEGMENT structures.
-        /// </summary>
-        public RDP_DATA_SEGMENT[] segmentArray; 
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Encode this PDU to the PduMarshaler.
-        /// </summary>
-        /// <param name="marshaler">This is used to encode the fields of this PDU.</param>
-        public override void Encode(PduMarshaler marshaler)
-        {
-            marshaler.WriteByte((byte)descriptor);
-            if (descriptor == DescriptorTypes.SINGLE)
-            {
-                if(bulkData != null)
-                {
-                    marshaler.WriteByte(bulkData.header);
-                    marshaler.WriteBytes(bulkData.data);
-                }
-            }
-            else
-            {
-                marshaler.WriteUInt16(segmentCount);
-                marshaler.WriteUInt32(uncompressedSize);
-                if (segmentArray != null && segmentArray.Length > 0)
-                {
-                    foreach (RDP_DATA_SEGMENT dataSeg in segmentArray)
-                    {
-                        marshaler.WriteUInt32(dataSeg.size);
-                        if (dataSeg.bulkData != null)
-                        {
-                            marshaler.WriteByte(bulkData.header);
-                            marshaler.WriteBytes(bulkData.data);
-                        }
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Decode this PDU from the PduMarshaler.
-        /// </summary>
-        /// <param name="marshaler">This is used to decode the fields of this PDU.</param>
-        public override bool Decode(PduMarshaler marshaler)
-        {
-            try
-            {
-                this.descriptor = (DescriptorTypes)marshaler.ReadByte();
-
-                if (this.descriptor == DescriptorTypes.SINGLE)
-                {
-                    this.bulkData = new RDP8_BULK_ENCODED_DATA();
-                    this.bulkData.header = marshaler.ReadByte();
-                    this.bulkData.data = marshaler.ReadToEnd();
-                }
-                else
-                {
-                    this.segmentCount = marshaler.ReadUInt16();
-                    this.uncompressedSize = marshaler.ReadUInt32();
-                    if (this.segmentCount > 0)
-                    {
-                        this.segmentArray = new RDP_DATA_SEGMENT[this.segmentCount];
-                        for (int i = 0; i < this.segmentCount; i++)
-                        {
-                            this.segmentArray[i].size = marshaler.ReadUInt32();
-                            if (this.segmentArray[i].size > 0)
-                            {
-                                this.segmentArray[i].bulkData = new RDP8_BULK_ENCODED_DATA();
-                                this.segmentArray[i].bulkData.header = marshaler.ReadByte();
-                                this.segmentArray[i].bulkData.data = marshaler.ReadBytes((int)this.segmentArray[i].size - 1);
-                            }
-                        }
-                    }
-                }
-
-                return true;
-            }
-            catch
-            {
-                marshaler.Reset();
-                throw new PDUDecodeException(this.GetType(), marshaler.ReadToEnd());
-            }
-        }
-
-        #endregion
-
-    }
-
-    /// <summary>
-    /// The RDP_DATA_SEGMENT structure contains data that has been encoded using RDP 8.0 Bulk Compression techniques (section 3.1.9.1).
-    /// </summary>
-    public class RDP_DATA_SEGMENT
-    {
-        /// <summary>
-        /// A 32-bit unsigned integer that specifies the size, in bytes, of the bulkData field
-        /// </summary>
-        public uint size;
-
-        /// <summary>
-        /// A variable-length RDP8_BULK_ENCODED_DATA structure (section 2.2.5.3).
-        /// </summary>
-        public RDP8_BULK_ENCODED_DATA bulkData; 
-    }
-
-    /// <summary>
-    /// The RDP8_BULK_ENCODED_DATA structure contains a header byte 
-    /// and data that has been encoded using RDP 8.0 Bulk Compression techniques (section 3.1.9.1).
-    /// </summary>
-    public class RDP8_BULK_ENCODED_DATA
-    {
-        /// <summary>
-        /// An 8-bit, unsigned integer that specifies the compression type and flags.
-        /// </summary>
-        public byte header;
-
-        /// <summary>
-        /// ): A variable-length array of bytes that contains data encoded using RDP 8.0 Bulk Compression techniques. 
-        /// If the PACKET_COMPRESSED (0x20) flag is specified in the header field, then the data is compressed.
-        /// </summary>
-        public byte[] data;
-    }
-
-    #endregion
  
     #region Client Messages
     /// <summary>
