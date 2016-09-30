@@ -87,13 +87,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Basic Setting Exchange
             ExpectPacket<Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request>(sessionContext, pduWaitTimeSpan);
 
-            if (multiTransportTypeFlags.HasFlag(MULTITRANSPORT_TYPE_FLAGS.SOFTSYNC_TCP_TO_UDP))
-            {
-                Site.Assert.IsTrue(sessionContext.MultitransportTypeFlagsInMCSConnectIntialPdu.HasFlag(MULTITRANSPORT_TYPE_FLAGS.SOFTSYNC_TCP_TO_UDP),
-                    "Client Should support Soft-Sync, flags: {0}",
-                    sessionContext.MultitransportTypeFlagsInMCSConnectIntialPdu);
-            }
-
             Server_MCS_Connect_Response(
                 enMethod, 
                 enLevel, 
@@ -290,77 +283,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     break;
                 }
             } 
-        }
-
-        /// <summary>
-        /// Generate static virtual channel data messages for test.
-        /// MS-RDPEFS is used to generated virtual channel traffics.
-        /// </summary>
-        /// <param name="invalidType">Invalid Type</param>
-        public void GenerateStaticVirtualChannelTraffics(StaticVirtualChannel_InvalidType invalidType)
-        {
-            /*
-             * MS-RDPEFS protocol Initialization.
-             */
-
-            byte[] receivedData = null;
-            uint clientId = 0;
-
-            if (invalidType == StaticVirtualChannel_InvalidType.None)
-            {
-                //Sending Server Announce Request.
-                byte[] data = RdpefsUtility.EncodeServerAnnounceRequest(RdpefsUtility.CreateServerAnnounceRequest());
-                SendVirtualChannelPDU(RDPDR_ChannelId, data, StaticVirtualChannel_InvalidType.None);
-
-                //Expecting  Client Announce Reply.
-                WaitForVirtualChannelPdu(RDPDR_ChannelId, out receivedData, pduWaitTimeSpan);
-                DR_CORE_SERVER_ANNOUNCE_RSP reply = RdpefsUtility.DecodeClientAnnounceReply(receivedData);
-                clientId = reply.ClientId;
-
-                //Expecting Client Name Request.
-                WaitForVirtualChannelPdu(RDPDR_ChannelId, out receivedData, pduWaitTimeSpan);
-
-                //Sending Server Core Capability Request.
-                data = RdpefsUtility.EncodeServerCoreCapabilityRequest(RdpefsUtility.CreateServerCoreCapabilityRequest());
-                SendVirtualChannelPDU(RDPDR_ChannelId, data, StaticVirtualChannel_InvalidType.None);
-
-                //Sending Server Client ID Confirm.
-                data = RdpefsUtility.EncodeServerClientIDConfirm(RdpefsUtility.CreateServerClientIDConfirm(clientId));
-                SendVirtualChannelPDU(RDPDR_ChannelId, data, StaticVirtualChannel_InvalidType.None);
-
-                //Expecting Client Core Capability Response.
-                WaitForVirtualChannelPdu(RDPDR_ChannelId, out receivedData, pduWaitTimeSpan);
-
-                DR_CORE_CAPABILITY_RSP capRsp = RdpefsUtility.DecodeClientCoreCapabilityRSP(receivedData);
-                bool supportUserLogonPacket = false;
-                foreach (CAPABILITY_SET capSet in capRsp.CapabilityMessage)
-                {
-                    if (capSet is GENERAL_CAPS_SET)
-                    {
-                        if (((GENERAL_CAPS_SET)capSet).extendedPDU.HasFlag(extendedPDU_Values.RDPDR_USER_LOGGEDON_PDU))
-                        {
-                            supportUserLogonPacket = true;
-                        }
-                    }
-                }
-
-                if (supportUserLogonPacket)
-                {
-                    // Send Server User logged on packet
-                    data = RdpefsUtility.EncodeServerUserLoggedOn(RdpefsUtility.CreateServerUserLoggedOn());
-                    SendVirtualChannelPDU(RDPDR_ChannelId, data, StaticVirtualChannel_InvalidType.None);
-                }
-
-                //Expecting Client Device List.
-                WaitForVirtualChannelPdu(RDPDR_ChannelId, out receivedData, pduWaitTimeSpan);
-            }
-            else
-            {
-                //Sending Server Announce Request.
-                byte[] data = RdpefsUtility.EncodeServerAnnounceRequest(RdpefsUtility.CreateServerAnnounceRequest());
-                SendVirtualChannelPDU(RDPDR_ChannelId, data, invalidType);
-                //WaitForVirtualChannelPdu(RDPDR_ChannelId, out receivedData, timeout);
-            }
         }
 
     }

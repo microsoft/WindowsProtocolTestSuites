@@ -41,6 +41,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         protected bool isClientSupportRDPEFS = true;
         protected bool isClientSupportServerRedirection = true;
         protected bool isClientSupportSoftSync = true;
+        protected bool isClientSupportTunnelingStaticVCTraffic = true;
         protected bool isClientSupportEmptyRdpNegData;
         protected static Image image_64X64; //Defined to static for reuse across test cases
         protected static Image imageForVideoMode;
@@ -437,6 +438,11 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 isClientSupportSoftSync = false; //if property not found, set to false as default value
             }
 
+            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, RdpPtfPropNames.RDPClientSupportTunnelingStaticVCTraffic, out isClientSupportTunnelingStaticVCTraffic))
+            {
+                isClientSupportTunnelingStaticVCTraffic = false; //if property not found, set to false as default value
+            }
+
             if (!PtfPropUtility.GetBoolPtfProperty(TestSite, RdpPtfPropNames.RDPClientSupportRdpNegDataEmpty, out isClientSupportEmptyRdpNegData))
             {
                 isClientSupportEmptyRdpNegData = false; //if property not found, set to false as default value
@@ -490,13 +496,15 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 isClientSupportRDPEFS = {2};
                 isClientSupportServerRedirection = {3};
                 isClientSupportEmptyRdpNegData = {4};
-                isClientSupportSoftSync = {5}",
+                isClientSupportSoftSync = {5}
+                isClientSupportTunnelingStaticVCTraffic = {6}",
                 isClientSupportFastPathInput,
                 isClientSuportAutoReconnect,
                 isClientSupportRDPEFS,
                 isClientSupportServerRedirection,
                 isClientSupportEmptyRdpNegData,
-                isClientSupportSoftSync);
+                isClientSupportSoftSync,
+                isClientSupportTunnelingStaticVCTraffic);
             #endregion
         }
         
