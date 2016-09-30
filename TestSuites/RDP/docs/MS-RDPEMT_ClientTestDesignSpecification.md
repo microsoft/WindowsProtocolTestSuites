@@ -13,6 +13,7 @@
     * [Test Scenarios](#_Toc350340316)
 		* [S1_Connection](#_Toc350340317)
 		* [S2_AutoDetect](#_Toc350340318)
+		* [S3_Tunneling_StaticVC_Traffic](#_Toc350340335)
 * [Test Suite Design](#_Toc350340319)
     * [Test Suite Architecture](#_Toc350340320)
 		* [System under Test (SUT)](#_Toc350340321)
@@ -26,6 +27,7 @@
     * [Test Cases Description](#_Toc350340329)
 		* [S1_Connection](#_Toc350340330)
 		* [S2_AutoDetect](#_Toc350340331)
+		* [S3_Tunneling_StaticVC_Traffic](#_Toc350340336)
 * [Appendix](#_Toc350340332)
     * [Glossary (Optional)](#_Toc350340333)
     * [Reference](#_Toc350340334)
@@ -92,7 +94,8 @@ There are 2 scenarios defined in the MS-RDPEMT client test suite for verifying t
 |  **Scenario**|  **Priority**|  **Test Approach**|  **Description**| 
 | -------------| -------------| -------------| ------------- |
 | **S1_Connection**| 0| Traditional| Verify the RDPEMT connection phase.| 
-| **S2_AutoDetect**| 0| Traditional| Verify auto detection over RDPEMT tunnel.| 
+| **S2_AutoDetect**| 0| Traditional| Verify auto detection over RDPEMT tunnel.|
+| **S3_Tunneling_StaticVC_Traffic**| 1| Traditional| Verify static VC data over reliable UDP.|
 
 ***Table 21 MS-RDPEMT Test Suite Scenarios***
 
@@ -152,6 +155,35 @@ This scenario will test the following structures:
 
 * RDP\_TUNNEL_DATA
 
+#### <a name="_Toc350340335"/>S3_Tunneling_StaticVC_Traffic
+**Preconditions:**
+
+* The RDP connection has been established.
+
+**Typical Sequence:**
+
+The typical scenario sequence is the following:
+
+* RDP server and RDP client establish a RDPEUDP connection.
+
+* RDP server and RDP client establish a RDPEMT connection.
+
+* RDP server and RDP client Soft-Sync negotiation.
+
+* RDP server and RDP client send and receive data.
+
+**Scenario Testing:**
+
+This scenario will test the following structures:
+
+* RDP\_TUNNEL_HEADER
+
+* RDP\_TUNNEL_DATA
+
+* DYNVC\_SOFT\_SYNC\_REQUEST
+
+* DYNVC\_SOFT\_SYNC\_RESPONSE
+
 ## <a name="_Toc350340319"/>Test Suite Design
 
 ### <a name="_Toc350340320"/>Test Suite Architecture
@@ -197,8 +229,9 @@ All multitransport connections are secured by using either Transport Layer Secur
 
 |  **Scenario**|  **Test Cases**|  **BVTs**|  **P0**|  **P1**| 
 | -------------| -------------| -------------| -------------| ------------- |
-| S1_Connection| 4| 2| 2| 2| 
+| S1_Connection| 6| 2| 2| 4| 
 | S2_AutoDetection| 4| 0| 2| 2| 
+| S3_Tunneling_StaticVC_Traffic| 0| 0| 0| 1| 
 
 ### <a name="_Toc350340329"/>Test Cases Description 
 The test suite is a synthetic RDP server. In the following descriptions, all instances of the term “Test Suite” can be understood as the RDP server.
@@ -280,12 +313,40 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Test suite expect RDP client to send a Client Initiate Multitransport Error PDU.| 
 |  **Cleanup**| N/A| 
 
+|  **S1_Connection**| | 
+| -------------| ------------- |
+|  **Test ID**| S1\_Connection\_SoftSync\_Lossy| 
+|  **Priority**| P1| 
+|  **Description** | Verify the RDP client can handle soft sync connection using RDP-UDP-L.| 
+|  **Prerequisites**| Both RDP server and client support Soft Sync.| 
+|  **Test Execution Steps**| Test suite trigger RDP client to create a lossy RDP-UDP connection | 
+| | Test suite and RDP client complete DTLS handshake to initialize a DTLS encrypted channel.|
+| | Test suite sends Initiate Multitransport Request PDU.| 
+| | Test suite expect RDP client to send a Client Initiate Multitransport Response PDU.|
+| | Test suite sends Soft-Sync Request PDU.|
+| | Test suite expect RDP client to send a Soft-Sync Response PDU.| 
+|  **Cleanup**| N/A| 
+
+|  **S1_Connection**| | 
+| -------------| ------------- |
+|  **Test ID**| S1\_Connection\_SoftSync\_Reliable| 
+|  **Priority**| P1| 
+|  **Description** | Verify the RDP client can handle soft sync connection using RDP-UDP-R.| 
+|  **Prerequisites**| Both RDP server and client support Soft Sync.| 
+|  **Test Execution Steps**| Test suite trigger RDP client to create a reliable RDP-UDP connection | 
+| | Test suite and RDP client complete TLS handshake to initialize a TLS encrypted channel.| 
+| | Test suite sends Initiate Multitransport Request PDU.| 
+| | Test suite expect RDP client to send a Client Initiate Multitransport Response PDU.|
+| | Test suite sends Soft-Sync Request PDU.|
+| | Test suite expect RDP client to send a Soft-Sync Response PDU.| 
+|  **Cleanup**| N/A| 
+
 #### <a name="_Toc350340331"/>S2_AutoDetect
 
 
 |  **S2_AutoDetect**| | 
 | -------------| ------------- |
-|  **Test ID**| S2_AutoDetect_RTTMeasure| 
+|  **Test ID**| S2\_AutoDetect_RTTMeasure| 
 |  **Priority**| P1| 
 |  **Description** | Verify the RDP client can response to round-trip measurement operations initiated by the RTT Measure Request correctly| 
 |  **Prerequisites**| N/A| 
@@ -302,7 +363,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 |  **S2_AutoDetect**| | 
 | -------------| ------------- |
-|  **Test ID**| S2_AutoDetect_ReliableBandwidthMeasure| 
+|  **Test ID**| S2\_AutoDetect_ReliableBandwidthMeasure| 
 |  **Priority**| P0| 
 |  **Description** | Verify the RDP client can complete the bandwidth measure auto detection in a reliable UDP transport| 
 |  **Prerequisites**| N/A| 
@@ -321,7 +382,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 |  **S2_AutoDetect**| | 
 | -------------| ------------- |
-|  **Test ID**| S2_AutoDetect_LossyBandwidthMeasure| 
+|  **Test ID**| S2\_AutoDetect_LossyBandwidthMeasure| 
 |  **Priority**| P0| 
 |  **Description** | Verify the RDP client can complete the bandwidth measure auto detection in a lossy UDP transport| 
 |  **Prerequisites**| N/A| 
@@ -341,7 +402,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 |  **S2_AutoDetect**| | 
 | -------------| ------------- |
-|  **Test ID**| S2_AutoDetect_NegtiveLossyBandwidthMeasure| 
+|  **Test ID**| S2\_AutoDetect_NegtiveLossyBandwidthMeasure| 
 |  **Priority**| P1| 
 |  **Description** | Verify the RDP client doesn’t respond Bandwidth detection request in a lossy UDP transport if the sequenceNumber field in the Bandwidth Measure Stop structure is not the same as that in the Bandwidth Measure Start structure.| 
 |  **Prerequisites**| N/A| 
@@ -351,7 +412,22 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Test suite send amounts of bytes to the client| 
 | | Test suite send a Bandwidth Measure Stop message encapsulated in the SubHeaderData field of an RDP_TUNNEL_SUBHEADER structure to the client. The sequenceNumber field in Bandwidth Measure Stop is set a different value from Bandwidth Measure Start message| 
 | | The client should skip the response step and test suite SHOULD NOT get a Bandwidth Measure Result PDU from the client| 
-|  **Cleanup**| N/A| 
+|  **Cleanup**| N/A|
+
+#### <a name="_Toc350340336"/>S3_Tunneling_StaticVC_Traffic 
+|  **S3_Tunneling_StaticVC_Traffic**| | 
+| -------------| ------------- |
+|  **Test ID**| S3\_Tunneling\_StaticVirtualChannel\_PositiveTest| 
+|  **Priority**| P1| 
+|  **Description** | This test case is used to verify client could tunnelling static virtual channel traffic over UDP.| 
+|  **Prerequisites**| N/A| 
+|  **Test Execution Steps**| Test suite trigger RDP client to create a reliable RDP-UDP connection and initialize a TLS encrypted channel| 
+| | Test suite expect for a RDPEMT connection from the client|
+| | Test suite and RDP client create Soft-Sync negotiation|
+| | Test suite and RDP client create dynamic VC for MS-RDPEFS|
+| | Test suite and RDP client send and receive MS-RDPEFS data on DVC over reliable UDP.| 
+
+|  **Cleanup**| N/A|
 
 ## <a name="_Toc350340332"/>Appendix
 

@@ -711,7 +711,7 @@ Below table shows the test case number of each scenario.
 | -------------| -------------| -------------| -------------| -------------| ------------- |
 | Capability Exchange Test| 3| 1| 1| 2| 0| 
 | Surface To Screen Test| 21| 2| 2| 19| 0| 
-| Cache Management Test| 13| 1| 1| 12| 0| 
+| Cache Management Test| 15| 1| 3| 12| 0| 
 | Surface to Surface Test| 11| 2| 2| 9| 0| 
 | Wire to Surface Test| 2| 1| 1| 1| 0| 
 | ClearCodec Test| 32| 2| 7| 25| 0| 
@@ -1475,6 +1475,38 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | Step 2: Create a surface, and instruct client to output bitmap data of surface| 
 | | Step 3: Make a frame with a RDPGFX\_EVICT\_CACHE\_ENTRY_PDU(cache slot is 0xfefe)| 
 | | Step 4:  Expect the client to drop the connection| 
+|  **Cleanup**| N/A|
+
+|  **Cache Management Test**| | 
+| -------------| ------------- |
+|  **Test ID**| RDPEGFX\_CacheManagement\_PositiveTest\_OverUDP\_Lossy\_SoftSync| 
+|  **Priority**| P1| 
+|  **Description** | This test case is used to verify RDP client can process cache correctly when receiving RDPGFX\_SURFACE\_TO\_CACHE_PDU with the max cacheSlot number.| 
+|  **Prerequisites**| N/A| 
+|  **Test Execution Steps**| Step 1: Create Lossy UDP connection and complete Soft Sync negotiation then finish capability Exchange| 
+| | Step 2: Create a surface, instruct client to map it to output | 
+| | Step 3: Server encode a message to send a rectangle to client and instruct client to copy the rectangle of bitmap area of the surface to cache slot 25600 (4096 if client is small cache)| 
+| | Step 4: Server encode a message to instruct client to copy bitmap area saved in above slot to other position in the surface.| 
+| | Step 5: Server pack messages in 3, 4 into a frame and sent it to client | 
+| | Step 6: Expect a frame acknowledge and validate frameId.| 
+| | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
+| | Step 8: Delete the surface.| 
+|  **Cleanup**| N/A| 
+
+|  **Cache Management Test**| | 
+| -------------| ------------- |
+|  **Test ID**| RDPEGFX\_CacheManagement\_PositiveTest\_OverUDP\_Reliable\_SoftSync| 
+|  **Priority**| P1| 
+|  **Description** | This test case is used to verify RDP client can process cache correctly when receiving RDPGFX\_SURFACE\_TO\_CACHE_PDU with the max cacheSlot number.| 
+|  **Prerequisites**| N/A| 
+|  **Test Execution Steps**| Step 1: Create Reliable UDP connection and complete Soft Sync negotiation then finish capability Exchange| 
+| | Step 2: Create a surface, instruct client to map it to output | 
+| | Step 3: Server encode a message to send a rectangle to client and instruct client to copy the rectangle of bitmap area of the surface to cache slot 25600 (4096 if client is small cache)| 
+| | Step 4: Server encode a message to instruct client to copy bitmap area saved in above slot to other position in the surface.| 
+| | Step 5: Server pack messages in 3, 4 into a frame and sent it to client | 
+| | Step 6: Expect a frame acknowledge and validate frameId.| 
+| | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT| 
+| | Step 8: Delete the surface.| 
 |  **Cleanup**| N/A| 
 
 #####Surface to Surface Test

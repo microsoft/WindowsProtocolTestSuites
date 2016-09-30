@@ -85,6 +85,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         RdpbcgrServer ServerStack {get;}
         ServerCapabilitySetting CapabilitySetting { get; }
         SimulatedScreen SimulatedScreen { get; }
+        UInt16 RDPDRChannelId { get; }
         #endregion
 
         #region Methods
@@ -571,6 +572,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="data">Data want to sent</param>
         /// <param name="subHdDataArr">Array of Auto-detect data, will be send as subheader of TunnelDataPdu</param>
         void SendTunnelData(Multitransport_Protocol_value requestedProtocol, byte[] data, byte[][] subHdDataArr = null);
+
              
         #endregion Multitransport 
 
@@ -661,12 +663,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// Expect SUT start the channel join sequence
         /// </summary>
         void ChannelJoinRequestAndConfirm(NegativeType invalidType);
-
-        /// <summary>
-        /// Generate static virtual channel data messages for test.
-        /// </summary>
-        /// <param name="invalidType">Invalid Type</param>
-        void GenerateStaticVirtualChannelTraffics(StaticVirtualChannel_InvalidType invalidType);
 
         #endregion
 

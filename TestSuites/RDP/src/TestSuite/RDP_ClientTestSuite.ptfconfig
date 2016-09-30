@@ -46,7 +46,8 @@
     <Adapter xsi:type="managed" name="IRdpegtAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdpegt.RdpegtAdapter"/>
     <Adapter xsi:type="managed" name="IRdpegfxAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdpegfx.RdpegfxAdapter"/>
     <Adapter xsi:type="managed" name="IRdpedispAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdpedisp.RdpedispAdapter" />
-    
+    <Adapter xsi:type="managed" name="IRdpefsAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdp.Rdpefs.RdpefsAdapter" />
+
     <!-- SUT Control Adapters-->
     <!-- Basic RDP SUT Control Adapters -->    
     <Adapter xsi:type="powershell" name="IRdpSutControlAdapter" scriptdir ="." />
