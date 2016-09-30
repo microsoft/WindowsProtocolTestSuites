@@ -347,6 +347,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// </summary>
         public RDPUDP_CORRELATION_ID_PAYLOAD? CorrelationId;
 
+        /// <summary>
+        /// SYNEX data
+        /// </summary>
         public RDPUDP_SYNDATAEX_PAYLOAD? SynDataEx;
 
         /// <summary>

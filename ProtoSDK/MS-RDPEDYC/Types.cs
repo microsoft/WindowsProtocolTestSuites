@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc.Utility;
+using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 {
@@ -66,19 +67,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             this.Sp = sp;
             this.CbChannelId = cbChId;
         }
-    }
-
-    public enum Version_Values : ushort
-    {
-        /// <summary>
-        ///  Version level one is supported.
-        /// </summary>
-        V1 = 0x0001,
-
-        /// <summary>
-        ///  Version level two is supported.
-        /// </summary>
-        V2 = 0x0002,
     }
 
     public enum Cmd_Values : int {
@@ -959,10 +947,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
     {
         public uint Length { get; set; }
 
-        public DataFirstCompressedDvcPdu()
-        {
-
-        }
+        public DataFirstCompressedDvcPdu(){ }
 
         public DataFirstCompressedDvcPdu(uint channelId, uint length, byte[] data)
         {
@@ -1006,10 +991,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
     /// </summary>
     public class DataCompressedDvcPdu : DataDvcBasePdu
     {
-        public DataCompressedDvcPdu()
-        {
-
-        }
+        public DataCompressedDvcPdu(){ }
 
         public DataCompressedDvcPdu(uint channelId, byte[] data)
         {
@@ -1102,8 +1084,35 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             }
         }
 
-        public SoftSyncReqDvcPDU()
+        public SoftSyncReqDvcPDU(){ }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public SoftSyncReqDvcPDU(SoftSyncReqFlags_Value flags, ushort numberOfTunnels, SoftSyncChannelList[] softSyncChannelLists)
         {
+            HeaderBits = new Header(Cmd_Values.SoftSyncReq, 0, 0);
+            this.Pad = 0;            
+            this.Flags = flags;
+            this.NumberOfTunnels = numberOfTunnels;
+            this.SoftSyncChannelLists = softSyncChannelLists;
+            // Section 2.2.5.1, Length (4 bytes): A 32-bit, unsigned integer indicating the total size, in bytes, of SoftSyncChannelLists field.
+            // TDI: this length should also including the length of Length(4 bytes), Flags(2 bytes) and NumberOfTunnels(2 bytes) in DYNVC_SOFT_SYNC_REQUEST PDU.
+            // this length value is Length(4) + Flags(2) + NumberOfTunnels(2) = 8.  
+            this.Length = 8;
+
+            if(flags.HasFlag(SoftSyncReqFlags_Value.SOFT_SYNC_CHANNEL_LIST_PRESENT))
+            {
+                if (softSyncChannelLists == null)
+                {
+                    DynamicVCException.Throw("Should have one or more Soft-Sync Channel Lists.");
+                }
+
+                foreach (var channel in softSyncChannelLists)
+                {
+                    this.Length += (uint)channel.GetSize();
+                }
+            }
         }
 
         protected override void DoMarshal(PduMarshaler marshaler)
@@ -1112,11 +1121,36 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             marshaler.WriteUInt32(Length);
             marshaler.WriteUInt16((ushort)Flags);
             marshaler.WriteUInt16((ushort)NumberOfTunnels);
+            if(SoftSyncChannelLists != null)
+            {
+                foreach (var li in SoftSyncChannelLists)
+                {
+                    marshaler.WriteBytes(li.Encode());
+                }
+            }
         }
 
         protected override void DoUnmarshal(PduMarshaler marshaler)
         {
-            throw new NotImplementedException();
+            this.Pad = marshaler.ReadByte();
+            this.Length = marshaler.ReadUInt32();
+            this.Flags = (SoftSyncReqFlags_Value)marshaler.ReadUInt16();
+            this.NumberOfTunnels = marshaler.ReadUInt16();
+            List<SoftSyncChannelList> list = new List<SoftSyncChannelList>();
+
+            for (int i = 0; i < NumberOfTunnels; ++i)
+            {
+                SoftSyncChannelList channel = new SoftSyncChannelList((TunnelType_Value)marshaler.ReadUInt32(), marshaler.ReadUInt16());
+
+                List<uint> Ids = new List<uint>();
+                for (int k = 0; k < channel.NumberOfDVCs; ++k)
+                {
+                    Ids.Add(marshaler.ReadUInt32());
+                }
+                channel.ListOfDVCIds = Ids.ToArray();
+                list.Add(channel);
+            }
+            this.SoftSyncChannelLists = list.ToArray();
         }
         
     }
@@ -1159,17 +1193,41 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// </summary>
         public uint[] ListOfDVCIds;
 
+        /// <summary>
+        /// Encode method.
+        /// </summary>
+        /// <returns>Binary value of SoftSyncChannelList</returns>
         public byte[] Encode()
         {
-            byte[] data = null;
-            return data;
+            List<byte> buffer = new List<byte>();
+            buffer.AddRange(TypeMarshal.ToBytes<TunnelType_Value>(TunnelType));
+            buffer.AddRange(TypeMarshal.ToBytes<ushort>(NumberOfDVCs));
+            foreach(uint i in ListOfDVCIds)
+            {
+                buffer.AddRange(TypeMarshal.ToBytes<uint>(i));
+            }
+            return buffer.ToArray();
         }
 
-        public SoftSyncChannelList Decode()
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public SoftSyncChannelList(TunnelType_Value tunnelType, ushort numberOfDVCs, List<uint> listOfIds = null)
         {
-            SoftSyncChannelList list = new SoftSyncChannelList();
-            return list;
+            this.TunnelType = tunnelType;
+            this.NumberOfDVCs = numberOfDVCs;
+            if (listOfIds != null)
+                this.ListOfDVCIds = listOfIds.ToArray();
         }
+
+        public uint GetSize()
+        {
+            // TunnelType: 4 bytes; NumberOfDVCs: 2 bytes; ListOfDVCIds: NumberOfDVCs * 4 bytes.
+            return (uint)(4 + 2 + NumberOfDVCs * 4);
+        }
+
+        public SoftSyncChannelList() { }
+
     }
 
     /// <summary>
@@ -1215,18 +1273,36 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             }
         }
 
+        public SoftSyncResDvcPdu() { }
+        
+        public SoftSyncResDvcPdu(uint numberOfTunnels, TunnelType_Value[] tunnelsToSwitch)
+        {
+            NumberOfTunnels = numberOfTunnels;
+            TunnelsToSwitch = tunnelsToSwitch;
+        }
+
         protected override void DoMarshal(PduMarshaler marshaler)
         {
-            throw new NotImplementedException();
+            marshaler.WriteByte(Pad);
+            marshaler.WriteUInt32(NumberOfTunnels);
+            foreach (var tunnel in TunnelsToSwitch)
+            {
+                marshaler.WriteBytes(TypeMarshal.ToBytes<TunnelType_Value>(tunnel));
+            }
         }
 
         protected override void DoUnmarshal(PduMarshaler marshaler)
         {
-            throw new NotImplementedException();
+            this.Pad = marshaler.ReadByte();
+            this.NumberOfTunnels = marshaler.ReadUInt32();
+            List<TunnelType_Value> tunnelsToSwitchList = new List<TunnelType_Value>();
+            for (int i = 0; i < NumberOfTunnels; ++i)
+            {
+                tunnelsToSwitchList.Add((TunnelType_Value)marshaler.ReadUInt32());
+            }
+            this.TunnelsToSwitch = tunnelsToSwitchList.ToArray();
         }
     }
     #endregion 
-
-
     #endregion
 }

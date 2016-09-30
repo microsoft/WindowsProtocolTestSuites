@@ -458,12 +458,26 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             {
                 rdpedycServer.CreateMultipleTransport(transportType);
             }
+
+            return CreateEGFXDvc(rdpedycServer, transportType);
+        }
+
+        /// <summary>
+        /// Create graphic DVC channel.
+        /// </summary>
+        /// <param name="rdpedycServer">RDPEDYC server instance</param>
+        /// <param name="transportType">Transport type</param>
+        /// <param name="channelId">Channel Id</param>
+        /// <returns>True if success; otherwise, return false.</returns>
+        public bool CreateEGFXDvc(RdpedycServer rdpedycServer, DynamicVC_TransportType transportType, uint? channelId = null)
+        {
             this.egfxServer = new RdpegfxServer(rdpedycServer);
 
             bool success = false;
+
             try
             {
-                success = egfxServer.CreateRdpegfxDvc(waitTime, transportType);
+                success = egfxServer.CreateRdpegfxDvc(waitTime, transportType, channelId);
             }
             catch (Exception e)
             {
@@ -472,7 +486,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             return success;
         }
-
 
         /// <summary>
         /// Set the type of current test.

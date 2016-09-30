@@ -22,6 +22,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         public const string RDPClientSupportAutoReconnect = "RDP.Client.SupportAutoReconnect";
         public const string RDPClientSupportRDPEFS = "RDP.Client.SupportRDPEFS";
         public const string RDPClientSupportServerRedirection = "RDP.Client.SupportServerRedirection";
+        public const string RDPClientSupportSoftSync = "RDP.Client.SupportSoftSync";
         public const string RDPClientSupportRdpNegDataEmpty = "RDP.Client.SupportRdpNegDataEmpty";
         public const string MSRDPRFX_64X64BitmapFile = "MSRDPRFX_64X64BitmapFile";
         public const string MSRDPRFX_BitmapFileForVideoMode = "MSRDPRFX_BitmapFileForVideoMode";

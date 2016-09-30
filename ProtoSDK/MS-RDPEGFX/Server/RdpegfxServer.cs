@@ -75,14 +75,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// </summary>
         /// <param name="transportType">selected transport type for created channels</param>
         /// <param name="timeout">Timeout</param>
+        /// <param name="channelId">ChannelId of this DVC</param>
         /// <returns>true if client supports this protocol; otherwise, return false.</returns>
-        public bool CreateRdpegfxDvc(TimeSpan timeout, DynamicVC_TransportType transportType = DynamicVC_TransportType.RDP_TCP)
+        public bool CreateRdpegfxDvc(TimeSpan timeout, DynamicVC_TransportType transportType = DynamicVC_TransportType.RDP_TCP, uint? channelId = null)
         {
 
             const ushort priority = 0;
             try
             {
-                rdpegfxDVC = rdpedycServer.CreateChannel(timeout, priority, RdpegfxGraphicChannelName, transportType, OnDataReceived);
+                rdpegfxDVC = rdpedycServer.CreateChannel(timeout, priority, RdpegfxGraphicChannelName, transportType, OnDataReceived, channelId);
             }
             catch
             {

@@ -8051,10 +8051,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     ///  For a detailed description of Proprietary Certificates,
     ///  see section .
     /// </summary>
-    //  <remarks>
-    //   file:///C:/ts_dev/TestSuites/MS-RDPBCGR/TestSuite/Src/TD/latest_XMLS_16may/RDPBCGR/
-    //   _rfc_ms-rdpbcgr2_1_1_4_3_1.xml
-    //  </remarks>
     public partial struct PROPRIETARYSERVERCERTIFICATE
     {
         /// <summary>
@@ -19983,8 +19979,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     /// </summary>
     public enum HrResponse_Value : uint
     {
-        None = 0x0,
-
         /// <summary>
         /// Indicates that the client was unable to complete the multitransport initiation request.
         /// </summary>

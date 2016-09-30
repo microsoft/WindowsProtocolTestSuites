@@ -479,6 +479,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             return BitConverter.ToUInt32(bytes, 0);
         }
 
+        /// <summary>
+        /// Parse UInt64
+        /// </summary>
+        /// <param name="data">data to be parsed</param>
+        /// <param name="index">parser index</param>
+        /// <param name="isBigEndian">big endian format flag</param>
+        /// <returns>parsed UInt64 number</returns>
         private UInt64 ParseUInt64(byte[] data, ref int index, bool isBigEndian = false)
         {
             byte[] bytes = GetBytes(data, ref index, sizeof(UInt64));

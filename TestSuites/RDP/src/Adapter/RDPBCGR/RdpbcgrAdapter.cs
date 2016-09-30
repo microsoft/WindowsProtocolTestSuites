@@ -341,7 +341,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="bSupportEGFX">Indicates the server supports MS-RDPEGFX</param>
         /// <param name="bSupportRestrictedAdminMode">Indicates the server supports Restricted admin mode</param>
         /// <param name="bReservedSet">Indicates the value of NEGRSP_FLAG_RESERVED in the flags field of RDP Negotiation Response</param>
-        public void Server_X_224_Connection_Confirm(selectedProtocols_Values protocol, bool bSupportExtClientData, bool setRdpNegData, NegativeType invalidType, bool bSupportEGFX = false, bool bSupportRestrictedAdminMode = false, bool bReservedSet = false)
+        /// <param name="bSupportRestrictedAuthenticationMode">Indicates the server supports Restricted Authentication mode</param>
+        public void Server_X_224_Connection_Confirm(selectedProtocols_Values protocol, bool bSupportExtClientData, bool setRdpNegData, NegativeType invalidType, bool bSupportEGFX = false, bool bSupportRestrictedAdminMode = false, bool bReservedSet = false, bool bSupportRestrictedAuthenticationMode = false)
         {
             //ExpectPacket<Client_X_224_Connection_Request_Pdu>(sessionContext, timeout);
             serverConfig.selectedProtocol = protocol;
@@ -364,6 +365,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             if(bReservedSet)
             {
                 confirmPdu.rdpNegData.flags |= RDP_NEG_RSP_flags_Values.NEGRSP_FLAG_RESERVED;
+            }
+            if (bSupportRestrictedAuthenticationMode)
+            {
+                confirmPdu.rdpNegData.flags |= RDP_NEG_RSP_flags_Values.REDIRECTED_AUTHENTICATION_MODE_SUPPORTED;
             }
 
             switch (invalidType)
@@ -427,7 +432,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="enLevel">Server selected encryption level.</param>
         /// <param name="rdpVersion">The RDP Server version</param>
         /// <param name="invalidType">Indicates the invalid type</param>
-        /// <param name="isMultitransportSupported">Whether support Multitransport</param>
+        /// <param name="multiTransportTypeFlags">Flags of Multitransport Channel Data</param>
         /// <param name="hasEarlyCapabilityFlags">Indicates the existing of the earlyCapabilityFlags</param>
         /// <param name="earlyCapabilityFlagsValue">The value of earlyCapabilityFlags</param>
         /// <param name="mcsChannelId_Net">MCSChannelId value for Server Network Data</param>
@@ -436,8 +441,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             EncryptionMethods enMothod, 
             EncryptionLevel enLevel, 
             TS_UD_SC_CORE_version_Values rdpVersion, 
-            NegativeType invalidType, 
-            bool isMultitransportSupported = false, 
+            NegativeType invalidType,
+            MULTITRANSPORT_TYPE_FLAGS multiTransportTypeFlags = MULTITRANSPORT_TYPE_FLAGS.None, 
             bool hasEarlyCapabilityFlags = false, 
             SC_earlyCapabilityFlags_Values earlyCapabilityFlagsValue = SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED, 
             UInt16 mcsChannelId_Net = ConstValue.IO_CHANNEL_ID,
@@ -462,10 +467,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     enLevel,
                     cert,
                     certLen,
-                    isMultitransportSupported,
+                    multiTransportTypeFlags,
                     hasEarlyCapabilityFlags,
                     earlyCapabilityFlagsValue,
-                    mcsChannelId_Net);
+                    mcsChannelId_Net,
+                    ConstValue.MCS_MESSAGE_CHANNEL_ID);
             connectRespPdu.mcsCrsp.gccPdu.serverCoreData.version = rdpVersion;
             connectRespPdu = new Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response_Ex(connectRespPdu, sessionContext, invalidType);
 

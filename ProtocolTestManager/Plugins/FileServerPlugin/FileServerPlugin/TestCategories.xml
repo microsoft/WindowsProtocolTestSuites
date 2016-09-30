@@ -8724,4 +8724,83 @@
   <TestCase name="QuotaInfo_Set_QuotaInformation_IsQuotaInfoSupported">
     <Category name="OtherThanAbove" />
   </TestCase>
+  <TestCase name="AlternateDataStream_Query_FileAccessInformation_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Query_FileAccessInformation_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Query_FileBasicInformation_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Query_FileBasicInformation_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Query_FileCompressionInformation_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Query_FileCompressionInformation_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Query_FileNetworkOpenInformation_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Query_FileNetworkOpenInformation_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Query_FileStandardInformation_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Query_FileStandardInformation_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Set_FileEaInformation_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Set_FileEaInformation_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Set_FileShortNameInformation_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Set_FileShortNameInformation_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Set_FileValidDataLengthInformation_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_Set_FileValidDataLengthInformation_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_FsCtl_Get_Compression_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_FsCtl_Get_Compression_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_FsCtl_Get_IntegrityInformation_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_FsCtl_Get_IntegrityInformation_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_FsCtl_Query_AllocatedRanges_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_FsCtl_Query_AllocatedRanges_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_FsCtl_Set_Compression_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_FsCtl_Set_Compression_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_FsCtl_Set_ZeroData_File">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  <TestCase name="AlternateDataStream_FsCtl_Set_ZeroData_Dir">
+    <Category name="OtherThanAbove" />
+  </TestCase>
+  
 </TestCategories>
