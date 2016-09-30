@@ -149,7 +149,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Compression.Mppc
         /// Compress the input buffer and write it into output stream.
         /// </summary>
         /// <param name="input">The buffer needed to be compressed</param>
-        private void CompressCore(byte[] input)
+        private void CompressCore(byte[] input, int maxBit =16)
         {
             int compressIndex = 0;
             int lookAheadBytesCount = 0;
@@ -168,7 +168,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Compression.Mppc
                 else
                 {
                     lookAheadBytesCount = match.Length;
-                    EncodeOffsetLengthPair(match);
+                    EncodeOffsetLengthPair(match, maxBit);
                 }
 
                 byte[] lookAheadBuffer = new byte[lookAheadBytesCount];
@@ -372,10 +372,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Compression.Mppc
         /// Encode offset and length according to RFC2118
         /// </summary>
         /// <param name="pair">offset and length pair</param>
-        private void EncodeOffsetLengthPair(OffsetLengthPair pair)
+        private void EncodeOffsetLengthPair(OffsetLengthPair pair, int maxBit = 16)
         {
             EncodeOffset(pair.Offset);
-            EncodeLength(pair.Length);
+            EncodeLength(pair.Length, maxBit);
         }
 
 
@@ -466,7 +466,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Compression.Mppc
         /// encoding length according to RFC2118
         /// </summary>
         /// <param name="length">length</param>
-        private void EncodeLength(int length)
+        private void EncodeLength(int length, int maxBit = 16)
         {
             // the range of length is from 0 to 65535, the max bits it may use is 16
             int highestBitOnePosition = GetHighestBitOnePos(length, 16);

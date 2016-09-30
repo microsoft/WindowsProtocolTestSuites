@@ -24,7 +24,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         TimeSpan waitTime;
         IRdpbcgrAdapter bcgrAdapter;
         RdpegfxServer egfxServer;
-        RdpSegmentedPdu segPdu;
+        EGFXRdpSegmentedPdu segPdu;
         SurfaceManager surfManager;
         bool frAckSuspend = false;
         RdpegfxNegativeTypes currentTestType;
@@ -381,8 +381,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             rdpegfxPdusToSent = new List<RdpegfxPdu>();
 
             // Set no rdp8.0 compression temperarily.
-            byte compFlag = RdpSegmentedPdu.PACKET_COMPR_TYPE_RDP8;
-            segPdu = new RdpSegmentedPdu(compFlag);
+            byte compFlag = (byte) PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_RDP8;
+            segPdu = new EGFXRdpSegmentedPdu(compFlag);
 
             surfManager = new SurfaceManager();
 
@@ -412,8 +412,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public override void Reset()
         {
             base.Reset();      
-            segPdu.compressFlag = RdpSegmentedPdu.PACKET_COMPR_TYPE_RDP8;
-            //rdpegfxServer = new RdpegfxServer();
+            segPdu.compressFlag = (byte)PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_RDP8;
+            
             rdpegfxPdusToSent.Clear();
             currentTestType = RdpegfxNegativeTypes.None;
 
@@ -521,7 +521,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             // Check PDU length.
             Site.Assert.AreEqual(adv.Header.pduLength, adv.pduLen,
-                "The actual length ({0}) of Capability Advertise PDU is different from pduLength({1}) in header!", adv.pduLen, adv.Header.pduLength);
+                "The actual length ({0}) of Capability Advertise PDU is expected to be same with pduLength({1}) in header!", adv.pduLen, adv.Header.pduLength);
 
             // Check capability version, capLen, and flags.
             for (ushort index = 0; index < adv.capsSetCount; index++)
@@ -545,7 +545,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                                     capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE ||
                                     capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_THINCLIENT ||
                                     capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC420_ENABLED) ||
-                                    capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_THINCLIENT | CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC420_ENABLED));
+                                    capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_THINCLIENT | CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC420_ENABLED)||
+                                    capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED)
+                                    );
                 Site.Assert.IsTrue(validFlag, "Unknown capability flags {0}", capsFlag);
             }
 
@@ -1054,7 +1056,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             // Check PDU length
             Site.Assert.AreEqual(impOffer.Header.pduLength, impOffer.pduLen,
-                "The actual length ({0}) of Capability Advertise PDU is different from pduLength({1}) in header!", impOffer.pduLen, impOffer.Header.pduLength);
+                "The actual length ({0}) of Capability Advertise PDU is is expected to be same with pduLength({1}) in header!", impOffer.pduLen, impOffer.Header.pduLength);
 
             return true;
         }

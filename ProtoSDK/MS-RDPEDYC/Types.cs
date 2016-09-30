@@ -25,6 +25,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         public Cmd_Values Cmd { get; set; }
         /// <summary>
         ///  The value and meaning depend on the Cmd field.
+        /// This field meaning can be Len, Sp, Pri, etc, depends on the Cmd field.
         /// </summary>
         public int Sp { get; set; }
         /// <summary>
@@ -127,8 +128,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         SoftSyncRes = 0x09,
 
         /// <summary>
-        /// Not supported by the protocol. Only apply to marshalinhg
-        /// runtines.
+        /// Not supported by the protocol. Only apply to marshaling runtimes.        
         /// </summary>
         Unknown = 0x0F
     }
@@ -208,6 +208,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         VERSION2 = 0x0002,
         VERSION3 = 0x0003,
     }
+  
     #endregion
 
     #region MS-RDPEDYC PDUs
@@ -405,6 +406,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             else if (length <= UInt32.MaxValue)
             {
                 HeaderBits.Sp = (int)Len_Values.FourBytes;
+            }
+            else
+            {
+                DynamicVCException.Throw("The field Length is too long.");
             }
         }
 
@@ -858,7 +863,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             return len;
         }
     }
-
+    
     public class DataFirstDvcPdu : DataDvcBasePdu
     {
         public uint Length { get; set; }
@@ -901,7 +906,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             Data = marshaler.ReadToEnd();
         }
     }
-
+    
     public class DataDvcPdu : DataDvcBasePdu
     {
         public DataDvcPdu()
@@ -945,16 +950,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
     /// </summary>
     public class DataFirstCompressedDvcPdu : DataDvcBasePdu
     {
-        public uint Length { get; set; }
+        public uint Length { get; set; }        
 
         public DataFirstCompressedDvcPdu(){ }
 
+        /// <summary>
+        /// Construct the DataFirstCompressedDvcPdu
+        /// </summary>
+        /// <param name="channelId">channelId</param>
+        /// <param name="length">length for the total uncompressed data length</param>
+        /// <param name="data">The co</param>
         public DataFirstCompressedDvcPdu(uint channelId, uint length, byte[] data)
         {
             this.ChannelId = channelId;
             this.Length = length;
-            this.Data = data;
 
+            this.Data = data;           
+            
             UpdateCbChannelId();
             UpdateLengthOfLength(length);
         }
@@ -985,6 +997,37 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
     
     }
 
+    /// <summary>
+    /// Types of RDP_SEGMENTED_DATA: Single or Mutipart.
+    /// </summary>
+    public enum DescriptorTypes : byte
+    {
+        /// <summary>
+        /// Specifies whether the RDP_SEGMENTED_DATA structure wraps a single segment. The segmentCount, 
+        /// uncompressedSize, and segmentArray fields MUST NOT be present, and the segment field MUST be present.
+        /// </summary>
+        SINGLE = 0xE0,
+        /// <summary>
+        /// Specifies whether the RDP_SEGMENTED_DATA structure wraps multiple segments. The segmentCount,  
+        /// uncompressedSize, and segmentArray fields MUST be present, and the segment field MUST NOT be present. 
+        /// </summary>
+        MULTIPART = 0xE1
+    }
+
+    public enum SEGMENT_PART_SISE : uint
+    {
+        MAX_PACKET_COMPR_TYPE_RDP8_SEGMENT_PART_SIZE = 10000,  // EGFX: Maximum number of uncompressed bytes in a single segment is 65535
+        MAX_PACKET_COMPR_TYPE_RDP8_LITE_SEGMENT_PART_SIZE = 8192,  //EDYC: Maximum number of uncompressed bytes in a single segment: 8,192 for DYNVC_DATA_FIRST_COMPRESSED
+        MAX_PACKET_COMPR_TYPE_RDP8_MATCH_DISTANCE = 2500000, //EGFX: Maximum match distance / minimum history size: 2,500,000 bytes.
+        MAX_PACKET_COMPR_TYPE_RDP8_LITE_MATCH_DISTANCE = 8192 //EDYC: Maximum match distance / minimum history size: 8,192 bytes instead of 2,500,000 bytes.
+    }
+
+    public enum PACKET_COMPR_FLAG : byte
+    {
+        PACKET_COMPR_TYPE_RDP8 = 0x04,
+        PACKET_COMPR_TYPE_LITE = 0x06, //DYNVC_DATA_FIRST_COMPRESSED 
+        PACKET_COMPRESSED = 0x20
+    }
     /// <summary>
     /// The DYNVC_DATA_COMPRESSED PDU is used to send both single messages and blocks of fragmented messages 
     /// when the data block is compressed.

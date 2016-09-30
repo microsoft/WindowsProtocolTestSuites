@@ -68,7 +68,9 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="RDP_ClientTestSuite.deployment.ptfconfig" />
+    <Content Include="RDP_ClientTestSuite.deployment.ptfconfig">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="RDP_ClientTestSuite.ptfconfig" />
   </ItemGroup>
   <ItemGroup>

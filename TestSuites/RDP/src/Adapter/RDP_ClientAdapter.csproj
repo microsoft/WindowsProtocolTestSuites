@@ -91,9 +91,9 @@
     <Compile Include="RDPEDISP\RdpedispAdapter.cs" />
     <Compile Include="RDPEFS\IRdpefsAdapter.cs" />
     <Compile Include="RDPEFS\RdpefsAdapter.cs" />
+    <Compile Include="RDPEGFX\RdpegfxAdapter.cs" />
     <Compile Include="RDPEGFX\RdpegfxRfxProgCodecBlockManagerDecorator.cs" />
     <Compile Include="RDPEGFX\IRdpegfxAdapter.cs" />
-    <Compile Include="RDPEGFX\RdpegfxAdapter.cs" />
     <Compile Include="RdpeiSUTControlAdapter\IRdpeiSUTControlAdapter.cs" />
     <Compile Include="RdpeiSUTControlAdapter\RdpeiSUTControlAdapter.cs" />
     <Compile Include="RdpeiSUTControlAdapter\RdpeiSUTControlData.cs" />

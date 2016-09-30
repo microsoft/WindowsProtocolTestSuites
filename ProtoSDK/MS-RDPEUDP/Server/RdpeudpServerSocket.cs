@@ -81,7 +81,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
             if(version != null)
             {
                 SynAndAckPacket.fecHeader.uFlags |= RDPUDP_FLAG.RDPUDP_FLAG_SYNEX;
-                SynAndAckPacket.SynDataEx = CreateSynExData((uUdpVer_Values)version);
+                SynAndAckPacket.SynDataEx = CreateSynExData((uUdpVer_Values)version);                
             }
             SynAndAckPacket.SynData = CreateSynData(initSequenceNumber);
             SendPacket(SynAndAckPacket);

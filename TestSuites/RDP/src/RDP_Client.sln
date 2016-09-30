@@ -1,7 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDP_ClientAdapter", "Adapter\RDP_ClientAdapter.csproj", "{407A6664-47AB-44DA-9917-ECB50F879772}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E5A90E66-44B4-4F13-B2A6-F7990770A977} = {E5A90E66-44B4-4F13-B2A6-F7990770A977}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDP_ClientTestSuite", "TestSuite\RDP_ClientTestSuite.csproj", "{1CEBA0F7-04B6-49F7-AF02-322FDF6CC5D2}"
 EndProject
