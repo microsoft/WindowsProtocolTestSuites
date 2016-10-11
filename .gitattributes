@@ -45,14 +45,13 @@
 *.cer	binary
 *.cat	binary
 *.sys	binary
-*.rdp   binary
+*.RDP   binary
 *.vhdx  binary
 *.vhds  binary
 *.avhdx binary
 *.zip   binary
 *.ico   binary
 *.xlsm  binary
-*.ico	binary
 *.rc	binary
 
 #Images (Binary)

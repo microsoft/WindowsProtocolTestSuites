@@ -4,6 +4,7 @@ drop
 *.suo
 *.mdf
 *.ldf
+.vs
 
 # Test result files
 TestResults
