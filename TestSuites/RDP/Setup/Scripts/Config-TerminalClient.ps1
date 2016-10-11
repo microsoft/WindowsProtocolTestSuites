@@ -4,9 +4,7 @@
 Param(
 [String]$scriptsPath     = "."
 )
-
-Write-Host "Put current dir as $scriptsPath."
-$scriptsPath = Get-Location
+$scriptsPath = Split-Path -Parent $MyInvocation.MyCommand.Definition
 pushd $scriptsPath
 $dataPath = "$scriptsPath\..\Data"
 $toolPath = "$env:HOMEDRIVE\Test\Tools" #For Temporarily use, will be removed in released version.
