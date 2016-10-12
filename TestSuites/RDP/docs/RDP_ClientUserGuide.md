@@ -267,9 +267,11 @@ All of the following software must be installed on the driver computer _before_ 
 |            [http://www.microsoft.com/en-us/download/details.aspx?id=30678](http://www.microsoft.com/en-us/download/details.aspx?id=30678)| 
 |            You can download Visual Studio 2012 Update 4 or later from below website| 
 |            [http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305](http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305)| 
-| Protocol Test Framework (build 1.0.0.0)| 
+| Protocol Test Framework (build 1.0.5000.0)| 
+|              You can download the Protocol Test Framework from below website. | 
+|                [https://github.com/Microsoft/ProtocolTestFramework/releases](https://github.com/Microsoft/ProtocolTestFramework/releases)| 
 |  **Optional Software** | 
-|       Microsoft Message Analyzer v1.3.1| 
+|       Microsoft Message Analyzer v1.4| 
 | ![image3.png](./image/RDP_ClientUserGuide/image3.png)Note| 
 |              You can download the latest Message Analyzer from below website. | 
 |                [http://www.microsoft.com/en-us/download/details.aspx?id=44226](http://www.microsoft.com/en-us/download/details.aspx?id=44226)| 
@@ -372,7 +374,7 @@ This section describes how to set up the driver computer.
 ![image6.png](./image/RDP_ClientUserGuide/image6.png)
 Important 
 
->Microsoft Visual Studio 2012 Update 4 (or later) and Protocol Test Framework (build 1.0.0.0) must be installed on the driver computer before you run the test suite installer.
+>Microsoft Visual Studio 2012 Update 4 (or later) and Protocol Test Framework (build 1.0.5000.0) must be installed on the driver computer before you run the test suite installer.
 
 To set up the driver computer
 
@@ -1353,7 +1355,7 @@ Super Log Viewer is a logging feature of RDP test suite which combines all test 
 ### <a name="_Toc421010937"/>Install and configure Microsoft Message Analyzer
 Microsoft Message Analyzer (MMA) is used to capture the data on wire and the data dumped by RDP test suite. You can follow below steps to configure MMA.
 
-* Install Micorsoft Message Analyzer v1.3.1 and PTF according to Section 7.4
+* Install Micorsoft Message Analyzer v1.4 and PTF according to Section 7.4
 
 * Copy OPNs to MMA
 
