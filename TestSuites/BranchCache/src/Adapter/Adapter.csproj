@@ -64,9 +64,6 @@
     <Content Include="WindowsSUTControlAdapter\GenerateSMB2Hash.ps1" />
     <Content Include="WindowsSUTControlAdapter\CreatePSCredential.ps1" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Adapter.licenseheader" />
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin\" />
