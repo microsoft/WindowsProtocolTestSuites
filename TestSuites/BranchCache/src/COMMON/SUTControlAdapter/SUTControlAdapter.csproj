@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{70813D77-3A91-4337-9759-529DBDC9DDFE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SUTControlAdapter</RootNamespace>
+    <AssemblyName>SUTControlAdapter</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRules>
+    </CodeAnalysisRules>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release'">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="ISUTControlAdapter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SUTControlAdapter\ClearApplicationBuffer.ps1" />
+    <None Include="SUTControlAdapter\ClearBranchCacheBuffer.ps1" />
+    <None Include="SUTControlAdapter\ModifyHostedCacheProtocolPort.ps1" />
+    <None Include="SUTControlAdapter\EndTaskandRestartService.ps1" />
+    <None Include="SUTControlAdapter\IsHashComputationFinished.ps1" />
+    <None Include="SUTControlAdapter\RestartService.ps1" />
+    <None Include="SUTControlAdapter\SetBackoffTimer.ps1" />
+    <None Include="SUTControlAdapter\SetHostedCacheAuthentication.ps1" />
+    <None Include="SUTControlAdapter\SetRequestPort.ps1" />
+    <None Include="SUTControlAdapter\SetRequestTimer.ps1" />
+    <None Include="SUTControlAdapter\StartService.ps1" />
+    <None Include="SUTControlAdapter\StopService.ps1" />
+    <None Include="SUTControlAdapter\TriggerPeerClientSendMSGGETBLKLIST.ps1" />
+    <None Include="SUTControlAdapter\TriggerPeerGetContentCache.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NonWindowsSUTImplementation\" />
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin\" />
+  </Target>
+</Project>

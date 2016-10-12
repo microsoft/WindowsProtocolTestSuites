@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?define TESTSUITE_NAME=BranchCache?>
+<?define PROTOSDK_TESTSUITE_SYMBOLS_DIR=$(env.TestSuiteRoot)\drop\ProtoSDK\Bin?>
+<?define TESTSUITE_SYMBOLS_DIR=$(env.TestSuiteRoot)\drop\TestSuites\BranchCache\Bin?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+
+    <ComponentGroup Id="TESTSUITE_MISC_FILES">
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Asn1Base.dll" />
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.dll" />
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Messages.dll" />
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.dll" />
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.dll" />
+	  <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.dll" />
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.dll" />
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Transport.dll" />
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.dll" />
+      <ComponentRef Id="BranchCache_Adapter.dll" />
+      <ComponentRef Id="BranchCache_TestSuite.dll" />
+      <ComponentRef Id="Common_Stack.dll" />
+      <ComponentRef Id="Pccrc_Stack.dll" />
+      <ComponentRef Id="Pccrd_Stack.dll" />
+      <ComponentRef Id="Pccrr_Stack.dll" />
+      <ComponentRef Id="Pccrtp_Stack.dll" />
+      <ComponentRef Id="Pchc_Stack.dll" />
+      <ComponentRef Id="WsDiscovery_Stack.dll" />
+      <ComponentRef Id="PCCRC_TestTool.exe" />
+      <ComponentRef Id="LocalTestRun.testsettings" />
+	  
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Asn1Base.pdb" />
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.pdb" />
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Messages.pdb" />
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.pdb" />
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.pdb" />
+	  <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.pdb" />
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.pdb" />
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Transport.pdb" />
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb" />
+      <ComponentRef Id="BranchCache_Adapter.pdb" />
+      <ComponentRef Id="BranchCache_TestSuite.pdb" />
+      <ComponentRef Id="Common_Stack.pdb" />
+      <ComponentRef Id="Pccrc_Stack.pdb" />
+      <ComponentRef Id="Pccrd_Stack.pdb" />
+      <ComponentRef Id="Pccrr_Stack.pdb" />
+      <ComponentRef Id="Pccrtp_Stack.pdb" />
+      <ComponentRef Id="Pchc_Stack.pdb" />
+      <ComponentRef Id="WsDiscovery_Stack.pdb" />
+    </ComponentGroup>
+
+    <DirectoryRef Id="TESTSUITE_BIN_DIR">
+      <!-- Test Suite binaries. -->
+      <Component Id="BranchCache_Adapter.dll" Guid="{BAE671EA-98CC-4BBF-90E2-42E3207793A6}">
+        <File Id="BranchCache_Adapter.dll"
+              Source="$(var.TESTSUITE_SYMBOLS_DIR)\BranchCache_Adapter.dll" />
+      </Component>
+
+      <Component Id="BranchCache_TestSuite.dll" Guid="{8A22E725-B8D3-40D9-AD65-DE67DC123879}">
+        <File Id="BranchCache_TestSuite.dll"
+              Source="$(var.TESTSUITE_SYMBOLS_DIR)\BranchCache_TestSuite.dll" />
+      </Component>
+
+      <Component Id="Common_Stack.dll" Guid="{5A249253-EB0E-4386-A49F-6E3003DC5242}">
+        <File Id="Common_Stack.dll"
+              Source="$(var.TESTSUITE_SYMBOLS_DIR)\CommonStack.dll" />
+      </Component>
+
+      <Component Id="Pccrd_Stack.dll" Guid="{5C42976A-9F29-4E3A-A535-D932CD4E73D9}">
+        <File Id="Pccrd_Stack.dll"
+              Source="$(var.TESTSUITE_SYMBOLS_DIR)\PccrdStack.dll" />
+      </Component>
+
+      <Component Id="Pccrc_Stack.dll" Guid="{771B27DB-BA7A-4C52-BD85-1B4E4BAD0748}">
+        <File Id="Pccrc_Stack.dll"
+              Source="$(var.TESTSUITE_SYMBOLS_DIR)\PccrcStack.dll" />
+      </Component>
+
+      <Component Id="Pccrr_Stack.dll" Guid="{BA07B30D-9BBA-4520-B44F-A1BA172A3986}">
+        <File Id="Pccrr_Stack.dll"
+              Source="$(var.TESTSUITE_SYMBOLS_DIR)\PccrrStack.dll" />
+      </Component>
+
+      <Component Id="Pccrtp_Stack.dll" Guid="{415E9781-6457-45A9-ADC1-5A780C580F83}">
+        <File Id="Pccrtp_Stack.dll"
+              Source="$(var.TESTSUITE_SYMBOLS_DIR)\PccrtpStack.dll" />
+      </Component>
+
+      <Component Id="Pchc_Stack.dll" Guid="{81747E88-5A3C-47B2-80AD-79E53BE13C15}">
+        <File Id="Pchc_Stack.dll"
+              Source="$(var.TESTSUITE_SYMBOLS_DIR)\PchcStack.dll" />
+      </Component>
+
+      <Component Id="WsDiscovery_Stack.dll" Guid="{AE281549-47D3-4240-9DE6-08D43290C66C}">
+        <File Id="WsDiscovery_Stack.dll"
+              Source="$(var.TESTSUITE_SYMBOLS_DIR)\WsDiscovery.dll" />
+      </Component>
+	  <Component Id="PCCRC_TestTool.exe" Guid="{052383D8-2959-4483-AB56-15E2EA6CB9C5}">
+        <File Id="PCCRC_TestTool.exe"
+              Source="$(var.TESTSUITE_SYMBOLS_DIR)\MS-PCCRC_TestTool.exe" />
+      </Component>
+	  <Component Id="LocalTestRun.testsettings" Guid="{E04D9F08-3B3F-4E55-ACF2-5CEF6B6104F1}">
+        <File Id="LocalTestRun.testsettings"
+              Source="$(var.TESTSUITE_SYMBOLS_DIR)\LocalTestRun.testsettings"/>
+      </Component>
+
+      <!-- Test Suite symbols. -->
+      <Component Id="BranchCache_Adapter.pdb" Guid="{7F894AFB-91E8-4872-99DD-67EA52095806}">
+        <File Id="BranchCache_Adapter.pdb"
+              Source="$(var.TESTSUITE_SYMBOLS_DIR)\BranchCache_Adapter.pdb" />
+      </Component>
+
+      <Component Id="BranchCache_TestSuite.pdb" Guid="{740F77DD-CD0A-427C-A3F9-D3674A622CF8}">
+        <File Id="BranchCache_TestSuite.pdb"
+              Source="$(var.TESTSUITE_SYMBOLS_DIR)\BranchCache_TestSuite.pdb" />
+      </Component>
+
+      <Component Id="Common_Stack.pdb" Guid="{9A8204A4-3E70-4B1A-AA98-CC56916E9FEC}">
+        <File Id="Common_Stack.pdb"
+              Source="$(var.TESTSUITE_SYMBOLS_DIR)\CommonStack.pdb" />
+      </Component>
+
+      <Component Id="Pccrd_Stack.pdb" Guid="{0ACD4FCD-F86E-4A70-A7C9-504DC2152D6C}">
+        <File Id="Pccrd_Stack.pdb"
+              Source="$(var.TESTSUITE_SYMBOLS_DIR)\PccrdStack.pdb" />
+      </Component>
+
+      <Component Id="Pccrc_Stack.pdb" Guid="{4FF99D74-02AC-415B-8025-98E03BA65E60}">
+        <File Id="Pccrc_Stack.pdb"
+              Source="$(var.TESTSUITE_SYMBOLS_DIR)\PccrcStack.pdb" />
+      </Component>
+
+      <Component Id="Pccrr_Stack.pdb" Guid="{C95ED4A2-C654-4B1C-8510-F6492662FBD4}">
+        <File Id="Pccrr_Stack.pdb"
+              Source="$(var.TESTSUITE_SYMBOLS_DIR)\PccrrStack.pdb" />
+      </Component>
+
+      <Component Id="Pccrtp_Stack.pdb" Guid="{7C97FDAB-258E-4CE9-A006-0037891AC5A5}">
+        <File Id="Pccrtp_Stack.pdb"
+              Source="$(var.TESTSUITE_SYMBOLS_DIR)\PccrtpStack.pdb" />
+      </Component>
+
+      <Component Id="Pchc_Stack.pdb" Guid="{EE8A5D7B-2729-479A-B346-98CA20607A47}">
+        <File Id="Pchc_Stack.pdb"
+              Source="$(var.TESTSUITE_SYMBOLS_DIR)\PchcStack.pdb" />
+      </Component>
+
+      <Component Id="WsDiscovery_Stack.pdb" Guid="{9D6344D4-37EA-4062-B2DF-04762645EB9B}">
+        <File Id="WsDiscovery_Stack.pdb"
+              Source="$(var.TESTSUITE_SYMBOLS_DIR)\WsDiscovery.pdb" />
+      </Component>
+    </DirectoryRef>
+	
+    <DirectoryRef Id="PROTOCOLSDK_BIN_DIR">
+      
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.dll" Guid="{C223B420-32A9-45C6-AA0D-AD50561E9DC7}">
+        <File Id="filEE6D4789723831E5503B41BFE85CA0DF" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.pdb" Guid="{C6AB8387-34CF-418B-BD04-CED9539D5E88}">
+        <File Id="fil27C518D7A3583F0071970672D3043D86" Source="$(var.PROTOSDK_TESTSUITE_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.pdb" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Asn1Base.dll" Guid="{069FEC48-6689-4C04-9B59-71ED5AB33281}">
+        <File Id="fil069FEC4866894C049B5971ED5AB33281" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Asn1Base.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Asn1Base.pdb" Guid="{9D2EB663-AC8E-4DC1-96EA-85B77ABD00B9}">
+        <File Id="fil9D2EB663AC8E4DC196EA85B77ABD00B9" Source="$(var.PROTOSDK_TESTSUITE_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Asn1Base.pdb" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.dll" Guid="{0D2C0A17-9A8B-4C6E-96B7-5F7EC3E98EBB}">
+        <File Id="filF5F1FC7433635A82592387076ECBCFC7" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.pdb" Guid="{63F8784C-27BA-4E17-8155-491C799A3AC2}">
+        <File Id="fil17EFC2E8EC670E3666505B0FF4BDC5C3" Source="$(var.PROTOSDK_TESTSUITE_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.pdb" />
+      </Component>      
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Messages.dll" Guid="{9FF3D165-C4AC-4D38-8778-E6922F16ED3E}">
+        <File Id="fil22E1C26CD9D94F4045E431026A659BDB" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Messages.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Messages.pdb" Guid="{D9B1C2CD-945D-41A1-910A-993340C2549D}">
+        <File Id="filDC2812FF386FEA3A4CB3E9C4F4CB6041" Source="$(var.PROTOSDK_TESTSUITE_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Messages.pdb" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.dll" Guid="{1C83A114-6E48-4C12-954C-A770AB77ECD4}">
+        <File Id="fil9E293A3FF01FBCF8F2C5050939241651" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb" Guid="{E4653BDA-D291-4472-B2EE-B8F0755BF6A4}">
+        <File Id="fil75461EF360CAE570D1B9C7294EBE6CD7" Source="$(var.PROTOSDK_TESTSUITE_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.dll" Guid="{58B3D860-053F-4624-9E36-9879C1E25D34}">
+        <File Id="filAD43C0A340B99F3AD64A722444CFC1F8" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.pdb" Guid="{BD158C52-F6BA-4544-ABBB-D4F1FB6F8EC6}">
+        <File Id="filAF778764E3399A4AD04C8E1D3D6298B3" Source="$(var.PROTOSDK_TESTSUITE_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.pdb" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.dll" Guid="{6F87329F-8038-4076-850B-9DE8EA1FD138}">
+        <File Id="filC7E1A1A5CDB4621DED0BF9CB3AD34D56" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.pdb" Guid="{514E9607-4302-4F72-A458-876CD7E44024}">
+        <File Id="filA167A924CD3EC7665DEFDD34DDDBF574" Source="$(var.PROTOSDK_TESTSUITE_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.pdb" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Transport.dll" Guid="{A94E2BAF-C495-4D5C-BC89-54853EC418E1}">
+        <File Id="filFFD4EA5E8E1224E1A49A8648E3B56B21" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Transport.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Transport.pdb" Guid="{FA12B3D3-5B53-474E-A997-AF10C07B2FAD}">
+        <File Id="fil3D7FAF9F6804D19280253F565FD4CFF1" Source="$(var.PROTOSDK_TESTSUITE_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Transport.pdb" />
+      </Component>
+	  <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.dll" Guid="{4A0514E3-9C01-4C20-896E-5613E89F99E5}">
+        <File Id="fil405C78F9895E03F03DFACB7897840DA4" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.pdb" Guid="{3C6DC8AB-0582-46B5-B400-E05AB9B6DE96}">
+        <File Id="filBC8F4F0BD9B1799FAC1BACA981C5268E" Source="$(var.PROTOSDK_TESTSUITE_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.pdb" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>

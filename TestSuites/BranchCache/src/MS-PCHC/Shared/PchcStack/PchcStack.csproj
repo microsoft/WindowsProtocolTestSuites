@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{77239ADF-01DC-4C41-948F-283511840692}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.BranchCache.Pchc</RootNamespace>
+    <AssemblyName>PchcStack</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRules>
+    </CodeAnalysisRules>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Client\HttpStatusCode401Exception.cs" />
+    <Compile Include="Client\NoRESPONSEMESSAGEException.cs" />
+    <Compile Include="Client\PCHCClient.cs" />
+    <Compile Include="Enum\PCHC_MESSAGE_TYPE.cs" />
+    <Compile Include="Enum\RESPONSE_CODE.cs" />
+    <Compile Include="PchcConsts.cs" />
+    <Compile Include="Server\NoINITIALOFFERMESSAGEReceivedException.cs" />
+    <Compile Include="Server\NoSEGMENTINFOMESSAGEReceivedException.cs" />
+    <Compile Include="Server\PCHCServer.cs" />
+    <Compile Include="Structure\BATCHED_OFFER_MESSAGE.cs" />
+    <Compile Include="Structure\CONNECTION_INFORMATION.cs" />
+    <Compile Include="Structure\INITIAL_OFFER_MESSAGE.cs" />
+    <Compile Include="Structure\MESSAGE_HEADER.cs" />
+    <Compile Include="Structure\RESPONSE_MESSAGE.cs" />
+    <Compile Include="Structure\SegmentDescriptor.cs" />
+    <Compile Include="Structure\SEGMENT_INFO_MESSAGE.cs" />
+    <Compile Include="EncodeMessage.cs" />
+    <Compile Include="Structure\TRANSPORT_HEADER.cs" />
+    <Compile Include="DecodeMessage.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\Common\Common.csproj">
+      <Project>{fe653643-6342-4300-871e-683c7ba31494}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\Messages\Messages.csproj">
+      <Project>{75544419-3f4e-4308-a676-165f45c1462e}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\COMMON\CommonStack\CommonStack.csproj">
+      <Project>{F3CA3AD9-94A6-4FE1-BA05-0C798E477673}</Project>
+      <Name>CommonStack</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\MS-PCCRC\Shared\PccrcStack\PccrcStack.csproj">
+      <Project>{CD34EB17-A5B5-49A1-A539-E45EF848FAB1}</Project>
+      <Name>PccrcStack</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin\" />
+  </Target>
+</Project>

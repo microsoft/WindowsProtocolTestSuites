@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+
+  <Properties>
+
+    <!--
+        Please edit the following settings according to your test environment
+    -->
+
+    <!--
+        SUT Common Configuration
+    -->
+    <!--Content transport protocol: SMB2 or PCCRTP-->
+    <Property name="ContentTransport" value="PCCRTP"/>
+
+    <!--Branch cache V1 support, SUT will return SRV_HASH_VER_1 if it supports Branch cache version 1-->
+    <Property name="SupportBranchCacheV1" value="true"/> 
+    <!--Branch cache V2 Support, SUT will return SRV_HASH_VER_2 if it supports Branch cache version 2, which is only applicable for the SMB 3.x dialect family.-->
+    <Property name="SupportBranchCacheV2" value="true"/>
+
+    <!--Computer name of content server-->
+    <Property name="ContentServerComputerName" value="ContentServer"/>
+    <!--Computer name of hosted cache server-->
+    <Property name="HostedCacheServerComputerName" value="HostedServer"/>
+
+    <!--Logon credentials-->
+    <Property name="DomainName" value="contoso"/>
+    <Property name="UserName" value="administrator"/>
+    <Property name="UserPassword" value="Password01!"/>
+
+    <!--Supported hash level that indicates the caching level configured on the server.
+        HashEnableAll: Indicates that caching is enabled for all shares on the server; 
+        HashDisableAll: Indicates that caching is disabled for all shares on the server; 
+        HashEnableShare: Indicates that caching is enabled or disabled on a per-share basis
+        Share.HashEnabled: A Boolean that, if set, indicates that the server supports hash generation for branch cache retrieval of data.-->
+    <Property name="SupportedHashLevel" value="HashEnableShare"/>
+
+    <!--
+        Content Server Configuration
+    -->
+    <!--Security packages for file share authentication: Negotiate, Kerberos or Ntlm-->
+    <Property name="SecurityPackageType" value="Negotiate"/>
+
+    <!--Server secret of content server-->
+    <Property name="ServerSecret" value="server secret"/>
+    
+    <!--Local path of the folder containing web files-->
+    <Property name="WebsiteLocalPath" value="c:\inetpub\wwwroot"/>
+
+    <!--Shared folder name-->
+    <Property name="SharedFolderName" value="FileShare"/>
+    <!--Local path of the shared folder-->
+    <Property name="FileShareLocalPath" value="c:\FileShare"/>
+    
+    <!--Names of testing files which are placed both under the WebsiteLocalPath and FileShareLocalPath-->
+    <Property name="NameOfFileWithMultipleSegments" value="MultipleSegments.txt"/>
+    <Property name="NameOfFileWithMultipleBlocks" value="MultipleBlocks.txt"/>
+    <Property name="NameOfFileWithSingleBlock" value="SingleBlock.txt"/>
+
+    <!--Forced hash generation support for website-->
+    <Property name="SupportWebsiteForcedHashGeneration" value="false"/>
+    <!--Forced hash generation support for file share-->
+    <Property name="SupportFileShareForcedHashGeneration" value="true"/>
+
+    <!--
+        Normally the following settings will not need to be changed, only for advanced users
+    -->
+
+    <!--Timeout in seconds-->
+    <Property name="Timeout" value="60"/>
+    <!--Retry interval in seconds-->
+    <Property name="RetryInterval" value="1"/>
+    <!--Timeout for negative test in seconds-->
+    <Property name="NegativeTestTimeout" value="10"/>
+
+    <!--Content server HTTP listen port-->
+    <Property name="ContentServerHTTPListenPort" value="80"/>
+    <!--Hosted cache server HTTP listen port-->
+    <Property name="HostedCacheServerHTTPListenPort" value="80"/>
+    <!--Hosted cache server HTTPS listen port-->
+    <Property name="HostedCacheServerHTTPSListenPort" value="443"/>
+    <!--Client content retrieval listen port-->
+    <Property name="ClientContentRetrievalListenPort" value="8282"/>
+    
+  </Properties>
+
+</TestSite>
