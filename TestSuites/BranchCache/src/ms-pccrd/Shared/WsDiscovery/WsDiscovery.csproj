@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{334C9601-ABF7-4830-9793-8F9259D0D7EB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.WsDiscovery</RootNamespace>
+    <AssemblyName>WsDiscovery</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SignAssembly>true</SignAssembly>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRules>
+    </CodeAnalysisRules>
+    <CodeAnalysisRuleSet>Sdl7.0.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Message\AppSequence.cs" />
+    <Compile Include="Message\AttributedQName.cs" />
+    <Compile Include="Message\AttributedURI.cs" />
+    <Compile Include="Message\EndpointReference.cs" />
+    <Compile Include="Message\Probe.cs" />
+    <Compile Include="Message\ProbeMatch.cs" />
+    <Compile Include="Message\ProbeMatches.cs" />
+    <Compile Include="Message\ProbeMatchOp.cs" />
+    <Compile Include="Message\ProbeOp.cs" />
+    <Compile Include="Message\ReferenceParameters.cs" />
+    <Compile Include="Message\ReferenceProperties.cs" />
+    <Compile Include="Message\Scope.cs" />
+    <Compile Include="Message\ServiceName.cs" />
+    <Compile Include="Message\SoapEnvelope.cs" />
+    <Compile Include="ProtocolStrings.cs" />
+    <Compile Include="SoapOverUdp\SoapNetworkMessage.cs" />
+    <Compile Include="SoapOverUdp\SoapOverUdp.cs" />
+    <Compile Include="Transport\ITransport.cs" />
+    <Compile Include="SoapOverUdp\MulticastListener.cs" />
+    <Compile Include="Transport\TransportType.cs" />
+    <Compile Include="SoapOverUdp\UdpSender.cs" />
+    <Compile Include="SoapOverUdp\UnicastListener.cs" />
+    <Compile Include="WsDiscoveryClient.cs" />
+    <Compile Include="WsDiscoveryService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\COMMON\CommonStack\CommonStack.csproj">
+      <Project>{F3CA3AD9-94A6-4FE1-BA05-0C798E477673}</Project>
+      <Name>CommonStack</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin\" />
+  </Target>
+</Project>

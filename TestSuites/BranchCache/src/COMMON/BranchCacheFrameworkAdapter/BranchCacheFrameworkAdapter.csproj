@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0D497178-2DDE-4111-94F7-468467FF9D6E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Protocols.TestSuites.BranchCache</RootNamespace>
+    <AssemblyName>BranchCacheFrameworkAdapter</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRules>
+    </CodeAnalysisRules>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release'">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="BranchCacheFrameworkAdapter.cs" />
+    <Compile Include="IBranchCacheFrameworkAdapter.cs" />
+    <Compile Include="ReceivedPccrrRequestEventArg.cs" />
+    <Compile Include="Structure.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MS-PCCRC\Shared\PccrcStack\PccrcStack.csproj">
+      <Project>{CD34EB17-A5B5-49A1-A539-E45EF848FAB1}</Project>
+      <Name>PccrcStack</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ms-pccrd\Shared\PccrdStack\PccrdStack.csproj">
+      <Project>{6CDA2C3E-F9CE-4A18-A06C-818C3C779C35}</Project>
+      <Name>PccrdStack</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ms-pccrd\Shared\WsDiscovery\WsDiscovery.csproj">
+      <Project>{334C9601-ABF7-4830-9793-8F9259D0D7EB}</Project>
+      <Name>WsDiscovery</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MS-PCCRR\Shared\PccrrStack\PccrrStack.csproj">
+      <Project>{E740266B-2CDF-43A8-9F24-EE6FF55149EA}</Project>
+      <Name>PccrrStack</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MS-PCCRTP\Shared\PccrtpStack\PccrtpStack.csproj">
+      <Project>{C87577F2-FFB9-4584-B109-E8D4F62999E2}</Project>
+      <Name>PccrtpStack</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MS-PCHC\Shared\PchcStack\PchcStack.csproj">
+      <Project>{77239ADF-01DC-4C41-948F-283511840692}</Project>
+      <Name>PchcStack</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CommonStack\CommonStack.csproj">
+      <Project>{F3CA3AD9-94A6-4FE1-BA05-0C798E477673}</Project>
+      <Name>CommonStack</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin\" />
+  </Target>
+</Project>
