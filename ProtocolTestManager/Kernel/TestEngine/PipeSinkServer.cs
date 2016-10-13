@@ -15,7 +15,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
     {
         static string PipeName;
         static List<Listener> listeners;
-        static IAsyncResult listenerResult = null;
         static NamedPipeServerStream waitingServer = null;
         public static void serverCallback(IAsyncResult result)
         {
@@ -23,11 +22,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
             NamedPipeServerStream server = (NamedPipeServerStream)result.AsyncState;
             server.EndWaitForConnection(result);
             StreamReader reader = new StreamReader(server);
-            StreamWriter writer = new StreamWriter(server);
             Listener listener = new Listener(reader, server);
             listeners.Add(listener);
             waitingServer = new NamedPipeServerStream(PipeName, PipeDirection.InOut, NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Message, PipeOptions.Asynchronous);
-            listenerResult = waitingServer.BeginWaitForConnection(new AsyncCallback(serverCallback), waitingServer);
+            waitingServer.BeginWaitForConnection(new AsyncCallback(serverCallback), waitingServer);
         }
 
         /// <summary>
@@ -40,7 +38,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             if (waitingServer == null)
             {
                 waitingServer = new NamedPipeServerStream(PipeName, PipeDirection.InOut, NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Message, PipeOptions.Asynchronous);
-                listenerResult = waitingServer.BeginWaitForConnection(new AsyncCallback(serverCallback), waitingServer);
+                waitingServer.BeginWaitForConnection(new AsyncCallback(serverCallback), waitingServer);
             }
             Listener.IgnoreLogs = false;
         }
