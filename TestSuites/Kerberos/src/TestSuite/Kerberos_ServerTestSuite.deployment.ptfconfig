@@ -23,7 +23,7 @@
       <Description>
         Trust Type, Forest, Realm, NoTrust, Child (for single realm)
       </Description>
-      <Choice>Forest,Realm,Notrust,Child</Choice>
+      <Choice>Forest,Realm,NoTrust,Child</Choice>
     </Property>
     <Property name="SupportedOid" value="MSKerberosToken">
       <Description>
