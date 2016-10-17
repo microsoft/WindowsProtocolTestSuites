@@ -44,7 +44,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Encode Header/Data Messages to client.");
-            byte compFlag = RdpSegmentedPdu.PACKET_COMPR_TYPE_RDP8;
+            byte compFlag = (byte)PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_RDP8;
 
             Image bgImage;
             Image compImage = RdpegfxTestUtility.captureFromImage(image_64X64, RdpegfxTestUtility.imgPos,
@@ -360,7 +360,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Encode Header/Data Messages to client.");
-            byte compFlag = RdpSegmentedPdu.PACKET_COMPR_TYPE_RDP8;
+            byte compFlag = (byte)PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_RDP8;
 
             Image bgImage;
             Image compImage = RdpegfxTestUtility.captureFromImage(image_64X64, RdpegfxTestUtility.imgPos,
@@ -403,7 +403,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Encode Header/Data Messages to client.");
-            byte compFlag = RdpSegmentedPdu.PACKET_COMPR_TYPE_RDP8;
+            byte compFlag = (byte)PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_RDP8;
 
             Image bgImage;
             Image compImage = RdpegfxTestUtility.captureFromImage(image_64X64, RdpegfxTestUtility.imgPos,
@@ -450,7 +450,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             // To be modified .... 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Encode Header/Data Messages to client.");
             // byte compFlag = RdpSegmentedPdu.PACKET_COMPR_TYPE_RDP8 | RdpSegmentedPdu.PACKET_COMPRESSED;
-            byte compFlag = RdpSegmentedPdu.PACKET_COMPR_TYPE_RDP8;
+            byte compFlag = (byte)PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_RDP8;
 
             Image bgImage;
             Image compImage = RdpegfxTestUtility.captureFromImage(image_64X64, RdpegfxTestUtility.imgPos,

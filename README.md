@@ -12,6 +12,7 @@ Windows Protocol Test Suites provide interoperability testing against the implem
 * **RDP Client Family Test Suite**. It provides interoperability testing for client implementation of RDP family protocols including [MS-RDPBCGR], [MS-RDPEDISP], [MS-RDPEDYC], [MS-RDPEGFX], [MS-RDPEGT], [MS-RDPEI], [MS-RDPEMT], [MS-RDPEUDP], [MS-RDPEUSB], [MS-RDPEVOR] and [MS-RDPRFX].  
 * **Kerberos Server Test Suite**. It is designed to test server implementations of Kerberos protocols including [MS-KILE], [MS-KKDCP] and [MS-PAC].
 * **SMBD Server Test Suite**. It is designed to test the implementations of SMB2&3 direct (RDMA) protocol, as specified in [MS-SMBD].
+* **Branch Cache Test Suite**. It is designed to test the implementations of MS-PCCRTP, MS-PCCRR, MS-PCHC and MS-PCCRC protocol.
 
 ## Components
 Windows Protocol Test Suites contain 4 components:
@@ -42,6 +43,7 @@ Some test suites use [Model-Based Testing](https://msdn.microsoft.com/en-us/libr
 * **File Server Family Test Suite**
 * **Kerberos Server Test Suite**
 * **SMBD Server Test Suite**
+* **BranchCache Server Test Suite**
 
 ## Build
 

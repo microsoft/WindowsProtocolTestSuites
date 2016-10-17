@@ -75,14 +75,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// </summary>
         /// <param name="transportType">selected transport type for created channels</param>
         /// <param name="timeout">Timeout</param>
+        /// <param name="channelId">ChannelId of this DVC</param>
         /// <returns>true if client supports this protocol; otherwise, return false.</returns>
-        public bool CreateRdpegfxDvc(TimeSpan timeout, DynamicVC_TransportType transportType = DynamicVC_TransportType.RDP_TCP)
+        public bool CreateRdpegfxDvc(TimeSpan timeout, DynamicVC_TransportType transportType = DynamicVC_TransportType.RDP_TCP, uint? channelId = null)
         {
 
             const ushort priority = 0;
             try
             {
-                rdpegfxDVC = rdpedycServer.CreateChannel(timeout, priority, RdpegfxGraphicChannelName, transportType, OnDataReceived);
+                rdpegfxDVC = rdpedycServer.CreateChannel(timeout, priority, RdpegfxGraphicChannelName, transportType, OnDataReceived, channelId);
             }
             catch
             {
@@ -481,7 +482,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
     /// <summary>
     /// The RDP Sever byte stream Must be encapsulated as RdpSegmentPdu with/without compression.
     /// </summary>
-    public class RdpSegmentedPdu
+    public class EGFXRdpSegmentedPdu
     {
         #region Variables
         private RDP_SEGMENTED_DATA segHeader;
@@ -504,7 +505,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// </summary>
         /// <param name="descType"> Indicates if a single or multipart segment PDU.</param>
         /// <param name="compFlag">Indicates the data is compressed and the compress type.</param>
-        public RdpSegmentedPdu(byte compFlag)
+        public EGFXRdpSegmentedPdu(byte compFlag)
         {
             // segHeader.descType = descType;
             compressFlag = compFlag;
@@ -529,14 +530,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 segHeader.descriptor = DescriptorTypes.SINGLE;
                 segHeader.bulkData = new RDP8_BULK_ENCODED_DATA();
                 if (currentTestType == RdpegfxNegativeTypes.Segmentation_Uncompressed_WithSegmentHeader)
-                    compressFlag = RdpSegmentedPdu.PACKET_COMPR_TYPE_RDP8;
+                    compressFlag = EGFXRdpSegmentedPdu.PACKET_COMPR_TYPE_RDP8;
                 else if (currentTestType == RdpegfxNegativeTypes.RDP8Compression_InvalidCompressPDU)
-                    compressFlag = RdpSegmentedPdu.PACKET_COMPR_TYPE_RDP8 | RdpSegmentedPdu.PACKET_COMPRESSED;
+                    compressFlag = EGFXRdpSegmentedPdu.PACKET_COMPR_TYPE_RDP8 | EGFXRdpSegmentedPdu.PACKET_COMPRESSED;
 
                 segHeader.bulkData.header = compressFlag;
 
                 // RDP 8.0 compression here. 
-                if (compressFlag == (RdpSegmentedPdu.PACKET_COMPR_TYPE_RDP8 | RdpSegmentedPdu.PACKET_COMPRESSED))
+                if (compressFlag == (EGFXRdpSegmentedPdu.PACKET_COMPR_TYPE_RDP8 | EGFXRdpSegmentedPdu.PACKET_COMPRESSED))
                 {
                     CompressFactory cpf = new CompressFactory();
                     byte[] compressedData = cpf.Compress(rawSvrData);
@@ -592,7 +593,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
 
                     segHeader.segmentArray[cnt] = new RDP_DATA_SEGMENT();
 
-                    if (compressFlag == (RdpSegmentedPdu.PACKET_COMPR_TYPE_RDP8 | RdpSegmentedPdu.PACKET_COMPRESSED))
+                    if (compressFlag == (EGFXRdpSegmentedPdu.PACKET_COMPR_TYPE_RDP8 | EGFXRdpSegmentedPdu.PACKET_COMPRESSED))
                     {
                         CompressFactory cpf = new CompressFactory();
                         byte[] compressData = cpf.Compress(rawPartData);
@@ -658,7 +659,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
 
                     if (currentTestType == RdpegfxNegativeTypes.RDP8Compression_IncorrectCompressFlag)
                     {
-                        segHead.bulkData.header = RdpSegmentedPdu.PACKET_COMPR_TYPE_RDP8 | 0x2;  // 0x02 is an invalid compress flag.
+                        segHead.bulkData.header = EGFXRdpSegmentedPdu.PACKET_COMPR_TYPE_RDP8 | 0x2;  // 0x02 is an invalid compress flag.
                     }
                     else if (currentTestType == RdpegfxNegativeTypes.RDP8Compression_IncorrectCompressType)
                     {

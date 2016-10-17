@@ -211,7 +211,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// </summary>
         /// <param name="completeData">The compete virtual channel data. This argument can be null.</param>
         /// <returns>The splitted chunk data.</returns>
-        internal ChannelChunk[] SplitToChunks(byte[] completeData)
+        internal ChannelChunk[] SplitToChunks(byte[] completeData, int maxBit  =16)
         {
             if (completeData == null || completeData.Length <= 0)
             {

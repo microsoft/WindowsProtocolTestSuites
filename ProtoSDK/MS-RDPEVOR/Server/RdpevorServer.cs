@@ -85,18 +85,29 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpevor
         /// <summary>
         /// Send a RDPEVOR packet through data channel
         /// </summary>
-        /// <param name="evorPdu"></param>
-        public void SendRdpevorDataPdu(RdpevorServerPdu evorPdu)
+        /// <param name="evorPdu">The pdu to send</param>
+        /// <param name="isCompressed"> Whether to compress the pdu before send</param>
+        public void SendRdpevorDataPdu(RdpevorServerPdu evorPdu, bool isCompressed )
         {
             byte[] data = PduMarshaler.Marshal(evorPdu);
+                       
             if (rdpevorDataDVC == null)
             {
                 throw new InvalidOperationException("Data DVC instance of RDPEVOR is null, Dynamic virtual channel must be created before sending data.");
             }
-            rdpevorDataDVC.Send(data);
-
+            rdpevorDataDVC.Send(data, isCompressed);            
         }
 
+        public void SendDataCompressedDvcPdu(DataCompressedDvcPdu compressedPdu)
+        {
+            byte[] data = PduMarshaler.Marshal(compressedPdu);
+            if (rdpevorDataDVC == null)
+            {
+                throw new InvalidOperationException("DataCompressedDvcPduinstance of RDPEVOR is null, Dynamic virtual channel must be created before sending data.");
+            }
+            rdpevorDataDVC.Send(data, true);
+
+        }
         /// <summary>
         /// Method to expect a RdpevorPdu.
         /// </summary>
@@ -240,7 +251,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpevor
             if (videoRawData != null)
             {
                 videoData.pSample = new byte[videoRawData.Length];
-                Array.Copy(videoRawData, videoData.pSample, videoRawData.Length);
+                Array.Copy(videoRawData, videoData.pSample, videoRawData.Length);               
                 videoData.Header.cbSize = (uint)(sizeOfVideoPacketFixedFields + videoData.pSample.Length);
                 videoData.cbSample = (uint)videoData.pSample.Length;
             }
@@ -253,7 +264,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpevor
             videoData.Reserved2 = 0;
             return videoData;
         }
-
         #endregion Create Methods
 
         #region Private Methods
@@ -312,8 +322,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpevor
                 }
             }
         }
-
         #endregion Private Methods
-
     }
 }

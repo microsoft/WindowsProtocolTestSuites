@@ -805,7 +805,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         public bool flags;
         /// <summary>
         /// A 8-bits unsigned integer, specify an index into the RFX_PROGRESSIVE_CODEC_QUANT array 
-        /// (the progQuantVals field) of the containing RFX_PROGRESSIVE_REGION block. 
+        /// (the quantProgVals field) of the containing RFX_PROGRESSIVE_REGION block. 
         /// </summary>
         public byte progressiveQuality;
         /// <summary>
@@ -989,7 +989,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         public ushort yIdx;
         /// <summary>
         /// A 8-bits unsigned integer, specify an index into the RFX_PROGRESSIVE_CODEC_QUANT array 
-        /// (the progQuantVals field) of the containing RFX_PROGRESSIVE_REGION block. 
+        /// (the quantProgVals field) of the containing RFX_PROGRESSIVE_REGION block. 
         /// </summary>
         public byte progressiveQuality;
         /// <summary>

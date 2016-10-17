@@ -15,18 +15,17 @@ namespace Microsoft.Protocols.TestManager.Kernel
     {
         static string PipeName;
         static List<Listener> listeners;
-        static IAsyncResult listenerResult = null;
         static NamedPipeServerStream waitingServer = null;
         public static void serverCallback(IAsyncResult result)
         {
+            CleanUnusedListener();
             NamedPipeServerStream server = (NamedPipeServerStream)result.AsyncState;
             server.EndWaitForConnection(result);
             StreamReader reader = new StreamReader(server);
-            StreamWriter writer = new StreamWriter(server);
             Listener listener = new Listener(reader, server);
             listeners.Add(listener);
             waitingServer = new NamedPipeServerStream(PipeName, PipeDirection.InOut, NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Message, PipeOptions.Asynchronous);
-            listenerResult = waitingServer.BeginWaitForConnection(new AsyncCallback(serverCallback), waitingServer);
+            waitingServer.BeginWaitForConnection(new AsyncCallback(serverCallback), waitingServer);
         }
 
         /// <summary>
@@ -38,8 +37,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
             PipeName = pipeName;
             if (waitingServer == null)
             {
-                waitingServer = new NamedPipeServerStream(PipeName, PipeDirection.InOut, 10, PipeTransmissionMode.Message, PipeOptions.Asynchronous);
-                listenerResult = waitingServer.BeginWaitForConnection(new AsyncCallback(serverCallback), waitingServer);
+                waitingServer = new NamedPipeServerStream(PipeName, PipeDirection.InOut, NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Message, PipeOptions.Asynchronous);
+                waitingServer.BeginWaitForConnection(new AsyncCallback(serverCallback), waitingServer);
             }
             Listener.IgnoreLogs = false;
         }
@@ -50,15 +49,26 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public static void Stop()
         {
             Listener.IgnoreLogs = true;
-            foreach (var listener in listeners)
-            {
-                listener.Stop();
-            }
+            if(listeners != null && listeners.Count > 0)
+                foreach (var listener in listeners)
+                {
+                    listener.Stop();
+                }
         }
 
         public delegate void ParseLogMessageCallback(string message);
         public static ParseLogMessageCallback ParseLogMessage;
-    
+        
+        private static void CleanUnusedListener()
+        {
+            if(listeners != null && listeners.Count > 0)
+            {
+                foreach (var listener in listeners)
+                    listener.Stop();
+
+                listeners.Clear();
+            }
+        }
     
     }
 
@@ -87,8 +97,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 thread.Abort();
             }
-            SR.Close();
-            serverStream.Close();
+
+            if(SR != null)
+                SR.Close();
+
+            if(serverStream != null)
+                serverStream.Close();
         }
         /// <summary>
         /// Start to get the output.

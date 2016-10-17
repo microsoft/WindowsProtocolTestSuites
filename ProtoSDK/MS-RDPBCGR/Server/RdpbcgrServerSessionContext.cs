@@ -655,6 +655,26 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             }
         }
 
+        /// <summary>
+        /// Get the flags of client MCS connect intial PDU.
+        /// </summary>
+        public MULTITRANSPORT_TYPE_FLAGS MultitransportTypeFlagsInMCSConnectIntialPdu
+        {
+            get
+            {
+                lock(contextLock)
+                {
+                    if (mcsConnectInitialPdu != null)
+                    {
+                        return mcsConnectInitialPdu.gccPdu.clientMultitransportChannelData.flags;
+                    }
+                    else
+                    {
+                        return MULTITRANSPORT_TYPE_FLAGS.None;
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// The failure code of x224 connection.
@@ -2142,7 +2162,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="data">The data to be compressed.</param>
         /// <param name="type">The type to compress.</param>
         /// <returns>The compressed data.</returns>
-        internal byte[] Compress(compressedType_Values type, byte[] data)
+        internal byte[] Compress(compressedType_Values type, byte[] data, int maxBit =16)
         {
             if (data == null)
             {

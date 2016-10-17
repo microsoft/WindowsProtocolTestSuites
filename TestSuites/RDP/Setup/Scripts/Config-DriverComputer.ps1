@@ -2,11 +2,10 @@
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 Param(
-[String]$scriptsPath     = "."
+[String]$scriptsPath  = [System.IO.Path]::GetDirectoryName($myInvocation.MyCommand.Definition)
 )
 
 Write-Host "Put current dir as $scriptsPath."
-$scriptsPath = Get-Location
 pushd $scriptsPath
 
 #----------------------------------------------------------------------------
@@ -190,7 +189,6 @@ if($listeningPort -eq "3389")
 $binPath         = $scriptsPath + "\..\Bin"
 $dataPath        = $scriptsPath + "\..\Data"
 $DepPtfConfig    = "$binPath\RDP_ClientTestSuite.deployment.ptfconfig"
-$SourcePath = $scriptsPath + "\..\Source\Client\TestCode\TestSuite"
 
 Write-Host  "TurnOff FileReadonly for $DepPtfConfig..."
 .\TurnOff-FileReadonly.ps1 $DepPtfConfig
@@ -235,7 +233,6 @@ else
 Write-Host  "TurnOff FileReadonly for $DepPtfConfig due to Execution Console..."
 .\TurnOff-FileReadonly.ps1 $DepPtfConfig
 
-Copy-Item $DepPtfConfig $SourcePath -Force
 #-----------------------------------------------------
 # Modify ClientLocal.testsettings file
 #-----------------------------------------------------
@@ -273,6 +270,7 @@ cmd /C ECHO CONFIG FINISHED>$env:HOMEDRIVE\config.finished.signal
 Write-Host "Config finished."
 Write-Host "EXECUTE [Config-DriverComputer.ps1] FINISHED (NOT VERIFIED)."
 
-# cmd /C Pause
+
 
 exit 0
+

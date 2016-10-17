@@ -170,24 +170,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         RDPGFX_CAPS_FLAG_AVC_DISABLED = 0x00000020
 
     }
-
-    /// <summary>
-    /// Types of RDP_SEGMENTED_DATA: Single or Mutipart.
-    /// </summary>
-    public enum DescriptorTypes : byte
-    {
-        /// <summary>
-        /// Specifies whether the RDP_SEGMENTED_DATA structure wraps a single segment. The segmentCount, 
-        /// uncompressedSize, and segmentArray fields MUST NOT be present, and the segment field MUST be present.
-        /// </summary>
-        SINGLE      = 0xE0,
-        /// <summary>
-        /// Specifies whether the RDP_SEGMENTED_DATA structure wraps multiple segments. The segmentCount,  
-        /// uncompressedSize, and segmentArray fields MUST be present, and the segment field MUST NOT be present. 
-        /// </summary>
-        MULTIPART   = 0xE1
-    }
-
+    
     /// <summary>
     /// Pixel format of bitmap data.
     /// </summary>

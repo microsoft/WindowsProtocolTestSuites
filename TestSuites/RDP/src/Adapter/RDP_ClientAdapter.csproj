@@ -89,9 +89,11 @@
     <Compile Include="RdpedispSUTControlAdapter\IRdpedispSUTControlAdapter.cs" />
     <Compile Include="RDPEDISP\IRdpedispAdapter.cs" />
     <Compile Include="RDPEDISP\RdpedispAdapter.cs" />
+    <Compile Include="RDPEFS\IRdpefsAdapter.cs" />
+    <Compile Include="RDPEFS\RdpefsAdapter.cs" />
+    <Compile Include="RDPEGFX\RdpegfxAdapter.cs" />
     <Compile Include="RDPEGFX\RdpegfxRfxProgCodecBlockManagerDecorator.cs" />
     <Compile Include="RDPEGFX\IRdpegfxAdapter.cs" />
-    <Compile Include="RDPEGFX\RdpegfxAdapter.cs" />
     <Compile Include="RdpeiSUTControlAdapter\IRdpeiSUTControlAdapter.cs" />
     <Compile Include="RdpeiSUTControlAdapter\RdpeiSUTControlAdapter.cs" />
     <Compile Include="RdpeiSUTControlAdapter\RdpeiSUTControlData.cs" />
@@ -144,6 +146,10 @@
     <ProjectReference Include="..\..\..\..\ProtoSDK\MS-RDPEDYC\Rdpedyc.csproj">
       <Project>{CFBAFDE2-F509-4AC8-817A-0C26C1B27653}</Project>
       <Name>Rdpedyc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-RDPEFS\Rdpefs.csproj">
+      <Project>{e5a90e66-44b4-4f13-b2a6-f7990770a977}</Project>
+      <Name>Rdpefs</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\ProtoSDK\MS-RDPEGFX\Rdpegfx.csproj">
       <Project>{c89ac3fb-7ffc-49d8-b99b-a76c9411aec6}</Project>

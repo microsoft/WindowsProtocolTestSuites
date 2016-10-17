@@ -210,6 +210,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         
         public uint SnInitialSequenceNumber{get;set;}
 
+        public uUdpVer_Values HighestVersion { get; set; }
+
         // Used when send packet, current sequence number of Code Packet
         public uint CurSnCoded{get;set;}
         // Used when send packet, current sequence number of Source packet
@@ -598,6 +600,28 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
             return SynData;
         }
 
+        /// <summary>
+        /// Create RDPUDP_SYNDATAEX_PAYLOAD Structure
+        /// </summary>
+        /// <returns></returns>
+        public RDPUDP_SYNDATAEX_PAYLOAD CreateSynExData(uUdpVer_Values version)
+        {
+            RDPUDP_SYNDATAEX_PAYLOAD SynExData = new RDPUDP_SYNDATAEX_PAYLOAD();
+            SynExData.uSynExFlags = uSynExFlags_Values.RDPUDP_VERSION_INFO_VALID;
+
+            //The uUdpVer field MUST be set to the highest RDP-UDP protocol version supported by both endpoints
+            if((version & uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_2) != 0)
+            {
+                SynExData.uUdpVer = uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_2;
+            }
+            else
+            {
+                SynExData.uUdpVer = uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_1;
+            }
+
+            return SynExData;
+        }
+
         public byte[] CreateFECPayload(RdpeudpPacket[] sourcePackets, out byte uFecIndex)
         {
             throw new NotImplementedException();
@@ -620,7 +644,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
 
             if (outPacketDic[packet.sourceHeader.Value.snSourceStart].retransmitTimes >= this.SocketConfig.retransmitLimit)
             {
-                //If a datagram has been retransmitted four times without a response, the sender terminates the connection
+                //If a datagram has been retransmitted five times without a response, the sender terminates the connection
                 this.Close();
             }
             RDPUDP_SOURCE_PAYLOAD_HEADER sourceHeader = packet.sourceHeader.Value;
@@ -720,6 +744,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                 ProcessFECPayloadData(eudpPacket);
                 // Process RDPUDP_ACK_OF_ACKVECTOR_HEADER Structure if the packet contained
                 ProcessAckOfAckVectorHeader(eudpPacket);
+                // Process RDPUPD_SYNDATAEX_PAYLOAD
+                ProcessSynDataExPayload(eudpPacket);
                 
                 //TODO: Congestion control function
                 
@@ -865,6 +891,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                 // TODO: process FEC payload, calculate lost packet with FEC data
                 // then use UpdateReceiveWindow function to update window and process received data
             }
+        }
+
+        /// <summary>
+        /// The highest version supported by both endpoints, which is RDPUDP_PROTOCOL_VERSION_1 if either this packet or the SYN packet does not specify a version, 
+        /// is the version that MUST be used by both endpoints.
+        /// </summary>
+        public void ProcessSynDataExPayload(RdpeudpPacket eudpPacket)
+        {
+            if(eudpPacket.fecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_SYNEX) && eudpPacket.SynDataEx != null)
+            {
+                if(eudpPacket.SynDataEx.Value.uUdpVer.HasFlag(uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_2))
+                {
+                    HighestVersion = uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_2;
+                    return;
+                }
+            }
+            HighestVersion = uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_1;
         }
 
 
@@ -1108,8 +1151,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                 this.SendAcKPacket();
             }
 
+            TimeSpan delayAckDuration = SocketConfig.DelayAckDuration_V1;
+            if(HighestVersion == uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_2)
+            {
+                TimeSpan half = new TimeSpan(RTT.Ticks / 2);
+                // RDPUDP_PROTOCOL_VERSION_2: the delayed ACK time-out is 50 ms or half the RTT, whichever is longer, up to a maximum of 200 ms.
+                delayAckDuration = SocketConfig.DelayAckDuration_V2 > half ? SocketConfig.DelayAckDuration_V2 : half;
+                delayAckDuration = delayAckDuration > SocketConfig.DelayAckDuration_Max ? SocketConfig.DelayAckDuration_Max : delayAckDuration;
+            }
+
             if (this.sourceNumNotAcked > 0 &&
-                ReceiveTimeForFirstNotACKSource + this.SocketConfig.DelayAckDuration <= DateTime.Now)
+                ReceiveTimeForFirstNotACKSource + delayAckDuration <= DateTime.Now)
             {
                 // Send ACK diagram, and set RDPUDP_FLAG_ACKDELAYED flag 
                 this.SendAcKPacket(true);
@@ -1163,8 +1215,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                 return;
             }
 
-            //Retransmit timer MUST fire at 200 milliseconds (ms) or twice the RTT, whichever is longer, after the datagram is transmitted.
-            TimeSpan retransmitDuration = ((RTT+RTT) > this.SocketConfig.RetransmitDuration)?(RTT+RTT):this.SocketConfig.RetransmitDuration;
+            // This timer MUST fire at the minimum retransmit time-out or twice the RTT, whichever is longer, after the datagram is first transmitted
+            // RDPUDP_PROTOCOL_VERSION_1: the minimum retransmit time-out is 500 ms.
+            // RDPUDP_PROTOCOL_VERSION_2: the minimum retransmit time-out is 300 ms.
+            TimeSpan _retransmitDuration = SocketConfig.RetransmitDuration_V1;
+            if(HighestVersion == uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_2)
+            {
+                _retransmitDuration = SocketConfig.RetransmitDuration_V2;
+            }
+
+            TimeSpan retransmitDuration = ((RTT + RTT) > _retransmitDuration) ? (RTT + RTT) : _retransmitDuration;
             // Packets may need to retransmit must in send window
             uint curpos = SendWindowStartPosition;
             while (outPacketDic.ContainsKey(curpos)

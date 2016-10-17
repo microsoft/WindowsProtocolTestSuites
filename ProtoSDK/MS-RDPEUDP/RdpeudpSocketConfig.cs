@@ -14,7 +14,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// <summary>
         /// The time after which fire the retransmit timer.  
         /// </summary>
-        public TimeSpan RetransmitDuration = new TimeSpan(0,0,0,0,200);
+        public TimeSpan RetransmitDuration_V1 = new TimeSpan(0, 0, 0, 0, 500);
+        public TimeSpan RetransmitDuration_V2 = new TimeSpan(0, 0, 0, 0, 300);
 
         /// <summary>
         /// This timer fires when the sender has not received any datagram from the receiver within 65 seconds
@@ -28,9 +29,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         public TimeSpan KeepaliveDuration = new TimeSpan(0,0,16);
 
         /// <summary>
-        /// The time after which fire the delay ACK timer.
+        /// RDPUDP_PROTOCOL_VERSION_1: the delayed ACK time-out is 200 ms.
+        /// RDPUDP_PROTOCOL_VERSION_2: the delayed ACK time-out is 50 ms or half the RTT, whichever is longer, 
+        /// up to a maximum of 200 ms.
         /// </summary>
-        public TimeSpan DelayAckDuration = new TimeSpan(0, 0, 0, 0, 200);
+        public TimeSpan DelayAckDuration_V1 = new TimeSpan(0, 0, 0, 0, 200);
+        public TimeSpan DelayAckDuration_V2 = new TimeSpan(0, 0, 0, 0, 50);
+        public TimeSpan DelayAckDuration_Max = new TimeSpan(0, 0, 0, 0, 200);
+
         /// <summary>
         /// This is the interval seconds of two heart beat packet.
         /// </summary>
@@ -85,16 +91,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         public int sendingInterval = 50;
 
         /// <summary>
-        /// Retransmit limit
+        /// Retransmit limit at least three and no more five times.
         /// </summary>
-        public uint retransmitLimit = 4; 
+        public uint retransmitLimit = 5; 
 
         public int changeSnAckOfAcksSeqNumInterval = 20;
 
         #region Config for Timer interval
         // RDPEUDP has three timer: retransmit, keeplive and delayACK
         /// <summary>
-        /// retransmit timer is max of 200ms and 2*RTT, 
+        /// retransmit timer is max of 300ms\500ms and 2*RTT, 
         /// set to 20ms, so will check whether some packet need retransmit every 20ms 
         /// </summary>
         public uint retransmitTimerInterval = 20;

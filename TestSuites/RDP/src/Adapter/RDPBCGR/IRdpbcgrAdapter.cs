@@ -85,6 +85,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         RdpbcgrServer ServerStack {get;}
         ServerCapabilitySetting CapabilitySetting { get; }
         SimulatedScreen SimulatedScreen { get; }
+        UInt16 RDPDRChannelId { get; }
         #endregion
 
         #region Methods
@@ -178,7 +179,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="bSupportEGFX">Indicates the server supports MS-RDPEGFX</param>
         /// <param name="bSupportRestrictedAdminMode">Indicates the server supports Restricted admin mode</param>
         /// <param name="bReservedSet">Indicates the value of NEGRSP_FLAG_RESERVED in the flags field of RDP Negotiation Response</param>
-        void Server_X_224_Connection_Confirm(selectedProtocols_Values protocol, bool bSupportExtClientData, bool bSetRdpNegData, NegativeType invalidType, bool bSupportEGFX = false, bool bSupportRestrictedAdminMode = false, bool bReservedSet = false);
+        /// <param name="bSupportRestrictedAuthenticationMode">Indicates the server supports restricted authentication mode</param>
+        void Server_X_224_Connection_Confirm(selectedProtocols_Values protocol, bool bSupportExtClientData, bool bSetRdpNegData, NegativeType invalidType, bool bSupportEGFX = false, bool bSupportRestrictedAdminMode = false, bool bReservedSet = false, bool bSupportRestrictedAuthenticationMode = false);
 
         /// <summary>
         /// Send X.224 Connection Confirm PDU. It is sent as a response of X.224 Connection Request.
@@ -210,8 +212,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             EncryptionMethods enMothod, 
             EncryptionLevel enLevel, 
             TS_UD_SC_CORE_version_Values rdpVersion, 
-            NegativeType invalidType, 
-            bool isMultitransportSupported = false, 
+            NegativeType invalidType,
+            MULTITRANSPORT_TYPE_FLAGS multiTransportTypeFlags = MULTITRANSPORT_TYPE_FLAGS.None, 
             bool hasEarlyCapabilityFlags = false, 
             SC_earlyCapabilityFlags_Values earlyCapabilityFlagsValue = SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED, 
             UInt16 mcsChannelId_Net = ConstValue.IO_CHANNEL_ID, 
@@ -570,6 +572,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="data">Data want to sent</param>
         /// <param name="subHdDataArr">Array of Auto-detect data, will be send as subheader of TunnelDataPdu</param>
         void SendTunnelData(Multitransport_Protocol_value requestedProtocol, byte[] data, byte[][] subHdDataArr = null);
+
              
         #endregion Multitransport 
 
@@ -621,7 +624,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="isExtendedClientDataSupported">Indicates if server supports Extended Client Data Blocks.</param>
         /// <param name="expectAutoReconnect">Indicates if expect an Auto-Connect sequence.</param>
         /// <param name="rdpServerVersion">The RDP Sever version</param>
-        /// <param name="isMultitransportSupported">Whether support multitransport</param>
+        /// <param name="multiTransportTypeFlags">Flags of Multitransport Channel Data</param>
         /// <param name="supportRDPEGFX">Whether support RDPEGFX</param>
         /// <param name="supportRestrictedAdminMode">Whether support restricted admin mode</param>
         void EstablishRDPConnection(
@@ -631,8 +634,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             bool isExtendedClientDataSupported,
             bool expectAutoReconnect,
             TS_UD_SC_CORE_version_Values rdpServerVersion,
-            bool isMultitransportSupported = false,
-            bool supportRDPEGFX = false, bool supportRestrictedAdminMode = false);
+            MULTITRANSPORT_TYPE_FLAGS multiTransportTypeFlags = MULTITRANSPORT_TYPE_FLAGS.None,
+            bool supportRDPEGFX = false, 
+            bool supportRestrictedAdminMode = false);
 
         /// <summary>
         /// Start a server Initiated disconnection sequence
@@ -659,12 +663,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// Expect SUT start the channel join sequence
         /// </summary>
         void ChannelJoinRequestAndConfirm(NegativeType invalidType);
-
-        /// <summary>
-        /// Generate static virtual channel data messages for test.
-        /// </summary>
-        /// <param name="invalidType">Invalid Type</param>
-        void GenerateStaticVirtualChannelTraffics(StaticVirtualChannel_InvalidType invalidType);
 
         #endregion
 

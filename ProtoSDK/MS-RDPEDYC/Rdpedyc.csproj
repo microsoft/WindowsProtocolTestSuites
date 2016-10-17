@@ -69,6 +69,7 @@
     <Compile Include="Client\Rdpbcgr_DVCClientTransport.cs" />
     <Compile Include="Client\RdpedycClient.cs" />
     <Compile Include="Client\Rdpemt_DVCClientTransport.cs" />
+    <Compile Include="CompressFactory.cs" />
     <Compile Include="DynamicVirtualChannel.cs" />
     <Compile Include="Exception.cs" />
     <Compile Include="IDVCTransport.cs" />

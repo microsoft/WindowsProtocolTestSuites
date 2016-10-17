@@ -3,7 +3,7 @@
 using System;
 
 
-namespace Microsoft.Protocols.TestSuites.Rdpbcgr
+namespace Microsoft.Protocols.TestSuites.Rdpbcgr.efs
 {
     /// <summary>
     /// RDPEFS state

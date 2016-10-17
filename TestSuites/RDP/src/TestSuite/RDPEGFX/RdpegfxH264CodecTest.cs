@@ -216,7 +216,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             RDPEGFX_CapabilityExchange();
             if (isAVC444)
             {
-                this.TestSite.Assume.IsTrue(this.isH264AVC444Supported, "This test case need RDP client indicate support AVC444(RDPGFX_CAPSET_VERSION10).");
+                this.TestSite.Assume.IsTrue(this.isH264AVC444Supported, "This test case need RDP client indicate support AVC444(RDPGFX_CAPSET_VERSION10,RDPGFX_CAPSET_VERSION102).");
             }
             else
             {
@@ -255,7 +255,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                 bmRect.top = data.DestRect.top;
                 bmRect.right = data.DestRect.right;
                 bmRect.bottom = data.DestRect.bottom;
-
+                
                 if (codecId == (ushort)CodecType.RDPGFX_CODECID_AVC420 && data.AVC420BitmapStream != null)
                 {
                     

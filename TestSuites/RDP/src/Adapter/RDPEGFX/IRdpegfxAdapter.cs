@@ -36,6 +36,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         bool ProtocolInitialize(RdpedycServer rdpedycserver, DynamicVC_TransportType transportType = DynamicVC_TransportType.RDP_TCP);
 
         /// <summary>
+        /// Create graphic DVC channel.
+        /// </summary>
+        /// <param name="rdpedycServer">RDPEDYC server instance</param>
+        /// <param name="transportType">Transport type</param>
+        /// <param name="channelId">The channel Id</param>
+        /// <returns>True if success; otherwise, return false.</returns>
+        bool CreateEGFXDvc(RdpedycServer rdpedycServer, DynamicVC_TransportType transportType, uint? channelId = null);
+        /// <summary>
         /// Set the type of current test.
         /// </summary>
         /// <param name="testType">The test type.</param>

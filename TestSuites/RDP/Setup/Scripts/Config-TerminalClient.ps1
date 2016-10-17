@@ -2,11 +2,9 @@
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 Param(
-[String]$scriptsPath     = "."
+[String]$scriptsPath  = [System.IO.Path]::GetDirectoryName($myInvocation.MyCommand.Definition)
 )
 
-Write-Host "Put current dir as $scriptsPath."
-$scriptsPath = Get-Location
 pushd $scriptsPath
 $dataPath = "$scriptsPath\..\Data"
 $toolPath = "$env:HOMEDRIVE\Test\Tools" #For Temporarily use, will be removed in released version.

@@ -1124,7 +1124,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 general.osMajorType == osMajorType_Values.OSMAJORTYPE_WINDOWS ||
                 general.osMajorType == osMajorType_Values.OSMAJORTYPE_IOS ||
                 general.osMajorType == osMajorType_Values.OSMAJORTYPE_OSX ||
-                general.osMajorType == osMajorType_Values.OSMAJORTYPE_ANDROID,
+                general.osMajorType == osMajorType_Values.OSMAJORTYPE_ANDROID ||
+                general.osMajorType == osMajorType_Values.OSMAJORTYPE_CHROME_OS,
                 1047);
             CaptureRequirement(general.osMinorType >= osMinorType_Values.OSMINORTYPE_WINDOWS_31X && general.osMinorType <= osMinorType_Values.OSMINORTYPE_WINDOWS_RT, 1054);
             CaptureRequirement(general.protocolVersion == protocolVersion_Values.V1,1065);
