@@ -72,20 +72,6 @@ build.cmd
 After the build succeeds, the MSI file of each test suite should be generated in the folder *WindowsProtocolTestSuite\drop\TestSuites\\[TestSuiteName]\deploy\.*
 Take SMB test suite as an example, **MS-SMB-TestSuite-ServerEP.msi** should be generated in the folder *WindowsProtocolTestSuite\drop\TestSuites\MS-SMB\deploy\.*
 
-### Build all test suites
-
-Since some test suites contain Model-Based Test cases, you should follow the [steps](#BuildTestSuite) before building all of them.
-After that, change to **WindowsProtocolTestSuites** folder:
-```
-cd WindowsProtocolTestSuites
-```
-
-Run **buildall.cmd**
-
-```
-buildall.cmd
-```
-
 ## Run
 After the build succeeds, you could set up the test environment and install/configure/run the test suite according to its **User Guide**.
 Each test suite has its own **User Guide** in the **WindowsProtocolTestSuites\TestSuites\\[TestSuiteName]\docs** folder.
