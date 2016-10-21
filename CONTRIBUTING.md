@@ -14,7 +14,7 @@ This is a one time job. Once you have signed a CLA for any project sponsored by 
 ## Pull Request
 Before you send out the pull request, you must:
 
-* Run all the impacted cases of the test suite and make sure they can all pass and be compatible with Windows if you make changes to a Test Suite.
+* Run all the impacted cases of the test suite and make sure they can all pass and be compatible with Windows.
 
 Your pull request should:
 
