@@ -18,7 +18,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
         static NamedPipeServerStream waitingServer = null;
         public static void serverCallback(IAsyncResult result)
         {
-            CleanUnusedListener();
+            // Bug: PTF will close these closed pipe, then cause QTAgent crash at the end of test. Solution: PTF should catch this exception.
+            // Should clean these unused listener, otherwise, these NamedPipeServerStreams will be kept at last.
+            //CleanUnusedListener();
             NamedPipeServerStream server = (NamedPipeServerStream)result.AsyncState;
             server.EndWaitForConnection(result);
             StreamReader reader = new StreamReader(server);
