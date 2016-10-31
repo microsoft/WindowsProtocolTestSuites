@@ -58,10 +58,14 @@ build.cmd
 
 ###<a name="BuildTestSuite">Build a test suite
 
-If the test suite contains Model-Based Test cases, you should follow the steps below before building it. 
+If the test suite contains Model-Based test cases, you should follow the steps below before building it. 
 
 * Install [Spec Explorer](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/), 
 * Install the **formodel** version of [Protocol Test Framework](https://github.com/microsoft/protocoltestframework). You can use a released MSI file or build it from source code by **formodel** option.
+
+If the test suite does not contain Model-Based test cases, you should follow the step below before building it.
+
+* Install the **nomodel** version of [Protocol Test Framework](https://github.com/microsoft/protocoltestframework). You can use a released MSI file or build it from source code without any options.
 
 After that, take SMB test suite as an example
 ```
@@ -71,20 +75,6 @@ build.cmd
 
 After the build succeeds, the MSI file of each test suite should be generated in the folder *WindowsProtocolTestSuite\drop\TestSuites\\[TestSuiteName]\deploy\.*
 Take SMB test suite as an example, **MS-SMB-TestSuite-ServerEP.msi** should be generated in the folder *WindowsProtocolTestSuite\drop\TestSuites\MS-SMB\deploy\.*
-
-### Build all test suites
-
-Since some test suites contain Model-Based Test cases, you should follow the [steps](#BuildTestSuite) before building all of them.
-After that, change to **WindowsProtocolTestSuites** folder:
-```
-cd WindowsProtocolTestSuites
-```
-
-Run **buildall.cmd**
-
-```
-buildall.cmd
-```
 
 ## Run
 After the build succeeds, you could set up the test environment and install/configure/run the test suite according to its **User Guide**.
