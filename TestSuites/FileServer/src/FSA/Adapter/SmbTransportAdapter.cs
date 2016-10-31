@@ -212,8 +212,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             base.Dispose(disposing);
             if (this.smbClient != null)
             {
-                this.TreeDisconnect();
-                this.LogOff();
                 this.smbClient.Dispose();
                 this.smbClient = null;
             }
