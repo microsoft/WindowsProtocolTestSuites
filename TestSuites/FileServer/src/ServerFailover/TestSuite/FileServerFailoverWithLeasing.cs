@@ -138,8 +138,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 "Retry Create until succeed within timeout span");
             #endregion
 
-            // Create a timer that signals the delegate to invoke CheckBreakNotification
-            Timer timer = new Timer(CheckBreakNotification, treeIdAfterFailover, 0, Timeout.Infinite);
+            // Create a timer that signals the delegate to invoke AckLeaseBreakNotification
+            Timer timer = new Timer(AckLeaseBreakNotification, treeIdAfterFailover, 0, Timeout.Infinite);
             base.clientToAckLeaseBreak = clientAfterFailover;
 
             Smb2FunctionalClient clientTriggeringBreak = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
@@ -237,6 +237,27 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             BaseTestSite.Log.Add(
                 LogEntryKind.Debug,
                 "AfterFailover: Finish triggering a LeaseBreakNotification from a separate client.");
+        }
+
+        /// <summary>
+        /// Timer Callback to be executed to acknowledge Lease Break Notification
+        /// </summary>
+        /// <param name="obj"></param>
+        protected void AckLeaseBreakNotification(object obj)
+        {
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Check if client received lease break notification");
+            BaseTestSite.Assert.IsTrue(
+                // Wait for notification arrival
+                notificationReceived.WaitOne(TestConfig.FailoverTimeout),
+                "LeaseBreakNotification should be raised.");
+
+            uint treeId = (uint)obj;
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Client attempts to acknowledge the lease break");
+            AcknowledgeLeaseBreak(clientToAckLeaseBreak, treeId, receivedLeaseBreakNotify);
         }
         #endregion
 
