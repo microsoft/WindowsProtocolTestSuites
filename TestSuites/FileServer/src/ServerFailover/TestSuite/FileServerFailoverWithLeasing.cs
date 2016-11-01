@@ -138,7 +138,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 "Retry Create until succeed within timeout span");
             #endregion
 
-            // Create a timer that signals the delegate to invoke CheckBreakNotification
+            // Create a timer that signals the delegate to invoke AckLeaseBreakNotification
             Timer timer = new Timer(AckLeaseBreakNotification, treeIdAfterFailover, 0, Timeout.Infinite);
             base.clientToAckLeaseBreak = clientAfterFailover;
 
