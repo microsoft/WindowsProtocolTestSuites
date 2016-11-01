@@ -320,7 +320,6 @@ namespace Microsoft.Protocols.TestManager.Detector
             {
                 propertiesDic.Add("DFSC.DomainNetBIOSName", new List<string>() { string.Empty });
                 propertiesDic.Add("DFSC.DomainFQDNName", new List<string>() { string.Empty });
-                propertiesDic.Add("DFSC.SiteName", new List<string>() { string.Empty });
                 propertiesDic.Add("DFSC.DomainNamespace", new List<string>() { string.Empty });
                 propertiesDic.Add("DFSC.DCServerComputerName", new List<string>() { string.Empty });
             }
