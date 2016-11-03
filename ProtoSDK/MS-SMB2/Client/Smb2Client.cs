@@ -568,10 +568,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         {
             Smb2Packet packet = receivedPackets.WaitPacket(messageId);
 
-            if (serverDisconnected)
+            if (packet == null && serverDisconnected)
                 throw new InvalidOperationException("Underlying connection has been closed.");
 
-            if (exceptionWhenReceivingPacket != null)
+            if (packet == null && exceptionWhenReceivingPacket != null)
                 throw exceptionWhenReceivingPacket;
 
             if (packet is T)
@@ -617,10 +617,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             for (int i = 0; i < messageIdList.Count; )
             {
                 Smb2Packet packet = receivedPackets.WaitPacket(messageIdList[i]);
-                if (serverDisconnected)
+                if (packet == null && serverDisconnected)
                     throw new InvalidOperationException("Underlying connection has been closed.");
 
-                if (exceptionWhenReceivingPacket != null)
+                if (packet == null && exceptionWhenReceivingPacket != null)
                     throw exceptionWhenReceivingPacket;
 
                 if (packet is Smb2CompoundPacket)
