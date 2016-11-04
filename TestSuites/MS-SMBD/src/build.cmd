@@ -22,13 +22,17 @@ if not defined WIX (
 )
 
 if not exist "%programfiles(x86)%\Spec Explorer 2010\SpecExplorer.exe" (
-	echo Error: Spec Explorer 2010 v3.5.3146.0 should be installed
-	exit /b 1
+    if not exist "%programfiles%\Spec Explorer 2010\SpecExplorer.exe" (
+		echo Error: Spec Explorer 2010 v3.5.3146.0 should be installed
+		exit /b 1
+	)
 )
 
 if not exist "%programfiles(x86)%\Protocol Test Framework\bin\Microsoft.Protocols.TestTools.dll" (
-    echo Error: Protocol Test Framework should be installed
-	exit /b 1
+	if not exist "%programfiles%\Protocol Test Framework\bin\Microsoft.Protocols.TestTools.dll" (
+        echo Error: Protocol Test Framework should be installed
+		exit /b 1
+	)
 )
 
 if not defined vspath (
@@ -93,6 +97,6 @@ if exist "%TestSuiteRoot%drop\TestSuites\MS-SMBD" (
 
 %buildtool% "%TestSuiteRoot%TestSuites\MS-SMBD\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:Platform="x64" /p:Configuration="Release"
 
-echo ==============================================
+echo ==================================================
 echo          Build MS-SMBD test suite successfully
-echo ==============================================
+echo ==================================================

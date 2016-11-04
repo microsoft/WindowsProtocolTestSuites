@@ -22,8 +22,10 @@ if not defined WIX (
 )
 
 if not exist "%programfiles(x86)%\Protocol Test Framework\bin\Microsoft.Protocols.TestTools.dll" (
-    echo Error: Protocol Test Framework should be installed
-	exit /b 1
+	if not exist "%programfiles%\Protocol Test Framework\bin\Microsoft.Protocols.TestTools.dll" (
+        echo Error: Protocol Test Framework should be installed
+		exit /b 1
+	)
 )
 
 if not defined vspath (
@@ -78,6 +80,6 @@ if exist "%TestSuiteRoot%drop\TestSuites\BranchCache" (
 
 %buildtool% "%TestSuiteRoot%TestSuites\BranchCache\src\deploy\deploy.wixproj" /t:Clean;Rebuild
 
-echo ==============================================
+echo =====================================================
 echo          Build BranchCache test suite successfully
-echo ==============================================
+echo =====================================================
