@@ -95,6 +95,7 @@
 		* [ ExtractAndOptimizeVHDSet ](#3.6.10)
 		* [ Resize ](#3.6.11)
 		* [ SCSI Persistent Reservation ](#3.6.12)
+		* [ ChangeTracking ](#3.6.13)
 	* [ DFSC Test](#3.7)
 		* [ Domain\_referral\_to\_DC](#3.7.1)
 		* [ DC\_referral\_to\_DC](#3.7.2)
@@ -183,7 +184,7 @@ Test scenarios are categorized as below table and will be described in following
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 9          | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 38         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
-| RSVD Test                | 24         | Test for MS-RSVD                                                                                                  |
+| RSVD Test                | 25         | Test for MS-RSVD                                                                                                  |
 | DFSC Test                | 43         | Test for MS-DFSC                                                                                                  |
 
 ###<a name="3.1">SMB2 BVT
@@ -7015,6 +7016,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**ConvertVHDtoVHDSet**|1|
 |**Checkpoint**|4|
 |**ExtractAndOptimizeVHDSet**|2|
+|**ChangeTracking**|1|
 |**Resize**|1|
 
 ####<a name="3.6.1"> OpenCloseSharedVHD
@@ -7516,6 +7518,35 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||The second client sends Preempt service action of SCSI Persistent Reserve Out command by tunnel operation RSVD_TUNNEL_SCSI_OPERATION to server and expects success.|
 ||The first client closes the file.|
 ||The second client closes the file.|
+|**Cleanup**|N/A|
+
+####<a name="3.6.13"> ChangeTracking 
+
+#####<a name="3.6.13.1"> Scenario
+
+|||
+|---|---|
+|**Description**|Check if server supports change tracking.|
+|**Message Sequence**|OpenSharedVirtualDisk|
+||Start Change Tracking |
+||Make some changes|
+||Stop Change Tracking|
+||CloseSharedVirtualDisk|
+|**Cluster Involved Scenario**|YES|
+
+#####<a name="3.6.13.2"> Test Case
+
+|||
+|---|---|
+|**Test ID**|BVT_ChangeTracking|
+|**Description**|Check if server supports handling change tracking.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client opens a shared virtual disk set file successfully.|
+||Client sends the tunnel operation SVHDX_CHANGE_TRACKING_START_REQUEST to start change tracking.|
+||Client sends Write request to change the vhds file.|
+||Client sends the tunnel operation RSVD_TUNNEL_CHANGE_TRACKING_GET_PARAMETERS to get the change tracking status.|
+||Client sends the tunnel operation SVHDX_CHANGE_TRACKING_STOP_REQUEST to stop change tracking.|
+||Client closes the file.|
 |**Cleanup**|N/A|
 
 ###<a name="3.7"> DFSC Test
