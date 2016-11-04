@@ -208,6 +208,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
         ///  A GUID. The objectGUID of the config NC object.
         /// </summary>
         public Guid ConfigObjGUID;
+
+        /// <summary>
+        /// A mask for the dwFlagsExt field that contains individual bit flags. 
+        /// </summary>
+        public uint dwExtCaps;
+
     }
 
     /// <summary>
@@ -2729,7 +2735,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
     //  </remarks>
     public partial struct ATTRVAL
     {
-
         /// <summary>
         ///  The size, in bytes, of the pVal array.
         /// </summary>
@@ -2822,7 +2827,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
     {
 
         /// <summary>
-        ///  Status of the CrackNames operation for the corresponding
+        ///  Status of the crack name operation for the corresponding
         ///  element of the rpNames field in the request. The status
         ///  is one of the values from the enumeration DS_NAME_ERROR.
         /// </summary>
@@ -2856,13 +2861,13 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
     {
 
         /// <summary>
-        ///The size of decompressed data.
+        ///  The size of decompressed data.
         /// </summary>
         [CLSCompliant(false)]
         public uint cbDecompressedSize;
 
         /// <summary>
-        ///The size of compressed data.
+        ///  The size of compressed data.
         /// </summary>
         [CLSCompliant(false)]
         public uint cbCompressedSize;
@@ -5104,12 +5109,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
         ///  The USN of the DC assigned to the originating update.
         /// </summary>
         public long usnOriginating;
-
-        /*
-        /// <summary>
-        /// </summary>
-        public long usnProperty;
-        */
     }
 
     /// <summary>
@@ -7471,6 +7470,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
         /// <summary>
         ///  The link value.
         /// </summary>
+        [CLSCompliant(false)]
         public ATTRVAL Aval;
 
         /// <summary>
@@ -8506,6 +8506,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
         ///  Count of items in the rgValues array.
         /// </summary>
         [CLSCompliant(false)]
+        [PossibleValueRange("0", "1048576")]
         public uint cNumValues;
 
         /// <summary>
@@ -9110,6 +9111,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
         public DRS_MSG_GETCHGREPLY_V9 V9;
     }
 
+
     /// <summary>
     ///  The DRS_MSG_ADDENTRYREPLY_V3 structure defines the response
     ///  message received from the IDL_DRSAddEntry method.
@@ -9551,6 +9553,19 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
         /// </summary>
         [CLSCompliant(false)]
         public uint retVal;
+
+        /// <summary>
+        ///  The number of bytes in the pNgcKey array.
+        /// </summary>
+        [PossibleValueRange("0", "0xFFFF")]
+        [CLSCompliant(false)]
+        public uint cNgcKey;
+
+        /// <summary>
+        ///  The NGC key value.
+        /// </summary>
+        [Size("cNgcKey")]
+        public byte[] pNgcKey;
     }
 
 }
