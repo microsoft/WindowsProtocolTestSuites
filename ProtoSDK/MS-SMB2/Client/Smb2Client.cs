@@ -568,10 +568,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         {
             Smb2Packet packet = receivedPackets.WaitPacket(messageId);
 
-            if (serverDisconnected)
+            // Sometimes the response packet is followed by the disconnect message from server.
+            // "serverDisconnected" could be changed to true by the EventLoop() in another thread
+            // if the disconnect message is very close to the response packet.
+            // In this case, we should handle the response packet first. We should not throw the exception.
+            // On the other hand, if the response is a disconnect message (which means we cannot get a packet from the receive list), 
+            // then we should throw the exception.
+            if (packet == null && serverDisconnected)
                 throw new InvalidOperationException("Underlying connection has been closed.");
 
-            if (exceptionWhenReceivingPacket != null)
+            if (packet == null && exceptionWhenReceivingPacket != null)
                 throw exceptionWhenReceivingPacket;
 
             if (packet is T)
@@ -617,10 +623,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             for (int i = 0; i < messageIdList.Count; )
             {
                 Smb2Packet packet = receivedPackets.WaitPacket(messageIdList[i]);
-                if (serverDisconnected)
+
+                // Sometimes the response packet is followed by the disconnect message from server.
+                // "serverDisconnected" could be changed to true by the EventLoop() in another thread
+                // if the disconnect message is very close to the response packet.
+                // In this case, we should handle the response packet first. We should not throw the exception.
+                // On the other hand, if the response is a disconnect message (which means we cannot get a packet from the receive list), 
+                // then we should throw the exception.
+                if (packet == null && serverDisconnected)
                     throw new InvalidOperationException("Underlying connection has been closed.");
 
-                if (exceptionWhenReceivingPacket != null)
+                if (packet == null && exceptionWhenReceivingPacket != null)
                     throw exceptionWhenReceivingPacket;
 
                 if (packet is Smb2CompoundPacket)
