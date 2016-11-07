@@ -3,9 +3,9 @@
 
 @echo off
 
-echo ==========================================
+echo ==================================================
 echo          Start to build BranchCache test suite
-echo ==========================================
+echo ==================================================
 
 if not defined buildtool (
 	for /f %%i in ('dir /b /ad /on "%windir%\Microsoft.NET\Framework\v4*"') do (@if exist "%windir%\Microsoft.NET\Framework\%%i\msbuild".exe set buildtool=%windir%\Microsoft.NET\Framework\%%i\msbuild.exe)
