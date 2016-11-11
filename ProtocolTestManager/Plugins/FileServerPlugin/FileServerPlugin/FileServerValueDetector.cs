@@ -393,6 +393,16 @@ namespace Microsoft.Protocols.TestManager.Detector
             }
             #endregion
 
+            #region AUTH
+
+            string serviceSalt = ConstructKerberosSalt();
+            if (serviceSalt != null)
+            {
+                propertiesDic.Add("Auth.Authentication.ServiceSaltString", new List<string>() { serviceSalt });
+            }
+
+            #endregion
+
             // Add every property whose name contains "share" and does not contain "server"
             string[] cfgFiles = {"CommonTestSuite.deployment.ptfconfig",
                                  "MS-SMB2_ServerTestSuite.deployment.ptfconfig",
@@ -1305,6 +1315,22 @@ namespace Microsoft.Protocols.TestManager.Detector
             detectionInfo.targetSUT = fullPath.Substring(0, posBackSlash);
             detectionInfo.BasicShareName = fullPath.Substring(detectionInfo.targetSUT.Length + 1);
         }
+
+        // Construct key salt for SMB2 service principal according to [MS-KILE] 3.1.1.2
+        // Computer accounts: < DNS name of the realm, converted to upper case > | "host" | < computer name, converted to lower case with trailing "$" stripped off > | "." | < DNS name of the realm, converted to lower case >
+        private string ConstructKerberosSalt()
+        {
+            // If the target SUT is an IP address, which means kerberos is not supported or not configured well,
+            // do not construct salt, use the default one.
+            IPAddress address;
+            if (IPAddress.TryParse(detectionInfo.targetSUT, out address))
+            {
+                return null;
+            }
+
+            return string.Format("{0}host{1}.{2}", detectionInfo.domainName.ToUpper(), detectionInfo.targetSUT.ToLower(), detectionInfo.domainName.ToLower());
+        }
+
         #endregion
 
         #region Helper functions for Getting Detected Results
