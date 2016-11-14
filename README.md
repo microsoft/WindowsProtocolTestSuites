@@ -35,6 +35,22 @@ You can use the script in **InstallPrerequisites** folder to automatically downl
 * [Protocol Test Framework](https://github.com/microsoft/protocoltestframework). You can use a released MSI file or build it from source code.
 * [Spec Explorer](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/). It is only required for the test suites that contain Model-Based Test cases. If you want to regenerate Model-Based Test cases, you must install Visual Studio 2012, otherwise higher versions of Visual Studio are supported.
 
+Tips when using the script in **InstallPrerequisites** folder:
+
+* To run the script, open **PowerShell**, enter **InstallPrerequisites** folder, and type:
+
+```
+.\InstallPrerequisites.ps1
+```
+
+* If you meet errors about **Execution Policy**, make sure you open **PowerShell** as **Administrator**, and type:
+
+```
+Set-ExecutionPolicy RemoteSigned
+```
+
+Then rerun the script.
+
 ## Model-Based Testing
 
 Some test suites use [Model-Based Testing](https://msdn.microsoft.com/en-us/library/ee620469.aspx):
