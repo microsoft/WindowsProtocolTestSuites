@@ -225,6 +225,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                 SetCorrDespIncrement(NDR_CORR_EXTENSION_SIZE);
             }
 
+            NdrConvertIfNecessary(procFormatString, offset, procHeaderInfo.NumberOfParams, isClient);
+
             List<Int3264> parameterList = new List<Int3264>(parameters);
 
             for (int i = 0; i < procHeaderInfo.NumberOfParams; i++)
