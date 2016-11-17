@@ -44,7 +44,7 @@ cd WindowsProtocolTestSuites\InstallPrerequisites
 .\InstallPrerequisites.ps1
 ```
 
-* If you meet errors about **Execution Policy**, make sure you run **Windows PowerShell** as **Administrator**, and type:
+* If you meet errors about **Execution Policy**, make sure you run **Windows PowerShell** as **Administrator**, and type the following and enter:
 
 ```
 Set-ExecutionPolicy RemoteSigned
