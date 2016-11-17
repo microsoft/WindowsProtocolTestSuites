@@ -37,16 +37,23 @@ You can use the script in **InstallPrerequisites** folder to automatically downl
 
 Tips when using the script in **InstallPrerequisites** folder:
 
-* To run the script, open **PowerShell**, enter **InstallPrerequisites** folder, and type:
+* To run the script, open **Windows PowerShell**, and execute the commands below in the **PowerShell Window**:
 
 ```
+cd WindowsProtocolTestSuites\InstallPrerequisites
 .\InstallPrerequisites.ps1
 ```
 
-* If you meet errors about **Execution Policy**, make sure you open **PowerShell** as **Administrator**, and type:
+* If you meet errors about **Execution Policy**, make sure you run **Windows PowerShell** as **Administrator**, and type:
 
 ```
 Set-ExecutionPolicy RemoteSigned
+```
+
+You could run the command below to verify if the **Execution Policy** is correctly set:
+
+```
+Get-ExecutionPolicy
 ```
 
 Then rerun the script.
