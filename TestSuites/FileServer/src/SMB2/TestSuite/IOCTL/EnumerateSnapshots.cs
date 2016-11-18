@@ -61,15 +61,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
-        [TestCategory(TestCategories.Smb30)]
-        [TestCategory(TestCategories.FsctlEnumerateSnapshots)]
+        [TestCategory(TestCategories.FsctlEnumerateSnapShots)]
         [Description("This test case is designed to test basic functionality of FSCTL_SRV_ENUMERATE_SNAPSHOTS.")]
-        public void BVT_EnumerateSnapshots()
+        public void BVT_EnumerateSnapShots()
         {
+            #region Check Applicability
+            TestConfig.CheckIOCTL(CtlCode_Values.FSCTL_SRV_ENUMERATE_SNAPSHOTS);
+            #endregion
+
             uint treeId;
             FILEID fileId;
-
-            OpenFile(true, out treeId, out fileId);
+            OpenFile(out treeId, out fileId);
 
             SRV_SNAPSHOT_ARRAY snapShotArray;
             client.EnumerateSnapshots(
@@ -107,61 +109,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client.LogOff();
         }
 
-        [TestMethod]
-        [TestCategory(TestCategories.Bvt)]
-        [TestCategory(TestCategories.Smb30)]
-        [TestCategory(TestCategories.FsctlEnumerateSnapshots)]
-        [Description("This test case is designed to test basic functionality of FSCTL_SRV_ENUMERATE_SNAPSHOTS.")]
-        public void EnumerateSnapshot_NoPrevioursVersions()
+        private void OpenFile(out uint treeId, out FILEID fileId)
         {
-            uint treeId;
-            FILEID fileId;
-
-            OpenFile(false, out treeId, out fileId);
-
-            SRV_SNAPSHOT_ARRAY snapShotArray;
-            client.EnumerateSnapshots(
-                treeId,
-                fileId,
-                out snapShotArray,
-                checker: (Packet_Header header, IOCTL_Response response) =>
-                {
-                    BaseTestSite.Assert.AreEqual(
-                        Smb2Status.STATUS_SUCCESS,
-                        header.Status,
-                        "FSCTL_SRV_ENUMERATE_SNAPSHOTS should succeed, actually server returns {0}.", Smb2Status.GetStatusCode(header.Status));
-                });
-
-            BaseTestSite.Assert.AreEqual((uint)0, snapShotArray.NumberOfSnapShots, "NumberOfSnapShots should be zero.");
-            BaseTestSite.Assert.AreEqual((uint)0, snapShotArray.NumberOfSnapShotsReturned, "NumberOfSnapShotsReturned should be zero.");
-            BaseTestSite.Assert.AreEqual((uint)0, snapShotArray.SnapShotArraySize, "SnapShotArraySize should be zero.");
-
-            client.Close(treeId, fileId);
-            client.TreeDisconnect(treeId);
-            client.LogOff();
-        }
-
-
-        private void OpenFile(bool withPreviousVersions, out uint treeId, out FILEID fileId)
-        {
-            #region Check Applicability
-            TestConfig.CheckIOCTL(CtlCode_Values.FSCTL_SRV_ENUMERATE_SNAPSHOTS);
-            #endregion
-
-            // Parse full path to separate properties.
+            // Parse full path to separate properties. The format is "<ShareName>\<FileName>"
             string filePath = TestConfig.FilePathContainingPreviousVersions;
 
             string shareName = filePath.Substring(0, filePath.IndexOf(@"\"));
-            string fileName;
-
-            if (withPreviousVersions)
-            {
-                fileName = filePath.Substring(shareName.Length + 1);
-            }
-            else
-            {
-                fileName = string.Format("EnumerateSnapshots_{0}.txt", Guid.NewGuid());
-            }
+            string fileName = filePath.Substring(shareName.Length + 1);
 
             client.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
 
@@ -174,8 +128,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                             Smb2Status.STATUS_SUCCESS,
                             header.Status,
                             "Negotiate should succeed, actually server returns {0}.", Smb2Status.GetStatusCode(header.Status));
-
-                    TestConfig.CheckNegotiateDialect(DialectRevision.Smb30, response);
                 });
 
             client.SessionSetup(

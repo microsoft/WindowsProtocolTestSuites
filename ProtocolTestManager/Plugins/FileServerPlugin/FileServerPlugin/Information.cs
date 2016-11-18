@@ -86,6 +86,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         public DetectResult F_HandleV2_LeaseV2;
         public DetectResult F_Leasing_V1;
         public DetectResult F_Leasing_V2;
+        public DetectResult F_EnumerateSnapShots;
 
         public DetectResult SqosSupport;
         public DetectResult RsvdSupport;
@@ -161,6 +162,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             F_FileLevelTrim = DetectResult.UnSupported;
             F_ResilientHandle = DetectResult.UnSupported;
             F_ValidateNegotiateInfo = DetectResult.UnSupported;
+            F_EnumerateSnapShots = DetectResult.UnSupported;
             F_AppInstanceId = DetectResult.UnSupported;
             F_HandleV1_BatchOplock = DetectResult.UnSupported;
             F_HandleV1_LeaseV1 = DetectResult.UnSupported;
