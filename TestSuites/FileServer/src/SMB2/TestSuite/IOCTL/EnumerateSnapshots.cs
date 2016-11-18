@@ -73,8 +73,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             FILEID fileId;
             OpenFile(out treeId, out fileId);
 
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Enumerate snapshots by sending the IOCTL request: FSCTL_SRV_ENUMERATE_SNAPSHOTS.");
             SRV_SNAPSHOT_ARRAY snapShotArray;
-            client.EnumerateSnapshots(
+            client.EnumerateSnapShots(
                 treeId,
                 fileId,
                 out snapShotArray,
@@ -86,6 +89,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                         "FSCTL_SRV_ENUMERATE_SNAPSHOTS should succeed, actually server returns {0}.", Smb2Status.GetStatusCode(header.Status));
                 });
 
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Verify SRV_SNAPSHOT_ARRAY returned in response.");
             BaseTestSite.Assert.AreEqual(
                 TestConfig.NumberOfPreviousVersions, snapShotArray.NumberOfSnapShots, "NumberOfSnapShots should be {0}.", TestConfig.NumberOfPreviousVersions);
             BaseTestSite.Log.Add(LogEntryKind.Debug, "NumberOfSnapShotsReturned is {0}.", snapShotArray.NumberOfSnapShotsReturned);
@@ -104,6 +110,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     "This SnapShot is {0}. The format of each SnapShot should be \"@GMT-YYYY.MM.DD-HH.MM.SS\". ", versionArray[i]);
             }
 
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
             client.Close(treeId, fileId);
             client.TreeDisconnect(treeId);
             client.LogOff();
@@ -117,6 +124,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             string shareName = filePath.Substring(0, filePath.IndexOf(@"\"));
             string fileName = filePath.Substring(shareName.Length + 1);
 
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Open the file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE.");
             client.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
 
             client.Negotiate(
