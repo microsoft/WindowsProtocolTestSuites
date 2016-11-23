@@ -38,6 +38,7 @@
 		* [CreateClose](#3.1.23)
 		* [ Compound](#3.1.24)
 		* [ ValidateNegotiateInfo](#3.1.25)
+		* [ EnumerateSnapShots ](#3.1.26)
 	* [SMB2 Feature Test](#3.2)
 		* [AppInstanceId](#3.2.1)
 		* [AppInstanceVersion](#3.2.2)
@@ -1754,6 +1755,39 @@ This is used to test SMB2 common user scenarios.
 ||TREE_CONNECT|
 ||IOCTL (with valid FSCTL_VALIDATE_NEGOTIATE_INFO)|
 ||Expected success in IOCTL response|
+||TREE_DISCONNECT|
+||LOGOFF|
+|**Cleanup**||
+
+####<a name="3.1.26"> EnumerateSnapShots
+
+#####<a name="3.1.26.1"> Scenario
+
+|||
+|---|---|
+|**Description**|Request enumerate snapshots (previous versions) of a file|
+|**Message Sequence**|NEGOTIATE|
+||SESSION_SETUP|
+||TREE_CONNECT|
+||IOCTL: FSCTL_SRV_ENUMERATE_SNAPSHOTS|
+||Expect success or disconnection|
+||TREE_DISCONNECT (optional)|
+||LOGOFF (optional)|
+|**Cluster Involved Scenario**|**NO**|
+
+
+#####<a name="3.1.26.2"> Test Case
+
+|||
+|---|---|
+|**Test ID**|BVT_EnumerateSnapShots|
+|**Description**|Test whether server can handle IOCTL FSCTL_SRV_ENUMERATE_SNAPSHOTS.|
+|**Prerequisites**||
+|**Test Execution Steps**|NEGOTIATE|
+||SESSION_SETUP|
+||TREE_CONNECT|
+||IOCTL (with valid FSCTL_SRV_ENUMERATE_SNAPSHOTS)|
+||Expected success in IOCTL response and verify the SRV_SNAPSHOT_ARRAY in the response|
 ||TREE_DISCONNECT|
 ||LOGOFF|
 |**Cleanup**||

@@ -1196,5 +1196,142 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 return result;
             }
         }
+
+        public DetectResult CheckIOCTL_EnumerateSnapShots(string sharename, ref DetectionInfo info)
+        {
+            logWriter.AddLog(LogLevel.Information, "===== Detecting IOCTL FSCTL_SRV_ENUMERATE_SNAPSHOTS =====");
+            logWriter.AddLog(LogLevel.Information, "Share name: " + sharename);
+
+            using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
+            {
+                ulong messageId;
+                ulong sessionId;
+                uint treeId;
+                ConnectToShare(sharename, info, client, out messageId, out sessionId, out treeId);
+
+                #region Create
+
+                Smb2CreateContextResponse[] serverCreateContexts;
+                FILEID fileId;
+                CREATE_Response createResponse;
+                Packet_Header header;
+                logWriter.AddLog(LogLevel.Information, "Client opens a file");
+                client.Create(
+                    1,
+                    1,
+                    info.smb2Info.IsRequireMessageSigning ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                    messageId++,
+                    sessionId,
+                    treeId,
+                    Guid.NewGuid().ToString(),
+                    AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
+                    ShareAccess_Values.FILE_SHARE_READ | ShareAccess_Values.FILE_SHARE_WRITE | ShareAccess_Values.FILE_SHARE_DELETE,
+                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                    CreateDisposition_Values.FILE_OPEN_IF,
+                    File_Attributes.NONE,
+                    ImpersonationLevel_Values.Impersonation,
+                    SecurityFlags_Values.NONE,
+                    RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE,
+                    null,
+                    out fileId,
+                    out serverCreateContexts,
+                    out header,
+                    out createResponse);
+
+                if (header.Status != Smb2Status.STATUS_SUCCESS)
+                {
+                    LogFailedStatus("CREATE", header.Status);
+                    throw new Exception("CREATE failed with with " + Smb2Status.GetStatusCode(header.Status));
+                }
+
+                #endregion
+
+                #region IOCTL FSCTL_SRV_ENUMERATE_SNAPSHOTS
+
+                logWriter.AddLog(LogLevel.Information, "Client sends IOCTL request with FSCTL_SRV_ENUMERATE_SNAPSHOTS.");
+                IOCTL_Response ioCtlResponse;
+                byte[] buffer = new byte[1024];
+                byte[] respInput = new byte[1024];
+                byte[] respOutput = new byte[1024];
+
+                client.IoCtl(
+                    1,
+                    1,
+                    info.smb2Info.IsRequireMessageSigning ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                    messageId++,
+                    sessionId,
+                    treeId,
+                    CtlCode_Values.FSCTL_SRV_ENUMERATE_SNAPSHOTS,
+                    fileId,
+                    0,
+                    buffer,
+                    64 * 1024,
+                    IOCTL_Request_Flags_Values.SMB2_0_IOCTL_IS_FSCTL,
+                    out respInput,
+                    out respOutput,
+                    out header,
+                    out ioCtlResponse,
+                    0);
+
+                DetectResult result = DetectResult.UnSupported;
+
+                if (header.Status != Smb2Status.STATUS_SUCCESS)
+                {
+                    // FSCTL_SRV_ENUMERATE_SNAPSHOTS is not supported
+                    LogFailedStatus("FSCTL_SRV_ENUMERATE_SNAPSHOTS", header.Status);
+                    return result;
+                }
+
+                result = DetectResult.Supported;
+                logWriter.AddLog(LogLevel.Information, "FSCTL_SRV_ENUMERATE_SNAPSHOTS is supported");
+
+                #endregion
+
+
+                #region Close
+
+                CLOSE_Response closeResponse;
+                client.Close(
+                    1,
+                    1,
+                    info.smb2Info.IsRequireMessageSigning ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                    messageId++,
+                    sessionId,
+                    treeId,
+                    fileId,
+                    Flags_Values.NONE,
+                    out header,
+                    out closeResponse);
+
+                if (header.Status != Smb2Status.STATUS_SUCCESS)
+                {
+                    LogFailedStatus("CLOSE", header.Status);
+                }
+
+                #endregion
+
+                #region Tree Disconnect
+
+                TREE_DISCONNECT_Response treeDisconnectResponse;
+                client.TreeDisconnect(
+                    1,
+                    1,
+                    info.smb2Info.IsRequireMessageSigning ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                    messageId++,
+                    sessionId,
+                    treeId,
+                    out header,
+                    out treeDisconnectResponse);
+
+                if (header.Status != Smb2Status.STATUS_SUCCESS)
+                {
+                    LogFailedStatus("TREEDISCONNECT", header.Status);
+                }
+
+                #endregion
+
+                return result;
+            }
+        }
     }
 }

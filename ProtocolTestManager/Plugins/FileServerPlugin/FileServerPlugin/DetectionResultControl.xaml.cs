@@ -52,6 +52,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             AddIoctlCode(CtlCode_Values.FSCTL_SET_INTEGRITY_INFORMATION, this.info.F_IntegrityInfo[1]);
             AddIoctlCode(CtlCode_Values.FSCTL_LMR_REQUEST_RESILIENCY, this.info.F_ResilientHandle);
             AddIoctlCode(CtlCode_Values.FSCTL_VALIDATE_NEGOTIATE_INFO, this.info.F_ValidateNegotiateInfo);
+            AddIoctlCode(CtlCode_Values.FSCTL_SRV_ENUMERATE_SNAPSHOTS, this.info.F_EnumerateSnapShots);
 
             // Add/Update detected Create Contexts
             AddCreateContext(CreateContextTypeValue.SMB2_CREATE_APP_INSTANCE_ID, this.info.F_AppInstanceId);

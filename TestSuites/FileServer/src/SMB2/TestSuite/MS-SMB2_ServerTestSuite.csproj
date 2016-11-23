@@ -133,6 +133,7 @@
     <Compile Include="Compound\Compound.cs" />
     <Compile Include="CreateClose\CreateClose.cs" />
     <Compile Include="DurableHandle\SMB2DurableHandleTestBase.cs" />
+    <Compile Include="IOCTL\EnumerateSnapshots.cs" />
     <Compile Include="Negotiate\Negotiation.cs" />
     <Compile Include="DurableHandle\DurableHandle.cs" />
     <Compile Include="DurableHandle\DurableHandleV2.cs" />

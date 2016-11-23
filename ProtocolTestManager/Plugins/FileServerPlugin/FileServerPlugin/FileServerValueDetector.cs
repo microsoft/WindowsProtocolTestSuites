@@ -511,6 +511,8 @@ namespace Microsoft.Protocols.TestManager.Detector
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.FSCTL/IOCTL.FsctlLmrRequestResiliency", null, detectionInfo.F_ResilientHandle));
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.FSCTL/IOCTL.FsctlFileLevelTrim", null, detectionInfo.F_FileLevelTrim));
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.FSCTL/IOCTL.FsctlValidateNegotiateInfo", null, detectionInfo.F_ValidateNegotiateInfo));
+            selectedRuleList.Add(CreateRule("Feature.SMB2&3.FSCTL/IOCTL.FsctlEnumerateSnapShots", null, detectionInfo.F_EnumerateSnapShots));
+
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.FSCTL/IOCTL.FsctlSetGetIntegrityInformation",
                 detectionInfo.F_IntegrityInfo[0] == DetectResult.Supported || detectionInfo.F_IntegrityInfo[1] == DetectResult.Supported));
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.FSCTL/IOCTL.FsctlOffloadReadWrite",
@@ -975,6 +977,22 @@ namespace Microsoft.Protocols.TestManager.Detector
             logWriter.AddLog(LogLevel.Information, "===== Detect Ioctl Codes =====");
             detectionInfo.unsupportedIoctlCodes = new List<string>();
             detectionInfo.ResetDetectResult();
+
+            #region Detect FSCTL_SRV_ENUMERATE_SNAPSHOTS
+            try
+            {
+                detectionInfo.F_EnumerateSnapShots = detector.CheckIOCTL_EnumerateSnapShots(detectionInfo.BasicShareName, ref detectionInfo);
+            }
+            catch (Exception ex)
+            {
+                detectionInfo.F_EnumerateSnapShots = DetectResult.DetectFail;
+                detectionInfo.detectExceptions.Add(CtlCode_Values.FSCTL_SRV_ENUMERATE_SNAPSHOTS.ToString(), string.Format("Detect FSCTL_SRV_ENUMERATE_SNAPSHOTS failed: {0}", ex.Message));
+            }
+
+            //Add the unsupported IoctlCodes to the list
+            if (detectionInfo.F_EnumerateSnapShots != DetectResult.Supported)
+                detectionInfo.unsupportedIoctlCodes.Add(CtlCode_Values.FSCTL_SRV_ENUMERATE_SNAPSHOTS.ToString());
+            #endregion
 
             if (detectionInfo.CheckHigherDialect(detectionInfo.smb2Info.MaxSupportedDialectRevision, DialectRevision.Smb30))
             {

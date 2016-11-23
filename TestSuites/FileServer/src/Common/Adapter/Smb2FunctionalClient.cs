@@ -1577,6 +1577,52 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             return status;
         }
 
+        public uint EnumerateSnapshots(
+            uint treeId,
+            FILEID fileId,
+            out SRV_SNAPSHOT_ARRAY snapshotArray,
+            ResponseChecker<IOCTL_Response> checker = null)
+        {
+            uint status = 0;
+            Packet_Header header;
+            IOCTL_Response ioCtlResponse;
+            byte[] respInput;
+            byte[] respOutput;
+
+            ulong messageId = generateMessageId(sequenceWindow);
+            ushort creditCharge = generateCreditCharge(1);
+
+            // Need to consume credit from sequence window first according to TD
+            ConsumeCredit(messageId, creditCharge);
+
+            status = client.IoCtl(
+                creditCharge,
+                generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
+                testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                messageId,
+                sessionId,
+                treeId,
+                CtlCode_Values.FSCTL_SRV_ENUMERATE_SNAPSHOTS,
+                fileId,
+                0,
+                null,
+                DefaultMaxOutputResponse,
+                IOCTL_Request_Flags_Values.SMB2_0_IOCTL_IS_FSCTL,
+                out respInput,
+                out respOutput,
+                out header,
+                out ioCtlResponse,
+                sessionChannelSequence);
+
+            ProduceCredit(messageId, header);
+
+            InnerResponseChecker(checker, header, ioCtlResponse);
+
+            snapshotArray = TypeMarshal.ToStruct<SRV_SNAPSHOT_ARRAY>(respOutput);
+
+            return status;
+        }
+
         public uint SetIntegrityInfo(
             uint treeId,
             FILEID fileId,
