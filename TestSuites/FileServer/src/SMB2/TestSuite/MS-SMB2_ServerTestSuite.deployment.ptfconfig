@@ -46,7 +46,7 @@
         <Description>
           The number of the previous versions of the share.
           This is used to test FSCTL_SRV_ENUMERATE_SNAPSHOTS.
-          If no such file, leave it blank.
+          If not supported, leave it blank.
         </Description>
       </Property>      
 
