@@ -42,19 +42,11 @@
         </Description>
       </Property>
 
-      <Property name="FilePathContainingPreviousVersions" value="FileShare\ExistingFile.txt">
-        <Description>
-          The path of the file which has previous versions, the format is "[Share Name]\[File Name]\".
-          This is used to test FSCTL_SRV_ENUMERATE_SNAPSHOTS.
-          If no such file, leave it blank.
-        </Description>
-      </Property>
-
       <Property name="NumberOfPreviousVersions" value="3">
         <Description>
-          The number of the previous versions of the file.
+          The number of the previous versions of the share.
           This is used to test FSCTL_SRV_ENUMERATE_SNAPSHOTS.
-          If no such file, leave it blank.
+          If not supported, leave it blank.
         </Description>
       </Property>      
 

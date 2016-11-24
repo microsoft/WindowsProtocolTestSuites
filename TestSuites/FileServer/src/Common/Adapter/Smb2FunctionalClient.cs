@@ -1577,7 +1577,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             return status;
         }
 
-        public uint EnumerateSnapshots(
+        public uint EnumerateSnapShots(
             uint treeId,
             FILEID fileId,
             out SRV_SNAPSHOT_ARRAY snapshotArray,
