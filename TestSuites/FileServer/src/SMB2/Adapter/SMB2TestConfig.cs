@@ -56,14 +56,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter
             }
         }
 
-        public string FilePathContainingPreviousVersions
-        {
-            get
-            {
-                return GetProperty("FilePathContainingPreviousVersions");
-            }
-        }
-
         public uint NumberOfPreviousVersions
         {
             get

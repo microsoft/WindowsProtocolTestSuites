@@ -118,12 +118,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         private void OpenFile(out uint treeId, out FILEID fileId)
         {
-            // Parse full path to separate properties. The format is "<ShareName>\<FileName>"
-            string filePath = TestConfig.FilePathContainingPreviousVersions;
-
-            string shareName = filePath.Substring(0, filePath.IndexOf(@"\"));
-            string fileName = filePath.Substring(shareName.Length + 1);
-
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
                 "Open the file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE.");
@@ -146,12 +140,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 TestConfig.AccountCredential,
                 TestConfig.UseServerGssToken);
 
-            client.TreeConnect(Smb2Utility.GetUncPath(TestConfig.SutComputerName, shareName), out treeId);
+            client.TreeConnect(Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare), out treeId);
 
             Smb2CreateContextResponse[] serverCreateContexts;
             client.Create(
                 treeId,
-                fileName,
+                string.Format("BVT_EnumerateSnapShots_{0}.txt", Guid.NewGuid()),
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileId,
                 out serverCreateContexts);
