@@ -11,9 +11,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 {
     internal static class SMB2_TDIWorkaround
     {
-        internal static MessageStatus WorkaroundFsCtlSetZeroData(BufferSize bufferSize, InputBuffer_FSCTL_SET_ZERO_DATA inputBuffer, bool isIsDeletedTrue, bool isConflictDetected, MessageStatus returnedStatus, ITestSite site)
+        internal static MessageStatus WorkaroundFsCtlSetZeroData(FileSystem fileSystem, BufferSize bufferSize, InputBuffer_FSCTL_SET_ZERO_DATA inputBuffer, bool isIsDeletedTrue, bool isConflictDetected, MessageStatus returnedStatus, ITestSite site)
         {
-            if (isIsDeletedTrue &&
+            if (fileSystem != FileSystem.NTFS && fileSystem != FileSystem.REFS) 
+            {
+                returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(4335, MessageStatus.INVALID_DEVICE_REQUEST, returnedStatus, site);
+            }
+            else if (isIsDeletedTrue &&
                 bufferSize == BufferSize.BufferSizeSuccess &&
                 (inputBuffer == InputBuffer_FSCTL_SET_ZERO_DATA.BufferSuccess || inputBuffer == InputBuffer_FSCTL_SET_ZERO_DATA.FileOffsetGreatThanBeyondFinalZero) )
             {
@@ -66,11 +70,44 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 byteCount = FsaUtility.TransferExpectedResult<ByteCount>(3992, ByteCount.SizeofFILE_FULL_EA_INFORMATION, byteCount, site);
                 returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(1187, MessageStatus.SUCCESS, returnedStatus, site);
             }
-            else if (fileInfoClass == FileInfoClass.FILE_FULLEA_INFORMATION &&
-                fileSystem == FileSystem.REFS &&
+            else if (fileInfoClass == FileInfoClass.FILE_STREAM_INFORMATION &&
+                fileSystem == FileSystem.FAT32) 
+            {
+                returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(1421, MessageStatus.SUCCESS, returnedStatus, site);
+            }
+            else if (fileInfoClass == FileInfoClass.FILE_COMPRESSION_INFORMATION &&
+                fileSystem == FileSystem.FAT32)
+            {
+                if (outputBufferSize == OutputBufferSize.NotLessThan) 
+                {
+                    returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(1421, MessageStatus.SUCCESS, returnedStatus, site);
+                    byteCount = FsaUtility.TransferExpectedResult<ByteCount>(1421, ByteCount.SizeofFILE_COMPRESSION_INFORMATION, byteCount, site);
+                }
+                else if (outputBufferSize == OutputBufferSize.LessThan)
+                {
+                    returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(1489, MessageStatus.INFO_LENGTH_MISMATCH, returnedStatus, site);
+                    byteCount = FsaUtility.TransferExpectedResult<ByteCount>(1489, ByteCount.NotSet, byteCount, site);
+                }
+            }
+            else if (fileInfoClass == FileInfoClass.FILE_ATTRIBUTETAG_INFORMATION &&
+                fileSystem == FileSystem.FAT32)
+            {
+                if (outputBufferSize == OutputBufferSize.NotLessThan) 
+                {
+                    returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(1421, MessageStatus.SUCCESS, returnedStatus, site);
+                    byteCount = FsaUtility.TransferExpectedResult<ByteCount>(1421, ByteCount.SizeofFILE_ATTRIBUTE_TAG_INFORMATION, byteCount, site);
+                }
+                else if (outputBufferSize == OutputBufferSize.LessThan)
+                {
+                    returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(1445, MessageStatus.INFO_LENGTH_MISMATCH, returnedStatus, site);
+                    byteCount = FsaUtility.TransferExpectedResult<ByteCount>(1445, ByteCount.NotSet, byteCount, site);
+                }
+            }
+            else if (fileInfoClass == FileInfoClass.FILE_FULLEA_INFORMATION && 
+                fileSystem != FileSystem.NTFS &&
                 outputBufferSize == OutputBufferSize.NotLessThan)
             {
-                // REFS file system does not support FILE_FULLEA_INFORMATION, will failed with STATUS_INVALID_DEVICE_REQUEST
+                // FILE_FULL_EA_INFORMATION is only supported in NTFS, will failed with STATUS_INVALID_DEVICE_REQUEST in other file systems.
                 // Transfer the return code and byteCount to make model test cases passed.
                 byteCount = FsaUtility.TransferExpectedResult<ByteCount>(3992, ByteCount.SizeofFILE_FULL_EA_INFORMATION, byteCount, site);
                 returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(1187, MessageStatus.SUCCESS, returnedStatus, site);
@@ -142,12 +179,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 isBytesReturnedSet = FsaUtility.TransferExpectedResult<bool>(3966, true, isBytesReturnedSet, site);
                 isOutputBufferSizeReturn = FsaUtility.TransferExpectedResult<bool>(3966, true, isOutputBufferSizeReturn, site);
             }
+            else if (fileSystem != FileSystem.NTFS &&
+                requestType == FsControlRequestType.SET_ZERO_ON_DEALLOCATION)
+            {
+                returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(4721, MessageStatus.INVALID_DEVICE_REQUEST, returnedStatus, site);
+                isBytesReturnedSet = FsaUtility.TransferExpectedResult<bool>(4721, false, isBytesReturnedSet, site);
+                isOutputBufferSizeReturn = FsaUtility.TransferExpectedResult<bool>(4721, false, isOutputBufferSizeReturn, site);
+            }
+            else if (fileSystem == FileSystem.FAT32 &&
+                requestType == FsControlRequestType.FSCTL_FILESYSTEM_GET_STATISTICS)
+            {
+                returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(5803, MessageStatus.INVALID_DEVICE_REQUEST, returnedStatus, site);
+                isBytesReturnedSet = FsaUtility.TransferExpectedResult<bool>(5803, false, isBytesReturnedSet, site);
+                isOutputBufferSizeReturn = FsaUtility.TransferExpectedResult<bool>(5803, false, isOutputBufferSizeReturn, site);
+            }
             return returnedStatus;
         }
 
-        internal static MessageStatus WorkaroundFsctlSisCopy(BufferSize bufferSize, InputBufferFSCTL_SIS_COPYFILE inputBuffer, bool isCOPYFILE_SIS_LINKTrue, bool isIsEncryptedTrue, MessageStatus returnedStatus, ITestSite site)
+        internal static MessageStatus WorkaroundFsctlSisCopy(FileSystem fileSystem, BufferSize bufferSize, InputBufferFSCTL_SIS_COPYFILE inputBuffer, bool isCOPYFILE_SIS_LINKTrue, bool isIsEncryptedTrue, MessageStatus returnedStatus, ITestSite site)
         {
-            if (bufferSize == BufferSize.BufferSizeSuccess && 
+            if (fileSystem == FileSystem.FAT32) 
+            {
+                returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(4732, MessageStatus.INVALID_DEVICE_REQUEST, returnedStatus, site);
+            }
+            else if (bufferSize == BufferSize.BufferSizeSuccess && 
                 inputBuffer == InputBufferFSCTL_SIS_COPYFILE.Initial && 
                 isCOPYFILE_SIS_LINKTrue == false && 
                 isIsEncryptedTrue == false)
@@ -189,7 +244,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
         internal static MessageStatus WorkaroundStreamRename(FileSystem fileSystem, InputBufferFileName NewStreamName, InputBufferFileName StreamTypeName, bool ReplaceIfExists, MessageStatus returnedStatus, ITestSite site)
         {
-            if (fileSystem == FileSystem.REFS)
+            if (fileSystem == FileSystem.REFS || fileSystem == FileSystem.FAT32)
             {
                 returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(3146, MessageStatus.NOT_SUPPORTED, returnedStatus, site);
             }
@@ -261,9 +316,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             return isBytesReturnedSet;
         }
 
-        internal static MessageStatus WorkaroundFsCtlSetReparsePoint(ReparseTag inputReparseTag, BufferSize bufferSize, bool isReparseGUIDNotEqual, bool isFileReparseTagNotEqualInputBufferReparseTag, MessageStatus returnedStatus, ITestSite site)
+        internal static MessageStatus WorkaroundFsCtlSetReparsePoint(FileSystem fileSystem, ReparseTag inputReparseTag, BufferSize bufferSize, bool isReparseGUIDNotEqual, bool isFileReparseTagNotEqualInputBufferReparseTag, MessageStatus returnedStatus, ITestSite site)
         {
-            if ((inputReparseTag == ReparseTag.SYMLINK))
+            if (fileSystem != FileSystem.NTFS && fileSystem != FileSystem.REFS) 
+            {
+                returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(4331, MessageStatus.INVALID_DEVICE_REQUEST, returnedStatus, site);
+            }
+            else if ((inputReparseTag == ReparseTag.SYMLINK))
             {
                 returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(1231, MessageStatus.ACCESS_DENIED, returnedStatus, site);
             }
@@ -361,14 +420,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             bool streamFound, bool isSymbolicLink, FileType openFileType, FileNameStatus fileNameStatus,
             CreateOptions existingOpenModeCreateOption, ShareAccess existOpenShareModeShareAccess,
             FileAccess existOpenDesiredAccess, CreateOptions createOption, CreateDisposition createDisposition,
-            StreamTypeNameToOPen streamTypeNameToOPen, FileAttribute fileAttribute,
+            StreamTypeNameToOpen streamTypeNameToOPen, FileAttribute fileAttribute,
             FileAttribute desiredFileAttribute, MessageStatus returnedStatus, ITestSite site)
         {
             if (shareAccess == ShareAccess.FILE_SHARE_READ && desiredAccess == FileAccess.FILE_ADD_SUBDIRECTORY
                 && !streamFound && !isSymbolicLink && openFileType == FileType.DataFile && fileNameStatus == FileNameStatus.Normal
                 && existingOpenModeCreateOption == CreateOptions.NON_DIRECTORY_FILE && existOpenShareModeShareAccess == ShareAccess.FILE_SHARE_READ
                 && existOpenDesiredAccess == FileAccess.FILE_LIST_DIRECTORY && createOption == CreateOptions.NO_INTERMEDIATE_BUFFERING
-                && createDisposition == CreateDisposition.OPEN_IF && streamTypeNameToOPen == StreamTypeNameToOPen.NULL
+                && createDisposition == CreateDisposition.OPEN_IF && streamTypeNameToOPen == StreamTypeNameToOpen.NULL
                 && fileAttribute == FileAttribute.NORMAL && desiredFileAttribute == FileAttribute.NORMAL)
             {
                 returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(376, MessageStatus.INVALID_PARAMETER, returnedStatus, site);
@@ -488,7 +547,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 EmptyPattern = false;
             }
 
-            if (fileSystem == FileSystem.REFS)
+            if (fileSystem != FileSystem.NTFS)
             {
                 returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(830, MessageStatus.INVALID_DEVICE_REQUEST, returnedStatus, site);
             }
@@ -523,9 +582,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             return returnedStatus;
         }
 
-        internal static MessageStatus WorkaroundFsCtlDeleteReparsePoint(ReparseTag reparseTag, bool reparseGuidEqualOpenGuid, MessageStatus returnedStatus, ITestSite site)
+        internal static MessageStatus WorkaroundFsCtlDeleteReparsePoint(FileSystem fileSystem, ReparseTag reparseTag, bool reparseGuidEqualOpenGuid, MessageStatus returnedStatus, ITestSite site)
         {
-            if (reparseTag == ReparseTag.EMPTY && reparseGuidEqualOpenGuid)
+            if (fileSystem == FileSystem.FAT32) {
+                returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(4999, MessageStatus.INVALID_DEVICE_REQUEST, returnedStatus, site);
+            }
+            else if (reparseTag == ReparseTag.EMPTY && reparseGuidEqualOpenGuid)
             {
                 returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(5001, MessageStatus.SUCCESS, returnedStatus, site);
             }
@@ -588,9 +650,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             return returnedStatus;
         }
 
-        internal static MessageStatus WorkaroundSetSecurityInfo(SecurityInformation securityInformation, OwnerSid ownerSidEnum, MessageStatus returnedStatus, ITestSite site)
+        internal static MessageStatus WorkaroundSetSecurityInfo(FileSystem fileSystem, SecurityInformation securityInformation, OwnerSid ownerSidEnum, MessageStatus returnedStatus, ITestSite site)
         {
-            if (((securityInformation == SecurityInformation.OWNER_SECURITY_INFORMATION || securityInformation == SecurityInformation.GROUP_SECURITY_INFORMATION || securityInformation == SecurityInformation.LABEL_SECURITY_INFORMATION)) || (securityInformation == SecurityInformation.DACL_SECURITY_INFORMATION) || (securityInformation == SecurityInformation.SACL_SECURITY_INFORMATION))
+            if (fileSystem == FileSystem.FAT32) 
+            {
+                returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(3232, MessageStatus.INVALID_DEVICE_REQUEST, returnedStatus, site);
+            }
+            else if (((securityInformation == SecurityInformation.OWNER_SECURITY_INFORMATION || securityInformation == SecurityInformation.GROUP_SECURITY_INFORMATION || securityInformation == SecurityInformation.LABEL_SECURITY_INFORMATION)) || (securityInformation == SecurityInformation.DACL_SECURITY_INFORMATION) || (securityInformation == SecurityInformation.SACL_SECURITY_INFORMATION))
             {
                 returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(3239, MessageStatus.ACCESS_DENIED, returnedStatus, site);
             }
@@ -610,9 +676,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             return returnedStatus;
         }
 
-        internal static MessageStatus WorkaroundFsCtlSetEncrypion(bool isIsCompressedTrue, EncryptionOperation encryptionOpteration, BufferSize bufferSize, MessageStatus returnedStatus, ITestSite site)
+        internal static MessageStatus WorkaroundFsCtlSetEncrypion(FileSystem fileSystem, bool isIsCompressedTrue, EncryptionOperation encryptionOpteration, BufferSize bufferSize, MessageStatus returnedStatus, ITestSite site)
         {
-            if (bufferSize == BufferSize.LessThanENCRYPTION_BUFFER)
+            if (fileSystem == FileSystem.FAT32) 
+            {
+                returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(3891, MessageStatus.INVALID_DEVICE_REQUEST, returnedStatus, site);
+            }
+            else if (bufferSize == BufferSize.LessThanENCRYPTION_BUFFER)
             {
                 returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(3899, MessageStatus.BUFFER_TOO_SMALL, returnedStatus, site);
             }

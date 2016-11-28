@@ -133,6 +133,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             string feature = fileSystemAttribute.ToString();
             string attribute = string.Format("FileSystemAttributes.{0}", fileSystemAttribute.ToString());
 
+            if (this.fsaAdapter.FileSystem == FileSystem.FAT32 &&
+                fileSystemAttribute == FileSystemAttributes_Values.FILE_SUPPORTS_ENCRYPTION) 
+            {
+                isSupported = true;
+            }
+
             if (isSupported)
             {
                 string comment = string.Format("{0} is supported and {1} MUST be set.", feature, attribute);
