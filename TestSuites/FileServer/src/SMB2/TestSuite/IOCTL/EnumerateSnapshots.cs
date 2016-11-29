@@ -75,11 +75,35 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Enumerate snapshots by sending the IOCTL request: FSCTL_SRV_ENUMERATE_SNAPSHOTS.");
+                "Enumerate snapshots by sending the first IOCTL request: FSCTL_SRV_ENUMERATE_SNAPSHOTS, with MaxOutputResponse set to 16.");
             SRV_SNAPSHOT_ARRAY snapShotArray;
             client.EnumerateSnapShots(
                 treeId,
                 fileId,
+                16,
+                out snapShotArray,
+                checker: (Packet_Header header, IOCTL_Response response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        Smb2Status.STATUS_SUCCESS,
+                        header.Status,
+                        "FSCTL_SRV_ENUMERATE_SNAPSHOTS should succeed, actually server returns {0}.", Smb2Status.GetStatusCode(header.Status));
+                });
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Verify SRV_SNAPSHOT_ARRAY returned in response.");
+            BaseTestSite.Assert.AreEqual(
+                TestConfig.NumberOfPreviousVersions, snapShotArray.NumberOfSnapShots, "NumberOfSnapShots should be {0}.", TestConfig.NumberOfPreviousVersions);
+            BaseTestSite.Assert.AreEqual(
+                (uint)0, snapShotArray.NumberOfSnapShotsReturned, "NumberOfSnapShotsReturned should be 0.");
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Enumerate snapshots by sending the second IOCTL request: FSCTL_SRV_ENUMERATE_SNAPSHOTS, with MaxOutputResponse set to 65536.");
+            client.EnumerateSnapShots(
+                treeId,
+                fileId,
+                Smb2FunctionalClient.DefaultMaxOutputResponse,
                 out snapShotArray,
                 checker: (Packet_Header header, IOCTL_Response response) =>
                 {
@@ -95,6 +119,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             BaseTestSite.Assert.AreEqual(
                 TestConfig.NumberOfPreviousVersions, snapShotArray.NumberOfSnapShots, "NumberOfSnapShots should be {0}.", TestConfig.NumberOfPreviousVersions);
             BaseTestSite.Log.Add(LogEntryKind.Debug, "NumberOfSnapShotsReturned is {0}.", snapShotArray.NumberOfSnapShotsReturned);
+
 
             string[] versionArray = System.Text.Encoding.Unicode.GetString(snapShotArray.SnapShots).Split('\0');
             BaseTestSite.Assert.AreEqual(
