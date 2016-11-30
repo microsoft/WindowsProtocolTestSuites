@@ -16,6 +16,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
     {
         #region Variables
         private Smb2FunctionalClient client;
+        private const uint SizeOfEmptySnapShotArray = 16;
         #endregion
 
         #region Test Initialize and Cleanup
@@ -80,7 +81,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client.EnumerateSnapShots(
                 treeId,
                 fileId,
-                16,
+                SizeOfEmptySnapShotArray,
                 out snapShotArray,
                 checker: (Packet_Header header, IOCTL_Response response) =>
                 {
