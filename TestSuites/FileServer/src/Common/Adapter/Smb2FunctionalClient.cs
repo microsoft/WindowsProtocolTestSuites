@@ -1580,6 +1580,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         public uint EnumerateSnapShots(
             uint treeId,
             FILEID fileId,
+            uint maxOutputResponse,
             out SRV_SNAPSHOT_ARRAY snapshotArray,
             ResponseChecker<IOCTL_Response> checker = null)
         {
@@ -1606,7 +1607,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 fileId,
                 0,
                 null,
-                DefaultMaxOutputResponse,
+                maxOutputResponse,
                 IOCTL_Request_Flags_Values.SMB2_0_IOCTL_IS_FSCTL,
                 out respInput,
                 out respOutput,
