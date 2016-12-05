@@ -5341,7 +5341,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  by an @GMT token, which are separated by NULL characters
         ///  and terminated by two NULL characters.
         /// </summary>
-        [Size("SnapShotArraySize")]
+        [Size("NumberOfSnapShotsReturned == 0 ? 0 : SnapShotArraySize")]
         public byte[] SnapShots;
     }
 
