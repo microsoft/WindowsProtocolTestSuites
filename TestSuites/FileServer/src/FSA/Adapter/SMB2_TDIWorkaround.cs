@@ -584,28 +584,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
         internal static MessageStatus WorkaroundFsCtlDeleteReparsePoint(FileSystem fileSystem, ReparseTag reparseTag, bool reparseGuidEqualOpenGuid, MessageStatus returnedStatus, ITestSite site)
         {
-            if (fileSystem == FileSystem.FAT32) {
-                returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(4999, MessageStatus.INVALID_DEVICE_REQUEST, returnedStatus, site);
-            }
-            else if (reparseTag == ReparseTag.EMPTY && reparseGuidEqualOpenGuid)
+            if (fileSystem != FileSystem.FAT32)
             {
-                returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(5001, MessageStatus.SUCCESS, returnedStatus, site);
-            }
-            else if (reparseTag == ReparseTag.IO_REPARSE_TAG_RESERVED_ONE || reparseTag == ReparseTag.IO_REPARSE_TAG_RESERVED_ZERO)
-            {
-                returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(2437, MessageStatus.IO_REPARSE_TAG_INVALID, returnedStatus, site);
-            }
-            else if ((reparseTag == ReparseTag.NON_MICROSOFT_RANGE_TAG) && (!reparseGuidEqualOpenGuid))
-            {
-                returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(990, MessageStatus.REPARSE_ATTRIBUTE_CONFLICT, returnedStatus, site);
-            }
-            else if (reparseTag == ReparseTag.NON_MICROSOFT_RANGE_TAG && reparseGuidEqualOpenGuid)
-            {
-                returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(1257, MessageStatus.IO_REPARSE_DATA_INVALID, returnedStatus, site);
-            }
-            else if (reparseTag == ReparseTag.NotEqualOpenFileReparseTag)
-            {
-                returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(989, MessageStatus.IO_REPARSE_TAG_MISMATCH, returnedStatus, site);
+                if (reparseTag == ReparseTag.EMPTY && reparseGuidEqualOpenGuid)
+                {
+                    returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(5001, MessageStatus.SUCCESS, returnedStatus, site);
+                }
+                else if (reparseTag == ReparseTag.IO_REPARSE_TAG_RESERVED_ONE || reparseTag == ReparseTag.IO_REPARSE_TAG_RESERVED_ZERO)
+                {
+                    returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(2437, MessageStatus.IO_REPARSE_TAG_INVALID, returnedStatus, site);
+                }
+                else if ((reparseTag == ReparseTag.NON_MICROSOFT_RANGE_TAG) && (!reparseGuidEqualOpenGuid))
+                {
+                    returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(990, MessageStatus.REPARSE_ATTRIBUTE_CONFLICT, returnedStatus, site);
+                }
+                else if (reparseTag == ReparseTag.NON_MICROSOFT_RANGE_TAG && reparseGuidEqualOpenGuid)
+                {
+                    returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(1257, MessageStatus.IO_REPARSE_DATA_INVALID, returnedStatus, site);
+                }
+                else if (reparseTag == ReparseTag.NotEqualOpenFileReparseTag)
+                {
+                    returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(989, MessageStatus.IO_REPARSE_TAG_MISMATCH, returnedStatus, site);
+                }
             }
             return returnedStatus;
         }

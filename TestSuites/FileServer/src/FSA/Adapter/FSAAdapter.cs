@@ -5199,11 +5199,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
         /// <summary>
         /// To make sure whether implement object functionality
+        /// Conclude the file system functionality by the type of the file system.
         /// </summary>
         /// <param name="isImplemented">True: if Object is functionality</param>
         public void GetObjectFunctionality(out bool isImplemented)
         {
-            isImplemented = bool.Parse(testConfig.GetProperty("IsObjectFunctionality"));
+            isImplemented = (fileSystem == Adapter.FileSystem.FAT32) ? false : true;
         }
 
         /// <summary>
