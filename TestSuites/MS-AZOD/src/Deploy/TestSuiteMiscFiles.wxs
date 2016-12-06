@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?define SYMBOLS_DIR=$(env.TestSuiteRoot)\drop\TestSuites\MS-AZOD\Bin?>
+<?define PROTOSDK_DROP_DIR=$(env.TestSuiteRoot)\drop\ProtoSDK\Bin?>
+<?define TESTSUITE_SRC_DIR=$(env.TestSuiteRoot)\TestSuites\MS-AZOD?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+
+    <!-- Files to be installed to test suite. -->
+    <!-- Source code and files in drop folder are automatically installed. -->
+    <ComponentGroup Id="TESTSUITE_MISC_FILES"> 
+      <ComponentRef Id="MS_AZOD_ODAdapter.pdb" />
+      <ComponentRef Id="MS_AZOD_ODTestSuite.pdb" />
+      <ComponentRef Id="Microsoft_Protocols_TestTools_MessageAnalyzer.dll" />
+      <ComponentRef Id="ODLocalTestRun.testsettings" />
+    </ComponentGroup>
+    
+    <!-- Files to be installed to SUT. -->
+    <!-- Scripts in drop folder are automatically installed. -->
+    <ComponentGroup Id="TESTSUITE_SUT_FILES">
+     
+    </ComponentGroup>
+
+
+    <!-- Files to be installed to domain. -->
+    <!-- Scripts in drop folder are automatically installed. -->
+    <ComponentGroup Id="TESTSUITE_DOMAIN_FILES">
+      <!--
+      <ComponentRef Id="FILENAME"/>
+      -->
+    </ComponentGroup>
+
+
+    <!-- This is installed directory on target machine: TestSuite\docs -->
+    <!-- There are some other Directory Ids pre-defined: TESTSUITE_BIN_DIR, TESTSUITE_SOURCE_DIR, TESTSUITE_SCRIPTS_DIR. --> 
+    <DirectoryRef Id="TESTSUITE_BIN_DIR">
+      <Component Id="ODLocalTestRun.testsettings" Guid="{E04D9F08-3B3F-4E55-ACF2-5CEF6B6104F1}">
+        <File Id="ODLocalTestRun.testrunconfig"
+              Source="$(var.SYMBOLS_DIR)\ODLocalTestRun.testrunconfig"/>
+      </Component>
+      <!-- TODO: Install pdb files to bin directory. -->
+      <Component Id="MS_AZOD_ODAdapter.pdb" Guid="{B5C6FDE6-87E7-4E64-80B7-CC0F52FEC54C}">
+        <File Id="MS_AZOD_ODAdapter.pdb"
+              Source="$(var.SYMBOLS_DIR)\MS-AZOD_ODAdapter.pdb" />
+      </Component>
+
+      <Component Id="MS_AZOD_ODTestSuite.pdb" Guid="{E9E49524-4503-40D5-B26D-2948A6F7714A}">
+        <File Id="MS_AZOD_ODTestSuite.pdb"
+              Source="$(var.SYMBOLS_DIR)\MS-AZOD_ODTestSuite.pdb" />
+      </Component>
+
+      <Component Id="Microsoft_Protocols_TestTools_MessageAnalyzer.dll" Guid="{CEB29581-3303-4E05-86BC-799B928141BF}">
+        <File Id="Microsoft_Protocols_TestTools_MessageAnalyzer.dll"
+              Source="$(var.SYMBOLS_DIR)\Microsoft.Protocols.TestTools.MessageAnalyzer.dll" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>

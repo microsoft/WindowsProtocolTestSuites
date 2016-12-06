@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="TESTSUITE_BIN_DIR">
+            <Component Id="cmp36CD3178FE4034DC4613B79871F0674A" Guid="{DEAFD57B-452C-4E01-BFD5-FF9731A3ABE7}">
+                <File Id="filC6AF1463238686643F2C2A306C66F5C4" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\Microsoft.Protocols.TestTools.MessageAnalyzer.dll" />
+            </Component>
+            <Component Id="cmp3FC8FB33ADA153BDE651F07DAC6C794F" Guid="{F6E27928-70DF-4176-AFAC-9BAA749AA092}">
+                <File Id="fil1A079CA59300AEB2B5A3A33CEEA4D366" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\Microsoft.Protocols.TestTools.MessageAnalyzer.pdb" />
+            </Component>
+            <Component Id="cmpA0CBCE318F37879B4163AEA7E74D9B68" Guid="{684AE4A1-6EA7-4FFC-8E5A-9BC007A98F0F}">
+                <File Id="fil39924E4D5BCA03468842A3FCB4A76475" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\MS-AZOD_ODAdapter.dll" />
+            </Component>
+            <Component Id="cmp1402BDFB30D901C2ABE4C5A637534853" Guid="{84D7C5EC-92FF-4735-BCCA-6C9D0AE89FDE}">
+                <File Id="filC4DC9A806310C70CA3F3638FCD2A7EDE" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\MS-AZOD_ODAdapter.pdb" />
+            </Component>
+            <Component Id="cmpF17B1E539787BDB1649CF957C6F6CDD3" Guid="{ED02A5F1-8346-4E41-A3B5-CF3E55412E10}">
+                <File Id="fil3D0F70510C7AAF8A3A7870277877D468" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\MS-AZOD_ODTestSuite.dll" />
+            </Component>
+            <Component Id="cmp6AB94F2D50461B18CACCCCF11C485805" Guid="{350A4B77-4925-4A64-AC19-366F21EA6299}">
+                <File Id="filD86FB0347C5555903CFE83421506AED5" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\MS-AZOD_ODTestSuite.pdb" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="BIN_FILES">
+            <ComponentRef Id="cmp36CD3178FE4034DC4613B79871F0674A" />
+            <ComponentRef Id="cmp3FC8FB33ADA153BDE651F07DAC6C794F" />
+            <ComponentRef Id="cmpA0CBCE318F37879B4163AEA7E74D9B68" />
+            <ComponentRef Id="cmp1402BDFB30D901C2ABE4C5A637534853" />
+            <ComponentRef Id="cmpF17B1E539787BDB1649CF957C6F6CDD3" />
+            <ComponentRef Id="cmp6AB94F2D50461B18CACCCCF11C485805" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>
