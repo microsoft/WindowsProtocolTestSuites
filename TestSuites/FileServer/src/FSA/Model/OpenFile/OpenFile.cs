@@ -27,7 +27,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
         /// <param name="streamFoundType">Indicate if the stream is found or not.</param>
         /// <param name="symbolicLinkType">Indicate if it is symbolic link or not.</param>
         /// <param name="openFileType">Indicate OpenFfileType</param>
-        /// <param name="streamTypeNameToOPen">Indicate StreamTypeNameToOPen </param>
+        /// <param name="streamTypeNameToOpen">Indicate StreamTypeNameToOpen </param>
         /// <param name="fileNameStatus">Indicate fileName status</param>
         /// <returns>An NTSTATUS code that specifies the result.</returns>
         /// Disable warning CA1502, because this action confuses with the actual model design if modify it.
@@ -42,7 +42,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
             FileAttribute fileAttribute,
             StreamFoundType streamFoundType,
             SymbolicLinkType symbolicLinkType,
-            StreamTypeNameToOPen streamTypeNameToOPen,
+            StreamTypeNameToOpen streamTypeNameToOPen,
             FileType openFileType,
             FileNameStatus fileNameStatus)
         {
@@ -209,7 +209,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
             }
 
             //If PathName contains a trailing backslash and CreateOptions.FILE_NON_DIRECTORY_FILE is true
-            if (fileNameStatus == FileNameStatus.BlacklashName &&
+            if (fileNameStatus == FileNameStatus.BackslashName &&
                 createOption == CreateOptions.NON_DIRECTORY_FILE && 
                 desiredAccess == FileAccess.FILE_READ_DATA)
             {
@@ -463,12 +463,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
                 gfileTypeToOpen = FileType.DataFile;
             }
             //Else if StreamTypeNameToOpen is "$INDEX_ALLOCATION"
-            else if (streamTypeNameToOPen == StreamTypeNameToOPen.INDEX_ALLOCATION)
+            else if (streamTypeNameToOPen == StreamTypeNameToOpen.INDEX_ALLOCATION)
             {
                 gfileTypeToOpen = FileType.DirectoryFile;
             }
             //Else if StreamTypeNameToOpen is "$DATA"
-            else if (streamTypeNameToOPen == StreamTypeNameToOPen.DATA)
+            else if (streamTypeNameToOPen == StreamTypeNameToOpen.DATA)
             {
                 gfileTypeToOpen = FileType.DataFile;
             }
@@ -516,7 +516,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
             //If FileTypeToOpen is DataFile and StreamNameToOpen is empty and Open.File 
             //is not NULL and Open.File.FileType is DirectoryFile
             if (gfileTypeToOpen == FileType.DataFile &&
-                streamTypeNameToOPen == StreamTypeNameToOPen.NULL &&
+                streamTypeNameToOPen == StreamTypeNameToOpen.NULL &&
                 fileNameStatus == FileNameStatus.OpenFileNotNull &&
                 openFileType == FileType.DirectoryFile)
             {
@@ -543,7 +543,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
         /// <param name="desiredAccess">The desired access, as specified in [MS-SMB2] section 2.2.13.1.</param>
         /// <param name="createOption">A bitmask of options for the open, as specified in [MS-SMB2] section 2.2.13.</param>
         /// <param name="existingOpenModeCreateOption">CreateOption of the existing open</param>
-        /// <param name="streamTypeNameToOPen">The stream type name to open used in 3.1.5.1</param>
+        /// <param name="streamTypeNameToOpen">The stream type name to open used in 3.1.5.1</param>
         /// <param name="shareAccess">A bitmask indicate sharing access for the open file, as specified in [MS-SMB2] section 2.2.13</param>
         /// <param name="existOpenShareModeShareAccess">ShareAccess of the existing open</param>
         /// <returns>An NTSTATUS code that specifies the result of the access check.</returns>
@@ -558,7 +558,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
             FileAccess desiredAccess,
             CreateOptions createOption,
             CreateOptions existingOpenModeCreateOption,
-            StreamTypeNameToOPen streamTypeNameToOPen,
+            StreamTypeNameToOpen streamTypeNameToOPen,
             ShareAccess shareAccess,
             ShareAccess existOpenShareModeShareAccess)
         {
@@ -692,7 +692,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
 
             //If Open.GrantedAccess.DELETE is true and Open.Stream.StreamType is DirectoryStream
             if ((gOpenGrantedAccess & FileAccess.DELETE) != 0 &&
-                (streamTypeNameToOPen == StreamTypeNameToOPen.INDEX_ALLOCATION))
+                (streamTypeNameToOPen == StreamTypeNameToOpen.INDEX_ALLOCATION))
             {
                 //For each ExistingOpen in Open.File.OpenList:
                 //If ExistingOpen.SharingMode.FILE_SHARE_DELETE is FALSE
@@ -851,7 +851,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
         /// <param name="existOpenDesiredAccess">The parameter in 3.1.5.1.2.2</param>
         /// <param name="createOption">A bitmask of options for the open, as specified in [MS-SMB2] section 2.2.13.</param>
         /// <param name="createDisposition">The desired disposition for the open, as specified in [MS-SMB2] section 2.2.13.</param>
-        /// <param name="streamTypeNameToOPen">StreamTypeNameToOpen</param>
+        /// <param name="streamTypeNameToOpen">StreamTypeNameToOpen</param>
         /// <param name="fileAttribute">A bitmask of file attributes for the open, as specified in [MS-SMB2] section 2.2.13.</param>
         /// <param name="desiredFileAttribute">A bitmask of desired file attributes for the open, as specified in [MS-SMB2] section 2.2.13.</param>
         /// <returns>An NTSTATUS code that specifies the result.</returns>
@@ -870,7 +870,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
             FileAccess existOpenDesiredAccess,
             CreateOptions createOption,
             CreateDisposition createDisposition,
-            StreamTypeNameToOPen streamTypeNameToOPen,
+            StreamTypeNameToOpen streamTypeNameToOPen,
             FileAttribute fileAttribute,
             FileAttribute desiredFileAttribute
             )

@@ -2434,7 +2434,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <summary>
         /// If set, PathName contains a trailing backslash.
         /// </summary>
-        BlacklashName,
+        BackslashName,
 
         /// <summary>
         /// If set, PathName is valid as specified in [MS-FSCC] section 2.1.5
@@ -2492,7 +2492,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
     /// <summary>
     /// StreamTypeNameToOpen used in 3.1.5.1
     /// </summary>
-    public enum StreamTypeNameToOPen
+    public enum StreamTypeNameToOpen
     {
         /// <summary>
         /// "$INDEX_ALLOCATION"

@@ -377,7 +377,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// </summary>
         /// <param name="desiredFileAttribute">Desired file attribute</param>
         /// <param name="createOption">Specifies the options to be applied when creating or opening the file</param>
-        /// <param name="streamTypeNameToOPen">The name of stream type to open</param>
+        /// <param name="streamTypeNameToOpen">The name of stream type to open</param>
         /// <param name="desiredAccess">A bitmask indicating desired access for the open, as specified in [MS-SMB2] section 2.2.13.1.</param>
         /// <param name="shareAccess">A bitmask indicating sharing access for the open, as specified in [MS-SMB2] section 2.2.13.</param>
         /// <param name="createDisposition">The desired disposition for the open, as specified in [MS-SMB2] section 2.2.13.</param>
@@ -391,7 +391,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         public MessageStatus CreateFile(
             FileAttribute desiredFileAttribute,
             CreateOptions createOption,
-            StreamTypeNameToOPen streamTypeNameToOPen,
+            StreamTypeNameToOpen streamTypeNameToOpen,
             FileAccess desiredAccess,
             ShareAccess shareAccess,
             CreateDisposition createDisposition,
@@ -402,8 +402,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             )
         {
             gOpenMode = createOption;
-            gStreamType = (streamTypeNameToOPen == StreamTypeNameToOPen.INDEX_ALLOCATION ? StreamType.DirectoryStream : StreamType.DataStream);
-
+            gStreamType = (streamTypeNameToOpen == StreamTypeNameToOpen.INDEX_ALLOCATION ? StreamType.DirectoryStream : StreamType.DataStream);
 
             uint createAction = 0;
             string randomFile = this.ComposeRandomFileName();
@@ -439,11 +438,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 randomFile = testConfig.GetProperty("ExistingFile");
             }
 
-            //Construct a path name with trailing Blacklash.
-            else if ((fileNameStatus == FileNameStatus.BlacklashName) &&
+            //Construct a path name with trailing backslash.
+            else if ((fileNameStatus == FileNameStatus.BackslashName) &&
                (createOption & CreateOptions.NON_DIRECTORY_FILE) != 0)
             {
-                randomFile = randomFile + @"\\\\\\" + "::$DATA";
+                if (fileSystem == Adapter.FileSystem.NTFS || fileSystem == Adapter.FileSystem.REFS)
+                {
+                    randomFile = randomFile + @"\\\\\\" + "::$DATA";
+                }
+                else
+                {
+                    // For file systems other than NTFS or ReFS, the constructed path name with trailing backslash should not contain "::$DATA"
+                    randomFile = randomFile + @"\\\\\\";
+                }
             }
 
             //Construct a data file for an directory operation to 
@@ -468,7 +475,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             //Construct a directory file for an data file operation to 
             //trigger the error code FILE_IS_A_DIRECTORY.
             else if ((createOption == CreateOptions.NON_DIRECTORY_FILE) &&
-                (streamTypeNameToOPen == StreamTypeNameToOPen.NULL) &&
+                (streamTypeNameToOpen == StreamTypeNameToOpen.NULL) &&
                 (fileNameStatus != FileNameStatus.FileNameNull) && (openFileType == FileType.DirectoryFile))
             {
                 randomFile = testConfig.GetProperty("ExistingFolder");
@@ -479,11 +486,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             else if (createDisposition == CreateDisposition.CREATE
                 && (createOption & CreateOptions.RANDOM_ACCESS) != 0)
             {
-                if (streamTypeNameToOPen == StreamTypeNameToOPen.DATA)
+                if (streamTypeNameToOpen == StreamTypeNameToOpen.DATA)
                 {
                     randomFile = randomFile + "::$DATA";
                 }
-                else if (streamTypeNameToOPen == StreamTypeNameToOPen.INDEX_ALLOCATION)
+                else if (streamTypeNameToOpen == StreamTypeNameToOpen.INDEX_ALLOCATION)
                 {
                     randomFile = randomFile + "::$INDEX_ALLOCATION";
                 }
@@ -514,29 +521,42 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 randomFile = fileName + ":" + streamName + ":$INDEX_ALLOCATION";
             }
 
-            //Construct path name with streamTypeNameToOPen
-            if (streamTypeNameToOPen != StreamTypeNameToOPen.NULL &&
+            //Construct path name with streamTypeNameToOpen
+            if (streamTypeNameToOpen != StreamTypeNameToOpen.NULL &&
                 symbolicLinkType != SymbolicLinkType.IsSymbolicLink)
             {
-                if (streamTypeNameToOPen == StreamTypeNameToOPen.DATA
+                if (streamTypeNameToOpen == StreamTypeNameToOpen.DATA
                     && !randomFile.Contains("$DATA"))
                 {
                     randomFile = randomFile + "::$DATA";
                 }
-                else if (streamTypeNameToOPen == StreamTypeNameToOPen.INDEX_ALLOCATION
+                else if (streamTypeNameToOpen == StreamTypeNameToOpen.INDEX_ALLOCATION
                     && !randomFile.Contains("$INDEX_ALLOCATION"))
-                {
-                    randomFile = randomFile + "::$INDEX_ALLOCATION";
+                {   
+                    if ((desiredFileAttribute & FileAttribute.READONLY) == FileAttribute.READONLY &&
+                        (createOption & CreateOptions.DELETE_ON_CLOSE) == CreateOptions.DELETE_ON_CLOSE &&
+                        (fileSystem != Adapter.FileSystem.NTFS && fileSystem != Adapter.FileSystem.REFS))
+                    {
+                        /*
+                         * To cover the below requirements in a file system other than NTFS and ReFS, remove complex suffix:
+                         * Section 2.1.5.1.1 Create a New File
+                         *     If DesiredFileAttributes.FILE_ATTRIBUTE_READONLY and CreateOptions.FILE_DELETE_ON_CLOSE are both set, 
+                         * the operation MUST be failed with STATUS_CANNOT_DELETE.
+                         * =>
+                         *     If "::$INDEX_ALLOCATION" is added to the file name, it will return unexpected error codes in FAT32 that
+                         * does not recognize the "::$INDEX_ALLOCATION" complex suffix.
+                         */
+                    }
+                    else
+                    {
+                        randomFile = randomFile + "::$INDEX_ALLOCATION";
+                    }
                 }
-                else if (streamTypeNameToOPen == StreamTypeNameToOPen.Other
+                else if (streamTypeNameToOpen == StreamTypeNameToOpen.Other
                     && !randomFile.Contains("$TEST"))
                 {
                     randomFile = randomFile + "::$TEST";
                 }
-            }
-
-            if ((fileSystem == FileSystem.FAT32) && (randomFile.Contains("::$DATA") || randomFile.Contains("::$INDEX_ALLOCATION"))) {
-                Site.Assert.Inconclusive("Stream is not supported in a FAT32 file system.");
             }
 
             MessageStatus returnedStatus = transAdapter.CreateFile(
@@ -556,8 +576,193 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             }
             else
             {
-                returnedStatus = SMB_TDIWorkaround.WorkaroundCreateFile(fileNameStatus, createOption, desiredAccess, openFileType, desiredFileAttribute, returnedStatus, site);
+                returnedStatus = SMB_TDIWorkaround.WorkaroundCreateFile(fileSystem, fileNameStatus, createOption, desiredAccess, openFileType, desiredFileAttribute, returnedStatus, site);
             }
+
+            /*
+             * Work around for test cases only designed for NTFS and ReFS:
+             * Make assertion in the adapter, then convert the return code according to the test case.
+             */
+            if (this.fileSystem != Adapter.FileSystem.NTFS && this.fileSystem != Adapter.FileSystem.REFS)
+            {
+                if ((createOption & CreateOptions.DIRECTORY_FILE) == CreateOptions.DIRECTORY_FILE &&
+                (createOption & CreateOptions.NON_DIRECTORY_FILE) == CreateOptions.NON_DIRECTORY_FILE)
+                {
+                    /*
+                     * To cover the below requirements in a file system other than NTFS and ReFS, remove complex suffix:
+                     * Section 2.1.5.1 
+                     * Phase 1 - Parameter Validation
+                     *     If CreateOptions.FILE_DIRECTORY_FILE && CreateOptions.FILE_NON_DIRECTORY_FILE, 
+                     * the operation MUST be failed with STATUS_INVALID_PARAMETER.
+                     * =>
+                     *     Return the status immediately.
+                     * 
+                     * Test Cases:    
+                     *     CreateFileTestCaseS12
+                     */
+                    return returnedStatus;
+                }                
+                else if (openFileType == FileType.DataFile && symbolicLinkType == SymbolicLinkType.IsSymbolicLink)
+                {
+                    /*
+                     * To cover the below requirements in a file system other than NTFS and ReFS that does not support Symbolic Link:
+                     * Section 2.1.5.1
+                     * Phase 6 -- Location of file:
+                     *     If Link.File.IsSymbolicLink is TRUE, the operation MUST be failed with Status set to STATUS_STOPPED_ON_SYMLINK
+                     * and ReparsePointData set to Link.File.ReparsePointData.
+                     * Section 2.1.5.1.2
+                     *     Else if FileTypeToOpen is DataFile:
+                     *     If CreateDisposition is FILE_CREATE, then the operation MUST be failed with STATUS_OBJECT_NAME_COLLISION.
+                     * =>
+                     * In NTFS and ReFS, these cases are expecting STATUS_STOPPED_ON_SYMLINK, while in other file system that does
+                     * not support symbolic link will consider this action as creating a file that is already existed. The return 
+                     * will be STATUS_OBJECT_NAME_COLLISION instead.
+                     * 
+                     * Test Cases:
+                     *     CreateFileTestCaseS42
+                     */
+                    site.Log.Add(LogEntryKind.Checkpoint, @"Section 2.1.5.1.2
+                                                            Else if FileTypeToOpen is DataFile:
+                                                            If CreateDisposition is FILE_CREATE, then the operation MUST be failed with STATUS_OBJECT_NAME_COLLISION.");
+                    site.Assert.AreEqual<MessageStatus>(MessageStatus.OBJECT_NAME_COLLISION, returnedStatus, "return of CreateFile");
+
+                    // Make a fake return
+                    return MessageStatus.STOPPED_ON_SYMLINK;
+                }
+                else if (randomFile.Contains("$STANDARD_INFORMATION")
+                        || randomFile.Contains("$ATTRIBUTE_LIST")
+                        || randomFile.Contains("$FILE_NAME")
+                        || randomFile.Contains("$OBJECT_ID")
+                        || randomFile.Contains("$SECURITY_DESCRIPTOR")
+                        || randomFile.Contains("$VOLUME_NAME")
+                        || randomFile.Contains("$VOLUME_INFORMATION")
+                        || randomFile.Contains("$DATA")
+                        || randomFile.Contains("$INDEX_ROOT")
+                        || randomFile.Contains("$INDEX_ALLOCATION")
+                        || randomFile.Contains("$BITMAP")
+                        || randomFile.Contains("$REPARSE_POINT")
+                        || randomFile.Contains("$EA_INFORMATION")
+                        || randomFile.Contains("$EA")
+                        || randomFile.Contains("$LOGGED_UTILITY_STREAM"))
+                {
+                    if (fileNameStatus == FileNameStatus.StreamTypeNameIsINDEX_ALLOCATION)
+                    {
+                        return MessageStatus.INVALID_PARAMETER;
+                    }
+                    else if (createDisposition == CreateDisposition.OPEN
+                        || createDisposition == CreateDisposition.OVERWRITE
+                        || createDisposition == CreateDisposition.OPEN_IF)
+                    {
+                        /*
+                         * To cover the below requirements in a file system other than NTFS and ReFS that does not support stream type names:
+                         * Section 2.1.5.1
+                         * Phase 6 -- Location of file:
+                         * If StreamTypeNameToOpen is non-empty and StreamTypeNameToOpen is not equal to one of the stream type names
+                         * recognized by the object store<42> (using case-insensitive string comparisons), the operation MUST be failed
+                         * with STATUS_OBJECT_NAME_INVALID.
+                         * 
+                         * Section 5
+                         * <42> Section 2.1.5.1:  NTFS and ReFS recognize the following stream type names:
+                         *      "$STANDARD_INFORMATION"
+                         *      "$ATTRIBUTE_LIST"
+                         *      "$FILE_NAME"
+                         *      "$OBJECT_ID"
+                         *      "$SECURITY_DESCRIPTOR"
+                         *      "$VOLUME_NAME"
+                         *      "$VOLUME_INFORMATION"
+                         *      "$DATA"
+                         *      "$INDEX_ROOT"
+                         *      "$INDEX_ALLOCATION"
+                         *      "$BITMAP"
+                         *      "$REPARSE_POINT"
+                         *      "$EA_INFORMATION"
+                         *      "$EA"
+                         *      "$LOGGED_UTILITY_STREAM"
+                         * Other Windows file systems do not recognize any stream type names.
+                         * =>
+                         * In NTFS and ReFS, these cases are expecting STATUS_OBJECT_NAME_NOT_FOUND, while in other file system that does not
+                         * support the the stream type names will return STATUS_OBJECT_NAME_INVALID.
+                         * 
+                         * Test Cases:
+                         *     CreateFileTestCaseS38
+                         *     CreateFileTestCaseS40
+                         *     LockAndUnlockTestCaseS2
+                         */
+                        site.Log.Add(LogEntryKind.Checkpoint, @"Section 2.1.5.1
+                                                                Phase 6 -- Location of file:
+                                                                If StreamTypeNameToOpen is non-empty and StreamTypeNameToOpen is not equal to one of the stream type names
+                                                                recognized by the object store<42> (using case-insensitive string comparisons), the operation MUST be failed
+                                                                with STATUS_OBJECT_NAME_INVALID.");
+                        site.Assert.AreEqual<MessageStatus>(MessageStatus.OBJECT_NAME_INVALID, returnedStatus, "return of CreateFile");
+
+                        // Remove the complex name suffixes and try to create the file again.
+                        randomFile = randomFile.Remove(randomFile.IndexOf(":"));
+                        returnedStatus = transAdapter.CreateFile(
+                            randomFile,
+                            (uint)desiredFileAttribute,
+                            (uint)desiredAccess,
+                            (uint)shareAccess,
+                            (uint)createOption,
+                            (uint)createDisposition,
+                            out createAction);
+                        return returnedStatus;
+                    }
+                }
+                else if (randomFile.Contains(":$I30")
+                    || randomFile.Contains("::$INDEX_ALLOCATION")
+                    || randomFile.Contains(":$I30:$INDEX_ALLOCATION")
+                    || randomFile.Contains("::$BITMAP")
+                    || randomFile.Contains(":$I30:$BITMAP")
+                    || randomFile.Contains("::$ATTRIBUTE_LIST")
+                    || randomFile.Contains("::$REPARSE_POINT"))
+                {
+                    /*
+                     * To cover the below requirements in a file system other than NTFS and ReFS that does not complex name suffixes:
+                     * Section 2.1.5.1
+                     * Phase 6 -- Location of file:
+                     * If ComplexNameSuffix is non-empty and ComplexNameSuffix is not equal to one of the complex name suffixes
+                     * recognized by the object store<41> (using case-insensitive string comparisons), the operation MUST be 
+                     * failed with STATUS_OBJECT_NAME_INVALID.
+                     * 
+                     * Section 5
+                     * <41> Section 2.1.5.1:  NTFS and ReFS recognize the following complex name suffixes:
+                     *      ":$I30"
+                     *      "::$INDEX_ALLOCATION"
+                     *      ":$I30:$INDEX_ALLOCATION"
+                     *      "::$BITMAP"
+                     *      ":$I30:$BITMAP"
+                     *      "::$ATTRIBUTE_LIST"
+                     *      "::$REPARSE_POINT"
+                     * Other Windows file systems do not recognize any complex name suffixes.
+                     * =>
+                     * In NTFS and ReFS, these cases are expecting STATUS_SUCCESS, while in other file system that does not
+                     * support the complex name suffixes will return STATUS_OBJECT_NAME_INVALID.
+                     * 
+                     * Test Cases:
+                     *     ChangeNotificationTestCaseS0
+                     *     ChangeNotificationTestCaseS2
+                     */
+                    site.Log.Add(LogEntryKind.Checkpoint, @"Section 2.1.5.1
+                                                            Phase 6 -- Location of file:
+                                                            If ComplexNameSuffix is non-empty and ComplexNameSuffix is not equal to one of the complex name suffixes
+                                                            recognized by the object store<41> (using case-insensitive string comparisons), the operation MUST be 
+                                                            failed with STATUS_OBJECT_NAME_INVALID.");
+                    site.Assert.AreEqual<MessageStatus>(MessageStatus.OBJECT_NAME_INVALID, returnedStatus, "return of CreateFile");
+
+                    // Remove the complex name suffixes and try to create the file again.
+                    randomFile = randomFile.Remove(randomFile.IndexOf(":"));
+                    returnedStatus = transAdapter.CreateFile(
+                        randomFile,
+                        (uint)desiredFileAttribute,
+                        (uint)desiredAccess,
+                        (uint)shareAccess,
+                        (uint)createOption,
+                        (uint)createDisposition,
+                        out createAction);
+                    return returnedStatus;
+                }
+            }
+
             return returnedStatus;
         }
 
@@ -615,7 +820,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     returnedStatus = CreateFile(
                         FileAttribute.NORMAL,
                         CreateOptions.NON_DIRECTORY_FILE,
-                        openStream ? StreamTypeNameToOPen.DATA : StreamTypeNameToOPen.NULL,
+                        openStream ? StreamTypeNameToOpen.DATA : StreamTypeNameToOpen.NULL,
                         FileAccess.GENERIC_ALL,
                         ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE,
                         CreateDisposition.OPEN_IF,
@@ -629,7 +834,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     returnedStatus = CreateFile(
                         FileAttribute.NORMAL,
                         CreateOptions.DIRECTORY_FILE,
-                        openStream ? StreamTypeNameToOPen.INDEX_ALLOCATION : StreamTypeNameToOPen.NULL,
+                        openStream ? StreamTypeNameToOpen.INDEX_ALLOCATION : StreamTypeNameToOpen.NULL,
                         FileAccess.GENERIC_ALL,
                         ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE,
                         CreateDisposition.OPEN_IF,
@@ -661,7 +866,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <param name="existOpenDesiredAccess">A bitmask indicating desired access for the open, as specified in [MS-SMB2] section 2.2.13.1.</param>
         /// <param name="createOption">create options</param>
         /// <param name="createDisposition">The desired disposition for the open, as specified in [MS-SMB2] section 2.2.13.</param>
-        /// <param name="streamTypeNameToOPen">the name of stream type to open</param>
+        /// <param name="streamTypeNameToOpen">the name of stream type to open</param>
         /// <param name="fileAttribute">A bitmask of file attributes for the open, as specified in [MS-SMB2] section 2.2.13.</param>
         /// <param name="desiredFileAttribute">A bitmask of desired file attributes for the open, as specified in [MS-SMB2] section 2.2.13.</param>
         /// <returns>An NTSTATUS code that specifies the result.</returns>
@@ -677,7 +882,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             FileAccess existOpenDesiredAccess,
             CreateOptions createOption,
             CreateDisposition createDisposition,
-            StreamTypeNameToOPen streamTypeNameToOPen,
+            StreamTypeNameToOpen streamTypeNameToOpen,
             FileAttribute fileAttribute,
             FileAttribute desiredFileAttribute)
         {
@@ -691,7 +896,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             switch (fileNameStatus)
             {
-                case FileNameStatus.BlacklashName:
+                case FileNameStatus.BackslashName:
                     randomFile = randomFile + @"/";
                     break;
 
@@ -715,17 +920,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     break;
             }
 
-            switch (streamTypeNameToOPen)
+            switch (streamTypeNameToOpen)
             {
-                case StreamTypeNameToOPen.DATA:
+                case StreamTypeNameToOpen.DATA:
                     randomFile = randomFile + "::$DATA";
                     break;
 
-                case StreamTypeNameToOPen.INDEX_ALLOCATION:
+                case StreamTypeNameToOpen.INDEX_ALLOCATION:
                     randomFile = randomFile + "::$INDEX_ALLOCATION";
                     break;
 
-                case StreamTypeNameToOPen.Other:
+                case StreamTypeNameToOpen.Other:
                     randomFile = randomFile + "::$OTHER";
                     break;
 
@@ -744,6 +949,47 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     (uint)createOption,
                     (uint)createDisposition,
                     out createAction);
+
+                /*
+                 * Work around for test cases only designed for NTFS and ReFS:
+                 * Make assertion in the adapter, then convert the return code according to the test case.
+                 */
+                if (this.fileSystem != Adapter.FileSystem.NTFS && this.fileSystem != Adapter.FileSystem.REFS)
+                {   
+                    if ((createDisposition & CreateDisposition.OPEN_IF) == CreateDisposition.OPEN_IF)
+                    {
+                        /*
+                         * To cover the below requirements in a file system other than NTFS and ReFS that does not support Symbolic Link:
+                         * Section 2.1.5.1
+                         * Phase 6 -- Location of file:
+                         * If Link.File.IsSymbolicLink is TRUE, the operation MUST be failed with Status set to STATUS_STOPPED_ON_SYMLINK
+                         * and ReparsePointData set to Link.File.ReparsePointData.                         * 
+                         * Section 2.1.5.1.2
+                         * Else if FileTypeToOpen is DataFile:
+                         * If Stream was found:
+                         * If CreateDisposition is FILE_OPEN or FILE_OPEN_IF:
+                         * ...
+                         * Nothing is violated, return STATUS_SUCCESS.
+                         * =>
+                         * In NTFS and ReFS, these cases are expecting STATUS_STOPPED_ON_SYMLINK, while in other file system that does
+                         * not support symbolic link will consider this action as creating a file that is already existed, and if 
+                         * the CreateDisposition==FILE_OPEN_IF, the return will be STATUS_SUCCESS instead.
+                         * 
+                         * Test Cases:
+                         *     OpenFileTestCaseS40
+                         */
+                        site.Log.Add(LogEntryKind.Checkpoint, @"Section 2.1.5.1.2
+                                                                Else if FileTypeToOpen is DataFile:
+                                                                If Stream was found:
+                                                                If CreateDisposition is FILE_OPEN or FILE_OPEN_IF:
+                                                                ...
+                                                                Nothing is violated, return STATUS_SUCCESS.");
+                        site.Assert.AreEqual<MessageStatus>(MessageStatus.SUCCESS, returnedStatus, "return of CreateFile");
+
+                        // Make a fake return
+                        return MessageStatus.STOPPED_ON_SYMLINK;
+                    }
+                }
 
                 return returnedStatus;
             }
@@ -780,12 +1026,82 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
             {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundOpenExistingFile(shareAccess, desiredAccess, streamFound, isSymbolicLink, openFileType, fileNameStatus, existingOpenModeCreateOption, existOpenShareModeShareAccess, existOpenDesiredAccess, createOption, createDisposition, streamTypeNameToOPen, fileAttribute, desiredFileAttribute, returnedStatus, site);
+                returnedStatus = SMB2_TDIWorkaround.WorkaroundOpenExistingFile(shareAccess, desiredAccess, streamFound, isSymbolicLink, openFileType, fileNameStatus, existingOpenModeCreateOption, existOpenShareModeShareAccess, existOpenDesiredAccess, createOption, createDisposition, streamTypeNameToOpen, fileAttribute, desiredFileAttribute, returnedStatus, site);
             }
             else
             {
-                returnedStatus = SMB_TDIWorkaround.WorkaroundOpenExistingFile(shareAccess, desiredAccess, streamFound, isSymbolicLink, openFileType, fileNameStatus, existingOpenModeCreateOption, existOpenShareModeShareAccess, existOpenDesiredAccess, createOption, createDisposition, streamTypeNameToOPen, fileAttribute, desiredFileAttribute, returnedStatus, site);
+                returnedStatus = SMB_TDIWorkaround.WorkaroundOpenExistingFile(shareAccess, desiredAccess, streamFound, isSymbolicLink, openFileType, fileNameStatus, existingOpenModeCreateOption, existOpenShareModeShareAccess, existOpenDesiredAccess, createOption, createDisposition, streamTypeNameToOpen, fileAttribute, desiredFileAttribute, returnedStatus, site);
             }
+
+            /*
+             * Work around for test cases only designed for NTFS and ReFS:
+             * Make assertion in the adapter, then convert the return code according to the test case.
+             */
+            if (this.fileSystem != Adapter.FileSystem.NTFS && this.fileSystem != Adapter.FileSystem.REFS)
+            {   
+                if (randomFile.Contains("$STANDARD_INFORMATION")
+                        || randomFile.Contains("$ATTRIBUTE_LIST")
+                        || randomFile.Contains("$FILE_NAME")
+                        || randomFile.Contains("$OBJECT_ID")
+                        || randomFile.Contains("$SECURITY_DESCRIPTOR")
+                        || randomFile.Contains("$VOLUME_NAME")
+                        || randomFile.Contains("$VOLUME_INFORMATION")
+                        || randomFile.Contains("$DATA")
+                        || randomFile.Contains("$INDEX_ROOT")
+                        || randomFile.Contains("$INDEX_ALLOCATION")
+                        || randomFile.Contains("$BITMAP")
+                        || randomFile.Contains("$REPARSE_POINT")
+                        || randomFile.Contains("$EA_INFORMATION")
+                        || randomFile.Contains("$EA")
+                        || randomFile.Contains("$LOGGED_UTILITY_STREAM"))
+                {
+                    if (fileNameStatus == FileNameStatus.StreamTypeNameIsINDEX_ALLOCATION)
+                    {
+                        /*
+                         * To cover the below requirements in a file system other than NTFS and ReFS that does not support stream type names:
+                         * Section 2.1.5.1
+                         * Phase 7 -- Type of file to open:
+                         * If StreamTypeNameToOpen is "$INDEX_ALLOCATION" and StreamNameToOpen has a value other than an empty stream or "$I30", 
+                         * the operation MUST be failed with STATUS_INVALID_PARAMETER.
+                         * 
+                         * Section 5
+                         * <42> Section 2.1.5.1:  NTFS and ReFS recognize the following stream type names:
+                         *      "$STANDARD_INFORMATION"
+                         *      "$ATTRIBUTE_LIST"
+                         *      "$FILE_NAME"
+                         *      "$OBJECT_ID"
+                         *      "$SECURITY_DESCRIPTOR"
+                         *      "$VOLUME_NAME"
+                         *      "$VOLUME_INFORMATION"
+                         *      "$DATA"
+                         *      "$INDEX_ROOT"
+                         *      "$INDEX_ALLOCATION"
+                         *      "$BITMAP"
+                         *      "$REPARSE_POINT"
+                         *      "$EA_INFORMATION"
+                         *      "$EA"
+                         *      "$LOGGED_UTILITY_STREAM"
+                         * Other Windows file systems do not recognize any stream type names.
+                         * =>
+                         * In NTFS and ReFS, these cases are expecting STATUS_OBJECT_NAME_NOT_FOUND, while in other file system that does not
+                         * support the the stream type names will return STATUS_OBJECT_NAME_INVALID.
+                         * 
+                         * Test Cases:
+                         *     OpenFileTestCaseS34
+                         */
+                        site.Log.Add(LogEntryKind.Checkpoint, @"Section 2.1.5.1
+                                                                Phase 6 -- Location of file:
+                                                                If StreamTypeNameToOpen is non-empty and StreamTypeNameToOpen is not equal to one of the stream type names
+                                                                recognized by the object store<42> (using case-insensitive string comparisons), the operation MUST be failed
+                                                                with STATUS_OBJECT_NAME_INVALID.");
+                        site.Assert.AreEqual<MessageStatus>(MessageStatus.OBJECT_NAME_INVALID, returnedStatus, "return of CreateFile");
+
+                        // Make a fake return
+                        return MessageStatus.INVALID_PARAMETER;
+                    }
+                }
+            }
+
             return returnedStatus;
         }
         #endregion
@@ -805,7 +1121,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <param name="isCaseInsensitive">True: if case is insensitive</param>
         /// <param name="isLinkIsDeleted">True: if Links is deleted</param>
         /// <param name="isSymbolicLink">True: if Link.File.IsSymbolicLink is TRUE</param>
-        /// <param name="streamTypeNameToOPen">the name of stream type to open</param>
+        /// <param name="streamTypeNameToOpen">the name of stream type to open</param>
         /// <param name="openFileType">Open.File.FileType</param>
         /// <param name="fileNameStatus">File name status</param>
         /// <returns>An NTSTATUS code that specifies the result.</returns>
@@ -820,7 +1136,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             bool isCaseInsensitive,
             bool isLinkIsDeleted,
             bool isSymbolicLink,
-            StreamTypeNameToOPen streamTypeNameToOPen,
+            StreamTypeNameToOpen streamTypeNameToOPen,
             FileType openFileType,
             FileNameStatus fileNameStatus
             )
@@ -1530,12 +1846,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
             {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundFsCtlDeleteReparsePoint(reparseTag, reparseGuidEqualOpenGuid, returnedStatus, site);
+                returnedStatus = SMB2_TDIWorkaround.WorkaroundFsCtlDeleteReparsePoint(fileSystem, reparseTag, reparseGuidEqualOpenGuid, returnedStatus, site);
             }
             else
             {
-                returnedStatus = SMB_TDIWorkaround.WorkAroundFsCtlDeleteReparsePoint(reparseTag, reparseGuidEqualOpenGuid, returnedStatus, site);
+                returnedStatus = SMB_TDIWorkaround.WorkAroundFsCtlDeleteReparsePoint(fileSystem, reparseTag, reparseGuidEqualOpenGuid, returnedStatus, site);
             }
+
             return returnedStatus;
         }
         #endregion
@@ -1597,6 +1914,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             else
             {
                 isBytesReturnedSet = false;
+
+                if (fileSystem == Adapter.FileSystem.FAT32 &&
+                    MessageStatus.INVALID_DEVICE_REQUEST == returnedStatus)
+                {
+                    return returnedStatus;
+                }
             }
 
             //  If Open.File.Volume.QuotaInformation is empty
@@ -1905,6 +2228,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     isBytesReturnedSet = SMB_TDIWorkaround.WorkAroundFsCtlForEasyRequestBool(this.fileSystem, requestType, bufferSize, isVolumeReadonly, fileVolUsnAct, isBytesReturnedSet, ref isOutputBufferSizeReturn, returnedStatus, site);
                 }
             }
+
             return returnedStatus;
         }
 
@@ -1963,6 +2287,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             else
             {
                 isBytesReturnedSet = false;
+
+                if (MessageStatus.INVALID_DEVICE_REQUEST == returnedStatus)
+                {
+                    return returnedStatus;
+                }
             }
 
             if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
@@ -1974,11 +2303,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 isBytesReturnedSet = SMB_TDIWorkaround.WorkAroundFsCtlGetReparsePoint(bufferSize, openFileReparseTag, isBytesReturnedSet, site);
                 returnedStatus = SMB_TDIWorkaround.WorkAroundFsCtlGetReparsePointStatus(bufferSize, openFileReparseTag, returnedStatus, site);
             }
+
             return returnedStatus;
         }
 
         /// <summary>
-        /// Implementation of FSCTL_GET_RETRIEVAL_POINTERS 
+        /// Implementation of FSCTL_GET_REPARSE_POINT
         /// </summary>
         /// <param name="outputBufferSize">The maximum number of bytes to return in OutputBuffer.</param>
         /// <param name="bytesReturned">The number of bytes returned to the caller.</param>
@@ -2309,6 +2639,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             else
             {
                 isBytesReturnedSet = false;
+
+                if (MessageStatus.INVALID_DEVICE_REQUEST == returnedStatus)
+                {
+                    return returnedStatus;
+                }
             }
 
             if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
@@ -2396,6 +2731,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             else
             {
                 isBytesReturnedSet = false;
+
+                if (MessageStatus.INVALID_DEVICE_REQUEST == returnedStatus)
+                {
+                    return returnedStatus;
+                }
             }
 
             if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
@@ -2533,6 +2873,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 inbuffer,
                 out outbuffer);
 
+            if ((fileSystem == Adapter.FileSystem.NTFS ||
+                fileSystem == Adapter.FileSystem.REFS) &&
+                returnedStatus == MessageStatus.INVALID_DEVICE_REQUEST)
+            {
+                if (bufferSize == BufferSize.BufferSizeSuccess)
+                {
+                    returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(1176, MessageStatus.SUCCESS, returnedStatus, site);
+                }
+                else if (bufferSize == BufferSize.LessThanOneBytes)
+                {
+                    returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(1178, MessageStatus.INVALID_PARAMETER, returnedStatus, site);
+                }
+            }
+
             return returnedStatus;
         }
 
@@ -2586,12 +2940,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
             {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundFsCtlSetEncrypion(isIsCompressedTrue, encryptionOpteration, bufferSize, returnedStatus, site);
+                returnedStatus = SMB2_TDIWorkaround.WorkaroundFsCtlSetEncrypion(fileSystem, isIsCompressedTrue, encryptionOpteration, bufferSize, returnedStatus, site);
             }
             else
             {
-                returnedStatus = SMB_TDIWorkaround.WorkAroundFsCtlSetEncryption(isIsCompressedTrue, encryptionOpteration, bufferSize, returnedStatus, site);
+                returnedStatus = SMB_TDIWorkaround.WorkAroundFsCtlSetEncryption(fileSystem, isIsCompressedTrue, encryptionOpteration, bufferSize, returnedStatus, site);
             }
+
             return returnedStatus;
         }
 
@@ -2776,12 +3131,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
             {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundFsCtlSetReparsePoint(inputReparseTag, bufferSize, isReparseGUIDNotEqual, isFileReparseTagNotEqualInputBufferReparseTag, returnedStatus, site);
+                returnedStatus = SMB2_TDIWorkaround.WorkaroundFsCtlSetReparsePoint(fileSystem, inputReparseTag, bufferSize, isReparseGUIDNotEqual, isFileReparseTagNotEqualInputBufferReparseTag, returnedStatus, site);
             }
             else
             {
-                returnedStatus = SMB_TDIWorkaround.WorkAroundFsCtlSetReparsePoint(inputReparseTag, isReparseGUIDNotEqual, isFileReparseTagNotEqualInputBufferReparseTag, returnedStatus, site);
+                returnedStatus = SMB_TDIWorkaround.WorkAroundFsCtlSetReparsePoint(fileSystem, inputReparseTag, isReparseGUIDNotEqual, isFileReparseTagNotEqualInputBufferReparseTag, returnedStatus, site);
             }
+
             return returnedStatus;
         }
 
@@ -2933,12 +3289,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             }
             if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
             {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundFsCtlSetZeroData(bufferSize, inputBuffer, isIsDeletedTrue, isConflictDetected, returnedStatus, this.site);
+                returnedStatus = SMB2_TDIWorkaround.WorkaroundFsCtlSetZeroData(fileSystem, bufferSize, inputBuffer, isIsDeletedTrue, isConflictDetected, returnedStatus, this.site);
             }
             else
             {
-                returnedStatus = SMB_TDIWorkaround.WorkAroundFsCtlSetZeroData(bufferSize, inputBuffer, isIsDeletedTrue, isConflictDetected, returnedStatus, site);
+                returnedStatus = SMB_TDIWorkaround.WorkAroundFsCtlSetZeroData(fileSystem, bufferSize, inputBuffer, isIsDeletedTrue, isConflictDetected, returnedStatus, site);
             }
+            
             return returnedStatus;
         }
 
@@ -3034,12 +3391,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
             {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundFsctlSisCopy(bufferSize, inputBuffer, isCOPYFILE_SIS_LINKTrue, isIsEncryptedTrue, returnedStatus, site);
+                returnedStatus = SMB2_TDIWorkaround.WorkaroundFsctlSisCopy(fileSystem, bufferSize, inputBuffer, isCOPYFILE_SIS_LINKTrue, isIsEncryptedTrue, returnedStatus, site);
             }
             else
             {
-                returnedStatus = SMB_TDIWorkaround.WorkAroundFsctlSisCopyFile(bufferSize, inputBuffer, isCOPYFILE_SIS_LINKTrue, isIsEncryptedTrue, returnedStatus, site);
+                returnedStatus = SMB_TDIWorkaround.WorkAroundFsctlSisCopyFile(fileSystem, bufferSize, inputBuffer, isCOPYFILE_SIS_LINKTrue, isIsEncryptedTrue, returnedStatus, site);
             }
+
             return returnedStatus;
         }
 
@@ -3236,6 +3594,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             {
                 returnedStatus = SMB_TDIWorkaround.WorkAroundQueryFileInfoPart1(this.fileSystem, fileInfoClass, outputBufferSize, ref byteCount, ref outputBuffer, returnedStatus, site);
             }
+
             return returnedStatus;
         }
 
@@ -3705,6 +4064,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             isReturnStatus = true;
             this.VerifyServerSetFsInfo(isReturnStatus);
 
+            if (fileSystem == Adapter.FileSystem.FAT32 &&
+                returnedStatus == MessageStatus.SUCCESS)
+            {
+                returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(2875, MessageStatus.INVALID_PARAMETER, returnedStatus, site);
+            }
+
             return returnedStatus;
         }
 
@@ -3764,6 +4129,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             //If no exception is thrown in SetFileInformation, server response status.
             isReturnStatus = true;
             this.VerifyServerSetFsInfo(isReturnStatus);
+
+            if (fileSystem == Adapter.FileSystem.FAT32 &&
+                returnedStatus == MessageStatus.DISK_FULL)
+            {
+                returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(2913, MessageStatus.INVALID_PARAMETER, returnedStatus, site);
+            }
 
             return returnedStatus;
         }
@@ -4403,6 +4774,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             isReturnStatus = true;
             this.VerifyServerSetFsInfo(isReturnStatus);
 
+            if (fileSystem == Adapter.FileSystem.FAT32) {
+                returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(3203, MessageStatus.PRIVILEGE_NOT_HELD, returnedStatus, site);
+            }
+
             return returnedStatus;
         }
         #endregion
@@ -4465,7 +4840,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             MessageStatus returnedStatus = transAdapter.SetSecurityInformation((uint)securityInformation, informationBuffer);
 
             //Workaround for the current issue
-            returnedStatus = SMB2_TDIWorkaround.WorkaroundSetSecurityInfo(securityInformation, ownerSidEnum, returnedStatus, site);
+            returnedStatus = SMB2_TDIWorkaround.WorkaroundSetSecurityInfo(fileSystem, securityInformation, ownerSidEnum, returnedStatus, site);
 
             return returnedStatus;
         }
@@ -4824,11 +5199,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
         /// <summary>
         /// To make sure whether implement object functionality
+        /// Conclude the file system functionality by the type of the file system.
         /// </summary>
         /// <param name="isImplemented">True: if Object is functionality</param>
         public void GetObjectFunctionality(out bool isImplemented)
         {
-            isImplemented = bool.Parse(testConfig.GetProperty("IsObjectFunctionality"));
+            isImplemented = (fileSystem == Adapter.FileSystem.FAT32) ? false : true;
         }
 
         /// <summary>
