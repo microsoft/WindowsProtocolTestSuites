@@ -1,6 +1,9 @@
+########################################################################################################
+## Copyright (c) Microsoft. All rights reserved.
+## Licensed under the MIT license. See LICENSE file in the project root for full license information.
+########################################################################################################
+
 #############################################################################
-##Copyright (c) Microsoft Corporation. All rights reserved.
-##
 ## Microsoft Windows Powershell Scripting
 ## Purpose: Get Parameter which used in Protocol in XML file.
 ##

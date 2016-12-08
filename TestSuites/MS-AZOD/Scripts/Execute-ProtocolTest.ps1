@@ -1,3 +1,8 @@
+########################################################################################################
+## Copyright (c) Microsoft. All rights reserved.
+## Licensed under the MIT license. See LICENSE file in the project root for full license information.
+########################################################################################################
+
 #############################################################################
 ##
 ## Microsoft Windows Powershell Scripting
@@ -5,7 +10,6 @@
 ## Purpose:        Protocol Test Suite Entry Point for FileSharing
 ## Requirements:   Windows Powershell 2.0
 ## Supported OS:   Windows Server 8.1
-## Copyright (c) Microsoft Corporation. All rights reserved.
 ##
 ##############################################################################
 
