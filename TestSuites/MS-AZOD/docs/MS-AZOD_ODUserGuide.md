@@ -1,14 +1,4 @@
-﻿
-
-| &#32;| &#32;| &#32; |
-| -------------| -------------| ------------- |
-| MS-AZOD| | | 
-| Test Suite User Guide | | | 
-|  _Windows is built to be the most interoperable platform_| | | 
-| **![image1.png](./image/MS-AZOD_ODUserGuide/image1.png)**|  **MICROSOFT CORPORATION**|  | 
-| |  _August 18, 2015_ | | 
-| | Send suggestions and comments about this document to dochelp@microsoft.com. | | 
-| | Please include the name of the test suite with your feedback.| | 
+﻿# MS-AZOD Test Suite User Guide 
 
 ## Contents
 * [Introduction](#_Toc426622584)
@@ -86,47 +76,47 @@ The following checklist summarizes the steps required to get the test suite up a
 
 |  **Check**|  **Task**|  **Topic**| 
 | -------------| -------------| ------------- |
-| □| Download the test suite for the protocol implementation| For a list of the files that the download package contains, see [Installed Files and Folders](#_Installed_Files_and_1).| 
-| □| Confirm that your test environment and computers meet the requirements of the test suite| For information about the requirements of the test suite, see [Requirements](#_Requirements). | 
-| □| Install the software prerequisites| For information about software that must be installed on the computers in your test environment before the test suite is installed, see [Software](#_Prerequisite_Software).| 
-| □| Set up the Local-Realm Key Distribution Center (KDC) Computer| See [Set Up the Local-Realm/Trust-Realm KDC Computer](#_Set_Up_a).| 
-| □| Set up the Trust-Realm Key Distribution Center (KDC) Computer| See [Set Up the Local-Realm/Trust-Realm KDC Computer](#_Test_Client_Computer_1).| 
+| □| Download the test suite for the protocol implementation| For a list of the files that the download package contains, see [Installed Files and Folders](#_Toc426622606).| 
+| □| Confirm that your test environment and computers meet the requirements of the test suite| For information about the requirements of the test suite, see [Requirements](#_Toc426622589). | 
+| □| Install the software prerequisites| For information about software that must be installed on the computers in your test environment before the test suite is installed, see [Software](#_Toc426622596).| 
+| □| Set up the Local-Realm Key Distribution Center (KDC) Computer| See [Set Up the Local-Realm/Trust-Realm KDC Computer](#_Toc426622603).| 
+| □| Set up the Trust-Realm Key Distribution Center (KDC) Computer| See [Set Up the Local-Realm/Trust-Realm KDC Computer](#_Toc426622603).| 
 | | | Note: only for cross realm scenario.| 
-| □| Set up the Local-Realm Application Server (AP) Computer| See [Set Up the Local-Realm/Trust-Realm Application Server Computer](#_Set_Up_a_1).| 
-| □| Set up the Trust-Realm Application Server (AP) Computer| See [Set Up the Local-Realm/Trust-Realm Application Server Computer](#_Set_Up_a_1).| 
+| □| Set up the Local-Realm Application Server (AP) Computer| See [Set Up the Local-Realm/Trust-Realm Application Server Computer](#_Toc426622604).| 
+| □| Set up the Trust-Realm Application Server (AP) Computer| See [Set Up the Local-Realm/Trust-Realm Application Server Computer](#_Toc426622604).| 
 | | | Note: only for cross realm scenario.| 
-| □| Set up the Client Computer| See [Set Up the Client Computer](#_Set_Up_the_3).| 
-| □| Set up the network| See [Network Setup.](#_Setup)| 
-| □| Verify the connection from the driver computer to the SUT and other computers| See [Verify Connectivity](#_Verify_Connectivity).| 
-| □| Configure the Local-Realm KDC computer| See [Configure the Local-Realm KDC Computer](#_Configure_the_PDC).| 
-| □| Configure the Trust-Realm KDC computer| See [Configure the Trust-Realm KDC Computer](#_Configure_the_Client).| 
+| □| Set up the Client Computer| See [Set Up the Client Computer](#_Toc426622605).| 
+| □| Set up the network| See [Network Setup.](#_Toc426622597)| 
+| □| Verify the connection from the driver computer to the SUT and other computers| See [Verify Connectivity](#_Toc426622601).| 
+| □| Configure the Local-Realm KDC computer| See [Configure the Local-Realm KDC Computer](#_Toc426622608).| 
+| □| Configure the Trust-Realm KDC computer| See [Configure the Trust-Realm KDC Computer](#_Toc426622610).| 
 | | | Note: only for cross realm scenario.| 
-| □| Configure the Local-Realm Application Server computer| See [Configure the Local-Realm Application Server Computer](#_Configure_the_Local-Realm_1).| 
-| □| Configure the Trust-Realm Application Server computer| See [Configure the Trust-Realm Application Server Computer](#_Configure_the_Driver_1).| 
+| □| Configure the Local-Realm Application Server computer| See [Configure the Local-Realm Application Server Computer](#_Toc426622609).| 
+| □| Configure the Trust-Realm Application Server computer| See [Configure the Trust-Realm Application Server Computer](#_Toc426622611).| 
 | | | Note: only for cross realm scenario.| 
-| □| Configure the Client computer| See [Configure the Client Computer](#_Configure_the_Driver_2).| 
-| □| Configure test suite settings| See [Configuring the Test Suite](#_Guidelines_for_Configuring_1).| 
+| □| Configure the Client computer| See [Configure the Client Computer](#_Toc426622612).| 
+| □| Configure test suite settings| See [Configuring the Test Suite](#_Toc426622613).| 
 
 ## <a name="_Toc426622588"/>How Do I?
 Use the following quick reference to learn how to complete common tasks.
 
 |  **How do I…?**|  **For more information…**| 
 | -------------| ------------- |
-| Set up the test environment| [Network Setup](#_Network_Setup) and [Computer Setup](#_Computer_Setup)| 
-| Verify the connection from the driver computer to other computers and between other computers in the test environment| [Verify Connectivity](#_Verify_Connectivity)| 
-| Setup the Local-Realm/Trust-Realm KDC Computer| [Set Up the Local-Realm/Trust-Realm KDC Computer](#_Test_Client_Computer_1)| 
-| Setup the Local-Realm/Trust-Realm Application Server Computer| [Set Up the Local-Realm/Trust-Realm Application Server Computer](#_Set_Up_the_4)| 
-| Setup the Client Computer| [Set Up the Client Computer](#_Set_Up_the_3)| 
-| Configure the Local-Realm KDC Computer| [Configure the Local-Realm KDC Computer](#_Configure_the_Test) or [Configure a KDC Computer that is Not Windows-based](#_Configuring_a_KDC)| 
-| Configure the Trust-Realm KDC Computer| [Configure the Trust-Realm KDC Computer](#_Configure_the_Client) or [Configure a KDC Computer that is Not Windows-based](#_Configuring_a_KDC)| 
-| Configure the Local-Realm Application Server Computer| [Configure the Local-Realm Application Server Computer](#_Configure_the_Local-Realm_1) or [Configure an Application Server Computer that is Not Windows-based](#_Configuring_a_Application)| 
-| Configure the Trust-Realm Application Server Computer| [Configure the Trust-Realm Application Server Computer](#_Configure_the_Driver_1) or [Configure an Application Server Computer that is Not Windows-based](#_Configuring_a_Application)| 
-| Configure the Client Computer| [Configure the Client Computer](#_Configure_the_Client_1)| 
-| Configure the test suite settings| [Configuring the Test Suite](#_Guidelines_for_Configuring_1)| 
-| Run test cases| [Run All Test Cases](#_Run_All_Test_1), [Run Specified Test Cases](#_Run_Specified_Test)| 
-| Debug my own test cases| [Debugging Test Cases](#_Debugging_Test_Cases)| 
-| Get the results of test runs| [Check Test Results](#_Analyzing_Test_Results)| 
-| Troubleshoot problems| [Troubleshooting](#_Troubleshooting_1)| 
+| Set up the test environment| [Network Setup](#_Network_Setup) and [Computer Setup](#_Toc426622602)| 
+| Verify the connection from the driver computer to other computers and between other computers in the test environment| [Verify Connectivity](#_Toc426622601)| 
+| Setup the Local-Realm/Trust-Realm KDC Computer| [Set Up the Local-Realm/Trust-Realm KDC Computer](#_Toc426622603)| 
+| Setup the Local-Realm/Trust-Realm Application Server Computer| [Set Up the Local-Realm/Trust-Realm Application Server Computer](#_Toc426622603)| 
+| Setup the Client Computer| [Set Up the Client Computer](#_Toc426622605)| 
+| Configure the Local-Realm KDC Computer| [Configure the Local-Realm KDC Computer](#_Toc426622608) or [Configure a KDC Computer that is Not Windows-based](#_Toc426622613)| 
+| Configure the Trust-Realm KDC Computer| [Configure the Trust-Realm KDC Computer](#_Toc426622610) or [Configure a KDC Computer that is Not Windows-based](#_Toc426622613)| 
+| Configure the Local-Realm Application Server Computer| [Configure the Local-Realm Application Server Computer](#_Toc426622609) or [Configure an Application Server Computer that is Not Windows-based](#_Toc426622613)| 
+| Configure the Trust-Realm Application Server Computer| [Configure the Trust-Realm Application Server Computer](#_Toc426622611) or [Configure an Application Server Computer that is Not Windows-based](#_Toc426622613)| 
+| Configure the Client Computer| [Configure the Client Computer](#_Toc426622612)| 
+| Configure the test suite settings| [Configuring the Test Suite](#_Toc426622613)| 
+| Run test cases| [Run All Test Cases](#_Toc426622617), [Run Specified Test Cases](#_Toc426622618)| 
+| Debug my own test cases| [Debugging Test Cases](#_Toc426622620)| 
+| Get the results of test runs| [Check Test Results](#_Toc426622619)| 
+| Troubleshoot problems| [Troubleshooting](#_Toc426622621)| 
 
 ## <a name="_Toc426622589"/>Requirements 
 
@@ -225,7 +215,7 @@ All of the following software must be installed on the driver computer _before_ 
 |            [http://www.microsoft.com/en-us/download/details.aspx?id=30678](http://www.microsoft.com/en-us/download/details.aspx?id=30678)| 
 |            You can download Visual Studio 2012 Update 4 or later from below website| 
 |            [http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305](http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305)| 
-| Microsoft® Protocol Test Framework 1.0.2485.0| 
+| Microsoft® Protocol Test Framework 1.0.5000.0| 
 | Microsoft® Message Analyzer| 
 | Message Analyzer is used to view the network trace and ETW log optionally generated by Automatic Network Capturing feature in Protocol Test Framework.| 
 |        ![image3.png](./image/MS-AZOD_ODUserGuide/image3.png)Note| 

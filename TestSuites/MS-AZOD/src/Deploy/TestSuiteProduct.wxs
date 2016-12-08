@@ -132,14 +132,16 @@
       <Directory Id="WindowsVolumeDir">
         <Directory Id="ProtocolTestDir" Name="MicrosoftProtocolTests">
           <Directory Id="TestSuiteNameDir" Name="!(wix.TESTSUITE_NAME)">
-              <!-- Protocol Code Directory -->
-              <Directory Id="TESTSUITE_ROOT_DIR" Name="!(wix.TESTSUITE_VERSION)">
-                <Directory Id="TESTSUITE_BATCH_DIR" Name="Batch" />
-                <Directory Id="TESTSUITE_BIN_DIR" Name="Bin" >
-                  <Directory Id="PROTOCOLSDK_BIN_DIR" Name="." />
-                </Directory>
-                <Directory Id="TESTSUITE_SCRIPTS_DIR" Name="Scripts" />
-            </Directory>
+			<Directory Id="SERVERENDPOINT_TESTSUITE_DIR" Name="OD-Endpoint">
+				<!-- Protocol Code Directory -->
+				<Directory Id="TESTSUITE_ROOT_DIR" Name="!(wix.TESTSUITE_VERSION)">
+					<Directory Id="TESTSUITE_BATCH_DIR" Name="Batch" />
+					<Directory Id="TESTSUITE_BIN_DIR" Name="Bin" >
+					  <Directory Id="PROTOCOLSDK_BIN_DIR" Name="." />
+					</Directory>
+					<Directory Id="TESTSUITE_SCRIPTS_DIR" Name="Scripts" />
+				</Directory>
+			</Directory>
           </Directory>
         </Directory>
       </Directory>
@@ -254,6 +256,11 @@
                   Description="Run all test cases in the test suite"
                   Target="[TESTSUITE_BATCH_DIR]!(wix.RUN_TESTS_COMMAND)"
                   WorkingDirectory="TESTSUITE_BATCH_DIR" />
+        <Shortcut Id="RunBVTTestCasesShortcut_Desktop"
+                  Name="Run !(wix.TESTSUITE_NAME) BVT Test Cases"
+                  Description="Run BVT test cases in the test suite"
+                  Target="[TESTSUITE_BATCH_DIR]!(wix.RUN_BVT_COMMAND)"
+                  WorkingDirectory="TESTSUITE_BATCH_DIR" />
         <Shortcut Id="HashGenerationAndVerificationTool_Desktop"
                   Name="Hash Generation and Verification Tool"
                   Description="Hash Generation and Verification Tool"
@@ -308,13 +315,13 @@
         <ComponentGroupRef Id="TESTSUITE_MISC_FILES"/>
         <ComponentGroupRef Id="BATCH_FILES" />
         <ComponentGroupRef Id="BIN_FILES" />
-
+		<ComponentGroupRef Id="Scripts_FILES"/>
       </Feature>
 
       <Feature Id="SutFeature" Level="1">
         <!-- If TARGET_ENDPOINT doesn't equal "SUT", donot install on SUT. -->
         <Condition Level="0"><![CDATA[TARGET_ENDPOINT<>"SUT" AND CLIENTUILEVEL<>0]]></Condition>
-
+		<ComponentGroupRef Id="Scripts_FILES"/>
         <ComponentRef Id="SutShortcuts" />
 
       </Feature>
@@ -322,7 +329,7 @@
       <Feature Id="DomainFeature" Level="1">
         <!-- If TARGET_ENDPOINT doesn't equal "DOMAIN", donot install on domain. -->
         <Condition Level="0"><![CDATA[TARGET_ENDPOINT<>"DOMAIN" AND CLIENTUILEVEL<>0]]></Condition>
-
+		<ComponentGroupRef Id="Scripts_FILES"/>
         <ComponentRef Id="DomainShortcuts" />
 
       </Feature>

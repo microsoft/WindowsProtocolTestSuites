@@ -1,6 +1,4 @@
-﻿# MS-AZOD Test  De sign Specification 
-# Windows is built to be the most interoperable platform 
-#  MICROSOFT CORPORATION    August 6, 2015  Send suggestions and comments about this document to  dochelp@microsoft.com .  Please include the name of the test suite with your feedback. 
+﻿#MS-AZOD Test Design Specification
 
 # Contents
 * [Introduction](#_Toc426559895)
@@ -42,15 +40,18 @@ The MS-AZOD test suite is used to test authorization process of file sharing, so
 Authorization Protocols Overview (MS-AZOD) is an overview document, which descripts the authorization process of controlling access to resources. The document introduces 3 authorization models: 
 
 * DAC and CBAC models
-
 * AzMan RBAC model 
-
 * COM+ roles  access control model 
 
 The DAC model is suited for the well-defined persistent resources such as Active Directory, files, and the registry. CBAC is an extension to the DAC model, applicable for file resources on a file server.
+
 The Authorization Manager-based RBAC model provides a natural framework for business process applications that require representing the organizational model within the application security framework. In Microsoft Windows®, remote desktop gateway applications use this model.
+
 The COM+ roles authorization model is applicable for the applications that are developed using COM and COM+ development frameworks.
-Therefore, the AZOD with file sharing test suite is focus on the test of DAC and CBAC models. **The architecture of CBAC model is shown as following:**
+
+Therefore, the AZOD with file sharing test suite is focus on the test of DAC and CBAC models. 
+
+**The architecture of CBAC model is shown as following:**
 
 ![image2.png](./image/MS-AZOD_ODTestDesignSpecification/image2.png)
 
@@ -108,10 +109,14 @@ Out scope
 
 ### <a name="_Toc426559901"/>Test Approach
 Test Approach:
-The test suite will be developed based on traditional testing. 
+The test suite will be developed based on traditional testing.
+ 
 Some tests use an observer to capture and verify message sequence among client computer, DC and file server. These tests depend on Message Analyzer API to capture and parse messages.
+
 Some tests use a synthetic client, Kerberos, NTLM and SMB2 message will be used during these tests, so the test suite depends on these protocols’ SDK. 
+
 Test Approach Comparison
+
 Table 11 illustrates the comparison of test approaches for the MS-AZOD test suite.
 
 | &#32;| &#32;| &#32;| &#32; |
@@ -121,12 +126,14 @@ Table 11 illustrates the comparison of test approaches for the MS-AZOD test suit
 |  **Small test case number**| The test suite focuses on scenarios which is the combination of AZOD and file sharing. The number of test cases is not expected to be very large. | It is easy to create useful test cases with traditional testing. | Traditional| 
 |  **Simple parameter combinations**| Parameter combination is not complex. | It is easy to cover all combinations of parameters with traditional testing.| Traditional| 
 
-***Table 11 Test Approach Comparison***
+*Table 11 Test Approach Comparison*
+
 Reasons for choosing Traditional Testing
-The AZOD with file sharing scenarios are stateless and error states are very simple.
-Message exchange is simple (authentication process and file access process).
-Previous artifacts can be reused for traditional testing.
-The combinations of parameters are not complex. Capability settings can be easily configured using the configuration files.
+
+* The AZOD with file sharing scenarios are stateless and error states are very simple.
+* Message exchange is simple (authentication process and file access process).
+* Previous artifacts can be reused for traditional testing.
+* The combinations of parameters are not complex. Capability settings can be easily configured using the configuration files.
 
 ### <a name="_Toc426559902"/>Test Scenarios
 
@@ -165,43 +172,29 @@ Preconditions:
 * Central Access Policy is applied to share folder on application server.
 
 Typical Sequence:
+
 The typical scenario sequence is the following:
 
 * The SMB2 client sends **NEGOTIATE Request**.
-
 * SMB2 server reply a **NEGOTIATE Response** with **GSS SpnegoToken** [MS-SPNG].
-
 * The SMB2 Client sends a **KRB_AS_REQ** message to the KDC. This message includes the user principal name and a list of supported encryption types in preferred priority order to encrypt the pre-authentication data, but does not include the pre-authentication data since its function is to discover the supported encryption types.
-
 * Because the request message does not contain the pre-authentication data, the KDC responds with a **KRB_ERROR** and with a list of supported encryption types in its priority order.
-
 * The SMB2 Client sends **KRB_AS_REQ** message for a **ticket-granting ticket (TGT)** with PA-ENC-TIMESTAMP as pre-authentication data to the KDC. The client builds the pre-authentication data by encrypting its timestamp with a secret key derived from the user's password using an agreed-on encryption method. Since domain controller requests **claims** with EnableCBACandArmor set be TRUE, the client adds a PA-PAC-OPTIONS [167] (MS-KILE section 2.2.9) PA-DATA type with the Claims bit set in the KRB_AS_REQ to request claims authorization data.
-
 * The KDC builds the TGT with a PAC that contains group membership (and claims) information in the authorization_data field of the TGT, generates a **KRB_AS_REP** message from the TGT and the session key, and sends the **KRB_AS_REP** message back to the client.
-
 * The SMB2 Client sends a **KRB_TGS_REQ** based on the TGT to obtain a service ticket for the SMB2 server. The KRB_TGS_REQ message includes the TGT, the authenticator, and the Service Principal Name (SPN) as cifs/servername.domain, where servername is the actual name of the SMB2 server computer, and domain is the domain or realm of the client computer.
-
 * The KDC validates the ticket-granting ticket (TGT) and the authenticator. If these are valid, the KDC returns a service ticket for the SMB2 server and a session key for communication between the SMB2 client and the SMB2 server in a **KRB_TGS_REP** message.
-
 * The SMB2 client send **SESSION_SETUP** request with **KRB_AP_REQ** to SMB2 Server. The KRB_AP_REQ is built with a TGT and the authenticator created by encrypting the Username, IP address, and a timestamp with the session key received in step 8.
-
 * The SMB2 server generates a signature and sends the SMB2 client a SMB2 **SESSION_SETUP** Response containing the signature and a GSS security token. The GSS security token contains a **KRB_AP_REP**.
-
 * **TREE_CONNECT**: Client sends SMB2 TREE_CONNECT Request to the Server.
-
 * The Server responses an SMB2 TREE_CONNECT Response. 
-
 * If flags of Packet header contains SMB2_FLAGS_SIGNED, the packet should be signed, client should use **subkey** from **KRP_AP_REP** to sign the packet; otherwise, the signature field of Packet header should be 0.
-
 * **TREE_DISCONNECT**: The client sends SMB2 TREE_DISCONNECT Request to the server
-
 * **LOGOFF**: The client sends SMB2 LOGOFF Request to the server
-
 * **TREE_DISCONNECT**: The server response SMB2 TREE_DISCONNECT Response.
-
 * **LOGOFF**: The server response SMB2 LOGOFF Response.
 
 Scenario Testing:
+
 User can access share folder if satisfying corresponding Central access policies.
 Verify the message sequence of accessing CBAC file share using Kerberos when service ticket with user claims.
 
@@ -209,61 +202,39 @@ Verify the message sequence of accessing CBAC file share using Kerberos when ser
 Preconditions:
 
 * The client computer and server computer are joined to the same Active Directory domain.
-
 * The application server and Domain Controller are CBAC aware while the client computer is not.
-
 * The file server and file resource manager roles have been configured on the server computer.
-
 * The required user accounts and associated group memberships have been configured on an Account Database (see [MS-ADOD]).
-
 * Created claim types, resource (file) properties, and central access rules (CARs) are configured on DC and then added to the central access policies using the Active Directory Administration center tool.
-
 * The intended central access policies (CAPs) have been targeted to the file server computer using the Group Policy Management tool and the CAPs to the required file shares have been enabled.
-
 * The required association of claims for the user and computer accounts has been set.
-
 * Classification rules have been pushed onto the file server through the LDAP (carried File Classification Infrastructure structures, as described in [MS-FCIADS]) Protocol.
-
 * File share(s) have been created on the server computer and the appropriate shared permissions configured. 
-
 * Central Access Policy is applied to share folder on application server.
 
 Typical Sequence:
+
 The typical scenario sequence is the following:
 
 * The SMB2 client sends **NEGOTIATE Request**.
-
 * SMB2 server reply a **NEGOTIATE Response** with **GSS SpnegoToken** [MS-SPNG].
-
 * The SMB2 Client builds the GSS-API Spnego Token with an **AUTHENTICATE_MESSAGE** ([MS-NLMP] section 2.2.1.3), creates the **SMB2 SESSION_SETUP Request** with the GSS token and sends it to the SMB2 server.
-
 * File server binds to the remote Netlogon RPC endpoint on DC. File server sends **Bind** request to DC.
-
 * The DC response a **Bind** **ACK** to the file server. 
-
 * To validate the security token, the File Server sends NETLOGON_ NETWORK_INFO message to the DC as an input argument **LogonInformation** to the **NetrLogonSamLogonEx** method.
-
 * The Domain Controller validates the request message and returns either the NETLOGON_VALIDATION_SAM_INFO2 or the NETLOGON_VALIDATION_SAM_INFO4 message as an output argument to **NetrLogonSamLogonEx**.
-
 * The file server service sends KRB_TGS_REQ using the S4U2self extension, so as to retrieve a user claim for itself on behalf of the user. The KRB_TGS_REQ has PA-TGS-REQ, PA_S4U_X509_USER, PA-FOR-USER and PA-PAC-OPTIONS as the PAdata.
-
 * The DC returns the service ticket for the user in the KRB_TGS_REP message. The privilege attribute certificate (PAC) returned in the service ticket contains the authorization data.
-
 * The SMB2 server builds the SMB2 SESSION_SETUP Response message and sends it to the SMB2 client.
-
 * **TREE_CONNECT**: Client sends SMB2 TREE_CONNECT Request to the Server
-
 * The file server responses an SMB2 TREE_CONNECT Response.
-
 * **TREE_DISCONNECT**: The client sends SMB2 TREE_DISCONNECT Request to the server
-
 * **LOGOFF**: The client sends SMB2 LOGOFF Request to the server
-
 * **TREE_DISCONNECT**: The server responses SMB2 TREE_DISCONNECT Response.
-
 * **LOGOFF**: The server responses SMB2 LOGOFF Response.
 
 Scenario Testing:
+
 User can access file if satisfying corresponding central access policies.
 Verify message sequence of accessing CBAC file share using NTLM.
 
@@ -271,50 +242,31 @@ Verify message sequence of accessing CBAC file share using NTLM.
 Preconditions:
 
 * The client computer and server computer are joined to the same Active Directory domain.
-
 * The file server and file resource manager roles have been configured on the server computer.
-
 * The required user accounts and associated group memberships have been configured on an Account Database (see [MS-ADOD]).
-
 * File share(s) have been created on the server computer and have appropriate shared permissions. The permissions are either directly configured or inherited from its parent object. 
 
 Typical Sequence:
+
 The typical scenario sequence is as following:
 
 * The SMB2 client sends **NEGOTIATE Request**.
-
 * SMB2 server reply a **NEGOTIATE Response** with **GSS SpnegoToken** [MS-SPNG].
-
 * The SMB2 Client sends a **KRB_AS_REQ** message to the KDC. This message includes the user principal name and a list of supported encryption types in preferred priority order to encrypt the pre-authentication data, but does not include the pre-authentication data since its function is to discover the supported encryption types.
-
 * Because the request message does not contain the pre-authentication data, the KDC responds with a **KRB_ERROR** and with a list of supported encryption types in its priority order.
-
 * The SMB2 Client sends **KRB_AS_REQ** message for a **ticket-granting ticket (TGT)** with PA-ENC-TIMESTAMP as pre-authentication data to the KDC. The client builds the pre-authentication data by encrypting its timestamp with a secret key derived from the user's password using an agreed-on encryption method. 
-
 * The KDC builds the TGT with a PAC that contains group membership information in the authorization_data field of the TGT, generates a **KRB_AS_REP** message from the TGT and the session key, and sends the **KRB_AS_REP** message back to the client.
-
 * The SMB2 Client sends a **KRB_TGS_REQ** based on the TGT to obtain a service ticket for the SMB2 server. The KRB_TGS_REQ message includes the TGT, the authenticator, and the Service Principal Name (SPN) as cifs/servername.domain, where servername is the actual name of the SMB2 server computer, and domain is the domain or realm of the client computer.
-
 * The KDC validates the ticket-granting ticket (TGT) and the authenticator. If these are valid, the KDC returns a service ticket for the SMB2 server and a session key for communication between the SMB2 client and the SMB2 server in a **KRB_TGS_REP** message.
-
 * The SMB2 client sends **SESSION_SETUP** request with **KRB_AP_REQ** to SMB2 Server. The KRB_AP_REQ is built with a TGT and the authenticator created by encrypting the Username, IP address, and a timestamp with the session key received in step 8.
-
 * The SMB2 server uses the S4U2self extension to retrieve a service ticket to itself on behalf of the user and sends the KRB_TGS_REQ to the KDC.
-
 * The KDC returns the service ticket for the user in the KRB_TGS_REP to SMB2 server. The privilege attribute certificate (PAC) returned in the service ticket contains the authorization data, as specified in [[MS-PAC]](file:///C:/Users/vtian/AppData/Roaming/Microsoft/Word/[MS-PAC].pdf) section 3. 
-
 * The SMB2 server generates a signature and sends the SMB2 client a SMB2 **SESSION_SETUP** Response containing the signature and a GSS security token. The GSS security token contains a **KRB_AP_REP**.
-
 * **TREE_CONNECT**: Client sends SMB2 TREE_CONNECT Request to the Server.
-
 * The Server responses a SMB2 TREE_CONNECT Response. If flags of Packet header contains SMB2_FLAGS_SIGNED, the packet should be signed, client should use **subkey** from **KRP_AP_REP** to sign the packet; otherwise, the signature field of Packet header should be 0.
-
 * **TREE_DISCONNECT**: The client sends SMB2 TREE_DISCONNECT Request to the server.
-
 * **LOGOFF**: The client sends SMB2 LOGOFF Request to the server.
-
 * The server responses SMB2 TREE_DISCONNECT Response.
-
 * The server responses SMB2 LOGOFF Response.
 
 Scenario Testing:
@@ -327,102 +279,75 @@ Scenario Testing:
 Preconditions:
 
 * The client computer and server computer are joined to the same Active Directory domain.
-
 * The file server and file resource manager roles have been configured on the server computer.
-
 * The required user accounts and associated group memberships have been configured on an Account Database (see [MS-ADOD]).
-
 * File share(s) have been created on the server computer and have appropriate shared permissions. The permissions are either directly configured or inherited from its parent object. 
 
 Typical Sequence:
+
 The typical scenario sequence is as following:
 
 * The SMB2 client sends **NEGOTIATE Request**.
-
 * SMB2 server replies a **NEGOTIATE Response** with **GSS SpnegoToken** [MS-SPNG].
-
 * The SMB2 Client builds the GSS-API Spnego Token with an **AUTHENTICATE_MESSAGE** ([MS-NLMP] section 2.2.1.3), creates the **SMB2 SESSION_SETUP Request** with the GSS token and sends it to the SMB2 server.
-
 * File server binds to the remote Netlogon RPC endpoint on DC. File server sends **Bind** request to DC.
-
 * The DC response a **Bind** **ACK** to the file server. 
-
 * To validate the security token, the File Server sends NETLOGON_ NETWORK_INFO message to the DC as an input argument **LogonInformation** to the **NetrLogonSamLogonEx** method.
-
 * The Domain Controller validates the request message and returns either the NETLOGON_VALIDATION_SAM_INFO2 or the NETLOGON_VALIDATION_SAM_INFO4 message as an output argument to **NetrLogonSamLogonEx**.
-
 * The file server service sends KRB_TGS_REQ using the S4U2self extension, so as to retrieve a user claim for itself on behalf of the user. The KRB_TGS_REQ has PA-TGS-REQ, PA_S4U_X509_USER, and PA-FOR-USER as the PAdata.
-
 * The DC returns the service ticket for the user in the KRB_TGS_REP message. The privilege attribute certificate (PAC) returned in the service ticket contains the authorization data.
-
 * The SMB2 server builds the SMB2 SESSION_SETUP Response message and sends it to the SMB2 client.
-
 * **TREE_CONNECT**: Client sends SMB2 TREE_CONNECT Request to the Server.
-
 * The file server responses an SMB2 TREE_CONNECT Response.
-
 * **TREE_DISCONNECT**: The client sends SMB2 TREE_DISCONNECT Request to the server.
-
 * **LOGOFF**: The client sends SMB2 LOGOFF Request to the server.
-
 * **TREE_DISCONNECT**: The server responses SMB2 TREE_DISCONNECT Response.
-
 * **LOGOFF**: The server responses SMB2 LOGOFF Response.
 
 Scenario Testing:
 
 * User can access file if having appropriate permission. 
-
 * User cannot access file if not having appropriate permission.
-
 * If user has appropriated access permission for a remote directory, it can access file which inherited permission from the directory.
 
 #### <a name="_Toc426559907"/>S5_ClaimsAndGroupPolicy_Sync
 Preconditions:
 
 * The client computer and server computer are joined to the same Active Directory domain.
-
 * The file server and file resource manager roles have been configured on the server computer.
-
 * The required user accounts and associated group memberships have been configured on an Account Database (see [MS-ADOD]).
-
 * Created claim types, resource (file) properties, and central access rules (CARs) are configured on DC and then added to the central access policies using the Active Directory Administration center tool.
 
 Typical Sequence:
+
 The typical scenario sequence is the following:
 
 * Trigger: On File server, Run cmd gpupdate /force to trigger central access policies deployment.
-
 * Server retrieves version info from  &#60; scoped gpo path &#62; \GPT.ini via RFA protocol file access sequences. 
-
 * Server retrieves the policy file containing the policy settings from the GP FS ( &#60; scoped gpo path &#62; \Microsoft\Windows NT\CAP\cap.inf) via RFA protocol file access sequences.
-
 * Server invokes LDAP to retrieve the authorization rules contained in the CAP objects in Active Directory.
 
 Scenario Testing:
+
 The Message sequence of server’s Central Access Policy Configuration Process. 
 
 ## <a name="_Toc426559908"/>Test Suite Design
 The audience is looking for the following information:
 
 * The test suite architecture.
-
 * How different components work together.
-
 * Each component’s internal design.
-
 ### <a name="_Toc426559909"/>Test Suite Architecture
-
 #### <a name="_Toc426559910"/>System under Test (SUT)
+
 SUTs:
 
 * Domain Controller, CBAC aware, Windows implementation.
-
 * SMB2 CBAC aware File Server, Windows or Non-Windows implementation.
-
 * SMB2 client, CBAC supported or not, Windows or Non-Windows implementation.
 
 #### <a name="_Toc426559911"/>Test Suite Architecture
+
 This test suite includes two types of Architecture, Observer and Synthetic Client.
 
 #####Observer Architecture
@@ -433,27 +358,16 @@ Figure 31 AZOD Test Suite Architecture - Observer
 As shown in the Figure 3-1, the test suite is installed on Driver Computer. 
 
 * The Driver Computer is running the test suite to trigger client access File Server and verify the result.
-
 * SUT Control Adapter is used to:
-
 * Trigger client computer to access file share on file server.
-
 * Trigger file server to update group policy and resource property.
-
 * MA (Message Analyzer) Adapter is used to:
-
 * Capture and save messages on the LAN. 
-
 * Parse and verify message sequence
-
 * Message sequence store is used to store expected message sequences, which are configured by xml files.
-
 * The test case:
-
 * Use SUT Control Adapter to configure and control client computer and file server
-
 * Get expected message sequence from message sequence store
-
 * Use MA to capture message and verify message sequence
 
 #####Synthetic Client Architecture
@@ -463,6 +377,7 @@ As shown in the Figure 3-1, the test suite is installed on Driver Computer.
 Figure 3-2 AZOD Test Suite Architecture – Synthetic client
 
 As shown in the Figure 3-2, the test suite is consisted of a synthetic client and a traffic observer.
+
 Synthetic Client: act as a client computer, trigger authentication, file access and authorization.
 Traffic Observer: observe the traffic between File server and DC. The computer running test suite will be configured as network gateway, so that it can observe all the network traffic.
 
@@ -478,8 +393,11 @@ There are no technical difficulties.
 
 #### <a name="_Toc426559916"/>Adapter Overview
 There are three adapters used in the test suite: protocol adapter, Message Analyzer adapter and SUT control adapter.
+
 The protocol adapter is used to receive messages from the SUT and to send messages to the SUT. The protocol adapter is built upon the protocol test framework, which is implemented with managed code. 
+
 Message Analyzer adapter is used to capture message, and parse the captured message to verify whether the message sequence is expected.
+
 The SUT control adapter is used to trigger the SUT to make some configurations, or run some powershell/shell scripts during test run, or send messages to the file server or DC.
 
 #### <a name="_Toc426559917"/>Adapter Abstract Level
@@ -534,9 +452,7 @@ Expected message sequence will be configured in an xml file. Therefore, if OPN u
 Expected message sequence is defined by set of expected messages with a specific order. Each expected message is consisted of:
 
 * Message Name
-
 * Source
-
 * Destination
 
 For some expected messages, only message name, source and destination cannot make sure whether it is the expected message. So it is necessary to verify message’s field value. Therefore, the MA adapter defines xml node for each message which need to verify field values. 
@@ -548,16 +464,15 @@ In Windows Implementation testing, The SUT control adapter is implemented using 
 
 ### <a name="_Toc426559920"/>Traditional Test Case Design 
 Purpose:
-Describe how to design the traditional test case if the traditional test approach is used in testing_._
+Describe how to design the traditional test case if the traditional test approach is used in testing.
+
 Checklist:
 
 * What is the rationale for test case selection?
 
-* What test techniques are used?  (For example, Boundary Testing, Negative Testing, etc…)
-
-* What is the number of test cases?
-
-* How will the scenarios be covered by the test cases?
+	* What test techniques are used?  (For example, Boundary Testing, Negative Testing, etc…)
+	* What is the number of test cases?
+	* How will the scenarios be covered by the test cases?
 
 ### <a name="_Toc426559921"/>Test Cases Description 
 
@@ -686,60 +601,112 @@ Checklist:
 
 ###### ConditionalACE
 Table 4-1, 4-3 describe templates of test for ConditionalAce test scenario. Table 4-2 and 4-4 describe which test cases use this template.
+
 In Table 4-1, 4-2, 4-3, and 4-4 the configuration items are below:
+
 Group **IT**
+
 Member: IT Admins, ITmember01
+
 Group **IT Admins** 
+
 Member: ITadmin01
+
 Group **Payroll**
+
 Member: Payroll Admins, ITadmin01, ITmember01, payrollmember01, payrollmember02, payrollmember03 
+
 Group **Payroll Admins**
+
 Member: payrolladmin01 
+
 **ITadmin01**
+
 Group: IT Admins
+
 Attribute department: IT
+
 Attribute countryCode: 156
+
 **ITmember01** 
+
 Group: IT
+
 Attribute department: IT
+
 Attribute countryCode: 392
+
 **Payrollmember01** 
+
 Group: Payroll
+
 Attribute department: Payroll
+
 Attribute countryCode: 156
+
 **Payrollmember02**
+
 Group: Payroll
+
 Attribute department: Payroll
+
 Attribute countryCode: 840
+
 **Payrollmember03** 
+
 Group: Payroll
+
 Attribute department: Payroll
+
 Attribute countryCode: 392
+
 **Payrolladmin01**
+
 Group: Payroll Admins
+
 Attribute department: Payroll
+
 Attribute countryCode: 840
 
 **Claim Types**:
+
 Company
+
 Department
+
 CountryCode
 
 **Resource Properties**:
+
 Display name: **SecurityLevel**
+
 Value type: Single-valued Choice
+
 Suggested Values: 
+
 Value: HBI Display name: HBI
+
 Value: MBI Display name: MBI
+
+
 Value: LBI Display name: LBI
+
 Display name: **Department**
+
 Value type: Multi-valued Choice
+
 Suggested Values: 
+
 Value: IT Display name: IT
+
 Value: Payroll Display name: Payroll
+
 Display name: **Location**
+
 Suggested Values: 
+
 Value: 156 Display name: CHN
+
 Value: 840 Display name: US
 
 **Central Access Rules:**
@@ -755,80 +722,46 @@ Value: 840 Display name: US
 * MemberOfAnyGroupRule 
 
 * (XA;;FA;;;AU;(@USER.Group Member of any {IT, IT Admins}) 
-
 * NotMemberOfAnyGroupRule 
-
 * (XA;;FA;;;AU;(@USER.Group Not Member of any {IT, IT Admins}) 
-
 * CountryCodeEquals156Rule 
-
 * (XA;;FA;;;AU;(@User.CountryCode  Equals 156) 
-
 * CountryCodeNotEquals156Rule 
-
 * (XA;;FA;;;AU;(@User.CountryCode  Not Equals 156) 
-
 * CountryCodeLessThan392Rule 
-
 * (XA;;FA;;;AU;(@User.CountryCode  Less than 392) 
-
 * CountryCodeLessThanOrEquals392Rule 
-
 * (XA;;FA;;;AU;(@User.CountryCode  Less than or equals 392) 
-
 * CountryCodeGreaterThan392Rule 
-
 * (XA;;FA;;;AU;(@User.CountryCode  Greater than 392) 
-
 * CountryCodeGreaterThanOrEquals392Rule 
-
 * (XA;;FA;;;AU;(@User.CountryCode  Greater than or equals 392) 
-
 * CountryCodeAnyOf156Or840Rule 
-
 * (XA;;FA;;;AU;(@User.CountryCode  Any of {156,840}) 
-
 * CountryCodeNotAnyOf156Or840Rule 
-
 * (XA;;FA;;;AU;(@User.CountryCode  Not Any of {156,840}) 
-
 * CountryCodeEquals156AndITGroupRule 
-
 * (XA;;FA;;;AU;((@user.CountryCode  Equals 156) And Member of any ({IT, IT Admins})) 
-
 * CountryCodeEquals156OrITGroupRule 
-
 * (XA;;FA;;;AU;((@user.CountryCode  Equals 156) Or Member of any ({IT, IT Admins})) 
 
 **Central Access Policy:**
 
 * MemberOfEachGroupPolicy 
-
 * NotMemberOfEachGroupPolicy 
-
 * MemberOfAnyGroupPolicy 
-
 * NotMemberOfAnyGroupPolicy 
-
 * CountryCodeEquals156Policy 
-
 * CountryCodeNotEquals156Policy 
-
 * CountryCodeLessThan392Policy 
-
 * CountryCodeLessThanOrEquals392Policy 
-
 * CountryCodeGreaterThan392Policy 
-
 * CountryCodeGreaterThanOrEquals392Policy 
-
 * CountryCodeAnyOf156Or840Policy 
-
 * CountryCodeNotAnyOf156Or840Policy 
-
 * CountryCodeEquals156AndITGroupPolicy 
-
 * CountryCodeEquals156OrITGroupPolicy 
+
 Conditional ACE Access Check with User Claim
 
 | &#32;| &#32; |
