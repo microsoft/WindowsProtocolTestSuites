@@ -16,7 +16,7 @@
     <Property Id="SAVED_TARGET_ENDPOINT">
       <RegistrySearch Id="LoadTargetEndpoint"
                       Root="HKLM"
-                      Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_VERSION)"
+                      Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"
                       Name="TargetEndpoint"
                       Type="raw" />
     </Property>
@@ -26,7 +26,7 @@
 	<Component Id="SaveTargetEndpoint" Guid="*" Directory="TESTSUITE_ROOT_DIR">
       <RegistryValue Id="SaveTargetEndpoint"
                      Root="HKLM"
-                     Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_VERSION)"
+                     Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"
                      Name="TargetEndpoint"
                      Type="string"
                      Value="[TARGET_ENDPOINT]" />
