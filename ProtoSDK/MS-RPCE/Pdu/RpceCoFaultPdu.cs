@@ -141,7 +141,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             status = binaryReader.ReadUInt32();
             reserved2 = binaryReader.ReadUInt32();
 
-            if (context.PackedDataRepresentationFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
+            if (packed_drep.dataRepFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
             {
                 alloc_hint = EndianUtility.ReverseByteOrder(alloc_hint);
                 p_cont_id = EndianUtility.ReverseByteOrder(p_cont_id);

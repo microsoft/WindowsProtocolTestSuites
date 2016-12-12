@@ -128,6 +128,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
         // Length of RPCE C/O common header.
         internal const int CO_PDU_HEADER_SIZE = 16;
 
+        // Offset of data_representation field
+        internal const int DREP_FIELD_OFFSET = 4;
+
         // Offset of frag_length field.
         internal const int FRAG_LENGTH_FIELD_OFFSET = 8;
 
@@ -762,11 +765,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                     break;
                 }
 
+                //#4 byte is drep
+                uint dataRepresentation = BitConverter.ToUInt32(
+                    messageBytes,
+                    consumedLength + RpceUtility.DREP_FIELD_OFFSET);
                 //#8 byte is frag_length
                 ushort fragmentLength = BitConverter.ToUInt16(
                     messageBytes,
                     consumedLength + RpceUtility.FRAG_LENGTH_FIELD_OFFSET);
-                if (context.PackedDataRepresentationFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
+                if ((dataRepresentation & 0x0000FFFFU) != NativeMethods.NDR_LOCAL_DATA_REPRESENTATION)
                 {
                     fragmentLength = EndianUtility.ReverseByteOrder(fragmentLength);
                 }

@@ -153,7 +153,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             max_recv_frag = binaryReader.ReadUInt16();
             assoc_group_id = binaryReader.ReadUInt32();
 
-            if (context.PackedDataRepresentationFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
+            if (packed_drep.dataRepFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
             {
                 max_xmit_frag = EndianUtility.ReverseByteOrder(max_xmit_frag);
                 max_recv_frag = EndianUtility.ReverseByteOrder(max_recv_frag);
@@ -181,7 +181,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                 p_context_elem.p_cont_elem[i].abstract_syntax.if_vers_minor
                     = binaryReader.ReadUInt16();
 
-                if (context.PackedDataRepresentationFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
+                if (packed_drep.dataRepFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
                 {
                     p_context_elem.p_cont_elem[i].p_cont_id = EndianUtility.ReverseByteOrder(p_context_elem.p_cont_elem[i].p_cont_id);
                     p_context_elem.p_cont_elem[i].abstract_syntax.if_uuid = EndianUtility.ReverseByteOrder(p_context_elem.p_cont_elem[i].abstract_syntax.if_uuid);
@@ -200,7 +200,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                     p_context_elem.p_cont_elem[i].transfer_syntaxes[j].if_vers_minor
                         = binaryReader.ReadUInt16();
 
-                    if (context.PackedDataRepresentationFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
+                    if (packed_drep.dataRepFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
                     {
                         p_context_elem.p_cont_elem[i].transfer_syntaxes[j].if_uuid = EndianUtility.ReverseByteOrder(p_context_elem.p_cont_elem[i].transfer_syntaxes[j].if_uuid);
                         p_context_elem.p_cont_elem[i].transfer_syntaxes[j].if_vers_major = EndianUtility.ReverseByteOrder(p_context_elem.p_cont_elem[i].transfer_syntaxes[j].if_vers_major);

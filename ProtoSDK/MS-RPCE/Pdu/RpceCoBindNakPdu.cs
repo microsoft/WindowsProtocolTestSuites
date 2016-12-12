@@ -151,7 +151,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
         {
             base.FromBytes(binaryReader);
 
-            if (context.PackedDataRepresentationFormat == RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
+            if (packed_drep.dataRepFormat == RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
             {
                 provider_reject_reason = (p_reject_reason_t)binaryReader.ReadUInt16();
             }
@@ -183,7 +183,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                 signature = new Guid(binaryReader.ReadBytes(RpceUtility.GUID_SIZE));
                 extended_error_info = binaryReader.ReadBytes(frag_length - L - RpceUtility.GUID_SIZE);
 
-                if (context.PackedDataRepresentationFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
+                if (packed_drep.dataRepFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
                 {
                     signature = EndianUtility.ReverseByteOrder((Guid)signature);
                 }
