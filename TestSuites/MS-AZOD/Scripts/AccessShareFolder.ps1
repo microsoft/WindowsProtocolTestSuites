@@ -32,7 +32,7 @@ $signalFile="$workingDir\$runningScriptName.signal"
 
 
 #----------------------------------------------------------------------------
-# Creat the log file
+# Create the log file
 #----------------------------------------------------------------------------
 echo "-----------------$runningScriptName Log----------------------" > $logFile
 echo "UNCPath  = $uncPath" >> $logFile
@@ -42,7 +42,7 @@ echo "domainName  = $domainName" >> $logFile
 
 #----------------------------------------------------------------------------
 # Function: Show-ScriptUsage
-# Usage   : Describes the usage information and options
+# Usage   : Describe the usage information and options
 #----------------------------------------------------------------------------
 function Show-ScriptUsage
 {    
@@ -122,7 +122,7 @@ New-Item $uncPath\testfile.txt -type file -force -value "This is a test file."
 echo "Run net use /delete." >> $logFile
 net use $uncPath /delete >> $logFile
 
-# Sleep works heres. 
+# Sleep works here. 
 # However, it's difficult to maintain for all cases in a ready msi.
 # Suggest move the sleep to testsuite code, with a ptf config property.
 # start-sleep 20

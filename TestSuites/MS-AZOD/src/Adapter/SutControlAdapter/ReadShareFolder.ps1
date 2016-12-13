@@ -34,7 +34,7 @@ $signalFile="$workingDir\$runningScriptName.signal"
 
 
 #----------------------------------------------------------------------------
-# Creat the log file
+# Create the log file
 #----------------------------------------------------------------------------
 echo "$runningScriptName starts." 
 echo "-----------------$runningScriptName Log----------------------" > $logFile

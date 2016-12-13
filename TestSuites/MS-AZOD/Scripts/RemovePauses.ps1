@@ -12,7 +12,7 @@
 #----------------------------------------------------------------------------
 #
 # This script removes all the PAUSEs in the batch file
-# so that the batch closes automatically after executing
+# so that the batch closes automatically after execution
 #
 #----------------------------------------------------------------------------
 
