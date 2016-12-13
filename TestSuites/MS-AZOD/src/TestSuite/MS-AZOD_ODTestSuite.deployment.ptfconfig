@@ -19,7 +19,7 @@
         <Property name="KdcAdminPwd" value="Password01!"/>
         <!--Type: string Usage: a user with user claim defined in local domain.-->
         <Property name="KdcClaimUser" value="claimuser"/>
-        <!--Type: string Usage: the password of the user defined as above.-->
+        <!--Type: string Usage: the password of KdcClaimUser.-->
         <Property name="KdcClaimUserPwd" value="Password01!"/>
 
         <!--Type: string Usage: Application server name.-->
@@ -67,12 +67,12 @@
         <!--Type: string Usage: Script path on the client computer or on the AP server. (Windows: Powershell scripts)-->
         <Property name="ScriptPath" value="C:\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint\1.0.5644.0\Scripts\"/>
     
-        <!--Type: string Usage: Capture files location on the driver computer. Make sure the folder exists.-->
+        <!--Type: string Usage: Capture files location on the client/driver computer. Make sure the folder exists.-->
         <Property name="LocalCapFilePath" value="C:\Test\TestLog\MA\"/>
 
         <Property name="ExpectedSequenceFilePath" value="C:\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint\1.0.5644.0\Source\OD\TestCode\TestSuite\ExpectFrames"/>
     
-        <!--Type: string Usage: Logs Path for Powershell Adapter on the driver computer. Make sure the folder exists.-->
+        <!--Type: string Usage: Logs Path for Powershell Adapter on the client/driver computer. Make sure the folder exists.-->
         <Property name="DriverLogPath" value="C:\Test\TestLog\" />
 
         <!--Advanced Configuration-->

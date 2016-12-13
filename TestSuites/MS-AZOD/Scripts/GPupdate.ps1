@@ -1,13 +1,10 @@
-﻿########################################################################################################
+﻿####################################################################################
 ## Copyright (c) Microsoft. All rights reserved.
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-########################################################################################################
-
-####################################################################################
 ##
 ## 	Microsoft Windows Powershell Scripting
-##  File:		RemoteLogon.ps1
-##	Purpose:	Start and close cmd.exe with a domain user account in current machine
+##  File:		GPupdate.ps1
+##	Purpose:	Refreshes local and Active Directory-based Group Policy settings, including security settings
 ##	Version: 	1.1 (18 Jan, 2012)
 ####################################################################################
 

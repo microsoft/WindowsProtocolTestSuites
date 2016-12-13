@@ -6,8 +6,8 @@
 #############################################################################
 ##
 ## Microsoft Windows Powershell Scripting
-## File:           RemoteSessionSetup.ps1
-## Purpose:        Use WinRM to Setup a powershell session from local machine to a remote computer.
+## File:           IsRemoteSessionSetup.ps1
+## Purpose:        Use WinRM to Setup a powershell session from local machine to a remote computer then return if it can be connected.
 ## Version:        1.1 (2 Mar, 2012)
 ##
 ##############################################################################
@@ -101,9 +101,6 @@ echo "EXECUTE [RemoteSessionSetup.ps1] FINISHED." | Out-File $logFile -Append
 #-------------------------------------------------------------------------------------#
 # Return Result
 #-------------------------------------------------------------------------------------#
-#return $remoteSession
-
-#return $remoteSession -match "[PSSession]Session"
 $returnvalue = !($remoteSession -match "The client cannot connect to the destination specified in the request.")
 
 Remove-PSSession -Session $remoteSession -ErrorAction Stop

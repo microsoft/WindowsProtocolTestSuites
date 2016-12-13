@@ -1,9 +1,6 @@
-########################################################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-########################################################################################################
-
 #############################################################################
+## Copyright (c) Microsoft. All rights reserved.
+## Licensed under the MIT license. See LICENSE file in the project root for full license information
 ##
 ## Microsoft Windows Powershell Scripting
 ## File:           Config-AP01.ps1
@@ -23,11 +20,11 @@ Function Phase1
 	$endPointPath = "$env:SystemDrive\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint"
     $azodTestSuites = Get-ChildItem -Path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestSuites\MS-AZOD-OD-*'
     $azodTestSuite = $azodTestSuites[0]
-    $version = $azodTestSuite.Name.Substring($azodTestSuite.Name.Length-10,10)
+    $version = $azodTestSuite.Name.Substring(80,$azodTestSuite.Name.Length-80)
 
     $dataFile = "$endPointPath\$version\scripts\Config.xml"
     $logPath = $env:SystemDrive
-    $logFile = "config-ap01.ps1.log"
+    $logFile = $MyInvocation.MyCommand.Name + ".log"
     $domainName = "contoso.com"
     $domainAdmin 	= "administrator"
     $domainAdminPwd 	= "Password01!"
@@ -44,7 +41,7 @@ Function Phase1
         {
 	        [xml]$configFile = Get-Content -Path $dataFile
 	        $logPath	= $configFile.Parameters.LogPath
-	        $logFile	= $logPath + "\Config-ap01.ps1.log"
+	        $logFile	= $logPath + "\" + $MyInvocation.MyCommand.Name + ".log"
 
 	        $domainName 	= $configFile.Parameters.LocalRealm.DomainName
             $domainAdmin 	= $configFile.Parameters.LocalRealm.DomainAdministrator.UserName
@@ -231,6 +228,8 @@ Function Phase2
     Install-WindowsFeature File-Services
     .\Write-Info.ps1 "Install-WindowsFeature FS-Resource-Manager`n"
     Install-WindowsFeature FS-Resource-Manager
+
+    gpupdate /force
 }
 
 Function Phase3
@@ -238,11 +237,11 @@ Function Phase3
 	$endPointPath = "$env:SystemDrive\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint"
     $azodTestSuites = Get-ChildItem -Path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestSuites\MS-AZOD-OD-*'
     $azodTestSuite = $azodTestSuites[0]
-    $version = $azodTestSuite.Name.Substring($azodTestSuite.Name.Length-10,10)
+    $version = $azodTestSuite.Name.Substring(80, $azodTestSuite.Name.Length-80)
 
     $dataFile = "$endPointPath\$version\scripts\Config.xml"
     $logPath = $env:SystemDrive
-    $logFile = "config-ap01.ps1.log"
+    $logFile = $MyInvocation.MyCommand.Name + ".log"
     $domainName = "contoso.com"
     $domainAdmin 	= "administrator"
     $domainAdminPwd 	= "Password01!"
@@ -253,7 +252,7 @@ Function Phase3
         {
 	        [xml]$configFile = Get-Content -Path $dataFile
 	        $logPath	= $configFile.Parameters.LogPath
-	        $logFile	= $logPath + "\Config-ap01.ps1.log"
+	        $logFile	= $logPath + "\" + $MyInvocation.MyCommand.Name + ".log"
 
 	        $domainName 	= $configFile.Parameters.LocalRealm.DomainName
             $domainAdmin 	= $configFile.Parameters.LocalRealm.DomainAdministrator.UserName
@@ -338,7 +337,6 @@ Function Phase3
                     {
                         .\Write-Info.ps1 "GetAccessControl for $sharePath."
                         $acl = (Get-Item $sharePath).GetAccessControl("Access")
-                        $aclAccess = $acl.Access
                         .\Write-Info.ps1 "Set-Acl $sharePath $policy."
                         Set-Acl $sharePath $acl $policy
                     }
@@ -417,7 +415,7 @@ Function Main
 #----------------------------------------------------------------------------
 $rootPath = Split-Path $MyInvocation.MyCommand.Definition -parent
 Push-Location $rootPath 
-$logFile =  "$rootPath\Config-AP01.ps1.log"
+$logFile =  "$rootPath\" + $MyInvocation.MyCommand.Name + ".log"
 $dataFile = "$rootPath\Config.xml"
 if(Test-Path -Path $dataFile)
 {
@@ -429,7 +427,7 @@ if(Test-Path -Path $dataFile)
         {
             cmd /c mkdir $logPath 2>&1 | Write-Host
         }
-	    $logFile = $logPath + "\Config-AP01.ps1.log"
+	    $logFile = $logPath + "\" + $MyInvocation.MyCommand.Name + ".log"
     }
     catch
     {

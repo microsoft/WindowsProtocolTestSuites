@@ -1,9 +1,6 @@
-﻿########################################################################################################
+﻿####################################################################################
 ## Copyright (c) Microsoft. All rights reserved.
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-########################################################################################################
-
-####################################################################################
 ##
 ## 	Microsoft Windows Powershell Scripting
 ##  File:		AccessShareFolder.ps1
@@ -110,16 +107,6 @@ function Check-UNCPath($path){
 	}
 	return $isExist
 }
-
-#$isUNCPathExist=Check-UNCPath ($uncPath)
-
-#if ( $isUNCPathExist -eq $false){
-#	echo "Error: The UNC path $uncPath is invalid. Please double check your inputs." >> $logFile
-#	echo "-----------------$runningScriptName Log Done----------------------" >> $logFile
-#	Throw "Error: The UNC path $uncPath is invalid. Please double check your inputs."
-#}
-
-#echo "The UNC path $uncPath exists." >> $logFile
 
 #----------------------------------------------------------------------------
 # Mount the unc path to a local drive, this will invoke SMB message

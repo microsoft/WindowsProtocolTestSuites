@@ -1,16 +1,12 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocol.TestSuites.Azod.Adapter.Util;
+using Microsoft.Protocols.TestTools;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Protocols.TestTools;
 using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
 using System.Text.RegularExpressions;
-using Microsoft.Protocol.TestSuites.Azod.Adapter.Util;
 
 namespace Microsoft.Protocol.TestSuites.Azod.Adapter
 {

@@ -1,9 +1,6 @@
-########################################################################################################
+#############################################################################
 ## Copyright (c) Microsoft. All rights reserved.
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-########################################################################################################
-
-#############################################################################
 ##
 ## Microsoft Windows Powershell Scripting
 ## File:           Config-DC02.ps1
@@ -22,11 +19,11 @@ Function Phase1
     $endPointPath = "$env:SystemDrive\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint"
     $azodTestSuites = Get-ChildItem -Path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestSuites\MS-AZOD-OD-*'
     $azodTestSuite = $azodTestSuites[0]
-    $version = $azodTestSuite.Name.Substring($azodTestSuite.Name.Length-10,10)
+    $version = $azodTestSuite.Name.Substring(80, $azodTestSuite.Name.Length-80)
 
     $dataFile = "$endPointPath\$version\scripts\Config.xml"     
     $logPath = $env:SystemDrive
-    $logFile = "config-dc02.ps1.log"
+    $logFile = $MyInvocation.MyCommand.Name + ".log"
     $domainName = "kerb.com"
     $domainAdmin 	= "administrator"
     $domainAdminPwd 	= "Password01!"
@@ -37,7 +34,7 @@ Function Phase1
         {
 	        [xml]$configFile = Get-Content -Path $dataFile
 	        $logPath	= $configFile.Parameters.LogPath
-	        $logFile	= $logPath + "\Config-DC02.ps1.log"
+	        $logFile	= $logPath + "\" + $MyInvocation.MyCommand.Name + ".log"
 
 	        $domainName 	= $configFile.Parameters.TrustRealm.DomainName
             $domainAdmin 	= $configFile.Parameters.TrustRealm.DomainAdministrator.UserName
@@ -251,11 +248,11 @@ Function Phase2
     $endPointPath = "$env:SystemDrive\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint"
     $azodTestSuites = Get-ChildItem -Path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestSuites\MS-AZOD-OD-*'
     $azodTestSuite = $azodTestSuites[0]
-    $version = $azodTestSuite.Name.Substring($azodTestSuite.Name.Length-10,10)
+    $version = $azodTestSuite.Name.Substring(80, $azodTestSuite.Name.Length-80)
 
     $dataFile = "$endPointPath\$version\scripts\Config.xml"     
     $logPath = $env:SystemDrive
-    $logFile = "config-dc02.ps1.log"
+    $logFile = $MyInvocation.MyCommand.Name + ".log"
     $domainName = "kerb.com"
     $domainAdmin 	= "administrator"
     $domainAdminPwd 	= "Password01!"
@@ -270,7 +267,7 @@ Function Phase2
         {
 	        [xml]$configFile = Get-Content -Path $dataFile
 	        $logPath	= $configFile.Parameters.LogPath
-	        $logFile	= $logPath + "\Config-DC02.ps1.log"
+	        $logFile	= $logPath + "\" + $MyInvocation.MyCommand.Name + ".log"
 
 	        $domainName 	= $configFile.Parameters.TrustRealm.DomainName
             $domainAdmin 	= $configFile.Parameters.TrustRealm.DomainAdministrator.UserName
@@ -450,18 +447,18 @@ Function Phase3
     #-----------------------------------------------------------------------------------------------
     # Configure Group Policy for Claims
     #-----------------------------------------------------------------------------------------------
-    Write-Host "Extract GPOBackup files"
+    .\Write-Info.ps1 "Extract GPOBackup files"
     .\Extract-ZipFile.ps1 -ZipFile $endPointPath\$version\Scripts\DC02GPO.zip -Destination $endPointPath\$version\Scripts\DC02GPO
 
-    Write-Host "Configuring Group Policy"
+    .\Write-Info.ps1 "Configuring Group Policy"
     Import-GPO -BackupId 7D5F951C-D924-4118-80C9-DFCEC3B2FD08 -TargetName "Default Domain Policy" -Path "$endPointPath\$version\Scripts\DC02GPO\" -CreateIfNeeded
 
     gpupdate /force 
 
-    # Create claim transformation policy
+    # Create claim transformation 
     $dataFile = "$endPointPath\$version\scripts\Config.xml"     
     $logPath = $env:SystemDrive
-    $logFile = "config-dc02.ps1.log"
+    $logFile = $MyInvocation.MyCommand.Name + ".log"
     $domainName = "kerb.com"
     $domainAdmin 	= "administrator"
     $domainAdminPwd 	= "Password01!"
@@ -476,7 +473,7 @@ Function Phase3
         {
 	        [xml]$configFile = Get-Content -Path $dataFile
 	        $logPath	= $configFile.Parameters.LogPath
-	        $logFile	= $logPath + "\Config-DC02.ps1.log"
+	        $logFile	= $logPath + "\" + $MyInvocation.MyCommand.Name + ".log"
 
 	        $domainName 	= $configFile.Parameters.TrustRealm.DomainName
             $domainAdmin 	= $configFile.Parameters.TrustRealm.DomainAdministrator.UserName
@@ -600,7 +597,7 @@ Function Main
 #----------------------------------------------------------------------------
 $rootPath = Split-Path $MyInvocation.MyCommand.Definition -parent
 Push-Location $rootPath
-$logFile =  "$rootPath\Config-DC02.ps1.log"
+$logFile =  "$rootPath\" + $MyInvocation.MyCommand.Name + ".log"
 $dataFile = "$rootPath\Config.xml"
 if(Test-Path -Path $dataFile)
 {
@@ -612,7 +609,7 @@ if(Test-Path -Path $dataFile)
         {
             cmd /c mkdir $logPath 2>&1 | Write-Host
         }
-	    $logFile = $logPath + "\Config-DC02.ps1.log"
+	    $logFile = $logPath + "\" = $MyInvocation.MyCommand.Name + ".log"
     }
     catch
     {

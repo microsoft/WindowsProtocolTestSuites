@@ -94,9 +94,6 @@ try{
 		Invoke-Command -Session $RemoteSession -ScriptBlock {param($switch);REG ADD HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\policies\system\kerberos\parameters  /v EnableCbacAndArmor /t REG_DWORD /d $switch /f} -argumentlist $cbacSwitch		
 		Invoke-Command -Session $RemoteSession -ScriptBlock {REG ADD HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\policies\system\kerberos\parameters  /v SupportedEncryptionTypes /t REG_DWORD /d 0x7fffffff /f}
 		
-		#Invoke-Command -Session $RemoteSession -ScriptBlock {gpupdate /force}
-
-		
 		#-------------------------------------------------------------------------------------#
 		# Remove the remote session to the remote computer
 		#-------------------------------------------------------------------------------------#

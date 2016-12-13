@@ -1,9 +1,7 @@
-########################################################################################################
+#############################################################################
 ## Copyright (c) Microsoft. All rights reserved.
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-########################################################################################################
-
-#############################################################################
+##
 ## Microsoft Windows Powershell Scripting
 ## File:           TurnOff-FileReadonly.ps1
 ## Purpose:        Turn off readonly attribute for a file.

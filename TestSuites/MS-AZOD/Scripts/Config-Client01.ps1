@@ -1,9 +1,6 @@
-########################################################################################################
+#############################################################################
 ## Copyright (c) Microsoft. All rights reserved.
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-########################################################################################################
-
-#############################################################################
 ##
 ## Microsoft Windows Powershell Sripting
 ## File:           Config-client01.ps1
@@ -26,11 +23,11 @@ Function Phase1
  	$endPointPath = "$env:SystemDrive\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint"    
     $azodTestSuites = Get-ChildItem -Path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestSuites\MS-AZOD-OD-*'
     $azodTestSuite = $azodTestSuites[0]
-    $version = $azodTestSuite.Name.Substring($azodTestSuite.Name.Length-10,10)
+    $version = $azodTestSuite.Name.Substring(80, $azodTestSuite.Name.Length-80)
 
     $dataFile = "$endPointPath\$version\scripts\Config.xml"    
     $logPath = $env:SystemDrive
-    $logFile = "config-client01.ps1.log"
+    $logFile = $MyInvocation.MyCommand.Name + ".log"
     $domainName = "contoso.com"
     $domainAdmin 	= "administrator"
     $domainAdminPwd 	= "Password01!"
@@ -42,7 +39,7 @@ Function Phase1
         {
 	        [xml]$configFile = Get-Content -Path $dataFile
 	        $logPath = $configFile.Parameters.LogPath
-	        $logFile = $logPath + "\Config-client01.ps1.log"
+	        $logFile = $logPath + "\" + $MyInvocation.MyCommand.Name + ".log"
 
 	        $domainName = $configFile.Parameters.LocalRealm.DomainName
             $domainAdmin = $configFile.Parameters.LocalRealm.DomainAdministrator.UserName
@@ -241,11 +238,11 @@ Function Phase2
  	$endPointPath = "$env:SystemDrive\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint"    
     $azodTestSuites = Get-ChildItem -Path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestSuites\MS-AZOD-OD-*'
     $azodTestSuite = $azodTestSuites[0]
-    $version = $azodTestSuite.Name.Substring($azodTestSuite.Name.Length-10,10)
+    $version = $azodTestSuite.Name.Substring(80, $azodTestSuite.Name.Length-80)
 
     $dataFile = "$endPointPath\$version\scripts\Config.xml"    
     $logPath = $env:SystemDrive
-    $logFile = "config-client01.ps1.log"
+    $logFile = $MyInvocation.MyCommand.Name + ".log"
     $domainName = "contoso.com"
     $domainAdmin 	= "administrator"
     $domainAdminPwd 	= "Password01!"
@@ -257,7 +254,7 @@ Function Phase2
         {
 	        [xml]$configFile = Get-Content -Path $dataFile
 	        $logPath = $configFile.Parameters.LogPath
-	        $logFile = $logPath + "\Config-client01.ps1.log"
+	        $logFile = $logPath + "\" + $MyInvocation.MyCommand.Name + ".log"
 
 	        $domainName = $configFile.Parameters.LocalRealm.DomainName
             $domainAdmin = $configFile.Parameters.LocalRealm.DomainAdministrator.UserName
@@ -307,7 +304,7 @@ Function Phase2
         .\Modify-ConfigFileNode.ps1 $ptfconfig.FullName "CrossForestApplicationServerIP" $configFile.Parameters.LocalRealm.Client.IP
         .\Modify-ConfigFileNode.ps1 $ptfconfig.FullName "CrossForestApplicationServerShareFolder" "\\$CrossForestApplicationServerName.$CrossForestName\AzodShare"
         .\Modify-ConfigFileNode.ps1 $ptfconfig.FullName "ScriptPath" "$endPointPath\$version\Scripts\"
-        .\Modify-ConfigFileNode.ps1 $ptfconfig.FullName "ExpectedSequenceFilePath" "$endPointPath\$version\Source\OD\TestCode\TestSuite\ExpectFrames"
+        .\Modify-ConfigFileNode.ps1 $ptfconfig.FullName "ExpectedSequenceFilePath" "$endPointPath\$version\Bin"
     }  
 
     # Enable Powershell Remoting
@@ -361,7 +358,7 @@ Function Main()
 #----------------------------------------------------------------------------
 $rootPath = Split-Path $MyInvocation.MyCommand.Definition -parent
 Push-Location $rootPath 
-$logFile =  "$rootPath\Config-Client01.ps1.log"
+$logFile =  "$rootPath\" + $MyInvocation.MyCommand.Name + ".log"
 $dataFile = "$rootPath\Config.xml"
 if(Test-Path -Path $dataFile)
 {
@@ -373,7 +370,7 @@ if(Test-Path -Path $dataFile)
         {
             cmd /c mkdir $logPath 2>&1 | Write-Host
         }
-	    $logFile = $logPath + "\Config-client01.ps1.log"
+	    $logFile = $logPath + "\" + $MyInvocation.MyCommand.Name + ".log"
     }
     catch
     {

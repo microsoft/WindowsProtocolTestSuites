@@ -29,13 +29,12 @@ $uncPath = $uncPath.Replace("/","\")
 $workingDir=$MyInvocation.MyCommand.path
 $workingDir =Split-Path $workingDir
 $runningScriptName=$MyInvocation.MyCommand.Name
-#$logFile="$workingDir\$runningScriptName.log"
 $logFile = "$PtfPropDriverLogPath\$logFileName"
 $signalFile="$workingDir\$runningScriptName.signal"
 
 
 #----------------------------------------------------------------------------
-# Creat the log file
+# Create the log file
 #----------------------------------------------------------------------------
 echo "$runningScriptName starts." 
 echo "-----------------$runningScriptName Log----------------------" > $logFile
@@ -80,7 +79,6 @@ if ($fileName -eq $null -or $uncPath -eq "")
 {
 	echo "Error: The required filename is blank." >> $logFile
 	echo "-----------------$runningScriptName Log Done----------------------" >> $logFile
-	#Throw "filename cannot be blank." 
     return $false
 }
 
@@ -88,21 +86,18 @@ if ($userName -eq $null -or $userName -eq "" )
 {
 	echo "Error: The required username is blank." >> $logFile
 	echo "-----------------$runningScriptName Log Done----------------------" >> $logFile
-	#Throw"The username cannot be blank."	
     return $false
 }
 if ($password -eq $null -or $password -eq "")
 {
 	echo "Error: The required password is blank." >> $logFile
 	echo "-----------------$runningScriptName Log Done----------------------" >> $logFile
-    #Throw "Password cannot be blank."
     return $false
 }
 if ($domainName -eq $null -or $domainName -eq "")
 {
 	echo "Error: The required domain name is blank." >> $logFile
 	echo "-----------------$runningScriptName Log Done----------------------" >> $logFile
-    #Throw "Domain Name cannot be blank."
     return $false
 }
 
@@ -136,7 +131,6 @@ if ( $isUNCPathExist -eq $false){
 	echo "Error: The UNC path $uncPath is invalid. Please double check your inputs."
 	echo "Error: The UNC path $uncPath is invalid. Please double check your inputs." >> $logFile
 	echo "-----------------$runningScriptName Log Done----------------------" >> $logFile
-	#Throw "Error: The UNC path $uncPath is invalid. Please double check your inputs."
     return $false
 }
 else
@@ -203,8 +197,8 @@ else
     echo "Run the net use  command successfully." >> $logFile
 }
 
-echo "create a file to the share folder with command new-item."
-echo "create a file to the share folder with command new-item." >> $logFile
+echo "Create a file to the share folder with command new-item."
+echo "Create a file to the share folder with command new-item." >> $logFile
 
 $fileFullPath =  "X:\" + $fileName
 
@@ -231,7 +225,7 @@ if(!$?)
     return $false
 }
 
-echo "done" > $signalFile
+echo "Done" > $signalFile
 echo "$runningScriptName ends." 
 echo "-----------------$runningScriptName Log Done----------------------" >> $logFile
 return $true

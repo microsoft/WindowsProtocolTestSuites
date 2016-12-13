@@ -1,8 +1,3 @@
-########################################################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-########################################################################################################
-
 #############################################################################
 ##
 ## Microsoft Windows Powershell Scripting
@@ -10,6 +5,7 @@
 ## Purpose:        Protocol Test Suite Entry Point for FileSharing
 ## Requirements:   Windows Powershell 2.0
 ## Supported OS:   Windows Server 8.1
+## Copyright (c) Microsoft Corporation. All rights reserved.
 ##
 ##############################################################################
 
@@ -76,19 +72,6 @@ if($function:EnterCallStack -ne $null)
 #----------------------------------------------------------------------------
 Stop-Transcript -ErrorAction Continue | Out-Null
 Start-Transcript -Path "$testResultDir\Execute-ProtocolTest.ps1.log" -Append -Force
-
-#----------------------------------------------------------------------------
-# Verify input parameters
-#----------------------------------------------------------------------------
-Write-Info.ps1 "Verify input parameters... " -foregroundcolor Yellow
-if ($protocolName -ne "MS-AZOD")
-{
-    Throw "$protocolName is not correct. Only MS-AZOD is allowed."
-}
-else
-{
-	Write-Info.ps1 " Current test protocol is $protocolName " -foregroundcolor Green
-}
 
 #----------------------------------------------------------------------------
 # Define source folders
