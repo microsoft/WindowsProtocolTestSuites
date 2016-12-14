@@ -42,15 +42,13 @@ namespace Microsoft.Protocols.TestTools.MessageAnalyzer
         /// </summary>
         public static MessageAnalyzerMonitor CreateMonitor(List<string> groupList = null, bool isMAInstalled = false)
         {
-            if (instance == null)
+            if (instance != null)
             {
-                instance = new MessageAnalyzerMonitor(groupList, isMAInstalled);
-                return instance;
+                instance.Dispose();
             }
-            else
-            {
-                throw new Exception("Monitor instance has been created before. Only one Monitor instance exists during runtime.");
-            }
+            
+            instance = new MessageAnalyzerMonitor(groupList, isMAInstalled);
+            return instance;
         }
 
         #endregion Static Constructor
