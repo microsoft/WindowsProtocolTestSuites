@@ -140,8 +140,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                     binaryWriter.Write((ushort)p_result_list.p_results[i].reason);
 
                     binaryWriter.Write(p_result_list.p_results[i].transfer_syntax.if_uuid.ToByteArray());
-                    binaryWriter.Write(p_result_list.p_results[i].transfer_syntax.if_vers_major);
-                    binaryWriter.Write(p_result_list.p_results[i].transfer_syntax.if_vers_minor);
+                    binaryWriter.Write(p_result_list.p_results[i].transfer_syntax.if_version);
                 }
             }
 
@@ -208,16 +207,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                 p_result_list.p_results[i].transfer_syntax = new p_syntax_id_t();
                 p_result_list.p_results[i].transfer_syntax.if_uuid
                     = new Guid(binaryReader.ReadBytes(RpceUtility.GUID_SIZE));
-                p_result_list.p_results[i].transfer_syntax.if_vers_major
-                    = binaryReader.ReadUInt16();
-                p_result_list.p_results[i].transfer_syntax.if_vers_minor
-                    = binaryReader.ReadUInt16();
+                p_result_list.p_results[i].transfer_syntax.if_version
+                    = binaryReader.ReadUInt32();
 
                 if (packed_drep.dataRepFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
                 {
                     p_result_list.p_results[i].transfer_syntax.if_uuid = EndianUtility.ReverseByteOrder(p_result_list.p_results[i].transfer_syntax.if_uuid);
-                    p_result_list.p_results[i].transfer_syntax.if_vers_major = EndianUtility.ReverseByteOrder(p_result_list.p_results[i].transfer_syntax.if_vers_major);
-                    p_result_list.p_results[i].transfer_syntax.if_vers_minor = EndianUtility.ReverseByteOrder(p_result_list.p_results[i].transfer_syntax.if_vers_minor);
+                    p_result_list.p_results[i].transfer_syntax.if_version = EndianUtility.ReverseByteOrder(p_result_list.p_results[i].transfer_syntax.if_version);
                 }
             }
         }

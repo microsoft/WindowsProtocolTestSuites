@@ -118,16 +118,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                     binaryWriter.Write(p_context_elem.p_cont_elem[i].n_transfer_syn);
                     binaryWriter.Write(p_context_elem.p_cont_elem[i].reserved);
                     binaryWriter.Write(p_context_elem.p_cont_elem[i].abstract_syntax.if_uuid.ToByteArray());
-                    binaryWriter.Write(p_context_elem.p_cont_elem[i].abstract_syntax.if_vers_major);
-                    binaryWriter.Write(p_context_elem.p_cont_elem[i].abstract_syntax.if_vers_minor);
+                    binaryWriter.Write(p_context_elem.p_cont_elem[i].abstract_syntax.if_version);
                     if (p_context_elem.p_cont_elem[i].transfer_syntaxes != null)
                     {
                         for (int j = 0; j < p_context_elem.p_cont_elem[i].transfer_syntaxes.Length; j++)
                         {
                             binaryWriter.Write(
                                 p_context_elem.p_cont_elem[i].transfer_syntaxes[j].if_uuid.ToByteArray());
-                            binaryWriter.Write(p_context_elem.p_cont_elem[i].transfer_syntaxes[j].if_vers_major);
-                            binaryWriter.Write(p_context_elem.p_cont_elem[i].transfer_syntaxes[j].if_vers_minor);
+                            binaryWriter.Write(p_context_elem.p_cont_elem[i].transfer_syntaxes[j].if_version);
                         }
                     }
                 }
@@ -176,17 +174,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                 p_context_elem.p_cont_elem[i].abstract_syntax = new p_syntax_id_t();
                 p_context_elem.p_cont_elem[i].abstract_syntax.if_uuid
                     = new Guid(binaryReader.ReadBytes(RpceUtility.GUID_SIZE));
-                p_context_elem.p_cont_elem[i].abstract_syntax.if_vers_major
-                    = binaryReader.ReadUInt16();
-                p_context_elem.p_cont_elem[i].abstract_syntax.if_vers_minor
-                    = binaryReader.ReadUInt16();
+                p_context_elem.p_cont_elem[i].abstract_syntax.if_version
+                    = binaryReader.ReadUInt32();
 
                 if (packed_drep.dataRepFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
                 {
                     p_context_elem.p_cont_elem[i].p_cont_id = EndianUtility.ReverseByteOrder(p_context_elem.p_cont_elem[i].p_cont_id);
                     p_context_elem.p_cont_elem[i].abstract_syntax.if_uuid = EndianUtility.ReverseByteOrder(p_context_elem.p_cont_elem[i].abstract_syntax.if_uuid);
-                    p_context_elem.p_cont_elem[i].abstract_syntax.if_vers_major = EndianUtility.ReverseByteOrder(p_context_elem.p_cont_elem[i].abstract_syntax.if_vers_major);
-                    p_context_elem.p_cont_elem[i].abstract_syntax.if_vers_minor = EndianUtility.ReverseByteOrder(p_context_elem.p_cont_elem[i].abstract_syntax.if_vers_minor);
+                    p_context_elem.p_cont_elem[i].abstract_syntax.if_version = EndianUtility.ReverseByteOrder(p_context_elem.p_cont_elem[i].abstract_syntax.if_version);
                 }
 
                 p_context_elem.p_cont_elem[i].transfer_syntaxes
@@ -195,16 +190,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                 {
                     p_context_elem.p_cont_elem[i].transfer_syntaxes[j].if_uuid
                         = new Guid(binaryReader.ReadBytes(RpceUtility.GUID_SIZE));
-                    p_context_elem.p_cont_elem[i].transfer_syntaxes[j].if_vers_major
-                        = binaryReader.ReadUInt16();
-                    p_context_elem.p_cont_elem[i].transfer_syntaxes[j].if_vers_minor
-                        = binaryReader.ReadUInt16();
+                    p_context_elem.p_cont_elem[i].transfer_syntaxes[j].if_version
+                        = binaryReader.ReadUInt32();
 
                     if (packed_drep.dataRepFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
                     {
                         p_context_elem.p_cont_elem[i].transfer_syntaxes[j].if_uuid = EndianUtility.ReverseByteOrder(p_context_elem.p_cont_elem[i].transfer_syntaxes[j].if_uuid);
-                        p_context_elem.p_cont_elem[i].transfer_syntaxes[j].if_vers_major = EndianUtility.ReverseByteOrder(p_context_elem.p_cont_elem[i].transfer_syntaxes[j].if_vers_major);
-                        p_context_elem.p_cont_elem[i].transfer_syntaxes[j].if_vers_minor = EndianUtility.ReverseByteOrder(p_context_elem.p_cont_elem[i].transfer_syntaxes[j].if_vers_minor);
+                        p_context_elem.p_cont_elem[i].transfer_syntaxes[j].if_version = EndianUtility.ReverseByteOrder(p_context_elem.p_cont_elem[i].transfer_syntaxes[j].if_version);
                     }
                 }
             }

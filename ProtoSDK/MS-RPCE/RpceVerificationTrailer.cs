@@ -330,11 +330,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                                 writer.Write((ushort)secVtPcontext.command);
                                 writer.Write(secVtPcontext.length);
                                 writer.Write(secVtPcontext.interfaceId.if_uuid.ToByteArray());
-                                writer.Write(secVtPcontext.interfaceId.if_vers_major);
-                                writer.Write(secVtPcontext.interfaceId.if_vers_minor);
+                                writer.Write(secVtPcontext.interfaceId.if_version);
                                 writer.Write(secVtPcontext.transferSyntax.if_uuid.ToByteArray());
-                                writer.Write(secVtPcontext.transferSyntax.if_vers_major);
-                                writer.Write(secVtPcontext.transferSyntax.if_vers_minor);
+                                writer.Write(secVtPcontext.transferSyntax.if_version);
                             }
                             else
                             {
@@ -410,12 +408,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                             secVtPcontext.length = length;
                             secVtPcontext.interfaceId = new p_syntax_id_t();
                             secVtPcontext.interfaceId.if_uuid = new Guid(reader.ReadBytes(RpceUtility.GUID_SIZE));
-                            secVtPcontext.interfaceId.if_vers_major = reader.ReadUInt16();
-                            secVtPcontext.interfaceId.if_vers_minor = reader.ReadUInt16();
+                            secVtPcontext.interfaceId.if_version = reader.ReadUInt32();
                             secVtPcontext.transferSyntax = new p_syntax_id_t();
                             secVtPcontext.transferSyntax.if_uuid = new Guid(reader.ReadBytes(RpceUtility.GUID_SIZE));
-                            secVtPcontext.transferSyntax.if_vers_major = reader.ReadUInt16();
-                            secVtPcontext.transferSyntax.if_vers_minor = reader.ReadUInt16();
+                            secVtPcontext.transferSyntax.if_version = reader.ReadUInt32();
 
                             secVtList.Add(secVtPcontext);
                             break;

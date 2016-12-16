@@ -226,7 +226,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             List<p_cont_elem_t> p_cont_elem_list = new List<p_cont_elem_t>();
             if ((ndrVersion & RpceNdrVersion.NDR) == RpceNdrVersion.NDR)
             {
-                p_cont_elem_t p_cont_elem;
+                p_cont_elem_t p_cont_elem = new p_cont_elem_t();
                 p_cont_elem.p_cont_id = (ushort)(p_cont_elem_list.Count);
                 p_cont_elem.n_transfer_syn = 1;
                 p_cont_elem.reserved = 0;
@@ -244,7 +244,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             }
             if ((ndrVersion & RpceNdrVersion.NDR64) == RpceNdrVersion.NDR64)
             {
-                p_cont_elem_t p_cont_elem;
+                p_cont_elem_t p_cont_elem = new p_cont_elem_t();
                 p_cont_elem.p_cont_id = (ushort)(p_cont_elem_list.Count);
                 p_cont_elem.n_transfer_syn = 1;
                 p_cont_elem.reserved = 0;
@@ -262,7 +262,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             }
             if (bindTimeFeatureNegotiationBitmask != null)
             {
-                p_cont_elem_t p_cont_elem;
+                p_cont_elem_t p_cont_elem = new p_cont_elem_t();
                 p_cont_elem.p_cont_id = (ushort)(p_cont_elem_list.Count);
                 p_cont_elem.n_transfer_syn = 1;
                 p_cont_elem.reserved = 0;
@@ -325,7 +325,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             alterContextPdu.p_context_elem.reserved2 = 0;
             alterContextPdu.p_context_elem.p_cont_elem = new p_cont_elem_t[1];
 
-            p_cont_elem_t p_cont_elem;
+            p_cont_elem_t p_cont_elem = new p_cont_elem_t();
             p_cont_elem.p_cont_id = context.ContextIdentifier;
             p_cont_elem.n_transfer_syn = 1;
             p_cont_elem.reserved = 0;
