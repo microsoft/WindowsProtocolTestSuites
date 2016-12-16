@@ -1,4 +1,7 @@
-﻿using Microsoft.Opn.Runtime.Metadata;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Opn.Runtime.Metadata;
 using Microsoft.Opn.Runtime.Monitoring;
 using Microsoft.Opn.Runtime.Services;
 using Microsoft.Opn.Runtime.Utilities;
