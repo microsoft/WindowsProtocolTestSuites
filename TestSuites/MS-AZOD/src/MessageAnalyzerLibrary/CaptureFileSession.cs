@@ -1,7 +1,4 @@
-﻿// Copyright (c) Microsoft. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
-using Microsoft.Opn.Runtime.Messaging;
+﻿using Microsoft.Opn.Runtime.Messaging;
 using Microsoft.Opn.Runtime.Monitoring;
 using Microsoft.Opn.Runtime.Utilities;
 using Microsoft.Opn.Runtime.Values;

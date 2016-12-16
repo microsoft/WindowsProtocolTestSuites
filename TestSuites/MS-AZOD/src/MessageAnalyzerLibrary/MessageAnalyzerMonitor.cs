@@ -1,7 +1,4 @@
-﻿// Copyright (c) Microsoft. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
-using Microsoft.Opn.Runtime.Metadata;
+﻿using Microsoft.Opn.Runtime.Metadata;
 using Microsoft.Opn.Runtime.Monitoring;
 using Microsoft.Opn.Runtime.Services;
 using Microsoft.Opn.Runtime.Utilities;
@@ -46,7 +43,7 @@ namespace Microsoft.Protocols.TestTools.MessageAnalyzer
             {
                 instance.Dispose();
             }
-            
+
             instance = new MessageAnalyzerMonitor(groupList, isMAInstalled);
             return instance;
         }
@@ -291,6 +288,7 @@ namespace Microsoft.Protocols.TestTools.MessageAnalyzer
         /// <summary>
         /// delete files to make sure MA library support parsing .matp file
         /// </summary>
+        // TODO: it's kind of workaround method, if MA API changes and will not incur duplicate files, delete part of this code 
         private void ConfigureEnvironment()
         {
             string currentAppPath = System.AppDomain.CurrentDomain.BaseDirectory;

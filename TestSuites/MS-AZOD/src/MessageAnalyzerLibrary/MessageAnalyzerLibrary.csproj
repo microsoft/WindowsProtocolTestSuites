@@ -39,6 +39,12 @@
     <Reference Include="Microsoft.Opn.Language">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="Microsoft.Opn.Runtime.Messaging">
+      <HintPath>C:\Program Files\Microsoft Message Analyzer\extensions\Microsoft.Opn.Runtime.Messaging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Opn.Technologies">
+      <HintPath>C:\Program Files\Microsoft Message Analyzer\extensions\Microsoft.Opn.Technologies.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Protocols.Tools.UI.Core">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
