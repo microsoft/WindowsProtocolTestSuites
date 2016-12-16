@@ -62,4 +62,12 @@
 		<tool>TestAgent2012</tool>
 		<tool>PTF</tool>
 	</BranchCache>
+	<AZOD>
+		<tool>NET40</tool>
+		<tool>VCRedist_x86</tool>
+		<tool>SE</tool>
+		<tool>Wix310</tool>
+		<tool>TestAgent2012</tool>
+		<tool>PTF</tool>
+	</AZOD>
 </Dependency>

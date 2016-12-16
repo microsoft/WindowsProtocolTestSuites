@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExpectedMessageList>
+  <!--computer ip are required for filter, this is the limitation of MA-->
+  <Filter>(SMB2 or NRPC or MSRPCE or KerberosV5)</Filter>
+  <!--1 TGS-REQ: AP01 Request for authentication on behalf of User-->
+  <ExpectedMessage>
+    <Name>KerberosV5.KrbMessage</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Message.MsgType" Value="12" Type="long"/>
+    </VerifyItemList>
+    <ArrayField FieldName="Message.PAData">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <!--PA-TGS-REQ-->
+          <VerifyItem Operation="equal" FieldName="PADataType" Value="1" Type="long"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <!--PA_S4U_X509_USER-->
+          <VerifyItem Operation="equal" FieldName="PADataType" Value="130" Type="long"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <!--PA-FOR-USER-->
+          <VerifyItem Operation="equal" FieldName="PADataType" Value="129" Type="long"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <!--PA-PAC-OPTIONS-->
+          <VerifyItem Operation="equal" FieldName="PADataType" Value="167" Type="long"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+    <ArrayField FieldName="Message.ReqBody.Sname.NameString">
+      <ArrayItem>
+        <VerifyItemList Operation="or">
+          <VerifyItem Operation="equal" Value="{ApplicationServerName}$@{KdcDomainName}" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--2 TGS-REP: Response to AP01 for KRB_TGS_REQ request-->
+  <ExpectedMessage>
+    <Name>KerberosV5.KrbMessage</Name>
+    <Source>{KdcName}</Source>
+    <Destination>{ApplicationServerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Message.MsgType" Value="13" Type="long"/>
+    </VerifyItemList>
+    <ArrayField FieldName="Message.PAData">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <!--PA_S4U_X509_USER-->
+          <VerifyItem Operation="equal" FieldName="PADataType" Value="130" Type="long"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+    <ArrayField FieldName="Message.Cname.NameString">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="Administrator" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+    <ArrayField FieldName="Message.Ticket.Sname.NameString">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="{ApplicationServerName}$@{KdcDomainName}" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+ </ExpectedMessageList>
