@@ -3,14 +3,14 @@
 using System;
 using System.IO;
 using System.Drawing;
+using System.Reflection;
 using System.Diagnostics;
 using Microsoft.Protocols.TestTools;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Protocols.TestSuites.Rdpbcgr;
-using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using System.Text.RegularExpressions;
-using System.Reflection;
+using Microsoft.Protocols.TestTools.StackSdk;
+using Microsoft.Protocols.TestSuites.Rdpbcgr;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 
 namespace Microsoft.Protocols.TestSuites.Rdp
 {
@@ -20,8 +20,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         const int VideoMode_TileRowNum = 5; //The row number of tiles to be sent to client.
         const int VideoMode_TileColNum = 5; //The column number of tiles to be sent to client.
         const string RDPVersionPattern = "RDP\\d+\\.\\d+"; // Used to match the RDP version in TestCategory. It MUST follow this format.
-        const int RDPVersionBoundary = 50; // If RDP.Version = 8,1 will parse as 81, then using this boundary value to check it.
-
+        
         #region Adapter Instances
         protected IRdpbcgrAdapter rdpbcgrAdapter;
         protected IRdpSutControlAdapter sutControlAdapter;
@@ -126,17 +125,26 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             try
             {
                 string currentRDPVersion = this.Site.Properties["RDP.Version"];
-                double currentRDPVersionValue = Double.Parse(currentRDPVersion);
 
-                if (currentRDPVersionValue > RDPVersionBoundary)
+                //Validate the format of RDP.version in ptfconfig. The format of the version is required to be x.x
+                Version currentRDPVer = null;
+                if (!Version.TryParse(currentRDPVersion, out currentRDPVer))
                 {
-                    this.Site.Assert.Fail("RDP.Version in config file is invalid.");
+                    this.Site.Assert.Fail("Invalid format of RDP.Version {0} in config file. The valid format is required to be x.x. Please check the ptf config file.", currentRDPVersion);
                 }
 
-                double versionValue = Double.Parse(version);
-                if (currentRDPVersionValue < versionValue)
+                //Validate the RDP version required by the test case against the RDP.version in ptfconfig
+                Version testcaseRdpVer = null;
+                if (Version.TryParse(version, out testcaseRdpVer))
                 {
-                    this.Site.Assert.Inconclusive("{0} is only supported by RDP {1} or above. But current RDP version is set to {2}", testCaseName, version, currentRDPVersion);
+                    if (testcaseRdpVer > currentRDPVer)
+                    {
+                        this.Site.Assert.Inconclusive("Test case {0} is only supported by RDP {1} or above. But current RDP version is set to {2}", testCaseName, version, currentRDPVersion);
+                    }
+                }
+                else
+                {
+                    this.Site.Assert.Fail("Invalid format of test case category RDP version {0}. The valid format is required to be RDPx.x.", version, testCaseName);
                 }
             }
             catch (Exception ex)
@@ -144,7 +152,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 if (ex is ArgumentNullException || ex is FormatException || ex is OverflowException)
                 {
                     this.Site.Log.Add(LogEntryKind.Comment, ex.Message);
-                    this.Site.Assert.Fail("RDP.Version in PTF config or the RDP version in TestCategory attribute is not configured correctly.");
+                    this.Site.Assert.Fail("RDP.Version in PTF config, or the RDP version in TestCategory attribute is not configured correctly.");
                 }
                 else
                 {
