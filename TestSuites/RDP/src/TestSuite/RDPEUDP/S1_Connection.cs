@@ -3,10 +3,10 @@
 using System;
 using System.Net;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Protocols.TestSuites.Rdp;
 using Microsoft.Protocols.TestTools;
+using Microsoft.Protocols.TestSuites.Rdp;
 using Microsoft.Protocols.TestTools.StackSdk;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.Mcs;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
@@ -17,7 +17,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
 {
     public partial class RdpeudpTestSuite : RdpTestClassBase
     {
-
         #region BVT Test Cases
 
         [TestMethod]
@@ -68,12 +67,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [TestCategory("RDPEUDP")]
         [Description("Verify the RDP client can initiate a reliable RDP-UDP (RDP-UDP-R) connection and a lossy RDP-UDP (RDP-UDP-L) connection. Server supports highest version RDPUDP_PROTOCOL_VERSION_2.")]
         public void S1_Connection_Initialization_InitialUDPConnection_UUDPVer2()
-        {
-            double rdpVersion = double.Parse(this.Site.Properties["RDP.Version"]);
-            if (rdpVersion < 8.1)
-            {
-                this.Site.Assume.Inconclusive("The client RDP version is below 8.1, which does not support the uUdpVer RDPUDP_PROTOCOL_VERSION_2.");
-            }
+        {                 
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
             StartRDPConnection();
 
@@ -85,7 +79,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
 
             Site.Log.Add(LogEntryKind.Debug, "Client accept the server's UDP connection with uUdpVer RDPUDP_PROTOCOL_VERSION_2.");
         }
-
 
         [TestMethod]
         [Priority(1)]
