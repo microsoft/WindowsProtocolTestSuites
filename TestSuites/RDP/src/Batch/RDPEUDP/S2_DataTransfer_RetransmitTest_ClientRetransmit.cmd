@@ -1,2 +1,5 @@
-"%VS110COMNTOOLS%..\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" "..\..\Bin\RDP_ClientTestSuite.dll" /Settings:..\..\Bin\ClientLocal.TestSettings /Tests:S2_DataTransfer_RetransmitTest_ClientRetransmit /Logger:trx
+﻿:: Copyright (c) Microsoft. All rights reserved.
+:: Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+..\CommonRunTestCase.cmd  "..\..\Bin\RDP_ClientTestSuite.dll" /Settings:..\..\Bin\ClientLocal.TestSettings /Tests:S2_DataTransfer_RetransmitTest_ClientRetransmit 
 pause
