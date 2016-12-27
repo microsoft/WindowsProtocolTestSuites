@@ -121,6 +121,9 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
         [PtfConfig("Common.ClientUserName")]
         public string ClientUserName { get; set; }
 
+        [PtfConfig("Common.ClientUserPassword")]
+        public string ClientUserPassword { get; set; }
+
         [PtfConfig("MS_ADTS_Schema.TDXmlPath")]
         public string SchemaTdPath { get; set; }
 

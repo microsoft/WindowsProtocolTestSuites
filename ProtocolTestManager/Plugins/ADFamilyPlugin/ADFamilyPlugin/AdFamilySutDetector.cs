@@ -62,8 +62,8 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
             steps.AddStep("Verify DM");
             steps.AddStep("Verify Child Domain");
             steps.AddStep("Verify Trust Domain");
-            steps.AddStep("Verify User Account");
-            steps.AddStep("Verify Machine Account");
+            steps.AddStep("Verify User Accounts");
+            steps.AddStep("Verify Machine Accounts");
             return steps;
         }
 
@@ -292,13 +292,20 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
                 DetectorUtil.WriteLog("Verify Trust Domain - Not Found", true, LogStyle.StepNotFound);
             }
 
-            // Check User Account
-            DetectorUtil.WriteLog("Verify User Account - Begin", true, LogStyle.Default);
+            // Check User Accounts
+            DetectorUtil.WriteLog("Verify User Accounts - Begin", true, LogStyle.Default);
             DetectorUtil.WriteLog(
                 string.Format("Verify {0}\\{1} Password: {2} on {3}", ptfcfg.PrimaryDomainDnsName, ptfcfg.DomainAdminName, ptfcfg.DomainUserPassword, ptfcfg.Dc1NetBiosName),
                 true, LogStyle.Default);
             Utility.LdapBind(ptfcfg.Dc1NetBiosName, new System.Net.NetworkCredential(ptfcfg.DomainAdminName, SharedPassword, ptfcfg.PrimaryDomainDnsName));
             ptfcfg.DomainUserPassword = SharedPassword;
+
+            DetectorUtil.WriteLog(
+                string.Format("Verify {0}\\{1} Password: {2} on {3}", ptfcfg.PrimaryDomainDnsName, ptfcfg.ClientUserName, ptfcfg.DomainUserPassword, ptfcfg.Dc1NetBiosName),
+                true, LogStyle.Default);
+            Utility.LdapBind(ptfcfg.Dc1NetBiosName, new System.Net.NetworkCredential(ptfcfg.ClientUserName, SharedPassword, ptfcfg.PrimaryDomainDnsName));
+            ptfcfg.ClientUserPassword = SharedPassword;
+
             if (CdcExists)
             {
                 DetectorUtil.WriteLog(
@@ -315,10 +322,10 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
                 Utility.LdapBind(ptfcfg.TdcNetbiosName, new System.Net.NetworkCredential(ptfcfg.DomainAdminName, ptfcfg.DomainUserPassword, ptfcfg.TrustDomainDnsName));
 
             }
-            DetectorUtil.WriteLog("Verify User Account - Done", true, LogStyle.StepPassed);
-            // Check Machine Account
+            DetectorUtil.WriteLog("Verify User Accounts - Done", true, LogStyle.StepPassed);
+            // Check Machine Accounts
 
-            DetectorUtil.WriteLog("Verify machine account - Begin.", true, LogStyle.Default);
+            DetectorUtil.WriteLog("Verify machine accounts - Begin.", true, LogStyle.Default);
             // PDC
             if (VerifyMachineAccount(ptfcfg.PrimaryDomainDnsName, ptfcfg.Dc1NetBiosName, ptfcfg.Dc1Password))
             {
@@ -392,7 +399,7 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
                 ptfcfg.EndpointPasswordVerified = false;
             }
 
-            DetectorUtil.WriteLog("Verify machine account - Done.", true, LogStyle.StepPassed);
+            DetectorUtil.WriteLog("Verify machine accounts - Done.", true, LogStyle.StepPassed);
 
             int functionLevel;
             int.TryParse(ptfcfg.DomainFunctionLevel, out functionLevel);
