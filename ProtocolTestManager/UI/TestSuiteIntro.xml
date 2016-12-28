@@ -26,16 +26,6 @@
       <Description></Description>
       <TestSuiteDetail>* Active Directory Protocols Overview [MS-ADOD]</TestSuiteDetail>
     </TestSuite>
-    <TestSuite name="MS-ADTS-LDAP">
-      <Description></Description>
-      <TestSuiteDetail>Tests Lightweight Directory Access Protocol in the Microsoft document [MS-ADTS].</TestSuiteDetail>
-    </TestSuite>
-    <TestSuite name="MS-DRSR">
-      <Description>[MS-DRSR] Directory Replication Service Remote Protocol Testing</Description>
-    </TestSuite>
-    <TestSuite name="MS-SAMR">
-      <Description></Description>
-    </TestSuite>
   </Group>
 
   <Group name="Remote Desktop">
