@@ -29,9 +29,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
             this.Value = s;
         }
 
-        //TODO: add an int[] ctor if needed
-        //TODO: add a property to store/get/set int[] form data if needed
-
         //Constraint is not needed for primitive type UniversalString.
         //Therefore no need to override VerifyConstraints method.
 

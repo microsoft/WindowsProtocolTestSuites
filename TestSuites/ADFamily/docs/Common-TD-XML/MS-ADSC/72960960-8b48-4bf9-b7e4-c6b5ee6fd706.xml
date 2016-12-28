@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="72960960-8b48-4bf9-b7e4-c6b5ee6fd706" build_format="rfc" section_number="1.12"><title>Class attributeSchema</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>Defines an attribute object in the schema.</p>
+<example><snippet type="syntax">cn: Attribute-Schema
+ldapDisplayName: attributeSchema
+governsId: 1.2.840.113556.1.3.14
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: top
+systemMustContain: schemaIDGUID, oMSyntax, lDAPDisplayName, 
+ isSingleValued, cn, attributeSyntax, attributeID
+systemMayContain: systemOnly, searchFlags, schemaFlagsEx, rangeUpper, 
+ rangeLower, oMObjectClass, msDs-Schema-Extensions, msDS-IntId, 
+ mAPIID, linkID, isMemberOfPartialAttributeSet, isEphemeral, 
+ isDefunct, extendedCharsAllowed, classDisplayName, 
+ attributeSecurityGUID
+systemPossSuperiors: dMD
+schemaIdGuid: bf967a80-0de6-11d0-a285-00aa003049e2
+defaultSecurityDescriptor: D:S:
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=Attribute-Schema,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT | FLAG_DOMAIN_DISALLOW_RENAME</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADSC"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class attributeSchema [_rfc_ms-adsc1_12]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

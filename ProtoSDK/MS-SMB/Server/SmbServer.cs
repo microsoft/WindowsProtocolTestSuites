@@ -195,7 +195,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name="localNetbiosName">the local Netbios name. It is only used in NetBios tranport.</param>
         public virtual void Stop(string localNetbiosName)
         {
-            //TODO: disconnect
             this.transport.Stop(localNetbiosName);
         }
 
@@ -206,7 +205,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <param name="localPort">the local port to bind for server</param>
         public virtual void Stop(int localPort)
         {
-            //TODO: disconnect
             this.transport.Stop(localPort);
         }
 
@@ -216,7 +214,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// </summary>
         public virtual void StopAll()
         {
-            //TODO: disconnect
             this.transport.Stop();
         }
 

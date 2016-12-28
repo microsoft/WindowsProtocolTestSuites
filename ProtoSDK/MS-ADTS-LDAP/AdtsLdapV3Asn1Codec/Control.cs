@@ -15,20 +15,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV
     {
         [Asn1Field(0)]
         public LDAPOID controlType { get; set; }
-        
-        [Asn1Field(1)]
+
+        [Asn1Field(1, Optional = true)]
         public Asn1Boolean criticality { get; set; }
-        
-        [Asn1Field(2, Optional = true)]
+
+        [Asn1Field(2)]
         public Asn1OctetString controlValue { get; set; }
-        
+
         public Control()
         {
             this.controlType = null;
             this.criticality = null;
             this.controlValue = null;
         }
-        
+
         public Control(
          LDAPOID controlType,
          Asn1Boolean criticality,

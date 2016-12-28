@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page>
+<metadata id="e6c50dab-f1b5-44f6-ba21-0c28c9cb5f36" build_format="rfc" section_number="1.293">
+<title>Attribute systemFlags</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details>
+<change_tracking month="09" day="01" year="2009" revision_class="major" change_type="content_removed"><tdi_info><tdi_number>38337</tdi_number><tdi_title>Removed product behavior note about attribute modification.</tdi_title></tdi_info></change_tracking>
+
+<change_tracking month="09" day="26" year="2009" revision_class="major" change_type="content_removed"><tdi_info><tdi_number>39424</tdi_number><tdi_title>Removed product behavior note about attribute modification.</tdi_title></tdi_info></change_tracking>
+<change_tracking month="08" day="28" year="2010" change_type="content_update" revision_class="major"><tdi_info><tdi_number>54271</tdi_number><tdi_title>Revised description of FLAG_ATTR_IS_RDN to remove the word "hint".</tdi_title></tdi_info></change_tracking></change_tracking_details>
+</metadata>
+<section>
+<section_contents>
+<p>This attribute specifies an integer value that contains flags that define additional properties of the class. See <xref rid="d2435927-0999-4c62-8c6d-13ba31a52e1a" targtype="protocol_page">[MS-ADTS]</xref> for more information. This attribute is optional.</p>
+
+<p>The systemFlags attribute contains bitwise flags. The values relevant to the schema objects are the following (further defined in <xref rid="d2435927-0999-4c62-8c6d-13ba31a52e1a" targtype="protocol_page">[MS-ADTS]</xref> section <xref rid="1e38247d-8234-4273-9de3-bbf313548631" targtype="whitepaper_page"><section_ref placeholder="2.2.10" /></xref>):</p>
+<list>
+<item><p>FLAG_ATTR_NOT_REPLICATED: This attribute is non-replicated.</p></item>
+<item><p>FLAG_ATTR_REQ_PARTIAL_SET_MEMBER: If set, this attribute is a member of partial attribute set (PAS) regardless of the value of attribute <xref rid="6ff27821-1282-43ac-a0a7-fd8f1c59fa0b" targtype="adschema_attribute">isMemberofPartialAttributeSet</xref>.</p></item>
+<item><p>FLAG_ATTR_IS_CONSTRUCTED: This attribute is a constructed attribute.</p></item>
+<item><p>FLAG_ATTR_IS_OPERATIONAL: This attribute is an operational attribute, as defined in <xref hlink="http://go.microsoft.com/fwlink/?LinkId=90325">[RFC2251]</xref> section 3.2.1.</p></item>
+<item><p>FLAG_SCHEMA_BASE_OBJECT: This attribute is a Category 1 schema attribute.</p></item>
+<item><p>FLAG_ATTR_IS_RDN: This attribute can be used as an RDN attribute of a class.</p></item></list>
+<example><snippet type="syntax">cn: System-Flags
+ldapDisplayName: systemFlags
+attributeId: 1.2.840.113556.1.4.375
+attributeSyntax: 2.5.5.9
+omSyntax: 2
+isSingleValued: TRUE
+schemaIdGuid: e0fa1e62-9b45-11d0-afdd-00c04fd930c9
+systemOnly: TRUE
+searchFlags: fPRESERVEONDELETE
+attributeSecurityGuid: e48d0154-bcf8-11d1-8702-00c04fb96050
+systemFlags: FLAG_SCHEMA_BASE_OBJECT
+schemaFlagsEx: FLAG_ATTR_IS_CRITICAL</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p>
+<p>The <xref rid="5ea3a865-2cfa-481d-9892-d00fd04514ea" enabled="1" targtype="adschema_attribute">schemaFlagsEx</xref> attribute was added to this attribute definition in <auto_text>windows_server_2008</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA3"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute systemFlags [_rfc_ms-ada31_293]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

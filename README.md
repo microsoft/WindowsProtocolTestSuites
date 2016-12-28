@@ -13,6 +13,7 @@ Windows Protocol Test Suites provide interoperability testing against the implem
 * **Kerberos Server Test Suite**. It is designed to test server implementations of Kerberos protocols including [MS-KILE], [MS-KKDCP] and [MS-PAC].
 * **SMBD Server Test Suite**. It is designed to test the implementations of SMB2&3 direct (RDMA) protocol, as specified in [MS-SMBD].
 * **Branch Cache Test Suite**. It is designed to test the implementations of MS-PCCRTP, MS-PCCRR, MS-PCHC and MS-PCCRC protocol.
+* **ADFamily Test Suite**. It is designed to test the implementations of the Active Directory protocols including [MS-ADTS], [MS-APDS], [MS-DRSR] [MS-FRS2], [MS-LSAD], [MS-LSAT], [MS-SAMR] and [MS-NRPC]. 
 
 ## Components
 Windows Protocol Test Suites contain 4 components:
@@ -67,6 +68,7 @@ Some test suites use [Model-Based Testing](https://msdn.microsoft.com/en-us/libr
 * **Kerberos Server Test Suite**
 * **SMBD Server Test Suite**
 * **BranchCache Server Test Suite**
+* **ADFamily Test Suite**
 
 ## Build
 

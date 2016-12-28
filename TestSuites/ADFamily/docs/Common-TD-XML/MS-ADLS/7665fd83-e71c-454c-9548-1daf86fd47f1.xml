@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="7665fd83-e71c-454c-9548-1daf86fd47f1" build_format="rfc" section_number="1.347"><title>Attribute thumbnailPhoto</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>Picture<?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?></p>
+<example><snippet type="syntax">cn: Picture
+ldapDisplayName: thumbnailPhoto
+attributeId: 2.16.840.1.113730.3.1.35
+attributeSyntax: 2.5.5.10
+omSyntax: 4
+isSingleValued: TRUE
+schemaIdGuid: 8d3bca50-1d7e-11d0-a081-00aa006c33ed
+systemOnly: FALSE
+searchFlags: 0
+rangeLower: 0
+rangeUpper: 102400
+attributeSecurityGuid: 77b5b886-944a-11d1-aebd-0000f80367c1</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="a-labenn" date="2007-04-11T16:01:06" initials="" commentText="needs better intro"?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="7665fd83-e71c-454c-9548-1daf86fd47f1"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-adls_2_360"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

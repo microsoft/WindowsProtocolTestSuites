@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page>
+<metadata id="df86a948-bf90-4d1f-8896-7b2c7cc4b701" build_format="rfc" section_number="1.304">
+<title>Attribute schemaFlagsEx</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details>
+<change_tracking month="11" day="07" year="2009" change_type="content_update" revision_class="major"><tdi_info><tdi_number>41915</tdi_number><tdi_title>Added a description and version information.</tdi_title></tdi_info></change_tracking>
+</change_tracking_details>
+</metadata>
+<section>
+<section_contents>
+<p>This attribute specifies an integer value that contains flags that define additional properties of the attribute, as shown below. See <xref rid="d2435927-0999-4c62-8c6d-13ba31a52e1a" targtype="protocol_page">[MS-ADTS]</xref> for more information. This is an optional attribute.</p>
+<p>The schemaFlagsEx attribute contains bitwise flags. The following value is relevant to schema objects:</p>
+<list>
+<item><p>FLAG_ATTR_IS_CRITICAL: Specifies that the attribute is not a member of the filtered attribute set even if the fRODCFilteredAttribute (<xref rid="d2435927-0999-4c62-8c6d-13ba31a52e1a" targtype="protocol_page">[MS-ADTS]</xref> section <xref rid="46683629-4da3-4f0d-b5f9-4950d87f54d8" targtype="whitepaper_page"><section_ref placeholder="3.1.1.2.3.5" /></xref>) is set.</p></item></list>
+<example>
+<snippet type="syntax">cn: Schema-Flags-Ex
+ldapDisplayName: schemaFlagsEx
+attributeId: 1.2.840.113556.1.4.120
+attributeSyntax: 2.5.5.9
+omSyntax: 2
+isSingleValued: TRUE
+schemaIdGuid: bf967a2b-0de6-11d0-a285-00aa003049e2
+systemOnly: FALSE
+searchFlags: 0
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet>
+</example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p>
+<p>The <xref enabled="1" rid="df86a948-bf90-4d1f-8896-7b2c7cc4b701" targtype="adschema_attribute">schemaFlagsEx</xref> attribute was added to this attribute definition in <auto_text>windows_server_2008</auto_text>.</p>
+<p>The FLAG_ATTR_IS_CRITICAL value was implemented in <auto_text>windows_server_2008</auto_text>.</p>
+</section_contents>
+</section>
+</whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADLS"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute schemaFlagsEx [_rfc_ms-adls1_304]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

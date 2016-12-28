@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata build_format="rfc" section_number="43.124" id="484d58a6-50af-487c-8ffb-8c1f6978fcd7"><title>Class msDS-CloudExtensions</title>
+<tech />
+<index />
+<change_tracking_details>
+<change_tracking revision_class="major" year="2012" month="03" day="31" change_type="content_new"><non_tdi_info><non_tdi_desc><p>Added section with content for <auto_text>windows_server_8</auto_text>.</p></non_tdi_desc></non_tdi_info></change_tracking>
+</change_tracking_details>
+</metadata>
+<section>
+<section_contents>
+<p>A collection of attributes that contains application-specific strings for cloud scenarios.</p>
+<example>
+<snippet>cn: ms-DS-Cloud-Extensions
+ldapDisplayName: msDS-CloudExtensions
+governsId: 1.2.840.113556.1.5.283
+objectClassCategory: 3
+rdnAttId: cn
+subClassOf: top
+MayContain: msDS-cloudExtensionAttribute1, msDS-cloudExtensionAttribute2, 
+ msDS-cloudExtensionAttribute3, msDS-cloudExtensionAttribute4, 
+ msDS-cloudExtensionAttribute5, msDS-cloudExtensionAttribute6, 
+ msDS-cloudExtensionAttribute7, msDS-cloudExtensionAttribute8, 
+ msDS-cloudExtensionAttribute9, msDS-cloudExtensionAttribute10, 
+ msDS-cloudExtensionAttribute11, msDS-cloudExtensionAttribute12, 
+ msDS-cloudExtensionAttribute13, msDS-cloudExtensionAttribute14, 
+ msDS-cloudExtensionAttribute15, msDS-cloudExtensionAttribute16, 
+ msDS-cloudExtensionAttribute17, msDS-cloudExtensionAttribute18, 
+ msDS-cloudExtensionAttribute19, msDS-cloudExtensionAttribute20
+schemaIdGuid: 641e87a4-8326-4771-ba2d-c706df35e35a
+defaultSecurityDescriptor: D:(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;DA)
+ (A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;SY)(A;;RPLCLORC;;;AU)
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=ms-DS-Cloud-Extensions,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet>
+</example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_8</auto_text> and <auto_text>winblue_server_1</auto_text>.</p>
+</section_contents>
+</section>
+</whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADSC"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class msDS-CloudExtensions [ms-adsc]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="cad2ef1b-2d70-4acc-95e2-7d88c2dc0d89" build_format="rfc" section_number="1.59"><title>Attribute mS-DS-ConsistencyChildCount</title>
+<tech value="protocol" />
+<index><keyword>mS-DS-ConsistencyChildCount attribute</keyword></index>
+<change_tracking_details><change_tracking month="08" day="28" year="2010" change_type="content_update" revision_class="major"><tdi_info><tdi_number>54297</tdi_number><tdi_title>Specified that the attribute is not required for Active Directory.</tdi_title></tdi_info></change_tracking></change_tracking_details></metadata>
+<section><section_contents><p>This attribute is not necessary for Active Directory to function. The protocol does not define a format beyond that required by the schema.</p>
+<example><snippet type="syntax">cn: MS-DS-Consistency-Child-Count
+ldapDisplayName: mS-DS-ConsistencyChildCount
+attributeId: 1.2.840.113556.1.4.1361
+attributeSyntax: 2.5.5.9
+omSyntax: 2
+isSingleValued: TRUE
+schemaIdGuid: 178b7bc2-b63a-11d2-90e1-00c04fd91ab1
+systemOnly: FALSE
+searchFlags: 0
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA2"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute mS-DS-ConsistencyChildCount [_rfc_ms-ada21_59]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

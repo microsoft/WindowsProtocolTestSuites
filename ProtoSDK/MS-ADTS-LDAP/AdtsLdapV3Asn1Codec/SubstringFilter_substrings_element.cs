@@ -14,17 +14,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV
     public class SubstringFilter_substrings_element : Asn1Choice
     {
         [Asn1ChoiceIndex]
-        public const long initial = 0;
+        public const long initial = 1;
         [Asn1ChoiceElement(initial), Asn1Tag(Asn1TagType.Context, 0)]
         protected LDAPString field0 { get; set; }
         
         [Asn1ChoiceIndex]
-        public const long any = 1;
+        public const long any = 2;
         [Asn1ChoiceElement(any), Asn1Tag(Asn1TagType.Context, 1)]
         protected LDAPString field1 { get; set; }
         
         [Asn1ChoiceIndex]
-        public const long final = 2;
+        public const long final = 3;
         [Asn1ChoiceElement(final), Asn1Tag(Asn1TagType.Context, 2)]
         protected LDAPString field2 { get; set; }
         
@@ -36,6 +36,62 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV
         public SubstringFilter_substrings_element(long? choiceIndex, Asn1Object obj)
             : base(choiceIndex, obj)
         {
+        }
+
+
+        public override int BerEncode(IAsn1BerEncodingBuffer buffer, bool explicitTag = true)
+        {
+            int allLen = 0;
+            Asn1Tag contextTag;
+            switch (SelectedChoice)
+            {
+                case 1:
+                    allLen += field0.BerEncodeWithoutUnisersalTag(buffer);
+                    contextTag = new Asn1Tag(Asn1TagType.Context, 0) { EncodingWay = EncodingWay.Primitive };
+                    allLen += TagBerEncode(buffer, contextTag);
+                    break;
+                case 2:
+                    allLen += field1.BerEncodeWithoutUnisersalTag(buffer);
+                    contextTag = new Asn1Tag(Asn1TagType.Context, 1) { EncodingWay = EncodingWay.Primitive };
+                    allLen += TagBerEncode(buffer, contextTag);
+                    break;
+                case 3:
+                    allLen += field2.BerEncodeWithoutUnisersalTag(buffer);
+                    contextTag = new Asn1Tag(Asn1TagType.Context, 2) { EncodingWay = EncodingWay.Primitive };
+                    allLen += TagBerEncode(buffer, contextTag);
+                    break;
+                default:
+                    throw new Asn1ConstraintsNotSatisfied(ExceptionMessages.InvalidChoiceIndex + " AuthenticationChoice");
+            }
+            return allLen;
+        }
+
+        public override int BerDecode(IAsn1DecodingBuffer buffer, bool explicitTag = true)
+        {
+            int allLen = 0;
+            Asn1Tag contextTag;
+            allLen += TagBerDecode(buffer, out contextTag);
+            switch (contextTag.TagValue)
+            {
+                case 0:
+                    field0 = new LDAPString();
+                    allLen += field0.BerDecodeWithoutUnisersalTag(buffer);
+                    SetData(1, field0);
+                    break;
+                case 1:
+                    field1 = new LDAPString();
+                    allLen += field1.BerDecodeWithoutUnisersalTag(buffer);
+                    SetData(2, field1);
+                    break;
+                case 2:
+                    field2 = new LDAPString();
+                    allLen += field2.BerDecodeWithoutUnisersalTag(buffer);
+                    SetData(3, field2);
+                    break;
+                default:
+                    throw new Asn1DecodingUnexpectedData(ExceptionMessages.DecodingUnexpectedData + " AuthenticationChoice");
+            }
+            return allLen;
         }
     }
 }

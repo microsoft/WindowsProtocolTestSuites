@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="d9025ca2-017a-483f-8fd1-47b61f843e42" build_format="rfc" section_number="1.208"><title>Class serviceConnectionPoint</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>Publishes information that client applications can use to bind to a service.<?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?></p>
+<example><snippet type="syntax">cn: Service-Connection-Point
+ldapDisplayName: serviceConnectionPoint
+governsId: 1.2.840.113556.1.5.126
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: connectionPoint
+systemMayContain: versionNumberLo, versionNumberHi, versionNumber, 
+ vendor, serviceDNSNameType, serviceDNSName, serviceClassName, 
+ serviceBindingInformation, appSchemaVersion
+systemPossSuperiors: organizationalUnit, container, computer
+schemaIdGuid: 28630ec1-41d5-11d1-a9c1-0000f80367c1
+defaultSecurityDescriptor: D:(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;DA)
+ (A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;CO)
+ (A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;SY)(A;;RPLCLORC;;;AU)
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=Service-Connection-Point,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="a-chwar" date="2007-08-16T16:50:59" initials="" commentText="L-R edit: It appears that the descriptions for this class and the next class (Class serviceInstance) might have been switched. Can you review these two descriptions and see if you agree?"?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="d9025ca2-017a-483f-8fd1-47b61f843e42"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-adsc_2_218"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

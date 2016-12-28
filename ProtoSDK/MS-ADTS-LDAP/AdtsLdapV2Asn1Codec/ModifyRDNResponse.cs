@@ -15,8 +15,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV
             : base()
         {
         }
-        
-        //TODO: Add Other Constructors.
     }
 }
 

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="8f5f0704-c07f-4add-a7ab-6321cd9460c3" build_format="rfc" section_number="1.37"><title>Attribute contextMenu</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>This attribute specifies the order number and GUID of the context menu<?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?> to be used for an object.</p>
+<example><snippet type="syntax">cn: Context-Menu
+ldapDisplayName: contextMenu
+attributeId: 1.2.840.113556.1.4.499
+attributeSyntax: 2.5.5.12
+omSyntax: 64
+isSingleValued: FALSE
+schemaIdGuid: 4d8601ee-ac85-11d0-afe3-00c04fd930c9
+systemOnly: FALSE</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="a-labenn" date="2007-04-11T16:59:00Z" initials="" commentText="replace with &quot;submenu&quot;?:"?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="8f5f0704-c07f-4add-a7ab-6321cd9460c3"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-adls_2_37"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

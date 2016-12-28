@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="3412131d-1db7-484c-8d99-3231b395e769" build_format="rfc" section_number="1.335"><title>Attribute unstructuredAddress</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>This attribute specifies the IP address of the router. For example, 100.11.22.33. PKCS #9.<?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?></p>
+<example><snippet type="syntax">cn: unstructuredAddress
+ldapDisplayName: unstructuredAddress
+attributeId: 1.2.840.113549.1.9.8
+attributeSyntax: 2.5.5.12
+omSyntax: 64
+isSingleValued: FALSE
+schemaIdGuid: 50950839-cc4c-4491-863a-fcf942d684b7
+systemOnly: FALSE
+searchFlags: 0
+rangeUpper: 256</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="debdlug" date="2007-12-19T13:04:43" initials="" commentText="How does PKCS #9 relate to the preceding sentence? Please clarify."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="3412131d-1db7-484c-8d99-3231b395e769"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-ada3_2_336"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

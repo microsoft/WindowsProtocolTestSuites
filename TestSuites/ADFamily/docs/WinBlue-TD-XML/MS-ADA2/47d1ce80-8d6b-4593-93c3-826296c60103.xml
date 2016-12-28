@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata build_format="rfc" section_number="43.124" id="47d1ce80-8d6b-4593-93c3-826296c60103"><title>Attribute msDS-RegistrationQuota</title>
+<tech />
+<index />
+<change_tracking_details><change_tracking revision_class="major" change_type="content_new" year="2013" month="06" day="26"><non_tdi_info><non_tdi_desc><p>Added section with content for <auto_text>winblue_server_1</auto_text>.</p></non_tdi_desc></non_tdi_info></change_tracking>
+<change_tracking month="03" day="05" year="2014" change_type="content_update" revision_class="minor"><tdi_info><tdi_number>71018</tdi_number><tdi_title>Removed an extra colon after schemaIdGuid.</tdi_title></tdi_info></change_tracking></change_tracking_details></metadata>
+<section>
+<section_contents>
+<p>This attribute specifies the policy used to limit the number of registrations allowed for a single user.</p>
+<example>
+<snippet>cn: ms-DS-Registration-Quota
+ldapDisplayName: msDS-RegistrationQuota
+attributeId: 1.2.840.113556.1.4.2241
+attributeSyntax: 2.5.5.9
+omSyntax: 2
+isSingleValued: TRUE
+schemaIdGuid: ca3286c2-1f64-4079-96bc-e62b610e730f
+systemOnly: FALSE
+searchFlags: 0
+systemFlags: FLAG_SCHEMA_BASE_OBJECT
+showInAdvancedViewOnly: TRUE</snippet>
+</example>
+<p>Version-Specific Behavior: Implemented on <auto_text>winblue_server_1</auto_text>.</p>
+</section_contents>
+</section>
+</whitepaper_page>
+</topic><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA2"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute msDS-RegistrationQuota"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.1.1"?>

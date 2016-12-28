@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="57977b55-aa81-4801-bfa6-4b8e89b883cf" build_format="rfc" section_number="1.176"><title>Attribute msDS-Entry-Time-To-Die</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>This attribute holds the absolute expiration time of a dynamic object in the directory.</p>
+<example><snippet type="syntax">cn: ms-DS-Entry-Time-To-Die
+ldapDisplayName: msDS-Entry-Time-To-Die
+attributeId: 1.2.840.113556.1.4.1622
+attributeSyntax: 2.5.5.11
+omSyntax: 24
+isSingleValued: TRUE
+schemaIdGuid: e1e9bad7-c6dd-4101-a843-794cec85b038
+systemOnly: TRUE
+searchFlags: fPRESERVEONDELETE | fATTINDEX
+isMemberOfPartialAttributeSet: TRUE
+systemFlags: FLAG_SCHEMA_BASE_OBJECT | FLAG_ATTR_IS_OPERATIONAL</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADLS"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute msDS-Entry-Time-To-Die [_rfc_ms-adls1_176]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

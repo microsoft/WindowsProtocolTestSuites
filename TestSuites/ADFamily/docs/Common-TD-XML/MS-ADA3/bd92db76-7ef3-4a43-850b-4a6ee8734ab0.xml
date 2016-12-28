@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="bd92db76-7ef3-4a43-850b-4a6ee8734ab0" build_format="rfc" section_number="1.292" target="wspp"><title>Attribute systemAuxiliaryClass</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details><change_tracking month="03" day="05" year="2009" revision_class="minor" change_type="content_update"><non_tdi_info><non_tdi_desc><p>Clarified the description<?CommentRangeStart id="0"?>.<?CommentRangeEnd id="0"?></p></non_tdi_desc></non_tdi_info></change_tracking>
+<change_tracking month="12" day="19" year="2009" change_type="content_update" revision_class="major"><non_tdi_info><non_tdi_desc><p>Changed "the system" to "the Active Directory system" and added reference to MS-ADSO. </p></non_tdi_desc></non_tdi_info></change_tracking>
+<change_tracking month="07" day="30" year="2012" change_type="content_update" revision_class="minor"><non_tdi_info><non_tdi_desc><p>Changed cross-reference from [MS-ADSO] to [MS-ADOD] and removed section reference.</p></non_tdi_desc></non_tdi_info></change_tracking></change_tracking_details></metadata>
+<section><section_contents><p>This attribute specifies the governsIds of some of the Auxiliary classes that are linked to this class. These classes contain attributes that are required for system operation. This attribute is optional. It can be modified only by the Active Directory system <xref rid="5ff67bf4-c145-48cb-89cd-4f5482d94664" targtype="protocol_page">[MS-ADOD]</xref>. See <xref rid="d2435927-0999-4c62-8c6d-13ba31a52e1a" targtype="protocol_page">[MS-ADTS]</xref> section <xref rid="b24cec6c-170a-4c58-832a-a031cd9a58ea" targtype="whitepaper_page"><section_ref placeholder="3.1.1.3.1.1.5" /></xref> for more information.</p>
+<example><snippet type="syntax">cn: System-Auxiliary-Class
+ldapDisplayName: systemAuxiliaryClass
+attributeId: 1.2.840.113556.1.4.198
+attributeSyntax: 2.5.5.2
+omSyntax: 6
+isSingleValued: FALSE
+schemaIdGuid: bf967a43-0de6-11d0-a285-00aa003049e2
+systemOnly: TRUE
+searchFlags: 0
+systemFlags: FLAG_SCHEMA_BASE_OBJECT
+schemaFlagsEx: FLAG_ATTR_IS_CRITICAL</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p>
+<p>The <xref rid="5ea3a865-2cfa-481d-9892-d00fd04514ea" enabled="1" targtype="adschema_attribute">schemaFlagsEx</xref> attribute was added to this attribute definition in <auto_text>windows_server_2008</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="Paul Bartos" date="2009-03-05T12:08:00Z" initials="PB" commentText="Flagging change tracking entry for Microsoft Feedback TDI 27917."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="bd92db76-7ef3-4a43-850b-4a6ee8734ab0"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-ada3_2_292"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

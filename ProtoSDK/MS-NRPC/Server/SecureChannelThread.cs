@@ -60,7 +60,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
             {
                 serverForSecureChannel = new NrpcServer(null);
                 serverForSecureChannel.StartTcp(tcpPort);
-                //todo: support ipv6
                 serverForSecureChannel.StartNamedPipe(NrpcUtility.NETLOGON_RPC_OVER_NP_WELLKNOWN_ENDPOINT, null, IPAddress.Any);
             }
 

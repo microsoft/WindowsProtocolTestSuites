@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="aeaae713-6db2-42fe-b458-54810712496b" build_format="rfc" section_number="1.49"><title>Class fileLinkTrackingEntry</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details><change_tracking month="04" year="2010" change_type="content_update" revision_class="major" day="24"><non_tdi_info><non_tdi_desc><p>Added reference to GUID definition in [MS-DTYP].</p></non_tdi_desc></non_tdi_info></change_tracking>
+</change_tracking_details>
+</metadata>
+<section><section_contents><p>Holds the GUID and the current machine information for a link-tracked file. GUID is defined in <xref rid="cca27429-5689-4a16-b2b4-9325d93e4ba2" targtype="protocol_page">[MS-DTYP]</xref> section <xref rid="4926e530-816e-41c2-b251-ec5c7aca018a" targtype="whitepaper_page"><section_ref placeholder="2.3.2" /></xref>.</p>
+<example><snippet type="syntax">cn: File-Link-Tracking-Entry
+ldapDisplayName: fileLinkTrackingEntry
+governsId: 1.2.840.113556.1.5.59
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: top
+systemPossSuperiors: fileLinkTracking
+schemaIdGuid: 8e4eb2ed-4712-11d0-a1a0-00c04fd930c9
+defaultSecurityDescriptor: D:(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;DA)
+ (A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;SY)(A;;RPLCLORC;;;AU)
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=File-Link-Tracking-Entry,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADSC"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class fileLinkTrackingEntry [_rfc_ms-adsc1_49]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

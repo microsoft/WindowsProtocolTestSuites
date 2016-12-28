@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="a5f64bc0-42b7-42b4-8289-9dea23ff8adf" build_format="rfc" section_number="1.276"><title>Attribute gPCFunctionalityVersion</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>This attribute specifies the version of the Group Policy Object Editor<?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?> that created this object.</p>
+<example><snippet type="syntax">cn: GPC-Functionality-Version
+ldapDisplayName: gPCFunctionalityVersion
+attributeId: 1.2.840.113556.1.4.893
+attributeSyntax: 2.5.5.9
+omSyntax: 2
+isSingleValued: TRUE
+schemaIdGuid: f30e3bc0-9ff0-11d1-b603-0000f80367c1
+systemOnly: FALSE
+searchFlags: 0
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="pbartos" date="2008-09-02T09:56:24" initials="" commentText="This name needs to change, but should it be &quot;Local Group Policy Editor&quot; or &quot;Group Policy Management Console (GPMC)&quot;? Look in http://winedit/ for information."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="a5f64bc0-42b7-42b4-8289-9dea23ff8adf"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-ada1_2_278"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

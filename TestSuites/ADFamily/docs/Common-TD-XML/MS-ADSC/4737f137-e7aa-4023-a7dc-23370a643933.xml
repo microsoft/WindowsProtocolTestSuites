@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="4737f137-e7aa-4023-a7dc-23370a643933" build_format="rfc" section_number="1.13"><title>Class bootableDevice</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>Represents a device that has boot parameters.</p>
+<example><snippet type="syntax">cn: BootableDevice
+ldapDisplayName: bootableDevice
+governsId: 1.3.6.1.1.1.2.12
+objectClassCategory: 3
+rdnAttId: cn
+subClassOf: top
+mayContain: cn, bootParameter, bootFile
+schemaIdGuid: 4bcb2477-4bb3-4545-a9fc-fb66e136b435
+defaultSecurityDescriptor: D:(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;DA)
+ (A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;SY)(A;;RPLCLORC;;;AU)
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=BootableDevice,&lt;SchemaNCDN&gt;</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADSC"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class bootableDevice [_rfc_ms-adsc1_13]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="11d1d744-10d8-4732-9499-3c8aee0b990a" build_format="rfc" section_number="1.207"><title>Attribute msDS-ReplAuthenticationMode</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>The <mark type="attribute">ms-DS-Repl-Authentication-Mode</mark> attribute is used to specify which authentication method is used to authenticate replication partners. This attribute applies to the configuration partition of an AD LDS instance.</p>
+<example><snippet type="syntax">cn: ms-DS-Repl-Authentication-Mode
+ldapDisplayName: msDS-ReplAuthenticationMode
+attributeId: 1.2.840.113556.1.4.1861
+attributeSyntax: 2.5.5.9
+omSyntax: 2
+isSingleValued: TRUE
+schemaIdGuid: 6e124d4f-1a3f-4cc6-8e09-4a54c81b1d50
+systemOnly: FALSE
+searchFlags: 0
+rangeLower: 0
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADLS"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute msDS-ReplAuthenticationMode [_rfc_ms-adls1_207]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

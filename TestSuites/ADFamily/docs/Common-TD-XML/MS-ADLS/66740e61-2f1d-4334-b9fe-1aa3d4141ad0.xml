@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="66740e61-2f1d-4334-b9fe-1aa3d4141ad0" build_format="rfc" section_number="2.8"><title>Class country</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>This class specifies the country/region in the address of the user. This is the full name.<?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?></p>
+<example><snippet type="syntax">cn: Country
+ldapDisplayName: country
+governsId: 2.5.6.2
+objectClassCategory: 0
+rdnAttId: c
+subClassOf: top
+systemMustContain: c
+systemMayContain: co, searchGuide
+systemPossSuperiors: domainDNS, organization
+schemaIdGuid: bf967a8c-0de6-11d0-a285-00aa003049e2
+defaultSecurityDescriptor: D:S:
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=Country,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="debdlug" date="2008-07-07T17:23:37" initials="" commentText="This second sentence is a little ambiguous. The full name for what? Does it mean &quot;non-abbreviated name&quot;?"?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="66740e61-2f1d-4334-b9fe-1aa3d4141ad0"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-adls_3_8"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

@@ -13,7 +13,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
     /// <summary>
     /// Encoder class which creates requests/responses for LDAP v3.
     /// </summary>
-    [SuppressMessage("Microsoft.Maintainability","CA1506:AvoidExcessiveClassCoupling")]
+    [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     internal class AdtsLdapV3Encoder : AdtsLdapEncoder
     {
         /// <summary>
@@ -80,11 +80,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
         private Asn1SetOf<AttributeValue> CreateAttributeValueSet(string[] values)
         {
             int length = (values != null) ? values.Length : 0;
-            
+
             AttributeValue[] valueArray = new AttributeValue[length];
             for (int i = 0; i < length; i++)
             {
-                valueArray[i] = new AttributeValue(values[i]);
+                valueArray[i] = new AttributeValue(System.Text.Encoding.ASCII.GetBytes(values[i]));
             }
 
             Asn1SetOf<AttributeValue> valueSet = new Asn1SetOf<AttributeValue>(valueArray);
@@ -98,7 +98,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
             AttributeValue[] valueArray = new AttributeValue[length];
             for (int i = 0; i < length; i++)
             {
-                valueArray[i] = new AttributeValue(System.Text.Encoding.UTF8.GetString(values[i]));
+                valueArray[i] = new AttributeValue(values[i]);
             }
 
             Asn1SetOf<AttributeValue> valueSet = new Asn1SetOf<AttributeValue>(valueArray);
@@ -215,7 +215,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
         {
             AuthenticationChoice authentication = new AuthenticationChoice();
             authentication.SetData(
-                AuthenticationChoice.sasl, 
+                AuthenticationChoice.sasl,
                 new SaslCredentials(
                     new LDAPString(mechanism ?? string.Empty),
                     new Asn1OctetString(credential ?? (new byte[0]))));
@@ -308,24 +308,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
             params KeyValuePair<string, string[]>[] attributes)
         {
             int length = (attributes != null) ? attributes.Length : 0;
-            
+
             AttributeList_element[] attributeArray = new AttributeList_element[length];
             for (int i = 0; i < length; i++)
             {
-                AttributeValue[] attributeValues = new AttributeValue[attributes[i].Value.Length];
-                for (int j = 0; j < attributes[i].Value.Length; i++)
-                {
-                    attributeValues[j] = new AttributeValue(attributes[i].Value[j]);
-                }
-                attributeArray[i] = new AttributeList_element(new AttributeDescription(attributes[i].Key), new Asn1SetOf<AttributeValue>(attributeValues));
+                attributeArray[i] = new AttributeList_element(
+                    new AttributeDescription(attributes[i].Key),
+                    CreateAttributeValueSet(attributes[i].Value));
             }
 
             AddRequest addRequest = new AddRequest(
                 new LDAPDN(objectDn ?? string.Empty),
                 new AttributeList(attributeArray));
-            
+
             LDAPMessage_protocolOp operation = new LDAPMessage_protocolOp();
-            operation.SetData(LDAPMessage_protocolOp.extendedReq, addRequest);
+            operation.SetData(LDAPMessage_protocolOp.addRequest, addRequest);
 
             LDAPMessage message = new LDAPMessage(new MessageID(context.MessageId), operation, null);
 
@@ -346,9 +343,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
         internal override AdtsDelRequestPacket CreateDelRequest(AdtsLdapContext context, string objectDn)
         {
             DelRequest delRequest = new DelRequest(objectDn ?? string.Empty);
-            
+
             LDAPMessage_protocolOp operation = new LDAPMessage_protocolOp();
-            operation.SetData(LDAPMessage_protocolOp.extendedReq, delRequest);
+            operation.SetData(LDAPMessage_protocolOp.delRequest, delRequest);
 
             LDAPMessage message = new LDAPMessage(new MessageID(context.MessageId), operation, null);
             AdtsDelRequestPacket packet = new AdtsDelRequestPacket();
@@ -370,7 +367,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
             AbandonRequest abandonRequest = new AbandonRequest(messageId);
 
             LDAPMessage_protocolOp operation = new LDAPMessage_protocolOp();
-            operation.SetData(LDAPMessage_protocolOp.extendedReq, abandonRequest);
+            operation.SetData(LDAPMessage_protocolOp.abandonRequest, abandonRequest);
 
             LDAPMessage message = new LDAPMessage(new MessageID(context.MessageId), operation, null);
             AdtsAbandonRequestPacket packet = new AdtsAbandonRequestPacket();
@@ -400,9 +397,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
                 new AttributeValueAssertion(
                     new AttributeDescription(attributeName ?? string.Empty),
                     new AssertionValue(attributeValue ?? string.Empty)));
-            
+
             LDAPMessage_protocolOp operation = new LDAPMessage_protocolOp();
-            operation.SetData(LDAPMessage_protocolOp.extendedReq, compareRequest);
+            operation.SetData(LDAPMessage_protocolOp.compareRequest, compareRequest);
 
             LDAPMessage message = new LDAPMessage(new MessageID(context.MessageId), operation, null);
             AdtsCompareRequestPacket packet = new AdtsCompareRequestPacket();
@@ -428,7 +425,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
             ExtendedRequest extendedRequest = new ExtendedRequest(
                 new LDAPOID(requestName ?? string.Empty),
                 new Asn1OctetString(requestValue));
-            
+
             LDAPMessage_protocolOp operation = new LDAPMessage_protocolOp();
             operation.SetData(LDAPMessage_protocolOp.extendedReq, extendedRequest);
 
@@ -487,10 +484,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
                 new RelativeLDAPDN(newRdn ?? string.Empty),
                 new Asn1Boolean(delOldRdn),
                 new LDAPDN(newParentDn ?? string.Empty));
-            
+
             LDAPMessage_protocolOp operation = new LDAPMessage_protocolOp();
             operation.SetData(LDAPMessage_protocolOp.modDNRequest, modifyDnRequest);
-            
+
             LDAPMessage message = new LDAPMessage(new MessageID(context.MessageId), operation, null);
             AdtsModifyDnRequestPacket packet = new AdtsModifyDnRequestPacket();
             packet.ldapMessagev3 = message;
@@ -528,12 +525,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
 
             Asn1SequenceOf<ModifyRequest_modification_element> modificationSequence =
                 new Asn1SequenceOf<ModifyRequest_modification_element>(modificationElements);
-            
+
 
             ModifyRequest modifyRequest = new ModifyRequest(
                 new LDAPDN(objectDn ?? string.Empty),
                 modificationSequence);
-            
+
             LDAPMessage_protocolOp operation = new LDAPMessage_protocolOp();
             operation.SetData(LDAPMessage_protocolOp.modifyRequest, modifyRequest);
 
@@ -580,7 +577,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
                 attributeDescriptionArray[i] = new AttributeDescription(attributes[i]);
             }
             AttributeDescriptionList attributeList = new AttributeDescriptionList(attributeDescriptionArray);
-            
+
             SearchRequest searchRequest = new SearchRequest(
                 new LDAPDN(dn ?? string.Empty),
                 new SearchRequest_scope((long)scope),
@@ -590,7 +587,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
                 new Asn1Boolean(typesOnly),
                 (Filter)filter,
                 attributeList);
-            
+
             LDAPMessage_protocolOp operation = new LDAPMessage_protocolOp();
             operation.SetData(LDAPMessage_protocolOp.searchRequest, searchRequest);
 
@@ -630,7 +627,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
                 new LDAPString(errorMessage ?? string.Empty),
                 CreateReferral(referral),
                 new Asn1OctetString(serverCredentials ?? (new byte[0])));
-            
+
             LDAPMessage_protocolOp operation = new LDAPMessage_protocolOp();
             operation.SetData(LDAPMessage_protocolOp.bindResponse, bindResponse);
 
@@ -664,7 +661,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
 
             LDAPMessage_protocolOp operation = new LDAPMessage_protocolOp();
             operation.SetData(LDAPMessage_protocolOp.sicilybindResponse, sicilyBindResponse);
-            
+
             LDAPMessage message = new LDAPMessage(new MessageID(context.MessageId), operation, null);
             AdtsSicilyBindResponsePacket packet = new AdtsSicilyBindResponsePacket();
             packet.ldapMessagev3 = message;
@@ -695,7 +692,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
                 new LDAPDN(matchedDn ?? string.Empty),
                 new LDAPString(errorMessage ?? string.Empty),
                 CreateReferral(referral));
-            
+
             LDAPMessage_protocolOp operation = new LDAPMessage_protocolOp();
             operation.SetData(LDAPMessage_protocolOp.addResponse, addResponse);
 
@@ -729,7 +726,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
                 new LDAPDN(matchedDn ?? string.Empty),
                 new LDAPString(errorMessage ?? string.Empty),
                 CreateReferral(referral));
-            
+
             LDAPMessage_protocolOp operation = new LDAPMessage_protocolOp();
             operation.SetData(LDAPMessage_protocolOp.delResponse, delResponse);
 
@@ -763,7 +760,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
                 new LDAPDN(matchedDn ?? string.Empty),
                 new LDAPString(errorMessage ?? string.Empty),
                 CreateReferral(referral));
-            
+
             LDAPMessage_protocolOp operation = new LDAPMessage_protocolOp();
             operation.SetData(LDAPMessage_protocolOp.modifyResponse, modifyResponse);
 
@@ -797,7 +794,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
                 new LDAPDN(matchedDn ?? string.Empty),
                 new LDAPString(errorMessage ?? string.Empty),
                 CreateReferral(referral));
-            
+
             LDAPMessage_protocolOp operation = new LDAPMessage_protocolOp();
             operation.SetData(LDAPMessage_protocolOp.modDNResponse, modifyDnResponse);
 
@@ -831,7 +828,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
                 new LDAPDN(matchedDn ?? string.Empty),
                 new LDAPString(errorMessage ?? string.Empty),
                 CreateReferral(referral));
-            
+
             LDAPMessage_protocolOp operation = new LDAPMessage_protocolOp();
             operation.SetData(LDAPMessage_protocolOp.compareResponse, compareResponse);
 
@@ -865,7 +862,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
                 new LDAPDN(matchedDn ?? string.Empty),
                 new LDAPString(errorMessage ?? string.Empty),
                 CreateReferral(referral));
-            
+
             LDAPMessage_protocolOp operation = new LDAPMessage_protocolOp();
             operation.SetData(LDAPMessage_protocolOp.extendedResp, extendedResponse);
 
@@ -900,7 +897,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
                     CreateAttributeValueSet(attributes[i].Value));
             }
             PartialAttributeList attributeList = new PartialAttributeList(partialAttributeElementArray);
-            
+
             SearchResultEntry entry = new SearchResultEntry(
                 new LDAPDN(matchedDn ?? string.Empty),
                 attributeList);
@@ -938,7 +935,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
 
             LDAPMessage_protocolOp operation = new LDAPMessage_protocolOp();
             operation.SetData(LDAPMessage_protocolOp.searchResRef, reference);
-            
+
             LDAPMessage message = new LDAPMessage(new MessageID(context.MessageId), operation, null);
             AdtsSearchResultReferencePacket packet = new AdtsSearchResultReferencePacket();
             packet.ldapMessagev3 = message;

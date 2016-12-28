@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="2e4a157d-1bc5-43ae-93ae-de4c486a6f4e" build_format="rfc" section_number="1.219"><title>Attribute msDS-isRODC</title>
+<tech value="protocol" />
+<index><keyword>msDS-isRODC attribute</keyword></index></metadata>
+<section><section_contents><p>For an Active Directory instance, this attribute identifies whether the DSA is a read-only DSA.</p>
+<example><snippet type="syntax">cn: ms-DS-isRODC
+ldapDisplayName: msDS-isRODC
+attributeId: 1.2.840.113556.1.4.1960
+attributeSyntax: 2.5.5.8
+omSyntax: 1
+isSingleValued: TRUE
+schemaIdGuid: a8e8aa23-3e67-4af1-9d7a-2f1a1d633ac9
+systemOnly: FALSE
+searchFlags: 0
+systemFlags: FLAG_SCHEMA_BASE_OBJECT | FLAG_ATTR_IS_CONSTRUCTED
+schemaFlagsEx: FLAG_ATTR_IS_CRITICAL</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA2"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute msDS-isRODC [_rfc_ms-ada21_219]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

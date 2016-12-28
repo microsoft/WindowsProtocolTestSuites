@@ -41,7 +41,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// </remarks>
         protected override bool VerifyConstraints()
         {
-            //TODO: check ASN.1 Doc for detailed constraints on the string format time.
             //Ref. X.680: 46
             //Constraints may be verified by using REGEX, seems complicated.
             return base.VerifyConstraints();
@@ -59,7 +58,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// </remarks>
         protected override int ValueBerEncode(IAsn1BerEncodingBuffer buffer)
         {
-            //TODO: Check X.690: 11.7 for more encoding details.
             //Currently this works good only if there is no fractional portions in Value.
             //In kerberos test suite, the time shall not include any fractional portions of the seconds. Ref. RFC4120: 5.2.3.
             return base.ValueBerEncode(buffer);

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="1a2f6d1d-e427-472b-a002-7d348bdc4c39" build_format="rfc" section_number="1.82"><title>Attribute partialAttributeDeletionList</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details><change_tracking month="08" day="31" year="2012" change_type="content_update" revision_class="minor"><non_tdi_info><non_tdi_desc><p>Removed cross-reference to [MS-DRDM].</p></non_tdi_desc></non_tdi_info></change_tracking></change_tracking_details></metadata>
+<section><section_contents><p>This attribute specifies the internal replication state of partial replicas (that is, on global catalogs (GCs)). It is an attribute of the partial replica NC object and is used when the GC is in the process of removing attributes from the objects in its partial replica NCs. See <xref rid="f977faaa-673e-4f66-b9bf-48c640241d47" targtype="protocol_page">[MS-DRSR]</xref> for more information on implementation usage.<?CommentRangeStart id="1"?><?CommentRangeEnd id="1"?></p>
+<example><snippet type="syntax">cn: Partial-Attribute-Deletion-List
+ldapDisplayName: partialAttributeDeletionList
+attributeId: 1.2.840.113556.1.4.663
+attributeSyntax: 2.5.5.10
+omSyntax: 4
+isSingleValued: TRUE
+schemaIdGuid: 28630ec0-41d5-11d1-a9c1-0000f80367c1
+systemOnly: TRUE
+searchFlags: 0
+isMemberOfPartialAttributeSet: TRUE
+systemFlags: FLAG_SCHEMA_BASE_OBJECT | 
+ FLAG_ATTR_REQ_PARTIAL_SET_MEMBER | FLAG_ATTR_NOT_REPLICATED
+schemaFlagsEx: FLAG_ATTR_IS_CRITICAL</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p>
+<p>The <xref rid="5ea3a865-2cfa-481d-9892-d00fd04514ea" enabled="1" targtype="adschema_attribute">schemaFlagsEx</xref> attribute was added to this attribute definition in <auto_text>windows_server_2008</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="1" author="pbartos" date="2008-01-03T11:52:00Z" initials="" commentText="I cannot find this attribute in DRSR."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="1a2f6d1d-e427-472b-a002-7d348bdc4c39"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-ada3_2_82"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

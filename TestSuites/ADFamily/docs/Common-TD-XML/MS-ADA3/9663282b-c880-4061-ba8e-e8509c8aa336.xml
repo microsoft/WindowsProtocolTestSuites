@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="9663282b-c880-4061-ba8e-e8509c8aa336" build_format="rfc" section_number="1.174"><title>Attribute pwdLastSet</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details><change_tracking change_type="content_update" revision_class="minor" month="08" day="09" year="2013"><non_tdi_info><non_tdi_desc><p>Updated reference to ADS_UF_DONT_EXPIRE_PASSWD flag.</p></non_tdi_desc></non_tdi_info></change_tracking></change_tracking_details></metadata>
+<section><section_contents><p>This attribute specifies the date and time that the password for this account was last changed. This value is stored as a large integer that represents the number of 100 nanosecond intervals since January 1, 1601 (UTC). If this value is set to 0 and the <xref rid="01cf3969-bc7f-4294-9223-f15668557f5f" targtype="adschema_attribute">User-Account-Control</xref> attribute does not contain the ADS_UF_DONT_EXPIRE_PASSWD flag, the user must set the password at the next logon. See <xref rid="4df07fab-1bbc-452f-8e92-7853a3c7e380" targtype="protocol_page">[MS-SAMR]</xref> section <xref rid="c3e2da33-f158-4a44-9a59-ec2729825c2e" targtype="whitepaper_page"><section_ref placeholder="3.2.1.8.8" /></xref> and <xref rid="d2435927-0999-4c62-8c6d-13ba31a52e1a" targtype="protocol_page">[MS-ADTS]</xref> for more information on how Active Directory uses this attribute.</p>
+<example><snippet type="syntax">cn: Pwd-Last-Set
+ldapDisplayName: pwdLastSet
+attributeId: 1.2.840.113556.1.4.96
+attributeSyntax: 2.5.5.16
+omSyntax: 65
+isSingleValued: TRUE
+schemaIdGuid: bf967a0a-0de6-11d0-a285-00aa003049e2
+systemOnly: FALSE
+searchFlags: 0
+attributeSecurityGuid: 4c164200-20c0-11d0-a768-00aa006e0529
+systemFlags: FLAG_SCHEMA_BASE_OBJECT
+schemaFlagsEx: FLAG_ATTR_IS_CRITICAL</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p>
+<p>The <xref rid="5ea3a865-2cfa-481d-9892-d00fd04514ea" enabled="1" targtype="adschema_attribute">schemaFlagsEx</xref> attribute was added to this attribute definition in <auto_text>windows_server_2008</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA3"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute pwdLastSet [_rfc_ms-ada31_174]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.1.1"?>

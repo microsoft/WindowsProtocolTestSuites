@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="9ad70349-9ffe-4624-aafb-e30de8d82b45" build_format="rfc" section_number="2.16"><title>Class dynamicObject</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>If present in an entry, this class indicates that this entry has a limited lifetime and may disappear automatically when its time-to-live has reached 0. If the client has not supplied a value for the entryTtl attribute, the server will provide one.</p>
+<example><snippet type="syntax">cn: Dynamic-Object
+ldapDisplayName: dynamicObject
+governsId: 1.3.6.1.4.1.1466.101.119.2
+objectClassCategory: 3
+rdnAttId: cn
+subClassOf: top
+systemMayContain: msDS-Entry-Time-To-Die, entryTTL
+schemaIdGuid: 66d51249-3355-4c1f-b24e-81f252aca23b
+defaultSecurityDescriptor: D:S:
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=Dynamic-Object,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADLS"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class dynamicObject [_rfc_ms-adls2_16]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

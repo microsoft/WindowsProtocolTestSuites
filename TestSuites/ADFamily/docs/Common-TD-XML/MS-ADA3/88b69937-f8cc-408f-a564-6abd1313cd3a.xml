@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="88b69937-f8cc-408f-a564-6abd1313cd3a" build_format="rfc" section_number="1.175"><title>Attribute pwdProperties</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>This attribute specifies an unsigned long numeric that, bit by bit, is home to several true/false policies, most of which can be configured under the default domain policy Group Policy Object's (GPO's) <?CommentRangeStart id="1"?><?CommentRangeEnd id="1"?><?CommentRangeStart id="2"?><?CommentRangeEnd id="2"?>Computer Configuration\Windows Settings\Security Settings\Account Policies\Password Policy folder. For example, the DOMAIN_PASSWORD_COMPLEX setting, which can be configured through a GPO's Passwords must meet complexity requirements policy, occupies pwdProperties' first bit. See <xref rid="4df07fab-1bbc-452f-8e92-7853a3c7e380" targtype="protocol_page">[MS-SAMR]</xref> for more information on bit descriptions.</p>
+<example><snippet type="syntax">cn: Pwd-Properties
+ldapDisplayName: pwdProperties
+attributeId: 1.2.840.113556.1.4.93
+attributeSyntax: 2.5.5.9
+omSyntax: 2
+isSingleValued: TRUE
+schemaIdGuid: bf967a0b-0de6-11d0-a285-00aa003049e2
+systemOnly: FALSE
+searchFlags: 0
+attributeSecurityGuid: c7407360-20bf-11d0-a768-00aa006e0529
+systemFlags: FLAG_SCHEMA_BASE_OBJECT
+schemaFlagsEx: FLAG_ATTR_IS_CRITICAL</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p>
+<p>The <xref rid="5ea3a865-2cfa-481d-9892-d00fd04514ea" enabled="1" targtype="adschema_attribute">schemaFlagsEx</xref> attribute was added to this attribute definition in <auto_text>windows_server_2008</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="1" author="pbartos" date="2008-01-03T12:42:00Z" initials="" commentText="Ask engineering: Can I quote this from here up to (not including) &quot;folder&quot;?"?><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA3"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute pwdProperties [_rfc_ms-ada31_175]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="62db4d14-b79e-419a-99e4-7e5f15fd3866" build_format="rfc" section_number="1.191"><title>Attribute msDS-NonMembers</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>This attribute serves the same purpose as the <mark type="attribute">Non-Security-Member</mark><?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?> attribute but with scoping rules applied.</p>
+<example><snippet type="syntax">cn: ms-DS-Non-Members
+ldapDisplayName: msDS-NonMembers
+attributeId: 1.2.840.113556.1.4.1793
+attributeSyntax: 2.5.5.1
+omSyntax: 127
+omObjectClass: 1.3.12.2.1011.28.0.714
+isSingleValued: FALSE
+schemaIdGuid: cafcb1de-f23c-46b5-adf7-1e64957bd5db
+systemOnly: FALSE
+searchFlags: 0
+linkID: 2014
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="a-labenn" date="2007-04-11T18:07:46" initials="" commentText="fix the mark tag"?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="62db4d14-b79e-419a-99e4-7e5f15fd3866"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-adls_2_199"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

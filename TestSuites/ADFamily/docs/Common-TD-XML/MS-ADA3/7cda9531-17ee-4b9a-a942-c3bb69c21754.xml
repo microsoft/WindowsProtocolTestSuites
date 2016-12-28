@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="7cda9531-17ee-4b9a-a942-c3bb69c21754" build_format="rfc" section_number="1.1"><title>Attribute name</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>This attribute specifies the relative distinguished name of an object. The relative distinguished name is the part of the object name that is an attribute of the object itself. Also known as the naming attribute. See the glossary entry for distinguished name in <xref rid="d2435927-0999-4c62-8c6d-13ba31a52e1a" targtype="protocol_page">[MS-ADTS]</xref> section <xref rid="b645c125-a7da-4097-84a1-2fa7cea07714" targtype="retcodes_page"><section_ref placeholder="1.1.2" /></xref>.</p>
+<example><snippet type="syntax">cn: RDN
+ldapDisplayName: name
+attributeId: 1.2.840.113556.1.4.1
+attributeSyntax: 2.5.5.12
+omSyntax: 64
+isSingleValued: TRUE
+schemaIdGuid: bf967a0e-0de6-11d0-a285-00aa003049e2
+systemOnly: TRUE
+searchFlags: fPRESERVEONDELETE| fANR | fATTINDEX
+rangeLower: 1
+rangeUpper: 255
+attributeSecurityGuid: e48d0154-bcf8-11d1-8702-00c04fb96050
+mapiID: 33282
+isMemberOfPartialAttributeSet: TRUE
+systemFlags: FLAG_SCHEMA_BASE_OBJECT | 
+ FLAG_ATTR_REQ_PARTIAL_SET_MEMBER
+schemaFlagsEx: FLAG_ATTR_IS_CRITICAL</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p>
+<p>The <xref rid="5ea3a865-2cfa-481d-9892-d00fd04514ea" enabled="1" targtype="adschema_attribute">schemaFlagsEx</xref> attribute was added to this attribute definition in <auto_text>windows_server_2008</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA3"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute name [_rfc_ms-ada31_1]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.1.1"?>

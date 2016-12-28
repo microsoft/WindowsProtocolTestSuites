@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="ccc52e19-7546-4ab9-b79f-0dd68827944e" build_format="rfc" section_number="1.150"><title>Attribute msDFSR-Priority</title>
+<tech value="protocol" />
+<index><keyword>msDFSR-Priority attribute</keyword></index></metadata>
+<section><section_contents><p><?CommentRangeStart id="1" displacedByCustomXml="prev"?><?CommentRangeEnd id="1"?>Priority level.</p>
+<example><snippet type="syntax">cn: ms-DFSR-Priority
+ldapDisplayName: msDFSR-Priority
+attributeId: 1.2.840.113556.1.6.13.3.25
+attributeSyntax: 2.5.5.9
+omSyntax: 2
+isSingleValued: TRUE
+schemaIdGuid: eb20e7d6-32ad-42de-b141-16ad2631b01b
+searchFlags: 0</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="1" author="a-jmicka" date="2007-04-03T12:42:00Z" initials="" commentText="Incomplete description."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="ccc52e19-7546-4ab9-b79f-0dd68827944e"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-ada2_2_163"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

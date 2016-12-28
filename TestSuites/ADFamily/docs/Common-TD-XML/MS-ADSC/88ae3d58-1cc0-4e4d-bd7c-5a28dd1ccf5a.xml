@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="88ae3d58-1cc0-4e4d-bd7c-5a28dd1ccf5a" build_format="rfc" section_number="1.73"><title>Class ipsecPolicy</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>This class is for internal use only.</p>
+<example><snippet type="syntax">cn: Ipsec-Policy
+ldapDisplayName: ipsecPolicy
+governsId: 1.2.840.113556.1.5.98
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: ipsecBase
+systemMayContain: ipsecNFAReference, ipsecISAKMPReference
+systemPossSuperiors: organizationalUnit, computer, container
+schemaIdGuid: b7b13121-b82e-11d0-afee-0000f80367c1
+defaultSecurityDescriptor: D:
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=Ipsec-Policy,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADSC"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class ipsecPolicy [_rfc_ms-adsc1_73]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

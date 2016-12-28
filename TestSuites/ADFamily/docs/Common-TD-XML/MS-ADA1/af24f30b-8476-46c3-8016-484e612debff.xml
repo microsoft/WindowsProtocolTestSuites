@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="af24f30b-8476-46c3-8016-484e612debff" build_format="rfc" section_number="1.79"><title>Attribute authorityRevocationList</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p><?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?>Cross-certificate, certificate revocation list.</p>
+<example><snippet type="syntax">cn: Authority-Revocation-List
+ldapDisplayName: authorityRevocationList
+attributeId: 2.5.4.38
+attributeSyntax: 2.5.5.10
+omSyntax: 4
+isSingleValued: FALSE
+schemaIdGuid: 1677578d-47f3-11d1-a9c3-0000f80367c1
+systemOnly: FALSE
+searchFlags: 0
+rangeUpper: 10485760
+mapiID: 32806
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p>
+<p>In <auto_text>windows_2000_server</auto_text>, rangeUpper is not defined.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="pbartos" date="2008-02-11T13:40:01" initials="" commentText="Maybe add, &quot;This attribute contains a...&quot;"?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="af24f30b-8476-46c3-8016-484e612debff"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-ada1_2_80"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->
