@@ -151,7 +151,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
         {
             base.FromBytes(binaryReader);
 
-            provider_reject_reason = (p_reject_reason_t)binaryReader.ReadUInt16();
+            if (packed_drep.dataRepFormat == RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
+            {
+                provider_reject_reason = (p_reject_reason_t)binaryReader.ReadUInt16();
+            }
+            else
+            {
+                provider_reject_reason = (p_reject_reason_t)EndianUtility.ReverseByteOrder(binaryReader.ReadUInt16());
+            }
+
             versions = new p_rt_versions_supported_t();
             versions.n_protocols = binaryReader.ReadByte();
             versions.p_protocols = new version_t[versions.n_protocols];
@@ -174,6 +182,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                 pad = binaryReader.ReadBytes(L - (int)binaryReader.BaseStream.Position);
                 signature = new Guid(binaryReader.ReadBytes(RpceUtility.GUID_SIZE));
                 extended_error_info = binaryReader.ReadBytes(frag_length - L - RpceUtility.GUID_SIZE);
+
+                if (packed_drep.dataRepFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
+                {
+                    signature = EndianUtility.ReverseByteOrder((Guid)signature);
+                }
             }
         }
     }

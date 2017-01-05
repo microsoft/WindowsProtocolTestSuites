@@ -543,18 +543,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
 
 
         /// <summary>
-        /// The NdrConvert function converts the network buffer from the data representation of 
+        /// The NdrConvert2 function converts the network buffer from the data representation of
         /// the sender to the data representation of the receiver if they are different.
+        /// This routine handles the conversion of all parameters in a procedure.
         /// </summary>
         /// <param name="pStubMsg">
-        /// Pointer to a MIDL_STUB_MESSAGE structure that maintains the current status of the RPC stub. 
-        /// The pRpcMsg member points to a structure whose Buffer member contains the data to convert. 
+        /// Pointer to a MIDL_STUB_MESSAGE structure that maintains the current status of the RPC stub.
+        /// The pRpcMsg member points to a structure whose Buffer member contains the data to convert.
         /// This structure is for internal use only and should not be modified.</param>
         /// <param name="pFormat">Pointer to type format of the data to convert.</param>
+        /// <param name="NumberParams">The number of parameters in the procedure.</param>
         [DllImport("rpcrt4.dll")]
-        internal extern static void NdrConvert(
+        internal extern static void NdrConvert2(
             IntPtr pStubMsg,
-            IntPtr pFormat);
+            IntPtr pFormat,
+            long NumberParams);
 
 
         /// <summary>

@@ -96,6 +96,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fsrvp
                     FsrvpStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList);
 
 

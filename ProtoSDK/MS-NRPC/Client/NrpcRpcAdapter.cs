@@ -169,6 +169,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pValidationInformation = outParamList[3];
@@ -245,6 +246,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pValidationInformation = outParamList[3];
@@ -357,6 +359,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReturnAuthenticatorOut = outParamList[3];
@@ -464,6 +467,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReturnAuthenticatorOut = outParamList[3];
@@ -547,6 +551,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pServerChallenge = outParamList[3];
@@ -643,6 +648,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pServerCredential = outParamList[5];
@@ -751,6 +757,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReturnAuthenticator = outParamList[5];
@@ -875,6 +882,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReturnAuthenticatorOut = outParamList[3];
@@ -1022,6 +1030,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReturnAuthenticatorOut = outParamList[3];
@@ -1147,6 +1156,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReturnAuthenticatorOut = outParamList[3];
@@ -1275,6 +1285,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReturnAuthenticatorOut = outParamList[3];
@@ -1368,6 +1379,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pBuffer = outParamList[2];
@@ -1446,6 +1458,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pBuffer = outParamList[3];
@@ -1533,6 +1546,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pBuffer = outParamList[2];
@@ -1617,6 +1631,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pBuffer = outParamList[4];
@@ -1720,6 +1735,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pServerCredential = outParamList[5];
@@ -1884,6 +1900,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReturnAuthenticatorOut = outParamList[3];
@@ -1996,6 +2013,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReturnAuthenticatorOut = outParamList[3];
@@ -2114,6 +2132,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pBuffer = outParamList[4];
@@ -2185,6 +2204,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pDomainNameBuffer = outParamList[1];
@@ -2277,6 +2297,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pDomainControllerInfo = outParamList[5];
@@ -2379,6 +2400,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReturnAuthenticatorOut = outParamList[3];
@@ -2470,6 +2492,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 retVal = outParamList[3].ToInt32();
@@ -2548,6 +2571,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 Rid = TypeMarshal.ToNullableStruct<uint>(outParamList[2]);
@@ -2653,6 +2677,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pNewMessageDigest = outParamList[4];
@@ -2761,6 +2786,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pNewMessageDigest = outParamList[4];
@@ -2891,6 +2917,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pServerCredential = outParamList[5];
@@ -2994,6 +3021,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                 true,
                 responseStub,
+                rpceClientTransport.Context.PackedDataRepresentationFormat,
                 paramList))
             {
                 //DomainControllerInfo is double pointer (**)
@@ -3068,6 +3096,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pSiteName = outParamList[1];
@@ -3175,6 +3204,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReturnAuthenticatorOut = outParamList[3];
@@ -3301,6 +3331,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReturnAuthenticator = outParamList[5];
@@ -3411,6 +3442,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReturnAuthenticator = outParamList[5];
@@ -3513,6 +3545,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReturnAuthenticator = outParamList[3];
@@ -3614,6 +3647,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pSiteNames = outParamList[3];
@@ -3739,6 +3773,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pDomainControllerInfo = outParamList[7];
@@ -3826,6 +3861,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pDomainName = outParamList[1];
@@ -3905,6 +3941,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pDomains = outParamList[1];
@@ -4002,6 +4039,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pSiteNames;
@@ -4072,6 +4110,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pSiteNames = outParamList[1];
@@ -4215,6 +4254,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pValidationInformation = outParamList[5];
@@ -4303,6 +4343,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pDomains = outParamList[2];
@@ -4400,6 +4441,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 retVal = outParamList[5].ToInt32();
@@ -4534,6 +4576,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReturnAuthenticator = outParamList[5];
@@ -4627,6 +4670,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pForestTrustInfo = outParamList[3];
@@ -4724,6 +4768,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReturnAuthenticator = outParamList[3];
@@ -4865,6 +4910,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReturnAuthenticatorOut = outParamList[3];
@@ -5016,6 +5062,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReturnAuthenticator = outParamList[5];
@@ -5082,6 +5129,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 retVal = outParamList[0].ToInt32();
@@ -5175,6 +5223,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReturnAuthenticator = outParamList[3];
@@ -5299,6 +5348,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReturnAuthenticatorOut = outParamList[4];

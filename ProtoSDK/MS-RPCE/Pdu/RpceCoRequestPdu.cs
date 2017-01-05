@@ -134,6 +134,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             p_cont_id = binaryReader.ReadUInt16();
             opnum = binaryReader.ReadUInt16();
 
+            if (packed_drep.dataRepFormat != RpceDataRepresentationFormat.IEEE_LittleEndian_ASCII)
+            {
+                alloc_hint = EndianUtility.ReverseByteOrder(alloc_hint);
+                p_cont_id = EndianUtility.ReverseByteOrder(p_cont_id);
+                opnum = EndianUtility.ReverseByteOrder(opnum);
+            }
+
             if ((pfc_flags & RpceCoPfcFlags.PFC_OBJECT_UUID) != 0)
             {
                 @object = new Guid(binaryReader.ReadBytes(RpceUtility.GUID_SIZE)); 
