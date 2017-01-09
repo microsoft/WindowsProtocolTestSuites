@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="692270e8-7360-459a-a8e5-562005a80c71" build_format="rfc" section_number="1.474"><title>Attribute msTSManagingLS4</title>
+<tech value="protocol" />
+<index><keyword>msTSManagingLS4 attribute</keyword></index></metadata>
+<section><section_contents><p>This attribute specifies the issuer name of the fourth Terminal Services session per user CAL.</p>
+<example><snippet type="syntax">cn: MS-TS-ManagingLS4
+ldapDisplayName: msTSManagingLS4
+attributeId: 1.2.840.113556.1.4.2008
+attributeSyntax: 2.5.5.12
+omSyntax: 64
+isSingleValued: TRUE
+systemOnly: FALSE
+rangeLower: 0
+rangeUpper: 255
+schemaIdGuid: f7a3b6a0-2107-4140-b306-75cb521731e5
+searchFlags: fATTINDEX
+attributeSecurityGuid: 5805bc62-bdc9-4428-a5e2-856a0f4c185e
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA2"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute msTSManagingLS4 [_rfc_ms-ada21_474]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="a112279c-08bc-4c16-953b-3c0a3c89d0e2" build_format="rfc" section_number="1.311"><title>Attribute searchFlags</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>This attribute contains a set of flags that specify search and indexing information for an attribute.<?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?></p>
+<example><snippet type="syntax">cn: Search-Flags
+ldapDisplayName: searchFlags
+attributeId: 1.2.840.113556.1.2.334
+attributeSyntax: 2.5.5.9
+omSyntax: 10
+isSingleValued: TRUE
+schemaIdGuid: bf967a2d-0de6-11d0-a285-00aa003049e2
+systemOnly: FALSE
+searchFlags: 0
+rangeLower: 0
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="pbartos" date="2008-01-04T01:10:27" initials="" commentText="See searchFlags in ADA3.  We might want to include information of that type."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="a112279c-08bc-4c16-953b-3c0a3c89d0e2"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-adls_2_324"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

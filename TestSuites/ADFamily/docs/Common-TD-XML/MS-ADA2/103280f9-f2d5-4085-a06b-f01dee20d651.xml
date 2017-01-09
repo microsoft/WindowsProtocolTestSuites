@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="103280f9-f2d5-4085-a06b-f01dee20d651" build_format="rfc" section_number="1.478"><title>Attribute msTSProfilePath</title>
+<tech value="protocol" />
+<index><keyword>msTSProfilePath attribute</keyword></index></metadata>
+<section><section_contents><p>This attribute specifies a roaming or mandatory profile path to use when the user logs on to the terminal server. The profile path is in the following network path format: "\\servername\profiles folder name\username".</p>
+<example><snippet type="syntax">cn: ms-TS-Profile-Path
+ldapDisplayName: msTSProfilePath
+attributeId: 1.2.840.113556.1.4.1976
+attributeSyntax: 2.5.5.12
+omSyntax: 64
+isSingleValued: TRUE
+schemaIdGuid: e65c30db-316c-4060-a3a0-387b083f09cd
+systemOnly: FALSE
+searchFlags: 0
+rangeLower: 0
+rangeUpper: 32767
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA2"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute msTSProfilePath [_rfc_ms-ada21_478]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

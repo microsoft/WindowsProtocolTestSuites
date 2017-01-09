@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="8f3553de-a02e-4f81-9ce3-b0a7834c0d6a" build_format="rfc" section_number="1.221"><title>Attribute msDS-TasksForAzRole</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>This attribute specifies a list of tasks for Az-Role.</p>
+<example><snippet type="syntax">cn: ms-DS-Tasks-For-Az-Role
+ldapDisplayName: msDS-TasksForAzRole
+attributeId: 1.2.840.113556.1.4.1814
+attributeSyntax: 2.5.5.1
+omSyntax: 127
+omObjectClass: 1.3.12.2.1011.28.0.714
+isSingleValued: FALSE
+schemaIdGuid: 35319082-8c4a-4646-9386-c2949d49894d
+systemOnly: FALSE
+searchFlags: 0
+linkID: 2024</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADLS"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute msDS-TasksForAzRole [_rfc_ms-adls1_221]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

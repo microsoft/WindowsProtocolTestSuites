@@ -16,6 +16,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         private long val;
         private EncodingWay? encodingWay;
 
+        public Asn1Tag()
+        {
+            this.type = 0;
+            this.val = 0;
+            this.encodingWay = 0;
+        }
+
         /// <summary>
         /// Initializes a new instance of the Asn1Tag class with a given tag.
         /// </summary>

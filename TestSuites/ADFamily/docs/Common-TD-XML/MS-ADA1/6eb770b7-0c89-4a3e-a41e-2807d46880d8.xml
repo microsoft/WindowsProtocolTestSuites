@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="6eb770b7-0c89-4a3e-a41e-2807d46880d8" build_format="rfc" section_number="1.275"><title>Attribute gPCFileSysPath</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details><change_tracking month="01" day="10" year="2011" change_type="content_update" revision_class="major"><tdi_info><tdi_number>61051</tdi_number><tdi_title>Replaced Boolean setting with UNC path description.</tdi_title></tdi_info></change_tracking></change_tracking_details></metadata>
+<section><section_contents><p>This attribute specifies the <?CommentRangeStart id="0"?>Universal Naming Convention (UNC) <?CommentRangeEnd id="0"?>path to the Group Policy Object template located in the system volume (SYSVOL).</p>
+<example><snippet type="syntax">cn: GPC-File-Sys-Path
+ldapDisplayName: gPCFileSysPath
+attributeId: 1.2.840.113556.1.4.894
+attributeSyntax: 2.5.5.12
+omSyntax: 64
+isSingleValued: TRUE
+schemaIdGuid: f30e3bc1-9ff0-11d1-b603-0000f80367c1
+systemOnly: FALSE
+searchFlags: 0
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section>
+</whitepaper_page>
+</topic><?COMMENT id="0" author="David Clark (Volt)" date="2012-05-14T14:21:00Z" initials="DC" commentText="&quot;Universal Naming Convention (UNC)&quot; ideally should be term tagged to ref MS-GLOS;probably &quot;Group Policy Object (GPO)&quot; as well.probably &quot;system volume (SYSVOL)&quot; as well"?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="6eb770b7-0c89-4a3e-a41e-2807d46880d8"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-ada1_2_277"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

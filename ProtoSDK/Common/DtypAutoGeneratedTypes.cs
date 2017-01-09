@@ -1729,7 +1729,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         private ulong[] Uint64Values;
         private string[] StringValues;
 
-        // TODO: the following data types are not implemented:
         // public _SID[] SidValues;
         // public bool[] BooleanValues;
         // Octet String
@@ -1890,7 +1889,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             retVal.AttributeData = TypeMarshal.ToStruct<CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1>(data, ref offset);
             Debug.Assert(retVal.AttributeData.Name == (offset - attributeDataOffset));
 
-            // TODO: any better approach?
             int strLen = 0;
             for (int i = offset; i < data.Length - 2; ++i)
             {

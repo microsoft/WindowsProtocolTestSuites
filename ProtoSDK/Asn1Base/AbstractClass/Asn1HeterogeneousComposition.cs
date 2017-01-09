@@ -70,7 +70,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// </exception>
         private void CollectMetadata()
         {
-            //TODO: ensure that only collect once for each derived class, like static member. Cound not find a solution yet.
 
             //Get metadata for fields
             MemberInfo[] mis = GetType().GetMembers(

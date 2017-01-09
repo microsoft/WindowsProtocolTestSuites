@@ -1,15 +1,5 @@
-﻿//------------------------------------------------------------------------------
-// Copyright (c) Microsoft Corporation. All rights reserved.
-//------------------------------------------------------------------------------
-
-//-------------------------------------------------------------------------
-// Copyright(c) 2009 Microsoft Corporation
-// All rights reserved
-// 
-// Module Name: OutStandingRequest
-// Description: A stucture contains information about the request waiting
-//              for server response
-//-------------------------------------------------------------------------
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
 

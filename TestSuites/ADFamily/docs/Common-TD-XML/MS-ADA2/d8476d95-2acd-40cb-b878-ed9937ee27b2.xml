@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="d8476d95-2acd-40cb-b878-ed9937ee27b2" build_format="rfc" section_number="1.260"><title>Attribute msDS-PhoneticCompanyName</title>
+<tech value="protocol" />
+<index><keyword>msDS-PhoneticCompanyName attribute</keyword></index>
+<change_tracking_details>
+<change_tracking month="12" day="19" year="2009" change_type="content_update" revision_class="major"><non_tdi_info><non_tdi_desc><p>Changed "the system" to "the Active Directory system" and added reference to MS-ADSO. </p></non_tdi_desc></non_tdi_info></change_tracking>
+<change_tracking month="06" day="06" year="2012" revision_class="major" change_type="protocol_syntax_updated"><non_tdi_info><non_tdi_desc><p>Added the isMemberOfPartialAttributeSet attribute.</p></non_tdi_desc></non_tdi_info></change_tracking>
+</change_tracking_details>
+</metadata>
+<section><section_contents><p>This attribute contains the phonetic company name where the person works.</p>
+<example><snippet type="syntax">cn: ms-DS-Phonetic-Company-Name
+ldapDisplayName: msDS-PhoneticCompanyName
+attributeId: 1.2.840.113556.1.4.1945
+attributeSyntax: 2.5.5.12
+omSyntax: 64
+isSingleValued: TRUE
+schemaIdGuid: 5bd5208d-e5f4-46ae-a514-543bc9c47659
+systemOnly: FALSE
+searchFlags: fATTINDEX | fANR
+rangeLower: 1
+rangeUpper: 64
+attributeSecurityGuid: e48d0154-bcf8-11d1-8702-00c04fb96050
+mapiID: 35985
+systemFlags: FLAG_SCHEMA_BASE_OBJECT
+isMemberOfPartialAttributeSet: TRUE</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA2"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute msDS-PhoneticCompanyName [_rfc_ms-ada21_260]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

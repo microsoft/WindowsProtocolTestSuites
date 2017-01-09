@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV
     /*
     DelResponse ::= [APPLICATION 11] LDAPResult
     */
-    [Asn1Tag(Asn1TagType.Application, 11)]
+    [Asn1Tag(Asn1TagType.Application, 11, EncodingWay = EncodingWay.Constructed)]
     public class DelResponse : LDAPResult
     {
         public DelResponse()
@@ -20,11 +20,30 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV
          LDAPResult_resultCode resultCode,
          LDAPDN matchedDN,
          LDAPString errorMessage,
-         Referral referral) : base (resultCode, matchedDN, errorMessage, referral)
+         Referral referral)
+            : base(resultCode, matchedDN, errorMessage, referral)
         {
         }
 
-        //TODO: Add Other Constructors.
+        public override int BerEncode(IAsn1BerEncodingBuffer buffer, bool explicitTag = true)
+        {
+            int allLength = 0;
+
+            if (referral != null)
+            {
+                allLength += referral.BerEncodeWithoutUnisersalTag(buffer);
+                allLength += TagBerEncode(buffer,
+                    new Asn1Tag(Asn1TagType.Context, 3) { EncodingWay = EncodingWay.Constructed });
+            }
+
+            allLength += errorMessage.BerEncode(buffer);
+            allLength += matchedDN.BerEncode(buffer);
+            allLength += resultCode.BerEncode(buffer);
+            allLength += LengthBerEncode(buffer, allLength);
+            allLength += TagBerEncode(buffer, this.TopTag);
+
+            return allLength;
+        }
     }
 }
 

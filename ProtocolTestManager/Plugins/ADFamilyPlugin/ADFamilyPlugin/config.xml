@@ -1,0 +1,91 @@
+<Config>
+	<PtfFileNames>
+		<PtfFileName>AD_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+	</PtfFileNames>
+	<ConfigFileInSourceCode>
+		<PtfFileName>Source\Server\TestCode\TestSuite\AD_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+	</ConfigFileInSourceCode>
+	<DllFileNames>
+		<DllFileName>Bin\AD_ServerTestSuite.dll</DllFileName>
+		<DllFileName>Bin\AD_ServerAdapter.dll</DllFileName>
+	</DllFileNames>
+	<AutoDetectionDllName>ADFamilyPlugin.dll</AutoDetectionDllName>
+	<ConfigCaseRule>
+    <Group name ="Machine" type="Remover">
+      <Rule name = "PDC">
+        <Category name = "PDC"/>
+      </Rule>
+      <Rule name = "SDC">
+        <Category name = "SDC"/>
+      </Rule>
+      <Rule name = "RODC">
+        <Category name = "RODC"/>
+      </Rule>
+      <Rule name = "CDC">
+        <Category name = "CDC"/>
+      </Rule>
+      <Rule name = "TDC">
+        <Category name = "TDC"/>
+      </Rule>
+      <Rule name = "DM">
+        <Category name = "DM"/>
+      </Rule>
+    </Group>
+    <Group name ="Protocol">
+      <Rule name = "MS-ADTS-LDAP">
+        <Category name = "MS-ADTS-LDAP"/>
+      </Rule>
+      <Rule name = "MS-ADTS-PublishDC">
+        <Category name = "MS-ADTS-PublishDC"/>
+      </Rule>
+      <Rule name = "MS-ADTS-Schema">
+        <Category name = "MS-ADTS-Schema"/>
+      </Rule>
+      <Rule name = "MS-ADTS-Security">
+        <Rule name = "ADDS">
+          <Category name = "MS-ADTS-Security_ADDS"/>
+        </Rule>
+        <Rule name = "ADLDS">
+          <Category name = "MS-ADTS-Security_ADLDS"/>
+        </Rule>
+      </Rule>
+      <Rule name = "MS-APDS">
+        <Category name = "MS-APDS"/>
+      </Rule>
+      <Rule name = "MS-DRSR">
+        <Category name = "MS-DRSR"/>
+      </Rule>
+      <Rule name = "MS-FRS2">
+        <Category name = "MS-FRS2"/>
+      </Rule>
+      <Rule name = "MS-LSAD">
+        <Category name = "MS-LSAD"/>
+      </Rule>
+      <Rule name = "MS-LSAT">
+        <Category name = "MS-LSAT"/>
+      </Rule>
+      <Rule name = "MS-NRPC">
+        <Category name = "MS-NRPC"/>
+      </Rule>
+      <Rule name = "MS-SAMR">
+        <Category name = "MS-SAMR"/>
+      </Rule>
+    </Group>
+    <Group name ="Domain Function Level">
+      <Rule name="Windows Server 2008 R2 and below">
+        <Category name = "DomainWin2008"/>
+        <Category name = "DomainWin2008R2"/>
+      </Rule>
+      <Rule name="Windows Server 2012">
+        <Category name = "DomainWin2012"/>
+      </Rule>
+      <Rule name="Windows Server 2012 R2">
+        <Category name = "DomainWin2012R2"/>
+      </Rule>
+      <Rule name="Windows Threshold">
+        <Category name = "DomainWinThreshold"/>
+      </Rule>
+    </Group>
+	</ConfigCaseRule>
+	<TestSetting>Bin\ServerLocalTestRun.testrunconfig</TestSetting>
+</Config>

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="b8697566-fa2e-4e64-a84c-5a95edb8473e" build_format="rfc" section_number="1.123"><title>Class mSMQMigratedUser</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>An object that is associated with a migrated user. MSMQ 1.0 used a <?CommentRangeStart id="0"?>proprietary <?CommentRangeEnd id="0"?>directory service that contained specific user information. As part of MSMQ integration with the <auto_text>windows_2000</auto_text> directory service, MSMQ provides a migration tool. During migration, for each user that is not in the <auto_text>windows_2000</auto_text> domain, a migrated user is created.</p>
+<example><snippet type="syntax">cn: MSMQ-Migrated-User
+ldapDisplayName: mSMQMigratedUser
+governsId: 1.2.840.113556.1.5.179
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: top
+systemMayContain: mSMQUserSid, mSMQSignCertificatesMig, 
+ mSMQSignCertificates, mSMQDigestsMig, mSMQDigests, objectSid
+systemPossSuperiors: organizationalUnit, domainDNS, builtinDomain
+schemaIdGuid: 50776997-3c3d-11d2-90cc-00c04fd91ab1
+defaultSecurityDescriptor: D:(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;DA)
+ (A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;SY)(A;;RPLCLORC;;;AU)
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=MSMQ-Migrated-User,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="a-lomerr" date="2009-08-18T11:58:00Z" initials="LAM" commentText="Did not remove as part of clean up on 8/18/09."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="b8697566-fa2e-4e64-a84c-5a95edb8473e"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-adsc_2_133"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

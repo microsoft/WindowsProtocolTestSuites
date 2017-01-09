@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="ef0999ec-b21d-4c11-a36e-6c465de2b460" build_format="rfc" section_number="2.61"><title>Class user</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?>
+<p>This class is used to store information about an employee or contractor who works for an organization. It is also possible to apply this class to long-term visitors.</p>
+<example><snippet type="syntax">cn: User
+ldapDisplayName: user
+governsId: 1.2.840.113556.1.5.9
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: organizationalPerson
+systemAuxiliaryClass: msDS-BindableObject, securityPrincipal
+mayContain: audio, carLicense, departmentNumber, displayName, 
+ employeeNumber, employeeType, givenName, homePostalAddress, 
+ jpegPhoto, labeledURI, photo, preferredLanguage, roomNumber, 
+ secretary, uid, userPKCS12, userSMIMECertificate, 
+ x500uniqueIdentifier
+systemMayContain: defaultClassStore, dynamicLDAPServer, 
+ lastLogonTimestamp, preferredOU, userParameters, userPrincipalName, 
+ userCertificate, businessCategory, homePhone, initials, mail, 
+ manager, mobile, o, pager
+systemPossSuperiors: domainDNS, organizationalUnit
+schemaIdGuid: bf967aba-0de6-11d0-a285-00aa003049e2
+defaultSecurityDescriptor: 
+ D:(OA;;CR;ab721a53-1e2f-11d0-9819-00aa0040529b;;PS)S:
+defaultHidingValue: FALSE
+systemOnly: FALSE
+defaultObjectCategory: CN=Person,&lt;SchemaNCDN&gt;</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="" date="1900-01-01T00:00:00Z" initials="" commentText="This section is out of order with the other sections; it should go after Class top."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="ef0999ec-b21d-4c11-a36e-6c465de2b460"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-adls_3_62"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

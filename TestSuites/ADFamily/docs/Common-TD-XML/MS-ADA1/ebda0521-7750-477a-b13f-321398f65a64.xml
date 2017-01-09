@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="ebda0521-7750-477a-b13f-321398f65a64" build_format="rfc" section_number="1.140"><title>Attribute dBCSPwd</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?>
+<p>This attribute specifies the account's LAN Manager password.</p>
+<p>For more information, see <xref rid="4df07fab-1bbc-452f-8e92-7853a3c7e380" targtype="protocol_page">[MS-SAMR]</xref> section <xref rid="9a014fcd-83f6-4432-8110-31fae3d78f6b" targtype="whitepaper_page"><section_ref placeholder="3.1.1.8.6" /></xref>.</p>
+<example><snippet type="syntax">cn: DBCS-Pwd
+ldapDisplayName: dBCSPwd
+attributeId: 1.2.840.113556.1.4.55
+attributeSyntax: 2.5.5.10
+omSyntax: 4
+isSingleValued: TRUE
+schemaIdGuid: bf96799c-0de6-11d0-a285-00aa003049e2
+systemOnly: FALSE
+searchFlags: 0
+systemFlags: FLAG_SCHEMA_BASE_OBJECT
+schemaFlagsEx: FLAG_ATTR_IS_CRITICAL</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p>
+<p>The <xref rid="5ea3a865-2cfa-481d-9892-d00fd04514ea" enabled="1" targtype="adschema_attribute">schemaFlagsEx</xref> attribute was added to this attribute definition in <auto_text>windows_server_2008</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="" date="1900-01-01T00:00:00Z" initials="" commentText="Is &quot;LAN Manager&quot; short for &quot;Windows NT LAN Manager&quot;? If so, it should be written out as just NTLM, according to Winedit. This came up because the copyeditor wanted to spell out LAN, but I'm wondering if the whole phrase should be changed."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="ebda0521-7750-477a-b13f-321398f65a64"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-ada1_2_141"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

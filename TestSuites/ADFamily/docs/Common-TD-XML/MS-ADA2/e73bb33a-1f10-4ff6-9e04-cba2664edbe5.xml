@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata build_format="rfc" id="e73bb33a-1f10-4ff6-9e04-cba2664edbe5"><title>Attribute msDS-IngressClaimsTransformationPolicy</title>
+<tech />
+<index><keyword>msDS-IngressClaimsTransformationPolicy attribute</keyword></index>
+<change_tracking_details>
+<change_tracking revision_class="major" year="2011" month="12" day="21" change_type="content_new"><non_tdi_info><non_tdi_desc><p>Added section with content for <auto_text>windows_server_8</auto_text>.</p></non_tdi_desc></non_tdi_info></change_tracking>
+</change_tracking_details>
+</metadata>
+<section>
+<section_contents>
+<p>This attribute is a link to a claims transformation policy object for the ingress claims (that is, claims entering this forest) from the Trusted Domain. This is applicable only for an outgoing or bidirectional cross-forest trust. If this link is absent, all the ingress claims are dropped.</p>
+<example>
+<snippet>cn: ms-DS-Ingress-Claims-Transformation-Policy
+ldapDisplayName: msDS-IngressClaimsTransformationPolicy
+attributeId: 1.2.840.113556.1.4.2191
+attributeSyntax: 2.5.5.1
+omSyntax: 127
+isSingleValued: TRUE
+systemOnly: FALSE
+searchFlags: 0
+omObjectClass: 1.3.12.2.1011.28.0.714
+schemaIdGuid: 86284c08-0c6e-1540-8b15-75147d23d20d
+linkID: 2190
+systemFlags: FLAG_SCHEMA_BASE_OBJECT 
+schemaFlagsEx: FLAG_ATTR_IS_CRITICAL</snippet>
+</example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_8</auto_text> and <auto_text>winblue_server_1</auto_text>.</p>
+</section_contents>
+</section>
+</whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA2"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute msDS-IngressClaimsTransformationPolicy"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

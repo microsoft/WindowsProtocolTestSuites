@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="86744db8-0dee-46cb-826d-10767bb732fb" build_format="rfc" section_number="1.202"><title>Class securityObject</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>An auxiliary class that identifies security principals.<?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?></p>
+<example><snippet type="syntax">cn: Security-Object
+ldapDisplayName: securityObject
+governsId: 1.2.840.113556.1.5.1
+objectClassCategory: 2
+rdnAttId: cn
+subClassOf: top
+systemMustContain: cn
+systemPossSuperiors: container
+schemaIdGuid: bf967aaf-0de6-11d0-a285-00aa003049e2
+defaultSecurityDescriptor: D:(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;DA)
+ (A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;SY)(A;;RPLCLORC;;;AU)
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=Security-Object,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="a-chwar" date="2007-08-16T16:50:59" initials="" commentText="L-R edit: It appears that the descriptions for this class and the next class (Class securityPrincipal) have been switched. Can you review these two descriptions and see if you agree?"?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="86744db8-0dee-46cb-826d-10767bb732fb"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-adsc_2_212"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

@@ -54,8 +54,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// </remarks>
         public byte ReadByte()
         {
-            if (curBitIndexInTempData == 0 && tempData == -1
-                || curBitIndexInTempData != 0 && buffer.Position == buffer.Length)
+            if (IsNomoreData())
             {
                 throw new Asn1DecodingOutOfBufferRangeException(
                      ExceptionMessages.DecodingOutOfRange); 
@@ -72,6 +71,34 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
             }
             RefreshTempByte();
             return (byte)nextVal;
+        }
+
+        public byte PeekByte()
+        {
+            if (curBitIndexInTempData == 0 && tempData == -1
+                || curBitIndexInTempData != 0 && buffer.Position == buffer.Length)
+            {
+                throw new Asn1DecodingOutOfBufferRangeException(
+                     ExceptionMessages.DecodingOutOfRange);
+            }
+
+            int nextVal;
+            if (curBitIndexInTempData == 0)
+            {
+                nextVal = tempData;
+            }
+            else
+            {
+                nextVal = buffer.ReadByte();
+                buffer.Position -= 1;
+            }
+            return (byte)nextVal;
+        }
+
+        public bool IsNomoreData()
+        {
+            return curBitIndexInTempData == 0 && tempData == -1
+                || curBitIndexInTempData != 0 && buffer.Position == buffer.Length;
         }
 
         /// <summary>
@@ -105,7 +132,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         {
             if (curBitIndexInTempData != 0)
             {
-                //TODO: add a SeekBitPosition method when it is needed.
                 throw new Asn1InvalidOperation(ExceptionMessages.SeekPositionFailed + " Some bits are read already. It's not octet aligned.");
             }
             switch (origin)
@@ -182,8 +208,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
             }
             return bits;
         }
-
-        //TODO: Add some methods like ReadInt by using BinaryReader/BinaryWriter if needed.
 
         #region Dispose
 

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="f265ce28-56ef-4730-b49e-b4e712c7ca8f" build_format="rfc" section_number="1.173"><title>Attribute msDS-DisableForInstances</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?>
+<p>This attribute specifies the set of DSA objects, representing AD LDS instances, for which Service Connection Point publication should be disabled.</p>
+<example><snippet type="syntax">cn: ms-DS-Disable-For-Instances
+ldapDisplayName: msDS-DisableForInstances
+attributeId: 1.2.840.113556.1.4.1870
+attributeSyntax: 2.5.5.1
+omSyntax: 127
+omObjectClass: 1.3.12.2.1011.28.0.714
+isSingleValued: FALSE
+schemaIdGuid: 5f8f45cb-0fb7-fc4f-b44f-66f781aa66dd
+systemOnly: FALSE
+searchFlags: 0
+linkID: 2042
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="" date="1900-01-01T00:00:00Z" initials="" commentText="Please write DSA out in full since this is the first mention of that acronym."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="f265ce28-56ef-4730-b49e-b4e712c7ca8f"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-adls_2_176"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

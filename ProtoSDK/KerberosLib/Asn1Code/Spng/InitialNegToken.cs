@@ -48,7 +48,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Spng
         /// <remarks>This method is overrode because Universal Class Tag is not needed in the encoding result.</remarks>
         public override int BerEncode(IAsn1BerEncodingBuffer buffer, bool explicitTag = true)
         {
-            //TODO: deal with explicitTag
             if (!VerifyConstraints())
             {
                 throw new Asn1ConstraintsNotSatisfied(ExceptionMessages.ConstraintsNotSatisfied
@@ -61,7 +60,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Spng
             int resultLen = ValueBerEncode(buffer);
 
             //No Universal Tag.
-            //TODO: Need to check the original definition.
 
             //Add the encoding result of the top most tag (in most cases it's Application Class Tag) to the front of buffer if it is defined.
             Asn1Tag topTag = this.TopTag;

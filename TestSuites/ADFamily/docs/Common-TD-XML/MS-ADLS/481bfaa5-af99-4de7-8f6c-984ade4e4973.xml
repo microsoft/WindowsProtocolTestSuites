@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page>
+<metadata id="481bfaa5-af99-4de7-8f6c-984ade4e4973" build_format="rfc" section_number="1.374">
+<title>Attribute wellKnownObjects</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details>
+<change_tracking month="04" day="11" year="2009" revision_class="minor" change_type="content_update"><tdi_info><tdi_number>28834</tdi_number><tdi_title>Added a reference citation.</tdi_title></tdi_info></change_tracking>
+
+<change_tracking month="12" day="19" year="2009" change_type="content_update" revision_class="major"><non_tdi_info><non_tdi_desc><p>Changed "the system" to "the Active Directory system".</p></non_tdi_desc></non_tdi_info>
+</change_tracking></change_tracking_details>
+</metadata>
+<section>
+<section_contents>
+<p>This attribute contains a list of well-known object containers by GUID and distinguished name. The well-known objects are system containers. This information is used to retrieve an object after it has been moved by using just the GUID and the domain name.</p>
+<p>Whenever the object is moved, the Active Directory system will automatically update the distinguished name portion of the Well-Known-Objects values that referred to the object.</p>
+<p>For information on well-known objects, well-known GUIDs, and their symbolic names, see <xref rid="d2435927-0999-4c62-8c6d-13ba31a52e1a" targtype="protocol_page">[MS-ADTS]</xref> section <xref targtype="whitepaper_page" rid="5A00C890-6BE5-4575-93C4-8BF8BE0CA8D8"><section_ref placeholder="7.1.1.4" /></xref>.</p>
+<example>
+<snippet type="syntax">cn: Well-Known-Objects
+ldapDisplayName: wellKnownObjects
+attributeId: 1.2.840.113556.1.4.618
+attributeSyntax: 2.5.5.7
+omSyntax: 127
+omObjectClass: 1.2.840.113556.1.1.1.11
+isSingleValued: FALSE
+schemaIdGuid: 05308983-7688-11d1-aded-00c04fd8d5cd
+systemOnly: TRUE
+searchFlags: 0
+rangeLower: 16
+rangeUpper: 16
+isMemberOfPartialAttributeSet: TRUE
+systemFlags: FLAG_SCHEMA_BASE_OBJECT | 
+ FLAG_ATTR_REQ_PARTIAL_SET_MEMBER</snippet>
+</example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p>
+</section_contents>
+</section>
+</whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADLS"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute wellKnownObjects [_rfc_ms-adls1_374]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

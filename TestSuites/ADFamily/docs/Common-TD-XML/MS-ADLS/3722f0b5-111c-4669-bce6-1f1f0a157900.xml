@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="3722f0b5-111c-4669-bce6-1f1f0a157900" build_format="rfc" section_number="1.116"><title>Attribute labeledURI</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>This attribute specifies a Uniform Resource Identifier (URI) followed by a label. The label is used to describe the resource to which the URI points and is intended as a friendly name fit for <?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?>human readers.</p>
+<example><snippet type="syntax">cn: labeledURI
+ldapDisplayName: labeledURI
+attributeId: 1.3.6.1.4.1.250.1.57
+attributeSyntax: 2.5.5.12
+omSyntax: 64
+isSingleValued: FALSE
+schemaIdGuid: c569bb46-c680-44bc-a273-e6c227d71b45
+systemOnly: FALSE
+searchFlags: 0
+showInAdvancedViewOnly: FALSE</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="debdlug" date="2008-07-07T15:31:50" initials="" commentText="Can we delete &quot;fit&quot; here? I think the meaning is clear without it."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="3722f0b5-111c-4669-bce6-1f1f0a157900"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-adls_2_117"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

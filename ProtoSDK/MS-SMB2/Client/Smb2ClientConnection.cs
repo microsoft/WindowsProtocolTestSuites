@@ -142,7 +142,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             set;
         }
 
-        // TODO: Find a better place for this member, not part of the ADM
         /// <summary>
         /// The underlying gss-api
         /// </summary>

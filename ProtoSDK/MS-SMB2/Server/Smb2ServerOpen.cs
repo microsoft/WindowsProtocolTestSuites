@@ -37,7 +37,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         public _SID DurableOwner;
 
-        // TODO: Not sure about the data type
         public ulong EnumerationLocation;
 
         public string EnumerationSearchPattern;

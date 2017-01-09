@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page>
+<metadata id="1152a281-8525-4849-ae31-c7b3bb53bba4" build_format="rfc" section_number="2.58">
+<title>Class top</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details>
+<change_tracking month="04" day="11" year="2009" revision_class="major" change_type="protocol_syntax_updated"><tdi_info><tdi_number>29211</tdi_number><tdi_title>Corrected the name of the isRecycled attribute.</tdi_title></tdi_info></change_tracking>
+</change_tracking_details>
+</metadata>
+<section><section_contents><p>This class is the top-level class from which all classes are derived.</p>
+<example><snippet type="syntax">cn: Top
+ldapDisplayName: top
+governsId: 2.5.6.0
+objectClassCategory: 2
+rdnAttId: cn
+subClassOf: top
+systemMustContain: objectClass, objectCategory, nTSecurityDescriptor, 
+ instanceType
+mayContain: directReports, ownerBL, msDS-TasksForAzRoleBL, 
+ msDS-OperationsForAzRoleBL, msDS-TasksForAzTaskBL, 
+ msDS-OperationsForAzTaskBL
+systemMayContain: msDS-EnabledFeatureBL, msDS-LastKnownRDN, 
+ msDS-LocalEffectiveRecycleTime, msDS-LocalEffectiveDeletionTime, 
+ isRecycled, url, wWWHomePage, whenCreated, whenChanged, 
+ wellKnownObjects, wbemPath, uSNSource, uSNLastObjRem, USNIntersite, 
+ uSNDSALastObjRemoved, uSNCreated, uSNChanged, systemFlags, 
+ subSchemaSubEntry, subRefs, structuralObjectClass, siteObjectBL, 
+ serverReferenceBL, sDRightsEffective, revision, repsTo, repsFrom, 
+ replUpToDateVector, replPropertyMetaData, name, queryPolicyBL, 
+ proxyAddresses, proxiedObjectName, possibleInferiors, 
+ partialAttributeSet, partialAttributeDeletionList, 
+ otherWellKnownObjects, objectVersion, objectGUID, distinguishedName, 
+ msDS-DisableForInstancesBL, msDS-ServiceAccountBL, 
+ msDS-ReplValueMetaData, msDS-ReplAttributeMetaData, 
+ msDS-NCReplOutboundNeighbors, msDS-NCReplInboundNeighbors, 
+ msDS-NCReplCursors, msDS-NonMembersBL, msDS-MembersForAzRoleBL, 
+ msDs-masteredBy, msDS-DefaultNamingContextBL, mS-DS-ConsistencyGuid, 
+ mS-DS-ConsistencyChildCount, msDS-Approx-Immed-Subordinates, 
+ modifyTimeStamp, masteredBy, managedObjects, lastKnownParent, 
+ memberOf, isDeleted, isCriticalSystemObject, showInAdvancedViewOnly, 
+ fSMORoleOwner, fromEntry, dSASignature, dSCorePropagationData, 
+ displayName, description, createTimeStamp, cn, canonicalName, 
+ bridgeheadServerListBL, allowedChildClassesEffective, 
+ allowedChildClasses, allowedAttributesEffective, allowedAttributes, 
+ adminDisplayName, adminDescription
+systemPossSuperiors: lostAndFound
+schemaIdGuid: bf967ab7-0de6-11d0-a285-00aa003049e2
+defaultSecurityDescriptor: D:S:
+defaultHidingValue: TRUE
+systemOnly: TRUE
+defaultObjectCategory: CN=Top,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>,<conditional_phrase><conditions><doc_set value="pre_windows_8" /></conditions><phrase> and <auto_text>ad_lds_windows_7</auto_text></phrase></conditional_phrase><conditional_phrase><conditions><doc_set value="windows_8" /></conditions><phrase> <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>ad_lds_windows_8</auto_text></phrase></conditional_phrase>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADLS"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class top [_rfc_ms-adls2_58]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

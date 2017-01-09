@@ -26,6 +26,7 @@
       <ComponentGroupRef Id="ProductComponents_ProtoSDK" />
       <ComponentGroupRef Id="fileserver_PLUGIN"/>
       <ComponentGroupRef Id="KERBEROS_PLUGIN"/>
+	  <ComponentGroupRef Id="ADFAMILY_PLUGIN"/>
       <ComponentGroupRef Id="RDP_PLUGIN"/>
       <ComponentRef Id="ApplicationShortcut"/>
       <ComponentRef Id="DesktopShortcuts"/>
@@ -100,12 +101,14 @@
             <Directory Id="FILESERVERCONFIG" Name="fileserver" />
 	          <Directory Id="RDPCONFIG" Name="rdp" />
             <Directory Id="KERBEROSCONFIGFOLDER" Name="kerberos" />
+			<Directory Id="ADFAMILYCONFIGFOLDER" Name="adfamily" />
           </Directory>
           <Directory Id="LIBFOLDER" Name="lib" />
           <Directory Id="DOCFOLDER" Name="doc" >
             <Directory Id="FILESERVERDOCFOLDER" Name="fileserver" />
 	          <Directory Id="RDPDOCFOLDER" Name="rdp" />
             <Directory Id="KERBEROSDOCFOLDER" Name="kerberos" />
+			<Directory Id="ADFAMILYDOCFOLDER" Name="adfamily" />
           </Directory>
 		  <Directory Id="DATAFOLDER" Name="data" >
 			<Directory Id="FILESERVERDATAFOLDER" Name="fileserver" />

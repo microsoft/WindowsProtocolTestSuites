@@ -28,7 +28,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV
         }
         
         public SearchRequest_scope(long val)
-            : base()
+            : base(val)
         {
         }
     }

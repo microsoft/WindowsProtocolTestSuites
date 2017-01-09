@@ -1105,7 +1105,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     //(section 2.2.1.4.11) or in the NETLOGON_VALIDATION_SAM_INFO2 
                     //(section 2.2.1.4.12) structure.
 
-                    //TODO: TDI 48320, there're no UserSessionKey and ExpansionRoom in NETLOGON_INFO class.
 
                     break;
 
@@ -1789,7 +1788,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
         {
             _NETLOGON_WORKSTATION_INFORMATION netlogonWorkstationInfo = new _NETLOGON_WORKSTATION_INFORMATION();
 
-            //TODO: TDI 48704: 3.5.5.3.9 said: 
             //The WkstaBuffer parameter contains one of the following structures, 
             //based on the value of level field. Value Meaning
             //0x00000001: The WkstaBuffer contains a NETLOGON_DOMAIN_INFO structure.
@@ -1916,7 +1914,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
         {
             _NETLOGON_WORKSTATION_INFORMATION netlogonWorkstationInfo = new _NETLOGON_WORKSTATION_INFORMATION();
 
-            //TODO: TDI 48704: 3.5.5.3.9 said: 
             //The WkstaBuffer parameter contains one of the following structures, 
             //based on the value of level field. Value Meaning
             //0x00000001: The WkstaBuffer contains a NETLOGON_DOMAIN_INFO structure.
@@ -2371,7 +2368,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
             bool isAesNegotiated;
             if ((context.NegotiateFlags & NrpcNegotiateFlags.SupportsAESAndSHA2) != 0)
             {
-                //TODO: TDI 48777, TD doesn't mention we should use AES to encrypt.
                 isAesNegotiated = true;
             }
             else if ((context.NegotiateFlags & NrpcNegotiateFlags.SupportsRC4) != 0)

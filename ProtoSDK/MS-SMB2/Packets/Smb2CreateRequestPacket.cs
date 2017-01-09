@@ -28,7 +28,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         public uint BufferLength
         {
-            // TODO: Fix all buffer length calculation logic
             get 
             {
                 // In the request, the Buffer field MUST be at least one byte in length.

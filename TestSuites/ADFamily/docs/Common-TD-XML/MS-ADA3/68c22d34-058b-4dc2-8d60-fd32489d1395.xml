@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="68c22d34-058b-4dc2-8d60-fd32489d1395" build_format="rfc" section_number="1.243"><title>Attribute serverRole</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>This attribute specifies compatibility with servers that preceded <auto_text>windows_2000</auto_text> servers.<?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?> A computer running <auto_text>windows_nt_server</auto_text> can be a stand-alone server, a primary domain controller (PDC), or a backup domain controller (BDC).</p>
+<example><snippet type="syntax">cn: Server-Role
+ldapDisplayName: serverRole
+attributeId: 1.2.840.113556.1.4.157
+attributeSyntax: 2.5.5.9
+omSyntax: 2
+isSingleValued: TRUE
+schemaIdGuid: bf967a33-0de6-11d0-a285-00aa003049e2
+systemOnly: FALSE
+searchFlags: 0
+attributeSecurityGuid: b8119fd0-04f6-4762-ab7a-4986c76b3f9a</snippet></example>
+<example><snippet type="syntax">systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p>
+<p>In <auto_text>windows_2000_server</auto_text>, attribute attributeSecurityGuid is not defined. </p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="debdlug" date="2007-12-18T17:54:00Z" initials="" commentText="Should list the earlier Windows versions that are being referred to here. It almost sounds like non-Windows servers are being referred to also; is this the case?"?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="68c22d34-058b-4dc2-8d60-fd32489d1395"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-ada3_2_243"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

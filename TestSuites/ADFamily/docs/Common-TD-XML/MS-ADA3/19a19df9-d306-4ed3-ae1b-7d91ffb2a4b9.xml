@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="19a19df9-d306-4ed3-ae1b-7d91ffb2a4b9" build_format="rfc" section_number="1.23"><title>Attribute networkAddress</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details><change_tracking month="10" day="09" year="2010" change_type="content_update" revision_class="minor"><tdi_info><tdi_number>55813</tdi_number><tdi_title>Updated introductory usage description.</tdi_title></tdi_info></change_tracking></change_tracking_details></metadata>
+<section><section_contents><p>This attribute specifies the TCP/IP address for a network segment, which is also called the subnet address.</p>
+<example><snippet type="syntax">cn: Network-Address
+ldapDisplayName: networkAddress
+attributeId: 1.2.840.113556.1.2.459
+attributeSyntax: 2.5.5.4
+omSyntax: 20
+isSingleValued: FALSE
+schemaIdGuid: bf9679d9-0de6-11d0-a285-00aa003049e2
+systemOnly: FALSE
+searchFlags: 0
+rangeLower: 0
+rangeUpper: 256
+mapiID: 33136</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA3"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute networkAddress [_rfc_ms-ada31_23]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

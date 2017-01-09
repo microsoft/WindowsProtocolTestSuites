@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="97e2529a-8ba3-413c-8fd0-3f495073733a" build_format="rfc" section_number="1.374"><title>Attribute logonWorkstation</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>For more information, see the <xref rid="ec941bac-bc77-48f3-a1cf-79d773a91b6b" targtype="adschema_attribute">userWorkstations</xref> attribute in <xref rid="4517e835-3ee6-44d4-bb95-a94b6966bfb0" targtype="protocol_page">[MS-ADA3]</xref>.</p>
+<example><snippet type="syntax">cn: Logon-Workstation
+ldapDisplayName: logonWorkstation
+attributeId: 1.2.840.113556.1.4.65
+attributeSyntax: 2.5.5.10
+omSyntax: 4
+isSingleValued: TRUE
+schemaIdGuid: bf9679ac-0de6-11d0-a285-00aa003049e2
+systemOnly: FALSE
+searchFlags: fCOPY
+attributeSecurityGuid: 5f202010-79a5-11d0-9020-00c04fc2d4cf
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA1"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute logonWorkstation [_rfc_ms-ada11_374]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

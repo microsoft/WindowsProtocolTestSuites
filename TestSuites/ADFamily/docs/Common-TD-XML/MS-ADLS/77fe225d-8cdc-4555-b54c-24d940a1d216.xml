@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="77fe225d-8cdc-4555-b54c-24d940a1d216" build_format="rfc" section_number="1.292"><title>Attribute replInterval</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>The attribute of Site-Link objects that defines the interval in minutes between replication cycles between the sites in the Site-List. <?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?>It must be a multiple of 15 minutes (the granularity of cross-site DS replication), a minimum of 15 minutes, and a maximum of 10,080 minutes (one week).</p>
+<example><snippet type="syntax">cn: Repl-Interval
+ldapDisplayName: replInterval
+attributeId: 1.2.840.113556.1.4.1336
+attributeSyntax: 2.5.5.9
+omSyntax: 2
+isSingleValued: TRUE
+schemaIdGuid: 45ba9d1a-56fa-11d2-90d0-00c04fd91ab1
+systemOnly: FALSE
+searchFlags: 0
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="debdlug" date="2008-05-15T15:30:00Z" initials="" commentText="The two phrases starting with between here make the sentence a little confusing. Maybe change to &quot;between the replication cycles for the sites in the Site-List.&quot;"?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="77fe225d-8cdc-4555-b54c-24d940a1d216"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-adls_2_305"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

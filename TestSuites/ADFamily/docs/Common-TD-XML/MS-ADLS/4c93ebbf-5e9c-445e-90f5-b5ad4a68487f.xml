@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="4c93ebbf-5e9c-445e-90f5-b5ad4a68487f" build_format="rfc" section_number="1.2"><title>Attribute adminContextMenu</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details><change_tracking month="04" year="2010" change_type="content_update" revision_class="major" day="24"><non_tdi_info><non_tdi_desc><p>Added reference to GUID definition in [MS-DTYP].</p></non_tdi_desc></non_tdi_info></change_tracking>
+</change_tracking_details></metadata>
+<section><section_contents><p>This attribute specifies the order number and globally unique identifier (GUID) of the context menu<?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?> to be used on administration screens. GUID is defined in <xref rid="cca27429-5689-4a16-b2b4-9325d93e4ba2" targtype="protocol_page">[MS-DTYP]</xref> section <xref rid="4926e530-816e-41c2-b251-ec5c7aca018a" targtype="whitepaper_page"><section_ref placeholder="2.3.2" /></xref>.</p>
+<example><snippet type="syntax">cn: Admin-Context-Menu
+ldapDisplayName: adminContextMenu
+attributeId: 1.2.840.113556.1.4.614
+attributeSyntax: 2.5.5.12
+omSyntax: 64
+isSingleValued: FALSE
+schemaIdGuid: 553fd038-f32e-11d0-b0bc-00c04fd8dca6
+systemOnly: FALSE</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="a-labenn" date="2007-04-10T14:37:00Z" initials="" commentText="replace 'context menu' with 'shortcut menu'?"?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="4c93ebbf-5e9c-445e-90f5-b5ad4a68487f"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-adls_2_2"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

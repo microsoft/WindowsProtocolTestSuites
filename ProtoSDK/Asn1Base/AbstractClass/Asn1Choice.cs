@@ -330,13 +330,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// </exception>
         public override int BerEncode(IAsn1BerEncodingBuffer buffer, bool explicitTag = true)
         {
-            //TODO: deal with explicitTag
             if (SelectedChoice == UndefinedIndex)
             {
                 throw new Asn1EmptyDataException(ExceptionMessages.EmptyData);
             }
 
-            int length = GetData().BerEncode(buffer);
+            int length = GetData().BerEncode(buffer, explicitTag);
 
             Asn1Tag contextTag = metaDatas[(int)choiceIndexInFieldsMemberInfo].AttachedTag;
             if (contextTag != null)
@@ -359,7 +358,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// Decodes the object by BER.
         /// </summary>
         /// <param name="buffer">A buffer that contains a BER encoding result.</param>
-	    /// <param name="explicitTag">Indicates whether the tags should be encoded explicitly. In our Test Suites, it will always be true.</param>
+        /// <param name="explicitTag">Indicates whether the tags should be encoded explicitly. In our Test Suites, it will always be true.</param>
         /// <returns>The number of the bytes consumed in the buffer to decode this object.</returns>
         /// <exception cref="Asn1DecodingUnexpectedData">
         /// Thrown when the data in the buffer can not be properly decoded.

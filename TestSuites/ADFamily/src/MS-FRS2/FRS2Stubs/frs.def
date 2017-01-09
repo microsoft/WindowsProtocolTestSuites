@@ -1,0 +1,27 @@
+LIBRARY	"IMS_FRS2_RpcAdapter_RpcStubs"
+EXPORTS
+
+CheckConnectivity                                @ 1 PRIVATE
+EstablishConnection                              @ 2 PRIVATE
+EstablishSession                                 @ 3 PRIVATE
+RequestUpdates                                   @ 4 PRIVATE
+RequestVersionVector                             @ 5 PRIVATE
+AsyncPoll                                        @ 6 PRIVATE
+RequestRecords								     @ 7 PRIVATE
+UpdateCancel									 @ 8 PRIVATE
+RawGetFileData								     @ 9 PRIVATE
+RdcGetSignatures								 @ 10 PRIVATE
+RdcPushSourceNeeds								 @ 11 PRIVATE
+RdcGetFileData									 @ 12 PRIVATE
+RdcClose										 @ 13 PRIVATE
+InitializeFileTransferAsync						 @ 14 PRIVATE
+RawGetFileDataAsync								 @ 16 PRIVATE
+RdcGetFileDataAsync								 @ 17 PRIVATE
+FRS2AsyncPoll			     					 @ 19 PRIVATE
+FRSRequestVersionVector	     					 @ 20 PRIVATE
+FRS2RequestUpdates	           					 @ 21 PRIVATE
+FRS2RequestRecords	           					 @ 22 PRIVATE
+FRS2InitializeFileTransferAsync					 @ 23 PRIVATE
+FRS2UpdateCancel               					 @ 24 PRIVATE
+FRS2RawGetFileDataAsync        					 @ 25 PRIVATE   
+FRS2RdcGetFileDataAsync        					 @ 26 PRIVATE             

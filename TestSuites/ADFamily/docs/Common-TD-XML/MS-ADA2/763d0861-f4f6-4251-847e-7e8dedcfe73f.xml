@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="763d0861-f4f6-4251-847e-7e8dedcfe73f" build_format="rfc" section_number="1.43"><title>Attribute member</title>
+<tech value="protocol" />
+<index><keyword>member attribute</keyword></index>
+<change_tracking_details><change_tracking month="12" day="19" year="2009" change_type="content_update" revision_class="major"><tdi_info><tdi_number>42741</tdi_number><tdi_title>Changed "list of users" to "list of objects"</tdi_title></tdi_info></change_tracking>
+<change_tracking month="11" day="20" year="2010" change_type="content_update" revision_class="major"><tdi_info><tdi_number>57386</tdi_number><tdi_title>Clarified the relationship between member, memberOf, and primaryGroupID attributes.</tdi_title></tdi_info></change_tracking></change_tracking_details></metadata>
+<section><section_contents><p>For a given group object, this attribute specifies the list of objects that belong to the group, except for user accounts whose <xref rid="e12954a4-6865-4432-94e6-00c310ca87c0" targtype="adschema_attribute">primaryGroupID</xref> specifies the given group object. Those user accounts are members of the group, although they are not reflected in this attribute. For more information, refer to <xref targtype="adschema_attribute" rid="e12954a4-6865-4432-94e6-00c310ca87c0">primaryGroupID</xref> <xref rid="4517e835-3ee6-44d4-bb95-a94b6966bfb0" targtype="protocol_page">[MS-ADA3]</xref> section <xref rid="e12954a4-6865-4432-94e6-00c310ca87c0" targtype="adschema_attribute"><section_ref placeholder="2.119" /></xref>.</p>
+<example><snippet type="syntax">cn: Member
+ldapDisplayName: member
+attributeId: 2.5.4.31
+attributeSyntax: 2.5.5.1
+omSyntax: 127
+omObjectClass: 1.3.12.2.1011.28.0.714
+isSingleValued: FALSE
+schemaIdGuid: bf9679c0-0de6-11d0-a285-00aa003049e2
+systemOnly: FALSE
+searchFlags: 0
+attributeSecurityGuid: bc0ac240-79a9-11d0-9020-00c04fc2d4cf
+linkID: 2
+mapiID: 32777
+isMemberOfPartialAttributeSet: TRUE
+systemFlags: FLAG_SCHEMA_BASE_OBJECT | 
+ FLAG_ATTR_REQ_PARTIAL_SET_MEMBER
+schemaFlagsEx: FLAG_ATTR_IS_CRITICAL</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p>
+<p>The <xref rid="5ea3a865-2cfa-481d-9892-d00fd04514ea" enabled="1" targtype="adschema_attribute">schemaFlagsEx</xref> attribute was added to this attribute definition in <auto_text>windows_server_2008</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA2"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute member [_rfc_ms-ada21_43]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

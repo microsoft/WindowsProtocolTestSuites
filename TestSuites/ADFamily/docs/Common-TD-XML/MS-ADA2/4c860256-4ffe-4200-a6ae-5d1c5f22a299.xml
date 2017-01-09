@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="4c860256-4ffe-4200-a6ae-5d1c5f22a299" build_format="rfc" section_number="1.370"><title>Attribute mSMQSignCertificates</title>
+<tech value="protocol" />
+<index><keyword>mSMQSignCertificates attribute</keyword></index>
+<change_tracking_details><change_tracking month="10" day="09" year="2010" change_type="content_update" revision_class="minor"><tdi_info><tdi_number>56244</tdi_number><tdi_title>Changed "a certificate" to "an array of certificates".</tdi_title></tdi_info></change_tracking></change_tracking_details></metadata>
+<section><section_contents><p>For a given MSMQ object, this attribute contains an array of certificates.</p>
+<example><snippet type="syntax">cn: MSMQ-Sign-Certificates
+ldapDisplayName: mSMQSignCertificates
+attributeId: 1.2.840.113556.1.4.947
+attributeSyntax: 2.5.5.10
+omSyntax: 4
+isSingleValued: TRUE
+schemaIdGuid: 9a0dc33b-c100-11d1-bbc5-0080c76670c0
+systemOnly: FALSE
+searchFlags: 0
+rangeUpper: 1048576
+attributeSecurityGuid: 77b5b886-944a-11d1-aebd-0000f80367c1
+isMemberOfPartialAttributeSet: TRUE
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p>
+<p>In <auto_text>windows_2000_server</auto_text>, the <xref rid="83b00fc4-1312-40ba-991d-b410524e2778" targtype="adschema_attribute">rangeUpper</xref> attribute is not defined.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA2"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute mSMQSignCertificates [_rfc_ms-ada21_370]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

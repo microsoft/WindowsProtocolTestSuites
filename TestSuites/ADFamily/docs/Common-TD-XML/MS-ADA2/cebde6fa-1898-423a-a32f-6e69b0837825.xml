@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata build_format="rfc" id="cebde6fa-1898-423a-a32f-6e69b0837825"><title>Attribute msKds-CreateTime</title>
+<tech />
+<index><keyword>msKds-CreateTime attribute</keyword></index>
+<change_tracking_details>
+<change_tracking revision_class="major" year="2011" month="12" day="21" change_type="content_new"><non_tdi_info><non_tdi_desc><p>Added section with content for <auto_text>windows_server_8</auto_text>.</p></non_tdi_desc></non_tdi_info></change_tracking>
+</change_tracking_details>
+</metadata>
+<section>
+<section_contents>
+<p>This attribute contains the time when this root key was created.</p>
+<example>
+<snippet>cn: ms-Kds-CreateTime
+ldapDisplayName: msKds-CreateTime
+attributeId: 1.2.840.113556.1.4.2179
+attributeSyntax: 2.5.5.16
+omSyntax: 65
+isSingleValued: TRUE
+systemOnly: FALSE
+searchFlags: fRODCFilteredAttribute | fCONFIDENTIAL
+schemaIdGuid: ae18119f-6390-0045-b32d-97dbc701aef7
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet>
+</example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_8</auto_text> and <auto_text>winblue_server_1</auto_text>.</p>
+</section_contents>
+</section>
+</whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA2"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute msKds-CreateTime"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="09bc4375-bea4-42eb-947e-858f01c9772b" build_format="rfc" section_number="1.127"><title>Attribute msDFSR-ConflictPath</title>
+<tech value="protocol" />
+<index><keyword>msDFSR-ConflictPath attribute</keyword></index>
+<change_tracking_details><change_tracking month="11" day="07" year="2009" change_type="content_update" revision_class="major"><tdi_info><tdi_number>41925</tdi_number><tdi_title>Revised the attribute description.</tdi_title></tdi_info></change_tracking></change_tracking_details></metadata>
+<section><section_contents><p>This attribute specifies the full path of the conflict directory used by the Distributed File System Replication Protocol.</p>
+<example><snippet type="syntax">cn: ms-DFSR-ConflictPath
+ldapDisplayName: msDFSR-ConflictPath
+attributeId: 1.2.840.113556.1.6.13.3.7
+attributeSyntax: 2.5.5.12
+omSyntax: 64
+isSingleValued: TRUE
+schemaIdGuid: 5cf0bcc8-60f7-4bff-bda6-aea0344eb151
+searchFlags: 0
+rangeLower: 0
+rangeUpper: 32767</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA2"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute msDFSR-ConflictPath [_rfc_ms-ada21_127]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

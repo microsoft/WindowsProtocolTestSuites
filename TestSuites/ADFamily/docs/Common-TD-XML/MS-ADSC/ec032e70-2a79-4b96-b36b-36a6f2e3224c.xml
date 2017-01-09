@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="ec032e70-2a79-4b96-b36b-36a6f2e3224c" build_format="rfc" section_number="1.100"><title>Class msDFSR-ReplicationGroup</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>A replication group container.</p>
+<example><snippet type="syntax">cn: ms-DFSR-ReplicationGroup
+ldapDisplayName: msDFSR-ReplicationGroup
+governsId: 1.2.840.113556.1.6.13.4.5
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: top
+mustContain: msDFSR-ReplicationGroupType
+mayContain: msDFSR-Options2, msDFSR-OnDemandExclusionDirectoryFilter, 
+ msDFSR-OnDemandExclusionFileFilter, 
+ msDFSR-DefaultCompressionExclusionFilter, msDFSR-DeletedSizeInMb, 
+ msDFSR-DirectoryFilter, msDFSR-FileFilter, msDFSR-ConflictSizeInMb, 
+ msDFSR-StagingSizeInMb, msDFSR-RootSizeInMb, description, 
+ msDFSR-TombstoneExpiryInMin, msDFSR-Flags, msDFSR-Options, 
+ msDFSR-Extension, msDFSR-Schedule, msDFSR-Version
+possSuperiors: msDFSR-GlobalSettings
+schemaIdGuid: 1c332fe0-0c2a-4f32-afca-23c5e45a9e77
+defaultSecurityDescriptor: D:(A;;RPLCLORC;;;AU)
+ (A;;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;DA)
+ (A;;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;CO)
+ (A;;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;SY)
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=ms-DFSR-ReplicationGroup,&lt;SchemaNCDN&gt;</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADSC"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class msDFSR-ReplicationGroup [_rfc_ms-adsc1_100]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

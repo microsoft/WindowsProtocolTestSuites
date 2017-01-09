@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata build_format="rfc" id="cea4ac11-a4b2-4f2d-84cc-aebb4a4ad405"><title>Attribute msDS-AllowedToActOnBehalfOfOtherIdentity</title>
+<tech />
+<index><keyword>msDS-AllowedToActOnBehalfOfOtherIdentity attribute</keyword></index>
+<change_tracking_details>
+<change_tracking revision_class="major" year="2011" month="12" day="21" change_type="content_new"><non_tdi_info><non_tdi_desc><p>Added section with content for <auto_text>windows_server_8</auto_text>.</p></non_tdi_desc></non_tdi_info></change_tracking>
+<change_tracking revision_class="major" year="2012" month="03" day="31" change_type="content_update"><non_tdi_info><non_tdi_desc><p>Updated content for <auto_text>windows_server_8</auto_text>.</p></non_tdi_desc></non_tdi_info></change_tracking>
+</change_tracking_details>
+</metadata>
+<section>
+<section_contents>
+<p><?CommentRangeStart id="1" displacedByCustomXml="prev"?>This attribute is used for access checks to determine if a requestor has permission to act on the behalf of other identities to services running as this account.<?CommentRangeEnd id="1"?></p>
+<example>
+<snippet>cn: ms-DS-Allowed-To-Act-On-Behalf-Of-Other-Identity
+ldapDisplayName: msDS-AllowedToActOnBehalfOfOtherIdentity
+attributeId: 1.2.840.113556.1.4.2182
+attributeSyntax: 2.5.5.15
+omSyntax: 66
+isSingleValued: TRUE
+systemOnly: TRUE
+searchFlags: 0
+rangeLower: 0
+rangeUpper: 132096
+schemaIdGuid: 3f78c3e5-f79a-46bd-a0b8-9d18116ddc79
+attributeSecurityGuid: 4c164200-20c0-11d0-a768-00aa006e0529
+systemFlags: FLAG_SCHEMA_BASE_OBJECT
+schemaFlagsEx: FLAG_ATTR_IS_CRITICAL</snippet>
+</example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_8</auto_text> and <auto_text>winblue_server_1</auto_text>.</p>
+</section_contents>
+</section>
+</whitepaper_page>
+</topic><?COMMENT id="1" author="Paul Bartos" date="2011-08-19T15:59:00Z" initials="PB" commentText="This could be clearer."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="cea4ac11-a4b2-4f2d-84cc-aebb4a4ad405"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

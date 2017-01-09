@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="8718451c-ccdc-48d4-a741-0b232847d199" build_format="rfc" section_number="1.149"><title>Attribute msDFSR-Options2</title>
+<tech value="protocol" />
+<index><keyword>msDFSR-Options2 attribute</keyword></index></metadata>
+<section><section_contents><p><?CommentRangeStart id="1" displacedByCustomXml="prev"?><?CommentRangeEnd id="1"?>Object Options2.</p>
+<example><snippet type="syntax">cn: ms-DFSR-Options2
+ldapDisplayName: msDFSR-Options2
+attributeId: 1.2.840.113556.1.6.13.3.37
+attributeSyntax: 2.5.5.9
+omSyntax: 2
+isSingleValued: TRUE
+schemaIdGuid: 11e24318-4ca6-4f49-9afe-e5eb1afa3473
+searchFlags: 0</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="1" author="a-jmicka" date="2007-04-03T12:41:00Z" initials="" commentText="Incomplete description."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="8718451c-ccdc-48d4-a741-0b232847d199"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-ada2_2_162"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

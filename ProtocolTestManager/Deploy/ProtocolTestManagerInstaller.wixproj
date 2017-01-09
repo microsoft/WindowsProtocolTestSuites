@@ -27,6 +27,7 @@
   <ItemGroup>
     <Compile Include="RDPPlugin.wxs" />
     <Compile Include="KerberosPlugin.wxs" />
+	<Compile Include="ADFamily.wxs" />
     <Compile Include="Product.wxs" />
     <Compile Include="PrivacyDlg.wxs" />
     <Compile Include="ProtoSDK.wxs" />
@@ -95,6 +96,14 @@
     </ProjectReference>
     <ProjectReference Include="..\Plugins\KerberosPlugin\KerberosPlugin\KerberosPlugin.csproj">
       <Name>KerberosPlugin</Name>
+      <Project>{A18054D7-60B6-4D02-A95C-F752A61DC8DD}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Plugins\ADFamilyPlugin\ADFamilyPlugin\ADFamilyPlugin.csproj">
+      <Name>ADFamilyPlugin</Name>
       <Project>{E18054D7-60B6-4D02-A95C-F752A61DC8D8}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>

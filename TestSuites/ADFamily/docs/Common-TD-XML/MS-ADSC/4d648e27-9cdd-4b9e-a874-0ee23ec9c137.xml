@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page>
+<metadata id="4d648e27-9cdd-4b9e-a874-0ee23ec9c137" build_format="rfc" section_number="1.198">
+<title>Class samDomain</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details>
+<change_tracking month="04" day="11" year="2009" revision_class="major" change_type="protocol_syntax_updated"><tdi_info><tdi_number>29519</tdi_number><tdi_title>Revised the information for defaultSecurityDescriptor.</tdi_title></tdi_info></change_tracking>
+<change_tracking month="06" year="2012" revision_class="major" change_type="protocol_syntax_updated" day="07"><non_tdi_info><non_tdi_desc><p>Updated content for <auto_text>windows_server_8</auto_text>.</p></non_tdi_desc></non_tdi_info></change_tracking>
+</change_tracking_details>
+</metadata>
+<section>
+<section_contents>
+<p>An auxiliary class that holds common properties for <auto_text>windows_nt</auto_text> domains.</p>
+<example>
+<snippet type="syntax">cn: Sam-Domain
+ldapDisplayName: samDomain
+governsId: 1.2.840.113556.1.5.3
+objectClassCategory: 3
+rdnAttId: cn
+subClassOf: top
+systemAuxiliaryClass: samDomainBase
+systemMayContain: treeName, rIDManagerReference, replicaSource, 
+ pwdProperties, pwdHistoryLength, privateKey, pekList, 
+ pekKeyChangeInterval, nTMixedDomain, nextRid, nETBIOSName, 
+ msDS-PerUserTrustTombstonesQuota, msDS-PerUserTrustQuota, 
+ ms-DS-MachineAccountQuota, msDS-LogonTimeSyncInterval, 
+ msDS-AllUsersTrustQuota, modifiedCountAtLastProm, minPwdLength, 
+ minPwdAge, maxPwdAge, lSAModifiedCount, lSACreationTime, 
+ lockoutThreshold, lockoutDuration, lockOutObservationWindow, 
+ gPOptions, gPLink, eFSPolicy, domainPolicyObject, desktopProfile, 
+ description, defaultLocalPolicyObject, creationTime, 
+ controlAccessRights, cACertificate, builtinModifiedCount, 
+ builtinCreationTime, auditingPolicy
+schemaIdGuid: bf967a90-0de6-11d0-a285-00aa003049e2
+defaultSecurityDescriptor: D:
+ (OA;;CR;1131f6aa-9c07-11d1-f79f-00c04fc2dcd2;;RO)(A;;RP;;;WD)
+ (OA;;CR;1131f6aa-9c07-11d1-f79f-00c04fc2dcd2;;ED)
+ (OA;;CR;1131f6ab-9c07-11d1-f79f-00c04fc2dcd2;;ED)
+ (OA;;CR;1131f6ac-9c07-11d1-f79f-00c04fc2dcd2;;ED)
+ (OA;;CR;1131f6aa-9c07-11d1-f79f-00c04fc2dcd2;;BA)
+ (OA;;CR;1131f6ab-9c07-11d1-f79f-00c04fc2dcd2;;BA)
+ (OA;;CR;1131f6ac-9c07-11d1-f79f-00c04fc2dcd2;;BA)(A;;RPLCLORC;;;AU)
+ (A;;RPWPCRLCLOCCRCWDWOSW;;;DA)(A;CI;RPWPCRLCLOCCRCWDWOSDSW;;;BA)
+ (A;;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;SY)
+ (A;CI;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;EA)(A;CI;LC;;;RU)
+ (OA;CIIO;RP;037088f8-0ae1-11d2-b422-00a0c968f939;
+ bf967aba-0de6-11d0-a285-00aa003049e2;RU)
+ (OA;CIIO;RP;59ba2f42-79a2-11d0-9020-00c04fc2d3cf;
+ bf967aba-0de6-11d0-a285-00aa003049e2;RU)
+ (OA;CIIO;RP;bc0ac240-79a9-11d0-9020-00c04fc2d4cf;
+ bf967aba-0de6-11d0-a285-00aa003049e2;RU)
+ (OA;CIIO;RP;4c164200-20c0-11d0-a768-00aa006e0529;
+ bf967aba-0de6-11d0-a285-00aa003049e2;RU)
+ (OA;CIIO;RP;5f202010-79a5-11d0-9020-00c04fc2d4cf;
+ bf967aba-0de6-11d0-a285-00aa003049e2;RU)
+ (OA;;RP;c7407360-20bf-11d0-a768-00aa006e0529;;RU)
+ (OA;CIIO;RPLCLORC;;bf967a9c-0de6-11d0-a285-00aa003049e2;RU)
+ (A;;RPRC;;;RU)(OA;CIIO;RPLCLORC;;
+ bf967aba-0de6-11d0-a285-00aa003049e2;RU)(A;;LCRPLORC;;;ED)
+ (OA;CIIO;RP;037088f8-0ae1-11d2-b422-00a0c968f939;
+ 4828CC14-1437-45bc-9B07-AD6F015E5F28;RU)
+ (OA;CIIO;RP;59ba2f42-79a2-11d0-9020-00c04fc2d3cf;
+ 4828CC14-1437-45bc-9B07-AD6F015E5F28;RU)
+ (OA;CIIO;RP;bc0ac240-79a9-11d0-9020-00c04fc2d4cf;
+ 4828CC14-1437-45bc-9B07-AD6F015E5F28;RU)
+ (OA;CIIO;RP;4c164200-20c0-11d0-a768-00aa006e0529;
+ 4828CC14-1437-45bc-9B07-AD6F015E5F28;RU)
+ (OA;CIIO;RP;5f202010-79a5-11d0-9020-00c04fc2d4cf;
+ 4828CC14-1437-45bc-9B07-AD6F015E5F28;RU)
+ (OA;CIIO;RPLCLORC;;4828CC14-1437-45bc-9B07-AD6F015E5F28;RU)
+ (OA;;RP;b8119fd0-04f6-4762-ab7a-4986c76b3f9a;;RU)
+ (OA;;RP;b8119fd0-04f6-4762-ab7a-4986c76b3f9a;;AU)
+ (OA;CIIO;RP;b7c69e6d-2cc7-11d2-854e-00a0c983f608;
+ bf967aba-0de6-11d0-a285-00aa003049e2;ED)
+ (OA;CIIO;RP;b7c69e6d-2cc7-11d2-854e-00a0c983f608;
+ bf967a9c-0de6-11d0-a285-00aa003049e2;ED)
+ (OA;CIIO;RP;b7c69e6d-2cc7-11d2-854e-00a0c983f608;
+ bf967a86-0de6-11d0-a285-00aa003049e2;ED)
+ (OA;CIIO;WP;ea1b7b93-5e48-46d5-bc6c-4df4fda78a35;
+ bf967a86-0de6-11d0-a285-00aa003049e2;PS)
+ (OA;;CR;1131f6ad-9c07-11d1-f79f-00c04fc2dcd2;;DD)
+ (OA;;CR;89e95b76-444d-4c62-991a-0facbeda640c;;ED)
+ (OA;;CR;1131f6ad-9c07-11d1-f79f-00c04fc2dcd2;;BA)
+ (OA;;CR;89e95b76-444d-4c62-991a-0facbeda640c;;BA)
+ (OA;;CR;e2a36dc9-ae17-47c3-b58b-be34c55ba633;;S-1-5-32-557)
+ (OA;;CR;280f369c-67c7-438e-ae98-1d46f3c6f541;;AU)
+ (OA;;CR;ccc2dc7d-a6ad-4a7a-8846-c04e3cc53501;;AU)
+ (OA;;CR;05c74c5e-4deb-43b4-bd9f-86664c2a7fd5;;AU)
+ (OA;;CR;1131f6ae-9c07-11d1-f79f-00c04fc2dcd2;;ED)
+ (OA;;CR;1131f6ae-9c07-11d1-f79f-00c04fc2dcd2;;BA)
+ (OA;CIIO;CRRPWP;91e647de-d96f-4b70-9557-d63ff4f3ccd8;;PS)
+ (OA;CIOI;RPWP;3f78c3e5-f79a-46bd-a0b8-9d18116ddc79;;PS)
+ S:(AU;SA;WDWOWP;;;WD)(AU;SA;CR;;;BA)(AU;SA;CR;;;DU)
+ (OU;CISA;WP;f30e3bbe-9ff0-11d1-b603-0000f80367c1;
+ bf967aa5-0de6-11d0-a285-00aa003049e2;WD)
+ (OU;CISA;WP;f30e3bbf-9ff0-11d1-b603-0000f80367c1;
+ bf967aa5-0de6-11d0-a285-00aa003049e2;WD)
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=Sam-Domain,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet>
+</example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADSC"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class samDomain [_rfc_ms-adsc1_198]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

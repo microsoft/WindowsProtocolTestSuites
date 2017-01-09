@@ -15,20 +15,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV
     {
         [Asn1Field(0)]
         public MessageID messageID { get; set; }
-        
+
         [Asn1Field(1)]
         public LDAPMessage_protocolOp protocolOp { get; set; }
-        
+
         [Asn1Field(2, Optional = true), Asn1Tag(Asn1TagType.Context, 0)]
         public Controls controls { get; set; }
-        
+
         public LDAPMessage()
         {
             this.messageID = null;
             this.protocolOp = null;
             this.controls = null;
         }
-        
+
         public LDAPMessage(
          MessageID messageID,
          LDAPMessage_protocolOp protocolOp,
@@ -45,49 +45,51 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV
 
             if (controls != null)
             {
-                allLength += controls.BerEncodeWithoutUnisersalTag(buffer);
+                allLength += controls.BerEncode(buffer, false);
+                allLength += LengthBerEncode(buffer, allLength);
                 allLength += TagBerEncode(buffer,
                     new Asn1Tag(Asn1TagType.Context, 0) { EncodingWay = EncodingWay.Constructed });
             }
 
-            allLength += protocolOp.BerEncode(buffer);
-            allLength += messageID.BerEncode(buffer);
-            allLength += LengthBerEncode(buffer, allLength);
-            allLength += TagBerEncode(buffer,
-                new Asn1Tag(Asn1TagType.Universal, Asn1TagValue.Sequence) { EncodingWay = EncodingWay.Constructed });
+            allLength += protocolOp.BerEncode(buffer, true);
+            allLength += messageID.BerEncode(buffer, true);
+
+            if (explicitTag)
+            {
+                allLength += LengthBerEncode(buffer, allLength);
+                allLength += TagBerEncode(buffer,
+                    new Asn1Tag(Asn1TagType.Universal, Asn1TagValue.Sequence) { EncodingWay = EncodingWay.Constructed });
+            }
 
             return allLength;
         }
 
         public override int BerDecode(IAsn1DecodingBuffer buffer, bool explicitTag = true)
         {
-            int headLen = 0;
-            Asn1Tag seqTag;
-            headLen += TagBerDecode(buffer, out seqTag);
-            int valueLen;
-            headLen += LengthBerDecode(buffer, out valueLen);
+            Asn1Tag asn1Tag;
+            int headLen = 0, valueLen = 0, tagLength = 0;
+
+            if (explicitTag)
+            {
+                headLen += TagBerDecode(buffer, out asn1Tag);
+                headLen += LengthBerDecode(buffer, out valueLen);
+            }
 
             int valueLenDecode = 0;
             messageID = new MessageID();
-            valueLenDecode += messageID.BerDecode(buffer);
+            valueLenDecode += messageID.BerDecode(buffer, true);
             protocolOp = new LDAPMessage_protocolOp();
-            valueLenDecode += protocolOp.BerDecode(buffer);
-            if (valueLenDecode == valueLen)
+            valueLenDecode += protocolOp.BerDecode(buffer, true);
+
+            asn1Tag = new Asn1Tag(Asn1TagType.Context, 0) { EncodingWay = EncodingWay.Constructed };
+            if (IsTagMatch(buffer, asn1Tag, out tagLength, true))
             {
-                controls = null;
-            }
-            else
-            {
-                Asn1Tag contextTag;
-                valueLenDecode += TagBerDecode(buffer, out contextTag);
                 controls = new Controls();
-                valueLenDecode += controls.BerDecodeWithoutUnisersalTag(buffer);
+                valueLenDecode += controls.BerDecode(buffer, false);
             }
-            if (valueLen != valueLenDecode)
-            {
-                throw new Asn1DecodingUnexpectedData(ExceptionMessages.DecodingUnexpectedData + " LDAPResult.");
-            }
-            return headLen + valueLen;
+            valueLenDecode += tagLength;
+
+            return headLen + valueLenDecode;
         }
     }
 }

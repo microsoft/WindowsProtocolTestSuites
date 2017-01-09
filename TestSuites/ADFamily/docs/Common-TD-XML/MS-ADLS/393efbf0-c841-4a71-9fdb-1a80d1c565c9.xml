@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata build_format="rfc" section_number="43.124" id="393efbf0-c841-4a71-9fdb-1a80d1c565c9"><title>Attribute displayNamePrintable</title>
+<tech />
+<index />
+<change_tracking_details><change_tracking month="04" year="2010" change_type="content_new" revision_class="major" day="24"><tdi_info><tdi_number>48017</tdi_number><tdi_title>Added new section.</tdi_title></tdi_info></change_tracking></change_tracking_details></metadata>
+<desc />
+<section><section_contents><p>This attribute specifies the printable display name for an object. The printable display name is usually the combination of the user's first name, middle initial, and last name.</p>
+<example><snippet>cn: Display-Name-Printable
+ldapDisplayName: displayNamePrintable
+attributeId: 1.2.840.113556.1.2.353
+attributeSyntax: 2.5.5.5
+omSyntax: 19
+isSingleValued: TRUE
+schemaIdGuid: bf967954-0de6-11d0-a285-00aa003049e2
+systemOnly: FALSE
+rangeLower: 1
+rangeUpper: 256
+attributeSecurityGuid: e48d0154-bcf8-11d1-8702-00c04fb96050
+isMemberOfPartialAttributeSet: TRUE
+</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, Active Directory Lightweight Directory Services for <auto_text>windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADLS"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute displayNamePrintable"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>
