@@ -4,8 +4,8 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
         <DirectoryRef Id="ADFAMILYDOCFOLDER">
-            <Component Id="cmpECFB8FF1559A4BC095BD7952E0FAFFEE" Guid="{D255E164-1B94-4D04-81AD-6EF0C7445CEB}">
-                <File Id="fil01525AD7E1AD413885E4D51C32BD36AB" Source="..\Plugins\ADFamilyPlugin\ADFamilyPlugin\Docs\index.html" />
+            <Component Id="cmpECFB8FF1559A4BC095BD7952E0FAABCD" Guid="{D255E164-1B94-4D04-81AD-6EF0C7445CEB}">
+                <File Id="fil01525AD7E1AD413885E4D51C32BDCAAB" Source="..\Plugins\ADFamilyPlugin\ADFamilyPlugin\Docs\index.html" />
             </Component>
         </DirectoryRef>
     </Fragment>
@@ -30,7 +30,7 @@
     </Fragment>
     <Fragment>
         <ComponentGroup Id="ADFAMILY_PLUGIN">
-            <ComponentRef Id="cmpECFB8FF1559A4BC095BD7952E0FAFFEE" />
+            <ComponentRef Id="cmpECFB8FF1559A4BC095BD7952E0FAABCD" />
             <ComponentRef Id="ADFamilyPlugin.dll" />
             <ComponentRef Id="ADFamilyConfigFile" />
 	        <?if $(env.DEBUGVER) = 1?>

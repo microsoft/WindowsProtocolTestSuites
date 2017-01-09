@@ -139,10 +139,5 @@
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-AZOD\Bin\" />
     <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-AZOD\Bin\" />
-	<Copy SourceFiles="$(TargetDir)Microsoft.WindowsAzure.Storage.dll" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-AZOD\Bin\" />
-	<Copy SourceFiles="$(TargetDir)Microsoft.Protocols.TestTools.MessageAnalyzer.dll" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-AZOD\Bin\" />
-	<Copy SourceFiles="$(TargetDir)Microsoft.Data.Services.Client.dll" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-AZOD\Bin\" />
-	<Copy SourceFiles="$(TargetDir)Microsoft.Data.OData.dll" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-AZOD\Bin\" />
-	<Copy SourceFiles="$(TargetDir)Microsoft.Data.Edm.dll" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-AZOD\Bin\" />
   </Target>
 </Project>

@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyValueDetector", "PropertyValueDetector\PropertyValueDetector.csproj", "{7982ACF0-F1A4-4996-A339-641CAFA093CE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KernelTest", "KernelTest\KernelTest.csproj", "{88058385-F512-45E5-96BD-611639685CD7}"
@@ -18,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{35
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PtmCli", "PtmCli\PtmCli.csproj", "{80AC8EE5-435F-4586-AF1B-25E7B109F918}"
 EndProject
+
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,7 +69,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{87B85496-2DD6-4A33-9D2F-48CE72ADD855} = {3525D7B2-E781-47BE-B4DC-96DC28894F62}
 		{88058385-F512-45E5-96BD-611639685CD7} = {3525D7B2-E781-47BE-B4DC-96DC28894F62}
+		{87B85496-2DD6-4A33-9D2F-48CE72ADD855} = {3525D7B2-E781-47BE-B4DC-96DC28894F62}
 	EndGlobalSection
 EndGlobal

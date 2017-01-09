@@ -1,0 +1,23 @@
+<Config>
+  <PtfFileNames>
+    <PtfFileName>MS-AZOD_ODTestSuite.deployment.ptfconfig</PtfFileName>
+  </PtfFileNames>
+  <DllFileNames>
+    <DllFileName>Bin\MS-AZOD_ODTestSuite.dll</DllFileName>
+  </DllFileNames>
+  <AutoDetectionDllName>AZODPlugin.dll</AutoDetectionDllName>
+  <ConfigFileInSourceCode>
+    <PtfFileName>Source\Server\TestCode\TestSuite\MS-AZOD_ODTestSuite.deployment.ptfconfig</PtfFileName>
+  </ConfigFileInSourceCode>
+  <ConfigCaseRule>
+    <Group name ="Priority">
+      <Rule name = "BVT">
+        <Category name = "BVT"/>
+      </Rule>
+      <Rule name = "Non-BVT">
+        <Category name = "!BVT"/>
+      </Rule>
+    </Group>
+  </ConfigCaseRule>
+  <TestSetting>Bin\ODLocalTestRun.testrunconfig</TestSetting>
+</Config>

@@ -26,6 +26,7 @@
   <Import Project="$(WixTargetsPath)" />
   <ItemGroup>
     <Compile Include="RDPPlugin.wxs" />
+	<Compile Include="AZODPlugin.wxs" />
     <Compile Include="KerberosPlugin.wxs" />
 	<Compile Include="ADFamily.wxs" />
     <Compile Include="Product.wxs" />
@@ -113,6 +114,14 @@
     <ProjectReference Include="..\Plugins\RDPPlugin\RDPPlugin\RDPPlugin.csproj">
       <Name>RDPPlugin</Name>
       <Project>{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Plugins\AZODPlugin\AZODPlugin\AZODPlugin.csproj">
+      <Name>AZODPlugin</Name>
+      <Project>{424C6D1E-6DEA-4DA5-AFF9-D8F5CB9081BF}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
