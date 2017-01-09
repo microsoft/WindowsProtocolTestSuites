@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="68530b5f-636e-4e6f-b715-1facba63c2df" build_format="rfc" section_number="1.148"><title>Class msWMI-SimplePolicyTemplate</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>Provides a type of template that cannot be merged. This class is used when the target object is not intended to be combined; that is, merged.<?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?></p>
+<example><snippet type="syntax">cn: ms-WMI-SimplePolicyTemplate
+ldapDisplayName: msWMI-SimplePolicyTemplate
+governsId: 1.2.840.113556.1.5.201
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: msWMI-PolicyTemplate
+systemMustContain: msWMI-TargetObject
+systemPossSuperiors: container
+schemaIdGuid: 6cc8b2b5-12df-44f6-8307-e74f5cdee369
+defaultSecurityDescriptor: D:(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;DA)
+ (A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;SY)(A;;RPCCDCLCLODTRC;;;AU)
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=ms-WMI-SimplePolicyTemplate,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="pbartos" date="2008-05-28T17:51:00Z" initials="" commentText="With what?"?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="68530b5f-636e-4e6f-b715-1facba63c2df"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-adsc_2_158"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

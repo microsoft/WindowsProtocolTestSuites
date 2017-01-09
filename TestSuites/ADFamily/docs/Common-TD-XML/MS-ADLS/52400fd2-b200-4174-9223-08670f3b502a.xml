@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="52400fd2-b200-4174-9223-08670f3b502a" build_format="rfc" section_number="1.261"><title>Attribute ownerBL</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>This attribute specifies the backlink to the <xref rid="3cd444e9-c54a-4ab4-9621-3baeb89834b9" targtype="adschema_attribute">owner</xref> attribute. It contains a list of owners for an object.</p>
+<example><snippet type="syntax">cn: ms-Exch-Owner-BL
+ldapDisplayName: ownerBL
+attributeId: 1.2.840.113556.1.2.104
+attributeSyntax: 2.5.5.1
+omSyntax: 127
+omObjectClass: 1.3.12.2.1011.28.0.714
+isSingleValued: FALSE
+schemaIdGuid: bf9679f4-0de6-11d0-a285-00aa003049e2
+systemOnly: TRUE
+searchFlags: 0
+linkID: 45
+systemFlags: FLAG_ATTR_NOT_REPLICATED</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADLS"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute ownerBL [_rfc_ms-adls1_261]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

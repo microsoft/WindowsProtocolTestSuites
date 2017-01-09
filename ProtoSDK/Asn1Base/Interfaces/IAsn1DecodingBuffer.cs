@@ -54,5 +54,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// Align the data by octet in the buffer.
         /// </summary>
         void AlignData();
+
+        /// <summary>
+        /// Peek one byte use current position, Position not changed.
+        /// </summary>
+        /// <returns>byte on current postion</returns>
+        byte PeekByte();
+
+        /// <summary>
+        /// Check if read to end.
+        /// </summary>
+        /// <returns>True means postion = length</returns>
+        bool IsNomoreData();
     }
 }

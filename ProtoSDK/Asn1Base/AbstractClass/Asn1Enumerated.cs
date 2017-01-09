@@ -54,7 +54,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         {
             //Get all the allowed values by checking the Asn1EnumeratedElement attribute on each member.
 
-            //TODO: initiate allowedValues once for each derived type, not each instance.
             allowedValues = new List<long?>();
 
             MemberInfo[] mis = this.GetType().GetMembers(
@@ -113,7 +112,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// <returns>Return true if it is in allowedValues. Return false if neither.</returns>
         protected sealed override bool VerifyConstraints()
         {
-            //TODO: deal with the external objects.
             return (this.Value == undefinedValue || allowedValues.Contains(this.Value));
         }
 

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="a7372a68-9128-4e63-814d-d6f744a51f61" build_format="rfc" section_number="1.282"><title>Attribute msDS-RevealedList</title>
+<tech value="protocol" />
+<index><keyword>msDS-RevealedList attribute</keyword></index></metadata>
+<?CommentRangeStart id="1"?><?CommentRangeEnd id="1"?>
+<section><section_contents><p>For an Active Directory instance, this attribute identifies the user objects whose secrets have been disclosed to that instance.</p>
+<example><snippet type="syntax">cn: ms-DS-Revealed-List
+ldapDisplayName: msDS-RevealedList
+attributeId: 1.2.840.113556.1.4.1940
+attributeSyntax: 2.5.5.14
+omSyntax: 127
+omObjectClass: 1.2.840.113556.1.1.1.12
+isSingleValued: FALSE
+schemaIdGuid: cbdad11c-7fec-387b-6219-3a0627d9af81
+systemOnly: TRUE
+searchFlags: 0
+systemFlags: FLAG_SCHEMA_BASE_OBJECT | FLAG_ATTR_IS_CONSTRUCTED
+schemaFlagsEx: FLAG_ATTR_IS_CRITICAL</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="1" author="a-kathyp" date="2007-09-19T14:54:00Z" initials="" commentText="L-S:This sentence is exactly the same as the one in section 2.298 Attribute msDS-RevealedUsers."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="a7372a68-9128-4e63-814d-d6f744a51f61"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-ada2_2_311"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

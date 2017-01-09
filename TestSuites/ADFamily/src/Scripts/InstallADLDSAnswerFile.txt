@@ -1,0 +1,37 @@
+[ADAMInstall]
+; The following line specifies to install a unique ADAM instance.
+InstallType=
+; The following line specifies whether or not display progress information during installation.
+ShowOrHideProgressGUI=
+; The following line specifies the name to be assigned to the new instance.
+InstanceName=
+; The following line specifies the communications port to use for LDAP.
+LocalLDAPPortToListenOn=
+; The following line specifies the communications SSL port to use for LDAP.
+LocalSSLPortToListenOn=
+; The following line specifies an application partition to create
+NewApplicationPartitionToCreate=
+; The following line specifies the directory to use for ADAM data files.
+DataFilesPath=
+; The following line specifies the directory to use for ADAM log files.
+LogFilesPath=
+; The following line specifies the Service Account.
+ServiceAccount=
+; The following line specifies whether to Add Permission to the Service Account.
+AddPermissionsToServiceAccount=
+; The following line specifies the Service Password.
+ServicePassword=
+; The following line specifies the ADAM Administrator.
+Administrator=
+; The following line specifies whether to Show In Add or Remove Programs.
+ShowInAddRemovePrograms=
+; The following line specifies the .ldf files to import into the ADAM schema.
+ImportLDIFFiles=
+; The following lines are for Replica type.
+ApplicationPartitionsToReplicate=
+ReplicationDataSourcePath=
+ReplicationLogSourcePath=
+SourceServer=
+SourceLDAPPort=
+SourceUserName=
+SourcePassword=

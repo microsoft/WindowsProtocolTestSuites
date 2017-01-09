@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="54f314da-17e3-4b41-bad2-2ecb394bebb5" build_format="rfc" section_number="1.149"><title>Attribute msDS-Auxiliary-Classes</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details><change_tracking month="12" day="19" year="2009" change_type="content_update" revision_class="major"><non_tdi_info><non_tdi_desc><p>Changed "the system" to "the Active Directory system".</p></non_tdi_desc></non_tdi_info>
+</change_tracking>
+</change_tracking_details></metadata>
+<section><section_contents><p>This attribute lists the auxiliary classes that have been dynamically attached to an object. This attribute is not associated with a class. It is automatically populated by the Active Directory system.</p>
+<example><snippet type="syntax">cn: ms-DS-Auxiliary-Classes
+ldapDisplayName: msDS-Auxiliary-Classes
+attributeId: 1.2.840.113556.1.4.1458
+attributeSyntax: 2.5.5.2
+omSyntax: 6
+isSingleValued: FALSE
+schemaIdGuid: c4af1073-ee50-4be0-b8c0-89a41fe99abe
+systemOnly: TRUE
+searchFlags: fPRESERVEONDELETE
+attributeSecurityGuid: e48d0154-bcf8-11d1-8702-00c04fb96050
+systemFlags: FLAG_SCHEMA_BASE_OBJECT | FLAG_ATTR_IS_CONSTRUCTED</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADLS"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute msDS-Auxiliary-Classes [_rfc_ms-adls1_149]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

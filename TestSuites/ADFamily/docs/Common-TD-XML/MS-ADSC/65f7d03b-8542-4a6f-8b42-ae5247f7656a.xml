@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page>
+<metadata id="65f7d03b-8542-4a6f-8b42-ae5247f7656a" build_format="rfc" section_number="1.50">
+<title>Class foreignSecurityPrincipal</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details>
+<change_tracking month="05" day="23" year="2009" revision_class="minor" change_type="content_update"><tdi_info><tdi_number>31348</tdi_number><tdi_title>Clarified the description of "foreignSecurityPrincipal".</tdi_title></tdi_info></change_tracking>
+</change_tracking_details>
+</metadata>
+<section>
+<section_contents>
+<p>Defines an entry that represents a security principal that is external to the forest.</p>
+<example><snippet type="syntax">cn: Foreign-Security-Principal
+ldapDisplayName: foreignSecurityPrincipal
+governsId: 1.2.840.113556.1.5.76
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: top
+systemMustContain: objectSid
+systemMayContain: foreignIdentifier
+systemPossSuperiors: container
+schemaIdGuid: 89e31c12-8530-11d0-afda-00c04fd930c9
+defaultSecurityDescriptor: D:(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;DA)
+ (A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;SY)
+ (A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;AO)(A;;RPLCLORC;;;PS)
+ (OA;;CR;ab721a53-1e2f-11d0-9819-00aa0040529b;;PS)
+ (OA;;CR;ab721a54-1e2f-11d0-9819-00aa0040529b;;PS)
+ (OA;;CR;ab721a56-1e2f-11d0-9819-00aa0040529b;;PS)
+ (OA;;RPWP;77B5B886-944A-11d1-AEBD-0000F80367C1;;PS)
+ (OA;;RPWP;E45795B2-9455-11d1-AEBD-0000F80367C1;;PS)
+ (OA;;RPWP;E45795B3-9455-11d1-AEBD-0000F80367C1;;PS)(A;;RC;;;AU)
+ (OA;;RP;59ba2f42-79a2-11d0-9020-00c04fc2d3cf;;AU)
+ (OA;;RP;77B5B886-944A-11d1-AEBD-0000F80367C1;;AU)
+ (OA;;RP;E45795B3-9455-11d1-AEBD-0000F80367C1;;AU)
+ (OA;;RP;e48d0154-bcf8-11d1-8702-00c04fb96050;;AU)
+ (OA;;CR;ab721a53-1e2f-11d0-9819-00aa0040529b;;WD)
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=Foreign-Security-Principal,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADSC"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class foreignSecurityPrincipal [_rfc_ms-adsc1_50]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

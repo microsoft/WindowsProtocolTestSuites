@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page>
+<metadata id="f59801d8-7b65-495c-b853-fc9e47e606f4" build_format="rfc" section_number="1.166">
+<title>Attribute msDS-AdditionalDnsHostName</title>
+<tech value="protocol" />
+<index><keyword>msDS-AdditionalDnsHostName attribute</keyword></index>
+<change_tracking_details>
+<change_tracking month="06" day="05" year="2009" change_type="content_update" revision_class="minor"><non_tdi_info><non_tdi_desc><p>Replaced "DNS domain name" with "fully qualified domain name".</p></non_tdi_desc></non_tdi_info></change_tracking>
+</change_tracking_details>
+</metadata>
+<section>
+<section_contents>
+<p>For a given computer object, this attribute specifies additional fully qualified domain names (FQDNs) (1) (<xref rid="d2435927-0999-4c62-8c6d-13ba31a52e1a" targtype="protocol_page">[MS-ADTS]</xref> section <xref rid="b645c125-a7da-4097-84a1-2fa7cea07714" targtype="whitepaper_page"><section_ref placeholder="1.1" /></xref>) of that computer, as specified in <xref targtype="protocol_page" rid="d2435927-0999-4c62-8c6d-13ba31a52e1a">[MS-ADTS]</xref> section <xref rid="994347b4-938b-4995-b8fd-a23b58a01dbf" targtype="whitepaper_page"><section_ref placeholder="3.1.1" /></xref>.</p>
+<example><snippet type="syntax">cn: ms-DS-Additional-Dns-Host-Name
+ldapDisplayName: msDS-AdditionalDnsHostName
+attributeId: 1.2.840.113556.1.4.1717
+attributeSyntax: 2.5.5.12
+omSyntax: 64
+isSingleValued: FALSE
+schemaIdGuid: 80863791-dbe9-4eb8-837e-7f0ab55d9ac7
+systemOnly: TRUE
+searchFlags: 0
+rangeLower: 0
+rangeUpper: 2048
+attributeSecurityGuid: 72e39547-7b18-11d1-adef-00c04fd8d5cd
+systemFlags: FLAG_SCHEMA_BASE_OBJECT
+schemaFlagsEx: FLAG_ATTR_IS_CRITICAL</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p>
+<p>The <xref rid="5ea3a865-2cfa-481d-9892-d00fd04514ea" enabled="1" targtype="adschema_attribute">schemaFlagsEx</xref> attribute was added to this attribute definition in <auto_text>windows_server_2008</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA2"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute msDS-AdditionalDnsHostName [_rfc_ms-ada21_166]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

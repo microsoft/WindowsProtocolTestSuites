@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="985b320e-dfed-449c-bf39-a8aba9613ee1" build_format="rfc" section_number="1.149"><title>Class msWMI-Som</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>Refines the SOM for a GPO. Adds a list of rules, expressed as WMI Query Language (WQL) queries, that are executed on the target machine. All queries must return results in order for this SOM to be applicable to the target.</p>
+<example><snippet type="syntax">cn: ms-WMI-Som
+ldapDisplayName: msWMI-Som
+governsId: 1.2.840.113556.1.5.213
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: top
+systemMustContain: msWMI-Name, msWMI-ID
+systemMayContain: msWMI-SourceOrganization, msWMI-Parm4, msWMI-Parm3, 
+ msWMI-Parm2, msWMI-Parm1, msWMI-intFlags4, msWMI-intFlags3, 
+ msWMI-intFlags2, msWMI-intFlags1, msWMI-CreationDate, 
+ msWMI-ChangeDate, msWMI-Author
+systemPossSuperiors: container
+schemaIdGuid: ab857078-0142-4406-945b-34c9b6b13372
+defaultSecurityDescriptor: D:(A;;RPLCLORC;;;AU)
+ (A;;RPWPCRLCLOCCDCRCWDWOSW;;;DA)(A;;CC;;;PA)
+ (A;;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;SY)
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=ms-WMI-Som,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADSC"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class msWMI-Som [_rfc_ms-adsc1_149]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

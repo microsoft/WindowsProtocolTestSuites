@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="f6adba54-f9c0-4045-b92c-a8b35782d6f5" build_format="rfc" section_number="1.56"><title>Class groupPolicyContainer</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>Represents the Group Policy Object (GPO). This class is used to define Group Policy settings.</p>
+<example><snippet type="syntax">cn: Group-Policy-Container
+ldapDisplayName: groupPolicyContainer
+governsId: 1.2.840.113556.1.5.157
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: container
+systemMayContain: versionNumber, gPCWQLFilter, gPCUserExtensionNames, 
+ gPCMachineExtensionNames, gPCFunctionalityVersion, gPCFileSysPath, 
+ flags
+schemaIdGuid: f30e3bc2-9ff0-11d1-b603-0000f80367c1
+defaultSecurityDescriptor: D:P(A;CI;RPWPCCDCLCLOLORCWOWDSDDTSW;;;DA)
+ (A;CI;RPWPCCDCLCLOLORCWOWDSDDTSW;;;EA)
+ (A;CI;RPWPCCDCLCLOLORCWOWDSDDTSW;;;CO)
+ (A;CI;RPWPCCDCLCLORCWOWDSDDTSW;;;SY)(A;CI;RPLCLORC;;;AU)
+ (OA;CI;CR;edacfd8f-ffb3-11d1-b41d-00a0c968f939;;AU)
+ (A;CI;LCRPLORC;;;ED)
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=Group-Policy-Container,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADSC"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class groupPolicyContainer [_rfc_ms-adsc1_56]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

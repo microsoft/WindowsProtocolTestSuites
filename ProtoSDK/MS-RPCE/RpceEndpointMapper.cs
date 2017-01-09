@@ -255,7 +255,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                             responseStub[113] = (byte)endpointMap[ifSpec];
                             //modify the address, offset is 119
                             Buffer.BlockCopy(hostIp.GetAddressBytes(), 0, responseStub, 119, 4);
-                            //todo support Ipv6
                             epmServer.SendResponse(context, responseStub);
                         }
                     }

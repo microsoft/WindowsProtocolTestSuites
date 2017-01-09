@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="a43fad92-2350-45ba-9076-eba949acfa05" build_format="rfc" section_number="1.45"><title>Class dSA</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details><change_tracking change_type="content_update" day="07" month="11" revision_class="minor" year="2009"><tdi_info><tdi_number>40950</tdi_number><tdi_title>Revised the first sentence to define the class.</tdi_title></tdi_info></change_tracking></change_tracking_details></metadata>
+<section><section_contents><?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?>
+<p>The X.500 base class for dSA.</p>
+<example><snippet type="syntax">cn: DSA
+ldapDisplayName: dSA
+governsId: 2.5.6.13
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: applicationEntity
+systemMayContain: knowledgeInformation
+systemPossSuperiors: server, computer
+schemaIdGuid: 3fdfee52-47f4-11d1-a9c3-0000f80367c1
+defaultSecurityDescriptor: D:(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;DA)
+ (A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;SY)(A;;RPLCLORC;;;AU)
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=DSA,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="" date="" initials="" commentText="Needs work."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="a43fad92-2350-45ba-9076-eba949acfa05"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-adsc_2_45"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

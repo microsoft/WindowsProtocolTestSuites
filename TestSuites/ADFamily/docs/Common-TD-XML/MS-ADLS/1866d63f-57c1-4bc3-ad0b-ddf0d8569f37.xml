@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="1866d63f-57c1-4bc3-ad0b-ddf0d8569f37" build_format="rfc" section_number="1.5"><title>Attribute adminMultiselectPropertyPages</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>A multivalued attribute whose values are a number representing the order in which the pages are added and a GUID of a component object model (COM) object that implements multiselect property pages for the Active Directory Users and Computers snap-in.</p>
+<example><snippet type="syntax">cn: Admin-Multiselect-Property-Pages
+ldapDisplayName: adminMultiselectPropertyPages
+attributeId: 1.2.840.113556.1.4.1690
+attributeSyntax: 2.5.5.12
+omSyntax: 64
+isSingleValued: FALSE
+schemaIdGuid: 18f9b67d-5ac6-4b3b-97db-d0a406afb7ba
+systemOnly: FALSE</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADLS"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute adminMultiselectPropertyPages [_rfc_ms-adls1_5]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

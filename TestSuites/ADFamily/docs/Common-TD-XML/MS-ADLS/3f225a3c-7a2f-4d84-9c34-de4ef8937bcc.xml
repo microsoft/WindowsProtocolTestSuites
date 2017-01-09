@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="3f225a3c-7a2f-4d84-9c34-de4ef8937bcc" build_format="rfc" section_number="2.39"><title>Class nTDSService</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>This class is used for an NTDS services object, which contains information about the configuration of the directory service forest. This object is kept in the CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,... container.</p>
+<example><snippet type="syntax">cn: NTDS-Service
+ldapDisplayName: nTDSService
+governsId: 1.2.840.113556.1.5.72
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: top
+systemMayContain: msDS-DeletedObjectLifetime, tombstoneLifetime, 
+ replTopologyStayOfExecution, msDS-Other-Settings, garbageCollPeriod, 
+ dSHeuristics
+systemPossSuperiors: container
+schemaIdGuid: 19195a5f-6da0-11d0-afd3-00c04fd930c9
+defaultSecurityDescriptor: D:S:
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=NTDS-Service,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADLS"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class nTDSService [_rfc_ms-adls2_39]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

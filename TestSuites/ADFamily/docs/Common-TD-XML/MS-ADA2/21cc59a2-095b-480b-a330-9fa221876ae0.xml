@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="21cc59a2-095b-480b-a330-9fa221876ae0" build_format="rfc" section_number="43.124"><title>Attribute msDFS-LastModifiedv2</title>
+<tech value="protocol" />
+<index><keyword>msDFS-LastModifiedv2 attribute</keyword></index>
+<change_tracking_details>
+<change_tracking month="06" day="07" year="2012" revision_class="major" change_type="protocol_syntax_updated"><non_tdi_info><non_tdi_desc><p>Added systemFlags to the definition.</p></non_tdi_desc></non_tdi_info></change_tracking>
+</change_tracking_details>
+</metadata>
+<section><section_contents><p>This attribute is updated on each write to the entry that contains the attribute.</p>
+<example><snippet type="syntax">cn: ms-DFS-Last-Modified-v2
+ldapDisplayName: msDFS-LastModifiedv2
+attributeId: 1.2.840.113556.1.4.2034
+attributeSyntax: 2.5.5.11
+omSyntax: 24
+isSingleValued: TRUE
+schemaIdGuid: 3c095e8a-314e-465b-83f5-ab8277bcf29b
+isMemberOfPartialAttributeSet: FALSE
+searchFlags: 0
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA2"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute msDFS-LastModifiedv2 [_rfc_ms-ada2_attribute_msdfs-lastmodifiedv2]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

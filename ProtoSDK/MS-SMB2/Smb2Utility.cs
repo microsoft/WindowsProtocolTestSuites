@@ -1212,7 +1212,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 return false;
             }
 
-            // TODO:
             //if (!(singlePacket is Smb2ErrorResponsePacket))
             //{
             //    return false;
@@ -1248,24 +1247,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         internal static uint CheckStatus(uint status, Smb2Packet packet)
         {
             NtStatus ntStatus = (NtStatus)status;
-
-            // TODO:
-            //if ((packet is Smb2IOCtlResponsePacket)
-            //    && smb2Status != Smb2Status.STATUS_SUCCESS)
-            //{
-            //    throw new InvalidOperationException(
-            //       string.Format("Fails with error code: 0x{0:x}.", status));
-            //}
-
-            //if ((packet is Smb2ErrorResponsePacket)
-            //    && smb2Status != Smb2Status.STATUS_MORE_PROCESSING_REQUIRED
-            //    && smb2Status != Smb2Status.STATUS_BUFFER_OVERFLOW
-            //    && smb2Status != Smb2Status.STATUS_NOTIFY_ENUM_DIR
-            //    && ntStatus != NtStatus.STATUS_PIPE_EMPTY)
-            //{
-            //    throw new InvalidOperationException(
-            //       string.Format("Fails with error code: 0x{0:x}.", status));
-            //}
 
             return status;
         }

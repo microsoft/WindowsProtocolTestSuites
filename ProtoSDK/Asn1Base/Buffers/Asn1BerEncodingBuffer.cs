@@ -90,7 +90,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
             }
         }
 
-        //TODO: Add some methods like WriteInt by using BinaryReader/BinaryWriter if needed.
 
         #region Dispose
 

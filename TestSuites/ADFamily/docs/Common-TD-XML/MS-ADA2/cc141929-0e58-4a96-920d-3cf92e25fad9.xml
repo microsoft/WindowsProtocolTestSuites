@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="cc141929-0e58-4a96-920d-3cf92e25fad9" build_format="rfc" section_number="1.401"><title>Attribute msPKI-RA-Policies</title>
+<tech value="protocol" />
+<index><keyword>msPKI-RA-Policies attribute</keyword></index></metadata>
+<?CommentRangeStart id="1"?><?CommentRangeEnd id="1"?>
+<section><section_contents><p>For the CA for the Active Directory domain, this attribute specifies the required RA application policy OID in the counter signatures of the certificate request.</p>
+<example><snippet type="syntax">cn: ms-PKI-RA-Policies
+ldapDisplayName: msPKI-RA-Policies
+attributeId: 1.2.840.113556.1.4.1438
+attributeSyntax: 2.5.5.12
+omSyntax: 64
+isSingleValued: FALSE
+schemaIdGuid: d546ae22-0951-4d47-817e-1c9f96faad46
+systemOnly: FALSE
+searchFlags: 0
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="1" author="a-kathyp" date="2007-09-19T15:29:00Z" initials="" commentText="L-S: This is the exact same sentence as in section 2.414 msPKI-RA-Application-Policies. One or the other should change."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="cc141929-0e58-4a96-920d-3cf92e25fad9"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-ada2_2_434"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

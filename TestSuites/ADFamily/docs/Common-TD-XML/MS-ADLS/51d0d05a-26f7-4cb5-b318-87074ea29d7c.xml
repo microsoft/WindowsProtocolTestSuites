@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="51d0d05a-26f7-4cb5-b318-87074ea29d7c" build_format="rfc" section_number="2.19"><title>Class groupOfNames</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?>
+<p>Group-Of-Names</p>
+<example><snippet type="syntax">cn: Group-Of-Names
+ldapDisplayName: groupOfNames
+governsId: 2.5.6.9
+objectClassCategory: 0
+rdnAttId: cn
+subClassOf: top
+systemMustContain: cn
+systemMayContain: member, businessCategory, o, ou, owner, seeAlso
+systemPossSuperiors: container, organization, locality, 
+ organizationalUnit
+schemaIdGuid: bf967a9d-0de6-11d0-a285-00aa003049e2
+defaultSecurityDescriptor: D:S:
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=Group-Of-Names,&lt;SchemaNCDN&gt;</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="" date="1900-01-01T00:00:00Z" initials="" commentText="Needs intro."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="51d0d05a-26f7-4cb5-b318-87074ea29d7c"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-adls_3_19"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

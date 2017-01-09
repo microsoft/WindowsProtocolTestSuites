@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page>
+<metadata id="cdaad8f0-b304-45e1-823c-756f66d80351" build_format="rfc" section_number="1.64">
+<title>Attribute dnsRoot</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details>
+<change_tracking month="06" day="08" year="2009" change_type="content_update" revision_class="major"><non_tdi_info><non_tdi_desc><p>Replaced the term "DNS domain name" with "fully qualified domain name".</p></non_tdi_desc></non_tdi_info></change_tracking>
+<change_tracking month="03" day="13" year="2010" change_type="content_update" revision_class="major"><tdi_info><tdi_number>47443</tdi_number><tdi_title>Changed "domain/directory partition" to "naming context".</tdi_title></tdi_info></change_tracking>
+<change_tracking month="07" day="23" year="2010" change_type="content_update" revision_class="major"><tdi_info><tdi_number>47443</tdi_number><tdi_title>Specified that the FQDN is assigned to the root of an NC.</tdi_title></tdi_info></change_tracking>
+<change_tracking month="08" day="28" year="2010" change_type="content_update" revision_class="major"><tdi_info><tdi_number>47443</tdi_number><tdi_title>Revised attribute description to say that it specifies the FQDN associated with a naming context.</tdi_title></tdi_info></change_tracking></change_tracking_details>
+</metadata>
+<section>
+<section_contents>
+<p>This attribute specifies the FQDN (1) (<xref rid="d2435927-0999-4c62-8c6d-13ba31a52e1a" targtype="protocol_page">[MS-ADTS]</xref> section <xref rid="b645c125-a7da-4097-84a1-2fa7cea07714" targtype="whitepaper_page"><section_ref placeholder="1.1" /></xref>) that is associated with a naming context. This attribute is set on a crossRef object and is used for referral generation.</p>
+<p>When a search is made through an entire domain tree, the search must be initiated at the Dns-Root object. This attribute can be multivalued, in which case multiple referrals are generated.</p>
+<example><snippet type="syntax">cn: Dns-Root
+ldapDisplayName: dnsRoot
+attributeId: 1.2.840.113556.1.4.28
+attributeSyntax: 2.5.5.12
+omSyntax: 64
+isSingleValued: FALSE
+schemaIdGuid: bf967959-0de6-11d0-a285-00aa003049e2
+systemOnly: FALSE
+searchFlags: fATTINDEX
+rangeLower: 1
+rangeUpper: 255
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADLS"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute dnsRoot [_rfc_ms-adls1_64]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

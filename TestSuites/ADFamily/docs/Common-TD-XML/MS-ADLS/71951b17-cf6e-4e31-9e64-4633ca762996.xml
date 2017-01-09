@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="71951b17-cf6e-4e31-9e64-4633ca762996" build_format="rfc" section_number="2.38"><title>Class nTDSDSA</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details><change_tracking month="03" day="12" year="2014" change_type="content_update" revision_class="major"><tdi_info><tdi_number>71008</tdi_number><tdi_title>Added msDS-EnabledFeature to the class code.</tdi_title></tdi_info></change_tracking></change_tracking_details></metadata>
+<section><section_contents><p>This class represents the Active Directory DSA process on the server.</p>
+<example><snippet type="syntax">cn: NTDS-DSA
+ldapDisplayName: nTDSDSA
+governsId: 1.2.840.113556.1.5.7000.47
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: applicationSettings
+systemMayContain: msDS-DefaultNamingContext, serverReference, 
+ msDS-RetiredReplNCSignatures, retiredReplDSASignatures, 
+ queryPolicyObject, options, networkAddress, msDS-ServiceAccount, 
+ msDS-ServiceAccountDNSDomain, msDS-PortSSL, msDS-PortLDAP, 
+ msDS-ReplicationEpoch, msDS-HasInstantiatedNCs, msDS-hasMasterNCs, 
+ msDS-HasDomainNCs, msDS-Behavior-Version, managedBy, 
+ lastBackupRestorationTime, invocationId, hasPartialReplicaNCs, 
+ hasMasterNCs, dMDLocation, msDS-EnabledFeature
+systemPossSuperiors: organization, server
+schemaIdGuid: f0f8ffab-1191-11d0-a060-00aa006c33ed
+defaultSecurityDescriptor: D:S:
+defaultHidingValue: TRUE
+systemOnly: TRUE
+defaultObjectCategory: CN=NTDS-DSA,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADLS"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class nTDSDSA [_rfc_ms-adls2_38]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.1.1"?>

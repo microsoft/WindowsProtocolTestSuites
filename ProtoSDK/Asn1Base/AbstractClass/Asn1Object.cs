@@ -96,11 +96,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// <summary>
         /// Gets an indicator which speicifies whether an external object is defined in the structure.
         /// </summary>
-        protected bool HasExternalObjects 
+        protected bool HasExternalObjects
         {
             get
             {
-                MemberInfo[] mis = this.GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public |BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
+                MemberInfo[] mis = this.GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
                 List<MemberInfo> list = new List<MemberInfo>();
                 foreach (var mi in mis)
                 {
@@ -246,32 +246,33 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// <remarks>Override this method in a user-defined class only if the procedure is not applicable in some special scenarios.</remarks>
         public virtual int BerEncode(IAsn1BerEncodingBuffer buffer, bool explicitTag = true)
         {
-            //TODO: deal with explicitTag
             if (!VerifyConstraints())
             {
                 throw new Asn1ConstraintsNotSatisfied(ExceptionMessages.ConstraintsNotSatisfied
                     + " Encode " + this.GetType().Name + ".");
             }
 
-            //Encoding inversely since buffer is reversed.
-
             //Add the encoding result of Value to the front of buffer.
             int resultLen = ValueBerEncode(buffer);
 
-            //Add the encoding result of Length to the front of buffer.
-            resultLen += LengthBerEncode(buffer, resultLen);
-
-            //Add the encoding result of Universal Class Tag to the front of buffer.
-            Asn1Tag uniTag = this.UniversalTag;
-            resultLen += TagBerEncode(buffer, uniTag);
-
-            //Add the encoding result of the top most tag (in most cases it's Application Class Tag) to the front of buffer if it is defined.
-            Asn1Tag topTag = this.TopTag;
-            if (topTag.TagType != Asn1TagType.Universal)
+            if (explicitTag)
             {
+                //Add the encoding result of Length to the front of buffer.
                 resultLen += LengthBerEncode(buffer, resultLen);
-                resultLen += TagBerEncode(buffer, topTag);
+
+                //Add the encoding result of Universal Class Tag to the front of buffer.
+                Asn1Tag uniTag = this.UniversalTag;
+                resultLen += TagBerEncode(buffer, uniTag);
+
+                //Add the encoding result of the top most tag (in most cases it's Application Class Tag) to the front of buffer if it is defined.
+                Asn1Tag topTag = this.TopTag;
+                if (topTag.TagType != Asn1TagType.Universal)
+                {
+                    resultLen += LengthBerEncode(buffer, resultLen);
+                    resultLen += TagBerEncode(buffer, topTag);
+                }
             }
+
             return resultLen;
         }
 
@@ -279,7 +280,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// Decodes the object by BER.
         /// </summary>
         /// <param name="buffer">A buffer that contains a BER encoding result.</param>
-	    /// <param name="explicitTag">Indicates whether the tags should be encoded explicitly. In our Test Suites, it will always be true.</param>
+        /// <param name="explicitTag">Indicates whether the tags should be encoded explicitly. In our Test Suites, it will always be true.</param>
         /// <returns>The number of the bytes consumed in the buffer to decode this object.</returns>
         /// <exception cref="Asn1ConstraintsNotSatisfied">
         /// Thrown when the constraints are not satisfied after decoding.
@@ -290,19 +291,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         /// <remarks>Override this method in a user-defined class only if the procedure is not applicable in some special scenarios.</remarks>
         public virtual int BerDecode(IAsn1DecodingBuffer buffer, bool explicitTag = true)
         {
-            int returnVal = 0;
-            //Decode the top most tag and universal class tag
-            int lengthAfterTopTag;
-            Asn1Tag topTag;
-            returnVal += TagBerDecode(buffer, out topTag);
+            int returnVal = 0, lengthAfterTopTag = 0, lengthAfterUniTag = 0;
+            if (explicitTag)
+            {
+                //Decode the top most tag and universal class tag
+                Asn1Tag topTag;
+                returnVal += TagBerDecode(buffer, out topTag);
 
-            Asn1Tag topTagInDefinition = this.TopTag;
-            if (!topTag.Equals(topTagInDefinition))
-            {
-                throw new Asn1DecodingUnexpectedData(ExceptionMessages.DecodingUnexpectedData + " Top Most Tag decoding fail.");
-            }
-            else
-            {
+                Asn1Tag topTagInDefinition = this.TopTag;
+
                 if (topTag.TagType != Asn1TagType.Universal)
                 {
                     returnVal += LengthBerDecode(buffer, out lengthAfterTopTag);
@@ -316,9 +313,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
                 }
             }
 
-            //Decode length
-            int lengthAfterUniTag;
             returnVal += LengthBerDecode(buffer, out lengthAfterUniTag);
+
             //Decode data
             returnVal += ValueBerDecode(buffer, lengthAfterUniTag);
 
@@ -414,11 +410,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
             }
             if (HasExternalObjects)
             {
-                //TODO: write true to the buffer if external element is used.
                 buffer.WriteBit(false);
             }
             ValuePerEncode(buffer);
-            //TODO: encode the external object.
         }
 
         /// <summary>
@@ -438,14 +432,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
             if (HasExternalObjects)
             {
                 bool hasExt = buffer.ReadBit();
-                //TODO: if true is read, store the decoding value to external object
                 if (hasExt)
                 {
                     throw new NotImplementedException("External marker is not implemented yet.");
                 }
             }
             ValuePerDecode(buffer, aligned);
-            //TODO: decode the external object.
             if (!VerifyConstraints())
             {
                 throw new Asn1ConstraintsNotSatisfied(ExceptionMessages.ConstraintsNotSatisfied);
@@ -453,5 +445,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         }
 
         #endregion PER
+
+        /// <summary>
+        /// Check if tag from buffer is match with input Asn1Tag
+        /// </summary>
+        /// <param name="buffer">decode buffer</param>
+        /// <param name="tag">compare Asn1Tag</param>
+        /// <param name="length">Tag Length</param>
+        /// <param name="IsForward">If true Postion + 1, otherwise not change Postion</param>
+        /// <returns>Tag from Buffer is match with input Tag</returns>
+        public virtual bool IsTagMatch(IAsn1DecodingBuffer buffer, Asn1Tag tag, out int length, bool IsForward = false)
+        {
+            length = 0;
+            if (buffer.IsNomoreData())
+            {
+                return false;
+            }
+
+            byte tagByte = Asn1StandardProcedure.GetEncodeTag(tag);
+            byte bufferTagByte = IsForward ? buffer.ReadByte() : buffer.PeekByte();
+            length = IsForward ? 1 : 0;
+            return tagByte == bufferTagByte;
+        }
     }
 }

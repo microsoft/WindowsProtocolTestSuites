@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="c5df0bda-2cf3-4a5f-9980-3fbca02143f8" build_format="rfc" section_number="1.178"><title>Class posixAccount</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>An abstraction of an account that has Portable Operating System Interface (POSIX) attributes.</p>
+<example><snippet type="syntax">cn: PosixAccount
+ldapDisplayName: posixAccount
+governsId: 1.3.6.1.1.1.2.0
+objectClassCategory: 3
+rdnAttId: uid
+subClassOf: top
+mayContain: uid, cn, uidNumber, gidNumber, unixHomeDirectory, 
+ homeDirectory, userPassword, unixUserPassword, loginShell, gecos, 
+ description
+schemaIdGuid: ad44bb41-67d5-4d88-b575-7b20674e76d8
+defaultSecurityDescriptor: D:(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;DA)
+ (A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;SY)(A;;RPLCLORC;;;AU)
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=PosixAccount,&lt;SchemaNCDN&gt;</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADSC"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class posixAccount [_rfc_ms-adsc1_178]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

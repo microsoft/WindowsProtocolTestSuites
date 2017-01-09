@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="5298bde3-5754-4e8a-b5bd-6d1aea26a4b5" build_format="rfc" section_number="1.161"><title>Class nTDSService</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?>
+<p>Used for an NTDS services object, which contains information about the configuration of the directory service forest. This object is kept in the CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,... container. </p>
+<example>
+<snippet type="syntax">cn: NTDS-Service
+ldapDisplayName: nTDSService
+governsId: 1.2.840.113556.1.5.72
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: top
+systemMayContain: msDS-DeletedObjectLifetime, tombstoneLifetime, 
+ sPNMappings, replTopologyStayOfExecution, msDS-Other-Settings, 
+ garbageCollPeriod, dSHeuristics
+systemPossSuperiors: container
+schemaIdGuid: 19195a5f-6da0-11d0-afd3-00c04fd930c9
+defaultSecurityDescriptor: D:(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;DA)
+ (A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;SY)(A;;RPLCLORC;;;AU)
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=NTDS-Service,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet>
+</example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="" date="1900-01-01T00:00:00Z" initials="" commentText="CE: Please spell &quot;NTDS&quot; out in full below, followed by the acronym in parentheses."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="5298bde3-5754-4e8a-b5bd-6d1aea26a4b5"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-adsc_2_171"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

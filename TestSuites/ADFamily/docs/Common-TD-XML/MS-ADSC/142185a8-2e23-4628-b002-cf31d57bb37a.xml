@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page>
+<metadata id="142185a8-2e23-4628-b002-cf31d57bb37a" build_format="rfc" section_number="1.21" target="mcpp_windows_unreleased">
+<title>Class computer</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details>
+<change_tracking month="03" day="27" year="2009" revision_class="major" change_type="protocol_syntax_updated"><tdi_info><tdi_number>29459</tdi_number><tdi_title>Added attributes to systemMayContain.</tdi_title></tdi_info></change_tracking>
+
+<change_tracking month="04" day="11" year="2009" revision_class="major" change_type="protocol_syntax_updated"><tdi_info><tdi_number>29222</tdi_number><tdi_title>Corrected the name of msTSEndpointPlugin in systemMayContain.</tdi_title></tdi_info></change_tracking>
+<change_tracking month="04" year="2009" revision_class="major" change_type="protocol_syntax_updated" day="22"><tdi_info><tdi_number>29744</tdi_number><tdi_title>Corrected the name of msTSEndpointPlugin in systemMayContain.</tdi_title></tdi_info></change_tracking>
+<change_tracking revision_class="major" year="2011" month="12" day="21" change_type="content_update"><non_tdi_info><non_tdi_desc><p>Updated content for <auto_text>windows_server_8</auto_text>.</p></non_tdi_desc></non_tdi_info></change_tracking>
+<change_tracking revision_class="major" year="2012" month="03" day="31" change_type="content_update"><non_tdi_info><non_tdi_desc><p>Updated content for <auto_text>windows_server_8</auto_text>.</p></non_tdi_desc></non_tdi_info></change_tracking>
+</change_tracking_details>
+</metadata>
+<section>
+<section_contents>
+<p>A class that represents a computer account in the domain.</p>
+<example>
+<snippet type="syntax">cn: Computer
+ldapDisplayName: computer
+governsId: 1.2.840.113556.1.3.30
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: user
+auxiliaryClass: ipHost
+mayContain: msSFU30Aliases, msSFU30NisDomain, nisMapName, 
+ msSFU30Name
+systemMayContain: msTSSecondaryDesktopBL, msTSPrimaryDesktopBL, 
+ msTSEndpointData, msTSEndpointType, 
+ msTSEndpointPlugin, msDS-HostServiceAccount, 
+ msDS-IsUserCachableAtRodc, msTSProperty02, 
+ msTSProperty01, msTPM-OwnerInformation, msDS-RevealOnDemandGroup, 
+ msDS-NeverRevealGroup, msDS-PromotionSettings, msDS-SiteName, 
+ msDS-isRODC, msDS-isGC, msDS-AuthenticatedAtDC, msDS-RevealedList, 
+ msDS-RevealedUsers, msDS-ExecuteScriptPassword, msDS-KrbTgtLink, 
+ volumeCount, siteGUID, rIDSetReferences, policyReplicationFlags, 
+ physicalLocationObject, operatingSystemVersion, 
+ operatingSystemServicePack, operatingSystemHotfix, operatingSystem, 
+ networkAddress, netbootDUID, netbootSIFFile, netbootMirrorDataFile, 
+ netbootMachineFilePath, netbootInitialization, netbootGUID, 
+ msDS-AdditionalSamAccountName, msDS-AdditionalDnsHostName, 
+ managedBy, machineRole, location, localPolicyFlags, dNSHostName, 
+ defaultLocalPolicyObject, cn, catalogs, msTPM-TpmInformationForComputer, 
+ msDS-GenerationId, msImaging-ThumbprintHash, msImaging-HashAlgorithm
+systemPossSuperiors: container, organizationalUnit, domainDNS
+schemaIdGuid: bf967a86-0de6-11d0-a285-00aa003049e2
+defaultSecurityDescriptor: D:(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;DA)
+ (A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;AO)
+ (A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;SY)(A;;RPCRLCLORCSDDT;;;CO)
+ (OA;;WP;4c164200-20c0-11d0-a768-00aa006e0529;;CO)(A;;RPLCLORC;;;AU)
+ (OA;;CR;ab721a53-1e2f-11d0-9819-00aa0040529b;;WD)(A;;CCDC;;;PS)
+ (OA;;CCDC;bf967aa8-0de6-11d0-a285-00aa003049e2;;PO)
+ (OA;;RPWP;bf967a7f-0de6-11d0-a285-00aa003049e2;;CA)
+ (OA;;SW;f3a64788-5306-11d1-a9c5-0000f80367c1;;PS)
+ (OA;;RPWP;77B5B886-944A-11d1-AEBD-0000F80367C1;;PS)
+ (OA;;SW;72e39547-7b18-11d1-adef-00c04fd8d5cd;;PS)
+ (OA;;SW;72e39547-7b18-11d1-adef-00c04fd8d5cd;;CO)
+ (OA;;SW;f3a64788-5306-11d1-a9c5-0000f80367c1;;CO)
+ (OA;;WP;3e0abfd0-126a-11d0-a060-00aa006c33ed;
+ bf967a86-0de6-11d0-a285-00aa003049e2;CO)
+ (OA;;WP;5f202010-79a5-11d0-9020-00c04fc2d4cf;
+ bf967a86-0de6-11d0-a285-00aa003049e2;CO)
+ (OA;;WP;bf967950-0de6-11d0-a285-00aa003049e2;
+ bf967a86-0de6-11d0-a285-00aa003049e2;CO)
+ (OA;;WP;bf967953-0de6-11d0-a285-00aa003049e2;
+ bf967a86-0de6-11d0-a285-00aa003049e2;CO)
+ (OA;;RP;46a9b11d-60ae-405a-b7e8-ff8a58d456d2;;S-1-5-32-560)
+defaultHidingValue: FALSE
+systemOnly: FALSE
+defaultObjectCategory: CN=Computer,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet>
+</example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADSC"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class computer [_rfc_ms-adsc1_21]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

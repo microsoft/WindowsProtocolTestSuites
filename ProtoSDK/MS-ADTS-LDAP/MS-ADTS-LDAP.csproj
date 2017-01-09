@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2FA90F03-31CD-4495-86BF-8DA9CC14E210}</ProjectGuid>
@@ -32,7 +31,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -47,7 +46,7 @@
     </DocumentationFile>
     <CodeAnalysisRuleSet>Sdl7.0.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -127,6 +126,7 @@
     <Compile Include="AdtsLdapV3Asn1Codec\AuthenticationChoice.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\BatchRequestRequestValue.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\BatchRequestResponseValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\BatchRequestValue.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\BindRequest.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\BindResponse.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\CompareRequest.cs" />
@@ -135,9 +135,12 @@
     <Compile Include="AdtsLdapV3Asn1Codec\Controls.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\DelRequest.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\DelResponse.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\DirsyncExRep.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\DirsyncExReq.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\DirSyncRequestValue.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\DirSyncResponseValue.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\DNInputRequestValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\ExpectedEntryCount.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\ExpectedEntryCountRequestValue.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\ExtendedDNRequestValue.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\ExtendedRequest.cs" />
@@ -169,8 +172,10 @@
     <Compile Include="AdtsLdapV3Asn1Codec\RequireSortIndexHintValue.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\SaslCredentials.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\SDFlagsRequestValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\SearchHints.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\SearchHintsRequestValue.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\SearchHintsRequestValue_element.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\SearchHints_element.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\SearchOptionsRequestValue.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\SearchRequest.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\SearchRequest_derefAliases.cs" />
@@ -189,10 +194,15 @@
     <Compile Include="AdtsLdapV3Asn1Codec\StatsResponseValueV4_element_choice.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\SubstringFilter.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\SubstringFilter_substrings_element.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\TreeDeleteEx.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\TreeDeleteExRequestValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\TtlRefreshRequestValue.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\TtlRefreshResponseValue.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\UnbindRequest.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\UpdateStats.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\UpdateStatsResponseValue.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\UpdateStatsResponseValue_element.cs" />
+    <Compile Include="AdtsLdapV3Asn1Codec\UpdateStats_element.cs" />
     <Compile Include="AdtsLdapV3Asn1Codec\VerifyNameRequestValue.cs" />
     <Compile Include="AdtsLdap\AdtsLdapBlobs.cs" />
     <Compile Include="AdtsLdap\AdtsLdapConnectionType.cs" />

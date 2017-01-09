@@ -28,7 +28,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
             this.Value = s;
         }
 
-        //TODO: add constraints by overriding VerifyConstraints method, check ASN.1 doc for detailed constraints on CHAR SET.
 
         //BER encoding/decoding are implemented in base class Asn1ByteString.
 

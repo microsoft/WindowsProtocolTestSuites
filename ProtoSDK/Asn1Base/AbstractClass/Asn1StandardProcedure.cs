@@ -202,6 +202,49 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
             }
         }
 
+        public static byte GetEncodeTag(Asn1Tag tag)
+        {
+            //Ref. X.690: 8.1.2.2, there are four kinds of tags
+            byte prefix = 0;
+            switch (tag.TagType)
+            {
+                case Asn1TagType.Universal:
+                    {
+                        prefix = 0;//00
+                    } break;
+                case Asn1TagType.Application:
+                    {
+                        prefix = 1;//01
+                    } break;
+                case Asn1TagType.Context:
+                    {
+                        prefix = 2;//10
+                    } break;
+                case Asn1TagType.Private:
+                    {
+                        prefix = 3;//11
+                        //Ref. X.680: G.2.12.4
+                        throw new Asn1UnreachableExcpetion(ExceptionMessages.Unreachable);
+                    };
+            }
+            prefix <<= 6;
+            if (tag.EncodingWay == EncodingWay.Constructed)
+            {
+                prefix |= (1 << 5);//Set the sixth bit to 1 if it is encoded in constructed way. Ref. X.690: 8.1.2.3
+            }
+            if (tag.TagValue <= 30)//Use one byte to store the encoding result
+            //Ref. X.690: 8.1.2.3
+            {
+                prefix |= (byte)tag.TagValue;
+                return prefix;
+            }
+            else//Use more than one bytes to store.
+            {
+                //Ref. X.690: 8.1.2.4.3
+                throw new NotImplementedException("Case tag > 30 is not implemented. Check X.690: 8.1.2.4.3.");
+            }
+        }
+
         /// <summary>
         /// Encapsulates a method that encode an object to a buffer.
         /// </summary>

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata build_format="rfc" section_number="43.124" id="624318a1-b5ec-4518-be8f-30ff795abb8a"><title>Attribute msDS-ComputerAuthNPolicyBL</title>
+<tech />
+<index />
+<change_tracking_details><change_tracking revision_class="major" change_type="content_new" year="2013" month="06" day="26"><non_tdi_info><non_tdi_desc><p>Added section with content for <auto_text>winblue_server_1</auto_text>.</p></non_tdi_desc></non_tdi_info></change_tracking>
+<change_tracking month="03" day="05" year="2014" change_type="content_update" revision_class="major"><tdi_info><tdi_number>71017</tdi_number><tdi_title>Updated the attribute with the FLAG_ATTR_NOT_REPLICATED value.</tdi_title></tdi_info></change_tracking></change_tracking_details></metadata>
+<section><section_contents>
+<p>This attribute is the backlink for msDS-ComputerAuthNPolicy.</p>
+<example><snippet>cn: ms-DS-Computer-AuthN-Policy-BL
+ldapDisplayName: msDS-ComputerAuthNPolicyBL
+attributeId: 1.2.840.113556.1.4.2292
+attributeSyntax: 2.5.5.1
+omObjectClass: 1.3.12.2.1011.28.0.714
+omSyntax: 127
+isSingleValued: FALSE
+schemaIdGuid: 2bef6232-30a1-457e-8604-7af6dbf131b8
+systemOnly: TRUE
+searchFlags: 0
+linkID: 2209
+systemFlags: FLAG_SCHEMA_BASE_OBJECT | FLAG_ATTR_NOT_REPLICATED</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA2"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute msDS-ComputerAuthNPolicyBL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.1.1"?>

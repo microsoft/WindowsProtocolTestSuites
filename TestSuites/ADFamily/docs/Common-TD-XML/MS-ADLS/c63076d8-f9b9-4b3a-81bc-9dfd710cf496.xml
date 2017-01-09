@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="c63076d8-f9b9-4b3a-81bc-9dfd710cf496" build_format="rfc" section_number="1.338"><title>Attribute systemFlags</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>This attribute specifies an integer value that contains flags that define additional properties of the class.<?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?></p>
+<example><snippet type="syntax">cn: System-Flags
+ldapDisplayName: systemFlags
+attributeId: 1.2.840.113556.1.4.375
+attributeSyntax: 2.5.5.9
+omSyntax: 2
+isSingleValued: TRUE
+schemaIdGuid: e0fa1e62-9b45-11d0-afdd-00c04fd930c9
+systemOnly: TRUE
+searchFlags: fPRESERVEONDELETE
+attributeSecurityGuid: e48d0154-bcf8-11d1-8702-00c04fb96050
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="a-labenn" date="2007-04-11T18:36:00" initials="" commentText="See the Remarks section for more information. 'obtain reference from adax'"?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="c63076d8-f9b9-4b3a-81bc-9dfd710cf496"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-adls_2_351"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

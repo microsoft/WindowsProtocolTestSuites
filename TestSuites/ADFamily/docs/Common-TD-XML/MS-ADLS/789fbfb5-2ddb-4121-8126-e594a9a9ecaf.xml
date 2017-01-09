@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="789fbfb5-2ddb-4121-8126-e594a9a9ecaf" build_format="rfc" section_number="1.247"><title>Attribute objectSid</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details><change_tracking month="01" day="30" year="2010" change_type="content_update" revision_class="major"><tdi_info><tdi_number>44574</tdi_number><tdi_title>Revised attribute description.</tdi_title></tdi_info></change_tracking></change_tracking_details></metadata>
+<section><section_contents><p>This attribute contains a binary value that specifies the security identifier (SID) of a security principal object. The SID is a unique value used to identify security principal objects.</p>
+<example><snippet type="syntax">cn: Object-Sid
+ldapDisplayName: objectSid
+attributeId: 1.2.840.113556.1.4.146
+attributeSyntax: 2.5.5.17
+omSyntax: 4
+isSingleValued: TRUE
+schemaIdGuid: bf9679e8-0de6-11d0-a285-00aa003049e2
+systemOnly: TRUE
+searchFlags: fPRESERVEONDELETE | fATTINDEX
+rangeLower: 0
+rangeUpper: 28
+attributeSecurityGuid: 59ba2f42-79a2-11d0-9020-00c04fc2d3cf
+isMemberOfPartialAttributeSet: TRUE
+systemFlags: FLAG_SCHEMA_BASE_OBJECT | 
+ FLAG_ATTR_REQ_PARTIAL_SET_MEMBER</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADLS"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute objectSid [_rfc_ms-adls1_247]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

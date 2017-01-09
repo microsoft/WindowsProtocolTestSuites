@@ -8,6 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV
     /*
     UnbindRequest ::= [APPLICATION 2] NULL
     */
+    [Asn1Tag(Asn1TagType.Application, 2, EncodingWay = EncodingWay.Primitive)]
     public class UnbindRequest : Asn1Object
     {
         /// <summary>
@@ -22,7 +23,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV
         /// <remarks>Override this method in a user-defined class only if the procedure is not applicable in some special scenarios.</remarks>
         public override int BerEncode(IAsn1BerEncodingBuffer buffer, bool explicitTag = true)
         {
-            return 0;
+            int resultLen = 0;
+            //Add the encoding result of Length to the front of buffer.
+            resultLen += LengthBerEncode(buffer, 0);
+
+            //Add the encoding result of the top most tag (in most cases it's Application Class Tag) to the front of buffer if it is defined.
+
+            resultLen += TagBerEncode(buffer, this.TopTag);
+            return resultLen;
         }
 
         /// <summary>
@@ -39,7 +47,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV
         /// <remarks>Override this method in a user-defined class only if the procedure is not applicable in some special scenarios.</remarks>
         public override int BerDecode(IAsn1DecodingBuffer buffer, bool explicitTag)
         {
-            return 0;
+            int decodeLen = 0;
+            int resultVal = LengthBerDecode(buffer, out decodeLen);
+            Asn1Tag topTag;
+            resultVal += TagBerDecode(buffer, out topTag);
+            return resultVal;
         }
     }
 }

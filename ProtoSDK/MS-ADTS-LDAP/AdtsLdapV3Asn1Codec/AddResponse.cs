@@ -24,7 +24,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV
         {
         }
 
-        //TODO: Add Other Constructors.
+        public override int BerEncode(IAsn1BerEncodingBuffer buffer, bool explicitTag = true)
+        {
+            int allLength = 0;
+
+            if (referral != null)
+            {
+                allLength += referral.BerEncodeWithoutUnisersalTag(buffer);
+                allLength += TagBerEncode(buffer,
+                    new Asn1Tag(Asn1TagType.Context, 3) { EncodingWay = EncodingWay.Constructed });
+            }
+
+            allLength += errorMessage.BerEncode(buffer);
+            allLength += matchedDN.BerEncode(buffer);
+            allLength += resultCode.BerEncode(buffer);
+            allLength += LengthBerEncode(buffer, allLength);
+            allLength += TagBerEncode(buffer, this.TopTag);
+
+            return allLength;
+        }
     }
 }
 

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="cba20feb-41f6-4bba-9070-baae8c3cf179" build_format="rfc" section_number="1.7"><title>Class applicationEntity</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details><change_tracking change_type="content_update" day="07" month="11" revision_class="minor" year="2009"><tdi_info><tdi_number>40950</tdi_number><tdi_title>Changed introductory sentence to refer to applicationEntity.</tdi_title></tdi_info></change_tracking></change_tracking_details></metadata>
+<section><section_contents><p>The X.500 base class for applicationEntity. </p>
+<example><snippet type="syntax">cn: Application-Entity
+ldapDisplayName: applicationEntity
+governsId: 2.5.6.12
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: top
+systemMustContain: presentationAddress, cn
+systemMayContain: supportedApplicationContext, seeAlso, ou, o, l
+systemPossSuperiors: applicationProcess, organizationalUnit, 
+ container
+schemaIdGuid: 3fdfee4f-47f4-11d1-a9c3-0000f80367c1
+defaultSecurityDescriptor: D:(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;DA)
+ (A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;SY)(A;;RPLCLORC;;;AU)
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=Application-Entity,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADSC"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class applicationEntity [_rfc_ms-adsc1_7]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

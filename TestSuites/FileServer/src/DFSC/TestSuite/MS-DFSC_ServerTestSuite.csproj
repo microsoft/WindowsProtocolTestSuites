@@ -54,16 +54,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Binplace Include="$(TargetDir)$(TargetFileName)">
-      <DestinationFolder>$(TestSuitesDrop)\FileServer\Server\Bin</DestinationFolder>
-      <Visible>false</Visible>
-    </Binplace>
-    <Binplace Include="$(TargetDir)*.pdb">
-      <DestinationFolder>$(TestSuitesDrop)\FileServer\Server\Bin</DestinationFolder>
-      <Visible>false</Visible>
-    </Binplace>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>

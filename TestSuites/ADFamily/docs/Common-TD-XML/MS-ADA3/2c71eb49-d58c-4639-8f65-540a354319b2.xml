@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="2c71eb49-d58c-4639-8f65-540a354319b2" build_format="rfc" section_number="1.204"><title>Attribute rIDPreviousAllocationPool</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>The RID-Previous-Allocation-Pool attribute contains the pool of RIDs that a domain controller allocates from. This attribute is an 8-byte value that contains a pair of 4-byte integers that represent the start and end values of the RID pool. The start value is in the lower 4 bytes, and the end value is in the upper 4 bytes.</p>
+<example><snippet type="syntax">cn: RID-Previous-Allocation-Pool
+ldapDisplayName: rIDPreviousAllocationPool
+attributeId: 1.2.840.113556.1.4.372
+attributeSyntax: 2.5.5.16
+omSyntax: 65
+isSingleValued: TRUE
+schemaIdGuid: 6617188a-8f3c-11d0-afda-00c04fd930c9
+systemOnly: TRUE
+searchFlags: 0
+systemFlags: FLAG_SCHEMA_BASE_OBJECT | FLAG_ATTR_NOT_REPLICATED
+schemaFlagsEx: FLAG_ATTR_IS_CRITICAL</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p>
+<p>The <xref rid="5ea3a865-2cfa-481d-9892-d00fd04514ea" enabled="1" targtype="adschema_attribute">schemaFlagsEx</xref> attribute was added to this attribute definition in <auto_text>windows_server_2008</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA3"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute rIDPreviousAllocationPool [_rfc_ms-ada31_204]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

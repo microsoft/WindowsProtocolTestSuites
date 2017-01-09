@@ -12413,7 +12413,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         OPLOCK_BREAK = 0x12,
     }
 
-    // TODO: Should be defined globally
     public static class ErrefStatus
     {
         public const uint STATUS_INVALID_NETWORK_RESPONSE = 0xC00000C3;

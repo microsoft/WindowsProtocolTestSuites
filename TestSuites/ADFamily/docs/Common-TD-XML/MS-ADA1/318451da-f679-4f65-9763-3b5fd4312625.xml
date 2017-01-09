@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="318451da-f679-4f65-9763-3b5fd4312625" build_format="rfc" section_number="1.124"><title>Attribute controlAccessRights</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>This attribute is used by DS Security<?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?> to determine which users can perform specific operations on the host object.</p>
+<example><snippet type="syntax">cn: Control-Access-Rights
+ldapDisplayName: controlAccessRights
+attributeId: 1.2.840.113556.1.4.200
+attributeSyntax: 2.5.5.10
+omSyntax: 4
+isSingleValued: FALSE
+schemaIdGuid: 6da8a4fc-0e52-11d0-a286-00aa003049e2
+systemOnly: FALSE
+searchFlags: 0
+rangeLower: 16
+rangeUpper: 16
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="pbartos" date="2008-02-11T13:43:41" initials="" commentText="What is &quot;DS Security&quot;? A product? If not, should it be &quot;directory services security&quot;?"?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="318451da-f679-4f65-9763-3b5fd4312625"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-ada1_2_125"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

@@ -19,6 +19,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV
             : base(val)
         {
         }
+
+        public AttributeValue(byte[] val)
+            : base(val)
+        {
+        }
     }
 }
 

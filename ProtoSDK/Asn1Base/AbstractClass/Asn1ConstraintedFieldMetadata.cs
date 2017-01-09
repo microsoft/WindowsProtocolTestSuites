@@ -142,7 +142,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
                     Constraint = attrs[0] as Asn1SizeConstraint;
                 }
             }
-            //TODO: add more when needed.
             return Constraint;
         }
 
@@ -162,7 +161,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
                 {
                     (obj as Asn1OctetString).Constraint = Constraint as Asn1StringConstraint;
                 }
-                //TODO: add more when needed.
             }
         }
 

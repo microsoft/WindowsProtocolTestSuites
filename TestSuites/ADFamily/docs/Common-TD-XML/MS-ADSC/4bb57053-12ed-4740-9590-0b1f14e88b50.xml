@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="4bb57053-12ed-4740-9590-0b1f14e88b50" build_format="rfc" section_number="1.152"><title>Class msWMI-UintSetParam</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>An object for an unsigned integer set parameter.</p>
+<example><snippet type="syntax">cn: ms-WMI-UintSetParam
+ldapDisplayName: msWMI-UintSetParam
+governsId: 1.2.840.113556.1.5.208
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: msWMI-RangeParam
+systemMustContain: msWMI-IntDefault
+systemMayContain: msWMI-IntValidValues
+systemPossSuperiors: msWMI-MergeablePolicyTemplate
+schemaIdGuid: 8f4beb31-4e19-46f5-932e-5fa03c339b1d
+defaultSecurityDescriptor: D:(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;DA)
+ (A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;SY)(A;;RPCCDCLCLODTRC;;;AU)
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=ms-WMI-UintSetParam,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADSC"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class msWMI-UintSetParam [_rfc_ms-adsc1_152]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

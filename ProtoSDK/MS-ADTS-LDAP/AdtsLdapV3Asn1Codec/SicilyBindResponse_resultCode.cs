@@ -52,7 +52,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV
         }
         
         public SicilyBindResponse_resultCode(long val)
-            : base()
+            : base(val)
         {
         }
     }

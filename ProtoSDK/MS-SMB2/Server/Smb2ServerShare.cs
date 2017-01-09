@@ -11,7 +11,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         public string LocalPath;
 
-        // TODO: What should be the type?
         public string ConnectionSecurity;
 
         public string FileSecurity;
@@ -27,8 +26,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         public bool ForceSharedDelete;
 
         public bool RestrictExclusiveOpens;
-
-        // TODO: MS-SRVS Type
 
         public uint MaxUsers;
 

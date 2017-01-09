@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="2ecb804b-fe71-4f76-96b9-e4b749ebf193" build_format="rfc" section_number="1.279"><title>Attribute structuralObjectClass</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>This attribute specifies a constructed attribute that stores a list of classes contained in a class hierarchy, including abstract classes. This list does contain dynamically linked auxiliary classes.</p>
+<example><snippet type="syntax">cn: Structural-Object-Class
+ldapDisplayName: structuralObjectClass
+attributeId: 2.5.21.9
+attributeSyntax: 2.5.5.2
+omSyntax: 6
+isSingleValued: FALSE
+schemaIdGuid: 3860949f-f6a8-4b38-9950-81ecb6bc2982
+systemOnly: FALSE
+searchFlags: 0
+systemFlags: FLAG_SCHEMA_BASE_OBJECT | FLAG_ATTR_IS_CONSTRUCTED
+schemaFlagsEx: FLAG_ATTR_IS_CRITICAL</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p>
+<p>The <xref rid="5ea3a865-2cfa-481d-9892-d00fd04514ea" enabled="1" targtype="adschema_attribute">schemaFlagsEx</xref> attribute was added to this attribute definition in <auto_text>windows_server_2008</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA3"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute structuralObjectClass [_rfc_ms-ada31_279]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>
