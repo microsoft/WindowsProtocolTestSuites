@@ -16,9 +16,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
     public class SqosTestConfig: TestConfigBase
     {
         #region Fields
-        private string fileServerNameContainingSqosVHD;
-        private string shareContainingSqosVHD;
-        private string nameOfSqosVHD;
+        private string fileServerNameContainingSharedVHD;
+        private string shareContainingSharedVHD;
         #endregion
 
         /// <summary>
@@ -32,56 +31,52 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
             return GetProperty("SQOS", propertyName, checkNullOrEmpty);
         }
 
-        public IPAddress FileServerIPContainingSqosVHD
+        public IPAddress FileServerIPContainingSharedVHD
         {
             get
             {
-                IPAddress fileServerIPContainingSqosVHD;
+                IPAddress fileServerIPContainingSharedVHD;
                 // If FileServerName in full path of SQOS vhd file is an IP address, use that one directly.
-                if (IPAddress.TryParse(FileServerNameContainingSqosVHD, out fileServerIPContainingSqosVHD))
+                if (IPAddress.TryParse(FileServerNameContainingSharedVHD, out fileServerIPContainingSharedVHD))
                 {
-                    return fileServerIPContainingSqosVHD;
+                    return fileServerIPContainingSharedVHD;
                 }
                 else
                 {
-                    return Dns.GetHostEntry(FileServerNameContainingSqosVHD).AddressList[0];
+                    return Dns.GetHostEntry(FileServerNameContainingSharedVHD).AddressList[0];
                 }
             }
         }
 
-        public string FileServerNameContainingSqosVHD
+        public string FileServerNameContainingSharedVHD
         {
             get
             {
-                if (fileServerNameContainingSqosVHD == null)
+                if (fileServerNameContainingSharedVHD == null)
                 {
                     ParseSqosFullPath();
                 }
-                return fileServerNameContainingSqosVHD;
+                return fileServerNameContainingSharedVHD;
             }
         }
 
-        public string ShareContainingSqosVHD
+        public string ShareContainingSharedVHD
         {
             get
             {
-                if (shareContainingSqosVHD == null)
+                if (shareContainingSharedVHD == null)
                 {
                     ParseSqosFullPath();
                 }
-                return shareContainingSqosVHD;
+                return shareContainingSharedVHD;
             }
         }
 
-        public string NameOfSqosVHD
+        public string NameOfSharedVHD
         {
             get
-            {
-                if (nameOfSqosVHD == null)
-                {
-                    ParseSqosFullPath();
-                }
-                return nameOfSqosVHD;
+            {   
+                return "test.vhdx";
             }
         }
 
@@ -149,20 +144,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
             }
         }
 
+        public string FullPathShareContainingSharedVHD
+        {
+            get
+            {
+                return GetProperty("ShareContainingSharedVHD");
+            }
+        }
+
         private void ParseSqosFullPath()
         {
             // Parse full path to separate properties.
-            string fullPath = GetProperty("SqosVHDFullPath");
+            string fullPath = GetProperty("ShareContainingSharedVHD");
             if (!fullPath.StartsWith(@"\\"))
             {
-                Site.Assert.Inconclusive(@"SqosVHDFullPath should start with \\");
+                Site.Assert.Inconclusive(@"ShareContainingSharedVHD should start with \\");
             }
 
             fullPath = fullPath.Substring(2);
-            fileServerNameContainingSqosVHD = fullPath.Substring(0, fullPath.IndexOf(@"\"));
-            fullPath = fullPath.Substring(fileServerNameContainingSqosVHD.Length + 1);
-            shareContainingSqosVHD = fullPath.Substring(0, fullPath.IndexOf(@"\"));
-            nameOfSqosVHD = fullPath.Substring(shareContainingSqosVHD.Length + 1);
+            fileServerNameContainingSharedVHD = fullPath.Substring(0, fullPath.IndexOf(@"\"));
+            shareContainingSharedVHD = fullPath.Substring(fileServerNameContainingSharedVHD.Length + 1);
         }
 
         public SqosTestConfig(ITestSite site):base(site)

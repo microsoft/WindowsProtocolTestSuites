@@ -35,6 +35,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
 
             client = new SqosClient(TestConfig.Timeout);
 
+            // Copy the data used in test cases to the share of the SUT, e.g. the shared virtual disk files.
+            sutProtocolController.CopyFile(TestConfig.FullPathShareContainingSharedVHD, @"data\*.*");
         }
 
         protected override void TestCleanup()
@@ -60,15 +62,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep,
                 "Client creates an Open to a VHDX file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
             client.ConnectToVHD(
-                TestConfig.FileServerNameContainingSqosVHD, 
-                TestConfig.FileServerIPContainingSqosVHD,
+                TestConfig.FileServerNameContainingSharedVHD, 
+                TestConfig.FileServerIPContainingSharedVHD,
                 TestConfig.DomainName,
                 TestConfig.UserName,
                 TestConfig.UserPassword,
                 TestConfig.DefaultSecurityPackage,
                 TestConfig.UseServerGssToken,
-                TestConfig.ShareContainingSqosVHD,
-                TestConfig.NameOfSqosVHD);
+                TestConfig.ShareContainingSharedVHD,
+                TestConfig.NameOfSharedVHD);
         }
     }
 }

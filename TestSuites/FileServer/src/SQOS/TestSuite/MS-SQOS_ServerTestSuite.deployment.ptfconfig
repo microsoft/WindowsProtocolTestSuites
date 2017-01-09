@@ -9,11 +9,10 @@
 
   <Properties>
     <Group name="SQOS">
-      <Property name="SqosVHDFullPath" value="\\scaleoutfs\SMBClustered\sqos.vhdx">
-          <Description>
-          Full path of the virtual disk file used to test Storage QOS, should start with "\\".
-          The file server name could be an IP address.
-          If no such share, leave it blank.
+      <Property name="ShareContainingSharedVHD" value="\\ScaleoutFS\SMBClustered">
+        <Description>
+          The share path which contains the shared virtual disk files, should start with "\\"
+          If no such share, leave it blank
         </Description>
       </Property>
 

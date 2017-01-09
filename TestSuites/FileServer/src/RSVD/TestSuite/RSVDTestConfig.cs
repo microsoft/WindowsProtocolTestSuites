@@ -71,7 +71,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         {
             get
             {
-                return "rsvd.vhdx";
+                return "test.vhdx";
             }
         }
 
