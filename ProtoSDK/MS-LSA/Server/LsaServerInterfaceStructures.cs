@@ -445,7 +445,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">request stub</param>
         /// <returns>param list</returns>
         [CLSCompliant(false)]
-        internal protected RpceInt3264Collection LsaStubDecodeToParamList(byte[] requestStub)
+        internal protected RpceInt3264Collection LsaStubDecodeToParamList(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
             return RpceStubDecoder.ToParamList(
               RpceStubHelper.GetPlatform(),
@@ -454,7 +454,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                 LsaRpcStubFormatString.ProcFormatString,
                 LsaRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub);
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat);
         }
     }
 
@@ -555,7 +556,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatString,
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                     false,
-                    requestStub))
+                    requestStub,
+                    sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 ObjectHandle = TypeMarshal.ToNullableStruct<IntPtr>(outParamList[0]);
             }
@@ -773,7 +775,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatString,
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                     false,
-                    requestStub))
+                    requestStub,
+                    sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 SystemName = IntPtrUtility.PtrToArray<ushort>(outParamList[0], 1);
                 ObjectAttributes = TypeMarshal.ToNullableStruct<_LSAPR_OBJECT_ATTRIBUTES>(outParamList[1]);
@@ -960,7 +963,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatString,
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                     false,
-                    requestStub))
+                    requestStub,
+                    sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 Count = outParamList[1].ToUInt32();
@@ -1111,7 +1115,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatString,
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                     false,
-                    requestStub))
+                    requestStub,
+                    sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 SidEnumBuffer = TypeMarshal.ToNullableStruct<_LSAPR_SID_ENUM_BUFFER>(outParamList[1]);
@@ -1354,7 +1359,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatString,
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                     false,
-                    requestStub))
+                    requestStub,
+                    sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 SystemName = Marshal.PtrToStringUni(outParamList[0]);
                 ObjectAttributes = TypeMarshal.ToNullableStruct<_LSAPR_OBJECT_ATTRIBUTES>(outParamList[1]);
@@ -1468,7 +1474,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatString,
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                     false,
-                    requestStub))
+                    requestStub,
+                    sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 SystemName = Marshal.PtrToStringUni(outParamList[0]);
                 UserName = TypeMarshal.ToNullableStruct<_RPC_UNICODE_STRING>(Marshal.ReadIntPtr(outParamList[1]));
@@ -1726,7 +1733,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatString,
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                     false,
-                    requestStub))
+                    requestStub,
+                    sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 SidEnumBuffer = TypeMarshal.ToNullableStruct<_LSAPR_SID_ENUM_BUFFER>(outParamList[1]);
@@ -1897,7 +1905,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatString,
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                     false,
-                    requestStub))
+                    requestStub,
+                    sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 Count = outParamList[1].ToUInt32();
@@ -2503,7 +2512,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatString,
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                     false,
-                    requestStub))
+                    requestStub,
+                    sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 Count = outParamList[1].ToUInt32();
@@ -2942,7 +2952,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatString,
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                     false,
-                    requestStub))
+                    requestStub,
+                    sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 RpcHandle = sessionContext.RpceLayerSessionContext.Handle;
                 SidEnumBuffer = TypeMarshal.ToNullableStruct<_LSAPR_SID_ENUM_BUFFER>(outParamList[0]);
@@ -3114,7 +3125,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatString,
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[(int)Opnum],
                     false,
-                    requestStub))
+                    requestStub,
+                    sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 RpcHandle = sessionContext.RpceLayerSessionContext.Handle;
                 Count = outParamList[0].ToUInt32();
@@ -3250,7 +3262,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 EnumerationContext = outParamList[1].ToUInt32();
@@ -3346,7 +3358,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 ObjectHandle = outParamList[0].ToIntPtr();
                 SecurityInformation = (SECURITY_INFORMATION)outParamList[1].ToUInt32();
@@ -3440,7 +3452,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 ObjectHandle = outParamList[0].ToIntPtr();
                 SecurityInformation = (SECURITY_INFORMATION)outParamList[1].ToUInt32();
@@ -3519,7 +3531,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 InformationClass = (_POLICY_INFORMATION_CLASS)outParamList[1].ToUInt32();
@@ -3623,7 +3635,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 InformationClass = (_POLICY_INFORMATION_CLASS)outParamList[1].ToUInt32();
@@ -3709,7 +3721,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 AccountSid = TypeMarshal.ToNullableStruct<_RPC_SID>(outParamList[1]);
@@ -3804,7 +3816,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 EnumerationContext = outParamList[1].ToUInt32();
@@ -3906,7 +3918,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 TrustedDomainInformation = TypeMarshal.ToNullableStruct<_LSAPR_TRUST_INFORMATION>(outParamList[1]);
@@ -4001,7 +4013,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 EnumerationContext = outParamList[1].ToUInt32();
@@ -4103,7 +4115,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 SecretName = TypeMarshal.ToNullableStruct<_RPC_UNICODE_STRING>(outParamList[1]);
@@ -4198,7 +4210,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 AccountSid = TypeMarshal.ToNullableStruct<_RPC_SID>(outParamList[1]);
@@ -4281,7 +4293,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 AccountHandle = outParamList[0].ToIntPtr();
             }
@@ -4367,7 +4379,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 AccountHandle = outParamList[0].ToIntPtr();
                 Privileges = TypeMarshal.ToNullableStruct<_LSAPR_PRIVILEGE_SET>(outParamList[1]);
@@ -4449,7 +4461,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 AccountHandle = outParamList[0].ToIntPtr();
                 AllPrivileges = (byte)outParamList[1].ToUInt32();
@@ -4522,7 +4534,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 AccountHandle = outParamList[0].ToIntPtr();
             }
@@ -4607,7 +4619,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 AccountHandle = outParamList[0].ToIntPtr();
                 SystemAccess = TypeMarshal.ToNullableStruct<uint>(outParamList[1]);
@@ -4690,7 +4702,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 TrustedDomainSid = TypeMarshal.ToNullableStruct<_RPC_SID>(outParamList[1]);
@@ -4779,7 +4791,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 TrustedDomainHandle = outParamList[0].ToIntPtr();
                 InformationClass = (_TRUSTED_INFORMATION_CLASS)outParamList[1].ToUInt32();
@@ -4883,7 +4895,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 TrustedDomainHandle = outParamList[0].ToIntPtr();
                 InformationClass = (_TRUSTED_INFORMATION_CLASS)outParamList[1].ToUInt32();
@@ -4969,7 +4981,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 SecretName = TypeMarshal.ToNullableStruct<_RPC_UNICODE_STRING>(outParamList[1]);
@@ -5064,7 +5076,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 SecretHandle = outParamList[0].ToIntPtr();
                 EncryptedCurrentValue = TypeMarshal.ToNullableStruct<_LSAPR_CR_CIPHER_VALUE>(outParamList[1]);
@@ -5161,7 +5173,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 SecretHandle = outParamList[0].ToIntPtr();
                 EncryptedCurrentValue = TypeMarshal.ToNullableStruct<_LSAPR_CR_CIPHER_VALUE>(Marshal.ReadIntPtr(outParamList[1]));
@@ -5276,7 +5288,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 Name = TypeMarshal.ToNullableStruct<_RPC_UNICODE_STRING>(outParamList[1]);
@@ -5363,7 +5375,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 Value = TypeMarshal.ToNullableStruct<_LUID>(outParamList[1]);
@@ -5461,7 +5473,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 Name = TypeMarshal.ToNullableStruct<_RPC_UNICODE_STRING>(outParamList[1]);
@@ -5554,7 +5566,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 ObjectHandle = TypeMarshal.ToNullableStruct<IntPtr>(outParamList[0]);
             }
@@ -5638,7 +5650,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 UserRight = TypeMarshal.ToNullableStruct<_RPC_UNICODE_STRING>(outParamList[1]);
@@ -5725,7 +5737,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 AccountSid = TypeMarshal.ToNullableStruct<_RPC_SID>(outParamList[1]);
@@ -5818,7 +5830,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 AccountSid = TypeMarshal.ToNullableStruct<_RPC_SID>(outParamList[1]);
@@ -5908,7 +5920,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 AccountSid = TypeMarshal.ToNullableStruct<_RPC_SID>(outParamList[1]);
@@ -5995,7 +6007,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 TrustedDomainSid = TypeMarshal.ToNullableStruct<_RPC_SID>(outParamList[1]);
@@ -6107,7 +6119,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 TrustedDomainSid = TypeMarshal.ToNullableStruct<_RPC_SID>(outParamList[1]);
@@ -6189,7 +6201,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 TrustedDomainSid = TypeMarshal.ToNullableStruct<_RPC_SID>(outParamList[1]);
@@ -6272,7 +6284,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 KeyName = TypeMarshal.ToNullableStruct<_RPC_UNICODE_STRING>(outParamList[1]);
@@ -6357,7 +6369,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 KeyName = TypeMarshal.ToNullableStruct<_RPC_UNICODE_STRING>(outParamList[1]);
@@ -6446,7 +6458,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 InformationClass = (_POLICY_INFORMATION_CLASS)outParamList[1].ToUInt32();
@@ -6550,7 +6562,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 InformationClass = (_POLICY_INFORMATION_CLASS)outParamList[1].ToUInt32();
@@ -6636,7 +6648,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 TrustedDomainName = TypeMarshal.ToNullableStruct<_RPC_UNICODE_STRING>(outParamList[1]);
@@ -6748,7 +6760,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 TrustedDomainName = TypeMarshal.ToNullableStruct<_RPC_UNICODE_STRING>(outParamList[1]);
@@ -6836,7 +6848,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 EnumerationContext = outParamList[1].ToUInt32();
@@ -6944,7 +6956,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 TrustedDomainInformation =
@@ -7038,7 +7050,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 InformationClass = (_POLICY_DOMAIN_INFORMATION_CLASS)outParamList[1].ToUInt32();
@@ -7142,7 +7154,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 InformationClass = (_POLICY_DOMAIN_INFORMATION_CLASS)outParamList[1].ToUInt32();
@@ -7228,7 +7240,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 TrustedDomainName = TypeMarshal.ToNullableStruct<_RPC_UNICODE_STRING>(outParamList[1]);
@@ -7329,7 +7341,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 TrustedDomainInformation =
@@ -7428,7 +7440,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 TrustedDomainName = TypeMarshal.ToNullableStruct<_RPC_UNICODE_STRING>(outParamList[1]);
@@ -7535,7 +7547,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// <param name="requestStub">The request stub got from RPCE layer</param>
         internal override void Decode(LsaServerSessionContext sessionContext, byte[] requestStub)
         {
-            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(requestStub))
+            using (RpceInt3264Collection outParamList = LsaStubDecodeToParamList(sessionContext, requestStub))
             {
                 PolicyHandle = outParamList[0].ToIntPtr();
                 TrustedDomainName = TypeMarshal.ToNullableStruct<_RPC_UNICODE_STRING>(outParamList[1]);

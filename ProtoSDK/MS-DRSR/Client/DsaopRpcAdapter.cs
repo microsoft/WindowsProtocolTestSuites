@@ -170,6 +170,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
                     DrsrRpcStubFormatString.Dsaop_ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 pdwOutVersion = TypeMarshal.ToNullableStruct<uint>(outParamList[2]);
@@ -248,6 +249,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
                     DrsrRpcStubFormatString.Dsaop_ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 pdwOutVersion = TypeMarshal.ToNullableStruct<uint>(outParamList[2]);

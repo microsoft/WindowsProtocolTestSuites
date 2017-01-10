@@ -156,6 +156,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 ObjectHandle = TypeMarshal.ToNullableStruct<IntPtr>(outParamList[0]);
@@ -258,6 +259,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 PolicyHandle = TypeMarshal.ToNullableStruct<IntPtr>(outParamList[3]);
@@ -375,6 +377,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReferencedDomains = Marshal.ReadIntPtr(outParamList[3]);
@@ -477,6 +480,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReferencedDomains = Marshal.ReadIntPtr(outParamList[2]);
@@ -577,6 +581,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 PolicyHandle = TypeMarshal.ToNullableStruct<IntPtr>(outParamList[3]);
@@ -656,6 +661,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 UserName = TypeMarshal.ToNullableStruct<_RPC_UNICODE_STRING>(Marshal.ReadIntPtr(outParamList[1]));
@@ -788,6 +794,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReferencedDomains = Marshal.ReadIntPtr(outParamList[2]);
@@ -914,6 +921,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReferencedDomains = Marshal.ReadIntPtr(outParamList[3]);
@@ -1119,6 +1127,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReferencedDomains = Marshal.ReadIntPtr(outParamList[3]);
@@ -1280,6 +1289,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReferencedDomains = Marshal.ReadIntPtr(outParamList[1]);
@@ -1424,6 +1434,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr pReferencedDomains = Marshal.ReadIntPtr(outParamList[2]);
@@ -3677,6 +3688,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
                     LsaRpcStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList);
             return outParamList;
         }
