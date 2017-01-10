@@ -462,6 +462,7 @@ namespace Microsoft.Protocol.TestSuites.Azod.TestSuite
         [TestCategory("BVT")]    
         [Priority(0)]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void CountryCodeAnyOf156Or840Policy()
         {
             string testName = string.Empty;

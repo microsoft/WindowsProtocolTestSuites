@@ -16,6 +16,9 @@
     <TestSuite name="MS-RAA">
       <Description></Description>
     </TestSuite>
+	<TestSuite name="MS-AZOD" folder="C:\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint\$(TestSuiteVersion)">
+      <Description></Description>
+    </TestSuite>
   </Group>
   <Group name="Active Directory">
     <TestSuite name="ADFamily" folder="C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\$(TestSuiteVersion)">

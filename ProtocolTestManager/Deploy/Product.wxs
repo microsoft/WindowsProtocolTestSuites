@@ -28,6 +28,7 @@
       <ComponentGroupRef Id="KERBEROS_PLUGIN"/>
 	  <ComponentGroupRef Id="ADFAMILY_PLUGIN"/>
       <ComponentGroupRef Id="RDP_PLUGIN"/>
+	  <ComponentGroupRef Id="AZOD_PLUGIN" />
       <ComponentRef Id="ApplicationShortcut"/>
       <ComponentRef Id="DesktopShortcuts"/>
     </Feature>
@@ -99,15 +100,17 @@
           <Directory Id="BINFOLDER" Name="bin" />
           <Directory Id="ETCFOLDER" Name="etc" >
             <Directory Id="FILESERVERCONFIG" Name="fileserver" />
-	          <Directory Id="RDPCONFIG" Name="rdp" />
+            <Directory Id="RDPCONFIG" Name="rdp" />
             <Directory Id="KERBEROSCONFIGFOLDER" Name="kerberos" />
+			<Directory Id="AZODCONFIGFOLDER" Name="MS-AZOD" />
 			<Directory Id="ADFAMILYCONFIGFOLDER" Name="adfamily" />
           </Directory>
           <Directory Id="LIBFOLDER" Name="lib" />
           <Directory Id="DOCFOLDER" Name="doc" >
             <Directory Id="FILESERVERDOCFOLDER" Name="fileserver" />
-	          <Directory Id="RDPDOCFOLDER" Name="rdp" />
+            <Directory Id="RDPDOCFOLDER" Name="rdp" />
             <Directory Id="KERBEROSDOCFOLDER" Name="kerberos" />
+			<Directory Id="AZODDOCFOLDER" Name="MS-AZOD" />
 			<Directory Id="ADFAMILYDOCFOLDER" Name="adfamily" />
           </Directory>
 		  <Directory Id="DATAFOLDER" Name="data" >
