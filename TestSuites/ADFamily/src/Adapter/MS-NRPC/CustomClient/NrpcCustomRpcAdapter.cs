@@ -191,6 +191,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrValidationInformation = outParamList[3];
@@ -271,6 +272,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrValidationInformation = outParamList[3];
@@ -386,6 +388,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrReturnAuthenticatorOut = outParamList[3];
@@ -507,6 +510,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrReturnAuthenticatorOut = outParamList[3];
@@ -607,6 +611,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrReturnAuthenticatorOut = outParamList[3];
@@ -691,6 +696,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrServerChallenge = outParamList[3];
@@ -790,6 +796,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrServerCredential = outParamList[5];
@@ -900,6 +907,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrReturnAuthenticator = outParamList[5];
@@ -1027,6 +1035,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrReturnAuthenticatorOut = outParamList[3];
@@ -1181,6 +1190,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrReturnAuthenticatorOut = outParamList[3];
@@ -1309,6 +1319,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrReturnAuthenticatorOut = outParamList[3];
@@ -1440,6 +1451,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrReturnAuthenticatorOut = outParamList[3];
@@ -1536,6 +1548,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrBuffer = outParamList[2];
@@ -1618,6 +1631,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrBuffer = outParamList[3];
@@ -1707,6 +1721,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrBuffer = outParamList[2];
@@ -1795,6 +1810,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrBuffer = outParamList[4];
@@ -1905,6 +1921,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrServerCredential = outParamList[5];
@@ -2072,6 +2089,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrReturnAuthenticatorOut = outParamList[3];
@@ -2187,6 +2205,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrReturnAuthenticatorOut = outParamList[3];
@@ -2307,6 +2326,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrBuffer = outParamList[4];
@@ -2428,6 +2448,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrBuffer = outParamList[4];
@@ -2501,6 +2522,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrDomainNameBuffer = outParamList[1];
@@ -2596,6 +2618,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrDomainControllerInfo = outParamList[5];
@@ -2701,6 +2724,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrReturnAuthenticatorOut = outParamList[3];
@@ -2795,6 +2819,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 retVal = outParamList[3].ToInt32();
@@ -2875,6 +2900,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 rid = TypeMarshal.ToNullableStruct<uint>(outParamList[2]);
@@ -2982,6 +3008,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrNewMessageDigest = outParamList[4];
@@ -3092,6 +3119,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrNewMessageDigest = outParamList[4];
@@ -3224,6 +3252,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrServerCredential = outParamList[5];
@@ -3326,6 +3355,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                 true,
                 responseStub,
+                rpceClientTransport.Context.PackedDataRepresentationFormat,
                 paramList))
             {
                 // domainControllerInfo is double pointer (**)
@@ -3403,6 +3433,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrSiteName = outParamList[1];
@@ -3513,6 +3544,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrReturnAuthenticatorOut = outParamList[3];
@@ -3640,6 +3672,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrReturnAuthenticator = outParamList[5];
@@ -3752,6 +3785,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrReturnAuthenticator = outParamList[5];
@@ -3857,6 +3891,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrReturnAuthenticator = outParamList[3];
@@ -3955,6 +3990,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrSiteNames = outParamList[3];
@@ -4083,6 +4119,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrDomainControllerInfo = outParamList[7];
@@ -4171,6 +4208,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrDomainName = outParamList[1];
@@ -4253,6 +4291,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrDomains = outParamList[1];
@@ -4349,6 +4388,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrSiteNames;
@@ -4422,6 +4462,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrSiteNames = outParamList[1];
@@ -4568,6 +4609,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrValidationInformation = outParamList[5];
@@ -4658,6 +4700,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrDomains = outParamList[2];
@@ -4758,6 +4801,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 retVal = outParamList[5].ToInt32();
@@ -4892,6 +4936,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrReturnAuthenticator = outParamList[5];
@@ -4987,6 +5032,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrForestTrustInfo = outParamList[3];
@@ -5086,6 +5132,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrReturnAuthenticator = outParamList[3];
@@ -5229,6 +5276,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrReturnAuthenticatorOut = outParamList[3];
@@ -5382,6 +5430,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrReturnAuthenticator = outParamList[5];
@@ -5451,6 +5500,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 retVal = outParamList[0].ToInt32();
@@ -5547,6 +5597,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrReturnAuthenticator = outParamList[3];
@@ -5674,6 +5725,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     NrpcRpcStubFormatString.ProcFormatStringOffsetTable[Opnum],
                     true,
                     responseStub,
+                    rpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList))
             {
                 IntPtr ptrReturnAuthenticatorOut = outParamList[4];

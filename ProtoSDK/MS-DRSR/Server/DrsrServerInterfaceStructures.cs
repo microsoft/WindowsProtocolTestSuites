@@ -317,7 +317,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
                 DrsrRpcStubFormatString.ProcFormatString,
                 DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 rpc_handle = sessionContext.RpceLayerSessionContext.Handle;
                 clientDsaUuid = TypeMarshal.ToNullableStruct<Guid>(outParamList[0]);
@@ -428,7 +429,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
                 DrsrRpcStubFormatString.ProcFormatString,
                 DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = TypeMarshal.ToNullableStruct<IntPtr>(outParamList[0]);
             }
@@ -538,7 +540,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
                 DrsrRpcStubFormatString.ProcFormatString,
                 DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
                 false,
-                requestStub))
+                requestStub,
+                sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 inVersion = outParamList[1].ToUInt32();
@@ -641,7 +644,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 inVersion = outParamList[1].ToUInt32();
@@ -744,7 +748,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 inVersion = outParamList[1].ToUInt32();
@@ -847,7 +852,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 inVersion = outParamList[1].ToUInt32();
@@ -951,7 +957,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 inVersion = outParamList[1].ToUInt32();
@@ -1055,7 +1062,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 dwInVersion = outParamList[1].ToUInt32();
@@ -1178,7 +1186,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 dwInVersion = (dwInVersion_Values)(outParamList[1].ToUInt32());
@@ -1301,7 +1310,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 dwInVersion = (IDL_DRSRemoveDsServer_dwInVersion_Values)(outParamList[1].ToUInt32());
@@ -1424,7 +1434,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 dwInVersion = (IDL_DRSRemoveDsDomain_dwInVersion_Values)(outParamList[1].ToUInt32());
@@ -1547,7 +1558,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 dwInVersion = outParamList[1].ToUInt32();
@@ -1670,7 +1682,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 dwInVersion = outParamList[1].ToUInt32();
@@ -1774,7 +1787,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 dwInVersion = outParamList[1].ToUInt32();
@@ -1897,7 +1911,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 dwInVersion = (IDL_DRSAddSidHistory_dwInVersion_Values)(outParamList[1].ToUInt32());
@@ -2020,7 +2035,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 inVersion = outParamList[1].ToUInt32();
@@ -2124,7 +2140,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 dwInVersion = outParamList[1].ToUInt32();
@@ -2247,7 +2264,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 dwInVersion = outParamList[1].ToUInt32();
@@ -2370,7 +2388,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 dwInVersion = outParamList[1].ToUInt32();
@@ -2493,7 +2512,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 dwInVersion = outParamList[1].ToUInt32();
@@ -2616,7 +2636,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 dwInVersion = outParamList[1].ToUInt32();
@@ -2739,7 +2760,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 dwInVersion = outParamList[1].ToUInt32();
@@ -2862,7 +2884,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 dwInVersion = outParamList[1].ToUInt32();
@@ -2985,7 +3008,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 dwInVersion = outParamList[1].ToUInt32();
@@ -3108,7 +3132,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 dwInVersion = outParamList[1].ToUInt32();
@@ -3231,7 +3256,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 dwInVersion = outParamList[1].ToUInt32();
@@ -3354,7 +3380,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 dwInVersion = outParamList[1].ToUInt32();
@@ -3477,7 +3504,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Drsuapi_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 drsHandle = outParamList[0].ToIntPtr();
                 dwInVersion = outParamList[1].ToUInt32();
@@ -3624,7 +3652,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Dsaop_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 rpcHandle = sessionContext.RpceLayerSessionContext.Handle;
                 dwInVersion = outParamList[0].ToUInt32();
@@ -3746,7 +3775,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
              DrsrRpcStubFormatString.ProcFormatString,
              DrsrRpcStubFormatString.Dsaop_ProcFormatStringOffsetTable[(int)Opnum],
              false,
-             requestStub))
+             requestStub,
+             sessionContext.RpceLayerSessionContext.PackedDataRepresentationFormat))
             {
                 rpcHandle = sessionContext.RpceLayerSessionContext.Handle;
                 dwInVersion = outParamList[0].ToUInt32();
