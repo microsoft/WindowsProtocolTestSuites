@@ -1942,11 +1942,13 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                 ClientSecurityContextAttribute.Connection
                 | ClientSecurityContextAttribute.Integrity
                 | ClientSecurityContextAttribute.Confidentiality
-                | ClientSecurityContextAttribute.UseSessionKey)
+                | ClientSecurityContextAttribute.UseSessionKey
+                | ClientSecurityContextAttribute.DceStyle)
                 :
                 (ClientSecurityContextAttribute.Connection
                 | ClientSecurityContextAttribute.Integrity
-                | ClientSecurityContextAttribute.Confidentiality);
+                | ClientSecurityContextAttribute.Confidentiality
+                | ClientSecurityContextAttribute.DceStyle);
 
             SspiClientSecurityContext securityContext = new SspiClientSecurityContext(
                 EnvironmentConfig.UseKerberos == true ? SecurityPackageType.Kerberos : SecurityPackageType.Negotiate,
