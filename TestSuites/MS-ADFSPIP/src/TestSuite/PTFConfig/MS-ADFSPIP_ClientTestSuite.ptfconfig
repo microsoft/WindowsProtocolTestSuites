@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+  <Properties>
+    <!-- Test suite properties which value not changed when running in different test environments -->
+    <!--<Property name="BeaconLogTargetServer" value="Xiaotian-Think" />-->
+    <Property name="TestName"     value="MS-ADFSPIP Client Endpoint Test" />
+    <Property name="ProtocolName" value="MS-ADFSPIP" />
+    <Property name="Version"      value="3.0" />
+  </Properties>
+
+  <Adapters>
+    <Adapter xsi:type="powershell" name="ISUTControlAdapter"      scriptdir  =".\" />
+    <Adapter xsi:type="managed"    name="IMSADFSPIPClientAdapter" adaptertype="Microsoft.Protocols.TestSuites.Identity.ADFSPIP.MSADFSPIPClientAdapter" />
+  </Adapters>
+
+  <TestLog defaultprofile="Verbose">
+    <Sinks>
+      <Console id="Console" />
+      <Console id="CommandLineConsole" />
+      <Console id="RedConsole" />
+      <Console id="GreenConsole" />
+      <Console id="YellowConsole" />
+      <File    id="XMLLog" directory="..\..\Log" file="MS-ADFSPIP-Log.xml" format="xml"/>
+      <File    id="TXTLog" directory="..\..\Log" file="MS-ADFSPIP-Log.txt" format="text"/>
+      <Sink    id="BeaconLog" type="Microsoft.Protocols.TestTools.Logging.BeaconLogSink" assembly="Microsoft.Protocols.TestTools"/>
+    </Sinks>
+    <Profiles>
+      <Profile name="Verbose" extends="Error">
+        <Rule kind="CheckSucceeded" sink="XMLLog"             delete="false" />
+        <Rule kind="Checkpoint"     sink="XMLLog"             delete="true"/>
+        <Rule kind="Comment"        sink="XMLLog"             delete="false"/>
+        <Rule kind="Debug"          sink="XMLLog"             delete="false" />
+        <Rule kind="CheckSucceeded" sink="BeaconLog"          delete="false" />
+        <Rule kind="Checkpoint"     sink="BeaconLog"          delete="true"/>
+        <Rule kind="Comment"        sink="BeaconLog"          delete="false"/>
+        <Rule kind="Debug"          sink="BeaconLog"          delete="false" />
+        <Rule kind="CheckSucceeded" sink="GreenConsole"       delete="false"/>
+        <Rule kind="Checkpoint"     sink="CommandLineConsole" delete="true" />
+        <Rule kind="TestPassed"     sink="GreenConsole"       delete="false" />
+        <Rule kind="TestFailed"     sink="RedConsole"         delete="false" />
+        <Rule kind="Comment"        sink="YellowConsole"      delete="false" />
+        <Rule kind="Comment"        sink="TXTLog"             delete="false" />
+      </Profile>
+    </Profiles>
+  </TestLog>
+</TestSite>

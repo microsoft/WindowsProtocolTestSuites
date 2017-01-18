@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+
+  <Properties>    
+    <Group name="Domain">
+      <Property name="DomainName"        value="contoso.com"/>
+      <Property name="Username"          value="contoso\Administrator" />
+      <Property name="Password"          value="Password01!" />
+    </Group>
+
+    <Group name="SUT">
+      <Property name="SutIPAddress"      value="192.168.1.50"/>
+      <Property name="SutDns"            value="proxy.contoso.com"/>
+      <Property name="MaxDelaySeconds"   value="600"/>
+      <Property name="IsWindows"         value="true" />
+      <Property name="IsWin2016"         value="true" />
+      <Property name="Username"          value="proxy\Administrator" />
+      <Property name="Password"          value="Password01!" />
+    </Group>
+
+    <Group name="ADFS">
+      <Property name="AdfsName"          value="adfs"/>
+      <Property name="AdfsDns"           value="adfs.contoso.com"/>
+      <Property name="AdfsUrl"           value="https://adfs.contoso.com/"/>
+      <Property name="AdfsCert"          value="Adfs.PFX"/>
+      <Property name="SignCert"          value="Sign.PFX" />
+      <Property name="EncryptCert"       value="Encrypt.PFX" />
+      <Property name="StoreEntryKey_2012R2"     value="442c0fbd-7f9d-453a-b38c"/>
+      <Property name="StoreEntryKey_2016"     value="3c5b6c89-0344-4289-a0af-974a3a62bb86"/>
+      <Property name="MetadataTemplate_2012R2"  value="MetadataTemplate_2012.xml" />
+      <Property name="MetadataTemplate_2016"  value="MetadataTemplate_2016.xml" />
+    </Group>
+
+    <Group name="WebApp">
+      <Property name="ProxyHostName"     value="webapp.contoso.com"/>
+      <Property name="App1Name"          value="fed1"/>
+      <Property name="App2Name"          value="fed2"/>      
+      <Property name="App1Url"           value="https://webapp.contoso.com/fed1/"/>
+      <Property name="App2Url"           value="https://webapp.contoso.com/fed2/"/>
+      <Property name="AppUserUpn"        value="adfsuser@contoso.com"/>
+      <Property name="AppUserName"       value="contoso\adfsuser"/>
+      <Property name="AppUserPassword"   value="Password01!"/>
+      <Property name="WebAppCert"        value="WebApp.PFX" />
+      <Property name="ClientCert"        value="CARoot.PFX" />
+    </Group>
+
+    <Group name="Common">
+      <Property name="PfxPassword"       value="123" />
+      <Property name="DataStorePath"     value="C:\DataStore.xml" />
+      <Property name="DriverShareFolder" value="\\192.168.1.100\temp\"/>
+      <Property name="SutShareFolder"    value="\\192.168.1.50\temp\"/>
+      <Property name="ProxyCert"         value="C:\Proxy.PFX"/>
+      <Property name="RealADFSIP"        value="192.168.1.2"/>
+    </Group>
+  </Properties>
+
+  <Adapters></Adapters>
+  <TestLog defaultprofile="Verbose"><Sinks></Sinks><Profiles></Profiles></TestLog>
+  
+</TestSite>

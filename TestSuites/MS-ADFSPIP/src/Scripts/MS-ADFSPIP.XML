@@ -1,0 +1,89 @@
+<lab>
+	<core>
+		<parentdisk>9200.amd64fre.server_en-us_vl.SERVERSTANDARD.win8_rtm.vhd</parentdisk>
+		<parentanswerfile>9200.amd64fre.server_en-us_vl.SERVERSTANDARD.win8_rtm.xml</parentanswerfile>
+		<username>Administrator</username>
+		<password>Password01!</password>
+		<legacyclient>true</legacyclient>
+		<basecpu>1</basecpu>
+		<Description>DC x 1 and Member x 1 (NIC x 1)</Description>
+	</core>
+  
+	<network>
+		<vnet>
+			<hostisgateway>true</hostisgateway>
+			<name>MS-ADFSPIP-Internal</name>
+			<ip>192.168.1.254</ip>
+			<subnet>255.255.255.0</subnet>
+		</vnet>
+	</network>
+
+	<servers>
+    <vm>
+        <installorder>1</installorder>
+        <hypervname>MS-ADFSPIP-DCCA</hypervname>  
+        <name>DCCA</name>
+        <username>Administrator</username>   
+        <password>Password01!</password>	  
+        <domain>contoso.com</domain>
+        <isdc>true</isdc>	  
+        <!-- Network configuration                    -->
+        <!-- Multiple DNS or IP settings cannot be    -->
+        <!-- handled by VSTORMLITE automatically.     -->
+        <!-- scripts to config multiple DNS or IP     -->
+        <!-- setting are required in the post script. -->  
+        <vnet>MS-ADFSPIP-Internal</vnet>
+        <ip>192.168.1.1</ip>
+        <subnet>255.255.255.0</subnet>
+		<gateway></gateway>		
+        <dns>127.0.0.1</dns>		
+        <memory>1024</memory> 	  
+        <!-- PostScript are scripts to be executed      -->
+        <!-- by VSTORMLITE right after the VM is built, -->
+        <!-- before running any configuration scripts   -->
+        <!-- from the test suite.                       -->    
+		<skipwaitingforpostscript>false</skipwaitingforpostscript>
+        <postscript>Disable_Firewall.ps1;SetPasswordNeverExpires.ps1;MS-ADFSPIP-DCCA-Postscript.ps1</postscript>
+    </vm>
+
+    <vm>
+        <installorder>2</installorder>
+        <hypervname>MS-ADFSPIP-PROXY</hypervname>
+        <name>PROXY</name>
+        <username>Administrator</username>
+        <password>Password01!</password>
+        <vnet>MS-ADFSPIP-Internal</vnet>
+        <ip>192.168.1.50</ip>
+        <subnet>255.255.255.0</subnet>
+		<gateway></gateway>
+        <dns>192.168.1.1</dns>
+        <memory>2048</memory>
+		<skipwaitingforpostscript>false</skipwaitingforpostscript>
+        <postscript>Disable_Firewall.ps1;SetPasswordNeverExpires.ps1;MS-ADFSPIP-PROXY-Postscript.ps1</postscript>
+    </vm>
+
+    <vm>
+        <installorder>3</installorder>
+        <hypervname>MS-ADFSPIP-DRIVER</hypervname>
+        <name>DRIVER</name>
+        <username>Administrator</username>
+        <password>Password01!</password>
+	    <domain>contoso.com</domain>
+        <vnet>MS-ADFSPIP-Internal</vnet>
+        <ip>192.168.1.100</ip>
+        <subnet>255.255.255.0</subnet>
+		<gateway></gateway>
+        <dns>192.168.1.1</dns>
+        <memory>2048</memory>
+		<skipwaitingforpostscript>false</skipwaitingforpostscript>
+        <postiso>VS2012.iso</postiso>
+	    <postscript>Disable_Firewall.ps1;SetPasswordNeverExpires.ps1;InstallMSIAndTools.ps1;MS-ADFSPIP-DRIVER-Postscript.ps1</postscript>
+        <tools>
+			<tool name="PTF" MSIName="ProtocolTestFramework.msi" version="1.0.2485.0" CPUArchitecture="x86" />
+			<TestsuiteMSI MSIName="MS-ADFSPIP-TestSuite-ClientEP.msi" targetEndpoint="" />
+			<tool name="NetworkMonitor" MSIName="Netmonpt3.msi" version="3.4.2350.0" CPUArchitecture="x64" />
+			<tool name="NetworkMontiorParsers" MSIName="NetworkMonitor_Parsers.msi" version="3.4.2964.0001" CPUArchitecture="x64" />
+		</tools>
+    </vm>
+  </servers>	
+</lab>

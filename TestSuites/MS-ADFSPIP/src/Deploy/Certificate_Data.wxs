@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="Certificate_Data_DIR">
+            <Directory Id="dir4B18F4FB60C012FDEE78D948F093B75A" Name="Certificates">
+                <Component Id="cmp927625758BB7307694F552B0DA8092FE" Guid="{190C6591-7C6F-47EB-B66D-01CCC6A92897}">
+                    <File Id="fil9835953CC1BE2DE212F9A4DC7EE8F397" KeyPath="yes" Source="!(wix.Certificate_Data_DIR)\Certificates\Adfs.PFX" />
+                </Component>
+                <Component Id="cmp91C17C074A696FC6F24DF97816931B03" Guid="{8E60C897-769A-4F0F-AF20-9C79FFD5576F}">
+                    <File Id="filA77C5901FB018C83C646DCC13102A76F" KeyPath="yes" Source="!(wix.Certificate_Data_DIR)\Certificates\CARoot.CER" />
+                </Component>
+                <Component Id="cmpA2F6CDED2D32A72CEDB3ECA08FF785F6" Guid="{E59D8FEB-41CF-485F-8766-442BE2028E34}">
+                    <File Id="fil493F480145319CB473F0046F8540F45E" KeyPath="yes" Source="!(wix.Certificate_Data_DIR)\Certificates\Client.CER" />
+                </Component>
+                <Component Id="cmpA1392E4E0BEE5467EFA46E2770C66CE4" Guid="{FE2BDB62-DB5A-4C92-AB5C-D196AA525FC4}">
+                    <File Id="fil2473B7D1AA9CE778081AAE0A264729DC" KeyPath="yes" Source="!(wix.Certificate_Data_DIR)\Certificates\WebApp.PFX" />
+                </Component>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="Certificate_Data">
+            <ComponentRef Id="cmp927625758BB7307694F552B0DA8092FE" />
+            <ComponentRef Id="cmp91C17C074A696FC6F24DF97816931B03" />
+            <ComponentRef Id="cmpA2F6CDED2D32A72CEDB3ECA08FF785F6" />
+            <ComponentRef Id="cmpA1392E4E0BEE5467EFA46E2770C66CE4" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

@@ -4,19 +4,19 @@
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Fragment>
-
-    <!-- Properties for "Add or Reomve Program Entries" -->
+	
+	<!-- Properties for "Add or Reomve Program Entries" -->
 	<SetProperty Id="PTF_BUILDVERSION" Value="$(env.PTF_VERSION)" Before="AppSearch" />
     <SetProperty Id="ARPCOMMENTS" Value="[ProductName] v[ProductVersion]" Before="AppSearch" />
     <Property Id="ARPCONTACT">Microsoft Winterop Engineering Team</Property>
     <!--Disables the Modify button in MaintenanceTypeDlg-->
     <Property Id="ARPNOMODIFY" Value="1" />
 	
-	<!-- Search for saved TARGET_ENDPOINT, and assign to the actual property if uninstall/repair. -->
+    <!-- Search for saved TARGET_ENDPOINT, and assign to the actual property if uninstall/repair. -->
     <Property Id="SAVED_TARGET_ENDPOINT">
       <RegistrySearch Id="LoadTargetEndpoint"
                       Root="HKLM"
-                      Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_VERSION)"
+                      Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"
                       Name="TargetEndpoint"
                       Type="raw" />
     </Property>
@@ -26,7 +26,7 @@
 	<Component Id="SaveTargetEndpoint" Guid="*" Directory="TESTSUITE_ROOT_DIR">
       <RegistryValue Id="SaveTargetEndpoint"
                      Root="HKLM"
-                     Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_VERSION)"
+                     Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"
                      Name="TargetEndpoint"
                      Type="string"
                      Value="[TARGET_ENDPOINT]" />
@@ -61,8 +61,8 @@
       <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="EndpointDlg">1</Publish>
       <Publish Dialog="MaintenanceTypeDlg" Control="ChangeButton" Event="NewDialog" Value="EndpointDlg">1</Publish>
     </UI>
-
-    <!-- Dependency List -->
+	
+	<!-- Dependency List -->
 	<SetProperty Id="VS2012_VSTA2012_Higher" After="AppSearch" Value=" • Microsoft Visual Studio or Visual Studio Test Agent, version 2012 or higher.&#xA;">
         <![CDATA[$(var.VS12H)]]>
     </SetProperty>
@@ -123,8 +123,7 @@
 	<SetProperty Id="VSInstalled" After="AppSearch" Value="1">
         <![CDATA[VSTA2012 OR VSTA2013 OR VSTA2015]]>
     </SetProperty>
-
-
+	
     <!-- Directory structure -->
     <SetDirectory Id="WindowsVolumeDir" Value="[WindowsVolume]" />
 
@@ -133,14 +132,17 @@
       <Directory Id="WindowsVolumeDir">
         <Directory Id="ProtocolTestDir" Name="MicrosoftProtocolTests">
           <Directory Id="TestSuiteNameDir" Name="!(wix.TESTSUITE_NAME)">
-              <!-- Protocol Code Directory -->
-              <Directory Id="TESTSUITE_ROOT_DIR" Name="!(wix.TESTSUITE_VERSION)">
-                <Directory Id="TESTSUITE_BATCH_DIR" Name="Batch" />
-                <Directory Id="TESTSUITE_BIN_DIR" Name="Bin" >
-                  <Directory Id="PROTOCOLSDK_BIN_DIR" Name="." />
-                </Directory>
-                <Directory Id="TESTSUITE_SCRIPTS_DIR" Name="Scripts" />
-            </Directory>
+			<Directory Id="SERVERENDPOINT_TESTSUITE_DIR" Name="Client-Endpoint">
+				<!-- Protocol Code Directory -->
+				<Directory Id="TESTSUITE_ROOT_DIR" Name="!(wix.TESTSUITE_VERSION)">
+					<Directory Id="TESTSUITE_BATCH_DIR" Name="Batch" />
+					<Directory Id="TESTSUITE_BIN_DIR" Name="Bin" >
+					  <Directory Id="PROTOCOLSDK_BIN_DIR" Name="." />
+					</Directory>
+					<Directory Id="SCRIPT_FILES_DIR" Name="Scripts" />
+					<Directory Id="Certificate_Data_DIR" Name="Data" />
+				</Directory>
+			</Directory>
           </Directory>
         </Directory>
       </Directory>
@@ -194,14 +196,18 @@
                   WorkingDirectory="TESTSUITE_ROOT_DIR"/>
 				  
 		<Shortcut Id="RunTestCasesShortcut"
-                  Name="Run All Test Cases"
+                  Name="Run Test Cases"
                   Description="Run all test cases in the test suite"
-                  Target="[TESTSUITE_BATCH_DIR]!(wix.RunAllTestCases)"
+                  Target="[TESTSUITE_BATCH_DIR]!(wix.DOMAIN_RUN_ALLTCS_COMMAND)"
                   WorkingDirectory="TESTSUITE_BATCH_DIR" />
-				  
-        <Shortcut Id="Run2012R2TestCasesShortcut"
-                  Name="Run2012R2TestCases"
-                  Description="Run 2012R2 test cases."
+		<Shortcut Id="RunBVTTestCasesShortcut"
+                  Name="Run BVT Test Cases"
+                  Description="Run BVT test cases in the test suite"
+                  Target="[TESTSUITE_BATCH_DIR]!(wix.DOMAIN_RUN_BVT_COMMAND)"
+                  WorkingDirectory="TESTSUITE_BATCH_DIR" />
+		<Shortcut Id="Run2012R2TestCasesShortcut"
+                  Name="Run 2012R2 Test Cases"
+                  Description="Run BVT test cases in the test suite"
                   Target="[TESTSUITE_BATCH_DIR]!(wix.DOMAIN_RUN_2012R2_COMMAND)"
                   WorkingDirectory="TESTSUITE_BATCH_DIR" />
 				  
@@ -261,15 +267,15 @@
                   Description="Run all test cases in the test suite"
                   Target="[TESTSUITE_BATCH_DIR]!(wix.DOMAIN_RUN_ALLTCS_COMMAND)"
                   WorkingDirectory="TESTSUITE_BATCH_DIR" />
-        <Shortcut Id="RunBVTTestCasesShortcut_Desktop"
-                  Name="Run BVT Test Cases"
-                  Description="Run BVT test cases in the test suite"
-                  Target="[TESTSUITE_BATCH_DIR]!(wix.DOMAIN_RUN_BVT_COMMAND)"
-                  WorkingDirectory="TESTSUITE_BATCH_DIR" />
         <Shortcut Id="Run2012R2TestCasesShortcut_Desktop"
-                  Name="Run 2012R2 Test Cases"
+                  Name="Run !(wix.TESTSUITE_NAME) BVT Test Cases"
                   Description="Run 2012R2 test cases in the test suite"
                   Target="[TESTSUITE_BATCH_DIR]!(wix.DOMAIN_RUN_2012R2_COMMAND)"
+                  WorkingDirectory="TESTSUITE_BATCH_DIR" />
+        <Shortcut Id="RunBVTTestCasesShortcut_Desktop"
+                  Name="Run !(wix.TESTSUITE_NAME) BVT Test Cases"
+                  Description="Run BVT test cases in the test suite"
+                  Target="[TESTSUITE_BATCH_DIR]!(wix.DOMAIN_RUN_BVT_COMMAND)"
                   WorkingDirectory="TESTSUITE_BATCH_DIR" />
         <RegistryValue Id="TestSuiteShortcutsKeyPath_Desktop"
                         Root="HKCU"
@@ -320,13 +326,15 @@
         <ComponentGroupRef Id="TESTSUITE_MISC_FILES"/>
         <ComponentGroupRef Id="BATCH_FILES" />
         <ComponentGroupRef Id="BIN_FILES" />
-
+		<ComponentGroupRef Id="SCRIPT_FILES"/>
+		<ComponentGroupRef Id="Certificate_Data" />
       </Feature>
 
       <Feature Id="SutFeature" Level="1">
         <!-- If TARGET_ENDPOINT doesn't equal "SUT", donot install on SUT. -->
         <Condition Level="0"><![CDATA[TARGET_ENDPOINT<>"SUT" AND CLIENTUILEVEL<>0]]></Condition>
-
+		<ComponentGroupRef Id="SCRIPT_FILES"/>
+		<ComponentGroupRef Id="Certificate_Data"/>
         <ComponentRef Id="SutShortcuts" />
 
       </Feature>
@@ -334,7 +342,8 @@
       <Feature Id="DomainFeature" Level="1">
         <!-- If TARGET_ENDPOINT doesn't equal "DOMAIN", donot install on domain. -->
         <Condition Level="0"><![CDATA[TARGET_ENDPOINT<>"DOMAIN" AND CLIENTUILEVEL<>0]]></Condition>
-
+		<ComponentGroupRef Id="SCRIPT_FILES"/>
+		<ComponentGroupRef Id="Certificate_Data"/>
         <ComponentRef Id="DomainShortcuts" />
 
       </Feature>

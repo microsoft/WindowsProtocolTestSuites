@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?define SYMBOLS_DIR=$(env.TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\Bin?>
+<?define PROTOSDK_DROP_DIR=$(env.TestSuiteRoot)\drop\ProtoSDK\Bin?>
+<?define TESTSUITE_SYMBOLS_DIR=$(env.TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\Bin?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+
+    <!-- Files to be installed to test suite. -->
+    <!-- Source code and files in drop folder are automatically installed. -->
+    <ComponentGroup Id="TESTSUITE_MISC_FILES"> 
+      <ComponentRef Id="MS_ADFSPIP_ClientAdapter.dll"/>
+      <ComponentRef Id="MS_ADFSPIP_ClientAdapter.pdb"/>
+      <ComponentRef Id="MS_ADFSPIP_ClientTestSuite.dll"/>
+      <ComponentRef Id="MS_ADFSPIP_ClientTestSuite.pdb"/>
+      <ComponentRef Id="ClientLocal.TestSettings" />
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Networking.WebProxy.dll"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Networking.WebProxy.pdb"/>
+	  <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Identity.ADFSPIP.dll"/>
+	  <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Identity.ADFSPIP.pdb"/>
+    </ComponentGroup>
+    
+    <!-- Files to be installed to SUT. -->
+    <!-- Scripts in drop folder are automatically installed. -->
+    <ComponentGroup Id="TESTSUITE_SUT_FILES">
+     
+    </ComponentGroup>
+
+
+    <!-- Files to be installed to domain. -->
+    <!-- Scripts in drop folder are automatically installed. -->
+    <ComponentGroup Id="TESTSUITE_DOMAIN_FILES">
+
+    </ComponentGroup>
+
+    <DirectoryRef Id="TESTSUITE_BIN_DIR">
+      <Component Id="MS_ADFSPIP_ClientAdapter.dll" Guid="{2E9F0CC7-D6EF-49F9-96F2-9394571B915B}">
+        <File Id="MS_ADFSPIP_ClientAdapter.dll" Source="$(var.TESTSUITE_SYMBOLS_DIR)\MS-ADFSPIP_ClientAdapter.dll" />
+      </Component>
+	  <Component Id="MS_ADFSPIP_ClientTestSuite.dll" Guid="{F0A6F7F8-54CB-4FF6-A557-5930BDCFC808}">
+        <File Id="MS_ADFSPIP_ClientTestSuite.dll" Source="$(var.TESTSUITE_SYMBOLS_DIR)\MS-ADFSPIP_ClientTestSuite.dll" />
+      </Component>
+      <Component Id="ClientLocal.TestSettings" Guid="{E30C0EC1-6331-49AF-827F-55EBC95438D3}">
+        <File Id="ClientLocal.TestSettings" Source="$(var.TESTSUITE_SYMBOLS_DIR)\ClientLocal.TestSettings"/>
+      </Component>
+	  <Component Id="Microsoft.Protocols.TestTools.StackSdk.Networking.WebProxy.dll" Guid="{2C659C52-30A8-4B61-864F-4BA77643AA58}">
+        <File Id="fil157CD645FBA445E9A6540F3033FD6446" Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Networking.Http.WebProxy.dll"/>
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Networking.WebProxy.pdb" Guid="{F6C57498-0378-4012-8865-FAB2D00869D7}">
+        <File Id="filD15A4A6EBA4C461585999D90762712BA" Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Networking.Http.WebProxy.pdb" />
+      </Component>
+	  
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Identity.ADFSPIP.dll" Guid="{383CF12E-C8B6-4E61-9221-844F455CC18B}">
+        <File Id="filE562F451441F41A2B69D0112C9D8A8CB" Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Identity.ADFSPIP.dll"/>
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Identity.ADFSPIP.pdb" Guid="{3B3485C7-BA12-4BDB-A6AF-A36FB8D14212}">
+        <File Id="fil478F9B4373AF4B6C868B812F934A6FA1" Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Identity.ADFSPIP.pdb" />
+      </Component>
+      
+      <Component Id="MS_ADFSPIP_ClientAdapter.pdb" Guid="{8387C571-E23E-4412-B472-1BB9F452F808}">
+        <File Id="fil183E523F6F474F7798889ACC09B467CF" Source="$(var.TESTSUITE_SYMBOLS_DIR)\MS-ADFSPIP_ClientAdapter.pdb" />
+      </Component>
+      <Component Id="MS_ADFSPIP_ClientTestSuite.pdb" Guid="{08502D98-6805-48F6-8DEE-DF2CB99FE753}">
+        <File Id="filAAFCB43065DC440A81E7D82515E05933" Source="$(var.TESTSUITE_SYMBOLS_DIR)\MS-ADFSPIP_ClientTestSuite.pdb" />        
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>
