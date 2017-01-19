@@ -65,7 +65,7 @@
       <Property name="PrimaryDomain.DNSName" value="contoso.com">
         <Description>Type:string! Usage: DNS suffix of the primary domain.</Description>
       </Property>
-      <Property name="PrimaryDomain.ServerGUID" value="047e3c88-dd53-43b4-90d4-8acae906b2b4">
+      <Property name="PrimaryDomain.ServerGUID" value="2a23574e-5c4e-49f5-937f-9647ce974e85">
         <Description>Type:string! Usage: Server GUID of the primary domain.</Description>
       </Property>
       <Property name="PrimaryDomain.SID" value="S-1-5-21-4101333323-254929996-3728012994">
