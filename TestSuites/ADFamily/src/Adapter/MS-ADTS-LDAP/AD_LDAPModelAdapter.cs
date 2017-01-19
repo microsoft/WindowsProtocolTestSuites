@@ -194,7 +194,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             // assume dc is operating with the highest domain functional level it supports
             dcFunctionality = ((uint)DomainFunctionLevel).ToString();
             Microsoft.Protocols.TestSuites.ActiveDirectory.Common.Domain rootDomain = 
-                domains.SingleOrDefault(x => x.FQDN.Equals(PrimaryDomain, StringComparison.InvariantCultureIgnoreCase));
+                domains.SingleOrDefault(x => x.FQDN.Equals(PrimaryDomainDnsName, StringComparison.InvariantCultureIgnoreCase));
             rootDomainNCForDs = rootDomain.DomainNC;
             rootDomainAdminsGroup = string.Format("{0}\\Domain Admins", rootDomain.NetbiosName);
             serversContainerDNForDs = string.Format("CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,{0}", rootDomainNCForDs);
@@ -225,13 +225,13 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             if (!string.IsNullOrEmpty(ADLDSPortNum))
             {
-                rootDomainNCForLds = Utilities.GetLdsDomainDN(string.Format("{0}.{1}:{2}", PDCNetbiosName, PrimaryDomain, ADLDSPortNum));
+                rootDomainNCForLds = Utilities.GetLdsDomainDN(string.Format("{0}.{1}:{2}", PDCNetbiosName, PrimaryDomainDnsName, ADLDSPortNum));
             }
 
             // child domain
-            if (!string.IsNullOrEmpty(ChildDomain))
+            if (!string.IsNullOrEmpty(ChildDomainDnsName))
             {
-                childDomainNC = domains.SingleOrDefault(x => x.FQDN.Equals(ChildDomain, StringComparison.InvariantCultureIgnoreCase)).DomainNC;
+                childDomainNC = domains.SingleOrDefault(x => x.FQDN.Equals(ChildDomainDnsName, StringComparison.InvariantCultureIgnoreCase)).DomainNC;
                 childAdminName = DomainAdministratorName;
                 childAdminPwd = DomainUserPassword;
             }
@@ -241,8 +241,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             // Initialize variables in Utilities
             Utilities.DomainAdmin = DomainAdministratorName;
             Utilities.DomainAdminPassword = DomainUserPassword;
-            Utilities.DomainName = PrimaryDomain;
-            string PdcFqdn = string.Format("{0}.{1}", PDCNetbiosName, PrimaryDomain);
+            Utilities.DomainName = PrimaryDomainDnsName;
+            string PdcFqdn = string.Format("{0}.{1}", PDCNetbiosName, PrimaryDomainDnsName);
             Utilities.TargetServerFqdn = PdcFqdn;
 
             Site.Log.Add(LogEntryKind.Debug, "Initialize local variables completed.");
@@ -393,7 +393,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     authenticationType = AuthType.Basic | AuthType.Ntlm;
                     defaultNC = LDSApplicationNC;
                     Site.Log.Add(LogEntryKind.Debug, "Get the LDS default naming context:");
-                    Site.Log.Add(LogEntryKind.Debug, "serverName: {0}.{1}", PDCNetbiosName, PrimaryDomain);
+                    Site.Log.Add(LogEntryKind.Debug, "serverName: {0}.{1}", PDCNetbiosName, PrimaryDomainDnsName);
                     Site.Log.Add(LogEntryKind.Debug, "portNumber: {0}", ADLDSPortNum);
                     configurationNC = string.Format("CN=Configuration,{0}", rootDomainNCForLds);
                     schemaNC = string.Format("CN=Schema,{0}", configurationNC);
@@ -519,7 +519,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             List<DirectoryAttribute> attrVals = new List<DirectoryAttribute>();
             attribnVals.Add(("objectClass: crossRef"));
             attribnVals.Add("nCName: DC=ForestDnsZones," + rootDomainNC);
-            attribnVals.Add("dnsRoot: ForestDnsZones." + PrimaryDomain);
+            attribnVals.Add("dnsRoot: ForestDnsZones." + PrimaryDomainDnsName);
             foreach (string attrib in attribnVals)
             {
                 attrVals.Add(new DirectoryAttribute(attrib));
@@ -645,7 +645,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                         //dnsRoot: xxx.contoso.com
                         if (item.Split(':')[0].Trim().Equals("dnsRoot"))
                         {
-                            item = item.Replace("adts88", PrimaryDomain);
+                            item = item.Replace("adts88", PrimaryDomainDnsName);
                         }
                         break;
                 }
@@ -2515,7 +2515,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 {
                     Utilities.CreateNewSite(
                         delObjRdnValue,
-                        PDCNetbiosName + '.' + PrimaryDomain);
+                        PDCNetbiosName + '.' + PrimaryDomainDnsName);
 
                     DirectoryEntry objToDelEntry =
                         new DirectoryEntry("LDAP://" + currentWorkingDC.FQDN + ":" + currentPort + "/" + delObjDn);
@@ -2977,7 +2977,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     case ADImplementations.AD_DS:
                     default:
                         attrToModify = attrToModify.Replace("DC=adts88", rootDomainNC);
-                        attrToModify = attrToModify.Replace("ADTS_XP.adts88", string.Format("{0}.{1}", testComputer1Name, PrimaryDomain));
+                        attrToModify = attrToModify.Replace("ADTS_XP.adts88", string.Format("{0}.{1}", testComputer1Name, PrimaryDomainDnsName));
                         attrToModify = attrToModify.Replace("ADTS_XP", testComputer1Name);
                         attrToModify = attrToModify.Replace("ADTS88", rootDomainNC.Split(',')[0].Trim().Split('=')[1]);
                         break;
@@ -3097,7 +3097,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                         case ADImplementations.AD_DS:
                         default:
                             attrToGetObject = attrToGetObject.Replace("DC=adts88", rootDomainNC);
-                            attrToGetObject = attrToGetObject.Replace("ADTS_XP.adts88", string.Format("{0}.{1}", testComputer1Name, PrimaryDomain));
+                            attrToGetObject = attrToGetObject.Replace("ADTS_XP.adts88", string.Format("{0}.{1}", testComputer1Name, PrimaryDomainDnsName));
                             attrToGetObject = attrToGetObject.Replace("ADTS_XP", testComputer1Name);
                             attrToGetObject = attrToGetObject.Replace("ADTS88", rootDomainNC.Split(',')[0].Trim().Split('=')[1]);
                             break;
@@ -3110,7 +3110,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     {
                         testUserGuid = Utilities.GetUserGuid(
                             PDCNetbiosName,
-                            PrimaryDomain,
+                            PrimaryDomainDnsName,
                             ADDSPortNum,
                             testUserName,
                             testUserPwd,
@@ -3121,7 +3121,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     {
                         testUserSid = Utilities.GetUserSid(
                             PDCNetbiosName,
-                            PrimaryDomain,
+                            PrimaryDomainDnsName,
                             testUserName,
                             testUserPwd,
                             testUserName);
@@ -5233,7 +5233,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                             "CN=Users," + rootDomainNC,
                             tombStoneName.Remove(index),
                             true,
-                            CDCNetbiosName + '.' + ChildDomain,
+                            CDCNetbiosName + '.' + ChildDomainDnsName,
                             null,
                             isWindows);
                         if (currentWorkingDC.OSVersion.Equals(ServerVersion.NonWin))
@@ -5270,7 +5270,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             // distinguishedNames[1] => new object DN, new object ParentDN
             // distinguishedNames[2] => whether to deleted old RDN
             string[] distinguishedNames = oldDN_newDN_deleteOldRDN.ToArray();
-            string childDomainNetbios = string.Format("{0}$", ChildDomain.Split('.')[0].ToUpper());
+            string childDomainNetbios = string.Format("{0}$", ChildDomainNetBiosName.ToUpper());
 
             if (control == ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID)
             {
@@ -5379,7 +5379,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                         Utilities.SetAccessRights(
                             oldObjectDN,
                             testUserName,
-                            PrimaryDomain,
+                            PrimaryDomainDnsName,
                             ActiveDirectoryRights.Delete,
                             AccessControlType.Deny);
 
@@ -5389,7 +5389,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                             Utilities.SetAccessRights(
                                 oldObjectDN,
                                 testUserName,
-                                PrimaryDomain,
+                                PrimaryDomainDnsName,
                                 ActiveDirectoryRights.WriteProperty,
                                 AccessControlType.Deny);
                         }
@@ -5410,13 +5410,13 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                             Utilities.SetAccessRights(
                                 oldObjectParentDn,
                                 testUserName,
-                                PrimaryDomain,
+                                PrimaryDomainDnsName,
                                 ActiveDirectoryRights.DeleteChild,
                                 AccessControlType.Deny);
                             Utilities.SetAccessRights(
                                 newObjectParentDN,
                                 testUserName,
-                                PrimaryDomain,
+                                PrimaryDomainDnsName,
                                 ActiveDirectoryRights.CreateChild,
                                 AccessControlType.Deny);
                         }
@@ -5429,7 +5429,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                             Utilities.SetAccessRights(
                                 oldObjectParentDn,
                                 testUserName,
-                                PrimaryDomain,
+                                PrimaryDomainDnsName,
                                 ActiveDirectoryRights.DeleteChild,
                                 AccessControlType.Deny);
                         }
@@ -5546,7 +5546,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     newObjectParentDN,
                     newObjectRDN,
                     deleteOldObjectRDN,
-                    CDCNetbiosName + '.' + ChildDomain,
+                    CDCNetbiosName + '.' + ChildDomainDnsName,
                     null,
                     isWindows);
             }
@@ -5749,13 +5749,13 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                         int.Parse(currentPort),
                         childAdminName,
                         childAdminPwd,
-                        ChildDomain,
+                        ChildDomainDnsName,
                         AuthType.Basic);
 
                     #region Target domain controller name for LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID control
 
                     Site.CaptureRequirementIfIsNotNull(
-                        CDCNetbiosName + '.' + ChildDomain,
+                        CDCNetbiosName + '.' + ChildDomainDnsName,
                         831,
                         @"The controlValue field of LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID control has the DNS hostname of the target DC 
                     that must be used as a helper to perform cross domain move.");
@@ -5816,13 +5816,13 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                         Utilities.RemoveAccessRights(
                             oldObjectDN,
                             testUserName,
-                            PrimaryDomain,
+                            PrimaryDomainDnsName,
                             ActiveDirectoryRights.Delete,
                             AccessControlType.Deny);
                         Utilities.SetAccessRights(
                             oldObjectDN,
                             testUserName,
-                            PrimaryDomain,
+                            PrimaryDomainDnsName,
                             ActiveDirectoryRights.Delete,
                             AccessControlType.Allow);
 
@@ -5832,13 +5832,13 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                             Utilities.RemoveAccessRights(
                                 oldObjectDN,
                                 testUserName,
-                                PrimaryDomain,
+                                PrimaryDomainDnsName,
                                 ActiveDirectoryRights.WriteProperty,
                                 AccessControlType.Deny);
                             Utilities.SetAccessRights(
                                 oldObjectDN,
                                 testUserName,
-                                PrimaryDomain,
+                                PrimaryDomainDnsName,
                                 ActiveDirectoryRights.WriteProperty,
                                 AccessControlType.Allow);
                         }
@@ -5855,25 +5855,25 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                 Utilities.RemoveAccessRights(
                                     oldObjectParentDn,
                                     testUserName,
-                                    PrimaryDomain,
+                                    PrimaryDomainDnsName,
                                     ActiveDirectoryRights.DeleteChild,
                                     AccessControlType.Deny);
                                 Utilities.SetAccessRights(
                                     oldObjectParentDn,
                                     testUserName,
-                                    PrimaryDomain,
+                                    PrimaryDomainDnsName,
                                     ActiveDirectoryRights.DeleteChild,
                                     AccessControlType.Allow);
                                 Utilities.RemoveAccessRights(
                                     newObjectParentDN,
                                     testUserName,
-                                    PrimaryDomain,
+                                    PrimaryDomainDnsName,
                                     ActiveDirectoryRights.CreateChild,
                                     AccessControlType.Deny);
                                 Utilities.SetAccessRights(
                                     newObjectParentDN,
                                     testUserName,
-                                    PrimaryDomain,
+                                    PrimaryDomainDnsName,
                                     ActiveDirectoryRights.CreateChild,
                                     AccessControlType.Allow);
                             }
@@ -5887,13 +5887,13 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                 Utilities.RemoveAccessRights(
                                     oldObjectParentDn,
                                     testUserName,
-                                    PrimaryDomain,
+                                    PrimaryDomainDnsName,
                                     ActiveDirectoryRights.DeleteChild,
                                     AccessControlType.Deny);
                                 Utilities.SetAccessRights(
                                     oldObjectParentDn,
                                     testUserName,
-                                    PrimaryDomain,
+                                    PrimaryDomainDnsName,
                                     ActiveDirectoryRights.DeleteChild,
                                     AccessControlType.Allow);
                             }
@@ -6041,13 +6041,13 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     case ADImplementations.AD_DS:
                     default:
                         baseObjectDN = baseObjectDN.Replace("DC=adts88", rootDomainNC);
-                        baseObjectDN = baseObjectDN.Replace("ADTS88", PrimaryDomain.ToUpper(CultureInfo.InvariantCulture).Split('.')[0]);
+                        baseObjectDN = baseObjectDN.Replace("ADTS88", PrimaryDomainNetBiosName.ToUpper());
                         break;
                 }
                 baseObjectDN = baseObjectDN.Replace("adts_user1", testUserName);
                 testUserGuid = Utilities.GetUserGuid(
                     PDCNetbiosName,
-                    PrimaryDomain,
+                    PrimaryDomainDnsName,
                     ADDSPortNum,
                     testUserName,
                     testUserPwd,
@@ -6055,7 +6055,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 baseObjectDN = baseObjectDN.Replace("a5127683905336458dc57f180a0adf16", testUserGuid);
                 testUserSid = Utilities.GetUserSid(
                     PDCNetbiosName,
-                    PrimaryDomain,
+                    PrimaryDomainDnsName,
                     testUserName,
                     testUserPwd,
                     testUserName);
@@ -6069,7 +6069,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             if (!string.IsNullOrEmpty(filter))
             {
                 filter = filter.Replace("DC=adts88", rootDomainNC);
-                filter = filter.Replace("adts88", PrimaryDomain);
+                filter = filter.Replace("adts88", PrimaryDomainDnsName);
                 if (filter.Contains(":")
                     && !filter.Contains(":="))
                 {
@@ -7076,7 +7076,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                                 isDnsHostNameFilled = true;
                                                 if (!string.IsNullOrEmpty(samaccountName))
                                                 {
-                                                    Site.CaptureRequirementIfAreEqual<string>((samaccountName.Replace("$", "") + '.' + PrimaryDomain).ToLower(CultureInfo.InvariantCulture), attrbutevalue.ToLower(CultureInfo.InvariantCulture), 664, "In AD/DS, the value of the dNSHostName attribute being written is in the following format: computerName.fullDomainDnsName, where computerName is the current sAMAccountName of the object (without the final \"$\" character), and the fullDomainDnsName is the DNS name of the domain NC or one of the values of msDS-AllowedDNSSuffixes on the domain NC (if any) where the object that is being modified is located. This addition check performed for validated writes is on objects of class computer or server (or a subclass of computer or server).");
+                                                    Site.CaptureRequirementIfAreEqual<string>((samaccountName.Replace("$", "") + '.' + PrimaryDomainDnsName).ToLower(CultureInfo.InvariantCulture), attrbutevalue.ToLower(CultureInfo.InvariantCulture), 664, "In AD/DS, the value of the dNSHostName attribute being written is in the following format: computerName.fullDomainDnsName, where computerName is the current sAMAccountName of the object (without the final \"$\" character), and the fullDomainDnsName is the DNS name of the domain NC or one of the values of msDS-AllowedDNSSuffixes on the domain NC (if any) where the object that is being modified is located. This addition check performed for validated writes is on objects of class computer or server (or a subclass of computer or server).");
                                                     samaccountName = null;
                                                 }
                                             }
@@ -7138,7 +7138,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                           entrypacket.GetInnerRequestOrResponse();
                             string distinguishedName = Encoding.ASCII.GetString(entry.objectName.ByteArrayValue);
                             if (distinguishedName.ToLower(CultureInfo.InvariantCulture) ==
-                                ("CN=" + PrimaryDomain.Replace(".com", "") +
+                                ("CN=" + PrimaryDomainNetBiosName +
                                 ",CN=Partitions,CN=Configuration," +
                                 rootDomainNC).ToLower(CultureInfo.InvariantCulture))
                             {
@@ -7159,7 +7159,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                             if (attributeString.Equals("dnsRoot", StringComparison.OrdinalIgnoreCase)
                                                 && isEnabled == true)
                                             {
-                                                Site.CaptureRequirementIfAreEqual<string>(attrbutevalue.ToLower(CultureInfo.InvariantCulture), PrimaryDomain.ToLower(CultureInfo.InvariantCulture), 939, "If the Enable attribute of the Cross-Ref Objects is not false, in AD/DS the dnsRoot holds the fully qualified DNS name.");
+                                                Site.CaptureRequirementIfAreEqual<string>(attrbutevalue.ToLower(CultureInfo.InvariantCulture), PrimaryDomainDnsName.ToLower(CultureInfo.InvariantCulture), 939, "If the Enable attribute of the Cross-Ref Objects is not false, in AD/DS the dnsRoot holds the fully qualified DNS name.");
                                             }
                                         }
                                         if (attributeString.ToLower(CultureInfo.InvariantCulture) == "nCName".ToLower(CultureInfo.InvariantCulture)
@@ -7217,7 +7217,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                             {
                                 //If the "Enable" attribute of the crossRef object is false this requirement is validated.
                                 //Here "isEnabled" variable represents the presence of "Enable" attribute.
-                                Site.CaptureRequirementIfIsTrue(dnsRoot.Contains(currentWorkingDC.Domain.NetbiosName), 937, "If the Enable attribute of the Cross-Ref Objects is false, in AD/DS the dnsRoot holds the DNS name of the DC that will create the root of the NC.");
+                                Site.CaptureRequirementIfIsTrue(dnsRoot.ToLower().Contains(currentWorkingDC.Domain.NetbiosName.ToLower()), 937, "If the Enable attribute of the Cross-Ref Objects is false, in AD/DS the dnsRoot holds the DNS name of the DC that will create the root of the NC.");
                             }
 
                             #endregion
@@ -8159,7 +8159,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                     @"An LDAP Request to ldapServiceName rootDSE attribute returns the LDAP service name for the LDAP server on the DC.");
                                 // ldapServicename is generated by the System. So the format will be FullDomainName:DomainControllerName$@FullDomainName
                                 Site.CaptureRequirementIfAreEqual<string>(
-                                    string.Format("{0}:{1}$@{2}", PrimaryDomain, currentWorkingDC.NetbiosName, currentWorkingDC.Domain.FQDN).ToLower(CultureInfo.InvariantCulture),
+                                    string.Format("{0}:{1}$@{2}", PrimaryDomainDnsName, currentWorkingDC.NetbiosName, currentWorkingDC.Domain.FQDN).ToLower(CultureInfo.InvariantCulture),
                                     searchAttrVals[0].ToLower(CultureInfo.InvariantCulture),
                                     227,
                                     @"The format of the ldapServiceName rootDSE attribute value is <DNS name of the forest root domain>:<Kerberos principal name>,
@@ -9416,7 +9416,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                             new LdapDirectoryIdentifier(PDCIPAddress, int.Parse(currentPort)),
                             new NetworkCredential(DomainAdministratorName,
                                 DomainUserPassword,
-                                PrimaryDomain));
+                                PrimaryDomainDnsName));
                     }
                     else
                     {
@@ -9424,7 +9424,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                             new LdapDirectoryIdentifier(PDCIPAddress, int.Parse(currentPort)),
                             new NetworkCredential(testUserName,
                                 testUserPwd,
-                                PrimaryDomain));
+                                PrimaryDomainDnsName));
                     }
                     con.SessionOptions.Sealing = false;
                     con.SessionOptions.Signing = false;
@@ -9495,7 +9495,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             {
                 if (string.IsNullOrWhiteSpace(RODCNetbiosName))
                     Site.Assert.Fail("Test case requires a RODC but \"RODCName\" ptfconfig property value is invalid");
-                serverName = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", RODCNetbiosName, PrimaryDomain);
+                serverName = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", RODCNetbiosName, PrimaryDomainDnsName);
             }
             else
             {
@@ -9503,23 +9503,23 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 {
                     if (string.IsNullOrWhiteSpace(SDCNetbiosName))
                         Site.Assert.Fail("Test case requires a SDC but \"ADCName\" ptfconfig property value is invalid");
-                    serverName = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", SDCNetbiosName, PrimaryDomain);
+                    serverName = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", SDCNetbiosName, PrimaryDomainDnsName);
                 }
                 else if (specifiedServer != null && specifiedServer == "DC=notWritableDC")
                 {
                     if (string.IsNullOrWhiteSpace(RODCNetbiosName))
                         Site.Assert.Fail("Test case requires a RODC but \"RODCName\" ptfconfig property value is invalid");
-                    serverName = string.Format("{0}.{1}", RODCNetbiosName, PrimaryDomain);
+                    serverName = string.Format("{0}.{1}", RODCNetbiosName, PrimaryDomainDnsName);
                 }
                 else if (specifiedServer != null && specifiedServer == "DC=WritableDCNotSameDomain")
                 {
                     if (string.IsNullOrWhiteSpace(CDCNetbiosName))
                         Site.Assert.Fail("Test case requires a CDC but \"CDCName\" ptfconfig property value is invalid");
-                    serverName = string.Format("{0}.{1}", CDCNetbiosName, ChildDomain);
+                    serverName = string.Format("{0}.{1}", CDCNetbiosName, ChildDomainDnsName);
                 }
                 else
                 {
-                    serverName = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", PDCNetbiosName, PrimaryDomain);
+                    serverName = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", PDCNetbiosName, PrimaryDomainDnsName);
                 }
             }
             return serverName;
@@ -9580,7 +9580,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 DirectoryAttributeModification modAdditionDnsHostName = new DirectoryAttributeModification();
                 modAdditionDnsHostName.Name = "msDS-AdditionalDnsHostName";
                 modAdditionDnsHostName.Operation = DirectoryAttributeOperation.Replace;
-                modAdditionDnsHostName.Add(string.Format("{0}.{1}", PDCNetbiosName, PrimaryDomain));
+                modAdditionDnsHostName.Add(string.Format("{0}.{1}", PDCNetbiosName, PrimaryDomainDnsName));
                 attrsMod.RemoveAt(0);
                 attrsMod.Add(modAdditionDnsHostName);
                 adLdapClient.ModifyObject(

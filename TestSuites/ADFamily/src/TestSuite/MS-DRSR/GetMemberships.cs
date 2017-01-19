@@ -379,7 +379,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                     0,
                     ret,
                     "IDL_DRSBind: should return 0 with a success bind to DC");
-                string groupDn = "CN=Domain Users,CN=Users," + DrsrHelper.GetDNFromFQDN(ADCommonServerAdapter.Instance(Site).PrimaryDomain);
+                string groupDn = "CN=Domain Users,CN=Users," + DrsrHelper.GetDNFromFQDN(ADCommonServerAdapter.Instance(Site).PrimaryDomainDnsName);
                 DSNAME dsGroup = LdapUtility.CreateDSNameForObject(
                     server,
                    groupDn

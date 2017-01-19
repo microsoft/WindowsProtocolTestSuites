@@ -15,7 +15,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
     {
         static string GetPdcDnsName()
         {
-            return _samrProtocolAdapter.PDCNetbiosName + "." + _samrProtocolAdapter.PrimaryDomain;
+            return _samrProtocolAdapter.PDCNetbiosName + "." + _samrProtocolAdapter.PrimaryDomainDnsName;
         }
 
         [TestCategory("MS-SAMR")]

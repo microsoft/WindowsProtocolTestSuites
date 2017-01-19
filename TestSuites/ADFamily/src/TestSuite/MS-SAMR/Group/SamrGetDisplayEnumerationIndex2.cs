@@ -22,7 +22,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrGetDisplayEnumerationIndex2 with DomainDisplayGroup.")]
         public void SamrGetDisplayEnumerationIndex2_Group()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrGetDisplayEnumerationIndex2: obtains an index into an ascending account-name¨Csorted list of accounts.");
             uint index;
@@ -40,7 +40,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrGetDisplayEnumerationIndex2 with DomainHandle.HandleType not equal to Domain.")]
         public void SamrGetDisplayEnumerationIndex2_Group_InvalidHandle()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrGetDisplayEnumerationIndex2 with invalid handle.");
             uint index;
@@ -58,7 +58,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrGetDisplayEnumerationIndex2 with no DOMAIN_LIST_ACCOUNTS access.")]
         public void SamrGetDisplayEnumerationIndex2_Group_STATUS_ACCESS_DENIED()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle, Utilities.DOMAIN_READ);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle, Utilities.DOMAIN_READ);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrGetDisplayEnumerationIndex2 with no DOMAIN_LIST_ACCOUNTS access.");
             uint index;
@@ -76,7 +76,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrGetDisplayEnumerationIndex2 with invalid DisplayInformationClass.")]
         public void SamrGetDisplayEnumerationIndex2_Group_InvalidDisplayInformationClass()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrGetDisplayEnumerationIndex2 with invalid DisplayInformationClass.");
             uint index;
@@ -94,7 +94,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrGetDisplayEnumerationIndex2 of STATUS_NO_MORE_ENTRIES.")]
         public void SamrGetDisplayEnumerationIndex2_Group_STATUS_NO_MORE_ENTRIES()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrGetDisplayEnumerationIndex2: obtains an index into an ascending account-name¨Csorted list of accounts.");
             uint index;
@@ -103,7 +103,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
 
             Site.Log.Add(LogEntryKind.TestStep, "Check whether there is such group with prefix {0} existing in the database.", prefix);
             LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(_samrProtocolAdapter.pdcFqdn),
-                new NetworkCredential(_samrProtocolAdapter.DomainAdministratorName, _samrProtocolAdapter.DomainUserPassword, _samrProtocolAdapter.PrimaryDomain));
+                new NetworkCredential(_samrProtocolAdapter.DomainAdministratorName, _samrProtocolAdapter.DomainUserPassword, _samrProtocolAdapter.PrimaryDomainDnsName));
             string filter = string.Format("(&(objectclass=group)(sAMAccountName={0}*))", prefix);
             SearchRequest request = new SearchRequest(_samrProtocolAdapter.primaryDomainUserContainerDN,
                 filter, System.DirectoryServices.Protocols.SearchScope.Subtree, "sAMAccountName");

@@ -67,7 +67,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             AD_LDAPModelAdapter.Instance(Site).Initialize();
             Utilities.DomainAdmin = AD_LDAPModelAdapter.Instance(Site).DomainAdministratorName;
             Utilities.DomainAdminPassword = AD_LDAPModelAdapter.Instance(Site).DomainUserPassword;
-            Utilities.TargetServerFqdn = AD_LDAPModelAdapter.Instance(Site).PDCNetbiosName + "." + AD_LDAPModelAdapter.Instance(Site).PrimaryDomain + ":" + AD_LDAPModelAdapter.Instance(Site).ADDSPortNum;
+            Utilities.TargetServerFqdn = AD_LDAPModelAdapter.Instance(Site).PDCNetbiosName + "." + AD_LDAPModelAdapter.Instance(Site).PrimaryDomainDnsName + ":" + AD_LDAPModelAdapter.Instance(Site).ADDSPortNum;
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 new LdapDirectoryIdentifier(addr, int.Parse(port)),
                 new NetworkCredential(AD_LDAPModelAdapter.Instance(Site).DomainAdministratorName,
                     AD_LDAPModelAdapter.Instance(Site).DomainUserPassword,
-                    AD_LDAPModelAdapter.Instance(Site).PrimaryDomain));
+                    AD_LDAPModelAdapter.Instance(Site).PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
 
@@ -122,7 +122,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(addr, int.Parse(port)),
               new NetworkCredential(AD_LDAPModelAdapter.Instance(Site).DomainAdministratorName,
                   AD_LDAPModelAdapter.Instance(Site).DomainUserPassword,
-                  AD_LDAPModelAdapter.Instance(Site).PrimaryDomain));
+                  AD_LDAPModelAdapter.Instance(Site).PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
 
@@ -194,7 +194,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(addr, int.Parse(port)),
               new NetworkCredential(AD_LDAPModelAdapter.Instance(Site).DomainAdministratorName,
                   AD_LDAPModelAdapter.Instance(Site).DomainUserPassword,
-                  AD_LDAPModelAdapter.Instance(Site).PrimaryDomain));
+                  AD_LDAPModelAdapter.Instance(Site).PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
 
@@ -280,7 +280,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 new LdapDirectoryIdentifier(addr, int.Parse(port)),
                 new NetworkCredential(AD_LDAPModelAdapter.Instance(Site).DomainAdministratorName,
                   AD_LDAPModelAdapter.Instance(Site).DomainUserPassword,
-                  AD_LDAPModelAdapter.Instance(Site).PrimaryDomain));
+                  AD_LDAPModelAdapter.Instance(Site).PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
 
@@ -494,7 +494,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(AD_LDAPModelAdapter.Instance(Site).PDCIPAddress),
               new NetworkCredential(AD_LDAPModelAdapter.Instance(Site).DomainAdministratorName,
                   AD_LDAPModelAdapter.Instance(Site).DomainUserPassword,
-                  AD_LDAPModelAdapter.Instance(Site).PrimaryDomain));
+                  AD_LDAPModelAdapter.Instance(Site).PrimaryDomainDnsName));
 
             #endregion
 
@@ -582,7 +582,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 AD_LDAPModelAdapter.Instance(Site).testUserName,
                  AD_LDAPModelAdapter.Instance(Site).testUserPwd);
 
-            string testDNS = AD_LDAPModelAdapter.Instance(Site).testComputer1Name + "." + AD_LDAPModelAdapter.Instance(Site).PrimaryDomain;
+            string testDNS = AD_LDAPModelAdapter.Instance(Site).testComputer1Name + "." + AD_LDAPModelAdapter.Instance(Site).PrimaryDomainDnsName;
             entry.Properties["msds-additionaldnshostname"].Value = testDNS;
             entry.CommitChanges();
             entry.RefreshCache();
@@ -631,7 +631,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         {
             #region variables
 
-            string netBIOSName = AD_LDAPModelAdapter.Instance(Site).PrimaryDomain.Split('.')[0];
+            string netBIOSName = AD_LDAPModelAdapter.Instance(Site).PrimaryDomainNetBiosName;
             string operUser = "operUser";
             string operUserDN = "CN=" + operUser + ",CN=Users," + AD_LDAPModelAdapter.Instance(Site).rootDomainNC;
             string testUser = "testUser";
@@ -653,7 +653,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     new LdapDirectoryIdentifier(addr, int.Parse(port)),
                     new NetworkCredential(AD_LDAPModelAdapter.Instance(Site).DomainAdministratorName,
                         AD_LDAPModelAdapter.Instance(Site).DomainUserPassword,
-                        AD_LDAPModelAdapter.Instance(Site).PrimaryDomain)))
+                        AD_LDAPModelAdapter.Instance(Site).PrimaryDomainDnsName)))
                 {
                     con.SessionOptions.Sealing = false;
                     con.SessionOptions.Signing = false;
@@ -701,7 +701,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
                 using (LdapConnection con = new LdapConnection(
                     new LdapDirectoryIdentifier(addr, int.Parse(port)),
-                    new NetworkCredential(operUser, userPwd, AD_LDAPModelAdapter.Instance(Site).PrimaryDomain)))
+                    new NetworkCredential(operUser, userPwd, AD_LDAPModelAdapter.Instance(Site).PrimaryDomainDnsName)))
                 {
                     #region modify the test user
 
@@ -748,7 +748,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     new LdapDirectoryIdentifier(addr, int.Parse(port)),
                     new NetworkCredential(AD_LDAPModelAdapter.Instance(Site).DomainAdministratorName,
                         AD_LDAPModelAdapter.Instance(Site).DomainUserPassword,
-                        AD_LDAPModelAdapter.Instance(Site).PrimaryDomain)))
+                        AD_LDAPModelAdapter.Instance(Site).PrimaryDomainDnsName)))
                 {
                     #region clean up
 

@@ -327,7 +327,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             //create normal user account if it does not exist yet
             string serverName = ADCommonServerAdapter.Instance(testSite).PDCNetbiosName;
             string serverPort = ADCommonServerAdapter.Instance(testSite).ADDSPortNum;
-            string domainNC = "DC=" + ADCommonServerAdapter.Instance(testSite).PrimaryDomain.Replace(".", ",DC=");
+            string domainNC = "DC=" + ADCommonServerAdapter.Instance(testSite).PrimaryDomainDnsName.Replace(".", ",DC=");
             string parentDN = string.Format("CN=Users,{0}", domainNC);
             string userDN = string.Format("CN={0},CN=Users,{1}", DomainUserName, domainNC);
             string userPassword = ADCommonServerAdapter.Instance(testSite).DomainUserPassword;
@@ -405,7 +405,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             #region domain objects
 
             DsDomain primaryDomain = ldapAd.GetDomainInfo(
-                ADCommonServerAdapter.Instance(testSite).PDCNetbiosName + "." + ADCommonServerAdapter.Instance(testSite).PrimaryDomain + (testDS == true ? "" : ":" + testSite.Properties[Machine.WritableDC1.ToString() + ".LDSPort"]),
+                ADCommonServerAdapter.Instance(testSite).PDCNetbiosName + "." + ADCommonServerAdapter.Instance(testSite).PrimaryDomainDnsName + (testDS == true ? "" : ":" + testSite.Properties[Machine.WritableDC1.ToString() + ".LDSPort"]),
                 UserStore[User.ParentDomainAdmin]
                 );
             DomainStore.Add(DomainEnum.PrimaryDomain, primaryDomain);
@@ -460,7 +460,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                             machine = MachineStore[Machine.WritableDC1];
                         else
                         {
-                            machine = ldapAd.GetDCInfo(ADCommonServerAdapter.Instance(testSite).PDCNetbiosName + "." + ADCommonServerAdapter.Instance(testSite).PrimaryDomain, UserStore[User.ParentDomainAdmin]);
+                            machine = ldapAd.GetDCInfo(ADCommonServerAdapter.Instance(testSite).PDCNetbiosName + "." + ADCommonServerAdapter.Instance(testSite).PrimaryDomainDnsName, UserStore[User.ParentDomainAdmin]);
                             if (testDS)
                                 //do this in AD LDS will assign an AD LDS domain
                                 machine.Domain = DomainStore[DomainEnum.PrimaryDomain];
@@ -471,7 +471,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                             continue;
                         try
                         {
-                            machine = ldapAd.GetDCInfo(ADCommonServerAdapter.Instance(testSite).RODCNetbiosName + "." + ADCommonServerAdapter.Instance(testSite).PrimaryDomain, UserStore[User.ParentDomainAdmin]);
+                            machine = ldapAd.GetDCInfo(ADCommonServerAdapter.Instance(testSite).RODCNetbiosName + "." + ADCommonServerAdapter.Instance(testSite).PrimaryDomainDnsName, UserStore[User.ParentDomainAdmin]);
                             if (testDS)
                                 //do this in AD LDS will assign an AD LDS domain
                                 machine.Domain = DomainStore[DomainEnum.PrimaryDomain];
@@ -487,7 +487,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                             machine = MachineStore[Machine.MainDC];
                         else
                         {
-                            machine = ldapAd.GetDCInfo(ADCommonServerAdapter.Instance(testSite).PDCNetbiosName + "." + ADCommonServerAdapter.Instance(testSite).PrimaryDomain, UserStore[User.ParentDomainAdmin]);
+                            machine = ldapAd.GetDCInfo(ADCommonServerAdapter.Instance(testSite).PDCNetbiosName + "." + ADCommonServerAdapter.Instance(testSite).PrimaryDomainDnsName, UserStore[User.ParentDomainAdmin]);
                             if (testDS)
                                 //do this in AD LDS will assign an AD LDS domain
                                 machine.Domain = DomainStore[DomainEnum.PrimaryDomain];
@@ -498,7 +498,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                             continue;
                         try
                         {
-                            machine = ldapAd.GetDCInfo(ADCommonServerAdapter.Instance(testSite).SDCNetbiosName + "." + ADCommonServerAdapter.Instance(testSite).PrimaryDomain, UserStore[User.ParentDomainAdmin]);
+                            machine = ldapAd.GetDCInfo(ADCommonServerAdapter.Instance(testSite).SDCNetbiosName + "." + ADCommonServerAdapter.Instance(testSite).PrimaryDomainDnsName, UserStore[User.ParentDomainAdmin]);
                             if (testDS)
                                 //do this in AD LDS will assign an AD LDS domain
                                 machine.Domain = DomainStore[DomainEnum.PrimaryDomain];
@@ -525,14 +525,14 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                             machine = ldapAd.GetDCInfo(
                                 ADCommonServerAdapter.Instance(testSite).PDCNetbiosName
                                 + "."
-                                + ADCommonServerAdapter.Instance(testSite).PrimaryDomain
+                                + ADCommonServerAdapter.Instance(testSite).PrimaryDomainDnsName
                                 + ":"
                                 + testSite.Properties[s + ".LDSPort"],
                                 UserStore[User.ParentDomainAdmin]);
                             ((AdldsServer)machine).DsaNetworkAddress =
                                 ADCommonServerAdapter.Instance(testSite).PDCNetbiosName
                                 + "."
-                                + ADCommonServerAdapter.Instance(testSite).PrimaryDomain
+                                + ADCommonServerAdapter.Instance(testSite).PrimaryDomainDnsName
                                 + ":"
                                 + ((AdldsServer)machine).DsaNetworkAddress;
                         }
@@ -733,8 +733,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                         continue;
                     default:
                         user.Domain = new AddsDomain();
-                        user.Domain.NetbiosName = testSite.Properties[DomainEnum.PrimaryDomain.ToString() + ".NetBIOSName"];
-                        user.Domain.DNSName = ADCommonServerAdapter.Instance(testSite).PrimaryDomain;
+                        user.Domain.NetbiosName = testSite.Properties[DomainEnum.PrimaryDomain.ToString() + ".NetbiosName"];
+                        user.Domain.DNSName = ADCommonServerAdapter.Instance(testSite).PrimaryDomainDnsName;
                         break;
                 }
                 UserStore.Add((EnvironmentConfig.User)Enum.Parse(typeof(EnvironmentConfig.User), s), user);

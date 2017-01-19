@@ -210,7 +210,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
             Site.Assert.IsTrue(buffer.EntriesRead > 0, "The number of entries returned should be larger than 0.");
             Dictionary<string, string> dic = new Dictionary<string, string>();
             LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(_samrProtocolAdapter.pdcFqdn),
-    new NetworkCredential(_samrProtocolAdapter.DomainAdministratorName, _samrProtocolAdapter.DomainUserPassword, _samrProtocolAdapter.PrimaryDomain));
+    new NetworkCredential(_samrProtocolAdapter.DomainAdministratorName, _samrProtocolAdapter.DomainUserPassword, _samrProtocolAdapter.PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
             string filter = string.Format("(&(objectClass=group)(|(groupType={0})(groupType={1})))", Utilities.GROUP_TYPE_SECURITY_ACCOUNT, Utilities.GROUP_TYPE_SECURITY_UNIVERSAL);
@@ -304,7 +304,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
                 rids.Add(rid.RelativeId.ToString());
             }
             LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(_samrProtocolAdapter.pdcFqdn),
-                new NetworkCredential(_samrProtocolAdapter.DomainAdministratorName, _samrProtocolAdapter.DomainUserPassword, _samrProtocolAdapter.PrimaryDomain));
+                new NetworkCredential(_samrProtocolAdapter.DomainAdministratorName, _samrProtocolAdapter.DomainUserPassword, _samrProtocolAdapter.PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
             string filter = string.Format("(&(objectClass=group)(|(groupType={0})(groupType={1})))", Utilities.GROUP_TYPE_SECURITY_ACCOUNT, Utilities.GROUP_TYPE_SECURITY_UNIVERSAL);
@@ -1511,7 +1511,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
             Site.Assert.IsTrue(buffer.EntriesRead > 0, "The number of entries returned should be larger than 0.");
             Dictionary<string, string> dic = new Dictionary<string, string>();
             LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(_samrProtocolAdapter.pdcFqdn),
-    new NetworkCredential(_samrProtocolAdapter.DomainAdministratorName, _samrProtocolAdapter.DomainUserPassword, _samrProtocolAdapter.PrimaryDomain));
+    new NetworkCredential(_samrProtocolAdapter.DomainAdministratorName, _samrProtocolAdapter.DomainUserPassword, _samrProtocolAdapter.PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
             SearchRequest searchReq = new SearchRequest(
@@ -1568,7 +1568,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
             Site.Assert.IsTrue(buffer.EntriesRead > 0, "The number of entries returned should be larger than 0.");
             Dictionary<string,string> dic = new Dictionary<string,string>();
             LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(_samrProtocolAdapter.pdcFqdn),
-    new NetworkCredential(_samrProtocolAdapter.DomainAdministratorName, _samrProtocolAdapter.DomainUserPassword, _samrProtocolAdapter.PrimaryDomain));
+    new NetworkCredential(_samrProtocolAdapter.DomainAdministratorName, _samrProtocolAdapter.DomainUserPassword, _samrProtocolAdapter.PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
             SearchRequest searchReq = new SearchRequest(
@@ -1662,7 +1662,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
                 rids.Add(rid.RelativeId.ToString());
             }
             LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(_samrProtocolAdapter.pdcFqdn),
-                new NetworkCredential(_samrProtocolAdapter.DomainAdministratorName, _samrProtocolAdapter.DomainUserPassword, _samrProtocolAdapter.PrimaryDomain));
+                new NetworkCredential(_samrProtocolAdapter.DomainAdministratorName, _samrProtocolAdapter.DomainUserPassword, _samrProtocolAdapter.PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
             string filter = string.Format("(&(objectClass=user)(userAccountControl:1.2.840.113556.1.4.803:={0}))", userAccountControlFilter.ToString());
@@ -1755,7 +1755,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
            entry.Close();
 
            LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(_samrProtocolAdapter.pdcFqdn),
-               new NetworkCredential(_samrProtocolAdapter.DomainAdministratorName, _samrProtocolAdapter.DomainUserPassword, _samrProtocolAdapter.PrimaryDomain));
+               new NetworkCredential(_samrProtocolAdapter.DomainAdministratorName, _samrProtocolAdapter.DomainUserPassword, _samrProtocolAdapter.PrimaryDomainDnsName));
            string filter = string.Format("(sAMAccountName={0})", name);
            SearchRequest request = new SearchRequest(_samrProtocolAdapter.primaryDomainDN, filter, System.DirectoryServices.Protocols.SearchScope.Subtree);
            SearchResponse response = (SearchResponse)con.SendRequest(request);
@@ -1986,7 +1986,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
        public void VerifyConstraintsForGroup(string name)
        {
            LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(_samrProtocolAdapter.pdcFqdn),
-               new NetworkCredential(_samrProtocolAdapter.DomainAdministratorName, _samrProtocolAdapter.DomainUserPassword, _samrProtocolAdapter.PrimaryDomain));
+               new NetworkCredential(_samrProtocolAdapter.DomainAdministratorName, _samrProtocolAdapter.DomainUserPassword, _samrProtocolAdapter.PrimaryDomainDnsName));
            string filter = string.Format("(sAMAccountName={0})", name);
            SearchRequest request = new SearchRequest(_samrProtocolAdapter.primaryDomainDN, filter, System.DirectoryServices.Protocols.SearchScope.Subtree);
            SearchResponse response = (SearchResponse)con.SendRequest(request);

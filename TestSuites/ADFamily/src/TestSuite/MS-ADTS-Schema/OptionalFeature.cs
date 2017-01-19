@@ -577,7 +577,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                 "LDAP://"
                 + adAdapter.adamServerPort
                 + "/CN=Deleted Objects," 
-                + configNC,adAdapter.PrimaryDomain+@"\"+adAdapter.ClientUserName,adAdapter.ClientUserPassword);
+                + configNC,adAdapter.PrimaryDomainDnsName+@"\"+adAdapter.ClientUserName,adAdapter.ClientUserPassword);
             deletedObjects.AuthenticationType = AuthenticationTypes.Secure;
             DirectorySearcher searcher = new DirectorySearcher(deletedObjects);
             searcher.SearchScope = System.DirectoryServices.SearchScope.OneLevel;

@@ -27,7 +27,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Common
         public string DomainAdministratorName;
         public string DomainUserPassword;
         // Primary DC
-        public string PrimaryDomain;
+        public string PrimaryDomainNetBiosName;
+        public string PrimaryDomainDnsName;
         public string PrimaryDomainSrvGUID;
         public string PrimaryDomainSID;
         public string PDCNetbiosName;
@@ -46,12 +47,14 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Common
         public string RODCIPAddress;
         public ServerVersion RODCOSVersion;
         // Child DC
-        public string ChildDomain;
+        public string ChildDomainNetBiosName;
+        public string ChildDomainDnsName;
         public string CDCNetbiosName;
         public string CDCIPAddress;
         public ServerVersion CDCOSVersion;
         // Trust DC
-        public string TrustDomain;
+        public string TrustDomainNetBiosName;
+        public string TrustDomainDnsName;
         public string TDCNetbiosName;
         public string TDCIPAddress;
         public ServerVersion TDCOSVersion;
@@ -128,7 +131,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Common
             DomainAdminGroup        = GetProperty(propertyGroup + "DomainAdminGroup");
             DomainAdministratorName = GetProperty(propertyGroup + "DomainAdministratorName", true);
             DomainUserPassword      = GetProperty(propertyGroup + "DomainUserPassword", true);
-            PrimaryDomain           = GetProperty(propertyGroup + "PrimaryDomain.DNSName", true);
+            PrimaryDomainDnsName    = GetProperty(propertyGroup + "PrimaryDomain.DNSName", true);
+            PrimaryDomainNetBiosName = GetProperty(propertyGroup + "PrimaryDomain.NetBiosName" ?? (PrimaryDomainDnsName.Split('.'))[0].ToString());
             PrimaryDomainSrvGUID    = GetProperty(propertyGroup + "PrimaryDomain.ServerGUID", true);
             PrimaryDomainSID        = GetProperty(propertyGroup + "PrimaryDomain.SID", true);
             PDCNetbiosName          = GetProperty(propertyGroup + "WritableDC1.NetbiosName", true);
@@ -144,11 +148,13 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Common
             RODCPassword            = GetProperty(propertyGroup + "RODC.Password");
             RODCIPAddress           = GetProperty(propertyGroup + "RODC.IPAddress");
             RODCOSVersion           = GetEnumProperty<ServerVersion>(propertyGroup + "RODC.OSVersion");
-            ChildDomain             = GetProperty(propertyGroup + "ChildDomain.DNSName");
+            ChildDomainDnsName = GetProperty(propertyGroup + "ChildDomain.DNSName");
+            ChildDomainNetBiosName = GetProperty(propertyGroup + "ChildDomain.NetBiosName") ?? (ChildDomainDnsName.Split('.'))[0].ToString();
             CDCNetbiosName          = GetProperty(propertyGroup + "CDC.NetbiosName");
             CDCIPAddress            = GetProperty(propertyGroup + "CDC.IPAddress");
             CDCOSVersion            = GetEnumProperty<ServerVersion>(propertyGroup + "CDC.OSVersion");
-            TrustDomain             = GetProperty(propertyGroup + "TrustDomain.DNSName");
+            TrustDomainDnsName = GetProperty(propertyGroup + "TrustDomain.DNSName");
+            TrustDomainNetBiosName = GetProperty(propertyGroup + "TrustDomain.NetBiosName") ?? (TrustDomainDnsName.Split('.'))[0].ToString();
             TDCNetbiosName          = GetProperty(propertyGroup + "TDC.NetbiosName");
             TDCIPAddress            = GetProperty(propertyGroup + "TDC.IPAddress");
             TDCOSVersion            = GetEnumProperty<ServerVersion>(propertyGroup + "TDC.OSVersion");
@@ -174,7 +180,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Common
             domains = new DomainCollection();
             domainControllers = new DomainControllerCollection();
 
-            Domain primaryDomain = new Domain(PrimaryDomain);
+            Domain primaryDomain = new Domain(PrimaryDomainDnsName, PrimaryDomainNetBiosName);
             domains.Add(primaryDomain);
             DomainController pdc = new DomainController(primaryDomain, PDCNetbiosName, PDCIPAddress, (ServerVersion)PDCOSVersion);
             DomainController sdc = new DomainController(primaryDomain, SDCNetbiosName, SDCIPAddress, (ServerVersion)SDCOSVersion);
@@ -183,25 +189,25 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Common
             domainControllers.Add(sdc);
             domainControllers.Add(rodc);
             
-            if (string.IsNullOrEmpty(ChildDomain))
+            if (string.IsNullOrEmpty(ChildDomainDnsName))
             {
-                Site.Log.Add(LogEntryKind.Warning, "ChildDomain is not configured in PTF, indicating the environment has no child domain.");
+                Site.Log.Add(LogEntryKind.Warning, "ChildDomainDnsName is not configured in PTF, indicating the environment has no child domain.");
             }
             else
             {
-                Domain childDomain = new Domain(ChildDomain);
+                Domain childDomain = new Domain(ChildDomainDnsName);
                 DomainController cdc = new DomainController(childDomain, CDCNetbiosName, CDCIPAddress, (ServerVersion)CDCOSVersion);
                 domains.Add(childDomain);
                 domainControllers.Add(cdc);
             }
 
-            if (string.IsNullOrEmpty(TrustDomain))
+            if (string.IsNullOrEmpty(TrustDomainDnsName))
             {
-                Site.Log.Add(LogEntryKind.Warning, "TrustDomain is not configured in PTF, indicating the environment has no trusted domain.");
+                Site.Log.Add(LogEntryKind.Warning, "TrustDomainDnsName is not configured in PTF, indicating the environment has no trusted domain.");
             }
             else
             {
-                Domain trustDomain = new Domain(TrustDomain);
+                Domain trustDomain = new Domain(TrustDomainDnsName);
                 DomainController tdc = new DomainController(trustDomain, TDCNetbiosName, TDCIPAddress, (ServerVersion)TDCOSVersion);
                 domains.Add(trustDomain);
                 domainControllers.Add(tdc);

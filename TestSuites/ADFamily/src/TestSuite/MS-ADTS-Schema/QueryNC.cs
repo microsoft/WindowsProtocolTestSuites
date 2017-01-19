@@ -200,7 +200,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                 //To create the Application NC in the Active Directory.
                 AdLdapClient.Instance().ConnectAndBind(adAdapter.PDCNetbiosName,
                     adAdapter.PDCIPAddr, Convert.ToInt32(adAdapter.ADDSPortNum), adAdapter.DomainAdministratorName,
-                    adAdapter.DomainUserPassword, adAdapter.PrimaryDomain,
+                    adAdapter.DomainUserPassword, adAdapter.PrimaryDomainDnsName,
                     AuthType.Basic | AuthType.Kerberos);
                 List<DirectoryAttribute> attrs = new List<DirectoryAttribute>();
                 attrs.Add(new DirectoryAttribute("instancetype:5"));

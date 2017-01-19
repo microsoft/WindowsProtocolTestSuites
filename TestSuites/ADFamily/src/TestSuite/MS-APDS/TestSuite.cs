@@ -109,14 +109,14 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
             else currentOS = OSVersion.OTHER;
             isServerWindows = currentOS != OSVersion.NONWINDOWS;
 
-            resourceDCName = apdsServerAdapter.PDCNetbiosName + "." + apdsServerAdapter.PrimaryDomain;
-            accountDCName = apdsServerAdapter.TDCNetbiosName + "." + apdsServerAdapter.TrustDomain;
+            resourceDCName = apdsServerAdapter.PDCNetbiosName + "." + apdsServerAdapter.PrimaryDomainDnsName;
+            accountDCName = apdsServerAdapter.TDCNetbiosName + "." + apdsServerAdapter.TrustDomainDnsName;
             // The value for registry key to block DC.
             blockDCkey = 7;
             // The value for registry key to set exception server for block DC.
             blockCDException = apdsServerAdapter.ENDPOINTNetbiosName;
 
-            testUser = apdsServerAdapter.TrustDomain + "\\" + apdsServerAdapter.DomainAdministratorName;
+            testUser = apdsServerAdapter.TrustDomainDnsName + "\\" + apdsServerAdapter.DomainAdministratorName;
 
 
             // Get default registry key for DC blocker.

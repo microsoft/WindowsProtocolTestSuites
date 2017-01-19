@@ -53,7 +53,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             string[] actualValue = null;
             string distinguishedName = String.Empty;
             string sidValues = String.Empty;
-            string hostOrDomainName = adAdapter.PrimaryDomain;
+            string hostOrDomainName = adAdapter.PrimaryDomainDnsName;
             string targetOu = adAdapter.rootDomainDN, rootNC, quotaEntryValue, getSidValue, tokenGroup, tempString = String.Empty;
             byte[] objectSid;
             int quotaUsed = -1, liveCount = -1, tombstoneCount = -1, wrongLocation = -1;
@@ -79,7 +79,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
 
                 if (serverOS >= OSVersion.WinSvr2008R2)
                 {
-                    serverName += "." + adAdapter.PrimaryDomain;
+                    serverName += "." + adAdapter.PrimaryDomainDnsName;
                 }
                 LdapConnection conn = new LdapConnection(new LdapDirectoryIdentifier(serverName));
                 conn.Bind();
@@ -105,7 +105,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
 
                 if (serverOS >= OSVersion.WinSvr2008R2)
                 {
-                    serverName += "." + adAdapter.PrimaryDomain;
+                    serverName += "." + adAdapter.PrimaryDomainDnsName;
                 }
                 LdapConnection connectionPSC = new LdapConnection(new LdapDirectoryIdentifier(serverName));
                 connectionPSC.Bind();
@@ -2832,7 +2832,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                 Convert.ToInt32(adAdapter.ADDSPortNum),
                 adAdapter.DomainAdministratorName,
                 adAdapter.DomainUserPassword,
-                adAdapter.PrimaryDomain.Split('.')[0],
+                adAdapter.PrimaryDomainNetBiosName,
                 AuthType.Basic | AuthType.Kerberos);
             if (ret.Equals("Success_STATUS_SUCCESS"))
             {
@@ -3569,7 +3569,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                 Convert.ToInt32(adAdapter.ADLDSPortNum),
                 adAdapter.ClientUserName,
                 adAdapter.ClientUserPassword,
-                adAdapter.PrimaryDomain.Split('.')[0],
+                adAdapter.PrimaryDomainNetBiosName,
                 AuthType.Basic | AuthType.Ntlm);
             if (ret.Equals("Success_STATUS_SUCCESS"))
             {
@@ -4263,7 +4263,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             String actualSubSchemaSubEntry = dirEntry.Properties["subSchemaSubEntry"].Value.ToString().ToLower();
             String expectedSubSchemaSubEntry = null;
             string schemaDN = "CN=Schema,CN=Configuration,";
-            string domainNC = adAdapter.PrimaryDomain;
+            string domainNC = adAdapter.PrimaryDomainDnsName;
 
             if (isDS)
             {
@@ -4412,7 +4412,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             string serverName = adAdapter.PDCNetbiosName;
             if (serverOS >= OSVersion.WinSvr2008R2)
             {
-                serverName += "." + adAdapter.PrimaryDomain;
+                serverName += "." + adAdapter.PrimaryDomainDnsName;
             }
             LdapConnection conn = new LdapConnection(new LdapDirectoryIdentifier(serverName));
             conn.Bind();
@@ -4457,7 +4457,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             string serverName = adAdapter.PDCNetbiosName;
             if (serverOS >= OSVersion.WinSvr2008R2)
             {
-                serverName += "." + adAdapter.PrimaryDomain;
+                serverName += "." + adAdapter.PrimaryDomainDnsName;
             }
             LdapConnection conn = new LdapConnection(new LdapDirectoryIdentifier(serverName));
             conn.Bind();

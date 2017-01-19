@@ -35,17 +35,17 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Common
         /// </summary>
         public DomainFunctionLevel DomainFunctionLevel;
 
-        public Domain(string fqdn) 
+        public Domain(string fqdn, string netbios = null) 
         {
-            FQDN = fqdn; 
-            NetbiosName = fqdn.Split('.')[0];
+            FQDN = fqdn;
+            NetbiosName = String.IsNullOrEmpty(netbios) ? fqdn.Split('.')[0] : netbios;
             DomainNC = "DC=" + fqdn.Replace(".", ",DC=");
         }
 
-        public Domain(string fqdn, DomainFunctionLevel domainfunctionlevel)
+        public Domain(string fqdn, DomainFunctionLevel domainfunctionlevel, string netbios = null)
         {
             FQDN = fqdn;
-            NetbiosName = fqdn.Split('.')[0];
+            NetbiosName = String.IsNullOrEmpty(netbios) ? fqdn.Split('.')[0] : netbios;
             DomainNC = "DC=" + fqdn.Replace(".", ",DC=");
             DomainFunctionLevel = domainfunctionlevel;
         }

@@ -37,11 +37,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
             common = new ADCommonServerAdapter();
             common.Initialize(BaseTestSite);
             Utilities.BackupOrRestoreNtSecurityDescriptor(
-                common.PDCNetbiosName + "." + common.PrimaryDomain,
+                common.PDCNetbiosName + "." + common.PrimaryDomainDnsName,
                 int.Parse(common.ADDSPortNum),
-                "CN=NTDS Quotas,CN=Configuration," + Utilities.DomainDnsNameToDN(common.PrimaryDomain),
+                "CN=NTDS Quotas,CN=Configuration," + Utilities.DomainDnsNameToDN(common.PrimaryDomainDnsName),
                 Utilities.SecurityDescriptorBackupFilename,
-                new System.Net.NetworkCredential(common.DomainAdministratorName, common.DomainUserPassword, common.PrimaryDomain));
+                new System.Net.NetworkCredential(common.DomainAdministratorName, common.DomainUserPassword, common.PrimaryDomainDnsName));
         }
 
         [Microsoft.VisualStudio.TestTools.UnitTesting.ClassCleanupAttribute()]
@@ -49,11 +49,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         {
             PtfTestClassBase.Cleanup();
             Utilities.BackupOrRestoreNtSecurityDescriptor(
-                common.PDCNetbiosName + "." + common.PrimaryDomain,
+                common.PDCNetbiosName + "." + common.PrimaryDomainDnsName,
                 int.Parse(common.ADDSPortNum),
-                "CN=NTDS Quotas,CN=Configuration," + Utilities.DomainDnsNameToDN(common.PrimaryDomain),
+                "CN=NTDS Quotas,CN=Configuration," + Utilities.DomainDnsNameToDN(common.PrimaryDomainDnsName),
                 Utilities.SecurityDescriptorBackupFilename,
-                new System.Net.NetworkCredential(common.DomainAdministratorName, common.DomainUserPassword, common.PrimaryDomain));
+                new System.Net.NetworkCredential(common.DomainAdministratorName, common.DomainUserPassword, common.PrimaryDomainDnsName));
         }
         #endregion
 

@@ -30,7 +30,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             PtfTestClassBase.Initialize(context);
             string userPassword = LsadManagedAdapter.Instance(BaseTestSite).DomainUserPassword;
             string newUserName = LsadManagedAdapter.DomainUserName;
-            string domainNC = "DC=" + LsadManagedAdapter.Instance(BaseTestSite).PrimaryDomain.Replace(".", ",DC=");
+            string domainNC = "DC=" + LsadManagedAdapter.Instance(BaseTestSite).PrimaryDomainDnsName.Replace(".", ",DC=");
             string parentDN = string.Format("CN=Users,{0}", domainNC);
             string userDN = string.Format("CN={0},CN=Users,{1}", newUserName, domainNC);
             if (Utilities.IsObjectExist(userDN, LsadManagedAdapter.Instance(BaseTestSite).PDCNetbiosName, LsadManagedAdapter.Instance(BaseTestSite).ADDSPortNum))
@@ -43,7 +43,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
         [Microsoft.VisualStudio.TestTools.UnitTesting.ClassCleanupAttribute()]
         public static void ClassCleanup() {
             PtfTestClassBase.Cleanup();
-            string domainNC = "DC=" + LsadManagedAdapter.Instance(BaseTestSite).PrimaryDomain.Replace(".", ",DC=");
+            string domainNC = "DC=" + LsadManagedAdapter.Instance(BaseTestSite).PrimaryDomainDnsName.Replace(".", ",DC=");
             string parentDN = string.Format("CN=Users,{0}", domainNC);
             string userDN = string.Format("CN={0},CN=Users,{1}", LsadManagedAdapter.DomainUserName, domainNC);
             if (Utilities.IsObjectExist(userDN, LsadManagedAdapter.Instance(BaseTestSite).PDCNetbiosName, LsadManagedAdapter.Instance(BaseTestSite).ADDSPortNum))

@@ -88,7 +88,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 new LdapDirectoryIdentifier(addr, int.Parse(port)),
                 new NetworkCredential(adLdapModelAdapter.DomainAdministratorName,
                     adLdapModelAdapter.DomainUserPassword,
-                    adLdapModelAdapter.PrimaryDomain));
+                    adLdapModelAdapter.PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
 
@@ -122,7 +122,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(adLdapModelAdapter.PDCIPAddress),
               new NetworkCredential(adLdapModelAdapter.DomainAdministratorName,
                   adLdapModelAdapter.DomainUserPassword,
-                  adLdapModelAdapter.PrimaryDomain));
+                  adLdapModelAdapter.PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
 
@@ -166,8 +166,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             int errorCode;
             bool failed = false;
-            string fullDomainName = adLdapModelAdapter.PrimaryDomain;
-            string netBiosDomainName = fullDomainName.Remove(fullDomainName.IndexOf('.'));
+            string fullDomainName = adLdapModelAdapter.PrimaryDomainDnsName;
+            string netBiosDomainName = adLdapModelAdapter.PrimaryDomainNetBiosName;
 
             // This "default domain NC" CrossRef object has nCName attribute DN1 which is ancestor of
             // "config NC" CrossRef object's nCName attribute DN2, DN2 is ancestor of
@@ -185,7 +185,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(adLdapModelAdapter.PDCIPAddress),
               new NetworkCredential(adLdapModelAdapter.DomainAdministratorName,
                   adLdapModelAdapter.DomainUserPassword,
-                  adLdapModelAdapter.PrimaryDomain));
+                  adLdapModelAdapter.PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
 
@@ -234,8 +234,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             int errorCode;
             bool failed = false;
-            string fullDomainName = adLdapModelAdapter.PrimaryDomain;
-            string netBiosDomainName = fullDomainName.Remove(fullDomainName.IndexOf('.'));
+            string fullDomainName = adLdapModelAdapter.PrimaryDomainDnsName;
+            string netBiosDomainName = adLdapModelAdapter.PrimaryDomainNetBiosName;
 
             // This "default domain NC" CrossRef object has nCName attribute DN1 which is ancestor of
             // "config NC" CrossRef object's nCName attribute DN2, DN2 is ancestor of
@@ -253,7 +253,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(adLdapModelAdapter.PDCIPAddress),
               new NetworkCredential(adLdapModelAdapter.DomainAdministratorName,
                   adLdapModelAdapter.DomainUserPassword,
-                  adLdapModelAdapter.PrimaryDomain));
+                  adLdapModelAdapter.PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
 
@@ -311,7 +311,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(adLdapModelAdapter.PDCNetbiosName),
               new NetworkCredential(adLdapModelAdapter.DomainAdministratorName,
                   adLdapModelAdapter.DomainUserPassword,
-                  adLdapModelAdapter.PrimaryDomain));
+                  adLdapModelAdapter.PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
 
@@ -369,7 +369,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 new NetworkCredential(
                     adLdapModelAdapter.DomainAdministratorName,
                     adLdapModelAdapter.DomainUserPassword,
-                    adLdapModelAdapter.PrimaryDomain)))
+                    adLdapModelAdapter.PrimaryDomainDnsName)))
             {
                 con.SessionOptions.Sealing = false;
                 con.SessionOptions.Signing = false;
@@ -414,7 +414,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
                 testUserGuid = Utilities.GetUserGuid(
                     adLdapModelAdapter.PDCNetbiosName,
-                    adLdapModelAdapter.PrimaryDomain,
+                    adLdapModelAdapter.PrimaryDomainDnsName,
                     adLdapModelAdapter.ADDSPortNum,
                     adLdapModelAdapter.DomainAdministratorName,
                     adLdapModelAdapter.DomainUserPassword,
@@ -470,7 +470,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(adLdapModelAdapter.PDCIPAddress),
               new NetworkCredential(adLdapModelAdapter.DomainAdministratorName,
                   adLdapModelAdapter.DomainUserPassword,
-                  adLdapModelAdapter.PrimaryDomain));
+                  adLdapModelAdapter.PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
 
@@ -497,7 +497,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             System.DirectoryServices.Protocols.DeleteResponse delRep = (System.DirectoryServices.Protocols.DeleteResponse)con.SendRequest(delReq);
 
             DirectoryEntry deletedEntry = Utilities.BuildDeletedEntry(
-                string.Format(CultureInfo.InvariantCulture, "{0}.{1}", adLdapModelAdapter.PDCNetbiosName, adLdapModelAdapter.PrimaryDomain),
+                string.Format(CultureInfo.InvariantCulture, "{0}.{1}", adLdapModelAdapter.PDCNetbiosName, adLdapModelAdapter.PrimaryDomainDnsName),
                 AD_LDAPModelAdapter.DELETED_OBJECTS_CONTAINER_GUID,
                 adLdapModelAdapter.rootDomainNC);
             SearchResult tombStoneResult = Utilities.GetTombstone(deletedEntry, delObjDN.Split(',')[0].Split('=')[1].Trim());
@@ -545,7 +545,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 new LdapDirectoryIdentifier(addr, int.Parse(port)),
                 new NetworkCredential(adLdapModelAdapter.DomainAdministratorName,
                   adLdapModelAdapter.DomainUserPassword,
-                  adLdapModelAdapter.PrimaryDomain));
+                  adLdapModelAdapter.PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
 
@@ -602,7 +602,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             System.DirectoryServices.Protocols.DeleteResponse delRep = (System.DirectoryServices.Protocols.DeleteResponse)con.SendRequest(delReq);
 
             DirectoryEntry deletedEntry = Utilities.BuildDeletedEntry(
-                string.Format(CultureInfo.InvariantCulture, "{0}.{1}", adLdapModelAdapter.PDCNetbiosName, adLdapModelAdapter.PrimaryDomain),
+                string.Format(CultureInfo.InvariantCulture, "{0}.{1}", adLdapModelAdapter.PDCNetbiosName, adLdapModelAdapter.PrimaryDomainDnsName),
                 AD_LDAPModelAdapter.DELETED_OBJECTS_CONTAINER_GUID,
                 adLdapModelAdapter.rootDomainNC);
             SearchResult tombStoneResult = Utilities.GetTombstone(deletedEntry, testUserDN.Split(',')[0].Split('=')[1].Trim());

@@ -20,7 +20,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryDisplayInformation2 withDomainDisplayUser, large EntryCount, large PreferredMaximumLength, zero index.")]
         public void SamrQueryDisplayInformation2ForUser_DomainDisplayUser_IndexZero()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryDisplayInformation2: obtains a listing of accounts in ascending name-sorted order.");
             uint entryCount = 100;
@@ -44,7 +44,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryDisplayInformation2 with DomainDisplayOemUser, large EntryCount, large PreferredMaximumLength, zero index.")]
         public void SamrQueryDisplayInformation2ForUser_DomainDisplayOemUser_IndexZero()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryDisplayInformation2: obtains a listing of accounts in ascending name-sorted order.");
             uint entryCount = 100;

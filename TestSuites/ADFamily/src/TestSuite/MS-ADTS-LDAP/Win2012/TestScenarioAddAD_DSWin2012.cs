@@ -74,7 +74,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             AD_LDAPModelAdapter.Instance(Site).Initialize();
             Utilities.DomainAdmin = AD_LDAPModelAdapter.Instance(Site).DomainAdministratorName;
             Utilities.DomainAdminPassword = AD_LDAPModelAdapter.Instance(Site).DomainUserPassword;
-            Utilities.TargetServerFqdn = AD_LDAPModelAdapter.Instance(Site).PDCNetbiosName + "." + AD_LDAPModelAdapter.Instance(Site).PrimaryDomain + ":" + AD_LDAPModelAdapter.Instance(Site).ADDSPortNum + "/";
+            Utilities.TargetServerFqdn = AD_LDAPModelAdapter.Instance(Site).PDCNetbiosName + "." + AD_LDAPModelAdapter.Instance(Site).PrimaryDomainDnsName + ":" + AD_LDAPModelAdapter.Instance(Site).ADDSPortNum + "/";
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 new LdapDirectoryIdentifier(addr, int.Parse(port)),
                 new NetworkCredential(AD_LDAPModelAdapter.Instance(Site).DomainAdministratorName,
                     AD_LDAPModelAdapter.Instance(Site).DomainUserPassword,
-                    AD_LDAPModelAdapter.Instance(Site).PrimaryDomain));
+                    AD_LDAPModelAdapter.Instance(Site).PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
 
@@ -124,7 +124,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(AD_LDAPModelAdapter.Instance(Site).PDCIPAddress),
               new NetworkCredential(AD_LDAPModelAdapter.Instance(Site).DomainAdministratorName,
                   AD_LDAPModelAdapter.Instance(Site).DomainUserPassword,
-                  AD_LDAPModelAdapter.Instance(Site).PrimaryDomain));
+                  AD_LDAPModelAdapter.Instance(Site).PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
 
@@ -193,7 +193,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(AD_LDAPModelAdapter.Instance(Site).PDCIPAddress),
               new NetworkCredential(AD_LDAPModelAdapter.Instance(Site).DomainAdministratorName,
                   AD_LDAPModelAdapter.Instance(Site).DomainUserPassword,
-                  AD_LDAPModelAdapter.Instance(Site).PrimaryDomain));
+                  AD_LDAPModelAdapter.Instance(Site).PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
 
@@ -259,7 +259,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(AD_LDAPModelAdapter.Instance(Site).PDCIPAddress),
               new NetworkCredential(AD_LDAPModelAdapter.Instance(Site).DomainAdministratorName,
                   AD_LDAPModelAdapter.Instance(Site).DomainUserPassword,
-                  AD_LDAPModelAdapter.Instance(Site).PrimaryDomain));
+                  AD_LDAPModelAdapter.Instance(Site).PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
 
@@ -320,7 +320,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(AD_LDAPModelAdapter.Instance(Site).PDCIPAddress),
               new NetworkCredential(AD_LDAPModelAdapter.Instance(Site).DomainAdministratorName,
                   AD_LDAPModelAdapter.Instance(Site).DomainUserPassword,
-                  AD_LDAPModelAdapter.Instance(Site).PrimaryDomain));
+                  AD_LDAPModelAdapter.Instance(Site).PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
 
@@ -383,7 +383,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(AD_LDAPModelAdapter.Instance(Site).PDCIPAddress),
               new NetworkCredential(AD_LDAPModelAdapter.Instance(Site).DomainAdministratorName,
                   AD_LDAPModelAdapter.Instance(Site).DomainUserPassword,
-                  AD_LDAPModelAdapter.Instance(Site).PrimaryDomain));
+                  AD_LDAPModelAdapter.Instance(Site).PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
 
@@ -546,7 +546,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             //The user do not have RIGHT_DS_CREATE_CHILD access rights
             String userName = AD_LDAPModelAdapter.Instance(Site).testUser7Name;
             String password = AD_LDAPModelAdapter.Instance(Site).testUser7Pwd;
-            String netbiosDomain = AD_LDAPModelAdapter.Instance(Site).PrimaryDomain.Split('.')[0].Trim();
+            String netbiosDomain = AD_LDAPModelAdapter.Instance(Site).PrimaryDomainNetBiosName;
             TimeSpan timeout = AD_LDAPModelAdapter.Instance(Site).timeout;
 
             //Using SSL binding
@@ -582,8 +582,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             string computerObjectDN = "CN=" + computerName + ",CN=Computers," + AD_LDAPModelAdapter.Instance(Site).rootDomainNC;
             KeyValuePair<string, string[]>[] attrs = new KeyValuePair<string, string[]>[5];
             attrs[0] = new KeyValuePair<string, string[]>("objectClass", new string[] { "computer" });
-            attrs[1] = new KeyValuePair<string, string[]>("dNSHostName", new string[] { computerName + "." + AD_LDAPModelAdapter.Instance(Site).PrimaryDomain });
-            attrs[2] = new KeyValuePair<string, string[]>("servicePrincipalName", new string[] { "host/" + computerName + "." + AD_LDAPModelAdapter.Instance(Site).PrimaryDomain, "host/" + computerName });
+            attrs[1] = new KeyValuePair<string, string[]>("dNSHostName", new string[] { computerName + "." + AD_LDAPModelAdapter.Instance(Site).PrimaryDomainDnsName });
+            attrs[2] = new KeyValuePair<string, string[]>("servicePrincipalName", new string[] { "host/" + computerName + "." + AD_LDAPModelAdapter.Instance(Site).PrimaryDomainDnsName, "host/" + computerName });
             attrs[3] = new KeyValuePair<string, string[]>("sAMAccountName", new string[] { computerName + "$" });
             //attrs[4] = new KeyValuePair<string, string[]>("userAccountControl", new string[]{ "4098" });
             //If the account is created with UF_ACCOUNTDISABLE set in userAccountControl, unicodePwd is not required.
@@ -639,7 +639,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(AD_LDAPModelAdapter.Instance(Site).PDCIPAddress),
               new NetworkCredential(AD_LDAPModelAdapter.Instance(Site).DomainAdministratorName,
                   AD_LDAPModelAdapter.Instance(Site).DomainUserPassword,
-                  AD_LDAPModelAdapter.Instance(Site).PrimaryDomain));
+                  AD_LDAPModelAdapter.Instance(Site).PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
 

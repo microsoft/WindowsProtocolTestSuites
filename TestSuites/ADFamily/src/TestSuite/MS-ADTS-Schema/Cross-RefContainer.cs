@@ -40,7 +40,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                 //To create the Application NC in the Active Directory.
                 AdLdapClient.Instance().ConnectAndBind(adAdapter.PDCNetbiosName,
                     adAdapter.PDCIPAddr, Convert.ToInt32(adAdapter.ADDSPortNum), adAdapter.DomainAdministratorName,
-                    adAdapter.DomainUserPassword, adAdapter.PrimaryDomain,
+                    adAdapter.DomainUserPassword, adAdapter.PrimaryDomainDnsName,
                     AuthType.Basic | AuthType.Kerberos);
                 List<DirectoryAttribute> attrs = new List<DirectoryAttribute>();
                 attrs.Add(new DirectoryAttribute("instancetype:5"));
@@ -51,7 +51,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             string configNC = "CN=Configuration," + adAdapter.rootDomainDN;
             string SchemaNC = "CN=Schema," + configNC;
             //Returns Fully Qualified DNS Name for the Current Domain.
-            string strReturn = adAdapter.PrimaryDomain;
+            string strReturn = adAdapter.PrimaryDomainDnsName;
 
             if (!adAdapter.GetObjectByDN("CN=Partitions," + configNC, out dirPartitions))
             {
@@ -296,7 +296,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
 
                         //MS-ADTS-Schema trustParent
                         DirectoryEntry parentEntry = new DirectoryEntry();
-                        string netbiosDomain = adAdapter.PrimaryDomain.Split('.')[0]; 
+                        string netbiosDomain = adAdapter.PrimaryDomainNetBiosName; 
                         parentEntry = dirPartitions.Children.Find(string.Format("CN={0}", netbiosDomain));                        
                         DataSchemaSite.Assert.AreEqual<string>(
                             parentEntry.Properties["distinguishedName"].Value.ToString(),

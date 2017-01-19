@@ -45,7 +45,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
            
             #region Add Request for class schema in DS
             bool objectCreated = false;
-            LdapConnection connection = new LdapConnection(new LdapDirectoryIdentifier(adAdapter.PDCNetbiosName + "." + adAdapter.PrimaryDomain));
+            LdapConnection connection = new LdapConnection(new LdapDirectoryIdentifier(adAdapter.PDCNetbiosName + "." + adAdapter.PrimaryDomainDnsName));
             if (
                 adAdapter.GetObjectByDN(newClassName
                 + ",CN=Schema,CN=Configuration,"
@@ -1006,7 +1006,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                   new System.Net.NetworkCredential(
                       adAdapter.ClientUserName,
                       adAdapter.ClientUserPassword,
-                      adAdapter.PrimaryDomain),
+                      adAdapter.PrimaryDomainDnsName),
                   AuthType.Ntlm | AuthType.Basic);
             //MS-ADTS-Schema_R209
             bool objectCreated = false;
@@ -1889,7 +1889,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             string serverFullName = serverName;
             if (serverName.IndexOf('.') == -1)
             {
-                serverFullName = serverName + "." + adAdapter.PrimaryDomain;
+                serverFullName = serverName + "." + adAdapter.PrimaryDomainDnsName;
             }
             LdapConnection connection = null;
             if (!isLDS)
@@ -1899,7 +1899,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                    new System.Net.NetworkCredential(
                        adAdapter.DomainAdministratorName,
                        adAdapter.DomainUserPassword,
-                       adAdapter.PrimaryDomain),
+                       adAdapter.PrimaryDomainDnsName),
                    AuthType.Kerberos | AuthType.Basic);
             }
             else
@@ -1909,7 +1909,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                   new System.Net.NetworkCredential(
                       adAdapter.ClientUserName,
                       adAdapter.ClientUserPassword,
-                      adAdapter.PrimaryDomain),
+                      adAdapter.PrimaryDomainDnsName),
                   AuthType.Ntlm | AuthType.Basic);
             }
             bool inValidSyntax = false;
@@ -2172,7 +2172,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             string serverFullName = serverName;
             if (serverName.IndexOf('.') == -1)
             {
-                serverFullName = serverName +"." + adAdapter.PrimaryDomain;
+                serverFullName = serverName +"." + adAdapter.PrimaryDomainDnsName;
             }
             LdapConnection connection = null;
             if (!isLDS)
@@ -2182,7 +2182,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                    new System.Net.NetworkCredential(
                        adAdapter.DomainAdministratorName,
                        adAdapter.DomainUserPassword,
-                       adAdapter.PrimaryDomain),
+                       adAdapter.PrimaryDomainDnsName),
                    AuthType.Kerberos | AuthType.Basic);
             }
             else
@@ -2192,7 +2192,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                   new System.Net.NetworkCredential(
                       adAdapter.ClientUserName,
                       adAdapter.ClientUserPassword,
-                      adAdapter.PrimaryDomain),
+                      adAdapter.PrimaryDomainDnsName),
                   AuthType.Ntlm | AuthType.Basic);
             }
 

@@ -20,7 +20,7 @@ function GetPtfVariable
 $objectPath = .\GetAdministratorObjPath.ps1
 $attribute = "pwdLastSet"
 $primaryDCName = GetPtfVariable "Common.WritableDC1.NetbiosName" 
-$primaryDomainNetBiosName = (GetPtfVariable "Common.PrimaryDomain.DNSName").Split(".")[0]
+$primaryDomainNetBiosName = GetPtfVariable "Common.PrimaryDomain.NetBiosName"
 
 # Get Information
 $objectInstance = New-Object System.DirectoryServices.DirectoryEntry("LDAP://$primaryDCName/$objectPath","$primaryDomainNetBiosName\$username",$password)

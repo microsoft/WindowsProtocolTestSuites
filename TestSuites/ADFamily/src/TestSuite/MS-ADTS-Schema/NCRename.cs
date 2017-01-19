@@ -23,12 +23,12 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         [TestCategory("TDC")]
         public void Schema_TestNCRename()
         {
-            NCRenameDiag diag = new NCRenameDiag(adAdapter.PDCIPAddress, adAdapter.PrimaryDomain, adAdapter.PrimaryDomain.Split('.')[0], adAdapter.DomainAdministratorName, adAdapter.DomainUserPassword);
-            diag.AddChild(adAdapter.CDCIPAddress,adAdapter.ChildDomain,adAdapter.ChildDomain.Split('.')[0]);
+            NCRenameDiag diag = new NCRenameDiag(adAdapter.PDCIPAddress, adAdapter.PrimaryDomainDnsName, adAdapter.PrimaryDomainNetBiosName, adAdapter.DomainAdministratorName, adAdapter.DomainUserPassword);
+            diag.AddChild(adAdapter.CDCIPAddress, adAdapter.ChildDomainDnsName, adAdapter.ChildDomainNetBiosName);
             diag.AddTrustedDomain(
                 adAdapter.TDCNetbiosName,
-                adAdapter.TrustDomain,
-                adAdapter.TrustDomain.Split('.')[0],
+                adAdapter.TrustDomainDnsName,
+                adAdapter.TrustDomainNetBiosName,
                 adAdapter.DomainAdministratorName,
                 adAdapter.DomainUserPassword);
            List<string> errors =  diag.Diag();

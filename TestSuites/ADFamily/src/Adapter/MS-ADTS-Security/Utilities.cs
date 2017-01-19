@@ -30,7 +30,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
 
         #region GetSid
         /// <summary>
-        /// Initializes the SID of the PrimaryDomain.DNSName.
+        /// Initializes the SID of the Domain.
         /// </summary> 
 
         public static _RPC_SID[] GetSid(string sid)
@@ -205,17 +205,17 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         }
         #endregion LsarOpenPolicy2
 
-        #region ParsePrimaryDomain.DNSNameName
-        public static string ParseDomainName(string DomainName)
+        #region Parse Domain DnsName
+        public static string ParseDomainName(string DomainDnsName)
         {
-            string[] temp = DomainName.Split('.');
-            string parsedDomainNme = "";
+            string[] temp = DomainDnsName.Split('.');
+            string parsedDomainName = "";
             foreach (string item in temp)
             {
-                parsedDomainNme += "DC=" + item + ",";
+                parsedDomainName += "DC=" + item + ",";
             }
-            return parsedDomainNme.Substring(0, parsedDomainNme.Length - 1);
+            return parsedDomainName.Substring(0, parsedDomainName.Length - 1);
         }
-        #endregion ParsePrimaryDomain.DNSNameName
+        #endregion Parse Domain DnsName
     }
 }

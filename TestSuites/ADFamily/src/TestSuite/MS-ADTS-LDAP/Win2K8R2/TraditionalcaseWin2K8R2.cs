@@ -227,7 +227,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             var attributes = Utilities.GetAttributesFromEntry(
                 testUser0Dn,
                 new string[] { "objectGUID", "objectSid" },
-                adLdapModelAdapter.PDCNetbiosName + "." + adLdapModelAdapter.PrimaryDomain,
+                adLdapModelAdapter.PDCNetbiosName + "." + adLdapModelAdapter.PrimaryDomainDnsName,
                 adLdapModelAdapter.ADDSPortNum);
 
             Guid testUser0GuidBeforeDelete = new Guid((byte[])attributes["objectGUID"]);
@@ -570,7 +570,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 uint flags = uint.Parse(Utilities.GetAttributeFromEntry(
                     adLdapModelAdapter.recycleBinPartialDN + ',' + adLdapModelAdapter.configurationNC,
                     "msDS-OptionalFeatureFlags",
-                    adLdapModelAdapter.PDCNetbiosName + "." + adLdapModelAdapter.PrimaryDomain,
+                    adLdapModelAdapter.PDCNetbiosName + "." + adLdapModelAdapter.PrimaryDomainDnsName,
                     adLdapModelAdapter.ADDSPortNum).ToString());
 
                 Site.Log.Add(LogEntryKind.Debug, "Whether an optional feature can be disabled is specified in the msDS-OptionalFeatureFlags attribute on the object representing the optional feature. If the feature can be disabled, the attribute contains the bit flag DISABLABLE_OPTIONAL_FEATURE. Absence of this flag means that the feature cannot be disabled once it has been enabled. Flags: {0}", (OptionalFeature)flags);
@@ -807,7 +807,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             var attributes = Utilities.GetAttributesFromEntry(
                 testUser0Dn,
                 new string[] { "objectGUID", "objectSid" },
-                adLdapModelAdapter.PDCNetbiosName + "." + adLdapModelAdapter.PrimaryDomain,
+                adLdapModelAdapter.PDCNetbiosName + "." + adLdapModelAdapter.PrimaryDomainDnsName,
                 adLdapModelAdapter.ADDSPortNum);
 
             Guid testUser0GuidBeforeDelete = new Guid((byte[])attributes["objectGUID"]);
@@ -860,7 +860,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             var member = Utilities.GetAttributeFromEntry(
                 testGroup0Dn,
                 "member",
-                adLdapModelAdapter.PDCNetbiosName + "." + adLdapModelAdapter.PrimaryDomain,
+                adLdapModelAdapter.PDCNetbiosName + "." + adLdapModelAdapter.PrimaryDomainDnsName,
                 adLdapModelAdapter.ADDSPortNum);
             Site.CaptureRequirementIfIsNull(member, 59, "When an object o is transformed into a tombstone, any forward link reference to object o is removed from the attribute that contains it.");
 
@@ -1448,7 +1448,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             List<DirectoryAttribute> attrs = new List<DirectoryAttribute>();
             attrs.Add(new DirectoryAttribute("systemflags:5"));
-            attrs.Add(new DirectoryAttribute("dnsroot:" + adLdapModelAdapter.PDCNetbiosName + "." + adLdapModelAdapter.PrimaryDomain));
+            attrs.Add(new DirectoryAttribute("dnsroot:" + adLdapModelAdapter.PDCNetbiosName + "." + adLdapModelAdapter.PrimaryDomainDnsName));
             attrs.Add(new DirectoryAttribute("ncname:" + appNC));
             attrs.Add(new DirectoryAttribute("enabled:FALSE"));
             attrs.Add(new DirectoryAttribute("objectclass:crossref"));
@@ -1487,7 +1487,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             List<DirectoryAttribute> attrs = new List<DirectoryAttribute>();
             attrs.Add(new DirectoryAttribute("systemflags:5"));
-            attrs.Add(new DirectoryAttribute("dnsroot:" + adLdapModelAdapter.PDCNetbiosName + "." + adLdapModelAdapter.PrimaryDomain));
+            attrs.Add(new DirectoryAttribute("dnsroot:" + adLdapModelAdapter.PDCNetbiosName + "." + adLdapModelAdapter.PrimaryDomainDnsName));
             attrs.Add(new DirectoryAttribute("ncname:" + appNC));
             attrs.Add(new DirectoryAttribute("enabled:TRUE"));
             attrs.Add(new DirectoryAttribute("objectclass:crossref"));
@@ -1566,7 +1566,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             List<DirectoryAttribute> attrs = new List<DirectoryAttribute>();
             attrs.Add(new DirectoryAttribute("systemflags", "5"));
-            attrs.Add(new DirectoryAttribute("dnsroot", adLdapModelAdapter.PDCNetbiosName + "." + adLdapModelAdapter.PrimaryDomain + ":" + adLdapModelAdapter.ADLDSPortNum + ":" + adLdapModelAdapter.ADLDSSSLPortNum));
+            attrs.Add(new DirectoryAttribute("dnsroot", adLdapModelAdapter.PDCNetbiosName + "." + adLdapModelAdapter.PrimaryDomainDnsName + ":" + adLdapModelAdapter.ADLDSPortNum + ":" + adLdapModelAdapter.ADLDSSSLPortNum));
             attrs.Add(new DirectoryAttribute("ncname", appNC));
             attrs.Add(new DirectoryAttribute("enabled", "FALSE"));
             attrs.Add(new DirectoryAttribute("objectclass", "crossref"));
@@ -1621,7 +1621,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 adLdapModelAdapter.testUserName,
                  adLdapModelAdapter.testUserPwd);
 
-            string testDNS = adLdapModelAdapter.testComputer1Name + "." + adLdapModelAdapter.PrimaryDomain;
+            string testDNS = adLdapModelAdapter.testComputer1Name + "." + adLdapModelAdapter.PrimaryDomainDnsName;
             entry.Properties["dnshostname"].Value = testDNS;
             entry.CommitChanges();
             entry.RefreshCache();
@@ -1687,7 +1687,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             List<DirectoryAttribute> attrs = new List<DirectoryAttribute>();
             attrs.Add(new DirectoryAttribute("systemflags", "5"));
-            attrs.Add(new DirectoryAttribute("dnsroot", adLdapModelAdapter.PDCNetbiosName + "." + adLdapModelAdapter.PrimaryDomain + ":" + adLdapModelAdapter.ADLDSPortNum + ":" + adLdapModelAdapter.ADLDSSSLPortNum));
+            attrs.Add(new DirectoryAttribute("dnsroot", adLdapModelAdapter.PDCNetbiosName + "." + adLdapModelAdapter.PrimaryDomainDnsName + ":" + adLdapModelAdapter.ADLDSPortNum + ":" + adLdapModelAdapter.ADLDSSSLPortNum));
             attrs.Add(new DirectoryAttribute("ncname", appNC));
             attrs.Add(new DirectoryAttribute("enabled", "TRUE"));
             attrs.Add(new DirectoryAttribute("objectclass", "crossref"));
@@ -1755,7 +1755,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     new NetworkCredential(
                         adLdapModelAdapter.testUserName,
                         adLdapModelAdapter.testUserPwd,
-                        adLdapModelAdapter.PrimaryDomain));
+                        adLdapModelAdapter.PrimaryDomainDnsName));
             ManagedAddRequest req = new ManagedAddRequest("cn=badcomputer,cn=computers," + adLdapModelAdapter.rootDomainNC, "computer");
             bool asExpected = false;
             try

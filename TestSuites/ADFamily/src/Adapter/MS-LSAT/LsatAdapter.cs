@@ -378,7 +378,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
             // 0x00000002 implies that the Client is running an operating system version of Windows 2000 or a later release!
             // Use const value here, as we will no longer support OS version earlier than Windows 2000
             this.clientRevision = 2;
-            NameOfDomain = PrimaryDomain;
+            NameOfDomain = PrimaryDomainDnsName;
             this.currentUserName = DomainAdministratorName;
             string password = DomainUserPassword;
 
