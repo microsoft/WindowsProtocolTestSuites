@@ -110,10 +110,6 @@ else
 $certPwd = "Password01!"
 $certFileName = $driverComputerName
 
-if (Test-Path -Path "$env:HOMEDRIVE\$certFileName.pvk")
-{
-    Remove-Item "$env:HOMEDRIVE\$certFileName.pvk" -Force
-}
 if (Test-Path -Path "$env:HOMEDRIVE\$certFileName.cer")
 {
     Remove-Item "$env:HOMEDRIVE\$certFileName.cer" -Force
