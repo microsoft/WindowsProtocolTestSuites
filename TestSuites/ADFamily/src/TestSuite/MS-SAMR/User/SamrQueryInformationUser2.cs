@@ -18,7 +18,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with UserAllInformation.")]
         public void SamrQueryInformationUser2_UserAllInformation()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_GENERAL | Utilities.USER_READ_LOGON | Utilities.USER_READ_ACCOUNT | Utilities.USER_READ_PREFERENCES);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");
@@ -39,7 +39,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with UserAllInformation using USER_READ_GENERAL.")]
         public void SamrQueryInformationUser2_UserAllInformation_USER_READ_GENERAL()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_GENERAL);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");
@@ -60,7 +60,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with UserAllInformation using USER_READ_LOGON.")]
         public void SamrQueryInformationUser2_UserAllInformation_USER_READ_LOGON()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_LOGON);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");
@@ -81,7 +81,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with UserAllInformation using USER_READ_ACCOUNT.")]
         public void SamrQueryInformationUser2_UserAllInformation_USER_READ_ACCOUNT()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_ACCOUNT);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");
@@ -102,7 +102,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with UserAllInformation using USER_READ_PREFERENCES.")]
         public void SamrQueryInformationUser2_UserAllInformation_USER_READ_PREFERENCES()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_PREFERENCES);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");
@@ -123,7 +123,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with UserAccountInformation.")]
         public void SamrQueryInformationUser2_UserAccountInformation()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_GENERAL | Utilities.USER_READ_PREFERENCES | Utilities.USER_READ_LOGON | Utilities.USER_READ_ACCOUNT);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");
@@ -144,7 +144,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with UserGeneralInformation.")]
         public void SamrQueryInformationUser2_UserGeneralInformation()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_GENERAL);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");
@@ -165,7 +165,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with UserPrimaryGroupInformation.")]
         public void SamrQueryInformationUser2_UserPrimaryGroupInformation()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_GENERAL);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");
@@ -186,7 +186,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with UserNameInformation.")]
         public void SamrQueryInformationUser2_UserNameInformation()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_GENERAL);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");
@@ -207,7 +207,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with UserAccountNameInformation.")]
         public void SamrQueryInformationUser2_UserAccountNameInformation()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_GENERAL);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");
@@ -228,7 +228,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with UserFullNameInformation.")]
         public void SamrQueryInformationUser2_UserFullNameInformation()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_GENERAL);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");
@@ -249,7 +249,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with UserAdminCommentInformation.")]
         public void SamrQueryInformationUser2_UserAdminCommentInformation()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_GENERAL);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");
@@ -270,7 +270,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with UserPreferencesInformation.")]
         public void SamrQueryInformationUser2_UserPreferencesInformation()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_PREFERENCES | Utilities.USER_READ_GENERAL);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");
@@ -291,7 +291,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with UserLogonInformation.")]
         public void SamrQueryInformationUser2_UserLogonInformation()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_GENERAL | Utilities.USER_READ_PREFERENCES |  Utilities.USER_READ_LOGON | Utilities.USER_READ_ACCOUNT);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");
@@ -312,7 +312,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with UserLogonHoursInformation.")]
         public void SamrQueryInformationUser2_UserLogonHoursInformation()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_LOGON);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");
@@ -333,7 +333,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with UserHomeInformation.")]
         public void SamrQueryInformationUser2_UserHomeInformation()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_LOGON);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");
@@ -354,7 +354,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with UserScriptInformation.")]
         public void SamrQueryInformationUser2_UserScriptInformation()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_LOGON);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");
@@ -375,7 +375,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with UserProfileInformation.")]
         public void SamrQueryInformationUser2_UserProfileInformation()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_LOGON);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");
@@ -396,7 +396,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with UserWorkStationsInformation.")]
         public void SamrQueryInformationUser2_UserWorkStationsInformation()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_LOGON);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");
@@ -417,7 +417,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with UserControlInformation.")]
         public void SamrQueryInformationUser2_UserControlInformation()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_ACCOUNT);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");
@@ -438,7 +438,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with UserExpiresInformation.")]
         public void SamrQueryInformationUser2_UserExpiresInformation()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_ACCOUNT);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");
@@ -459,7 +459,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with UserParametersInformation.")]
         public void SamrQueryInformationUser2_UserParametersInformation()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_ACCOUNT);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");
@@ -480,7 +480,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with invalid handle.")]
         public void SamrQueryInformationUser2_WithInvalidHandle()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2 with server handle.");
             _SAMPR_USER_INFO_BUFFER? userInfo;
@@ -501,7 +501,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 without required access.")]
         public void SamrQueryInformationUser2_WithoutRequiredAccess()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_WRITE_ACCOUNT);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2 using UserAccountInformation with USER_WRITE_ACCOUNT.");
@@ -600,7 +600,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationUser2 with invalid information level.")]
         public void SamrQueryInformationUser2_WithInvalidInformationLevel()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
     _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_GENERAL | Utilities.USER_READ_LOGON | Utilities.USER_READ_ACCOUNT | Utilities.USER_READ_PREFERENCES);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser2: obtain attributes from a user object.");

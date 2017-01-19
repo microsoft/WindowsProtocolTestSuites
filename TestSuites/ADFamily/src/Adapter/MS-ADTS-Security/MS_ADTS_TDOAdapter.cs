@@ -110,6 +110,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         /// Trusted domain's name
         /// </summary>
         public string trustedDomainName;
+
+        /// <summary>
+        /// Trusted domain's netbios name
+        /// </summary>
+        public string trustedDomainNetBiosName;
+        
         /// <summary>
         /// Trusting Domain's name
         /// </summary>
@@ -166,14 +172,15 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         public override void Initialize(ITestSite testSite)
         {
             base.Initialize(testSite);
-            PdcFqdn = PDCNetbiosName + "." + PrimaryDomain;
+            PdcFqdn = PDCNetbiosName + "." + PrimaryDomainDnsName;
             lsadAdapterObj = new LsaClient();
-            trustedDomainName = TrustDomain.ToUpper();
+            trustedDomainName = TrustDomainDnsName.ToUpper();
+            trustedDomainNetBiosName = TrustDomainNetBiosName.ToUpper();
             connection = new LdapConnection(PdcFqdn);
-            trustingDomainName = PrimaryDomain.ToUpper();
+            trustingDomainName = PrimaryDomainDnsName.ToUpper();
             //Get the current domain name
-            PrimaryDomainNetBIOSName = PrimaryDomain.Split('.')[0];
-            primaryDomainDn = Utilities.ParseDomainName(PrimaryDomain);
+            PrimaryDomainNetBIOSName = PrimaryDomainNetBiosName;
+            primaryDomainDn = Utilities.ParseDomainName(PrimaryDomainDnsName);
             if (!Common.Utilities.IsObjectExist(
                 string.Format("CN={0},CN=Users,{1}", TDOTestUser, primaryDomainDn),
                 PdcFqdn,
@@ -520,7 +527,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
 
             //The expecteed value for CN attribute of TDA object will be the NetBIOS name of the domain
             //appended with $.
-            string expectedCn = trustedDomainName.Split('.')[0] + "$";
+            string expectedCn = trustedDomainNetBiosName + "$";
 
 
             //Preparing the DN of the TDO object.
@@ -540,7 +547,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
 
             #region Validating MS-ADTS-Security_R662
             //Preparing the Trusted Domain Account object DN.
-            tdoDistinguishedName = "CN=" + trustedDomainName.Split('.')[0]
+            tdoDistinguishedName = "CN=" + trustedDomainNetBiosName
                                     + "$,CN=Users," + trustingDomainDN;
 
             searchRequest = new SearchRequest(tdoDistinguishedName, "objectclass=user",
@@ -551,7 +558,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
 
             //The expected sAMAccountName should also be like the above attribute.
 
-            expectedSamAccName = trustedDomainName.Split('.')[0] + "$";
+            expectedSamAccName = trustedDomainNetBiosName + "$";
 
             //Get the sAMAccountName attribute of TDA object as actual value.
             string strsAMAccountName = searchResponse.Entries[0].Attributes["sAMAccountName"][0].ToString();
@@ -757,7 +764,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
             string attrisCriticalSystemObject = string.Empty;
             string attrtrustPartner = string.Empty;
             string attrdistinguishedName = string.Empty;
-            string trustingDomainDN = Utilities.ParseDomainName(PrimaryDomain);
+            string trustingDomainDN = Utilities.ParseDomainName(PrimaryDomainDnsName);
 
             int unauthorizedUserEntries = 0;
             string targetOu = "CN=" + nameAttribute + ",CN=System," + trustingDomainDN;

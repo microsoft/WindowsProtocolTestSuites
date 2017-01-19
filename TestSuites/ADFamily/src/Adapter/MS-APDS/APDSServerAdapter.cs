@@ -168,8 +168,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
                 isWindows = true;
             }
             sutComputerName = PDCNetbiosName;
-            sutDomainName = PrimaryDomain;
-            sutTrustDomainName = TrustDomain;
+            sutDomainName = PrimaryDomainDnsName;
+            sutTrustDomainName = TrustDomainDnsName;
             clientComputerName = ENDPOINTNetbiosName;
             clientComputerPassword = DomainUserPassword;
             timeout = TimeSpan.FromMilliseconds(600000);
@@ -536,7 +536,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
             //Create digest validation logon info
             _NETLOGON_LEVEL netlogonLevel = ApdsUtility.CreatePacLogonInfo(
                 NrpcParameterControlFlags.AllowLogonWithComputerAccount,
-                PrimaryDomain,
+                PrimaryDomainDnsName,
                 DomainAdministratorName,
                 PDCNetbiosName,
                 kerberosReq);

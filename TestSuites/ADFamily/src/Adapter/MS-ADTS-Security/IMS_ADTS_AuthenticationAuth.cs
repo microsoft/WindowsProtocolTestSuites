@@ -71,7 +71,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         /// This method is used for authentication the Domain user
         /// on regular LDAP ports
         /// </summary>
-        /// <param name="username">Contains username in PrimaryDomain.DNSName</param>
+        /// <param name="username">Contains username in the domain</param>
         /// <param name="passWord">Contains the password to the username</param>
         /// <param name="portNum">Contains the port number over which the bind will accomplish</param>
         /// <param name="enableTLS">This variable i used to state when we are using TLS</param>

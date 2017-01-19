@@ -146,9 +146,9 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                         expected = "host/"
                             + adAdapter.RODCNetbiosName 
                             + "." 
-                            + adAdapter.PrimaryDomain 
+                            + adAdapter.PrimaryDomainDnsName 
                             + "/" 
-                            + adAdapter.PrimaryDomain;
+                            + adAdapter.PrimaryDomainDnsName;
                         expected = expected.ToLower();
                         for (int i = 0; i < values.Length; i++)
                         {
@@ -173,7 +173,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
 
                     if (attribute.Name.ToLower().Equals("dnshostname"))
                     {
-                        expected = adAdapter.RODCNetbiosName.ToLower() + "." + adAdapter.PrimaryDomain.ToLower();
+                        expected = adAdapter.RODCNetbiosName.ToLower() + "." + adAdapter.PrimaryDomainDnsName.ToLower();
                         
                         actual = attribute[0].ToString().ToLower();
 

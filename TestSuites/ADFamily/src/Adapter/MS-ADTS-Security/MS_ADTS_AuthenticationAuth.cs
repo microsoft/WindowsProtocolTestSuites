@@ -30,8 +30,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         {
             base.Initialize(testSite);
             adtsRequirementsValidation.Initialize(testSite);
-            PdcDN = Utilities.ParseDomainName(PrimaryDomain);
-            PdcFqdn = PDCNetbiosName + "." + PrimaryDomain;
+            PdcDN = Utilities.ParseDomainName(PrimaryDomainDnsName);
+            PdcFqdn = PDCNetbiosName + "." + PrimaryDomainDnsName;
         }
 
         #region Global variables
@@ -168,7 +168,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
                         //Create  an AD User.
                         ADTSHelper.CreateActiveDirUser(PdcFqdn, userName, ClientUserPassword, PdcDN);
                         //Change the attribute
-                        ADTSHelper.ModifyOperation(PdcFqdn, userName, adTestType, ClientUserName, ClientUserPassword, PrimaryDomain, PDCOSVersion);
+                        ADTSHelper.ModifyOperation(PdcFqdn, userName, adTestType, ClientUserName, ClientUserPassword, PrimaryDomainDnsName, PDCOSVersion);
                     }
 
                     else if ((userName == name.nameMapsMoreThanOneObject) && (passWord == Password.invalidPassword))
@@ -240,7 +240,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         /// This method is used for authentication the Domain user
         /// on regular LDAP ports
         /// </summary>
-        /// <param name="userName">Contains username in PrimaryDomain.DNSName</param>
+        /// <param name="userName">Contains username in the domain</param>
         /// <param name="passWord">Contains the password to the username</param>
         /// <param name="portNum">Contains the port number over which the bind will accomplish</param>
         /// <param name="enableTLS">This variable i used to state when we are using TLS</param>

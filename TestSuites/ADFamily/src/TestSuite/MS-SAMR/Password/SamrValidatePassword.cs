@@ -29,7 +29,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
 
             ConnectAndOpenDomain(
                 GetPdcDnsName(),
-                _samrProtocolAdapter.PrimaryDomain,
+                _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle,
                 out _domainHandle);
 
@@ -86,7 +86,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
 
             ConnectAndOpenDomain(
                 GetPdcDnsName(),
-                _samrProtocolAdapter.PrimaryDomain,
+                _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle,
                 out _domainHandle);
 
@@ -150,7 +150,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
 
             ConnectAndOpenDomain(
                 GetPdcDnsName(),
-                _samrProtocolAdapter.PrimaryDomain,
+                _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle,
                 out _domainHandle);
 

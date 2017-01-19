@@ -20,7 +20,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationDomain with DomainGeneralInformation.")]
         public void SamrQueryInformationDomain_GeneralInformation()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationDomain: obtain attributes from a domain object.");
@@ -43,7 +43,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationDomain with DomainServerRoleInformation.")]
         public void SamrQueryInformationDomain_ServerRoleInformation()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationDomain: obtain attributes from a domain object.");
@@ -66,7 +66,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationDomain with DomainStateInformation.")]
         public void SamrQueryInformationDomain_StateInformation()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationDomain: obtain attributes from a domain object.");
@@ -89,7 +89,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationDomain with DomainGeneralInformation2.")]
         public void SamrQueryInformationDomain_GeneralInformation2()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationDomain: obtain attributes from a domain object.");
@@ -124,7 +124,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationDomain with DomainLockoutInformation.")]
         public void SamrQueryInformationDomain_LockoutInformation()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationDomain: obtain attributes from a domain object.");
@@ -181,7 +181,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationDomain with DomainPasswordInformation with no required access.")]
         public void SamrQueryInformationDomain_PasswordInformation_NoAccess()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle, (uint)DOMAIN_ACCESS_MASK.DOMAIN_READ_OTHER_PARAMETERS);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationDomain: obtain password information from a domain object with no required access.");

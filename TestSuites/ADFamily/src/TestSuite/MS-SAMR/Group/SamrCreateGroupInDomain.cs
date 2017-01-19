@@ -29,7 +29,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrCreateGroupInDomain with GROUP_TYPE_SECURITY_ACCOUNT and GROUP_ALL_ACCESS.")]
         public void SamrCreateGroupInDomain_GROUP_TYPE_SECURITY_ACCOUNT()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             try
             {
@@ -64,7 +64,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrCreateGroupInDomain with DomainHandle.HandleType not equal to Domain.")]
         public void SamrCreateGroupInDomain_InvalidHandle()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrCreateGroupInDomain: create a group using server handle instead of domain handle.");
             uint relativeId;
@@ -87,7 +87,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrCreateGroupInDomain without required access.")]
         public void SamrCreateGroupInDomain_STATUS_ACCESS_DENIED()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle, Utilities.DOMAIN_READ);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle, Utilities.DOMAIN_READ);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrCreateGroupInDomain: create a group without required access.");
             uint relativeId;

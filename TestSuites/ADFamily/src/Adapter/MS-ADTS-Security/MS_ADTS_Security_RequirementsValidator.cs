@@ -33,17 +33,17 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         public override void Initialize(ITestSite testSite)
         {
             base.Initialize(testSite);
-            adDomain = PrimaryDomain.Split(new char[] { '.' })[0];
+            adDomain = PrimaryDomainNetBiosName;
             //get the parse string  for the domain name to use as distinguish name.
-            parsedDN = ADTSHelper.ParseDomainName(PrimaryDomain);
+            parsedDN = ADTSHelper.ParseDomainName(PrimaryDomainDnsName);
             sleepTime = int.Parse(TestClassBase.BaseTestSite.Properties.Get("MS_ADTS_SECURITY.SleepTime"));
 
             if (!string.IsNullOrEmpty(ADLDSPortNum))
             {
-                LDSRootObjectName = Common.Utilities.GetLdsDomainDN(string.Format("{0}.{1}:{2}", PDCNetbiosName, PrimaryDomain, ADLDSPortNum));
+                LDSRootObjectName = Common.Utilities.GetLdsDomainDN(string.Format("{0}.{1}:{2}", PDCNetbiosName, PrimaryDomainDnsName, ADLDSPortNum));
             }
-            PdcFqdn = PDCNetbiosName + "." + PrimaryDomain;
-            EndpointFqdn = ENDPOINTNetbiosName + "." + PrimaryDomain;
+            PdcFqdn = PDCNetbiosName + "." + PrimaryDomainDnsName;
+            EndpointFqdn = ENDPOINTNetbiosName + "." + PrimaryDomainDnsName;
             EndpointSPN = "HOST/" + EndpointFqdn;
 
             CheckAndCreateUserInPrimaryDomain(AdminChgPwdUser, AdminChgPwdUserPassword);
@@ -89,7 +89,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
             // Check whether the user to create already exists.
             LdapConnection conn = new LdapConnection(
                 new LdapDirectoryIdentifier(PdcFqdn, int.Parse(ADLDSPortNum)),
-                new NetworkCredential(ClientUserName, ClientUserPassword, PrimaryDomain));
+                new NetworkCredential(ClientUserName, ClientUserPassword, PrimaryDomainDnsName));
             conn.Bind();
             SearchRequest sr = new SearchRequest(
                 "CN=Roles,CN=Configuration," + LDSRootObjectName,
@@ -110,13 +110,13 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
                     "CN=Roles,CN=Configuration," + LDSRootObjectName,
                     userName,
                     password,
-                    PrimaryDomain + "\\" + ClientUserName,
+                    PrimaryDomainDnsName + "\\" + ClientUserName,
                     ClientUserPassword);
 
             Common.Utilities.AddLDSGroupMember(
                 PdcFqdn,
                 ADLDSPortNum,
-                PrimaryDomain + "\\" + ClientUserName,
+                PrimaryDomainDnsName + "\\" + ClientUserName,
                 ClientUserPassword,
                 string.Format("CN={0},CN=Roles,CN=Configuration,{1}", "Administrators", LDSRootObjectName),
                 string.Format("CN={0},CN=Roles,CN=Configuration,{1}", userName, LDSRootObjectName));
@@ -137,7 +137,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
             // Check whether the user to create already exists.
             LdapConnection conn = new LdapConnection(
                 new LdapDirectoryIdentifier(PdcFqdn, int.Parse(ADDSPortNum)), 
-                new NetworkCredential(DomainAdministratorName, AdminUserPassword, PrimaryDomain));
+                new NetworkCredential(DomainAdministratorName, AdminUserPassword, PrimaryDomainDnsName));
             conn.Bind();
             SearchRequest sr = new SearchRequest(
                 "CN=Users," + parsedDN,
@@ -886,7 +886,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
 
                     credential = new NetworkCredential(
                         ClientUserName,
-                        ClientUserPassword, PrimaryDomain);
+                        ClientUserPassword, PrimaryDomainDnsName);
                     connection.Credential = credential;
                     connection.Bind();
 
@@ -1319,7 +1319,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
             hostNameAndLDAPPort = hostName + ":" + portNo;
 
             // LDAP connection to the server
-            connection = (invalidSPN == true) ? new LdapConnection(PrimaryDomain) : new LdapConnection(hostNameAndLDAPPort);
+            connection = (invalidSPN == true) ? new LdapConnection(PrimaryDomainDnsName) : new LdapConnection(hostNameAndLDAPPort);
 
             //Setting Authtpyye for the selected mechanism.
             AuthType saslAuthType;
@@ -1943,7 +1943,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
                 else
                 {
                     //Bind connection
-                    bindResponse = LdapBindConnection(PrimaryDomain, userName, password, AuthType.Kerberos);
+                    bindResponse = LdapBindConnection(PrimaryDomainDnsName, userName, password, AuthType.Kerberos);
 
                     //Check result.
                     TestClassBase.BaseTestSite.Assert.AreEqual<uint>((uint)errorstatus.success, bindResponse, "Mutual Bind");
@@ -1958,7 +1958,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
             {
                 //Mutual Bind 
                 //Mutual Bind is Kerberos
-                bindResponse = LdapBindConnection(PrimaryDomain, userName, password, AuthType.Kerberos);
+                bindResponse = LdapBindConnection(PrimaryDomainDnsName, userName, password, AuthType.Kerberos);
 
                 //check whether the result is invalid credentials or not
                 TestClassBase.BaseTestSite.Assert.AreEqual<uint>(
@@ -2521,7 +2521,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
             }
             else
             {
-                con = new LdapConnection(new LdapDirectoryIdentifier(hostName, ldsPort), new NetworkCredential(userName, password, PrimaryDomain));
+                con = new LdapConnection(new LdapDirectoryIdentifier(hostName, ldsPort), new NetworkCredential(userName, password, PrimaryDomainDnsName));
             }
             DeleteRequest del = new DeleteRequest("cn=" + TempUser0 + ",CN=Roles," + LDSApplicationNC);
             del.Controls.Add(new TreeDeleteControl());
@@ -3150,7 +3150,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
                 //mutualBindConnection
                 LdapConnection mutualBindConnection;
 
-                LdapDirectoryIdentifier identifier = new LdapDirectoryIdentifier(PrimaryDomain);
+                LdapDirectoryIdentifier identifier = new LdapDirectoryIdentifier(PrimaryDomainDnsName);
                 //connect with identifier
                 mutualBindConnection = new LdapConnection(identifier);
 
@@ -3255,7 +3255,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
 
                 digestBindConnection = new LdapConnection(identifier);
 
-                NetworkCredential networkCredential = new NetworkCredential(userName, password, PrimaryDomain);
+                NetworkCredential networkCredential = new NetworkCredential(userName, password, PrimaryDomainDnsName);
 
                 //Specifies Digest Bind
                 digestBindConnection.AuthType = AuthType.Digest;
@@ -3301,7 +3301,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
             LdapConnection subDigestConnection = new LdapConnection(new LdapDirectoryIdentifier(PdcFqdn));
 
             //Credentials to be passed
-            NetworkCredential subdigestCredential = new NetworkCredential(userName, password, PrimaryDomain);
+            NetworkCredential subdigestCredential = new NetworkCredential(userName, password, PrimaryDomainDnsName);
 
             subDigestConnection.Credential = subdigestCredential;
 
@@ -5728,20 +5728,20 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
                 expectedResult = new object();
 
                 //554 part-1
-                //process the Search result  for Enterprise Admins in other NCRoot other than Forest Root PrimaryDomain.DNSName, 
+                //process the Search result  for Enterprise Admins in other NCRoot other than Forest Root Domain, 
                 //it should fail
                 ADTSHelper.ProcessSearchRespone(searchResponseUser, "Enterprise Admins", "name", out expectedResult);
 
                 //the result should be null
                 TestClassBase.BaseTestSite.Assert.IsNull(expectedResult,
-                    @"Enterprise Admin does not exist only other than Forest Root PrimaryDomain.DNSName");
+                    @"Enterprise Admin does not exist only other than Forest Root Domain.");
 
                 //process the search Result for the expected property. 
                 ADTSHelper.ProcessSearchRespone(searchResponseGroup, "Enterprise Admins", "name", out expectedResult);
 
                 //554 part-2
                 TestClassBase.BaseTestSite.CaptureRequirementIfAreEqual<string>("Enterprise Admins", expectedResult.ToString(), 554,
-                    @"The Enterprise Administrators exist only in Forest Root PrimaryDomain.DNSName");
+                    @"The Enterprise Administrators exist only in Forest Root Domain.");
 
                 //Validate MS-ADTS-Security_R555
                 TestClassBase.BaseTestSite.CaptureRequirementIfAreEqual<string>("Enterprise Admins", expectedResult.ToString(), 555,
@@ -8972,7 +8972,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
                     int.Parse(ADDSPortNum),
                     entry,
                     Common.Utilities.SecurityDescriptorBackupFilename,
-                    new NetworkCredential(DomainAdministratorName, DomainUserPassword, PrimaryDomain));
+                    new NetworkCredential(DomainAdministratorName, DomainUserPassword, PrimaryDomainDnsName));
 
                 DirectoryEntry dirEntry = new DirectoryEntry(
                  string.Format("LDAP://{0}/{1}", PdcFqdn, entry),
@@ -8992,7 +8992,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
 
                 // Add ace Deny the RIGHT_DS_WRITE_PROPERTY_EXTENDED of the client user.
                 AccessControlEntry myace = new AccessControlEntry();
-                myace.Trustee = PrimaryDomain.Split('.')[0] + "\\" + ClientUserName;
+                myace.Trustee = PrimaryDomainNetBiosName + "\\" + ClientUserName;
                 myace.AceType = (int)AccessControlType.Deny;
                 myace.AccessMask = 0x08; // [MS-ADTS] Section 5.1.3.2 Access Rights
                 dacl.AddAce(myace);
@@ -9007,7 +9007,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
                     int.Parse(ADDSPortNum),
                     string.Format("CN={0},CN=Computers,{1}", ENDPOINTNetbiosName, parsedDN),
                     Common.Utilities.SecurityDescriptorBackupFilename,
-                    new NetworkCredential(DomainAdministratorName, DomainUserPassword, PrimaryDomain));
+                    new NetworkCredential(DomainAdministratorName, DomainUserPassword, PrimaryDomainDnsName));
 
                 //Validate MS_AD_Security_R417
                 TestClassBase.BaseTestSite.CaptureRequirementIfAreEqual(modifyResult, ResultCode.InsufficientAccessRights, 417, @"the authorization for the requester's 
@@ -9182,7 +9182,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
                         string.Format(
                         "LDAP://{0}/CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,{1}",
                         PdcFqdn, 
-                        ADTSHelper.ParseDomainName(PrimaryDomain)));
+                        ADTSHelper.ParseDomainName(PrimaryDomainDnsName)));
 
                     string dSHeuristics = ent.Properties["dSHeuristics"][0].ToString();
 

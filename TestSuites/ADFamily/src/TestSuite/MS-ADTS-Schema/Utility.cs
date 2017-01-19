@@ -234,7 +234,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                 }
                 else
                 {
-                    connection = new LdapConnection(new LdapDirectoryIdentifier(serverName + "." + adAdapter.PrimaryDomain));
+                    connection = new LdapConnection(new LdapDirectoryIdentifier(serverName + "." + adAdapter.PrimaryDomainDnsName));
                 }
                 connection.Bind();
 

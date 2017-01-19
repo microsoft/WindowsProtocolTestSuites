@@ -23,7 +23,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrGetGroupsForUser.")]
         public void SamrGetGroupsForUser()
         {
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrGetGroupsForUser: obtain a listing of groups that a user is a member of.");
@@ -69,7 +69,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         public void SamrGetGroupsForUser_STATUS_ACCESS_DENIED()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Connect and open a user handle with USER_READ access.");
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, (uint)User_ACCESS_MASK.USER_READ_GENERAL);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrGetGroupsForUser: obtain a listing of groups that a user is a member of.");
@@ -87,7 +87,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrGetGroupsForUser with invalid handle.")]
         public void SamrGetGroupsForUser_InvalidHandle()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrGetGroupsForUser: obtain a listing of groups that a user is a member of.");
             _SAMPR_GET_GROUPS_BUFFER? groups;

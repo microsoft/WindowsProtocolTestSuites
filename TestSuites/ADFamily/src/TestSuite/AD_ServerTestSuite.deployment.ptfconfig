@@ -65,10 +65,10 @@
       <Property name="PrimaryDomain.DNSName" value="contoso.com">
         <Description>Type:string! Usage: DNS suffix of the primary domain.</Description>
       </Property>
-      <Property name="PrimaryDomain.ServerGUID" value="2a23574e-5c4e-49f5-937f-9647ce974e85">
+      <Property name="PrimaryDomain.ServerGUID" value="047e3c88-dd53-43b4-90d4-8acae906b2b4">
         <Description>Type:string! Usage: Server GUID of the primary domain.</Description>
       </Property>
-      <Property name="PrimaryDomain.SID" value="S-1-5-21-4101333323-254929996-3728012994">
+      <Property name="PrimaryDomain.SID" value="S-1-5-21-1546650794-366934599-1496430199">
         <Description>Type:string! Usage: SID of the primary domain.</Description>
       </Property>
       <Property name="WritableDC1.NetbiosName" value="PDC">
@@ -332,30 +332,30 @@
     </Group>
     <Group name="MS_ADTS_Schema">
       <!--Path to the TDXml of ADA1, ADA2, ADA3 and ADSC-->
-      <Property name="TDXmlPath" value=".\..\..\..\..\Docs\Common-TD-XML\MS-ADA1\*,.\..\..\..\..\Docs\Common-TD-XML\MS-ADA2\*,.\..\..\..\..\Docs\WinBlue-TD-XML\MS-ADA2\*,.\..\..\..\..\Docs\Common-TD-XML\MS-ADA3\*,.\..\..\..\..\Docs\Common-TD-XML\MS-ADSC\*,.\..\..\..\..\Docs\WinBlue-TD-XML\MS-ADSC\*" >
-		<Description>Type:string! Usage: Specify where the TD XMLs for AD DS locates.</Description>
+      <Property name="TDXmlPath" value="C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\1.0.2615.0\Docs\Common-TD-XML\MS-ADA1\*,C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\1.0.2615.0\Docs\Common-TD-XML\MS-ADA2\*,C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\1.0.2615.0\Docs\WinBlue-TD-XML\MS-ADA2\*,C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\1.0.2615.0\Docs\Common-TD-XML\MS-ADA3\*,C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\1.0.2615.0\Docs\Common-TD-XML\MS-ADSC\*,C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\1.0.2615.0\Docs\WinBlue-TD-XML\MS-ADSC\*">
+        <Description>Type:string! Usage: Specify where the TD XMLs for AD DS locates.</Description>
       </Property>
       <!--Path to the TDXml of ADLS-->
-      <Property name="LdsTDXmlPath" value=".\..\..\..\..\Docs\Common-TD-XML\MS-ADLS\*,.\..\..\..\..\Docs\WinBlue-TD-XML\MS-ADLS\* " >
-	  	<Description>Type:string! Usage: Specify where the TD XMLs for AD LDS locates.</Description>
+      <Property name="LdsTDXmlPath" value="C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\1.0.2615.0\Docs\Common-TD-XML\MS-ADLS\*,C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\1.0.2615.0\Docs\WinBlue-TD-XML\MS-ADLS\* ">
+        <Description>Type:string! Usage: Specify where the TD XMLs for AD LDS locates.</Description>
       </Property>
       <!--Path to the open XML of ADA1, ADA2, ADA3, ADSC for Win2016-->
-      <Property name="OpenXmlPath2016" value=".\..\..\..\..\Docs\Win2016-TD-XML\DS\*">
+      <Property name="OpenXmlPath2016" value="C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\1.0.2615.0\Docs\Win2016-TD-XML\DS\*">
         <Description>Type:string! Usage: Specify where the Doc for AD DS locates.</Description>
       </Property>
       <!--Path to the open XML of ADLS for Win2016-->
-      <Property name="LdsOpenXmlPath2016" value=".\..\..\..\..\Docs\Win2016-TD-XML\LDS\*">
+      <Property name="LdsOpenXmlPath2016" value="C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\1.0.2615.0\Docs\Win2016-TD-XML\LDS\*">
         <Description>Type:string! Usage: Specify where the Doc for AD LDS locates.</Description>
       </Property>
       <!--TD-XML section ends.-->
       <!--Run DS Test Cases-->
-      <Property name="RunDSTestCases" value="true" >
-		<Description>Type:boolean! Usage: Specify whether to run cases for AD DS.</Description>
-	  </Property>
+      <Property name="RunDSTestCases" value="true">
+        <Description>Type:boolean! Usage: Specify whether to run cases for AD DS.</Description>
+      </Property>
       <!--Run LDS Test Cases-->
-      <Property name="RunLDSTestCases" value="true" >
-		<Description>Type:boolean! Usage: Specify whether to run cases for AD LDS.</Description>
-	  </Property>
+      <Property name="RunLDSTestCases" value="true">
+        <Description>Type:boolean! Usage: Specify whether to run cases for AD LDS.</Description>
+      </Property>
       <!--TDI Section begins.-->
       <Property name="TDI.67172.Fixed" value="false" />
       <!--TDI Section ends.-->

@@ -80,11 +80,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
         {
             base.Initialize(testSite);
             AdLdsAppNamingContext = "partition:" + LDSApplicationNC;
-            PDCFullName = string.Format("{0}.{1}",PDCNetbiosName,PrimaryDomain);
-            SDCFullName = string.Format("{0}.{1}",SDCNetbiosName,PrimaryDomain);
-            RODCFullName = string.Format("{0}.{1}",RODCNetbiosName,PrimaryDomain);
-            CDCFullName = string.Format("{0}.{1}",CDCNetbiosName,ChildDomain);
-            DomainNC = "DC=" + PrimaryDomain.Replace(".",",DC=");
+            PDCFullName = string.Format("{0}.{1}",PDCNetbiosName,PrimaryDomainDnsName);
+            SDCFullName = string.Format("{0}.{1}",SDCNetbiosName,PrimaryDomainDnsName);
+            RODCFullName = string.Format("{0}.{1}",RODCNetbiosName,PrimaryDomainDnsName);
+            CDCFullName = string.Format("{0}.{1}",CDCNetbiosName,ChildDomainDnsName);
+            DomainNC = "DC=" + PrimaryDomainDnsName.Replace(".",",DC=");
         }
 
         public override void Reset()

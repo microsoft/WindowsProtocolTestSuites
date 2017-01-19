@@ -262,7 +262,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                 //MS-ADTS-Schema_R439
                 DataSchemaSite.CaptureRequirementIfIsTrue(
                     hasDNSHostName
-                    && (domainStr.ToLower().Equals(adAdapter.PrimaryDomain.ToLower())),
+                    && (domainStr.ToLower().Equals(adAdapter.PrimaryDomainDnsName.ToLower())),
                     439,
                     "The dNSHostName Attribute of the Server Object must be fully qualified DNS name of the DC.");
 
@@ -295,7 +295,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                         string dnsHostName = serverEntryChild.Properties["dNSHostName"].Value.ToString().ToLower();
                         string[] hostName = dnsHostName.Split('.');
                         string domainStr = dnsHostName.Substring(hostName[0].Length + 1, dnsHostName.Length - (hostName[0].Length + 1));
-                        if ((hostName[0].ToLower().Equals(adAdapter.PDCNetbiosName.ToLower())) && (domainStr.ToLower().Equals(adAdapter.PrimaryDomain.ToLower())))
+                        if ((hostName[0].ToLower().Equals(adAdapter.PDCNetbiosName.ToLower())) && (domainStr.ToLower().Equals(adAdapter.PrimaryDomainDnsName.ToLower())))
                         {
                             isTrue = true;
                         }

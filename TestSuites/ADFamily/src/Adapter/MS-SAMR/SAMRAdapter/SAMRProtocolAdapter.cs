@@ -221,21 +221,21 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
                 timeout = 10;
             }
 
-            primaryDomainFqdn = PrimaryDomain;
-            primaryDomainNetBIOSName = PrimaryDomain.Split('.')[0];
-            primaryDomainDN = "DC=" + PrimaryDomain.Replace(".", ",DC=");
+            primaryDomainFqdn = PrimaryDomainDnsName;
+            primaryDomainNetBIOSName = PrimaryDomainNetBiosName;
+            primaryDomainDN = "DC=" + PrimaryDomainDnsName.Replace(".", ",DC=");
             primaryDomainSid = PrimaryDomainSID;
 
-            childDomainFqdn = ChildDomain;
-            childDomainNetBIOSName = ChildDomain.Split('.')[0];
-            childDomainDN = "DC=" + ChildDomain.Replace(".", ",DC=");
+            childDomainFqdn = ChildDomainDnsName;
+            childDomainNetBIOSName = ChildDomainNetBiosName;
+            childDomainDN = "DC=" + ChildDomainDnsName.Replace(".", ",DC=");
 
             pdcNetBIOSName = PDCNetbiosName;
-            pdcFqdn = PDCNetbiosName + "." + PrimaryDomain;
+            pdcFqdn = PDCNetbiosName + "." + PrimaryDomainDnsName;
             pdcComputerObjectDN = string.Format("CN=NTDS Settings,CN={0},CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,{1}", pdcNetBIOSName, primaryDomainDN); 
 
             domainMemberNetBIOSName = DMNetbiosName;
-            domainMemberFqdn = DMNetbiosName + "." + PrimaryDomain;
+            domainMemberFqdn = DMNetbiosName + "." + PrimaryDomainDnsName;
 
             primaryDomainUserContainerDN = "CN=Users," + primaryDomainDN;
             primaryDomainComputerContainerDN = "CN=Computers," + primaryDomainDN;

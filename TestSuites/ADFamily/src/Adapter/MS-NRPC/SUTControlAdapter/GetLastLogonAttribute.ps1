@@ -16,7 +16,7 @@ function GetPtfVariable
 $objectPath = .\GetAdministratorObjPath.ps1
 $attribute = "lastLogon"
 $primaryDCName = GetPtfVariable "Common.WritableDC1.NetbiosName"
-$primaryDomainNetBiosName = (GetPtfVariable "SUT.PrimaryDomain.DNSName").Split(".")[0]
+$primaryDomainNetBiosName = GetPtfVariable "Common.PrimaryDomain.NetBiosName"
 $normalDomainUserAccount = GetPtfVariable "Common.DomainAdministratorName"
 $userName = "$primaryDomainNetBiosName\$normalDomainUserAccount"
 $password = GetPtfVariable "Common.DomainUserPassword"

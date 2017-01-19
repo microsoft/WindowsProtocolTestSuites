@@ -462,8 +462,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad
                 IsInDomainAdminsGroup = false;
             }
 
-            fullDomain = this.PrimaryDomain;
-            domain = fullDomain.Split('.')[0];
+            fullDomain = this.PrimaryDomainDnsName;
+            domain = this.PrimaryDomainNetBiosName;
             this.timeout = TimeSpan.FromMilliseconds(GetDoubleProperty(propertyGroup + "TimeoutMilliseconds"));
             secretNameOfSecretObject = ValidName;                    
             isWindows = !ServerVersion.NonWin.Equals(PDCOSVersion) && !ServerVersion.Invalid.Equals(PDCOSVersion);

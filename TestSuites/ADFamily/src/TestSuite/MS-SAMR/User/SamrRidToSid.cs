@@ -23,7 +23,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         public void SamrRidToSid()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Connect and open a user handle.");
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrRidToSid: obtain the SID of an account, given a RID.");

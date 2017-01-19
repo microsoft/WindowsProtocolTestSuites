@@ -23,7 +23,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         {
             HRESULT hResult;
 
-            ConnectAndOpenDomain(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle, (uint)Common_ACCESS_MASK.WRITE_OWNER);
 
             CommonSecurityDescriptor commonsd = new CommonSecurityDescriptor(false, true, "O:BAG:BA"); 
@@ -51,7 +51,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         {
             HRESULT hResult;
 
-            ConnectAndOpenDomain(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle, (uint)Common_ACCESS_MASK.WRITE_OWNER);
 
             CommonSecurityDescriptor commonsd = new CommonSecurityDescriptor(false, true, "O:BAG:BA");
@@ -80,7 +80,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         {
             HRESULT hResult;
 
-            ConnectAndOpenDomain(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle, (uint)(Common_ACCESS_MASK.WRITE_OWNER | Common_ACCESS_MASK.READ_CONTROL));
 
             CommonSecurityDescriptor commonsd = new CommonSecurityDescriptor(false, true, "O:BGG:BA");

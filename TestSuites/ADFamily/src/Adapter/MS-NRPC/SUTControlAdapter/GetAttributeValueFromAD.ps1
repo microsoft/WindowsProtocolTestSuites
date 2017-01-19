@@ -25,7 +25,7 @@ if ($attribute -eq $null -or $attribute -eq "")
 #----------------------------------------------------------------------------
 $primaryDCName = GetPtfVariable "Common.WritableDC1.NetbiosName"
 $primaryDomainDNSName =  GetPtfVariable "Common.PrimaryDomain.DNSName"
-$primaryDomainNetBiosName = $primaryDomainDNSName.Split(".")[0]
+$primaryDomainNetBiosName = GetPtfVariable "Common.PrimaryDomain.NetBiosName"
 $normalDomainUserAccount = GetPtfVariable "Common.DomainAdministratorName"
 $userName = "$primaryDomainNetBiosName\$normalDomainUserAccount"
 $password = GetPtfVariable "Common.DomainUserPassword"

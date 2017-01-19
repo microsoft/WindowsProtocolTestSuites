@@ -20,7 +20,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrGetDisplayEnumerationIndex with DomainDisplayUser.")]
         public void SamrGetDisplayEnumerationIndex_User()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrGetDisplayEnumerationIndex: obtains an index into an ascending account-name¨Csorted list of accounts.");
             uint index;
