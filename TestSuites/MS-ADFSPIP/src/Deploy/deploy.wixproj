@@ -33,6 +33,9 @@
     <!--Ignore error LGHT0204: ICE30: The same target file by two different components on an LFN system which breaks component reference counting-->
     <SuppressIces>ICE30</SuppressIces>
   </PropertyGroup>
+  <PropertyGroup>
+    <SuppressValidation>true</SuppressValidation>
+  </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="UiText.wxl" />
   </ItemGroup>
