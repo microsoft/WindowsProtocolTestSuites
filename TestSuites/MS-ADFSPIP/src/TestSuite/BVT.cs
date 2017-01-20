@@ -126,7 +126,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
         }
 
         [TestMethod]
-        [DeployScneario]
+        [DeployScenario]
         [TestCategory("BVT")]
         [TestCategory("Disabled")]
         [Ignore]
@@ -743,7 +743,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
         List<System.Threading.Thread> managedThreads = new List<System.Threading.Thread>();
 
         [TestMethod]
-        [DeployScneario]
+        [DeployScenario]
         [TestCategory("BVT")]
         [TestCategory("Disabled")]
         [Ignore]

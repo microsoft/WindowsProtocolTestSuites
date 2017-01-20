@@ -21,8 +21,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Http.WebProxy
     /// </summary>
     public class ManagedProxyStream
     {
-        //public IPEndPoint Client;
-
         public TcpClient SourceClient;
 
         public TcpClient TargetClient;
@@ -55,8 +53,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Http.WebProxy
     public class ManagedProxyEvent
     {
         public ProxyEventType EventType;
-
-        //public HttpEndpointBase ServiceEndpoint;
 
         public SenderType Sender;
 
@@ -102,17 +98,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Http.WebProxy
 
         private string targetServerIP;
         private int targetServerPort;
+
         /// <summary>
-        /// must be called at very beginning when use HTTP, should only initialize once
+        /// Must be called at very beginning when use HTTP, should only initialize once
         /// </summary>
-        /// <param name="port">port number listens on</param>
-        /// <param name="idleTimeout">how much time can a client be idle before been force closed</param>
+        /// <param name="targetIP">Target Ip Address</param>
+        /// <param name="targetPort">port number listens on</param>
         public void Initialize(string targetIP, int targetPort)
         {
             this.port = targetPort;
             this.targetServerPort = targetPort;
             this.targetServerIP = targetIP;
-            //this.idleTimeout = idleTimeout;
             this.running = true;
             this.listener = new TcpListener(IPAddress.Any, this.port);
             this.listenThread = new Thread(ListenLoop);
@@ -143,76 +139,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Http.WebProxy
             this.useSSL = true;
             Initialize(targetIP, targetPort);
         }
-
-        ///// <summary>
-        ///// register a HTTP service, will forward message to the URL it has registered
-        ///// </summary>
-        ///// <param name="service"></param>
-        ///// <returns>true if success</returns>
-        //public bool RegisterHttpEndpoint(HttpEndpointBase service)
-        //{
-        //    // if any of the urls in service already exists in the 
-        //    // registeredServices, the registration fails.
-        //    var existedUrls =
-        //        from url in service.Urls
-        //        where (
-        //            from s in this.registeredEndpoints
-        //            where s.Urls.Contains(url)
-        //            select s
-        //            ).Count() > 0
-        //        select url;
-
-        //    if (existedUrls.Any())
-        //        return false;
-
-        //    this.registeredEndpoints.Add(service);
-        //    return true;
-        //}
-
-        ///// <summary>
-        ///// send message to an accepted client
-        ///// </summary>
-        ///// <param name="client"></param>
-        ///// <param name="msg"></param>
-        ///// <returns>true if success</returns>
-        //private bool sendMessage(IPEndPoint client, byte[] msg)
-        //{
-        //    if (!this.running)
-        //        return false;
-        //    // if Initialize has not been called
-        //    if (this.listenThread == null)
-        //        return false;
-
-        //    // find cached client
-        //    var q =
-        //        from c in this.clientStreams
-        //        where c.Client == client
-        //        select c;
-
-        //    if (!q.Any())
-        //    {
-        //        return false;
-        //    }
-        //    else
-        //    {
-        //        var ms = q.First();
-        //        // try to send message
-        //        try
-        //        {
-        //            lock (ms.IOLock)
-        //            {
-        //                ms.Stream.Write(msg, 0, msg.Length);
-        //            }
-        //        }
-        //        // if client is disconnect, task fail
-        //        catch
-        //        {
-        //            return false;
-        //        }
-
-        //        return true;
-        //    }
-        //}
 
         /// <summary>
         /// 1 thread listen on TransportStack
@@ -384,28 +310,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Http.WebProxy
                                     HttpRequest req = new HttpRequest();
                                     req.Parse(e.Text);
                                     e.ParsedHttpRequest = req;
-
-                                    //// find specific endpoint
-                                    //var q =
-                                    //     from r in this.registeredEndpoints
-                                    //     where (
-                                    //         from u in r.Urls
-                                    //         where req.RequestUrl.Path.ToLower().Contains(u.ToLower())
-                                    //         select u
-                                    //     ).Count() > 0
-                                    //     select r;
-                                    //// if found
-                                    //if (q.Any())
-                                    //{
-
-                                    //    e.ServiceEndpoint = (HttpEndpointBase)q.First();
-                                    //    e.EventType = EventType.IncomingRequest;
-                                    //}
-                                    //// if not found
-                                    //else
-                                    //{
-                                    //    e.EventType = EventType.UnknownEndpoint;
-                                    //}
                                 }
                                 // if not http message
                                 catch
@@ -442,7 +346,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Http.WebProxy
         void targetSendBackLoop(object o)
         {
             ManagedProxyStream stream = o as ManagedProxyStream;
-            //TimeSpan idleTime = TimeSpan.FromMilliseconds(0);
             TimeSpan sleepTime = TimeSpan.FromMilliseconds(200);
             try
             {
@@ -452,13 +355,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Http.WebProxy
                     if (stream.TargetClient.Connected && stream.TargetClient.Available == 0)
                     {
                         Thread.Sleep(sleepTime);
-                        //idleTime += sleepTime;
                     }
                     // if data coming
                     else
                     {
-                        //idleTime = TimeSpan.FromMilliseconds(0);
-
                         byte[] data;
 
                         // receive data
@@ -496,28 +396,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Http.WebProxy
                             HttpResponse res = new HttpResponse();
                             res.Parse(e.Text);
                             e.ParsedHttpResponse = res;
-
-                            //// find specific endpoint
-                            //var q =
-                            //     from r in this.registeredEndpoints
-                            //     where (
-                            //         from u in r.Urls
-                            //         where req.RequestUrl.Path.ToLower().Contains(u.ToLower())
-                            //         select u
-                            //     ).Count() > 0
-                            //     select r;
-                            //// if found
-                            //if (q.Any())
-                            //{
-
-                            //    e.ServiceEndpoint = (HttpEndpointBase)q.First();
-                            //    e.EventType = EventType.IncomingRequest;
-                            //}
-                            //// if not found
-                            //else
-                            //{
-                            //    e.EventType = EventType.UnknownEndpoint;
-                            //}
                         }
                         // if not http message
                         catch
@@ -547,7 +425,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Http.WebProxy
             }
             catch (Exception)
             {
-                //TODO: to some log?
             }
         }
 
@@ -560,35 +437,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Http.WebProxy
         public OnReceiveMessage ReceiveMessageFromSourceCallback = null;
 
         public OnReceiveMessage ReceiveMessageFromTargetCallback = null;
-
-        //public int ExpectMessages(TimeSpan duration, ref List<ManagedEvent> all)
-        //{
-        //    if (all == null)
-        //        throw new Exception("must not input a null list");
-        //    int maxSleep;
-        //    maxSleep = (int)duration.TotalMilliseconds;// 1000 * (duration.Minutes * 60 + duration.Seconds);
-        //    // use a queue type here since List<> sometimes will break the order of item inside
-        //    Queue<ManagedEvent> q = new Queue<ManagedEvent>();
-        //    int actualSleep = 0;
-
-        //    while (actualSleep < maxSleep)
-        //    {
-        //        actualSleep += 20;
-        //        System.Threading.Thread.Sleep(20);
-        //        if (eventPipe.Count > 0)
-        //        {
-        //            while (eventPipe.Count > 0)
-        //            {
-        //                ManagedEvent e = null;
-        //                eventPipe.TryDequeue(out e);
-        //                q.Enqueue(e);
-        //            }
-        //            break;
-        //        }
-        //    }
-        //    all = q.ToList<ManagedEvent>();
-        //    return all.Count;
-        //}
 
         /// <summary>
         /// dispose everything!

@@ -73,56 +73,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Http
         public TcpPortInfo PortInfo { get; set; }
     }
 
-    public static class HttpServerUtility
-    {
-        //public static List<ManagedEvent> ReassembleRequests(List<ManagedEvent> events)
-        //{
-        //    List<ManagedEvent> ret = new List<ManagedEvent>();
-        //    ManagedEvent toReassemble = null;
-        //    for (int i = 0; i < events.Count; i++)
-        //    {
-        //        if (toReassemble == null)
-        //        {
-        //            if (events[i].EventType == EventType.IncomingRequest)
-        //            {
-        //                HttpRequest req = events[i].ParsedHttpRequest;
-
-        //                int bodyLen = 0;
-        //                string bodyLenStr = req.GetHeaderFieldValue(HttpRequestHeader.ContentLength);
-        //                if (bodyLenStr != null && bodyLenStr != "")
-        //                    bodyLen = int.Parse(bodyLenStr);
-        //                if (req.GetHeaderFieldValue(HttpRequestHeader.Expect) != "100-continue" && bodyLen > 0 && (req.Body == null || bodyLen > req.Body.Length))
-        //                {
-        //                    toReassemble = events[i];
-
-        //                    continue;
-        //                }
-        //            }
-        //        }
-        //        else
-        //        {
-        //            if (events[i].EventType == EventType.IncomingRequest)
-        //            {
-        //                ret.Add(toReassemble);
-        //                toReassemble = null;
-        //            }
-        //            else if (events[i].EventType == EventType.UnknownRequest && toReassemble.Sender.ToString() == events[i].Sender.ToString())
-        //            {
-        //                HttpRequest req = toReassemble.ParsedHttpRequest;
-        //                if (req.Body == null)
-        //                    req.Body = "";
-        //                req.Body += Encoding.UTF8.GetString(events[i].Data);
-        //                continue;
-        //            }
-        //        }
-        //        ret.Add(events[i]);
-        //    }
-        //    if (toReassemble != null)
-        //        ret.Add(toReassemble);
-        //    return ret;
-        //}
-    }
-
     public class TcpPortInfo
     {
         public TcpPortInfo()
@@ -138,7 +88,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Http
     }
 
     /// <summary>
-    /// HTTPS server for supporting multiple upper level HTTP endpoints. Each HTTP endpoint should register its URL to this server to send and receive messages
+    /// HTTP server for supporting multiple upper level HTTP endpoints. Each HTTP endpoint should register its URL to this server to send and receive messages
     /// </summary>
     public class HttpServer : IDisposable
     {
@@ -157,9 +107,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Http
         private static object staLock = new object();
 
         /// <summary>
-        /// It;s singleton
+        /// singleton, not allow create outside, keep only one instance.
         /// </summary>
-        protected HttpServer()
+        private HttpServer()
         {
         }
 
@@ -239,7 +189,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Http
                 if (!running)
                 {
                     this.idleTimeout = idleTimeout;
-                    //Can do something here
                     this.running = true;
                 }
                 else
@@ -509,7 +458,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Http
                             {
                                 //first message is not http
                                 e.EventType = EventType.Exception;
-                                e.Exception = new Exception("The 1st request from this context is not a HTTP Request");
+                                e.Exception = new Exception("The 1st request from this context is not an HTTP Request");
                             }
                             else
                             {

@@ -47,8 +47,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Identity.ADFSPIP
 
     public class Endpoint : JSONObject
     {
-        // TDI #70863 is addressed for value range of AuthenticationScheme
-        public int                        AuthenticationSchemes;
+        public AuthType                   AuthenticationSchemes;
         public CertificateValidation      CertificateValidation;
         public ClientCertificateQueryMode ClientCertificateQueryMode;
         public PortType                   PortType;
@@ -229,5 +228,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Identity.ADFSPIP
         HttpPort                = 0,
         HttpsPort               = 1,
         HttpsPortForUserTlsAuth = 2
+    }
+
+    public enum AuthType
+    {
+        Basic = 8,
+        Anonymous = 32768
     }
 }

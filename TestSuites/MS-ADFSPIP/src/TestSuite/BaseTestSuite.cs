@@ -11,7 +11,7 @@ using System.Diagnostics;
 namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
 {
     [AttributeUsage(AttributeTargets.All)]
-    public sealed class DeployScneario : Attribute
+    public sealed class DeployScenario : Attribute
     {
     }
 
@@ -46,20 +46,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
             server.Initialize(BaseTestSite);
             bool isDeploy = EnvironmentConfig.TestDeployment;
             StackTrace trace = new System.Diagnostics.StackTrace();
-            StackFrame[] frames = trace.GetFrames();
-            ////find who is calling me            
-            //System.Reflection.MethodBase method = frames[1].GetMethod();
-            //object[] attrs = method.DeclaringType.GetMember(BaseTestSite.TestProperties["CurrentTestCaseName"].ToString().Substring(BaseTestSite.TestProperties["CurrentTestCaseName"].ToString().LastIndexOf(".") + 1))[0].GetCustomAttributes(false);
-            //bool duped = isDeploy;
-            //for (int i = 0; i < attrs.Length; i++)
-            //{
-            //    if (attrs[i] is DeployScneario)
-            //    {
-            //        duped = !duped;
-            //        break;
-            //    }
-            //}
-            //BaseTestSite.Assert.IsFalse(duped, "Should set TestDeployment to " + (isDeploy.ToString()) + " when " + (isDeploy ? "" : "not") + " run deployment test cases");
+            StackFrame[] frames = trace.GetFrames();            
             ValidationModel.Initialize(BaseTestSite, isDeploy);
             ValidationModel.Reset();
         }

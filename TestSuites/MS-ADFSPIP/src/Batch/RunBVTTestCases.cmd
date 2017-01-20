@@ -4,7 +4,7 @@
 @echo off
 
 echo ==============================================
-echo          Start to run ADFSPIP BVT test cases
+echo          Start to run ADFSPIP test cases
 echo ==============================================
 
 if not defined vspath (
@@ -20,7 +20,6 @@ if not defined vspath (
 	)
 )
 
-REM Run all BVT cases
-"%vspath%..\IDE\mstest" /testcontainer:..\Bin\MS-ADFSPIP_ClientTestSuite.dll /runconfig:..\Bin\ClientLocal.TestSettings /category:"BVT&!Disabled"
+%vspath%"..\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" "..\Bin\MS-ADFSPIP_ClientTestSuite.dll" /Settings:..\Bin\ClientLocal.TestSettings /Logger:trx /TestCaseFilter:"(TestCategory!=Disabled&TestCategory=BVT)"
 
 PAUSE

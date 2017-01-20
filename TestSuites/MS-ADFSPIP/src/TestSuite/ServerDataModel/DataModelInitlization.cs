@@ -32,7 +32,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
 
             var endpoints = new List<Endpoint> {
                 new Endpoint {
-                    AuthenticationSchemes      = 32768,
+                    AuthenticationSchemes      = AuthType.Anonymous,
                     CertificateValidation      = CertificateValidation.None,
                     ClientCertificateQueryMode = ClientCertificateQueryMode.None,
                     Path                       = AdfsServicePathPairs.FederationMetadata,
@@ -42,7 +42,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                     SupportsNtlm               = false
                 },
                 new Endpoint {
-                    AuthenticationSchemes      = 32768,
+                    AuthenticationSchemes      = AuthType.Anonymous,
                     CertificateValidation      = CertificateValidation.Device,
                     ClientCertificateQueryMode = ClientCertificateQueryMode.None,
                     Path                       = AdfsServicePathPairs.Ls,
@@ -53,7 +53,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                 },
 
                 new Endpoint {
-                    AuthenticationSchemes      = 32768,
+                    AuthenticationSchemes      = AuthType.Anonymous,
                     CertificateValidation      = CertificateValidation.User,
                     ClientCertificateQueryMode = ClientCertificateQueryMode.QueryAndRequire,
                     Path                       = AdfsServicePathPairs.Ls,
@@ -64,7 +64,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                 },
 
                 new Endpoint {
-                    AuthenticationSchemes      = 32768,
+                    AuthenticationSchemes      = AuthType.Anonymous,
                     CertificateValidation      = CertificateValidation.None,
                     ClientCertificateQueryMode = ClientCertificateQueryMode.None,
                     Path                       = AdfsServicePathPairs.Portal,
@@ -75,7 +75,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                 },
 
                 new Endpoint {
-                    AuthenticationSchemes      = 32768,
+                    AuthenticationSchemes      = AuthType.Anonymous,
                     CertificateValidation      = CertificateValidation.None,
                     ClientCertificateQueryMode = ClientCertificateQueryMode.None,
                     Path                       = AdfsServicePathPairs.OAuth2Token,
@@ -86,7 +86,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                 },
 
                 new Endpoint {
-                    AuthenticationSchemes      = 32768,
+                    AuthenticationSchemes      = AuthType.Anonymous,
                     CertificateValidation      = CertificateValidation.Device,
                     ClientCertificateQueryMode = ClientCertificateQueryMode.None,
                     Path                       = AdfsServicePathPairs.OAuth2Auth,
@@ -97,7 +97,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                 },
 
                 new Endpoint {
-                    AuthenticationSchemes      = 32768,
+                    AuthenticationSchemes      = AuthType.Anonymous,
                     CertificateValidation      = CertificateValidation.User,
                     ClientCertificateQueryMode = ClientCertificateQueryMode.QueryAndRequire,
                     Path                       = AdfsServicePathPairs.OAuth2Auth,
@@ -107,7 +107,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                     SupportsNtlm               = false
                 },
                 new Endpoint {
-                    AuthenticationSchemes      = 32768,
+                    AuthenticationSchemes      = AuthType.Anonymous,
                     CertificateValidation      = CertificateValidation.None,
                     ClientCertificateQueryMode = ClientCertificateQueryMode.None,
                     Path                       = AdfsServicePathPairs.EnrollmentServer,
@@ -118,7 +118,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                 },
 
                 new Endpoint {
-                    AuthenticationSchemes      = 32768,
+                    AuthenticationSchemes      = AuthType.Anonymous,
                     CertificateValidation      = CertificateValidation.None,
                     ClientCertificateQueryMode = ClientCertificateQueryMode.None,
                     Path                       = AdfsServicePathPairs.Portal,
@@ -129,7 +129,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                 },
 
                 new Endpoint {
-                    AuthenticationSchemes      = 32768,
+                    AuthenticationSchemes      = AuthType.Anonymous,
                     CertificateValidation      = CertificateValidation.None,
                     ClientCertificateQueryMode = ClientCertificateQueryMode.None,
                     Path                       = AdfsServicePathPairs.WindowsTransportTrust2005,
@@ -140,7 +140,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                 },
 
                 new Endpoint {
-                    AuthenticationSchemes      = 32768,
+                    AuthenticationSchemes      = AuthType.Anonymous,
                     CertificateValidation      = CertificateValidation.None,
                     ClientCertificateQueryMode = ClientCertificateQueryMode.None,
                     Path                       = AdfsServicePathPairs.CertificateMixedTrust2005,
@@ -150,7 +150,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                     SupportsNtlm               = false
                 },
                 new Endpoint {
-                    AuthenticationSchemes      = 32768,
+                    AuthenticationSchemes      = AuthType.Anonymous,
                     CertificateValidation      = CertificateValidation.None,
                     ClientCertificateQueryMode = ClientCertificateQueryMode.QueryAndRequire,
                     Path                       = AdfsServicePathPairs.CertificateTransportTrust2005,
@@ -160,7 +160,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                     SupportsNtlm               = false
                 },
                 new Endpoint {
-                    AuthenticationSchemes      = 32768,
+                    AuthenticationSchemes      = AuthType.Anonymous,
                     CertificateValidation      = CertificateValidation.None,
                     ClientCertificateQueryMode = ClientCertificateQueryMode.None,
                     Path                       = AdfsServicePathPairs.UsernameMixedTrust2005,
@@ -170,7 +170,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                     SupportsNtlm               = false
                 },
                 new Endpoint {
-                    AuthenticationSchemes      = 32768,
+                    AuthenticationSchemes      = AuthType.Anonymous,
                     CertificateValidation      = CertificateValidation.None,
                     ClientCertificateQueryMode = ClientCertificateQueryMode.None,
                     Path                       = AdfsServicePathPairs.IssuedTokenMixedAsymmetricBasic256Trust2005,
@@ -180,7 +180,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                     SupportsNtlm               = false
                 },
                 new Endpoint {
-                    AuthenticationSchemes      = 32768,
+                    AuthenticationSchemes      = AuthType.Anonymous,
                     CertificateValidation      = CertificateValidation.None,
                     ClientCertificateQueryMode = ClientCertificateQueryMode.None,
                     Path                       = AdfsServicePathPairs.IssuedTokenMixedSymmetricBasic256Trust2005,
@@ -190,7 +190,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                     SupportsNtlm               = false
                 },
                 new Endpoint {
-                    AuthenticationSchemes      = 32768,
+                    AuthenticationSchemes      = AuthType.Anonymous,
                     CertificateValidation      = CertificateValidation.None,
                     ClientCertificateQueryMode = ClientCertificateQueryMode.None,
                     Path                       = AdfsServicePathPairs.CertificateMixedTrust13,
@@ -200,7 +200,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                     SupportsNtlm               = false
                 },
                 new Endpoint {
-                    AuthenticationSchemes      = 32768,
+                    AuthenticationSchemes      = AuthType.Anonymous,
                     CertificateValidation      = CertificateValidation.None,
                     ClientCertificateQueryMode = ClientCertificateQueryMode.None,
                     Path                       = AdfsServicePathPairs.UsernameMixedTrust13,
@@ -210,7 +210,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                     SupportsNtlm               = false
                 },
                 new Endpoint {
-                    AuthenticationSchemes      = 32768,
+                    AuthenticationSchemes      = AuthType.Anonymous,
                     CertificateValidation      = CertificateValidation.None,
                     ClientCertificateQueryMode = ClientCertificateQueryMode.None,
                     Path                       = AdfsServicePathPairs.IssuedTokenMixedAsymmetricBasic256Trust13,
@@ -220,7 +220,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                     SupportsNtlm               = false
                 },
                 new Endpoint {
-                    AuthenticationSchemes      = 32768,
+                    AuthenticationSchemes      = AuthType.Anonymous,
                     CertificateValidation      = CertificateValidation.None,
                     ClientCertificateQueryMode = ClientCertificateQueryMode.None,
                     Path                       = AdfsServicePathPairs.IssuedTokenMixedSymmetricBasic256Trust13,
@@ -230,7 +230,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                     SupportsNtlm               = false
                 },
                 new Endpoint {
-                    AuthenticationSchemes      = 32768,
+                    AuthenticationSchemes      = AuthType.Anonymous,
                     CertificateValidation      = CertificateValidation.None,
                     ClientCertificateQueryMode = ClientCertificateQueryMode.None,
                     Path                       = AdfsServicePathPairs.Mex,
@@ -264,7 +264,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                 #region 2016 New Added Endpoints
                 endpoints.AddRange(new List<Endpoint>() { 
                     new Endpoint {
-                        AuthenticationSchemes      = 32768,
+                        AuthenticationSchemes      = AuthType.Anonymous,
                         CertificateValidation      = CertificateValidation.None,
                         ClientCertificateQueryMode = ClientCertificateQueryMode.None,
                         Path                       = AdfsServicePathPairs.OpenIdConfiguration,
@@ -274,7 +274,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                         SupportsNtlm               = false
                     },
                     new Endpoint {
-                        AuthenticationSchemes      = 32768,
+                        AuthenticationSchemes      = AuthType.Anonymous,
                         CertificateValidation      = CertificateValidation.None,
                         ClientCertificateQueryMode = ClientCertificateQueryMode.None,
                         Path                       = AdfsServicePathPairs.DiscroveryKeys,
@@ -284,7 +284,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                         SupportsNtlm               = false
                     },
                     new Endpoint {
-                        AuthenticationSchemes      = 32768,
+                        AuthenticationSchemes      = AuthType.Anonymous,
                         CertificateValidation      = CertificateValidation.None,
                         ClientCertificateQueryMode = ClientCertificateQueryMode.None,
                         Path                       = AdfsServicePathPairs.WebFinger,
@@ -294,7 +294,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                         SupportsNtlm               = false
                     },
                     new Endpoint {
-                        AuthenticationSchemes      = 32768,
+                        AuthenticationSchemes      = AuthType.Anonymous,
                         CertificateValidation      = CertificateValidation.None,
                         ClientCertificateQueryMode = ClientCertificateQueryMode.None,
                         Path                       = AdfsServicePathPairs.AdfsUserInfo,

@@ -23,7 +23,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
             List<Endpoint> eps = new List<Endpoint>();
 
             Endpoint fed = new Endpoint();
-            fed.AuthenticationSchemes = 32768;
+            fed.AuthenticationSchemes = AuthType.Anonymous;
             fed.CertificateValidation = CertificateValidation.None;
             fed.ClientCertificateQueryMode = ClientCertificateQueryMode.None;
             fed.Path = AdfsServicePathPairs.GetServicePath(AdfsServicePathPairs.PathKey.FederationMetadata);
@@ -34,7 +34,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
             eps.Add(fed);
 
             Endpoint ls = new Endpoint();
-            ls.AuthenticationSchemes = 32768;
+            ls.AuthenticationSchemes = AuthType.Anonymous;
             ls.CertificateValidation = CertificateValidation.Device;
             ls.ClientCertificateQueryMode = ClientCertificateQueryMode.QueryAndRequire;
             ls.Path = AdfsServicePathPairs.GetServicePath(AdfsServicePathPairs.PathKey.Ls);
@@ -45,7 +45,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
             eps.Add(ls);
 
             Endpoint ls2 = new Endpoint();
-            ls2.AuthenticationSchemes = 32768;
+            ls2.AuthenticationSchemes = AuthType.Anonymous;
             ls2.CertificateValidation = CertificateValidation.User;
             ls2.ClientCertificateQueryMode = ClientCertificateQueryMode.QueryAndRequire;
             ls2.Path = AdfsServicePathPairs.GetServicePath(AdfsServicePathPairs.PathKey.Ls);
@@ -56,7 +56,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
             eps.Add(ls2);
 
             Endpoint portal1 = new Endpoint();
-            portal1.AuthenticationSchemes = 32768;
+            portal1.AuthenticationSchemes = AuthType.Anonymous;
             portal1.CertificateValidation = CertificateValidation.None;
             portal1.ClientCertificateQueryMode = ClientCertificateQueryMode.None;
             portal1.Path = AdfsServicePathPairs.GetServicePath(AdfsServicePathPairs.PathKey.Portal);
@@ -67,7 +67,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
             eps.Add(portal1);
 
             Endpoint oauth2token = new Endpoint();
-            oauth2token.AuthenticationSchemes = 32768;
+            oauth2token.AuthenticationSchemes = AuthType.Anonymous;
             oauth2token.CertificateValidation = CertificateValidation.None;
             oauth2token.ClientCertificateQueryMode = ClientCertificateQueryMode.None;
             oauth2token.Path = AdfsServicePathPairs.GetServicePath(AdfsServicePathPairs.PathKey.OAuth2Token);
@@ -78,7 +78,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
             eps.Add(oauth2token);
 
             Endpoint oauth2auth = new Endpoint();
-            oauth2auth.AuthenticationSchemes = 32768;
+            oauth2auth.AuthenticationSchemes = AuthType.Anonymous;
             oauth2auth.CertificateValidation = CertificateValidation.Device;
             oauth2auth.ClientCertificateQueryMode = ClientCertificateQueryMode.None;
             oauth2auth.Path = AdfsServicePathPairs.GetServicePath(AdfsServicePathPairs.PathKey.OAuth2Auth);
@@ -90,7 +90,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
 
 
             Endpoint oauth2auth2 = new Endpoint();
-            oauth2auth2.AuthenticationSchemes = 32768;
+            oauth2auth2.AuthenticationSchemes = AuthType.Anonymous;
             oauth2auth2.CertificateValidation = CertificateValidation.User;
             oauth2auth2.ClientCertificateQueryMode = ClientCertificateQueryMode.QueryAndRequire;
             oauth2auth2.Path = AdfsServicePathPairs.GetServicePath(AdfsServicePathPairs.PathKey.OAuth2Auth);
@@ -101,7 +101,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
             eps.Add(oauth2auth2);
 
             Endpoint enroll = new Endpoint();
-            enroll.AuthenticationSchemes = 32768;
+            enroll.AuthenticationSchemes = AuthType.Anonymous;
             enroll.CertificateValidation = CertificateValidation.None;
             enroll.ClientCertificateQueryMode = ClientCertificateQueryMode.None;
             enroll.Path = AdfsServicePathPairs.GetServicePath(AdfsServicePathPairs.PathKey.EnrollmentServer);
@@ -112,7 +112,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
             eps.Add(enroll);
 
             Endpoint portal2 = new Endpoint();
-            portal2.AuthenticationSchemes = 32768;
+            portal2.AuthenticationSchemes = AuthType.Anonymous;
             portal2.CertificateValidation = CertificateValidation.None;
             portal2.ClientCertificateQueryMode = ClientCertificateQueryMode.None;
             portal2.Path = AdfsServicePathPairs.GetServicePath(AdfsServicePathPairs.PathKey.Portal);
@@ -123,7 +123,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
             eps.Add(portal2);
 
             Endpoint winTrans = new Endpoint();
-            winTrans.AuthenticationSchemes = 32768;
+            winTrans.AuthenticationSchemes = AuthType.Anonymous;
             winTrans.CertificateValidation = CertificateValidation.None;
             winTrans.ClientCertificateQueryMode = ClientCertificateQueryMode.None;
             winTrans.Path = AdfsServicePathPairs.GetServicePath(AdfsServicePathPairs.PathKey.WindowsTransportTrust2005);
@@ -135,7 +135,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
 
 
             Endpoint cert2005 = new Endpoint();
-            cert2005.AuthenticationSchemes = 32768;
+            cert2005.AuthenticationSchemes = AuthType.Anonymous;
             cert2005.CertificateValidation = CertificateValidation.None;
             cert2005.ClientCertificateQueryMode = ClientCertificateQueryMode.None;
             cert2005.Path = AdfsServicePathPairs.GetServicePath(AdfsServicePathPairs.PathKey.CertificateMixedTrust2005);
@@ -147,7 +147,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
 
 
             Endpoint certTrans = new Endpoint();
-            certTrans.AuthenticationSchemes = 32768;
+            certTrans.AuthenticationSchemes = AuthType.Anonymous;
             certTrans.CertificateValidation = CertificateValidation.None;
             certTrans.ClientCertificateQueryMode = ClientCertificateQueryMode.QueryAndRequire;
             certTrans.Path = AdfsServicePathPairs.GetServicePath(AdfsServicePathPairs.PathKey.CertificateTransportTrust2005);
@@ -158,7 +158,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
             eps.Add(certTrans);
 
             Endpoint user2005 = new Endpoint();
-            user2005.AuthenticationSchemes = 32768;
+            user2005.AuthenticationSchemes = AuthType.Anonymous;
             user2005.CertificateValidation = CertificateValidation.None;
             user2005.ClientCertificateQueryMode = ClientCertificateQueryMode.None;
             user2005.Path = AdfsServicePathPairs.GetServicePath(AdfsServicePathPairs.PathKey.UsernameMixedTrust2005);
@@ -169,7 +169,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
             eps.Add(user2005);
 
             Endpoint asym2005 = new Endpoint();
-            asym2005.AuthenticationSchemes = 32768;
+            asym2005.AuthenticationSchemes = AuthType.Anonymous;
             asym2005.CertificateValidation = CertificateValidation.None;
             asym2005.ClientCertificateQueryMode = ClientCertificateQueryMode.None;
             asym2005.Path = AdfsServicePathPairs.GetServicePath(AdfsServicePathPairs.PathKey.IssuedTokenMixedAsymmetricBasic256Trust2005);
@@ -180,7 +180,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
             eps.Add(asym2005);
 
             Endpoint sym2005 = new Endpoint();
-            sym2005.AuthenticationSchemes = 32768;
+            sym2005.AuthenticationSchemes = AuthType.Anonymous;
             sym2005.CertificateValidation = CertificateValidation.None;
             sym2005.ClientCertificateQueryMode = ClientCertificateQueryMode.None;
             sym2005.Path = AdfsServicePathPairs.GetServicePath(AdfsServicePathPairs.PathKey.IssuedTokenMixedSymmetricBasic256Trust2005);
@@ -191,7 +191,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
             eps.Add(sym2005);
 
             Endpoint cert13 = new Endpoint();
-            cert13.AuthenticationSchemes = 32768;
+            cert13.AuthenticationSchemes = AuthType.Anonymous;
             cert13.CertificateValidation = CertificateValidation.None;
             cert13.ClientCertificateQueryMode = ClientCertificateQueryMode.None;
             cert13.Path = AdfsServicePathPairs.GetServicePath(AdfsServicePathPairs.PathKey.CertificateMixedTrust13);
@@ -202,7 +202,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
             eps.Add(cert13);
 
             Endpoint user13 = new Endpoint();
-            user13.AuthenticationSchemes = 32768;
+            user13.AuthenticationSchemes = AuthType.Anonymous;
             user13.CertificateValidation = CertificateValidation.None;
             user13.ClientCertificateQueryMode = ClientCertificateQueryMode.None;
             user13.Path = AdfsServicePathPairs.GetServicePath(AdfsServicePathPairs.PathKey.UsernameMixedTrust13);
@@ -213,7 +213,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
             eps.Add(user13);
 
             Endpoint asym13 = new Endpoint();
-            asym13.AuthenticationSchemes = 32768;
+            asym13.AuthenticationSchemes = AuthType.Anonymous;
             asym13.CertificateValidation = CertificateValidation.None;
             asym13.ClientCertificateQueryMode = ClientCertificateQueryMode.None;
             asym13.Path = AdfsServicePathPairs.GetServicePath(AdfsServicePathPairs.PathKey.IssuedTokenMixedAsymmetricBasic256Trust13);
@@ -224,7 +224,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
             eps.Add(asym13);
 
             Endpoint sym13 = new Endpoint();
-            sym13.AuthenticationSchemes = 32768;
+            sym13.AuthenticationSchemes = AuthType.Anonymous;
             sym13.CertificateValidation = CertificateValidation.None;
             sym13.ClientCertificateQueryMode = ClientCertificateQueryMode.None;
             sym13.Path = AdfsServicePathPairs.GetServicePath(AdfsServicePathPairs.PathKey.IssuedTokenMixedSymmetricBasic256Trust13);
@@ -235,7 +235,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
             eps.Add(sym13);
 
             Endpoint proxyMex = new Endpoint();
-            proxyMex.AuthenticationSchemes = 32768;
+            proxyMex.AuthenticationSchemes = AuthType.Anonymous;
             proxyMex.CertificateValidation = CertificateValidation.None;
             proxyMex.ClientCertificateQueryMode = ClientCertificateQueryMode.None;
             proxyMex.Path = AdfsServicePathPairs.GetServicePath(AdfsServicePathPairs.PathKey.Mex);

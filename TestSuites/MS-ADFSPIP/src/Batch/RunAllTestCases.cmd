@@ -20,7 +20,6 @@ if not defined vspath (
 	)
 )
 
-REM Run all test cases
-"%vspath%..\IDE\mstest" /testcontainer:..\Bin\MS-ADFSPIP_ClientTestSuite.dll /runconfig:..\Bin\ClientLocal.TestSettings /category:"!Disabled"
+%vspath%"..\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" "..\Bin\MS-ADFSPIP_ClientTestSuite.dll" /Settings:..\Bin\ClientLocal.TestSettings /Logger:trx /TestCaseFilter:"TestCategory!=Disabled"
 
 PAUSE

@@ -3,7 +3,7 @@
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Identity.ADFSPIP
 {
-    public class Constraints
+    public static class Constraints
     {
         public const int HTTPSServiceDefaultPort = 443;
         public const string DefaultUriSchema = "https";
