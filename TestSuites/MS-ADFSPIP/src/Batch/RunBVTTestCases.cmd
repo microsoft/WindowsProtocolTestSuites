@@ -20,6 +20,6 @@ if not defined vspath (
 	)
 )
 
-%vspath%"..\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" "..\Bin\MS-ADFSPIP_ClientTestSuite.dll" /Settings:..\Bin\ClientLocal.TestSettings /Logger:trx /TestCaseFilter:"(TestCategory!=Disabled&TestCategory=BVT)"
+%vspath%"..\IDE\mstest" /testcontainer:..\Bin\MS-ADFSPIP_ClientTestSuite.dll /runconfig:..\Bin\ClientLocal.TestSettings /category:"BVT&!Disabled"
 
 PAUSE

@@ -64,3 +64,7 @@ TestSuites/ADFamily/src/Deploy/Bin.wxs
 TestSuites/ADFamily/src/Deploy/PlayLists.wxs
 TestSuites/BranchCache/src/Deploy/TestSuiteBatchFiles.wxs
 TestSuites/BranchCache/src/Deploy/TestSuiteBinFiles.wxs
+TestSuites/MS-ADFSPIP/src/Deploy/TestSuiteBinFiles.wxs
+TestSuites/MS-ADFSPIP/src/Deploy/TestSuiteBatchFiles.wxs
+TestSuites/MS-ADFSPIP/src/Deploy/SCRIPT_FILES.wxs
+TestSuites/MS-ADFSPIP/src/Deploy/Certificate_Data.wxs

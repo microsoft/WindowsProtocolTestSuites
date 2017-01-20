@@ -20,5 +20,5 @@ if not defined vspath (
 	)
 )
 
-%vspath%"..\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" "..\Bin\MS-ADFSPIP_ClientTestSuite.dll" /Settings:..\Bin\ClientLocal.TestSettings /Logger:trx /TestCaseFilter:"(TestCategory!=Disabled&TestCategory!=Win2016)"
+%vspath%"..\IDE\mstest" /testcontainer:..\Bin\MS-ADFSPIP_ClientTestSuite.dll /runconfig:..\Bin\ClientLocal.TestSettings /category:"!Disabled&!Win2016"
 pause
