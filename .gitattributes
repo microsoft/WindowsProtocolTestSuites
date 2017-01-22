@@ -54,6 +54,7 @@
 *.xlsm  binary
 *.rc	binary
 *.docx  binary
+*.pfx	binary
 
 #Images (Binary)
 *.png binary
