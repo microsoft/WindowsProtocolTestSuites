@@ -1,0 +1,491 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            36:52:eb:df:77:5f:26:ac:45:22:96:6c:2c:42:e9:27
+    Signature Algorithm: sha1WithRSAEncryption
+        Issuer:
+            commonName                = CONTOSO-CA
+            domainComponent           = contoso
+            domainComponent           = com
+        Validity
+            Not Before: Jan  9 07:43:12 2014 GMT
+            Not After : Jan  9 07:53:11 2019 GMT
+        Subject:
+            commonName                = CONTOSO-CA
+            domainComponent           = contoso
+            domainComponent           = com
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:b4:2b:7d:5e:1d:0f:a5:b3:6b:01:2c:20:50:e0:
+                    13:49:df:17:e3:40:31:e4:bb:9e:32:98:4d:c0:77:
+                    96:f1:82:8d:03:e7:2e:3e:28:93:ff:d6:28:b8:bb:
+                    04:10:bc:22:dc:c8:66:81:ce:48:14:76:11:ed:fc:
+                    7c:df:59:15:9d:9a:89:9a:b7:3d:c2:0d:db:73:2d:
+                    a4:a3:07:5f:b8:02:0d:fd:a5:42:cb:2e:69:3b:c8:
+                    c9:78:13:fe:c4:29:e4:2c:2e:21:60:18:bc:ba:89:
+                    26:5c:16:f9:57:56:e4:f6:3c:7e:28:27:78:ea:63:
+                    21:93:32:a2:2d:5c:7c:7e:66:77:e8:d0:43:d1:3f:
+                    5b:2e:2a:0c:59:14:91:91:c9:92:1d:dd:55:a5:d7:
+                    91:78:4a:b5:05:f4:10:24:8a:41:1e:3e:22:5d:cf:
+                    a9:38:ca:c3:36:a3:9e:4d:67:bb:cc:4a:a6:60:86:
+                    16:9c:3c:e3:0d:e8:ba:e1:c0:aa:7e:20:94:9e:d9:
+                    66:54:7b:a2:87:8c:ea:d3:18:07:74:1c:5e:07:2f:
+                    4b:88:6c:06:b2:cb:26:50:31:51:b8:85:4f:0f:d5:
+                    50:bf:5b:c7:d8:33:c9:3f:c4:fd:e0:4a:10:d1:03:
+                    8b:e2:9a:9c:61:b8:87:9a:2f:49:a0:26:a1:be:81:
+                    47:23
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Key Usage: 
+                Digital Signature, Certificate Sign, CRL Sign
+            X509v3 Basic Constraints: critical
+                CA:TRUE
+            X509v3 Subject Key Identifier: 
+                1A:20:77:B0:65:4D:C9:A6:29:07:84:C7:8D:31:C5:31:6E:C7:5E:F3
+            1.3.6.1.4.1.311.21.1: 
+                ...
+    Signature Algorithm: sha1WithRSAEncryption
+         85:cb:d6:41:0b:76:11:f6:2e:78:08:30:41:c2:80:98:eb:34:
+         2d:3e:d0:4e:50:3d:08:fe:a4:81:07:61:96:ff:bf:f5:24:26:
+         02:25:49:f2:6d:ad:07:6a:9a:24:c6:4c:ec:df:6c:15:06:05:
+         0b:90:94:13:fa:af:3b:d8:5c:1e:a9:55:56:8c:45:ac:d4:65:
+         6f:10:39:41:c2:94:f1:46:ca:2a:bc:dd:8c:bf:9e:03:1a:af:
+         b6:7a:4c:1c:00:c1:fb:58:4e:22:94:96:c2:47:ad:61:72:8c:
+         62:6c:e8:89:95:0e:ee:9a:8e:e6:bc:1b:09:49:2c:98:2c:3d:
+         d6:3f:d9:70:17:ab:51:69:c5:11:ed:5f:47:a1:23:c1:8e:43:
+         df:2f:60:7c:90:0e:e6:25:51:9c:8b:25:54:8e:15:d0:10:9b:
+         0d:41:59:70:65:bf:11:b6:b5:e2:8c:44:23:18:b8:ba:4f:02:
+         94:e3:24:14:21:10:94:2f:6b:90:63:7f:6f:a5:24:a1:bf:e8:
+         cf:d2:48:66:2e:7a:23:3b:44:79:d5:0c:41:66:70:70:ee:34:
+         83:70:ce:9a:5d:1f:76:67:f0:c9:3a:4b:3b:ca:44:b8:d2:57:
+         8e:1a:95:e0:41:b5:02:25:fe:67:ed:bb:6b:23:5a:a0:96:50:
+         c1:b6:6e:ed
+-----BEGIN CERTIFICATE-----
+MIIDYTCCAkmgAwIBAgIQNlLr33dfJqxFIpZsLELpJzANBgkqhkiG9w0BAQUFADBD
+MRMwEQYKCZImiZPyLGQBGRYDY29tMRcwFQYKCZImiZPyLGQBGRYHY29udG9zbzET
+MBEGA1UEAxMKQ09OVE9TTy1DQTAeFw0xNDAxMDkwNzQzMTJaFw0xOTAxMDkwNzUz
+MTFaMEMxEzARBgoJkiaJk/IsZAEZFgNjb20xFzAVBgoJkiaJk/IsZAEZFgdjb250
+b3NvMRMwEQYDVQQDEwpDT05UT1NPLUNBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A
+MIIBCgKCAQEAtCt9Xh0PpbNrASwgUOATSd8X40Ax5LueMphNwHeW8YKNA+cuPiiT
+/9YouLsEELwi3Mhmgc5IFHYR7fx831kVnZqJmrc9wg3bcy2kowdfuAIN/aVCyy5p
+O8jJeBP+xCnkLC4hYBi8uokmXBb5V1bk9jx+KCd46mMhkzKiLVx8fmZ36NBD0T9b
+LioMWRSRkcmSHd1VpdeReEq1BfQQJIpBHj4iXc+pOMrDNqOeTWe7zEqmYIYWnDzj
+Dei64cCqfiCUntlmVHuih4zq0xgHdBxeBy9LiGwGsssmUDFRuIVPD9VQv1vH2DPJ
+P8T94EoQ0QOL4pqcYbiHmi9JoCahvoFHIwIDAQABo1EwTzALBgNVHQ8EBAMCAYYw
+DwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUGiB3sGVNyaYpB4THjTHFMW7HXvMw
+EAYJKwYBBAGCNxUBBAMCAQAwDQYJKoZIhvcNAQEFBQADggEBAIXL1kELdhH2LngI
+MEHCgJjrNC0+0E5QPQj+pIEHYZb/v/UkJgIlSfJtrQdqmiTGTOzfbBUGBQuQlBP6
+rzvYXB6pVVaMRazUZW8QOUHClPFGyiq83Yy/ngMar7Z6TBwAwftYTiKUlsJHrWFy
+jGJs6ImVDu6ajua8GwlJLJgsPdY/2XAXq1FpxRHtX0ehI8GOQ98vYHyQDuYlUZyL
+JVSOFdAQmw1BWXBlvxG2teKMRCMYuLpPApTjJBQhEJQva5Bjf2+lJKG/6M/SSGYu
+eiM7RHnVDEFmcHDuNINwzppdH3Zn8Mk6SzvKRLjSV44aleBBtQIl/mftu2sjWqCW
+UMG2bu0=
+-----END CERTIFICATE-----
+
+
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            6d:00:00:00:02:03:30:9a:b9:d0:1f:db:76:00:00:00:00:00:02
+    Signature Algorithm: sha1WithRSAEncryption
+        Issuer:
+            commonName                = CONTOSO-CA
+            domainComponent           = contoso
+            domainComponent           = com
+        Validity
+            Not Before: Jan  9 07:49:12 2014 GMT
+            Not After : Jan  9 07:49:12 2016 GMT
+        Subject:
+            commonName                = adfs.contoso.com
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:d3:23:39:ee:69:07:a6:6f:53:02:32:d0:b9:3a:
+                    d0:6f:cd:ad:20:80:aa:ce:8b:f3:6a:d4:07:1b:0f:
+                    6a:43:17:87:9f:79:35:eb:46:11:8a:42:37:34:57:
+                    55:ec:3e:85:84:20:79:1d:e7:d1:9f:4b:40:df:46:
+                    6f:a5:26:c1:83:1f:04:13:fc:bd:df:61:59:7f:86:
+                    f9:74:77:aa:2f:93:c7:19:8a:70:86:96:4b:f2:ad:
+                    cc:3e:8b:ed:78:38:f5:54:fc:65:0c:43:07:99:46:
+                    d3:18:89:51:25:76:cd:0c:8c:4a:ce:b6:50:fd:a3:
+                    5f:af:18:ac:ca:af:90:e8:ff:ef:1c:06:78:30:cf:
+                    cf:f4:1f:c4:24:c5:7f:26:dc:14:de:82:89:34:08:
+                    0c:01:08:57:e8:98:00:9e:82:a7:37:a3:c7:d0:7e:
+                    3d:fb:fc:19:2c:d8:6d:f8:55:fe:b2:f1:a1:e9:4e:
+                    de:45:4b:0e:4f:92:93:cd:ab:7e:23:68:a8:88:74:
+                    2a:4d:1a:61:33:13:5f:a5:69:0e:02:9f:2e:57:8d:
+                    75:24:90:46:cf:82:60:6d:e6:38:a8:17:6d:78:03:
+                    ff:5a:a5:f6:92:72:c6:de:52:8f:63:c9:ff:91:fd:
+                    3d:76:a0:d8:a4:59:0e:f3:89:30:56:f3:6d:b1:d8:
+                    3a:d5
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            1.3.6.1.4.1.311.20.2: 
+                ...W.e.b.S.e.r.v.e.r
+            X509v3 Extended Key Usage: 
+                TLS Web Server Authentication
+            X509v3 Key Usage: critical
+                Digital Signature, Key Encipherment
+            X509v3 Subject Key Identifier: 
+                6E:B0:7C:87:6E:1D:D2:84:AE:0D:E4:41:0D:58:C1:C7:5E:73:A6:FF
+            X509v3 Subject Alternative Name: 
+                DNS:adfs.contoso.com, DNS:enterpriseregistration.contoso.com
+            X509v3 Authority Key Identifier: 
+                keyid:1A:20:77:B0:65:4D:C9:A6:29:07:84:C7:8D:31:C5:31:6E:C7:5E:F3
+
+    Signature Algorithm: sha1WithRSAEncryption
+         2d:a6:83:ce:e6:80:36:89:ee:eb:bb:85:22:00:dd:41:55:bb:
+         02:50:12:0e:0f:a8:ac:f2:8e:de:46:4f:d7:a4:e7:41:cb:9b:
+         76:a0:47:64:7a:64:16:38:c5:19:68:ac:af:34:cc:69:87:61:
+         60:a8:fc:c9:59:26:79:d0:99:bc:7c:d1:12:af:89:c8:91:ed:
+         fc:76:12:5c:65:90:b1:88:70:54:1a:b5:59:7a:bd:ea:b0:42:
+         c8:8c:02:ff:67:9e:0f:f6:d1:9e:9f:35:30:4e:e9:bc:51:7f:
+         14:6f:47:fe:a5:49:6e:a7:0d:7a:73:cf:23:6f:66:b1:89:31:
+         2a:ca:43:87:42:3c:89:b3:13:6c:27:75:c3:52:e4:3c:7f:49:
+         a5:74:1f:bd:fd:56:ad:ea:ec:af:d6:d5:6b:95:1c:ed:af:f5:
+         c4:1f:7a:0f:57:61:89:eb:a2:03:74:7f:d7:a6:21:7b:0a:9b:
+         9f:60:47:9b:90:79:22:50:8e:56:6e:f0:47:16:0c:91:98:23:
+         b8:d1:7b:3d:bb:9c:57:fb:ee:0e:15:ed:e3:22:5d:c5:fc:d1:
+         9f:1a:7d:df:aa:23:5b:a4:75:45:bc:ab:6b:58:ea:22:d6:fd:
+         95:3c:6e:32:cb:4b:cf:2b:6f:d6:46:03:e8:ba:a3:d3:b8:60:
+         64:1c:7c:45
+-----BEGIN CERTIFICATE-----
+MIIDuDCCAqCgAwIBAgITbQAAAAIDMJq50B/bdgAAAAAAAjANBgkqhkiG9w0BAQUF
+ADBDMRMwEQYKCZImiZPyLGQBGRYDY29tMRcwFQYKCZImiZPyLGQBGRYHY29udG9z
+bzETMBEGA1UEAxMKQ09OVE9TTy1DQTAeFw0xNDAxMDkwNzQ5MTJaFw0xNjAxMDkw
+NzQ5MTJaMBsxGTAXBgNVBAMTEGFkZnMuY29udG9zby5jb20wggEiMA0GCSqGSIb3
+DQEBAQUAA4IBDwAwggEKAoIBAQDTIznuaQemb1MCMtC5OtBvza0ggKrOi/Nq1Acb
+D2pDF4efeTXrRhGKQjc0V1XsPoWEIHkd59GfS0DfRm+lJsGDHwQT/L3fYVl/hvl0
+d6ovk8cZinCGlkvyrcw+i+14OPVU/GUMQweZRtMYiVElds0MjErOtlD9o1+vGKzK
+r5Do/+8cBngwz8/0H8QkxX8m3BTegok0CAwBCFfomACegqc3o8fQfj37/Bks2G34
+Vf6y8aHpTt5FSw5PkpPNq34jaKiIdCpNGmEzE1+laQ4Cny5XjXUkkEbPgmBt5jio
+F214A/9apfaScsbeUo9jyf+R/T12oNikWQ7ziTBW822x2DrVAgMBAAGjgcwwgckw
+IQYJKwYBBAGCNxQCBBQeEgBXAGUAYgBTAGUAcgB2AGUAcjATBgNVHSUEDDAKBggr
+BgEFBQcDATAOBgNVHQ8BAf8EBAMCBaAwHQYDVR0OBBYEFG6wfIduHdKErg3kQQ1Y
+wcdec6b/MD8GA1UdEQQ4MDaCEGFkZnMuY29udG9zby5jb22CImVudGVycHJpc2Vy
+ZWdpc3RyYXRpb24uY29udG9zby5jb20wHwYDVR0jBBgwFoAUGiB3sGVNyaYpB4TH
+jTHFMW7HXvMwDQYJKoZIhvcNAQEFBQADggEBAC2mg87mgDaJ7uu7hSIA3UFVuwJQ
+Eg4PqKzyjt5GT9ek50HLm3agR2R6ZBY4xRlorK80zGmHYWCo/MlZJnnQmbx80RKv
+iciR7fx2ElxlkLGIcFQatVl6veqwQsiMAv9nng/20Z6fNTBO6bxRfxRvR/6lSW6n
+DXpzzyNvZrGJMSrKQ4dCPImzE2wndcNS5Dx/SaV0H739Vq3q7K/W1WuVHO2v9cQf
+eg9XYYnrogN0f9emIXsKm59gR5uQeSJQjlZu8EcWDJGYI7jRez27nFf77g4V7eMi
+XcX80Z8afd+qI1ukdUW8q2tY6iLW/ZU8bjLLS88rb9ZGA+i6o9O4YGQcfEU=
+-----END CERTIFICATE-----
+
+
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            7b:00:00:00:02:27:6a:c4:72:13:27:6c:f3:00:00:00:00:00:02
+    Signature Algorithm: sha1WithRSAEncryption
+        Issuer:
+            commonName                = CONTOSO-CA
+            domainComponent           = contoso
+            domainComponent           = com
+        Validity
+            Not Before: Mar 14 01:42:26 2014 GMT
+            Not After : Mar 13 01:42:26 2016 GMT
+        Subject:
+            commonName                = webapp.contoso.com
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:aa:64:35:2c:c1:a8:1a:b2:ad:44:d9:c1:80:d5:
+                    43:cb:3e:b9:e0:01:7f:a2:75:0c:97:fa:52:22:ad:
+                    e6:40:13:4d:eb:6f:88:48:9a:7c:24:22:2b:c9:63:
+                    99:13:19:74:20:88:5d:e7:8b:d4:ab:ed:45:ac:40:
+                    77:d9:5b:ff:2c:8e:24:da:ce:94:b7:4d:91:68:f8:
+                    13:4a:76:a8:e4:8d:70:16:7d:b0:fc:5a:a4:84:6b:
+                    dd:d0:85:2e:d6:25:ca:81:03:10:d1:1b:68:f1:13:
+                    fa:c8:ab:e1:83:02:f5:4f:3e:b5:7c:f7:b7:68:48:
+                    d4:30:a6:80:aa:59:03:49:1e:77:c7:dd:9e:55:fc:
+                    78:e6:d4:e4:69:4c:50:cc:f9:d1:ca:e0:bb:c7:27:
+                    33:7f:f8:31:7c:88:34:3c:b3:32:11:29:eb:7a:34:
+                    da:76:e7:52:b1:8c:fa:6d:22:b6:82:0d:f9:47:f4:
+                    ab:8b:16:75:f0:e6:b2:ce:1c:0a:e0:56:ef:02:59:
+                    5b:45:22:f5:d3:72:da:f7:09:20:f4:44:c4:ac:de:
+                    4f:44:31:87:06:5f:db:a9:89:c2:f2:6f:f3:dc:d7:
+                    6d:02:ed:8a:23:e0:27:4c:71:15:0b:04:37:87:f8:
+                    4c:6a:d1:d3:95:72:01:4b:0d:c2:57:f4:ca:a1:ac:
+                    9f:eb
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            1.3.6.1.4.1.311.20.2: 
+                ...W.e.b.S.e.r.v.e.r
+            X509v3 Extended Key Usage: 
+                TLS Web Server Authentication
+            X509v3 Key Usage: critical
+                Digital Signature, Key Encipherment
+            X509v3 Subject Key Identifier: 
+                9D:03:DC:AD:9D:B0:EC:B5:67:53:83:CD:07:94:7C:F8:54:6D:75:80
+            X509v3 Subject Alternative Name: 
+                DNS:webapp.contoso.com
+            X509v3 Authority Key Identifier: 
+                keyid:1A:20:77:B0:65:4D:C9:A6:29:07:84:C7:8D:31:C5:31:6E:C7:5E:F3
+
+    Signature Algorithm: sha1WithRSAEncryption
+         8a:1c:ea:d1:68:b4:75:96:9f:d7:20:a2:d5:a5:da:80:68:52:
+         6a:c3:81:9a:39:dd:9b:f3:8c:f1:3f:40:5b:21:78:87:b5:ed:
+         70:b8:00:d8:11:58:4b:2d:e6:3d:a9:64:e5:59:c7:17:1b:e2:
+         97:60:01:d4:8f:cf:4d:f5:43:20:2a:d2:c0:a8:80:af:9c:a8:
+         1b:f6:f8:b4:23:f9:91:cc:3a:8c:ea:d9:76:db:44:b5:c6:4c:
+         67:94:88:7f:45:72:be:b4:1b:19:35:d1:66:c9:7a:1b:d7:02:
+         57:f2:3a:e6:c8:d1:17:d8:cf:f9:67:c9:86:78:bc:1a:97:ff:
+         89:8d:95:2f:cb:47:8e:79:a1:bf:8f:bb:7f:a6:bc:18:13:56:
+         8e:ca:76:27:7d:14:f6:03:db:f5:f8:39:98:99:ff:63:d3:12:
+         6f:71:3e:1d:a3:48:70:de:7a:ca:53:0a:20:af:67:ca:2c:b7:
+         9c:74:2b:c9:c4:fe:dc:16:2c:27:84:37:0d:0d:05:a1:37:4d:
+         65:35:f5:c5:7c:96:cc:44:d6:4c:d0:e2:5b:2d:de:24:bf:1a:
+         d2:c3:fa:8a:cd:ba:fd:c4:38:de:d3:45:8f:29:8e:3a:f7:3e:
+         6f:e4:e4:88:4d:0b:8e:21:b1:aa:39:37:9d:47:48:d9:b6:c1:
+         80:ec:50:78
+-----BEGIN CERTIFICATE-----
+MIIDmDCCAoCgAwIBAgITewAAAAInasRyEyds8wAAAAAAAjANBgkqhkiG9w0BAQUF
+ADBDMRMwEQYKCZImiZPyLGQBGRYDY29tMRcwFQYKCZImiZPyLGQBGRYHY29udG9z
+bzETMBEGA1UEAxMKQ09OVE9TTy1DQTAeFw0xNDAzMTQwMTQyMjZaFw0xNjAzMTMw
+MTQyMjZaMB0xGzAZBgNVBAMTEndlYmFwcC5jb250b3NvLmNvbTCCASIwDQYJKoZI
+hvcNAQEBBQADggEPADCCAQoCggEBAKpkNSzBqBqyrUTZwYDVQ8s+ueABf6J1DJf6
+UiKt5kATTetviEiafCQiK8ljmRMZdCCIXeeL1KvtRaxAd9lb/yyOJNrOlLdNkWj4
+E0p2qOSNcBZ9sPxapIRr3dCFLtYlyoEDENEbaPET+sir4YMC9U8+tXz3t2hI1DCm
+gKpZA0ked8fdnlX8eObU5GlMUMz50crgu8cnM3/4MXyINDyzMhEp63o02nbnUrGM
++m0itoIN+Uf0q4sWdfDmss4cCuBW7wJZW0Ui9dNy2vcJIPRExKzeT0QxhwZf26mJ
+wvJv89zXbQLtiiPgJ0xxFQsEN4f4TGrR05VyAUsNwlf0yqGsn+sCAwEAAaOBqjCB
+pzAhBgkrBgEEAYI3FAIEFB4SAFcAZQBiAFMAZQByAHYAZQByMBMGA1UdJQQMMAoG
+CCsGAQUFBwMBMA4GA1UdDwEB/wQEAwIFoDAdBgNVHQ4EFgQUnQPcrZ2w7LVnU4PN
+B5R8+FRtdYAwHQYDVR0RBBYwFIISd2ViYXBwLmNvbnRvc28uY29tMB8GA1UdIwQY
+MBaAFBogd7BlTcmmKQeEx40xxTFux17zMA0GCSqGSIb3DQEBBQUAA4IBAQCKHOrR
+aLR1lp/XIKLVpdqAaFJqw4GaOd2b84zxP0BbIXiHte1wuADYEVhLLeY9qWTlWccX
+G+KXYAHUj89N9UMgKtLAqICvnKgb9vi0I/mRzDqM6tl220S1xkxnlIh/RXK+tBsZ
+NdFmyXob1wJX8jrmyNEX2M/5Z8mGeLwal/+JjZUvy0eOeaG/j7t/prwYE1aOynYn
+fRT2A9v1+DmYmf9j0xJvcT4do0hw3nrKUwogr2fKLLecdCvJxP7cFiwnhDcNDQWh
+N01lNfXFfJbMRNZM0OJbLd4kvxrSw/qKzbr9xDje00WPKY469z5v5OSITQuOIbGq
+OTedR0jZtsGA7FB4
+-----END CERTIFICATE-----
+
+
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            1c:2d:34:af:cd:0a:60:bc:41:88:22:06:21:4c:b1:e6
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer:
+            commonName                = ADFS Signing - adfs.contoso.com
+        Validity
+            Not Before: Mar  3 05:51:39 2014 GMT
+            Not After : Mar  3 05:51:39 2015 GMT
+        Subject:
+            commonName                = ADFS Signing - adfs.contoso.com
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:bd:4a:6a:91:09:6f:72:6e:aa:3b:63:3e:0a:5c:
+                    b2:96:6a:c8:21:23:d8:36:18:74:56:89:5e:58:b6:
+                    91:62:4a:15:a9:03:d6:7d:16:cf:d3:58:37:03:1e:
+                    f4:25:19:d8:63:3b:d1:92:66:0c:0c:16:c5:fb:26:
+                    db:de:ec:f0:67:32:1c:57:2f:5a:bf:6e:6f:39:aa:
+                    41:9a:49:51:94:10:d8:2e:9e:f1:c8:95:7a:4b:56:
+                    57:9f:20:a1:42:db:c5:3b:f6:77:58:31:eb:c5:c3:
+                    fa:e6:fd:cd:6b:5b:65:85:85:ea:9e:c6:80:c9:e4:
+                    96:67:ef:57:ef:ad:02:a4:94:e8:ae:1f:80:f7:1a:
+                    2c:6b:7b:c2:09:e5:24:dc:19:9f:03:c1:ee:2c:12:
+                    9c:80:37:a7:49:55:a7:fe:8c:09:b6:0e:a8:2e:b7:
+                    d0:3f:96:27:d4:97:43:a9:d7:96:59:2d:6d:68:2d:
+                    f4:63:bb:98:b4:f8:ef:22:0e:7d:16:62:c4:e3:05:
+                    4e:5d:e5:33:d3:30:88:23:d8:c4:8c:ad:15:59:a4:
+                    10:cf:7d:a5:17:9c:9b:a6:0e:ad:fa:cc:72:b2:ac:
+                    db:ce:68:74:b3:a5:a6:6d:fa:d7:aa:79:57:24:fa:
+                    70:9e:bb:4e:19:0e:2f:13:f9:cb:45:7e:22:35:56:
+                    ec:03
+                Exponent: 65537 (0x10001)
+    Signature Algorithm: sha256WithRSAEncryption
+         30:cb:ee:06:2e:8e:e4:0b:c1:f4:f6:be:bd:7a:8c:8a:5c:04:
+         15:3c:82:8e:02:b6:8e:79:40:86:d7:2c:ef:53:d4:6a:f3:35:
+         83:58:bc:81:22:3b:5d:bf:f5:6a:7d:d9:07:09:03:10:6f:09:
+         a5:38:a1:53:4f:01:50:81:f1:78:84:9c:33:a8:6e:46:3c:aa:
+         9a:ca:de:82:0c:09:52:a0:13:47:ef:b9:a9:18:be:11:cc:33:
+         ad:c9:d6:d8:0f:32:cd:b8:e8:db:ee:ad:2c:0c:b5:3f:8d:50:
+         1e:3d:8d:6e:08:35:c7:5a:0c:65:5b:3d:5c:93:ab:8b:21:8d:
+         15:16:3c:9f:49:22:d8:fe:20:1f:bd:6d:21:d0:03:e7:74:e7:
+         71:7d:cd:5a:76:46:04:06:5b:c3:cb:2b:0b:ab:ef:e6:e4:0a:
+         8b:c6:03:26:3f:5a:46:84:98:b9:8f:51:85:a5:a9:ef:12:b6:
+         d0:de:ee:6c:1a:eb:1c:f0:13:b0:2c:d5:22:ee:f8:e6:48:90:
+         be:01:31:c9:b3:e1:2b:89:7c:3c:06:b8:7e:d9:60:72:55:66:
+         b6:6b:b2:a7:18:57:3e:82:5a:9c:6e:a6:b7:f7:f5:fb:ff:84:
+         1b:0e:7c:fd:01:58:13:0e:94:ca:80:79:81:42:60:b2:0c:4f:
+         ff:b8:51:df
+-----BEGIN CERTIFICATE-----
+MIIC3DCCAcSgAwIBAgIQHC00r80KYLxBiCIGIUyx5jANBgkqhkiG9w0BAQsFADAq
+MSgwJgYDVQQDEx9BREZTIFNpZ25pbmcgLSBhZGZzLmNvbnRvc28uY29tMB4XDTE0
+MDMwMzA1NTEzOVoXDTE1MDMwMzA1NTEzOVowKjEoMCYGA1UEAxMfQURGUyBTaWdu
+aW5nIC0gYWRmcy5jb250b3NvLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCC
+AQoCggEBAL1KapEJb3JuqjtjPgpcspZqyCEj2DYYdFaJXli2kWJKFakD1n0Wz9NY
+NwMe9CUZ2GM70ZJmDAwWxfsm297s8GcyHFcvWr9ubzmqQZpJUZQQ2C6e8ciVektW
+V58goULbxTv2d1gx68XD+ub9zWtbZYWF6p7GgMnklmfvV++tAqSU6K4fgPcaLGt7
+wgnlJNwZnwPB7iwSnIA3p0lVp/6MCbYOqC630D+WJ9SXQ6nXllktbWgt9GO7mLT4
+7yIOfRZixOMFTl3lM9MwiCPYxIytFVmkEM99pRecm6YOrfrMcrKs285odLOlpm36
+16p5VyT6cJ67ThkOLxP5y0V+IjVW7AMCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEA
+MMvuBi6O5AvB9Pa+vXqMilwEFTyCjgK2jnlAhtcs71PUavM1g1i8gSI7Xb/1an3Z
+BwkDEG8JpTihU08BUIHxeIScM6huRjyqmsreggwJUqATR++5qRi+EcwzrcnW2A8y
+zbjo2+6tLAy1P41QHj2Nbgg1x1oMZVs9XJOriyGNFRY8n0ki2P4gH71tIdAD53Tn
+cX3NWnZGBAZbw8srC6vv5uQKi8YDJj9aRoSYuY9RhaWp7xK20N7ubBrrHPATsCzV
+Iu745kiQvgExybPhK4l8PAa4ftlgclVmtmuypxhXPoJanG6mt/f1+/+EGw58/QFY
+Ew6UyoB5gUJgsgxP/7hR3w==
+-----END CERTIFICATE-----
+
+
+ Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            15:b3:fb:78:05:6c:75:aa:45:46:45:3a:cd:bb:0e:b1
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer:
+            commonName                = ADFS Encryption - adfs.contoso.com
+        Validity
+            Not Before: Mar  3 05:51:39 2014 GMT
+            Not After : Mar  3 05:51:39 2015 GMT
+        Subject:
+            commonName                = ADFS Encryption - adfs.contoso.com
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:a3:a6:93:1c:21:be:8b:14:6f:bb:2b:81:93:c7:
+                    dd:85:e7:0b:47:43:19:87:0c:ba:70:a9:de:31:9e:
+                    fa:35:8a:4e:b9:31:f2:c0:47:1c:5a:b4:c0:0b:b3:
+                    80:45:e6:27:d3:f3:28:09:88:db:8e:b9:59:d3:a5:
+                    10:bc:d0:b0:19:0b:68:34:24:eb:73:b2:00:fc:fc:
+                    e8:ed:ba:d4:36:80:51:14:ba:4a:0d:bd:5f:80:2c:
+                    70:d2:fb:61:b6:c1:55:4f:41:5d:40:b8:6f:1a:b2:
+                    16:2e:b4:ef:c1:90:e1:18:8c:cb:af:0f:5b:43:13:
+                    76:4a:16:29:68:41:3d:c1:a6:1e:28:58:e2:e5:67:
+                    43:48:f2:d5:4d:bc:2e:8d:a3:64:bf:49:28:02:d7:
+                    d5:f0:3d:59:6b:95:3b:7b:9d:06:15:24:5d:96:d1:
+                    b3:8a:10:09:fd:6f:4a:2f:97:fb:ae:64:b2:6b:dc:
+                    5d:75:41:8b:23:c3:0e:05:62:29:8a:aa:28:46:ce:
+                    ab:92:97:c4:3b:b0:e7:3b:d4:27:25:57:19:e2:9f:
+                    7f:1e:ed:29:13:fe:c7:de:c7:9b:98:df:3f:38:7c:
+                    2b:a8:c0:7d:b2:3a:d6:a6:72:d7:15:5a:60:3c:e6:
+                    68:d1:64:3e:e2:0c:2c:b3:9a:a3:9d:09:25:89:b9:
+                    d0:c1
+                Exponent: 65537 (0x10001)
+    Signature Algorithm: sha256WithRSAEncryption
+         89:0e:9a:ff:4d:ff:88:1b:0c:57:7b:e5:d3:a9:ce:d2:63:a4:
+         2a:f3:df:f7:f3:5b:12:16:bd:2d:5e:f8:e2:8d:97:64:75:e8:
+         d5:a8:bc:fb:c6:ba:9a:52:4d:94:8c:21:97:bc:b0:0a:03:3b:
+         a6:46:9a:5d:41:32:e6:81:51:d6:4a:21:4d:76:6d:b7:c5:4b:
+         19:63:9b:52:35:7b:a8:4e:a6:4f:fe:80:87:5c:9e:95:67:61:
+         79:3d:b1:e7:15:cf:58:6f:0a:8c:70:46:ef:88:e4:03:2a:e9:
+         30:e0:47:44:c5:82:11:9d:79:ef:2a:37:34:a0:b5:5d:a5:35:
+         e4:c1:1d:e5:35:59:31:46:54:15:8b:42:f7:c9:e1:5c:74:12:
+         3b:50:23:a4:b5:19:87:9c:46:20:4d:90:06:cc:51:47:76:b9:
+         98:bc:06:32:3d:20:0f:e5:72:d9:d6:97:01:c8:08:6e:b6:57:
+         ec:da:ea:c0:f1:b6:44:f4:7f:4f:7a:0a:09:aa:9a:62:6a:45:
+         bd:3a:6a:38:55:eb:5c:71:1a:ea:64:d7:0f:f4:54:a6:5b:73:
+         d9:9b:64:d3:21:03:f5:73:ec:a2:06:52:dd:03:70:81:ad:17:
+         c2:1e:88:85:79:a5:c8:6c:da:97:5e:3a:8f:45:cf:99:d3:60:
+         fb:51:8d:6a
+-----BEGIN CERTIFICATE-----
+MIIC4jCCAcqgAwIBAgIQFbP7eAVsdapFRkU6zbsOsTANBgkqhkiG9w0BAQsFADAt
+MSswKQYDVQQDEyJBREZTIEVuY3J5cHRpb24gLSBhZGZzLmNvbnRvc28uY29tMB4X
+DTE0MDMwMzA1NTEzOVoXDTE1MDMwMzA1NTEzOVowLTErMCkGA1UEAxMiQURGUyBF
+bmNyeXB0aW9uIC0gYWRmcy5jb250b3NvLmNvbTCCASIwDQYJKoZIhvcNAQEBBQAD
+ggEPADCCAQoCggEBAKOmkxwhvosUb7srgZPH3YXnC0dDGYcMunCp3jGe+jWKTrkx
+8sBHHFq0wAuzgEXmJ9PzKAmI2465WdOlELzQsBkLaDQk63OyAPz86O261DaAURS6
+Sg29X4AscNL7YbbBVU9BXUC4bxqyFi6078GQ4RiMy68PW0MTdkoWKWhBPcGmHihY
+4uVnQ0jy1U28Lo2jZL9JKALX1fA9WWuVO3udBhUkXZbRs4oQCf1vSi+X+65ksmvc
+XXVBiyPDDgViKYqqKEbOq5KXxDuw5zvUJyVXGeKffx7tKRP+x97Hm5jfPzh8K6jA
+fbI61qZy1xVaYDzmaNFkPuIMLLOao50JJYm50MECAwEAATANBgkqhkiG9w0BAQsF
+AAOCAQEAiQ6a/03/iBsMV3vl06nO0mOkKvPf9/NbEha9LV744o2XZHXo1ai8+8a6
+mlJNlIwhl7ywCgM7pkaaXUEy5oFR1kohTXZtt8VLGWObUjV7qE6mT/6Ah1yelWdh
+eT2x5xXPWG8KjHBG74jkAyrpMOBHRMWCEZ157yo3NKC1XaU15MEd5TVZMUZUFYtC
+98nhXHQSO1AjpLUZh5xGIE2QBsxRR3a5mLwGMj0gD+Vy2daXAcgIbrZX7NrqwPG2
+RPR/T3oKCaqaYmpFvTpqOFXrXHEa6mTXD/RUpltz2Ztk0yED9XPsogZS3QNwga0X
+wh6IhXmlyGzal146j0XPmdNg+1GNag==
+-----END CERTIFICATE-----
+
+
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            22:25:ae:b6:6a:0b:72:b0:44:05:e6:c3:a4:2a:a3:a2
+    Signature Algorithm: sha1WithRSAEncryption
+        Issuer:
+            commonName                = Test Client
+        Validity
+            Not Before: Mar 13 06:56:12 2014 GMT
+            Not After : Mar 13 06:56:12 2015 GMT
+        Subject:
+            commonName                = Test Client
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:d4:c4:48:63:5f:fb:17:a3:17:65:0e:a2:8f:04:
+                    84:f6:e3:13:2b:80:19:3b:0f:8d:49:ef:fc:03:58:
+                    3f:2f:47:1b:c2:18:e4:0e:ad:6b:d5:df:79:d0:51:
+                    58:db:3d:7a:a7:94:06:63:f1:4b:7a:47:12:9f:3b:
+                    9d:c9:5e:fe:49:ff:e6:d9:c0:28:78:fc:98:87:6b:
+                    86:1e:3d:c4:21:14:04:75:d6:8d:d8:fd:13:7e:f2:
+                    13:31:f1:6a:b8:ee:f7:44:1a:9c:4f:5f:1d:b1:e6:
+                    ad:7b:21:fc:61:f0:5c:fb:73:c7:8a:b4:1b:c5:9e:
+                    a7:f7:f9:2e:78:99:55:de:3d:01:2a:90:45:7b:80:
+                    f4:4f:cb:7d:38:a1:15:da:7f:cf:fb:14:98:cc:f0:
+                    3b:81:30:1d:e2:08:1b:f4:38:bc:34:92:75:1c:39:
+                    c3:2d:5f:07:17:eb:db:51:98:f0:ec:55:a1:0c:ec:
+                    fd:56:35:0d:b4:9e:6c:74:6c:61:0e:6d:eb:e1:8e:
+                    d5:88:84:4b:2b:b4:79:ec:78:96:eb:0c:5d:73:65:
+                    ab:b3:e1:1b:51:06:20:3e:d7:d8:1b:d5:76:d7:38:
+                    9f:0c:78:1a:17:ec:b3:43:f9:06:2e:3e:bb:8b:d9:
+                    8b:a5:df:24:3d:a3:6e:1d:ad:64:31:61:42:ad:2f:
+                    6b:7b
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Key Usage: 
+                Digital Signature, Key Encipherment, Data Encipherment
+            X509v3 Extended Key Usage: 
+                TLS Web Client Authentication
+    Signature Algorithm: sha1WithRSAEncryption
+         55:20:bd:98:fe:13:fe:71:1c:86:4a:1e:70:0c:9e:63:85:67:
+         88:31:fd:33:4a:63:3c:ea:f9:bf:3e:81:5b:0b:ee:fd:94:5a:
+         65:78:fd:49:91:15:8d:8f:51:8d:ad:84:bc:e4:41:cb:12:4d:
+         8d:f4:0f:d3:bc:54:ad:75:1d:a9:2d:ab:13:36:50:24:e4:c8:
+         20:b7:cc:20:3d:df:bc:08:48:01:00:f3:16:90:e2:a0:01:dd:
+         61:01:44:85:f7:a7:10:21:e4:47:21:95:83:63:93:f1:ac:8e:
+         c9:f1:97:0c:80:59:8f:bf:3a:26:f8:51:52:7c:a5:f7:42:1b:
+         23:fd:51:3f:df:0c:24:6a:ec:8e:be:39:f5:af:ec:d4:35:df:
+         ba:f0:1e:84:88:6c:05:a1:c8:23:91:09:c8:a0:4a:dc:a6:fd:
+         25:ea:58:5a:7f:13:eb:f3:2c:60:62:c0:70:79:3d:38:9c:29:
+         ff:c6:1e:c8:e9:be:c3:b5:7f:48:e1:43:27:da:3d:b3:2b:76:
+         ac:13:f2:4d:57:db:92:61:c3:84:da:ef:19:12:b0:e2:dd:14:
+         5f:03:66:a0:58:e5:f0:d2:7e:1f:0e:8a:2e:8f:46:ea:bf:82:
+         e5:89:69:23:08:33:70:d1:ed:47:6c:1e:f7:5c:d4:12:37:01:
+         fb:b2:d7:32
+-----BEGIN CERTIFICATE-----
+MIIC2jCCAcKgAwIBAgIQIiWutmoLcrBEBebDpCqjojANBgkqhkiG9w0BAQUFADAW
+MRQwEgYDVQQDEwtUZXN0IENsaWVudDAeFw0xNDAzMTMwNjU2MTJaFw0xNTAzMTMw
+NjU2MTJaMBYxFDASBgNVBAMTC1Rlc3QgQ2xpZW50MIIBIjANBgkqhkiG9w0BAQEF
+AAOCAQ8AMIIBCgKCAQEA1MRIY1/7F6MXZQ6ijwSE9uMTK4AZOw+NSe/8A1g/L0cb
+whjkDq1r1d950FFY2z16p5QGY/FLekcSnzudyV7+Sf/m2cAoePyYh2uGHj3EIRQE
+ddaN2P0TfvITMfFquO73RBqcT18dseateyH8YfBc+3PHirQbxZ6n9/kueJlV3j0B
+KpBFe4D0T8t9OKEV2n/P+xSYzPA7gTAd4ggb9Di8NJJ1HDnDLV8HF+vbUZjw7FWh
+DOz9VjUNtJ5sdGxhDm3r4Y7ViIRLK7R57HiW6wxdc2Wrs+EbUQYgPtfYG9V21zif
+DHgaF+yzQ/kGLj67i9mLpd8kPaNuHa1kMWFCrS9rewIDAQABoyQwIjALBgNVHQ8E
+BAMCBLAwEwYDVR0lBAwwCgYIKwYBBQUHAwIwDQYJKoZIhvcNAQEFBQADggEBAFUg
+vZj+E/5xHIZKHnAMnmOFZ4gx/TNKYzzq+b8+gVsL7v2UWmV4/UmRFY2PUY2thLzk
+QcsSTY30D9O8VK11HaktqxM2UCTkyCC3zCA937wISAEA8xaQ4qAB3WEBRIX3pxAh
+5EchlYNjk/GsjsnxlwyAWY+/Oib4UVJ8pfdCGyP9UT/fDCRq7I6+OfWv7NQ137rw
+HoSIbAWhyCORCcigStym/SXqWFp/E+vzLGBiwHB5PTicKf/GHsjpvsO1f0jhQyfa
+PbMrdqwT8k1X25Jhw4Ta7xkSsOLdFF8DZqBY5fDSfh8Oii6PRuq/guWJaSMIM3DR
+7UdsHvdc1BI3Afuy1zI=
+-----END CERTIFICATE-----
