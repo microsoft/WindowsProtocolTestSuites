@@ -1,8 +1,26 @@
-﻿
-##Protocol Scenarios
+﻿###MS-ADFSPIP Client Test Design Specification
+
+##Contents
+* [Protocol Scenarios](#_Toc472867297)
+    * [Proxy deployment](#_Toc472867298)
+    * [Manage web applications](#_Toc472867299)
+    * [Pre-authenticate users](#_Toc472867300)
+    * [Proxy Renew Trust](#_Toc472867301)
+* [Test Scope and requirements](#_Toc472867302)
+* [Test Approach](#_Toc472867303)
+* [Test Scenarios](#_Toc472867304)
+* [Test Cases](#_Toc472867305)
+    * [BVT](#_Toc472867306)
+		* [Deployment_InitialStore_Success](#_Toc472867307)
+		* [PublishApplication_Success](#_Toc472867308)
+		* [RemoveApplication_Success](#_Toc472867309)
+		* [PreAuthentication_WorkplaceJoined_Federation_AsProxy_Success](#_Toc472867310)
+		* [RenewTrust_Success](#_Toc472867311)
+
+## <a name="_Toc472867297"/>Protocol Scenarios
 MS-ADFSPIP is used for protecting AD FS server and supporting pre-authentication when user access web resource inside company network. There are 4 roles in this system: AD FS Server, Proxy, and Web Application server. These 3 are inside a company network. There is a client outside the company network, used by user to access Web Application server inside company network. There are 3 scenarios involves different roles of this protocol: 
 
-###Proxy deployment
+### <a name="_Toc472867298"/>Proxy deployment
 This scenario is used when a Proxy is registered to AD FS Server and retrieve configuration before it can process requests from user.
 Call sequence:
 
@@ -12,7 +30,7 @@ Call sequence:
 
 * Proxy get and update web application store data
 
-###Manage web applications
+### <a name="_Toc472867299"/>Manage web applications
 This scenario is used to describe how a Proxy admin tool can check, add, and delete web application publish information. There is no complex sequence. Proxy admin tool can choose any of below operations after the TLS connection to AD FS server is established
 
 * Admin tool adds a new record into store
@@ -21,7 +39,7 @@ This scenario is used to describe how a Proxy admin tool can check, add, and del
 
 * Admin tool deletes a record
 
-###Pre-authenticate users
+### <a name="_Toc472867300"/>Pre-authenticate users
 This scenario is used when user access web application via Proxy, Proxy should request user to pre-authenticate 
 Call sequence:
 
@@ -33,7 +51,7 @@ Call sequence:
 
 * STS verifies the request is from a valid Proxy and then issue security token to user
 
-###Proxy Renew Trust
+### <a name="_Toc472867301"/>Proxy Renew Trust
 This scenario is used when Proxy restarts or current certificate will expire, Proxy sends new certificate to renew the trust relationship with AD FS Server
 Call sequence:
 
@@ -41,14 +59,14 @@ Call sequence:
 
 * AD FS Server sends response to Proxy
 
-##Test Scope and requirements
+## <a name="_Toc472867302"/>Test Scope and requirements
 Test suite will test whether Proxy implementation can finish scenarios in section 1.
 For Windows implementation, choose Proxy powershell APIs.
 
-##Test Approach
+## <a name="_Toc472867303"/>Test Approach
 Traditional test case. Test suite will play AD FS Server, Web Application server, and Client machine roles.
 
-##Test Scenarios
+## <a name="_Toc472867304"/>Test Scenarios
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -68,13 +86,13 @@ Traditional test case. Test suite will play AD FS Server, Web Application server
 | -------------| ------------- |
 | Scenario Name| SearchWebApplication| 
 | Covered messages| Proxy/RelyingPartyTrusts/| 
-| Scenario steps|  IT Admin tool uses “Proxy/RelyingPartyTrusts/” message to find out all published web applications| 
+| Scenario steps|  * IT Admin tool uses “Proxy/RelyingPartyTrusts/” message to find out all published web applications| 
 
 | &#32;| &#32; |
 | -------------| ------------- |
 | Scenario Name| AddWebApplication| 
 | Covered messages| Proxy/RelyingPartyTrusts/{Identifier}/PublishingSettings| 
-| Scenario steps|  IT Admin tool uses “Proxy/RelyingPartyTrusts/{Identifier}/PublishingSettings” message to publish a web application| 
+| Scenario steps|  * IT Admin tool uses “Proxy/RelyingPartyTrusts/{Identifier}/PublishingSettings” message to publish a web application| 
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -96,11 +114,11 @@ Traditional test case. Test suite will play AD FS Server, Web Application server
 | Scenario steps| Proxy uses “Proxy/RenewTrust” message to renew the certificate with AD FS Server| 
 | | AD FS Server sends back the response| 
 
-##Test Cases
+## <a name="_Toc472867305"/>Test Cases
 
-###BVT
+### <a name="_Toc472867306"/>BVT
 
-####Deployment_InitialStore_Success
+#### <a name="_Toc472867307"/>Deployment_InitialStore_Success
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -118,7 +136,7 @@ Traditional test case. Test suite will play AD FS Server, Web Application server
 | |  **Driver verifies Proxy is using the trust certificate and returns data**| 
 | |  **Verifies Proxy starts running**| 
 
-####PublishApplication_Success
+#### <a name="_Toc472867308"/>PublishApplication_Success
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -132,7 +150,7 @@ Traditional test case. Test suite will play AD FS Server, Web Application server
 | |  **Driver verifies that the request is valid and using the trusted certificate, then returns HTTP 200.** | 
 | |  **Driver verifies the application is successfully published on the proxy.**| 
 
-####RemoveApplication_Success
+#### <a name="_Toc472867309"/>RemoveApplication_Success
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -144,7 +162,7 @@ Traditional test case. Test suite will play AD FS Server, Web Application server
 | |  **Driver verifies that the request is valid and using the trusted certificate, then returns HTTP 200.**| 
 | |  **Driver verifies the application is successfully removed from the proxy.**| 
 
-####PreAuthentication_WorkplaceJoined_Federation_AsProxy_Success
+#### <a name="_Toc472867310"/>PreAuthentication_WorkplaceJoined_Federation_AsProxy_Success
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -156,7 +174,7 @@ Traditional test case. Test suite will play AD FS Server, Web Application server
 | |  **Driver sends web access request to the proxy.**| 
 | |  **Driver verifies proxy can successfully perform pre-authentication and message forwarding.**| 
 
-####RenewTrust_Success
+#### <a name="_Toc472867311"/>RenewTrust_Success
 
 | &#32;| &#32; |
 | -------------| ------------- |
