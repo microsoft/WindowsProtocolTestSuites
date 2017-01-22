@@ -4,7 +4,7 @@
 @echo off
 
 echo ==============================================
-echo          Start to run ADFSPIP test cases
+echo          Start to run ADFSPIP 2012R2 test cases
 echo ==============================================
 
 if not defined vspath (

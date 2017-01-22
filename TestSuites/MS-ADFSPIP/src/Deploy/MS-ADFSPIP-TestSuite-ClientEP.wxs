@@ -42,8 +42,6 @@
     <WixVariable Id="DOMAIN_RUN_2012R2_COMMAND" Value="Run2012R2TestCases.cmd" />
     <WixVariable Id="DOMAIN_RUN_BVT_COMMAND" Value="RunBVTTestCases.cmd" />
     
-    <WixVariable Id="QUICK_START_GUIDE" Value="MS-ADFSPIP_ClientUserGuide.docx" />
-    
     <DirectoryRef Id="TESTSUITE_ROOT_DIR">
       <Component Id="LICENSE.rtf" Guid="{40EE42F0-4761-4DC9-BA1F-89FEF0DA38EB}">
         <File Id="LICENSE.rtf" Source="LICENSE.rtf" />
