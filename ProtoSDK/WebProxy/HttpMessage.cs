@@ -168,8 +168,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Http
                     return "Content-Length";
                 case HttpRequestHeader.ContentType:
                     return "Content-Type";
-                //case HttpRequestHeader.WwwAuthenticate:
-                //    return "WWW-Authenticate";
                 case HttpRequestHeader.TransferEncoding:
                     return "Transfer-Encoding";
             }
@@ -205,8 +203,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Http
 
             Header.Add(new KeyValuePair<string, string>(strKey, value));
         }
-
-        // private string rawRequest;
 
         private Version version;
 
@@ -251,8 +247,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Http
 
         public void Parse(string request)
         {
-            //  this.rawRequest = request;
-
             string[] lines = request.Split(new[] { "\r\n" }, StringSplitOptions.None);
 
             // parse the request-line
@@ -423,14 +417,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Http
 
         public void Parse(string response)
         {
-            //  this.rawRequest = request;
-
             string[] lines = response.Split(new[] { "\r\n" }, StringSplitOptions.None);
 
             // parse the request-line
             string[] responseLine = lines[0].Split(' ');
-            //this.method = (HttpMethod)Enum.Parse(typeof(HttpMethod), requestLine[0], true);
-            //this.requestUrl = new Url(requestLine[1]);
             this.version = (responseLine[0].Equals("HTTP/1.1")) ? HttpVersion.Version11 : HttpVersion.Version10;
             this.statusCode = (HttpStatusCode)int.Parse(responseLine[1]);
             this.reasonPhrase = responseLine[2];
@@ -461,7 +451,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Http
             }
             if (this.Body != null)
                 this.Body += "\r\n";
-            //   CheckChunk();
         }
 
         public void SetHeaderField(HttpResponseHeader key, string value)

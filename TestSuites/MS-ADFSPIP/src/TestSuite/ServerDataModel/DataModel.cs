@@ -72,8 +72,6 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
         #region Private Methods
         private ServerDataModel()
         {
-            // SyncOnPropertyChanged is disabled at present
-            // PropertyChanged += SyncOnPropertyChanged;
             InitializeProxyTrust();
             InitialServerCertificates();
             InitializeConfiguration();
@@ -103,7 +101,6 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
             // the ServerDataModel instance gets instantiated first,
             // if the value stored in the XML file is not the same
             // as the current value, it overrides the current value.
-            // if (File.Exists(_storeDataFile)) _model.Load();
 
             return _model;
         }

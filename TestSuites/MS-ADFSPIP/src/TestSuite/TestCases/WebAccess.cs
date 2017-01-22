@@ -57,7 +57,6 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
         // So to make these cases work, you need update the EndpointConfig in data store 
         // either through establishing trust, or in the next config polling time.
         //
-
         [TestMethod]
         [TestCategory("BVT")]
         [TestCategory("Positive")]

@@ -111,7 +111,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                 t.Start();
                 managedThreads.Add(t);
             }
-            //System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(installProxy));
+            
             if (EnvironmentConfig.IsWindows)
                 // windows may need 15seconds to install role before start deployment
                 System.Threading.Thread.Sleep(20000);
@@ -210,18 +210,6 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
         {
             return new X509Certificate(EnvironmentConfig.TLSServerCertificatePath, EnvironmentConfig.TLSServerCertificatePassword);
         }
-
-        //X509Certificate targetClientCertSelectionCallback(object sender, string targetHost, X509CertificateCollection localCertificates, X509Certificate remoteCertificate, string[] acceptableIssuers)
-        //{
-        //    if (System.IO.File.Exists(EnvironmentConfig.ProxyTrustCertificatePath))
-        //    {
-        //        proxyCert = new X509Certificate2(EnvironmentConfig.ProxyTrustCertificatePath, EnvironmentConfig.ProxyTrustCertificatePassword);
-        //    }
-        //    if (proxyCert == null)
-        //        return new X509Certificate(EnvironmentConfig.TLSServerCertificatePath, EnvironmentConfig.TLSServerCertificatePassword);
-        //    else
-        //        return proxyCert;
-        //}
 
         string returnHostName()
         {
@@ -350,7 +338,6 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
         void AsyncInstallAndPublishApp1AndAccess(object delayedSeconds)
         {
 #if !NODEPLOY
-            //TODO? need autologon?
             installProxy(null);
 #endif
             string err = null;
@@ -438,10 +425,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                                 first.ParsedHttpResponse.Parse(Encoding.UTF8.GetString(first.Data));
                             }
                             HttpResponse res = first.ParsedHttpResponse;
-                            //TODO
-                            //if (res.Body != null && res.Body.Contains("Enter your user ID"))
-                            //    System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(askToTypeCredential));
-
+                            
                             if (res.StatusCode == System.Net.HttpStatusCode.TemporaryRedirect)
                             {
                                 string loc = res.GetHeaderFieldValue(System.Net.HttpResponseHeader.Location);
@@ -503,7 +487,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                 string appHost = new Uri(EnvironmentConfig.App1Url).Host;
                 System.Net.HttpWebRequest req = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(EnvironmentConfig.App1Url);
                 req.Method = "GET";
-                //req.AllowAutoRedirect = false;
+                
                 System.Net.HttpWebResponse res = (System.Net.HttpWebResponse)req.GetResponse();
                 byte[] resRaw = null;
                 if (res.StatusCode == System.Net.HttpStatusCode.OK)
@@ -527,24 +511,21 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                 }
                 else
                     throw new Exception();
-                // string resBody = null;
+                
                 if (resRaw != null)
                     Encoding.UTF8.GetString(resRaw);
-                //System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-                //doc.LoadXml(resBody);
+                
                 {
                     req = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(res.ResponseUri);
                     req.Method = "POST";
                     req.AllowAutoRedirect = false;
                     req.Referer = res.ResponseUri.ToString();
                     req.Accept = "text/html, application/xhtml+xml, */*";
-                    //req.RequestUri = res.ResponseUri;
+                    
                     req.UserAgent = "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko";
                     req.ContentType = "application/x-www-form-urlencoded";
-                    //example is "UserName=contoso%5Cadfsuser&Password=Password01%21&AuthMethod=FormsAuthentication";
                     string auth = "UserName=" + System.Web.HttpUtility.UrlEncode(EnvironmentConfig.AppUser) + "&Password=" + System.Web.HttpUtility.UrlEncode(EnvironmentConfig.AppUserPassword) + "&AuthMethod=FormsAuthentication";
                     req.GetRequestStream().Write(Encoding.UTF8.GetBytes(auth), 0, auth.Length);
-                    //req.GetRequestStream().Write(Encoding.UTF8.GetBytes("\r\n"), 0, "\r\n".Length);
                     req.GetRequestStream().Close();
                     res = (System.Net.HttpWebResponse)req.GetResponse();
                 }
@@ -569,10 +550,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
 
                 if (resRaw != null)
                     Encoding.UTF8.GetString(resRaw);
-                //if (res.StatusCode == System.Net.HttpStatusCode.OK)
-                //{
-                //}
-                //resBody = Encoding.UTF8.GetString(resRaw);
+                
                 if (res.StatusCode == System.Net.HttpStatusCode.Found)
                 {
                     using (System.Net.Sockets.TcpClient tc = new System.Net.Sockets.TcpClient(EnvironmentConfig.ADFSFamrDNSName, Constraints.HTTPSServiceDefaultPort))
@@ -627,12 +605,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                                             string url = new Uri(hres.GetHeaderFieldValue(System.Net.HttpResponseHeader.Location)).PathAndQuery;
                                             HttpRequest hreq = new HttpRequest(HttpRequest.HttpMethod.GET, url);
                                             hreq.SetHeaderField(System.Net.HttpRequestHeader.Referer, res.GetResponseHeader("location"));
-                                            //string[] vals = hres.GetHeaderFieldValueArray(System.Net.HttpResponseHeader.SetCookie);
-                                            //foreach (string s in vals)
-                                            //{
-                                            //    hreq.Header.Add(new KeyValuePair<string, string>("Cookie", s.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries)[0]));
-
-                                            //}
+                                            
                                             hreq.SetHeaderField(System.Net.HttpRequestHeader.Host, appHost);
                                             apSsl.Write(Encoding.UTF8.GetBytes(hreq.ToString()));
 
@@ -674,10 +647,8 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                     req.AllowAutoRedirect = false;
                     string cok = res.GetResponseHeader("Set-Cookie");
                     string[] cokParts = cok.Split(new string[] { "=", ";" }, StringSplitOptions.RemoveEmptyEntries);
-                    //foreach (System.Net.Cookie cook in res.Cookies)
-                    //{
+                    
                     req.Accept = "text/html, application/xhtml+xml, */*";
-                    //req.RequestUri = res.ResponseUri;
                     req.UserAgent = "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko";
                     req.CookieContainer = new System.Net.CookieContainer();
                     System.Net.Cookie cook = new System.Net.Cookie(cokParts[0], cokParts[1], cokParts[3], req.RequestUri.Host);
@@ -688,8 +659,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                     req.CookieContainer.Add(cook);
                     req.Referer = res.GetResponseHeader("Location");
                     req.Host = req.RequestUri.Host;
-                    //}
-                    //req.GetRequestStream().Write(Encoding.UTF8.GetBytes("UserName=contoso%5Cadfsuser&Password=Password01%21&AuthMethod=FormsAuthentication"), 0, "UserName=contoso%5Cadfsuser&Password=Password01%21&AuthMethod=FormsAuthentication".Length);
+                    
                     res = (System.Net.HttpWebResponse)req.GetResponse();
                 }
                 else
@@ -773,8 +743,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
                     proxy.SetClientCertificate(new X509Certificate2(EnvironmentConfig.TLSServerCertificatePath, EnvironmentConfig.TLSServerCertificatePassword));
                 proxy.Initialize(EnvironmentConfig.ADFSFarmIP, Constraints.HTTPSServiceDefaultPort, new RemoteCertificateValidationCallback(sourceCertValidationCallback), new LocalCertificateSelectionCallback(sourceServerCertSelectionCallback), null
                     , new RemoteCertificateValidationCallback(targetCertValidationCallback), EncryptionPolicy.AllowNoEncryption, new X509Certificate2(EnvironmentConfig.TLSServerCertificatePath, EnvironmentConfig.TLSServerCertificatePassword, X509KeyStorageFlags.Exportable));
-                //System.Threading.Thread.Sleep(10000);
-
+                
                 preauth_fed_workplacejoined_asProxy_success(proxy);
 
                 if (accessToWebApp)
@@ -785,7 +754,6 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
             }
             BaseTestSite.Assert.IsTrue(accessToWebApp, "Must receive HTTP GET to web app");
 
-            // Just to suppress Error CS0414: Warning as Error: The field is assigned but its value is never used. 
             if (authTokenPresent && accessToWebApp && backendTlsCaptured) { }
             return;
 
