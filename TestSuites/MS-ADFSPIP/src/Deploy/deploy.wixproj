@@ -40,11 +40,10 @@
     <EmbeddedResource Include="UiText.wxl" />
   </ItemGroup>
   <ItemGroup>
-    	<!-- Auto generated -->
+    <!-- Auto generated -->
 	<Compile Include="TestSuiteBatchFiles.wxs" />
     <Compile Include="TestSuiteBinFiles.wxs" />
 	<Compile Include="SCRIPT_FILES.wxs" />
-	<Compile Include="Certificate_Data.wxs" />
 	
 	<!-- Manual input -->
     <Compile Include="EndpointDlg.wxs" />
@@ -114,7 +113,6 @@
 	<Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\Bin" -out TestSuiteBinFiles.wxs -template fragment -gg -cg BIN_FILES -dr TESTSUITE_BIN_DIR -var wix.TESTSUITE_BIN_DIR -sreg -sfrag -srd' />
     <Exec Command='"$(WIX)\bin\heat.exe" dir ..\Batch -out TestSuiteBatchFiles.wxs -template fragment -gg -cg BATCH_FILES -dr TESTSUITE_BATCH_DIR -var wix.TESTSUITE_BATCH_DIR -sreg -sfrag -srd' />
 	<Exec Command='"$(WIX)\bin\heat.exe" dir ..\Scripts -out SCRIPT_FILES.wxs -template fragment -gg -cg SCRIPT_FILES -dr SCRIPT_FILES_DIR -var wix.SCRIPT_FILES_DIR -sreg -sfrag -srd' />
-	<Exec Command='"$(WIX)\bin\heat.exe" dir ..\Data -out Certificate_Data.wxs -template fragment -gg -cg Certificate_Data -dr Certificate_Data_DIR -var wix.Certificate_Data_DIR -sreg -sfrag -srd' />
   </Target>
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)en-us\$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\deploy\" />

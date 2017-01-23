@@ -140,7 +140,6 @@
 					  <Directory Id="PROTOCOLSDK_BIN_DIR" Name="." />
 					</Directory>
 					<Directory Id="SCRIPT_FILES_DIR" Name="Scripts" />
-					<Directory Id="Certificate_Data_DIR" Name="Data" />
 				</Directory>
 			</Directory>
           </Directory>
@@ -327,14 +326,12 @@
         <ComponentGroupRef Id="BATCH_FILES" />
         <ComponentGroupRef Id="BIN_FILES" />
 		<ComponentGroupRef Id="SCRIPT_FILES"/>
-		<ComponentGroupRef Id="Certificate_Data" />
       </Feature>
 
       <Feature Id="SutFeature" Level="1">
         <!-- If TARGET_ENDPOINT doesn't equal "SUT", donot install on SUT. -->
         <Condition Level="0"><![CDATA[TARGET_ENDPOINT<>"SUT" AND CLIENTUILEVEL<>0]]></Condition>
 		<ComponentGroupRef Id="SCRIPT_FILES"/>
-		<ComponentGroupRef Id="Certificate_Data"/>
         <ComponentRef Id="SutShortcuts" />
 
       </Feature>
@@ -343,7 +340,6 @@
         <!-- If TARGET_ENDPOINT doesn't equal "DOMAIN", donot install on domain. -->
         <Condition Level="0"><![CDATA[TARGET_ENDPOINT<>"DOMAIN" AND CLIENTUILEVEL<>0]]></Condition>
 		<ComponentGroupRef Id="SCRIPT_FILES"/>
-		<ComponentGroupRef Id="Certificate_Data"/>
         <ComponentRef Id="DomainShortcuts" />
 
       </Feature>

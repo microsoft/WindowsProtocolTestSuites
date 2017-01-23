@@ -36,7 +36,6 @@
     <WixVariable Id="TESTSUITE_BATCH_DIR" Value="..\Batch" />
     <WixVariable Id="PROTOSDK_DROP_DIR" Value="$(env.TestSuiteRoot)\drop\ProtoSDK\Bin" />
 	<WixVariable Id="SCRIPT_FILES_DIR" Value="..\Scripts" />
-	<WixVariable Id="Certificate_Data_DIR" Value="..\Data" />
 	
     <WixVariable Id="DOMAIN_RUN_ALLTCS_COMMAND" Value="RunAllTestCases.cmd" />
     <WixVariable Id="DOMAIN_RUN_2012R2_COMMAND" Value="Run2012R2TestCases.cmd" />
