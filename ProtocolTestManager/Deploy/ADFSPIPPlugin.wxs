@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?define SRCDIR=$(env.TestSuiteRoot)\drop\ProtocolTestManager?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="ADFSPIPDOCFOLDER">
+            <Component Id="ADFSPIPArrowRight" Guid="{5A14AEE3-4617-41A1-AF64-61213573164C}">
+                <File Id="ADFSPIPArrowRight" KeyPath="yes" Source="..\Plugins\ADFSPIPPlugin\ADFSPIPPlugin\doc\arrow_right.png" />
+            </Component>
+            <Component Id="ADFSPIPDocIndex" Guid="{7DC8DF3E-FF01-4A80-B466-2AAD3C5B945C}">
+                <File Id="ADFSPIPDocIndex" KeyPath="yes" Source="..\Plugins\ADFSPIPPlugin\ADFSPIPPlugin\doc\index.html" />
+            </Component>
+            <Component Id="ADFSPIPDocNetwork" Guid="{1260194E-0E54-4F29-9D23-8F6FFDB35BEE}">
+                <File Id="ADFSPIPDocNetwork" KeyPath="yes" Source="..\Plugins\ADFSPIPPlugin\ADFSPIPPlugin\doc\network.html" />
+            </Component>
+            <Component Id="ADFSPIPDocNetworkImg" Guid="{54B7F2C5-C124-4B97-85BB-FC97EFE5DBCA}">
+                <File Id="ADFSPIPDocNetworkImg" KeyPath="yes" Source="..\Plugins\ADFSPIPPlugin\ADFSPIPPlugin\doc\network.png" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="LIBFOLDER">
+            <Component Id="ADFSPIPPlugin.dll" Guid="{F21B0398-BEDC-4880-92CB-37A7EC0F847E}">
+                <File Id="ADFSPIPPlugin.dll" Source="$(var.SRCDIR)\lib\ADFSPIPPlugin.dll" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="ADFSPIPCONFIGFOLDER">
+            <Component Id="ADFSPIPConfigFile" Guid="{C8895DDD-7CE0-4019-8333-C02F20C61C45}">
+                <File Id="ADFSPIPConfigFile" Source="..\Plugins\ADFSPIPPlugin\ADFSPIPPlugin\config.xml" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="ADFSPIP_PLUGIN">
+            <ComponentRef Id="ADFSPIPArrowRight" />
+            <ComponentRef Id="ADFSPIPDocIndex" />
+            <ComponentRef Id="ADFSPIPDocNetwork" />
+            <ComponentRef Id="ADFSPIPDocNetworkImg" />
+            <ComponentRef Id="ADFSPIPPlugin.dll" />
+            <ComponentRef Id="ADFSPIPConfigFile" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

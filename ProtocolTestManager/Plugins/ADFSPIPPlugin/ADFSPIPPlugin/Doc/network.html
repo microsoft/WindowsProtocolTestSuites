@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Network Setting</title>
+    <style>
+        div.Title
+        {
+            font-family: Arial;
+            font-size: larger;
+            margin-bottom: 10px;
+        }
+
+        div.Context
+        {
+            font-family: 'Segoe UI';
+            font-size: medium;
+            margin-top: auto;
+        }
+
+        .icon
+        {
+            font-family: 'Segoe UI';
+            font-size: larger;
+            font-weight: bold;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .List
+        {
+            margin-top: 4px;
+        }
+
+        .img
+        {
+            vertical-align: text-top;
+        }
+    </style>
+</head>
+<body>
+    <div class="Context">
+        <p>Run this test suite in a domain environment using either physical or virtual machines. This section describes the test environment using physical computers.</p>
+        <p>For information about configuring a virtual machine, see <a href="http://www.microsoft.com/virtualization/en/us/solution-appliance-test.aspx">http://www.microsoft.com/virtualization/en/us/solution-appliance-test.aspx</a>. The configuration of virtual machines for use with this test suite is out of the scope of this guide.</p>
+        <h2>Domain Environment</h2>
+        <p>The domain environment requires interactions between the following computers and server roles.</p>
+        <ul>
+            <li>The DCCA runs an implementation of the domain controller and certificate authority. The DCCA provides the domain environment for the testing, and also the functionality to authorize certificate which is used to identify server and client in device registration process.</li>
+            <li>The ADFS runs the active directory federation services, which is a backend server used to generate real access token.</li>
+            <li>The SUT runs an implementation of the web application proxy, which is being tested.</li>
+            <li>The DRIVER runs the test cases by acting as a synthetic server which responses to the requests from the proxy, which is regarded as the client, to test the proxy’s behavior.</li>
+        </ul>
+        <p>The following figure shows the domain environment.</p>
+        <img class="img" src="network.png" style="width: 400px" />
+    </div>
+</body>
+</html>
