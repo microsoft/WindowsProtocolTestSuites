@@ -3,7 +3,6 @@
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
 ########################################################################################################
 
-## Parameters passed by PTF ##
 # Remote SUT computer
 $SutIpAddress         = ${PTFPropSUT.SutIPAddress}
 $SutAdminUserName     = ${PTFPropSUT.Username}
