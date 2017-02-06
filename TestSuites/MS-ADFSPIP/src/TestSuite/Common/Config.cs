@@ -54,7 +54,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
         {                      
             SUTMaxDelayBetweenOperations  = int .Parse(site.Properties["SUT.MaxDelaySeconds"]);
             IsWindows                     = bool.Parse(site.Properties["SUT.IsWindows"]);
-            IsWin2016                     = bool.Parse(site.Properties["SUT.IsWin2016"]);
+            IsWin2016                     = bool.Parse(site.Properties["ADFS.IsWin2016"]);
             DomainName                    = site.Properties["Domain.DomainName"];
             DomainAdminUser               = site.Properties["Domain.Username"];
             DomainAdminPassword           = site.Properties["Domain.Password"];           

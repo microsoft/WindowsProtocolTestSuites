@@ -15,12 +15,12 @@
       <Property name="SutDns"            value="proxy.contoso.com"/>
       <Property name="MaxDelaySeconds"   value="600"/>
       <Property name="IsWindows"         value="true" />
-      <Property name="IsWin2016"         value="true" />
       <Property name="Username"          value="proxy\Administrator" />
       <Property name="Password"          value="Password01!" />
     </Group>
 
     <Group name="ADFS">
+      <Property name="IsWin2016"         value="true" />
       <Property name="AdfsName"          value="adfs"/>
       <Property name="AdfsDns"           value="adfs.contoso.com"/>
       <Property name="AdfsUrl"           value="https://adfs.contoso.com/"/>
