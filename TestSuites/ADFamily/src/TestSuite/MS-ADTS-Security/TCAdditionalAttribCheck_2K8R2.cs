@@ -35,15 +35,15 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
             PtfTestClassBase.Initialize(context);
             common = new ADCommonServerAdapter();
             common.Initialize(BaseTestSite);
-            string domainDN = Utilities.DomainDnsNameToDN(common.PrimaryDomain);
-            string PdcFqdn = common.PDCNetbiosName + "." + common.PrimaryDomain;
+            string domainDN = Utilities.DomainDnsNameToDN(common.PrimaryDomainDnsName);
+            string PdcFqdn = common.PDCNetbiosName + "." + common.PrimaryDomainDnsName;
             string noaceuserdn = string.Format("CN={0},CN=Users,{1}", MS_ADTS_SecurityRequirementsValidator.NoAceUser, domainDN);
             ds.LdapConnection conn = new ds.LdapConnection(
                 new ds.LdapDirectoryIdentifier(PdcFqdn, int.Parse(common.ADDSPortNum)),
-                new System.Net.NetworkCredential(common.DomainAdministratorName, common.DomainUserPassword, common.PrimaryDomain));
+                new System.Net.NetworkCredential(common.DomainAdministratorName, common.DomainUserPassword, common.PrimaryDomainDnsName));
             conn.Bind();
             ds.SearchRequest sr = new ds.SearchRequest(
-                "CN=Users," + Utilities.ParseDN(common.PrimaryDomain),
+                "CN=Users," + Utilities.ParseDN(common.PrimaryDomainDnsName),
                 "(objectclass=*)",
                 System.DirectoryServices.Protocols.SearchScope.OneLevel,
                 "name");
@@ -82,18 +82,18 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
                 int.Parse(common.ADDSPortNum),
                 noaceuserdn,
                 Utilities.SecurityDescriptorBackupFilename,
-                new System.Net.NetworkCredential(common.DomainAdministratorName, common.DomainUserPassword, common.PrimaryDomain));
+                new System.Net.NetworkCredential(common.DomainAdministratorName, common.DomainUserPassword, common.PrimaryDomainDnsName));
         }
 
         [ClassCleanup]
         public static void ClassCleanup()
         {
             Utilities.BackupOrRestoreNtSecurityDescriptor(
-                common.PDCNetbiosName + "." + common.PrimaryDomain,
+                common.PDCNetbiosName + "." + common.PrimaryDomainDnsName,
                 int.Parse(common.ADDSPortNum),
-                string.Format("CN={0},CN=Users,{1}", MS_ADTS_SecurityRequirementsValidator.NoAceUser, Utilities.DomainDnsNameToDN(common.PrimaryDomain)),
+                string.Format("CN={0},CN=Users,{1}", MS_ADTS_SecurityRequirementsValidator.NoAceUser, Utilities.DomainDnsNameToDN(common.PrimaryDomainDnsName)),
                 Utilities.SecurityDescriptorBackupFilename,
-                new System.Net.NetworkCredential(common.DomainAdministratorName, common.DomainUserPassword, common.PrimaryDomain));
+                new System.Net.NetworkCredential(common.DomainAdministratorName, common.DomainUserPassword, common.PrimaryDomainDnsName));
             PtfTestClassBase.Cleanup();
         }
         #endregion

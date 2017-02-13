@@ -101,7 +101,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             this.Manager.Comment("executing step \'call RestartNetlogonService()\'");
             Common.ADCommonServerAdapter adapter = Common.ADCommonServerAdapter.Instance(BaseTestSite);
             this.INrpcServerSutControlAdapterInstance.RestartNetlogonService(
-                adapter.ENDPOINTNetbiosName + "." + adapter.PrimaryDomain,
+                adapter.ENDPOINTNetbiosName + "." + adapter.PrimaryDomainDnsName,
                 NrpcServerAdapter.tdcFQDN);
             this.Manager.Comment("reaching state \'S73\'");
             this.Manager.Comment("checking step \'return RestartNetlogonService\'");

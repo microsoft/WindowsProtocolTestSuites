@@ -80,7 +80,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
         {
             //Connect and send an LDAP bind request to LDAP Server
             string connectStatus = ldapAdapter.ConnectAndBind(publishDCAdapter.PDCFullName, IPAddress.Parse(publishDCAdapter.PDCIPAddress), Int32.Parse(publishDCAdapter.ADDSPortNum),
-                publishDCAdapter.DomainAdministratorName, publishDCAdapter.DomainUserPassword, publishDCAdapter.PrimaryDomain, AuthType.Kerberos);
+                publishDCAdapter.DomainAdministratorName, publishDCAdapter.DomainUserPassword, publishDCAdapter.PrimaryDomainDnsName, AuthType.Kerberos);
             Assert.IsTrue(connectStatus.Contains("STATUS_SUCCESS"), "Bind response result should be LDAPResult_resultCode.success.");
         }
 
@@ -101,7 +101,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
 
             string exePath = string.Format(@"C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\{0}\Bin\ResponseTrigger.exe", publishDCAdapter.GetInstalledTestSuiteVersion());
             ProcessStartInfo startInfo = new ProcessStartInfo(exePath);
-            startInfo.Arguments = publishDCAdapter.PDCIPAddress + " " + publishDCAdapter.PrimaryDomain + " ex";
+            startInfo.Arguments = publishDCAdapter.PDCIPAddress + " " + publishDCAdapter.PrimaryDomainDnsName + " ex";
             startInfo.UseShellExecute = false;
             Process.Start(startInfo);
             Thread.Sleep(10000);
@@ -298,7 +298,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             fieldValue = null;
             fieldValue = message.TryGetValue<object>(publishDCAdapter.DnsForestNameFilter);
             Site.CaptureRequirementIfAreEqual<string>(
-                publishDCAdapter.PrimaryDomain.ToLower(),
+                publishDCAdapter.PrimaryDomainDnsName.ToLower(),
                 fieldValue.ToString().ToLower(),
                 297,
                 @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
@@ -309,7 +309,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             fieldValue = null;
             fieldValue = message.TryGetValue<object>(publishDCAdapter.DnsDomainNameFilter);
             Site.CaptureRequirementIfAreEqual<string>(
-                publishDCAdapter.PrimaryDomain.ToLower(),
+                publishDCAdapter.PrimaryDomainDnsName.ToLower(),
                 fieldValue.ToString().ToLower(),
                 298,
                 @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
@@ -332,7 +332,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             fieldValue = null;
             fieldValue = message.TryGetValue<object>(publishDCAdapter.NetbiosDomainNameFilter);
             Site.CaptureRequirementIfAreEqual<string>(
-                publishDCAdapter.PrimaryDomain.Split('.')[0].ToLower(),
+                publishDCAdapter.PrimaryDomainNetBiosName.ToLower(),
                 fieldValue.ToString().ToLower(),
                 300,
                 @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
@@ -428,7 +428,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
 
             string exePath = string.Format(@"C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\{0}\Bin\ResponseTrigger.exe", publishDCAdapter.GetInstalledTestSuiteVersion());
             ProcessStartInfo startInfo = new ProcessStartInfo(exePath);
-            startInfo.Arguments = publishDCAdapter.PDCIPAddress + " " + publishDCAdapter.PrimaryDomain + " nonex";
+            startInfo.Arguments = publishDCAdapter.PDCIPAddress + " " + publishDCAdapter.PrimaryDomainDnsName + " nonex";
             startInfo.UseShellExecute = false;
             Process.Start(startInfo);
             Thread.Sleep(10000);
@@ -498,7 +498,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             fieldValue = null;
             fieldValue = message.TryGetValue<object>(publishDCAdapter.DnsForestNameFilter);
             Site.CaptureRequirementIfAreEqual<string>(
-                publishDCAdapter.PrimaryDomain.ToLower(),
+                publishDCAdapter.PrimaryDomainDnsName.ToLower(),
                 fieldValue.ToString().ToLower(),
                 321,
                 @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
@@ -509,7 +509,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             fieldValue = null;
             fieldValue = message.TryGetValue<object>(publishDCAdapter.DnsDomainNameFilter);
             Site.CaptureRequirementIfAreEqual<string>(
-                publishDCAdapter.PrimaryDomain.ToLower(),
+                publishDCAdapter.PrimaryDomainDnsName.ToLower(),
                 fieldValue.ToString().ToLower(),
                 322,
                 @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
@@ -588,7 +588,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             fieldValue = message.TryGetValue<object>(publishDCAdapter.UnicodeDomainNameFilter);
 
             Site.CaptureRequirementIfAreEqual<string>(
-                publishDCAdapter.PrimaryDomain.Split('.')[0].ToLower(),
+                publishDCAdapter.PrimaryDomainNetBiosName.ToLower(),
                 fieldValue.ToString().ToLower(),
                 318,
                 @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
@@ -640,7 +640,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
 
             //Connect and send an LDAP bind request to LDAP Server
             string connectStatus = ldapAdapter.ConnectAndBind(publishDCAdapter.PDCFullName,IPAddress.Parse(publishDCAdapter.PDCIPAddress),Int32.Parse(publishDCAdapter.ADDSPortNum),
-                publishDCAdapter.DomainAdministratorName,publishDCAdapter.DomainUserPassword,publishDCAdapter.PrimaryDomain,AuthType.Kerberos);
+                publishDCAdapter.DomainAdministratorName,publishDCAdapter.DomainUserPassword,publishDCAdapter.PrimaryDomainDnsName,AuthType.Kerberos);
             Assert.IsTrue(connectStatus.Contains("STATUS_SUCCESS"), "Bind response result should be LDAPResult_resultCode.success."); 
             
 
@@ -826,7 +826,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             // --> In that section server is receving Request with classType=In and server will return
             //    those matching records based on the question sent by requester.
             bool isCnameType = false;
-            response = HelperClass.ExecuteCommand(String.Concat("-d2 -type=CNAME ", publishDCAdapter.PrimaryDomain));
+            response = HelperClass.ExecuteCommand(String.Concat("-d2 -type=CNAME ", publishDCAdapter.PrimaryDomainDnsName));
 
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
@@ -884,7 +884,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             // type=A. So 234 is also validated as part of this command.
             if (publishDCAdapter.IsSutGc)
             {
-                response = HelperClass.ExecuteCommand(String.Concat("-type=A gc._msdcs." + publishDCAdapter.PrimaryDomain));
+                response = HelperClass.ExecuteCommand(String.Concat("-type=A gc._msdcs." + publishDCAdapter.PrimaryDomainDnsName));
 
                 if (response.ToLower() != "Invalid Parameter".ToLower())
                 {
@@ -901,7 +901,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
 
                             Site.CaptureRequirementIfIsTrue(
                                 (response.ToLower().Contains(String.Concat("gc._msdcs."
-                                + publishDCAdapter.PrimaryDomain.ToLower()))),
+                                + publishDCAdapter.PrimaryDomainDnsName.ToLower()))),
                                 227,
                                 @"If a server is a DC with default NC X in forest Z, then it publishes a type A record 
                                with Name field X. If the DC is a GC server, it also publishes a type A record with
@@ -922,7 +922,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             // Please find the following information in the log which validates the above two requirements
             // The server is sending the requrest for TYPE A rercods with class=IN type
             bool isAType = false;
-            response = HelperClass.ExecuteCommand(String.Concat("-d2 -type=A " + publishDCAdapter.PrimaryDomain));
+            response = HelperClass.ExecuteCommand(String.Concat("-d2 -type=A " + publishDCAdapter.PrimaryDomainDnsName));
            
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
@@ -983,7 +983,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             // as an input to ExecuteCommand Method.
             // _ldap._tcp.site1._sites.dc._msdcs.na.fabrikam.com
             response = HelperClass.ExecuteCommand(
-                String.Concat("-type=srv _ldap._tcp.Default-First-Site-Name._sites.dc._msdcs.", publishDCAdapter.PrimaryDomain));
+                String.Concat("-type=srv _ldap._tcp.Default-First-Site-Name._sites.dc._msdcs.", publishDCAdapter.PrimaryDomainDnsName));
 
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
@@ -1027,7 +1027,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             // The server is sending the requrest for SRV rercods with class=IN type(Questions)
             bool isClassTypeIn = false;
             bool isSrvType = false;
-            response = HelperClass.ExecuteCommand(String.Concat("-d2 -type=SRV ", publishDCAdapter.PrimaryDomain));
+            response = HelperClass.ExecuteCommand(String.Concat("-d2 -type=SRV ", publishDCAdapter.PrimaryDomainDnsName));
             
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
@@ -1075,7 +1075,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             // type=CNAME.
             // In the log we are able to see the canonical name of each Domain controller.
             response = HelperClass.ExecuteCommand(String.Concat("-type=CNAME ", publishDCAdapter.PdcDnsAlias, "._msdcs.", 
-                publishDCAdapter.PrimaryDomain));
+                publishDCAdapter.PrimaryDomainDnsName));
            
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
@@ -1126,7 +1126,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             // -->The SRV field of SRV record
             //   To the "ExecuteCommand" Method we have provided -type=srv as an input which means nslookup will fetch 
             //   SRV records registered by server.
-            response = HelperClass.ExecuteCommand(String.Concat("-type=srv _ldap._tcp.", publishDCAdapter.PrimaryDomain));
+            response = HelperClass.ExecuteCommand(String.Concat("-type=srv _ldap._tcp.", publishDCAdapter.PrimaryDomainDnsName));
            
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
@@ -1266,7 +1266,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             
             // Here we need to verify The record structure is created or not mentioned above(_ldap_tcp.X).If we receive 
             // some ping information then the structure is created otherwise not.
-            response = HelperClass.ExecuteCommand("-type=srv _ldap._tcp." + publishDCAdapter.PrimaryDomain);
+            response = HelperClass.ExecuteCommand("-type=srv _ldap._tcp." + publishDCAdapter.PrimaryDomainDnsName);
            
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
@@ -1274,7 +1274,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             }
 
             response = HelperClass.ExecuteCommand(
-                String.Concat("-type=srv _ldap._tcp.Default-First-Site-Name._sites.", publishDCAdapter.PrimaryDomain));
+                String.Concat("-type=srv _ldap._tcp.Default-First-Site-Name._sites.", publishDCAdapter.PrimaryDomainDnsName));
 
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
@@ -1282,7 +1282,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             }
 
             response = HelperClass.ExecuteCommand(
-                String.Concat("-type=srv _ldap_tcp.dc._msdcs.", publishDCAdapter.PrimaryDomain));
+                String.Concat("-type=srv _ldap_tcp.dc._msdcs.", publishDCAdapter.PrimaryDomainDnsName));
 
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
@@ -1290,7 +1290,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             }
 
             response = HelperClass.ExecuteCommand(
-                String.Concat("-type=srv _ldap._tcp.Default-First-Site-Name._sites.dc._msdcs.", publishDCAdapter.PrimaryDomain));
+                String.Concat("-type=srv _ldap._tcp.Default-First-Site-Name._sites.dc._msdcs.", publishDCAdapter.PrimaryDomainDnsName));
 
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
@@ -1298,21 +1298,21 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             }
 
             response = HelperClass.ExecuteCommand(
-                String.Concat("-type=srv _ldap._tcp.", publishDCAdapter.PrimaryDomainSrvGUID, ".domains._msdcs.", publishDCAdapter.PrimaryDomain));
+                String.Concat("-type=srv _ldap._tcp.", publishDCAdapter.PrimaryDomainSrvGUID, ".domains._msdcs.", publishDCAdapter.PrimaryDomainDnsName));
 
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
                 isRedirectionDone = HelperClass.AppendOutputToTextFile(response, "189.txt");
             }
 
-            response = HelperClass.ExecuteCommand(String.Concat("-type=srv _kerberos._tcp.", publishDCAdapter.PrimaryDomain));
+            response = HelperClass.ExecuteCommand(String.Concat("-type=srv _kerberos._tcp.", publishDCAdapter.PrimaryDomainDnsName));
             
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
                 isRedirectionDone = HelperClass.AppendOutputToTextFile(response, "189.txt");
             }
 
-            response = HelperClass.ExecuteCommand(String.Concat("-type=srv _kerberos._udp.", publishDCAdapter.PrimaryDomain));
+            response = HelperClass.ExecuteCommand(String.Concat("-type=srv _kerberos._udp.", publishDCAdapter.PrimaryDomainDnsName));
             
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
@@ -1320,7 +1320,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             }
 
             response = HelperClass.ExecuteCommand(
-                String.Concat("-type=srv _kerberos._tcp.Default-First-Site-Name._sites.", publishDCAdapter.PrimaryDomain));
+                String.Concat("-type=srv _kerberos._tcp.Default-First-Site-Name._sites.", publishDCAdapter.PrimaryDomainDnsName));
 
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
@@ -1328,7 +1328,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             }
 
             response = HelperClass.ExecuteCommand(
-                String.Concat("-type=srv _kerberos._tcp.dc._msdcs.", publishDCAdapter.PrimaryDomain));
+                String.Concat("-type=srv _kerberos._tcp.dc._msdcs.", publishDCAdapter.PrimaryDomainDnsName));
 
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
@@ -1336,21 +1336,21 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             }
 
             response = HelperClass.ExecuteCommand(
-                String.Concat("-type=srv _kerberos._tcp.Default-First-Site-Name._sites.dc._msdcs.", publishDCAdapter.PrimaryDomain));
+                String.Concat("-type=srv _kerberos._tcp.Default-First-Site-Name._sites.dc._msdcs.", publishDCAdapter.PrimaryDomainDnsName));
 
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
                 isRedirectionDone = HelperClass.AppendOutputToTextFile(response, "189.txt");
             }
 
-            response = HelperClass.ExecuteCommand(String.Concat("-type=srv  _kpasswd._tcp.", publishDCAdapter.PrimaryDomain));
+            response = HelperClass.ExecuteCommand(String.Concat("-type=srv  _kpasswd._tcp.", publishDCAdapter.PrimaryDomainDnsName));
             
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
                 isRedirectionDone = HelperClass.AppendOutputToTextFile(response, "189.txt");
             }
 
-            response = HelperClass.ExecuteCommand(String.Concat("-type=srv  _kpasswd._udp." + publishDCAdapter.PrimaryDomain));
+            response = HelperClass.ExecuteCommand(String.Concat("-type=srv  _kpasswd._udp." + publishDCAdapter.PrimaryDomainDnsName));
             
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
@@ -1424,7 +1424,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
 
                 response = HelperClass.ExecuteCommand(
                             "-type=srv _ldap._tcp.Default-First-Site-Name._sites." 
-                            + publishDCAdapter.PrimaryDomain);
+                            + publishDCAdapter.PrimaryDomainDnsName);
 
                 if (response.ToLower() != invalidParam)
                 {
@@ -1437,7 +1437,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
                 }
 
                 response = HelperClass.ExecuteCommand(
-                    String.Concat("-type=srv _ldap._tcp.Default-First-Site-Name._sites.dc._msdcs.", publishDCAdapter.PrimaryDomain));
+                    String.Concat("-type=srv _ldap._tcp.Default-First-Site-Name._sites.dc._msdcs.", publishDCAdapter.PrimaryDomainDnsName));
                
                 if (response.ToLower() != invalidParam)
                 {
@@ -1450,7 +1450,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
                 }
 
                 response = HelperClass.ExecuteCommand(
-                    String.Concat("-type=srv _kerberos._tcp.Default-First-Site-Name._sites.", publishDCAdapter.PrimaryDomain));
+                    String.Concat("-type=srv _kerberos._tcp.Default-First-Site-Name._sites.", publishDCAdapter.PrimaryDomainDnsName));
 
                 if (response.ToLower() != invalidParam)
                 {
@@ -1463,7 +1463,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
                 }
 
                 response = HelperClass.ExecuteCommand(
-                    String.Concat("-type=srv _kerberos._tcp.Default-First-Site-Name._sites.dc._msdcs.", publishDCAdapter.PrimaryDomain));
+                    String.Concat("-type=srv _kerberos._tcp.Default-First-Site-Name._sites.dc._msdcs.", publishDCAdapter.PrimaryDomainDnsName));
 
                 if (response.ToLower() != invalidParam)
                 {
@@ -1516,7 +1516,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             // Here we need to verify The record structure is created or not mentioned above(_ldap_tcp.gc._msdcs.Z).
             // If we receive some ping information 
             // then the structure is created otherwise not.
-            response = HelperClass.ExecuteCommand(String.Concat("-type=srv _ldap._tcp.gc._msdcs.", publishDCAdapter.PrimaryDomain));
+            response = HelperClass.ExecuteCommand(String.Concat("-type=srv _ldap._tcp.gc._msdcs.", publishDCAdapter.PrimaryDomainDnsName));
             
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
@@ -1524,14 +1524,14 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             }
 
             response = HelperClass.ExecuteCommand(
-                String.Concat("-type=srv _ldap._tcp.Default-First-Site-Name._sites.gc._msdcs.", publishDCAdapter.PrimaryDomain));
+                String.Concat("-type=srv _ldap._tcp.Default-First-Site-Name._sites.gc._msdcs.", publishDCAdapter.PrimaryDomainDnsName));
 
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
                 isRedirectionDone = HelperClass.AppendOutputToTextFile(response, "190.txt");
             }
 
-            response = HelperClass.ExecuteCommand(String.Concat("-type=srv _gc._tcp.", publishDCAdapter.PrimaryDomain));
+            response = HelperClass.ExecuteCommand(String.Concat("-type=srv _gc._tcp.", publishDCAdapter.PrimaryDomainDnsName));
             
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
@@ -1539,7 +1539,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             }
 
             response = HelperClass.ExecuteCommand
-                (String.Concat("-type=srv _gc._tcp.Default-First-Site-Name._sites.", publishDCAdapter.PrimaryDomain));
+                (String.Concat("-type=srv _gc._tcp.Default-First-Site-Name._sites.", publishDCAdapter.PrimaryDomainDnsName));
 
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
@@ -1589,7 +1589,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
               // After that we are appending the rest of the command outputs to 191.txt without writing them to different files
               // because all these commands are fall under single requirement.
             response = HelperClass.ExecuteCommand(
-                String.Concat("-type=srv _ldap._tcp.Default-First-Site-Name._sites.gc._msdcs.", publishDCAdapter.PrimaryDomain));
+                String.Concat("-type=srv _ldap._tcp.Default-First-Site-Name._sites.gc._msdcs.", publishDCAdapter.PrimaryDomainDnsName));
             
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
@@ -1597,7 +1597,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             }
 
             response = HelperClass.ExecuteCommand(
-                String.Concat("-type=srv _gc._tcp.Default-First-Site-Name._sites.", publishDCAdapter.PrimaryDomain));
+                String.Concat("-type=srv _gc._tcp.Default-First-Site-Name._sites.", publishDCAdapter.PrimaryDomainDnsName));
             
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
@@ -1635,7 +1635,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             // Please refer the log file for corresponding SRV records. The following are the list of commands we passed
             // as an input to ExecuteCommand Method.
             // _ldap._tcp.pdc._msdcs.X
-            response = HelperClass.ExecuteCommand(String.Concat("-type=srv _ldap._tcp.pdc._msdcs.", publishDCAdapter.PrimaryDomain));
+            response = HelperClass.ExecuteCommand(String.Concat("-type=srv _ldap._tcp.pdc._msdcs.", publishDCAdapter.PrimaryDomainDnsName));
             
             if (response.ToLower() != "Invalid Parameter".ToLower())
             {
@@ -1684,7 +1684,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             // an input which means nslookup will fetch SRV records registered by server along with their properties. 
             // Here the service name we are providing is gc instead of LDAP so that we will get GC Port: 3268
             Thread.Sleep(5000);
-            response = HelperClass.ExecuteCommand(String.Concat("-type=srv _gc._tcp.", publishDCAdapter.PrimaryDomain));
+            response = HelperClass.ExecuteCommand(String.Concat("-type=srv _gc._tcp.", publishDCAdapter.PrimaryDomainDnsName));
             Thread.Sleep(5000);
             
             if (response.ToLower() != "Invalid Parameter".ToLower())
@@ -1731,7 +1731,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             // Here the service name we are providing is _kerberos instead of LDAP,GC so that we will get a Kerberos 
             // service Port: 88
             Thread.Sleep(5000);
-            response = HelperClass.ExecuteCommand(String.Concat("-type=srv _kerberos._tcp.", publishDCAdapter.PrimaryDomain));
+            response = HelperClass.ExecuteCommand(String.Concat("-type=srv _kerberos._tcp.", publishDCAdapter.PrimaryDomainDnsName));
             Thread.Sleep(10000);
             
             if (response.ToLower() != "Invalid Parameter".ToLower())
@@ -1778,7 +1778,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             // Here the service name we are providing is _kpasswd instead of LDAP,GC,_kerberos so that we will get
             // a Kerberos Password Change service Port: 464
             Thread.Sleep(5000);
-            response = HelperClass.ExecuteCommand(String.Concat("-type=srv _kpasswd._tcp.", publishDCAdapter.PrimaryDomain));
+            response = HelperClass.ExecuteCommand(String.Concat("-type=srv _kpasswd._tcp.", publishDCAdapter.PrimaryDomainDnsName));
             Thread.Sleep(5000);
 
             if (response.ToLower() != "Invalid Parameter".ToLower())
@@ -1825,7 +1825,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
 
             //Connect and send an LDAP bind request to LDAP Server
             string connectStatus = ldapAdapter.ConnectAndBind(publishDCAdapter.PDCFullName,IPAddress.Parse(publishDCAdapter.PDCIPAddress),Int32.Parse(publishDCAdapter.ADDSPortNum),
-                publishDCAdapter.DomainAdministratorName,publishDCAdapter.DomainUserPassword,publishDCAdapter.PrimaryDomain,AuthType.Kerberos);
+                publishDCAdapter.DomainAdministratorName,publishDCAdapter.DomainUserPassword,publishDCAdapter.PrimaryDomainDnsName,AuthType.Kerberos);
             Assert.IsTrue(connectStatus.Contains("STATUS_SUCCESS"), "Bind response result should be LDAPResult_resultCode.success.");   
 
             #region MS-AD_LDAP_251,351,352,353
@@ -1977,7 +1977,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             #endregion
 
             #region MS-AD_LDAP_263
-            string filterStr = String.Format("(&(DnsDomain={0})(DomainGuid=DomainGuid=\\3b\\b0\\21\\ca\\d3\\6d\\d1\\11\\8a\\7d\\b8\\df\\b1\\56\\87\\1f))",publishDCAdapter.PrimaryDomain);
+            string filterStr = String.Format("(&(DnsDomain={0})(DomainGuid=DomainGuid=\\3b\\b0\\21\\ca\\d3\\6d\\d1\\11\\8a\\7d\\b8\\df\\b1\\56\\87\\1f))",publishDCAdapter.PrimaryDomainDnsName);
             // Given reqGuidNC is not equal to the Guid of NC reqDnsNC. 
             response = ldapAdapter.SearchObject(publishDCAdapter.DomainNC,System.DirectoryServices.Protocols.SearchScope.Subtree,
                 filterStr, new string[]{"Netlogon"}, null, out searchResponse);
@@ -1996,7 +1996,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             #endregion
 
             #region MS-AD_LDAP_264
-            filterStr = String.Format("(&(DnsDomain={0})(DomainSid=S-1-5-21-4265316293-1957091001-45817728))", publishDCAdapter.PrimaryDomain);
+            filterStr = String.Format("(&(DnsDomain={0})(DomainSid=S-1-5-21-4265316293-1957091001-45817728))", publishDCAdapter.PrimaryDomainDnsName);
             response = ldapAdapter.SearchObject(publishDCAdapter.DomainNC,System.DirectoryServices.Protocols.SearchScope.Subtree,
                 filterStr, new string[]{"Netlogon"}, null, out searchResponse);
             if (response.Contains("STATUS_SUCCESS"))

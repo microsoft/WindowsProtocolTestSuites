@@ -21,7 +21,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrDeleteGroup.")]
         public void SamrDeleteGroup()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrCreateGroupInDomain: Create a group with Name:{0}, AccountType:{1} and DesiredAccess:{2}",
                 testGroupName, GROUP_TYPE.GROUP_TYPE_SECURITY_ACCOUNT, Group_ACCESS_MASK.GROUP_ALL_ACCESS);
@@ -52,7 +52,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrDeleteGroup whose Rid is less than 1000.")]
         public void SamrDeleteGroup_SmallRid()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrOpenGroup: obtain the handle to the domain users group.");
             HRESULT result = _samrProtocolAdapter.SamrOpenGroup(_domainHandle, (uint)Group_ACCESS_MASK.GROUP_ALL_ACCESS, Utilities.DOMAIN_GROUP_RID_USERS, out _groupHandle);
@@ -71,7 +71,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrDeleteGroup with GroupHandle.HandleType not equal to Group.")]
         public void SamrDeleteGroup_InvalidHandle()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrDeleteGroup with invalid handle.");
             HRESULT result = _samrProtocolAdapter.SamrDeleteGroup(ref _domainHandle);
@@ -87,7 +87,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrDeleteGroup with no required access.")]
         public void SamrDeleteGroup_STATUS_ACCESS_DENIED()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             uint relativeId = 0;
             try

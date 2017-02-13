@@ -931,7 +931,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             byte[] expectedPlianOwfPassword =
                 Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.NlmpUtility.GetResponseKeyNt(
                 TestTools.StackSdk.Security.Nlmp.NlmpVersion.v1,
-                PrimaryDomain,
+                PrimaryDomainDnsName,
                 ENDPOINTNetbiosName,
                 ENDPOINTPassword);
 
@@ -3218,7 +3218,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
 
                 // Verify MS-NRPC requirement: MS-NRPC_R1665.
                 Site.CaptureRequirementIfAreEqual<string>(
-                    PrimaryDomain,
+                    PrimaryDomainDnsName,
                     GetRpcUnicodeString(validationSamInfo.DnsLogonDomainName),
                     1665,
                     @"[In NETLOGON_VALIDATION_SAM_INFO4 structure]DnsLogonDomainName:  Contains the fully qualified
@@ -5446,7 +5446,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 // A        Domain is a member of the forest.
                 // B        Domain is directly trusted by this domain.
                 string expectedDomainNetBiosName = isBitASet ? primaryDomainNetBiosName : trustDomainNetBiosName;
-                string expectedDnsDomainName = isBitASet ? PrimaryDomain : TrustDomain;
+                string expectedDnsDomainName = isBitASet ? PrimaryDomainDnsName : TrustDomainDnsName;
                 string expectedSid = isBitASet ? PrimaryDomainSID : TrustDomainSid;
 
                 // Add the debug information.
@@ -6147,7 +6147,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 netlogonInfo.netlog4_trusted_domain_name);
 
             bool isVerifyR1974 =
-                (TrustDomain.ToLowerInvariant() ==
+                (TrustDomainDnsName.ToLowerInvariant() ==
                 netlogonInfo.netlog4_trusted_domain_name.ToLowerInvariant())
                 || (trustDomainNetBiosName.ToLowerInvariant() ==
                 netlogonInfo.netlog4_trusted_domain_name.ToLowerInvariant());
@@ -6309,7 +6309,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                         || domainControllerInfo.DomainControllerName.Replace(@"\\", string.Empty).Equals(
                         trustDCName, StringComparison.OrdinalIgnoreCase);
                     isDomainNameValid = domainControllerInfo.DomainName.Equals(
-                        TrustDomain, StringComparison.OrdinalIgnoreCase)
+                        TrustDomainDnsName, StringComparison.OrdinalIgnoreCase)
                         || domainControllerInfo.DomainName.Equals(
                         trustDomainNetBiosName, StringComparison.OrdinalIgnoreCase);
                 }
@@ -6339,7 +6339,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     isDomainNameValid = domainControllerInfo.DomainName.Equals(
                         primaryDomainNetBiosName, StringComparison.OrdinalIgnoreCase)
                         || domainControllerInfo.DomainName.Equals(
-                        PrimaryDomain, StringComparison.OrdinalIgnoreCase);
+                        PrimaryDomainDnsName, StringComparison.OrdinalIgnoreCase);
                 }
             }
 
@@ -6965,13 +6965,13 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
 
             if (domainNameType == DomainNameType.TrustedDomainName)
             {
-                isDomainNameValid = domainName.Equals(TrustDomain, StringComparison.OrdinalIgnoreCase)
+                isDomainNameValid = domainName.Equals(TrustDomainDnsName, StringComparison.OrdinalIgnoreCase)
                     || domainName.Equals(trustDomainNetBiosName, StringComparison.OrdinalIgnoreCase);
             }
             else
             {
                 isDomainNameValid = domainName.Equals(primaryDomainNetBiosName, StringComparison.OrdinalIgnoreCase)
-                    || domainName.Equals(PrimaryDomain, StringComparison.OrdinalIgnoreCase);
+                    || domainName.Equals(PrimaryDomainDnsName, StringComparison.OrdinalIgnoreCase);
             }
 
             // Add the debug information.
@@ -6993,11 +6993,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
 
             if (domainNameType == DomainNameType.TrustedDomainName)
             {
-                expectedForestName = TrustDomain;
+                expectedForestName = TrustDomainDnsName;
             }
             else
             {
-                expectedForestName = PrimaryDomain;
+                expectedForestName = PrimaryDomainDnsName;
             }
 
             // Add the debug information.
@@ -7738,7 +7738,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                         || domainControllerInfo.DomainControllerName.Substring(2, domainControllerInfo.DomainControllerName.Length - 2).Equals(
                         trustDCName, StringComparison.OrdinalIgnoreCase);
                     isDomainNameValid =
-                        domainControllerInfo.DomainName.Equals(TrustDomain, StringComparison.OrdinalIgnoreCase)
+                        domainControllerInfo.DomainName.Equals(TrustDomainDnsName, StringComparison.OrdinalIgnoreCase)
                         || domainControllerInfo.DomainName.Equals(trustDomainNetBiosName, StringComparison.OrdinalIgnoreCase);
                 }
             }
@@ -7767,7 +7767,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                         primaryDCName, StringComparison.OrdinalIgnoreCase);
                     isDomainNameValid =
                         domainControllerInfo.DomainName.Equals(primaryDomainNetBiosName, StringComparison.OrdinalIgnoreCase)
-                        || domainControllerInfo.DomainName.Equals(PrimaryDomain, StringComparison.OrdinalIgnoreCase);
+                        || domainControllerInfo.DomainName.Equals(PrimaryDomainDnsName, StringComparison.OrdinalIgnoreCase);
                 }
             }
 
@@ -9055,7 +9055,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 byte[] expectedHashValue =
                     Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.NlmpUtility.GetResponseKeyNt(
                     TestTools.StackSdk.Security.Nlmp.NlmpVersion.v1,
-                    PrimaryDomain,
+                    PrimaryDomainDnsName,
                     DomainAdministratorName,
                     passwordSent);
 
@@ -9404,7 +9404,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
 
                     // Verify MS-NRPC requirement:  MS-NRPC_R1058.
                     Site.CaptureRequirementIfAreEqual<string>(
-                        PrimaryDomain.ToLower(CultureInfo.InvariantCulture),
+                        PrimaryDomainDnsName.ToLower(CultureInfo.InvariantCulture),
                         actualDnsDomainName.ToLower(CultureInfo.InvariantCulture),
                         1058,
                         @"[In NetrLogonGetDomainInfo (Opnum 29) If the Level parameter is set to 1, the return
@@ -9444,7 +9444,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
 
                         // Verify MS-NRPC requirement:  MS-NRPC_R1060.
                         Site.CaptureRequirementIfAreEqual<string>(
-                            Site.Properties["Common.PrimaryDomain.ServerGUID"],
+                            Site.Properties["Common.PrimaryDomainDnsName.ServerGUID"],
                             actualDomainGuid.ToString(),
                             1060,
                             @"[In NetrLogonGetDomainInfo (Opnum 29) If the Level parameter is set to 1, the return
@@ -10318,14 +10318,14 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 byte[] responseKeyNt =
                     Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.NlmpUtility.GetResponseKeyNt(
                     TestTools.StackSdk.Security.Nlmp.NlmpVersion.v1,
-                    PrimaryDomain,
+                    PrimaryDomainDnsName,
                     DomainAdministratorName,
                     DomainUserPassword);
 
                 byte[] responseKeyLm =
                     Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.NlmpUtility.GetResponseKeyLm(
                     TestTools.StackSdk.Security.Nlmp.NlmpVersion.v1,
-                    PrimaryDomain,
+                    PrimaryDomainDnsName,
                     DomainAdministratorName,
                     DomainUserPassword);
 
@@ -10766,14 +10766,14 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 byte[] responseKeyNt =
                     Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.NlmpUtility.GetResponseKeyNt(
                     TestTools.StackSdk.Security.Nlmp.NlmpVersion.v1,
-                    PrimaryDomain,
+                    PrimaryDomainDnsName,
                     DomainAdministratorName,
                     DomainUserPassword);
 
                 byte[] responseKeyLm =
                     Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.NlmpUtility.GetResponseKeyLm(
                     TestTools.StackSdk.Security.Nlmp.NlmpVersion.v1,
-                    PrimaryDomain,
+                    PrimaryDomainDnsName,
                     DomainAdministratorName,
                     DomainUserPassword);
 
@@ -11223,8 +11223,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 if (domains.Value.DomainCount > 0)
                     foreach (var domain in domains.Value.Domains)
                     {
-                        if (!(string.Equals(domain.DnsDomainName, TrustDomain, StringComparison.InvariantCultureIgnoreCase)
-                        | string.Equals(domain.DnsDomainName, PrimaryDomain, StringComparison.InvariantCultureIgnoreCase)))
+                        if (!(string.Equals(domain.DnsDomainName, TrustDomainDnsName, StringComparison.InvariantCultureIgnoreCase)
+                        | string.Equals(domain.DnsDomainName, PrimaryDomainDnsName, StringComparison.InvariantCultureIgnoreCase)))
                             continue;
                         // Verify the _DS_DOMAIN_TRUSTSW structure.
                         this.VerifyDsDomainTrustsw(domain);
@@ -12244,7 +12244,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                         buffer.Value.NetlogonInfo4[0].netlog4_trusted_domain_name);
 
                     bool isVerifyR103926 =
-                        (TrustDomain.ToLowerInvariant() ==
+                        (TrustDomainDnsName.ToLowerInvariant() ==
                             buffer.Value.NetlogonInfo4[0].netlog4_trusted_domain_name.ToLowerInvariant())
                         || (trustDomainNetBiosName.ToLowerInvariant() ==
                             buffer.Value.NetlogonInfo4[0].netlog4_trusted_domain_name.ToLowerInvariant());
@@ -12453,7 +12453,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                         netlogonInfo.netlog4_trusted_domain_name);
 
                     bool isVerifyR104006 =
-                        (TrustDomain.ToLowerInvariant() ==
+                        (TrustDomainDnsName.ToLowerInvariant() ==
                         netlogonInfo.netlog4_trusted_domain_name.ToLowerInvariant())
                         || (trustDomainNetBiosName.ToLowerInvariant() ==
                         netlogonInfo.netlog4_trusted_domain_name.ToLowerInvariant());
@@ -12748,7 +12748,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                         netlogonInfo.netlog4_trusted_domain_name);
 
                     bool isVerifyR104150 =
-                        (TrustDomain.ToLowerInvariant() ==
+                        (TrustDomainDnsName.ToLowerInvariant() ==
                         netlogonInfo.netlog4_trusted_domain_name.ToLowerInvariant())
                         || (trustDomainNetBiosName.ToLowerInvariant() ==
                         netlogonInfo.netlog4_trusted_domain_name.ToLowerInvariant());
@@ -12772,7 +12772,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                             netlogonInfo.netlog4_trusted_domain_name);
 
                         bool isVerifyR104082 =
-                            (TrustDomain.ToLowerInvariant() ==
+                            (TrustDomainDnsName.ToLowerInvariant() ==
                             netlogonInfo.netlog4_trusted_domain_name.ToLowerInvariant())
                             || (trustDomainNetBiosName.ToLowerInvariant() ==
                             netlogonInfo.netlog4_trusted_domain_name.ToLowerInvariant());

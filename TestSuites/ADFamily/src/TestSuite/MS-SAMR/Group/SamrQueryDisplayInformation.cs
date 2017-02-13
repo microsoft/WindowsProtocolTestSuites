@@ -22,7 +22,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryDisplayInformation with DomainDisplayGroup, large EntryCount, large PreferredMaximumLength, zero index.")]
         public void SamrQueryDisplayInformationForGroup_DomainDisplayGroup_IndexZero()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
             // set search index as zero to start from the beginning.
             uint index = 0;
             // the total number of groups in the test environment should be less than entryCount.

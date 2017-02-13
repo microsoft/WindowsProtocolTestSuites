@@ -58,8 +58,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.MS_FRS2
             ConfigStore.Should = false;
             ConfigStore.Win2k8 = false;
             ConfigStore.Win2K8R2 = true;
-            ConfigStore.DomainDnsName = ADCommonServerAdapter.Instance(s).PrimaryDomain;
-            ConfigStore.DomainNetbiosName = ConfigStore.DomainDnsName.Split(new string[] { "." }, StringSplitOptions.RemoveEmptyEntries)[0];
+            ConfigStore.DomainDnsName = ADCommonServerAdapter.Instance(s).PrimaryDomainDnsName;
+            ConfigStore.DomainNetbiosName = ADCommonServerAdapter.Instance(s).PrimaryDomainNetBiosName;
 
             // Check if SDC is set in ptfcofig file
             if (string.IsNullOrWhiteSpace(ADCommonServerAdapter.Instance(s).SDCNetbiosName))

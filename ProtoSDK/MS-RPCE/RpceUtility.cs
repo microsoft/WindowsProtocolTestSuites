@@ -134,8 +134,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
         // Offset of frag_length field.
         internal const int FRAG_LENGTH_FIELD_OFFSET = 8;
 
+        // Pad stub to be 4 bytes blocks.
+        internal const int STUB_PAD_LENGTH = 4;
+
         // Pad stub to be 16 bytes blocks.
-        internal const int STUB_PAD_LENGTH = 16;
+        internal const int AUTH_PAD_LENGTH = 16;
 
         // Prefix length of BindTimeFeatureNegotiationBitmask
         internal const int BIND_TIME_FEATURE_NEGOTIATION_BITMASK_PREFIX_LENGTH = 8;
@@ -432,11 +435,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                             //To keep stub always be padded to 16 bytes, and pdu doesnot exceed max transmit frag size.
                             int stubLength = context.MaxTransmitFragmentSize - headerAndTrailerSize;
                             headerAndTrailerSize +=
-                                RpceUtility.Align(stubLength, RpceUtility.STUB_PAD_LENGTH) - stubLength;
+                                RpceUtility.Align(stubLength, RpceUtility.AUTH_PAD_LENGTH) - stubLength;
 
                             //The beginning of the verification_trailer header MUST be 4-byte aligned 
                             //with respect to the beginning of the PDU.
-                            headerAndTrailerSize = RpceUtility.Align(headerAndTrailerSize, 4);
+                            headerAndTrailerSize = RpceUtility.Align(headerAndTrailerSize, RpceUtility.STUB_PAD_LENGTH);
                         }
 
                         stub = requestPdu.stub ?? new byte[0];
@@ -493,11 +496,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                             //To keep stub always be padded to 16 bytes, and pdu doesnot exceed max transmit frag size.
                             int stubLength = context.MaxTransmitFragmentSize - headerAndTrailerSize;
                             headerAndTrailerSize +=
-                                RpceUtility.Align(stubLength, RpceUtility.STUB_PAD_LENGTH) - stubLength;
+                                RpceUtility.Align(stubLength, RpceUtility.AUTH_PAD_LENGTH) - stubLength;
 
                             //The beginning of the verification_trailer header MUST be 4-byte aligned 
                             //with respect to the beginning of the PDU.
-                            headerAndTrailerSize = RpceUtility.Align(headerAndTrailerSize, 4);
+                            headerAndTrailerSize = RpceUtility.Align(headerAndTrailerSize, RpceUtility.STUB_PAD_LENGTH);
                         }
 
                         stub = responsePdu.stub ?? new byte[0];

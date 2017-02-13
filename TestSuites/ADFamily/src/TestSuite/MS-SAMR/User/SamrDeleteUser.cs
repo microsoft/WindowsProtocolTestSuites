@@ -25,7 +25,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrDeleteUser.")]
         public void SamrDeleteUser()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrCreateUser2InDomain: Create a user with Name:{0}, AccountType:{1} and DesiredAccess:{2}",
                 testUserName, ACCOUNT_TYPE.USER_NORMAL_ACCOUNT, User_ACCESS_MASK.USER_ALL_ACCESS);
@@ -53,7 +53,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrDeleteUser whose Rid is less than 1000.")]
         public void SamrDeleteUser_SmallRid()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
             
             Site.Log.Add(LogEntryKind.TestStep, "SamrOpenUser: obtain the handle to the administrator.");
             HRESULT result = _samrProtocolAdapter.SamrOpenUser(_domainHandle, (uint)User_ACCESS_MASK.USER_ALL_ACCESS, Utilities.DOMAIN_USER_RID_ADMIN, out _userHandle);
@@ -72,7 +72,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrDeleteUser with UserHandle.HandleType not equal to User.")]
         public void SamrDeleteUser_InvalidHandle()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrDeleteUser with invalid handle.");
             HRESULT result = _samrProtocolAdapter.SamrDeleteUser(ref _domainHandle);
@@ -88,7 +88,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrDeleteUser with no required access.")]
         public void SamrDeleteUser_STATUS_ACCESS_DENIED()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             uint grantedAccess, relativeId=0;
             try
@@ -124,12 +124,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrDeleteUser for user which is a parent to another object.")]
         public void SamrDeleteUser_WithChildObject()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             LdapConnection con = new LdapConnection(
                 new LdapDirectoryIdentifier(_samrProtocolAdapter.PDCIPAddress, int.Parse(_samrProtocolAdapter.ADDSPortNum)),
                 new NetworkCredential(_samrProtocolAdapter.DomainAdministratorName,
-                    _samrProtocolAdapter.DomainUserPassword, _samrProtocolAdapter.PrimaryDomain));
+                    _samrProtocolAdapter.DomainUserPassword, _samrProtocolAdapter.PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
             con.SessionOptions.Signing = false;
             string treeRootDN = "CN=testRootDN," + _samrProtocolAdapter.primaryDomainUserContainerDN;

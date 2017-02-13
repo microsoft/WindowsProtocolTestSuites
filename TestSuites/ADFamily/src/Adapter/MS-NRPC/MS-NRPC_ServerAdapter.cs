@@ -274,7 +274,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
         {
             get
             {
-                return "administrator@" + PrimaryDomain;
+                return "administrator@" + PrimaryDomainDnsName;
             }
         }
 
@@ -559,8 +559,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
         {
             base.Initialize(testSite);
             this.sutControlAdapter = Site.GetAdapter<INrpcServerSutControlAdapter>();
-            pdcFQDN = PDCNetbiosName + "." + PrimaryDomain;
-            tdcFQDN = TDCNetbiosName + "." + TrustDomain;
+            pdcFQDN = PDCNetbiosName + "." + PrimaryDomainDnsName;
+            tdcFQDN = TDCNetbiosName + "." + TrustDomainDnsName;
             if (tdcExist == TDCExist.NotSet)
             {
                 System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
@@ -588,8 +588,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 resetChangedNonDcAccountStatus();
             }
             Site.DefaultProtocolDocShortName = "MS-NRPC";
-            this.primaryDomainNetBiosName = this.PrimaryDomain.Split('.')[0];
-            this.trustDomainNetBiosName = TrustDomain.Split('.')[0];
+            this.primaryDomainNetBiosName = this.PrimaryDomainNetBiosName;
+            this.trustDomainNetBiosName = TrustDomainNetBiosName;
             this.trustDomainUserName = Site.Properties["MS_NRPC.SUT.Login.TrustDomainUserAccount"];
             DomainAdministratorName = this.DomainAdministratorName;
             if (double.Parse(Site.Properties["MS_NRPC.Adapter.BindTimeOut"], CultureInfo.InvariantCulture) < 10000)
@@ -601,17 +601,17 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 this.timeOut = TimeSpan.FromMilliseconds(double.Parse(Site.Properties["MS_NRPC.Adapter.BindTimeOut"], CultureInfo.InvariantCulture));
             }
 
-            this.trustDCName = this.TDCNetbiosName + "." + this.TrustDomain;
+            this.trustDCName = this.TDCNetbiosName + "." + this.TrustDomainDnsName;
             this.trustDCNetBiosName = this.TDCNetbiosName.ToLower(CultureInfo.InvariantCulture);
-            this.primaryDCName = this.PDCNetbiosName + "." + this.PrimaryDomain;
+            this.primaryDCName = this.PDCNetbiosName + "." + this.PrimaryDomainDnsName;
             this.primaryDCNetBiosName = this.PDCNetbiosName.ToLower(CultureInfo.InvariantCulture);
             this.secondaryDCName = Site.Properties["Common.WritableDC2.NetbiosName"].ToLower(CultureInfo.InvariantCulture)
-                + "." + this.PrimaryDomain;
+                + "." + this.PrimaryDomainDnsName;
             this.secondaryDCNetBiosName = Site.Properties["Common.WritableDC2.NetbiosName"].ToLower(CultureInfo.InvariantCulture);
             this.GetPlatform(out this.currentSutOperatingSystem);
             m_oneTimeBootMark = true;
-            primaryDomainDN = Utilities.DomainDnsNameToDN(PrimaryDomain);
-            trustDomainDN = Utilities.DomainDnsNameToDN(TrustDomain);
+            primaryDomainDN = Utilities.DomainDnsNameToDN(PrimaryDomainDnsName);
+            trustDomainDN = Utilities.DomainDnsNameToDN(TrustDomainDnsName);
             defaultSiteName = Site.Properties["MS_NRPC.Adapter.DefaultSiteName"];
 
             string siteObject = string.Format(
@@ -623,7 +623,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 Utilities.CreateNewSite(
                     PDCNetbiosName,
                     "Site1",
-                    PrimaryDomain,
+                    PrimaryDomainDnsName,
                     DomainAdministratorName,
                     DomainUserPassword);
                 Thread.Sleep(timeOut);
@@ -632,7 +632,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             ExpectedSiteNamesInPrimaryDomain = Utilities.SearchSites(
                 PDCNetbiosName,
                 int.Parse(ADDSPortNum),
-                PrimaryDomain,
+                PrimaryDomainDnsName,
                 DomainAdministratorName,
                 DomainUserPassword);
 
@@ -1418,10 +1418,10 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 this.nrpcClient = null;
             }
 
-            NrpcClient bindOverClient = NrpcClient.CreateNrpcClient(this.PrimaryDomain);
+            NrpcClient bindOverClient = NrpcClient.CreateNrpcClient(this.PrimaryDomainDnsName);
 
             AccountCredential accountCredential = new AccountCredential(
-                this.PrimaryDomain,
+                this.PrimaryDomainDnsName,
                 DomainAdministratorName,
                 this.DomainUserPassword);
 
@@ -2325,7 +2325,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                RprnProductSuiteFlags.VER_SUITE_WH_SERVER,
                workStationInfo.WorkStationInfo.ClientOSType);
 
-            string clientDnsHostName = this.ENDPOINTNetbiosName + "." + this.PrimaryDomain; 
+            string clientDnsHostName = this.ENDPOINTNetbiosName + "." + this.PrimaryDomainDnsName; 
             _NETLOGON_WORKSTATION_INFORMATION workStaBuffer;
             if (!workStationInfo.WorkStationInfo.IsOsVersionNull)
             {
@@ -2552,7 +2552,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             string clientName = this.GetComputerNameFromType(clientType);
 
             // Initial a NrpcClient instance to bind
-            NrpcClient nrpcProxy = NrpcClient.CreateNrpcClient(this.PrimaryDomain);
+            NrpcClient nrpcProxy = NrpcClient.CreateNrpcClient(this.PrimaryDomainDnsName);
 
             _NETLOGON_LEVEL? encryptedLogonLevel = null;
 
@@ -2572,7 +2572,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 #region credential
 
                 AccountCredential accountCredential = new AccountCredential(
-                    this.PrimaryDomain,
+                    this.PrimaryDomainDnsName,
                     DomainAdministratorName,
                     this.DomainUserPassword);
 
@@ -2724,7 +2724,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 logon_Level = this.nrpcClient.CreateNetlogonLevel(
                                logonLevel,
                                NrpcParameterControlFlags.AllowLogonWithComputerAccount,
-                               this.PrimaryDomain,
+                               this.PrimaryDomainDnsName,
                                DomainAdministratorName,
                                this.DomainUserPassword);
 
@@ -3007,18 +3007,18 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             // interface id in response
             string interfaceId = null;
 
-            this.nrpcCustomClient = new NrpcCustomClient(this.PrimaryDomain);
+            this.nrpcCustomClient = new NrpcCustomClient(this.PrimaryDomainDnsName);
             NrpcCustomClientSecurityContext secuContext = null;
 
             if (this.IsSecurityContext)
             {
                 this.nrpcCustomClient.Context.NegotiateFlags = this.GetNrpcNegotiateFlags();
                 MachineAccountCredential machineCredential = new MachineAccountCredential(
-                    this.PrimaryDomain,
+                    this.PrimaryDomainDnsName,
                     this.ENDPOINTNetbiosName,
                     this.ENDPOINTPassword);
                 secuContext = new NrpcCustomClientSecurityContext(
-                    this.PrimaryDomain,
+                    this.PrimaryDomainDnsName,
                     this.primaryDCNetBiosName,
                     machineCredential,
                     true,
@@ -3026,7 +3026,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             }
 
             AccountCredential accountCredential = new AccountCredential(
-                this.PrimaryDomain,
+                this.PrimaryDomainDnsName,
                 DomainAdministratorName,
                 this.DomainUserPassword);
             if (this.currentSutOperatingSystem == PlatformType.WindowsServer2008 && logonServerName.Contains("."))
@@ -3651,17 +3651,17 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             PdcSameSite_Values? pdcSameSite = null;
 
             // InitNrpcClient(isSecurityContext).
-            this.nrpcCustomClient = new NrpcCustomClient(this.PrimaryDomain);
+            this.nrpcCustomClient = new NrpcCustomClient(this.PrimaryDomainDnsName);
             NrpcCustomClientSecurityContext secuContext = null;
             if (this.IsSecurityContext)
             {
                 this.nrpcCustomClient.Context.NegotiateFlags = this.GetNrpcNegotiateFlags();
                 MachineAccountCredential machineCredential = new MachineAccountCredential(
-                    this.PrimaryDomain,
+                    this.PrimaryDomainDnsName,
                     this.ENDPOINTNetbiosName,
                     this.ENDPOINTPassword);
                 secuContext = new NrpcCustomClientSecurityContext(
-                    this.PrimaryDomain,
+                    this.PrimaryDomainDnsName,
                     this.primaryDCNetBiosName,
                     machineCredential,
                     true,
@@ -3669,7 +3669,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             }
 
             AccountCredential accountCredential = new AccountCredential(
-                this.PrimaryDomain,
+                this.PrimaryDomainDnsName,
                 DomainAdministratorName,
                 this.DomainUserPassword);
 
@@ -3756,17 +3756,17 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             if (queryLevel > 4 || queryLevel < 1)
             {
                 this.nrpcClient.Dispose();
-                this.nrpcCustomClient = new NrpcCustomClient(this.PrimaryDomain);
+                this.nrpcCustomClient = new NrpcCustomClient(this.PrimaryDomainDnsName);
                 NrpcCustomClientSecurityContext secuContext = null;
                 if (this.IsSecurityContext)
                 {
                     this.nrpcCustomClient.Context.NegotiateFlags = this.GetNrpcNegotiateFlags();
                     MachineAccountCredential machineCredential = new MachineAccountCredential(
-                        this.PrimaryDomain,
+                        this.PrimaryDomainDnsName,
                         this.ENDPOINTNetbiosName,
                         this.ENDPOINTPassword);
                     secuContext = new NrpcCustomClientSecurityContext(
-                        this.PrimaryDomain,
+                        this.PrimaryDomainDnsName,
                         this.primaryDCNetBiosName,
                         machineCredential,
                         true,
@@ -3774,7 +3774,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 }
 
                 AccountCredential accountCredential = new AccountCredential(
-                    this.PrimaryDomain,
+                    this.PrimaryDomainDnsName,
                     DomainAdministratorName,
                     this.DomainUserPassword);
                 if (this.currentSutOperatingSystem == PlatformType.WindowsServer2008 && sutName.Contains("."))
@@ -3878,17 +3878,17 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             if (queryLevel > 4 || queryLevel < 1)
             {
                 this.nrpcClient.Dispose();
-                this.nrpcCustomClient = new NrpcCustomClient(this.PrimaryDomain);
+                this.nrpcCustomClient = new NrpcCustomClient(this.PrimaryDomainDnsName);
                 NrpcCustomClientSecurityContext secuContext = null;
                 if (this.IsSecurityContext)
                 {
                     this.nrpcCustomClient.Context.NegotiateFlags = this.GetNrpcNegotiateFlags();
                     MachineAccountCredential machineCredential = new MachineAccountCredential(
-                        this.PrimaryDomain,
+                        this.PrimaryDomainDnsName,
                         this.ENDPOINTNetbiosName,
                         this.ENDPOINTPassword);
                     secuContext = new NrpcCustomClientSecurityContext(
-                        this.PrimaryDomain,
+                        this.PrimaryDomainDnsName,
                         this.primaryDCNetBiosName,
                         machineCredential,
                         true,
@@ -3896,7 +3896,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 }
 
                 AccountCredential accountCredential = new AccountCredential(
-                    this.PrimaryDomain,
+                    this.PrimaryDomainDnsName,
                     DomainAdministratorName,
                     this.DomainUserPassword);
                 if (this.currentSutOperatingSystem == PlatformType.WindowsServer2008 && sutName.Contains("."))
@@ -4322,7 +4322,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 this.nrpcClient = null;
             }
 
-            NrpcClient nrpcClientBindOverNamedPipe = NrpcClient.CreateNrpcClient(this.PrimaryDomain);
+            NrpcClient nrpcClientBindOverNamedPipe = NrpcClient.CreateNrpcClient(this.PrimaryDomainDnsName);
             NrpcCustomClientSecurityContext secuContext = null;
 
             // If using secured transport, initialize securityContext with the correct credential.
@@ -4331,11 +4331,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 // Set the negotiate flags.
                 nrpcClientBindOverNamedPipe.Context.NegotiateFlags = negotiateFlags;
                 MachineAccountCredential machineCredential = new MachineAccountCredential(
-                    this.PrimaryDomain,
+                    this.PrimaryDomainDnsName,
                     this.ENDPOINTNetbiosName,
                     this.ENDPOINTPassword);
                 secuContext = new NrpcCustomClientSecurityContext(
-                    this.PrimaryDomain,
+                    this.PrimaryDomainDnsName,
                     this.primaryDCNetBiosName,
                     machineCredential,
                     true,
@@ -4343,7 +4343,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             }
 
             AccountCredential accountCredential = new AccountCredential(
-                this.PrimaryDomain,
+                this.PrimaryDomainDnsName,
                 DomainAdministratorName,
                 this.DomainUserPassword);
 
@@ -4397,7 +4397,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 this.nrpcClient = null;
             }
 
-            this.nrpcClient = NrpcClient.CreateNrpcClient(this.PrimaryDomain);
+            this.nrpcClient = NrpcClient.CreateNrpcClient(this.PrimaryDomainDnsName);
 
             NrpcCustomClientSecurityContext secuContext = null;
 
@@ -4408,12 +4408,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 this.nrpcClient.Context.NegotiateFlags = negotiateFlags;
 
                 MachineAccountCredential machineCredential = new MachineAccountCredential(
-                    this.PrimaryDomain,
+                    this.PrimaryDomainDnsName,
                     this.ENDPOINTNetbiosName,
                     this.ENDPOINTPassword);
 
                 secuContext = new NrpcCustomClientSecurityContext(
-                    this.PrimaryDomain,
+                    this.PrimaryDomainDnsName,
                     this.primaryDCNetBiosName,
                     machineCredential,
                     ((this.nrpcClient.Context.NegotiateFlags & NrpcNegotiateFlags.SupportsAESAndSHA2)
@@ -4444,7 +4444,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
 
                     case TransportType.NamedPipe:
                         AccountCredential accountCredential = new AccountCredential(
-                            this.PrimaryDomain,
+                            this.PrimaryDomainDnsName,
                             DomainAdministratorName,
                             this.DomainUserPassword);
                         this.nrpcClient.BindOverNamedPipe(
@@ -4811,7 +4811,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     domainName = null;
                     break;
                 case DomainNameType.TrustedDomainName:
-                    domainName = this.TrustDomain;
+                    domainName = this.TrustDomainDnsName;
                     break;
                 case DomainNameType.NetBiosFormatDomainName:
                     domainName = this.primaryDomainNetBiosName;
@@ -4823,7 +4823,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     domainName = NonExistDomainName;
                     break;
                 case DomainNameType.FqdnFormatDomainName:
-                    domainName = this.PrimaryDomain;
+                    domainName = this.PrimaryDomainDnsName;
                     break;
                 case DomainNameType.EmptyDomainName:
                     domainName = string.Empty;
@@ -4852,7 +4852,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                     computerName = null;
                     break;
                 case ComputerType.PrimaryDc:
-                    computerName = this.PDCNetbiosName + "." + this.PrimaryDomain;
+                    computerName = this.PDCNetbiosName + "." + this.PrimaryDomainDnsName;
                     break;
                 case ComputerType.NonExistComputer:
                     computerName = NonExistComputerName;
@@ -5362,7 +5362,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 case NetlogonControlDataInformationType.Valid:
                     controlData = this.GenerateControlDataInfo(
                         (FunctionCode_Values)functionCode,
-                        this.TrustDomain,
+                        this.TrustDomainDnsName,
                         this.trustDomainUserName,
                         DebugFlag);
                     break;

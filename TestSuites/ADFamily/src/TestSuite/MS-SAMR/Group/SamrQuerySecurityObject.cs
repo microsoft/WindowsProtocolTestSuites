@@ -20,7 +20,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQuerySecurityObject with SACL_SECURITY_INFORMATION.")]
         public void SamrQuerySecurityObject_Group_SACL_SECURITY_INFORMATION()
         {
-            ConnectAndOpenGroup(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenGroup(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdminGroup, out _groupHandle, (uint)Common_ACCESS_MASK.ACCESS_SYSTEM_SECURITY);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQuerySecurityObject with SACL_SECURITY_INFORMATION.");
@@ -45,7 +45,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQuerySecurityObject with OWNER_SECURITY_INFORMATION for a group object.")]
         public void SamrQuerySecurityObject_Group_OWNER_SECURITY_INFORMATION()
         {
-            ConnectAndOpenGroup(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenGroup(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdminGroup, out _groupHandle, (uint)Common_ACCESS_MASK.READ_CONTROL);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQuerySecurityObject with OWNER_SECURITY_INFORMATION");
@@ -71,7 +71,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQuerySecurityObject with DACL_SECURITY_INFORMATION.")]
         public void SamrQuerySecurityObject_Group_DACL_SECURITY_INFORMATION_DomainAdminGroup()
         {
-            ConnectAndOpenGroup(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenGroup(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdminGroup, out _groupHandle, (uint)Common_ACCESS_MASK.READ_CONTROL);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQuerySecurityObject with DACL_SECURITY_INFORMATION.");
@@ -117,7 +117,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQuerySecurityObject with DACL_SECURITY_INFORMATION.")]
         public void SamrQuerySecurityObject_Group_DACL_SECURITY_INFORMATION_NonDomainAdminGroup()
         {
-            ConnectAndOpenGroup(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenGroup(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName,
                 "Domain Users", out _groupHandle, (uint)Common_ACCESS_MASK.READ_CONTROL);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQuerySecurityObject with DACL_SECURITY_INFORMATION.");
@@ -185,7 +185,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         public void SamrQuerySecurityObject_Group_AccessDenied()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Connect and open a user handle with GROUP_ADD_MEMBER.");
-            ConnectAndOpenGroup(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenGroup(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdminGroup, out _groupHandle, (uint)Group_ACCESS_MASK.GROUP_ADD_MEMBER);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQuerySecurityObject with OWNER_SECURITY_INFORMATION");

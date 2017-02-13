@@ -24,7 +24,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         {
             HRESULT hResult;
 
-            ConnectAndOpenDomain(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle, (uint)Common_ACCESS_MASK.ACCESS_SYSTEM_SECURITY);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQuerySecurityObject, SecurityInformation: SACL_SECURITY_INFORMATION.");
@@ -54,7 +54,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         {
             HRESULT hResult;
 
-            ConnectAndOpenDomain(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle, (uint)Common_ACCESS_MASK.READ_CONTROL);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQuerySecurityObject, SecurityInformation: OWNER_SECURITY_INFORMATION.");
@@ -85,7 +85,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         {
             HRESULT hResult;
 
-            ConnectAndOpenDomain(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle, (uint)Common_ACCESS_MASK.READ_CONTROL);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQuerySecurityObject, SecurityInformation: GROUP_SECURITY_INFORMATION.");
@@ -116,7 +116,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         {
             HRESULT hResult;
 
-            ConnectAndOpenDomain(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle, (uint)Common_ACCESS_MASK.READ_CONTROL);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQuerySecurityObject, SecurityInformation: DACL_SECURITY_INFORMATION.");
@@ -192,7 +192,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         {
             HRESULT hResult;
 
-            ConnectAndOpenDomain(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle, (uint)Common_ACCESS_MASK.READ_CONTROL);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQuerySecurityObject, SecurityInformation: GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION.");
@@ -270,7 +270,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         {
             HRESULT hResult;
 
-            ConnectAndOpenDomain(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle, (uint)Common_ACCESS_MASK.READ_CONTROL);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQuerySecurityObject, SecurityInformation: SACL_SECURITY_INFORMATION with no ACCESS_SYSTEM_SECURITY access.");
@@ -293,7 +293,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         {
             HRESULT hResult;
 
-            ConnectAndOpenDomain(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle, (uint)Common_ACCESS_MASK.DELETE);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQuerySecurityObject, SecurityInformation: OWNER_SECURITY_INFORMATION with no READ_CONTROL access.");
@@ -316,7 +316,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         {
             HRESULT hResult;
 
-            ConnectAndOpenDomain(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQuerySecurityObject, SecurityInformation: INVALID_SECURITY_INFORMATION.");

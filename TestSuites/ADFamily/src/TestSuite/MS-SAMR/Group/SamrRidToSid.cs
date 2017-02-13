@@ -22,7 +22,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrRidToSid with right Rid.")]
         public void SamrRidToSid_Group()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle);
             LookupAndOpenGroup(_domainHandle, _samrProtocolAdapter.DomainAdminGroup, out _groupHandle);
 

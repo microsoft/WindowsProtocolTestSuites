@@ -12,9 +12,8 @@ function GetPtfVariable
 
 $computerName = GetPtfVariable "Common.ENDPOINT.NetbiosName"
 $domainName   = GetPtfVariable "Common.PrimaryDomain.DNSName"
+$domainNetBiosName   = GetPtfVariable "Common.PrimaryDomain.NetBiosName"
 
-$domainNameSplits  = $domainName.Split('.')
-$domainNetBiosName = $domainNameSplits[0]
 $domainNC = "DC=" + $domainName.Replace(".",",DC=")
 
 $primaryDCName = GetPtfVariable "Common.WritableDC1.NetbiosName"

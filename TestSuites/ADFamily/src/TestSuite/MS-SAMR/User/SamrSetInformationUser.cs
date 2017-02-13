@@ -18,7 +18,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrSetInformationUser with UserAdminCommentInformation.")]
         public void SamrSetInformationUser_AdminComment()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
             try
             {
                 Site.Log.Add(LogEntryKind.TestStep, "SamrCreateUser2InDomain: create a user with Name:{0}, AccountType:{1} and DesiredAccess:{2}",

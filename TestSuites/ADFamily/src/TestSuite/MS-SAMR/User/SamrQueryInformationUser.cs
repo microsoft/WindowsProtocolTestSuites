@@ -19,7 +19,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         public void SamrQueryInformationUser_UserAllInformation()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Connect and open a user handle.");
-            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenUser(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdministratorName, out _userHandle, Utilities.USER_READ_GENERAL | Utilities.USER_READ_LOGON | Utilities.USER_READ_ACCOUNT | Utilities.USER_READ_PREFERENCES);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationUser: obtain attributes from a user object.");

@@ -522,21 +522,21 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             NrpcServerAdapter adapter = new NrpcServerAdapter();
             adapter.Initialize(Site);
 
-            using (this.nrpcClient = NrpcClient.CreateNrpcClient(adapter.PrimaryDomain))
+            using (this.nrpcClient = NrpcClient.CreateNrpcClient(adapter.PrimaryDomainDnsName))
             {
                 this.nrpcClient.Context.NegotiateFlags = (NrpcNegotiateFlags)NrpcServerAdapter.NegotiateFlags;
                 MachineAccountCredential machineCredential = new MachineAccountCredential(
-                        adapter.PrimaryDomain,
+                        adapter.PrimaryDomainDnsName,
                         adapter.ENDPOINTNetbiosName,
                         adapter.ENDPOINTPassword);
                 NrpcClientSecurityContext secuContext = new NrpcClientSecurityContext(
-                    adapter.PrimaryDomain,
+                    adapter.PrimaryDomainDnsName,
                     adapter.PDCNetbiosName,
                     machineCredential,
                     true,
                     this.nrpcClient.Context.NegotiateFlags);
                 AccountCredential accountCredential = new AccountCredential(
-                    adapter.PrimaryDomain,
+                    adapter.PrimaryDomainDnsName,
                     adapter.DomainAdministratorName,
                     adapter.DomainUserPassword);
                 try
@@ -558,7 +558,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 _NETLOGON_LEVEL logonLevel = this.nrpcClient.CreateNetlogonLevel(
                     logonLevelInfoClass,
                     NrpcParameterControlFlags.AllowLogonWithComputerAccount,
-                    adapter.PrimaryDomain,
+                    adapter.PrimaryDomainDnsName,
                     adapter.DomainAdministratorName,
                     adapter.DomainUserPassword);
 

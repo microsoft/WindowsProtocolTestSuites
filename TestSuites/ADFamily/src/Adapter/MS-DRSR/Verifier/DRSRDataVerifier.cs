@@ -1189,7 +1189,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                         Array.Copy(reply.Value.ppDsNames[k][0].Sid.Data, sidData, reply.Value.ppDsNames[k][0].SidLen);
                         SearchResultEntryCollection srec = null;
                         string sidHexString = "\\" + BitConverter.ToString(sidData).Replace('-', '\\');
-                        ldapAd.Search(srv, DrsrHelper.GetDNFromFQDN(Common.ADCommonServerAdapter.Instance(testSite).PrimaryDomain), "(objectSid=" + sidHexString + ")", SearchScope.Subtree, new string[] { "cn" }, out srec);
+                        ldapAd.Search(srv, DrsrHelper.GetDNFromFQDN(Common.ADCommonServerAdapter.Instance(testSite).PrimaryDomainDnsName), "(objectSid=" + sidHexString + ")", SearchScope.Subtree, new string[] { "cn" }, out srec);
                         if (srec != null && srec.Count > 0)
                         {
                             testSite.Log.Add(LogEntryKind.Checkpoint, "Reply returned user: " + srec[0].DistinguishedName);

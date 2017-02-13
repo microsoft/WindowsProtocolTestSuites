@@ -333,11 +333,11 @@
     <Group name="MS_ADTS_Schema">
       <!--Path to the TDXml of ADA1, ADA2, ADA3 and ADSC-->
       <Property name="TDXmlPath" value=".\..\..\..\..\Docs\Common-TD-XML\MS-ADA1\*,.\..\..\..\..\Docs\Common-TD-XML\MS-ADA2\*,.\..\..\..\..\Docs\WinBlue-TD-XML\MS-ADA2\*,.\..\..\..\..\Docs\Common-TD-XML\MS-ADA3\*,.\..\..\..\..\Docs\Common-TD-XML\MS-ADSC\*,.\..\..\..\..\Docs\WinBlue-TD-XML\MS-ADSC\*" >
-		<Description>Type:string! Usage: Specify where the TD XMLs for AD DS locates.</Description>
+        <Description>Type:string! Usage: Specify where the TD XMLs for AD DS locates.</Description>
       </Property>
       <!--Path to the TDXml of ADLS-->
       <Property name="LdsTDXmlPath" value=".\..\..\..\..\Docs\Common-TD-XML\MS-ADLS\*,.\..\..\..\..\Docs\WinBlue-TD-XML\MS-ADLS\* " >
-	  	<Description>Type:string! Usage: Specify where the TD XMLs for AD LDS locates.</Description>
+        <Description>Type:string! Usage: Specify where the TD XMLs for AD LDS locates.</Description>
       </Property>
       <!--Path to the open XML of ADA1, ADA2, ADA3, ADSC for Win2016-->
       <Property name="OpenXmlPath2016" value=".\..\..\..\..\Docs\Win2016-TD-XML\DS\*">
@@ -349,13 +349,13 @@
       </Property>
       <!--TD-XML section ends.-->
       <!--Run DS Test Cases-->
-      <Property name="RunDSTestCases" value="true" >
-		<Description>Type:boolean! Usage: Specify whether to run cases for AD DS.</Description>
-	  </Property>
+      <Property name="RunDSTestCases" value="true">
+        <Description>Type:boolean! Usage: Specify whether to run cases for AD DS.</Description>
+      </Property>
       <!--Run LDS Test Cases-->
-      <Property name="RunLDSTestCases" value="true" >
-		<Description>Type:boolean! Usage: Specify whether to run cases for AD LDS.</Description>
-	  </Property>
+      <Property name="RunLDSTestCases" value="true">
+        <Description>Type:boolean! Usage: Specify whether to run cases for AD LDS.</Description>
+      </Property>
       <!--TDI Section begins.-->
       <Property name="TDI.67172.Fixed" value="false" />
       <!--TDI Section ends.-->

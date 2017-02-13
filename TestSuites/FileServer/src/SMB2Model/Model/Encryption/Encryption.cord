@@ -23,15 +23,17 @@ machine EncryptionScenario() : EncryptionConfig
         SetupConnection;
         (
              SessionSetupRequest;
-             SessionSetupResponse;
+             SessionSetupResponse;     
+             
+             (
+                 TreeConnectRequest;
+                 (TreeConnectResponse|ExpectDisconnect);
 
-             TreeConnectRequest;
-             (TreeConnectResponse|ExpectDisconnect);
-
-             ( 
-                FileOperationVerifyEncryptionRequest;
-                (FileOperationVerifyEncryptionResponse|ExpectDisconnect);
-             )?;            
+                 ( 
+                    FileOperationVerifyEncryptionRequest;
+                    (FileOperationVerifyEncryptionResponse|ExpectDisconnect);
+                 )?;  
+             )?;      
         );
     ) || (construct model program from EncryptionConfig where Scope = "Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Encryption")
 }

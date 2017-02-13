@@ -18,7 +18,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrSetInformationUser2 with UserAccountNameInformation.")]
         public void SamrSetInformationUser2_AccountName()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrCreateUser2InDomain: create a user with Name:{0}, AccountType:{1} and DesiredAccess:{2}",
                testUserName, ACCOUNT_TYPE.USER_NORMAL_ACCOUNT, Common_ACCESS_MASK.MAXIMUM_ALLOWED);
@@ -59,7 +59,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrSetInformationUser2 with UserAdminCommentInformation.")]
         public void SamrSetInformationUser2_AdminComment()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrCreateUser2InDomain: create a user with Name:{0}, AccountType:{1} and DesiredAccess:{2}",
                testUserName, ACCOUNT_TYPE.USER_NORMAL_ACCOUNT, Common_ACCESS_MASK.MAXIMUM_ALLOWED);
@@ -103,7 +103,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrSetInformationUser2 with UserControlInformation.")]
         public void SamrSetInformationUser2_Control()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrCreateUser2InDomain: create a user with Name:{0}, AccountType:{1} and DesiredAccess:{2}",
                testUserName, ACCOUNT_TYPE.USER_NORMAL_ACCOUNT, Common_ACCESS_MASK.MAXIMUM_ALLOWED);
@@ -143,7 +143,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrSetInformationUser2 with UserFullNameInformation.")]
         public void SamrSetInformationUser2_FullName()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrCreateUser2InDomain: create a user with Name:{0}, AccountType:{1} and DesiredAccess:{2}",
                testUserName, ACCOUNT_TYPE.USER_NORMAL_ACCOUNT, Common_ACCESS_MASK.MAXIMUM_ALLOWED);
@@ -183,7 +183,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrSetInformationUser2 with UserGeneralInformation.")]
         public void SamrSetInformationUser2_General()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrCreateUser2InDomain: create a user with Name:{0}, AccountType:{1} and DesiredAccess:{2}",
                testUserName, ACCOUNT_TYPE.USER_NORMAL_ACCOUNT, Common_ACCESS_MASK.MAXIMUM_ALLOWED);
@@ -222,7 +222,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrSetInformationUser2 with UserAccountInformation.")]
         public void SamrSetInformationUser2_Account()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrCreateUser2InDomain: create a user with Name:{0}, AccountType:{1} and DesiredAccess:{2}",
                testUserName, ACCOUNT_TYPE.USER_NORMAL_ACCOUNT, Common_ACCESS_MASK.MAXIMUM_ALLOWED);
@@ -254,7 +254,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrSetInformationUser2 with UserLogonInformation.")]
         public void SamrSetInformationUser2_Logon()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrCreateUser2InDomain: create a user with Name:{0}, AccountType:{1} and DesiredAccess:{2}",
                testUserName, ACCOUNT_TYPE.USER_NORMAL_ACCOUNT, Common_ACCESS_MASK.MAXIMUM_ALLOWED);
@@ -285,7 +285,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrSetInformationUser2 with UserNameInformation.")]
         public void SamrSetInformationUser2_Name()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrCreateUser2InDomain: create a user with Name:{0}, AccountType:{1} and DesiredAccess:{2}",
                testUserName, ACCOUNT_TYPE.USER_NORMAL_ACCOUNT, Common_ACCESS_MASK.MAXIMUM_ALLOWED);
@@ -329,7 +329,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrSetInformationUser2 with UserPrimaryGroupInformation.")]
         public void SamrSetInformationUser2_PrimaryGroup()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrCreateUser2InDomain: create a user with Name:{0}, AccountType:{1} and DesiredAccess:{2}",
                testUserName, ACCOUNT_TYPE.USER_NORMAL_ACCOUNT, Common_ACCESS_MASK.MAXIMUM_ALLOWED);
@@ -368,7 +368,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrSetInformationUser2 with UserHomeInformation.")]
         public void SamrSetInformationUser2_Home()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrCreateUser2InDomain: create a user with Name:{0}, AccountType:{1} and DesiredAccess:{2}",
                testUserName, ACCOUNT_TYPE.USER_NORMAL_ACCOUNT, Common_ACCESS_MASK.MAXIMUM_ALLOWED);
@@ -412,7 +412,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrSetInformationUser2 with UserScriptInformation.")]
         public void SamrSetInformationUser2_Script()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrCreateUser2InDomain: create a user with Name:{0}, AccountType:{1} and DesiredAccess:{2}",
                testUserName, ACCOUNT_TYPE.USER_NORMAL_ACCOUNT, Common_ACCESS_MASK.MAXIMUM_ALLOWED);
@@ -452,7 +452,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrSetInformationUser2 with UserProfileInformation.")]
         public void SamrSetInformationUser2_Profile()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrCreateUser2InDomain: create a user with Name:{0}, AccountType:{1} and DesiredAccess:{2}",
                testUserName, ACCOUNT_TYPE.USER_NORMAL_ACCOUNT, Common_ACCESS_MASK.MAXIMUM_ALLOWED);
@@ -492,7 +492,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrSetInformationUser2 with UserPreferencesInformation.")]
         public void SamrSetInformationUser2_Preferences()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrCreateUser2InDomain: create a user with Name:{0}, AccountType:{1} and DesiredAccess:{2}",
                testUserName, ACCOUNT_TYPE.USER_NORMAL_ACCOUNT, Common_ACCESS_MASK.MAXIMUM_ALLOWED);
@@ -541,7 +541,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrSetInformationUser2 with UserWorkStationsInformation.")]
         public void SamrSetInformationUser2_WorkStations()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrCreateUser2InDomain: create a user with Name:{0}, AccountType:{1} and DesiredAccess:{2}",
                testUserName, ACCOUNT_TYPE.USER_NORMAL_ACCOUNT, Common_ACCESS_MASK.MAXIMUM_ALLOWED);
@@ -581,7 +581,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrSetInformationUser2 for user with Rid as DOMAIN_USER_RID_KRBTGT.")]
         public void SamrSetInformationUser2_DOMAIN_USER_RID_KRBTGT()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrOpenUser: Open a user with Rid as DOMAIN_USER_RID_KRBTGT.");
             HRESULT result = _samrProtocolAdapter.SamrOpenUser(_domainHandle, Utilities.USER_ALL_ACCESS, Utilities.DOMAIN_USER_RID_KRBTGT, out _userHandle);

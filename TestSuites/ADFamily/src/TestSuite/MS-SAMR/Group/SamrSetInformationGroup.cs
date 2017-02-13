@@ -19,7 +19,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         public void SamrSetInformationGroup_AdminComment()
         {
             Site.Log.Add(LogEntryKind.TestStep, "SamrBind-->SamrConnect5-->SamrLookupDomainInSamServer-->SamrOpenDomain");
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrCreateGroupInDomain: create a group with Name:{0}, and DesiredAccess:{1}",
                testGroupName, Common_ACCESS_MASK.MAXIMUM_ALLOWED);
@@ -61,7 +61,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         public void SamrSetInformationGroup_Attribute()
         {
             Site.Log.Add(LogEntryKind.TestStep, "SamrBind-->SamrConnect5-->SamrLookupDomainInSamServer-->SamrOpenDomain");
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrCreateGroupInDomain: create a group with Name:{0}, and DesiredAccess:{1}",
                testGroupName, Common_ACCESS_MASK.MAXIMUM_ALLOWED);
@@ -102,7 +102,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         public void SamrSetInformationGroup_Name()
         {
             Site.Log.Add(LogEntryKind.TestStep, "SamrBind-->SamrConnect5-->SamrLookupDomainInSamServer-->SamrOpenDomain");
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain, out _serverHandle, out _domainHandle);
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrCreateGroupInDomain: create a group with Name:{0}, and DesiredAccess:{1}",
                testGroupName, Common_ACCESS_MASK.MAXIMUM_ALLOWED);

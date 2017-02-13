@@ -18,7 +18,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationGroup with GroupGeneralInformation.")]
         public void SamrQueryInformationGroup_GroupGeneralInformation()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle);
             LookupAndOpenGroup(_domainHandle, _samrProtocolAdapter.DomainAdminGroup, out _groupHandle);
 
@@ -40,7 +40,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationGroup with GroupNameInformation.")]
         public void SamrQueryInformationGroup_GroupNameInformation()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle);
             LookupAndOpenGroup(_domainHandle, _samrProtocolAdapter.DomainAdminGroup, out _groupHandle);
 
@@ -62,7 +62,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationGroup with GroupAttributeInformation.")]
         public void SamrQueryInformationGroup_GroupAttributeInformation()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle);
             LookupAndOpenGroup(_domainHandle, _samrProtocolAdapter.DomainAdminGroup, out _groupHandle);
 
@@ -84,7 +84,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationGroup with GroupAdminCommentInformation.")]
         public void SamrQueryInformationGroup_GroupAdminCommentInformation()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle);
             LookupAndOpenGroup(_domainHandle, _samrProtocolAdapter.DomainAdminGroup, out _groupHandle);
 
@@ -106,7 +106,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationGroup with GroupReplicationInformation.")]
         public void SamrQueryInformationGroup_GroupReplicationInformation()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle);
             LookupAndOpenGroup(_domainHandle, _samrProtocolAdapter.DomainAdminGroup, out _groupHandle);
 
@@ -128,7 +128,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationGroup with GroupGeneralInformation.")]
         public void SamrQueryInformationGroup_WithInvalidHandle()
         {
-            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName,
                 out _serverHandle, out _domainHandle);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationGroup with server handle.");
@@ -150,7 +150,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [Description("This is to test SamrQueryInformationGroup without required access.")]
         public void SamrQueryInformationGroup_WithoutRequiredAccess()
         {
-            ConnectAndOpenGroup(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomain,
+            ConnectAndOpenGroup(_samrProtocolAdapter.PDCNetbiosName, _samrProtocolAdapter.PrimaryDomainDnsName,
                 _samrProtocolAdapter.DomainAdminGroup, out _groupHandle, Utilities.GROUP_WRITE_ACCOUNT);
 
             Site.Log.Add(LogEntryKind.TestStep, "SamrQueryInformationGroup using GroupGeneralInformation with GROUP_WRITE_ACCOUNT.");

@@ -54,7 +54,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             base.Initialize(testSite);
 
             timeout = TimeSpan.FromMilliseconds(10000000);
-            adamServerPort = string.Format("{0}.{1}:{2}", PDCNetbiosName, PrimaryDomain, ADLDSPortNum);
+            adamServerPort = string.Format("{0}.{1}:{2}", PDCNetbiosName, PrimaryDomainDnsName, ADLDSPortNum);
             PDCIPAddr = IPAddress.Parse(PDCIPAddress);
             if ((ServerVersion)PDCOSVersion <= ServerVersion.Win2012R2)
             {
@@ -70,11 +70,11 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             RunDSTestCases = GetBoolProperty(propertyGroup + "RunDSTestCases");
             RunLDSTestCases = GetBoolProperty(propertyGroup + "RunLDSTestCases");
             TDI67172Fixed = GetBoolProperty(propertyGroup + "TDI.67172.Fixed");
-            rootDomainDN = "DC=" + PrimaryDomain.Replace(".",",DC=");
-            childDomainDN = "DC=" + ChildDomain.Replace(".", ",DC=");
+            rootDomainDN = "DC=" + PrimaryDomainDnsName.Replace(".",",DC=");
+            childDomainDN = "DC=" + ChildDomainDnsName.Replace(".", ",DC=");
             if (RunLDSTestCases)
             {
-                LDSRootObjectName = Utilities.GetLdsDomainDN(string.Format("{0}.{1}:{2}", PDCNetbiosName, PrimaryDomain, ADLDSPortNum));
+                LDSRootObjectName = Utilities.GetLdsDomainDN(string.Format("{0}.{1}:{2}", PDCNetbiosName, PrimaryDomainDnsName, ADLDSPortNum));
             }
         }
 

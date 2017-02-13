@@ -1173,8 +1173,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
             #region Establishing connection for ModifyOperation
             connection = new LdapConnection(hostName + ":" + (uint)Port.LDAP_PORT);
             connection.AuthType = AuthType.Basic;
-            string domainName = domainDnsName.Split('.')[0];
-            NetworkCredential credential = new NetworkCredential(clientUserName, clientUserPassword, domainName);
+            NetworkCredential credential = new NetworkCredential(clientUserName, clientUserPassword, domainDnsName);
             connection.Credential = credential;
             connection.Bind();
             #endregion Establishing connection for ModifyOperation
