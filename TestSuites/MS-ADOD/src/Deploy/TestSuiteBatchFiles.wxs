@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="TESTSUITE_BATCH_DIR">
+            <Component Id="cmp6D42465ACF38489BD9FFED89F28BDE83" Guid="{FCE911C6-2D2A-47B6-BD60-38B29519E312}">
+                <File Id="filBFA1933655994D37F233997173133770" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\BVT_JoinDomainCreateAcct.cmd" />
+            </Component>
+            <Component Id="cmpFDE20C5CA32BF8D6909F046A71F6FF9B" Guid="{5702F780-DDFD-4152-9D6C-1F615E500054}">
+                <File Id="fil09AD89E1D34B06D7B91A0F5EAF1F2F02" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\BVT_JoinDomainPredefAcct.cmd" />
+            </Component>
+            <Component Id="cmpF8D771818805396B20756605B51AF660" Guid="{69DBBE1C-504C-4B61-A335-F97FF4EC959B}">
+                <File Id="filB0B2C07DFDC1D145F8165FDBA380A2CA" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\BVT_LocateDomainControllerDNS.cmd" />
+            </Component>
+            <Component Id="cmp0638124AB323529DBE35696B4B716175" Guid="{D62AC92E-9698-4BB4-BB9F-E190B4C90842}">
+                <File Id="fil23C32639A63C91D7AAC89B93B0346C55" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\BVT_UnjoinDomain.cmd" />
+            </Component>
+            <Component Id="cmp9D0A51779F997ECACADA71456A851346" Guid="{E8BFD983-F6FD-46AC-B1E3-CEAE4B53257C}">
+                <File Id="fil8DF1F07E2F62C6F053903E8CC215D836" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\nonBVT_ChangeUserAcctPasswordLDAP.cmd" />
+            </Component>
+            <Component Id="cmp4B873C8FAB2B396BD624BA4957AC8366" Guid="{00CF59FE-CDE1-43F9-84EB-1D4B921FED09}">
+                <File Id="fil11270B05EACEF7D6DF2E9EFB32313EFC" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\nonBVT_ChangeUserAcctPasswordSAMR.cmd" />
+            </Component>
+            <Component Id="cmpD46AC3E57B97C6D1E8249FB461638179" Guid="{10BCC801-D80C-4345-8547-A69EE7FF5AD5}">
+                <File Id="filE9D47FBC6B90F53ABAEF96A954406EB9" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\nonBVT_DeleteGroup.cmd" />
+            </Component>
+            <Component Id="cmp8576E702AF9D62A228AE319D17067922" Guid="{3AA905E4-20D2-491C-858B-F3B72AEB2E80}">
+                <File Id="fil86A796D499BA73A9D9647444B3170FB3" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\nonBVT_DeleteUserAcct.cmd" />
+            </Component>
+            <Component Id="cmp4F0738EB6129240491B747BD6997337B" Guid="{893DD5C0-EE25-4F38-8F1C-A1C8490C4336}">
+                <File Id="fil46C7BC7E503AEE56029B3C2F35E5AECD" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\nonBVT_DetermineUserAcctMembershipLDAP.cmd" />
+            </Component>
+            <Component Id="cmpD92B705F9F15FCF02D250FAB91823173" Guid="{E71A1E1D-C774-42B3-84AE-3202D0079BD0}">
+                <File Id="fil2BC1C034044D55FA57C4519FDE412DE5" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\nonBVT_DetermineUserAcctMembershipSAMR.cmd" />
+            </Component>
+            <Component Id="cmpE5D88C1CDA0ABCA5A8E92A388185C399" Guid="{37024D21-76C3-41CC-9ED0-C7582F679488}">
+                <File Id="filAAF723D2154B0CABC3E938C9F50E6D66" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\nonBVT_LocateDomainControllerNetbios.cmd" />
+            </Component>
+            <Component Id="cmp4A393D42649C9769355611E3A8C15DEA" Guid="{AB6610FB-5812-4A6F-8424-8971280AECB0}">
+                <File Id="fil79DF22EAD9DE06B7B5D09F757142127B" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\nonBVT_ManageGroupsandTheirMemberships.cmd" />
+            </Component>
+            <Component Id="cmpFF5CEA7F3C81EEAB87325B9D818B8673" Guid="{0F409F2D-975B-4C64-90A0-FDE120BF2EA6}">
+                <File Id="fil523B0CCB8F1270FDB67C68AC51D455B0" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\nonBVT_ObtainUserAcctListLDAP.cmd" />
+            </Component>
+            <Component Id="cmp899D64865DC7D5A40DCED6B2E3DE7052" Guid="{0B449201-5182-4111-9674-D242715EDF41}">
+                <File Id="fil0E3037FDF393CB3B962EE55241A03EC0" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\nonBVT_ProvisionUserAcctLDAP.cmd" />
+            </Component>
+            <Component Id="cmp900CC9653671536BBC9F6D2B61D78580" Guid="{F625D6E1-283B-4E4D-9876-45BED69770C7}">
+                <File Id="fil35627DDA7B428B7B159B33C2F7936139" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\nonBVT_ProvisionUserAcctSAMR.cmd" />
+            </Component>
+            <Component Id="cmp524A3D5B76F1DDD42C964F083F6CCAC3" Guid="{F344452A-EF61-40E6-9814-30D7C76B51E4}">
+                <File Id="fil7A0D52FB487F1579DF980A211EDC8F5A" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RunAllTestCases.cmd" />
+            </Component>
+            <Component Id="cmp8C608FCC6EDD2836B945045B1739D795" Guid="{7514013F-85A0-40DE-8D70-5C1A3571F68A}">
+                <File Id="filC67B528B95CC16BE8F518DA5ECFD1FE2" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RunBVTTestCases.cmd" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="BATCH_FILES">
+            <ComponentRef Id="cmp6D42465ACF38489BD9FFED89F28BDE83" />
+            <ComponentRef Id="cmpFDE20C5CA32BF8D6909F046A71F6FF9B" />
+            <ComponentRef Id="cmpF8D771818805396B20756605B51AF660" />
+            <ComponentRef Id="cmp0638124AB323529DBE35696B4B716175" />
+            <ComponentRef Id="cmp9D0A51779F997ECACADA71456A851346" />
+            <ComponentRef Id="cmp4B873C8FAB2B396BD624BA4957AC8366" />
+            <ComponentRef Id="cmpD46AC3E57B97C6D1E8249FB461638179" />
+            <ComponentRef Id="cmp8576E702AF9D62A228AE319D17067922" />
+            <ComponentRef Id="cmp4F0738EB6129240491B747BD6997337B" />
+            <ComponentRef Id="cmpD92B705F9F15FCF02D250FAB91823173" />
+            <ComponentRef Id="cmpE5D88C1CDA0ABCA5A8E92A388185C399" />
+            <ComponentRef Id="cmp4A393D42649C9769355611E3A8C15DEA" />
+            <ComponentRef Id="cmpFF5CEA7F3C81EEAB87325B9D818B8673" />
+            <ComponentRef Id="cmp899D64865DC7D5A40DCED6B2E3DE7052" />
+            <ComponentRef Id="cmp900CC9653671536BBC9F6D2B61D78580" />
+            <ComponentRef Id="cmp524A3D5B76F1DDD42C964F083F6CCAC3" />
+            <ComponentRef Id="cmp8C608FCC6EDD2836B945045B1739D795" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

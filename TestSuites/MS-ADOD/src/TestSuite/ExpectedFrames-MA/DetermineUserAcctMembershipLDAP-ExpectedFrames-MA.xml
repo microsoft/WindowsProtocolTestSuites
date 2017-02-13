@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ExpectedMessageList>
+  <Filter>(LDAP OR KerberosV5 OR SASL)</Filter>
+  <!--1. LDAP Bind Request-->
+  <!--2. LDAP Bind Response-->
+  <!--with the credentials of the administrator-->
+  <ExpectedMessage>
+    <Name>LDAP.VirtualOperations.LdapBindOperation</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Result" Value="0" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--3. LDAP Search Requests (UI)-->
+  <!--Encrypted: -->
+  <ExpectedMessage>
+    <Name>SASL.SaslMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Buffer.TokID" Value="1284" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Buffer.Token.Flags.Sealed" Value="true" Type="bool"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--4. LDAP Search Responses (UI)-->
+  <ExpectedMessage>
+    <Name>SASL.SaslMessage</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Buffer.TokID" Value="1284" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Buffer.Token.Flags.Sealed" Value="true" Type="bool"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+</ExpectedMessageList>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Configure Client Computer</title>
+    <style>
+        div.Title
+        {
+            font-family: Arial;
+            font-size: larger;
+            margin-bottom: 10px;
+        }
+
+        div.Context
+        {
+            font-family: 'Segoe UI';
+            font-size: medium;
+            margin-top: auto;
+        }
+
+        .icon
+        {
+            font-family: 'Segoe UI';
+            font-size: larger;
+            font-weight: bold;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .List
+        {
+            margin-top: 4px;
+        }
+
+        .img
+        {
+            vertical-align: text-top;
+        }
+    </style>
+</head>
+<body>
+    <div class="Context">
+      General guidelines for configuring the Non-Windows Client Computer<br />
+        <ul>
+            <li>Set hostname and IP Addresses</li>
+            <li>Set DNS Server to PDC</li>
+            <li>Turn off the firewalls</li>
+            <li>(Optional) If your client computer support telnet, install Telnet Server. And start the service</li>
+            <li>(Optional) After configuring the driver computer, copy the Shell scripts under %systemdrive%\MicrosoftProtocolTests\MS-ADOD\OD-Endpoint\<version>\Scripts\NonWindows\ from driver to a local path on the client</li>
+            <li>(Optional) Configure the ptfconfig file on the driver with the local path of the client computer with the Shell scripts</li>
+        </ul>
+    </div>
+</body>
+</html>

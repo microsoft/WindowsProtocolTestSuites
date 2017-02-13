@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExpectedFrames Name="JoinDomainCreateAcctSAMR">
+  <CatureFilter></CatureFilter>
+  <SpecialFilter></SpecialFilter>
+  <VerificationFilters>
+    <Filter>(SMB OR SAMR OR DRSR OR LDAPMessage) AND ((sourcenetworkaddress == {ClientIP} AND destinationnetworkaddress == {PDCIP}) OR (sourcenetworkaddress == {PDCIP} AND destinationnetworkaddress ==  {ClientIP}))</Filter>
+  </VerificationFilters>
+  <ExpectedFrameList>
+    <ExpectedFrame Name="SMB session bind" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Smb.CSessionSetupAndXNTLMESS" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="SMB session bind response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Smb.RSessionSetupAndXNTLMAll" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LsarOpenPolicy2" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Lsad.LsarOpenPolicy2.Request" IsValueRequired="false"/>
+      </ExpectedFieldValueList>      
+    </ExpectedFrame>
+    <ExpectedFrame Name="LsarOpenPolicy2 response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Lsad.LsarOpenPolicy2.Response" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LsarQueryInformationPolicy2" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Lsad.LsarQueryInformationPolicy2.Request" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LsarQueryInformationPolicy2 response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Lsad.LsarQueryInformationPolicy2.Response" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="SamrConnect" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrConnect5.Request" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="SamrConnect response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrConnect5.Response" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="SamrOpenDomain" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrOpenDomain.Request" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="SamrOpenDomain response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrOpenDomain.Response" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="SamrCreateUser2InDomain" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrCreateUser2InDomain.Request" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="SamrCreateUser2InDomain response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrCreateUser2InDomain.Response" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="SamrSetInformationUser2" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrSetInformationUser2.Request" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="SamrSetInformationUser2 response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrSetInformationUser2.Response" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="IDL_DRSBind" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Drsr.drsuapi.IdlDRSBind.Request" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="IDL_DRSBind response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Drsr.drsuapi.IdlDRSBind.Response" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="IDL_DRSCrackNames" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Drsr.drsuapi.IdlDRSCrackNames.Request" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="IDL_DRSCrackNames response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Drsr.drsuapi.IdlDRSCrackNames.Response" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LDAP bind" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.BindRequest" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LDAP bind response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.BindResponse" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LDAP modify" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.ModifyRequest" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LDAP modify response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.ModifyResponse" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+  </ExpectedFrameList>
+</ExpectedFrames>

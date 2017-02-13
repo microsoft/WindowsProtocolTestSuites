@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExpectedFrames Name="DeleteGroup">
+  <CatureFilter></CatureFilter>
+  <SpecialFilter></SpecialFilter>
+  <VerificationFilters>
+    <Filter>(LDAPMessage) AND ((sourcenetworkaddress == {ClientIP} AND destinationnetworkaddress == {PDCIP}) OR (destinationnetworkaddress == {ClientIP} AND sourcenetworkaddress ==  {PDCIP}))</Filter>
+  </VerificationFilters>
+  <ExpectedFrameList>
+    <ExpectedFrame Name="BindRequest" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.BindRequest" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="BindResponse" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.BindResponse.Result.ResultCode.Value.AsnInt" IsValueRequired="true" Value="0" ValueType="int"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="DelRequest" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.DelRequest" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="DelResponse" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.DelResponse.ResultCode.Value.AsnInt" IsValueRequired="true" Value="0" ValueType="int"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+  </ExpectedFrameList>
+</ExpectedFrames>

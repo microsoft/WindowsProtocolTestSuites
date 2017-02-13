@@ -28,6 +28,7 @@
 	<Compile Include="ADFSPIPPlugin.wxs" />
     <Compile Include="RDPPlugin.wxs" />
 	<Compile Include="AZODPlugin.wxs" />
+	<Compile Include="ADODPlugin.wxs" />
     <Compile Include="KerberosPlugin.wxs" />
 	<Compile Include="ADFamily.wxs" />
     <Compile Include="Product.wxs" />
@@ -123,6 +124,14 @@
     <ProjectReference Include="..\Plugins\AZODPlugin\AZODPlugin\AZODPlugin.csproj">
       <Name>AZODPlugin</Name>
       <Project>{424C6D1E-6DEA-4DA5-AFF9-D8F5CB9081BF}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+	<ProjectReference Include="..\Plugins\ADODPlugin\ADODPlugin\ADODPlugin.csproj">
+      <Name>ADODPlugin</Name>
+      <Project>{4A226949-08A5-4D5A-8DBD-674C22377DF7}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
