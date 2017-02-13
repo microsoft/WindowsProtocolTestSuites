@@ -13,9 +13,7 @@
 				<Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
 				<Control Id="Title" Type="Text" X="15" Y="6" Width="350" Height="15" Transparent="yes" NoPrefix="yes" Text="{\WixUI_Font_Title}Install the [ProductName]" />
 				<Control Id="TestSuiteDescription" Height="105" Width="305" Type="Hyperlink" X="30" Y="80">
-					<Text>
-						<![CDATA[This software will collect and store personal information from users computers, including user names and passwords. For more information, see <a href="http://www.microsoft.com/privacystatement/en-us/core/default.aspx">the Privacy Statement</a>.]]>
-					</Text>
+					<Text><![CDATA[This software will collect and store personal information from users computers, including user names and passwords. For more information, see the <a href="http://www.microsoft.com/privacystatement/en-us/core/default.aspx">Privacy Statement</a>.]]></Text>
 				</Control>
 			</Dialog>
 		</UI>

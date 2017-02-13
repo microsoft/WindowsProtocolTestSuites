@@ -82,4 +82,11 @@
 		<tool>TestAgent2012</tool>
 		<tool>PTF</tool>
 	</AZOD>
+	<ADFSPIP>
+		<tool>NET40</tool>
+		<tool>VCRedist_x86</tool>
+		<tool>Wix310</tool>
+		<tool>TestAgent2012</tool>
+		<tool>PTF</tool>
+	</ADFSPIP>
 </Dependency>

@@ -194,9 +194,15 @@
                   WorkingDirectory="TESTSUITE_ROOT_DIR"/>
 				  
 		<Shortcut Id="RunTestCasesShortcut"
-                  Name="Run Test Cases"
+                  Name="Run All Test Cases"
                   Description="Run all test cases in the test suite"
-                  Target="[TESTSUITE_BATCH_DIR]!(wix.DOMAIN_RUN_ALLTCS_COMMAND)"
+                  Target="[TESTSUITE_BATCH_DIR]!(wix.RunAllTestCases)"
+                  WorkingDirectory="TESTSUITE_BATCH_DIR" />
+				  
+        <Shortcut Id="Run2012R2TestCasesShortcut"
+                  Name="Run2012R2TestCases"
+                  Description="Run 2012R2 test cases."
+                  Target="[TESTSUITE_BATCH_DIR]!(wix.DOMAIN_RUN_2012R2_COMMAND)"
                   WorkingDirectory="TESTSUITE_BATCH_DIR" />
 				  
 		<RegistryValue Id="TestSuiteShortcutsKeyPath"
@@ -255,10 +261,15 @@
                   Description="Run all test cases in the test suite"
                   Target="[TESTSUITE_BATCH_DIR]!(wix.DOMAIN_RUN_ALLTCS_COMMAND)"
                   WorkingDirectory="TESTSUITE_BATCH_DIR" />
-        <Shortcut Id="HashGenerationAndVerificationTool_Desktop"
-                  Name="Hash Generation and Verification Tool"
-                  Description="Hash Generation and Verification Tool"
-                  Target="[TESTSUITE_BATCH_DIR]MS-PCCRC_TestTool.exe"
+        <Shortcut Id="RunBVTTestCasesShortcut_Desktop"
+                  Name="Run BVT Test Cases"
+                  Description="Run BVT test cases in the test suite"
+                  Target="[TESTSUITE_BATCH_DIR]!(wix.DOMAIN_RUN_BVT_COMMAND)"
+                  WorkingDirectory="TESTSUITE_BATCH_DIR" />
+        <Shortcut Id="Run2012R2TestCasesShortcut_Desktop"
+                  Name="Run 2012R2 Test Cases"
+                  Description="Run 2012R2 test cases in the test suite"
+                  Target="[TESTSUITE_BATCH_DIR]!(wix.DOMAIN_RUN_2012R2_COMMAND)"
                   WorkingDirectory="TESTSUITE_BATCH_DIR" />
         <RegistryValue Id="TestSuiteShortcutsKeyPath_Desktop"
                         Root="HKCU"

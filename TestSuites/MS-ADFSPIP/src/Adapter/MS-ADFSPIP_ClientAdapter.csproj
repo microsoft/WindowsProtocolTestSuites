@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B4A9391F-3803-477B-B703-34E924EA1FD5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Protocols.TestSuites.Identity.ADFSPIP</RootNamespace>
+    <AssemblyName>MS-ADFSPIP_ClientAdapter</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'fxcop|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\fxcop\</OutputPath>
+    <DefineConstants>FXCOP;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Protocols.TestTools">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.Protocols.TestTools.VSTS">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.Protocols" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="MockClient\MockClient.cs" />
+    <Compile Include="SUTRequestHandler\IRequestHandler.cs" />
+    <Compile Include="SUTRequestHandler\IRequestHandlerFactory.cs" />
+    <Compile Include="SUTRequestHandler\IRequestValidator.cs" />
+    <Compile Include="IMSADFSPIPClientAdapter.cs" />
+    <Compile Include="ISUTControlAdapter.cs" />
+    <Compile Include="SUTRequestHandler\NativeMethods.cs" />
+    <Compile Include="SUTControlAdapterAsync.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SUTControlAdapter\TriggerBrowserToAccessAp.ps1" />
+    <Content Include="SUTControlAdapter\TriggerCleanCertificate.ps1" />
+    <Content Include="SUTControlAdapter\TriggerExportCertificate.ps1" />
+    <Content Include="SUTControlAdapter\IsApplicationProxyConfigured.ps1" />
+    <Content Include="SUTControlAdapter\TriggerInstallApplicationProxy.ps1" />
+    <Content Include="SUTControlAdapter\TriggerProxyInstall.ps1" />
+    <Content Include="SUTControlAdapter\TriggerProxyUninstall.ps1" />
+    <Content Include="SUTControlAdapter\TriggerPublishApplication.ps1" />
+    <Content Include="SUTControlAdapter\TriggerRemoveApplication.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SUTControlAdapter\TriggerPublishNonClaimsApp.ps1" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\Bin\" />
+  </Target>
+</Project>

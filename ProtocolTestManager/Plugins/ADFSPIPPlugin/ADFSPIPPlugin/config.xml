@@ -1,0 +1,44 @@
+<Config>
+	<PtfFileNames>
+		<PtfFileName>MS-ADFSPIP_ClientTestSuite.deployment.ptfconfig</PtfFileName>
+	</PtfFileNames>
+	<ConfigFileInSourceCode>
+		<PtfFileName>Source\Client\TestCode\TestSuite\PTFConfig\MS-ADFSPIP_ClientTestSuite.deployment.ptfconfig</PtfFileName>
+	</ConfigFileInSourceCode>
+	<DllFileNames>
+		<DllFileName>Bin\MS-ADFSPIP_ClientTestSuite.dll</DllFileName>
+	</DllFileNames>
+	<AutoDetectionDllName>ADFSPIPPlugin.dll</AutoDetectionDllName>
+	<ConfigCaseRule>
+    <Group name ="Test Scope">
+      <Rule name = "BVT">
+        <Category name = "BVT"/>
+      </Rule>
+      <Rule name = "Non BVT">
+        <Category name = "!BVT"/>
+      </Rule>
+    </Group>
+
+    <Group name ="Scenario">
+      <Rule name = "Deployment">
+        <Category name = "Deployment"/>
+      </Rule>
+      <Rule name = "Management">
+        <Category name = "Management"/>
+      </Rule>
+      <Rule name = "Runtime">
+        <Category name = "Runtime"/>
+      </Rule>
+    </Group>
+
+    <Group name ="SUT Function Level">
+      <Rule name = "Windows 2016">
+        <Category name = "Win2016"/>
+      </Rule>
+      <Rule name = "Windows 2012R2">
+        <Category name = "!win2016"/>
+      </Rule>
+    </Group>
+	</ConfigCaseRule>
+	<TestSetting>Bin\ClientLocal.TestSettings</TestSetting>
+</Config>
