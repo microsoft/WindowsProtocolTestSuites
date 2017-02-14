@@ -18,15 +18,6 @@ Param(
 )
 
 #----------------------------------------------------------------------------
-# Starting script
-#----------------------------------------------------------------------------
-#Write-Host "EXECUTING [Set-Parameter.ps1] ..." -foregroundcolor cyan
-#Write-Host "`$sourceFileName = $sourceFileName"
-#Write-Host "`$attrName       = $attrName"
-#Write-Host "`$value          = $value"
-#Write-Host "`$comment        = $comment"
-
-#----------------------------------------------------------------------------
 # Function: Show-ScriptUsage
 # Usage   : Describes the usage information and options
 #----------------------------------------------------------------------------
