@@ -211,6 +211,9 @@
       <Property name="UseKerberos" value="false">
         <Description>Type:string! Usage:true if use Kerberos to authenticate, false for Negotiate.</Description>
       </Property>
+      <Property name="UseNativeRpcLib" value="false">
+        <Description>Type:string! Usage:set to true if native RPC stub is used, false to use SDK RPC adapter. </Description>
+      </Property>
       <Property name="LDSDemotion.Scriptfolder" value="c:\">
         <Description>Type:string! Usage:a script batch file will be placed here after IDL_DRSFinishDemotion failed to remove target SPNs.</Description>
       </Property>
