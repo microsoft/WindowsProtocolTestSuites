@@ -322,7 +322,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             testDS = bool.Parse(site.Properties["MS_DRSR.TestDS"]);
             funcLv = (Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr.DrsrDomainFunctionLevel)(ADCommonServerAdapter.Instance(testSite).DomainFunctionLevel);
             UseKerberos = bool.Parse(site.Properties["MS_DRSR.UseKerberos"]);
-            //UseNativeRpcLib = true;
+            UseNativeRpcLib = bool.Parse(site.Properties["MS_DRSR.UseNativeRpcLib"]);
 
             //create normal user account if it does not exist yet
             string serverName = ADCommonServerAdapter.Instance(testSite).PDCNetbiosName;

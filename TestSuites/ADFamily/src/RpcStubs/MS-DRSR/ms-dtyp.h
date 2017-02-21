@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 8.00.0595 */
-/* at Thu Mar 19 15:37:03 2015
+/* at Fri Nov 04 11:26:16 2016
  */
 /* Compiler settings for ms-dtyp.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.00.0595 
@@ -49,7 +49,7 @@ extern "C"{
 /* interface __MIDL_itf_ms2Ddtyp_0000_0000 */
 /* [local] */ 
 
-typedef unsigned short wchar_t;
+//typedef unsigned short wchar_t;
 
 typedef void *ADCONNECTION_HANDLE;
 
@@ -227,24 +227,24 @@ typedef struct _FILETIME *PFILETIME;
 
 typedef struct _FILETIME *LPFILETIME;
 
-typedef struct _GUID
-    {
-    unsigned long Data1;
-    unsigned short Data2;
-    unsigned short Data3;
-    byte Data4[ 8 ];
-    } 	GUID;
+//typedef struct _GUID
+//    {
+//    unsigned long Data1;
+//    unsigned short Data2;
+//    unsigned short Data3;
+//    byte Data4[ 8 ];
+//    } 	GUID;
 
 typedef struct _GUID UUID;
 
 typedef struct _GUID *PGUID;
 
-typedef struct _LARGE_INTEGER
-    {
-    __int64 QuadPart;
-    } 	LARGE_INTEGER;
+//typedef struct _LARGE_INTEGER
+//    {
+//    __int64 QuadPart;
+//    } 	LARGE_INTEGER;
 
-typedef struct _LARGE_INTEGER *PLARGE_INTEGER;
+//typedef struct _LARGE_INTEGER *PLARGE_INTEGER;
 
 typedef struct _EVENT_DESCRIPTOR
     {
@@ -259,7 +259,7 @@ typedef struct _EVENT_DESCRIPTOR
 
 typedef struct _EVENT_DESCRIPTOR *PEVENT_DESCRIPTOR;
 
-typedef const EVENT_DESCRIPTOR *PCEVENT_DESCRIPTOR;
+typedef struct _EVENT_DESCRIPTOR *PCEVENT_DESCRIPTOR;
 
 typedef struct _EVENT_HEADER
     {
@@ -288,11 +288,11 @@ typedef struct _EVENT_HEADER *PEVENT_HEADER;
 
 typedef DWORD LCID;
 
-typedef struct _LUID
-    {
-    DWORD LowPart;
-    LONG HighPart;
-    } 	LUID;
+//typedef struct _LUID
+//    {
+//    DWORD LowPart;
+//    LONG HighPart;
+//    } 	LUID;
 
 typedef struct _LUID *PLUID;
 
@@ -335,17 +335,17 @@ typedef struct _SERVER_INFO_101 *PSERVER_INFO_101;
 
 typedef struct _SERVER_INFO_101 *LPSERVER_INFO_101;
 
-typedef struct _SYSTEMTIME
-    {
-    WORD wYear;
-    WORD wMonth;
-    WORD wDayOfWeek;
-    WORD wDay;
-    WORD wHour;
-    WORD wMinute;
-    WORD wSecond;
-    WORD wMilliseconds;
-    } 	SYSTEMTIME;
+//typedef struct _SYSTEMTIME
+//    {
+//    WORD wYear;
+//    WORD wMonth;
+//    WORD wDayOfWeek;
+//    WORD wDay;
+//    WORD wHour;
+//    WORD wMinute;
+//    WORD wSecond;
+//    WORD wMilliseconds;
+//    } 	SYSTEMTIME;
 
 typedef struct _SYSTEMTIME *PSYSTEMTIME;
 
@@ -357,12 +357,12 @@ typedef struct _UINT128
 
 typedef struct _UINT128 *PUINT128;
 
-typedef struct _ULARGE_INTEGER
-    {
-    unsigned __int64 QuadPart;
-    } 	ULARGE_INTEGER;
+//typedef struct _ULARGE_INTEGER
+//    {
+//    unsigned __int64 QuadPart;
+//    } 	ULARGE_INTEGER;
 
-typedef struct _ULARGE_INTEGER *PULARGE_INTEGER;
+//typedef struct _ULARGE_INTEGER *PULARGE_INTEGER;
 
 typedef struct _RPC_SID_IDENTIFIER_AUTHORITY
     {
@@ -373,37 +373,37 @@ typedef DWORD ACCESS_MASK;
 
 typedef ACCESS_MASK *PACCESS_MASK;
 
-typedef struct _OBJECT_TYPE_LIST
-    {
-    WORD Level;
-    ACCESS_MASK Remaining;
-    GUID *ObjectType;
-    } 	OBJECT_TYPE_LIST;
+//typedef struct _OBJECT_TYPE_LIST
+//    {
+//    WORD Level;
+//    ACCESS_MASK Remaining;
+//    GUID *ObjectType;
+//    } 	OBJECT_TYPE_LIST;
 
 typedef struct _OBJECT_TYPE_LIST *POBJECT_TYPE_LIST;
 
-typedef struct _ACE_HEADER
-    {
-    UCHAR AceType;
-    UCHAR AceFlags;
-    USHORT AceSize;
-    } 	ACE_HEADER;
+//typedef struct _ACE_HEADER
+//    {
+//    UCHAR AceType;
+//    UCHAR AceFlags;
+//    USHORT AceSize;
+//    } 	ACE_HEADER;
 
 typedef struct _ACE_HEADER *PACE_HEADER;
 
-typedef struct _SYSTEM_MANDATORY_LABEL_ACE
-    {
-    ACE_HEADER Header;
-    ACCESS_MASK Mask;
-    DWORD SidStart;
-    } 	SYSTEM_MANDATORY_LABEL_ACE;
+//typedef struct _SYSTEM_MANDATORY_LABEL_ACE
+//    {
+//    ACE_HEADER Header;
+//    ACCESS_MASK Mask;
+//    DWORD SidStart;
+//    } 	SYSTEM_MANDATORY_LABEL_ACE;
 
 typedef struct _SYSTEM_MANDATORY_LABEL_ACE *PSYSTEM_MANDATORY_LABEL_ACE;
 
-typedef struct _TOKEN_MANDATORY_POLICY
-    {
-    DWORD Policy;
-    } 	TOKEN_MANDATORY_POLICY;
+//typedef struct _TOKEN_MANDATORY_POLICY
+//    {
+//    DWORD Policy;
+//    } 	TOKEN_MANDATORY_POLICY;
 
 typedef struct _TOKEN_MANDATORY_POLICY *PTOKEN_MANDATORY_POLICY;
 
@@ -426,21 +426,21 @@ typedef struct _CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_RELATIVE
 
 typedef struct _CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_RELATIVE *PCLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_RELATIVE;
 
-typedef struct _CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1
-    {
-    DWORD Name;
-    WORD ValueType;
-    WORD Reserved;
-    DWORD Flags;
-    DWORD ValueCount;
-    union 
-        {
-        PLONG64 pInt64[ 1 ];
-        PDWORD64 pUint64[ 1 ];
-        PWSTR ppString[ 1 ];
-        PCLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_RELATIVE pOctetString[ 1 ];
-        } 	Values;
-    } 	CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1;
+//typedef struct _CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1
+//    {
+//    DWORD Name;
+//    WORD ValueType;
+//    WORD Reserved;
+//    DWORD Flags;
+//    DWORD ValueCount;
+//    union 
+//        {
+//        PLONG64 pInt64[ 1 ];
+//        PDWORD64 pUint64[ 1 ];
+//        PWSTR ppString[ 1 ];
+//        PCLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_RELATIVE pOctetString[ 1 ];
+//        } 	Values;
+//    } 	CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1;
 
 typedef struct _CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1 *PCLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1;
 
@@ -458,31 +458,31 @@ typedef struct _RPC_SID
 
 typedef struct _RPC_SID *PRPC_SID;
 
-typedef struct _RPC_SID *PSID;
+//typedef struct _RPC_SID *PSID;
 
-typedef struct _ACL
-    {
-    unsigned char AclRevision;
-    unsigned char Sbz1;
-    unsigned short AclSize;
-    unsigned short AceCount;
-    unsigned short Sbz2;
-    } 	ACL;
+//typedef struct _ACL
+//    {
+//    unsigned char AclRevision;
+//    unsigned char Sbz1;
+//    unsigned short AclSize;
+//    unsigned short AceCount;
+//    unsigned short Sbz2;
+//    } 	ACL;
 
 typedef struct _ACL *PACL;
 
-typedef struct _SECURITY_DESCRIPTOR
-    {
-    UCHAR Revision;
-    UCHAR Sbz1;
-    USHORT Control;
-    PSID Owner;
-    PSID Group;
-    PACL Sacl;
-    PACL Dacl;
-    } 	SECURITY_DESCRIPTOR;
+//typedef struct _SECURITY_DESCRIPTOR
+//    {
+//    UCHAR Revision;
+//    UCHAR Sbz1;
+//    USHORT Control;
+//    PSID Owner;
+//    PSID Group;
+//    PACL Sacl;
+//    PACL Dacl;
+//    } 	SECURITY_DESCRIPTOR;
 
-typedef struct _SECURITY_DESCRIPTOR *PSECURITY_DESCRIPTOR;
+//typedef struct _SECURITY_DESCRIPTOR *PSECURITY_DESCRIPTOR;
 
 
 

@@ -37,4 +37,10 @@
       <TestSuiteDetail>RDP test suite is designed to test implementations of Remote Desktop Protocol family.</TestSuiteDetail>
     </TestSuite>
   </Group>
+  <Group name="MS-ADFSPIP">
+    <TestSuite name="MS-ADFSPIP">
+      <Description></Description>
+      <TestSuiteDetail>MS-ADFSPIP test suite is is designed to test the implementations of Device Registration Discovery Protocol, as specified in Microsoft document [MS-DVRD], and Device Registration Enrollment Protocol, as specified in Microsoft document [MS-DVRE].</TestSuiteDetail>
+    </TestSuite>
+  </Group>
 </TestSuiteSelectionConfig>

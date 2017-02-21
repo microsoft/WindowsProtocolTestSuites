@@ -15,6 +15,7 @@ Windows Protocol Test Suites provide interoperability testing against the implem
 * **Branch Cache Test Suite**. It is designed to test the implementations of MS-PCCRTP, MS-PCCRR, MS-PCHC and MS-PCCRC protocol.
 * **AZOD Test Suite**. It is designed to test the implementations of MS-AZOD protocol.
 * **ADFamily Test Suite**. It is designed to test the implementations of the Active Directory protocols including [MS-ADTS], [MS-APDS], [MS-DRSR] [MS-FRS2], [MS-LSAD], [MS-LSAT], [MS-SAMR] and [MS-NRPC]. 
+* **ADFSPIP Client Test Suite**. It is designed to test the implementations of Device Registration Discovery Protocol, as specified in Microsoft document [MS-DVRD], and Device Registration Enrollment Protocol, as specified in Microsoft document [MS-DVRE]. 
 
 ## Components
 Windows Protocol Test Suites contain 4 components:
@@ -70,6 +71,7 @@ Some test suites use [Model-Based Testing](https://msdn.microsoft.com/en-us/libr
 * **SMBD Server Test Suite**
 * **BranchCache Server Test Suite**
 * **ADFamily Test Suite**
+* **ADFSPIP Client Test Suite**
 
 ## Build
 

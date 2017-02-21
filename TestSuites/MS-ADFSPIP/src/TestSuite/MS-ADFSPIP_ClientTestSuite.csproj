@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7141404A-4096-480D-861D-50845AEDDDDB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Protocols.TestSuites.Identity.ADFSPIP</RootNamespace>
+    <AssemblyName>MS-ADFSPIP_ClientTestSuite</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <!--For CoReXT bcz fxcop settings-->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'fxcop|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\fxcop\</OutputPath>
+    <DefineConstants>FXCOP;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Protocols.TestTools">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.Protocols.TestTools.VSTS">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="BaseTestSuite.cs" />
+    <Compile Include="BVT.cs" />
+    <Compile Include="ModifyOperation.cs" />
+    <Compile Include="RequestHandlers\BackendProxyTlsHandler.cs" />
+    <Compile Include="RequestHandlers\EstablishTrustHandler.cs" />
+    <Compile Include="RequestHandlers\FederationAuthRequestHandler.cs" />
+    <Compile Include="RequestHandlers\ProxyTrustHandler.cs" />
+    <Compile Include="RequestHandlers\RelyingPartyTokenHandler.cs" />
+    <Compile Include="RequestHandlers\STSCommonHandler.cs" />
+    <Compile Include="RequestHandlers\ProxyRequestHandlerBase.cs" />
+    <Compile Include="RequestHandlers\ProxyRequestHandlerFactory.cs" />
+    <Compile Include="RequestHandlers\PublishApplicationHandler.cs" />
+    <Compile Include="RequestHandlers\RelyingPartyTrustHandler.cs" />
+    <Compile Include="RequestHandlers\RenewTrustHandler.cs" />
+    <Compile Include="RequestHandlers\StoreEntryHandler.cs" />
+    <Compile Include="RequestHandlers\UnknownRequestHandler.cs" />
+    <Compile Include="ServerDataModel\DataModel.cs" />
+    <Compile Include="ServerDataModel\DataModelCertificates.cs" />
+    <Compile Include="ServerDataModel\DataModelInitlization.cs" />
+    <Compile Include="ServerDataModel\DataModelOperations.cs" />
+    <Compile Include="ServerDataModel\DataModelStoreEntry.cs" />
+    <Compile Include="Common\Config.cs" />
+    <Compile Include="ServerDataModel\PreauthJsonWebToken.cs" />
+    <Compile Include="TestCases\ActiveClientAuth.cs" />
+    <Compile Include="TestCases\WebAccess.cs" />
+    <Compile Include="TestCases\ProxyRuntime.cs" />
+    <Compile Include="TestCases\RemoveApplication.cs" />
+    <Compile Include="Common\Utilities.cs" />
+    <Compile Include="TestCases\BaseTestClass.cs" />
+    <Compile Include="TestCases\EstablishRenewTrust.cs" />
+    <Compile Include="TestCases\PublishApplication.cs" />
+    <Compile Include="ValidationModel.cs" />
+    <Compile Include="TestServer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-ADFSPIP\MS-ADFSPIP.csproj">
+      <Project>{f18ebed0-5635-4b96-9e36-6408b2c66d42}</Project>
+      <Name>MS-ADFSPIP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\WebProxy\WebProxy.csproj">
+      <Project>{14b15ce4-b6dc-4ae3-b0aa-d979fd902f08}</Project>
+      <Name>WebProxy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Adapter\MS-ADFSPIP_ClientAdapter.csproj">
+      <Project>{B4A9391F-3803-477B-B703-34E924EA1FD5}</Project>
+      <Name>MS-ADFSPIP_ClientAdapter</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PTFConfig\MS-ADFSPIP_ClientTestSuite.deployment.ptfconfig">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="PTFConfig\MS-ADFSPIP_ClientTestSuite.ptfconfig" />
+    <Content Include="ServerDataModel\MetadataTemplate_2012.xml" />
+    <Content Include="ServerDataModel\MetadataTemplate_2016.xml" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Certificates\ADFS.PFX" />
+    <Content Include="Certificates\CARoot.PFX" />
+    <Content Include="Certificates\Encrypt.PFX" />
+    <Content Include="Certificates\Sign.PFX" />
+    <Content Include="Certificates\WebApp.PFX" />
+    <Content Include="Certificates\Client.PFX" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\Bin\" />
+  </Target>
+</Project>

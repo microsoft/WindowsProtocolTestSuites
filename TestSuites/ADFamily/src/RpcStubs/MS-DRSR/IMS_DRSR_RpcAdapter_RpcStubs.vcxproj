@@ -139,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ms-drsr.h" />
+    <ClInclude Include="ms-dtyp.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -153,6 +154,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="IMS_DRSR_RpcAdapter_RpcStubs.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="exports.def" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="AfterBuild">
