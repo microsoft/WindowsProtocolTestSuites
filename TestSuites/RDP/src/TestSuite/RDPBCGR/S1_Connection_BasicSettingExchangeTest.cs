@@ -110,9 +110,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server MCS Connect Response PDU to SUT. Encryption Method {0}; Encryption Level: {1}; RDP Version Code: {2}; Invalid Result.", enMethod.ToString(), enLevel.ToString(), TS_UD_SC_CORE_version_Values.V2.ToString());
             this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, TS_UD_SC_CORE_version_Values.V2, NegativeType.InvalidResult);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "SUT should drop the connection when the result field in mcsCrsp of MCS Connect Response PDU with GCC Conference Create Response is invalid.");
+            RDPClientTryDropConnection("MCS connection response");
             #endregion
         }
 
@@ -161,9 +159,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server MCS Connect Response PDU to SUT. Encryption Method {0}; Encryption Level: {1}; RDP Version Code: {2}; Invalid H221.", enMethod.ToString(), enLevel.ToString(), TS_UD_SC_CORE_version_Values.V2.ToString());
             this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, TS_UD_SC_CORE_version_Values.V2, NegativeType.InvalidH221);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "SUT should drop the connection when the H221 key is invalid.");
+            RDPClientTryDropConnection("MCS connection response with invalid H221 key");            
             #endregion
         }
 
@@ -216,9 +212,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             else
                 this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, TS_UD_SC_CORE_version_Values.V2, NegativeType.InvalidEncodedLengthExternalSecurityProtocols);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "SUT should drop the connection when the length field of User Data Header to an invalid value (less than the actual value).");
+            RDPClientTryDropConnection("MCS connection response with invalid User Data Header");            
             #endregion
         }
 
@@ -267,9 +261,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server MCS Connect Response PDU to SUT. Encryption Method {0}; Encryption Level: {1}; RDP Version Code: {2}; Invalid Client Requested Protocol.", enMethod.ToString(), enLevel.ToString(), TS_UD_SC_CORE_version_Values.V2.ToString());
             this.rdpbcgrAdapter.Server_MCS_Connect_Response(enMethod, enLevel, TS_UD_SC_CORE_version_Values.V2, NegativeType.InvalidClientRequestedProtocols);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "SUT should drop the connection when the Client Requested protocol is invalid.");
+            RDPClientTryDropConnection("MCS connection response with invalid Client Requested protocol");            
             #endregion
         }
 
@@ -340,9 +332,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 #endregion
             }
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnceted = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnceted, "SUT should drop the connection when the encryptionMethod field in the Server Security Data is not valid or not supported.");
+            RDPClientTryDropConnection("MCS connection response with invalid/unspported encryptionMethod field in the Server Security Data");            
             #endregion
         }
 
@@ -350,7 +340,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
-        [Description(@"This test case verifies that SUT drops the connection when the serverRandomLen  field in the Server Security Data is not valid.")]
+        [Description(@"This test case verifies that SUT drops the connection when the serverRandomLen field in the Server Security Data is not valid.")]
         public void S1_ConnectionTest_BasicSettingExchange_NegativeTest_InvalidServerRandomLen()
         {
             #region Test Steps
@@ -420,9 +410,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 #endregion
             }
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnceted = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnceted, "SUT should drop the connection when the serverCertificate field in the Server Security Data is not valid.");
+            RDPClientTryDropConnection("MCS connection response with invalid serverRandomLen field in the Server Security Data");            
             #endregion
         }
 
@@ -500,9 +488,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 #endregion
             }
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnceted = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnceted, "SUT should drop the connection when the serverCertificate field in the Server Security Data is not valid.");
+            RDPClientTryDropConnection("MCS connection response with invalid serverCertificate field in the Server Security Data");            
             #endregion
         }
 

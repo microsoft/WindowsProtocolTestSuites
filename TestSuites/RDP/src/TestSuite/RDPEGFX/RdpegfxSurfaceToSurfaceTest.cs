@@ -380,15 +380,20 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Set the test type to {0}.", RdpegfxNegativeTypes.SurfaceManagement_InterSurfaceCopy_InexistentSrc);
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.SurfaceManagement_InterSurfaceCopy_InexistentSrc);
-
-            // Trigger client to copy bitmap from inexistent source to destination surface
-            RDPGFX_POINT16[] destPts = { RdpegfxTestUtility.imgPos2 };
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to copy bitmap from inexistent source to destination surface.");
-            fid = this.rdpegfxAdapter.InterSurfaceCopy(surf, RdpegfxTestUtility.copySrcRect, RdpegfxTestUtility.fillColorRed, surf2, destPts);
-
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
+            
+            try
+            {
+                // Trigger client to copy bitmap from inexistent source to destination surface
+                RDPGFX_POINT16[] destPts = { RdpegfxTestUtility.imgPos2 };
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to copy bitmap from inexistent source to destination surface.");
+                fid = this.rdpegfxAdapter.InterSurfaceCopy(surf, RdpegfxTestUtility.copySrcRect, RdpegfxTestUtility.fillColorRed, surf2, destPts);
+                
+                RDPClientTryDropConnection("copy bitmap from inexistent source to destination surface");
+            }
+            catch (Exception ex)
+            {
+                this.TestSite.Log.Add(LogEntryKind.TestFailed, "SUT should terminate the connection, or deny the request, or ignore the request to solid fill to inexistent surface instead of throw out an exception: {0}.", ex.Message);
+            }
         }
 
         [TestMethod]
@@ -423,15 +428,20 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Set the test type to {0}.", RdpegfxNegativeTypes.SurfaceManagement_InterSurfaceCopy_InexistentDest);
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.SurfaceManagement_InterSurfaceCopy_InexistentDest);
-
-            // Trigger client to copy bitmap from source to inexistent destination surface
-            RDPGFX_POINT16[] destPts = { RdpegfxTestUtility.imgPos2 };
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to copy bitmap from source to inexistent destination surface.");
-            fid = this.rdpegfxAdapter.InterSurfaceCopy(surf, RdpegfxTestUtility.copySrcRect, RdpegfxTestUtility.fillColorRed, surf2, destPts);
-
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
+                        
+            try
+            {
+                // Trigger client to copy bitmap from source to inexistent destination surface
+                RDPGFX_POINT16[] destPts = { RdpegfxTestUtility.imgPos2 };
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to copy bitmap from source to inexistent destination surface.");
+                fid = this.rdpegfxAdapter.InterSurfaceCopy(surf, RdpegfxTestUtility.copySrcRect, RdpegfxTestUtility.fillColorRed, surf2, destPts);
+                
+                RDPClientTryDropConnection("copy bitmap from source to inexistent destination surface");
+            }
+            catch (Exception ex)
+            {
+                this.TestSite.Log.Add(LogEntryKind.TestFailed, "SUT should terminate the connection, or deny the request, or ignore the request to solid fill to inexistent surface instead of throw out an exception: {0}.", ex.Message);
+            }
         }
 
 
@@ -464,15 +474,20 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             RDPGFX_RECT16 surfRect2 = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth3, RdpegfxTestUtility.surfHeight3);
             Surface surf2 = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect2, PixelFormat.PIXEL_FORMAT_ARGB_8888);
             this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf2.Id);
+                        
+            try
+            {
+                // Trigger client to copy bitmap with boundary out of source surface to destination surface
+                RDPGFX_POINT16[] destPts = { RdpegfxTestUtility.imgPos2 };   // Relative to destination surface 
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to copy bitmap with boundary out of source surface to destination surface.");
+                fid = this.rdpegfxAdapter.InterSurfaceCopy(surf, RdpegfxTestUtility.copySrcRect2, RdpegfxTestUtility.fillColorRed, surf2, destPts);
 
-            // Trigger client to copy bitmap with boundary out of source surface to destination surface
-            RDPGFX_POINT16[] destPts = { RdpegfxTestUtility.imgPos2 };   // Relative to destination surface 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to copy bitmap with boundary out of source surface to destination surface.");
-            fid = this.rdpegfxAdapter.InterSurfaceCopy(surf, RdpegfxTestUtility.copySrcRect2, RdpegfxTestUtility.fillColorRed, surf2, destPts);
-
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when received an invalid message.");
+                RDPClientTryDropConnection("copy bitmap with boundary out of source surface to destination surface");
+            }
+            catch (Exception ex)
+            {
+                this.TestSite.Log.Add(LogEntryKind.TestFailed, "SUT should terminate the connection, or deny the request, or ignore the request to solid fill to inexistent surface instead of throw out an exception: {0}.", ex.Message);
+            }
         }
 
         [TestMethod]
@@ -504,15 +519,20 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             RDPGFX_RECT16 surfRect2 = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth3, RdpegfxTestUtility.surfHeight3);
             Surface surf2 = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect2, PixelFormat.PIXEL_FORMAT_ARGB_8888);
             this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf2.Id);
+                        
+            try
+            {
+                // Trigger client to copy bitmap of source surface to illegal position outside destination surface
+                RDPGFX_POINT16[] destPts = { RdpegfxTestUtility.imgPos4 };   // imgPos4 is a position outside destination surface
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to copy bitmap of source surface to illegal position outside destination surface.");
+                fid = this.rdpegfxAdapter.InterSurfaceCopy(surf, RdpegfxTestUtility.copySrcRect, RdpegfxTestUtility.fillColorRed, surf2, destPts);
 
-            // Trigger client to copy bitmap of source surface to illegal position outside destination surface
-            RDPGFX_POINT16[] destPts = { RdpegfxTestUtility.imgPos4 };   // imgPos4 is a position outside destination surface
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to copy bitmap of source surface to illegal position outside destination surface.");
-            fid = this.rdpegfxAdapter.InterSurfaceCopy(surf, RdpegfxTestUtility.copySrcRect, RdpegfxTestUtility.fillColorRed, surf2, destPts);
-
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when received an invalid message.");
+                RDPClientTryDropConnection("copy bitmap of source surface to illegal position outside destination surface");
+            }
+            catch (Exception ex)
+            {
+                this.TestSite.Log.Add(LogEntryKind.TestFailed, "SUT should terminate the connection, or deny the request, or ignore the request to solid fill to inexistent surface instead of throw out an exception: {0}.", ex.Message);
+            }
         }
 
 
@@ -548,16 +568,20 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Set the test type to {0}.", RdpegfxNegativeTypes.SurfaceManagement_InterSurfaceCopy_DestPtsCount_Mismatch);
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.SurfaceManagement_InterSurfaceCopy_DestPtsCount_Mismatch);
-
-            // Send a SurfaceToSurface PDU to client with value of destPtsCount and the length of destPts doesn't match 
-            RDPGFX_POINT16[] destPts = { RdpegfxTestUtility.imgPos2 };   // Relative to destination surface 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Send a SurfaceToSurface PDU to client with value of destPtsCount and the length of destPts doesn't match.");
-            fid = this.rdpegfxAdapter.InterSurfaceCopy(surf, RdpegfxTestUtility.copySrcRect, RdpegfxTestUtility.fillColorRed, surf2, destPts);
-
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when received an invalid message.");
+            
+            try
+            {
+                // Send a SurfaceToSurface PDU to client with value of destPtsCount and the length of destPts doesn't match 
+                RDPGFX_POINT16[] destPts = { RdpegfxTestUtility.imgPos2 };   // Relative to destination surface 
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Send a SurfaceToSurface PDU to client with value of destPtsCount and the length of destPts doesn't match.");
+                fid = this.rdpegfxAdapter.InterSurfaceCopy(surf, RdpegfxTestUtility.copySrcRect, RdpegfxTestUtility.fillColorRed, surf2, destPts);
+                                
+                RDPClientTryDropConnection("a SurfaceToSurface PDU to client with value of destPtsCount and the length of destPts doesn't match");
+            }
+            catch (Exception ex)
+            {
+                this.TestSite.Log.Add(LogEntryKind.TestFailed, "SUT should terminate the connection, or deny the request, or ignore the request to solid fill to inexistent surface instead of throw out an exception: {0}.", ex.Message);
+            }
         }
-
     }
 }

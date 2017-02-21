@@ -992,7 +992,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 ImageQualityAccessment.AssessResult res = iqaIndex.Assess(referenceImage, inputImage, ImageQualityAccessment.UseComponent.Cr);
                 double assessValueCr = res.Cr;
 
-                site.Log.Add(LogEntryKind.Comment, "SimulatedScreen: Assess Cb component of Images using {0} algorithm, assess value is {1}, assess value threshold is {2}.", iqaIndex.IndexName, assessValueCr, assessValueThreshold);
+                site.Log.Add(LogEntryKind.Comment, "SimulatedScreen: Assess Cr component of Images using {0} algorithm, assess value is {1}, assess value threshold is {2}.", iqaIndex.IndexName, assessValueCr, assessValueThreshold);
                 if (assessValueCr < assessValueThreshold)
                 {
                     return false;

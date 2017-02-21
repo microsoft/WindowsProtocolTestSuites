@@ -50,8 +50,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
             this.rdpevorAdapter.SendPresentationRequest(pId, CommandValues.Start, width, height, width, height, geoId, VideoSubtype.MFVideoFormat_H264, RdpevorTestData.GetNegativeTestH264ExtraData());
 
             Site.Log.Add(LogEntryKind.Debug, "Expecting RDP client drop the connection when the packet length of Presentation Request is invalid.");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            Site.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
+            RDPClientTryDropConnection("the packet length of Presentation Request is invalid");
         }
 
         #endregion
@@ -97,8 +96,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
                 RdpevorTestData.NegativeTest_H264_Packet1Sample1Timestamp);
 
             Site.Log.Add(LogEntryKind.Debug, "Expecting RDP client drop the connection when the packet length of TSMM_VIDEO_DATA is invalid.");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            Site.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
+            RDPClientTryDropConnection("the packet length of TSMM_VIDEO_DATA is invalid");
         }
 
         #endregion

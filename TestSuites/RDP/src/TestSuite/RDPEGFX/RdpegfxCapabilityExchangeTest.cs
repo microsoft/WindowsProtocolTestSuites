@@ -75,9 +75,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending capability confirm message with an incorrect capability version to client.");
             this.rdpegfxAdapter.SendCapabilityConfirm(capFlag);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when received an invalid message.");
+            RDPClientTryDropConnection("capability confirm message with an incorrect capability version");
         }
 
         [TestMethod]
@@ -111,9 +109,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending capability confirm message with incorrect CapsDataLength to client.");
             this.rdpegfxAdapter.SendCapabilityConfirm(capFlag);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
+            RDPClientTryDropConnection("capability confirm message with incorrect CapsDataLength");            
         }
                 
     }

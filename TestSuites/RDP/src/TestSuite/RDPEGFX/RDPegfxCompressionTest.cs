@@ -71,15 +71,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Set the test type to {0}.", RdpegfxNegativeTypes.RDP8Compression_IncorrectCompressFlag);
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.RDP8Compression_IncorrectCompressFlag);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Send CreateSurface message and  MapSurfaceToOutPut message with incorrect compress flag to client.");
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Send CreateSurface message and MapSurfaceToOutPut message with incorrect compress flag to client.");
             // Create & output a surface 
             RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
             Surface surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_XRGB_8888);
             this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf.Id);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
+            RDPClientTryDropConnection("CreateSurface message and MapSurfaceToOutPut message with incorrect compress flag");
         }
 
         [TestMethod]
@@ -98,15 +96,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Set the test type to {0}.", RdpegfxNegativeTypes.RDP8Compression_IncorrectCompressType);
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.RDP8Compression_IncorrectCompressType);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Send CreateSurface message and  MapSurfaceToOutPut message with incorrect compress type to client.");
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Send CreateSurface message and MapSurfaceToOutPut message with incorrect compress type to client.");
             // Create & output a surface 
             RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
             Surface surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_XRGB_8888);
             this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf.Id);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
+            RDPClientTryDropConnection("CreateSurface message and MapSurfaceToOutPut message with incorrect compress type");            
         }
 
         [TestMethod]
@@ -131,10 +127,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             Surface surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_XRGB_8888);
             this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf.Id);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
+            RDPClientTryDropConnection("CreateSurface message and MapSurfaceToOutPut message with compress flag and uncompressed payload");            
         }
-
     }
 }

@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDPPlugin", "RDPPlugin\RDPPlugin.csproj", "{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProtocolSDK", "ProtocolSDK", "{EF0AC845-FE1F-4CF3-8D0A-9F457721E4FA}"
@@ -66,8 +68,8 @@ Global
 		{BF6AFAF0-7592-467F-AD5C-18429D854057}.Release|Any CPU.Build.0 = Release|Any CPU
 		{75544419-3F4E-4308-A676-165F45C1462E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{75544419-3F4E-4308-A676-165F45C1462E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{75544419-3F4E-4308-A676-165F45C1462E}.Fxcop|Any CPU.ActiveCfg = Fxcop|Any CPU
-		{75544419-3F4E-4308-A676-165F45C1462E}.Fxcop|Any CPU.Build.0 = Fxcop|Any CPU
+		{75544419-3F4E-4308-A676-165F45C1462E}.Fxcop|Any CPU.ActiveCfg = Release|Any CPU
+		{75544419-3F4E-4308-A676-165F45C1462E}.Fxcop|Any CPU.Build.0 = Release|Any CPU
 		{75544419-3F4E-4308-A676-165F45C1462E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75544419-3F4E-4308-A676-165F45C1462E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FA218CAB-320C-45E9-B641-04622418988E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

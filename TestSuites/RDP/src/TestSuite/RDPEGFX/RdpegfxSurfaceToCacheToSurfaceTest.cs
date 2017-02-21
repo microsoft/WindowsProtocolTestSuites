@@ -20,7 +20,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("BVT")]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test SurfacetoCache, and CacheToSurface command.")]
         public void RDPEGFX_CacheManagement_PositiveTest()
         {
@@ -75,7 +75,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
             Surface surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_ARGB_8888);
             this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf.Id);
-                        
+
             List<RDPGFX_POINT16> destPointList = new List<RDPGFX_POINT16>();
             RDPGFX_POINT16 pos = new RDPGFX_POINT16(RdpegfxTestUtility.cacheRect.right, RdpegfxTestUtility.cacheRect.bottom);
             destPointList.Add(pos);
@@ -126,7 +126,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                 uint fid = this.rdpegfxAdapter.CacheSurface(surf, RdpegfxTestUtility.largeCacheRect, RdpegfxTestUtility.cacheKey, slot, RdpegfxTestUtility.fillColorRed);
                 this.rdpegfxAdapter.ExpectFrameAck(fid);
             }
-            
+
             // Delete the surface after wait 3 seconds.
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
             this.TestSite.Log.Add(LogEntryKind.Debug, "Surface {0} is deleted", surf.Id);
@@ -150,7 +150,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             {
                 maxCacheSlot = RdpegfxTestUtility.maxCacheSlotForSmallCache;
             }
-            
+
             // Create a surface 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create a Surface.");
             RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
@@ -191,7 +191,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             ushort cacheSlot = 1;
             // Init for capability exchange
             RDPEGFX_CapabilityExchange();
-            
+
             // Create a surface 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create a Surface.");
             RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
@@ -309,7 +309,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
             RDPGFX_RECT16 verifyRect = new RDPGFX_RECT16(
-                (ushort)(RdpegfxTestUtility.smallWidth * 2), (ushort)(RdpegfxTestUtility.smallHeight * 2), 
+                (ushort)(RdpegfxTestUtility.smallWidth * 2), (ushort)(RdpegfxTestUtility.smallHeight * 2),
                 (ushort)(RdpegfxTestUtility.smallWidth * 5), (ushort)(RdpegfxTestUtility.smallHeight * 5));
             this.VerifySUTDisplay(false, surfRect);
 
@@ -337,26 +337,25 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             Surface surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_ARGB_8888);
             this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf.Id);
 
-
+            //Cache the surface to cacheslot
             this.TestSite.Log.Add(LogEntryKind.Comment, "Fill a rect on surface and cache this rect.");
             uint fid = this.rdpegfxAdapter.CacheSurface(surf, RdpegfxTestUtility.cacheRect, RdpegfxTestUtility.cacheKey, cacheSlot, RdpegfxTestUtility.fillColorRed);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Evict the cache slot.");
+            //  Delete the existing cacheslot         
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Evict the existing cache slot.");
             fid = this.rdpegfxAdapter.EvictCachEntry(cacheSlot);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
+            this.TestSite.Assert.IsNotNull(fid, "Evit the existing cache slot should succeed.");
 
-            List<RDPGFX_POINT16> destPointList = new List<RDPGFX_POINT16>();
-            RDPGFX_POINT16 pos = new RDPGFX_POINT16(RdpegfxTestUtility.cacheRect.right, RdpegfxTestUtility.cacheRect.bottom);
-            destPointList.Add(pos);
+            //Cache the surface to the cache slot again after the cache slot is evited.
+            //The operation should succeed.        
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Cache the rect to the cache slot with same cacheslot id again.");
+            fid = this.rdpegfxAdapter.CacheSurface(surf, RdpegfxTestUtility.cacheRect, RdpegfxTestUtility.cacheKey, cacheSlot, RdpegfxTestUtility.fillColorGreen);
+            this.rdpegfxAdapter.ExpectFrameAck(fid);
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect cache surface operation succeed.");
+            this.TestSite.Assert.IsNotNull(fid, "Expect cache surface operation should succeed.");
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Copy image from deleted slot.");
-            fid = this.rdpegfxAdapter.FillSurfaceByCachedBitmap(surf, cacheSlot, destPointList.ToArray());
-
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
-        
         }
 
         [TestMethod]
@@ -364,7 +363,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Non-BVT")]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("The server attempts to allocate cache slots which exceeds size upper limitation for default cache flag")]
         public void RDPEGFX_CacheManagement_Negative_Default_ExceedMaxCacheSize()
         {
@@ -393,12 +392,17 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.CacheManagement_Default_ExceedMaxCacheSize);
 
             // Send message to trigger client to allocate cache slots with cache size exceed the max value 100MB
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to allocate cache slots with cache size exceed the max value 100MB");
-            this.rdpegfxAdapter.CacheSurface(surf, RdpegfxTestUtility.largeCacheRect, RdpegfxTestUtility.cacheKey, null, RdpegfxTestUtility.fillColorRed);
-
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to allocate cache slots with cache size exceeds the max value 100MB");
+            try
+            {
+                this.rdpegfxAdapter.CacheSurface(surf, RdpegfxTestUtility.largeCacheRect, RdpegfxTestUtility.cacheKey, null, RdpegfxTestUtility.fillColorRed);
+                //Expect the RDP client handle the negative request by dropping the connection as Windows does, or deny the request or ignore the request.
+                RDPClientTryDropConnection("allocate cache slots with cache size exceeds the max value 100MB");
+            }
+            catch (Exception ex)
+            {
+                this.TestSite.Log.Add(LogEntryKind.CheckFailed, "SUT should terminate the connection, or deny the request, or ignore the request to create duplicated surface instead of throw out an exception: {0}.", ex.Message);                
+            }
         }
 
         [TestMethod]
@@ -406,7 +410,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Non-BVT")]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("Check if client can use an inexistent surface as source for cache successfully")]
         public void RDPEGFX_CacheManagement_Negative_SurfaceToCache_InexistentSurface()
         {
@@ -422,12 +426,18 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.CacheManagement_SurfaceToCache_InexistentSurface);
 
             // Send message to trigger client to allocate cache slots with cache size exceed the max value 100MB
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to use an inexistent surface as source for cache");
-            this.rdpegfxAdapter.CacheSurface(surf, RdpegfxTestUtility.largeCacheRect, RdpegfxTestUtility.cacheKey, null, RdpegfxTestUtility.fillColorRed);
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to use an inexistent surface as source for cache"); 
+            try
+            {
+                this.rdpegfxAdapter.CacheSurface(surf, RdpegfxTestUtility.largeCacheRect, RdpegfxTestUtility.cacheKey, null, RdpegfxTestUtility.fillColorRed);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
+                //Expect the RDP client handle the negative request by dropping the connection as Windows does, or deny the request or ignore the request.
+                RDPClientTryDropConnection("use an inexistent surface as source for cache");
+            }
+            catch (Exception ex)
+            {
+                this.TestSite.Log.Add(LogEntryKind.CheckFailed, "SUT should terminate the connection, or deny the request, or ignore the request to create duplicated surface instead of throw out an exception: {0}.", ex.Message);
+            }
         }
 
         [TestMethod]
@@ -435,7 +445,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Non-BVT")]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("Check if client can copy cached bitmap data to inexistent surface")]
         public void RDPEGFX_CacheManagement_Negative_CacheToSurface_InexistentSurface()
         {
@@ -472,19 +482,72 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             // Trigger the client to copy cached bitmap data to inexistent surface
             this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger the client to copy cached bitmap data to inexistent surface.");
-            uint fid = this.rdpegfxAdapter.FillSurfaceByCachedBitmap(surf, RdpegfxTestUtility.largeCacheRect, RdpegfxTestUtility.cacheKey, destPointList.ToArray(), null, RdpegfxTestUtility.fillColorRed);
+            try
+            {
+                uint fid = this.rdpegfxAdapter.FillSurfaceByCachedBitmap(surf, RdpegfxTestUtility.largeCacheRect, RdpegfxTestUtility.cacheKey, destPointList.ToArray(), null, RdpegfxTestUtility.fillColorRed);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
+                //Expect the RDP client handle the negative request by dropping the connection as Windows does, or deny the request or ignore the request.
+                RDPClientTryDropConnection("copy cached bitmap data to inexistent surface");
+            }
+            catch (Exception ex)
+            {
+                this.TestSite.Log.Add(LogEntryKind.CheckFailed, "SUT should terminate the connection, or deny the request, or ignore the request to create duplicated surface instead of throw out an exception: {0}.", ex.Message);
+            }
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Non-BVT")]
+        [TestCategory("Positive")]
+        [TestCategory("RDP8.0")]
+        [TestCategory("RDPEGFX")]
+        [Description("This test case is used to verify RDP client can process cache correctly when receiving RDPGFX_EVICT_CACHE_ENTRY_PDU to delete a slot.")]
+        public void RDPEGFX_CacheManagement_PositiveTest_EvictCache()
+        {
+            ushort cacheSlot = 1;
+            // Init for capability exchange
+            RDPEGFX_CapabilityExchange();
+
+            // Create a surface 
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Create a Surface.");
+            RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
+            Surface surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_ARGB_8888);
+            this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf.Id);
+
+            //Cache the surface
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Fill a rect on surface and cache this rect.");
+            uint fid = this.rdpegfxAdapter.CacheSurface(surf, RdpegfxTestUtility.cacheRect, RdpegfxTestUtility.cacheKey, cacheSlot, RdpegfxTestUtility.fillColorRed);
+            this.rdpegfxAdapter.ExpectFrameAck(fid);
+
+            //Evict the existing cacheslot          
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Evict the existing cache slot.");
+            fid = this.rdpegfxAdapter.EvictCachEntry(cacheSlot);
+            this.rdpegfxAdapter.ExpectFrameAck(fid);
+            this.TestSite.Assert.IsNotNull(fid, "Evit the existing cache slog should succeed.");
+         
+            //Evict the existing cacheslot
+            try
+            {
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Evict the existing cache slot.");
+                fid = this.rdpegfxAdapter.EvictCachEntry(cacheSlot);
+                // this.rdpegfxAdapter.ExpectFrameAck(fid);
+                this.TestSite.Assert.IsNotNull(fid, "Evit the existing cache slog should succeed.");
+            }
+            catch (Exception ex)
+            {
+                this.TestSite.Assume.Pass("Evict cache slot twice should fail as expected. The operation failed with error message: {0}.", ex.Message);
+                return;
+            }
+
+            this.TestSite.Assume.Fail("Evict a cache slot twice should fail. But the RDP client did not fail the request.");
+
+        }
+        [TestMethod]
+        [Priority(1)]
+        [TestCategory("Non-BVT")]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("Check if client can copy cached bitmap from an inexistent cache slot to destination surface")]
         public void RDPEGFX_CacheManagement_Negative_CacheToSurface_InexistentCacheSlot()
         {
@@ -520,12 +583,18 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             }
 
             // Trigger the client to copy cached bitmap from an inexsitent cache slot to destination surface
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger the client to copy cached bitmap from an inexistent cache slot to destination surface.");
-            uint fid = this.rdpegfxAdapter.FillSurfaceByCachedBitmap(surf, RdpegfxTestUtility.largeCacheRect, RdpegfxTestUtility.cacheKey, destPointList.ToArray(), null, RdpegfxTestUtility.fillColorRed);
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger the client to copy cached bitmap from an inexistent cache slot to destination surface.");            
+            try
+            {
+                uint fid = this.rdpegfxAdapter.FillSurfaceByCachedBitmap(surf, RdpegfxTestUtility.largeCacheRect, RdpegfxTestUtility.cacheKey, destPointList.ToArray(), null, RdpegfxTestUtility.fillColorRed);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
+                //Expect the RDP client handle the negative request by dropping the connection as Windows does, or deny the request or ignore the request.
+                RDPClientTryDropConnection("copy cached bitmap from an inexistent cache slot to destination surface");
+            }
+            catch (Exception ex)
+            {
+                this.TestSite.Log.Add(LogEntryKind.CheckFailed, "SUT should terminate the connection, or deny the request, or ignore the request to create duplicated surface instead of throw out an exception: {0}.", ex.Message);
+            }
         }
 
         [TestMethod]
@@ -533,7 +602,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Non-BVT")]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("Check if client can handle a request of deleting an inexistent cache slot")]
         public void RDPEGFX_CacheManagement_Negative_Delete_InexistentCacheSlot()
         {
@@ -548,19 +617,23 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Set the test type to {0}.", RdpegfxNegativeTypes.CacheManagement_Delete_InexistentCacheSlot);
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.CacheManagement_Delete_InexistentCacheSlot);
 
-            // Trigger the client to delete an inexistent cache slot
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger the client to delete an inexistent cache slot.");
-            this.rdpegfxAdapter.CacheSurface(surf, RdpegfxTestUtility.largeCacheRect, RdpegfxTestUtility.cacheKey, null, RdpegfxTestUtility.fillColorRed);
-
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
+            try
+            {
+                // Trigger the client to delete an inexistent cache slot
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger the client to delete an inexistent cache slot.");
+                this.rdpegfxAdapter.CacheSurface(surf, RdpegfxTestUtility.largeCacheRect, RdpegfxTestUtility.cacheKey, null, RdpegfxTestUtility.fillColorRed);
+             
+            }
+            catch (Exception ex)
+            {
+                this.TestSite.Log.Add(LogEntryKind.Warning, "Exception thrown out when non-Windows RDP client received invalid delete inexistent cacheslot message: {0}.", ex.Message);                
+            }
         }
 
         private void RDPEGFX_CacheManagement(DynamicVC_TransportType transport, bool isSoftSync)
         {
             // Check if SUT supports Soft Sync.
-            if(isSoftSync)
+            if (isSoftSync)
                 this.TestSite.Assert.IsTrue(isClientSupportSoftSync, "SUT should support Soft-Sync.");
 
             // Init for capability exchange
