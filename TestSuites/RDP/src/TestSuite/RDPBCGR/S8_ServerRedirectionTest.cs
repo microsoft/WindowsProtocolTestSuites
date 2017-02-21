@@ -68,9 +68,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             #endregion
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to terminate the connection.");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "SUT should drop the connection when receiving Server Redirection PDU.");
+            RDPClientTryDropConnection("Server Redirection PDU without Routing Token");
 
             #region Redirect Connection
 
@@ -161,9 +159,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             #endregion
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to terminate the connection.");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "SUT should drop the connection when receiving Server Redirection PDU.");
+            RDPClientTryDropConnection("Server Redirection PDU without Routing Token");                
 
             #region Redirect Connection
 

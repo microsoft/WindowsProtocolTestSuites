@@ -14,46 +14,46 @@ using Microsoft.Protocols.TestSuites.Rdp;
 
 namespace Microsoft.Protocols.TestSuites.Rdpegfx
 {
-	public partial class RdpegfxTestSuite : RdpTestClassBase
-	{
-		[TestMethod]
+    public partial class RdpegfxTestSuite : RdpTestClassBase
+    {
+        [TestMethod]
         [Priority(0)]
-		[TestCategory("BVT")]
-		[TestCategory("Positive")]
+        [TestCategory("BVT")]
+        [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]		
-		[Description("This test case is used to test create surface, map to output, solid fill, and delete surface command.")]
-		public void RDPEGFX_SurfaceToScreen_PositiveTest_MapAndFill()
-		{
-			uint fid;
+        [TestCategory("RDPEGFX")]
+        [Description("This test case is used to test create surface, map to output, solid fill, and delete surface command.")]
+        public void RDPEGFX_SurfaceToScreen_PositiveTest_MapAndFill()
+        {
+            uint fid;
 
-		    this.TestSite.Log.Add(LogEntryKind.Comment, "Do capability exchange.");
-			// Init for capability exchange
-			RDPEGFX_CapabilityExchange();
-						
-			this.TestSite.Log.Add(LogEntryKind.Comment, "Create a surface and fill it with green color.");
-			// Create & output a surface 
-			RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
-			Surface surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_XRGB_8888);
-			this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf.Id);
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Do capability exchange.");
+            // Init for capability exchange
+            RDPEGFX_CapabilityExchange();
 
-			// Send solid fill request to client to fill surface with green color
-			RDPGFX_RECT16 fillSurfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, (ushort)(RdpegfxTestUtility.surfWidth), RdpegfxTestUtility.surfHeight);
-			RDPGFX_RECT16[] fillRects = { fillSurfRect};  // Relative to surface
-			fid = this.rdpegfxAdapter.SolidFillSurface(surf, RdpegfxTestUtility.fillColorGreen, fillRects);
-			this.TestSite.Log.Add(LogEntryKind.Debug, "Surface is filled with solid color in frame: {0}", fid);
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Create a surface and fill it with green color.");
+            // Create & output a surface 
+            RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
+            Surface surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_XRGB_8888);
+            this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf.Id);
 
-			// Expect the client to send a frame acknowledge pdu
-			// If the server receives the message, it indicates that the client has been successfully decoded the logical frame of graphics commands
-			this.rdpegfxAdapter.ExpectFrameAck(fid);
+            // Send solid fill request to client to fill surface with green color
+            RDPGFX_RECT16 fillSurfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, (ushort)(RdpegfxTestUtility.surfWidth), RdpegfxTestUtility.surfHeight);
+            RDPGFX_RECT16[] fillRects = { fillSurfRect };  // Relative to surface
+            fid = this.rdpegfxAdapter.SolidFillSurface(surf, RdpegfxTestUtility.fillColorGreen, fillRects);
+            this.TestSite.Log.Add(LogEntryKind.Debug, "Surface is filled with solid color in frame: {0}", fid);
+
+            // Expect the client to send a frame acknowledge pdu
+            // If the server receives the message, it indicates that the client has been successfully decoded the logical frame of graphics commands
+            this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
             this.VerifySUTDisplay(false, surfRect);
 
-			// Delete the surface
-			this.rdpegfxAdapter.DeleteSurface(surf.Id);
-			this.TestSite.Log.Add(LogEntryKind.Debug, "Surface {0} is deleted", surf.Id);
-		}
+            // Delete the surface
+            this.rdpegfxAdapter.DeleteSurface(surf.Id);
+            this.TestSite.Log.Add(LogEntryKind.Debug, "Surface {0} is deleted", surf.Id);
+        }
 
         [TestMethod]
         [Priority(0)]
@@ -81,10 +81,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             RDPGFX_RECT16[] fillRects = { fillSurfRect };  // Relative to surface
             fid = this.rdpegfxAdapter.SolidFillSurface(surf, RdpegfxTestUtility.fillColorGreen, fillRects);
             this.TestSite.Log.Add(LogEntryKind.Debug, "Surface is filled with solid color in frame: {0}", fid);
-            
+
             // Expect the client to send a frame acknowledge pdu
             this.rdpegfxAdapter.ExpectFrameAck(fid);
-            
+
             // Map surface to Output
             this.TestSite.Log.Add(LogEntryKind.Comment, "Map surface to output.");
             fid = this.rdpegfxAdapter.MapSurfaceToOutput(surf.Id, RdpegfxTestUtility.surfPos.x, RdpegfxTestUtility.surfPos.y);
@@ -292,9 +292,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create a surface and fill it with green color.");
             // Create & output a surface 
             RDPGFX_RECT16 surfRect = new RDPGFX_RECT16(
-                (ushort)(desktopWidth - RdpegfxTestUtility.surfWidth), 
-                (ushort)(desktopHeight - RdpegfxTestUtility.surfHeight), 
-                desktopWidth, 
+                (ushort)(desktopWidth - RdpegfxTestUtility.surfWidth),
+                (ushort)(desktopHeight - RdpegfxTestUtility.surfHeight),
+                desktopWidth,
                 desktopHeight);
             Surface surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_XRGB_8888);
             this.TestSite.Assert.IsNotNull(surf, "Surface with max ID: {0} is created", surf.Id);
@@ -314,15 +314,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             // Delete the surface
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
             this.TestSite.Log.Add(LogEntryKind.Debug, "Surface {0} is deleted", surf.Id);
-        }
-               
+        }       
+
         [TestMethod]
         [Priority(1)]
         [TestCategory("Non-BVT")]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
-        [Description("This test case is used to verify RDP client can delete a surface.")]
+        [Description("This test case is used to verify whether RDP client can delete a surface successfully.")]
         public void RDPEGFX_SurfaceToScreen_PositiveTest_DeleteSurface()
         {
             this.TestSite.Log.Add(LogEntryKind.Comment, "Do capability exchange.");
@@ -330,24 +330,35 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             RDPEGFX_CapabilityExchange();
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create a surface.");
-            // Create & output a surface 
+            // Create & output a surface             
             RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
-            Surface surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_XRGB_8888);
-            this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf.Id);
-            
-            // Delete the surface
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Delete the surface {0}.", surf.Id);
-            this.rdpegfxAdapter.DeleteSurface(surf.Id);
-            this.TestSite.Log.Add(LogEntryKind.Debug, "Surface {0} is deleted", surf.Id);
+            Surface surf1 = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_XRGB_8888);
+            this.TestSite.Assert.IsNotNull(surf1, "Surface {0} is created", surf1.Id);
 
-            // To verify the delete, map the deleted surface to output, expect RDP client drop the connection
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Map the surface {0} to the output.", surf.Id);
-            this.rdpegfxAdapter.MapSurfaceToOutput(surf.Id, RdpegfxTestUtility.surfPos2.x, RdpegfxTestUtility.surfPos2.y);
+            //Recreate the second surface with same surfaceID as surf1.
+            //The operation will fail. Since the client already has a surface with same surfaceId.
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Create the second surface with same surfaceId {0}. Expect the operation will fail.", surf1.Id);
+            try
+            {
+                Surface surf2 = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_XRGB_8888, surf1.Id);
+                this.TestSite.Assert.IsNull(surf2, "The second surface cannot be created successfully since the surface ID is duplicated.");
+            }
+            catch (Exception ex)
+            {
+                this.TestSite.Log.Add(LogEntryKind.Debug, "The second surface: {0} cannot be created successfully with error message: {1}", surf1.Id, ex.Message);
+            }
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
-		
+            // Delete the first surface
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Delete the first surface with ID: {0}.", surf1.Id);
+            this.rdpegfxAdapter.DeleteSurface(surf1.Id);
+            this.TestSite.Log.Add(LogEntryKind.Debug, "Surface {0} is deleted", surf1.Id);
+
+            //Verify the surface is deleted successuflly by creating a third surface with the same surface ID.
+            //Recreate the third surface with same surfaceID as surf1.
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Create the third surface with same surfaceId {0} after the first surface is deleted.", surf1.Id);
+            Surface surf3 = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_XRGB_8888, surf1.Id);
+            this.TestSite.Assert.IsNotNull(surf3, "The third surface {0} is created successfully.", surf1.Id);
+
         }
 
         [TestMethod]
@@ -376,7 +387,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create a new surface and use the same surface Id {0}.", surf.Id);
             Surface surf2 = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_XRGB_8888, surf.Id);
-            this.TestSite.Assert.IsNotNull(surf2, "Surface {0} is created", surf.Id);            
+            this.TestSite.Assert.IsNotNull(surf2, "Surface {0} is created", surf.Id);
         }
 
         [TestMethod]
@@ -441,11 +452,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             // Generate many fillRects on the surface
             List<RDPGFX_RECT16> rectList = new List<RDPGFX_RECT16>();
-            for (ushort y = 0; y < RdpegfxTestUtility.surfHeight; y+= 2)
+            for (ushort y = 0; y < RdpegfxTestUtility.surfHeight; y += 2)
             {
                 for (ushort x = 0; x < RdpegfxTestUtility.surfWidth; x += 2)
                 {
-                    RDPGFX_RECT16 fillSurfRect = new RDPGFX_RECT16(x, y, (ushort)(x + 1),(ushort)(y + 1));
+                    RDPGFX_RECT16 fillSurfRect = new RDPGFX_RECT16(x, y, (ushort)(x + 1), (ushort)(y + 1));
                     rectList.Add(fillSurfRect);
                 }
             }
@@ -490,23 +501,23 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             List<RDPGFX_RECT16> rectList = new List<RDPGFX_RECT16>();
             // Top-right corner
             RDPGFX_RECT16 fillSurfRect = new RDPGFX_RECT16(
-                (ushort)(RdpegfxTestUtility.surfWidth - RdpegfxTestUtility.smallWidth), 
-                0, 
-                RdpegfxTestUtility.surfWidth, 
+                (ushort)(RdpegfxTestUtility.surfWidth - RdpegfxTestUtility.smallWidth),
+                0,
+                RdpegfxTestUtility.surfWidth,
                 RdpegfxTestUtility.smallHeight);
             rectList.Add(fillSurfRect);
             // bottom-right corner
             fillSurfRect = new RDPGFX_RECT16(
-                (ushort)(RdpegfxTestUtility.surfWidth - RdpegfxTestUtility.smallWidth), 
-                (ushort)(RdpegfxTestUtility.surfHeight - RdpegfxTestUtility.smallHeight), 
-                RdpegfxTestUtility.surfWidth, 
+                (ushort)(RdpegfxTestUtility.surfWidth - RdpegfxTestUtility.smallWidth),
+                (ushort)(RdpegfxTestUtility.surfHeight - RdpegfxTestUtility.smallHeight),
+                RdpegfxTestUtility.surfWidth,
                 RdpegfxTestUtility.surfHeight);
             rectList.Add(fillSurfRect);
             // bottom-left corner
             fillSurfRect = new RDPGFX_RECT16(
-                0, 
-                (ushort)(RdpegfxTestUtility.surfHeight - RdpegfxTestUtility.smallHeight), 
-                RdpegfxTestUtility.smallWidth, 
+                0,
+                (ushort)(RdpegfxTestUtility.surfHeight - RdpegfxTestUtility.smallHeight),
+                RdpegfxTestUtility.smallWidth,
                 RdpegfxTestUtility.surfHeight);
             rectList.Add(fillSurfRect);
 
@@ -558,12 +569,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             rectList.Add(fillSurfRect);
             // Second Rect, overlap partial area of the first rect
             fillSurfRect = new RDPGFX_RECT16(
-                (ushort)(RdpegfxTestUtility.smallWidth/2),
-                (ushort)(RdpegfxTestUtility.smallHeight/2),
+                (ushort)(RdpegfxTestUtility.smallWidth / 2),
+                (ushort)(RdpegfxTestUtility.smallHeight / 2),
                 (ushort)(RdpegfxTestUtility.smallWidth / 2 + RdpegfxTestUtility.smallWidth),
                 (ushort)(RdpegfxTestUtility.smallHeight / 2 + RdpegfxTestUtility.smallHeight));
             rectList.Add(fillSurfRect);
-           
+
             // Send solid fill request to client to fill surface with green color            
             fid = this.rdpegfxAdapter.SolidFillSurface(surf, RdpegfxTestUtility.fillColorGreen, rectList.ToArray());
             this.TestSite.Log.Add(LogEntryKind.Debug, "Surface is filled with solid color in frame: {0}", fid);
@@ -646,11 +657,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             RDPEGFX_CapabilityExchange();
 
             RDPGFX_RECT16 verifyRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
-            
+
             // Init Data for test
             RDPGFX_POINT16[] positions = new RDPGFX_POINT16[4];
             positions[0] = new RDPGFX_POINT16(RdpegfxTestUtility.surfPos.x, RdpegfxTestUtility.surfPos.y);
-            positions[1] = new RDPGFX_POINT16((ushort)(RdpegfxTestUtility.surfPos.x + RdpegfxTestUtility.surfWidth/2), RdpegfxTestUtility.surfPos.y);
+            positions[1] = new RDPGFX_POINT16((ushort)(RdpegfxTestUtility.surfPos.x + RdpegfxTestUtility.surfWidth / 2), RdpegfxTestUtility.surfPos.y);
             positions[2] = new RDPGFX_POINT16(RdpegfxTestUtility.surfPos.x, (ushort)(RdpegfxTestUtility.surfPos.y + RdpegfxTestUtility.surfHeight / 2));
             positions[3] = new RDPGFX_POINT16(RdpegfxTestUtility.surfPos.x, RdpegfxTestUtility.surfPos.y);
 
@@ -706,170 +717,202 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             }
         }
 
-		[TestMethod]
+        [TestMethod]
         [Priority(1)]
-		[TestCategory("Non-BVT")]
-		[TestCategory("Negative")]
+        [TestCategory("Non-BVT")]
+        [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]		
-		[Description("Create a new surface with surfaceId is duplicated with another surface")]
-		public void RDPEGFX_SurfaceToScreen_Negative_CreateDuplicateSurface()
-		{
-			this.TestSite.Log.Add(LogEntryKind.Comment, "Do capability exchange.");
+        [TestCategory("RDPEGFX")]
+        [Description("Create a new surface with surfaceId is duplicated with another surface")]
+        public void RDPEGFX_SurfaceToScreen_Negative_CreateDuplicateSurface()
+        {
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Do capability exchange.");
             RDPEGFX_CapabilityExchange();
 
-			this.TestSite.Log.Add(LogEntryKind.Comment, "Create the first surface and map the surface to output");
-			// Create & output the first surface 
-			RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
-			Surface surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_XRGB_8888);
-			this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf.Id);
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Create the first surface and map the surface to output");
+            // Create & output the first surface 
+            RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
+            Surface surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_XRGB_8888);
+            this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf.Id);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Set the test type to {0}.", RdpegfxNegativeTypes.SurfaceManagement_CreateDuplicatedSurface);
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.SurfaceManagement_CreateDuplicatedSurface);
 
-			this.TestSite.Log.Add(LogEntryKind.Comment, "Create the second surface with same surface id as the first surface and map the surface to output");
-			// Create & ouput the second surface with a duplicated surface id
-			RDPGFX_RECT16 surfRect2 = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth2, RdpegfxTestUtility.surfHeight2);
-			Surface surf2 = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect2, PixelFormat.PIXEL_FORMAT_XRGB_8888);
-			this.Site.Assert.IsNotNull(surf2, "Surface {0} is created", surf2.Id);
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Create the second surface with same surface id as the first surface and map the surface to output");
+            // Create & ouput the second surface with a duplicated surface id
+            RDPGFX_RECT16 surfRect2 = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth2, RdpegfxTestUtility.surfHeight2);
 
-			this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-			bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-			this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
-		}
+            try
+            {
+                Surface surf2 = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect2, PixelFormat.PIXEL_FORMAT_XRGB_8888);
+                this.Site.Assert.IsNotNull(surf2, "Surface {0} is created", surf2.Id);
+                RDPClientTryDropConnection("create duplicated surface");
+            }
+            catch (Exception ex)
+            {
+                this.TestSite.Log.Add(LogEntryKind.CheckFailed, "SUT should terminate the connection, or deny the request, or ignore the request to create duplicated surface instead of throw out an exception: {0}.", ex.Message);                
+            }
+        }
 
-		[TestMethod]
-        [Priority(1)]
-		[TestCategory("Non-BVT")]
-		[TestCategory("Negative")]
-        [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]		
-		[Description("Attempt to delete a surface, which has inexistent surfaceId")]
-		public void RDPEGFX_SurfaceToScreen_Negative_DeleteInexistentSurface()
-		{
-			this.TestSite.Log.Add(LogEntryKind.Comment, "Do capability exchange.");
-            RDPEGFX_CapabilityExchange();
-
-			this.TestSite.Log.Add(LogEntryKind.Comment, "Create a surface and fill it with green color.");
-			// Create & output a surface 
-			RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
-			Surface surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_XRGB_8888);
-			this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf.Id);
-
-			// Send solid fill request to client to fill surface with green color
-			RDPGFX_RECT16 fillSurfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
-			RDPGFX_RECT16[] fillRects = { fillSurfRect };  // Relative to surface
-			uint fid = this.rdpegfxAdapter.SolidFillSurface(surf, RdpegfxTestUtility.fillColorGreen, fillRects);
-			this.TestSite.Log.Add(LogEntryKind.Comment, "Surface is filled with solid color in frame: {0}", fid);
-
-			// Expect the client to send a frame acknowledge pdu
-			// If the server receives the message, it indicates that the client has been successfully decoded the logical frame of graphics commands
-			this.rdpegfxAdapter.ExpectFrameAck(fid);
-
-			// Delete the surface
-			this.TestSite.Log.Add(LogEntryKind.Comment, "Delete surface {0}", surf.Id);
-			this.rdpegfxAdapter.DeleteSurface(surf.Id);
-
-			// Delete an inexistent surface
-			this.TestSite.Log.Add(LogEntryKind.Comment, "Try to delete an inexistent surface");
-			this.rdpegfxAdapter.DeleteSurface(surf.Id);
-
-			this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-			bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-			this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
-		}
-
-		[TestMethod]
+        [TestMethod]
         [Priority(1)]
         [TestCategory("Non-BVT")]
-		[TestCategory("Negative")]
+        [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]		
-		[Description("Attempt to map bitmap of an inexistent surface to output")]
-		public void RDPEGFX_SurfaceToScreen_Negative_MapInexistentSurfaceToOutput()
-		{
-			this.TestSite.Log.Add(LogEntryKind.Comment, "Do capability exchange.");
+        [TestCategory("RDPEGFX")]
+        [Description("Attempt to delete a surface, which has inexistent surfaceId")]
+        public void RDPEGFX_SurfaceToScreen_Negative_DeleteInexistentSurface()
+        {
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Do capability exchange.");
+            RDPEGFX_CapabilityExchange();
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Create a surface and fill it with green color.");
+            // Create & output a surface 
+            RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
+            Surface surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_XRGB_8888);
+            this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf.Id);
+
+            // Send solid fill request to client to fill surface with green color
+            RDPGFX_RECT16 fillSurfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
+            RDPGFX_RECT16[] fillRects = { fillSurfRect };  // Relative to surface
+            uint fid = this.rdpegfxAdapter.SolidFillSurface(surf, RdpegfxTestUtility.fillColorGreen, fillRects);
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Surface is filled with solid color in frame: {0}", fid);
+
+            // Expect the client to send a frame acknowledge pdu
+            // If the server receives the message, it indicates that the client has been successfully decoded the logical frame of graphics commands
+            this.rdpegfxAdapter.ExpectFrameAck(fid);
+
+            // Delete the surface
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Delete surface {0}", surf.Id);
+            this.rdpegfxAdapter.DeleteSurface(surf.Id);
+
+            try
+            {
+                // Delete an inexistent surface
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Try to delete an inexistent surface");
+                this.rdpegfxAdapter.DeleteSurface(surf.Id);
+
+                //Expect the RDP client handle the negative request by dropping the connection as Windows does, or deny the request or ignore the request.
+                RDPClientTryDropConnection("delete inexistent surface");
+            }
+            catch (Exception ex)
+            {
+                this.TestSite.Log.Add(LogEntryKind.CheckFailed, "SUT should terminate the connection, or deny the request, or ignore the request to create duplicated surface instead of throw out an exception: {0}.", ex.Message);
+            }
+        }
+
+        [TestMethod]
+        [Priority(1)]
+        [TestCategory("Non-BVT")]
+        [TestCategory("Negative")]
+        [TestCategory("RDP8.0")]
+        [TestCategory("RDPEGFX")]
+        [Description("Attempt to map bitmap of an inexistent surface to output")]
+        public void RDPEGFX_SurfaceToScreen_Negative_MapInexistentSurfaceToOutput()
+        {
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Do capability exchange.");
             RDPEGFX_CapabilityExchange();
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Set the test type to {0}.", RdpegfxNegativeTypes.SurfaceManagement_MapInexistentSurfaceToOutput);
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.SurfaceManagement_MapInexistentSurfaceToOutput);
 
-			this.TestSite.Log.Add(LogEntryKind.Comment, "Create a surface and map an inexistent surface to output");
-			// Create a surface and output an inexisent surface to output
-			RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
-			Surface surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_XRGB_8888);
-			this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf.Id);
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Create a surface and map an inexistent surface to output");            
+            
+            try
+            {
+                // Create a surface and output an inexisent surface to output
+                RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
+                Surface surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_XRGB_8888);
+                this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf.Id);
 
-			this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-			bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-			this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
-		}
+                RDPClientTryDropConnection("create a surface and map an inexistent surface to output");
+            }
+            catch (Exception ex)
+            {
+                this.TestSite.Log.Add(LogEntryKind.TestFailed, "SUT should terminate the connection, or deny the request, or ignore the request to map inexistent surface to output instead of throw out an exception: {0}.", ex.Message);
+            }
+        }
 
-		[TestMethod]
+        [TestMethod]
         [Priority(1)]
         [TestCategory("Non-BVT")]
-		[TestCategory("Negative")]
+        [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]		
-		[Description("Attempt to fill solid to an inexistent surface")]
-		public void RDPEGFX_SurfaceToScreen_Negative_SolidFillToInexistentSurface()
-		{
-			this.TestSite.Log.Add(LogEntryKind.Comment, "Do capability exchange.");
+        [TestCategory("RDPEGFX")]
+        [Description("Attempt to fill solid to an inexistent surface")]
+        public void RDPEGFX_SurfaceToScreen_Negative_SolidFillToInexistentSurface()
+        {
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Do capability exchange.");
             RDPEGFX_CapabilityExchange();
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Set the test type to {0}.", RdpegfxNegativeTypes.SurfaceManagement_SolidFill_ToInexistentSurface);
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.SurfaceManagement_SolidFill_ToInexistentSurface);
 
-			this.TestSite.Log.Add(LogEntryKind.Comment, "Create a surface and fill an inexistent surface with green color.");
-			// Create & output a surface 
-			RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
-			Surface surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_XRGB_8888);
-			this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf.Id);
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Create a surface and fill an inexistent surface with green color.");
+            // Create & output a surface 
+            RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
+            Surface surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_XRGB_8888);
+            this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf.Id);
 
-			// Send solid fill request to client to fill surface with green color
-			RDPGFX_RECT16 fillSurfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
-			RDPGFX_RECT16[] fillRects = { fillSurfRect };  // Relative to surface
-			uint fid = this.rdpegfxAdapter.SolidFillSurface(surf, RdpegfxTestUtility.fillColorGreen, fillRects);
-			this.TestSite.Log.Add(LogEntryKind.Comment, "Solid color to fill an existent surface in frame: {0}", fid);
+            // Send solid fill request to client to fill surface with green color
+            RDPGFX_RECT16 fillSurfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
+            RDPGFX_RECT16[] fillRects = { fillSurfRect };  // Relative to surface
+                      
+            try
+            {
+                //Solid fill to an inexistent surface(surfaceID: 0xffff)
+                uint fid = this.rdpegfxAdapter.SolidFillSurface(surf, RdpegfxTestUtility.fillColorGreen, fillRects);
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Solid color to fill an inexistent surface in frame: {0}", fid);
 
-			this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-			bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-			this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
-		}
+                //Expect the RDP client handle the negative request by dropping the connection as Windows does, or deny the request or ignore the request.
+                RDPClientTryDropConnection("solid color to fill an inexistent surface");
+            }
+            catch (Exception ex)
+            {
+                this.TestSite.Log.Add(LogEntryKind.CheckFailed, "SUT should terminate the connection, or deny the request, or ignore the request to create duplicated surface instead of throw out an exception: {0}.", ex.Message);
+            }          
+        }
 
-		[TestMethod]
+        [TestMethod]
         [Priority(1)]
         [TestCategory("Non-BVT")]
-		[TestCategory("Negative")]
+        [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]		
-		[Description("Check if client can handle a message with incorrect pdu length in RDPGFX_HEADER")]
-		public void RDPEGFX_SurfaceToScreen_Negative_IncorrectPduLengthInHeader()
-		{
-			this.TestSite.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
-			StartRDPConnection();
+        [TestCategory("RDPEGFX")]
+        [Description("Check if client can handle a message with incorrect pdu length in RDPGFX_HEADER")]
+        public void RDPEGFX_SurfaceToScreen_Negative_IncorrectPduLengthInHeader()
+        {
+            this.TestSite.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
+            StartRDPConnection();
 
-			this.TestSite.Log.Add(LogEntryKind.Debug, "Creating dynamic virtual channels for MS-RDPEGFX ...");
+            this.TestSite.Log.Add(LogEntryKind.Debug, "Creating dynamic virtual channels for MS-RDPEGFX ...");
             bool bProtocolSupported = this.rdpegfxAdapter.ProtocolInitialize(this.rdpedycServer);
-			this.TestSite.Assert.IsTrue(bProtocolSupported, "Client should support this protocol.");
+            this.TestSite.Assert.IsTrue(bProtocolSupported, "Client should support this protocol.");
 
-			this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting capability advertise from client.");
-			RDPGFX_CAPS_ADVERTISE capsAdv = this.rdpegfxAdapter.ExpectCapabilityAdvertise();
-			this.TestSite.Assert.IsNotNull(capsAdv, "RDPGFX_CAPS_ADVERTISE is received.");
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting capability advertise from client.");
+            RDPGFX_CAPS_ADVERTISE capsAdv = this.rdpegfxAdapter.ExpectCapabilityAdvertise();
+            this.TestSite.Assert.IsNotNull(capsAdv, "RDPGFX_CAPS_ADVERTISE is received.");
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Set the test type to {0}.", RdpegfxNegativeTypes.SurfaceToScreen_Incorrect_PduLengthInHeader);
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.SurfaceToScreen_Incorrect_PduLengthInHeader);
+            
+            try
+            {
+                // Set first capset in capability advertise request, if no capdata in request, use default flag.
+                CapsFlags capFlag = CapsFlags.RDPGFX_CAPS_FLAG_DEFAULT;
+                if (capsAdv.capsSetCount > 0)
+                    capFlag = (CapsFlags)BitConverter.ToUInt32(capsAdv.capsSets[0].capsData, 0);
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Sending capability confirm with incorrect pdu length in RDPGFX_HEADER to client.");
+                this.rdpegfxAdapter.SendCapabilityConfirm(capFlag);
 
-			// Set first capset in capability advertise request, if no capdata in request, use default flag.
-			CapsFlags capFlag = CapsFlags.RDPGFX_CAPS_FLAG_DEFAULT;
-			if (capsAdv.capsSetCount > 0)
-				capFlag = (CapsFlags)BitConverter.ToUInt32(capsAdv.capsSets[0].capsData, 0);
-			this.TestSite.Log.Add(LogEntryKind.Comment, "Sending capability confirm with incorrect pdu length in RDPGFX_HEADER to client.");
-			this.rdpegfxAdapter.SendCapabilityConfirm(capFlag);
+                RDPClientTryDropConnection("capability confirm with incorrect pdu length in RDPGFX_HEADER ");                
+            }
+            catch (Exception ex)
+            {
+                this.TestSite.Log.Add(LogEntryKind.TestFailed, "SUT should terminate the connection, or deny the request, or ignore the request to solid fill to inexistent surface instead of throw out an exception: {0}.", ex.Message);
+            }
+        }
 
-			this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-			bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-			this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
-		}
-	}
+    
+    }
 }

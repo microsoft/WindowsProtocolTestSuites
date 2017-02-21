@@ -94,9 +94,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending capability confirm message not using RDP 8.0 compression technology without segment header to client.");
             this.rdpegfxAdapter.SendCapabilityConfirm(capFlag);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
+            RDPClientTryDropConnection("capability confirm message without RDP 8.0 compression technology without segment header");            
         }
 
 
@@ -182,9 +180,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending capability confirm message without segment header to the client. This message is compressed by RDP 8.0 compression technology.");
             this.rdpegfxAdapter.SendCapabilityConfirm(capFlag);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
+            RDPClientTryDropConnection("capability confirm message without segment header");            
         }
 
         [TestMethod]
@@ -217,9 +213,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending capability confirm message with segment descriptor is neither 0xE0 nor 0xE1 to client.");
             this.rdpegfxAdapter.SendCapabilityConfirm(capFlag);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
+            RDPClientTryDropConnection("capability confirm message with segment descriptor is neither 0xE0 nor 0xE1");
         }
 
 
@@ -253,9 +247,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending capability confirm message with single segment with segmentCount field to client.");
             this.rdpegfxAdapter.SendCapabilityConfirm(capFlag);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
+            RDPClientTryDropConnection("capability confirm message with single segment with segmentCount field");
         }
 
 
@@ -289,9 +281,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending capability confirm message with single segment with UncompressedSize field to client.");
             this.rdpegfxAdapter.SendCapabilityConfirm(capFlag);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
+            RDPClientTryDropConnection("capability confirm message with single segment with UncompressedSize field");
         }
 
 
@@ -325,9 +315,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending capability confirm message with single segment with SegmentArray field to client.");
             this.rdpegfxAdapter.SendCapabilityConfirm(capFlag);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid message received.");
+            RDPClientTryDropConnection("capability confirm message with single segment with SegmentArray field");
         }
 
         [TestMethod]
@@ -368,9 +356,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send a large size bitmap using multipart datapacking but without SegmentCount field to the client for frame {0}.", fid);
             fid = this.rdpegfxAdapter.SendUncompressedImage(compImage, RdpegfxTestUtility.imgPos.x, RdpegfxTestUtility.imgPos.y, surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, compFlag, RdpegfxTestUtility.segmentPartSize);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when received an invalid message.");
+            RDPClientTryDropConnection("a large size bitmap using multipart datapacking but without SegmentCount field");
         }
 
         [TestMethod]
@@ -411,9 +397,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send a large size bitmap using multipart datapacking but without UncompressedSize field to the client for frame {0}.", fid);
             fid = this.rdpegfxAdapter.SendUncompressedImage(compImage, RdpegfxTestUtility.imgPos.x, RdpegfxTestUtility.imgPos.y, surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, compFlag, RdpegfxTestUtility.segmentPartSize);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when received an invalid message.");
+            RDPClientTryDropConnection("a large size bitmap using multipart datapacking but without SegmentCount field");
         }
 
 
@@ -458,9 +442,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send a large size bitmap using multipart datapacking but without SegmentArray field to the client for frame {0}.", fid);
             fid = this.rdpegfxAdapter.SendUncompressedImage(compImage, RdpegfxTestUtility.imgPos.x, RdpegfxTestUtility.imgPos.y, surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, compFlag, RdpegfxTestUtility.segmentPartSize);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when received an invalid message.");
+            RDPClientTryDropConnection("a large size bitmap using multipart datapacking but without SegmentArray field");
         }
     }
 
