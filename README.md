@@ -73,6 +73,8 @@ Some test suites use [Model-Based Testing](https://msdn.microsoft.com/en-us/libr
 * **BranchCache Server Test Suite**
 * **ADFamily Test Suite**
 * **ADFSPIP Client Test Suite**
+* **AZOD Test Suite**
+* **ADOD Test Suite**
 
 ## Build
 
