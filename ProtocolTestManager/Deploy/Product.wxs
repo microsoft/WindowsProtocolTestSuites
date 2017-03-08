@@ -29,6 +29,7 @@
 	  <ComponentGroupRef Id="ADFAMILY_PLUGIN"/>
       <ComponentGroupRef Id="RDP_PLUGIN"/>
 	  <ComponentGroupRef Id="AZOD_PLUGIN" />
+	  <ComponentGroupRef Id="ADOD_PLUGIN" />
 	  <ComponentGroupRef Id="ADFSPIP_PLUGIN" />
       <ComponentRef Id="ApplicationShortcut"/>
       <ComponentRef Id="DesktopShortcuts"/>
@@ -104,6 +105,7 @@
             <Directory Id="RDPCONFIG" Name="rdp" />
             <Directory Id="KERBEROSCONFIGFOLDER" Name="kerberos" />
 			<Directory Id="AZODCONFIGFOLDER" Name="MS-AZOD" />
+			<Directory Id="ADODCONFIGFOLDER" Name="MS-ADOD" />
 			<Directory Id="ADFSPIPCONFIGFOLDER" Name="MS-ADFSPIP" />
 			<Directory Id="ADFAMILYCONFIGFOLDER" Name="adfamily" />
           </Directory>
@@ -113,6 +115,7 @@
             <Directory Id="RDPDOCFOLDER" Name="rdp" />
             <Directory Id="KERBEROSDOCFOLDER" Name="kerberos" />
 			<Directory Id="AZODDOCFOLDER" Name="MS-AZOD" />
+			<Directory Id="ADODDOCFOLDER" Name="MS-ADOD" />
 			<Directory Id="ADFSPIPDOCFOLDER" Name="MS-ADFSPIP" />
 			<Directory Id="ADFAMILYDOCFOLDER" Name="adfamily" />
           </Directory>

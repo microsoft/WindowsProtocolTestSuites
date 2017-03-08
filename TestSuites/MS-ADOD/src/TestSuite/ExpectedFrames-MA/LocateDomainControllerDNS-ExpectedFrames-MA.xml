@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ExpectedMessageList>
+  <Filter>(DNS OR CLDAP)</Filter>
+  <!--1. DNS SRV Query-->
+  <ExpectedMessage>
+    <Description>1. DNS SRV Query: The FQDN of the domain in which the domain controller is to be located is available. The domain client makes use of the FQDN of the domain along with site information from the client and sends an SRV query to the DNS server to get a list of IP addresses of candidate domain controllers.</Description>
+    <Name>DNS.DNSMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <!--DNS.RCode-->
+    <!--DNS.Question[0].QueryName-->
+    <!--DNS.Question[0].Type-->
+    <!--DNS.Question[0].Class-->
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="RCode" Value="0" Type="ushort"/>
+    </VerifyItemList>
+    <ArrayField FieldName="Question">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="QueryName" Value="_ldap._tcp.dc._msdcs.{FullDomainName}" Type="string"/>
+          <VerifyItem Operation="equal" FieldName="Type" Value="33" Type="ushort"/>
+          <VerifyItem Operation="equal" FieldName="Class" Value="1" Type="ushort"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--2. DNS SRV Response-->
+  <ExpectedMessage>
+    <Description>2. DNS SRV Response: If no candidate domain controllers can be identified using SRV queries, the client should fall back to NetBIOS-based location. Active Directory servers offer the Lightweight Directory Access Protocol (LDAP) service over the TCP protocol; for example (see [MS-ADTS] section 6.3.6), clients can find an LDAP server by querying DNS for a record of the form:_ldap._tcp.DnsDomainName.</Description>
+    <Name>DNS.DNSMessage</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <!--DNS.RCode-->
+    <!--DNS.Answer[0].Name-->
+    <!--DNS.Answer[0].Type-->
+    <!--DNS.Answer[0].Class-->
+    <!--DNS.Answer[0].RData.Target-->
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="RCode" Value="0" Type="ushort"/>
+    </VerifyItemList>
+    <ArrayField FieldName="Answer">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Name" Value="_ldap._tcp.dc._msdcs.{FullDomainName}" Type="string"/>
+          <VerifyItem Operation="equal" FieldName="Type" Value="33" Type="ushort"/>
+          <VerifyItem Operation="equal" FieldName="Class" Value="1" Type="ushort"/>
+          <VerifyItem Operation="equal" FieldName="RData.Target" Value="{NetbiosComputerName}.{FullDomainName}" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--3. DNS A/AAAA Query-->
+  <ExpectedMessage>
+    <Description>3. DNS A/AAAA Query: After the list of candidate domain controllers is obtained by using the DNS infrastructure, the domain client selects a candidate domain controller that is based on a weighted random order ([RFC2052]). The client sends A/AAAA DNS queries to resolve the SRV record to an IP address.</Description>
+    <Name>DNS.DNSMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <!--DNS.RCode-->
+    <!--DNS.Question[0].QueryName-->
+    <!--DNS.Question[0].Type-->
+    <!--DNS.Question[0].Class-->
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="RCode" Value="0" Type="ushort"/>
+    </VerifyItemList>
+    <ArrayField FieldName="Question">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="QueryName" Value="{NetbiosComputerName}.{FullDomainName}" Type="string"/>
+          <VerifyItem Operation="equal" FieldName="Type" Value="1" Type="ushort"/>
+          <VerifyItem Operation="equal" FieldName="Class" Value="1" Type="ushort"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--4. DNS A/AAAA Response-->
+  <ExpectedMessage>
+    <Description>4. DNS A/AAAA Response: The domain client receives the IP address that was resolved from the SRV record in an A/AAAA DNS response.</Description>
+    <Name>DNS.DNSMessage</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <!--DNS.RCode-->
+    <!--DNS.Answer[0].RData.Octets-->
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="RCode" Value="0" Type="ushort"/>
+    </VerifyItemList>
+    <ArrayField FieldName="Answer">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Name" Value="{NetbiosComputerName}.{FullDomainName}" Type="string"/>
+          <VerifyItem Operation="equal" FieldName="Type" Value="1" Type="ushort"/>
+          <VerifyItem Operation="equal" FieldName="Class" Value="1" Type="ushort"/>
+          <VerifyItem Operation="equal" FieldName="RDLength" Value="4" Type="ushort"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--5. LDAP Ping-->
+  <ExpectedMessage>
+    <Description>5. LDAP Ping: After the IP address is known, the client sends an LDAP Ping to the candidate domain controller to determine whether the domain controller is in fact handling requests and whether its capabilities satisfy the client's requirements.</Description>
+    <Name>CLDAP.CldapMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <ArrayField FieldName="ProtocolOp.Filter.Content.Content">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Content.AttributeDesc" Value="DnsDomain" Type="string"/>
+          <VerifyItem Operation="equal" FieldName="Content.AssertionValue" Value="{FullDomainName}" Type="string"/>
+        </VerifyItemList>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Content.AttributeDesc" Value="Host" Type="string"/>
+          <VerifyItem Operation="equal" FieldName="Content.AssertionValue" Value="{ClientComputerName}" Type="string"/>
+        </VerifyItemList>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Content.AttributeDesc" Value="NtVer" Type="string"/>
+        </VerifyItemList>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Content.AttributeDesc" Value="DnsHostName" Type="string"/>
+          <VerifyItem Operation="equal" FieldName="Content.AssertionValue" Value="{ClientComputerName}" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+    <ArrayField FieldName="ProtocolOp.Attributes">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="Netlogon" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--6. LDAP Ping response-->
+  <ExpectedMessage>
+    <Description>6. LDAP Ping response: Upon receipt of a successful LDAP Ping response, the domain client validates that the capabilities that the domain controller returned satisfy the requested capabilities. If the capabilities that the domain controller returned are incompatible with the requirements that the client specifies, the client selects another candidate domain controller from the list of domain controller SRV records that were returned in step 2 and repeats steps 3 through 6.</Description>
+    <Name>ADTS.NetlogonSamLogonResponseEx</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Opcode" Value="23" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="DnsForestName" Value="{FullDomainName}" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="DnsHostName" Value="{NetbiosComputerName}.{FullDomainName}" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="NetbiosDomainName" Value="{NetbiosDomainName}" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="NetbiosComputerName" Value="{NetbiosComputerName}" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="LmNtToken" Value="65535" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Lm20Token" Value="65535" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+</ExpectedMessageList>

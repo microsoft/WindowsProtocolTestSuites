@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExpectedFrames Name="ObtainUserAcctListLDAP">
+  <CatureFilter></CatureFilter>
+  <SpecialFilter></SpecialFilter>
+  <VerificationFilters>
+    <Filter>(LDAPMessage) AND ((sourcenetworkaddress == {ClientIP} AND destinationnetworkaddress == {PDCIP}) OR (destinationnetworkaddress == {ClientIP} AND sourcenetworkaddress ==  {PDCIP}))</Filter>
+  </VerificationFilters>
+  <ExpectedFrameList>
+    <ExpectedFrame Name="BindRequest" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.BindRequest" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="BindResponse" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.BindResponse" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="SearchRequest" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchRequest" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="SearchResultEntry" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchResultEntry" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+  </ExpectedFrameList>
+</ExpectedFrames>

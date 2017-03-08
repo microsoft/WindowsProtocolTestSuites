@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?define SRCDIR=$(env.TestSuiteRoot)\drop\ProtocolTestManager?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="ADODDOCFOLDER">
+            <Component Id="cmp22D8A356EF514FF7B52B8FDB0882A894" Guid="{10649A20-DE87-43FD-BC14-6B4FC5203DAE}">
+                <File Id="filE6C457DE4D604B4EA6F45672366D4B0A" Source="..\Plugins\ADODPlugin\ADODPlugin\Doc\index.html" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="LIBFOLDER">
+	        <?if $(env.DEBUGVER) = 1?>
+                <Component Id="ADODPlugin.pdb" Guid="{B54456C7-C832-4898-9FF9-ED1F083FCFE5}">
+                    <File Id="ADODPlugin.pdb" Source="$(var.SRCDIR)\lib\ADODPlugin.pdb" />
+                </Component>
+            <?endif ?>
+            <Component Id="ADODPlugin.dll" Guid="{3DED3E5D-20ED-46DB-A50E-DF263342BB58}">
+                <File Id="ADODPlugin.dll" Source="$(var.SRCDIR)\lib\ADODPlugin.dll" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="ADODCONFIGFOLDER">
+            <Component Id="ADODConfigFile" Guid="{9F9004AE-9E4C-4680-92F1-FDC6C9E1976D}">
+                <File Id="ADODConfigFile" Source="..\Plugins\ADODPlugin\ADODPlugin\config.xml" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="ADOD_PLUGIN">
+            <ComponentRef Id="cmp22D8A356EF514FF7B52B8FDB0882A894" />
+            <ComponentRef Id="ADODPlugin.dll" />
+            <ComponentRef Id="ADODConfigFile" />
+	        <?if $(env.DEBUGVER) = 1?>
+              <ComponentRef Id="ADODPlugin.pdb" />
+            <?endif ?>
+        </ComponentGroup>
+    </Fragment>
+</Wix>
