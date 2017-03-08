@@ -49,6 +49,7 @@ namespace Microsoft.Protocol.TestSuites.ADOD.TestSuite
         [Priority(0)]
         [Description("Locate DC DNS")]
         [TestCategory("BVT")]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void LocateDomainControllerDNS()
         {
             #region LocalVariables
@@ -132,6 +133,7 @@ namespace Microsoft.Protocol.TestSuites.ADOD.TestSuite
         [Description("Locate DC NetBIOS")]
         [TestCategory("non BVT")]
         [TestCategory("pre-win8")]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void LocateDomainControllerNetbios()
         {
             #region LocalVariables
@@ -214,6 +216,7 @@ namespace Microsoft.Protocol.TestSuites.ADOD.TestSuite
         [Priority(0)]
         [Description("Join Domain by Creating An Account")]
         [TestCategory("BVT")]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void JoinDomainCreateAcct()
         {
             if (this.TestConfig.ClientOSVersion <= 6.0)
@@ -478,6 +481,7 @@ this.TestSite.Assert.IsTrue(true, "Start Message Analyzer on driver computer sho
         [Priority(0)]
         [Description("Joining domain by a predefined computer account")]
         [TestCategory("BVT")]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void JoinDomainPredefAcct()
         {
             #region LocalVariables
@@ -611,6 +615,7 @@ this.TestSite.Assert.IsTrue(true, "Start Message Analyzer on driver computer sho
         [Priority(0)]
         [Description("Unjoin domain")]
         [TestCategory("BVT")]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void UnjoinDomain()
         {
             #region LocalVariables
@@ -737,6 +742,7 @@ this.TestSite.Assert.IsTrue(true, "Start Message Analyzer on driver computer sho
         [Priority(0)]
         [Description("Provision a User Account using LDAP")]
         [TestCategory("non BVT")]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void ProvisionUserAcctLDAP()
         {
             #region LocalVariables
@@ -831,6 +837,7 @@ this.TestSite.Assert.IsTrue(true, "Start Message Analyzer on driver computer sho
         [Priority(0)]
         [Description("Provision a User Account using SAMR")]
         [TestCategory("non BVT")]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void ProvisionUserAcctSAMR()
         {
             #region LocalVariables
@@ -926,6 +933,7 @@ this.TestSite.Assert.IsTrue(true, "Start Message Analyzer on driver computer sho
         [Priority(0)]
         [Description("Change a User Account Password using LDAP")]
         [TestCategory("non BVT")]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void ChangeUserAcctPasswordLDAP()
         {
             #region LocalVariables
@@ -1026,6 +1034,7 @@ this.TestSite.Assert.IsTrue(true, "Start Message Analyzer on driver computer sho
         [Priority(0)]
         [Description("Change a User Account Password using SAMR")]
         [TestCategory("non BVT")]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void ChangeUserAcctPasswordSAMR()
         {
             #region LocalVariables
@@ -1126,6 +1135,7 @@ this.TestSite.Assert.IsTrue(true, "Start Message Analyzer on driver computer sho
         [Priority(0)]
         [Description("Determine the Group Membership of a User Account using LDAP")]
         [TestCategory("non BVT")]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void DetermineUserAcctMembershipLDAP()
         {
             #region LocalVariables
@@ -1332,6 +1342,7 @@ this.TestSite.Assert.IsTrue(true, "Start Message Analyzer on driver computer sho
         [Priority(0)]
         [Description("Delete a User Account")]
         [TestCategory("non BVT")]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void DeleteUserAcct()
         {
             #region LocalVariables
@@ -1419,6 +1430,7 @@ this.TestSite.Assert.IsTrue(true, "Start Message Analyzer on driver computer sho
         [Priority(0)]
         [Description("Obtain a List of User Accounts using LDAP")]
         [TestCategory("non BVT")]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void ObtainUserAcctListLDAP()
         {
             #region LocalVariables
@@ -1519,6 +1531,7 @@ this.TestSite.Assert.IsTrue(true, "Start Message Analyzer on driver computer sho
         [Priority(0)]
         [Description("Manage Groups and Their Memberships")]
         [TestCategory("non BVT")]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void ManageGroupsandTheirMemberships()
         {
             #region LocalVariables
@@ -1621,6 +1634,7 @@ this.TestSite.Assert.IsTrue(true, "Start Message Analyzer on driver computer sho
         [Priority(0)]
         [Description("Delete a Group")]
         [TestCategory("non BVT")]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void DeleteGroup()
         {
             #region LocalVariables
