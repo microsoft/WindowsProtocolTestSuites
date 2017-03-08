@@ -33,6 +33,7 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
         #region Constant
         private const string tcComputerNameTitle = "SUT Name";
         private const string isWindowsImplementationTitle = "IsWindowsImplementation";
+        private const string dropConnectionForInvalidRequestTitle = "DropConnectionForInvalidRequest";
         private const string triggerMethodTitle = "Trigger RDP Client By";
         private const string userNameInTCTitle =  "SUT User Name \n* Only for PowerShell Trigger";
         private const string userPwdInTCTitle = "SUT Password \n* Only for PowerShell Trigger";
@@ -68,11 +69,13 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
             string userNameInTC = DetectorUtil.GetPropertyValue("SUTUserName");
             string userPwdInTC = DetectorUtil.GetPropertyValue("SUTUserPassword");
             string isWindowsImplementation = DetectorUtil.GetPropertyValue("IsWindowsImplementation");
+            string DropConnectionForInvalidRequest = isWindowsImplementation.ToUpper().Equals("TRUE") ? "true": DetectorUtil.GetPropertyValue("DropConnectionForInvalidRequest"); // The value is always true for Windows implementation.
 
             List<string> sutNames = new List<string>();
             List<string> userNamesInTC = new List<string>();
             List<string> userPwdsInTC = new List<string>();
             List<string> isWindowsImplementationList = new List<string>();
+            List<string> dropConnectionForInvalidRequestList = new List<string>();
 
             if (string.IsNullOrWhiteSpace(sutName)
                 || string.IsNullOrWhiteSpace(userNameInTC)
@@ -90,19 +93,24 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
                 sutNames.Add(sutName);
                 userNamesInTC.Add(userNameInTC);
                 userPwdsInTC.Add(userPwdInTC);
+               
                 isWindowsImplementationList.Add(isWindowsImplementation);
                 if (isWindowsImplementation.ToUpper().Equals("TRUE"))
-                {
+                {                    
                     isWindowsImplementationList.Add("false");
                 }
                 else
                 {
-                    isWindowsImplementationList.Add("true");
+                    isWindowsImplementationList.Add("true");                    
                 }
             }
 
+            dropConnectionForInvalidRequestList.Add("true");
+            dropConnectionForInvalidRequestList.Add("false");
+
             propertiesDic.Add(tcComputerNameTitle, sutNames);            
             propertiesDic.Add(isWindowsImplementationTitle, isWindowsImplementationList);
+            propertiesDic.Add(dropConnectionForInvalidRequestTitle, dropConnectionForInvalidRequestList);
             propertiesDic.Add(triggerMethodTitle, new List<string>() { "Powershell", "Managed", "Interactive"});
             propertiesDic.Add(userNameInTCTitle, userNamesInTC);
             propertiesDic.Add(userPwdInTCTitle, userPwdsInTC);
@@ -129,6 +137,7 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
             detectionInfo.UserNameInTC = properties[userNameInTCTitle];
             detectionInfo.UserPwdInTC = properties[userPwdInTCTitle];
             detectionInfo.IsWindowsImplementation = properties[isWindowsImplementationTitle];
+            detectionInfo.DropConnectionForInvalidRequest = properties[dropConnectionForInvalidRequestTitle];
             detectionInfo.TriggerMethod = TriggerMethod.Powershell;
             if (properties[triggerMethodTitle] != null && properties[triggerMethodTitle].Equals("Interactive"))
             {
@@ -198,7 +207,8 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
             propertiesDic.Add("SUTUserName", new List<string>() { detectionInfo.UserNameInTC });
             propertiesDic.Add("SUTUserPassword", new List<string>() { detectionInfo.UserPwdInTC });
             propertiesDic.Add("IsWindowsImplementation", new List<string>() { detectionInfo.IsWindowsImplementation });
-
+            propertiesDic.Add("DropConnectionForInvalidRequest", new List<string>() { detectionInfo.DropConnectionForInvalidRequest });
+            
             propertiesDic.Add("RDP.Client.SupportAutoReconnect", new List<string>() { NullableBoolToString(detectionInfo.IsSupportAutoReconnect) });
             propertiesDic.Add("RDP.Client.SupportServerRedirection", new List<string>() { NullableBoolToString(detectionInfo.IsSupportServerRedirection) });
             propertiesDic.Add("RDP.Client.SupportRDPEFS", new List<string>() { NullableBoolToString(detectionInfo.IsSupportRDPEFS) });

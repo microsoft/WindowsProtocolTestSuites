@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 8.00.0595 */
-/* at Tue Apr 28 13:20:18 2015
+/* at Fri Nov 04 11:26:24 2016
  */
 /* Compiler settings for ms-drsr.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.00.0595 
@@ -42,7 +42,7 @@
 /* Forward Declarations */ 
 
 /* header files for imported files */
-//#include "ms-dtyp.h"
+#include "ms-dtyp.h"
 
 #ifdef __cplusplus
 extern "C"{
@@ -362,13 +362,6 @@ typedef /* [public][public][public][public][public] */ struct __MIDL_drsuapi_003
     UCHAR unusedPad;
     USHORT nextRDN;
     } 	NAMERESOP_DRS_WIRE_V1;
-
-typedef struct _RPC_UNICODE_STRING
-    {
-    unsigned short Length;
-    unsigned short MaximumLength;
-    /* [length_is][size_is] */ WCHAR *Buffer;
-    } 	RPC_UNICODE_STRING;
 
 typedef struct _DSA_ADDRESS_LIST_DRS_WIRE_V1
     {
@@ -1592,6 +1585,50 @@ typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0189
     /* [case()] */ DRS_MSG_ADDCLONEDCREPLY_V1 V1;
     } 	DRS_MSG_ADDCLONEDCREPLY;
 
+typedef struct _DRS_MSG_WRITENGCKEYREQ_V1
+    {
+    /* [string] */ const WCHAR *pwszAccount;
+    /* [range] */ DWORD cNgcKey;
+    /* [size_is] */ UCHAR *pNgcKey;
+    } 	DRS_MSG_WRITENGCKEYREQ_V1;
+
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0190
+    {
+    /* [case()] */ DRS_MSG_WRITENGCKEYREQ_V1 V1;
+    } 	DRS_MSG_WRITENGCKEYREQ;
+
+typedef struct _DRS_MSG_WRITENGCKEYREPLY_V1
+    {
+    DWORD retVal;
+    } 	DRS_MSG_WRITENGCKEYREPLY_V1;
+
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0191
+    {
+    /* [case()] */ DRS_MSG_WRITENGCKEYREPLY_V1 V1;
+    } 	DRS_MSG_WRITENGCKEYREPLY;
+
+typedef struct _DRS_MSG_READNGCKEYREQ_V1
+    {
+    /* [string] */ const WCHAR *pwszAccount;
+    } 	DRS_MSG_READNGCKEYREQ_V1;
+
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0192
+    {
+    /* [case()] */ DRS_MSG_READNGCKEYREQ_V1 V1;
+    } 	DRS_MSG_READNGCKEYREQ;
+
+typedef struct _DRS_MSG_READNGCKEYREPLY_V1
+    {
+    DWORD retVal;
+    /* [range] */ DWORD cNgcKey;
+    /* [size_is] */ UCHAR *pNgcKey;
+    } 	DRS_MSG_READNGCKEYREPLY_V1;
+
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0193
+    {
+    /* [case()] */ DRS_MSG_READNGCKEYREPLY_V1 V1;
+    } 	DRS_MSG_READNGCKEYREPLY;
+
 ULONG IDL_DRSBind( 
     /* [in] */ handle_t rpc_handle,
     /* [unique][in] */ UUID *puuidClientDsa,
@@ -1776,6 +1813,20 @@ ULONG IDL_DRSAddCloneDC(
     /* [switch_is][ref][in] */ DRS_MSG_ADDCLONEDCREQ *pmsgIn,
     /* [ref][out] */ DWORD *pdwOutVersion,
     /* [switch_is][ref][out] */ DRS_MSG_ADDCLONEDCREPLY *pmsgOut);
+
+ULONG IDL_DRSWriteNgcKey( 
+    /* [ref][in] */ DRS_HANDLE hDrs,
+    /* [in] */ DWORD dwInVersion,
+    /* [switch_is][ref][in] */ DRS_MSG_WRITENGCKEYREQ *pmsgIn,
+    /* [ref][out] */ DWORD *pdwOutVersion,
+    /* [switch_is][ref][out] */ DRS_MSG_WRITENGCKEYREPLY *pmsgOut);
+
+ULONG IDL_DRSReadNgcKey( 
+    /* [ref][in] */ DRS_HANDLE hDrs,
+    /* [in] */ DWORD dwInVersion,
+    /* [switch_is][ref][in] */ DRS_MSG_READNGCKEYREQ *pmsgIn,
+    /* [ref][out] */ DWORD *pdwOutVersion,
+    /* [switch_is][ref][out] */ DRS_MSG_READNGCKEYREPLY *pmsgOut);
 
 
 

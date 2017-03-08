@@ -22,7 +22,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("BVT")]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client accepts RFX Progressive codec stream which is progressively encoded.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_ProgressiveEncoding_Default()
         {
@@ -43,9 +43,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Debug, "Surface is filled with solid color in frame: {0}", fid);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages(Progressive Encoding) to client. to client."); 
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
-                                                            false, true, ImageQuality_Values.Midium, true, false, true);
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages(Progressive Encoding) to client. to client.");
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888, false, true, ImageQuality_Values.Midium, true, false, false);
+            
             fid = SendRfxProgCodecEcodedData(layerDataList);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
@@ -62,7 +62,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("BVT")]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client accepts RFX Progressive codec stream which is non-progressively encoded.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_NonProgressiveEncoding_Default()
         {
@@ -83,7 +83,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Debug, "Surface is filled with solid color in frame: {0}", fid);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages(Non-Progressive Encoding) to client.");       
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages(Non-Progressive Encoding) to client.");
             List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, false, false, true);
             fid = SendRfxProgCodecEcodedData(layerDataList);
@@ -101,7 +101,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(0)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client accepts RFX Progressive codec stream which is progressively encoded with tile diff.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_ProgressiveEncodingWithTileDiff()
         {
@@ -153,7 +153,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(0)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client accepts RFX Progressive codec stream which is non-progressively encoded with tile diff.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_NonProgressiveEncodingWithTileDiff()
         {
@@ -187,7 +187,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             // Add a diagonal to the test image and send it again, the image data should be sent in tile diff method.
             Bitmap newBitmap = RdpegfxTestUtility.drawDiagonal(testData.RfxProgCodecImage);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Sending second bitmap Data Messages, non-progressively encoded by RemoteFX Progressive Codec(tile diff enabled), to client.");            
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Sending second bitmap Data Messages, non-progressively encoded by RemoteFX Progressive Codec(tile diff enabled), to client.");
             List<Dictionary<uint, byte[]>> layerDataList2 = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, newBitmap, PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Midium, false, true, true);
             fid = SendRfxProgCodecEcodedData(layerDataList2);
@@ -205,7 +205,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client accepts RFX Progressive codec stream when surface size is not tile aligned.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_ProgressiveEncoding_SurfaceNotTileAligned()
         {
@@ -246,7 +246,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client accepts RFX Progressive codec stream when surface size is not tile aligned.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_NonProgressiveEncoding_SurfaceNotTileAligned()
         {
@@ -287,7 +287,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client accepts RFX Progressive codec stream with sync block.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_WithSyncBlock()
         {
@@ -324,7 +324,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client accepts RFX Progressive codec stream without context block.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_WithoutContextBlock()
         {
@@ -361,7 +361,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client accepts second RFX Progressive codec stream (progressively encoded) with SubBand_Diffing disabled in context block.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_ProgressiveEncoding_SubBandDiffDisabled()
         {
@@ -413,7 +413,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client accepts second RFX Progressive codec stream (non-progressively encoded) with SubBand_Diffing disabled in context block.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_NonProgressiveEncoding_SubBandDiffDisabled()
         {
@@ -446,7 +446,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Get second bitmap by adding a diagonal to first bitmap");
             // Add a diagonal to the test image and send it again, the image data should be sent in tile diff method.
             Bitmap newBitmap = RdpegfxTestUtility.drawDiagonal(testData.RfxProgCodecImage);
-            
+
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending second bitmap Data Messages, non-progressively encoded by RemoteFX Progressive Codec(SubBand_Diffing disabled), to client.");
             List<Dictionary<uint, byte[]>> layerDataList2 = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, false, false, true);
@@ -465,7 +465,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client accepts RFX Progressive codec stream (progressively encoded) with DWT doesn't use Reduce Extrapolate method.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_ProgressiveEncoding_ReduceExtrapolateDisabled()
         {
@@ -504,7 +504,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client accepts second RFX Progressive codec stream (non-progressively encoded) with DWT doesn't use Reduce Extrapolate method.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_NonProgressiveEncoding_ReduceExtrapolateDisabled()
         {
@@ -543,7 +543,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client can delete a RFX Progressive codec stream.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_DeleteContext()
         {
@@ -589,7 +589,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream which is sent to a non-exist surface.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_InexistSurface()
         {
@@ -616,18 +616,26 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Debug, "Surface {0} is deleted", surf.Id);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages to the deleted surface (id: {0}) on client.", surf.Id);
-            this.rdpegfxAdapter.SendRfxProgressiveCodecPduWithoutImage(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, false, true, false);
+                       
+            try
+            {
+                // Delete context from inexistent surface
+                this.rdpegfxAdapter.SendRfxProgressiveCodecPduWithoutImage(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, false, true, false);
 
-            // Test case pass if RDP connection is stopped due to inexist surface id in Rfx Progressive Codec stream 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive stream with non-exist surface Id.");
+                //Expect the RDP client handle the negative request by dropping the connection as Windows does, or deny the request or ignore the request.
+                RDPClientTryDropConnection("delete inexistent surface");
+            }
+            catch (Exception ex)
+            {
+                this.TestSite.Log.Add(LogEntryKind.CheckFailed, "SUT should terminate the connection, or deny the request, or ignore the request to create duplicated surface instead of throw out an exception: {0}.", ex.Message);
+            }
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with sync block len is not 12.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_SyncBlock_IncorrectBlockLen()
         {
@@ -654,15 +662,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendRfxProgressiveCodecPduWithoutImage(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, true, true, false);
 
             // Test case pass if RDP connection is stopped due to inexist surface id in Rfx Progressive Codec stream 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive stream with sync block length is not 12.");
+            RDPClientTryDropConnection("a Rfx Progressive stream with sync block length is not 12");            
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with duplicated frame begin block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_DuplicatedFrameBeginBlock()
         {
@@ -689,15 +696,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendRfxProgressiveCodecPduWithoutImage(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, false, true, false);
 
             // Test case pass if RDP connection is stopped due to duplicated frame begin block in Rfx Progressive Codec stream 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive stream with duplicated frame begin block.");
+            RDPClientTryDropConnection("a Rfx Progressive stream with duplicated frame begin block");
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]       
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with missing frame begin block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_MissedFrameBeginBlock()
         {
@@ -724,15 +730,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendRfxProgressiveCodecPduWithoutImage(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, false, true, false);
 
             // Test case pass if RDP connection is stopped due to missed frame begin block in Rfx Progressive Codec stream 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive stream with missing frame begin block.");
+            RDPClientTryDropConnection("a Rfx Progressive stream without frame begin block");
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with Nested frame block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_NestedFrameBlock()
         {
@@ -759,15 +764,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendRfxProgressiveCodecPduWithoutImage(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, false, true, false);
 
             // Test case pass if RDP connection is stopped due to Nested frame block in Rfx Progressive Codec stream 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive stream with Nested frame block.");
+            RDPClientTryDropConnection("a Rfx Progressive stream with Nested frame block");
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with incorrect length in frame begin block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_FrameBeginBlock_IncorrectLength()
         {
@@ -794,15 +798,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendRfxProgressiveCodecPduWithoutImage(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, false, true, false);
 
             // Test case pass if RDP connection is stopped due to incorrect length in frame begin block in Rfx Progressive Codec stream 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive stream with incorrect length in frame begin block.");
+            RDPClientTryDropConnection("a Rfx Progressive stream with incorrect length in frame begin block");            
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with missing frame end block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_MissedFrameEndBlock()
         {
@@ -829,15 +832,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendRfxProgressiveCodecPduWithoutImage(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, false, true, false);
 
             // Test case pass if RDP connection is stopped due to missed frame end block in Rfx Progressive Codec stream 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive stream with missing frame end block.");
+            RDPClientTryDropConnection("a Rfx Progressive stream without frame end block.");            
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with incorrect length in frame end block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_FrameEndBlockIncorrectLength()
         {
@@ -864,15 +866,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendRfxProgressiveCodecPduWithoutImage(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, false, true, false);
 
             // Test case pass if RDP connection is stopped due to incorrect length in frame end block in Rfx Progressive Codec stream 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive stream with incorrect length in frame end block.");
+            RDPClientTryDropConnection("a Rfx Progressive stream with incorrect length in frame end block");
+            
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with incorrect length in context block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_ContextBlock_IncorrectLength()
         {
@@ -899,15 +901,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendRfxProgressiveCodecPduWithoutImage(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, false, true, false);
 
             // Test case pass if RDP connection is stopped due to incorrect length in context block in Rfx Progressive Codec stream 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive stream with incorrect length in context block.");
+            RDPClientTryDropConnection("a Rfx Progressive stream with incorrect length in context block");            
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with incorrect tile size in context block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_ContextBlock_IncorrectTileSize()
         {
@@ -934,15 +935,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendRfxProgressiveCodecPduWithoutImage(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, false, true, false);
 
             // Test case pass if RDP connection is stopped due to incorrect tile size in context block in Rfx Progressive Codec stream 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive stream with incorrect tile size  in context block.");
+            RDPClientTryDropConnection("a Rfx Progressive stream with incorrect tile size  in context block");            
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with region block is before frame begin block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_BeforeFrameBeginBlock()
         {
@@ -971,15 +971,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             fid = SendRfxProgCodecEcodedData(layerDataList, false);
 
             // Test case pass if RDP connection is stopped due to region block is before frame begin block in Rfx Progressive Codec stream 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive stream with region block is before frame begin block.");
+            RDPClientTryDropConnection("a Rfx Progressive stream with region block is before frame begin block");            
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with incorrect block length of region block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_IncorrectLen()
         {
@@ -1008,15 +1007,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             fid = SendRfxProgCodecEcodedData(layerDataList, false);
 
             // Test case pass if RDP connection is stopped due to incorrect block length of region block in Rfx Progressive Codec stream 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive stream with incorrect block length of region block.");
+            RDPClientTryDropConnection("a Rfx Progressive stream with incorrect block length of region block");            
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with incorrect tile size in region block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_IncorrectTileSize()
         {
@@ -1045,15 +1043,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             fid = SendRfxProgCodecEcodedData(layerDataList, false);
 
             // Test case pass if RDP connection is stopped due to incorrect tile size of region block in Rfx Progressive Codec stream 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive stream with incorrect tile size in region block.");
+            RDPClientTryDropConnection("a Rfx Progressive stream with incorrect tile size in region block");
+            
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with incorrect Rects Number in region block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_IncorrectRectsNumber()
         {
@@ -1079,18 +1077,18 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.RfxProgCodec_RegionBlock_IncorrectRectsNumber);
             List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, false, false, true);
-            fid = SendRfxProgCodecEcodedData(layerDataList, false); 
+            fid = SendRfxProgCodecEcodedData(layerDataList, false);
 
             // Test case pass if RDP connection is stopped due to incorrect Rects Number of region block in Rfx Progressive Codec stream 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive stream with incorrect Rects Number in region block.");
+            RDPClientTryDropConnection("a Rfx Progressive stream with incorrect Rects Number in region block");
+            
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if client can accept a RFX Progressive codec stream with zero Rects Number in region block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_ZeroRectsNumber()
         {
@@ -1119,15 +1117,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             fid = SendRfxProgCodecEcodedData(layerDataList, false);
 
             // Test case pass if RDP connection is stopped due to zero Rects Number of region block in Rfx Progressive Codec stream 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive stream with zero Rects Number in region block.");
+            RDPClientTryDropConnection("a Rfx Progressive stream with 0 Rects Number in region block");            
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if client can accept a RFX Progressive codec stream with incorrect Quant Number in region block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_IncorrectQuantNumber()
         {
@@ -1156,15 +1153,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             fid = SendRfxProgCodecEcodedData(layerDataList, false);
 
             // Test case pass if RDP connection is stopped due to incorrect Quant Number of region block in Rfx Progressive Codec stream 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive stream with incorrect Quant Number in region block.");
+            RDPClientTryDropConnection("a Rfx Progressive stream with incorrect Quant  Number in region block");            
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if client can accept a RFX Progressive codec stream with zero Quant Number in region block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_ZeroQuantNumber()
         {
@@ -1193,15 +1189,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             fid = SendRfxProgCodecEcodedData(layerDataList, false);
 
             // Test case pass if RDP connection is stopped due to zero Quant Number of region block in Rfx Progressive Codec stream 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive stream with zero Quant Number in region block.");
+            RDPClientTryDropConnection("a Rfx Progressive stream with 0 Quant  Number in region block");            
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if client can accept a RFX Progressive codec stream with incorrect ProgQuant Number in region block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_IncorrectProgQuantNumber()
         {
@@ -1230,15 +1225,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             fid = SendRfxProgCodecEcodedData(layerDataList, false);
 
             // Test case pass if RDP connection is stopped due to incorrect ProgQuant Number of region block in Rfx Progressive Codec stream 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive stream with incorrect ProgQuant Number in region block.");
+            RDPClientTryDropConnection("a Rfx Progressive stream with incorrect ProgQuant Number in region block");            
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if client can accept a RFX Progressive codec stream with incorrect tile block number in region block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_IncorrectTileBlockNumber()
         {
@@ -1267,15 +1261,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             fid = SendRfxProgCodecEcodedData(layerDataList, false);
 
             // Test case pass if RDP connection is stopped due to incorrect tile block number of region block in Rfx Progressive Codec stream 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive stream with incorrect tile block number in region block.");
+            RDPClientTryDropConnection("a Rfx Progressive stream with incorrect tile block in region block");
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if client can accept a RFX Progressive codec stream with invalid tile block type in region block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_InvalidTileBlockType()
         {
@@ -1304,15 +1297,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             fid = SendRfxProgCodecEcodedData(layerDataList, false);
 
             // Test case pass if RDP connection is stopped due to iinvalid tile block type of region block in Rfx Progressive Codec stream 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive stream with invalid tile block type in region block.");
+            RDPClientTryDropConnection("a Rfx Progressive stream with invalid tile block type in region block");
+            
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if client can accept a RFX Progressive codec stream with mismatched region block number as that in frame begin block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlockNumberMismatch()
         {
@@ -1341,15 +1334,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             fid = SendRfxProgCodecEcodedData(layerDataList, false);
 
             // Test case pass if RDP connection is stopped due to mismatched region block number in Rfx Progressive Codec stream 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive stream with mismatched region block number.");
+            RDPClientTryDropConnection("a Rfx Progressive stream with mismatched region block number");            
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if client can accept a RFX Progressive codec stream to delete non-exist context on client.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_DeleteInexistContext()
         {
@@ -1385,20 +1377,26 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             fid = this.rdpegfxAdapter.DeleteRfxProgssiveCodecContextId(surf.Id, contextId);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages to delete same context(id: {0}) , which should be non-exist on client.", contextId);
-            // Attempt to delete the same context again
-            fid = this.rdpegfxAdapter.DeleteRfxProgssiveCodecContextId(surf.Id, contextId);
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages to delete same context(id: {0}) , which does not exist on client.", contextId);
+            try
+            {
+                // Attempt to delete the same context again
+                fid = this.rdpegfxAdapter.DeleteRfxProgssiveCodecContextId(surf.Id, contextId);
 
-            // Test case pass if RDP connection is stopped due to to delete inexist context on client. 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive stream to delete non-exist context on client.");
+                //Expect the RDP client handle the negative request by dropping the connection as Windows does, or deny the request or ignore the request.
+                RDPClientTryDropConnection("delete context from an inexistent surface");
+            }
+            catch (Exception ex)
+            {
+                this.TestSite.Log.Add(LogEntryKind.CheckFailed, "SUT should terminate the connection, or deny the request, or ignore the request to create duplicated surface instead of throw out an exception: {0}.", ex.Message);
+            }         
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [Description("This test case is used to test if client can delete Rfx Progressive codec context from a non-exist surface.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_DeleteContextFromInexistSurface()
         {
@@ -1434,12 +1432,18 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Debug, "Surface {0} is deleted", surf.Id);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages to delete a context from surface(id: {0}) on client.", surf.Id);
-            // Delete context from inexist surface
-            fid = this.rdpegfxAdapter.DeleteRfxProgssiveCodecContextId(surf.Id, contextId);
+            try
+            {
+                // Delete context from inexist surface
+                fid = this.rdpegfxAdapter.DeleteRfxProgssiveCodecContextId(surf.Id, contextId);
 
-            // Test case pass if RDP connection is stopped due to inexist surface id in Rfx Progressive Codec context deletion stream 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a Rfx Progressive context deletion stream to non-exist surface.");
+                //Expect the RDP client handle the negative request by dropping the connection as Windows does, or deny the request or ignore the request.
+                RDPClientTryDropConnection("allocate cache slots with cache size exceeds the max value 100MB");
+            }
+            catch (Exception ex)
+            {
+                this.TestSite.Log.Add(LogEntryKind.CheckFailed, "SUT should terminate the connection, or deny the request, or ignore the request to create duplicated surface instead of throw out an exception: {0}.", ex.Message);
+            }          
         }
     }
 }

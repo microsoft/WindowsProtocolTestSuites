@@ -24,6 +24,7 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
         public string UserNameInTC;
         public string UserPwdInTC;
         public string IsWindowsImplementation;
+        public string DropConnectionForInvalidRequest;
         public int AgentListenPort;
         public TriggerMethod TriggerMethod;
                 

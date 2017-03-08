@@ -46,6 +46,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         protected static Image imageForVideoMode;
         protected uint maxRequestSize = 0x50002A; //The MaxReqestSize field of  Multifragment Update Capability Set. Just for test.
         protected bool isWindowsImplementation = true;
+        protected bool DropConnectionForInvalidRequest = true;
         protected bool bVerifyRdpbcgrMessage;
         protected bool isclientSupportPersistentBitmapCache = false;
         protected ushort payloadLength = 15992; //payload length for RDP_BW_PAYLOAD and RDP_BW_STOP
@@ -456,9 +457,14 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 isClientSupportEmptyRdpNegData = false; //if property not found, set to false as default value
             }
 
-            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, "IsWindowsImplementation", out isWindowsImplementation))
+            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, RdpPtfPropNames.IsWindowsImplementation, out isWindowsImplementation))
             {
                 isWindowsImplementation  = true; //if property not found, set to true as default value
+            }
+
+            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, RdpPtfPropNames.DropConnectionForInvalidRequest, out DropConnectionForInvalidRequest))
+            {
+                DropConnectionForInvalidRequest = true; //if property not found, set to true as default value
             }
 
             if (!PtfPropUtility.GetBoolPtfProperty(TestSite, "VerifyRdpbcgrMessage", out bVerifyRdpbcgrMessage))
@@ -548,7 +554,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             File.Copy(tmpFilePath, pathForBaseImage, true);
 
             bool compareRes = this.rdpbcgrAdapter.SimulatedScreen.Compare(image, sutDisplayShift, compareRect, usingRemoteFX);
-            this.TestSite.Assert.IsTrue(compareRes, "SUT display verification failed, the output on RDP client is not equal (or similar enough if using RemoteFX codec) as expected.");
+            this.TestSite.Assert.IsTrue(compareRes, "SUT display verification should success, the output on RDP client should be equal (or similar enough if using RemoteFX codec) as expected.");
         }
 
         //override, assume fail for an invalid PTF property.
@@ -585,6 +591,34 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             }
         }
 
-        #endregion 
+        #endregion
+        /// <summary>
+        /// Provide a generic method to handle the invalid request from RDP server
+        /// For Windows, it drops the rdp connection directly.
+        /// For non-Windows, it may ignore the invalid request or deny the request.
+        /// </summary>
+        /// <param name="requestDesc">The description about the invalid request for logging output</param>
+        public void RDPClientTryDropConnection(string requestDesc)
+        {
+            if (isWindowsImplementation)
+            {
+                DropConnectionForInvalidRequest = true; //A switch to avoid waiting till timeout. 
+            }
+
+            if (DropConnectionForInvalidRequest) 
+            {
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Expect RDP client to drop the connection");
+                bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
+                if (!bDisconnected)
+                {
+                    this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid " + requestDesc + " received.");
+                }
+            }
+            else 
+            {                
+                this.TestSite.Log.Add(LogEntryKind.Warning, "Non-Windows RDP client did not terminate the connection when invalid " + requestDesc + " received.");
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Please double check the RDP client behavior is as expected.");
+            }
+        }
     }
 }

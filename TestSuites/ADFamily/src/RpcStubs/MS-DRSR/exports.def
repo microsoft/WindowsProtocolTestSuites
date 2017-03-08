@@ -59,9 +59,13 @@ IDL_DRSFinishDemotion @ 28
 
 IDL_DRSAddCloneDC @ 29
 
-IDL_DSAPrepareScript @ 30
+IDL_DRSWriteNgcKey @ 30
 
-IDL_DSAExecuteScript @ 31
+IDL_DRSReadNgcKey @ 31
+
+IDL_DSAPrepareScript @ 32
+
+IDL_DSAExecuteScript @ 33
 
 
 

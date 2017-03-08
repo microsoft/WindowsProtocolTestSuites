@@ -926,8 +926,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
                                                         0, ccRect, maxBitmap, null, null);
             // Test case pass if RDP connection is stopped due to too wide bitmap are encoded in clearcodec stream.
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a ClearCodec Encoded bitmap with width larger than 32766 to client.");
+            RDPClientTryDropConnection("a ClearCodec Encoded bitmap with width larger than 32766");            
         }
 
         [TestMethod]
@@ -965,8 +964,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
                                                         0, fillSurfRect, maxBitmap, null, null);
             // Test case pass if RDP connection is stopped due to too high bitmap are encoded in clearcodec stream.
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a ClearCodec Encoded bitmap with height larger than 32766 to client.");
+            RDPClientTryDropConnection("a ClearCodec Encoded bitmap with height larger than 32766");            
         }
 
         [TestMethod]
@@ -1009,8 +1007,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
                                                         RdpegfxTestUtility.ccGlyphIndex, glyphRect, null, bandBmpDict, null);
             // Test case pass if RDP connection is stopped due to too large size bitmap are encoded in clearcodec stream.
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a glyph larger than 1024 square pixels to client.");
+            RDPClientTryDropConnection("a ClearCodec Encoded bitmap with a glyph larger than 1024 square pixels");            
         }
 
         [TestMethod]
@@ -1046,8 +1043,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
                                                         0, glyphRect, null, null, null);
             // Test case pass if RDP connection is stopped due to glyph_hit flag is enabled, but glyph_index flag is disabled in clearcodec stream.
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a clearcodec stream with glyphhit flag set only to client.");
+            RDPClientTryDropConnection("a ClearCodec stream with glyphhit only flag set");            
         }
 
         [TestMethod]
@@ -1084,8 +1080,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
                                                         RdpegfxTestUtility.ccGlyphIndex, glyphRect, null, null, null);
             // Test case pass if RDP connection is stopped due to unused glyph index are encoded in clearcodec stream.
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a clearcodec stream with glyph_hit and glyph_index flag set but glyph index is not used to client.");
+            RDPClientTryDropConnection("a ClearCodec stream with glyph_hit and glyph_index flag set but glyph index is unused");            
         }
 
         [TestMethod]
@@ -1123,8 +1118,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
                                                         ccGlyphIndex, glyphRect, null, null, null);
             // Test case pass if RDP connection is stopped due to too big glyph index are encoded in clearcodec stream.
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a clearcodec stream with glyph index is out of range(0, 3999) to client.");
+            RDPClientTryDropConnection("a ClearCodec stream with glyph_hit and glyph_index flag set but glyph index is out of range(0, 3999)");            
         }
 
         [TestMethod]
@@ -1184,8 +1178,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             }
 
             // Test case pass if RDP connection is stopped due to client failed to allocate 4001 glyph slot in cache.
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending more than max ClearCodec glyph slot(4000) to client.");
+            RDPClientTryDropConnection("a ClearCodec stream with more than max ClearCodec glyph slot(4000)");
         }
 
         [TestMethod]
@@ -1238,8 +1231,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
                                                         RdpegfxTestUtility.ccGlyphIndex, glyphRect2, bgImage, null, null);
             // Test case pass if RDP connection is stopped due to both glyph hit flag and compsite payload exist in clearcodec stream
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a ClearCodec stream with graph index hit flag set but composite payload exists to client.");
+            RDPClientTryDropConnection("a ClearCodec stream with graph index hit flag set but composite payload exists");            
         }
 
         [TestMethod]
@@ -1278,8 +1270,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
                                                         0, ccRect, testData.ClearCodecImage, null, null);
             // Test case pass if RDP connection is stopped due to redundant RLF2 in clearcodec stream
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a ClearCodec stream with redundant RunLengthFactor2 or 3 in residual layer.");
+            RDPClientTryDropConnection("a ClearCodec stream with redundant RunLengthFactor2 or 3 in residual layer");
+            
         }
 
         [TestMethod]
@@ -1318,8 +1310,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
                                                         0, ccRect, testData.ClearCodecImage, null, null);
             // Test case pass if RDP connection is stopped due to RLF1 is 0xff but RLF2 is absent in clearcodec stream
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a ClearCodec stream with absent RunLengthFactor2 in residual layer.");
+            RDPClientTryDropConnection("a ClearCodec stream with absent RunLengthFactor2 in residual layer");
         }
 
         [TestMethod]
@@ -1365,8 +1356,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
                                                         0, ccRect, resBitmap, null, null);
             // Test case pass if RDP connection is stopped due to redundant RLF3 in clearcodec stream
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a ClearCodec stream with redundant RunLengthFactor3 in residual layer.");
+            RDPClientTryDropConnection("a ClearCodec stream with redundant RunLengthFactor3 in residual layer");
+            
         }
 
         [TestMethod]
@@ -1412,8 +1403,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
                                                         0, ccRect, resBitmap, null, null);
             // Test case pass if RDP connection is stopped due to absent RLF3 in clearcodec stream
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a ClearCodec stream with absent RunLengthFactor3 in residual layer.");
+            RDPClientTryDropConnection("a ClearCodec stream with absent RunLengthFactor3 in residual layer");
         }
 
         [TestMethod]
@@ -1456,8 +1446,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             fid = this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ClearCodec_BitmapStream.CLEARCODEC_FLAG_NONE, 0,
                                                         ccRect, null, bandBmpDict, null);
             // Test case pass if RDP connection is stopped due to bandBmpDict height is too big(>52 pixels) 
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a ClearCodec stream with band height larger than 52 pixels.");
+            RDPClientTryDropConnection("a ClearCodec stream with band height larger than 52 pixels");
         }
                 
         [TestMethod]
@@ -1498,8 +1487,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             fid = this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ClearCodec_BitmapStream.CLEARCODEC_FLAG_NONE, 0,
                                                         scRect, null, null, subcodecBmpDict);
             // Test case pass if RDP connection is stopped due to RLEX encoded bytes is larger than 3 * width * height in subcodec layer.
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a ClearCodec stream with RLEX encoded bytes larger than 3 * width * height in subcodec layer.");
+            RDPClientTryDropConnection("a ClearCodec stream with RLEX encoded bytes larger than 3 * width * height in subcodec layer");            
         }
 
         [TestMethod]
@@ -1544,8 +1532,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             fid = this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ClearCodec_BitmapStream.CLEARCODEC_FLAG_NONE, 0,
                                                         fillSurfRect, null, null, subcodecBmpDict);
             // Test case pass if RDP connection is stopped due to incorrect Palette Count in RLEX encoding
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "Client is expected to drop the connection when sending a ClearCodec stream with incorrect palette count in subcodec layer.");
+            RDPClientTryDropConnection("a ClearCodec stream with incorrect palette count in subcodec layer");            
         }
     }
 }

@@ -73,11 +73,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             //Respond a Server MCS Attach User Confirm PDU
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server MCS Attach User Confirm PDU to SUT with invalid TPK header length");
             this.rdpbcgrAdapter.MCSAttachUserConfirm(NegativeType.InvalidTPKLength);
-
-            //Expect SUT to drop the connection
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "SUT should drop the connection if the length field within tpktHeader in MCS Attach User Confirm PDU is not consistent with the received data.");
+                        
+            RDPClientTryDropConnection("MCS Attach User Confirm PDU with inconsistent TPK header length");            
             #endregion
         }
 
@@ -144,9 +141,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.rdpbcgrAdapter.MCSAttachUserConfirm(NegativeType.InvalidResult);
 
             //Expect SUT to drop the connection
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "SUT should drop the connection if the result field in MCS Attach User Confirm PDU is not set to rt-successful (0).");
+            RDPClientTryDropConnection("MCS Attach User Confirm PDU with invalid rt-successful(0)");            
             #endregion
         }
 
@@ -213,9 +208,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.rdpbcgrAdapter.MCSAttachUserConfirm(NegativeType.InvalidInitiatorField);
 
             //Expect SUT to drop the connection
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "SUT should drop the connection if the initiator field in MCS Attach User Confirm PDU is not present.");
+            RDPClientTryDropConnection("MCS Attach User Confirm PDU without the initiator field");            
             #endregion
         }
 

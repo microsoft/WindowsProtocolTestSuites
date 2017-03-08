@@ -80,7 +80,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
     /// <summary>
     ///  The INT64 type is an 8-byte integer in little-endian
-    ///  form. See [MS-DTYP] section  for its definition.
+    ///  form. See [MS-DTYP] section for its definition.
     /// </summary>
     //  <remarks>
     //   .\TD\MS-DRSR\1c3855ef-b058-4248-866f-70aa740b5a7b.xml
@@ -180,7 +180,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
         ///  A 32-bit, signed integer value that specifies the process
         ///  identifier of the client. This is for informational
         ///  and debugging purposes only. The assignment of this
-        ///  field is implementation-specific.This field contains
+        ///  field is implementation-specific. This field contains
         ///  the process ID of the client.
         /// </summary>
         [CLSCompliant(false)]
@@ -218,7 +218,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
     /// <summary>
     ///  The INT32 type is a 4-byte integer in little-endian
-    ///  form. See [MS-DTYP] section  for its definition.
+    ///  form. See [MS-DTYP] section for its definition.
     /// </summary>
     //  <remarks>
     //   .\TD\MS-DRSR\41605573-51bc-49c2-abcd-d8d4c31ab1f5.xml
@@ -295,11 +295,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
         /// <summary>
         ///  Variable-length records that each contain a specific
-        ///  type of data about the forest trust relationship.Records
+        ///  type of data about the forest trust relationship. Records
         ///  are not necessarily aligned to 32-bit boundaries. Each
         ///  record starts at the next byte after the previous record
-        ///  ends.Each record is represented as described in section
-        ///  .
+        ///  ends.
         /// </summary>
         [StaticSize(1, StaticSizeMode.Elements)]
         public Record[] Records;
@@ -1615,7 +1614,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     }
 
     /// <summary>
-    /// The flags vules of DSA_MSG_EXECUTE_SCRIPT_REQ_V1.
+    /// The flags values of DSA_MSG_EXECUTE_SCRIPT_REQ_V1.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [CLSCompliant(false)]
@@ -1766,7 +1765,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     }
 
     /// <summary>
-    /// The unused vules of NAMERESOP_DRS_WIRE_V1.
+    /// The unused values of NAMERESOP_DRS_WIRE_V1.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [CLSCompliant(false)]
@@ -1780,7 +1779,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     }
 
     /// <summary>
-    ///  The next RDN vules of NAMERESOP_DRS_WIRE_V1.
+    ///  The next RDN values of NAMERESOP_DRS_WIRE_V1.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [CLSCompliant(false)]
@@ -2117,7 +2116,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
         public int fIsHandleInCache;
 
         /// <summary>
-        ///  The threadThe implementation-specific thread ID of the
+        ///  The implementation-specific thread ID of the
         ///  thread that is using the context.
         /// </summary>
         [CLSCompliant(false)]
@@ -2253,7 +2252,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
         /// <summary>
         ///  Bytes that make up a SID structure, as specified in
-        ///  [MS-DTYP] section , in little-endian byte order.
+        ///  [MS-DTYP] section, in little-endian byte order.
         /// </summary>
         [Inline()]
         [StaticSize(28, StaticSizeMode.Elements)]
@@ -2310,7 +2309,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     }
 
     /// <summary>
-    ///  The buffer type vules of DRS_SecBuffer.
+    ///  The buffer type values of DRS_SecBuffer.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
@@ -2648,7 +2647,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     }
 
     /// <summary>
-    /// The formatDisired of DRS_MSG_CRACKREQ_V1.
+    /// The formatDesired of DRS_MSG_CRACKREQ_V1.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
@@ -2862,13 +2861,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     {
 
         /// <summary>
-        ///  Decompressed size of data.
+        ///  The size of decompressed data.
         /// </summary>
         [CLSCompliant(false)]
         public uint cbDecompressedSize;
 
         /// <summary>
-        ///  Compressed size of data.
+        ///  The size of compressed data.
         /// </summary>
         [CLSCompliant(false)]
         public uint cbCompressedSize;
@@ -2944,8 +2943,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
         ///  DWORDcb, a field in DRS_EXTENSIONS_INT is at the same
         ///  offset in DRS_EXTENSIONS as it is in DRS_EXTENSIONS_INT.
         /// </summary>
-        [Inline()]
         [Size("cb")]
+        [Inline()]
         public byte[] rgb;
     }
 
@@ -2967,7 +2966,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     }
 
     /// <summary>
-    ///  The reserved vules of DRS_MSG_RMDMNREPLY_V1.
+    ///  The reserved values of DRS_MSG_RMDMNREPLY_V1.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [CLSCompliant(false)]
@@ -3339,8 +3338,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
         public DRS_COMPRESSED_BLOB CompressedAny;
     }
 
+
+
     /// <summary>
-    ///  The dwCompressedVersion vules of DRS_MSG_GETCHGREPLY_V7.
+    ///  The dwCompressedVersion values of DRS_MSG_GETCHGREPLY_V7.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
@@ -3495,7 +3496,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
         ///  as specified in [MS-ADTS] section. This field always
         ///  contains at least one character: the terminating null
         ///  character. Each Unicode value is encoded as 2 bytes.
-        ///  The byte ordering is little-endian.No range is supported
+        ///  The byte ordering is little-endian. No range is supported
         ///  on any member of DSNAME in windows_2000_server. A range
         ///  of 0 to 10485760 is supported on the NameLen member
         ///  of DSNAME in windows_server_2003. A range of 0 to 10485761
@@ -4095,7 +4096,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
         /// <summary>
         ///  The interSiteTransportobject that identifies the network
-        ///  transport  over which replication should be performed
+        ///  transport over which replication should be performed
         ///   to be used in the server-to-server replication implementation
         ///  with the specified DC .
         /// </summary>
@@ -4349,7 +4350,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     }
 
     /// <summary>
-    ///  The alias RDN vules of CONTREF_DRS_WIRE_V1.
+    ///  The alias RDN values of CONTREF_DRS_WIRE_V1.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [CLSCompliant(false)]
@@ -4363,7 +4364,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     }
 
     /// <summary>
-    ///  The RDNsInternal vules of CONTREF_DRS_WIRE_V1.
+    ///  The RDNsInternal values of CONTREF_DRS_WIRE_V1.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [CLSCompliant(false)]
@@ -4377,7 +4378,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     }
 
     /// <summary>
-    ///  The refType vules of CONTREF_DRS_WIRE_V1.
+    ///  The refType values of CONTREF_DRS_WIRE_V1.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
@@ -4410,7 +4411,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     }
 
     /// <summary>
-    ///  The choice vules of CONTREF_DRS_WIRE_V1.
+    ///  The choice values of CONTREF_DRS_WIRE_V1.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
@@ -4752,7 +4753,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     }
 
     /// <summary>
-    ///  The errCode vules of DRS_MSG_REVMEMB_REPLY_V1.
+    ///  The errCode values of DRS_MSG_REVMEMB_REPLY_V1.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
@@ -4900,7 +4901,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     }
 
     /// <summary>
-    ///  The ulVersion vules of DRS_SecBufferDesc.
+    ///  The ulVersion values of DRS_SecBufferDesc.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [CLSCompliant(false)]
@@ -5024,7 +5025,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     }
 
     /// <summary>
-    ///  The dwReserved vules of DS_REPL_NEIGHBORW.
+    ///  The dwReserved values of DS_REPL_NEIGHBORW.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [CLSCompliant(false)]
@@ -5319,7 +5320,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
         public uint extendedData;
 
         /// <summary>
-        ///  0 or PROBLEM error code (section ).
+        ///  0 or PROBLEM error code.
         /// </summary>
         [CLSCompliant(false)]
         public ushort problem;
@@ -6711,6 +6712,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
         public PROPERTY_META_DATA_EXT MetaData;
     }
 
+    public partial struct VALUE_META_DATA_EXT_V3
+    {
+
+        /// <summary>
+        ///  The date and time at which the first originating update
+        ///  was made.
+        /// </summary>
+        public long timeCreated;
+
+        /// <summary>
+        ///  The remainder of the stamp; has the same PROPERTY_META_DATA_EXT
+        ///  type as used for the stamp of an attribute.
+        /// </summary>
+        public PROPERTY_META_DATA_EXT MetaData;
+
+        public uint unused1;
+        public uint unused2;
+        public uint unused3;
+        public long timeExpired;
+    }
+
     /// <summary>
     ///  The DRS_MSG_ADDENTRYREPLY_V2 structure defines the response
     ///  message received from the IDL_DRSAddEntry method.
@@ -7464,6 +7486,40 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
         public VALUE_META_DATA_EXT_V1 MetaData;
     }
 
+    public partial struct REPLVALINF_V3
+    {
+
+        /// <summary>
+        ///  Identifies the object with the attribute that contains
+        ///  the link value.
+        /// </summary>
+        [Indirect()]
+        public DSNAME? pObject;
+
+        /// <summary>
+        ///  An attribute that contains the link value.
+        /// </summary>
+        [CLSCompliant(false)]
+        public uint attrTyp;
+
+        /// <summary>
+        ///  The link value.
+        /// </summary>
+        public ATTRVAL Aval;
+
+        /// <summary>
+        ///  FALSE if and only if the link value has been removed
+        ///  from the attribute.
+        /// </summary>
+        [CLSCompliant(false)]
+        public int fIsPresent;
+
+        /// <summary>
+        ///  The stamp associated with the link value.
+        /// </summary>
+        public VALUE_META_DATA_EXT_V3 MetaData;
+    }
+
     /// <summary>
     ///  The DRS_MSG_GETREPLINFO_REPLY union defines response
     ///  messages received from the IDL_DRSGetReplInfo method.
@@ -7739,7 +7795,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     }
 
     /// <summary>
-    ///  The dwFlags vules of DRS_MSG_VERIFYREQ_V1.
+    ///  The dwFlags values of DRS_MSG_VERIFYREQ_V1.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
@@ -7883,7 +7939,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
         /// <summary>
         ///  Some of all of the attributes for this object, as determined
-        ///  by the particular method. See section  for an overview
+        ///  by the particular method. See section for an overview
         ///  of methods using type ENTINF.
         /// </summary>
         public ATTRBLOCK AttrBlock;
@@ -8212,7 +8268,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     }
 
     /// <summary>
-    ///  The error vules of DRS_MSG_MOVEREQ_V1.
+    ///  The error values of DRS_MSG_MOVEREQ_V1.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [CLSCompliant(false)]
@@ -8279,7 +8335,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     }
 
     /// <summary>
-    ///  The ulFlags vules of DRS_MSG_MOVEREQ_V2.
+    ///  The ulFlags values of DRS_MSG_MOVEREQ_V2.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [CLSCompliant(false)]
@@ -8337,7 +8393,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     }
 
     /// <summary>
-    ///  The ulFlags vules of DRS_MSG_MOVEREQ_V1.
+    ///  The ulFlags values of DRS_MSG_MOVEREQ_V1.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [CLSCompliant(false)]
@@ -8402,7 +8458,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
         public SCHEMA_PREFIX_TABLE PrefixTableSrc;
 
         /// <summary>
-        ///  0 or an EXOP_ERR code (section ).
+        ///  0 or an extended operation error code (section ).
         /// </summary>
         [CLSCompliant(false)]
         public uint ulExtendedRet;
@@ -8459,6 +8515,114 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
         /// </summary>
         [Size("cNumValues")]
         public REPLVALINF_V1[] rgValues;
+
+        /// <summary>
+        ///  0 if successful, otherwise a Windows error code.
+        /// </summary>
+        [CLSCompliant(false)]
+        public uint dwDRSError;
+    }
+
+    public partial struct DRS_MSG_GETCHGREPLY_V9
+    {
+
+        /// <summary>
+        ///  DSA GUID of the server DC.
+        /// </summary>
+        public Guid uuidDsaObjSrc;
+
+        /// <summary>
+        ///  Invocation ID of the server DC.
+        /// </summary>
+        public Guid uuidInvocIdSrc;
+
+        /// <summary>
+        ///  The NC root of the replica to replicate or the FSMO
+        ///  role object for an extended operation.
+        /// </summary>
+        [Indirect()]
+        public DSNAME? pNC;
+
+        /// <summary>
+        ///  Data used to correlate calls to IDL_DRSGetNCChanges.
+        /// </summary>
+        public USN_VECTOR usnvecFrom;
+
+        /// <summary>
+        ///  Data used to correlate calls to IDL_DRSGetNCChanges.
+        /// </summary>
+        public USN_VECTOR usnvecTo;
+
+        /// <summary>
+        ///  Stamp filter that describes updates the server has already
+        ///  applied.
+        /// </summary>
+        [StaticSize(1, StaticSizeMode.Elements)]
+        public UPTODATE_VECTOR_V2_EXT[] pUpToDateVecSrc;
+
+        /// <summary>
+        ///  Table for translating ATTRTYP values in the response
+        ///  to OIDs.
+        /// </summary>
+        public SCHEMA_PREFIX_TABLE PrefixTableSrc;
+
+        /// <summary>
+        ///  0 or an extended operation error code (section ).
+        /// </summary>
+        [CLSCompliant(false)]
+        public uint ulExtendedRet;
+
+        /// <summary>
+        ///  Count of items in the pObjects linked list.
+        /// </summary>
+        [CLSCompliant(false)]
+        public uint cNumObjects;
+
+        /// <summary>
+        ///  Size in bytes of items in or referenced by elements
+        ///  in the pObjects linked list.
+        /// </summary>
+        [CLSCompliant(false)]
+        public uint cNumBytes;
+
+        /// <summary>
+        ///  Linked list of objectupdates that the client applies
+        ///  to its NC replica.
+        /// </summary>
+        [StaticSize(1, StaticSizeMode.Elements)]
+        public REPLENTINFLIST[] pObjects;
+
+        /// <summary>
+        ///  False if and only if this is the last response in a
+        ///  replication cycle.
+        /// </summary>
+        [CLSCompliant(false)]
+        public int fMoreData;
+
+        /// <summary>
+        ///  Estimated number of objects in the server's NC replica.
+        /// </summary>
+        [CLSCompliant(false)]
+        public uint cNumNcSizeObjects;
+
+        /// <summary>
+        ///  Estimated number of link values in the server's NC replica.
+        /// </summary>
+        [CLSCompliant(false)]
+        public uint cNumNcSizeValues;
+
+        /// <summary>
+        ///  Count of items in the rgValues array.
+        /// </summary>
+        [CLSCompliant(false)]
+        public uint cNumValues;
+
+        /// <summary>
+        ///  Link valueupdates for the client to apply to its NC
+        ///  replica.
+        /// </summary>
+        [Size("cNumValues")]
+        public REPLVALINF_V3[] rgValues;
 
         /// <summary>
         ///  0 if successful, otherwise a Windows error code.
@@ -8947,168 +9111,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
         public DRS_MSG_GETCHGREPLY_V9 V9;
     }
 
-    public partial struct DRS_MSG_GETCHGREPLY_V9
-    {
-
-        /// <summary>
-        ///  DSA GUID of the server DC.
-        /// </summary>
-        public Guid uuidDsaObjSrc;
-
-        /// <summary>
-        ///  Invocation ID of the server DC.
-        /// </summary>
-        public Guid uuidInvocIdSrc;
-
-        /// <summary>
-        ///  The NC root of the replica to replicate or the FSMO
-        ///  role object for an extended operation.
-        /// </summary>
-        [Indirect()]
-        public DSNAME? pNC;
-
-        /// <summary>
-        ///  Data used to correlate calls to IDL_DRSGetNCChanges.
-        /// </summary>
-        public USN_VECTOR usnvecFrom;
-
-        /// <summary>
-        ///  Data used to correlate calls to IDL_DRSGetNCChanges.
-        /// </summary>
-        public USN_VECTOR usnvecTo;
-
-        /// <summary>
-        ///  Stamp filter that describes updates the server has already
-        ///  applied.
-        /// </summary>
-        [StaticSize(1, StaticSizeMode.Elements)]
-        public UPTODATE_VECTOR_V2_EXT[] pUpToDateVecSrc;
-
-        /// <summary>
-        ///  Table for translating ATTRTYP values in the response
-        ///  to OIDs.
-        /// </summary>
-        public SCHEMA_PREFIX_TABLE PrefixTableSrc;
-
-        /// <summary>
-        ///  0 or an extended operation error code (section ).
-        /// </summary>
-        [CLSCompliant(false)]
-        public uint ulExtendedRet;
-
-        /// <summary>
-        ///  Count of items in the pObjects linked list.
-        /// </summary>
-        [CLSCompliant(false)]
-        public uint cNumObjects;
-
-        /// <summary>
-        ///  Size in bytes of items in or referenced by elements
-        ///  in the pObjects linked list.
-        /// </summary>
-        [CLSCompliant(false)]
-        public uint cNumBytes;
-
-        /// <summary>
-        ///  Linked list of objectupdates that the client applies
-        ///  to its NC replica.
-        /// </summary>
-        [StaticSize(1, StaticSizeMode.Elements)]
-        public REPLENTINFLIST[] pObjects;
-
-        /// <summary>
-        ///  False if and only if this is the last response in a
-        ///  replication cycle.
-        /// </summary>
-        [CLSCompliant(false)]
-        public int fMoreData;
-
-        /// <summary>
-        ///  Estimated number of objects in the server's NC replica.
-        /// </summary>
-        [CLSCompliant(false)]
-        public uint cNumNcSizeObjects;
-
-        /// <summary>
-        ///  Estimated number of link values in the server's NC replica.
-        /// </summary>
-        [CLSCompliant(false)]
-        public uint cNumNcSizeValues;
-
-        /// <summary>
-        ///  Count of items in the rgValues array.
-        /// </summary>
-        [CLSCompliant(false)]
-        public uint cNumValues;
-
-        /// <summary>
-        ///  Link valueupdates for the client to apply to its NC
-        ///  replica.
-        /// </summary>
-        [Size("cNumValues")]
-        public REPLVALINF_V3[] rgValues;
-
-        /// <summary>
-        ///  0 if successful, otherwise a Windows error code.
-        /// </summary>
-        [CLSCompliant(false)]
-        public uint dwDRSError;
-    }
-
-    public partial struct REPLVALINF_V3
-    {
-
-        /// <summary>
-        ///  Identifies the object with the attribute that contains
-        ///  the link value.
-        /// </summary>
-        [Indirect()]
-        public DSNAME? pObject;
-
-        /// <summary>
-        ///  An attribute that contains the link value.
-        /// </summary>
-        [CLSCompliant(false)]
-        public uint attrTyp;
-
-        /// <summary>
-        ///  The link value.
-        /// </summary>
-        public ATTRVAL Aval;
-
-        /// <summary>
-        ///  FALSE if and only if the link value has been removed
-        ///  from the attribute.
-        /// </summary>
-        [CLSCompliant(false)]
-        public int fIsPresent;
-
-        /// <summary>
-        ///  The stamp associated with the link value.
-        /// </summary>
-        public VALUE_META_DATA_EXT_V3 MetaData;
-    }
-
-    public partial struct VALUE_META_DATA_EXT_V3
-    {
-
-        /// <summary>
-        ///  The date and time at which the first originating update
-        ///  was made.
-        /// </summary>
-        public long timeCreated;
-
-        /// <summary>
-        ///  The remainder of the stamp; has the same PROPERTY_META_DATA_EXT
-        ///  type as used for the stamp of an attribute.
-        /// </summary>
-        public PROPERTY_META_DATA_EXT MetaData;
-
-        public uint unused1;
-        public uint unused2;
-        public uint unused3;
-        public long timeExpired;
-    }
 
     /// <summary>
     ///  The DRS_MSG_ADDENTRYREPLY_V3 structure defines the response
@@ -9158,7 +9160,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     }
 
     /// <summary>
-    ///  The dwErrVer vules of DRS_MSG_ADDENTRYREPLY_V3.
+    ///  The dwErrVer values of DRS_MSG_ADDENTRYREPLY_V3.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
@@ -9428,6 +9430,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     [Union("System.Int32")]
     public partial struct DRS_MSG_WRITENGCKEYREQ
     {
+
         /// <summary>
         ///  The version 1 response.
         /// </summary>
@@ -9441,6 +9444,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     /// </summary>
     public partial struct DRS_MSG_WRITENGCKEYREQ_V1
     {
+
         /// <summary>
         ///  The DN of the object to modify.
         /// </summary>
@@ -9469,6 +9473,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     [Union("System.Int32")]
     public partial struct DRS_MSG_WRITENGCKEYREPLY
     {
+
         /// <summary>
         ///  The version 1 response.
         /// </summary>
@@ -9482,6 +9487,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     /// </summary>
     public partial struct DRS_MSG_WRITENGCKEYREPLY_V1
     {
+
         /// <summary>
         ///  0, or a Windows error code.
         /// </summary>
@@ -9497,6 +9503,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     [Union("System.Int32")]
     public partial struct DRS_MSG_READNGCKEYREQ
     {
+
         /// <summary>
         ///  The version 1 response.
         /// </summary>
@@ -9510,6 +9517,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     /// </summary>
     public partial struct DRS_MSG_READNGCKEYREQ_V1
     {
+
         /// <summary>
         ///  The DN of the object to modify.
         /// </summary>
@@ -9525,6 +9533,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     [Union("System.Int32")]
     public partial struct DRS_MSG_READNGCKEYREPLY
     {
+
         /// <summary>
         ///  The version 1 response.
         /// </summary>
@@ -9538,6 +9547,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     /// </summary>
     public partial struct DRS_MSG_READNGCKEYREPLY_V1
     {
+
         /// <summary>
         ///  0, or a Windows error code.
         /// </summary>

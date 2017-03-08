@@ -48,9 +48,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server X.224 Connection Confirm PDU to SUT with fail reason {0}", failureCode_Values.INCONSISTENT_FLAGS);
             this.rdpbcgrAdapter.Server_X_224_Negotiate_Failure(failureCode_Values.INCONSISTENT_FLAGS);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "SUT should drop the connection when the Server X.224 Negotiate Failure Confirm PDU is invalid.");
+            RDPClientTryDropConnection("invalid Server X.224 Negotiate Failure Confirm PDU");
             #endregion
         }
 
@@ -90,9 +88,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server X.224 Connection Confirm PDU to SUT with invalid TPKTHeader" );
             this.rdpbcgrAdapter.Server_X_224_Connection_Confirm(selectedProtocol, true, true, NegativeType.InvalidTPKTHeader);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "SUT should drop the connection when the TPKTHeader of Server X.224 Confirm PDU is invalid.");
+            RDPClientTryDropConnection("Server X.224 Confirm PDU with invalid TPKTHeader");            
             #endregion
         }
 
@@ -132,9 +128,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server X.224 Connection Confirm PDU to SUT with invalid rdpNegData");
             this.rdpbcgrAdapter.Server_X_224_Connection_Confirm(selectedProtocol, true, true, NegativeType.InvalidRdpNegData);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "SUT should drop the connection when the structure of rdpNegData field is invalid.");
+            RDPClientTryDropConnection("invalid structure of rdpNegData field in Server X.224 Connection Confirm PDU");            
             #endregion
         }
 
@@ -399,9 +393,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server X.224 Connection Confirm PDU to SUT with fail reason {0}", failureCode.ToString());
             this.rdpbcgrAdapter.Server_X_224_Negotiate_Failure(failureCode);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bDisconnected, "SUT should drop the connection when the RDP Negotiation Failure structure is invalid.");
+            RDPClientTryDropConnection("invalid RDP Negotiation Failure structure in Server X.224 Connection Confirm PDU");
             #endregion
         }
     }

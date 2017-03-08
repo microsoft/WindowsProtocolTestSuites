@@ -112,9 +112,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a Server Demand Active PDU to SUT.");
             this.rdpbcgrAdapter.Server_Demand_Active(NegativeType.InvalidTPKLength);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bClientDropConnection = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bClientDropConnection, "Client failed to drop the connection upon invalid TPKLength in Server Demand Active PDU");
+            RDPClientTryDropConnection("invalid TPKLength in Server Demand Active PDU");
             #endregion
             #endregion
         }
@@ -216,9 +214,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a Server Demand Active PDU to SUT.");
             this.rdpbcgrAdapter.Server_Demand_Active(NegativeType.InvalidMCSLength);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bClientDropConnection = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bClientDropConnection, "Client failed to drop the connection upon invalid MCS length in Server Demand Active pdu");
+            RDPClientTryDropConnection("invalid MCS length in Server Demand Active PDU");            
             #endregion
             #endregion
         }
@@ -325,9 +321,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a Server Demand Active PDU to SUT.");
             this.rdpbcgrAdapter.Server_Demand_Active(NegativeType.InvalidSignatureInSecurityHeader);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bClientDropConnection = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bClientDropConnection, "Client should drop the connection upon invalid MAC Signature in Server Demand Active pdu.");    
+            RDPClientTryDropConnection("invalid MAC Signature in Server Demand Active pdu");            
             #endregion
             #endregion
         }
@@ -431,9 +425,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #endregion
 
             #region Wait for Client to drop the connection
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bClientDropConnection = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bClientDropConnection, "Client failed to drop the connection upon invalid pdu length in Server Demand Active pdu");               
+            RDPClientTryDropConnection("invalid pdu length in Server Demand Active pdu");            
             #endregion
             #endregion
         }

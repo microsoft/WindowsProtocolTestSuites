@@ -60,9 +60,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a Slow-Path output PDU to SUT and the length field within tpktHeader is set to an invalid value.");
             this.rdpbcgrAdapter.SendSlowPathOutputPdu(SlowPathTest_InvalidType.InvalidTPKTLength);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT drop the connection.");
-            bool isDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(isDisconnected, "SUT should drop the connection when received an invalid Slow-Path output pdu.");
+            RDPClientTryDropConnection("invalid Slow-Path output pdu");            
 
             #endregion
         }
@@ -117,9 +115,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a Slow-Path output PDU to SUT and the length field of mcsSDin is set to an invalid value.");
             this.rdpbcgrAdapter.SendSlowPathOutputPdu(SlowPathTest_InvalidType.InvalidMCSLength);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT drop the connection.");
-            bool isDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(isDisconnected, "SUT should drop the connection when received an invalid Slow-Path output pdu.");
+            RDPClientTryDropConnection("a low-Path output pdu with invalid value of the length field of mcsSDin");           
 
             #endregion
         }
@@ -178,10 +174,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a Slow-Path output PDU to SUT and the signature within securityHeader is set to an invalid value.");
             this.rdpbcgrAdapter.SendSlowPathOutputPdu(SlowPathTest_InvalidType.InvalidSignature);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT drop the connection.");
-            bool isDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(isDisconnected, "SUT should drop the connection when received an invalid Slow-Path output pdu.");
-
+            RDPClientTryDropConnection("an invalid Slow-Path output pdu");
+            
             #endregion
         }
 
@@ -236,10 +230,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a Slow-Path output PDU to SUT and the SEC_ENCRYPT flag within securityHeader is set.");
             this.rdpbcgrAdapter.SendSlowPathOutputPdu(SlowPathTest_InvalidType.InvalidEncryptFlag);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT drop the connection.");
-            bool isDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(isDisconnected, "SUT should drop the connection when received an invalid Slow-Path output pdu.");
-
+            RDPClientTryDropConnection("an invalid Encrypt Flag in Slow-Path output pdu");
             #endregion
         }
 
@@ -289,9 +280,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a Slow-Path output PDU to SUT and the totalLength field within shareDataHeader is inconsistent with the sent data.");
             this.rdpbcgrAdapter.SendSlowPathOutputPdu(SlowPathTest_InvalidType.InvalidTotalLength);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT drop the connection.");
-            bool isDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(isDisconnected, "SUT should drop the connection when received an invalid Slow-Path output pdu.");
+            RDPClientTryDropConnection("an invalid Total Length in Slow-Path output pdu");            
 
             #endregion
         }
