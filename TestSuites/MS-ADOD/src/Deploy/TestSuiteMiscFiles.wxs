@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?define SYMBOLS_DIR=$(env.TestSuiteRoot)\drop\TestSuites\MS-ADOD\Bin?>
+<?define PROTOSDK_DROP_DIR=$(env.TestSuiteRoot)\drop\ProtoSDK\Bin?>
+<?define TESTSUITE_SRC_DIR=$(env.TestSuiteRoot)\TestSuites\MS-ADOD?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="TESTSUITE_MISC_FILES">
+      <ComponentRef Id="MS_ADOD_ODAdapter.pdb" />
+      <ComponentRef Id="MS_ADOD_ODTestSuite.pdb" />
+      <ComponentRef Id="Microsoft_Protocols_TestTools_MessageAnalyzer.pdb"/>
+      <ComponentRef Id="Microsoft_Protocols_TestTools_MessageAnalyzer.dll"/>
+      <ComponentRef Id="ODLocalTestRun.testrunconfig" />
+    </ComponentGroup>
+
+
+    <!-- Files to be installed to SUT. -->
+    <!-- Scripts in drop folder are automatically installed. -->
+    <ComponentGroup Id="TESTSUITE_SUT_FILES">
+     
+    </ComponentGroup>
+
+
+    <!-- Files to be installed to domain. -->
+    <!-- Scripts in drop folder are automatically installed. -->
+    <ComponentGroup Id="TESTSUITE_DOMAIN_FILES">
+      <!--
+      <ComponentRef Id="FILENAME"/>
+      -->
+    </ComponentGroup>
+    
+    <DirectoryRef Id="TESTSUITE_BIN_DIR">
+      <Component Id="ODLocalTestRun.testrunconfig" Guid="{7939995D-A8BD-4468-9EB5-796DA5BDFEAC}">
+        <File Id="ODLocalTestRun.testrunconfig"
+              Source="$(var.SYMBOLS_DIR)\ODLocalTestRun.testrunconfig"/>
+      </Component>
+      <Component Id="MS_ADOD_ODAdapter.pdb" Guid="{B5C6FDE6-87E7-4E64-80B7-CC0F52FEC54C}">
+        <File Id="MS_ADOD_ODAdapter.pdb"
+              Source="$(var.SYMBOLS_DIR)\MS-ADOD_ODAdapter.pdb" />
+      </Component>
+
+      <Component Id="MS_ADOD_ODTestSuite.pdb" Guid="{E9E49524-4503-40D5-B26D-2948A6F7714A}">
+        <File Id="MS_ADOD_ODTestSuite.pdb"
+              Source="$(var.SYMBOLS_DIR)\MS-ADOD_ODTestSuite.pdb" />
+      </Component>
+      
+      <Component Id="Microsoft_Protocols_TestTools_MessageAnalyzer.pdb" Guid="{79FFC4E8-269E-4B2B-BFCB-6154F03BDC12}">
+        <File Id="Microsoft_Protocols_TestTools_MessageAnalyzer.pdb"
+              Source="$(var.SYMBOLS_DIR)\Microsoft.Protocols.TestTools.MessageAnalyzer.pdb" />
+      </Component>
+
+      <Component Id="Microsoft_Protocols_TestTools_MessageAnalyzer.dll" Guid="{AE4040B8-3047-4920-B254-6D5513657B48}">
+        <File Id="Microsoft_Protocols_TestTools_MessageAnalyzer.dll"
+              Source="$(var.SYMBOLS_DIR)\Microsoft.Protocols.TestTools.MessageAnalyzer.dll" />
+      </Component>
+    </DirectoryRef>
+  
+    </Fragment>
+</Wix>

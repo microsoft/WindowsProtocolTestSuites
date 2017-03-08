@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ExpectedMessageList>
+  <Filter>(LDAP)</Filter>
+  <!--1. LDAP Bind Request-->
+  <!--2. LDAP Bind Response-->
+  <!--with the credentials of the administrator-->
+  <ExpectedMessage>
+    <Name>LDAP.VirtualOperations.LdapBindOperation</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Result" Value="0" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--3. LDAP Search Request-->
+  <!--look for the users in the user list, starts at the root of the domain-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.BaseObject" Value="CN={DomainNewUserUsername},CN=Users,{RootDomainNC}" Type="string"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--4. LDAP search Response-->
+  <!--return the DN of the user-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.ObjectName" Value="CN={DomainNewUserUsername},CN=Users,{RootDomainNC}" Type="string"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--5. LDAP Unbind Request-->
+</ExpectedMessageList>

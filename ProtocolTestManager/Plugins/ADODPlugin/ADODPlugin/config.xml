@@ -1,0 +1,25 @@
+<!--  TODO:   Update TestListName, AutoDetectionDllName -->
+<Config>
+	<PtfFileNames>
+		<PtfFileName>MS-ADOD_ODTestSuite.deployment.ptfconfig</PtfFileName>
+	</PtfFileNames>
+	<ConfigFileInSourceCode>
+		<PtfFileName>Source\OD\TestCode\TestSuite\MS-ADOD_ODTestSuite.deployment.ptfconfig</PtfFileName>
+	</ConfigFileInSourceCode>
+	<DllFileNames>
+		<DllFileName>Bin\MS-ADOD_ODTestSuite.dll</DllFileName>
+	</DllFileNames>
+	<AutoDetectionDllName>ADODPlugin.dll</AutoDetectionDllName>
+	<ConfigCaseRule>
+    <Group name ="Select Category">
+      <Rule name = "BVT">
+        <Category name = "BVT"/>
+      </Rule>
+      <Rule name = "non BVT">
+        <Category name = "!BVT"/>
+      </Rule>
+    </Group>
+	</ConfigCaseRule>
+	<TestSetting>Bin\ODLocalTestRun.testrunconfig</TestSetting>
+	<VSTestPath>C:\Program Files (x86)\Microsoft Visual Studio 11.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe</VSTestPath>
+</Config>

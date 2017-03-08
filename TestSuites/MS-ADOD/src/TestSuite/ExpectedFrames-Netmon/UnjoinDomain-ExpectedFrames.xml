@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExpectedFrames Name="UnjoinDomain">
+  <CatureFilter></CatureFilter>
+  <SpecialFilter></SpecialFilter>
+  <VerificationFilters>
+    <Filter>(SMB2 OR SAMR) AND ((sourcenetworkaddress == {ClientIP} AND destinationnetworkaddress == {PDCIP}) OR (sourcenetworkaddress == {PDCIP} AND destinationnetworkaddress ==  {ClientIP}))</Filter>
+  </VerificationFilters>
+  <ExpectedFrameList>
+    <ExpectedFrame Name="SMB2 session bind" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.SMB2.CSessionSetup" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="SMB2 session bind response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.SMB2.RSessionSetup" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="SamrConnect5.Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrConnect5.Request" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <!--<ExpectedFrame Name="SamrConnect5.Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrConnect5.Response" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>-->
+    <ExpectedFrame Name="SamrOpenDomain.Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrOpenDomain.Request" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <!--<ExpectedFrame Name="SamrOpenDomain.Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrOpenDomain.Response" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>-->
+    <ExpectedFrame Name="SamrLookupNamesInDomain.Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrLookupNamesInDomain.Request" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <!--<ExpectedFrame Name="SamrLookupNamesInDomain.Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrLookupNamesInDomain.Response" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>-->
+    <ExpectedFrame Name="SamrOpenUser.Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrOpenUser.Request" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <!--<ExpectedFrame Name="SamrOpenUser.Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrOpenUser.Response" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>-->
+    <ExpectedFrame Name="SamrQueryInformationUser.Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrQueryInformationUser.Request" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <!--<ExpectedFrame Name="SamrQueryInformationUser.Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrQueryInformationUser.Response" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>-->
+    <ExpectedFrame Name="SamrSetInformationUser.Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrSetInformationUser.Request" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <!--<ExpectedFrame Name="SamrSetInformationUser.Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrSetInformationUser.Response" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>-->
+    <ExpectedFrame Name="SamrCloseHandle.Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrCloseHandle.Request" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <!--<ExpectedFrame Name="SamrCloseHandle.Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrCloseHandle.Response" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>-->
+    <ExpectedFrame Name="SamrCloseHandle.Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrCloseHandle.Request" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <!--<ExpectedFrame Name="SamrCloseHandle.Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrCloseHandle.Response" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>-->
+    <ExpectedFrame Name="SamrCloseHandle.Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrCloseHandle.Request" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <!--<ExpectedFrame Name="SamrCloseHandle.Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Samr.SamrCloseHandle.Response" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>-->
+  </ExpectedFrameList>
+</ExpectedFrames>

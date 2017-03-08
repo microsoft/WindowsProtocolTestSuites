@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+  <Properties>
+    <!--Basic Configuration.-->
+
+    <!--Category: Domain Information.-->
+    <!--Scope: All scope (Windows, NonWindows).-->
+    <!--Type: string! Usage: Full Qualified Domain Name or NetBIOS Domain Name.-->
+    <Property name="FullDomainName" value="contoso.com" >
+      <Description>Type: string! Usage: Full Qualified Domain Name or NetBIOS Domain Name. </Description>
+    </Property>
+    <!--Type: string! Usage: Domain Naming Context.-->
+    <Property name="DomainNC" value="DC=contoso,DC=com" >
+      <Description>Type: string! Usage: Domain Naming Context. </Description>
+    </Property>
+    <!--Type: string! Usage: Partitions Naming Context.-->
+    <Property name="PartitionsNC" value="CN=Partitions,CN=Configuration,DC=contoso,DC=com">
+      <Description>Type: string! Usage: Partitions Naming Context.-</Description>
+    </Property>
+    <!--Type: string! Usage: Domain Administrator Username.-->
+    <Property name="DomainAdminUsername" value="Administrator" >
+      <Description>Type: string! Usage: Domain Administrator Username.</Description>
+    </Property>
+    <!--Type: string! Usage: Domain Administrator Password.-->
+    <Property name="DomainAdminPwd" value="Password01!" >
+      <Description>Type: string! Usage: Domain Administrator Password.</Description>
+    </Property>
+
+    <!--Category: Primary Domain Controller Information.-->
+    <!--Scope: All scope (Windows, NonWindows).-->
+    <!--Type: string! Usage: Primary Domain Controller Operating System. (Windows/NonWindows)-->
+    <Property name="PDCOperatingSystem" value="Windows" >
+      <Description>Type: string! Usage: Primary Domain Controller Operating System. (Windows/NonWindows)</Description>
+    </Property>
+    <!--Type: string! Usage: Primary Domain Controller Computer Name.-->
+    <Property name="PDCComputerName" value="PDC.contoso.com">
+      <Description>Type: string! Usage: Primary Domain Controller Computer Name. </Description>
+    </Property>
+    <!--Type: string! Usage: Primary Domain Controller IP Address.-->
+    <Property name="PDCIP" value="192.168.1.201" >
+      <Description>Type: string! Usage: Primary Domain Controller IP Address.</Description>
+    </Property>
+
+    <!--Category: Client Computer Information.-->
+    <!--Scope: All scope (Windows, NonWindows).-->
+    <!--Type: string! Usage: Client Computer Operating System. (Windows/NonWindows)-->
+    <Property name="ClientOperatingSystem" value="Windows" >
+      <Description>Type: string! Usage: Client Computer Operating System. (Windows/NonWindows) </Description>
+    </Property>
+    <!--Type: string! Usage: Client Computer Operating System Version, if non-windows, choose the windows client version it is referring to when implementing. (WindowsXP = 5.1, WindowsVista = 6.0, Windows7 = 6.1, Windows8 = 6.2, Windows8.1 = 6.3*)-->
+    <Property name="ClientOSVersion" value="6.2" >
+      <Description>Type: string! Usage: Client Computer Operating System Version, if non-windows, choose the windows client version it is referring to when implementing. (WindowsXP = 5.1, WindowsVista = 6.0, Windows7 = 6.1, Windows8 = 6.2, Windows8.1 = 6.3*) </Description>
+    </Property>
+    <!--Type: string! Usage: Client Computer Name.-->
+    <Property name="ClientComputerName" value="ENDPOINT01" >
+      <Description>Type: string! Usage: Client Computer Name. </Description>
+    </Property>
+    <!--Type: string! Usage: Client Computer IP Address.-->
+    <Property name="ClientIP" value="192.168.2.1" >
+      <Description>Type: string! Usage: Client Computer IP Address.</Description>
+    </Property>
+    <!--Type: string! Usage: Client Computer Administrator Username.-->
+    <Property name="ClientAdminUsername" value="Administrator">
+      <Description>Type: string! Usage: Client Computer Administrator Username. </Description>
+    </Property>
+    <!--Type: string! Client Administrator Password.-->
+    <Property name="ClientAdminPwd" value="Password01!" >
+      <Description>Type: string! Client Administrator Password. </Description>
+    </Property>
+
+    <!--Advanced Configuration.-->
+    <!--Category: Logs and Scripts.-->
+    <!--Scope: Windows.-->
+    <!--Type: string! Usage: Netmon Capture File Path on Local Computer.(PDC, Client Computer or Driver Computer)-->
+    <Property name="LocalCapFilePath" value="C:\Logs\Capture" >
+      <Description>Type: string! Usage: Netmon Capture File Path on Local Computer.(PDC, Client Computer or Driver Computer) </Description>
+    </Property>
+    <!--Type: string! Usage: Log Path for PowerShell Adapters on Driver Computer.-->
+    <Property name="DriverLogPath" value="C:\Logs\Driver" >
+      <Description>Type: string! Usage: Log Path for PowerShell Adapters on Driver Computer.</Description>
+    </Property>
+    <!--Scope: All scope (Windows, NonWindows).-->
+    <!--Type: string! Usage: Script Path on Client Computer. (Windows: PowerShell Scripts; NonWindows: Shell Scripts, etc.)-->
+    <Property name="ClientScriptPath" value="C:\MicrosoftProtocolTests\MS-ADOD\OD-Endpoint\1.0.5617.0\Scripts" >
+      <Description>Type: string! Usage: Script Path on Client Computer. (Windows: PowerShell Scripts; NonWindows: Shell Scripts, etc.) </Description>
+    </Property>
+    <!--Type: string! Usage: Script Log Path on Client Computer. (Windows: PowerShell Scripts; NonWindows: Shell Scripts, etc.)-->
+    <Property name="ClientLogPath" value="C:\Logs\Client" >
+      <Description>Type: string! Usage: Script Log Path on Client Computer. (Windows: PowerShell Scripts; NonWindows: Shell Scripts, etc.)</Description>
+    </Property>
+    <!--Category: Telnet Configuration Information.-->
+
+    <!--Type: bool! Usage: Disable trigger for SUT control adapters, and netmon captures.-->
+    <Property name="TriggerDisabled" value="false" >
+      <Description>Type: bool! Usage: Disable trigger for SUT control adapters, and netmon captures.</Description>
+    </Property>
+
+    <!--Scope: NonWindows.-->
+    <!--Type: int! Usage: Port Number for Telnet Server on Client Computer.-->
+    <Property name="TelnetPort" value="23" />
+    <!--Type: string! Usage: Shell Script Names.-->
+    <Property name="LocateDomainControllerScript" value="LocateDomainController.sh" />
+    <Property name="JoinDomainCreateAcctLDAPScript" value="JoinDomainCreateAcctLDAP.sh" />
+    <Property name="JoinDomainCreateAcctSAMRScript" value="JoinDomainCreateAcctSAMR.sh" />
+    <Property name="JoinDomainPredefAcctScript" value="JoinDomainPredefAcct.sh" />
+    <Property name="UnjoinDomainScript" value="UnjoinDomain.sh" />
+    <Property name="IsJoinDomainSuccessScript" value="IsJoinDomainSuccess.sh" />
+    <Property name="IsUnjoinDomainSuccessScript" value="IsUnjoinDomainSuccess.sh" />
+    <!--Category: Test Case Specific Configuration Information.-->
+    <!--Scope: All scope (Windows, NonWindows).-->
+    <!--Type: string! Usage: Single Method Timeout in seconds.-->
+    <Property name="Timeout" value="600" />
+    <!--Type: string! Usage: Single Method Retry Interval in seconds.-->
+    <Property name="RetryInterval" value="1" />
+    <!--Type: string! Usage: Domain New User Username.-->
+    <Property name="DomainNewUserUsername" value="user1" />
+    <!--Type: string! Usage: Domain New User Password.-->
+    <Property name="DomainNewUserPwd" value="Password01!" />
+    <!--Type: string! Usage: Domain New User SamAccountName.-->
+    <Property name="DomainNewUserSamAccountName" value="user1" />
+    <!--Type: string! Usage: Domain New User New Password.-->
+    <Property name="DomainNewUserNewPwd" value="Password02!" />
+    <!--Type: string! Usage: Domain New Group GroupName-->
+    <Property name="DomainNewGroup" value="testgroup" />
+
+    <!--Type: int! Usage: Sleep time for each test case-->
+    <Property name="JoinDomainCreateAcctLDAPSleepTime" value="25000" />
+    <Property name="JoinDomainCreateAcctSAMRSleepTime" value="25000" />
+    <Property name="JoinDomainPredefAcctSleepTime" value="25000" />
+    <Property name="UnjoinDomainSleepTime" value="25000" />
+
+  </Properties>
+</TestSite>

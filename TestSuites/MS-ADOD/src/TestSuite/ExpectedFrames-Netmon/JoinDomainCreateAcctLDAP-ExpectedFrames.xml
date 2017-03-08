@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExpectedFrames Name="JoinDomainCreateAcctLDAP">
+  <CatureFilter></CatureFilter>
+  <SpecialFilter></SpecialFilter>
+  <VerificationFilters>
+    <Filter>(LDAPMessage OR DRSR OR NRPC) AND ((sourcenetworkaddress == {ClientIP} AND destinationnetworkaddress == {PDCIP}) OR (sourcenetworkaddress == {PDCIP} AND destinationnetworkaddress ==  {ClientIP}))</Filter>
+  </VerificationFilters>
+  <ExpectedFrameList>
+    <!--DC-Location Ping and DC-Location Response are tested in the LocateDomainController test case.-->
+    <ExpectedFrame Name="LDAP Bind Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.BindRequest.Authentication.Credentials.Mechanism" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LDAP Bind Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.BindResponse.Result.ResultCode.Value.AsnInt" IsValueRequired="true" Value="0" ValueType="string"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <!--Update local domain name and forest name-->
+    <!--<ExpectedFrame Name="LDAP Search Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchRequest.BaseObject.AsnOctetStringHeader.AsnLen.OneByteLength.Length" IsValueRequired="true" Value="0" ValueType="int"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LDAP Search Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchResultDone.ResultCode.Value.AsnInt" IsValueRequired="true" Value="0" ValueType="int"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>-->
+    <!--Update local domain GUID and domain SID-->
+    <!--<ExpectedFrame Name="LDAP Search Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchRequest.BaseObject.OctetStream" IsValueRequired="true" Value="{DomainNC}" ValueType="string"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LDAP Search Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchResultDone.ResultCode.Value.AsnInt" IsValueRequired="true" Value="0" ValueType="int"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>-->
+    <!--Update NetBIOS name-->
+    <!--<ExpectedFrame Name="LDAP Search Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchRequest.BaseObject.OctetStream" IsValueRequired="true" Value="{PartitionsNC}" ValueType="string"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LDAP Search Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchResultDone.ResultCode.Value.AsnInt" IsValueRequired="true" Value="0" ValueType="int"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>-->
+    <ExpectedFrame Name="IDL_DRSBind Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Drsr.drsuapi.IdlDRSBind.Request" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="IDL_DRSBind Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Drsr.drsuapi.IdlDRSBind.Response" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="IDL_DRSCrackNames Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Drsr.drsuapi.IdlDRSCrackNames.Request" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="IDL_DRSCrackNames Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Drsr.drsuapi.IdlDRSCrackNames.Response" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <!--If the DN of the OU that was used to create the computer account was specified and the account does not exist under the OU,
+    the domain client sends an LDAP compare request to teh domain controller. Otherwise, the domain client sends an IDL_DRSCrackNames request-->
+    <!--<ExpectedFrame Name="LDAP Compare Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.CompareRequest" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LDAP Compare Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.CompareResponse.ResultCode.Value.AsnInt" IsValueRequired="true" Value ="0" ValueType ="int"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>-->
+    <ExpectedFrame Name="IDL_DRSUnbind Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Drsr.drsuapi.IdlDRSUnbind.Request" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="IDL_DRSUnbind Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Drsr.drsuapi.IdlDRSUnbind.Response" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <!--If the DN of the OU that was used create the computer account was not specified and the account does not exist under the OU,
+    the domain client sends an LDAP search request to the domain controller.-->
+    <!--<ExpectedFrame Name="LDAP Search Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchRequest.BaseObject" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LDAP Search Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchResultEntry.ObjectName.OctetStream" IsValueRequired="false"/>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchResultDone.ResultCode.Value.AsnInt" IsValueRequired="true" Value="0" ValueType="int"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>-->
+    <!--<ExpectedFrame Name="LDAP Search Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchRequest.BaseObject.OctetStream" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LDAP Search Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchResultEntry.ObjectName.OctetStream" IsValueRequired="false"/>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchResultDone.ResultCode.Value.AsnInt" IsValueRequired="true" Value="0" ValueType="int"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>-->
+    <!--The domain client sends an LDAP add request to the domain controller to add the new account to the directory with the
+    updated DN from the previous step.-->
+    <!--<ExpectedFrame Name="LDAP Add Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.AddRequest.Entry.OctetStream" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LDAP Add Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.AddResponse.ResultCode.Value.AsnInt" IsValueRequired="true" Value="0" ValueType="int"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>-->
+    <ExpectedFrame Name="DsrEnumerateTrusts" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.NRPC.DsrEnumerateDomainTrusts.Request" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="DsrEnumerateTrusts Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.NRPC.DsrEnumerateDomainTrusts.Response" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+  </ExpectedFrameList>
+</ExpectedFrames>

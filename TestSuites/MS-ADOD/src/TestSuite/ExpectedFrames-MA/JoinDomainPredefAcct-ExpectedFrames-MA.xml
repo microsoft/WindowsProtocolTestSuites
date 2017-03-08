@@ -1,0 +1,375 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ExpectedMessageList>
+  <Filter>(CLDAP OR LDAP OR MSRPCE OR DRSR OR NRPC OR SASL)</Filter>
+  <!--1. LDAP DC-location Ping-->
+  <ExpectedMessage>
+    <Description>1. LDAP DC-location Ping: If the domain controller was not located earlier, the client locates a domain controller, as described in [MS-ADOD] section 3.1.1.</Description>
+    <Name>CLDAP.CldapMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <ArrayField FieldName="ProtocolOp.Filter.Content.Content">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Content.AttributeDesc" Value="DnsDomain" Type="string"/>
+          <VerifyItem Operation="equal" FieldName="Content.AssertionValue" Value="{FullDomainName}" Type="string"/>
+        </VerifyItemList>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Content.AttributeDesc" Value="Host" Type="string"/>
+          <VerifyItem Operation="equal" FieldName="Content.AssertionValue" Value="{ClientComputerName}" Type="string"/>
+        </VerifyItemList>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Content.AttributeDesc" Value="NtVer" Type="string"/>
+        </VerifyItemList>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Content.AttributeDesc" Value="DnsHostName" Type="string"/>
+          <VerifyItem Operation="equal" FieldName="Content.AssertionValue" Value="{ClientComputerName}" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+    <ArrayField FieldName="ProtocolOp.Attributes">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="Netlogon" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--2. LDAP DC-location response-->
+  <ExpectedMessage>
+    <Description>2. LDAP DC-location response: If the client receives a successful response from the domain controller, the DC is located. If the response is not successful, the task fails.</Description>
+    <Name>ADTS.NetlogonSamLogonResponseEx</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Opcode" Value="23" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="DnsForestName" Value="{FullDomainName}" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="DnsHostName" Value="{NetbiosComputerName}.{FullDomainName}" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="NetbiosDomainName" Value="{NetbiosDomainName}" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="NetbiosComputerName" Value="{NetbiosComputerName}" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="LmNtToken" Value="65535" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Lm20Token" Value="65535" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--3. LDAP bind request-->
+  <ExpectedMessage>
+    <Description>3. LDAP bind request: The domain client computer sends an LDAP bind request ([RFC2251] section 4.2) to the domain controller with the credentials of the administrator.</Description>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.Version" Value="3" Type="int"/>
+    </VerifyItemList>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.Authentication.Mechanism" Value="GSS-SPNEGO" Type="string"/>
+    </VerifyItemList>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.Authentication.Credentials.Gssapi.InnerContextToken.MechToken.Gssapi.Payload.Token.Krb5.Ticket.Realm" Value="{FullDomainName}" Type="string"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--4. LDAP bind response-->
+  <ExpectedMessage>
+    <Description>4. LDAP bind response: The domain controller uses one of the methods defined elsewhere ([MS-AUTHSOD] section 2) to verify the credentials. Depending on the negotiated authentication method, this might involve additional domain client and server interactions not directly relevant to this discussion. After verification, the domain controller sends an LDAP bind response ([RFC2251] section 4.2.3) to the domain client.</Description>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.ResultCode" Value="0" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--5. LDAP search request-->
+  <!--Encrypted: baseObject = NULL domain name-->
+  <ExpectedMessage>
+    <Description>5. LDAP search request: The domain client computer sends an LDAP search request to the domain controller ([RFC2251] section 4.5.1) with baseObject set to the NULL domain name.</Description>
+    <Name>SASL.SaslMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Buffer.TokID" Value="1284" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Buffer.Token.Flags.Sealed" Value="true" Type="bool"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--6. LDAP search response-->
+  <!--Encrypted: return local domain name, forest name-->
+  <ExpectedMessage>
+    <Description>6. LDAP search response: Upon a successful response from the domain controller, the domain client updates the local domain name and the forest name in its abstract data.</Description>
+    <Name>SASL.SaslMessage</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Buffer.TokID" Value="1284" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Buffer.Token.Flags.Sealed" Value="true" Type="bool"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--7. LDAP search request-->
+  <!--Encrypted: baseObject = local domain name-->
+  <ExpectedMessage>
+    <Description>7. LDAP search request: The domain client computer sends an LDAP search request to the domain controller ([RFC2251] section 4.5.1) with baseObject set to the domain name that was obtained from step 5.</Description>
+    <Name>SASL.SaslMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Buffer.TokID" Value="1284" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Buffer.Token.Flags.Sealed" Value="true" Type="bool"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--8. LDAP search response-->
+  <!--Encrypted: local domain GUID, domain SID-->
+  <ExpectedMessage>
+    <Description>8. LDAP search response: Upon a successful response from the domain controller, the domain client updates the local domain GUID and domain SID in its abstract data.</Description>
+    <Name>SASL.SaslMessage</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Buffer.TokID" Value="1284" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Buffer.Token.Flags.Sealed" Value="true" Type="bool"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--9. LDAP search request-->
+  <!--Encrypted: baseObject = concatenation of "CN=Partitions", with the configurationNamingContext obtained in step 5-->
+  <ExpectedMessage>
+    <Description>9. LDAP search request: The domain client computer sends an LDAP search request to the domain controller ([RFC2251] section 4.5.1) with baseObject set to the concatenation of "CN=Partitions," with the value of configurationNamingContext that was obtained in step 5.</Description>
+    <Name>SASL.SaslMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Buffer.TokID" Value="1284" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Buffer.Token.Flags.Sealed" Value="true" Type="bool"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--10. LDAP search response-->
+  <!--Encrypted: NetBIOS name-->
+  <ExpectedMessage>
+    <Description>10. LDAP search response: Upon a successful response from the domain controller, the domain client updates the NetBIOS name in its abstract data.</Description>
+    <Name>SASL.SaslMessage</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Buffer.TokID" Value="1284" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Buffer.Token.Flags.Sealed" Value="true" Type="bool"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--11. IDL_DRSBind request-->
+  <!--12. IDL_DRSBind response-->
+  <!--Encrypted: create a context handle that is necessary to call any other directory replication server (DRS) messages-->
+  <ExpectedMessage>
+    <Description>
+      11. IDL_DRSBind request: The domain client sends an IDL_DRSBind request ([MS-DRSR] section 4.1.3) to create a context handle that is necessary to call any other DRSR messages.
+      12. IDL_DRSBind response: The domain controller sends an IDL_DRSBind response to the domain client.
+    </Description>
+    <Name>DRSR._Extendeddrsuapi.EncryptedOperation</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Opnum" Value="0" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--13. IDL_DRSCrackNames request-->
+  <!--14. IDL_DRSCrackNames response-->
+  <!--Encrypted: get the distinguished name (DN) of the organizational unit (OU) 
+  that was used to create the computer account-->
+  <ExpectedMessage>
+    <Description>
+      13. IDL_DRSCrackNames request: The domain client sends an IDL_DRSCrackNames request ([MS-DRSR] section 4.1.4) to the domain controller to get the NetBIOS name from the canonical name of the domain.
+      14. IDL_DRSCrackNames response: Upon a successful response from the domain controller, the NetBIOS-formatted domain name and the computer name are used to form the NetBIOS-formatted computer name.
+    </Description>
+    <Name>DRSR._Extendeddrsuapi.EncryptedOperation</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Opnum" Value="12" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--15. IDL_DRSCrackNames request-->
+  <!--16. IDL_DRSCrackNames response-->
+  <!--Encrypted: get the distinguished name (DN) of the computer account-->
+  <!--If the DN of OU was specified and the computer account does not exist,
+  the domain client sends an LDAP compare request ([RFC2251] section 4.10) to the domain controller to verify the OU.
+  Otherwise, the domain client sends an IDL_DRSCrackNames request ([MS-DRSR] section 4.1.4).
+  On a successful response from the domain controller, the domain client updates the DN of the client account-->
+  <ExpectedMessage>
+    <Description>
+      15. IDL_DRSCrackNames request: The domain client sends an IDL_DRSCrackNames request ([MS-DRSR] section 4.1.4) to the domain controller to translate NetBIOS format computer name to FQDN name format.
+      16. IDL_DRSCrackNames response: Upon a successful response from the domain controller, the domain client gets back the list of computer objects with the above FQDN name. If there are more than 1, the task fails.If the returned result contains a name, and the domain client does not specify an OU, the domain client updates the DN of the client account. If the domain client specifies an OU, and the returned name is not in the same OU, the task fails.
+    </Description>
+    <Name>DRSR._Extendeddrsuapi.EncryptedOperation</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Opnum" Value="12" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--17. LDAP compare request-->
+  <!--Encrypted: The domain client sends an LDAP compare request ([RFC2251] section 4.10) to the domain controller to verify the OU.-->
+  <!--Only for create new account-->
+  <!--<ExpectedMessage>
+    <Description>17. LDAP compare request: If no result is obtained in the last step and the domain client does not specify an OU, the domain client sends an LDAP compare request ([RFC2251] section 4.10) to the domain controller to verify the OU.</Description>
+    <Name>SASL.SaslMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Buffer.TokID" Value="1284" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Buffer.Token.Flags.Sealed" Value="true" Type="bool"/>
+    </VerifyItemList>
+  </ExpectedMessage>-->
+  <!--18. LDAP compare response-->
+  <!--Encrypted: If the OU is correct, the domain client uses the DN of the OU and the computer name to form the FQDN-formatted computer name.-->
+  <!--Only for create new account-->
+  <!--<ExpectedMessage>
+    <Description>18. LDAP compare response: Upon a successful response from the domain controller, the domain client uses the DN of the OU and the computer name to form the FQDN-formatted computer name.</Description>
+    <Name>SASL.SaslMessage</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Buffer.TokID" Value="1284" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Buffer.Token.Flags.Sealed" Value="true" Type="bool"/>
+    </VerifyItemList>
+  </ExpectedMessage>-->
+  <!--19. IDL_DRSCrackNames request-->
+  <!--20. IDL_DRSCrackNames response-->
+  <!--Only for create new account-->
+  <!--(Not used in this example) Encrypted: the domain client sends an IDL_DRSCrackNames request ([MS-DRSR] section 4.1.4) to the domain controller to get the FQDN format domain from the NetBIOS format domain name obtained in step 13.-->
+  <!--<ExpectedMessage>
+    <Description>
+      19. IDL_DRSCrackNames request: If the domain client does not specify an OU and no account was found in step 16, the domain client sends an IDL_DRSCrackNames request ([MS-DRSR] section 4.1.4) to the domain controller to get the FQDN format  domain from the NetBIOS format domain name (obtained via IDL_DRSCrackNames request in step 13).
+      20. IDL_DRSCrackNames response: Upon a successful response from the domain controller, the domain client updates the FQDN format domain name in its abstract data.
+    </Description>
+    <Name>DRSR._Extendeddrsuapi.EncryptedOperation</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Opnum" Value="12" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>-->
+  <!--21. LDAP search request-->
+  <!--Only for create new account-->
+  <!--Encrypted: search the default computer container DN, and obtain the DN of the prefered OU-->
+  <!--<ExpectedMessage>
+    <Description>21. LDAP search request: The domain client sends an LDAP search request ([RFC2251] section 4.5.1) to the domain controller with baseObject set to the FQDN format domain name.</Description>
+    <Name>SASL.SaslMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Buffer.TokID" Value="1284" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Buffer.Token.Flags.Sealed" Value="true" Type="bool"/>
+    </VerifyItemList>
+  </ExpectedMessage>-->
+  <!--22. LDAP search response-->
+  <!--Only for create new account-->
+  <!--Encrypted: return DN of the default computer container OU-->
+  <!--<ExpectedMessage>
+    <Description>22. LDAP search response: Upon a successful response from the domain controller, the domain client parses the returned value for the DN of the default computer container DN (see [MS-ADTS] section 6.1.1.4 for details) and obtains the DN of the preferred OU, which it uses to form the computer DN. If this search fails, the task fails.</Description>
+    <Name>SASL.SaslMessage</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Buffer.TokID" Value="1284" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Buffer.Token.Flags.Sealed" Value="true" Type="bool"/>
+    </VerifyItemList>
+  </ExpectedMessage>-->
+  <!--23. IDL_DRSUnbind request-->
+  <!--24. IDL_DRSUnbind response-->
+  <!--Encrypted: destroy the context handle that was created previously-->
+  <ExpectedMessage>
+    <Description>
+      23. IDL_DRSUnbind request: The domain client sends an IDL_DRSUnbind request ([MS-DRSR] section 4.1.25) to destroy the context handle that was created previously.
+      24. IDL_DRSUnbind response: Upon a successful response from the domain controller, the previously created context handle is destroyed.
+    </Description>
+    <Name>DRSR._Extendeddrsuapi.EncryptedOperation</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Opnum" Value="1" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--25. LDAP search request-->
+  <!--Encrypted: 	baseObject = computer DN-->
+  <ExpectedMessage>
+    <Description>25. LDAP search request: The domain client sends LDAP search request ([RFC2251] section 4.5.1) to the domain controller with baseObject set to the computer DN.</Description>
+    <Name>SASL.SaslMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Buffer.TokID" Value="1284" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Buffer.Token.Flags.Sealed" Value="true" Type="bool"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--26. LDAP search response-->
+  <!--Encrypted: On a successful response from the domain controller, the domain client 
+  updates the DN of the client account.-->
+  <ExpectedMessage>
+    <Description>26. LDAP search response: Upon a successful response from the domain controller, the domain client updates the DN of the client account.</Description>
+    <Name>SASL.SaslMessage</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Buffer.TokID" Value="1284" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Buffer.Token.Flags.Sealed" Value="true" Type="bool"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--27. LDAP add request-->
+  <!--Only for create new account-->
+  <!--Encrypted: 	add the new account to the directory with the updated DN from the previous step-->
+  <!--<ExpectedMessage>
+    <Description>27. LDAP add request: The domain client sends an LDAP add request ([RFC2251] section 4.7) to the domain controller to add the new account to the directory with the updated DN from the previous step.</Description>
+    <Name>SASL.SaslMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Buffer.TokID" Value="1284" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Buffer.Token.Flags.Sealed" Value="true" Type="bool"/>
+    </VerifyItemList>
+  </ExpectedMessage>-->
+  <!--28. LDAP add response-->
+  <!--Only for create new account-->
+  <!--Encrypted: On a successful response from domain controller, the new account is added in the directory-->
+  <!--<ExpectedMessage>
+    <Description>28. LDAP add response: Upon a successful response from domain controller, the new account is added in the directory.</Description>
+    <Name>SASL.SaslMessage</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Buffer.TokID" Value="1284" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Buffer.Token.Flags.Sealed" Value="true" Type="bool"/>
+    </VerifyItemList>
+  </ExpectedMessage>-->
+  <!--29. LDAP unbind request-->
+  <!--Encrypted: 	remove all the connections that were built in the previous steps-->
+  <ExpectedMessage>
+    <Description>29. LDAP unbind request: The domain client sends an LDAP unbind message ([RFC2251] section 4.3) to the domain controller to remove all the connections that were built in the previous steps.</Description>
+    <Name>SASL.SaslMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Buffer.TokID" Value="1284" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Buffer.Token.Flags.Sealed" Value="true" Type="bool"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--30. DsrEnumerateTrusts request-->
+  <ExpectedMessage>
+    <Description>30. DsrEnumerateTrusts request: To retrieve the list of domain trusts from the domain controller, the domain client sends a DsrEnumerateDomainTrusts request ([MS-NRPC] section 3.5.4.7.1).</Description>
+    <Name>NRPC._logonMessages._DsrEnumerateDomainTrustsRequest</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ServerName" Value="\\{PDCComputerName}" Type="string"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--31. DsrEnumerateTrusts response-->
+  <ExpectedMessage>
+    <Description>31. DsrEnumerateTrusts response: Upon a successful response from the domain controller, the domain client retrieves the list of trusts from the DC.</Description>
+    <Name>NRPC._logonMessages._DsrEnumerateDomainTrustsResponse</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <ArrayField FieldName="Domains.Domains">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="NetbiosDomainName" Value="{NetbiosDomainName}" Type="string"/>
+          <VerifyItem Operation="equal" FieldName="DnsDomainName" Value="{FullDomainName}" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ReturnValue" Value="0" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+</ExpectedMessageList>

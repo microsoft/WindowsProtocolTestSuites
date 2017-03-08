@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ExpectedMessageList>
+  <Filter>(NBTNS or MAIL or ADTS)</Filter>
+  <!--1. Name discovery (RFC 1001/1002)-->
+  <ExpectedMessage>
+    <Description>1. Name discovery (RFC 1001/1002): When the FQDN of the domain is not available, the domain client determines the NetBIOS name of the domain based on the client's abstract data. If the NetBIOS name cannot be determined, an error is returned indicating that a domain controller could not be located. The domain client queries the NetBIOS name server for NetBIOS group names that contain the list of DCs.</Description>
+    <Name>NBTNS.NameService</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{BroadcastAddress}</Destination>
+    <ArrayField FieldName="Questions">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="QuestionName.Chars" Value="{NetbiosDomainName}  &lt;0x1B> Domain Master Browser" Type="string"/>
+          <VerifyItem Operation="equal" FieldName="QuestionType" Value="32" Type="ushort"/>
+          <VerifyItem Operation="equal" FieldName="QuestionClass" Value="1" Type="ushort"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--2. Name Response-->
+  <ExpectedMessage>
+    <Description>2. Name Response: The NetBIOS name server responds with the NetBIOS group names.</Description>
+    <Name>NBTNS.NameService</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <ArrayField FieldName="AnswerResourceRecord">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Type" Value="32" Type="ushort"/>
+          <VerifyItem Operation="equal" FieldName="Class" Value="1" Type="ushort"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--3. MAILSLOT Ping (MS-MAIL, MS-ADTS)-->
+  <ExpectedMessage>
+    <Description>3. MAILSLOT Ping (MS-MAIL, MS-ADTS): By using the NetBIOS group names that domain controllers register along with their capabilities, the domain client sends a MAILSLOT Ping to candidate domain controllers by using the Remote Mailslot Protocol. The Ping response is used to determine availability and to confirm that the domain controller supports all the specified requirements.</Description>
+    <Name>ADTS.NetlogonSamLogonRequest</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Opcode" Value="18" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="UnicodeComputerName" Value="{ClientComputerName}" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="LmNtToken" Value="65535" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Lm20Token" Value="65535" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--4. MAILSLOT Ping Response-->
+  <ExpectedMessage>
+    <Description>4. MAILSLOT Ping Response: Upon receipt of a successful MAILSLOT Ping response, the domain client validates that the capabilities that the domain controller returned satisfy the requested capabilities. If no domain controllers respond or if none match the required capabilities, the client returns an error indicating that a domain controller could not be located.</Description>
+    <Name>ADTS.NetlogonSamLogonResponseNt40</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Opcode" Value="19" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="UnicodeLogonServer" Value="\\{NetbiosComputerName}" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="UnicodeDomainName" Value="{NetbiosDomainName}" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="LmNtToken" Value="65535" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Lm20Token" Value="65535" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+</ExpectedMessageList>
