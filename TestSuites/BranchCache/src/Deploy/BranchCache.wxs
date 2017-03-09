@@ -34,7 +34,7 @@
     <WixVariable Id="TESTSUITE_BATCH_DIR" Value="..\Batch" />
     <WixVariable Id="PROTOSDK_DROP_DIR" Value="$(env.TestSuiteRoot)\drop\ProtoSDK\Bin" />
     
-	<WixVariable Id="DOMAIN_RUN_ALLTCS_COMMAND" Value="RunBranchCacheTestCases.cmd" />
+	<WixVariable Id="RunAllTestCases" Value="RunBranchCacheTestCases.cmd" />
 
     <WixVariable Id="QUICK_START_GUIDE" Value="BranchCache_UserGuide.docx" />
 
