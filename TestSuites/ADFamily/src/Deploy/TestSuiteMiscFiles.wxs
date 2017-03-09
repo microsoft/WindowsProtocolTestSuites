@@ -127,11 +127,14 @@
         <File Id="IMS_DRSR_RpcAdapter_RpcStubs.dll" Source="$(var.TESTSUITE_SYMBOLS_DIR)\IMS_DRSR_RpcAdapter_RpcStubs.dll" />
       </Component>
 
-      <Component Id="Microsoft.Protocols.TestTools.MessageAnalyzer.dll" Guid="{81747E88-5A3C-47B2-80AD-79E53BE13C15}">
-        <File Id="Microsoft.Protocols.TestTools.MessageAnalyzer.dll" Source="$(var.TESTSUITE_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.MessageAnalyzer.dll" />
+      <Component Id="Microsoft.Protocols.TestTools.MessageAnalyzer.pdb" Guid="{79FFC4E8-269E-4B2B-BFCB-6154F03BDC12}">
+        <File Id="Microsoft.Protocols.TestTools.MessageAnalyzer.pdb"
+              Source="$(var.TESTSUITE_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.MessageAnalyzer.pdb" />
       </Component>
-	  <Component Id="Microsoft.Protocols.TestTools.MessageAnalyzer.pdb" Guid="{81747E88-5A3C-47B2-80AD-79E53BE13C16}">
-        <File Id="Microsoft.Protocols.TestTools.MessageAnalyzer.pdb" Source="$(var.TESTSUITE_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.MessageAnalyzer.pdb" />
+
+      <Component Id="Microsoft.Protocols.TestTools.MessageAnalyzer.dll" Guid="{AE4040B8-3047-4920-B254-6D5513657B48}">
+        <File Id="Microsoft.Protocols.TestTools.MessageAnalyzer.dll"
+              Source="$(var.TESTSUITE_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.MessageAnalyzer.dll" />
       </Component>
 	  
       <Component Id="ServerLocalTestRun.testrunconfig" Guid="{E04D9F08-3B3F-4E55-ACF2-5CEF6B6104F1}">

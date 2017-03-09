@@ -117,7 +117,7 @@
     <Content Include="SutControlAdapter\RemoteSessionSetup.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MessageAnalyzerLibrary\MessageAnalyzerLibrary.csproj">
+    <ProjectReference Include="..\..\..\..\MessageAnalyzerLibrary\MessageAnalyzerLibrary.csproj">
       <Project>{e3b08663-c752-41cc-b2b7-43c69b8c1292}</Project>
       <Name>MessageAnalyzerLibrary</Name>
     </ProjectReference>

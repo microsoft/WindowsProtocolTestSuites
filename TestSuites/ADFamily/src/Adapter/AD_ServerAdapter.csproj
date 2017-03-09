@@ -302,6 +302,10 @@
     <Content Include="MS-APDS\SUTControlAdapter\RestoreNTLMRegistryKey.ps1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\MessageAnalyzerLibrary\MessageAnalyzerLibrary.csproj">
+      <Project>{e3b08663-c752-41cc-b2b7-43c69b8c1292}</Project>
+      <Name>MessageAnalyzerLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\ProtoSDK\Asn1Base\Asn1Base.csproj">
       <Project>{deda188c-c97e-4968-bc31-594925631e9f}</Project>
       <Name>Asn1Base</Name>
@@ -385,10 +389,6 @@
     <ProjectReference Include="..\..\..\..\ProtoSDK\TransportStack\TransportStack.csproj">
       <Project>{967d976a-c792-4893-9235-14615ae1ff58}</Project>
       <Name>TransportStack</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MessageAnalyzerLibrary\MessageAnalyzerLibrary.csproj">
-      <Project>{e3b08663-c752-41cc-b2b7-43c69b8c1292}</Project>
-      <Name>MessageAnalyzerLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

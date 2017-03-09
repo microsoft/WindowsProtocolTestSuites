@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MS-AZOD_ODTestSuite", "Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MS-AZOD_ODAdapter", "Adapter\MS-AZOD_ODAdapter.csproj", "{8EE14F2E-A5F9-42BC-9B37-9D23F570D728}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageAnalyzerLibrary", "MessageAnalyzerLibrary\MessageAnalyzerLibrary.csproj", "{E3B08663-C752-41CC-B2B7-43C69B8C1292}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageAnalyzerLibrary", "..\..\..\MessageAnalyzerLibrary\MessageAnalyzerLibrary.csproj", "{E3B08663-C752-41CC-B2B7-43C69B8C1292}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

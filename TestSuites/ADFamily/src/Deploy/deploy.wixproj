@@ -87,7 +87,7 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\MessageAnalyzerLibrary\MessageAnalyzerLibrary.csproj">
+    <ProjectReference Include="..\..\..\..\MessageAnalyzerLibrary\MessageAnalyzerLibrary.csproj">
       <Name>MessageAnalyzerLibrary</Name>
       <Project>{e3b08663-c752-41cc-b2b7-43c69b8c1292}</Project>
       <Private>True</Private>

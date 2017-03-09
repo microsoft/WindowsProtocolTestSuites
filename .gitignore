@@ -62,9 +62,15 @@ TestSuites/Kerberos/src/Deploy/TestSuiteScripts.wxs
 TestSuites/ADFamily/src/Deploy/Batch.wxs
 TestSuites/ADFamily/src/Deploy/Bin.wxs
 TestSuites/ADFamily/src/Deploy/PlayLists.wxs
+TestSuites/ADFamily/src/Deploy/DOCS_FILES.wxs
+TestSuites/ADFamily/src/Deploy/SCRIPT_FILES.wxs
 TestSuites/BranchCache/src/Deploy/TestSuiteBatchFiles.wxs
 TestSuites/BranchCache/src/Deploy/TestSuiteBinFiles.wxs
 TestSuites/MS-ADFSPIP/src/Deploy/TestSuiteBinFiles.wxs
 TestSuites/MS-ADFSPIP/src/Deploy/TestSuiteBatchFiles.wxs
 TestSuites/MS-ADFSPIP/src/Deploy/SCRIPT_FILES.wxs
 TestSuites/MS-ADFSPIP/src/Deploy/Certificate_Data.wxs
+TestSuites/MS-AZOD/src/Deploy/DOCS_FILES.wxs
+TestSuites/MS-AZOD/src/Deploy/Scripts_FILES.wxs
+TestSuites/MS-AZOD/src/Deploy/TestSuiteBatchFiles.wxs
+TestSuites/MS-AZOD/src/Deploy/TestSuiteBinFiles.wxs

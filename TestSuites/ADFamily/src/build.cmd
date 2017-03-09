@@ -78,16 +78,16 @@ set TESTSUITE_VERSION=%versionStr:~28,-3%
 
 set KeyFile=%1
 if not defined KeyFile (
-	%buildtool% "%TestSuiteRoot%TestSuites\ADFamily\src\AD_Server.sln" /t:clean;rebuild
+	%buildtool% "%TestSuiteRoot%TestSuites\ADFamily\src\AD_Server.sln" /t:clean;rebuild /p:ProtocolName="ADFamily"
 ) else (
-	%buildtool% "%TestSuiteRoot%TestSuites\ADFamily\src\AD_Server.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true	
+	%buildtool% "%TestSuiteRoot%TestSuites\ADFamily\src\AD_Server.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true /p:ProtocolName="ADFamily"
 )
 
 if exist "%TestSuiteRoot%drop\TestSuites\ADFamily" (
 	rd /s /q "%TestSuiteRoot%drop\TestSuites\ADFamily"
 )
 
-%buildtool% "%TestSuiteRoot%TestSuites\ADFamily\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:Platform="x64"
+%buildtool% "%TestSuiteRoot%TestSuites\ADFamily\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:Platform="x64" /p:ProtocolName="ADFamily"
 
 echo ==========================================================
 echo          Build ADFamiliy test suite successfully
