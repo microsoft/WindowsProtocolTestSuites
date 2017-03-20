@@ -76,11 +76,21 @@ if not defined KeyFile (
 	%buildtool% "%TestSuiteRoot%TestSuites\RDP\src\RDP_Client.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true	
 )
 
+if ErrorLevel 1 (
+	echo Error: Failed to build RDP test suite
+	exit /b 1
+)
+
 if exist "%TestSuiteRoot%drop\TestSuites\RDP" (
- rd /s /q "%TestSuiteRoot%drop\TestSuites\RDP"
+	rd /s /q "%TestSuiteRoot%drop\TestSuites\RDP"
 )
 
 %buildtool% "%TestSuiteRoot%TestSuites\RDP\src\deploy\deploy.wixproj" /t:Clean;Rebuild
+
+if ErrorLevel 1 (
+	echo Error: Failed to generate the msi installer
+	exit /b 1
+)
 
 echo ==============================================
 echo          Build RDP test suite successfully

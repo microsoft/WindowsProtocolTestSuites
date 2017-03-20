@@ -83,11 +83,21 @@ if not defined KeyFile (
 	%buildtool% "%TestSuiteRoot%TestSuites\MS-ADOD\src\MS-ADOD_OD.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true /p:ProtocolName="MS-ADOD"
 )
 
+if ErrorLevel 1 (
+	echo Error: Failed to build MS-AZOD test suite
+	exit /b 1
+)
+
 if exist "%TestSuiteRoot%drop\TestSuites\MS-ADOD" (
 	rd /s /q "%TestSuiteRoot%drop\TestSuites\MS-ADOD"
 )
 
 %buildtool% "%TestSuiteRoot%TestSuites\MS-ADOD\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:ProtocolName="MS-ADOD"
+
+if ErrorLevel 1 (
+	echo Error: Failed to generate the msi installer
+	exit /b 1
+)
 
 echo ==========================================================
 echo          Build MS-ADOD test suite successfully

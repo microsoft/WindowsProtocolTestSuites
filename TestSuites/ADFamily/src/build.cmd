@@ -83,11 +83,21 @@ if not defined KeyFile (
 	%buildtool% "%TestSuiteRoot%TestSuites\ADFamily\src\AD_Server.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true	
 )
 
+if ErrorLevel 1 (
+	echo Error: Failed to build ADFamiliy test suite
+	exit /b 1
+)
+
 if exist "%TestSuiteRoot%drop\TestSuites\ADFamily" (
 	rd /s /q "%TestSuiteRoot%drop\TestSuites\ADFamily"
 )
 
 %buildtool% "%TestSuiteRoot%TestSuites\ADFamily\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:Platform="x64"
+
+if ErrorLevel 1 (
+	echo Error: Failed to generate the msi installer
+	exit /b 1
+)
 
 echo ==========================================================
 echo          Build ADFamiliy test suite successfully
