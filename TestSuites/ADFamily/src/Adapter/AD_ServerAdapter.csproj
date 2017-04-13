@@ -300,6 +300,7 @@
     <Content Include="MS-APDS\SUTControlAdapter\SetProtectedUser.ps1" />
     <Content Include="MS-APDS\SUTControlAdapter\ConfigNTLMRegistryKey.ps1" />
     <Content Include="MS-APDS\SUTControlAdapter\RestoreNTLMRegistryKey.ps1" />
+    <Content Include="MS-APDS\SUTControlAdapter\SetA2AFServiceAccount.ps1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\ProtoSDK\Asn1Base\Asn1Base.csproj">

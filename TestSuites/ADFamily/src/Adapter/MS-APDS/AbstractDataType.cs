@@ -24,7 +24,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
         /// <summary>
         /// The password sent in request does not match the one on DC
         /// </summary>
-        WrongPassword
+        WrongPassword,
+        /// <summary>
+        /// The account is a managed service account
+        /// </summary>
+        ManagedServiceAccount
     }
 
     /// <summary>

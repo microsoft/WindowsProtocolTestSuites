@@ -64,6 +64,8 @@
 			<CAroot>EnterpriseRootCA</CAroot>
 			<trusttargetdomain>trust.com</trusttargetdomain>
 			<trustpassword>Password01!</trustpassword>
+      <msaname>msa01</msaname>
+      <msapassword>Password01!</msapassword>
 		</vm>
 		<vm>
 			<installorder>2</installorder>

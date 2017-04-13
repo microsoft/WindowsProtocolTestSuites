@@ -85,7 +85,20 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
         /// </summary>
         private bool isWindows;
 
-        private string digestSessionKey;        
+        /// <summary>
+        /// Digest Session Key.
+        /// </summary>
+        private string digestSessionKey;
+
+        /// <summary>
+        /// The account name for the Managed Service Account for testing authentication policy.
+        /// </summary>
+        public string ManagedServiceAccountName { get; set; }
+
+        /// <summary>
+        /// The account password for the Managed Service Account for testing authentication policy.
+        /// </summary>
+        public string ManagedServiceAccountPassword { get; set; }
 
         #endregion
 
@@ -175,6 +188,9 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
             timeout = TimeSpan.FromMilliseconds(600000);
 
             serverName = sutComputerName + "." + sutDomainName;
+
+            ManagedServiceAccountName = GetProperty("MS_APDS.ManagedServiceAccountName");
+            ManagedServiceAccountPassword = GetProperty("MS_APDS.ManagedServiceAccountPassword");
         }
 
         /// <summary>
@@ -256,12 +272,24 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
             else if (logonLevel == _NETLOGON_LOGON_INFO_CLASS.NetlogonNetworkInformation)
             {
                 //Fill Netlogon_Network_Info
-                netLogonLevel = nrpcClient.CreateNetlogonLevel(
-                    _NETLOGON_LOGON_INFO_CLASS.NetlogonNetworkInformation,
-                    NrpcParameterControlFlags.AllowLogonWithComputerAccount,
-                    sutTrustDomainName,
-                    currentUserName,
-                    currentPassword);
+                if (accountInfo == AccountInformation.ManagedServiceAccount)
+                {
+                    netLogonLevel = nrpcClient.CreateNetlogonLevel(
+                        _NETLOGON_LOGON_INFO_CLASS.NetlogonNetworkInformation,
+                        NrpcParameterControlFlags.AllowLogonWithComputerAccount,
+                        sutDomainName, // managed service account is created in the local domain
+                        currentUserName,
+                        currentPassword);
+                }
+                else
+                {
+                    netLogonLevel = nrpcClient.CreateNetlogonLevel(
+                        _NETLOGON_LOGON_INFO_CLASS.NetlogonNetworkInformation,
+                        NrpcParameterControlFlags.AllowLogonWithComputerAccount,
+                        sutTrustDomainName,
+                        currentUserName,
+                        currentPassword);
+                }
             }
 
             _NETLOGON_LEVEL encryptedLogonLevel = nrpcClient.EncryptNetlogonLevel(
@@ -616,10 +644,15 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
                 currentUserName = DomainAdministratorName;
                 currentPassword = "InvalidPassword";
             }
-            else
+            else if (accountInfo == AccountInformation.AccountNotExist)
             {
                 currentUserName = "InvalidUserName";
                 currentPassword = DomainUserPassword;
+            }
+            else if (accountInfo == AccountInformation.ManagedServiceAccount)
+            {
+                currentUserName = ManagedServiceAccountName + "$"; // "$" must be appended for managed service account
+                currentPassword = ManagedServiceAccountPassword;
             }
         }      
 
