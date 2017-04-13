@@ -672,7 +672,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
             Site.Assert.AreEqual<Status>(
                 Status.AccountRestriction,
                 responseStatus,
-                @"<13> Section 3.1.5: msDS-UserAllowedToAuthenticateFrom is not supported by Windows 2000, 
+                @"<15> Section 3.1.5.1: msDS-UserAllowedToAuthenticateFrom is not supported by Windows 2000, 
                 Windows Server 2003, Windows Server 2008, Windows Server 2008 R2, or Windows Server 2012."
                 );
         }
@@ -865,7 +865,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
             Site.Assert.AreEqual<Status>(
                 Status.AccountRestriction,
                 responseStatus,
-                @"<13> Section 3.1.5: msDS-UserAllowedToAuthenticateFrom is not supported by Windows 2000, 
+                @"<16> Section 3.1.5.1: msDS-ServiceAllowedToAuthenticateFrom is not supported by Windows 2000, 
                 Windows Server 2003, Windows Server 2008, Windows Server 2008 R2, or Windows Server 2012."
                 );
         }
