@@ -156,7 +156,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle
                     testConfig.AccountCredential,
                     testConfig.UseServerGssToken);
 
-            testClientBeforeDisconnection.TreeConnect(sharePath, out treeIdBeforeDisconnection);
+            testClientBeforeDisconnection.TreeConnect(sharePath, out treeIdBeforeDisconnection, delegate (Packet_Header responseHeader, TREE_CONNECT_Response response)
+            {
+                if (isCAShare)
+                {
+                    if (!response.Capabilities.HasFlag(Share_Capabilities_Values.SHARE_CAP_CONTINUOUS_AVAILABILITY))
+                    {
+                        // skip test case for CA share is invalid
+                        Site.Assert.Inconclusive("This test case is applicable only when CA share is valid.");
+                    }
+                }
+            });
 
             #endregion
 
