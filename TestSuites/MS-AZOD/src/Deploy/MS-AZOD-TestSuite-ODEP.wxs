@@ -35,7 +35,7 @@
     <WixVariable Id="TESTSUITE_BIN_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\MS-AZOD\Bin" />
     <WixVariable Id="TESTSUITE_BATCH_DIR" Value="..\Batch" />
     <WixVariable Id="PROTOSDK_DROP_DIR" Value="$(env.TestSuiteRoot)\drop\ProtoSDK\Bin" />
-	<WixVariable Id="TESTSUITE_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\TestSuites\MS-AZOD\Scripts" />
+	<WixVariable Id="TESTSUITE_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\TestSuites\MS-AZOD\Setup\Scripts" />
 	
     <WixVariable Id="RUN_TESTS_COMMAND" Value="RunAllTestCases.cmd" />
     <WixVariable Id="RUN_BVT_COMMAND" Value="RunBVTTestCases.cmd" />

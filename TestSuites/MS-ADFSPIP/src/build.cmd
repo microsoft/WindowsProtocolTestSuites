@@ -71,18 +71,28 @@ set versionStr="[assembly: AssemblyVersion("1.0.0.0")]"
 for /f "delims=" %%i in ('""%FindExe%" "AssemblyVersion" "%path%""') do set versionStr=%%i
 set TESTSUITE_VERSION=%versionStr:~28,-3%
 
-set KeyFile=%1 
-if not defined KeyFile ( 
-	%buildtool% "%TestSuiteRoot%TestSuites\MS-ADFSPIP\src\MS-ADFSPIP_Client.sln" /t:clean;rebuild  
-) else ( 
-	%buildtool% "%TestSuiteRoot%TestSuites\MS-ADFSPIP\src\MS-ADFSPIP_Client.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true	 
-) 
+set KeyFile=%1
+if not defined KeyFile (
+	%buildtool% "%TestSuiteRoot%TestSuites\MS-ADFSPIP\src\MS-ADFSPIP_Client.sln" /t:clean;rebuild
+) else (
+	%buildtool% "%TestSuiteRoot%TestSuites\MS-ADFSPIP\src\MS-ADFSPIP_Client.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true
+)
+
+if ErrorLevel 1 (
+	echo Error: Failed to build MS-ADFSPIP test suite
+	exit /b 1
+)
 
 if exist "%TestSuiteRoot%drop\TestSuites\MS-ADFSPIP" (
- rd /s /q "%TestSuiteRoot%drop\TestSuites\MS-ADFSPIP"
+	rd /s /q "%TestSuiteRoot%drop\TestSuites\MS-ADFSPIP"
 )
 
 %buildtool% "%TestSuiteRoot%TestSuites\MS-ADFSPIP\src\deploy\deploy.wixproj" /t:Clean;Rebuild
+
+if ErrorLevel 1 (
+	echo Error: Failed to generate the msi installer
+	exit /b 1
+)
 
 echo =====================================================
 echo          Build MS-ADFSPIP test suite successfully

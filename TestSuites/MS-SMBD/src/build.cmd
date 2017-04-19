@@ -88,18 +88,28 @@ set versionStr="[assembly: AssemblyVersion("1.0.0.0")]"
 for /f "delims=" %%i in ('""%FindExe%" "AssemblyVersion" "%path%""') do set versionStr=%%i
 set TESTSUITE_VERSION=%versionStr:~28,-3%
 
-set KeyFile=%1 
-if not defined KeyFile ( 
-	%buildtool% "%TestSuiteRoot%TestSuites\MS-SMBD\src\MS-SMBD_Server.sln" /t:clean;rebuild  
-) else ( 
-	%buildtool% "%TestSuiteRoot%TestSuites\MS-SMBD\src\MS-SMBD_Server.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true	 
-) 
+set KeyFile=%1
+if not defined KeyFile (
+	%buildtool% "%TestSuiteRoot%TestSuites\MS-SMBD\src\MS-SMBD_Server.sln" /t:clean;rebuild
+) else (
+	%buildtool% "%TestSuiteRoot%TestSuites\MS-SMBD\src\MS-SMBD_Server.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true
+)
+
+if ErrorLevel 1 (
+	echo Error: Failed to build MS-SMBD test suite
+	exit /b 1
+)
 
 if exist "%TestSuiteRoot%drop\TestSuites\MS-SMBD" (
- rd /s /q "%TestSuiteRoot%drop\TestSuites\MS-SMBD"
+	rd /s /q "%TestSuiteRoot%drop\TestSuites\MS-SMBD"
 )
 
 %buildtool% "%TestSuiteRoot%TestSuites\MS-SMBD\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:Platform="x64" /p:Configuration="Release"
+
+if ErrorLevel 1 (
+	echo Error: Failed to generate the msi installer
+	exit /b 1
+)
 
 echo ==================================================
 echo          Build MS-SMBD test suite successfully

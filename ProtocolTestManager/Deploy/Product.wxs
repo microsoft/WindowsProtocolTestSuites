@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?define SRCDIR=$(env.TestSuiteRoot)\drop\ProtocolTestManager?>
+<!-- IF VS installed, wix will set VS2012_ROOT_FOLDER/VS2013_ROOT_FOLDER/VS2015_ROOT_FOLDER with correct path, otherwise it will use home drive instead, Wix compare function not support special character, so only use "Studio" here -->
+<?define CheckVSPath="Studio" ?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product Id="*"
@@ -36,7 +38,16 @@
     </Feature>
 
     <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
-
+	
+	<PropertyRef Id="VS2012_ROOT_FOLDER"/>
+	<PropertyRef Id="VS2013_ROOT_FOLDER"/>
+	<PropertyRef Id="VS2015_ROOT_FOLDER"/>
+	
+	<Property Id="VSInstalled">0</Property>
+	
+	<SetProperty Id="VSInstalled" After="AppSearch" Value="1">
+		<![CDATA[(VS2012_ROOT_FOLDER >< $(var.CheckVSPath)) OR (VS2013_ROOT_FOLDER >< $(var.CheckVSPath)) OR (VS2015_ROOT_FOLDER >< $(var.CheckVSPath))]]>
+	</SetProperty>
 
     <!-- Progress Texts for UI -->
     <UIRef Id="WixUI_ErrorProgressText" />
@@ -72,6 +83,13 @@
       <Publish Dialog="CustomizeDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="1">Installed</Publish>
       <Publish Dialog="CustomizeDlg" Control="Back" Event="NewDialog" Value="PrivacyDlg" Order="2">NOT Installed</Publish>
       <Publish Dialog="CustomizeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+	  
+      <Publish Dialog="CustomizeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="1"><![CDATA[VSInstalled = "1"]]></Publish>
+      <Publish Dialog="CustomizeDlg" Control="Next" Event="NewDialog" Value="DependencyCheckWarningDlg" Order="2">
+			<![CDATA[VSInstalled = "0"]]>
+      </Publish>
+      <Publish Dialog="DependencyCheckWarningDlg" Control="Back" Event="NewDialog" Value="CustomizeDlg">1</Publish>
+      <Publish Dialog="DependencyCheckWarningDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
 
       <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="CustomizeDlg" Order="1">NOT Installed </Publish>
       <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="CustomizeDlg" Order="2">WixUI_InstallMode = "Change"</Publish>

@@ -83,11 +83,21 @@ if not defined KeyFile (
 	%buildtool% "%TestSuiteRoot%TestSuites\Kerberos\src\Kerberos_Server.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true	
 )
 
+if ErrorLevel 1 (
+	echo Error: Failed to build Kerberos test suite
+	exit /b 1
+)
+
 if exist "%TestSuiteRoot%drop\TestSuites\Kerberos" (
- rd /s /q "%TestSuiteRoot%drop\TestSuites\Kerberos"
+	rd /s /q "%TestSuiteRoot%drop\TestSuites\Kerberos"
 )
 
 %buildtool% "%TestSuiteRoot%TestSuites\Kerberos\src\deploy\deploy.wixproj" /t:Clean;Rebuild
+
+if ErrorLevel 1 (
+	echo Error: Failed to generate the msi installer
+	exit /b 1
+)
 
 echo ==================================================
 echo          Build Kerberos test suite successfully

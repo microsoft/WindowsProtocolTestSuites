@@ -108,7 +108,7 @@
 	<Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\MS-AZOD\Bin" -out TestSuiteBinFiles.wxs -template fragment -gg -cg BIN_FILES -dr TESTSUITE_BIN_DIR -var wix.TESTSUITE_BIN_DIR -sreg -sfrag -srd' />
     <Exec Command='"$(WIX)\bin\heat.exe" dir ..\Batch -out TestSuiteBatchFiles.wxs -template fragment -gg -cg BATCH_FILES -dr TESTSUITE_BATCH_DIR -var wix.TESTSUITE_BATCH_DIR -sreg -sfrag -srd' />
 	<Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\TestSuites\MS-AZOD\docs" -out DOCS_FILES.wxs -template fragment -gg -cg DOCS_FILES -dr DOCS_FILES_DIR -var wix.DOCS_FILES_DIR -sreg -sfrag -srd' />
-	<Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\TestSuites\MS-AZOD\Scripts" -out Scripts_FILES.wxs -template fragment -gg -cg Scripts_FILES -dr TESTSUITE_SCRIPTS_DIR -var wix.TESTSUITE_SCRIPTS_DIR -sreg -sfrag -srd' />
+	<Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\TestSuites\MS-AZOD\Setup\Scripts" -out Scripts_FILES.wxs -template fragment -gg -cg Scripts_FILES -dr TESTSUITE_SCRIPTS_DIR -var wix.TESTSUITE_SCRIPTS_DIR -sreg -sfrag -srd' />
   </Target>
   <Target Name="CopyFilesToBin" BeforeTargets="GenDeployWxsFile">
     <Copy SourceFiles="..\ODLocalTestRun.testrunconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-AZOD\Bin" />

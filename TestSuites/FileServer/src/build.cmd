@@ -52,13 +52,13 @@ if ErrorLevel 1 (
 	if ErrorLevel 1 (
 	    :: If not found in two paths
 		echo Error: Protocol Test Framework should be installed
-		exit /b 1		
+		exit /b 1
 	) else (
 	    :: If found in 32-bit OS
 		FOR /F "usebackq tokens=3" %%A IN (`%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ProtocolTestFramework /v PTFVersion`) DO (
 			set PTF_VERSION=%%A
 		)
-	)	
+	)
 ) else (
     :: If found in 64-bit OS
 	FOR /F "usebackq tokens=3" %%A IN (`%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework /v PTFVersion`) DO (
@@ -83,11 +83,21 @@ if not defined KeyFile (
 	%buildtool% "%TestSuiteRoot%TestSuites\FileServer\src\FileServer.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true	
 )
 
+if ErrorLevel 1 (
+	echo Error: Failed to build FileServer test suite
+	exit /b 1
+)
+
 if exist "%TestSuiteRoot%drop\TestSuites\FileServer" (
- rd /s /q "%TestSuiteRoot%drop\TestSuites\FileServer"
+	rd /s /q "%TestSuiteRoot%drop\TestSuites\FileServer"
 )
 
 %buildtool% "%TestSuiteRoot%TestSuites\FileServer\src\deploy\deploy.wixproj" /t:Clean;Rebuild
+
+if ErrorLevel 1 (
+	echo Error: Failed to generate the msi installer
+	exit /b 1
+)
 
 echo ==========================================================
 echo          Build FileServer test suite successfully
