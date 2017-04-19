@@ -367,6 +367,10 @@
     <Compile Include="MS-SAMR\User\SamrDeleteUser.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\MessageAnalyzerLibrary\MessageAnalyzerLibrary.csproj">
+      <Project>{e3b08663-c752-41cc-b2b7-43c69b8c1292}</Project>
+      <Name>MessageAnalyzerLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\ProtoSDK\Asn1Base\Asn1Base.csproj">
       <Project>{deda188c-c97e-4968-bc31-594925631e9f}</Project>
       <Name>Asn1Base</Name>
@@ -450,10 +454,6 @@
     <ProjectReference Include="..\Adapter\AD_ServerAdapter.csproj">
       <Project>{669014EF-A5C7-4178-9F1E-3CFB2EC8ED4A}</Project>
       <Name>AD_ServerAdapter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MessageAnalyzerLibrary\MessageAnalyzerLibrary.csproj">
-      <Project>{e3b08663-c752-41cc-b2b7-43c69b8c1292}</Project>
-      <Name>MessageAnalyzerLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\MS-FRS2\Adapter\MS-FRS2_ServerAdapter.csproj">
       <Project>{c2780313-2dba-473f-a24d-40012aaea991}</Project>
