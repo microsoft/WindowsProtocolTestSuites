@@ -35,6 +35,7 @@
     <Compile Include="PrivacyDlg.wxs" />
     <Compile Include="ProtoSDK.wxs" />
     <Compile Include="FileServerPlugin.wxs" />
+	<Compile Include="DependencyCheckWarningDlg.wxs" />
     <EmbeddedResource Include="ProtocolTestManager.wxl" />
     <Content Include="License.rtf" />
   </ItemGroup>
