@@ -106,7 +106,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Conflict
             RequestFromFirstClient(requestFromFirstClient);
             RequestFromSecondClient(requestFromSecondClient);
         }
-        
+
         /// <summary>
         /// Do operation to the file from the first client
         /// </summary>
@@ -138,6 +138,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Conflict
                         });
                     break;
                 case RequestType.Lease:
+                    if (!testConfig.IsLeasingSupported)
+                    {
+                        // skip this case if leasing is not supported
+                        Site.Assert.Inconclusive("This test case is applicable only when leasing is supported.");
+                    }
                     firstClient.Create(
                         treeId1,
                         fileName,
@@ -245,6 +250,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Conflict
                     HandleConflictResult(status);
                     break;
                 case RequestType.Lease:
+                    if (!testConfig.IsLeasingSupported)
+                    {
+                        // skip this case if leasing is not supported
+                        Site.Assert.Inconclusive("This test case is applicable only when leasing is supported.");
+                    }
                     status = secondClient.Create(
                         treeId2,
                         fileName,
@@ -384,10 +394,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Conflict
             FILEID fileId;
             Smb2CreateContextResponse[] contexts;
             client.Create(
-                treeId, 
-                fileName, 
-                CreateOptions_Values.FILE_NON_DIRECTORY_FILE, 
-                out fileId, 
+                treeId,
+                fileName,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out fileId,
                 out contexts);
             client.Write(treeId, fileId, Smb2Utility.CreateRandomString(DEFAULT_WRITE_BUFFER_SIZE_IN_KB));
             client.Close(treeId, fileId);
