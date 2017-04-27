@@ -222,23 +222,7 @@
     <Property name="SHOULDMAYR2076Implementation" value ="true" />
     <Property name="SHOULDMAYR357Implementation" value="true" />
     <!--SHOULDMAY Section ends.-->
-
-    <!--TDI/Q Switch Section starts. All the switch property elements of the TDI/Q should be in this section.
-        These properties are to specified that if TDI or TDQ are fixed. If the TDI or TDQ is fixed,
-        the value of the property should be set to true, otherwise set to false.-->
-    <!--Type:bool! Usage: Is fixed or not!-->
-    <Property name="IsTDI33006Fixed" value="false" />
-    <Property name="IsTDI50461Fixed" value="false" />
-    <Property name="IsTDI33008Fixed" value="false" />
-    <Property name="IsTDI33017Fixed" value="false" />
-    <Property name="IsTDQ33005Fixed" value="false" />
-    <Property name="IsTDQ49846Fixed" value="false" />
-    <Property name="IsTDQ33010Fixed" value="false" />
-    <Property name="IsTDQ33015Fixed" value="false" />
-    <Property name="IsTDQ33016Fixed" value="false" />
-    <Property name="IsTDQ33049Fixed" value="false" />
-    <!-- TDI/Q Fix Section ends.-->
-    
+ 
     <!--Capture Section begins. All the configuration property elements for capture should be in this section.-->
     <!--Whether the first GSS token (or fragment thereof) produced by the GSS authentication protocol is 
         configured to be used by the SUT.-->
