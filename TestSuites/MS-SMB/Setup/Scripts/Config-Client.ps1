@@ -158,13 +158,13 @@ elseif ([double]$clientOsVersion -ge [double]$os2008R2)
 }
 
 
-$UserName = "SUT01\administrator"
+$UserName = "$servername\administrator"
 $Password = ConvertTo-SecureString -String "Password01!" -AsPlainText -Force
 
 $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $UserName , $Password
 
 #SUTOsVersion is like 6.3.9600
-$SUTOsVersion =  (Get-WmiObject -comp "SUT01" -Credential $Credential -class Win32_OperatingSystem ).Version
+$SUTOsVersion =  (Get-WmiObject -comp "$servername" -Credential $Credential -class Win32_OperatingSystem ).Version
 $FirstDotIndex = $SUTOSVersion.IndexOf('.')
 $SecondDotIndex = $SUTOSVersion.IndexOf('.', $FirstDotIndex+1)
 if ($SecondDotIndex -eq -1)
