@@ -1285,8 +1285,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             Site.CaptureRequirementIfIsTrue(
                 isVerifyR9219,
                 9219,
-                @"[In Non-Extended Security Response] ChallengeLength (1 byte):  This field MUST be either 0x00 or 0x08 
-                and is the length of the random challenge used in challenge/response authentication.");
+                @"[In Non-Extended Security Response] ChallengeLength (1 byte):  The value of this field MUST be 0x08 and is the length of the random challenge used in challenge/response authentication.");
 
             //
             // The following statement code will be run only when debugging.
