@@ -1279,18 +1279,13 @@ namespace Microsoft.Protocol.TestSuites.Smb
 
             //
             // Verify MS-SMB requirement: MS-SMB_R9219.
-            //
-            // Based on the latest TD v20101101 to the fixed TDI #53077, the description for RS MS-SMB_R9219 has been changed to as below:
-            // "ChallengeLength (1 byte): The value of this field MUST be 0x08 and is the length of the random challenge used in challenge/response authentication."
-            // Currently only change the capture logic according to MIP's rule.
             bool isVerifyR9219 = ((1 == Marshal.SizeOf(response.SmbParameters.ChallengeLength))
                 && (0x08 == response.SmbParameters.ChallengeLength));
 
             Site.CaptureRequirementIfIsTrue(
                 isVerifyR9219,
                 9219,
-                @"[In Non-Extended Security Response] ChallengeLength (1 byte):  This field MUST be either 0x00 or 0x08 
-                and is the length of the random challenge used in challenge/response authentication.");
+                @"[In Non-Extended Security Response] ChallengeLength (1 byte):  The value of this field MUST be 0x08 and is the length of the random challenge used in challenge/response authentication.");
 
             //
             // The following statement code will be run only when debugging.
