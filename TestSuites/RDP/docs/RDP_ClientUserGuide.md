@@ -1,4 +1,4 @@
-# RDP Client Test Suite User Guide
+﻿# RDP Client Test Suite User Guide
 
 ## Contents
 
@@ -499,6 +499,10 @@ Note
 
 >	* In the right panel, double click **Administrator** and then uncheck the **Account is disabled** box.
 
+>	* Right click **Administrator** and then click the **Set Password…** pop up menu, then ”Proceed” button, and then input the “Password01!” in the New Password and Confirm Password fields. Click OK to save the password for local administrator user.
+
+>	* Or run commands: ”net user /active administrator” “net user administrator Password01!” to enable the local administrator and set the password.
+
 * Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Scripts, and open the ParamConfig.xml file. 
 
 * Review the properties shown in the following table, updating the property values as necessary.
@@ -556,7 +560,7 @@ Note
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
 
->Steps 8, 9, 10 and 11 are only required for MS-RDPEUSB test cases. 
+>Last 3 steps are only required for MS-RDPEUSB test cases. 
 
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
@@ -619,11 +623,6 @@ Start-process powershell -verb runAs
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
 
->There will pop up a dialog when configuring the Driver Computer. The automation script will manipulate the dialog UI by sending keys to make a certificate for testing purpose. Please don't interrupt this automation process.
-
-![image2.png](./image/RDP_ClientUserGuide/image2.png)
-Note
-
 >If the value of **RDPListeningPort** is set to 3389 and the Remote Desktop Service is running on the Driver Computer, the automation script will change the port of Remote Desktop Service to 4488 and restart this service.
 
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
@@ -642,7 +641,7 @@ Note
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
 
->The certificate, **ComputerName**.cer, is generated for testing purpose, not from a trusted certifying authority. So when you run test cases, a dialog may be popped up with warning statements: "**The identity of the remote computer cannot be verified. Do you want to connect anyway?**", then you can selected the checkbox of "**Don't ask me again for connections to this computer**" before click **Yes** to avoid this dialog popped up again.
+>The certificate, **ComputerName**.cer, is generated for testing purpose, not from a trusted Certificate Authority. So when you run test cases, a dialog may be popped up with warning statements: "**The identity of the remote computer cannot be verified. Do you want to connect anyway?**", then you can selected the checkbox of "**Don't ask me again for connections to this computer**" before click **Yes** to avoid this dialog popped up again.
 
 Optionally, you can install this certificate on **SUT** as following to avoid warning dialog:
 

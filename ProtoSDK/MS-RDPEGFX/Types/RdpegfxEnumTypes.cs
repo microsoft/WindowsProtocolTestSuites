@@ -135,7 +135,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <summary>
         /// Specifies the version of the capability, which is supported in RDP 10.2
         /// </summary>
-        RDPGFX_CAPVERSION_102 = 0x000A0200
+        RDPGFX_CAPVERSION_102 = 0x000A0200,
+
+        /// <summary>
+        /// Specifies the version of the capability, which is supported in RDP 10.3
+        /// </summary>
+        RDPGFX_CAPVERSION_103 = 0x000A0200
     }
 
     public enum MaxCacheSlotNumber : int
