@@ -582,9 +582,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
         SharedVirtualDiskVer2OperationsSupported = 0x00000003,
 
         /// <summary>
-        /// The server supports shared virtual disks and continuous data protection (log-based) snapshots.
+        /// The server supports shared virtual disks and all snapshot types.
         /// </summary>
-        SharedVirtualDiskCDPSnapshotsSupported = 0x00000007
+        SharedVirtualDiskSnapshotsSupported = 0x00000007
     }
 
     /// <summary>
