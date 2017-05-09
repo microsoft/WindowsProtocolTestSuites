@@ -929,15 +929,15 @@ Test cases control the remote desktop client on the SUT to generate events, such
 
 When using the PowerShell mode, test cases control the client automatically via the PowerShell script. You can change the following scripts to customize the PowerShell operation.
 
-* RDPConnectWithDrectCredSSP.ps1
+* RDPConnectWithDirectCredSSP.ps1
 
-* RDPConnectWithDrectTLS.ps1
+* RDPConnectWithDirectTLS.ps1
 
 * RDPConnectWithNegotiationAppoach.ps1
 
-* RDPConnectWithDrectCredSSPFullScreen.ps1
+* RDPConnectWithDirectCredSSPFullScreen.ps1
 
-* RDPConnectWithDrectTLSFullScreen.ps1
+* RDPConnectWithDirectTLSFullScreen.ps1
 
 * RDPConnectWithNegotiationAppoachFullScreen.ps1
 
