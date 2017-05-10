@@ -37,6 +37,13 @@ SET TestCategorys="((TestCategory=RDP7.0|TestCategory=RDP7.1|TestCategory=RDP8.0
 ::SET TestCategorys="((TestCategory=RDP7.0|TestCategory=RDP7.1|TestCategory=RDP8.0|TestCategory=RDP8.1|TestCategory=RDP10.0)&TestCategory!=Interactive&TestCategory!=DeviceNeeded)&(TestCategory=RDPBCGR|TestCategory=RDPRFX|TestCategory=RDPEVOR|TestCategory=RDPEUDP|TestCategory=RDPEMT|TestCategory=RDPEGFX|TestCategory=RDPEUSB|TestCategory=RDPEDISP|(TestCategory=RDPEI&(TestCategory=BVT|TestCategory=TouchSimulated)))"
 )
 
+IF "%RDPVersion%" == "10.3" (
+SET TestCategorys="((TestCategory=RDP7.0|TestCategory=RDP7.1|TestCategory=RDP8.0|TestCategory=RDP8.1|TestCategory=RDP10.0)&TestCategory!=Interactive&TestCategory!=DeviceNeeded)&(TestCategory=RDPBCGR|TestCategory=RDPRFX|TestCategory=RDPEVOR|TestCategory=RDPEUDP|TestCategory=RDPEMT|TestCategory=RDPEGFX|TestCategory=RDPEDISP|(TestCategory=RDPEI&(TestCategory=BVT|TestCategory=TouchSimulated)))"
+
+::including RDPEUSB cases
+::SET TestCategorys="((TestCategory=RDP7.0|TestCategory=RDP7.1|TestCategory=RDP8.0|TestCategory=RDP8.1|TestCategory=RDP10.0)&TestCategory!=Interactive&TestCategory!=DeviceNeeded)&(TestCategory=RDPBCGR|TestCategory=RDPRFX|TestCategory=RDPEVOR|TestCategory=RDPEUDP|TestCategory=RDPEMT|TestCategory=RDPEGFX|TestCategory=RDPEUSB|TestCategory=RDPEDISP|(TestCategory=RDPEI&(TestCategory=BVT|TestCategory=TouchSimulated)))"
+)
+
 if not defined vspath (
 	if defined VS110COMNTOOLS (
 		set vspath="%VS110COMNTOOLS%"
