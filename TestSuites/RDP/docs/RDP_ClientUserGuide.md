@@ -267,11 +267,11 @@ All of the following software must be installed on the driver computer _before_ 
 |            [http://www.microsoft.com/en-us/download/details.aspx?id=30678](http://www.microsoft.com/en-us/download/details.aspx?id=30678)| 
 |            You can download Visual Studio 2012 Update 4 or later from below website| 
 |            [http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305](http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305)| 
-| Protocol Test Framework (build 1.0.5000.0)| 
+| Protocol Test Framework (build 1.0.5500.0)| 
 |              You can download the Protocol Test Framework from below website. | 
 |                [https://github.com/Microsoft/ProtocolTestFramework/releases](https://github.com/Microsoft/ProtocolTestFramework/releases)| 
 |  **Optional Software** | 
-|       Microsoft Message Analyzer v1.4| 
+|       Microsoft Message Analyzer Version 1.4 (Build 4.0.8112.0)| 
 | ![image3.png](./image/RDP_ClientUserGuide/image3.png)Note| 
 |              You can download the latest Message Analyzer from below website. | 
 |                [http://www.microsoft.com/en-us/download/details.aspx?id=44226](http://www.microsoft.com/en-us/download/details.aspx?id=44226)| 
@@ -603,8 +603,8 @@ Note
 |  **ipVersion**| The IP version that is used in test.| 
 | | Default value: **IPv4** | 
 |  **osVersion**| The operating system of terminal client.| 
-| | It can be Win7, Win8, or NonWindows.| 
-| | Default value: **Win8**| 
+| | It can be Windows, or NonWindows.| 
+| | Default value: **Windows**| 
 |  **workgroupDomain**| The test environment. If it is in domain environment, set the value to “Domain”; if it is in workgroup environment, set the value to “Workgroup”.| 
 | | Default value: **Workgroup**| 
 |  **tcSystemDrive**| The system drive letter of SUT machine.| 
@@ -727,7 +727,7 @@ The following table describes the required properties for all the test cases.
 
 |  **Property**|  **Description**| 
 | -------------| ------------- |
-|  **RDP.SeverPort**| The port number used to listen for RDP connection requests.| 
+|  **RDP.ServerPort**| The port number used to listen for RDP connection requests.| 
 | | The default value used in this test suite: **3389**| 
 |  **RDP.IPVersion**| The IP version used in test environment.| 
 | | Default value: **Ipv4**| 
@@ -749,7 +749,9 @@ The following table describes the required properties for all the test cases.
 | | Default value: **True**| 
 |  **IsWindowsImplementation**| Indicates if the SUT is a Windows implementation. The possible values are **True** and **False**.| 
 | | Default value: **True**| 
-|  **RDP.Version**| The version of the RDP intends to test, it should be one of **7.0**, **7.1**, **8.0**, **8.1**, **10.0**.| 
+|  **DropConnectionForInvalidRequest**| Indicates if SUT drops the connection when an invalid request received. The possible values are **True** and **False**.| 
+| | Default value: **True**| 
+|  **RDP.Version**| The version of the RDP intends to test, it should be one of **7.0**, **7.1**, **8.0**, **8.1**, **10.0**, **10.1**, **10.2**, **10.3**.| 
 | | Default value: **8.1**| 
 |  **CertificatePath**| The Personal Information Exchange (.pfx) certificate used to secure TLS or CrepSSP transports. If the **RDP.Security.Protocol** value is set to **TLS** or **CrepSSP**, this property must be set.| 
 | | Default value: **C:\DriverComputer.pfx**| 
@@ -868,13 +870,13 @@ The following table describes the optional configuration properties and provides
 
 |  **Property**|  **Description**| 
 | -------------| ------------- |
-|  **RDP.ServerDomain**| If using CredSSP security, use this setting to define the domain name of the driver computer. If the computer is not in a domain, then use the computer name.| 
+|  **RDP.ServerDomain**| If using CredSSP security, use this setting to define the domain name of the driver computer. If the computer is not in a domain, then use the IP or computer name.| 
 | | Default value: **contoso.com**| 
 |  **RDP.ServerUserName**| If using CredSSP security, use this setting to define the security account user name. | 
 | | Default value: **Administrator**| 
 |  **RDP.ServerUserPassword**| The password for the RDP.ServerUserName account.| 
 | | Default value: **Password01!**| 
-|  **SUTName**| If the SUT is using a Windows operating system, specify the machine name or IP address of the SUT.| 
+|  **SUTName**| Specify the computer name or IP address of the SUT.| 
 | | Default value: **SUT01**| 
 |  **SUTUserName**| If the SUT is using a Windows operating system, specify the local administrator account used to log on to the SUT.| 
 | | Required value: **Administrator**| 
@@ -1020,53 +1022,43 @@ Note: Desktop shortcuts referenced below are created during the installation pro
 
 **To run all smoke tests**
 
-* From the desktop of the driver computer, double-click the **Run All BVT Test Cases** shortcut. 
-* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **RunBVTTestCases.cmd** file. 
+* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **RunBVTTestCases.cmd** file. 
 
 **To run the smoke test of MS-RDPBCGR**
 
-* From the desktop of the driver computer, double-click the **Run MS-RDPBCGR Client-EP BVT Test Cases** shortcut. 
-* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpbcgr_RunBVTTestCases.cmd** file. 
+* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpbcgr_RunBVTTestCases.cmd** file. 
 
 **To run the smoke test of MS-RDPEUSB**
 
-* From the desktop of the driver computer, double-click the **Run MS-RDPEUSB Client-EP BVT Test Cases** shortcut. 
-* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpeusb_RunBVTTestCases.cmd** file. 
+* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpeusb_RunBVTTestCases.cmd** file. 
 
 **To run the smoke test of MS-RDPRFX**
 
-* From the desktop of the driver computer, double-click the **Run MS-RDPRFX Client-EP BVT Test Cases** shortcut.
-* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdprfx_RunBVTTestCases.cmd** file. 
+* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdprfx_RunBVTTestCases.cmd** file. 
 
 **To run the smoke test of MS-RDPEVOR**
 
-* From the desktop of the driver computer, double-click the **Run MS-RDPEVOR Client-EP BVT Test Cases** shortcut. 
-* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpevor_RunBVTTestCases.cmd** file. 
+* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpevor_RunBVTTestCases.cmd** file. 
 
 **To run the smoke test of MS-RDPEUDP**
 
-* From the desktop of the driver computer, double-click the **Run MS-RDPEUDP Client-EP BVT Test Cases** shortcut. 
-* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpeudp_RunBVTTestCases.cmd** file. 
+* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpeudp_RunBVTTestCases.cmd** file. 
 
 **To run the smoke test of MS-RDPEMT**
 
-* From the desktop of the driver computer, double-click the **Run MS-RDPEMT Client-EP BVT Test Cases** shortcut. 
-* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpemt_RunBVTTestCases.cmd** file. 
+* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpemt_RunBVTTestCases.cmd** file. 
 
 **To run the smoke test of MS-RDPEI**
 
-* From the desktop of the driver computer, double-click the **Run MS-RDPEI Client-EP BVT Test Cases** shortcut. 
-* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpei_RunBVTTestCases.cmd** file. 
+* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpei_RunBVTTestCases.cmd** file. 
 
 **To run the smoke test of MS-RDPEGFX**
 
-* From the desktop of the driver computer, double-click the **Run MS-RDPEGFX Client-EP BVT Test Cases** shortcut. 
-* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpegfx_RunBVTTestCases.cmd** file.
+* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpegfx_RunBVTTestCases.cmd** file.
 
 **To run the smoke test of MS-RDPEDISP**
 
-* From the desktop of the driver computer, double-click the **Run MS-RDPEDISP Client-EP BVT Test Cases** shortcut. 
-* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpedisp_RunBVTTestCases.cmd** file.
+* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpedisp_RunBVTTestCases.cmd** file.
 
 ### <a name="_Toc421010916"/>Run All Test Cases
 
@@ -1079,48 +1071,39 @@ Use the steps below to run all test cases.
 
 **To run all test cases of MS-RDPBCGR**
 
-* From the desktop of the driver computer, double-click the **Run MS-RDPBCGR Client-EP Test Cases** shortcut. 
-* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpbcgr_RunAllTestCases.cmd** file. 
+* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpbcgr_RunAllTestCases.cmd** file. 
 
 **To run all test cases of MS-RDPEUSB**
 
-* From the desktop of the driver computer, double-click the **Run MS-RDPEUSB Client-EP Test Cases** shortcut. 
-* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpeusb_RunAllTestCases.cmd** file. 
+* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpeusb_RunAllTestCases.cmd** file. 
 
 **To run all test cases of MS-RDPRFX**
 
-* From the desktop of the driver computer, double-click the **Run MS-RDPRFX Client-EP Test Cases** shortcut. 
-* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdprfx_RunAllTestCases.cmd** file. 
+* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdprfx_RunAllTestCases.cmd** file. 
 
 **To run all test cases of MS-RDPEVOR**
 
-* From the desktop of the driver computer, double-click the **Run MS-RDPEVOR Client-EP Test Cases** shortcut. 
-* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpevor_RunAllTestCases.cmd** file. 
+* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpevor_RunAllTestCases.cmd** file. 
 
 **To run all test cases of MS-RDPEUDP**
 
-* From the desktop of the driver computer, double-click the **Run MS-RDPEUDP Client-EP Test Cases** shortcut. 
-* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpeudp_RunAllTestCases.cmd** file. 
+* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpeudp_RunAllTestCases.cmd** file. 
 
 **To run all test cases of MS-RDPEMT**
 
-* From the desktop of the driver computer, double-click the **Run MS-RDPEMT Client-EP Test Cases** shortcut. 
-* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpemt_RunAllTestCases.cmd** file. 
+* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpemt_RunAllTestCases.cmd** file. 
 
 **To run all test cases of MS-RDPEI**
 
-* From the desktop of the driver computer, double-click the **Run MS-RDPEI Client-EP Test Cases** shortcut. 
-* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpei_RunAllTestCases.cmd** file.
+* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpei_RunAllTestCases.cmd** file.
 
 **To run all test cases of MS-RDPEGFX**
 
-* From the desktop of the driver computer, double-click the **Run MS-RDPEGFX Client-EP Test Cases** shortcut. 
-* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpegfx_RunAllTestCases.cmd** file.
+* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpegfx_RunAllTestCases.cmd** file.
 
 **To run all test cases of MS-RDPEDISP**
 
-* From the desktop of the driver computer, double-click the **Run MS-RDPEDISP Client-EP Test Cases** shortcut. 
-* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpedisp_RunAllTestCases.cmd** file.
+* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpedisp_RunAllTestCases.cmd** file.
 
 ### <a name="_Toc421010917"/>Run Specified Test Cases
 
@@ -1186,19 +1169,20 @@ Test suite generates test result files in different paths based on the way how t
 * For further information about test log settings, see the PTF User Guide in the PTF installation directory.
 
 ## <a name="_Toc421010921"/>Debugging Test Cases
-
 You can use the Visual Studio solution (.sln) file included with this test suite to debug additional test cases that you create for your protocol implementation. 
+
+Clone or download the WindowsProtocolTestSuites from https://github.com/Microsoft/WindowsProtocolTestSuites/ and save to Driver Computer local directory.
+
+
+
+**To debug a test case**
+
+* On the driver computer, use Microsoft® Visual Studio® to open the RDP_Client.sln solution file in the cloned or downloaded source code ..\TestSuites\RDP\src subfolder.
 
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note 
 
->Copy _RDP_ClientTestSuite.deployment.ptfconfig_ and _RDP_ClientTestSuite.ptfconfig_ from C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ &#60; version &#35;  &#62; \Bin to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ &#60; version &#35;  &#62; \Source\Client\TestCode\TestSuite and replace the original file.
-
-**To debug a test case**
-
-* On the driver computer, use Visual Studio to open the following solution file:
-
-	C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Source\Client\TestCode\RDP_Client.sln
+>Copy _RDP_ClientTestSuite.deployment.ptfconfig_ and _RDP_ClientTestSuite.ptfconfig_ from C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ &#60; version &#35;  &#62; \Bin to Driver Computer cloned or downloaded source code local directory ..\TestSuites\RDP\src\TestSuite subfolder and replace the original file.
 
 * In the **Solution Explorer** window, right-click the **Solution** ‘**RDP_Client’**, and select **Build Solution**.
 
