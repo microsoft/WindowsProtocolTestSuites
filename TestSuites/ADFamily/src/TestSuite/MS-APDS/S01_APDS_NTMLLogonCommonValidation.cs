@@ -672,7 +672,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
             Site.Assert.AreEqual<Status>(
                 Status.AccountRestriction,
                 responseStatus,
-                @"<13> Section 3.1.5: msDS-UserAllowedToAuthenticateFrom is not supported by Windows 2000, 
+                @"<15> Section 3.1.5.1: msDS-UserAllowedToAuthenticateFrom is not supported by Windows 2000, 
                 Windows Server 2003, Windows Server 2008, Windows Server 2008 R2, or Windows Server 2012."
                 );
         }
@@ -828,6 +828,45 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
                 responseStatus,
                 @"<16> Section 3.1.5: PROTECTED_USERS is not supported by Windows 2000, Windows Server 2003,
                 Windows Server 2008, Windows Server 2008 R2, or Windows Server 2012."
+                );
+        }
+
+        [TestMethod]
+        [TestCategory("MS-APDS")]
+        [TestCategory("DomainWin2012R2")]
+        [TestCategory("ForestWin2012R2")]
+        [TestCategory("PDC")]
+        public void APDS_S1_TC23_NTLM_NETWORK_VALIDATE_A2AF_RESTRICTION()
+        {
+            Site.Assume.IsTrue(currentOS >= OSVersion.WINSVR2012R2,
+            "This test case is only supported in Windows 2012 R2 or higher.");
+
+            // sets A2AF policy to restrict the test managed service account logon
+            serverControlAdapter.SetA2AFServiceAccount(testManagedServiceAccount);
+
+            Status responseStatus = apdsServerAdapter.NTLMLogon(
+                _NETLOGON_LOGON_INFO_CLASS.NetlogonNetworkInformation,
+                AccountInformation.ManagedServiceAccount,
+                false,
+                _NETLOGON_VALIDATION_INFO_CLASS.NetlogonValidationSamInfo2
+                );
+
+            // reverts the policy setting
+            serverControlAdapter.SetA2AFServiceAccount(null);
+
+            Site.Assert.AreEqual<Status>(
+                Status.AccountRestriction,
+                responseStatus,
+                @"If a managed Service account object, and if the corresponding msDS-ServiceAllowedToAuthenticateFrom
+                ([MS-ADA2] section 2.450) is populated and msDS-ServiceAllowedNTLMNetworkAuthentication is set to FALSE,
+                APDS MUST return STATUS_ACCOUNT_RESTRICTION."
+                );
+
+            Site.Assert.AreEqual<Status>(
+                Status.AccountRestriction,
+                responseStatus,
+                @"<16> Section 3.1.5.1: msDS-ServiceAllowedToAuthenticateFrom is not supported by Windows 2000, 
+                Windows Server 2003, Windows Server 2008, Windows Server 2008 R2, or Windows Server 2012."
                 );
         }
     }
