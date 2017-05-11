@@ -445,7 +445,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
     /// Utility class used for RDPEGFX test. The fields defined here are only used internally.
     /// </summary>
     public class RdpegfxTestUtility
-    {
+    {        
         // Fields
         public static uint desktopWidth = 1024;
         public static uint desktopHeight = 768;
@@ -500,7 +500,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public static byte delaySeconds = 1;
 
         public static ulong cacheKey = 0xf0f0f0f07f7f7f7f;
+
         public static ushort maxCacheSlot = 25600;
+
         public static ushort maxCacheSlotForSmallCache = 4096;
 
         public static int maxCacheSize = 100; // 100M
@@ -508,6 +510,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
         public Bitmap ClearCodecImage;
         public Bitmap RfxProgCodecImage;
+       
 
         /// <summary>
         /// Transform a C# color into RDPGRX_COLOR32 structure

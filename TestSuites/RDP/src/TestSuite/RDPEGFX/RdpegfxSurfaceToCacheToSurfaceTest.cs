@@ -62,6 +62,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         {
             ushort maxCacheSlot = RdpegfxTestUtility.maxCacheSlot;
 
+            string RDPClientVersion = this.TestSite.Properties["RDP.Version"].ToString();
+            if (string.CompareOrdinal(RDPClientVersion, "10.3") == 0) // RDP 10.3 maxCacheSlot is 4096.
+            {
+                maxCacheSlot = 4096;
+            }
+            
             // Init for capability exchange
             RDPEGFX_CapabilityExchange();
 
@@ -102,8 +108,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("RDPEGFX")]
         [Description("This test case is used to verify RDP client can process cache correctly when its cache reached max size.")]
         public void RDPEGFX_CacheManagement_PositiveTest_SurfaceToCache_MaxCacheSize()
-        {
+        {           
             int maxCacheSize = RdpegfxTestUtility.maxCacheSize;
+
+            string RDPClientVersion = this.TestSite.Properties["RDP.Version"].ToString();
+            if (string.CompareOrdinal(RDPClientVersion, "10.3") == 0) // RDP 10.3 client maxCacheSize is 16M.
+            {
+                maxCacheSize = 16;
+            }
 
             // Init for capability exchange
             RDPEGFX_CapabilityExchange();
