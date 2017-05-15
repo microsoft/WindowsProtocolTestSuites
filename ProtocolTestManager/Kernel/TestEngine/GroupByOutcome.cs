@@ -12,6 +12,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
     /// </summary>
     public class GroupByOutcome
     {
+        private object locker = new object();
         Dictionary<string, TestCaseGroup> testcasemap;
 
         /// <summary>
@@ -41,19 +42,31 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 {
                     case TestCaseStatus.NotRun:
                         NotRunTestCases.AddTestCase(testcase);
-                        testcasemap.Add(testcase.Name, NotRunTestCases);
+                        lock (locker)
+                        {
+                            testcasemap.Add(testcase.Name, NotRunTestCases);
+                        }
                         break;
                     case TestCaseStatus.Passed:
                         PassedTestCases.AddTestCase(testcase);
-                        testcasemap.Add(testcase.Name, PassedTestCases);
+                        lock (locker)
+                        {
+                            testcasemap.Add(testcase.Name, PassedTestCases);
+                        }
                         break;
                     case TestCaseStatus.Failed:
                         FailedTestCases.AddTestCase(testcase);
-                        testcasemap.Add(testcase.Name, FailedTestCases);
+                        lock (locker)
+                        {
+                            testcasemap.Add(testcase.Name, FailedTestCases);
+                        }
                         break;
                     case TestCaseStatus.Other:
                         OtherTestCases.AddTestCase(testcase);
-                        testcasemap.Add(testcase.Name, OtherTestCases);
+                        lock (locker)
+                        {
+                            testcasemap.Add(testcase.Name, OtherTestCases);
+                        }
                         break;
                     case TestCaseStatus.Running:
                         RunningTestCase = testcase;
@@ -91,59 +104,62 @@ namespace Microsoft.Protocols.TestManager.Kernel
             if (from == null) return;
             TestCase testcase = from.TestCaseList.FirstOrDefault(c => c.Name == testCaseName);
             // If changed to Running/Waiting status, no need to change group.
-            if (status == TestCaseStatus.Running)
+            lock (locker)
             {
-                if (RunningTestCase != null)
+                if (status == TestCaseStatus.Running)
                 {
-                    if (RunningTestCase.Status == TestCaseStatus.Running)
-                        RunningTestCase.Status = TestCaseStatus.Waiting;
-                }
-                RunningTestCase = testcase;
-                RunningTestCase.Status = status;
-                if(UpdateTestCaseList != null)
-                {
-                    UpdateTestCaseList(from, RunningTestCase);
-                }
-                return;
-            }
-            if (status == TestCaseStatus.Waiting)
-            {
-                if (testcase.Status == TestCaseStatus.Running)
-                {
-                    testcase.Status = status;
+                    if (RunningTestCase != null)
+                    {
+                        if (RunningTestCase.Status == TestCaseStatus.Running)
+                            RunningTestCase.Status = TestCaseStatus.Waiting;
+                    }
+                    RunningTestCase = testcase;
+                    RunningTestCase.Status = status;
+                    if (UpdateTestCaseList != null)
+                    {
+                        UpdateTestCaseList(from, RunningTestCase);
+                    }
                     return;
                 }
-            }
+                if (status == TestCaseStatus.Waiting)
+                {
+                    if (testcase.Status == TestCaseStatus.Running)
+                    {
+                        testcase.Status = status;
+                        return;
+                    }
+                }
 
-            switch (status)
-            {
-                case TestCaseStatus.Passed:
-                    testcase.IsChecked = false;
-                    to = PassedTestCases;
-                    break;
-                case TestCaseStatus.Failed:
-                    testcase.IsChecked = true;
-                    to = FailedTestCases;
-                    break;
-                case TestCaseStatus.Other:
-                    to = OtherTestCases;
-                    break;
-                case TestCaseStatus.NotRun:
-                    to = NotRunTestCases;
-                    break;
-            }
-            testcase.Status = status;
-            if (UpdateTestCaseStatus != null)
-            {
-                UpdateTestCaseStatus(from, to, testcase);
-            }
-            else
-            {
+                switch (status)
+                {
+                    case TestCaseStatus.Passed:
+                        testcase.IsChecked = false;
+                        to = PassedTestCases;
+                        break;
+                    case TestCaseStatus.Failed:
+                        testcase.IsChecked = true;
+                        to = FailedTestCases;
+                        break;
+                    case TestCaseStatus.Other:
+                        to = OtherTestCases;
+                        break;
+                    case TestCaseStatus.NotRun:
+                        to = NotRunTestCases;
+                        break;
+                }
+                testcase.Status = status;
+                if (UpdateTestCaseStatus != null)
+                {
 
-                from.RemoveTestCase(testcase);
-                to.AddTestCase(testcase);
+                    UpdateTestCaseStatus(from, to, testcase);
+                }
+                else
+                {
+                    from.RemoveTestCase(testcase);
+                    to.AddTestCase(testcase);
+                }
+                testcasemap[testCaseName] = to;
             }
-            testcasemap[testCaseName] = to;
         }
 
 
