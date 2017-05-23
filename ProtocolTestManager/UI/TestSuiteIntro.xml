@@ -44,9 +44,9 @@
     </TestSuite>
   </Group>
   <Group name="BranchCache">
-    <TestSuite name="BranchCache">
+    <TestSuite name="BranchCache" folder="C:\MicrosoftProtocolTests\BranchCache\$(TestSuiteVersion)">
       <Description></Description>
-      <TestSuiteDetail>BranchCache test suite is designed to test the implementations of MS-PCCRTP, MS-PCCRR, MS-PCHC and MS-PCCRC protocol.</TestSuiteDetail>
+      <TestSuiteDetail>BranchCache test suite is designed to test the implementations of MS-PCCRTP, MS-PCCRR, MS-PCHC and MS-PCCRC protocols.</TestSuiteDetail>
     </TestSuite>
   </Group>
 </TestSuiteSelectionConfig>
