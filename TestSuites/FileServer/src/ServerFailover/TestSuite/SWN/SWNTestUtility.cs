@@ -379,18 +379,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                     }
                     else if (platform == Platform.WindowsServer2016)
                     {
-                        if (info.Version == (uint)SwnVersion.SWN_VERSION_UNKNOWN)
-                        {
-
-                        }
-                        else
-                        {
-                            BaseTestSite.Assert.AreEqual<SwnVersion>(SwnVersion.SWN_VERSION_2,
-                                (SwnVersion)info.Version,
-                                "Expect the Version of SWN service on {0} is 0x{1:x8}",
-                                info.InterfaceGroupName,
-                                (uint)SwnVersion.SWN_VERSION_2);
-                        }
+                        BaseTestSite.Assert.IsTrue((SwnVersion)info.Version == SwnVersion.SWN_VERSION_2 || (SwnVersion)info.Version == SwnVersion.SWN_VERSION_UNKNOWN,
+                            "Expect the Version of SWN service on {0} is 0x{1:x8} or 0x{2:x8}",
+                            info.InterfaceGroupName,
+                            (uint)SwnVersion.SWN_VERSION_2, (uint)SwnVersion.SWN_VERSION_UNKNOWN);
                     }
                     else
                     {

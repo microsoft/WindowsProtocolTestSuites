@@ -387,14 +387,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 BaseTestSite.Assert.AreEqual<SwnErrorCode>(SwnErrorCode.ERROR_SUCCESS, (SwnErrorCode)ret, "WitnessrAsyncNotify returns with result code = 0x{0:x8}", ret);
                 SWNTestUtility.PrintNotification(respNotify);
                 SWNTestUtility.VerifyClientMoveShareMoveAndIpChange(respNotify, SwnMessageType.IP_CHANGE_NOTIFICATION, (uint)(SwnIPAddrInfoFlags.IPADDR_V4 | SwnIPAddrInfoFlags.IPADDR_OFFLINE), TestConfig.Platform);
-                // Wait the IP_CHANGE_NOTIFICATION
-                callId = swnClientForWitness.WitnessrAsyncNotify(pContext);
-                BaseTestSite.Assert.AreNotEqual<uint>(0, callId, "WitnessrAsyncNotify returns callId = {0}", callId);
-                ret = swnClientForWitness.ExpectWitnessrAsyncNotify(callId, out respNotify);
-                BaseTestSite.Assert.AreEqual<SwnErrorCode>(SwnErrorCode.ERROR_SUCCESS, (SwnErrorCode)ret, "WitnessrAsyncNotify returns with result code = 0x{0:x8}", ret);
-                SWNTestUtility.PrintNotification(respNotify);
-                // Verify RESP_ASYNC_NOTIFY
-                SWNTestUtility.VerifyClientMoveShareMoveAndIpChange(respNotify, SwnMessageType.IP_CHANGE_NOTIFICATION, (uint)(SwnIPAddrInfoFlags.IPADDR_V4 | SwnIPAddrInfoFlags.IPADDR_ONLINE), TestConfig.Platform);
                 #endregion
             }
             #endregion
