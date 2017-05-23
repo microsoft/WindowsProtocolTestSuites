@@ -40,7 +40,13 @@
   <Group name="MS-ADFSPIP">
     <TestSuite name="MS-ADFSPIP">
       <Description></Description>
-      <TestSuiteDetail>MS-ADFSPIP test suite is is designed to test the implementations of Device Registration Discovery Protocol, as specified in Microsoft document [MS-DVRD], and Device Registration Enrollment Protocol, as specified in Microsoft document [MS-DVRE].</TestSuiteDetail>
+      <TestSuiteDetail>MS-ADFSPIP test suite is designed to test the implementations of Device Registration Discovery Protocol, as specified in Microsoft document [MS-DVRD], and Device Registration Enrollment Protocol, as specified in Microsoft document [MS-DVRE].</TestSuiteDetail>
+    </TestSuite>
+  </Group>
+  <Group name="BranchCache">
+    <TestSuite name="BranchCache" folder="C:\MicrosoftProtocolTests\BranchCache\$(TestSuiteVersion)">
+      <Description></Description>
+      <TestSuiteDetail>BranchCache test suite is designed to test the implementations of MS-PCCRTP, MS-PCCRR, MS-PCHC and MS-PCCRC protocols.</TestSuiteDetail>
     </TestSuite>
   </Group>
 </TestSuiteSelectionConfig>

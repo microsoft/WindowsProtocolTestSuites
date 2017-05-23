@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Setup SUT</title>
+    <style>
+        table, th, td
+        {
+            border:1px solid black;
+            border-collapse:collapse;
+        }
+        div.Title
+        {
+            font-family:Arial;
+            font-size:larger;
+            margin-bottom:10px;
+        }
+        div.Context
+        {
+            font-family:'Segoe UI';
+            font-size:medium;
+            margin-top:auto;
+        }
+        .icon
+        {
+            font-family:'Segoe UI';
+            font-size:larger;
+            font-weight:bold;
+            margin-top:80px;
+        }
+        .List
+        {
+            margin-top: 4px;
+        }
+        .img
+        {
+            vertical-align:text-top;
+        }
+    </style>
+</head>
+<body>
+    <div class="Context">
+        <div style="font-weight:bold;font-size:large">Common Setup</div>
+        <ul class="List">
+            <li>1. Configure IP addresses on the SUT node and set the computer name to ContentServer/HostedCacheServer. </li>
+            <li>2. Turn off firewall.</li>
+            <li>3. Create domain user accounts: contoso\administrator, with password set to <b>Password01!</b>&nbsp;
+            </li>
+            <li>4. Join the SUT to the Domain provided by the DC.</li>
+            <li>5. Setup the Computer Password for SUT.</li>
+        </ul>
+        <div style="font-weight:bold;font-size:large">Setup to test ContentServer</div>
+        <ul class="List">
+            <li>1. Install BranchCache roles.</li>
+            <li>2. Set the secret key for ContentServer</li>
+            <li>3. Enable the ContentServer to support SMB transport for Content Information V1 and V2</li>
+        </ul>
+        <div style="font-weight:bold;font-size:large">Setup to test HostedCacheServer</div>
+        <ul class="List">
+            <li>1. Install BranchCache roles.</li>
+            <li>2. Create a self-signed certificate.</li>
+            <li>3. Bind the cert to SSL port.</li>
+            <li>4. Enable to hostedcacheserver role.</li>
+            <li>5. Restart BranchCache service.</li>
+        </ul>
+    </div>
+</body>
+</html>
