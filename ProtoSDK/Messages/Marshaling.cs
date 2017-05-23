@@ -2338,7 +2338,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling
                     marshaler.AlignRead(marshaler.GetAlignment(fdesc));
                     object fieldValue = marshaler.Unmarshal(fdesc);
 
-                    int fieldSize = marshaler.GetSize(fieldValue);
+                    // get the size of field with the help of its marshaling descriptor
+                    int fieldSize = marshaler.GetSize(fdesc, fieldValue);
                     if (maxFieldSize < fieldSize)
                     {
                         maxFieldSize = fieldSize;
@@ -2424,7 +2425,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling
                     marshaler.MarkForeignMemoryForDispose(region);
 
                     marshaler.EnterRegion(marshaler.MakeRegion(region, regionSize));
-                    object value = innerTypeMarshaler.Unmarshal(marshaler, desc);
+                    // use the marshaling descriptor of the pointed type to do unmarshal
+                    var innerDesc = new MarshalingDescriptor(desc.Type);
+                    object value = innerTypeMarshaler.Unmarshal(marshaler, innerDesc);
                     marshaler.ExitRegion();
                     return value;
                 }
