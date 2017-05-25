@@ -86,9 +86,9 @@ Function CheckIfNet4IsInstalled{
 # Check if application is installed on current machine.
 Function CheckIfAppInstalled{
     Param (
-		[string]$AppName,
-		[string]$Version,
-		[bool]$Compatible
+		[string]$AppName,	# Application Name
+		[string]$Version,	# Application Version
+		[bool]$Compatible	# Is support backward compatible
 	)
 
     #check if the required software is installed on current machine
