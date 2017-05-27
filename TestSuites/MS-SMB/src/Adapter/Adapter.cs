@@ -1690,8 +1690,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
                         }
 
                         //Workaround temp code (Guest session setup)
-                        if (isGuestAccount &&
-                            !bool.Parse(Site.Properties["IsTDQ33010Fixed"]))
+                        if (isGuestAccount)
                         {
                             this.ErrorResponse(sessionSetupAndXResponseHeader.Mid + this.addMidMark, MessageStatus.NetworkSessionExpired);
                         }
@@ -2678,8 +2677,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
                     impersonationLevel == (int)NamespaceCifs.NtTransactImpersonationLevel.SEC_ANONYMOUS ? true : false);
 
                 //Workaround temp code (Invalid impersonation level)
-                if ((string.Equals(Site.Properties["SutPlatformOS"], "Win2K8") && impersonationLevel == 4) &&
-                    !bool.Parse(Site.Properties["IsTDI33006Fixed"]))
+                if ((string.Equals(Site.Properties["SutPlatformOS"], "Win2K8") && impersonationLevel == 4))
                 {
                     this.ErrorResponse(ntCreateAndXResponseHeader.Mid + this.addMidMark, MessageStatus.BadImpersonationLevel);
                 }
@@ -3266,16 +3264,14 @@ namespace Microsoft.Protocol.TestSuites.Smb
                 }
 
                 //Workaround temp code (How To Set TRANS2_SET_FILE_INFORMATION to rename class.)
-                if (informationLevel == InformationLevel.SmbSetFileBasicInfo &&
-                    !bool.Parse(Site.Properties["IsTDI33017Fixed"]))
+                if (informationLevel == InformationLevel.SmbSetFileBasicInfo)
                 {
                     this.ErrorResponse(smbErrorHeader.Mid + this.addMidMark, MessageStatus.InvalidParameter);
                 }
                 else
                 {
                     //Workaround temp code (How to trigger ObjectNameNotCollision)
-                    if ((isReplaceEnable == false && string.Equals(Site.Properties["SutShareExistFile"], fileName)) &&
-                        !bool.Parse(Site.Properties["IsTDQ33015Fixed"]))
+                    if ((isReplaceEnable == false && string.Equals(Site.Properties["SutShareExistFile"], fileName)))
                     {
                         this.ErrorResponse(smbErrorHeader.Mid + this.addMidMark, MessageStatus.ObjectNameNotCollision);
                     }
@@ -3671,9 +3667,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
                     smbErrorHeader.Status = (uint)MessageStatus.NotSupported;
                 }
 
-                //Workaround temp code (SetFsInfo Unknown Error TDQ)
-                if (informationLevel == InformationLevel.FileFsControlInformaiton &&
-                    !bool.Parse(Site.Properties["IsTDQ33016Fixed"]))
+                if (informationLevel == InformationLevel.FileFsControlInformaiton)
                 {
                     this.ErrorResponse(smbErrorHeader.Mid + this.addMidMark, MessageStatus.AccessDenied);
                 }
@@ -3832,8 +3826,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
                 }
 
                 //Workaround temp code (How to trigger SUCCESS for TRANS2_FIND_FIRST2 Request)
-                if (smbErrorHeader.Status == (uint)MessageStatus.ObjectNameNotFound &&
-                    !bool.Parse(Site.Properties["IsTDQ33049Fixed"]))
+                if (smbErrorHeader.Status == (uint)MessageStatus.ObjectNameNotFound)
                 {
                     smbErrorHeader.Status = (uint)MessageStatus.InvalidParameter;
                 }
@@ -5515,8 +5508,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
                     isVolumnGuidZero = true;
                 }
                 //Workaround temp code (Invalid impersonation level)
-                if ((string.Equals(Site.Properties["SutPlatformOS"], "Win2K8") && impersonationLevel == 4)
-                    && !bool.Parse(Site.Properties["IsTDI33006Fixed"]))
+                if ((string.Equals(Site.Properties["SutPlatformOS"], "Win2K8") && impersonationLevel == 4))
                 {
                     this.ErrorResponse(ntCreateAndXResponseHeader.Mid + this.addMidMark, MessageStatus.BadImpersonationLevel);
                 }
@@ -5648,17 +5640,15 @@ namespace Microsoft.Protocol.TestSuites.Smb
             {
                 SmbErrorResponsePacket smbErrorResponsePacket = response as SmbErrorResponsePacket;
                 NamespaceCifs.SmbHeader smbErrorHeader = smbErrorResponsePacket.SmbHeader;
-                //f temp code (How To Trigger InvalidParameter TDQ)
-                if (!isVaildQuotaInfo &&
-                    !bool.Parse(Site.Properties["IsTDQ33005Fixed"]))
+                
+                if (!isVaildQuotaInfo)
                 {
                     this.ErrorNtTransSetQuotaResponseAdditional(
                         smbErrorHeader.Mid + this.addMidMark,
                         MessageStatus.InvalidParameter);
                 }
-                //Workaround temp code (FILEID ERROR TDI)
-                else if ((requestPara == NtTransSetQuotaRequestParameter.FileIdErrror) &&
-                    !bool.Parse(Site.Properties["IsTDI33008Fixed"]))
+                
+                else if ((requestPara == NtTransSetQuotaRequestParameter.FileIdErrror))
                 {
                     this.ErrorNtTransSetQuotaResponseAdditional(
                         smbErrorHeader.Mid + this.addMidMark,
@@ -5681,9 +5671,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
                     smbNtTransSetQuotaPacket,
                     ntTransSetQuotaResponseHeader.Status);
 
-                //Workaround temp code (Expected AccessDenied, actually Success)
-                if ((requestPara == NtTransSetQuotaRequestParameter.AccessDenied) &&
-                    !bool.Parse(Site.Properties["IsTDI50461Fixed"]))
+                if ((requestPara == NtTransSetQuotaRequestParameter.AccessDenied))
                 {
                     this.ErrorNtTransSetQuotaResponseAdditional(
                         ntTransSetQuotaResponseHeader.Mid + this.addMidMark,
@@ -5812,9 +5800,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
                     smbErrorHeader.Status = (uint)MessageStatus.NotSupported;
                 }
 
-                //Workaround temp code (How to trigger the error Status_Data_Error)
-                if ((informationLevel == InformationLevel.FileFsControlInformaiton) &&
-                    !bool.Parse(Site.Properties["IsTDQ49846Fixed"]))
+                if ((informationLevel == InformationLevel.FileFsControlInformaiton))
                 {
                     smbErrorHeader.Status = (uint)MessageStatus.StatusDataError;
                 }

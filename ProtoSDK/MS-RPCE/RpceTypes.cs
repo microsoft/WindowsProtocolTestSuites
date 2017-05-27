@@ -3,6 +3,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
 {
@@ -27,21 +28,51 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
     /// <summary>
     /// p_syntax_id_t, defined in [C706] section 12.6.3.1.
     /// </summary>
+    [StructLayout(LayoutKind.Explicit)]
     public struct p_syntax_id_t
     {
         /// <summary>
         /// interface identifier UUID.
         /// </summary>
+        [FieldOffset(0)]
         public Guid if_uuid;
 
         /// <summary>
-        /// interface identifier version major.
+        /// interface identifier version.
         /// </summary>
+        [FieldOffset(16)]
+        public uint if_version;
+
+        ///
+        /// The struct is described in [C706] 12.6.3 as following:
+        ///
+        /// typedef   struct   {
+        ///              uuid_t   if_uuid;
+        ///              u_int32   if_version;
+        ///           } p_syntax_id_t;
+        ///
+        /// For abstract syntax, if_uuid is set to the interface UUID, and if_version is
+        /// set to the interface version.
+        /// For transfer syntax, these are set to the UUID and version created for the
+        /// data representation.The major version is encoded in the 16 least significant
+        /// bits of if_version and the minor version in the 16 most significant bits.
+        ///
+        /// So the memory layout is manually defined here to directly get the major and
+        /// minor version.
+        ///
+
+        /// <summary>
+        /// interface identifier version major.
+        /// the 16 least significant bits of if_version.
+        /// </summary>
+        [FieldOffset(16)]
         public ushort if_vers_major;
 
         /// <summary>
         /// interface identifier version minor.
+        /// the 16 most significant bits of if_version.
         /// </summary>
+        [FieldOffset(18)]
         public ushort if_vers_minor;
     }
 

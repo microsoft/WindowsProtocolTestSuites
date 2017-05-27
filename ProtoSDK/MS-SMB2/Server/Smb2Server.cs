@@ -1,15 +1,5 @@
-//------------------------------------------------------------------------------
-// Copyright (c) Microsoft Corporation. All rights reserved.
-//------------------------------------------------------------------------------
-
-//-------------------------------------------------------------------------
-// Copyright(c) 2009 Microsoft Corporation
-// All rights reserved
-// 
-// Module Name: Smb2Server
-// Description: Smb2Server is resposable for expecting client connection, 
-//              create packet, send packet and so on.
-//-------------------------------------------------------------------------
+// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
 using System.Net;

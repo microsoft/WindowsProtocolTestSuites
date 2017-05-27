@@ -207,6 +207,9 @@
           <Rule name = "FsctlOffloadReadWrite">
             <Category name = "FsctlOffloadReadWrite"/>
           </Rule>
+          <Rule name = "FsctlEnumerateSnapShots">
+            <Category name = "FsctlEnumerateSnapShots"/>
+          </Rule>          
         </Rule>
         <Rule name = "CombinedFeature">
           <Category name = "CombinedFeature"/>

@@ -846,9 +846,22 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     93,
                     "In Client Core Data, The User Data Header type field MUST be set to CS_CORE (0xC001).");
             //<capture> also capture 97
-            Site.CaptureRequirementIfIsTrue(core.version == version_Values.V1 || core.version == version_Values.V2 || core.version == version_Values.V3 || core.version == version_Values.V4 || core.version == version_Values.V5,
+            Site.CaptureRequirementIfIsTrue(
+                core.version == version_Values.V1
+                || core.version == version_Values.V2
+                || core.version == version_Values.V3
+                || core.version == version_Values.V4
+                || core.version == version_Values.V5
+                || core.version == version_Values.V6,
                 98,
-                "In Client Core Data, for RDP 4.0 clients, the major version number will be 0x00080001.");
+                string.Format("In Client Core Data, RDP client version number should be one of {0}, {1}, {2}, {3}, {4}, {5}.",
+                version_Values.V1.ToString(),
+                version_Values.V2.ToString(),
+                version_Values.V3.ToString(),
+                version_Values.V4.ToString(),
+                version_Values.V5.ToString(),
+                version_Values.V6.ToString())
+                );
             Site.CaptureRequirementIfIsTrue(core.desktopWidth >= 0,
                 100,
                 "In Client Core Data, desktopWidth must be positive.");

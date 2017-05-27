@@ -33,7 +33,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// </summary>
         /// <param name="desiredFileAttribute">Desired file attribute</param>
         /// <param name="createOption">Specifies the options to be applied when creating or opening the file</param>
-        /// <param name="streamTypeNameToOPen">The name of stream type to open</param>
+        /// <param name="streamTypeNameToOpen">The name of stream type to open</param>
         /// <param name="desiredAccess">A bitmask indicating desired access for the open, as specified in [MS-SMB2] section 2.2.13.1.</param>
         /// <param name="shareAccess">A bitmask indicating sharing access for the open, as specified in [MS-SMB2] section 2.2.13.</param>
         /// <param name="createDisposition">The desired disposition for the open, as specified in [MS-SMB2] section 2.2.13.</param>
@@ -45,7 +45,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         MessageStatus CreateFile(
             FileAttribute desiredFileAttribute,
             CreateOptions createOption,
-            StreamTypeNameToOPen streamTypeNameToOpen,
+            StreamTypeNameToOpen streamTypeNameToOpen,
             FileAccess desiredAccess,
             ShareAccess shareAccess,
             CreateDisposition createDisposition,
@@ -87,7 +87,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             FileAccess existOpenDesiredAccess,
             CreateOptions createOption,
             CreateDisposition createDisposition,
-            StreamTypeNameToOPen streamTypeNameToOpen,
+            StreamTypeNameToOpen streamTypeNameToOpen,
             FileAttribute fileAttribute,
             FileAttribute desiredFileAttribute);
         #endregion
@@ -106,7 +106,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <param name="isCaseInsensitive">True: if is case-insensitive</param>
         /// <param name="isLinkIsDeleted">True: if Link is deleted</param>
         /// <param name="isSymbolicLink">True: if Link.File.IsSymbolicLink is true</param>
-        /// <param name="streamTypeNameToOPen">The type name of stream to be opened</param>
+        /// <param name="streamTypeNameToOpen">The type name of stream to be opened</param>
         /// <param name="openFileType">Open.File.FileType</param>
         /// <param name="fileNameStatus">File name status</param>
         /// <returns>An NTSTATUS code that specifies the result.</returns>
@@ -121,7 +121,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             bool isCaseInsensitive,
             bool isLinkIsDeleted,
             bool isSymbolicLink,
-            StreamTypeNameToOPen streamTypeNameToOpen,
+            StreamTypeNameToOpen streamTypeNameToOpen,
             FileType openFileType,
             FileNameStatus fileNameStatus);
         #endregion

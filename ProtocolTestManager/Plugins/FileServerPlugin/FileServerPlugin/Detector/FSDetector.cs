@@ -73,7 +73,9 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         {
             get
             {
-                if (!alreadyGotDnsName)
+                IPAddress address;
+                if (!alreadyGotDnsName 
+                    && !IPAddress.TryParse(sutName, out address)) // If the sutName is an IP address, no need to query DNS to get the entry
                 {
                     try
                     {

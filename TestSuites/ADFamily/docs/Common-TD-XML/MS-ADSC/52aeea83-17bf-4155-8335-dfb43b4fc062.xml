@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page>
+<metadata id="52aeea83-17bf-4155-8335-dfb43b4fc062" build_format="rfc" section_number="1.209">
+<title>Class serviceInstance</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details>
+<change_tracking month="11" day="07" year="2009" revision_class="minor" change_type="content_update"><tdi_info><tdi_number>41903</tdi_number><tdi_title>Removed inappropriate information about APIs from the description of the class.</tdi_title></tdi_info></change_tracking>
+<change_tracking month="12" day="19" year="2009" revision_class="minor" change_type="content_update"><tdi_info><tdi_number>41903</tdi_number><tdi_title>Added some details to the description of the class.</tdi_title></tdi_info></change_tracking>
+</change_tracking_details>
+</metadata>
+<section><section_contents><p>A connection point object that is used by the <auto_text>windows</auto_text> Sockets Registration and Resolution (RnR) name service. The serviceInstance object class is used by various namespace providers (such as DNS) to differentiate the type of data returned during service publication.</p>
+<example><snippet type="syntax">cn: Service-Instance
+ldapDisplayName: serviceInstance
+governsId: 1.2.840.113556.1.5.30
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: connectionPoint
+systemMustContain: serviceClassID, displayName
+systemMayContain: winsockAddresses, serviceInstanceVersion
+systemPossSuperiors: container
+schemaIdGuid: bf967ab2-0de6-11d0-a285-00aa003049e2
+defaultSecurityDescriptor: D:(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;DA)
+ (A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;SY)(A;;RPLCLORC;;;AU)
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=Service-Instance,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADSC"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class serviceInstance [_rfc_ms-adsc1_209]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

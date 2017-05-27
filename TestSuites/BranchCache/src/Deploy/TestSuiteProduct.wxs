@@ -9,14 +9,19 @@
 	<SetProperty Id="PTF_BUILDVERSION" Value="$(env.PTF_VERSION)" Before="AppSearch" />
     <SetProperty Id="ARPCOMMENTS" Value="[ProductName] v[ProductVersion]" Before="AppSearch" />
     <Property Id="ARPCONTACT">Microsoft Winterop Engineering Team</Property>
+	<Property Id="TESTSUITEPATH" Value="SOFTWARE\Wow6432Node\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_VERSION)" />
     <!--Disables the Modify button in MaintenanceTypeDlg-->
     <Property Id="ARPNOMODIFY" Value="1" />
 	
+    <SetProperty Id="TESTSUITEPATH" Before="AppSearch" Value="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_VERSION)">
+		<![CDATA[$(var.Platform)="x86"]]>
+    </SetProperty>
+		
 	<!-- Search for saved TARGET_ENDPOINT, and assign to the actual property if uninstall/repair. -->
     <Property Id="SAVED_TARGET_ENDPOINT">
       <RegistrySearch Id="LoadTargetEndpoint"
                       Root="HKLM"
-                      Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_VERSION)"
+                      Key="[TESTSUITEPATH]"
                       Name="TargetEndpoint"
                       Type="raw" />
     </Property>
@@ -26,7 +31,7 @@
 	<Component Id="SaveTargetEndpoint" Guid="*" Directory="TESTSUITE_ROOT_DIR">
       <RegistryValue Id="SaveTargetEndpoint"
                      Root="HKLM"
-                     Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_VERSION)"
+                     Key="[TESTSUITEPATH]"
                      Name="TargetEndpoint"
                      Type="string"
                      Value="[TARGET_ENDPOINT]" />
@@ -194,9 +199,9 @@
                   WorkingDirectory="TESTSUITE_ROOT_DIR"/>
 				  
 		<Shortcut Id="RunTestCasesShortcut"
-                  Name="Run Test Cases"
+                  Name="Run All Test Cases"
                   Description="Run all test cases in the test suite"
-                  Target="[TESTSUITE_BATCH_DIR]!(wix.DOMAIN_RUN_ALLTCS_COMMAND)"
+                  Target="[TESTSUITE_BATCH_DIR]!(wix.RunAllTestCases)"
                   WorkingDirectory="TESTSUITE_BATCH_DIR" />
 				  
 		<RegistryValue Id="TestSuiteShortcutsKeyPath"
@@ -253,12 +258,7 @@
         <Shortcut Id="RunTestCasesShortcut_Desktop"
                   Name="Run !(wix.TESTSUITE_NAME) Test Cases"
                   Description="Run all test cases in the test suite"
-                  Target="[TESTSUITE_BATCH_DIR]!(wix.DOMAIN_RUN_ALLTCS_COMMAND)"
-                  WorkingDirectory="TESTSUITE_BATCH_DIR" />
-        <Shortcut Id="HashGenerationAndVerificationTool_Desktop"
-                  Name="Hash Generation and Verification Tool"
-                  Description="Hash Generation and Verification Tool"
-                  Target="[TESTSUITE_BATCH_DIR]MS-PCCRC_TestTool.exe"
+                  Target="[TESTSUITE_BATCH_DIR]!(wix.RunAllTestCases)"
                   WorkingDirectory="TESTSUITE_BATCH_DIR" />
         <RegistryValue Id="TestSuiteShortcutsKeyPath_Desktop"
                         Root="HKCU"

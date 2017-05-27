@@ -606,7 +606,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             //context here.
             if (!ignoreCompoundFlag)
             {
-                // TODO
             }
 
             return packet;

@@ -1,0 +1,207 @@
+<lab>
+	<core>
+		<parentdisk>9200.amd64fre.server_en-us_vl.SERVERSTANDARD.win8_rtm.vhd</parentdisk>
+		<parentanswerfile>9200.amd64fre.server_en-us_vl.SERVERSTANDARD.win8_rtm.xml</parentanswerfile>
+		<username>Administrator</username>
+		<password>Password01!</password>
+		<legacyclient>true</legacyclient>
+		<basecpu>4</basecpu>
+		<Description>Primary DC, Secondary DC, Read-Only DC, Child DC, Trust DC, Domain Member, Endpoint</Description>
+	</core>
+	<network>
+		<vnet>
+			<hostisgateway>true</hostisgateway>
+			<name>MS-AD-Internal</name>
+			<ip>192.168.111.254</ip>
+			<gateway>192.168.111.254</gateway>
+			<subnet>255.255.255.0</subnet>
+		</vnet>
+	</network>
+  	<Parameters>
+    		<!--Parameters for automation run-->
+    		<Parameter Name="TestCase" Value="RunMainTestCases.ps1" Comment="Which test case to run." />
+    		<Parameter Name="TestCaseTimeout" Value="3600" Comment="Test case time out in seconds." />
+
+    		<!--Parameters for Computer information-->
+    		<Parameter Name="userName" Value="Administrator" Comment="" />
+    		<Parameter Name="password" Value="Password01!" Comment="" />
+    		<Parameter Name="domain" Value="contoso.com" Comment="" />
+    		<Parameter Name="testDriverName" Value="Driver" Comment="" />
+    		<Parameter Name="testDriverCtrlIp" Value="192.168.111.101" Comment="" />
+    		<Parameter Name="testDirInVM" Value="C:\Test" Comment="" />
+  	</Parameters>
+	<servers>   
+		<vm>
+			<installorder>1</installorder>
+			<hypervname>AD_PDC</hypervname>
+			<name>PDC</name>
+			<domain>contoso.com</domain>
+			<isdc>true</isdc>
+			<username>Administrator</username>
+			<password>Password01!</password>		
+			<cpu>4</cpu>
+			<vnet>MS-AD-Internal</vnet>
+			<ip>192.168.111.1</ip> 
+			<subnet>255.255.255.0</subnet>
+			<gateway>192.168.111.1</gateway>
+			<dns>192.168.111.2;192.168.111.1;192.168.111.5</dns>
+            <alternateDNS>192.168.111.5</alternateDNS> 
+			<memory>2048</memory> 
+			<skipwaitingforpostscript>false</skipwaitingforpostscript>
+			<postscript>Install_RemoteAccess_Feature.ps1;Config-PDC.ps1;SetPasswordNeverExpires.ps1</postscript>
+			<ldsinstancename>instance01</ldsinstancename>
+			<ldsldapport>20000</ldsldapport>
+			<ldssslport>20001</ldssslport>
+			<ldsnewapplicationpartitiontocreate>CN=ApplicationNamingContext</ldsnewapplicationpartitiontocreate>
+			<ldsserviceaccount>CONTOSO\Administrator</ldsserviceaccount>
+			<ldsservicepassword>Password01!</ldsservicepassword>
+			<ldsadministrator>CONTOSO\Administrator</ldsadministrator>
+			<ldssourceusername>CONTOSO\Administrator</ldssourceusername>
+			<ldssourcepassword>Password01!</ldssourcepassword>
+			<clientname>ENDPOINT</clientname>
+			<clientuser>userADTSSecurity</clientuser>
+			<userpassword>Password01!</userpassword>
+			<CAroot>EnterpriseRootCA</CAroot>
+			<trusttargetdomain>trust.com</trusttargetdomain>
+			<trustpassword>Password01!</trustpassword>
+      <msaname>msa01</msaname>
+      <msapassword>Password01!</msapassword>
+		</vm>
+		<vm>
+			<installorder>2</installorder>
+			<hypervname>AD_SDC</hypervname>
+			<name>SDC</name>
+			<domain>contoso.com</domain>
+			<username>Administrator</username>
+			<password>Password01!</password>
+			<isdc>true</isdc>		
+			<cpu>4</cpu>
+			<vnet>MS-AD-Internal</vnet>
+			<ip>192.168.111.2</ip> 
+			<subnet>255.255.255.0</subnet>
+			<gateway>192.168.111.1</gateway>
+			<dns>192.168.111.1</dns>	   
+			<memory>2048</memory> 
+			<skipwaitingforpostscript>true</skipwaitingforpostscript>
+			<postscript>Config-SDC.ps1;SetPasswordNeverExpires.ps1</postscript>
+			<replicasourcedc>PDC.contoso.com</replicasourcedc>
+		</vm>
+		<vm>
+			<installorder>3</installorder>
+			<hypervname>AD_RODC</hypervname>
+			<name>RODC</name>
+			<domain>contoso.com</domain>
+			<username>Administrator</username>
+			<password>Password01!</password>		
+			<isdc>true</isdc>		
+			<cpu>4</cpu>
+			<vnet>MS-AD-Internal</vnet>
+			<ip>192.168.111.3</ip> 
+			<subnet>255.255.255.0</subnet>
+			<gateway>192.168.111.1</gateway>
+			<dns>192.168.111.1</dns>	  
+			<memory>2048</memory> 
+			<skipwaitingforpostscript>true</skipwaitingforpostscript>
+			<postscript>Config-RODC.ps1;SetPasswordNeverExpires.ps1</postscript>
+			<replicasourcedc>PDC.contoso.com</replicasourcedc>
+		</vm>
+		<vm>
+			<installorder>4</installorder>
+			<hypervname>AD_CDC</hypervname>
+			<name>CDC</name>
+			<domain>child.contoso.com</domain>
+			<username>Administrator</username>
+			<password>Password01!</password>	
+			<isdc>true</isdc>		
+			<cpu>4</cpu>
+			<vnet>MS-AD-Internal</vnet>
+			<ip>192.168.111.4</ip> 
+			<subnet>255.255.255.0</subnet>
+			<gateway>192.168.111.1</gateway>
+			<dns>192.168.111.1</dns>
+			<memory>2048</memory> 
+			<skipwaitingforpostscript>false</skipwaitingforpostscript>
+			<postscript>Config-CDC.ps1;SetPasswordNeverExpires.ps1</postscript>
+			<primarydc>PDC.contoso.com</primarydc>
+			<secondarydc>SDC.contoso.com</secondarydc>
+			<parentdomain>contoso.com</parentdomain>
+		</vm>
+                <vm>
+			<installorder>5</installorder>
+			<hypervname>AD_TDC</hypervname>
+			<name>TDC</name>
+			<domain>trust.com</domain>
+			<isdc>true</isdc>
+			<username>Administrator</username>
+			<password>Password01!</password> 
+			<cpu>4</cpu>
+			<vnet>MS-AD-Internal</vnet>
+			<ip>192.168.111.5</ip>
+			<subnet>255.255.255.0</subnet>
+			<dns>192.168.111.1;192.168.111.5</dns>
+			<alternateDNS>192.168.111.1</alternateDNS>
+			<memory>2048</memory>
+			<postscript>Config-TDC.ps1;SetPasswordNeverExpires.ps1</postscript>
+			<trusttargetdomain>contoso.com</trusttargetdomain>
+			<trustpassword>Password01!</trustpassword>
+			<trusttargetserver>PDC.contoso.com</trusttargetserver>
+			<trusttargetuser>CONTOSO\Administrator</trusttargetuser>
+			<trusttargetpwd>Password01!</trusttargetpwd>
+		</vm>
+		<vm>
+			<installorder>6</installorder>
+			<hypervname>AD_DM</hypervname>
+			<name>DM</name>
+			<username>Administrator</username>
+			<password>Password01!</password>
+			<domain>contoso.com</domain>
+			<cpu>4</cpu>
+			<vnet>MS-AD-Internal</vnet>
+			<ip>192.168.111.6</ip>
+			<subnet>255.255.255.0</subnet>
+			<gateway>192.168.111.1</gateway>
+			<dns>192.168.111.1</dns>
+			<memory>2048</memory>
+			<skipwaitingforpostscript>false</skipwaitingforpostscript>
+			<postscript>Config-DM.ps1;SetPasswordNeverExpires.ps1</postscript>
+			<primarydc>PDC.contoso.com</primarydc>
+			<secondarydc>SDC.contoso.com</secondarydc>
+			<temppassword>Password02@</temppassword>
+		</vm>
+		<vm>
+			<installorder>7</installorder>
+			<hypervname>AD_ENDPOINT</hypervname>
+			<name>ENDPOINT</name>
+			<domain>contoso.com</domain>
+			<username>Administrator</username>
+			<password>Password01!</password>
+			<cpu>4</cpu>
+			<vnet>MS-AD-Internal</vnet>
+			<ip>192.168.111.101</ip>
+			<subnet>255.255.255.0</subnet>
+			<gateway>192.168.111.1</gateway>
+			<dns>192.168.111.1;192.168.111.4;192.168.111.5</dns>
+			<alternateDNS>192.168.111.5</alternateDNS>
+			<memory>4096</memory>
+			<postiso>VS2012.iso</postiso>
+			<skipwaitingforpostscript>false</skipwaitingforpostscript>
+			<postscript>Install_vs2012.ps1;InstallMSIAndTools.ps1;SetPasswordNeverExpires.ps1;SetClientNetWorkPrivate.ps1;Config-ENDPOINT.ps1</postscript>
+			<tools>
+			    <TestsuiteMSI MSIName="ADFamily-TestSuite-ServerEP.msi" targetEndpoint="TESTSUITE" />
+				<tool name="SE" MSIName="SpecExplorer.msi" version="3.5.3146.0" CPUArchitecture="x86" />
+				<tool name="PTF" MSIName="ProtocolTestFramework.msi" version="1.0.2485.0" CPUArchitecture="x86" />
+				<tool name="MMA" MSIName="MessageAnalyzer64.msi" version="4.0.7948.0" CPUArchitecture="x64" />
+				<tool name="OpenXMLSDK" MSIName="OpenXMLSDKV25.msi" version="2.5.5631.0" CPUArchitecture="x86" />
+			</tools>
+			<primarydc>PDC.contoso.com</primarydc>
+			<secondarydc>SDC.contoso.com</secondarydc>
+			<readonlydc>RODC.contoso.com</readonlydc>
+			<childdc>192.168.111.4</childdc>
+			<trustdc>192.168.111.5</trustdc>
+			<clientuser>userADTSSecurity</clientuser>
+			<userpassword>Password01!</userpassword>
+			<temppassword>Password02@</temppassword>
+		</vm>
+	</servers>
+</lab>
+

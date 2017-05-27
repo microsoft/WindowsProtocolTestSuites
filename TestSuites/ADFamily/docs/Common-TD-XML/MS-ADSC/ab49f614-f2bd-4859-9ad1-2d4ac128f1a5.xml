@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="ab49f614-f2bd-4859-9ad1-2d4ac128f1a5" build_format="rfc" section_number="1.143"><title>Class msWMI-PolicyType</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>Communicates schema for WMI policy objects.</p>
+<example><snippet type="syntax">cn: ms-WMI-PolicyType
+ldapDisplayName: msWMI-PolicyType
+governsId: 1.2.840.113556.1.5.211
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: top
+systemMustContain: msWMI-TargetObject, msWMI-ID
+systemMayContain: msWMI-SourceOrganization, msWMI-Parm4, 
+ msWMI-Parm3, msWMI-Parm2, msWMI-Parm1, msWMI-intFlags4, 
+ msWMI-intFlags3, msWMI-intFlags2, msWMI-intFlags1, 
+ msWMI-CreationDate, msWMI-ChangeDate, msWMI-Author
+systemPossSuperiors: container
+schemaIdGuid: 595b2613-4109-4e77-9013-a3bb4ef277c7
+defaultSecurityDescriptor: D:(A;;RPLCLORC;;;AU)
+ (A;;RPWPCRLCLOCCDCRCWDWOSW;;;DA)(A;;CC;;;PA)
+ (A;;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;SY)
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=ms-WMI-PolicyType,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADSC"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class msWMI-PolicyType [_rfc_ms-adsc1_143]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

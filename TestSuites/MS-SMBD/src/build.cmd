@@ -22,13 +22,10 @@ if not defined WIX (
 )
 
 if not exist "%programfiles(x86)%\Spec Explorer 2010\SpecExplorer.exe" (
-	echo Error: Spec Explorer 2010 v3.5.3146.0 should be installed
-	exit /b 1
-)
-
-if not exist "%programfiles(x86)%\Protocol Test Framework\bin\Microsoft.Protocols.TestTools.dll" (
-    echo Error: Protocol Test Framework should be installed
-	exit /b 1
+    if not exist "%programfiles%\Spec Explorer 2010\SpecExplorer.exe" (
+		echo Error: Spec Explorer 2010 v3.5.3146.0 should be installed
+		exit /b 1
+	)
 )
 
 if not defined vspath (
@@ -44,16 +41,27 @@ if not defined vspath (
 	)
 )
  
-:: Get PTF version
+:: Set path of Reg.exe
 set REGEXE="%SystemRoot%\System32\REG.exe"
-set PTF_VERSION="0.0"
-:: Try get PTF_VERSION from registry under Wow6432Node
-FOR /F "usebackq tokens=3" %%A IN (`%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework /v PTFVersion`) DO (
-	set PTF_VERSION=%%A
-)
-:: not found in Wow6432
-if PTF_VERSION == "0.0" (
-	FOR /F "usebackq tokens=3" %%A IN (`%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ProtocolTestFramework /v PTFVersion`) DO (
+
+:: Try get PTF_VERSION from registry under Wow6432Node, this is for 64-bit OS
+%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework /v PTFVersion
+if ErrorLevel 1 (
+	:: If not found, try searching the other path, this is for 32-bit OS
+	%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ProtocolTestFramework /v PTFVersion
+	if ErrorLevel 1 (
+	    :: If not found in two paths
+		echo Error: Protocol Test Framework should be installed
+		exit /b 1		
+	) else (
+	    :: If found in 32-bit OS
+		FOR /F "usebackq tokens=3" %%A IN (`%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ProtocolTestFramework /v PTFVersion`) DO (
+			set PTF_VERSION=%%A
+		)
+	)	
+) else (
+    :: If found in 64-bit OS
+	FOR /F "usebackq tokens=3" %%A IN (`%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework /v PTFVersion`) DO (
 		set PTF_VERSION=%%A
 	)
 )
@@ -80,19 +88,29 @@ set versionStr="[assembly: AssemblyVersion("1.0.0.0")]"
 for /f "delims=" %%i in ('""%FindExe%" "AssemblyVersion" "%path%""') do set versionStr=%%i
 set TESTSUITE_VERSION=%versionStr:~28,-3%
 
-set KeyFile=%1 
-if not defined KeyFile ( 
-	%buildtool% "%TestSuiteRoot%TestSuites\MS-SMBD\src\MS-SMBD_Server.sln" /t:clean;rebuild  
-) else ( 
-	%buildtool% "%TestSuiteRoot%TestSuites\MS-SMBD\src\MS-SMBD_Server.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true	 
-) 
-
-if exist "%TestSuiteRoot%drop\TestSuites\MS-SMBD" (
- rd /s /q "%TestSuiteRoot%drop\TestSuites\MS-SMBD"
+set KeyFile=%1
+if not defined KeyFile (
+	%buildtool% "%TestSuiteRoot%TestSuites\MS-SMBD\src\MS-SMBD_Server.sln" /t:clean;rebuild /p:VisualStudioVersion=12.0
+) else (
+	%buildtool% "%TestSuiteRoot%TestSuites\MS-SMBD\src\MS-SMBD_Server.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true /p:VisualStudioVersion=12.0
 )
 
-%buildtool% "%TestSuiteRoot%TestSuites\MS-SMBD\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:Platform="x64" /p:Configuration="Release"
+if ErrorLevel 1 (
+	echo Error: Failed to build MS-SMBD test suite
+	exit /b 1
+)
 
-echo ==============================================
+if exist "%TestSuiteRoot%drop\TestSuites\MS-SMBD" (
+	rd /s /q "%TestSuiteRoot%drop\TestSuites\MS-SMBD"
+)
+
+%buildtool% "%TestSuiteRoot%TestSuites\MS-SMBD\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:Platform="x64" /p:Configuration="Release" /p:VisualStudioVersion=12.0
+
+if ErrorLevel 1 (
+	echo Error: Failed to generate the msi installer
+	exit /b 1
+)
+
+echo ==================================================
 echo          Build MS-SMBD test suite successfully
-echo ==============================================
+echo ==================================================

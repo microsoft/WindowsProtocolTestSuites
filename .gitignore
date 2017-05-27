@@ -1,23 +1,55 @@
-bin
-obj
-objd
-drop
+# User-specific files
 *.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Oo]bjd/
+[Ll]og/
+
+# Visual Studio 2015 cache/options directory
+.vs/
+
+# SQL Server files
 *.mdf
 *.ldf
-.vs
 
-# Test result files
-TestResults
+# Visual C++ cache files
+ipch/
+*.aps
+*.ncb
+*.opendb
+*.opensdf
+*.sdf
+*.cachefile
+*.VC.db
+*.VC.VC.opendb
+
+# MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# Compiled files of Test Suites
+drop/
 
 # Generated files
+ProtocolTestManager/Kernel/Microsoft.Protocols.TestManager.Kernel.XML
+ProtocolTestManager/PropertyValueDetector/Microsoft.Protocols.TestManager.Detector.XML
 TestSuites/MS-SMB/src/Deploy/TestSuiteBatchFiles.wxs
 TestSuites/MS-SMB/src/Deploy/TestSuiteBinFiles.wxs
 TestSuites/MS-SMB/src/Deploy/TestSuiteScripts.wxs
 TestSuites/FileServer/src/Deploy/Bin.wxs
 TestSuites/FileServer/src/Deploy/Batch.wxs
-ProtocolTestManager/Kernel/Microsoft.Protocols.TestManager.Kernel.XML
-ProtocolTestManager/PropertyValueDetector/Microsoft.Protocols.TestManager.Detector.XML
 TestSuites/RDP/src/Deploy/TestSuiteBatchFiles.wxs
 TestSuites/RDP/src/Deploy/TestSuiteBinFiles.wxs
 TestSuites/RDP/src/Deploy/TestSuiteDataFiles.wxs
@@ -27,5 +59,18 @@ TestSuites/FileServer/src/Deploy/Bin.wxs
 TestSuites/Kerberos/src/Deploy/TestSuiteBatchFiles.wxs
 TestSuites/Kerberos/src/Deploy/TestSuiteBinFiles.wxs
 TestSuites/Kerberos/src/Deploy/TestSuiteScripts.wxs
+TestSuites/ADFamily/src/Deploy/Batch.wxs
+TestSuites/ADFamily/src/Deploy/Bin.wxs
+TestSuites/ADFamily/src/Deploy/PlayLists.wxs
+TestSuites/ADFamily/src/Deploy/DOCS_FILES.wxs
+TestSuites/ADFamily/src/Deploy/SCRIPT_FILES.wxs
 TestSuites/BranchCache/src/Deploy/TestSuiteBatchFiles.wxs
 TestSuites/BranchCache/src/Deploy/TestSuiteBinFiles.wxs
+TestSuites/MS-ADFSPIP/src/Deploy/TestSuiteBinFiles.wxs
+TestSuites/MS-ADFSPIP/src/Deploy/TestSuiteBatchFiles.wxs
+TestSuites/MS-ADFSPIP/src/Deploy/SCRIPT_FILES.wxs
+TestSuites/MS-ADFSPIP/src/Deploy/Certificate_Data.wxs
+TestSuites/MS-AZOD/src/Deploy/DOCS_FILES.wxs
+TestSuites/MS-AZOD/src/Deploy/Scripts_FILES.wxs
+TestSuites/MS-AZOD/src/Deploy/TestSuiteBatchFiles.wxs
+TestSuites/MS-AZOD/src/Deploy/TestSuiteBinFiles.wxs

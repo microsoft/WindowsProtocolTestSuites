@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="7e0d472a-285c-4c9b-bf1f-888263ece173" build_format="rfc" section_number="1.101"><title>Class msDFSR-Subscriber</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>Represents local computer membership of a replication group.</p>
+<example><snippet type="syntax">cn: ms-DFSR-Subscriber
+ldapDisplayName: msDFSR-Subscriber
+governsId: 1.2.840.113556.1.6.13.4.2
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: top
+mustContain: msDFSR-MemberReference, msDFSR-ReplicationGroupGuid
+mayContain: msDFSR-Options2, msDFSR-Flags, msDFSR-Options, 
+ msDFSR-Extension
+possSuperiors: msDFSR-LocalSettings
+schemaIdGuid: e11505d7-92c4-43e7-bf5c-295832ffc896
+defaultSecurityDescriptor: D:(A;;RPLCLORC;;;AU)
+ (A;;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;DA)
+ (A;;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;CO)
+ (A;;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;SY)
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=ms-DFSR-Subscriber,&lt;SchemaNCDN&gt;</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADSC"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class msDFSR-Subscriber [_rfc_ms-adsc1_101]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

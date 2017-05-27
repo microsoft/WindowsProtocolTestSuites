@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?define TESTSUITE_NAME=MS-ADFSPIP?>
+<?define TESTSUITE_ENDPOINT=Client?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+	
+  <Product Id="*" 
+           Name="Microsoft $(var.TESTSUITE_NAME) $(var.TESTSUITE_ENDPOINT) Endpoint Test Suite" 
+           Language="1033" 
+           Version="$(env.TESTSUITE_VERSION)" 
+           Manufacturer="Microsoft Corporation" 
+           UpgradeCode="{491D2802-69ED-4E6D-914B-50ED822C6681}">
+		
+    
+    <Package Id="*" 
+             InstallScope="perMachine"
+             InstallPrivileges="elevated"
+             Description="Microsoft $(var.TESTSUITE_NAME) $(var.TESTSUITE_ENDPOINT) Endpoint Test Suite v$(env.TESTSUITE_VERSION)"
+             Manufacturer="Microsoft Corporation"
+             InstallerVersion="300"
+             Compressed="yes" />
+    
+		<Media Id="1" Cabinet="TestSuite_AllInOne.cab" EmbedCab="yes" />
+
+    <MajorUpgrade DowngradeErrorMessage ="A later version of [ProductName] is already installed. Setup will now exit." />
+
+    <Feature Id="TestSuiteFeatures" Level="1" ConfigurableDirectory="TESTSUITE_ROOT_DIR" />
+
+    <WixVariable Id="TESTSUITE_NAME" Value="$(var.TESTSUITE_NAME)" Overridable="no" />
+    <WixVariable Id="TESTSUITE_ENDPOINT" Value="$(var.TESTSUITE_ENDPOINT)" Overridable="no" />
+    <WixVariable Id="TESTSUITE_VERSION" Value="$(env.TESTSUITE_VERSION)" Overridable="no" />
+
+    <WixVariable Id="TESTSUITE_BIN_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\Bin" />
+    <WixVariable Id="TESTSUITE_BATCH_DIR" Value="..\Batch" />
+    <WixVariable Id="PROTOSDK_DROP_DIR" Value="$(env.TestSuiteRoot)\drop\ProtoSDK\Bin" />
+	<WixVariable Id="SCRIPT_FILES_DIR" Value="..\Scripts" />
+	
+    <WixVariable Id="DOMAIN_RUN_ALLTCS_COMMAND" Value="RunAllTestCases.cmd" />
+    <WixVariable Id="DOMAIN_RUN_2012R2_COMMAND" Value="Run2012R2TestCases.cmd" />
+    <WixVariable Id="DOMAIN_RUN_BVT_COMMAND" Value="RunBVTTestCases.cmd" />
+    
+    <DirectoryRef Id="TESTSUITE_ROOT_DIR">
+      <Component Id="LICENSE.rtf" Guid="{40EE42F0-4761-4DC9-BA1F-89FEF0DA38EB}">
+        <File Id="LICENSE.rtf" Source="LICENSE.rtf" />
+      </Component>
+    </DirectoryRef>
+  </Product>
+</Wix>

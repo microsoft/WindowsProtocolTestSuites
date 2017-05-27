@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <DefineSolutionProperties>false</DefineSolutionProperties>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>3.5</ProductVersion>
+    <ProjectGuid>{43C18B0F-4CE6-40E5-99A7-FD028E7494D3}</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>MS-ADOD-TestSuite-ODEP</OutputName>
+    <OutputType>Package</OutputType>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+    <SuppressSpecificWarnings>58;1055;1076</SuppressSpecificWarnings>
+    <SuppressIces>ICE30</SuppressIces>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'fxcop|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>fxcop</DefineConstants>
+    <SuppressSpecificWarnings>58;1055;1076</SuppressSpecificWarnings>
+    <SuppressIces>ICE30</SuppressIces>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <SuppressSpecificWarnings>58;1055;1076</SuppressSpecificWarnings>
+    <SuppressIces>ICE30</SuppressIces>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Auto generated -->
+    <Compile Include="TestSuiteBatchFiles.wxs" />
+    <Compile Include="TestSuiteBinFiles.wxs" />
+    <Compile Include="Scripts_FILES.wxs" />
+    <!-- Manual input -->
+    <Compile Include="EndpointDlg.wxs" />
+    <Compile Include="MS-ADOD-TestSuite-ODEP.wxs" />
+    <Compile Include="DependencyCheckWarningDlg.wxs" />
+    <Compile Include="TestSuiteMiscFiles.wxs" />
+    <Compile Include="TestSuitePrivacyStatementDlg.wxs" />
+    <Compile Include="TestSuitePrivacyStatementLowMsiVersionDlg.wxs" />
+    <Compile Include="TestSuiteProduct.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="UiText.wxl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="LICENSE.rtf" />
+    <Content Include="readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixVSExtension">
+      <HintPath>$(WIX_PATH)\WixVSExtension.dll</HintPath>
+      <Name>WixVSExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WIX_PATH)\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WIX_PATH)\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixNetFxExtension">
+      <HintPath>$(WIX_PATH)\WixNetFxExtension.dll</HintPath>
+      <Name>WixNetFxExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\MessageAnalyzerLibrary\MessageAnalyzerLibrary.csproj">
+      <Name>MessageAnalyzerLibrary</Name>
+      <Project>{e3b08663-c752-41cc-b2b7-43c69b8c1292}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Adapter\MS-ADOD_ODAdapter.csproj">
+      <Name>MS-ADOD_ODAdapter</Name>
+      <Project>{97b3e49c-7dd9-4642-9172-dc47dc9d4631}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\TestSuite\MS-ADOD_ODTestSuite.csproj">
+      <Name>MS-ADOD_ODTestSuite</Name>
+      <Project>{79a15d41-6e1a-4eef-a134-2f31f54173a1}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ExpectFrameFiles_MA Include="..\TestSuite\ExpectedFrames-MA\*.xml" />
+    <ClientControlAdapterFiles Include="..\Adapter\ClientControlAdapter\*.ps1" />
+	<CommonAdapterFiles Include="..\Adapter\Common\*.ps1" />
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" />
+  <Target Name="GenDeployWxsFile" DependsOnTargets="ResolveWixExtensionReferences" BeforeTargets="Compile">
+	<Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Bin" -out TestSuiteBinFiles.wxs -template fragment -gg -cg BIN_FILES -dr TESTSUITE_BIN_DIR -var wix.TESTSUITE_BIN_DIR -sreg -sfrag -srd' />
+    <Exec Command='"$(WIX)\bin\heat.exe" dir ..\Batch -out TestSuiteBatchFiles.wxs -template fragment -gg -cg BATCH_FILES -dr TESTSUITE_BATCH_DIR -var wix.TESTSUITE_BATCH_DIR -sreg -sfrag -srd' />
+	<Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\TestSuites\MS-ADOD\Setup\Scripts" -out Scripts_FILES.wxs -template fragment -gg -cg Scripts_FILES -dr TESTSUITE_SCRIPTS_DIR -var wix.TESTSUITE_SCRIPTS_DIR -sreg -sfrag -srd' />
+  </Target>
+  <Target Name="CopyFilesToBin" BeforeTargets="GenDeployWxsFile">
+    <Copy SourceFiles="..\ODLocalTestRun.testrunconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Bin" />
+    <Copy SourceFiles="..\TestSuite\MS-ADOD_ODTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Bin" />
+    <Copy SourceFiles="..\TestSuite\MS-ADOD_ODTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Bin" />
+	<Copy SourceFiles="@(ExpectFrameFiles_MA)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Bin" />
+	<Copy SourceFiles="@(ClientControlAdapterFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Bin" />
+	<Copy SourceFiles="@(CommonAdapterFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Bin" />
+  </Target>
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)en-us\$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\deploy\" />
+  </Target>
+</Project>

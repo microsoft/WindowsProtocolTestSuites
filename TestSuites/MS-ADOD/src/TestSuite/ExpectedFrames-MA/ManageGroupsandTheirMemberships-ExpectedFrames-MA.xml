@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ExpectedMessageList>
+  <Filter>(LDAP)</Filter>
+  <!--1. LDAP Bind Request-->
+  <!--2. LDAP Bind Response-->
+  <!--with the credentials of the administrator-->
+  <ExpectedMessage>
+    <Name>LDAP.VirtualOperations.LdapBindOperation</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Result" Value="0" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--3. LDAP Add Request-->
+  <!--add the group to be managed-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.Entry" Value="CN={DomainNewGroup},CN=Users,{RootDomainNC}" Type="string"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--4. LDAP Add Response-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.ResultCode" Value="0" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--5. LDAP Search Request-->
+  <!--look for the user to be added to the new group-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.BaseObject" Value="CN={DomainNewUserUsername},CN=Users,{RootDomainNC}" Type="string"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--6. LDAP search Response-->
+  <!--return the user DN-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.ResultCode" Value="0" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--7. LDAP Modify Request-->
+  <!--modify the group to be managed and add the new user to the group-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.Object" Value="CN={DomainNewGroup},CN=Users,{RootDomainNC}" Type="string"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--8. LDAP Modify Response-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.ResultCode" Value="0" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--9. LDAP Unbind Request-->
+</ExpectedMessageList>

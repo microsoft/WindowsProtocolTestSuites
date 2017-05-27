@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?define SRCDIR=$(env.TestSuiteRoot)\drop\ProtocolTestManager?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="AZODDOCFOLDER">
+            <Component Id="cmpECFB8FF1559A4BC095BD7952E0FABBCD" Guid="{77B6285F-B25F-4535-B1CD-B575C37AFA9E}">
+                <File Id="fil01525AD7E1AD413885E4D51C32BD98AB" Source="..\Plugins\AZODPlugin\AZODPlugin\Docs\index.html" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="LIBFOLDER">
+	        <?if $(env.DEBUGVER) = 1?>
+                <Component Id="AZODPlugin.pdb" Guid="{F4258C1E-552C-4B6F-88A3-69CAF97594D9}">
+                    <File Id="AZODPlugin.pdb" Source="$(var.SRCDIR)\lib\AZODPlugin.pdb" />
+                </Component>
+            <?endif ?>
+            <Component Id="AZODPlugin.dll" Guid="{BA67AE9E-F6A2-4EEF-93DB-2E3FB70ABDAC}">
+                <File Id="AZODPlugin.dll" Source="$(var.SRCDIR)\lib\AZODPlugin.dll" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="AZODCONFIGFOLDER">
+            <Component Id="AZODConfigFile" Guid="{B4291C32-CD3C-4915-AFFE-A3E08EF0647B}">
+                <File Id="AZODConfigFile" Source="..\Plugins\AZODPlugin\AZODPlugin\config.xml" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="AZOD_PLUGIN">
+            <ComponentRef Id="cmpECFB8FF1559A4BC095BD7952E0FABBCD" />
+            <ComponentRef Id="AZODPlugin.dll" />
+            <ComponentRef Id="AZODConfigFile" />
+	        <?if $(env.DEBUGVER) = 1?>
+              <ComponentRef Id="AZODPlugin.pdb" />
+            <?endif ?>
+        </ComponentGroup>
+    </Fragment>
+</Wix>

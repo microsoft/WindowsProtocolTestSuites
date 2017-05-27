@@ -14,6 +14,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
     {
         public const string Timeout = "WaitTime";
         public const string IsWindowsImplementation = "IsWindowsImplementation";
+        public const string DropConnectionForInvalidRequest = "DropConnectionForInvalidRequest";
         public const string RdpSecurityNegotiation = "RDP.Security.Negotiation";
         public const string RdpSecurityProtocol = "RDP.Security.Protocol";
         public const string RdpSecurityEncryptionLevel = "RDP.Security.Encryption.Level";

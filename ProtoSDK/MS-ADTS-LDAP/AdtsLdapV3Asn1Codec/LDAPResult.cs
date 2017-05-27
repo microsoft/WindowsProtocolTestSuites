@@ -79,8 +79,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV
             int valueLenDecode = 0;
             resultCode = new LDAPResult_resultCode();
             valueLenDecode += resultCode.BerDecode(buffer);
+
             matchedDN = new LDAPDN();
             valueLenDecode += matchedDN.BerDecode(buffer);
+
             errorMessage = new LDAPString();
             valueLenDecode += errorMessage.BerDecode(buffer);
             if(valueLenDecode == valueLen)

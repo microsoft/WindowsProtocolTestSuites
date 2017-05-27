@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?define TESTSUITE_NAME=MS-AZOD?>
+<?define TESTSUITE_ENDPOINT=OD?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+	
+  <Product Id="*" 
+           Name="Microsoft $(var.TESTSUITE_NAME) $(var.TESTSUITE_ENDPOINT) Endpoint Test Suite" 
+           Language="1033" 
+           Version="$(env.TESTSUITE_VERSION)" 
+           Manufacturer="Microsoft Corporation" 
+           UpgradeCode="{491D2802-69ED-4E6D-914B-50ED822C6681}">
+		
+    
+    <Package Id="*" 
+             InstallScope="perMachine"
+             InstallPrivileges="elevated"
+             Description="Microsoft $(var.TESTSUITE_NAME) $(var.TESTSUITE_ENDPOINT) Endpoint Test Suite v$(env.TESTSUITE_VERSION)"
+             Manufacturer="Microsoft Corporation"
+             InstallerVersion="300"
+             Compressed="yes" />
+    
+		<Media Id="1" Cabinet="TestSuite_AllInOne.cab" EmbedCab="yes" />
+
+    <MajorUpgrade DowngradeErrorMessage ="A later version of [ProductName] is already installed. Setup will now exit." />
+
+    <Feature Id="TestSuiteFeatures" Level="1" ConfigurableDirectory="TESTSUITE_ROOT_DIR" />
+
+    <WixVariable Id="TESTSUITE_NAME" Value="$(var.TESTSUITE_NAME)" Overridable="no" />
+    <WixVariable Id="TESTSUITE_ENDPOINT" Value="$(var.TESTSUITE_ENDPOINT)" Overridable="no" />
+    <WixVariable Id="TESTSUITE_VERSION" Value="$(env.TESTSUITE_VERSION)" Overridable="no" />
+
+    <WixVariable Id="TESTSUITE_BIN_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\MS-AZOD\Bin" />
+    <WixVariable Id="TESTSUITE_BATCH_DIR" Value="..\Batch" />
+    <WixVariable Id="PROTOSDK_DROP_DIR" Value="$(env.TestSuiteRoot)\drop\ProtoSDK\Bin" />
+	<WixVariable Id="TESTSUITE_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\TestSuites\MS-AZOD\Setup\Scripts" />
+	
+    <WixVariable Id="RUN_TESTS_COMMAND" Value="RunAllTestCases.cmd" />
+    <WixVariable Id="RUN_BVT_COMMAND" Value="RunBVTTestCases.cmd" />
+    
+    <WixVariable Id="QUICK_START_GUIDE" Value="MS-AZOD_ODUserGuide.docx" />
+    <!-- Required PTF version should be the same as required Protocol Stack SDK version. -->    
+    <WixVariable Id="PROTOCOL_TEST_FRAMEWORK_VERSION" Value="1.0.2220.0" />
+    <WixVariable Id="MMA_VERSION" Value="4.0.6396.0" />
+    
+    <DirectoryRef Id="TESTSUITE_ROOT_DIR">
+      <Component Id="LICENSE.rtf" Guid="{40EE42F0-4761-4DC9-BA1F-89FEF0DA38EB}">
+        <File Id="LICENSE.rtf" Source="LICENSE.rtf" />
+      </Component>
+    </DirectoryRef>
+  </Product>
+</Wix>

@@ -35,6 +35,7 @@
 			* [5.1.2.3. Setup to test DFSC](#5.1.2.3)
 			* [5.1.2.4. Setup to test RSVD](#5.1.2.4)
 			* [5.1.2.5. Setup to test SQOS](#5.1.2.5)
+			* [5.1.2.6. Setup to test FSA](#5.1.2.6)
     * [5.2. Domain Environment](#5.2)
 		* [5.2.1. Setup the Domain Controller (DC)](#5.2.1)
 			* [5.2.1.1. Promote DC](#5.2.1.1)
@@ -51,12 +52,13 @@
 			* [5.2.4.5. Setup to test RSVD](#5.2.4.5)
 			* [5.2.4.6. Setup to test SQOS](#5.2.4.6)
 			* [5.2.4.7. Setup to test Authorization](#5.2.4.7)
+			* [5.2.4.8. Setup to test FSA](#5.2.4.8)
 	* [5.3. Setup Details for Windows Platform](#5.3)
-		* [5.3.1. Create a share named SMBBasic](#5.3.1)
+		* [5.3.1. Create a share](#5.3.1)
 		* [5.3.2. Set NTFS Permissions](#5.3.2)
 		* [5.3.3. Set Share Permissions](#5.3.3)
 		* [5.3.4. Add a share SameWithSMBBasic to an existing share SMBBasic](#5.3.4)
-		* [5.3.5. Create symbolic links in SMBBasic](#5.3.5)
+		* [5.3.5. Create symbolic links](#5.3.5)
 		* [5.3.6. Enable Encrypt Data Access on a share named SMBEncrypted](#5.3.6)
 		* [5.3.7. Enable FORCE_LEVELII_OPLOCK on a share named ShareForceLevel2](#5.3.7)
 		* [5.3.8. Create a share on a volume supporting integrity](#5.3.8)
@@ -108,7 +110,10 @@
 		* [5.3.21. Modify the Signing configuration](#5.3.21)
 		* [5.3.22. Manually Setup Computer Password](#5.3.22)
 		* [5.3.23. Create an SQOS policy](#5.3.23)
-		* [5.3.24. How to start console with Administrator privilege](5.3.24)
+		* [5.3.24. How to start console with Administrator privilege](#5.3.24)
+		* [5.3.25. Enable short name](#5.3.25)
+		* [5.3.26. Create a volume shadow copy](#5.3.26)
+		* [5.3.27. Create a volume mount point](#5.3.27)
 * [6. Installed Files and Folders](#6)
 * [7. Configure and Run Test Cases](#7)
     * [7.1. Configure and Run Test Cases Using Protocol Test Manager](#7.1)
@@ -476,7 +481,7 @@ This configuration is used to test **Basic** features of **[MS-SMB2]** protocol.
 1.  Create a share named **SMBBasic** on `Node01`.
 
 2.  Share it with **Read/Write** permission level to the local Administrator account **Administrator**.
->	For Windows platform, please refer to [5.3.1. Create a share named SMBBasic](#5.3.1).
+>	For Windows platform, please refer to [5.3.1. Create a share](#5.3.1).
 
 ######<a name="5.1.2.2.2"/> 5.1.2.2.2. Create a share with Encrypt data access enabled
 
@@ -485,7 +490,7 @@ This configuration is used to test **Encryption** feature of **[MS-SMB2]** proto
 1.  Create a share named **SMBEncrypted** on `Node01`.
 
 2.  Share it with **Read/Write** permission level to the local Administrator account **Administrator**.
->	For Windows platform, please refer to [5.3.1. Create a share named SMBBasic](#5.3.1).
+>	For Windows platform, please refer to [5.3.1. Create a share](#5.3.1).
 
 3.  Enable **Encrypt data access** on the share which indicates that the server requires messages to be encrypted when accessing this share.
 >	For Windows platform, please refer to [5.3.6. Enable Encrypt Data Access on a share named SMBEncrypted](#5.3.6).
@@ -499,7 +504,7 @@ This configuration is used to test **Oplock** feature of **[MS-SMB2]** protocol.
 1.  Create a share named **ShareForceLevel2** on `Node01`.
 
 2.  Share it with **Read/Write** permission level to the local Administrator account **Administrator**.
->	For Windows platform, please refer to [5.3.1. Create a share named SMBBasic](#5.3.1).
+>	For Windows platform, please refer to [5.3.1. Create a share](#5.3.1).
 
 3.  Enable **FORCE_LEVELII_OPLOCK** on the share.
 >	For Windows platform, please refer to [5.3.7. Enable FORCE_LEVELII_OPLOCK on a share named ShareForceLevel2](#5.3.7).
@@ -526,7 +531,7 @@ This configuration is used to test some negative cases (similar to [5.1.2.2.3.2.
 1.  Create a share named **DifferentFromSMBBasic** on `Node01`, this share should have a different path from **SMBBasic** share. For example, if **SMBBasic** has path `%SystemDrive%\SMBBasic`, then **DifferentFromSMBBasic** should have path `%SystemDrive%\DifferentFromSMBBasic`.
 
 2.  Share it with **Read/Write** permission level to the local Administrator account **Administrator**.
->	For Windows platform, please refer to [5.3.1. Create a share named SMBBasic](#5.3.1).
+>	For Windows platform, please refer to [5.3.1. Create a share](#5.3.1).
 
 #######<a name="5.1.2.2.3.4"/> 5.1.2.2.3.4. Create Symbolic Links
 
@@ -542,7 +547,7 @@ This configuration is used to test some negative cases of **Create/Close** featu
 	
 	-	In folder **Sub**, add another symbolic link named **Symboliclink2**, which links to **SMBBasic**.
 
->	For Windows platform, please refer to [5.3.5. Create symbolic links in SMBBasic](#5.3.5).
+>	For Windows platform, please refer to [5.3.5. Create symbolic links](#5.3.5).
 
 #######<a name="5.1.2.2.3.5"/> 5.1.2.2.3.5. Create a share on volume supporting integrity
 
@@ -608,6 +613,40 @@ This configuration is used to test the **[MS-DFSC]** protocol. If **DFS** is not
 >	&emsp;&emsp;The testing of SQOS is not applicable for **WORKGROUP** environment of Windows platform. But you could still test it if your implementation supports this feature in **WORKGROUP** environment.
 
 >	Please reference [5.2.4.6. Setup to test SQOS](#5.2.4.6) for how to setup.
+
+#####<a name="5.1.2.6"/> 5.1.2.6. Setup to test FSA
+
+This configuration is used to test the **[MS-FSA]** protocol. 
+
+1.  Create a share **FileShare** on SUT. If this share is already created, skip this step.
+
+    -	Share with Read/Write permission level to Admin User.
+	
+>	For Windows platform, please refer to [5.3.1. Create a share](#5.3.1).	
+	
+2.  Create a folder **ExistingFolder** under the **FileShare**.
+
+3.  Create a file **ExistingFile.txt** under the **FileShare**.
+
+4.  Create a link **link.txt** under the **FileShare**, and link it to **ExistingFile.txt**.
+
+>	For Windows platform, please refer to [5.3.5. Create symbolic links](#5.3.5).	
+
+5.  Create a mount point **MountPoint**, link to the volume where the **FileShare** locates.
+
+>   For Windows platform, please refer to [5.3.27. Create a volume mount point](#5.3.27).
+
+6.  Enable **short name** (**8.3 filename**) on the volume where the **FileShare** locates.
+
+>   For Windows platform, please refer to [5.3.25. Enable short name](#5.3.25).
+
+7.  Create 3 volume shadow copies on the volume where the **FileShare** locates. Modify the file **ExistingFile.txt** before every creation, then **ExistingFile.txt** will have 3 previous versions.
+
+>   For Windows platform, please refer to [5.3.26. Create a volume shadow copy](#5.3.26).
+
+8.  Repeat step 2 to 7 under the share **SMBReFSShare**, which is created in section [5.1.2.2.3.5 Create a share on volume supporting integrity](#5.1.2.2.3.5).
+
+	If **Integrity** is not supported by file system, this step can be ignored.
 
 ###<a name="5.2"/> 5.2. Domain Environment
 
@@ -863,17 +902,27 @@ The steps to create the above shares are similar to creating share **SMBBasic**.
 
 >	For Windows platform,
 
->	&emsp;&emsp;About how to create a share, please refer to [5.3.1. Create a share named SMBBasic](#5.3.1).
+>	&emsp;&emsp;About how to create a share, please refer to [5.3.1. Create a share](#5.3.1).
 
 >	&emsp;&emsp;About how to set NTFS permissions on a share, please refer to [5.3.2. Set NTFS Permissions](#5.3.2).
 
 >	&emsp;&emsp;About how to set share permissions, please refer to [5.3.3. Set Share Permissions](#5.3.3).
 
+#####<a name="5.2.4.8"/> 5.2.4.8. Setup to test FSA
+
+This configuration is used to test the **[MS-FSA]** protocol.
+
+1.  Complete [5.1.2.6. Setup to test FSA](#5.1.2.6) specified in the **WORKGROUP** environment.
+
+2.  Share all the shares with Domain Admin User.
+
 ###<a name="5.3"/> 5.3. Setup Details for Windows Platform
 
 This section describes detailed setup steps on a Windows platform.
 
-####<a name="5.3.1"/> 5.3.1. Create a share named SMBBasic
+####<a name="5.3.1"/> 5.3.1. Create a share
+
+Take the share named **SMBBasic** as an example:
 
 1.	Create a new folder at **%SystemDrive%\\SMBBasic**:
 
@@ -935,7 +984,7 @@ This section describes detailed setup steps on a Windows platform.
 ####<a name="5.3.4"/> 5.3.4. Add a share SameWithSMBBasic to an existing share SMBBasic 
 
 1.  Make sure the folder **%SystemDrive%\\SMBBasic** is created and shared with **Read/Write** permission level to **Node01\\Administrator** (and **CONTOSO\\Administrator** if **DOMAIN** environment).
->	For more details, please refer to [5.3.1. Create a share named SMBBasic](#5.3.1).
+>	For more details, please refer to [5.3.1. Create a share](#5.3.1).
 
 2.	Add another share with name **SameWithSMBBasic** to this **%SystemDrive%\\SMBBasic** folder.
 
@@ -955,24 +1004,28 @@ This section describes detailed setup steps on a Windows platform.
 
 		![](./image/FileServerUserGuide/image180.png)
 
-####<a name="5.3.5"/> 5.3.5. Create symbolic links in SMBBasic
+####<a name="5.3.5"/> 5.3.5. Create symbolic links
 
 1.	Logon to the SUT computer. And start the console window with Administrator privilege.
 >	For more details, please refer to [5.3.24. How to start console with Administrator privilege](#5.3.24).
 
-2.	Type the following commands in the console windows, and press **Enter**.
+2.	If you want to create a directory symbolic link under e.g. share **SMBBasic**, type the following commands in the console windows, and press **Enter**.
 ```
 	cd %SystemDrive%\SMBBasic
 	mklink /D Symboliclink %SystemDrive%\
-	mkdir Sub
-	cd Sub
-	mklink /D Symboliclink2 %SystemDrive%\SMBBasic
 ```
+
+3.  If you want to create a file symbolic link under e.g. share **FileShare**, type the following commands in the console windows, and press **Enter**.
+```
+	cd %SystemDrive%\FileShare
+	mklink link.txt ExistingFile.txt
+```
+
 
 ####<a name="5.3.6"/> 5.3.6. Enable Encrypt Data Access on a share named SMBEncrypted
 
 1.  Make sure the folder **%SystemDrive%\\SMBEncrypted** is created and shared with **Read/Write** permission level to **Node01\\Administrator** (and **CONTOSO\\Administrator** if **DOMAIN** environment).
->	For more details, please refer to [5.3.1. Create a share named SMBBasic](#5.3.1).
+>	For more details, please refer to [5.3.1. Create a share](#5.3.1).
 
 2.  Enable the share with **Encrypt data**.
 
@@ -993,7 +1046,7 @@ This section describes detailed setup steps on a Windows platform.
 ####<a name="5.3.7"/> 5.3.7. Enable FORCE_LEVELII_OPLOCK on a share named ShareForceLevel2
 
 1.	Make sure the folder **%SystemDrive%\\ShareForceLevel2** is created and shared with **Read/Write** permission level to **Node01\\Administrator** (and **CONTOSO\\Administrator** if **DOMAIN** environment).
->	For more details, please refer to [5.3.1. Create a share named SMBBasic](#5.3.1).
+>	For more details, please refer to [5.3.1. Create a share](#5.3.1).
 
 2.	Make sure [**File Server Test Suite**](#3.7) has already been installed on the driver computer.
 
@@ -1046,7 +1099,7 @@ This section describes detailed setup steps on a Windows platform.
 	![](./image/FileServerUserGuide/image185.png)
 
 6.	Create a share in the new volume with share name **SMBReFSShare** and share it with **Read/Write** permission level to **Node01\\Administrator** (and **CONTOSO\\Administrator** if **DOMAIN** environment).
->	For more details, please refer to [5.3.1. Create a share named SMBBasic](#5.3.1).
+>	For more details, please refer to [5.3.1. Create a share](#5.3.1).
 
 ####<a name="5.3.9"/> 5.3.9. Setup a Windows-based DC
 
@@ -1391,7 +1444,7 @@ This section describes detailed setup steps on a Windows platform.
 
 	-	Otherwise, create the folder on `Node01`. And share it with **Read/Write** permission level to **Node01\\Administrator** (and **CONTOSO\\Administrator** if **DOMAIN** environment).
 
->	For more details, please refer to [5.3.1. Create a share named SMBBasic](#5.3.1).
+>	For more details, please refer to [5.3.1. Create a share](#5.3.1).
 
 #####<a name="5.3.10.3"/> 5.3.10.3. Create DFS name spaces
 
@@ -2007,7 +2060,47 @@ To start the console window with Administrator privilege.
 1.	Click **Start**, and type `cmd`. Then right click **Command Prompt**, and select **Run as Administrator**.
 
 	![](./image/FileServerUserGuide/image178.png)
+	
+####<a name="5.3.25"/> 5.3.25. Enable short name
 
+1.	Start the console window with Administrator privilege.
+>	For more details, please refer to [5.3.24. How to start console with Administrator privilege](#5.3.24).
+
+2.	If you want to enable short name on volume e.g. C:, type the following commands in the console windows:
+```
+	fsutil 8dot3name set c:\ 0
+```
+
+####<a name="5.3.26"/> 5.3.26. Create a volume shadow copy
+
+1.	Start the console window with Administrator privilege.
+>	For more details, please refer to [5.3.24. How to start console with Administrator privilege](#5.3.24).
+
+2.	If you want to create a shadow copy on volume e.g. C:, type the following commands in the console windows:
+```
+	vssadmin.exe Create Shadow /For=c:\ /AutoRetry=2
+```
+
+####<a name="5.3.27"/> 5.3.27. Create a volume mount point
+
+1.	Start the console window with Administrator privilege.
+>	For more details, please refer to [5.3.24. How to start console with Administrator privilege](#5.3.24).
+
+2.  First create a new folder (e.g. name is MountPoint), type the following command in the console windows:
+```
+	mkdir MountPoint
+```
+
+    Then list the mounted volume (e.g. volume C:) name:
+```
+	mountvol c: /l
+```
+
+	Then create the mount point. The output of the above command is the volume name, it will be used in the command below:
+```
+	mountvol MountPoint [volume name copied from the above command]
+```
+	
 ##<a name="6"/> 6. Installed Files and Folders
 
 The installation process adds the following folders and files to the driver computer: `%SystemDrive%\MicrosoftProtocolTests\FileServer\Server-Endpoint\<version#>\`

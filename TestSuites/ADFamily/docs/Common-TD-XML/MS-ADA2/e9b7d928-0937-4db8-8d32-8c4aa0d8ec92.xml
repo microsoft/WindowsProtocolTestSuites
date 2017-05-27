@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="e9b7d928-0937-4db8-8d32-8c4aa0d8ec92" build_format="rfc" section_number="1.396"><title>Attribute msPKI-OID-CPS</title>
+<tech value="protocol" />
+<index><keyword>msPKI-OID-CPS attribute</keyword></index></metadata>
+<section><section_contents><p>For the CA for the Active Directory domain, this attribute specifies the certification practice statement (CPS)<?CommentRangeStart id="1"?><?CommentRangeEnd id="1"?>.</p>
+<example><snippet type="syntax">cn: ms-PKI-OID-CPS
+ldapDisplayName: msPKI-OID-CPS
+attributeId: 1.2.840.113556.1.4.1672
+attributeSyntax: 2.5.5.12
+omSyntax: 64
+isSingleValued: FALSE
+schemaIdGuid: 5f49940e-a79f-4a51-bb6f-3d446a54dc6b
+systemOnly: FALSE
+searchFlags: 0
+rangeUpper: 32768
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="1" author="pbartos" date="2008-01-02T10:05:00Z" initials="" commentText="From RFC 2527, we have &quot;certification practice statement (CPS)&quot;. This was &quot;Certificate Policy Statement (CPS)&quot;, changed by editor to &quot;Certificate Practices Statement (CPS)&quot;.  Verify with engineers that this final change is the correct one."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="e9b7d928-0937-4db8-8d32-8c4aa0d8ec92"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-ada2_2_429"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

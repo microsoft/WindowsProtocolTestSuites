@@ -197,7 +197,7 @@
     <Copy SourceFiles="$(TargetDir)en-us\$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-SMB\deploy\" />
   </Target>  
   <ItemGroup>
-	<SMBScriptFiles Include="..\..\scripts\*" />
+	<SMBScriptFiles Include="..\..\Setup\Scripts\*" />
 	<AdapterScriptFiles Include="..\Adapter\ServerSetup\*.ps1" />
   </ItemGroup>
   <Target Name="CopyFilesToBin" BeforeTargets="GenDeployWxsFile" >

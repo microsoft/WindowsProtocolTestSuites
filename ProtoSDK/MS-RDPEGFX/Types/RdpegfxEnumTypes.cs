@@ -135,9 +135,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <summary>
         /// Specifies the version of the capability, which is supported in RDP 10.2
         /// </summary>
-        RDPGFX_CAPVERSION_102 = 0x000A0200
+        RDPGFX_CAPVERSION_102 = 0x000A0200,
+
+        /// <summary>
+        /// Specifies the version of the capability, which is supported in RDP 10.3
+        /// </summary>
+        RDPGFX_CAPVERSION_103 = 0x000A0301
     }
 
+    public enum MaxCacheSlotNumber : int
+    {
+        Small_Cache_Size = 12800,
+        Thin_Client_Cache_Size = 4096,
+        Default_Cache_Size = 100,//If neither the RDPGFX_CAPS_FLAG_THINCLIENT nor the RDPGFX_CAPS_FLAG_SMALL_CACHE capability flag is specified, the bitmap cache size is assumed to be 100 MB in size
+        FLAG_THINCLIENT_Cache_Size = 16, // The bitmap cache MUST be constrained to 16 MB in size (if it is used) 
+        FLAG_SMALL_CACHE_Cache_Size = 16, //Indicates that the bitmap cache MUST be constrained to 16 MB in size (if it is used).
+        
+    }
     /// <summary>
     /// Flags of capability.
     /// </summary>

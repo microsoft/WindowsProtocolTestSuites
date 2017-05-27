@@ -56,33 +56,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter
             }
         }
 
-        #region Service Account Configuration
-
-        public string KeytabFile
+        public uint NumberOfPreviousVersions
         {
             get
             {
-                return GetProperty("KeytabFile", false);
+                return uint.Parse(GetProperty("NumberOfPreviousVersions"));
             }
         }
-
-        public string ServicePassword
-        {
-            get
-            {
-                return GetProperty("ServicePassword");
-            }
-        }
-
-        public string ServiceSaltString
-        {
-            get
-            {
-                return GetProperty("ServiceSaltString");
-            }
-        }
-
-        #endregion
 
         #region Symbolic link configuration
         public string Symboliclink

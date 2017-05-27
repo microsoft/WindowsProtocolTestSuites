@@ -71,7 +71,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
         /// </summary>
         /// <param name="desiredFileAttribute">distred file attribute</param>
         /// <param name="createOption">Create option</param>
-        /// <param name="streamTypeNameToOPen">the name of stream type to open</param>    
+        /// <param name="streamTypeNameToOpen">the name of stream type to open</param>    
         /// <param name="desiredAccess">A bitmask indicating desired access for the open, as specified in [MS-SMB2] section 2.2.13.1.</param>
         /// <param name="shareAccess">A bitmask indicating sharing access for the open, as specified in [MS-SMB2] section 2.2.13.</param>
         /// <param name="createDisposition">The desired disposition for the open, as specified in [MS-SMB2] section 2.2.13.</param>
@@ -84,7 +84,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
         public static MessageStatus CreateFile(
             FileAttribute desiredFileAttribute,
             CreateOptions createOption,
-            StreamTypeNameToOPen streamTypeNameToOPen,
+            StreamTypeNameToOpen streamTypeNameToOPen,
             FileAccess desiredAccess,
             ShareAccess shareAccess,
             CreateDisposition createDisposition,
@@ -132,7 +132,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
 
             //If StreamTypeNameToOpen is non-empty and has a value other than "$DATA" or 
             //"$INDEX_ALLOCATION", the operation MUST be failed with STATUS_ACCESS_DENIED.
-            if (streamTypeNameToOPen == StreamTypeNameToOPen.Other)
+            if (streamTypeNameToOPen == StreamTypeNameToOpen.Other)
             {
                 Helper.CaptureRequirement(420, @"[In Creation of a New File,Pseudocode for the operation is as follows:]If StreamTypeNameToOpen is non-empty and has a value other than \""$DATA"",the operation MUST be failed with STATUS_ACCESS_DENIED.");
                 return MessageStatus.OBJECT_NAME_INVALID;
@@ -180,8 +180,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
                 return MessageStatus.ACCESS_DENIED;
             }
 
-            if (streamTypeNameToOPen == StreamTypeNameToOPen.DATA ||
-                streamTypeNameToOPen == StreamTypeNameToOPen.NULL)
+            if (streamTypeNameToOPen == StreamTypeNameToOpen.DATA ||
+                streamTypeNameToOPen == StreamTypeNameToOpen.NULL)
             {
                 gStreamType = StreamType.DataStream;
             }

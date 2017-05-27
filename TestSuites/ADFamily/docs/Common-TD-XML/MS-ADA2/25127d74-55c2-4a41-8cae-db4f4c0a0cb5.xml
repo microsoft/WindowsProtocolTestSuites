@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="25127d74-55c2-4a41-8cae-db4f4c0a0cb5" build_format="rfc" section_number="1.482"><title>Attribute msTSRemoteControl</title>
+<tech value="protocol" />
+<index><keyword>msTSRemoteControl attribute</keyword></index></metadata>
+<section><section_contents><p>This attribute specifies whether to allow remote observation or remote control of the user's Terminal Services session. The values are as follows:</p>
+<list>
+<item><p>0: Disable</p></item>
+<item><p>1: EnableInputNotify</p></item>
+<item><p>2: EnableInputNoNotify</p></item>
+<item><p>3: EnableNoInputNotify</p></item>
+<item><p>4: EnableNoInputNoNotify</p></item></list>
+<p>For a description of these values, see the RemoteControl method of the Win32_TSRemoteControlSetting WMI class<?CommentRangeStart id="1"?><?CommentRangeEnd id="1"?>.</p>
+<example><snippet type="syntax">cn: ms-TS-Remote-Control
+ldapDisplayName: msTSRemoteControl
+attributeId: 1.2.840.113556.1.4.1980
+attributeSyntax: 2.5.5.9
+omSyntax: 2
+isSingleValued: TRUE
+schemaIdGuid: 15177226-8642-468b-8c48-03ddfd004982
+systemOnly: FALSE
+searchFlags: 0
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="1" author="pbartos" date="2008-02-11T16:00:00Z" initials="" commentText="Can we reference, &quot;http://msdn2.microsoft.com/en-us/library/aa383817.aspx&quot;?"?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="25127d74-55c2-4a41-8cae-db4f4c0a0cb5"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-ada2_2_521"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

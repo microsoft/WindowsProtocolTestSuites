@@ -296,9 +296,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending SUT a Static Virtual Channel PDU and filling the length field of tpktHeader to an invalid value (less than the actual value)");
             SendStaticVirtualChannelTraffics(StaticVirtualChannel_InvalidType.InvalidTPKTLength);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT drop the connection.");
-            bool isDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(isDisconnected, "SUT should drop the connection when received an invalid static virtual channel pdu.");
+            RDPClientTryDropConnection("an invalid length field of tpktHeader in Slow-Path static Virtual Channel PDU");
             #endregion
         }
         
@@ -359,9 +357,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending SUT a Static Virtual Channel PDU and filling the length field of mcsPdu to an invalid value (less than the actual value)");
             SendStaticVirtualChannelTraffics(StaticVirtualChannel_InvalidType.InvalidMCSLength);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT drop the connection.");
-            bool isDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(isDisconnected, "SUT should drop the connection when received an invalid static virtual channel pdu.");
+            RDPClientTryDropConnection("an invalid length field of mcsPdu Static Virtual Channel PDU");            
             #endregion
         }
 
@@ -424,9 +420,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending SUT a Static Virtual Channel PDU and present an invalid signature.");
             SendStaticVirtualChannelTraffics(StaticVirtualChannel_InvalidType.InvalidSignature);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT drop the connection.");
-            bool isDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(isDisconnected, "SUT should drop the connection when received an invalid static virtual channel pdu.");
+            RDPClientTryDropConnection("an invalid signature in Static Virtual Channel PDU");            
             #endregion
         }
     }

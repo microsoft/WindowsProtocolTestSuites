@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="49553072-bb78-44a1-b8d5-97fc9008c4e3" build_format="rfc" section_number="2.41"><title>Class organizationalPerson</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?>
+<p>This class is used for objects that contain organizational information about a user, such as the employee number, department, manager, title, and office address.</p>
+<example><snippet type="syntax">cn: Organizational-Person
+ldapDisplayName: organizationalPerson
+governsId: 2.5.6.7
+objectClassCategory: 0
+rdnAttId: cn
+subClassOf: person
+mayContain: homePostalAddress, houseIdentifier
+systemMayContain: streetAddress, assistant, company, countryCode, 
+ c, department, destinationIndicator, division, mail, employeeID, 
+ facsimileTelephoneNumber, generationQualifier, givenName, initials, 
+ internationalISDNNumber, l, thumbnailLogo, manager, o, ou, 
+ middleName, personalTitle, otherFacsimileTelephoneNumber, homePhone, 
+ otherHomePhone, otherIpPhone, ipPhone, 
+ primaryInternationalISDNNumber, otherMobile, mobile, otherTelephone, 
+ otherPager, pager, physicalDeliveryOfficeName, thumbnailPhoto, 
+ postOfficeBox, postalAddress, postalCode, preferredDeliveryMethod, 
+ registeredAddress, st, street, teletexTerminalIdentifier, 
+ telexNumber, primaryTelexNumber, co, title, comment, x121Address
+systemPossSuperiors: container, organization, organizationalUnit
+schemaIdGuid: bf967aa4-0de6-11d0-a285-00aa003049e2
+defaultSecurityDescriptor: D:S:
+defaultHidingValue: TRUE
+systemOnly: FALSE
+defaultObjectCategory: CN=Person,&lt;SchemaNCDN&gt;</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="" date="1900-01-01T00:00:00Z" initials="" commentText="This section is out of order with the other sections; it should go after Class organization."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="49553072-bb78-44a1-b8d5-97fc9008c4e3"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-adls_3_42"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

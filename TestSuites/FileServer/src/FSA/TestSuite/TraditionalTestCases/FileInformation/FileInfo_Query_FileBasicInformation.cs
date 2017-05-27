@@ -48,7 +48,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             status = this.fsaAdapter.CreateFile(
                         FileAttribute.NORMAL | FileAttribute.INTEGRITY_STREAM, // Set Integrity field
                         fileType == FileType.DataFile? CreateOptions.NON_DIRECTORY_FILE : CreateOptions.DIRECTORY_FILE,
-                        fileType == FileType.DataFile ? StreamTypeNameToOPen.DATA : StreamTypeNameToOPen.INDEX_ALLOCATION, //Stream Type
+                        fileType == FileType.DataFile ? StreamTypeNameToOpen.DATA : StreamTypeNameToOpen.INDEX_ALLOCATION, //Stream Type
                         FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE | FileAccess.FILE_WRITE_DATA | FileAccess.FILE_WRITE_ATTRIBUTES,
                         ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE,
                         CreateDisposition.OPEN_IF,

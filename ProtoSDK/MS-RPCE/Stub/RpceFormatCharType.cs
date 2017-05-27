@@ -343,9 +343,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
         FC_UNUSED3 = 0x3b,
 
         /// <summary>
-        /// Unused.
+        /// Used for [system_handle] IDL attribute.
         /// </summary>
-        FC_UNUSED4 = 0x3c,
+        FC_SYSTEM_HANDLE = 0x3c,
 
         /// <summary>
         /// Structure padding directives, used in structure layouts only.

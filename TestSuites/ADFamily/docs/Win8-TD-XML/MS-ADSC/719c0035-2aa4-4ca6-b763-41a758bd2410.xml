@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page>
+<metadata id="719c0035-2aa4-4ca6-b763-41a758bd2410" build_format="rfc" section_number="1.223">
+<title>Class user</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details>
+<change_tracking month="04" day="11" year="2009" revision_class="minor" change_type="protocol_syntax_updated"><tdi_info><tdi_number>29226</tdi_number><tdi_title>Corrected the case of msTSLSProperty01 in systemMayContain.</tdi_title></tdi_info></change_tracking>
+<change_tracking month="04" day="11" year="2009" revision_class="minor" change_type="protocol_syntax_updated"><tdi_info><tdi_number>29227</tdi_number><tdi_title>Corrected the case of msTSLSProperty02 in systemMayContain.</tdi_title></tdi_info></change_tracking>
+<change_tracking revision_class="major" year="2012" month="12" day="21" change_type="content_update"><conditions><doc_set value="windows_8_beta_only" /></conditions><non_tdi_info><non_tdi_desc><p>Updated content for <auto_text>windows_server_8</auto_text>.</p></non_tdi_desc></non_tdi_info></change_tracking>
+<change_tracking month="03" day="31" year="2012" revision_class="major" change_type="content_update"><tdi_info><tdi_number>66285</tdi_number><tdi_title>Added msDS-CloudExtensions to the value of the systemAuxiliaryClass attribute.</tdi_title></tdi_info></change_tracking>
+</change_tracking_details>
+</metadata>
+<section>
+<section_contents>
+<p>Stores information about an employee or contractor who works for an organization. It is also possible to apply this class to long-term visitors.</p>
+<example>
+<snippet type="syntax">cn: User
+ldapDisplayName: user
+governsId: 1.2.840.113556.1.5.9
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: organizationalPerson
+auxiliaryClass: shadowAccount, posixAccount
+systemAuxiliaryClass: securityPrincipal, mailRecipient, msDS-CloudExtensions
+mayContain: msSFU30NisDomain, msSFU30Name, msDS-SourceObjectDN, 
+ x500uniqueIdentifier, userSMIMECertificate, userPKCS12, uid, 
+ secretary, roomNumber, preferredLanguage, photo, labeledURI, 
+ jpegPhoto, homePostalAddress, givenName, employeeType, 
+ employeeNumber, displayName, departmentNumber, carLicense, audio
+systemMayContain: msTSPrimaryDesktop, msTSSecondaryDesktops, 
+ msPKI-CredentialRoamingTokens, msDS-ResultantPSO, msTSLSProperty01, 
+ msTSLSProperty02, msTSManagingLS2, msTSManagingLS3, msTSManagingLS4, 
+ msTSLicenseVersion2, msTSLicenseVersion3, msTSLicenseVersion4, 
+ msTSExpireDate2, msTSExpireDate3, msTSExpireDate4, 
+ msDS-AuthenticatedAtDC, msDS-UserPasswordExpiryTimeComputed, 
+ msTSManagingLS, msTSLicenseVersion, msTSExpireDate, msTSProperty02, 
+ msTSProperty01, msTSInitialProgram, msTSWorkDirectory, 
+ msTSDefaultToMainPrinter, msTSConnectPrinterDrives, 
+ msTSConnectClientDrives, msTSBrokenConnectionAction, 
+ msTSReconnectionAction, msTSMaxIdleTime, msTSMaxConnectionTime, 
+ msTSMaxDisconnectionTime, msTSRemoteControl, msTSAllowLogon, 
+ msTSHomeDrive, msTSHomeDirectory, msTSProfilePath, 
+ msDS-FailedInteractiveLogonCountAtLastSuccessfulLogon, 
+ msDS-FailedInteractiveLogonCount, 
+ msDS-LastFailedInteractiveLogonTime, 
+ msDS-LastSuccessfulInteractiveLogonTime, 
+ msRADIUS-SavedFramedIpv6Route, msRADIUS-FramedIpv6Route, 
+ msRADIUS-SavedFramedIpv6Prefix, msRADIUS-FramedIpv6Prefix, 
+ msRADIUS-SavedFramedInterfaceId, msRADIUS-FramedInterfaceId, 
+ msPKIAccountCredentials, msPKIDPAPIMasterKeys, 
+ msPKIRoamingTimeStamp, msDS-SupportedEncryptionTypes, 
+ msDS-SecondaryKrbTgtNumber, pager, o, mobile, manager, mail, 
+ initials, homePhone, businessCategory, userCertificate, 
+ userWorkstations, userSharedFolderOther, userSharedFolder, 
+ userPrincipalName, userParameters, userAccountControl, unicodePwd, 
+ terminalServer, servicePrincipalName, scriptPath, pwdLastSet, 
+ profilePath, primaryGroupID, preferredOU, otherLoginWorkstations, 
+ operatorCount, ntPwdHistory, networkAddress, msRASSavedFramedRoute, 
+ msRASSavedFramedIPAddress, msRASSavedCallbackNumber, 
+ msRADIUSServiceType, msRADIUSFramedRoute, msRADIUSFramedIPAddress, 
+ msRADIUSCallbackNumber, msNPSavedCallingStationID, 
+ msNPCallingStationID, msNPAllowDialin, mSMQSignCertificatesMig, 
+ mSMQSignCertificates, mSMQDigestsMig, mSMQDigests, msIIS-FTPRoot, 
+ msIIS-FTPDir, msDS-User-Account-Control-Computed, 
+ msDS-Site-Affinity, mS-DS-CreatorSID, 
+ msDS-Cached-Membership-Time-Stamp, msDS-Cached-Membership, 
+ msDRM-IdentityCertificate, msCOM-UserPartitionSetLink, maxStorage, 
+ logonWorkstation, logonHours, logonCount, lockoutTime, localeID, 
+ lmPwdHistory, lastLogonTimestamp, lastLogon, lastLogoff, homeDrive, 
+ homeDirectory, groupsToIgnore, groupPriority, groupMembershipSAM, 
+ dynamicLDAPServer, desktopProfile, defaultClassStore, dBCSPwd, 
+ controlAccessRights, codePage, badPwdCount, badPasswordTime, 
+ adminCount, aCSPolicyName, accountExpires, msDS-PrimaryComputer
+schemaIdGuid: bf967aba-0de6-11d0-a285-00aa003049e2
+defaultSecurityDescriptor: D:(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;DA)
+ (A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;SY)
+ (A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;AO)(A;;RPLCLORC;;;PS)
+ (OA;;CR;ab721a53-1e2f-11d0-9819-00aa0040529b;;PS)
+ (OA;;CR;ab721a54-1e2f-11d0-9819-00aa0040529b;;PS)
+ (OA;;CR;ab721a56-1e2f-11d0-9819-00aa0040529b;;PS)
+ (OA;;RPWP;77B5B886-944A-11d1-AEBD-0000F80367C1;;PS)
+ (OA;;RPWP;E45795B2-9455-11d1-AEBD-0000F80367C1;;PS)
+ (OA;;RPWP;E45795B3-9455-11d1-AEBD-0000F80367C1;;PS)
+ (OA;;RP;037088f8-0ae1-11d2-b422-00a0c968f939;;RS)
+ (OA;;RP;4c164200-20c0-11d0-a768-00aa006e0529;;RS)
+ (OA;;RP;bc0ac240-79a9-11d0-9020-00c04fc2d4cf;;RS)(A;;RC;;;AU)
+ (OA;;RP;59ba2f42-79a2-11d0-9020-00c04fc2d3cf;;AU)
+ (OA;;RP;77B5B886-944A-11d1-AEBD-0000F80367C1;;AU)
+ (OA;;RP;E45795B3-9455-11d1-AEBD-0000F80367C1;;AU)
+ (OA;;RP;e48d0154-bcf8-11d1-8702-00c04fb96050;;AU)
+ (OA;;CR;ab721a53-1e2f-11d0-9819-00aa0040529b;;WD)
+ (OA;;RP;5f202010-79a5-11d0-9020-00c04fc2d4cf;;RS)
+ (OA;;RPWP;bf967a7f-0de6-11d0-a285-00aa003049e2;;CA)
+ (OA;;RP;46a9b11d-60ae-405a-b7e8-ff8a58d456d2;;S-1-5-32-560)
+ (OA;;WPRP;6db69a1c-9422-11d1-aebd-0000f80367c1;;S-1-5-32-561)
+ (OA;;WPRP;5805bc62-bdc9-4428-a5e2-856a0f4c185e;;S-1-5-32-561)
+systemPossSuperiors: builtinDomain, organizationalUnit, domainDNS
+defaultHidingValue: FALSE
+systemOnly: FALSE
+defaultObjectCategory: CN=Person,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet>
+</example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, and <auto_text>windows_server_8</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADSC"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class user [_rfc_ms-adsc1_223]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

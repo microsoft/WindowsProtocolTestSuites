@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="63f5e067-d1b3-4e6e-9e53-a92953b6005b" build_format="rfc" section_number="1.364"><title>Attribute userPrincipalName</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>This attribute contains the UPN that is an Internet-style logon name for a user, as specified in <xref hlink="http://go.microsoft.com/fwlink/?LinkId=90497">[RFC822]</xref>. The UPN is shorter than the DN and easier to remember.</p>
+<p>By convention, this attribute should map to the user email name. The value set for this attribute is equal to the length of the user's ID and the domain name.</p>
+<example><snippet type="syntax">cn: User-Principal-Name
+ldapDisplayName: userPrincipalName
+attributeId: 1.2.840.113556.1.4.656
+attributeSyntax: 2.5.5.12
+omSyntax: 64
+isSingleValued: TRUE
+schemaIdGuid: 28630ebb-41d5-11d1-a9c1-0000f80367c1
+systemOnly: FALSE
+searchFlags: fATTINDEX
+rangeUpper: 1024
+attributeSecurityGuid: e48d0154-bcf8-11d1-8702-00c04fb96050
+isMemberOfPartialAttributeSet: TRUE
+systemFlags: FLAG_SCHEMA_BASE_OBJECT | 
+ FLAG_ATTR_REQ_PARTIAL_SET_MEMBER</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADLS"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute userPrincipalName [_rfc_ms-adls1_364]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

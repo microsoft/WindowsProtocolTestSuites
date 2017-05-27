@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="22d4f80c-44b2-40f6-b02b-ced6a4159de9" build_format="rfc" section_number="1.244"><title>Attribute msDS-Non-Security-Group-Extra-Classes</title>
+<tech value="protocol" />
+<index><keyword>msDS-Non-Security-Group-Extra-Classes attribute</keyword></index></metadata>
+<section><section_contents><p>This attribute specifies the common names of the nonstandard classes that can be added to a nonsecurity group through the Active Directory Users and Computers snap-in (ADUC MMC). For more information, see <xref hlink="http://go.microsoft.com/fwlink/?LinkId=89950">[MSDN-ACL]</xref>.<?CommentRangeStart id="1"?><?CommentRangeEnd id="1"?></p>
+<example><snippet type="syntax">cn: ms-DS-Non-Security-Group-Extra-Classes
+ldapDisplayName: msDS-Non-Security-Group-Extra-Classes
+attributeId: 1.2.840.113556.1.4.1689
+attributeSyntax: 2.5.5.12
+omSyntax: 64
+isSingleValued: FALSE
+schemaIdGuid: 2de144fc-1f52-486f-bdf4-16fcc3084e54
+systemOnly: FALSE
+searchFlags: 0
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="1" author="pbartos" date="2008-02-11T14:58:00Z" initials="" commentText="This seems like an odd reference."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="22d4f80c-44b2-40f6-b02b-ced6a4159de9"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-ada2_2_267"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

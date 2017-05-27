@@ -449,6 +449,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Swn
                 SwnStubFormatString.ProcFormatStringOffsetTable[opnum],
                 true,
                 responseStub,
+                rpceClientTransport.Context.PackedDataRepresentationFormat,
                 paramList);
 
             return outParamList;
@@ -519,6 +520,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Swn
                 SwnStubFormatString.ProcFormatStringOffsetTable[format.opnum],
                 true,
                 responseStub,
+                rpceClientTransport.Context.PackedDataRepresentationFormat,
                 format.paramList);
 
             lock (responseLock)

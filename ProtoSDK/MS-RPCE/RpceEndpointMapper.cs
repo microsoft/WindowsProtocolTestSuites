@@ -242,10 +242,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                         p_syntax_id_t ifSpec = new p_syntax_id_t();
                         // 37 == offset of interface uuid, 16 == the size of uuid
                         ifSpec.if_uuid = new Guid(ArrayUtility.SubArray(requestStub, 37, 16));
-                        //53 == offset of interface vers_major
-                        ifSpec.if_vers_major = BitConverter.ToUInt16(requestStub, 53);
-                        //57 == offset of interface vers_minor
-                        ifSpec.if_vers_minor = BitConverter.ToUInt16(requestStub, 57);
+                        //53 == offset of interface version
+                        ifSpec.if_version = BitConverter.ToUInt32(requestStub, 53);
                         if (endpointMap.ContainsKey(ifSpec))
                         {
                             //copy tower from request stub to response stub
@@ -257,7 +255,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                             responseStub[113] = (byte)endpointMap[ifSpec];
                             //modify the address, offset is 119
                             Buffer.BlockCopy(hostIp.GetAddressBytes(), 0, responseStub, 119, 4);
-                            //todo support Ipv6
                             epmServer.SendResponse(context, responseStub);
                         }
                     }

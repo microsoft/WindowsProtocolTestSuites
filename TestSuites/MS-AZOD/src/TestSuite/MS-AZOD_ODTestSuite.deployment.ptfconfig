@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+
+  <Properties>
+    <!-- Windows configuration -->
+      <!--Basic configuration-->       
+        <!--Scope: KDC domain-->
+        <!--Type: string Usage: KDC domain full name.-->
+        <Property name="KdcDomainName" value="contoso.com"/>
+        <!--Type: string Usage: KDC computer name.-->
+        <Property name="KdcName" value="DC01"/>
+        <!--Type: string Usage: KDC IP address.-->
+        <Property name="KDCIP" value="192.168.0.1"/>
+        <!--Type: string Usage: KDC domain administrator user name.-->
+        <Property name="KdcAdminUser" value="administrator"/>
+        <!--Type: string Usage: KDC domain administrator user password.-->
+        <Property name="KdcAdminPwd" value="Password01!"/>
+        <!--Type: string Usage: a user with user claim defined in local domain.-->
+        <Property name="KdcClaimUser" value="claimuser"/>
+        <!--Type: string Usage: the password of KdcClaimUser.-->
+        <Property name="KdcClaimUserPwd" value="Password01!"/>
+
+        <!--Type: string Usage: Application server name.-->
+        <Property name="ApplicationServerName" value="AP01"/>
+        <!--Type: string Usage: Application server IP address.-->
+        <Property name="ApplicationServerIP" value="192.168.0.2"/>
+        <!--Type: string Usage: the FQDN UNC path of a share folder which is required to use FQDN format for Kerberos authentication-->
+        <!--The format is like \\<AP Computer Name>.<Domain Name>\<Share name>.-->
+        <Property name="FQDNUncPath" value="\\ap01.contoso.com\AzodShare"/>
+        <!--Type: string Usage: the NetBIOS UNC path of a share folder whichi is required by NTLM authentication. .-->
+        <!--The format is like \\<AP IP address>\<Share name>.-->
+        <Property name="UncPath" value="\\192.168.0.2\AzodShare"/>        
+    
+        <!--Type: string Usage: Client computer name.-->
+        <Property name="ClientComputerName" value="client01"/>
+        <!--Type: string Usage: Client computer IP address.-->
+        <Property name="ClientComputerIp" value="192.168.0.3"/>
+        <!--Type: string Usage: Client local administrator user name.-->
+        <Property name="ClientAdminUser" value="administrator"/>
+        <!--Type: string Usage: Client local administrator user password.-->
+        <Property name="ClientAdminPwd" value="Password01!"/>
+
+        <!--Scope: cross forest configuration-->
+        <!--Type: string Usage: cross forest full domain name.-->
+        <Property name="CrossForestName" value="kerb.com"/>
+        <!--Type: string Usage: cross forest DC computer name.-->
+        <Property name="CrossForestDCName" value="dc02"/>
+        <!--Type: string Usage: cross realm DC IP.-->
+        <Property name="CrossForestDCIP" value="192.168.0.10"/>
+        <!--Type: string Usage: cross forest administrator user name.-->
+        <Property name="CrossForestAdminUser" value="administrator"/>
+        <!--Type: string Usage:cross forest administrator user password.-->
+        <Property name="CrossForestAdminPwd" value="Password01!"/>
+        <!--Type: string Usage: cross realm application server name..-->
+        <Property name="CrossForestApplicationServerName" value="ap02"/>
+        <!--Type: string Usage: cross realm application server IP.-->
+        <Property name="CrossForestApplicationServerIP" value="192.168.0.11"/>
+        <!--Type: string Usage: the share folder on cross realm application server ..-->
+        <Property name="CrossForestApplicationServerShareFolder" value="\\ap02.kerb.com\AzodShare"/>
+
+    <!--Advanced Configuration-->
+        <!--Category: Logs, Capture files and Scripts-->
+        <!--Scope: Windows-->
+    
+        <!--Type: string Usage: Script path on the client computer or on the AP server. (Windows: Powershell scripts)-->
+        <Property name="ScriptPath" value="C:\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint\1.0.5644.0\Scripts\"/>
+    
+        <!--Type: string Usage: Capture files location on the client/driver computer. Make sure the folder exists.-->
+        <Property name="LocalCapFilePath" value="C:\Test\TestLog\MA\"/>
+
+        <Property name="ExpectedSequenceFilePath" value="C:\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint\1.0.5644.0\Source\OD\TestCode\TestSuite\ExpectFrames"/>
+    
+        <!--Type: string Usage: Logs Path for Powershell Adapter on the client/driver computer. Make sure the folder exists.-->
+        <Property name="DriverLogPath" value="C:\Test\TestLog\" />
+
+        <!--Advanced Configuration-->
+        <!--Category: Environment specific settings-->
+        <!--Type: string Usage: Max SMB2 Dialect supported.-->
+        <!--Note: For Win8.1/Win2012R2, the Max SMB2 Dialect supported is 3.02. So this value should be 0x302, that is 770 in Decimal.-->
+        <Property name="MaxSMB2DialectSupported" value="770" />
+
+        <!--Type: string Usage: Name of the Site-->
+        <Property name="SiteName" value="Default-First-Site-Name" />
+    
+        <!--Category: Parameters as the inputs for Powershell Scripts which will be run on the client computer.-->
+        <!--Scope: Windows-->
+
+        <!--Category: Group Policy and Resource property Sync -->
+        <!--Type: string Usage: Central Access Policies name to be tested-->
+        <Property name="CentralAccessPolicyNames" value="PET-AccessPolicy"/>
+        <!--Type: string Usage: Central Access Rule to be tested.-->
+        <Property name="CentralAccessRuleNames" value="PET-AccessRule"/>
+        <!--Type: string Usage: Resource property to be tested.-->
+        <Property name="ResourcepropertyNames" value="Company_MS"/>
+    
+        <!--Advanced Configuration-->
+        <!--Category: Test Case Specific Configuration Information-->
+        <!--Scope: All Scope (Windows, Nonwindows)-->
+        <Property name="Timeout" value="120"/>         
+    
+  </Properties>
+
+</TestSite>

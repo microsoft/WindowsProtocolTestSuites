@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata build_format="rfc" id="c21a9eac-2143-4020-87e5-a23d125c9abb" section_number="2.110"><title>Class msDNS-ServerSettings</title>
+<tech />
+<index />
+<change_tracking_details>
+<change_tracking revision_class="major" year="2011" month="12" day="21" change_type="content_new"><non_tdi_info><non_tdi_desc><p>Added section with content for <auto_text>windows_server_8</auto_text>.</p></non_tdi_desc></non_tdi_info></change_tracking>
+</change_tracking_details>
+</metadata>
+<section>
+<section_contents>
+<p>Stores state information for DNS. The <xref targtype="adschema_attribute" rid="f884c624-0ba6-4997-ba90-0c680332610f">msDNS-KeymasterZones</xref> attribute is used to store values.</p>
+<example>
+<snippet>cn: ms-DNS-Server-Settings
+ldapDisplayName: msDNS-ServerSettings
+governsId: 1.2.840.113556.1.4.2129
+objectClassCategory: 1
+rdnAttId: cn
+subClassOf: top
+systemMayContain: msDNS-KeymasterZones
+systemPossSuperiors: server
+schemaIdGuid: ef2fc3ed-6e18-415b-99e4-3114a8cb124b
+defaultSecurityDescriptor: D:(A;;RPWPCRCCDCLCLOLORCWOWDSDDTDTSW;;;EA)
+ (A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;SY)(A;;RPLCLORC;;;AU)
+defaultHidingValue: FALSE
+systemOnly: FALSE
+defaultObjectCategory: CN=ms-DNS-Server-Settings,&lt;SchemaNCDN&gt;
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet>
+</example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_8</auto_text> and <auto_text>winblue_server_1</auto_text>.</p>
+</section_contents>
+</section>
+</whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADSC"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Class msDNS-ServerSettings [ms-adsc_2.110]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

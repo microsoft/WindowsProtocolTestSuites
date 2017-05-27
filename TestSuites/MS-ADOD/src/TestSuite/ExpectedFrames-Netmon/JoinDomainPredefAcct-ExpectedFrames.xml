@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExpectedFrames Name="JoinDomainPredefAcct">
+  <CatureFilter></CatureFilter>
+  <SpecialFilter></SpecialFilter>
+  <VerificationFilters>
+    <Filter>(LDAPMessage) AND ((sourcenetworkaddress == {ClientIP} AND destinationnetworkaddress == {PDCIP}) OR (sourcenetworkaddress == {PDCIP} AND destinationnetworkaddress ==  {ClientIP}))</Filter>
+  </VerificationFilters>
+  <ExpectedFrameList>
+    <ExpectedFrame Name="LDAP Bind Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.BindRequest.Authentication.Credentials.Mechanism.OctetStream" IsValueRequired="true" Value="GSS-SPNEGO" ValueType="string"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LDAP Bind Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.BindResponse.Result.ResultCode.Value.AsnInt" IsValueRequired="true" Value="0" ValueType="string"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LDAP Search Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchRequest.BaseObject.AsnOctetStringHeader.AsnLen.OneByteLength.Length" IsValueRequired="true" Value="0" ValueType="int"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LDAP Search Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchResultEntry.ObjectName.AsnOctetStringHeader.AsnLen.OneByteLength.Length" IsValueRequired="true" Value="0" ValueType="int"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LDAP Modify Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.ModifyRequest.Object.OctetStream" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="ModifyResponse" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.ModifyResponse.ResultCode.Value.AsnInt" IsValueRequired="true" Value="0" ValueType="int"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LDAP Search Request" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchRequest.BaseObject.OctetStream" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LDAP Search Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchResultEntry.ObjectName.OctetStream" IsValueRequired="false"/>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchResultDone.ResultCode.Value.AsnInt" IsValueRequired="true" Value="0" ValueType="int"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+  </ExpectedFrameList>
+</ExpectedFrames>

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="e1c68dac-1d26-4f5f-b961-c6db67b01d2b" build_format="rfc" section_number="1.126"><title>Attribute msDFSR-ComputerReferenceBL</title>
+<tech value="protocol" />
+<index><keyword>msDFSR-ComputerReferenceBL attribute</keyword></index>
+<change_tracking_details><change_tracking month="12" day="29" year="2009" change_type="content_update" revision_class="minor"><non_tdi_info><non_tdi_desc><p>Revised attribute description.</p></non_tdi_desc></non_tdi_info></change_tracking></change_tracking_details></metadata>
+<section><section_contents><?CommentRangeStart id="1" displacedByCustomXml="prev"?><?CommentRangeEnd id="1"?>
+<p>This attribute specifies a back link attribute and contains a value used to indicate a back reference from a computer by the Distributed File System Replication Protocol.</p>
+<example><snippet type="syntax">cn: ms-DFSR-ComputerReferenceBL
+ldapDisplayName: msDFSR-ComputerReferenceBL
+attributeId: 1.2.840.113556.1.6.13.3.103
+attributeSyntax: 2.5.5.1
+omSyntax: 127
+omObjectClass: 1.3.12.2.1011.28.0.714
+isSingleValued: FALSE
+schemaIdGuid: 5eb526d7-d71b-44ae-8cc6-95460052e6ac
+searchFlags: 0
+linkID: 2051
+systemFlags: FLAG_ATTR_NOT_REPLICATED</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="1" author="" date="1901-01-01T00:00:00Z" initials="" commentText="Ok to change the name of the protocol below to Distributed File System: Replication (DFS-R) Protocol, to match PIStore? This comment also applies to the other pages in this msDFSR section, which all refer to the same protocol."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="e1c68dac-1d26-4f5f-b961-c6db67b01d2b"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-ada2_2_139"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

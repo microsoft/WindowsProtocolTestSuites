@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="1d0fb4e9-508c-40e7-ab1b-41b67b34627e"><title>Attribute msDS-RegisteredOwner</title>
+<tech value="protocol" />
+<change_tracking_details>
+<change_tracking change_type="content_new" day="26" month="06" year="2013" revision_class="major">
+<non_tdi_info>
+<non_tdi_desc>
+<p>Added section with content for Windows Server 2012 R2 operating system.</p>
+</non_tdi_desc>
+</non_tdi_info>
+</change_tracking>
+</change_tracking_details>
+<protocol auto_text="MS-ADA2" /></metadata>
+<section><section_contents>
+<p>This attribute is a single-valued binary attribute containing the primary SID that references the first user to register the device. The value is not removed during de-registration, but could be managed by an administrator.</p>
+
+<example><snippet>cn: ms-DS-Registered-Owner
+ldapDisplayName: msDS-RegisteredOwner
+attributeId: 1.2.840.113556.1.4.2258
+attributeSyntax: 2.5.5.10
+omSyntax: 4
+isSingleValued: TRUE
+schemaIdGuid: 617626e9-01eb-42cf-991f-ce617982237e
+systemOnly: FALSE
+searchFlags: fATTINDEX
+systemFlags: FLAG_ATTR_REQ_PARTIAL_SET_MEMBER | FLAG_SCHEMA_BASE_OBJECT
+isMemberOfPartialAttributeSet: TRUE
+showInAdvancedViewOnly: TRUE</snippet></example>
+
+<p>Version-Specific Behavior: Implemented on <auto_text>winblue_server_1</auto_text>.</p>
+</section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

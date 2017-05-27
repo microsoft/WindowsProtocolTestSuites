@@ -325,6 +325,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Srvs
                     SrvsStubFormatString.ProcFormatStringOffsetTable[opnum],
                     true,
                     responseStub,
+                    RpceClientTransport.Context.PackedDataRepresentationFormat,
                     paramList);
 
             return outParamList;

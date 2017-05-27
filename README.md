@@ -13,6 +13,10 @@ Windows Protocol Test Suites provide interoperability testing against the implem
 * **Kerberos Server Test Suite**. It is designed to test server implementations of Kerberos protocols including [MS-KILE], [MS-KKDCP] and [MS-PAC].
 * **SMBD Server Test Suite**. It is designed to test the implementations of SMB2&3 direct (RDMA) protocol, as specified in [MS-SMBD].
 * **Branch Cache Test Suite**. It is designed to test the implementations of MS-PCCRTP, MS-PCCRR, MS-PCHC and MS-PCCRC protocol.
+* **AZOD Test Suite**. It is designed to test the implementations of MS-AZOD protocol.
+* **ADFamily Test Suite**. It is designed to test the implementations of the Active Directory protocols including [MS-ADTS], [MS-APDS], [MS-DRSR] [MS-FRS2], [MS-LSAD], [MS-LSAT], [MS-SAMR] and [MS-NRPC]. 
+* **ADFSPIP Client Test Suite**. It is designed to test the implementations of Device Registration Discovery Protocol, as specified in Microsoft document [MS-DVRD], and Device Registration Enrollment Protocol, as specified in Microsoft document [MS-DVRE]. 
+* **ADOD Test Suite**. It is designed to test the implementations of MS-ADOD protocol.
 
 ## Components
 Windows Protocol Test Suites contain 4 components:
@@ -35,6 +39,29 @@ You can use the script in **InstallPrerequisites** folder to automatically downl
 * [Protocol Test Framework](https://github.com/microsoft/protocoltestframework). You can use a released MSI file or build it from source code.
 * [Spec Explorer](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/). It is only required for the test suites that contain Model-Based Test cases. If you want to regenerate Model-Based Test cases, you must install Visual Studio 2012, otherwise higher versions of Visual Studio are supported.
 
+Tips when using the script in **InstallPrerequisites** folder:
+
+* To run the script, open **Windows PowerShell**, and execute the commands below in the **PowerShell Window**:
+
+```
+cd WindowsProtocolTestSuites\InstallPrerequisites
+.\InstallPrerequisites.ps1
+```
+
+* If you meet errors about **Execution Policy**, make sure you run **Windows PowerShell** as **Administrator**, and type the following and enter:
+
+```
+Set-ExecutionPolicy RemoteSigned
+```
+
+You could run the command below to verify if the **Execution Policy** is correctly set:
+
+```
+Get-ExecutionPolicy
+```
+
+Then rerun the script.
+
 ## Model-Based Testing
 
 Some test suites use [Model-Based Testing](https://msdn.microsoft.com/en-us/library/ee620469.aspx):
@@ -44,6 +71,10 @@ Some test suites use [Model-Based Testing](https://msdn.microsoft.com/en-us/libr
 * **Kerberos Server Test Suite**
 * **SMBD Server Test Suite**
 * **BranchCache Server Test Suite**
+* **ADFamily Test Suite**
+* **ADFSPIP Client Test Suite**
+* **AZOD Test Suite**
+* **ADOD Test Suite**
 
 ## Build
 
@@ -58,10 +89,14 @@ build.cmd
 
 ###<a name="BuildTestSuite">Build a test suite
 
-If the test suite contains Model-Based Test cases, you should follow the steps below before building it. 
+If the test suite contains Model-Based test cases, you should follow the steps below before building it. 
 
 * Install [Spec Explorer](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/), 
 * Install the **formodel** version of [Protocol Test Framework](https://github.com/microsoft/protocoltestframework). You can use a released MSI file or build it from source code by **formodel** option.
+
+If the test suite does not contain Model-Based test cases, you should follow the step below before building it.
+
+* Install the **nomodel** version of [Protocol Test Framework](https://github.com/microsoft/protocoltestframework). You can use a released MSI file or build it from source code without any options.
 
 After that, take SMB test suite as an example
 ```
@@ -71,20 +106,6 @@ build.cmd
 
 After the build succeeds, the MSI file of each test suite should be generated in the folder *WindowsProtocolTestSuite\drop\TestSuites\\[TestSuiteName]\deploy\.*
 Take SMB test suite as an example, **MS-SMB-TestSuite-ServerEP.msi** should be generated in the folder *WindowsProtocolTestSuite\drop\TestSuites\MS-SMB\deploy\.*
-
-### Build all test suites
-
-Since some test suites contain Model-Based Test cases, you should follow the [steps](#BuildTestSuite) before building all of them.
-After that, change to **WindowsProtocolTestSuites** folder:
-```
-cd WindowsProtocolTestSuites
-```
-
-Run **buildall.cmd**
-
-```
-buildall.cmd
-```
 
 ## Run
 After the build succeeds, you could set up the test environment and install/configure/run the test suite according to its **User Guide**.

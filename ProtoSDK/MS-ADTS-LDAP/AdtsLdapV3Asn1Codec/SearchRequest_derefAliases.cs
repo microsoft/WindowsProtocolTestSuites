@@ -32,7 +32,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV
         }
         
         public SearchRequest_derefAliases(long val)
-            : base()
+            : base(val)
         {
         }
     }

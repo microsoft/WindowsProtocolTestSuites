@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="7cbe52dc-ce5e-4283-aa03-c9da56e55b06" build_format="rfc" section_number="43.124"><title>Attribute msDS-OptionalFeatureGUID</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details><change_tracking change_type="content_update" day="15" month="08" revision_class="major" year="2009"><tdi_info><tdi_number>38074</tdi_number><tdi_title>Renamed attribute msDS-OptionalFeatureGuid to msDS-OptionalFeatureGUID.</tdi_title></tdi_info></change_tracking></change_tracking_details>
+</metadata>
+<section><section_contents><p>This attribute stores the <term rid="6fe8cb56-779b-4494-bb2f-59f38cdaec31" local="guid">GUID</term> of an optional feature.</p>
+<example><snippet>cn: ms-DS-Optional-Feature-GUID
+ldapDisplayName: msDS-OptionalFeatureGUID
+attributeId: 1.2.840.113556.1.4.2062
+attributeSyntax: 2.5.5.10
+omSyntax: 4
+isSingleValued: TRUE
+schemaIdGuid: 9b88bda8-dd82-4998-a91d-5f2d2baf1927
+systemOnly: TRUE
+searchFlags: 0
+rangeLower: 16
+rangeUpper: 16
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADLS"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute msDS-OptionalFeatureGUID [_rfc_ms-adls_attribute_msds-optionalfeatureguid]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

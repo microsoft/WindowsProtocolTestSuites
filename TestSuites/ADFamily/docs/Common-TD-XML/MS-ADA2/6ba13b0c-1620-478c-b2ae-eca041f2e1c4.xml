@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="6ba13b0c-1620-478c-b2ae-eca041f2e1c4" build_format="rfc" section_number="1.62"><title>Attribute ms-DS-MachineAccountQuota</title>
+<tech value="protocol" />
+<index><keyword>ms-DS-MachineAccountQuota attribute</keyword></index></metadata>
+<section><section_contents><p>For a given security principle, this attribute specifies, the quota of machine accounts that can be allocated, as specified in <xref targtype="protocol_page" rid="d2435927-0999-4c62-8c6d-13ba31a52e1a">[MS-ADTS]</xref> section <xref rid="5a00c890-6be5-4575-93c4-8bf8be0ca8d8" targtype="whitepaper_page"><section_ref placeholder="7.1.1.4" /></xref>.</p>
+<example><snippet type="syntax">cn: MS-DS-Machine-Account-Quota
+ldapDisplayName: ms-DS-MachineAccountQuota
+attributeId: 1.2.840.113556.1.4.1411
+attributeSyntax: 2.5.5.9
+omSyntax: 2
+isSingleValued: TRUE
+schemaIdGuid: d064fb68-1480-11d3-91c1-0000f87a57d4
+systemOnly: FALSE
+searchFlags: 0
+systemFlags: FLAG_SCHEMA_BASE_OBJECT
+schemaFlagsEx: FLAG_ATTR_IS_CRITICAL</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p>
+<p>The <xref rid="5ea3a865-2cfa-481d-9892-d00fd04514ea" enabled="1" targtype="adschema_attribute">schemaFlagsEx</xref> attribute was added to this attribute definition in <auto_text>windows_server_2008</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA2"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute ms-DS-MachineAccountQuota [_rfc_ms-ada21_62]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

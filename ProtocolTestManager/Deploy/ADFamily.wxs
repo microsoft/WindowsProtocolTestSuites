@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?define SRCDIR=$(env.TestSuiteRoot)\drop\ProtocolTestManager?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="ADFAMILYDOCFOLDER">
+            <Component Id="cmpECFB8FF1559A4BC095BD7952E0FAABCD" Guid="{D255E164-1B94-4D04-81AD-6EF0C7445CEB}">
+                <File Id="fil01525AD7E1AD413885E4D51C32BDCAAB" Source="..\Plugins\ADFamilyPlugin\ADFamilyPlugin\Docs\index.html" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="LIBFOLDER">
+	        <?if $(env.DEBUGVER) = 1?>
+                <Component Id="ADFamilyPlugin.pdb" Guid="{9266A213-E60E-43B1-96D7-7DEC858AA7AB}">
+                    <File Id="ADFamilyPlugin.pdb" Source="$(var.SRCDIR)\lib\ADFamilyPlugin.pdb" />
+                </Component>
+            <?endif ?>
+            <Component Id="ADFamilyPlugin.dll" Guid="{7A67AE9E-F6A2-4EEF-93DB-2E3FB70ABDAC}">
+                <File Id="ADFamilyPlugin.dll" Source="$(var.SRCDIR)\lib\ADFamilyPlugin.dll" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="ADFAMILYCONFIGFOLDER">
+            <Component Id="ADFamilyConfigFile" Guid="{24291C32-CD3C-4915-AFFE-A3E08EF0647B}">
+                <File Id="ADFamilyConfigFile" Source="..\Plugins\ADFamilyPlugin\ADFamilyPlugin\config.xml" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="ADFAMILY_PLUGIN">
+            <ComponentRef Id="cmpECFB8FF1559A4BC095BD7952E0FAABCD" />
+            <ComponentRef Id="ADFamilyPlugin.dll" />
+            <ComponentRef Id="ADFamilyConfigFile" />
+	        <?if $(env.DEBUGVER) = 1?>
+              <ComponentRef Id="ADFamilyPlugin.pdb" />
+            <?endif ?>
+        </ComponentGroup>
+    </Fragment>
+</Wix>

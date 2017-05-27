@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ExpectedMessageList>
+  <Filter>(CLDAP OR SMB OR MSRPCE OR LDAP OR LSA)</Filter>
+  <!--1. LDAP DC-location Ping-->
+  <ExpectedMessage>
+    <Name>CLDAP.CldapMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <ArrayField FieldName="ProtocolOp.Filter.Content.Content">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Content.AttributeDesc" Value="NtVer" Type="string"/>
+        </VerifyItemList>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Content.AttributeDesc" Value="DnsDomain" Type="string"/>
+          <VerifyItem Operation="equal" FieldName="Content.AssertionValue" Value="{FullDomainName}" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+    <ArrayField FieldName="ProtocolOp.Attributes">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="Netlogon" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--2. LDAP DC-location response-->
+  <ExpectedMessage>
+    <Name>ADTS.NetlogonSamLogonResponseEx</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Opcode" Value="23" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="DnsForestName" Value="{FullDomainName}" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="DnsHostName" Value="{NetbiosComputerName}.{FullDomainName}" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="NetbiosDomainName" Value="{NetbiosDomainName}" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="NetbiosComputerName" Value="{NetbiosComputerName}" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="LmNtToken" Value="65535" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Lm20Token" Value="65535" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--3. SMB session bind-->
+  <!--4. SMB session bind response-->
+  <ExpectedMessage>
+    <Name>SMB.VirtualOperations.ComSessionSetupAndx</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Status.Code" Value="0" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--5. LsarOpenPolicy2-->
+  <!--6. LsarOpenPolicy2 response-->
+  <ExpectedMessage>
+    <Name>LSA.lsarpc.LsarOpenPolicy2</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ReturnValue" Value="0" Type="ulong"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--7. LsarQueryInformationPolicy2 -->
+  <!--8. LsarQueryInformationPolicy2 response-->
+  <ExpectedMessage>
+    <Name>LSA.lsarpc.LsarQueryInformationPolicy2</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="PolicyInformation.PolicyDnsDomainInfo.Name.Buffer" Value="{NetbiosDomainName}" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="PolicyInformation.PolicyDnsDomainInfo.DnsDomainName.Buffer" Value="{FullDomainName}" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="PolicyInformation.PolicyDnsDomainInfo.DnsForestName.Buffer" Value="{FullDomainName}" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="ReturnValue" Value="0" Type="ulong"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--9. LsarClose-->
+  <!--10. LsarClose response-->
+  <!--11. SamrConnect5-->
+  <!--This is commented out because Samba is using SamrConnect-->
+  <ExpectedMessage>
+    <Name>SAMR._samrMessages._SamrConnect5Request</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ServerName" Value="\\{NetbiosComputerName}.{FullDomainName}" Type="string"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--12. SamrConnect5 Response-->
+  <ExpectedMessage>
+    <Name>SAMR._samrMessages._SamrConnect5Response</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ReturnValue" Value="0" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--13. SamrOpenDomain-->
+  <ExpectedMessage>
+    <Name>SAMR._samrMessages._SamrOpenDomainRequest</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="DomainId.Revision" Value="1" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="DomainId.SubAuthorityCount" Value="4" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--14. SamrOpenDomain response-->
+  <ExpectedMessage>
+    <Name>SAMR._samrMessages._SamrOpenDomainResponse</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ReturnValue" Value="0" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--15. SamrCreateUser2InDomain-->
+  <ExpectedMessage>
+    <Name>SAMR._samrMessages._SamrCreateUser2InDomainRequest</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="AccountType" Value="128" Type="ulong"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--16. SamrCreateUser2InDomain response-->
+  <ExpectedMessage>
+    <Name>SAMR._samrMessages._SamrCreateUser2InDomainResponse</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ReturnValue" Value="0" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--17. SamrSetInformationUser2-->
+  <ExpectedMessage>
+    <Name>SAMR._samrMessages._SamrSetInformationUser2Request</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="UserInformationClass" Value="25" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--18. SamrSetInformationUser2 response-->
+  <ExpectedMessage>
+    <Name>SAMR._samrMessages._SamrSetInformationUser2Response</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ReturnValue" Value="0" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--19. SamrCloseHandle-->
+  <!--20. SamrCloseHandle response-->
+  <!--21. IDL_DRSBind-->
+  <!--22. IDL_DRSBind response-->
+  <!--Encrypted: create a context handle that is necessary to call any other 
+  directory replication server (DRS) messages-->
+  <ExpectedMessage>
+    <Name>DRSR._Extendeddrsuapi.EncryptedOperation</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Opnum" Value="0" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--23. IDL_DRSCrackNames-->
+  <!--24. IDL_DRSCrackNames response-->
+  <!--Encrypted: get the distinguished name (DN) of the organizational unit (OU) 
+  that was used to create the computer account-->
+  <ExpectedMessage>
+    <Name>DRSR._Extendeddrsuapi.EncryptedOperation</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Opnum" Value="12" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--25. IDL_DRSUnbind-->
+  <!--26. IDL_DRSUnbind response-->
+  <!--27. LDAP bind-->
+  <!--28. LDAP bind response-->
+  <!--29. LDAP modify-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <ArrayField FieldName="ProtocolOp.Modifications">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Operation" Value="0" Type="int"/>
+          <VerifyItem Operation="equal" FieldName="Modification.Type" Value="ServicePrincipalName" Type="string"/>
+        </VerifyItemList>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Operation" Value="0" Type="int"/>
+          <VerifyItem Operation="equal" FieldName="Modification.Type" Value="DnsHostName" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--30. LDAP modify response-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.ResultCode" Value="0" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--31. LDAP unbind-->
+  <!--32. LDAP unbind response-->
+  <!--33. DsrEnumerateTrusts-->
+  <ExpectedMessage>
+    <Name>NRPC._logonMessages._DsrEnumerateDomainTrustsRequest</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ServerName" Value="\\{PDCComputerName}" Type="string"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--34. DsrEnumerateTrusts response-->
+  <ExpectedMessage>
+    <Name>NRPC._logonMessages._DsrEnumerateDomainTrustsResponse</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <ArrayField FieldName="Domains.Domains">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="NetbiosDomainName" Value="{NetbiosDomainName}" Type="string"/>
+          <VerifyItem Operation="equal" FieldName="DnsDomainName" Value="{FullDomainName}" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ReturnValue" Value="0" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--36. SMB session close-->
+  <!--37. SMB session close response-->
+</ExpectedMessageList>

@@ -28,7 +28,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV
         }
         
         public ModifyRequest_modification_element_operation(long val)
-            : base()
+            : base(val)
         {
         }
     }

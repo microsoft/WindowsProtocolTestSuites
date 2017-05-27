@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="fcd02705-ebe7-4e09-9e9f-29ca1d8c4ef0" build_format="rfc" section_number="1.361"><title>Attribute userParameters</title>
+<tech value="protocol" />
+<index />
+<change_tracking_details>
+<change_tracking month="06" day="18" year="2011" revision_class="minor" change_type="content_update"><tdi_info><tdi_number>65547</tdi_number><tdi_title>Clarified the description of the userParameters attribute.</tdi_title></tdi_info></change_tracking>
+</change_tracking_details>
+</metadata>
+<section>
+<section_contents>
+<p>This attribute specifies the user's parameters and is set aside for use by applications. Microsoft products use this member to store user data that is specific to the individual program.</p>
+<example><snippet type="syntax">cn: User-Parameters
+ldapDisplayName: userParameters
+attributeId: 1.2.840.113556.1.4.138
+attributeSyntax: 2.5.5.12
+omSyntax: 64
+isSingleValued: TRUE
+schemaIdGuid: bf967a6d-0de6-11d0-a285-00aa003049e2
+systemOnly: FALSE
+searchFlags: 0
+rangeLower: 0
+rangeUpper: 32767
+attributeSecurityGuid: 4c164200-20c0-11d0-a768-00aa006e0529</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADLS"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute userParameters [_rfc_ms-adls1_361]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

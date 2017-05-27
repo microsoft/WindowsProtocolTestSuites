@@ -17,7 +17,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
     /// authentication level, verification trailer and call timeout.<para/>
     /// It does not support: 
     /// RPC over other transport layers, partially-bound binding handle, 
-    /// data representation other than IEEE little endian ASCII,
+    /// data representation other than IEEE big or little endian ASCII,
     /// NDR64, security context multiplexing, concurrent multiplexing, 
     /// callback, and keeping connection open on orphaned.
     /// </summary>

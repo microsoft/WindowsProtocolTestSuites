@@ -320,7 +320,6 @@ namespace Microsoft.Protocols.TestManager.Detector
             {
                 propertiesDic.Add("DFSC.DomainNetBIOSName", new List<string>() { string.Empty });
                 propertiesDic.Add("DFSC.DomainFQDNName", new List<string>() { string.Empty });
-                propertiesDic.Add("DFSC.SiteName", new List<string>() { string.Empty });
                 propertiesDic.Add("DFSC.DomainNamespace", new List<string>() { string.Empty });
                 propertiesDic.Add("DFSC.DCServerComputerName", new List<string>() { string.Empty });
             }
@@ -392,6 +391,16 @@ namespace Microsoft.Protocols.TestManager.Detector
             {
                 propertiesDic.Add("SQOS.SqosClientDialect", new List<string>() { detectionInfo.SqosVersion.ToString() });
             }
+            #endregion
+
+            #region AUTH
+
+            string serviceSalt = ConstructKerberosSalt();
+            if (serviceSalt != null)
+            {
+                propertiesDic.Add("Auth.Authentication.ServiceSaltString", new List<string>() { serviceSalt });
+            }
+
             #endregion
 
             // Add every property whose name contains "share" and does not contain "server"
@@ -502,6 +511,8 @@ namespace Microsoft.Protocols.TestManager.Detector
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.FSCTL/IOCTL.FsctlLmrRequestResiliency", null, detectionInfo.F_ResilientHandle));
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.FSCTL/IOCTL.FsctlFileLevelTrim", null, detectionInfo.F_FileLevelTrim));
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.FSCTL/IOCTL.FsctlValidateNegotiateInfo", null, detectionInfo.F_ValidateNegotiateInfo));
+            selectedRuleList.Add(CreateRule("Feature.SMB2&3.FSCTL/IOCTL.FsctlEnumerateSnapShots", null, detectionInfo.F_EnumerateSnapShots));
+
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.FSCTL/IOCTL.FsctlSetGetIntegrityInformation",
                 detectionInfo.F_IntegrityInfo[0] == DetectResult.Supported || detectionInfo.F_IntegrityInfo[1] == DetectResult.Supported));
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.FSCTL/IOCTL.FsctlOffloadReadWrite",
@@ -967,6 +978,22 @@ namespace Microsoft.Protocols.TestManager.Detector
             detectionInfo.unsupportedIoctlCodes = new List<string>();
             detectionInfo.ResetDetectResult();
 
+            #region Detect FSCTL_SRV_ENUMERATE_SNAPSHOTS
+            try
+            {
+                detectionInfo.F_EnumerateSnapShots = detector.CheckIOCTL_EnumerateSnapShots(detectionInfo.BasicShareName, ref detectionInfo);
+            }
+            catch (Exception ex)
+            {
+                detectionInfo.F_EnumerateSnapShots = DetectResult.DetectFail;
+                detectionInfo.detectExceptions.Add(CtlCode_Values.FSCTL_SRV_ENUMERATE_SNAPSHOTS.ToString(), string.Format("Detect FSCTL_SRV_ENUMERATE_SNAPSHOTS failed: {0}", ex.Message));
+            }
+
+            //Add the unsupported IoctlCodes to the list
+            if (detectionInfo.F_EnumerateSnapShots != DetectResult.Supported)
+                detectionInfo.unsupportedIoctlCodes.Add(CtlCode_Values.FSCTL_SRV_ENUMERATE_SNAPSHOTS.ToString());
+            #endregion
+
             if (detectionInfo.CheckHigherDialect(detectionInfo.smb2Info.MaxSupportedDialectRevision, DialectRevision.Smb30))
             {
                 try
@@ -1306,6 +1333,22 @@ namespace Microsoft.Protocols.TestManager.Detector
             detectionInfo.targetSUT = fullPath.Substring(0, posBackSlash);
             detectionInfo.BasicShareName = fullPath.Substring(detectionInfo.targetSUT.Length + 1);
         }
+
+        // Construct key salt for SMB2 service principal according to [MS-KILE] 3.1.1.2
+        // Computer accounts: < DNS name of the realm, converted to upper case > | "host" | < computer name, converted to lower case with trailing "$" stripped off > | "." | < DNS name of the realm, converted to lower case >
+        private string ConstructKerberosSalt()
+        {
+            // If the target SUT is an IP address, which means kerberos is not supported or not configured well,
+            // do not construct salt, use the default one.
+            IPAddress address;
+            if (IPAddress.TryParse(detectionInfo.targetSUT, out address))
+            {
+                return null;
+            }
+
+            return string.Format("{0}host{1}.{2}", detectionInfo.domainName.ToUpper(), detectionInfo.targetSUT.ToLower(), detectionInfo.domainName.ToLower());
+        }
+
         #endregion
 
         #region Helper functions for Getting Detected Results

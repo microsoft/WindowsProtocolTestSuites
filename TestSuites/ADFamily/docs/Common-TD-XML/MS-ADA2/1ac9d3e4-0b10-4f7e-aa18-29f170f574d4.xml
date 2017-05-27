@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata build_format="rfc" id="1ac9d3e4-0b10-4f7e-aa18-29f170f574d4"><title>Attribute msSPP-KMSIds</title>
+<tech />
+<index><keyword>msSPP-KMSIds attribute</keyword></index>
+<change_tracking_details>
+<change_tracking revision_class="major" year="2011" month="12" day="21" change_type="content_new"><non_tdi_info><non_tdi_desc><p>Added section with content for <auto_text>windows_server_8</auto_text>.</p></non_tdi_desc></non_tdi_info></change_tracking>
+</change_tracking_details>
+</metadata>
+<section>
+<section_contents>
+<p>This attribute holds the KMS IDs enabled by the activation object.</p>
+<example>
+<snippet>cn: ms-SPP-KMS-Ids
+ldapDisplayName: msSPP-KMSIds
+attributeId: 1.2.840.113556.1.4.2082
+attributeSyntax: 2.5.5.10
+omSyntax: 4
+isSingleValued: FALSE
+systemOnly: FALSE
+searchFlags: fATTINDEX
+rangeLower: 16
+rangeUpper: 16
+schemaIdGuid: 9b663eda-3542-46d6-9df0-314025af2bac
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet>
+</example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_8</auto_text> and <auto_text>winblue_server_1</auto_text>.</p>
+</section_contents>
+</section>
+</whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA2"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute msSPP-KMSIds"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

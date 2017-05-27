@@ -84,9 +84,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
                 }
                 // because sometimes there is some zero bytes after packet, and cannot be parsed and throw exception,
                 // so just ignore the exception.
-                catch (Asn1Exception)
+                catch (Asn1Exception ae)
                 {
-                    break;
+                    if (ae.Message.Contains("Decoding error. Unexpected data is read"))
+                    {
+                        throw ae;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
 
                 if (packet == null)

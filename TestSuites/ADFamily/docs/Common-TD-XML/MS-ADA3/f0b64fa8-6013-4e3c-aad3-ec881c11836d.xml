@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="f0b64fa8-6013-4e3c-aad3-ec881c11836d" build_format="rfc" section_number="1.233"><title>Attribute searchFlags</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>This attribute specifies whether an attribute is indexed, <?CommentRangeStart id="0"?>among other things<?CommentRangeStart id="1"?><?CommentRangeEnd id="1"?><?CommentRangeEnd id="0"?>. It is optional and contains the following bitwise flags (further defined in <xref rid="d2435927-0999-4c62-8c6d-13ba31a52e1a" targtype="protocol_page">[MS-ADTS]</xref> section <xref rid="7c1cdf82-1ecc-4834-827e-d26ff95fb207" targtype="whitepaper_page"><section_ref placeholder="2.2.9" /></xref>):</p>
+<list>
+<item><p>fATTINDEX: * </p></item>
+<item><p>fPDNTATTINDEX: * </p></item>
+<item><p>fANR: Add this attribute to the ambiguous name resolution (ANR) set (if set, then fATTINDEX must be set). See <xref rid="d2435927-0999-4c62-8c6d-13ba31a52e1a" targtype="protocol_page">[MS-ADTS]</xref> for ANR search. </p></item>
+<item><p>fPRESERVEONDELETE: Preserve this attribute on logical deletion. This flag is ignored on link attributes. </p></item>
+<item><p>fCOPY: Interpreted by LDAP clients, not by the server. If set, the attribute is copied on object copy. </p></item>
+<item><p>fTUPLEINDEX: * </p></item>
+<item><p>fSUBTREEATTINDEX: * </p></item>
+<item><p>fCONFIDENTIAL: This attribute is confidential; special access check is needed. For more information, see <xref rid="d2435927-0999-4c62-8c6d-13ba31a52e1a" targtype="protocol_page">[MS-ADTS]</xref> section <xref rid="8271b44d-a755-4872-a762-1ac57152099d" targtype="whitepaper_page"><section_ref placeholder="3.1.1.4.3" /></xref>.</p></item>
+<item><p>fNEVERVALUEAUDIT: *</p></item>
+<item><p>fRODCFilteredAttribute: If set, this attribute is in the RODC filtered attribute set.</p></item></list>
+<p>The searchFlags marked * have an implementation-dependent interpretation defined by Windows. They may be ignored by other implementations, but must not be used in a conflicting way that would affect the performance of Windows DCs.</p>
+<example><snippet type="syntax">cn: Search-Flags
+ldapDisplayName: searchFlags
+attributeId: 1.2.840.113556.1.2.334
+attributeSyntax: 2.5.5.9
+omSyntax: 10
+isSingleValued: TRUE
+schemaIdGuid: bf967a2d-0de6-11d0-a285-00aa003049e2
+systemOnly: FALSE
+searchFlags: 0
+rangeLower: 0
+mapiID: 33069
+systemFlags: FLAG_SCHEMA_BASE_OBJECT
+schemaFlagsEx: FLAG_ATTR_IS_CRITICAL</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_2000_server</auto_text>, <auto_text>windows_server_2003</auto_text>, <auto_text>windows_server_2003_r2</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p>
+<p>The <xref rid="5ea3a865-2cfa-481d-9892-d00fd04514ea" enabled="1" targtype="adschema_attribute">schemaFlagsEx</xref> attribute was added to this attribute definition in <auto_text>windows_server_2008</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="1" author="pbartos" date="2008-01-03T13:44:00Z" initials="" commentText="What does &quot;among other things&quot; mean? The original description said, &quot;This attribute contains a set of flags that specify search and indexing information for an attribute.&quot; That seems better."?><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA3"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute searchFlags [_rfc_ms-ada31_233]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

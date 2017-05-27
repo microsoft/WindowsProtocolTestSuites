@@ -6919,7 +6919,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         ///  RDP 10.2 clients
         /// </summary>
-        V5 = 0x00080007
+        V5 = 0x00080007,
+
+        /// <summary>
+        ///  RDP 10.3 clients
+        /// </summary>
+        V6 = 0x00080008
     }
 
     /// <summary>
@@ -7833,7 +7838,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// RDP 10.2 servers
         /// </summary>
-        V5 = 0x00080007
+        V5 = 0x00080007,
+
+        /// <summary>
+        /// RDP 10.3 servers
+        /// </summary>
+        V6 = 0x00080008
     }
 
     /// <summary>

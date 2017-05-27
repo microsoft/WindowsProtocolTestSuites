@@ -1,0 +1,413 @@
+import "ms-dtyp.idl";
+
+
+#define FRS_COMMUNICATION_PROTOCOL_VERSION_W2K3R2     0x00050000
+#define FRS_COMMUNICATION_PROTOCOL_VERSION_LONGHORN_SERVER 0x00050002
+
+#define CONFIG_RDC_VERSION    (1)
+#define CONFIG_RDC_VERSION_COMPATIBLE   (1)
+
+#define CONFIG_FILEHASH_DATASIZE (20)
+#define CONFIG_RDC_SIMILARITY_DATASIZE (16)
+#define CONFIG_RDC_HORIZONSIZE_MIN      (128)
+#define CONFIG_RDC_HORIZONSIZE_MAX       (1024*16)
+#define CONFIG_RDC_HASHWINDOWSIZE_MIN   (2)
+#define CONFIG_RDC_HASHWINDOWSIZE_MAX   (96)
+#define CONFIG_RDC_MAX_LEVELS           (8)
+#define CONFIG_RDC_MAX_NEEDLENGTH       (65536)
+#define CONFIG_TRANSPORT_MAX_BUFFER_SIZE (262144)
+#define CONFIG_RDC_NEED_QUEUE_SIZE      (20)
+
+#define TRUE 1
+#define FALSE 0
+
+typedef GUID FRS_REPLICA_SET_ID;
+typedef GUID FRS_CONTENT_SET_ID;
+typedef GUID FRS_DATABASE_ID;
+typedef GUID FRS_MEMBER_ID;
+typedef GUID FRS_CONNECTION_ID;
+
+typedef SYSTEMTIME EPOQUE;
+
+typedef struct _FRS_VERSION_VECTOR {
+
+    GUID dbGuid;
+    DWORDLONG low;
+    DWORDLONG high;
+} FRS_VERSION_VECTOR;
+
+typedef struct _FRS_EPOQUE_VECTOR {
+
+    GUID machine;
+    EPOQUE epoque;
+
+} FRS_EPOQUE_VECTOR;
+
+
+typedef struct _FRS_ID_GVSN {
+   GUID uidDbGuid;
+   DWORDLONG uidVersion;
+   GUID gvsnDbGuid;
+   DWORDLONG gvsnVersion;
+} FRS_ID_GVSN;
+
+
+
+typedef struct _FRS_UPDATE {
+
+    long            present;
+    long            nameConflict;
+
+    unsigned long   attributes;
+    FILETIME        fence;
+    FILETIME        clock;
+    FILETIME        createTime;
+
+
+    FRS_CONTENT_SET_ID  contentSetId;
+    unsigned char           hash[CONFIG_FILEHASH_DATASIZE];
+    unsigned char           rdcSimilarity[CONFIG_RDC_SIMILARITY_DATASIZE];
+
+    GUID            uidDbGuid;
+    DWORDLONG       uidVersion;
+
+    GUID            gvsnDbGuid;
+    DWORDLONG       gvsnVersion;
+
+    GUID            parentDbGuid;
+    DWORDLONG       parentVersion;
+
+    [string] WCHAR  name[260+1];
+
+    long            flags;
+
+} FRS_UPDATE;
+
+
+typedef struct _FRS_UPDATE_CANCEL_DATA {
+
+    FRS_UPDATE          blockingUpdate;
+
+    FRS_CONTENT_SET_ID  contentSetId;
+
+    FRS_DATABASE_ID     gvsnDatabaseId;
+    FRS_DATABASE_ID     uidDatabaseId;
+    FRS_DATABASE_ID     parentDatabaseId;
+
+    DWORDLONG           gvsnVersion;
+    DWORDLONG           uidVersion;
+    DWORDLONG           parentVersion;
+
+    unsigned long       cancelType;
+
+    long                isUidValid;
+    long                isParentUidValid;
+    long                isBlockerValid;
+
+} FRS_UPDATE_CANCEL_DATA;
+
+
+typedef struct _FRS_RDC_SOURCE_NEED {
+    ULONGLONG           needOffset;
+    ULONGLONG           needSize;
+} FRS_RDC_SOURCE_NEED;
+
+
+typedef enum
+{
+    TRANSPORT_SUPPORTS_RDC_SIMILARITY = 1
+} TransportFlags;
+
+typedef enum
+{
+    RDC_UNCOMPRESSED = 0,
+    RDC_XPRESS = 1
+} RDC_FILE_COMPRESSION_TYPES;
+
+typedef enum
+{
+    RDC_FILTERGENERIC = 0,
+    RDC_FILTERMAX = 1,
+    RDC_FILTERPOINT = 2,
+    RDC_MAXALGORITHM = 3
+} RDC_CHUNKER_ALGORITHM;
+
+typedef enum
+{
+   UPDATE_REQUEST_ALL = 0,
+   UPDATE_REQUEST_TOMBSTONES = 1,
+   UPDATE_REQUEST_LIVE = 2
+} UPDATE_REQUEST_TYPE;
+
+typedef enum
+{
+    UPDATE_STATUS_DONE = 2,
+    UPDATE_STATUS_MORE = 3
+} UPDATE_STATUS;
+
+typedef enum
+{
+    RECORDS_STATUS_DONE = 0,
+    RECORDS_STATUS_MORE = 1
+} RECORDS_STATUS;
+
+typedef enum
+{
+    REQUEST_NORMAL_SYNC = 0,
+    REQUEST_SLOW_SYNC = 1,
+    REQUEST_SLAVE_SYNC = 2
+} VERSION_REQUEST_TYPE;
+
+typedef enum
+{
+  CHANGE_NOTIFY = 0,
+  CHANGE_ALL = 2
+} VERSION_CHANGE_TYPE;
+
+typedef enum
+{
+    SERVER_DEFAULT = 0,
+    STAGING_REQUIRED = 1,
+    RESTAGING_REQUIRED = 2
+} FRS_REQUESTED_STAGING_POLICY;
+
+typedef struct _FRS_RDC_PARAMETERS_FILTERMAX
+{
+    [range(CONFIG_RDC_HORIZONSIZE_MIN, CONFIG_RDC_HORIZONSIZE_MAX)]
+    unsigned short horizonSize;
+
+    [range(CONFIG_RDC_HASHWINDOWSIZE_MIN, CONFIG_RDC_HASHWINDOWSIZE_MAX)]
+    unsigned short windowSize;
+} FRS_RDC_PARAMETERS_FILTERMAX;
+
+typedef struct _FRS_RDC_PARAMETERS_FILTERPOINT
+{
+    unsigned short minChunkSize;
+    unsigned short maxChunkSize;
+} FRS_RDC_PARAMETERS_FILTERPOINT;
+
+typedef struct _FRS_RDC_PARAMETERS_GENERIC
+{
+    unsigned short    chunkerType;
+    byte    chunkerParameters[64];
+} FRS_RDC_PARAMETERS_GENERIC;
+
+
+typedef struct
+{
+    unsigned short      rdcChunkerAlgorithm;
+    [switch_is(rdcChunkerAlgorithm)] union
+    {
+        [case(RDC_FILTERGENERIC)] FRS_RDC_PARAMETERS_GENERIC filterGeneric;
+        [case(RDC_FILTERMAX)]     FRS_RDC_PARAMETERS_FILTERMAX filterMax;
+        [case(RDC_FILTERPOINT)]   FRS_RDC_PARAMETERS_FILTERPOINT filterPoint;
+    } u;
+} FRS_RDC_PARAMETERS;
+
+
+typedef struct _FRS_RDC_FILEINFO
+{
+    DWORDLONG onDiskFileSize;
+    DWORDLONG fileSizeEstimate;
+    unsigned short      rdcVersion;
+    unsigned short      rdcMinimumCompatibleVersion;
+    [range(0, CONFIG_RDC_MAX_LEVELS)]
+    byte      rdcSignatureLevels;
+    RDC_FILE_COMPRESSION_TYPES  compressionAlgorithm;
+
+    [size_is(rdcSignatureLevels)]
+        FRS_RDC_PARAMETERS rdcFilterParameters[*];
+} FRS_RDC_FILEINFO;
+
+
+typedef struct _FRS_ASYNC_VERSION_VECTOR_RESPONSE {
+  ULONGLONG            vvGeneration;
+  unsigned long                versionVectorCount;
+  [size_is(versionVectorCount)]
+  FRS_VERSION_VECTOR * versionVector;
+  unsigned long                epoqueVectorCount;
+  [size_is(epoqueVectorCount)]
+  FRS_EPOQUE_VECTOR *  epoqueVector;
+} FRS_ASYNC_VERSION_VECTOR_RESPONSE;
+
+
+typedef struct _FRS_ASYNC_RESPONSE_CONTEXT {
+    unsigned long sequenceNumber;
+    DWORD status;
+
+    FRS_ASYNC_VERSION_VECTOR_RESPONSE result;
+
+} FRS_ASYNC_RESPONSE_CONTEXT;
+
+// The following two defines are needed only for Windows Server 2008
+#define FRS_UPDATE_FLAG_GHOSTED_HEADER = 0x04;      // Update request for ghosted header only
+#define FRS_UPDATE_FLAG_DATA           = 0x08;      // Update request for file data only
+#define FRS_UPDATE_FLAG_CLOCK_DECREMENTED = 0x10;      // Update request 
+
+typedef pipe byte BYTE_PIPE;
+
+[
+    uuid(897e2e5f-93f3-4376-9c9c-fd2277495c27),
+    version(1.0)
+]
+interface FrsTransport
+{
+    DWORD
+    CheckConnectivity(
+        [in] FRS_REPLICA_SET_ID replicaSetId,
+        [in] FRS_CONNECTION_ID connectionId
+        );
+
+    DWORD
+    EstablishConnection(
+        [in] FRS_REPLICA_SET_ID replicaSetId,
+        [in] FRS_CONNECTION_ID connectionId,
+        [in] DWORD downstreamProtocolVersion,
+        [in] DWORD downstreamFlags,
+        [out] DWORD *upstreamProtocolVersion,
+        [out] DWORD *upstreamFlags
+        );
+
+    DWORD
+    EstablishSession(
+        [in] FRS_CONNECTION_ID connectionId,
+        [in] FRS_CONTENT_SET_ID contentSetId
+        );
+
+
+    DWORD
+    RequestUpdates(
+        [in] FRS_CONNECTION_ID connectionId,
+        [in] FRS_CONTENT_SET_ID contentSetId,
+        [in, range(0,256)] DWORD creditsAvailable,
+        [in, range(0,1)] long hashRequested,
+        [in, range(UPDATE_REQUEST_ALL, UPDATE_REQUEST_LIVE)] UPDATE_REQUEST_TYPE updateRequestType,
+        [in] unsigned long versionVectorDiffCount,
+        [in, size_is(versionVectorDiffCount)]
+            FRS_VERSION_VECTOR *versionVectorDiff,
+        [out, size_is(creditsAvailable), length_is(*updateCount)] FRS_UPDATE *frsUpdate,
+        [out] DWORD *updateCount,
+        [out] UPDATE_STATUS *updateStatus,
+        [out] GUID *gvsnDbGuid,
+        [out] DWORDLONG *gvsnVersion
+        );
+
+    DWORD
+    RequestVersionVector(
+        [in] DWORD sequenceNumber,
+        [in] FRS_CONNECTION_ID connectionId,
+        [in] FRS_CONTENT_SET_ID contentSetId,
+        [in, range(REQUEST_NORMAL_SYNC,REQUEST_SLAVE_SYNC)] VERSION_REQUEST_TYPE requestType,
+        [in, range(CHANGE_NOTIFY,CHANGE_ALL)] VERSION_CHANGE_TYPE changeType,
+        [in] ULONGLONG vvGeneration
+        );
+
+    DWORD
+    AsyncPoll(
+        [in]  FRS_CONNECTION_ID connectionId,
+        [out] FRS_ASYNC_RESPONSE_CONTEXT* response
+        );
+
+    DWORD
+    RequestRecords(
+        [in] FRS_CONNECTION_ID connectionId,
+        [in] FRS_CONTENT_SET_ID contentSetId,
+        [in] FRS_DATABASE_ID uidDbGuid,
+        [in] DWORDLONG uidVersion,
+        [in, out] DWORD *maxRecords,
+        [out] DWORD *numRecords,
+        [out] DWORD *numBytes,
+        [out, size_is(,*numBytes)] byte **compressedRecords,
+        [out] RECORDS_STATUS *recordsStatus
+        );
+
+    DWORD
+    UpdateCancel(
+        [in] FRS_CONNECTION_ID connectionId,
+        [in] FRS_UPDATE_CANCEL_DATA cancelData
+        );
+
+    typedef [context_handle] void * PFRS_SERVER_CONTEXT;
+
+    DWORD
+    RawGetFileData(
+        [in, out] PFRS_SERVER_CONTEXT *serverContext,
+        [out, size_is(bufferSize), length_is(*sizeRead)] byte *dataBuffer,
+        [in, range(0, CONFIG_TRANSPORT_MAX_BUFFER_SIZE)] DWORD bufferSize,  
+        [out] DWORD *sizeRead,
+        [out] long *isEndOfFile
+        );
+
+    DWORD
+    RdcGetSignatures(
+        [in] PFRS_SERVER_CONTEXT serverContext,
+        [in, range(1, CONFIG_RDC_MAX_LEVELS)] byte level,
+        [in] DWORDLONG offset,
+        [out, size_is(length), length_is(*sizeRead)] byte *buffer,
+        [in, range(1, CONFIG_RDC_MAX_NEEDLENGTH)] DWORD length,
+        [out] DWORD *sizeRead
+       );
+
+    DWORD
+    RdcPushSourceNeeds(
+        [in] PFRS_SERVER_CONTEXT serverContext,
+        [in, size_is(needCount)] FRS_RDC_SOURCE_NEED *sourceNeeds,
+        [in, range(0, CONFIG_RDC_NEED_QUEUE_SIZE)] DWORD needCount
+        );
+
+    DWORD
+    RdcGetFileData(
+        [in] PFRS_SERVER_CONTEXT serverContext,
+        [out, size_is(bufferSize), length_is(*sizeReturned)] byte *dataBuffer,
+        [in, range(0, CONFIG_TRANSPORT_MAX_BUFFER_SIZE)] DWORD bufferSize, 
+        [out] DWORD *sizeReturned
+       );
+
+    DWORD
+    RdcClose(
+       [in, out] PFRS_SERVER_CONTEXT *serverContext
+       );
+
+    DWORD
+    InitializeFileTransferAsync(
+        [in] FRS_CONNECTION_ID  connectionId,
+        [in, out] FRS_UPDATE *frsUpdate,
+        [in, range(0,1)] long rdcDesired,
+        [in,out] FRS_REQUESTED_STAGING_POLICY *stagingPolicy,
+        [out] PFRS_SERVER_CONTEXT *serverContext,
+        [out] FRS_RDC_FILEINFO **rdcFileInfo,
+        [out, size_is(bufferSize), length_is(*sizeRead)] byte *dataBuffer,
+        [in, range(0, CONFIG_TRANSPORT_MAX_BUFFER_SIZE)] DWORD bufferSize,  
+        [out] DWORD *sizeRead,
+        [out] long *isEndOfFile
+        );
+
+// This method exists only in Windows Server 2008 and later releases
+    DWORD
+    InitializeFileDataTransfer(
+        [in] FRS_CONNECTION_ID  connectionId,
+        [in, out] FRS_UPDATE *frsUpdate,
+        [out] PFRS_SERVER_CONTEXT *serverContext,
+        [in] DWORDLONG offset,
+        [in] DWORDLONG length,
+        [out, size_is(bufferSize), length_is(*sizeRead)] byte *dataBuffer,
+        [in, range(0, 262144)] DWORD bufferSize,
+        [out] DWORD *sizeRead,
+        [out] long *isEndOfFile
+        );
+
+// This method exists only in Windows Server 2008 and later releases
+    DWORD
+    RawGetFileDataAsync(
+        [in]  PFRS_SERVER_CONTEXT serverContext,
+        [out] BYTE_PIPE* bytePipe
+        );
+
+// This method exists only in Windows Server 2008 and later releases
+    DWORD
+    RdcGetFileDataAsync(
+        [in]  PFRS_SERVER_CONTEXT serverContext,
+        [out] BYTE_PIPE* bytePipe
+        );
+}
+

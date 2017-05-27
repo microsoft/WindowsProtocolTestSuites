@@ -1,0 +1,1 @@
+midl -backward_compat maybenull_sizeis -amd64 ms-drsr.idl

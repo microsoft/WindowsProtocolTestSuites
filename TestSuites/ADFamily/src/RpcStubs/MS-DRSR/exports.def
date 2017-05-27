@@ -1,0 +1,71 @@
+LIBRARY    "IMS_DRSR_RpcAdapter_RpcStubs"
+EXPORTS
+
+IDL_DRSBind @ 1
+
+IDL_DRSUnbind @ 2
+
+IDL_DRSReplicaSync @ 3
+
+IDL_DRSGetNCChanges @ 4
+
+IDL_DRSUpdateRefs @ 5
+
+IDL_DRSReplicaAdd @ 6
+
+IDL_DRSReplicaDel @ 7
+
+IDL_DRSReplicaModify @ 8
+
+IDL_DRSVerifyNames @ 9
+
+IDL_DRSGetMemberships @ 10
+
+IDL_DRSInterDomainMove @ 11
+
+IDL_DRSGetNT4ChangeLog @ 12
+
+IDL_DRSCrackNames @ 13
+
+IDL_DRSWriteSPN @ 14
+
+IDL_DRSRemoveDsServer @ 15
+
+IDL_DRSRemoveDsDomain @ 16
+
+IDL_DRSDomainControllerInfo @ 17
+
+IDL_DRSAddEntry @ 18
+
+IDL_DRSExecuteKCC @ 19
+
+IDL_DRSGetReplInfo @ 20
+
+IDL_DRSAddSidHistory @ 21
+
+IDL_DRSGetMemberships2 @ 22
+
+IDL_DRSReplicaVerifyObjects @ 23
+
+IDL_DRSGetObjectExistence @ 24
+
+IDL_DRSQuerySitesByCost @ 25
+
+IDL_DRSInitDemotion @ 26
+
+IDL_DRSReplicaDemotion @ 27
+
+IDL_DRSFinishDemotion @ 28
+
+IDL_DRSAddCloneDC @ 29
+
+IDL_DRSWriteNgcKey @ 30
+
+IDL_DRSReadNgcKey @ 31
+
+IDL_DSAPrepareScript @ 32
+
+IDL_DSAExecuteScript @ 33
+
+
+

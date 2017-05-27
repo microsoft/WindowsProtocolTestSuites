@@ -207,7 +207,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             status = this.fsaAdapter.CreateFile(
                         FileAttribute.SYSTEM,
                         fileType == FileType.DataFile ? CreateOptions.NON_DIRECTORY_FILE : CreateOptions.DIRECTORY_FILE,
-                        StreamTypeNameToOPen.NULL,
+                        StreamTypeNameToOpen.NULL,
                         FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE,
                         ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE,
                         CreateDisposition.OPEN_IF,

@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ExpectedMessageList>
+  <Filter>LDAP</Filter>
+  <!--1 LDAP: Bind Operation-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <!--computer name is required-->
+    <Source>{ApplicationServerName}</Source>
+    <!--computer name is required-->
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.Version" Value="3" Type="long"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+
+  <!--2 LDAP: RootDSE search request-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.BaseObject" Value="" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.Filter.Content" Value="objectClass" Type="string"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--3 LDAP: RootDSE search response-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{KdcName}</Source>
+    <Destination>{ApplicationServerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.ObjectName" Value="" Type="string"/>
+    </VerifyItemList>
+    <ArrayField FieldName="ProtocolOp.Attributes">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Type" Value="defaultNamingContext" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <!-- 22 attributes in total in RootDSE response, Just list important attributes-->
+    </ArrayField>
+  </ExpectedMessage>
+
+  <!--4 LDAP: Bind Operation-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.Version" Value="3" Type="long"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+
+  <!--5 LDAP: Resource Property List search request, object class-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.BaseObject" Value="CN=Global Resource Property List,CN=Resource Property Lists,CN=Claims Configuration,CN=Services,CN=Configuration,DC={KdcDomainNetbios},DC=com" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.Filter.Content" Value="objectClass" Type="string"/>
+    </VerifyItemList>
+    <ArrayField FieldName="ProtocolOp.Attributes">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="objectClass" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+
+  <!--6 LDAP: Resource Property List search response, object class-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{KdcName}</Source>
+    <Destination>{ApplicationServerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.ObjectName" Value="CN=Global Resource Property List,CN=Resource Property Lists,CN=Claims Configuration,CN=Services,CN=Configuration,DC={KdcDomainNetbios},DC=com" Type="string"/>
+    </VerifyItemList>
+    <ArrayField FieldName="ProtocolOp.Attributes">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+         <VerifyItem Operation="equal" FieldName="Type" Value="objectClass" Type="string"/>
+          <ArrayField FieldName="Vals">
+            <ArrayItem>
+              <VerifyItemList Operation="and">
+                <VerifyItem Operation="equal" Value="top" Type="BinaryValue"/>
+              </VerifyItemList>
+            </ArrayItem>
+            <ArrayItem>
+              <VerifyItemList Operation="and">
+                <VerifyItem Operation="equal" Value="msDS-ResourcePropertyList" Type="BinaryValue"/>
+              </VerifyItemList>
+            </ArrayItem>
+          </ArrayField>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+
+  <!--7 LDAP: Resource Property List search request, Get all attribute-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.BaseObject" Value="CN=Global Resource Property List,CN=Resource Property Lists,CN=Claims Configuration,CN=Services,CN=Configuration,DC={KdcDomainNetbios},DC=com" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.Filter.Content" Value="objectClass" Type="string"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  
+  <!--8 LDAP: Resource Property List search response, Get all attribute-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{KdcName}</Source>
+    <Destination>{ApplicationServerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.ObjectName" Value="CN=Global Resource Property List,CN=Resource Property Lists,CN=Claims Configuration,CN=Services,CN=Configuration,DC={KdcDomainNetbios},DC=com" Type="string"/>
+    </VerifyItemList>
+    <ArrayField FieldName="ProtocolOp.Attributes">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Type" Value="msDS-MembersOfResourcePropertyList" Type="string"/>          
+        </VerifyItemList>
+        <ArrayField FieldName="Vals">
+          <ArrayItem>
+            <VerifyItemList Operation="and">
+              <VerifyItem Operation="equal" Value="CN={ResourcepropertyNames[0]},CN=Resource Properties,CN=Claims Configuration,CN=Services,CN=Configuration,DC={KdcDomainNetbios},DC=com" Type="BinaryValue"/>
+            </VerifyItemList>
+          </ArrayItem>
+          
+          <!-- Can add other focused resource property-->
+        </ArrayField>
+      </ArrayItem>
+      <!-- Only verify the most important attribute existed. - Resource property list -->
+    </ArrayField>
+  </ExpectedMessage>
+  <!--Get Resource property information, Will query all the resource properties in the list got above, only verify the resource property test focus on -->
+  <!-- For the first one-->
+  <!--9 LDAP: Resource Property search request, Get object class-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <!--PETLevel_88d00186e3cd4f6b is the ID of resource property PET_Level. Hard code here for now. Consider to get the value automatically.-->
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.BaseObject" Value="CN={ResourcepropertyNames[0]},CN=Resource Properties,CN=Claims Configuration,CN=Services,CN=Configuration,DC={KdcDomainNetbios},DC=com" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.Filter.Content" Value="objectClass" Type="string"/>
+    </VerifyItemList>
+    <ArrayField FieldName="ProtocolOp.Attributes">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="objectClass" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+
+  <!--10 LDAP: Resource Property search response, Get object class-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{KdcName}</Source>
+    <Destination>{ApplicationServerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.ObjectName" Value="CN={ResourcepropertyNames[0]},CN=Resource Properties,CN=Claims Configuration,CN=Services,CN=Configuration,DC={KdcDomainNetbios},DC=com" Type="string"/>
+    </VerifyItemList>
+    <ArrayField FieldName="ProtocolOp.Attributes">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Type" Value="objectClass" Type="string"/>
+          <ArrayField FieldName="Vals">
+            <ArrayItem>
+              <VerifyItemList Operation="and">
+                <VerifyItem Operation="equal" Value="top" Type="BinaryValue"/>
+              </VerifyItemList>
+            </ArrayItem>
+            <ArrayItem>
+              <VerifyItemList Operation="and">
+                <VerifyItem Operation="equal" Value="msDS-ClaimTypePropertyBase" Type="BinaryValue"/>
+              </VerifyItemList>
+            </ArrayItem>
+            <ArrayItem>
+              <VerifyItemList Operation="and">
+                <VerifyItem Operation="equal" Value="msDS-ResourceProperty" Type="BinaryValue"/>
+              </VerifyItemList>
+            </ArrayItem>
+          </ArrayField>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--11 LDAP: Resource Property search request, Get all attribute-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{ApplicationServerName}</Source>
+    <Destination>{KdcName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.BaseObject" Value="CN={ResourcepropertyNames[0]},CN=Resource Properties,CN=Claims Configuration,CN=Services,CN=Configuration,DC={KdcDomainNetbios},DC=com" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.Filter.Content" Value="objectClass" Type="string"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--12 LDAP: Resource Property search response, Get all attribute-->
+  <ExpectedMessage>
+    <Name>LDAP.LdapMessage</Name>
+    <Source>{KdcName}</Source>
+    <Destination>{ApplicationServerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ProtocolOp.ObjectName" Value="CN={ResourcepropertyNames[0]},CN=Resource Properties,CN=Claims Configuration,CN=Services,CN=Configuration,DC={KdcDomainNetbios},DC=com" Type="string"/>
+    </VerifyItemList>
+    <ArrayField FieldName="ProtocolOp.Attributes">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Type" Value="objectClass" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Type" Value="cn" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>     
+    </ArrayField>
+  </ExpectedMessage>
+  
+  <!-- Can add query sequence for other focused resource properties-->
+  
+</ExpectedMessageList>

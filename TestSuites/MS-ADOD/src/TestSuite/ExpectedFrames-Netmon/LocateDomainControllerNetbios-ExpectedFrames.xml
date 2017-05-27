@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExpectedFrames Name="LocateDomainControllerNetbios">
+  <CatureFilter></CatureFilter>
+  <SpecialFilter></SpecialFilter>
+  <VerificationFilters>
+    <Filter>(NbtNs OR NetLogon) AND (sourcenetworkaddress == {ClientIP} OR (sourcenetworkaddress == {ClientIP} AND destinationnetworkaddress == {PDCIP}) OR (sourcenetworkaddress == {PDCIP} AND destinationnetworkaddress == {ClientIP}))</Filter>
+  </VerificationFilters>
+  <ExpectedFrameList>
+    <ExpectedFrame Name="Name Discovery" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Nbtns.NbtNsQuestionSectionData.QuestionName.Name" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="Name Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Nbtns.AnswerRecord.RRName.Name" IsValueRequired="false"/>
+        <ExpectedFieldValue Expression="*.Nbtns.AnswerRecord.ResouceRecordData.NBAddress" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="MAILSLOT Ping" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Netlogon.LogonPrimaryQuery" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="MAILSLOT Ping Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Netlogon.LogonPrimaryResponse" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="MAILSLOT Ping" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Netlogon.SamLogonRequest" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="MAILSLOT Ping Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Netlogon.SamLogonResponse" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+  </ExpectedFrameList>
+</ExpectedFrames>

@@ -10,8 +10,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
     {
         public bool RequireMessageSigning;
 
-        // TODO: ServerStatistics
-
         // ServerEnabled
 
         public MapContainer<string, Smb2ServerShare> ShareList;

@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ExpectedMessageList>
+  <Filter>(CLDAP OR SMB2 OR SAMR)</Filter>
+  <!--1. LDAP DC-location Ping-->
+  <ExpectedMessage>
+    <Description>1. LDAP DC-location Ping: If the domain controller was not located earlier, the client locates a domain controller, as described in section 3.1.1.</Description>
+    <Name>CLDAP.CldapMessage</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <ArrayField FieldName="ProtocolOp.Filter.Content.Content">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Content.AttributeDesc" Value="DnsDomain" Type="string"/>
+          <VerifyItem Operation="equal" FieldName="Content.AssertionValue" Value="{FullDomainName}" Type="string"/>
+        </VerifyItemList>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Content.AttributeDesc" Value="Host" Type="string"/>
+          <VerifyItem Operation="equal" FieldName="Content.AssertionValue" Value="{ClientComputerName}" Type="string"/>
+        </VerifyItemList>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Content.AttributeDesc" Value="NtVer" Type="string"/>
+        </VerifyItemList>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" FieldName="Content.AttributeDesc" Value="DnsHostName" Type="string"/>
+          <VerifyItem Operation="equal" FieldName="Content.AssertionValue" Value="{ClientComputerName}" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+    <ArrayField FieldName="ProtocolOp.Attributes">
+      <ArrayItem>
+        <VerifyItemList Operation="and">
+          <VerifyItem Operation="equal" Value="Netlogon" Type="string"/>
+        </VerifyItemList>
+      </ArrayItem>
+    </ArrayField>
+  </ExpectedMessage>
+  <!--2. LDAP DC-location response-->
+  <ExpectedMessage>
+    <Description>2. LDAP DC-location response: If the client receives a successful response from the domain controller, the DC is located. If the response is not successful, the task fails.</Description>
+    <Name>ADTS.NetlogonSamLogonResponseEx</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Opcode" Value="23" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="DnsForestName" Value="{FullDomainName}" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="DnsHostName" Value="{NetbiosComputerName}.{FullDomainName}" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="NetbiosDomainName" Value="{NetbiosDomainName}" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="NetbiosComputerName" Value="{NetbiosComputerName}" Type="string"/>
+      <VerifyItem Operation="equal" FieldName="LmNtToken" Value="65535" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="Lm20Token" Value="65535" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--3. SMB session bind-->
+  <!--4. SMB session bind response-->
+  <ExpectedMessage>
+    <Description>3. SMB session bind: To establish an SMB/SMB2/CIFS session to the domain controller, the domain client sends an SMB session bind request using anonymous user credentials to the domain controller ([MS-CIFS] section 3.2.4.2).
+    4. SMB session bind response: Upon a successful response from domain controller, the SMB/SMB2/CIFS session is established between the domain client and the DC.</Description>
+    <Name>SMB2.VirtualOperations.SessionSetup</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Status.Code" Value="0" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--5. SamrConnect5-->
+  <ExpectedMessage>
+    <Description>5. SamrConnect5: By using the SMB connection that was established in the previous step, the domain client sends a SamrConnect5 request ([MS-SAMR] section 3.1.5.1.1) to the domain controller to connect to the SAM RPC server on the DC.</Description>
+    <Name>SAMR._samrMessages._SamrConnect5Request</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ServerName" Value="\\{NetbiosComputerName}" Type="string"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--6. SamrConnect5 Response-->
+  <ExpectedMessage>
+    <Description>6. SamrConnect5 Response: Upon a successful response from domain controller, the domain client receives a handle to the server object from the DC.</Description>
+    <Name>SAMR._samrMessages._SamrConnect5Response</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ReturnValue" Value="0" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--7. SamrOpenDomain-->
+  <ExpectedMessage>
+    <Description>7. SamrOpenDomain: By using the server handle that was obtained in the preceding step, the domain client sends a SamrOpenDomain request ([MS-SAMR] section 3.1.5.1.5) to the domain controller to obtain a handle for a domain object.</Description>
+    <Name>SAMR._samrMessages._SamrOpenDomainRequest</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="DomainId.Revision" Value="1" Type="ushort"/>
+      <VerifyItem Operation="equal" FieldName="DomainId.SubAuthorityCount" Value="4" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--8. SamrOpenDomain Response-->
+  <ExpectedMessage>
+    <Description>8. SamrOpenDomain Response: Upon a successful response, the domain controller returns a handle for a domain object.</Description>
+    <Name>SAMR._samrMessages._SamrOpenDomainResponse</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ReturnValue" Value="0" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--9. SamrLookupNamesInDomain-->
+  <ExpectedMessage>
+    <Description>9. SamrLookupNamesInDomain: To determine the relative ID (RID) of the account, the domain client sends a SamrLookUpNamesInDomain request ([MS-SAMR] section 3.1.5.11.2) to the domain controller.</Description>
+    <Name>SAMR._samrMessages._SamrLookupNamesInDomainRequest</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="Count" Value="1" Type="ushort"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--10. SamrLookupNamesInDomain Response-->
+  <ExpectedMessage>
+    <Description>10. SamrLookupNamesInDomain Response: Upon a successful response, the domain controller returns the RID of the existing domain client account.</Description>
+    <Name>SAMR._samrMessages._SamrLookupNamesInDomainResponse</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ReturnValue" Value="0" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--11. SamrOpenUser-->
+  <ExpectedMessage>
+    <Description>11. SamrOpenUser: To obtain a handle to modify user account information, the domain client sends a SamrOpenUser request ([MS-SAMR] section 3.1.5.1.9) to the domain controller.</Description>
+    <Name>SAMR._samrMessages._SamrOpenUserRequest</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="DesiredAccess" Value="176" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--12. SamrOpenUser Response-->
+  <ExpectedMessage>
+    <Description>12. SamrOpenUser Response: Upon a successful response, the domain controller returns a handle to a user account.</Description>
+    <Name>SAMR._samrMessages._SamrOpenUserResponse</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ReturnValue" Value="0" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--13. SamrQueryInformationUser-->
+  <ExpectedMessage>
+    <Description>13. SamrQueryInformationUser: The domain client sends a SamrQueryInformationUser request ([MS-SAMR] section 3.1.5.5.6) to the domain controller to obtain attributes from the user object.</Description>
+    <Name>SAMR._samrMessages._SamrQueryInformationUserRequest</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="UserInformationClass" Value="16" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--14. SamrQueryInformationUser Response-->
+  <ExpectedMessage>
+    <Description>14. SamrQueryInformationUser Response: Upon a successful response, the domain controller returns attributes of the user object.</Description>
+    <Name>SAMR._samrMessages._SamrQueryInformationUserResponse</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ReturnValue" Value="0" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--15. SamrSetInformationUser-->
+  <ExpectedMessage>
+    <Description>15. SamrSetInformationUser: To disable the user account in the directory, the domain client sends a SamrSetInformationUser request ([MS-SAMR] section 3.1.5.6.5) to the domain controller.</Description>
+    <Name>SAMR._samrMessages._SamrSetInformationUserRequest</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="UserInformationClass" Value="16" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--16. SamrSetInformationUser Response-->
+  <ExpectedMessage>
+    <Description>16. SamrSetInformationUser Response: Upon a successful response from the domain controller, the domain client disables the user account in the directory.</Description>
+    <Name>SAMR._samrMessages._SamrSetInformationUserResponse</Name>
+    <Source>{PDCComputerName}</Source>
+    <Destination>{ClientComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ReturnValue" Value="0" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--18-19. SamrCloseHandle-->
+  <ExpectedMessage>
+    <Description>18-19. SamrCloseHandle: After the user account is disabled, the domain client sends SamrCloseHandle requests to the domain controller to close the handles that were opened earlier ([MS-SAMR] section 3.1.5.13.1). The client receives responses from the server for all the close-handle requests. Upon successful completion of the preceding call sequence, the domain client has successfully created or updated the client account in the domain.</Description>
+    <Name>SAMR.samr.SamrCloseHandle</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ReturnValue" Value="0" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--20-21. SamrCloseHandle-->
+  <ExpectedMessage>
+    <Description>20-21. SamrCloseHandle: After the user account is disabled, the domain client sends SamrCloseHandle requests to the domain controller to close the handles that were opened earlier ([MS-SAMR] section 3.1.5.13.1). The client receives responses from the server for all the close-handle requests. Upon successful completion of the preceding call sequence, the domain client has successfully created or updated the client account in the domain.</Description>
+    <Name>SAMR.samr.SamrCloseHandle</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ReturnValue" Value="0" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--22-23. SamrCloseHandle-->
+  <ExpectedMessage>
+    <Description>22-23. SamrCloseHandle: After the user account is disabled, the domain client sends SamrCloseHandle requests to the domain controller to close the handles that were opened earlier ([MS-SAMR] section 3.1.5.13.1). The client receives responses from the server for all the close-handle requests. Upon successful completion of the preceding call sequence, the domain client has successfully created or updated the client account in the domain.</Description>
+    <Name>SAMR.samr.SamrCloseHandle</Name>
+    <Source>{ClientComputerName}</Source>
+    <Destination>{PDCComputerName}</Destination>
+    <VerifyItemList Operation="and">
+      <VerifyItem Operation="equal" FieldName="ReturnValue" Value="0" Type="int"/>
+    </VerifyItemList>
+  </ExpectedMessage>
+  <!--24. SMB session close-->
+  <!--25. SMB session close response-->
+</ExpectedMessageList>

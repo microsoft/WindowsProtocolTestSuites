@@ -36,6 +36,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         public const string FsctlValidateNegotiateInfo = "FsctlValidateNegotiateInfo";
         public const string FsctlSetGetIntegrityInformation = "FsctlSetGetIntegrityInformation";
         public const string FsctlOffloadReadWrite = "FsctlOffloadReadWrite";
+        public const string FsctlEnumerateSnapShots = "FsctlEnumerateSnapShots";
 
         public const string Negotiate = "Negotiate";
         public const string Session = "Session";

@@ -41,7 +41,15 @@
           Relative path of symbolic link under sub folder of BasicFileShare share. If SUT does not have a symbolic link, leave it blank
         </Description>
       </Property>
-	  
+
+      <Property name="NumberOfPreviousVersions" value="3">
+        <Description>
+          The number of the previous versions of the share.
+          This is used to test FSCTL_SRV_ENUMERATE_SNAPSHOTS.
+          If not supported, leave it blank.
+        </Description>
+      </Property>      
+
     </Group>
   </Properties>
 </TestSite>

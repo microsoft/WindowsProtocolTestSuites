@@ -276,7 +276,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
                     //CALL DES_ECB(output1, k2, &output2)
                     //SET Session-Key to output2
 
-                    //TODO: TDI 48781 7 bytes k1/k2 are invalid to DES.
 
                     byte[] sum = BitConverter.GetBytes(
                         BitConverter.ToUInt64(clientChallenge, 0) +
@@ -933,7 +932,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
             copySeqNumber[6] = sequenceNumberHighPart[1];
             copySeqNumber[7] = sequenceNumberHighPart[0];
 
-            //TODO: TDI 47898, this is not decribed in TD.
             if (isClientSideOutbound)
             {
                 copySeqNumber[4] = (byte)(copySeqNumber[4] | 0x80);

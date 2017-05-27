@@ -237,8 +237,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             if (this.smb2Client != null)
             {
                 this.DeleteTestFile();
-                this.TreeDisconnect();
-                this.LogOff();
                 this.smb2Client.Disconnect();
                 this.smb2Client.Dispose();
                 this.smb2Client = null;

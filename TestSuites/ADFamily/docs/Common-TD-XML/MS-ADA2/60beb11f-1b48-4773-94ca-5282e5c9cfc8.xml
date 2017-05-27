@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="60beb11f-1b48-4773-94ca-5282e5c9cfc8" build_format="rfc" section_number="43.124"><title>Attribute msDS-LocalEffectiveRecycleTime</title>
+<tech value="protocol" />
+<index><keyword>msDS-LocalEffectiveRecycleTime attribute</keyword></index></metadata>
+<section><section_contents><p>This attribute stores the recycle time of the object in the local domain controller.</p>
+<example><snippet>cn: ms-DS-Local-Effective-Recycle-Time
+ldapDisplayName: msDS-LocalEffectiveRecycleTime
+attributeId: 1.2.840.113556.1.4.2060
+attributeSyntax: 2.5.5.11
+omSyntax: 24
+isSingleValued: TRUE
+schemaIdGuid: 4ad6016b-b0d2-4c9b-93b6-5964b17b968c
+systemOnly: TRUE
+searchFlags: 0
+systemFlags: FLAG_SCHEMA_BASE_OBJECT|FLAG_ATTR_IS_CONSTRUCTED
+schemaFlagsEx: FLAG_ATTR_IS_CRITICAL</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA2"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute msDS-LocalEffectiveRecycleTime [_rfc_ms-ada2_nattribute_msds-localeffectiverecycletime]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

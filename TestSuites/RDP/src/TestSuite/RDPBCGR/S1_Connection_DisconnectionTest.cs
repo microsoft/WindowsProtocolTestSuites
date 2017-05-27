@@ -163,12 +163,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a MCS Disconnect Provider Ultimatum PDU to SUT, set the length field within tpktHeader to an invalid value (less than the actual value).");
             this.rdpbcgrAdapter.Server_MCSDisconnectProviderUltimatum(true, NegativeType.InvalidTPKTHeader);
 
-            //Expect SUT to drop the connection            
-            #region Wait for Client to drop the connection
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bClientDropConnection = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bClientDropConnection, "Client failed to drop the connection upon invalid TPKT length field in MCS Disconnect Provider Ultimatum PDU.");
-            #endregion
+            //Expect SUT to drop the connection                        
+            RDPClientTryDropConnection("MCS Disconnect Provider Ultimatum PDU with invalid TPKT length field");            
             #endregion
         }
 

@@ -25,12 +25,18 @@
   </PropertyGroup>
   <Import Project="$(WixTargetsPath)" />
   <ItemGroup>
+	<Compile Include="ADFSPIPPlugin.wxs" />
+	<Compile Include="BranchCachePlugin.wxs" />
     <Compile Include="RDPPlugin.wxs" />
+	<Compile Include="AZODPlugin.wxs" />
+	<Compile Include="ADODPlugin.wxs" />
     <Compile Include="KerberosPlugin.wxs" />
+	<Compile Include="ADFamily.wxs" />
     <Compile Include="Product.wxs" />
     <Compile Include="PrivacyDlg.wxs" />
     <Compile Include="ProtoSDK.wxs" />
     <Compile Include="FileServerPlugin.wxs" />
+	<Compile Include="DependencyCheckWarningDlg.wxs" />
     <EmbeddedResource Include="ProtocolTestManager.wxl" />
     <Content Include="License.rtf" />
   </ItemGroup>
@@ -95,6 +101,14 @@
     </ProjectReference>
     <ProjectReference Include="..\Plugins\KerberosPlugin\KerberosPlugin\KerberosPlugin.csproj">
       <Name>KerberosPlugin</Name>
+      <Project>{A18054D7-60B6-4D02-A95C-F752A61DC8DD}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Plugins\ADFamilyPlugin\ADFamilyPlugin\ADFamilyPlugin.csproj">
+      <Name>ADFamilyPlugin</Name>
       <Project>{E18054D7-60B6-4D02-A95C-F752A61DC8D8}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
@@ -104,6 +118,38 @@
     <ProjectReference Include="..\Plugins\RDPPlugin\RDPPlugin\RDPPlugin.csproj">
       <Name>RDPPlugin</Name>
       <Project>{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Plugins\AZODPlugin\AZODPlugin\AZODPlugin.csproj">
+      <Name>AZODPlugin</Name>
+      <Project>{424C6D1E-6DEA-4DA5-AFF9-D8F5CB9081BF}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+	<ProjectReference Include="..\Plugins\ADODPlugin\ADODPlugin\ADODPlugin.csproj">
+      <Name>ADODPlugin</Name>
+      <Project>{4A226949-08A5-4D5A-8DBD-674C22377DF7}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Plugins\ADFSPIPPlugin\ADFSPIPPlugin\ADFSPIPPlugin.csproj">
+      <Name>ADFSPIPPlugin</Name>
+      <Project>{497B4EC6-DAFC-4AEA-BE66-13E17E147199}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+	<ProjectReference Include="..\Plugins\BranchCachePlugin\BranchCachePlugin\BranchCachePlugin.csproj">
+      <Name>BranchCachePlugin</Name>
+      <Project>{86BE87C6-846E-48FD-9676-BE6D1FC64C07}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>

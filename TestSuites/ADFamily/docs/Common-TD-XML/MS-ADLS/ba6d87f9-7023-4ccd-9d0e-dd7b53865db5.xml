@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="ba6d87f9-7023-4ccd-9d0e-dd7b53865db5" build_format="rfc" section_number="1.120"><title>Attribute lastLogonTimestamp</title>
+<tech value="protocol" />
+<index /></metadata>
+<section><section_contents><p>This attribute specifies the time at which the user last logged on to the domain. This value is only updated if the user logs on after a week has passed since the last update. <?CommentRangeStart id="0"?><?CommentRangeEnd id="0"?>This value is replicated.</p>
+<example><snippet type="syntax">cn: Last-Logon-Timestamp
+ldapDisplayName: lastLogonTimestamp
+attributeId: 1.2.840.113556.1.4.1696
+attributeSyntax: 2.5.5.16
+omSyntax: 65
+isSingleValued: TRUE
+schemaIdGuid: c0e20a04-0e5a-4ff3-9482-5efeaecd7060
+systemOnly: TRUE
+searchFlags: 0
+attributeSecurityGuid: 5f202010-79a5-11d0-9020-00c04fc2d4cf
+systemFlags: FLAG_SCHEMA_BASE_OBJECT</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>adam</auto_text>, <auto_text>windows_server_2008</auto_text>, <auto_text>ad_lds_windows_vista</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>ad_lds_windows_7</auto_text>, <auto_text>windows_server_8</auto_text>, <auto_text>ad_lds_windows_8</auto_text>, <auto_text>winblue_server_1</auto_text>, and <auto_text>ad_lds_winblue</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><?COMMENT id="0" author="debdlug" date="2008-05-15T12:52:51" initials="" commentText="Does this mean &quot;This value is only updated if the logon occurs at least a week after the last update.&quot; Please clarify."?><!--**BEGIN DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="Database" value="DDCMS_WS_PROTOCOL"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="Team" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="TopicID" value="ba6d87f9-7023-4ccd-9d0e-dd7b53865db5"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="CustomField1" value="_rfc_ms-adls_2_121"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="11" name="CustomField3" value=""?><!--**END DO NOT MODIFY THIS SECTION**-->

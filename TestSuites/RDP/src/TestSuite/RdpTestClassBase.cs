@@ -3,14 +3,14 @@
 using System;
 using System.IO;
 using System.Drawing;
+using System.Reflection;
 using System.Diagnostics;
 using Microsoft.Protocols.TestTools;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Protocols.TestSuites.Rdpbcgr;
-using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using System.Text.RegularExpressions;
-using System.Reflection;
+using Microsoft.Protocols.TestTools.StackSdk;
+using Microsoft.Protocols.TestSuites.Rdpbcgr;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 
 namespace Microsoft.Protocols.TestSuites.Rdp
 {
@@ -20,8 +20,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         const int VideoMode_TileRowNum = 5; //The row number of tiles to be sent to client.
         const int VideoMode_TileColNum = 5; //The column number of tiles to be sent to client.
         const string RDPVersionPattern = "RDP\\d+\\.\\d+"; // Used to match the RDP version in TestCategory. It MUST follow this format.
-        const int RDPVersionBoundary = 50; // If RDP.Version = 8,1 will parse as 81, then using this boundary value to check it.
-
+        
         #region Adapter Instances
         protected IRdpbcgrAdapter rdpbcgrAdapter;
         protected IRdpSutControlAdapter sutControlAdapter;
@@ -33,7 +32,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         protected selectedProtocols_Values selectedProtocol;
         protected EncryptionMethods enMethod;
         protected EncryptionLevel enLevel;
-        protected TS_UD_SC_CORE_version_Values rdpServerVersion;
+        protected TS_UD_SC_CORE_version_Values rdpServerVersion;        
         protected TimeSpan waitTime = new TimeSpan(0, 0, 40);
         protected TimeSpan shortWaitTime = new TimeSpan(0, 0, 5);
         protected bool isClientSupportFastPathInput = true;
@@ -47,6 +46,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         protected static Image imageForVideoMode;
         protected uint maxRequestSize = 0x50002A; //The MaxReqestSize field of  Multifragment Update Capability Set. Just for test.
         protected bool isWindowsImplementation = true;
+        protected bool DropConnectionForInvalidRequest = true;
         protected bool bVerifyRdpbcgrMessage;
         protected bool isclientSupportPersistentBitmapCache = false;
         protected ushort payloadLength = 15992; //payload length for RDP_BW_PAYLOAD and RDP_BW_STOP
@@ -126,17 +126,26 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             try
             {
                 string currentRDPVersion = this.Site.Properties["RDP.Version"];
-                double currentRDPVersionValue = Double.Parse(currentRDPVersion);
 
-                if (currentRDPVersionValue > RDPVersionBoundary)
+                //Validate the format of RDP.version in ptfconfig. The format of the version is required to be x.x
+                Version currentRDPVer = null;
+                if (!Version.TryParse(currentRDPVersion, out currentRDPVer))
                 {
-                    this.Site.Assert.Fail("RDP.Version in config file is invalid.");
+                    this.Site.Assert.Fail("Invalid format of RDP.Version {0} in config file. The valid format is required to be x.x. Please check the ptf config file.", currentRDPVersion);
                 }
 
-                double versionValue = Double.Parse(version);
-                if (currentRDPVersionValue < versionValue)
+                //Validate the RDP version required by the test case against the RDP.version in ptfconfig
+                Version testcaseRdpVer = null;
+                if (Version.TryParse(version, out testcaseRdpVer))
                 {
-                    this.Site.Assert.Inconclusive("{0} is only supported by RDP {1} or above. But current RDP version is set to {2}", testCaseName, version, currentRDPVersion);
+                    if (testcaseRdpVer > currentRDPVer)
+                    {
+                        this.Site.Assert.Inconclusive("Test case {0} is only supported by RDP {1} or above. But current RDP version is set to {2}", testCaseName, version, currentRDPVersion);
+                    }
+                }
+                else
+                {
+                    this.Site.Assert.Fail("Invalid format of test case category RDP version {0}. The valid format is required to be RDPx.x.", version, testCaseName);
                 }
             }
             catch (Exception ex)
@@ -144,7 +153,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 if (ex is ArgumentNullException || ex is FormatException || ex is OverflowException)
                 {
                     this.Site.Log.Add(LogEntryKind.Comment, ex.Message);
-                    this.Site.Assert.Fail("RDP.Version in PTF config or the RDP version in TestCategory attribute is not configured correctly.");
+                    this.Site.Assert.Fail("RDP.Version in PTF config, or the RDP version in TestCategory attribute is not configured correctly.");
                 }
                 else
                 {
@@ -448,9 +457,14 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 isClientSupportEmptyRdpNegData = false; //if property not found, set to false as default value
             }
 
-            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, "IsWindowsImplementation", out isWindowsImplementation))
+            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, RdpPtfPropNames.IsWindowsImplementation, out isWindowsImplementation))
             {
                 isWindowsImplementation  = true; //if property not found, set to true as default value
+            }
+
+            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, RdpPtfPropNames.DropConnectionForInvalidRequest, out DropConnectionForInvalidRequest))
+            {
+                DropConnectionForInvalidRequest = true; //if property not found, set to true as default value
             }
 
             if (!PtfPropUtility.GetBoolPtfProperty(TestSite, "VerifyRdpbcgrMessage", out bVerifyRdpbcgrMessage))
@@ -540,7 +554,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             File.Copy(tmpFilePath, pathForBaseImage, true);
 
             bool compareRes = this.rdpbcgrAdapter.SimulatedScreen.Compare(image, sutDisplayShift, compareRect, usingRemoteFX);
-            this.TestSite.Assert.IsTrue(compareRes, "SUT display verification failed, the output on RDP client is not equal (or similar enough if using RemoteFX codec) as expected.");
+            this.TestSite.Assert.IsTrue(compareRes, "SUT display verification should success, the output on RDP client should be equal (or similar enough if using RemoteFX codec) as expected.");
         }
 
         //override, assume fail for an invalid PTF property.
@@ -577,6 +591,42 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             }
         }
 
-        #endregion 
+        #endregion
+        /// <summary>
+        /// Provide a generic method to handle the invalid request from RDP server
+        /// For Windows, it drops the rdp connection directly.
+        /// For non-Windows, it may ignore the invalid request or deny the request.
+        /// </summary>
+        /// <param name="requestDesc">The description about the invalid request for logging output</param>
+        public void RDPClientTryDropConnection(string requestDesc)
+        {
+            if (isWindowsImplementation)
+            {
+                string RDPClientVersion = this.Site.Properties["RDP.Version"].ToString();
+                if (string.CompareOrdinal(RDPClientVersion,"10.3") ==0) // Windows client will not interrupt the connection for RDPClient 10.3.
+                {
+                    DropConnectionForInvalidRequest = true; //A switch to avoid waiting till timeout. 
+                }
+                else
+                {
+                    DropConnectionForInvalidRequest = false; //A switch to avoid waiting till timeout. 
+                }                
+            }
+
+            if (DropConnectionForInvalidRequest) 
+            {
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Expect RDP client to drop the connection");
+                bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
+                if (!bDisconnected)
+                {
+                    this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid " + requestDesc + " received.");
+                }
+            }
+            else 
+            {                
+                this.TestSite.Log.Add(LogEntryKind.Warning, "Non-Windows RDP client did not terminate the connection when invalid " + requestDesc + " received.");
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Please double check the RDP client behavior is as expected.");
+            }
+        }
     }
 }

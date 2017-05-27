@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?><topic xmlns="http://wsdev.schemas.microsoft.com/authoring/2008/2">
+<whitepaper_page><metadata id="61b4af59-c721-44a7-8177-36be4300f7d5" build_format="rfc" section_number="1.136"><title>Attribute msDFSR-DisablePacketPrivacy</title>
+<tech value="protocol" />
+<index><keyword>msDFSR-DisablePacketPrivacy attribute</keyword></index></metadata>
+<section><section_contents><p>This attribute disables packet privacy on a connection.</p>
+<example><snippet type="syntax">cn: ms-DFSR-DisablePacketPrivacy
+ldapDisplayName: msDFSR-DisablePacketPrivacy
+attributeId: 1.2.840.113556.1.6.13.3.32
+attributeSyntax: 2.5.5.8
+omSyntax: 1
+isSingleValued: TRUE
+schemaIdGuid: 6a84ede5-741e-43fd-9dd6-aa0f61578621
+searchFlags: 0</snippet></example>
+<p>Version-Specific Behavior: Implemented on <auto_text>windows_server_2008</auto_text>, <auto_text>windows_server_2008_r2</auto_text>, <auto_text>windows_server_8</auto_text>, and <auto_text>winblue_server_1</auto_text>.</p></section_contents></section></whitepaper_page>
+</topic><!--**END DO NOT MODIFY THIS SECTION**--><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="Server" value="10.185.184.7"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="Project" value="MS-ADA2"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="TopicTitle" value="Attribute msDFSR-DisablePacketPrivacy [_rfc_ms-ada21_136]"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="Schema" value="Protocol"?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="10" name="CustomField2" value=""?><?PROP fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="12" name="DocumentVersion" value="2.0"?>

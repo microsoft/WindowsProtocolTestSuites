@@ -1443,7 +1443,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// For 8-byte alignment.
         /// </summary>
         [StaticSize(4)]
-        public uint Padding; 
+        public uint Padding;
 
         /// <summary>
         /// An unsigned 64 bit integer containing the most significant value of the version.
@@ -5320,28 +5320,28 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  volume that backs this file.
         /// </summary>
         [StaticSize(4)]
-        public uint NumberOfSnapshots;
+        public uint NumberOfSnapShots;
 
         /// <summary>
         ///  The number of previous version time stamps returned
         ///  in the SnapShots[] array.
         /// </summary>
         [StaticSize(4)]
-        public uint NumberOfSnapshotsReturned;
+        public uint NumberOfSnapShotsReturned;
 
         /// <summary>
         ///  This field specifies the length, in bytes, of the SnapShots[]
         ///  array.
         /// </summary>
         [StaticSize(4)]
-        public uint SnapshotArraySize;
+        public uint SnapShotArraySize;
 
         /// <summary>
         ///  An array of time stamps in GMT format, as specified
         ///  by an @GMT token, which are separated by NULL characters
         ///  and terminated by two NULL characters.
         /// </summary>
-        [Size("SnapshotArraySize")]
+        [Size("NumberOfSnapShotsReturned == 0 ? 0 : SnapShotArraySize")]
         public byte[] SnapShots;
     }
 
@@ -12413,7 +12413,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         OPLOCK_BREAK = 0x12,
     }
 
-    // TODO: Should be defined globally
     public static class ErrefStatus
     {
         public const uint STATUS_INVALID_NETWORK_RESPONSE = 0xC00000C3;

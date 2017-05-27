@@ -97,9 +97,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a Server License Error Pdu - Valid Client with setting the length of tpktHeader to an invalid value (less than the actual value).");
             this.rdpbcgrAdapter.Server_License_Error_Pdu_Valid_Client(NegativeType.InvalidTPKLength);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bClientDropConnection = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bClientDropConnection, "Client failed to drop the connection upon invalid TKPK length in License Error Pdu");
+            RDPClientTryDropConnection("invalid TKPK length in License Error Pdu");            
             #endregion
         }
 
@@ -188,9 +186,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a Server License Error Pdu - Valid Client with setting the length within MCS Header to an invalid value (less than the actual value).");
             this.rdpbcgrAdapter.Server_License_Error_Pdu_Valid_Client(NegativeType.InvalidMCSLength);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bClientDropConnection = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bClientDropConnection, "Client failed to drop the connection upon invalid MCS length in License Error Pdu");
+            RDPClientTryDropConnection("invalid MCS length in License Error Pdu");            
             #endregion
         }
 
@@ -279,9 +275,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a Server License Error Pdu - Valid Client with not presenting the SEC_LICENSE_PKT (0x0080) flag within securityHeader.");
             this.rdpbcgrAdapter.Server_License_Error_Pdu_Valid_Client(NegativeType.InvalidFlagInSecurityHeader);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bClientDropConnection = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bClientDropConnection, "Client failed to drop the connection upon SEC_LICENSE_PKT not presented");
+            RDPClientTryDropConnection("invalid Server License Error Pdu without SEC_LICENSE_PKT");            
             #endregion
         }
 
@@ -376,9 +370,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a Server License Error Pdu - Valid Client, the SEC_ENCRYPT flag is present and the signature within securityHeader is invalid.");
             this.rdpbcgrAdapter.Server_License_Error_Pdu_Valid_Client(NegativeType.InvalidSignatureInSecurityHeader);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect SUT to drop the connection");
-            bool bClientDropConnection = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
-            this.TestSite.Assert.IsTrue(bClientDropConnection, "Client should drop the connection upon MAC signature is invalid");
+            RDPClientTryDropConnection("Server License Error Pdu with invalid MAC signature");            
             #endregion
         }
                 

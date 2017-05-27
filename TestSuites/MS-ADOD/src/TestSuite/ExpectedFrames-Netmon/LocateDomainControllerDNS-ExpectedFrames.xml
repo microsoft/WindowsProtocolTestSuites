@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExpectedFrames Name="LocateDomainControllerDNS">
+  <CatureFilter></CatureFilter>
+  <SpecialFilter></SpecialFilter>
+  <VerificationFilters>
+    <Filter></Filter>
+  </VerificationFilters>
+  <ExpectedFrameList>
+    <ExpectedFrame Name="SRV Query" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Dns.QRecord.QuestionName" IsValueRequired="false"/>
+        <ExpectedFieldValue Expression="*.Dns.QRecord.QuestionType" IsValueRequired="true" Value="33" ValueType="int"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="SRV Response" IsFound="false">
+      <ExpectedFieldValueList>
+       <ExpectedFieldValue Expression="*.Dns.ARecord.ResourceName" IsValueRequired="false"/>
+       <ExpectedFieldValue Expression="*.Dns.ARecord.ResourceType" IsValueRequired="true" Value="33" ValueType="int"/>
+       <ExpectedFieldValue Expression="*.Dns.ARecord.SRVRData.Target" IsValueRequired="true" Value="{PDCComputerName}" ValueType="string" IsCaseInsensitive="true"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="A/AAAA Query" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Dns.QRecord.QuestionName" IsValueRequired="true" Value="{PDCComputerName}" ValueType="string" IsCaseInsensitive="true"/>
+        <ExpectedFieldValue Expression="*.Dns.QRecord.QuestionType" IsValueRequired="true" Value="1" ValueType="int"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="A/AAAA Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.Dns.ARecord.ResourceName" IsValueRequired="true" Value="{PDCComputerName}" ValueType="string" IsCaseInsensitive="true"/>
+        <ExpectedFieldValue Expression="*.Dns.ARecord.ResourceType" IsValueRequired="true" Value="1" ValueType="int"/>
+        <ExpectedFieldValue Expression="*.Dns.ARecord.IPAddress" IsValueRequired="false"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LDAP Ping" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchRequest.Filter.LDAPLogicalFilter.filters.filter.MatchFilter.AttributeDescription.OctetStream" IsValueRequired="true" Value="DnsDomain" ValueType="string"/>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchRequest.Filter.LDAPLogicalFilter.filters.filter.MatchFilter.AssertionValue.OctetStream" IsValueRequired="true" Value="{FullDomainName}" ValueType="string" IsCaseInsensitive="true"/>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchRequest.Filter.LDAPLogicalFilter.filters.filter.MatchFilter.AttributeDescription.OctetStream" IsValueRequired="true" Value="Host" ValueType="string"/>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchRequest.Filter.LDAPLogicalFilter.filters.filter.MatchFilter.AssertionValue.OctetStream" IsValueRequired="true" Value="{ClientComputerName}" ValueType="string" IsCaseInsensitive="true"/>
+        <ExpectedFieldValue Expression="*.LDAPMessage.SearchRequest.Filter.LDAPLogicalFilter.filters.filter.MatchFilter.AttributeDescription.OctetStream" IsValueRequired="true" Value="NtVer" ValueType="string"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+    <ExpectedFrame Name="LDAP Ping Response" IsFound="false">
+      <ExpectedFieldValueList>
+        <ExpectedFieldValue Expression="*.NetlogonAttribute.NetlogonAttribute.SamLogonResponseEx.Opcode" IsValueRequired="false"/>
+        <ExpectedFieldValue Expression="*.NetlogonAttribute.NetlogonAttribute.SamLogonResponseEx.Flags" IsValueRequired="false"/>
+        <ExpectedFieldValue Expression="*.NetlogonAttribute.NetlogonAttribute.SamLogonResponseEx.DomainGuid" IsValueRequired="false"/>
+        <ExpectedFieldValue Expression="*.NetlogonAttribute.NetlogonAttribute.SamLogonResponseEx.DnsForestName" IsValueRequired="true" Value="{FullDomainName}" ValueType="string" IsCaseInsensitive="true"/>
+        <ExpectedFieldValue Expression="*.NetlogonAttribute.NetlogonAttribute.SamLogonResponseEx.DnsDomainName" IsValueRequired="true" Value="{FullDomainName}" ValueType="string" IsCaseInsensitive="true"/>
+        <ExpectedFieldValue Expression="*.NetlogonAttribute.NetlogonAttribute.SamLogonResponseEx.DnsHostName" IsValueRequired="true" Value="{PDCComputerName}" ValueType="string" IsCaseInsensitive="true"/>
+        <ExpectedFieldValue Expression="*.NetlogonAttribute.NetlogonAttribute.SamLogonResponseEx.UserName" IsValueRequired="false"/>
+        <ExpectedFieldValue Expression="*.NetlogonAttribute.NetlogonAttribute.SamLogonResponseEx.DcSiteName" IsValueRequired="false"/>
+        <ExpectedFieldValue Expression="*.NetlogonAttribute.NetlogonAttribute.SamLogonResponseEx.ClientSiteName" IsValueRequired="false"/>
+        <ExpectedFieldValue Expression="*.NetlogonAttribute.NetlogonAttribute.SamLogonResponseEx.Version" IsValueRequired="false"/>
+        <ExpectedFieldValue Expression="*.NetlogonAttribute.NetlogonAttribute.SamLogonResponseEx.LmNtToken.NtTokenByte1" IsValueRequired="true" Value="255" ValueType="int"/>
+        <ExpectedFieldValue Expression="*.NetlogonAttribute.NetlogonAttribute.SamLogonResponseEx.LmNtToken.NtTokenByte2" IsValueRequired="true" Value="255" ValueType="int"/>
+        <ExpectedFieldValue Expression="*.NetlogonAttribute.NetlogonAttribute.SamLogonResponseEx.Lm20Token.LmTokenByte1" IsValueRequired="true" Value="255" ValueType="int"/>
+        <ExpectedFieldValue Expression="*.NetlogonAttribute.NetlogonAttribute.SamLogonResponseEx.Lm20Token.LmTokenByte2" IsValueRequired="true" Value="255" ValueType="int"/>
+      </ExpectedFieldValueList>
+    </ExpectedFrame>
+  </ExpectedFrameList>
+</ExpectedFrames>

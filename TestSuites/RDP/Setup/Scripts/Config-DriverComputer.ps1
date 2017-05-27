@@ -11,6 +11,8 @@ pushd $scriptsPath
 #----------------------------------------------------------------------------
 # Starting script
 #----------------------------------------------------------------------------
+
+
 $settingFile = "$scriptsPath\ParamConfig.xml"
 if(Test-Path -Path $settingFile)
 {    
@@ -36,6 +38,25 @@ else
 {
     Write-Host "$settingFile not found. Will keep the default setting of all the test context info..."
 }
+
+$DropConnectionForInvalidRequest = "true"
+$SutOsVersion = Invoke-Command -ComputerName $tcComputerName -ScriptBlock {""+[System.Environment]::OSVersion.Version.Major.ToString() + "." + [System.Environment]::OSVersion.Version.Minor.ToString()}
+$SutOsBuildNumber = Invoke-Command -ComputerName $tcComputerName -ScriptBlock {[System.Environment]::OSVersion.Version.Build}
+
+if([double]$SutOSVersion -ge "10.0")
+{
+    
+    if([double] $SutOsBuildNumber -eq "15063")
+    {
+        $RDPVersion = "10.3"
+    }
+
+    if([double] $SutOsBuildNumber -ge "15063")
+    {
+        $DropConnectionForInvalidRequest = "false"
+    }
+}
+
 
 #-----------------------------------------------------
 # Create $logPath if not exist
@@ -109,12 +130,7 @@ else
 }
 $certPwd = "Password01!"
 $certFileName = $driverComputerName
-$certToolPath = "$env:ProgramFiles" + " (x86)" + "\Microsoft SDKs\Windows\v7.1A\Bin"
 
-if (Test-Path -Path "$env:HOMEDRIVE\$certFileName.pvk")
-{
-    Remove-Item "$env:HOMEDRIVE\$certFileName.pvk" -Force
-}
 if (Test-Path -Path "$env:HOMEDRIVE\$certFileName.cer")
 {
     Remove-Item "$env:HOMEDRIVE\$certFileName.cer" -Force
@@ -124,52 +140,12 @@ if (Test-Path -Path "$env:HOMEDRIVE\$certFileName.pfx")
     Remove-Item "$env:HOMEDRIVE\$certFileName.pfx" -Force
 }
 
-if (!(Test-Path -Path $certToolPath))
-{
-    Write-Host "Windows SDK (VS 2012 sp3) is not installed, switch to Lab Automation path ..."
-    $certToolPath = "$scriptsPath\..\MyTools";
-}
-pushd $certToolPath
-cmd /c start makecert.exe -pe -n "CN=$certCN" -a sha1 -sky exchange -eku 1.3.6.1.5.5.7.3.1 -r -sp "Microsoft RSA SChannel Cryptographic Provider" -sy 12 -sv "$env:HOMEDRIVE\$certFileName.pvk" "$env:HOMEDRIVE\$certFileName.cer"
+New-SelfSignedCertificate -KeyExportPolicy Exportable -Subject "CN=$certCN" -KeySpec KeyExchange -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.1") -Provider "Microsoft RSA SChannel Cryptographic Provider" -KeyLocation "$env:HOMEDRIVE\$certFileName.pvk"
+$cert = (Get-ChildItem -path cert:\localmachine\my)[-1]
+$securePwd = (ConvertTo-SecureString -string "$certPwd" -Force -AsPlainText)
+Export-PfxCertificate -Cert $cert -Force -Password $securePwd -FilePath "$env:HOMEDRIVE\$certFileName.pfx"
+Export-Certificate -Cert $cert -FilePath "$env:HOMEDRIVE\$certFileName.cer" -Type CERT
 
-$maxItirations = 180
-$shell = New-Object -comObject WScript.Shell
-$passIsEntered = $false
- 
-Start-Sleep -Milliseconds 1000   
- 
-$timeOut = 0
-
-while (!$passIsEntered -and $timeOut -lt $maxItirations)
-{
-    $isActivated = $shell.AppActivate("Create Private Key Password")
-    
-    Start-Sleep -Milliseconds 500
-    if ($isActivated)
-    {
-        $shell.SendKeys( $certPwd )
-        Start-Sleep -Milliseconds 300
-        $shell.SendKeys( "{TAB}" )
-        Start-Sleep -Milliseconds 300
-        $shell.SendKeys( $certPwd )
-        Start-Sleep -Milliseconds 300 
-        $shell.SendKeys( "{TAB}" )
-        Start-Sleep -Milliseconds 300
-        $shell.SendKeys( "{ENTER}" )
-        Start-Sleep -Milliseconds 500 
-        #Enter Private key Pass
-        $shell.SendKeys( $certPwd )
-        Start-Sleep -Milliseconds 300 
-        $shell.SendKeys( "{ENTER}" )
-        Start-Sleep -Milliseconds 500 
-        $passIsEntered = $true
-    }
-    Start-Sleep -Milliseconds 500
-    $timeOut ++
-}
-
-& $certToolPath\pvk2pfx.exe -pvk "$env:HOMEDRIVE\$certFileName.pvk" -spc "$env:HOMEDRIVE\$certFileName.cer" -pfx "$env:HOMEDRIVE\$certFileName.pfx" -pi $certPwd 2>&1 | Write-Host
-popd
 
 #-----------------------------------------------------
 # If listening port of test suite is 3389 and the Remote Desktop Service is running, edit registry to change Windows RDP service port and restart TermService
@@ -214,10 +190,13 @@ if ($osVersion.ToUpper() -eq "NONWINDOWS")
     .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Protocol" "RDP" 
     .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Encryption.Level" "Low" 
     .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Encryption.Method" "128bit" 
+    .\Modify-ConfigFileNode.ps1 $DepPtfConfig "DropConnectionForInvalidRequest" "true"
+    
 }
 else
 {
     .\Modify-ConfigFileNode.ps1 $DepPtfConfig "IsWindowsImplementation"      "true"
+    .\Modify-ConfigFileNode.ps1 $DepPtfConfig "DropConnectionForInvalidRequest" $DropConnectionForInvalidRequest
 }
 
 if ($workgroupDomain.ToUpper() -eq "DOMAIN")

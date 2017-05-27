@@ -49,13 +49,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// <summary>
         /// Fid of latest request/response.
         /// </summary>
-        //TODO: delete it, it doesn't support async.
         private uint currentFid;
 
         /// <summary>
         /// the file type defined in smb.
         /// </summary>
-        //TODO: delete it, it doesn't support async.
         private Cifs.FileTypeValue latestFileType;
 
         /// <summary>
@@ -1187,7 +1185,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
                     break;
 
                 case Cifs.SmbCommand.SMB_COM_ECHO:
-                    //TODO
                     break;
 
                 default:
@@ -1231,7 +1228,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
                 // negotiate with extended session security
                 securityMode = Cifs.SecurityModes.NEGOTIATE_USER_SECURITY
                     | Cifs.SecurityModes.NEGOTIATE_ENCRYPT_PASSWORDS;
-                //TODO: sign packets
                     //| Cifs.SecurityModes.NEGOTIATE_SECURITY_SIGNATURES_ENABLED
                     //| Cifs.SecurityModes.NEGOTIATE_SECURITY_SIGNATURES_REQUIRED;
             }
@@ -1247,7 +1243,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
                 securityMode,
                 maxBufferSizeInNegotiateResponse,
                 maxMpxCountInNegotiateResponse);
-            //TODO: we donot support info_level_pass_through, how to disable it in server capabilities?
+
             SMB_COM_NEGOTIATE_NtLanManagerResponse_SMB_Parameters param = negotiateResponse.SmbParameters;
             param.Capabilities &= ~Capabilities.CAP_INFOLEVEL_PASSTHRU;
             negotiateResponse.SmbParameters = param;
