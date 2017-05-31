@@ -547,11 +547,19 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             File.Copy(tmpFilePath, pathForSUTScreenShot, true);
             this.TestSite.Assume.IsTrue(result >= 0, "To verify output of RDP client, the protocol-based SUT control adapter should be used and the Agent on SUT should support screenshot control command.");
 
+            // print the absolute path of screen shot file
+            var fileInfoScreenShot = new FileInfo(pathForSUTScreenShot);
+            this.TestSite.Log.Add(LogEntryKind.Debug, "The absolute path of screen shot file is {0}.", fileInfoScreenShot.FullName);
+
             // Compare the screenshot with base image in simulated screen
             Bitmap image = new Bitmap(pathForSUTScreenShot);
             string pathForBaseImage = bitmapSavePath + @"\" + sf.GetMethod().Name + "_" + imageId + "_BaseImage.bmp";
             this.rdpbcgrAdapter.SimulatedScreen.BaseImage.Save(tmpFilePath);
             File.Copy(tmpFilePath, pathForBaseImage, true);
+
+            // print the absolute path of base image file
+            var fileInfoBaseImage = new FileInfo(pathForBaseImage);
+            this.TestSite.Log.Add(LogEntryKind.Debug, "The absolute path of base image file is {0}.", fileInfoBaseImage.FullName);
 
             bool compareRes = this.rdpbcgrAdapter.SimulatedScreen.Compare(image, sutDisplayShift, compareRect, usingRemoteFX);
             this.TestSite.Assert.IsTrue(compareRes, "SUT display verification should success, the output on RDP client should be equal (or similar enough if using RemoteFX codec) as expected.");
