@@ -29,7 +29,7 @@ if(Test-Path -Path $ScriptsSignalFile)
 }
 
 $endPointPath = "$env:SystemDrive\MicrosoftProtocolTests\Kerberos\Server-Endpoint"
-$version = Get-ChildItem $endPointPath | where {$_.Attributes -eq "Directory" -and $_.Name -like "1.0.*.*"} | Sort-Object Name -descending | Select-Object -first 1        
+$version = Get-ChildItem $endPointPath | where {$_.Attributes -eq "Directory" -and $_.Name -match "\d+\.\d+\.\d+\.\d+"} | Sort-Object Name -descending | Select-Object -first 1        
 $dataFile = "$WorkingPath\Data\ParamConfig.xml"
 
 #-----------------------------------------------------------------------------------------------
