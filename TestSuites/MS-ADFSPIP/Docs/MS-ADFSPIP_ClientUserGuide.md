@@ -47,7 +47,7 @@
 
 ### <a name="_Toc374100960"/>Introduction
 
-This guide provides information about how to install, configure, and run MS-ADFSPIP Test Suite and its environment. This suite of tools is designed to test the implementations of Device Registration Discovery Protocol, as specified in Microsoft document [MS-DVRD], and Device Registration Enrollment Protocol, as specified in Microsoft document [MS-DVRE].This guide provides information about using this test suite on the Microsoft® Windows® operating system.
+This guide provides information about how to install, configure, and run MS-ADFSPIP Test Suite and its environment. This suite of tools is designed to test the implementation of ADFS Proxy and Web Application Proxy integration, as described in [MS-ADFSPIP]. This guide provides information about using this test suite on the Microsoft® Windows® operating system.
 
 This suite of tools tests only the protocol implementation behaviors that are observed on the wire. For detailed information about the design of this test suite, see MS-ADFSPIP_ClientTestDesignSpecification.md. 
 
