@@ -246,7 +246,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             catch (Exception ex)
             {
                 //PTM will catch this exception and display to the user with message box.
-                throw new Exception("Failed to do auto detection with exception {0}.", ex);
+                throw new Exception(string.Format("Failed to do auto detection with exception {0}.", ex.Message), ex);
             }
             finally
             {

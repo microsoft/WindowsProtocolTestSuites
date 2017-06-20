@@ -217,6 +217,7 @@ namespace Microsoft.Protocols.TestManager.UI
                         if (o.Status == DetectionStatus.Finished) this.ButtonNext.Content = StringResources.NextButton;
                         else
                         {
+                            this.ButtonNext.Content = StringResources.DetectButton;
                             MessageBox.Show(o.Exception.Message, StringResources.DetectionError, MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                         SetButtonsStatus(true, true);
