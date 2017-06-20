@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using System.IO;
 using Microsoft.Protocols.TestManager.Kernel;
 using System.Diagnostics;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestManager.UI
 {
@@ -174,40 +175,57 @@ namespace Microsoft.Protocols.TestManager.UI
         }
 
         private bool detectionFinished = false;
+        private bool detectionRunning = false;
+        CancellationTokenSource ts = null;
         private void BeginDetection()
         {
+            this.ButtonNext.Content = StringResources.StopDetectButton;
+            this.detectionRunning = true;
             Pages.AutoDetectionPage.ResetSteps();
             detectionFinished = false;
-            SetButtonsStatus(false, false);
+
+            SetButtonsStatus(false, true);
             this.ListBox_Step.IsEnabled = false;
             Pages.AutoDetectionPage.PropertyListBox.IsEnabled = false;
-            try
+            ts = new CancellationTokenSource();
+            CancellationToken ct = ts.Token;
+
+            Task.Factory.StartNew(() =>
             {
-                if (util.SetPrerequisits() != true) throw new Exception(StringResources.InvalidValue);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, StringResources.InvalidValue, MessageBoxButton.OK, MessageBoxImage.Error);
-                SetButtonsStatus(true, true);
-                this.ListBox_Step.IsEnabled = true;
-                Pages.AutoDetectionPage.PropertyListBox.IsEnabled = true;
-                return;
-            }
-            util.StartDetection((o) =>
-            {
-                this.Dispatcher.BeginInvoke((Action)(() =>
+                try
                 {
-                    if (o.Status == DetectionStatus.Finished) this.ButtonNext.Content = StringResources.NextButton;
-                    else
-                    {
-                        MessageBox.Show(o.Exception.Message, StringResources.DetectionError, MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
+                    if (util.SetPrerequisits() != true) throw new Exception(StringResources.InvalidValue);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message, StringResources.InvalidValue, MessageBoxButton.OK, MessageBoxImage.Error);
                     SetButtonsStatus(true, true);
                     this.ListBox_Step.IsEnabled = true;
                     Pages.AutoDetectionPage.PropertyListBox.IsEnabled = true;
+                    return;
+                }
+
+                this.Dispatcher.Invoke((Action)(() =>
+                {
+                    this.ListBox_Step.IsEnabled = true;
                 }));
-                if (o.Status == DetectionStatus.Finished) detectionFinished = true;
-            });
+
+                util.StartDetection((o) =>
+                {
+                    this.Dispatcher.Invoke((Action)(() =>
+                    {
+                        if (o.Status == DetectionStatus.Finished) this.ButtonNext.Content = StringResources.NextButton;
+                        else
+                        {
+                            MessageBox.Show(o.Exception.Message, StringResources.DetectionError, MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        SetButtonsStatus(true, true);
+
+                        Pages.AutoDetectionPage.PropertyListBox.IsEnabled = true;
+                        if (o.Status == DetectionStatus.Finished) detectionFinished = true;
+                    }));
+                });
+            }, ct);
         }
 
         /// <summary>
@@ -244,7 +262,7 @@ namespace Microsoft.Protocols.TestManager.UI
 
         private bool IsCaseSeleted(int? caseCount = null)
         {
-            if(caseCount == null)
+            if (caseCount == null)
             {
                 caseCount = util.GetSelectedCaseList().Count;
             }
@@ -253,7 +271,7 @@ namespace Microsoft.Protocols.TestManager.UI
         }
 
         private void GotoConfigPage()
-        {        
+        {
             util.HideProperties();
             var propertyView = util.CreatePtfPropertyView();
             PtfPropertyView.Modified = DisableFollowingItems;
@@ -264,7 +282,7 @@ namespace Microsoft.Protocols.TestManager.UI
         {
             util.AdapterConfigurationChanged += DisableFollowingItems;
             Pages.AdapterPage.SetDatasource(util.GetAdaptersView());
-            
+
         }
 
         private void ApplyPtfConfigChanges()
@@ -313,10 +331,10 @@ namespace Microsoft.Protocols.TestManager.UI
             };
             logger.GroupByOutcome.UpdateTestCaseList = (group, runningcase) =>
             {
-                this.Dispatcher.Invoke((Action)(() => 
+                this.Dispatcher.Invoke((Action)(() =>
                 {
                     int index = group.TestCaseList.IndexOf(runningcase);
-                    if(index > 0)
+                    if (index > 0)
                     {
                         group.TestCaseList.Move(index, 0);
                     }
@@ -341,7 +359,7 @@ namespace Microsoft.Protocols.TestManager.UI
         {
             if (testcases == null || testcases.Count == 0)
             {
-                MessageBox.Show("No test case is selected.","Warning");
+                MessageBox.Show("No test case is selected.", "Warning");
                 return;
             }
             util.SaveLastProfile();
@@ -382,7 +400,7 @@ namespace Microsoft.Protocols.TestManager.UI
             util.LoadProfileSettings(filename);
             util.LoadPtfconfig();
             UpdateCaseFilter();
-            GotoConfigPage(); 
+            GotoConfigPage();
             ((ListBoxItem)ListBox_Step.Items[welcomeIndex]).IsEnabled = true;
             ((ListBoxItem)ListBox_Step.Items[configMethodIndex]).IsEnabled = true;
             ((ListBoxItem)ListBox_Step.Items[ruleIndex]).IsEnabled = true;
@@ -413,7 +431,7 @@ namespace Microsoft.Protocols.TestManager.UI
             ListBox_Step.SelectedIndex = testSuiteSelectionIndex;
             DisableFollowingItems();
             ContentFrame.Navigate(Pages.TestSuiteWindow);
-          
+
         }
         #region Navigation
         private void ButtonNext_Click(object sender, RoutedEventArgs e)
@@ -434,6 +452,19 @@ namespace Microsoft.Protocols.TestManager.UI
                     {
                         DetectionFinished();
                         nextpage = resultIndex;
+                    }
+                    else if (detectionRunning)
+                    {
+                        //stop detect
+                        detectionRunning = false;
+                        SetButtonsStatus(true, true);
+                        detectionFinished = false;
+                        this.ButtonNext.Content = StringResources.DetectButton;
+                        if (ts != null)
+                        {
+                            ts.Cancel();
+                            util.StopDetection();
+                        }
                     }
                     else
                         BeginDetection();
@@ -496,7 +527,7 @@ namespace Microsoft.Protocols.TestManager.UI
         private void ListBox_Step_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ListBox stepSelection = sender as ListBox;
-            if (stepSelection.SelectedIndex != detectionIndex 
+            if (stepSelection.SelectedIndex != detectionIndex
                 && stepSelection.SelectedIndex != runIndex)
             {
                 this.ButtonNext.Content = StringResources.NextButton;
@@ -588,7 +619,7 @@ namespace Microsoft.Protocols.TestManager.UI
 
         private void SetButtonsVisibility(bool previousButtonStatus, bool nextButtonStatus)
         {
-            if(previousButtonStatus)
+            if (previousButtonStatus)
                 this.ButtonPrevious.Visibility = Visibility.Visible;
             else
                 this.ButtonPrevious.Visibility = Visibility.Hidden;
@@ -632,7 +663,7 @@ namespace Microsoft.Protocols.TestManager.UI
             for (int i = StartPageIndex; i < selectedIndex; i++)
             {
                 ListBoxItem lbi = (ListBoxItem)ListBox_Step.Items[i];
-                lbi.IsEnabled = false ;
+                lbi.IsEnabled = false;
             }
         }
 

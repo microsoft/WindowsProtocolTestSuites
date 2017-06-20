@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Microsoft.Protocols.TestManager.Detector;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestManager.Kernel
 {
@@ -87,19 +88,33 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         private delegate DetectionOutcome DetectionDelegate();
 
+        private Thread thread = null;
         /// <summary>
         /// Begins the auto-detection.
         /// </summary>
         /// <param name="DetectionEvent">Callback function when the detection finished.</param>
         public void BeginDetection(DetectionCallback DetectionEvent)
         {
-            DetectionDelegate detectdelegate = new DetectionDelegate(RunDetection);
-            IAsyncResult result = detectdelegate.BeginInvoke(
-                (r) =>
+            thread = new Thread(new ThreadStart(()=>
+            {
+                var outcome = RunDetection();
+                if (DetectionEvent != null)
                 {
-                    var outcome = detectdelegate.EndInvoke(r);
-                    if (DetectionEvent != null) DetectionEvent(outcome);
-                }, null);
+                    DetectionEvent(outcome);
+                }
+            }));
+            thread.Start();
+        }
+
+        /// <summary>
+        /// Stop the auto-detection
+        /// </summary>
+        public void StopDetection()
+        {
+            if ((thread != null)&& !thread.ThreadState.Equals(ThreadState.Aborted))
+            {
+                thread.Abort();
+            }
         }
 
         /// <summary>

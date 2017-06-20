@@ -302,6 +302,14 @@ namespace Microsoft.Protocols.TestManager.Kernel
         }
 
         /// <summary>
+        /// Stop the auto-detection
+        /// </summary>
+        public void StopDetection()
+        {
+            detector.StopDetection();
+        }
+
+        /// <summary>
         /// Get a object to show on the UI as the detection summary.
         /// </summary>
         /// <returns>A object to show in the content control.</returns>

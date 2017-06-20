@@ -225,4 +225,7 @@ Do you want to abort the execution?</value>
   <data name="DefaultValue" xml:space="preserve">
     <value>Apply default value</value>
   </data>
+  <data name="StopDetectButton" xml:space="preserve">
+    <value>_Stop</value>
+  </data>
 </root>
