@@ -176,7 +176,6 @@ namespace Microsoft.Protocols.TestManager.UI
 
         private bool detectionFinished = false;
         private bool detectionRunning = false;
-        CancellationTokenSource ts = null;
         private void BeginDetection()
         {
             this.ButtonNext.Content = StringResources.StopDetectButton;
@@ -187,46 +186,41 @@ namespace Microsoft.Protocols.TestManager.UI
             SetButtonsStatus(false, true);
             this.ListBox_Step.IsEnabled = false;
             Pages.AutoDetectionPage.PropertyListBox.IsEnabled = false;
-            ts = new CancellationTokenSource();
-            CancellationToken ct = ts.Token;
-
-            Task.Factory.StartNew(() =>
+            
+            try
             {
-                try
-                {
-                    if (util.SetPrerequisits() != true) throw new Exception(StringResources.InvalidValue);
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message, StringResources.InvalidValue, MessageBoxButton.OK, MessageBoxImage.Error);
-                    SetButtonsStatus(true, true);
-                    this.ListBox_Step.IsEnabled = true;
-                    Pages.AutoDetectionPage.PropertyListBox.IsEnabled = true;
-                    return;
-                }
+                if (util.SetPrerequisits() != true) throw new Exception(StringResources.InvalidValue);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, StringResources.InvalidValue, MessageBoxButton.OK, MessageBoxImage.Error);
+                SetButtonsStatus(true, true);
+                this.ListBox_Step.IsEnabled = true;
+                Pages.AutoDetectionPage.PropertyListBox.IsEnabled = true;
+                return;
+            }
 
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+                this.ListBox_Step.IsEnabled = true;
+            }));
+
+            util.StartDetection((o) =>
+            {
                 this.Dispatcher.Invoke((Action)(() =>
                 {
-                    this.ListBox_Step.IsEnabled = true;
-                }));
-
-                util.StartDetection((o) =>
-                {
-                    this.Dispatcher.Invoke((Action)(() =>
+                    if (o.Status == DetectionStatus.Finished) this.ButtonNext.Content = StringResources.NextButton;
+                    else
                     {
-                        if (o.Status == DetectionStatus.Finished) this.ButtonNext.Content = StringResources.NextButton;
-                        else
-                        {
-                            this.ButtonNext.Content = StringResources.DetectButton;
-                            MessageBox.Show(o.Exception.Message, StringResources.DetectionError, MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
-                        SetButtonsStatus(true, true);
+                        this.ButtonNext.Content = StringResources.DetectButton;
+                        MessageBox.Show(o.Exception.Message, StringResources.DetectionError, MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    SetButtonsStatus(true, true);
 
-                        Pages.AutoDetectionPage.PropertyListBox.IsEnabled = true;
-                        if (o.Status == DetectionStatus.Finished) detectionFinished = true;
-                    }));
-                });
-            }, ct);
+                    Pages.AutoDetectionPage.PropertyListBox.IsEnabled = true;
+                    if (o.Status == DetectionStatus.Finished) detectionFinished = true;
+                }));
+            });
         }
 
         /// <summary>
@@ -461,11 +455,8 @@ namespace Microsoft.Protocols.TestManager.UI
                         SetButtonsStatus(true, true);
                         detectionFinished = false;
                         this.ButtonNext.Content = StringResources.DetectButton;
-                        if (ts != null)
-                        {
-                            ts.Cancel();
-                            util.StopDetection();
-                        }
+
+                        util.StopDetection();
                     }
                     else
                         BeginDetection();

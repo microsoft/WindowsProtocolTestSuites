@@ -307,6 +307,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public void StopDetection()
         {
             detector.StopDetection();
+            if (stepIndex < detectSteps.Count) detectSteps[stepIndex].DetectingStatus = TestManager.Detector.DetectingStatus.Pending;
+            if (logWriter != null)
+            {
+                logWriter.Close();
+                logWriter = null;
+            }
         }
 
         /// <summary>
