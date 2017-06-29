@@ -244,6 +244,7 @@
   <ItemGroup>
     <KerberosDataFiles Include="..\..\Setup\Data\*" />
     <KerberosScriptFiles Include="..\..\Setup\Scripts\*" />
+    <ClientControlScriptFiles Include="..\Adapter\IClientControlAdapter\*.ps1" />
   </ItemGroup>
   <Target Name="CopyFilesToBin" BeforeTargets="GenDeployWxsFile" >
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-Parameter.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
@@ -254,6 +255,7 @@
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-OSVersionNumber.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
     <Copy SourceFiles="@(KerberosDataFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
     <Copy SourceFiles="@(KerberosScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+	<Copy SourceFiles="@(ClientControlScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Bin\Adapter\IClientControlAdapter" />	
     <Copy SourceFiles="..\ServerLocalTestRun.testrunconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Bin" />
     <Copy SourceFiles="..\TestSuite\Kerberos_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Bin" />
     <Copy SourceFiles="..\TestSuite\Kerberos_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Bin" />
