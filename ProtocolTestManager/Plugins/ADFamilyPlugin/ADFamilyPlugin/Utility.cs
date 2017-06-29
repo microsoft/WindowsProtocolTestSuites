@@ -21,7 +21,7 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
     {
         static string RegistryPath = @"SOFTWARE\Microsoft\ProtocolTestSuites";
         static string RegistryPath64 = @"SOFTWARE\Wow6432Node\Microsoft\ProtocolTestSuites";
-        
+
         public static System.Net.IPHostEntry GetHost(string hostName)
         {
             try
@@ -52,6 +52,11 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
             IPAddress netmask = IPAddress.Any;
             foreach (NetworkInterface adapter in NetworkInterface.GetAllNetworkInterfaces())
             {
+                if (adapter.OperationalStatus != OperationalStatus.Up)
+                {
+                    continue;
+                }
+
                 foreach (UnicastIPAddressInformation unicastIPAddressInformation in adapter.GetIPProperties().UnicastAddresses)
                 {
                     if (unicastIPAddressInformation.Address.AddressFamily == AddressFamily.InterNetwork)
@@ -269,7 +274,8 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
                 {
                     properties.Add(p);
                     continue;
-                } if (p.IndexOf("MS_FRS2.TestSuiteIssueFixed") >= 0)
+                }
+                if (p.IndexOf("MS_FRS2.TestSuiteIssueFixed") >= 0)
                 {
                     properties.Add(p);
                     continue;
@@ -367,11 +373,11 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
 
     public class AutoDetectionException : Exception
     {
-        public AutoDetectionException(string message):base(message)
+        public AutoDetectionException(string message) : base(message)
         {
-            
+
         }
-        public AutoDetectionException(string format, params Object[] args):
+        public AutoDetectionException(string format, params Object[] args) :
             base(string.Format(format, args))
         {
         }
