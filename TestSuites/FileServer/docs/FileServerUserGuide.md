@@ -1,4 +1,4 @@
-# File Server Protocol Family Test Suite User Guide
+﻿# File Server Protocol Family Test Suite User Guide
 > This guide takes you through the fundamentals of using the **File Server Protocol Family Test Suite**. You will learn how to setup the test environment, how to install and configure the test suite, and how to run test cases.
 
 ## Table of Contents
@@ -272,9 +272,9 @@ All of the following software must be installed on the [**Driver Computer**](#3.
 
 	-	The test execution requires the `vstest.console.exe` utility which is installed along with either Visual Studio or Test Agent.
 
-	-	**Microsoft® Visual Studio®** provides you the capability to run test cases. Additionally it provides you the capability to update, build, debug and contribute to the test cases. You can download [Visual Studio Ultimate 2012 Trial (30 days)](http://www.microsoft.com/en-us/download/details.aspx?id=30678), [Visual Studio 2012 Update 4](http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305), or later versions of the Visual Studio. The optional components of Visual Studio are not required to be installed.
+	-	**Microsoft® Visual Studio®** provides you the capability to run test cases. Additionally it provides you the capability to update, build, debug and contribute to the test cases. You can download Visual Studio Ultimate 2012, Visual Studio 2012 Update 4, or later versions of the Visual Studio. The optional components of Visual Studio are not required to be installed.
 
-	-	**Test Agent for Visual Studio®** provides you the capability to run test cases without having to install the whole pack of Visual Studio. You can download [Agents for Visual Studio 2012 Update 4](http://www.microsoft.com/en-us/download/details.aspx?id=38186) or later versions of the Test Agent. This is recommended to be used when you only want to do some test against your own implementations and have no intention to make changes.
+	-	**Test Agent for Visual Studio®** provides you the capability to run test cases without having to install the whole pack of Visual Studio. You can download Agents for Visual Studio 2012 Update 4 or later versions of the Test Agent. This is recommended to be used when you only want to do some test against your own implementations and have no intention to make changes.
 
 2.	Install **Spec Explorer** [3.5.3146.0](<http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/>) or later versions.
 
@@ -1012,7 +1012,7 @@ Take the share named **SMBBasic** as an example:
 2.	If you want to create a directory symbolic link under e.g. share **SMBBasic**, type the following commands in the console windows, and press **Enter**.
 ```
 	cd %SystemDrive%\SMBBasic
-	mklink /D Symboliclink %SystemDrive%\
+	mklink /D Symboliclink %SystemDrive%\FileShare
 ```
 
 3.  If you want to create a file symbolic link under e.g. share **FileShare**, type the following commands in the console windows, and press **Enter**.

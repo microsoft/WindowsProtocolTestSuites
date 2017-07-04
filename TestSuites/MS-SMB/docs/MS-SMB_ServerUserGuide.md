@@ -87,21 +87,21 @@ This section describes the requirements for the test environment that are used t
 ### <a name="4.2"/>Environment
 Run this test suite in a workgroup environment that contains the following computers, physical or virtual: 
 
-* A driver computer running Microsoft Windows 8.1, 32-bit edition, with the latest updates.
-* A computer set up as a Windows-based SUT running Windows Server 2012 R2, or a computer set up as a SUT that is not based on the Windows operating system.
+* A driver computer running Microsoft Windows 8.1 or later versions.
+* A computer set up as a Windows-based SUT running Windows Server 2012 R2 or later versions, or a computer set up as a SUT that is not based on the Windows operating system.
 
 Run this test suite in a domain environment that contains the following computers, physical or virtual: 
 
-* A driver computer running Microsoft Windows 8.1, 32-bit edition, with the latest updates.
-* A computer set up as a Windows-based SUT running Windows Server 2012 R2, or a computer set up as a SUT that is not based on the Windows operating system.
-* A computer set up as a domain controller (DC) running Windows Server 2012 R2, or a computer set up as DC that is not based on the Windows operating system service.
+* A driver computer running Microsoft Windows 8.1 or later versions.
+* A computer set up as a Windows-based SUT running Windows Server 2012 R2 or later versions, or a computer set up as a SUT that is not based on the Windows operating system.
+* A computer set up as a domain controller (DC) running Windows Server 2012 R2 or later versions, or a computer set up as DC that is not based on the Windows operating system service.
 
 ### <a name="4.3"/>Driver Computer 
 The minimum requirements for the driver computer are as follows. 
 
  __Requirement__ | __Description__ 
  ----------------|----------
- Operating system|Microsoft Windows 8.1, 32-bit edition, with the latest updates
+ Operating system|Microsoft Windows 8.1 or later versions
  Memory|2 GB RAM
  Disk space|60 GB 
  
@@ -110,7 +110,7 @@ The minimum requirements for the driver computer are as follows.
  
   __Requirement__ | __Description__ 
  ----------------|----------
- Operating system|Microsoft Windows Server 2012 R2, Enterprise Edition, or a SUT implementation that is not based on the Windows operating system 
+ Operating system|Microsoft Windows Server 2012 R2, Enterprise Edition or later versions, or a SUT implementation that is not based on the Windows operating system 
  Memory|1 GB RAM
  Disk space|60 GB 
  
@@ -118,7 +118,7 @@ The minimum requirements for the driver computer are as follows.
   
    __Requirement__ | __Description__ 
  ----------------|----------
- Operating system|Microsoft Windows Server 2012 R2, Enterprise Edition, or a DC implementation that is not based on the Windows operating system
+ Operating system|Microsoft Windows Server 2012 R2, Enterprise Edition or later versions, or a DC implementation that is not based on the Windows operating system
  Services|Active Directory Domain Services (AD DS)
  Memory|1 GB RAM
  Disk space|60 GB 
@@ -131,14 +131,10 @@ The minimum requirements for the driver computer are as follows.
 
 * __Microsoft Visual Studio 2012__
  
-    You can download Visual Studio Ultimate 2012 Trial (30 days) from below website
-  
-    [http://www.microsoft.com/en-us/download/details.aspx?id=30678](http://www.microsoft.com/en-us/download/details.aspx?id=30678)
+    Download Visual Studio Ultimate 2012
   
   
-    You can download Visual Studio 2012 Update 4 or later from below website
-
-    [http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305](http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305)
+    Download Visual Studio 2012 Update 4 or later
 
 * __Spec Explorer (build 3.5.3146.0 or later)__
 

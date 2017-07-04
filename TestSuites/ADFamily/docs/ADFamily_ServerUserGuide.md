@@ -136,7 +136,7 @@ The minimum requirements for the driver computer are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft Windows 8.1, Enterprise Edition| 
+| Operating system| Microsoft Windows 8.1, Enterprise Edition or later versions| 
 | Memory| 2 GB RAM| 
 | Disk space| 60 GB | 
 
@@ -146,7 +146,7 @@ The minimum requirements for the DC are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| For Windows platform: Microsoft Windows Server 2012 R2, Standard Edition, or a DC implementation that is not based on the Windows operating system| 
+| Operating system| For Windows platform: Microsoft Windows Server 2012 R2, Standard Edition or later versions, or a DC implementation that is not based on the Windows operating system| 
 | Services| For Windows platform: Active Directory Domain Services (AD DS)| 
 | Memory| 1 GB RAM| 
 | Disk space| 60 GB| 
@@ -156,7 +156,7 @@ The minimum requirements for a domain member.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft Windows Server 2012 R2, Standard Edition, or a server that is not based on the Windows operating system| 
+| Operating system| Microsoft Windows Server 2012 R2, Standard Edition or later versions, or a server that is not based on the Windows operating system| 
 | Memory| 1 GB RAM| 
 | Disk space| 60 GB| 
 
@@ -167,10 +167,8 @@ All of the following software must be installed on the driver computer ***before
 | ------------- |
 | **Microsoft® Visual Studio® 2012**| 
 |      ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)Note| 
-|            You can download Visual Studio Ultimate 2012 Trial (30 days) from below website| 
-|            [http://www.microsoft.com/en-us/download/details.aspx?id=30678](http://www.microsoft.com/en-us/download/details.aspx?id=30678)| 
-|            You can download Visual Studio 2012 Update 4 or later from below website| 
-|            [http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305](http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305)| 
+|            Download Visual Studio Ultimate 2012| 
+|            Download Visual Studio 2012 Update 4 or later| 
 | **Spec Explorer** (build 3.5.3146.0 or later)| 
 | Spec Explorer is a model based testing tool used by test suite to design model and generate test cases.| 
 |      ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)Note| 
