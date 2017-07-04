@@ -279,7 +279,7 @@ namespace Microsoft.Protocols.TestManager.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Stop.
+        ///   Looks up a localized string similar to _Cancel.
         /// </summary>
         internal static string StopDetectButton {
             get {

@@ -107,15 +107,29 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <summary>
         /// Stop the auto-detection
         /// </summary>
-        public void StopDetection()
+        public void StopDetection(Action callback)
         {
             if (detectThread != null)
             {
                 try
                 {
+                    detectThread.Interrupt();
                     detectThread.Abort();
                 }
                 catch { }
+            }
+
+            if (detectThread != null)
+            {
+                while (detectThread.ThreadState != ThreadState.Aborted)
+                {
+                    Thread.Sleep(100);
+                }
+
+                if (callback != null)
+                {
+                    callback();
+                }
             }
         }
 

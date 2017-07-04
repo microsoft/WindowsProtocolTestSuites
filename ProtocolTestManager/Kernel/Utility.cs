@@ -304,15 +304,19 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <summary>
         /// Stop the auto-detection
         /// </summary>
-        public void StopDetection()
+        public void StopDetection(Action callback)
         {
-            detector.StopDetection();
+            detector.DetectLogCallback = null;
+            detectSteps[stepIndex].DetectingStatus = TestManager.Detector.DetectingStatus.Canceling;
+            detector.StopDetection(callback);
             if (stepIndex < detectSteps.Count) detectSteps[stepIndex].DetectingStatus = TestManager.Detector.DetectingStatus.Pending;
             if (logWriter != null)
             {
                 logWriter.Close();
+                logWriter.Dispose();
                 logWriter = null;
             }
+            stepIndex = 0;
         }
 
         /// <summary>

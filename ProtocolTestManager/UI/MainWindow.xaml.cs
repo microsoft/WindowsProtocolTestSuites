@@ -209,6 +209,7 @@ namespace Microsoft.Protocols.TestManager.UI
             {
                 this.Dispatcher.Invoke((Action)(() =>
                 {
+                    detectionRunning = false;
                     if (o.Status == DetectionStatus.Finished) this.ButtonNext.Content = StringResources.NextButton;
                     else
                     {
@@ -451,12 +452,20 @@ namespace Microsoft.Protocols.TestManager.UI
                     else if (detectionRunning)
                     {
                         //stop detect
-                        detectionRunning = false;
-                        SetButtonsStatus(true, true);
+                        SetButtonsStatus(false, false);
                         detectionFinished = false;
-                        this.ButtonNext.Content = StringResources.DetectButton;
 
-                        util.StopDetection();
+                        Task.Factory.StartNew(() => {
+                            util.StopDetection(() =>
+                            {
+                                this.Dispatcher.Invoke((Action)(() =>
+                                {
+                                    detectionRunning = false;
+                                    SetButtonsStatus(true, true);
+                                    this.ButtonNext.Content = StringResources.DetectButton;
+                                }));
+                            });
+                        });
                     }
                     else
                         BeginDetection();
@@ -552,6 +561,8 @@ namespace Microsoft.Protocols.TestManager.UI
 
         private void Item_DetectedSUT_Selected(object sender, RoutedEventArgs e)
         {
+            detectionRunning = false;
+            detectionFinished = false;
             ContentFrame.Navigate(Pages.SUTInfoPage);
             PageInfoTextBlock.Text = StringResources.DetectionResult;
             SetButtonsVisibility(true, true);
