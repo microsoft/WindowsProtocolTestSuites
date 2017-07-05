@@ -20,7 +20,7 @@ Start-Transcript -Path "$logPath\MS-AZOD-RunAllTestCases.ps1.log" -Append -Force
 # Execute Test Suite
 #-------------------------
 $endPointPath = "$env:SystemDrive\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint"
-$version = Get-ChildItem $endPointPath | where {$_.Attributes -eq "Directory" -and $_.Name -like "1.0.*.*"} | Sort-Object Name -descending | Select-Object -first 1
+$version = Get-ChildItem $endPointPath | where {$_.Attributes -eq "Directory" -and $_.Name -match "\d+\.\d+\.\d+\.\d+"} | Sort-Object Name -descending | Select-Object -first 1
 
 $binDir = "$endPointPath\$version\bin"
 $mstest = ($env:VS110COMNTOOLS + "mstest.exe").Replace("Tools","IDE")

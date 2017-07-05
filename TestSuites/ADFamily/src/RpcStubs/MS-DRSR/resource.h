@@ -6,7 +6,7 @@
 
 #define _BLDVER_H_
 #define COMPANY_NAME	"Microsoft"
-#define BUILD_VERSION	"1.0.5142.0"
-#define INET_VER         1,0,5142,0
+#define BUILD_VERSION	"2.0.0.0"
+#define INET_VER         2,0,0,0
 
 #endif
