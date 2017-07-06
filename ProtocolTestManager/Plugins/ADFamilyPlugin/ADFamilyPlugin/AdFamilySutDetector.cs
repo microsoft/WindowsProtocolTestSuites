@@ -158,6 +158,7 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
                 ptfcfg.DomainAdminName, SharedPassword, ptfcfg.PrimaryDomainDnsName));
             ptfcfg.PrimaryDomainServerGuid = d.DomainGuid;
             ptfcfg.PrimaryDomainSid = d.DomainSid;
+            ptfcfg.PrimaryDomainNetBiosName = Utility.GetDomainNetbiosName(ptfcfg.PrimaryDomainDnsName);
 
             ptfcfg.DomainFunctionLevel = pdcPingRep.DomainFunctionality;
             string mechanisms = "";
@@ -242,6 +243,7 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
                     var cdcHostEntry = Utility.GetHost(cdc.Name);
                     ptfcfg.CdcIpAddress = cdcHostEntry.GetIpAddress();
                     ptfcfg.CdcNetbiosName = cdcHostEntry.GetNetbiosName().ToUpper();
+                    ptfcfg.ChildDomainNetBiosName = Utility.GetDomainNetbiosName(ptfcfg.ChildDomainDnsName);
                     CdcExists = true;
                 }
             }
@@ -273,6 +275,7 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
                     var tdcHostEntry = Utility.GetHost(tdc.Name);
                     ptfcfg.TdcIpAddress = tdcHostEntry.GetIpAddress();
                     ptfcfg.TdcNetbiosName = tdcHostEntry.GetNetbiosName().ToUpper();
+                    ptfcfg.TrustDomainNetBiosName = Utility.GetDomainNetbiosName(ptfcfg.TrustDomainDnsName);
                     TdcExists = true;
                 }
             }

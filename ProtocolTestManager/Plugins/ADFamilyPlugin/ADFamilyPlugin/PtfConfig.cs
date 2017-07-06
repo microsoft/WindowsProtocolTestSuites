@@ -23,6 +23,9 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
         [PtfConfig("Common.PrimaryDomain.DNSName")]
         public string PrimaryDomainDnsName { get; set; }
 
+        [PtfConfig("Common.PrimaryDomain.NetBiosName")]
+        public string PrimaryDomainNetBiosName { get; set; }
+
         [PtfConfig("Common.PrimaryDomain.ServerGUID")]
         public string PrimaryDomainServerGuid { get; set; }
 
@@ -77,6 +80,9 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
         [PtfConfig("Common.ChildDomain.DNSName")]
         public string ChildDomainDnsName { get; set; }
 
+        [PtfConfig("Common.ChildDomain.NetBiosName")]
+        public string ChildDomainNetBiosName { get; set; }
+
         [PtfConfig("Common.CDC.NetbiosName")]
         public string CdcNetbiosName { get; set; }
 
@@ -88,6 +94,9 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
 
         [PtfConfig("Common.TrustDomain.DNSName")]
         public string TrustDomainDnsName { get; set; }
+
+        [PtfConfig("Common.TrustDomain.NetBiosName")]
+        public string TrustDomainNetBiosName { get; set; }
 
         [PtfConfig("Common.TDC.NetbiosName")]
         public string TdcNetbiosName { get; set; }

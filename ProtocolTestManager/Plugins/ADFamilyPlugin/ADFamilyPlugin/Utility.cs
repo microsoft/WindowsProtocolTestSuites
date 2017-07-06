@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.DirectoryServices;
 using System.DirectoryServices.Protocols;
 using System.DirectoryServices.ActiveDirectory;
 using System.Collections;
@@ -14,6 +15,9 @@ using Microsoft.Win32;
 using System.Text.RegularExpressions;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+
+using DSSearchScope = System.DirectoryServices.SearchScope;
+using SearchScope = System.DirectoryServices.Protocols.SearchScope;
 
 namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
 {
@@ -84,6 +88,36 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
         public static string GetNetbiosName(this System.Net.IPHostEntry host)
         {
             return host.HostName.Split('.')[0];
+        }
+
+        public static string GetDomainNetbiosName(string dnsName)
+        {
+            if (String.IsNullOrEmpty(dnsName))
+            {
+                return string.Empty;
+            }
+
+            string netbiosName = string.Empty;
+
+            DirectoryEntry rootDSE = new DirectoryEntry(string.Format("LDAP://{0}/RootDSE", dnsName));
+
+            string configurationNamingContext = rootDSE.Properties["configurationNamingContext"][0].ToString();
+
+            DirectoryEntry searchRoot = new DirectoryEntry("LDAP://cn=Partitions," + configurationNamingContext);
+
+            DirectorySearcher searcher = new DirectorySearcher(searchRoot);
+            searcher.SearchScope = DSSearchScope.OneLevel;
+            searcher.PropertiesToLoad.Add("netbiosname");
+            searcher.Filter = string.Format("(&(objectcategory=Crossref)(dnsRoot={0})(netBIOSName=*))", dnsName);
+
+            SearchResult result = searcher.FindOne();
+
+            if (result != null)
+            {
+                netbiosName = result.Properties["netbiosname"][0].ToString();
+            }
+
+            return netbiosName;
         }
 
         public static bool LdapPingHost(System.Net.IPHostEntry host, int port = 389)
