@@ -244,6 +244,11 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
                     properties.Add(p);
                     continue;
                 }
+                if (!rules.IsSelected("Protocol.MS-APDS") && p.IndexOf("MS_APDS") >= 0)
+                {
+                    properties.Add(p);
+                    continue;
+                }
                 if (!rules.IsSelected("Protocol.MS-DRSR") && p.IndexOf("MS_DRSR") >= 0)
                 {
                     properties.Add(p);
