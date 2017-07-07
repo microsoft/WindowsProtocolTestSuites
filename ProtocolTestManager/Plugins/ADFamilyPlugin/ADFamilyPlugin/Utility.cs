@@ -342,10 +342,9 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
                                                  .Where((s) => s.Contains("ADFamily"))
                                                  .FirstOrDefault();
 
-            Match versionMatch = Regex.Match(registryKeyName, @"\d\.\d\.\d{4}\.\d");
+            Match versionMatch = Regex.Match(registryKeyName, @"\d\.\d\.\d\.\d");
             return versionMatch.Value;
         }
-
 
         public static LdapSearchResponse LdapPing(string server)
         {

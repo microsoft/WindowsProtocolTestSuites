@@ -142,6 +142,9 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
                 ptfcfg.AdldsPort = "";
                 ptfcfg.ClientUserName = "Administrator";
             }
+
+            ptfcfg.LdsAppNc = "CN=ApplicationNamingContext," + String.Join(",", ptfcfg.PrimaryDomainDnsName.Split('.').Select(s => "DC=" + s));
+
             LdapSearchResponse pdcPingRep = null;
             try
             {
@@ -159,6 +162,8 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
             ptfcfg.PrimaryDomainServerGuid = d.DomainGuid;
             ptfcfg.PrimaryDomainSid = d.DomainSid;
             ptfcfg.PrimaryDomainNetBiosName = Utility.GetDomainNetbiosName(ptfcfg.PrimaryDomainDnsName);
+
+            ptfcfg.ReplicaDirName = String.Format(@"\\{0}\SYSVOL\{0}\scripts", ptfcfg.PrimaryDomainDnsName);
 
             ptfcfg.DomainFunctionLevel = pdcPingRep.DomainFunctionality;
             string mechanisms = "";
@@ -438,6 +443,8 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
             }
             ptfcfg.SchemaLdsTdPath = ldstddocs.ToString();
 
+            ptfcfg.SchemaOpenXmlPath = String.Format(@"{0}\Docs\Win2016-TD-XML\DS\*", installDir);
+            ptfcfg.SchemaLdsOpenXmlPath = String.Format(@"{0}\Docs\Win2016-TD-XML\LDS\*", installDir);
 
             return true;
         }

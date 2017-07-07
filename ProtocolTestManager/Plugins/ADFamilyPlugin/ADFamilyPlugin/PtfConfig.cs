@@ -35,6 +35,9 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
         [PtfConfig("Common.ADLDSPortNum")]
         public string AdldsPort { get; set; }
 
+        [PtfConfig("Common.LDSApplicationNC")]
+        public string LdsAppNc { get; set; }
+
         [PtfConfig("Common.WritableDC1.NetbiosName")]
         public string Dc1NetBiosName { get; set; }
 
@@ -139,11 +142,20 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
         [PtfConfig("MS_ADTS_Schema.LdsTDXmlPath")]
         public string SchemaLdsTdPath { get; set; }
 
+        [PtfConfig("MS_ADTS_Schema.OpenXmlPath2016")]
+        public string SchemaOpenXmlPath { get; set; }
+
+        [PtfConfig("MS_ADTS_Schema.LdsOpenXmlPath2016")]
+        public string SchemaLdsOpenXmlPath { get; set; }
+
         [PtfConfig("MS_LSAT.SUT.Server.Computer.Name")]
         public string LsatSutName { get; set; }
 
         [PtfConfig("MS_NRPC.SUT.SubnetNames.IP.V4")]
         public string NrpcSutSubnet { get; set; }
+
+        [PtfConfig("MS_FRS2.ReplicationDirectoryName")]
+        public string ReplicaDirName { get; set; }
 
         public bool EndpointPasswordVerified = false;
 
