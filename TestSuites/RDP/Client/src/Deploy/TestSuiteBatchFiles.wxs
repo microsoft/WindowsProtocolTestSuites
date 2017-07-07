@@ -1,0 +1,1781 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="TESTSUITE_BATCH_DIR">
+            <Component Id="cmpFCAAD6DD85DB25F572053095E3B64DA3" Guid="{D60C1BE6-4BE9-4D41-8933-E25BCB1B682F}">
+                <File Id="fil717144560CDD0DC9C4B88CCF4AE8F7C5" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\CommonRunTestCase.cmd" />
+            </Component>
+            <Component Id="cmpD1BBC57B5F896AE795A786A6D60C9B62" Guid="{25C9A20A-8121-45F5-8CCA-CFCE178E52CC}">
+                <File Id="filD2997FA1E3AF9BBE639301A3C098BA1D" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\Rdpbcgr_RunAllTestCases.cmd" />
+            </Component>
+            <Component Id="cmpCBAE3EF84FE9E33FC43F3BED6639A2A2" Guid="{25A44193-F7E2-437B-B65E-15680402F6AD}">
+                <File Id="filA598490B39F2B73F5BCD8CE794930183" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\Rdpbcgr_RunBVTTestCases.cmd" />
+            </Component>
+            <Component Id="cmp178E9936ED92DB681D9EBD63E311B82F" Guid="{AA1C74C1-71E5-4135-8092-4CFD433F6F00}">
+                <File Id="fil787D0B58D06A74841917B94341833DE9" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\Rdpedisp_RunAllTestCases.cmd" />
+            </Component>
+            <Component Id="cmpF6C820DA89E540D9688B4857F8498830" Guid="{96CCED97-81C4-459C-B541-889ED3AAF29F}">
+                <File Id="filB04DBBBA96760B3BF59555636D908F21" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\Rdpedisp_RunBVTTestCases.cmd" />
+            </Component>
+            <Component Id="cmpEF4152DA0B67C00073DA2FB37F8F9209" Guid="{410B1CD6-454B-4852-908C-D523DF51D5D1}">
+                <File Id="fil22F41EA6D270C04CABDD1F1D71EAA56D" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\Rdpegfx_RunAllTestCases.cmd" />
+            </Component>
+            <Component Id="cmp7B13141653AD31BD0ECACA2F09E44F38" Guid="{F622BE77-C91E-429E-A3A2-1F8966DDAAED}">
+                <File Id="fil47B1686B6590AAD3B867A61B250E41C0" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\Rdpegfx_RunBVTTestCases.cmd" />
+            </Component>
+            <Component Id="cmp5C8C6BF70151A0850E784009009625BC" Guid="{F8E1E0E1-E2AA-458C-AB07-BC6A8C56FFC1}">
+                <File Id="fil3C794F9702033D58178984EF44ED5787" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\Rdpei_RunAllTestCases.cmd" />
+            </Component>
+            <Component Id="cmp3E24545DC6FBA5A15848120B3B8F477C" Guid="{2A3EF3D8-FEA0-498B-8D62-8B4AB397DAC9}">
+                <File Id="fil3139BE6D8C08D5D5C526A55029FF08C6" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\Rdpei_RunBVTTestCases.cmd" />
+            </Component>
+            <Component Id="cmp9414226DD0DE510E92BD1F48327955F7" Guid="{6E7C97ED-287A-4C01-B944-F0C2EC0AC9E6}">
+                <File Id="filCF4AD7C209BE5BA834154A5F0659C112" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\Rdpemt_RunAllTestCases.cmd" />
+            </Component>
+            <Component Id="cmp3651917B6E6FBBD9B2DCAD76463BF57A" Guid="{B0CB5251-5F18-41B2-A2A5-391EF02F3285}">
+                <File Id="filF5D053679C7C5F5E91879C17FEFF8675" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\Rdpemt_RunBVTTestCases.cmd" />
+            </Component>
+            <Component Id="cmpC449F033F8DF8F88C6EEC8964BF2FE38" Guid="{50B3464E-EABD-4C30-8434-B4FB87B45014}">
+                <File Id="filADA9E0D1B53E2E5CFB183FAC06244A58" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\Rdpeudp_RunAllTestCases.cmd" />
+            </Component>
+            <Component Id="cmpA74FB871C8881E9AE03D5165C047BE17" Guid="{3DE1546F-353D-45E9-A0CC-A2B1BB8827AC}">
+                <File Id="fil0E177F7D76B622F551E494CD2FE53F56" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\Rdpeudp_RunBVTTestCases.cmd" />
+            </Component>
+            <Component Id="cmp2F22AAE335B366E524A8FBC41853926D" Guid="{B3C303CD-6BC4-48AD-89AF-23823968028E}">
+                <File Id="fil8D09F81642AC80E1586A84D445D9E154" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\Rdpeusb_RunAllTestCases.cmd" />
+            </Component>
+            <Component Id="cmpC7523E75C7D834889C4068ED20832F4D" Guid="{1D2CA5B3-4811-423C-BD85-080898926908}">
+                <File Id="fil38F09B598713A1A032B3AEA3B68CA25A" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\Rdpeusb_RunBVTTestCases.cmd" />
+            </Component>
+            <Component Id="cmp3C634BE70AF5D8954EB7A7DE0573C0D5" Guid="{AA97C10E-E93C-4C32-8228-ECBB6299803A}">
+                <File Id="fil676333B66F5E15567A4EF2AFA2304BBE" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\Rdpevor_RunAllTestCases.cmd" />
+            </Component>
+            <Component Id="cmp2A5D9554DE8B6F15E881097020A80CDF" Guid="{D9145534-4A6E-4124-B7EC-BBCEA3727B5D}">
+                <File Id="fil71738574B67C0FBDFDCAAF1D9F05E41D" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\Rdpevor_RunBVTTestCases.cmd" />
+            </Component>
+            <Component Id="cmpCAE50320D31A9E6E7AB47503FD169F72" Guid="{6810D708-98E6-4DD0-BF28-63496ECEECE7}">
+                <File Id="fil3313C3E838A38E2295A416BC060BC0AB" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\Rdprfx_RunAllTestCases.cmd" />
+            </Component>
+            <Component Id="cmpA5E49E3D31A37952926E03DDA7241734" Guid="{45AAD9F5-CA4A-4A3B-8490-4A0E1BD5B1A4}">
+                <File Id="fil2C8CF530204B191201A7BBAB1D1C09C4" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\Rdprfx_RunBVTTestCases.cmd" />
+            </Component>
+            <Component Id="cmp524A3D5B76F1DDD42C964F083F6CCAC3" Guid="{7004F506-4C18-4A93-AE47-C7F0035FDEF9}">
+                <File Id="fil7A0D52FB487F1579DF980A211EDC8F5A" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RunAllTestCases.cmd" />
+            </Component>
+            <Component Id="cmp8C608FCC6EDD2836B945045B1739D795" Guid="{B85368D6-8199-490A-871A-CDEE41FB7974}">
+                <File Id="filC67B528B95CC16BE8F518DA5ECFD1FE2" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RunBVTTestCases.cmd" />
+            </Component>
+            <Directory Id="dirFFE93D18AA41805A6752C0E164A8808E" Name="RDPBCGR">
+                <Component Id="cmp29A01B1D6AFD84FADADFDD1AEF4028E0" Guid="{22542026-8D2D-4A02-964A-E2C6AC096D82}">
+                    <File Id="fil0D0BB9878BBB610D05576E1CFD595945" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\BVT_AutoReconnect_PositiveTest.cmd" />
+                </Component>
+                <Component Id="cmpBB7BD578AD5E6B1463C1F9BCA8AFA7B0" Guid="{CD47CD3F-F5E0-4495-95ED-26796843530F}">
+                    <File Id="fil8D13366AD39C88CBA57E0B604704D702" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\BVT_ClientInputTest_FastPath.cmd" />
+                </Component>
+                <Component Id="cmp9524FF03087456E60F947F6F7B035B73" Guid="{DF031AA6-6C90-4186-AA4F-02D6D87DE5ED}">
+                    <File Id="filD35E201C971104A3FCFD56C31754D6DF" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\BVT_ClientInputTest_SlowPath.cmd" />
+                </Component>
+                <Component Id="cmp13F0D2688E91EFBB5A12FAE07D671710" Guid="{42ACB41A-D0CE-4889-BC8D-884D4A29430A}">
+                    <File Id="filF63C7A666BB1A27222535E9C531C0CD6" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\BVT_ConnectionTest_BasicSettingExchange_PositiveTest_ExtendedClientDataSupported.cmd" />
+                </Component>
+                <Component Id="cmpC0E934996981774A98DF7BB45FA996F4" Guid="{7C2C9FD9-AC2E-4E7A-A4E6-C57B4BBC530B}">
+                    <File Id="fil31F6D653E1E59272B7CDE4FE6127E627" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\BVT_ConnectionTest_CapabilityExchange_PositiveTest.cmd" />
+                </Component>
+                <Component Id="cmpD0A1BDAE14117CC2F57D07C08FFABF19" Guid="{4586DA6C-AE5E-4731-969B-EEFC229F8654}">
+                    <File Id="fil2A364415A696C2EF36A40FAD9FDB86BE" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\BVT_ConnectionTest_ChannelConnection_PositiveTest.cmd" />
+                </Component>
+                <Component Id="cmp0D7B81EE8A5BF37C341A502B7849F9CD" Guid="{F993728D-AAAC-4EB9-A603-1B3AC632C6E4}">
+                    <File Id="fil17D9AECA2521A02EDCAFA2F504B25BE2" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\BVT_ConnectionTest_ConnectionFinalization_PositiveTest_BitmapHostCacheSupported.cmd" />
+                </Component>
+                <Component Id="cmp1B8E85FA8372A4FD071078C94373A89D" Guid="{613430DF-E795-454D-A7B1-506503357BDB}">
+                    <File Id="fil0A8C5A95D32D91EC732DE630A61810F8" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\BVT_ConnectionTest_ConnectionInitiation_PositiveTest.cmd" />
+                </Component>
+                <Component Id="cmpA7C951C8BFC53B2D17EA6AF523ACB396" Guid="{6FA48976-FDF9-4191-8C20-C76FC351D693}">
+                    <File Id="fil9BB7B962281B90AFF339371B8B6C35B8" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\BVT_ConnectionTest_Disconnection_PositiveTest_ServerInitiated.cmd" />
+                </Component>
+                <Component Id="cmp3F2AE463BE9CA9AC162B033CFEF01E38" Guid="{495A2358-72D7-4DE1-8786-F9EA861C03B3}">
+                    <File Id="filB9921A1951FFB08DA4C523AE574D1A73" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\BVT_ConnectionTest_SecurityExchange_PositiveTest.cmd" />
+                </Component>
+                <Component Id="cmpC750E618BCC3B15E95C6AEE75C6DC6B1" Guid="{8554CC9B-74AD-4BCD-9F73-8FDBCD6FB0B4}">
+                    <File Id="filB1160B8B73668AD166634CCD205ACA2B" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\BVT_HealthMonitoring_PositiveTest_SendHeartbeat.cmd" />
+                </Component>
+                <Component Id="cmpCED1474CD345C6182332AB9BC45943F6" Guid="{5CFF5C85-6B63-4E48-B598-1C89BF46B0A4}">
+                    <File Id="fil38873EA6927F03CB73ABDDB26201079F" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\BVT_ReactivationTest_PositiveTest_BitmapHostCacheSupported.cmd" />
+                </Component>
+                <Component Id="cmp25CA70B9BB90F518A6ACFEB1DEB2D0F4" Guid="{4D82CC18-9A25-4088-A05A-62B8DB6F5D64}">
+                    <File Id="fil91574DB837821F48824B052868E3AC11" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\BVT_ServerRedirection_PositiveTest_WithoutRoutingToken.cmd" />
+                </Component>
+                <Component Id="cmp32BB44770C492A20B145E0D4F6756D20" Guid="{68155659-8247-4FDD-BF17-0D1A170EA034}">
+                    <File Id="fil9F3886F25EC9AE2CF77CC4B683A33256" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\BVT_StaticVirtualChannel_PositiveTest_CompressionNotSupported.cmd" />
+                </Component>
+                <Component Id="cmp75719BBC4107106B137B53030E889799" Guid="{84FD370B-A6B2-4EE8-8E10-ED7357E5D611}">
+                    <File Id="fil884690ECB402FBE4A51AFEEE0BD0884D" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\BVT_StaticVirtualChannel_PositiveTest_VCChunkSizeNotPresent.cmd" />
+                </Component>
+                <Component Id="cmp075F97DCF2FC85934755E6CEC49AD07B" Guid="{496E4CC5-7DE8-459F-8253-3BE4F67FCE9B}">
+                    <File Id="fil29E6A5542BBADE00AEDF1942F5D207E9" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S10_FastPathOutput_PositiveTest_CachedPointer_WithColorPointer.cmd" />
+                </Component>
+                <Component Id="cmpBDD1C5FF75238CF78BDE77157DAD857D" Guid="{3F0E9267-BC7D-49C7-80B2-F8F5733E551F}">
+                    <File Id="filD3714736061EBA452858ABD55E191E2F" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S10_FastPathOutput_PositiveTest_CachedPointer_WithNewPointer.cmd" />
+                </Component>
+                <Component Id="cmp57E0869CD7080673DDBB5474291434D5" Guid="{7E66EFDC-737B-4BBA-925F-A71600CC08FD}">
+                    <File Id="fil75180F24EA363E0841041C6C08288C2D" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S10_FastPathOutput_PositiveTest_CachedPointer_WithNewPointer_MultiCachedPointers.cmd" />
+                </Component>
+                <Component Id="cmp257F2AE8AAB78BA986089E4CA0146727" Guid="{C8DCCC0F-3309-4D7A-8462-3FB85F611B9C}">
+                    <File Id="filFA3420A29B44617784AA260CCCEE63A4" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S10_FastPathOutput_PositiveTest_CachedPointer_WithNewPointer_ReuseCacheIndex.cmd" />
+                </Component>
+                <Component Id="cmp2E9170CC183DFF2FA3219AEA2393712A" Guid="{03DC1E8F-B39D-49BD-80C8-941FC55E8320}">
+                    <File Id="filE4E7C6D30AA93FB01FE9CD3A59C2348D" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S10_FastPathOutput_PositiveTest_ColorPointer_HotSpotOnTheBorderOfPointer.cmd" />
+                </Component>
+                <Component Id="cmp5D1E4BE2DBABAC0248CE7F82A96107DF" Guid="{D2306008-DA23-4CC9-B12B-8846B23B3746}">
+                    <File Id="fil5BF18492BB4777A1E0E262F19CB5F47C" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S10_FastPathOutput_PositiveTest_ColorPointer_InitPointer.cmd" />
+                </Component>
+                <Component Id="cmp0D2B299811055681417198847F4FBA08" Guid="{FF02E3C5-ACAF-4629-B57E-D4BCE8162664}">
+                    <File Id="fil02389BF2E4DC35C73A8738A8126ACDBB" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S10_FastPathOutput_PositiveTest_ColorPointer_MaxAllowedCacheIndex.cmd" />
+                </Component>
+                <Component Id="cmp69AAFC114D70D7CFF98BEA27A5281369" Guid="{2E7E33D2-C7C6-4D59-A548-06D3F27936E6}">
+                    <File Id="fil6C106F3A17C75F614C88323BA97D287D" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S10_FastPathOutput_PositiveTest_ColorPointer_MaxAllowedWidthHeightLargePointerNotSupported.cmd" />
+                </Component>
+                <Component Id="cmpF5C89961EB8E8EA8C4C6ADAE1DD8CCCD" Guid="{061206C1-7A70-4CF1-9C95-54AA1D4FB36F}">
+                    <File Id="filC4E84CE989B00B05739EFA5AFD1CF974" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S10_FastPathOutput_PositiveTest_ColorPointer_OddWidth.cmd" />
+                </Component>
+                <Component Id="cmpDB414DC201F5351EED8213A6C4117E3E" Guid="{6A686C09-DE29-422A-820A-52EA8F2EABF2}">
+                    <File Id="filFAF8F4B1F91D82D9CAE5A17CD847CE52" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S10_FastPathOutput_PositiveTest_ColorPointer_UpdatePointer.cmd" />
+                </Component>
+                <Component Id="cmp78749C2D7FDDE292BC33BAB51C49E81A" Guid="{66013F98-F5F1-4AA5-A6CA-E885881E2928}">
+                    <File Id="fil6C8F7A7FC3879E87859488CFD155D134" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S10_FastPathOutput_PositiveTest_NewPointer_HotSpotOnTheBorderOfPointer.cmd" />
+                </Component>
+                <Component Id="cmpB6414FF6625B035CCA3B102028A925DC" Guid="{2BAEE55A-5E7A-4BF4-AB6F-04E91CDA987C}">
+                    <File Id="filD9394979B28883D46046217678364F20" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S10_FastPathOutput_PositiveTest_NewPointer_InitPointer.cmd" />
+                </Component>
+                <Component Id="cmp46CF43CAF730FB43773931093C75F7BC" Guid="{EE8290FD-0702-498A-8BFA-97E7E9E24F2D}">
+                    <File Id="fil8BFA9892CFCAABEC9F277FDD32A18852" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S10_FastPathOutput_PositiveTest_NewPointer_MaxAllowedCacheIndex.cmd" />
+                </Component>
+                <Component Id="cmpDE0ADFBFFCCFDAB6390881FE0811D684" Guid="{9A5C36D1-F9AD-4C91-B7EF-E72B36BEB4F7}">
+                    <File Id="fil85594F97950B318AD788F2D500BC29CC" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S10_FastPathOutput_PositiveTest_NewPointer_MaxAllowedWidthHeightLargePointerNotSupported.cmd" />
+                </Component>
+                <Component Id="cmp5B2FAF48F2C37C24DD6BD15240E4EE71" Guid="{D86D07CD-E1D5-4819-8B37-0AB8FA632D6E}">
+                    <File Id="filBF6C47B512A5253F765A91824422D232" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S10_FastPathOutput_PositiveTest_NewPointer_OddWidth.cmd" />
+                </Component>
+                <Component Id="cmp0CE48B4BAA317F5B171735CD51B6971A" Guid="{D0F9FEE4-EEB3-40A5-8E5A-110FED89A57F}">
+                    <File Id="fil518F241B066969F6AB0F916B180DB990" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S10_FastPathOutput_PositiveTest_NewPointer_UpdatePointer.cmd" />
+                </Component>
+                <Component Id="cmpA9D4B63D1AED73679D01A127158D4AB2" Guid="{CA539788-1112-4CB3-9752-48632418B46B}">
+                    <File Id="fil64E8E9403BA9DD978637ED2AA850CD42" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S10_FastPathOutput_PositiveTest_NewPointer_XorBpp_32.cmd" />
+                </Component>
+                <Component Id="cmp3885B76630A67E671B2B113FF407EE26" Guid="{7437CAEE-3AC8-494E-A53F-F9DA62EB7681}">
+                    <File Id="filE0F5AD00F8732B87E0A6B74372EE7AB3" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S10_FastPathOutput_PositiveTest_PointerHidden.cmd" />
+                </Component>
+                <Component Id="cmp9C1C87F7E6F59BAB630EE35B9F24417E" Guid="{46123496-452F-4C7B-B894-9A81E9BD7DCD}">
+                    <File Id="filA179448DBE827BED51BBB5561AA08B44" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S10_FastPathOutput_PositiveTest_PointerPosUpdate_PointerMove.cmd" />
+                </Component>
+                <Component Id="cmpF057B5AEA489DCBEF6FB900589223681" Guid="{A8B0E5C5-D277-4403-8318-2F4DFAE42509}">
+                    <File Id="filED4EE7CD2CECD28705B9C14C49C95764" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S10_FastPathOutput_PositiveTest_PointerPosUpdate_PointerOnTheBorderOfScreen.cmd" />
+                </Component>
+                <Component Id="cmp829692405748594D2405396A51FBAAF0" Guid="{3C55A083-796B-4291-AB07-A63A74EBCA1D}">
+                    <File Id="fil8B781F48A1B4BF9EC0046A64D7F1883E" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_BasicSettingExchange_NegativeTest_InvalidClientReaquestedProtocols.cmd" />
+                </Component>
+                <Component Id="cmpE46128BCE0BC98C1307DD6788562E4C5" Guid="{A0AF75C0-3A43-4EF6-84DB-0BA465813131}">
+                    <File Id="fil24AC2DB45E49FB97A8A63023457A6555" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_BasicSettingExchange_NegativeTest_InvalidEncodedLength.cmd" />
+                </Component>
+                <Component Id="cmpB2E506AF4DD6608672DBA4ED17EB0ED4" Guid="{5C89E410-3612-4C7F-84B9-9DD95641540C}">
+                    <File Id="filF30AD8EC6993D4095A6E0FB15B24148E" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_BasicSettingExchange_NegativeTest_InvalidEncryptionMethod.cmd" />
+                </Component>
+                <Component Id="cmpCC8B9406B5F25541D666C762CD844F5E" Guid="{02222348-0662-450F-9994-DE76BA4CF1AB}">
+                    <File Id="filA0D0D6BE88445196CA7C598DDC3E2DCD" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_BasicSettingExchange_NegativeTest_InvalidH221NonStandardkey.cmd" />
+                </Component>
+                <Component Id="cmp45B2BDB69C7B2BFAF8C1C6EA115A18AC" Guid="{191F0540-1D0C-469D-99BA-0885E61C2A19}">
+                    <File Id="fil17EBC55C355AEFA813EE89BD237855E4" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_BasicSettingExchange_NegativeTest_InvalidServerCertificate.cmd" />
+                </Component>
+                <Component Id="cmpE13673EED5FF999735484A8090EB5FBB" Guid="{0CFDE1DF-BB9B-4C15-842F-3B037F440EE2}">
+                    <File Id="fil37B0AE6CE6FF8BF4054F26E6A27F0D62" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_BasicSettingExchange_NegativeTest_InvalidServerRandomLen.cmd" />
+                </Component>
+                <Component Id="cmp7B7AEAAFB396E4DD8AED053A1636AD23" Guid="{BCE3AEA1-E001-45D9-B264-39A1A6ADF492}">
+                    <File Id="filDC714C9FE57E077A9DF482370D1571C3" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_BasicSettingExchange_NegativeTest_MCSConnectResonseFailure.cmd" />
+                </Component>
+                <Component Id="cmpE0EEBBAD379C45C9026D9865689B506E" Guid="{AD6A3288-7BCB-4035-9EAD-E1CFAF926568}">
+                    <File Id="filFE99C1B375C654312EC84909538B5038" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_BasicSettingExchange_PositiveTest_EncryptionMethodandLevel.cmd" />
+                </Component>
+                <Component Id="cmpC7C366E1CB3FFCFD8F0216DC1F98F2FE" Guid="{09411D57-BFC2-44BD-B3BE-35B9999C84C4}">
+                    <File Id="fil3083E3B1D042955E725196258A2AFF46" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_BasicSettingExchange_PositiveTest_ExtendedClientDataNotSupported.cmd" />
+                </Component>
+                <Component Id="cmp960FA818B47ED23818E4173F44B7B737" Guid="{3D14E2FE-2AC1-4559-9B77-573492DA2AA4}">
+                    <File Id="fil37A3F5EC2E0D52CE1EBA84C2D2B68FAA" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_BasicSettingExchange_PositiveTest_MCSChannelIdOfServerMessageChannelData_LessMaxValue.cmd" />
+                </Component>
+                <Component Id="cmp904823FCCA1F7972A9A747858EFF78B7" Guid="{ACEFB305-B9D6-422E-A780-0727C16AC20A}">
+                    <File Id="filDB50B5D051F3C9755C0C253736990D06" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_BasicSettingExchange_PositiveTest_MCSChannelIdOfServerMessageChannelData_MaxValue.cmd" />
+                </Component>
+                <Component Id="cmp8A4E3431A3A1D653561A9174D485881D" Guid="{B5484119-66BD-4EEF-8A02-02BDD26E3458}">
+                    <File Id="fil8F129E2756742D3D7F709EAE2626CA2D" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_BasicSettingExchange_PositiveTest_MCSChannelIdOfServerMessageChannelData_ONE.cmd" />
+                </Component>
+                <Component Id="cmp45559AB66D75FA8EEBF1B5D3DFA0AE47" Guid="{B1BB13A7-849A-4EAC-9515-830B393A393D}">
+                    <File Id="fil2EE125D3403FA067FC986D373C86A855" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_BasicSettingExchange_PositiveTest_MCSChannelIdOfServerMessageChannelData_ZERO.cmd" />
+                </Component>
+                <Component Id="cmp216B24349E52678B53F567A2D35F0620" Guid="{62F019C6-C2FA-410F-AD34-35F4B5F49F9D}">
+                    <File Id="filD13FDCFB4C32F84F4B9FA9FDF0A54E5C" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_BasicSettingExchange_PositiveTest_MCSChannelIdOfServerNetworkData_LessMaxValue.cmd" />
+                </Component>
+                <Component Id="cmp252A6716894AD2E8D8CFA972356D889D" Guid="{2502A52F-F037-4421-9BFB-DF6D26233C4F}">
+                    <File Id="fil37F457C493A611E42113975870ADAA2D" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_BasicSettingExchange_PositiveTest_MCSChannelIdOfServerNetworkData_ONE.cmd" />
+                </Component>
+                <Component Id="cmpB7FC28C7781E75F44F77A376477F5555" Guid="{39B3ABEF-CCBD-4555-B2DA-6003EB5B5198}">
+                    <File Id="fil0349D8C72145B515E818945CC20892D0" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_BasicSettingExchange_PositiveTest_MCSChannelIdOfServerNetworkData_ZERO.cmd" />
+                </Component>
+                <Component Id="cmp46FA610A73F206BEB10B198438CF4444" Guid="{F8EA59A9-C289-44A3-97D8-85572320593E}">
+                    <File Id="filC4CA42172135BA796FBBCA884A063A6A" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_BasicSettingExchange_PositiveTest_RnsUdScDynamicDstSupported.cmd" />
+                </Component>
+                <Component Id="cmp1B767F3F8098B6E8234CC7E70EF848D1" Guid="{B3B994F2-F4CA-4A85-AE39-CA8FC37033EF}">
+                    <File Id="fil419E79EB4C4785D2CD8E2A1F9A5BA579" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_BasicSettingExchange_PositiveTest_V10Server.cmd" />
+                </Component>
+                <Component Id="cmp0426AC640D7A8C5251FD76FD69EF43FE" Guid="{333F0802-4CE1-4247-805D-A71F1A39F024}">
+                    <File Id="filACC42FAAA2AA9E5E228A5C3599EB9C96" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_BasicSettingExchange_PositiveTest_V1andV2RnsUdScEdgeActionsSupported.cmd" />
+                </Component>
+                <Component Id="cmpE5EFA82411D4BA8FBB3ED787B99452D6" Guid="{25B59708-D838-43A7-8D48-37761128F2C8}">
+                    <File Id="filB0E2C48279B3D156D9D12B84115E3E1A" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_BasicSettingExchange_PositiveTest_V1RnsUdScEdgeActionsSupported.cmd" />
+                </Component>
+                <Component Id="cmp378E5750722B6E27719D10E8F6877181" Guid="{6B8F7A9F-86C1-4075-B69F-AAEE75EC2365}">
+                    <File Id="fil85D5DF60A5225B50245CA218EF599884" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_BasicSettingExchange_PositiveTest_V2RnsUdScEdgeActionsSupported.cmd" />
+                </Component>
+                <Component Id="cmpD92C0DB21D2CE1F5357918A228BBCE30" Guid="{3CA65CFA-56E7-4E26-9F48-3F182353A43C}">
+                    <File Id="fil901095FFCCC0196E1D826A8D5FB573BD" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_NegativeTest_DemandActive_IncorrectSignature.cmd" />
+                </Component>
+                <Component Id="cmpB46C1904547E4CD186A47F72D028333F" Guid="{9A621CB4-0633-4C40-AA14-8D0BF22DF808}">
+                    <File Id="fil2A113CBB4D95F92D8207815C26F7373E" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_NegativeTest_DemandActive_InvalidMCSLength.cmd" />
+                </Component>
+                <Component Id="cmpCBBF3D167A7820C1BF8E7EB1663FF79D" Guid="{A3B0B9E5-2071-4744-826C-1DA974598673}">
+                    <File Id="fil6F08CDF38D4A16429818C14913F95E8E" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_NegativeTest_DemandActive_InvalidPDULength.cmd" />
+                </Component>
+                <Component Id="cmpAB32CE9F15CD31DF02072F46B8503519" Guid="{05D6FFE9-DD35-493C-8FD3-F8415E8CB362}">
+                    <File Id="fil58AA71F2E93DB662ACB5EC206F1A2DDE" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_NegativeTest_DemandActive_InvalidTKPKLength.cmd" />
+                </Component>
+                <Component Id="cmp07BDB1D733DAF8FFBE51B6A807630625" Guid="{5E640AB4-9D1E-4691-999F-DC798984E5E6}">
+                    <File Id="fil788B178F7642EBE430728D50D01D475C" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_BitmapCacheHostSupportCapSet_NotPresent.cmd" />
+                </Component>
+                <Component Id="cmp29FD585A82871B3C5B50B3A428A80D9F" Guid="{493DC359-8484-42BA-A42E-7A821146899E}">
+                    <File Id="fil164F5EDC8E4B92F1EC44B7833489D008" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_BitmapCapSet_24ColorDepth.cmd" />
+                </Component>
+                <Component Id="cmp2A3CE6ED540E9DFAF48F46AE6B5EA5BD" Guid="{0E359959-5677-4C2D-81FC-DBB089A5E2E8}">
+                    <File Id="fil37F03D2B1284AB1F6633B025D636680F" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_BitmapCapSet_DesktopResizeNotSupported.cmd" />
+                </Component>
+                <Component Id="cmpB54202F6889127D6B34505213A9F5D06" Guid="{C21E34E7-33EF-4A2C-A86C-AB36FCAB1B38}">
+                    <File Id="fil0F1EFA1A24CA1831656D7F93CBA97734" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_BitmapCapSet_DrawingFlagsNotSet.cmd" />
+                </Component>
+                <Component Id="cmp031200F7C57B501CED650635AF49BE0E" Guid="{CB903C3D-D0A3-47CE-A7E9-A00CD5ACDD20}">
+                    <File Id="filCC9238BD914661FAD177CA86A1EC17A9" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_BitmapCapSet_MaxDesktopHeight.cmd" />
+                </Component>
+                <Component Id="cmpF892716B07CEB4B1EA32AE30809E10BF" Guid="{4B454CA2-006E-42D4-B1BC-FEEB06BA3ACF}">
+                    <File Id="fil186A84F4B49EE9885F0AD8984C05879F" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_BitmapCapSet_MaxDesktopWidth.cmd" />
+                </Component>
+                <Component Id="cmp7CE4144666A1E7D86198606B49033B24" Guid="{FE660A28-45EA-43CE-B26D-D7A82559AE4E}">
+                    <File Id="filC6030F6B1F7541808251BCCE111B55E3" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_BitmapCodecsCapSet_BitmapCodecCount_LargeValue.cmd" />
+                </Component>
+                <Component Id="cmpEE40D97F83DA99532A2C375F687A478B" Guid="{5B0CC878-4F19-4CAA-B94C-8938497E9687}">
+                    <File Id="fil66541591422C9C27689F723B07E8170D" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_BitmapCodecsCapSet_BitmapCodecCount_MaxValue.cmd" />
+                </Component>
+                <Component Id="cmp95472381E6FE9665425E681427E8C6D5" Guid="{079094E5-9713-4829-8BCE-7394E3A070B1}">
+                    <File Id="filD855DC4FE646F13CEC65E8FF081F867D" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_BitmapCodecsCapSet_NoBitmapCodec.cmd" />
+                </Component>
+                <Component Id="cmpAF054838E6C58F56DEEE171F9DEB36B4" Guid="{44569E25-6D3D-4A33-82F1-9AED910E56D1}">
+                    <File Id="fil20182FA4E224F2D78D3134EB2DDA5C8B" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_BitmapCodecsCapSet_NotPresent.cmd" />
+                </Component>
+                <Component Id="cmpBA99BAC55046264DBE704C07ADF35E73" Guid="{D3C776C2-C02C-41C8-B10D-77E7D774CF5C}">
+                    <File Id="fil4474222262535186C95B109A62E00838" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_DesktopCompositionCapSet_CompositionNotSupport.cmd" />
+                </Component>
+                <Component Id="cmpFE55DB804962A909857C6F1AA5018C16" Guid="{A7F6C193-5C4E-41A2-884C-F234892A7262}">
+                    <File Id="filCDCE71ECDD380FB0236662BDB45ED996" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_DesktopCompositionCapSet_NotPresent.cmd" />
+                </Component>
+                <Component Id="cmp4016B9FD689517C44260EB25024B3775" Guid="{46B08E91-A5FB-4E81-8B2A-B32018997219}">
+                    <File Id="fil5BB3EA451E067723E8D7A59CFE127CE4" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_FontCapSet_NotPresent.cmd" />
+                </Component>
+                <Component Id="cmp140C1B7DC3AF86F899CB597F8EF869D5" Guid="{380C38E2-D8DF-4F3E-A657-2E6478AA014C}">
+                    <File Id="filE7DFE714B96BCFD820116C34B4C23863" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_GeneralCapSet_FPOutputNotSupported.cmd" />
+                </Component>
+                <Component Id="cmp8C3A39B9E86C71DCC38CAFF3577746A7" Guid="{3C4E20CA-6C40-46C6-A8F5-64ED11B31077}">
+                    <File Id="filDAAAA32CE6FEFA1E6DAE86075CF73C1F" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_GeneralCapSet_OSTypeUnspecified.cmd" />
+                </Component>
+                <Component Id="cmpBDDEC5CD7FD9D2E5473E056C25993E85" Guid="{11AD78D5-DB5B-4BB5-8EE1-B08BD3EC5242}">
+                    <File Id="fil3B1515BB1CF5ED8D6CBEE7C27EF50A1E" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_GeneralCapSet_OSTypeWindowsRT.cmd" />
+                </Component>
+                <Component Id="cmp32F74E1715689EC0ED207032F1B95F8D" Guid="{FEA07C8A-2661-401A-AB4F-F5AFF1AA56CA}">
+                    <File Id="fil02BC6DF29447EBF0AE2D2EBB4B2C3DA5" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_GeneralCapSet_RefreshRectNotSupported.cmd" />
+                </Component>
+                <Component Id="cmpFAB7D042B4150F80059BAB672D6D8A55" Guid="{D9FD8E73-0479-4A9E-BB6A-48E73D8B5376}">
+                    <File Id="filFB03055AD393D1033BB82D437F4C7D63" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_GeneralCapSet_SuppressOutputNotSupported.cmd" />
+                </Component>
+                <Component Id="cmpB6BACA6CB424282D29EDC7D2AB1C065A" Guid="{EA31ABE7-B6F3-4F3F-A4FF-CF1B7BA02824}">
+                    <File Id="filFDD3D449F77FF27328A92B8D39A050D4" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_InputCapSet_OnlySupportScanCodes.cmd" />
+                </Component>
+                <Component Id="cmp3BBEA5B0950024DA235D80FD10F3F1F9" Guid="{41D0DA56-0E37-46BC-9094-3FE2FE2FFF23}">
+                    <File Id="filCAE06F3F0B77C3033B3B813182668E10" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_LargePointerCapSet_LargePointerNotSupport.cmd" />
+                </Component>
+                <Component Id="cmpF43C8DA445F26813CCAC7AE849B0252C" Guid="{08B1A090-A477-4DA5-8F14-28D358A374BD}">
+                    <File Id="filC3ACB24FF7B3F2B411BE6A50EFF5A80C" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_LargePointerCapSet_NotPresent.cmd" />
+                </Component>
+                <Component Id="cmp51C44323FEFE49D438FD4EF0C256A606" Guid="{8F960A75-000B-4EE9-9A63-5434EC1E099F}">
+                    <File Id="filC1DB079952A83FEA9D843D3C8CDBB361" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_MultifragmentUpdateCapSet_MaxRequestSizeLargeValue.cmd" />
+                </Component>
+                <Component Id="cmpDFEB0BAFBD52048189ECF44CA9E42865" Guid="{220E0021-8DB0-4703-8B8E-F29EBBE05729}">
+                    <File Id="fil79419FE8EB5C2F7B4449D5C6C7961E09" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_MultifragmentUpdateCapSet_NotPresent.cmd" />
+                </Component>
+                <Component Id="cmp855346BDE7387E091219404AE80E6B40" Guid="{E87446EC-4423-4E99-9288-7B2B160B3223}">
+                    <File Id="fil9332FEE457C95C7A36FE2C90EC796C74" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_OrderCapSet_ExtraFlagNotValid.cmd" />
+                </Component>
+                <Component Id="cmp6AA7AA56F0DAFD8BB8C43B790CAE6F52" Guid="{32444976-AA8D-4BE5-B95B-7CEE907BA40C}">
+                    <File Id="filE7F1730C7E9C53F9D1C8A5B00D95F0D5" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_OrderCapSet_SolidPatternBrushOnly.cmd" />
+                </Component>
+                <Component Id="cmp4BE4ADF87E906CA9A6E57FE06E0CCF99" Guid="{46B650AA-A40B-4584-9591-7CFB7A3CED97}">
+                    <File Id="fil9CECCB5D82372F2E28B0998D7A245604" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_PointerCapSet_ColorPointerCacheSize_0.cmd" />
+                </Component>
+                <Component Id="cmpC51CC458DFBA47567DD381452FBF98EB" Guid="{A586EFD2-F639-47FE-BFBA-6552C33787CF}">
+                    <File Id="fil454B6989AD63147E4BF65AD6F3D87BC9" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_PointerCapSet_PointerCacheSize_0.cmd" />
+                </Component>
+                <Component Id="cmp6C1A7FB09F82BCA63AC9D19781CDFE0A" Guid="{E527362A-477F-4F8E-B305-5F67B729ED77}">
+                    <File Id="filCBB3994B7DC932E36442CCCDB9AC329C" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_SurfaceCommandsCapSet_NotPresent.cmd" />
+                </Component>
+                <Component Id="cmp84FE4B565A20272C837D0587A48B6FD7" Guid="{2A4072B8-1ADC-4D4F-BAA9-7433AF52D1B9}">
+                    <File Id="fil7C82726E5A5D9E467D76F29E9076C8D8" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_SurfaceCommandsCapSet_StreamSurfaceBitsNotSupported.cmd" />
+                </Component>
+                <Component Id="cmpCE27701C68AF1C89B2661DCD5B051014" Guid="{E673F152-55F3-46CF-BCA2-D26DF703642A}">
+                    <File Id="fil3BA27E5B35FEFBF6F268320275FF91BA" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_VirtualChannelCapSet_CompressionNotSupport.cmd" />
+                </Component>
+                <Component Id="cmpF40C5F5B3E09B642C9477188E8AAFAAB" Guid="{A5A1C089-48AC-4FCA-87F4-7ED77C34754C}">
+                    <File Id="filA6A9CBB2EA659A69C0C29A53C4CA6A63" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_VirtualChannelCapSet_MaxVCChunkSize.cmd" />
+                </Component>
+                <Component Id="cmp5367C03ED0219AB52B0D73E72C0434AA" Guid="{4B3CC9EB-0B0D-4DB1-B626-BEDC3E06CEAC}">
+                    <File Id="fil09D6189464ED3D4A277F3E9C8506A1B7" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_CapabilityExchange_PositiveTest_VirtualChannelCapSet_VCChunkSizeNotPresent.cmd" />
+                </Component>
+                <Component Id="cmp9A53D832D64DD2E1786C7D967B0C7EEC" Guid="{3602AC32-DB76-4524-8E57-9A550D5131F1}">
+                    <File Id="fil865CC1D951B2A43E028EB4E73BFA3F07" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_ChannelConnection_NegativeTest_MCSAttachUserConfirm_Failure.cmd" />
+                </Component>
+                <Component Id="cmpD982A69E3BA7031561537AA1D24E5AAC" Guid="{E29D0420-378E-4285-87C5-7F000C92380B}">
+                    <File Id="fil4D081CB67178B27CB09942B1458F90F8" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_ChannelConnection_NegativeTest_MCSAttachUserConfirm_InitiatorNotPresent.cmd" />
+                </Component>
+                <Component Id="cmp14DEF29B3D4483DA9A6B45BCF9E4D827" Guid="{C74049A5-111B-4086-8BAE-BA9AA039AABD}">
+                    <File Id="fil9F29AEF95178EB02FE3144EE7C079328" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_ChannelConnection_NegativeTest_MCSAttachUserConfirm_InvalidTPKTLength.cmd" />
+                </Component>
+                <Component Id="cmp20D874332CDFC5E36323F24B03F38219" Guid="{121B3AD2-3232-423A-81A4-6451C5647406}">
+                    <File Id="fil6FB3FA32B80AE3FEBF31D0FCD2812E83" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_ChannelConnection_NegativeTest_MCSChannelJoinConfirm_ChannelIdNotPresent.cmd" />
+                </Component>
+                <Component Id="cmp241E121A6C5A592564F112BE9AF76688" Guid="{0BD9D3E7-1F89-4B62-9E5A-1495A23FDADA}">
+                    <File Id="fil347BA84CC5C0C048743A8FD99CAFE47D" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_ChannelConnection_NegativeTest_MCSChannelJoinConfirm_Failure.cmd" />
+                </Component>
+                <Component Id="cmp182ED8314DFF0F6A1147C4450E134183" Guid="{1DBAB2C3-D33E-4D82-9192-6CAF20704CC0}">
+                    <File Id="filEA20E31D6C3FAEAF997EB1B6E307FD64" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_ChannelConnection_NegativeTest_MCSChannelJoinConfirm_InvalidChannelId.cmd" />
+                </Component>
+                <Component Id="cmp5846EB60FCDC83CA18F509099EA3F789" Guid="{5D61F13F-5BE1-47C0-9866-E856148C40CF}">
+                    <File Id="filE01A226AC6EAC9987B570EF28DAD6142" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_ChannelConnection_NegativeTest_MCSChannelJoinConfirm_InvalidTPKTLength.cmd" />
+                </Component>
+                <Component Id="cmp8D1C2E9F977C6CF60FC0F37BE00B544E" Guid="{228B7F59-3D43-445B-99C9-77AFD5362FA1}">
+                    <File Id="fil4058B5A4AA6C7B4C1D04B5D07A80D678" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_ConnectionFinalization_PositiveTest_BitmapHostCacheNotSupported.cmd" />
+                </Component>
+                <Component Id="cmp4EC6AB4994D81A13D1E0513945FEACD0" Guid="{D387B27D-6B90-4138-90C2-CFDA22C8AF4C}">
+                    <File Id="fil09F810D8C7B9FBDF8126E20375D3A76A" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_ConnectionFinalization_PositiveTest_BitmapHostCacheSupported_sequenceTest_1.cmd" />
+                </Component>
+                <Component Id="cmpFB289BCB4DC201474008B3898E41980C" Guid="{3EA1734B-A725-49BA-81A1-58E429E3AD7B}">
+                    <File Id="filF414648C0B3CA278B9BCCE49F28A8193" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_ConnectionFinalization_PositiveTest_BitmapHostCacheSupported_sequenceTest_2.cmd" />
+                </Component>
+                <Component Id="cmp7C17B94B69E82DFC9B02DC35F216CB41" Guid="{D44555A0-36F0-4303-B096-12C9B0FEC465}">
+                    <File Id="filCF4DA7CA9C04EBAB6282061A9985D326" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_ConnectionFinalization_PositiveTest_BitmapHostCacheSupported_sequenceTest_3.cmd" />
+                </Component>
+                <Component Id="cmp55DBCC39CD4AD23744EC02B1B44A08E8" Guid="{B4F24CBC-E6BA-4F56-8500-1310D1B976E2}">
+                    <File Id="fil39F4A42817190163124A282F712A8939" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_ConnectionInitiation_NegativeTest_InvalidRDPNegData.cmd" />
+                </Component>
+                <Component Id="cmp4FA7F2FF03BA767612D256A07C008722" Guid="{26B0D6BD-8551-4CD1-B0E9-E5BFE530F425}">
+                    <File Id="filC6734BAD56A1DB421F0CC900FD5C5684" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_ConnectionInitiation_NegativeTest_InvalidTPKTHeader.cmd" />
+                </Component>
+                <Component Id="cmpEACB3F49066C57BAAFC113704202570B" Guid="{616C4B04-CABA-4368-948D-23B7B0920B3B}">
+                    <File Id="fil3CF2B849075085772885033C9C3E57BA" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_ConnectionInitiation_NegativeTest_RDPNegotiationFailure.cmd" />
+                </Component>
+                <Component Id="cmp3D7D82287F784173E091BE071F5D2B40" Guid="{FA8D36FE-B7CC-45F5-9D2D-BA40A6B5499B}">
+                    <File Id="filD039B38CE73096160BBF7F3F4DD2A1F5" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_ConnectionInitiation_PositiveTest_FlagsOfRdpNegRsp_SupportAllProtocols.cmd" />
+                </Component>
+                <Component Id="cmpF9230BCB2D5F899E7B20D773BB15AF51" Guid="{7BA03499-CF14-4EB1-9870-D449D4BD4072}">
+                    <File Id="fil6BBD2731DD4B4F3450976CBB2CC050AB" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_ConnectionInitiation_PositiveTest_HybridEXSelected.cmd" />
+                </Component>
+                <Component Id="cmp3314EF710CD7ECFED792943E0E870445" Guid="{3E4242AB-193F-43A9-A78B-7FFA44FAE946}">
+                    <File Id="fil733D1247487920CC489B5A9B3AAC1A17" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_ConnectionInitiation_PositiveTest_RDPNegotiationFailure.cmd" />
+                </Component>
+                <Component Id="cmpED259D10AE97363E4DE8F755E3C655E7" Guid="{E19AF513-78A8-48E1-8014-385D148A4219}">
+                    <File Id="filEC3A04E28D4631C23DA9CBEDD641C042" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_Disconnection_NegativeTest_MCSDisconnectProviderUltimatum_InvalidTPKTLength.cmd" />
+                </Component>
+                <Component Id="cmp749AB4D33AD6BE969ADD29D853EA55A1" Guid="{E9CAA76A-E67E-4F21-8871-869AB68F738E}">
+                    <File Id="filA4BBF16906ED5F3ECE9D5863AB1064EB" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_Disconnection_PositiveTest_ClientInitiated.cmd" />
+                </Component>
+                <Component Id="cmpFE3A7CC09C043F78D68DCEDD849DB2CB" Guid="{050F6A99-51DA-49AE-99C0-1BA31737EBE5}">
+                    <File Id="fil7FB0D5C85DAAC76084ACD2560B70C19D" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_SecurityExchange_NegativeTest_LicenseError_InvalidFlag.cmd" />
+                </Component>
+                <Component Id="cmp58461456AC311011B617FC8E610BE07A" Guid="{77E5BB07-1AFE-4288-AE67-444F1FE1CE5A}">
+                    <File Id="fil5E7BA9B5930C068E01B62ED39EF8B3AB" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_SecurityExchange_NegativeTest_LicenseError_InvalidMCSLength.cmd" />
+                </Component>
+                <Component Id="cmpA1EE118DA871EEAA16C31C894A999D2D" Guid="{52BCD8CD-A43B-4B05-8421-F71F70C5FF9F}">
+                    <File Id="fil2FF4B991054011898D744D874316C406" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_SecurityExchange_NegativeTest_LicenseError_InvalidSignature.cmd" />
+                </Component>
+                <Component Id="cmpE04624D0A2C5F21A93AACF716FCC8615" Guid="{AC3689CF-D9BC-4EE1-B5C9-BF43C2A4CB72}">
+                    <File Id="filCC8446DDBFA4AB3068B5D9BAEDAF144A" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S1_ConnectionTest_SecurityExchange_NegativeTest_LicenseError_InvalidTKPKLength.cmd" />
+                </Component>
+                <Component Id="cmpC10BC8834A2D0BA6D112CB254EC8DEE9" Guid="{74E67024-55D9-42A7-A0E6-4FC1355E1DAB}">
+                    <File Id="filE12B2DA49F5672312705795FE2BE1652" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S2_ReactivationTest_PositiveTest_BitmapHostCacheNotSupported.cmd" />
+                </Component>
+                <Component Id="cmp9DCE7FB811BE2E9F23853A94E524190E" Guid="{B5325781-5BCD-4759-AA3C-7F0C63577A62}">
+                    <File Id="fil1D41780D09823983C87929B4F5FD63AA" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S3_AutoReconnection_NegativeTest_AutoReconnectionFailed.cmd" />
+                </Component>
+                <Component Id="cmp7D58DD9A96FA9F2A2983442A76A594AD" Guid="{E06AE432-09AA-44AD-8B70-414224849610}">
+                    <File Id="fil4B0299BF80ECBBBF326EE3A09C6066A2" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S4_SlowPathInputTest_NegativeTest_ServerToClientSlowPath_InvalidEncryptFlag.cmd" />
+                </Component>
+                <Component Id="cmp646B70FA590666BCF3132628BC4D89FD" Guid="{1CF79733-58C4-4A98-AA15-AC59288E1326}">
+                    <File Id="fil1D7D37EA3E25E566554B1C23C4B28D58" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S4_SlowPathInputTest_NegativeTest_ServerToClientSlowPath_InvalidMCSLength.cmd" />
+                </Component>
+                <Component Id="cmp30FDECB93BCF7EFDDF2D31B844232092" Guid="{BE2E8E5E-F2AC-4CBF-9B83-5CBBA16C60AD}">
+                    <File Id="fil6D0C402F80F47DB7F87C0C1E2997CE99" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S4_SlowPathInputTest_NegativeTest_ServerToClientSlowPath_InvalidSignature.cmd" />
+                </Component>
+                <Component Id="cmpA2484F84CD0A8C6DB352F4974162FC79" Guid="{03D98A85-0F68-4A8A-89D4-63BF2DE83C39}">
+                    <File Id="fil160B2C3EC69AD8A9C4CEFE6C4D257AC0" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S4_SlowPathInputTest_NegativeTest_ServerToClientSlowPath_InvalidTotalLenth.cmd" />
+                </Component>
+                <Component Id="cmp99A403B35CCF8BA2FFA7BC1DC062447A" Guid="{A892F1CD-3627-44DE-AD10-AFB82EAE4A6A}">
+                    <File Id="fil5C13B229D3B3965108244CC89773F315" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S4_SlowPathInputTest_NegativeTest_ServerToClientSlowPath_InvalidTPKTLength.cmd" />
+                </Component>
+                <Component Id="cmp1E7D16377EAC23ED3F28E0B86D7DF0F7" Guid="{CC20DB8D-8740-4224-91D9-66BB22FBA02B}">
+                    <File Id="filBED18285B1588499BBBFB10D8ADB24D4" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S6_AutoDetection_ConnectTime_bandwidth.cmd" />
+                </Component>
+                <Component Id="cmpED481A8EB63F92E6A83904C640CCE03A" Guid="{AA884AC0-2C4C-4FB1-9D77-58633D3D2B51}">
+                    <File Id="fil614EF8580A81025F9F7923B0E94D10DF" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S6_AutoDetection_ConnectTime_RTT.cmd" />
+                </Component>
+                <Component Id="cmpCEA6AD2DF8EE9658B1E87E36D3AD05B4" Guid="{6C9E1C12-DA8E-47D8-8C62-469E1961690D}">
+                    <File Id="filE429CC77C99E9BDC8B7432266FADFBE3" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S6_AutoDetection_Continuous_bandwidth.cmd" />
+                </Component>
+                <Component Id="cmpDBC5D301A27C6B2118D303A8103CAFEE" Guid="{CB08F734-0592-41FA-878D-BE3B940C1FE0}">
+                    <File Id="fil1A199ADE73E4DE3464F915B139C3BD4A" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S6_AutoDetection_Continuous_RTT.cmd" />
+                </Component>
+                <Component Id="cmpFA368BD1ACA90823C03DC702B4C26115" Guid="{33D88ECA-6512-4C73-A43D-116A73C1A928}">
+                    <File Id="fil87ECD3320968A9346F4DB6926B6C1053" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S6_AutoDetection_NetworkCharacteristicsSync_After_AutoReconnect.cmd" />
+                </Component>
+                <Component Id="cmp365C5B9CC3E2DCFBAE55A01C35F7EA8B" Guid="{8180E424-640D-4688-8EB0-79971280534F}">
+                    <File Id="fil95E52C09AA7596F873B0CB5C8339288F" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S7_StaticVirtualChannel_NegativeTest_InvalidMCSLength.cmd" />
+                </Component>
+                <Component Id="cmp6D999FD5FBDE172E7F3638579B840042" Guid="{E9BCC7FA-10CD-46EE-975D-781E59D8F7FF}">
+                    <File Id="filC1A4435BD810637E85678BADCD599EFA" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S7_StaticVirtualChannel_NegativeTest_InvalidSignature.cmd" />
+                </Component>
+                <Component Id="cmp7071BC48B70909E6B5A5A2ACAC3569C2" Guid="{9C362CDB-5584-440B-8DB7-53D6E23DEDCB}">
+                    <File Id="fil3206674F7FA690CFCCBC63118E3BEEF2" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S7_StaticVirtualChannel_NegativeTest_InvalidTPKTLength.cmd" />
+                </Component>
+                <Component Id="cmp1B65B68D7A810A8296F8A2CEBA43D417" Guid="{8F8F39A1-F33F-4D0E-BE48-E4EA63BE06F0}">
+                    <File Id="filFE02CE6B695DCBDBB259326F76312423" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S7_StaticVirtualChannel_PositiveTest_CompressionSupported.cmd" />
+                </Component>
+                <Component Id="cmpBA16140009CA1552A04DABB366F63E3D" Guid="{EBFB713F-FE16-4343-A179-866E1811B357}">
+                    <File Id="fil5D2A9BA09DB26E0050BC2104CD12499C" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S7_StaticVirtualChannel_PositiveTest_VCChunkSizePresent.cmd" />
+                </Component>
+                <Component Id="cmp03729D6327916013E909E06CE304B030" Guid="{D1D91876-2144-4945-BB4C-EF4D9C070CE3}">
+                    <File Id="filB47F3D74104DE9F517DFDCB3CDF69EC7" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPBCGR\S8_ServerRedirection_PositiveTest_WithRoutingToken.cmd" />
+                </Component>
+            </Directory>
+            <Directory Id="dir4892C05606B982CD78109782A448FF8D" Name="RDPEDISP">
+                <Component Id="cmp1C9150001C69E23D758335F74AB3A270" Guid="{B4A99218-AF0F-4800-A80C-5F084718E2CC}">
+                    <File Id="fil5F6A419A5E64F89C42FCF9DB0F162A0B" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEDISP\S1_RDPEDISP_ResolutionChange_DeactivationReactivation.cmd" />
+                </Component>
+                <Component Id="cmpC7541B376BA0B6736EA03782F5D4093B" Guid="{015CED4C-9369-4014-8A38-B2FE90393D83}">
+                    <File Id="fil821BBD71CC4B16A4502495E445E097F2" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEDISP\S1_RDPEDISP_ResolutionChange_RestartGraphicsPipeline.cmd" />
+                </Component>
+                <Component Id="cmp093E3C3B43CF1CA45DCA885A6DD18341" Guid="{75BB4185-1C04-42C0-BC30-7F9954B4DF02}">
+                    <File Id="fil243083AA7FD2D7E6609A21F2E849F809" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEDISP\S2_RDPEDISP_OrientationAllChange_DeactivationReactivation.cmd" />
+                </Component>
+                <Component Id="cmpFFFBBAACEA9E79ACA56A195C37E84E88" Guid="{07124EFB-0F99-4A61-9467-8C58099B11A1}">
+                    <File Id="fil82F9772711589CD330C9006F2D4D8212" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEDISP\S2_RDPEDISP_OrientationAllChange_EnhancedAdapterDemo.cmd" />
+                </Component>
+                <Component Id="cmp36CCEBF2D26EE80858AE6845521BA42E" Guid="{EAEC30FB-4305-49B3-80A3-9E03538E20EB}">
+                    <File Id="fil17FA0FAF467B252C1E5D9206E407722E" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEDISP\S2_RDPEDISP_OrientationAllChange_RestartGraphicsPipeline.cmd" />
+                </Component>
+                <Component Id="cmp02D4DDE11D135C6D2735D34252C48F83" Guid="{91F0571F-46CC-4483-9E84-B5C585C54EEE}">
+                    <File Id="fil5B2B5224CAFA070A61C1880905F795FA" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEDISP\S2_RDPEDISP_OrientationChange_DeactivationReactivation.cmd" />
+                </Component>
+                <Component Id="cmp79C62092DCEFC090D15C6D64AFCA8687" Guid="{090917CF-3413-42C1-BACA-C1448EB2C23D}">
+                    <File Id="fil16375A37C21B8E7CCF62BF271361BC72" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEDISP\S2_RDPEDISP_OrientationChange_RestartGraphicsPipeline.cmd" />
+                </Component>
+                <Component Id="cmp07ED7ED8352826470D6C1AF03A37CD7F" Guid="{343465AD-994F-4240-9916-C021ED3D7409}">
+                    <File Id="filA11975AAF36B67AE5A2F361DE7079323" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEDISP\S3_RDPEDISP_MonitorAdditionRemoval_DeactivationReactivation.cmd" />
+                </Component>
+                <Component Id="cmpEDF4A9F5F418E2DA0909200B033CA493" Guid="{C5B179EF-5BF5-4C62-AC7D-210AEB297494}">
+                    <File Id="filB53C310007E0626CF038C8B7A39910E0" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEDISP\S3_RDPEDISP_MonitorAdditionRemoval_RestartGraphicsPipeline.cmd" />
+                </Component>
+                <Component Id="cmpBFD1006A2719B42F04B3C65504B89EE0" Guid="{CCCAE8B0-7D9C-4BD0-AEF3-9D3EB5273439}">
+                    <File Id="fil37A7B12D69FBE799CD1C9DE2BB49980A" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEDISP\S4_RDPEDISP_MonitorReposition_DeactivationReactivation.cmd" />
+                </Component>
+                <Component Id="cmpF239EAC7C399A2BD9CE1E317D5252090" Guid="{D3AE53B6-BFBC-4A1A-9DE7-F616125EB8E7}">
+                    <File Id="filD6DBB7675513D385FEE20F81F7FF3ADC" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEDISP\S4_RDPEDISP_MonitorReposition_RestartGraphicsPipeline.cmd" />
+                </Component>
+            </Directory>
+            <Directory Id="dir5E5C152B38F96569FBBB978FB494B81F" Name="RDPEGFX">
+                <Component Id="cmp003D77646F00034FEEF7234F2E0DC499" Guid="{44F29B85-254B-4D67-91C3-0ADC2F57C6D8}">
+                    <File Id="filCD4BAB16401583D16ECECA2420F92F5D" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_CacheManagement_Negative_CacheToSurface_InexistentCacheSlot.cmd" />
+                </Component>
+                <Component Id="cmp09D4DA5EB122C2AAA874AC8E97A3F9AA" Guid="{7EDF7310-7ECB-48DD-99FE-686E6AFD8DC9}">
+                    <File Id="fil6A56695C002099318F34341570308F29" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_CacheManagement_Negative_CacheToSurface_InexistentSurface.cmd" />
+                </Component>
+                <Component Id="cmp96F6CA9F851F1BD78B5A1BE7431E6A43" Guid="{BEC2B58F-5F8E-4E75-BD20-2578C70570FF}">
+                    <File Id="fil644FFF93A04C6CF516E5AD74891694CA" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_CacheManagement_Negative_Default_ExceedMaxCacheSize.cmd" />
+                </Component>
+                <Component Id="cmp7151A00F868B260250B04A46CE195901" Guid="{C72A5A05-AC32-4507-B2D1-1206E3ED5320}">
+                    <File Id="fil4B6D5663D3A094DF343FC52C6FA2CC61" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_CacheManagement_Negative_Delete_InexistentCacheSlot.cmd" />
+                </Component>
+                <Component Id="cmp9A1E0433A5D3346716720692BF2FD6EC" Guid="{1BA50D00-C58F-4D56-868A-27FDE3210130}">
+                    <File Id="fil4535EA8C60599D5D442C03684FAA0CEF" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_CacheManagement_Negative_SurfaceToCache_InexistentSurface.cmd" />
+                </Component>
+                <Component Id="cmp8A9F3E0213FCFDBFD32C2A0A536CBCEA" Guid="{F5FB4AF6-7E3C-4078-9CDD-2936F775B182}">
+                    <File Id="filB23525BBA955C78C50EF6DD97A0D38FB" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_CacheManagement_PositiveTest.cmd" />
+                </Component>
+                <Component Id="cmp36FE3E750C153521537B40DEB31F7F72" Guid="{811A0682-863E-4AB8-B2BF-391EC0BB5F47}">
+                    <File Id="fil7C45C7AE2D27E36C482BF5007AAEA23E" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_CacheManagement_PositiveTest_CacheToSurface_DestRectsBorderOverlapSurface.cmd" />
+                </Component>
+                <Component Id="cmpE84AD614747448EBE8E2DDF4C5D1852A" Guid="{731293D3-E948-4934-BD4A-44BD061D029F}">
+                    <File Id="filA7028A9E05A7AD473888F1F148942355" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_CacheManagement_PositiveTest_CacheToSurface_DestRectsOverlapped.cmd" />
+                </Component>
+                <Component Id="cmp1443C98ED4D2D9A108F4A16A6EDA8FC5" Guid="{E3229173-B7E7-4964-BB42-096FD76DFEB0}">
+                    <File Id="filF179B9BF47AEF74E4E66BCF55F6D530E" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_CacheManagement_PositiveTest_EvictCache_DeleteCacheSlot.cmd" />
+                </Component>
+                <Component Id="cmp968BDA9B46CF2FF64D2E186C45F13A3A" Guid="{54ECE140-D40B-4E12-B7CC-F9F230E0B75A}">
+                    <File Id="fil8F9A83B6B0B35A8BA1B49CF7A30C4387" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_CacheManagement_PositiveTest_OverUDP_Lossy_SoftSync.cmd" />
+                </Component>
+                <Component Id="cmp9781758C136BD4717C975B558BB17DB1" Guid="{B6D860E2-A465-4C87-B238-93B328F57159}">
+                    <File Id="fil782205C031455985F0264C4A69AA0443" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_CacheManagement_PositiveTest_OverUDP_Reliable_SoftSync.cmd" />
+                </Component>
+                <Component Id="cmpF58D781843C1EF8B30D2F5269564E29A" Guid="{8B0BD688-6DDE-4752-A8E8-CBABA450DFFE}">
+                    <File Id="fil6918F71CE8C86BC77B464DC64B647CF7" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_CacheManagement_PositiveTest_SurfaceToCache_MaxCacheSize.cmd" />
+                </Component>
+                <Component Id="cmp6ECB2C6669443B29109EE491217571B0" Guid="{9DA1EE0A-D8B2-42A6-A6F3-6E166EB54C68}">
+                    <File Id="fil58520FB1B95E8CE3907B89DCBFD132F7" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_CacheManagement_PositiveTest_SurfaceToCache_MaxCacheSlot.cmd" />
+                </Component>
+                <Component Id="cmp847ED44C4684F874255D6EBCEF71FD18" Guid="{1A75ABF5-DF25-4B32-B87F-7D533B6492CB}">
+                    <File Id="filBC02EB40D611E3B6167AA749D8667121" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_CacheManagement_PositiveTest_SurfaceToCache_SrcRectBorderOverlapSurface.cmd" />
+                </Component>
+                <Component Id="cmp129C5134B70CB14B080A6F2F70E4C8A2" Guid="{9600E71E-43E4-4C10-A832-02814F794CDE}">
+                    <File Id="fil998BC816CCAA5B2DF77F2880304E74D4" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_CacheManagement_PositiveTest_SurfaceToCache_UpdateCache.cmd" />
+                </Component>
+                <Component Id="cmpDBAC7EFBB2A9225DE5D50848950F7154" Guid="{ABD8E766-22E0-4E78-8A4A-69C3F5DA84F4}">
+                    <File Id="fil525FBBEC3E8CA87EAE12E52D6AAF300F" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_CapabilityExchange_Negative_IncorrectCapsDataLength.cmd" />
+                </Component>
+                <Component Id="cmpFDFA33AB682A22F6DF848190461723AC" Guid="{625B378E-6B4A-43C2-A504-EBB91F49964A}">
+                    <File Id="filB916C490A56E81EB1301CA5C21D89D4A" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_CapabilityExchange_Negative_IncorrectVersion.cmd" />
+                </Component>
+                <Component Id="cmp7A5EE79CAFC7259AF2B350E7C02E9678" Guid="{4BAEC00E-22F4-4573-9235-2A8948DADF22}">
+                    <File Id="filBC670A2406B12405402F8F30581BB1BA" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_CapabilityExchange_PositiveTest.cmd" />
+                </Component>
+                <Component Id="cmp7957E68647FD5C4690A7A8E9E25C472F" Guid="{7F69ECEE-9D62-4688-949B-9AE7ABF8141A}">
+                    <File Id="fil9790D11C780C309FDF39899659F2458F" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_NegativeTest_AbsentRunLengthFactor2.cmd" />
+                </Component>
+                <Component Id="cmp10FB9919059F1D361D01E24F5B96A857" Guid="{A59B5493-BB35-414A-BAE0-8D1F9B5AEC86}">
+                    <File Id="filA32CAE7283D4FFE1D8F4CFCAF2AFF532" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_NegativeTest_AbsentRunLengthFactor3.cmd" />
+                </Component>
+                <Component Id="cmp27738CF62380FC57CDE4E08B6FD597CD" Guid="{D5176F33-4A55-4A45-A551-CF0CF6107860}">
+                    <File Id="filF57E51518141E8F833B10C3DFCC18571" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_NegativeTest_GlyphHitFlagSet_GlyphIndexFlagNotSet.cmd" />
+                </Component>
+                <Component Id="cmp2E99AD1C1C3B8B52C95C27B95DD5B91B" Guid="{06C580A0-BCBE-470C-AA56-8585BBFC9FF6}">
+                    <File Id="fil6BB50A647FEA57AA4F4FCDD2B8D01037" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_NegativeTest_GlyphIndexHitSet_CompositePayloadExists.cmd" />
+                </Component>
+                <Component Id="cmp91E55DC46778DAFD7868469CEED47F50" Guid="{454FBC34-8EDF-4A25-ADC8-D01D7EDCF1D8}">
+                    <File Id="fil69A25EA4CB7BB28CF2C003FEFD29DB5E" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_NegativeTest_RedundantRunLengthFactor2.cmd" />
+                </Component>
+                <Component Id="cmp8EB75E68C76243275CA0A8655C75E1BC" Guid="{BDFA1DDD-323D-4B19-8E6A-C78608BB7D7F}">
+                    <File Id="filCEDB2546BB04A2E580A2B589C5EEE991" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_NegativeTest_RedundantRunLengthFactor3.cmd" />
+                </Component>
+                <Component Id="cmp71575518A08FA0EEEE6C876EDD3067EF" Guid="{FF2CBF77-0A4C-40FE-A28D-4B1866BB0AE9}">
+                    <File Id="filF16B8E0F8E4E05002B72D1D6E1952D0F" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_NegativeTest_SubCodecRLEX_EncodedBytesTooMuch.cmd" />
+                </Component>
+                <Component Id="cmp8C6374BF3443A232119810E3533D9941" Guid="{C9C72BF6-1D0E-479C-B23E-F715B6F1867A}">
+                    <File Id="filD9C8880603339F41F9E23DF415CABD1E" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_NegativeTest_SubCodecRLEX_IncorrectPlatteCount.cmd" />
+                </Component>
+                <Component Id="cmpB8213914C16F81F4D5BDBFDF847C0CC4" Guid="{291AA5AE-5B59-4D12-BAB3-D05938330BEC}">
+                    <File Id="filD37523C9B338296B7EDECC4E2F9A700D" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_NegativeTest_TooBigBandHeight.cmd" />
+                </Component>
+                <Component Id="cmp73D6CE73D328CE6948CDEF145D1FB8F4" Guid="{768EC026-E27C-4A62-8DA2-1758844C4E72}">
+                    <File Id="filD580B9D22EABAA3D3A7E45C2CC98613D" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_NegativeTest_TooBigGlyph.cmd" />
+                </Component>
+                <Component Id="cmpEA52429178D84BEFAE7921B899AEAE00" Guid="{014E2B77-2FDC-4B7D-AA55-0FC605A18EBF}">
+                    <File Id="filE72D4E4EB2FB99A340048B4C2392F099" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_NegativeTest_TooBigGlyphIndex.cmd" />
+                </Component>
+                <Component Id="cmpEF43FC4837A83346F757EFAB47FD6724" Guid="{04EAFD8D-651B-4449-92A9-97AFD4BE225D}">
+                    <File Id="fil08E7AFAC0E9317CEF4A23ACCCB01510B" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_NegativeTest_TooBigHeightBitmap.cmd" />
+                </Component>
+                <Component Id="cmp76AF179135009F5EC15FB8E94C99582B" Guid="{06E6B87A-6AE7-4761-A5F6-EC797DADB0B8}">
+                    <File Id="filD8FA1A11AE6AC455BDF8C4C6537F84EA" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_NegativeTest_TooBigWidthBitmap.cmd" />
+                </Component>
+                <Component Id="cmp3A9C34FF8DE09143A8597C0929D9F555" Guid="{CC63D83C-BF59-407E-8C6A-22F8BA899EFC}">
+                    <File Id="fil2BCD9DFF53CAA0F74931511311D38AC7" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_NegativeTest_TooMuchGlyphSlot.cmd" />
+                </Component>
+                <Component Id="cmpABAE962E1290C0A01FF5F9CC344016DC" Guid="{911F6807-95D0-466E-9323-03FC8B4367A6}">
+                    <File Id="filEF12D62341D772D1C6E647996926C2AB" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_NegativeTest_UnusedGlyphIndex.cmd" />
+                </Component>
+                <Component Id="cmpD7C0B391915261D5D464DC5AB2A57B50" Guid="{685D7A1A-8D93-44C7-ADE6-F6E09D91BE62}">
+                    <File Id="fil783409FA10A403B09CD723A17C10F0D4" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_PositiveTest_GlyphHitEnabled_DiffRect.cmd" />
+                </Component>
+                <Component Id="cmpEE3F391D367C97E8F4BAE86EBFAF4BD4" Guid="{965AB2F3-9597-44A9-883A-53651A7A2150}">
+                    <File Id="fil688DB3BBD5CE285D069DACB011104F0F" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_PositiveTest_GlyphHitEnabled_SameRect.cmd" />
+                </Component>
+                <Component Id="cmp5DFE353B6C0FA7171C37D58E0C271C74" Guid="{185A8349-4423-430D-94FF-4060C94146C6}">
+                    <File Id="fil7F7E6F5DB0066203C9AA675CAD6228E4" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_PositiveTest_GlyphIndexEnabled.cmd" />
+                </Component>
+                <Component Id="cmpF7BF7BF54514CEA54E35D0EBDB9AC379" Guid="{15443BAD-5C81-40FE-A8DB-9790FE62229B}">
+                    <File Id="fil72A2531A2959C3EC3AA496909A1CD2F8" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_PositiveTest_MaxBandHeight.cmd" />
+                </Component>
+                <Component Id="cmpBC5D3BAD884DF4ECC8AF5577366B6143" Guid="{F7A63B8A-0C20-486D-95FD-01ECDE5740B5}">
+                    <File Id="filF93142BF6B2F3FFDAEE32C36F2CECD9A" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_PositiveTest_MaxGlyphSize.cmd" />
+                </Component>
+                <Component Id="cmp50195FE1DD032E25B6B17CB5CDDF18D9" Guid="{8BFEA704-EDF9-4B74-B065-38986B470C13}">
+                    <File Id="fil10739936E2CA966265B7C189A8F42958" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_PositiveTest_MaxHeightBitmap.cmd" />
+                </Component>
+                <Component Id="cmp30471EFE96DF8A2D151B487B518EAFF1" Guid="{5D9711B5-3A7F-4AA1-B3F7-BE961260652F}">
+                    <File Id="fil622ABE0F059360B1F4760DD130D551F2" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_PositiveTest_MaxNumGlyphSlot.cmd" />
+                </Component>
+                <Component Id="cmp9573AFA4187BAD9CEC360024FC11B105" Guid="{64EA2211-F197-4405-A202-31487F5AF90B}">
+                    <File Id="filEE58787415F1A45DAFA53EF3257BF18F" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_PositiveTest_MaxWidthBitmap.cmd" />
+                </Component>
+                <Component Id="cmp4FFEA4D83798002168C03144C31A3B21" Guid="{DE4F9D72-6D3E-4E51-9EE1-508437C81095}">
+                    <File Id="filC9972EBF59E2CE1A944FC9B659A988F8" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_PositiveTest_MultipleBands.cmd" />
+                </Component>
+                <Component Id="cmpC4F8A185F6B25D54A75D6949D8ACB8BD" Guid="{CBCDC069-342F-46FF-B6BD-8055F3C10494}">
+                    <File Id="fil43B19038E6BDBE1A3AE1550C26B68CF5" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_ClearCodec_PositiveTest_MultipleFramesPduWithCache.cmd" />
+                </Component>
+                <Component Id="cmpFDE9FC9F7F792D9D97E2B8B83075B74E" Guid="{6912FABE-B48F-48C3-AF09-55E14A36C580}">
+                    <File Id="filEACB94EE7FEBF0EEECADB6A23902B493" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_PositiveTest_MultipleSubCodecArea.cmd" />
+                </Component>
+                <Component Id="cmp667EDF0AF85E35102199167313039E12" Guid="{15D6962F-B5B9-4C04-BCDD-64DE6A0F9687}">
+                    <File Id="fil03EBA9C6654226A4D3152ED2029859F9" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_PositiveTest_NotResetVBarCache.cmd" />
+                </Component>
+                <Component Id="cmp37880AA89AD9EC27518BDEAA968E5898" Guid="{EA458364-5FBF-4FDB-AE68-6E863BD22953}">
+                    <File Id="fil00BAB78F7FCFA140B6A5EB615F0CF8AD" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_PositiveTest_ResidualBandLayer.cmd" />
+                </Component>
+                <Component Id="cmp6CEA4F3E2194B07CBD9138EDE5342F7E" Guid="{AF6861AD-FE56-4809-9104-E6D41837DB0E}">
+                    <File Id="fil53ED81FC3219C5B81BAB553A9E313F86" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_PositiveTest_ResidualSubcodecLayer.cmd" />
+                </Component>
+                <Component Id="cmp7F4DD6B30BDC19D8948336BDC8C4245F" Guid="{BC3C4ADC-221A-4626-BDB4-6F431FD60746}">
+                    <File Id="fil0FF10A1FC9196F7CE532631346B1DDD4" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_PositiveTest_Residual_ZeroRunLengthFactor.cmd" />
+                </Component>
+                <Component Id="cmp4D3B78900D634C276628E6C20DD2BA83" Guid="{5601B6C1-62D6-4F2A-B21E-05BEEAE13650}">
+                    <File Id="fil45CA637D976F34BB47D9BFA68C5CBEA9" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_PositiveTest_SubCodecUncompressed.cmd" />
+                </Component>
+                <Component Id="cmpDB773BAFDD411E31B8C15C35427B54FB" Guid="{25416DD4-4568-411A-927B-FE8F7FB5B1A9}">
+                    <File Id="fil9003B3B29900C98FDDB5DAEDA017CFF9" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\Rdpegfx_ClearCodec_PositiveTest_Subcodec_MaxPlatteColor.cmd" />
+                </Component>
+                <Component Id="cmp3F9884B0E6462463BC9EE1BC1BDB888C" Guid="{9EE62F23-DD3C-4A79-A3EA-057AAFA6D281}">
+                    <File Id="filD51B7206BC68C493FF73F251D584A345" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_Compression_Negative_IncorrectCompressFlag.cmd" />
+                </Component>
+                <Component Id="cmpC063531D0F838820F621224442D696CB" Guid="{B61430BD-6641-4D39-939B-3C447514F4AF}">
+                    <File Id="fil5826E55F38D14EA073A0158A04216D7E" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_Compression_Negative_IncorrectCompressType.cmd" />
+                </Component>
+                <Component Id="cmpE9D2F1FA2B226AF00C2F5FA22B699490" Guid="{C39D182A-912C-49EF-985D-0709332EE27E}">
+                    <File Id="fil41C0060FAB3140BB65CDAAA7ED91E900" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_Compression_Negative_InvalidCompressPdu.cmd" />
+                </Component>
+                <Component Id="cmpF6F87C2B808C6227BB4BC9F341326476" Guid="{D6F836E2-28C0-4766-B304-E57268F7DAD8}">
+                    <File Id="filD2BEB62575C11ECB9E630DAFBBB8A853" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_Compression_PositiveTest.cmd" />
+                </Component>
+                <Component Id="cmp210E02FA2459D361DE9838E3AB4D2667" Guid="{48B8F06A-6B6B-4F2B-B5BB-5304D29ECEFA}">
+                    <File Id="fil41ED8E06074F9FA44631A801895C1EF6" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_H264Codec_PositiveTest_AVC420_BaseProfile.cmd" />
+                </Component>
+                <Component Id="cmpCC4F5352C239B7A6DDB17FE33369632C" Guid="{627299CF-B1D4-4D5D-802B-33173D3E5A9A}">
+                    <File Id="fil8A9488D103BF17CEADC6C2815F77366D" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_H264Codec_PositiveTest_AVC420_HighProfile.cmd" />
+                </Component>
+                <Component Id="cmp98CF240D604645075B63A3C05A1CC7D3" Guid="{0D63C653-BD6A-41FF-BC8B-AAF59242A77E}">
+                    <File Id="filDA0B7DC435E0886E57809127561303B1" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_H264Codec_PositiveTest_AVC420_MainProfile.cmd" />
+                </Component>
+                <Component Id="cmpA58C9A1F01FD8277EC1E2FEA1FA251A8" Guid="{D4A78F9B-B86C-492A-A2A4-901EAD49FAE6}">
+                    <File Id="fil05303B086107EA1D1BDB53EB72CD48CD" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_H264Codec_PositiveTest_AVC420_MainProfile_CABACEnabled.cmd" />
+                </Component>
+                <Component Id="cmpD3B9CA22872D592AAAA1D3B16459921D" Guid="{26405F15-9FF2-4393-A48E-6991D4E82999}">
+                    <File Id="fil8281D1777089D9AAB77A79A8A83D14AE" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Chroma420Separated_MainProfile.cmd" />
+                </Component>
+                <Component Id="cmpA519750C48EE1A2F84C253B2DAF5D460" Guid="{ADD408CA-C6B2-487F-A949-AE86F02BD7A0}">
+                    <File Id="filF26B33C8989DDA8BA2416EDC2D1D0904" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Chroma420Together_MainProfile.cmd" />
+                </Component>
+                <Component Id="cmp38C50F5AEF94A6B8F04BEC66CDA8B4CD" Guid="{90EE301D-4F08-4372-883B-2EF4AE417AF4}">
+                    <File Id="fil6B099000C67C3781029D9653B30370F8" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Chroma420Together_MainProfile_LargeSize.cmd" />
+                </Component>
+                <Component Id="cmpD2F40FE96CB3DADADF6BF9A6C8F02EC8" Guid="{C4FC46E0-965A-40A9-9EC6-565D5BE47AD0}">
+                    <File Id="fil61179F22CD51DB0FF61A87630DC65811" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_BaseProfile.cmd" />
+                </Component>
+                <Component Id="cmp22323E683E522F426F1753F2791CDF52" Guid="{8C9443B4-6433-4F90-8AF9-4DF14C5289D3}">
+                    <File Id="fil9A2A2C16B7B7E66195DDB6E925DAD61F" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_HighProfile.cmd" />
+                </Component>
+                <Component Id="cmp7E467005B297D44F3367CCE7F5010AFD" Guid="{D72C6914-9402-4EC9-9D55-3BC737B3625F}">
+                    <File Id="fil476DA47924940389507B498A575F8977" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile.cmd" />
+                </Component>
+                <Component Id="cmp21640DA828DFACA0B60D9E29527F868D" Guid="{EF62D45A-EF6D-4735-BE41-B35650DC1F28}">
+                    <File Id="fil6DB8F6CA0FDEF70ACEF8548641C5B948" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile_CABACEnabled.cmd" />
+                </Component>
+                <Component Id="cmp2301C5838C741264121A982400518E10" Guid="{BD671EDB-0FDA-49AB-B784-EA5F055A3E91}">
+                    <File Id="filBA3FD55CC42BE3BF1E627A3BCA188D46" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile_ISliceOnly.cmd" />
+                </Component>
+                <Component Id="cmp9E0A7FF9FC3212D9ADEACD488F61C551" Guid="{70D5FF55-F115-481F-9AF6-1DF786493781}">
+                    <File Id="fil1FDDC28F860C6BD64B0D7E4185C3A177" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile_LargeSize.cmd" />
+                </Component>
+                <Component Id="cmp4276354A2F1993186A376EAD371C8EFA" Guid="{E33341C8-440F-4DB6-9470-FBFCAFC9FF25}">
+                    <File Id="fil3514BA2EBEB4C7A6EF6AC12ABD9BAC8C" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_H264Codec_PositiveTest_H264Support.cmd" />
+                </Component>
+                <Component Id="cmpF0EFE5B0BFBD1E9907A09673CC980480" Guid="{4C91ACF5-9F0E-4B3F-ABB9-0650FA1B958D}">
+                    <File Id="filCD9C6C99FDB7A98FE5057EE1D19F3EC7" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RemoteFXCodec_PositiveTest_ImageMode_RLGR1.cmd" />
+                </Component>
+                <Component Id="cmp370E9C957FDC51F8E6945B67E0261508" Guid="{A3874B27-5DC5-4D13-BD0C-8E872EA250DA}">
+                    <File Id="fil750E3FAEF00CA701903C1414A50F9A8E" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RemoteFXCodec_PositiveTest_ImageMode_RLGR3.cmd" />
+                </Component>
+                <Component Id="cmp0473E2F44D52E6DE019511B3929AA75A" Guid="{305D8F8A-6F9E-483B-B048-2A774819E4BB}">
+                    <File Id="filFD3FDC8F75F0C4BFD6E26CD4D8ABE69B" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RemoteFXCodec_PositiveTest_VideoMode_RLGR1.cmd" />
+                </Component>
+                <Component Id="cmp2BE82C91CB59BFBD69570DAB9FDB4C1D" Guid="{313A07DC-A673-4A84-9780-DF6F457AF21F}">
+                    <File Id="fil28CBB88548522131831D3E0FDDB013A7" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RemoteFXCodec_PositiveTest_VideoMode_RLGR3.cmd" />
+                </Component>
+                <Component Id="cmp8A7A85BBBDA9A38EE14435205370154E" Guid="{EAF8DA6B-F6A9-49A8-B9BE-C38FC9DDDCC6}">
+                    <File Id="fil5DCE4D5B51CADFB93006F346EF9FF58B" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_ContextBlock_IncorrectLength.cmd" />
+                </Component>
+                <Component Id="cmp764657F9670E185EBFA38FE22949C5AE" Guid="{D6B94C46-A491-42A8-9D00-15C5EA9A7C65}">
+                    <File Id="filD8731DD2CFBE8B23C0EB935ED5B38F81" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_ContextBlock_IncorrectTileSize.cmd" />
+                </Component>
+                <Component Id="cmp13CC464C8BB916A7A662A4F77040B5E1" Guid="{FCEC4957-08B0-4138-94C9-178480D6DD49}">
+                    <File Id="fil9A733267A240103C9FA2572E04ACE53E" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_DeleteContextFromInexistSurface.cmd" />
+                </Component>
+                <Component Id="cmpF23AA5EE252BF3C24212F5141F51E453" Guid="{870D5F7A-61E3-41F5-A715-C6314B32ED78}">
+                    <File Id="fil34D73002E99A87086F7FB1FE4223CD6E" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_DuplicatedFrameBeginBlock.cmd" />
+                </Component>
+                <Component Id="cmp5A047B17FE024A5A1B4E3C16418C3636" Guid="{A51AF6BC-38BA-49DE-A572-CCBB6DE7CDD3}">
+                    <File Id="fil0F43C47C4349EEADF08B95370E4EDC99" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_FrameBeginBlock_IncorrectLength.cmd" />
+                </Component>
+                <Component Id="cmp50F3AE64C76AE88FC87178602DDD59C3" Guid="{28573E7F-271D-4277-B66B-414B6F5D87B0}">
+                    <File Id="fil8A8AB326C075487B5E956320378D53BB" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_FrameEndBlockIncorrectLength.cmd" />
+                </Component>
+                <Component Id="cmp0A50E858969C6EDB74FE587D8CDCC73B" Guid="{16520635-DC1D-4CC8-846A-44707FE890BE}">
+                    <File Id="fil9538BDF81C2A6313C4DC21A043856C06" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_InexistSurface.cmd" />
+                </Component>
+                <Component Id="cmp9844EE95926AB0EF5A0AD1E8E8676BC6" Guid="{95CCC72E-5E85-4CC2-9991-5466A297CB71}">
+                    <File Id="fil44A08711BEE0CDC4CD6FD336DCB0A0A3" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_MissedFrameBeginBlock.cmd" />
+                </Component>
+                <Component Id="cmpEF7042256E28F7951FB229470CEEF7DE" Guid="{9094350A-A3F9-4D5D-9F3D-70D12C972071}">
+                    <File Id="fil07BF2ACE9898EAAB65E256B307730773" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_MissedFrameEndBlock.cmd" />
+                </Component>
+                <Component Id="cmp974CCAA17CF2D0861A1017ED33E99CB8" Guid="{276A6337-ABE8-4867-BE4C-FA3093411CBD}">
+                    <File Id="fil33615848B5A2B1119636506AEC4F329A" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_NestedFrameBlock.cmd" />
+                </Component>
+                <Component Id="cmpD4CD5D46EA9C2DF829ADDCCA75F06213" Guid="{863E6D8C-A6EF-44F7-85BE-C338DFBFB01E}">
+                    <File Id="fil198D21E0725CA093CAB651497C3BDD93" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlockNumberMismatch.cmd" />
+                </Component>
+                <Component Id="cmpBDC94C3A0A3D2C01DA59758B4DCC700A" Guid="{1C699211-A564-45DE-B987-BC536A88B711}">
+                    <File Id="fil69D9BD3253991C643A57D7440B873839" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_BeforeFrameBeginBlock.cmd" />
+                </Component>
+                <Component Id="cmpB3E106AC090B3517B0C6FC8460817C43" Guid="{E9C8FD36-9549-48DD-8BEB-8200F1E10EC8}">
+                    <File Id="fil4A8AC84487CA5ECAF695759F066B4145" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_DeleteInexistContext.cmd" />
+                </Component>
+                <Component Id="cmp04AACAA0753F93C97670CE478ABE4B98" Guid="{E12FAEEB-4EF6-414C-84ED-73FD450D5CDA}">
+                    <File Id="fil83F494914180C8AFF1C4240564876880" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_IncorrectLen.cmd" />
+                </Component>
+                <Component Id="cmpF327A4ED780D50D60DEB8EEAA8C34501" Guid="{2FB54A16-C07C-4DD8-B475-CAAC12F9C5AB}">
+                    <File Id="filC38FE4C3FBCEDD4C5149B5460B07FE85" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_IncorrectProgQuantNumber.cmd" />
+                </Component>
+                <Component Id="cmp4FE45ED4171875E00366A9A74B037DFC" Guid="{CF4A4B04-3B95-490F-BA67-B4964ED66BB7}">
+                    <File Id="fil26736E0A299D00B29556A4E5048F4DAD" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_IncorrectQuantNumber.cmd" />
+                </Component>
+                <Component Id="cmp397B82BC77626F3F9FE93C5C6EDB6042" Guid="{88BCE6A7-3D05-47C2-AB34-7B792FD7D097}">
+                    <File Id="fil6C2692228D0641BE6C3F282A9DF8B69F" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_IncorrectRectsNumber.cmd" />
+                </Component>
+                <Component Id="cmp798D32B439FFA6AB809C8D87D07B69FC" Guid="{850752CD-C430-4979-B9A0-4A0CD60DB88C}">
+                    <File Id="fil59C42183E5077D26FEDF4736D876E48C" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_IncorrectTileBlockNumber.cmd" />
+                </Component>
+                <Component Id="cmpD88A6B555CF21B8E4FDB0FD5CA3AE4F9" Guid="{0DBC691E-F6E3-44C7-8FA6-071D0E1BDF12}">
+                    <File Id="filDA4472C31500480AEFEBE08C17496D00" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_IncorrectTileSize.cmd" />
+                </Component>
+                <Component Id="cmp8ABE76D070FC820A70E24D2E8AD734BE" Guid="{1CC0D191-8798-4F6D-964B-F374A8CEBDF0}">
+                    <File Id="filE0F398156F5A739D76C676C23348A092" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_InvalidTileBlockType.cmd" />
+                </Component>
+                <Component Id="cmpAFE7BB8A45696FF9A630FA01E3CC16D0" Guid="{00F57BE5-BBC3-4468-9172-9CDC48B99BA9}">
+                    <File Id="fil9B3638713695987F6D7DDC661DA8E841" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_ZeroQuantNumber.cmd" />
+                </Component>
+                <Component Id="cmpCF5053852BF9DBAEECD1E0CFD3DA413B" Guid="{EE8A4076-2253-4E5E-AD4E-571BC1E4F043}">
+                    <File Id="fil98540942C327FF2A6C5CA5050682CBC4" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_ZeroRectsNumber.cmd" />
+                </Component>
+                <Component Id="cmpEF42757A87A9AE54416B2BC056F75014" Guid="{2E67FCDA-85CC-4281-BBB4-1529A1B3F326}">
+                    <File Id="filB66FB3FEADE6343A229F522A49B3032B" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_NegativeTest_SyncBlock_IncorrectBlockLen.cmd" />
+                </Component>
+                <Component Id="cmp0EC777FD34A5BAD8337BD3FE59A66E7F" Guid="{5CFB1323-A7DD-4745-BDDE-B7CD9365321D}">
+                    <File Id="fil4141288AAB09DF9C3718E8FD8F67CA5A" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_PositiveTest_DeleteContext.cmd" />
+                </Component>
+                <Component Id="cmpA5DF9B22803CD58EAD732BFD0E541DC6" Guid="{23658949-B356-47AE-A8DB-3F37C66536DC}">
+                    <File Id="fil031BE0AB4DC0BCA4DCF2EF5F3C455940" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_PositiveTest_NonProgressiveEncodingWithTileDiff.cmd" />
+                </Component>
+                <Component Id="cmp8C3730D09DE15DEE9D0C250EB2638FFF" Guid="{C16C801B-0147-4FA2-9E7F-521170414434}">
+                    <File Id="filFFD2A8A5270A9232BD7D951781A37619" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_PositiveTest_NonProgressiveEncoding_Default.cmd" />
+                </Component>
+                <Component Id="cmpEBAE46FF10C5BA8F04E62DD3D5B500A5" Guid="{52DC9C29-CF00-4127-B1AB-044ABC7E4B62}">
+                    <File Id="fil78921B075244FF49C773AC8D01CE7A2D" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_PositiveTest_NonProgressiveEncoding_ReduceExtrapolateDisabled.cmd" />
+                </Component>
+                <Component Id="cmp5D1C473C9C5EF09F60D32050AA1AC3EE" Guid="{90C91FAD-B72F-4FC4-A0DB-AC6DD7477E6D}">
+                    <File Id="fil95EF01D099F5C2EFF61C2D792081476D" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_PositiveTest_NonProgressiveEncoding_SubBandDiffDisabled.cmd" />
+                </Component>
+                <Component Id="cmp5C8B93D30505A3B6DAAE5B3D7473B14A" Guid="{BEC887C8-ADC2-490C-A753-F930D7360992}">
+                    <File Id="fil7CFABE23DE2500BA1ACFE78BC4749530" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_PositiveTest_NonProgressiveEncoding_SurfaceNotTileAligned.cmd" />
+                </Component>
+                <Component Id="cmp87E62E912B3F71D6F38BBA9B44B721B4" Guid="{0E006576-59ED-4C41-B499-2091AAACD529}">
+                    <File Id="fil5BED9694F6913EE9687675CC68239F97" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_PositiveTest_ProgressiveEncodingWithTileDiff.cmd" />
+                </Component>
+                <Component Id="cmp93E589C0E416A17F14D50B8B78F32840" Guid="{A900EE48-6740-4B4D-AF82-151D4CC16E07}">
+                    <File Id="fil26AFA7399761371A1F2C61F4A0D6379B" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_PositiveTest_ProgressiveEncoding_Default.cmd" />
+                </Component>
+                <Component Id="cmp268E99EB98CCA56363927B9F0D49F1CB" Guid="{D3E0F1FB-378E-48BD-98B4-F81452568526}">
+                    <File Id="fil64C94AFA63FDCD6E998B98ACFCAA12E3" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_PositiveTest_ProgressiveEncoding_ReduceExtrapolateDisabled.cmd" />
+                </Component>
+                <Component Id="cmp18F39A0A1C43301E0D799D4FF085255C" Guid="{9CEEA9A8-3A3D-4594-A0CA-3E2B37BA6CCE}">
+                    <File Id="fil1D488C5B5881788ABBC248D71561B357" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_PositiveTest_ProgressiveEncoding_SubBandDiffDisabled.cmd" />
+                </Component>
+                <Component Id="cmpCC293A48EF3010109A15D62F2CC5E159" Guid="{75959568-ACDA-447E-8061-C7BF77B3F90D}">
+                    <File Id="fil9A9D3728B7CF24635DDBCA088E2919C2" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_PositiveTest_ProgressiveEncoding_SurfaceNotTileAligned.cmd" />
+                </Component>
+                <Component Id="cmpBB552AE6092ACFAFFFFCAA505D5770BB" Guid="{F6C3940B-959F-4A5E-8FF5-47CD4362BAC9}">
+                    <File Id="filFDA7A81D36505D03DF4DEDD483FB5A63" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_PositiveTest_WithoutContextBlock.cmd" />
+                </Component>
+                <Component Id="cmp76F17A5C2A7CC0EB8FFF8AEC2608AE1B" Guid="{7C479445-9D4A-4D7D-870C-90B5B20DA713}">
+                    <File Id="fil3687CDB8A2F5FBEDE9E15558BBAF2292" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_RfxProgressiveCodec_PositiveTest_WithSyncBlock.cmd" />
+                </Component>
+                <Component Id="cmp0265BCDE60A0F2ED13961B5800E3CA0A" Guid="{8F1642D9-CBD6-4407-940D-99C0C979C40B}">
+                    <File Id="fil2452450114A4C8D52E4677D14B24E776" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_Segmentation_Negative_CompressedNoSegmentHeader.cmd" />
+                </Component>
+                <Component Id="cmpE2050068F2AC689D975B4BD00CFE311F" Guid="{870FBDD6-0B70-4B23-B2C7-03A1E7CA2668}">
+                    <File Id="filB6F4CE05DDA7CAB63406427F0D211018" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_Segmentation_Negative_IncorrectSegmentDescriptor.cmd" />
+                </Component>
+                <Component Id="cmpE24DA4E89F4D7218A5F1750A5907A0AF" Guid="{F4AAA533-3FF0-4120-B46B-1E4F87FF0FFA}">
+                    <File Id="filA4B0607312ABD2227DE9DB5FBC15C2E3" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_Segmentation_Negative_MultiSegmentNoSegmentArray.cmd" />
+                </Component>
+                <Component Id="cmpE2466B6954E18FD939EFF9B1F9198D16" Guid="{1D6ACDAE-3EB3-4553-B694-FCD7DBC150B3}">
+                    <File Id="filF88CE6D14F46BDEF02844A77CDC76807" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_Segmentation_Negative_MultiSegmentNoSegmentCount.cmd" />
+                </Component>
+                <Component Id="cmp6F47F64647F3E6AB3A02821FF1AEB7BB" Guid="{F58A43FD-161E-42A5-9511-0B3FC1CD93B3}">
+                    <File Id="fil631F64350AF1C4B3084F8678B2E101CE" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_Segmentation_Negative_MultiSegmentNoUncompressedSize.cmd" />
+                </Component>
+                <Component Id="cmpEC63D75CA683FB7675F97DC1A1E1ED88" Guid="{626B068B-58F9-4E4F-B6BA-1AE8CB715B7E}">
+                    <File Id="filC920C3F2EC365640F0E720030B8F6A04" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_Segmentation_Negative_SingleSegmentWithSegmentArray.cmd" />
+                </Component>
+                <Component Id="cmp5D219DDF48BE0F0AF3BEE56CFE06171D" Guid="{81F8F978-B874-4C86-9149-84E7439669F0}">
+                    <File Id="fil8E8311C0ADAF3FC98F5A1522AC4DEC31" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_Segmentation_Negative_SingleSegmentWithSegmentCount.cmd" />
+                </Component>
+                <Component Id="cmp14F27AA35EADD7A6D2AC9CEC81251CAB" Guid="{6F577E29-F187-44A2-B3A1-B85377BF7D52}">
+                    <File Id="fil0B91E176F845CC05BC8D1D8126357ABA" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_Segmentation_Negative_SingleSegmentWithUncompressedSize.cmd" />
+                </Component>
+                <Component Id="cmpB31BE469B8596BB5C73AC0A5DC989B9A" Guid="{4F5A5B53-5188-423C-AA10-57C5A3459F18}">
+                    <File Id="fil27D4BCAD005FD27C21907DA03CE9D61F" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_Segmentation_Negative_UncompressedNoSegmentHeader.cmd" />
+                </Component>
+                <Component Id="cmp74D93AE0F182CC7A9C2CF3020DBFDFC0" Guid="{F2AF38EF-1F97-430C-84CB-36B570B8D279}">
+                    <File Id="filF08E17331098A83784A4E26900B0B0AD" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_Segmentation_Positive_MultipleSegmentedPacking.cmd" />
+                </Component>
+                <Component Id="cmpF4E57F363811B94A721E8DD10591E820" Guid="{88433436-3CE5-4E00-8A3A-DFAE885865BB}">
+                    <File Id="filBD2BE716443C0302DF01F08C2E3B649A" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_Segmentation_Positive_UncompressedSegmentHeader.cmd" />
+                </Component>
+                <Component Id="cmp0848DBB2ED30A5E7ECBAB6956323C79E" Guid="{E2CEB714-46A1-4B65-B66E-F61EAC4DDFDF}">
+                    <File Id="filF1011BAC7DFA14E9880AB8BE74A202C4" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToScreen_Negative_CreateDuplicateSurface.cmd" />
+                </Component>
+                <Component Id="cmpED7CFAE28B8DA1DD353900FA591A1B36" Guid="{0596EEEC-FE85-40DA-83F5-8E469379DC96}">
+                    <File Id="fil603E671D3DDFE4164F4F880D87F41C31" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToScreen_Negative_DeleteInexistentSurface.cmd" />
+                </Component>
+                <Component Id="cmp38C6AB5C3D158C0AE758DB4372B28F2B" Guid="{1E0906A0-412B-4348-87BD-C96DC608D840}">
+                    <File Id="filC8427B308300724DEDB44528A2018B32" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToScreen_Negative_IncorrectPduLengthInHeader.cmd" />
+                </Component>
+                <Component Id="cmp64F7ED3F6EA3C3BA28C2C2DBEE609CA4" Guid="{7EC98444-9592-428D-ACE2-0332ADDEF098}">
+                    <File Id="fil2C0A2AD832F37740FAD69833051C7DB4" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToScreen_Negative_MapInexistentSurfaceToOutput.cmd" />
+                </Component>
+                <Component Id="cmp1D9155DD4F3885B88188827D6E83AACE" Guid="{847E3C08-CB2C-48B6-86D3-1E17F87D8C92}">
+                    <File Id="fil2A5AFB7481B4C0103945186D6CE03BA7" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToScreen_Negative_SolidFillToInexistentSurface.cmd" />
+                </Component>
+                <Component Id="cmpAFA9020D8CB5E84273F2CBC42B01F742" Guid="{838016E7-D0BA-4CB5-97D2-1B7189D37950}">
+                    <File Id="fil482E29F8A83C8CF31F7460FBC9D5C3D9" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToScreen_PositiveTest_CreateSurface_FullWindow.cmd" />
+                </Component>
+                <Component Id="cmp3DC5B687B8D42026BBA93F1ED9A38B42" Guid="{33F404D5-1C0F-428A-80FC-CBDBB99D2671}">
+                    <File Id="fil544DE673F490C4718064C4ED80703FC6" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToScreen_PositiveTest_CreateSurface_MaxSurfaceId.cmd" />
+                </Component>
+                <Component Id="cmp87806A674899DAE955DDE0551CAA5351" Guid="{F7B582CE-E160-4814-9AE4-D25A1BF35230}">
+                    <File Id="filAFB1146C33181A22454CF5C80B8D2455" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToScreen_PositiveTest_CreateSurface_MaxWidth.cmd" />
+                </Component>
+                <Component Id="cmpEF0C9A33306B2E3831C7C41D71B20DDF" Guid="{D5E42749-20A6-47A2-8B19-A0ED8D7627EB}">
+                    <File Id="fil21D7871C2D8A8D19A219284EB9DE1AED" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToScreen_PositiveTest_DeleteSurface.cmd" />
+                </Component>
+                <Component Id="cmpE019A62C854EAA5AD12DE21404B5C04E" Guid="{22BA5124-8EB4-4410-9636-9DC774509300}">
+                    <File Id="fil5918608C2FECDC03D4CDAFD1613E0ED3" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToScreen_PositiveTest_FillAndMap.cmd" />
+                </Component>
+                <Component Id="cmp553C80E7C04B36D25428E3C813F7ED73" Guid="{BF9744CD-1FB4-4BEF-88FA-9A2C6F8871A1}">
+                    <File Id="filAD0DF33BF44A6B5D0A7C8D271469B601" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToScreen_PositiveTest_FillOverlappedSurface.cmd" />
+                </Component>
+                <Component Id="cmp50D42695FA04C4012139FCAB300D7C43" Guid="{0CEC0963-1DD2-4512-81DA-B4220A7E5606}">
+                    <File Id="fil9B3B62A9CC04418E67CF8169F0638485" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToScreen_PositiveTest_MapAndFill.cmd" />
+                </Component>
+                <Component Id="cmpA98A66B2168B80AF45E2929FEAB14056" Guid="{06B2074B-F86A-4A36-AD80-525606A17404}">
+                    <File Id="fil9BD743F2759ABD58757B12FD20C7D6CB" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToScreen_PositiveTest_MapSurface_SurfaceBorderOverlapWindow.cmd" />
+                </Component>
+                <Component Id="cmp02434CEDC9976EF9489052FB91299E90" Guid="{A7647AED-F5F7-43B6-984D-ACC61CE7FA25}">
+                    <File Id="fil182B1329BB52E2463C07E75C97BD8B89" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToScreen_PositiveTest_MultiSurfaceOverlap.cmd" />
+                </Component>
+                <Component Id="cmp1F883AC7D7CBD1E5F357D84B023A5C34" Guid="{33E1C7AA-D32A-4CCE-893C-22657E22B50F}">
+                    <File Id="fil83D0C8C2B68227EFFDC917B11F6D09F5" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToScreen_PositiveTest_ResetGraphic_MaxHeighWidth.cmd" />
+                </Component>
+                <Component Id="cmp0CB13695BCB6C9BACAAE7B16C7629724" Guid="{70F5ED2A-9E3C-485A-8D83-88A020745E82}">
+                    <File Id="fil953DBED080FFCD31ADC365E567448D4A" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToScreen_PositiveTest_ResetGraphic_MaxMonitorCount.cmd" />
+                </Component>
+                <Component Id="cmpD2EA5C1AFAC1DD8A542FB76A38AB1673" Guid="{AC52B6DE-7535-4FC0-A026-7C468FD1217F}">
+                    <File Id="fil52D694D317084388D476059DFEE9B4C5" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToScreen_PositiveTest_ReuseSurfaceId.cmd" />
+                </Component>
+                <Component Id="cmpB511EE1649C98E4EB93093086307027F" Guid="{347CBEBE-AB9D-4A7B-A6D4-8CD52DA94A62}">
+                    <File Id="filE5A15AE84686AF0988029EBC9158466B" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToScreen_PositiveTest_SolidFill_FillRectsBorderOverlapSurface.cmd" />
+                </Component>
+                <Component Id="cmp70332A2934903E2B2761493BD77ED0F1" Guid="{D600754E-DCEE-42FC-994C-37EA3E1C32AD}">
+                    <File Id="fil52FD6048C76B24FC32584301C7219AA8" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToScreen_PositiveTest_SolidFill_ManyFillRects.cmd" />
+                </Component>
+                <Component Id="cmp09565E8632D8F5710BD19567E3BC7D3E" Guid="{02537F59-08AC-447A-91C8-6BA833FFA4CF}">
+                    <File Id="fil091FA4341FF6B83FEB239E65416868DF" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToScreen_PositiveTest_SolidFill_MultiFillRectsOverlapped.cmd" />
+                </Component>
+                <Component Id="cmp9900AD09E2B6A0E1EE01AF0FB1ABC770" Guid="{87A62773-A727-4EB6-959C-789AAD2919F6}">
+                    <File Id="fil78C23F4E19BDADE4EA18945E7C817B8B" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToScreen_PositiveTest_StartFrame_MaxFrameId.cmd" />
+                </Component>
+                <Component Id="cmp6B53E76B2FC0A546E416BEA82B650F30" Guid="{A3C20F17-C7D4-4E35-BFCF-F7D5CC54AD29}">
+                    <File Id="fil746EF9D6A4D037BBA17C2A19011FBB27" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToSurface_Negative_DestPtsMismatch.cmd" />
+                </Component>
+                <Component Id="cmpC4E0D1A578ABA14843E995A4A39073F7" Guid="{8B43E87F-06F9-4078-AF30-33EE6ECCE422}">
+                    <File Id="fil6284604A3B2B2739352FDCD6E27022D0" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToSurface_Negative_InterSurfaceCopy_DestOutOfBoundary.cmd" />
+                </Component>
+                <Component Id="cmpF3004E812E8636D1DC4AD7BB4889F56F" Guid="{679DA0E7-CA10-4E53-A0B9-842F3CA16A9D}">
+                    <File Id="filD3C9DF8D0625B550AF7CECEE3E46D584" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToSurface_Negative_InterSurfaceCopy_InexistentDest.cmd" />
+                </Component>
+                <Component Id="cmpDE582CF394DCED6316DAC444EABEC276" Guid="{E12A29A7-70E2-478D-BBA3-D8EB5DB02C9D}">
+                    <File Id="fil3DC8EC13E467F18407F2609A2899AB0B" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToSurface_Negative_InterSurfaceCopy_InexistentSrc.cmd" />
+                </Component>
+                <Component Id="cmp164C24B63D20F34322DAED9093EE5FAE" Guid="{3520C44D-D645-4D96-AFF5-93B787BD23F6}">
+                    <File Id="fil7663D32F0FD7153711BA72238F4B49B7" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToSurface_Negative_InterSurfaceCopy_SrcOutOfBoundary.cmd" />
+                </Component>
+                <Component Id="cmpB54891CDD6FCDA65D8C08ACC93FAF81F" Guid="{20CC7FEA-5AFD-4CDE-9351-D05CEB146BAF}">
+                    <File Id="filA77937FDC5F870E443EC46C85D268969" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToSurface_PositiveTest_DestRectOverlapSourceRect.cmd" />
+                </Component>
+                <Component Id="cmp6F0635E8DE8C022F6F5F8FF6EB461F50" Guid="{1F5D96BB-E980-4C23-BDA5-8F3C90AEFF70}">
+                    <File Id="filC10F3905BCE9CAB3315FB48D446BB33C" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToSurface_PositiveTest_DestRectsBorderOverlapSurface.cmd" />
+                </Component>
+                <Component Id="cmp6761CB8C65E81C0C42948D04EFD8E1F8" Guid="{624D63F6-E909-4497-96BE-49F0224087BB}">
+                    <File Id="filDC95F3DC3587554A074F85CDBEFE52F6" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToSurface_PositiveTest_DestRectsOverlapped.cmd" />
+                </Component>
+                <Component Id="cmp2C96264C2D7836E615D626A282E18F26" Guid="{08A1CB3C-C12B-4CE1-805E-B4952FE7FBF5}">
+                    <File Id="fil54FB0397D1174D2AF3E48CF110A94642" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToSurface_PositiveTest_InterSurfaceCopy.cmd" />
+                </Component>
+                <Component Id="cmp5521564937DF6939A0895C3EF543DFA7" Guid="{A8E84028-8707-47D9-8D99-64E068CE8EC9}">
+                    <File Id="fil42E6312A6A18C098E8492CE4EA6EAE19" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToSurface_PositiveTest_IntraSurfaceCopy.cmd" />
+                </Component>
+                <Component Id="cmp96067BA625EDB759DC4B426944F00CE4" Guid="{CBF5A4FF-2A48-4762-902D-A86FCE45B9FA}">
+                    <File Id="filEFC7733394F659A5C984FB4CC0251B9C" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_SurfaceToSurface_PositiveTest_SrcRectBorderOverlapSurface.cmd" />
+                </Component>
+                <Component Id="cmpD9A5379076FD2A62C2B3F8BBC29DD855" Guid="{C7A3A176-2D4F-42C7-9170-B00AD4760FA5}">
+                    <File Id="fil785815074D79E25A509D4C51863F9785" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_WireToSurface_PositiveTest.cmd" />
+                </Component>
+                <Component Id="cmpACDA6992C381E02933E424820F37B53C" Guid="{707D0182-2809-4E06-BB54-A6992AFE7542}">
+                    <File Id="fil8337DB2BFE4227DABBAA4530BED573D5" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEGFX\RDPEGFX_WireToSurface_PositiveTest_ImageBorderOverlapSurface.cmd" />
+                </Component>
+            </Directory>
+            <Directory Id="dirCFE28C4FBCFCF9687B29118C2B39FF4D" Name="RDPEI">
+                <Component Id="cmp09780B74200CE1FD0457140D28483471" Guid="{7BC849A5-4EF5-4441-BDD8-D47A88B0C38D}">
+                    <File Id="fil9E4594F9AC23D70878726775284273AA" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEI\Rdpei_TouchControlTest_Negative_DuplicatedResume.cmd" />
+                </Component>
+                <Component Id="cmp4868CF6DA4878AB01EDA19D3F9C4341C" Guid="{FB45A832-D5CA-48D2-97CB-ACBF32D0112F}">
+                    <File Id="filC3FB1F9BA99E81939C630F218EE7338A" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEI\Rdpei_TouchControlTest_Negative_DuplicatedSuspend.cmd" />
+                </Component>
+                <Component Id="cmp3B4D635B6DAB36F70FD80AD830F9BF0A" Guid="{C7B04DCC-3301-40E7-B4A4-C93AF0CEA57C}">
+                    <File Id="filE4369B3F32A43B4FD676B972605B412A" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEI\Rdpei_TouchControlTest_Negative_InvalidEventIdInRunningPhase.cmd" />
+                </Component>
+                <Component Id="cmp46761F62BE01378506D9A62F743F5F2C" Guid="{135F6E89-034A-49E3-8E10-BCA268E71447}">
+                    <File Id="filCA1BB3E0EBFDDB81DA2F015714183FFC" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEI\Rdpei_TouchControlTest_Negative_InvalidResumePduLength.cmd" />
+                </Component>
+                <Component Id="cmpA469C6108A625DBDC8F16966D6EF104F" Guid="{6EA9CE3F-8EAA-4F50-A215-0A66A03EC129}">
+                    <File Id="fil8221C07533B3AB2266273DA05B2A188C" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEI\Rdpei_TouchControlTest_Negative_InvalidSuspendPduLength.cmd" />
+                </Component>
+                <Component Id="cmp3C2AF86914CDB32A49AA0AB0D73D1326" Guid="{8714EECC-D6E1-44FF-A60F-45C6812443FB}">
+                    <File Id="fil3FC4425C5C96A81A0EAFF91D47DA0A57" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEI\Rdpei_TouchControlTest_Positive_Resume.cmd" />
+                </Component>
+                <Component Id="cmp0467763751F914B1EB0E2473562647C7" Guid="{ACFC3CF6-239F-4E0E-8BC5-88DB70498E0A}">
+                    <File Id="filAA9E8DE8E37B813D13D4377B7C64444B" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEI\Rdpei_TouchControlTest_Positive_Suspend.cmd" />
+                </Component>
+                <Component Id="cmp545A79137A380CF5F7454957440F50E5" Guid="{2A7240CE-2BFA-44C0-9CBC-DAF25C37155A}">
+                    <File Id="fil32B7943EC8ACBBFAA6DD75CD6D85930C" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEI\Rdpei_TouchInputTest_Negative_InvalidEventIdInInitializingPhase.cmd" />
+                </Component>
+                <Component Id="cmp1D5A72424E08651348A8D25A69223234" Guid="{B9E23D05-C6B2-4AC7-921C-669B21A711D0}">
+                    <File Id="fil2DC4E6AAA1E410B218D3C25738847570" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEI\Rdpei_TouchInputTest_Negative_InvalidScReadyPduLength.cmd" />
+                </Component>
+                <Component Id="cmp9CFE98CBC0BA307A7DB43560AB4C5675" Guid="{B34A9B1E-4AB8-4581-BF9F-4B645277E3DC}">
+                    <File Id="fil38E8AB6E0AF67FDC722BB916F7ABB644" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEI\Rdpei_TouchInputTest_Negative_TouchEventWithoutNegotiation.cmd" />
+                </Component>
+                <Component Id="cmp41120A1D16B64E12D02A1E74892C431A" Guid="{A92B6C8A-5BFD-48B8-A2B2-6F9B379AA120}">
+                    <File Id="fil44403129D60BEAB89439CF6BC2ADC236" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEI\Rdpei_TouchInputTest_Positive_ContactStateTransition.cmd" />
+                </Component>
+                <Component Id="cmpB111617B92A719C16C3C8FE5C32E3569" Guid="{A10857ED-273F-417B-98BC-16291873EC44}">
+                    <File Id="fil875C95DAA649FD87DAFEFC6D2E9E310B" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEI\Rdpei_TouchInputTest_Positive_DismissHoveringContact.cmd" />
+                </Component>
+                <Component Id="cmpF330706B48BAF7AC67B1253F8A14A6EB" Guid="{9BAEE16F-A806-43AC-921A-136882EBD1BD}">
+                    <File Id="fil578D217FD469558A21CCBE612A3596E7" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEI\Rdpei_TouchInputTest_Positive_MultiTouchEvent.cmd" />
+                </Component>
+                <Component Id="cmp4AB91991607E52C9E1026BD3D2FAEEAF" Guid="{81F6896C-474A-4298-9B74-5EFB9DB123E0}">
+                    <File Id="fil623E102C9B0B7C847AEE6B3D774F2123" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEI\Rdpei_TouchInputTest_Positive_SingleTouchContactPosition.cmd" />
+                </Component>
+                <Component Id="cmp0178AE40E0EA96F3A803D37E6BA6FA6B" Guid="{03B0FD5D-E391-4DF2-9878-23B9B65FCAB2}">
+                    <File Id="fil33322D6876BFBB71854FDF2201021C4F" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEI\Rdpei_TouchInputTest_Positive_SingleTouchEvent.cmd" />
+                </Component>
+                <Component Id="cmpF724FC39B8B8C7F4A1B04AB870AB12D0" Guid="{B5E1F401-0A54-46BF-9339-78160BE1B960}">
+                    <File Id="filBF3A2F65E39339B1ECDAC1956D5966F6" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEI\Rdpei_TouchInputTest_Positive_TouchReadiness.cmd" />
+                </Component>
+            </Directory>
+            <Directory Id="dir68F9A1E1444AEA89488DF5C566D75E69" Name="RDPEMT">
+                <Component Id="cmpD6709C24CD837619F9C9F60281B3BCF2" Guid="{AE682C98-A8B8-4B50-B71C-7646DA16F23D}">
+                    <File Id="fil62F2018439D3A298BF495002187A16F9" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEMT\S1_Connection_Initialization_InitialLossyConnection.cmd" />
+                </Component>
+                <Component Id="cmpC90583CFF538ED9E827D22F2155402F2" Guid="{9164153C-354A-47BB-B229-50D999AF2961}">
+                    <File Id="fil5FDBBC3683714E2CD6B4BAF0CF52FB89" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEMT\S1_Connection_Initialization_InitialReliableConnection.cmd" />
+                </Component>
+                <Component Id="cmpB6BF83EB319D53AD15D7B60637BBA14E" Guid="{B40C0F6F-0373-4EED-9397-D56C03C792F2}">
+                    <File Id="fil7DBC7BC36F5EACB80C4D56D68E3186C8" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEMT\S1_Connection_Initialization_NegativeTest_InitialLossyConnection_RDPEncryption.cmd" />
+                </Component>
+                <Component Id="cmp8D84BE67C2A336FF9A82DF26F243FA96" Guid="{7FC78556-0B22-489E-B85F-9E6629669992}">
+                    <File Id="filA938278CDCF8A436760F0D4D04E47105" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEMT\S1_Connection_Initialization_NegativeTest_InitialReliableConnection_RDPEncryption.cmd" />
+                </Component>
+                <Component Id="cmpF4F7CE0125335BAB5F499C572177B587" Guid="{642A6AC5-2EB6-4070-9EFF-4C07560851C8}">
+                    <File Id="fil26FAB29DF3C2577F048E95F96A0A3D21" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEMT\S1_Connection_SoftSync_Lossy.cmd" />
+                </Component>
+                <Component Id="cmpD214EBC4F15511891531C1F1F3B36FA2" Guid="{B83D071F-D3BE-4D94-AA16-C8E1A0A96317}">
+                    <File Id="fil6597DE4C073859E1750DBD8562882C19" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEMT\S1_Connection_SoftSync_Reliable.cmd" />
+                </Component>
+                <Component Id="cmp4204B6797B2BCAFDBDB0D63D9F97CCEB" Guid="{CAAA7C4F-4AE0-4B12-9E13-AE5A42F453DC}">
+                    <File Id="fil42707FB1BEEC7C02B1D8F9C3A320040E" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEMT\S2_AutoDetect_LossyBandwidthMeasure.cmd" />
+                </Component>
+                <Component Id="cmp5B059DA5127BB9854F9F48546145022A" Guid="{BED0DDA6-5FAF-45AE-8E60-D63E5AAE0DB1}">
+                    <File Id="filAAD3A73CD6081FE8F9847A160F8FABA9" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEMT\S2_AutoDetect_NegtiveLossyBandwidthMeasure.cmd" />
+                </Component>
+                <Component Id="cmp64059199A08ED7FD4B711B5895307B0D" Guid="{547656BB-30CE-4917-9B39-2A5E4BB18131}">
+                    <File Id="fil0BBAFB4708D2BBD74C1B2CBFFCDEF0D9" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEMT\S2_AutoDetect_ReliableBandwidthMeasure.cmd" />
+                </Component>
+                <Component Id="cmp015C1040F6B757CEEF51FB42341DD471" Guid="{3B8DDFF7-F9C2-4A49-B8EB-4670882EE1BD}">
+                    <File Id="filDD501AFBF910554E5BC43A052E3EABFA" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEMT\S2_AutoDetect_RTTMeasure.cmd" />
+                </Component>
+                <Component Id="cmp641A914DA35D20490BA9CB7E6B1ADBFF" Guid="{E4BC7739-D32A-4114-AAFD-DBC47296B7BC}">
+                    <File Id="fil37BC868441F78D27EB2C598F331BCA05" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEMT\S3_Tunneling_StaticVirtualChannel_PositiveTest.cmd" />
+                </Component>
+            </Directory>
+            <Directory Id="dirD373DBCEBCCB9EFD33775FEAC7F1E4B7" Name="RDPEUDP">
+                <Component Id="cmp9E8AA5662A06EA257AAADAB71BF838AA" Guid="{CB565CB8-FDE3-47EA-A432-83A27F774D19}">
+                    <File Id="fil3830D663789AB82FBE110FDFEFF709FE" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUDP\S1_Connection_Initialization_InitialUDPConnection.cmd" />
+                </Component>
+                <Component Id="cmp5505875DD8C27F673EC3DEA31097996D" Guid="{EDAC2615-990E-49C6-AD6F-A2826A2EF465}">
+                    <File Id="filE1886DDD64C094B613884DDD6516383D" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUDP\S1_Connection_Initialization_InitialUDPConnection_UUDPVer1.cmd" />
+                </Component>
+                <Component Id="cmp169837F0872604A9C68CAAFF6C5D96C6" Guid="{5FBA469E-E72C-49AF-9A2F-68178A82DC4E}">
+                    <File Id="fil233622A73F462833D91560B1522C0615" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUDP\S1_Connection_Initialization_InitialUDPConnection_UUDPVer2.cmd" />
+                </Component>
+                <Component Id="cmp8D55B03B53E712BBEC8FAB30E9AFF843" Guid="{6C5759F9-287B-48E9-BE45-EC957C088E9C}">
+                    <File Id="filB765A5F54BD359BDF579BE6B08F0F2C5" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUDP\S1_Connection_Keepalive_ClientSendKeepAlive.cmd" />
+                </Component>
+                <Component Id="cmp147F293A3B78544F994ABB33B2E6C5C8" Guid="{BB95E2C4-62C5-416B-B56A-511EAF1FCCC3}">
+                    <File Id="filEE951D470324849B076E37E19565A480" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUDP\S2_DataTransfer_AcknowledgeTest_AcknowlegeLossyPackage.cmd" />
+                </Component>
+                <Component Id="cmp0EA413AC8A4D940D8EAA5091C9941057" Guid="{59F74211-CC47-487C-902A-246B1636059D}">
+                    <File Id="fil089F68FCBCBE0C8C6273D02CCA5F23AF" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUDP\S2_DataTransfer_ClientAckDelay.cmd" />
+                </Component>
+                <Component Id="cmp4E1FB25567634E6F74BDEF2ADFFA7BC5" Guid="{EE39680D-0668-41CA-BB6B-EB6E100C8100}">
+                    <File Id="fil57D364586CA062F2BA6A81C5B07D2B16" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUDP\S2_DataTransfer_ClientReceiveData.cmd" />
+                </Component>
+                <Component Id="cmp394FF00D24624EB412FD94E3FA4CE1F2" Guid="{2E8B39DA-4440-4E63-B96D-01D9F503BDC4}">
+                    <File Id="fil206050FE7F52C3695655F36A284F498B" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUDP\S2_DataTransfer_CongestionControlTest_ClientReceiveData.cmd" />
+                </Component>
+                <Component Id="cmp5C72DCAFCB410B8D30AD2FEA757D5495" Guid="{FB63B75C-06DB-4BED-A2E0-09FBA1C12271}">
+                    <File Id="filD43B7F9D8844E9E5061B3B7ED6C8DE59" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUDP\S2_DataTransfer_RetransmitTest_ClientRetransmit.cmd" />
+                </Component>
+                <Component Id="cmpAF6F778B0482C4551D61D4533C86E099" Guid="{60147790-5042-4B25-B460-D7BA058436FD}">
+                    <File Id="filD2CB7A05B0B7E194AB03D8825D499F40" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUDP\S2_DataTransfer_SecurityChannelCreation_LossyConnection.cmd" />
+                </Component>
+                <Component Id="cmpBD4680927973296BA79EFC1080D3DEDE" Guid="{3E36CEE5-7D6B-493A-85F5-9ED776878C91}">
+                    <File Id="fil1BD88435B713E7F6EA90A02537450FC2" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUDP\S2_DataTransfer_SecurityChannelCreation_ReliableConnection.cmd" />
+                </Component>
+                <Component Id="cmp93B0A747335A6A45134AAB8BD9EB5691" Guid="{4FA42962-7A68-487E-B4E2-F90F24A7D91B}">
+                    <File Id="fil9D6C0A91CE5A6B748023AF4EA4CD4BE6" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUDP\S2_DataTransfer_SequenceNumberWrapAround.cmd" />
+                </Component>
+            </Directory>
+            <Directory Id="dirBFAA569746AE017566E9F7AA23FEC013" Name="RDPEUSB">
+                <Component Id="cmp2FA955C89B9579210131D72970E960BA" Guid="{7E271787-5C90-4F7F-A90F-F8E5CA0C8C93}">
+                    <File Id="fil446CF122A868F85ABA2743B224C6A5CF" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\BVT_EUSB_CancelRequest_InternalIoControl.cmd" />
+                </Component>
+                <Component Id="cmp8662A400205AC8C3B6B32D10F1E8B93D" Guid="{C6334E14-064B-4FE1-925E-53A8A616C605}">
+                    <File Id="filFAD4765E23BEE50469B8093A411B64AC" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\BVT_EUSB_CancelRequest_IoControl.cmd" />
+                </Component>
+                <Component Id="cmpC123E1FD4ECABE4CA77CC5644C290067" Guid="{CD320012-976C-47A5-8FAE-32AE318F8E8A}">
+                    <File Id="filD028AAEAB0A5F81D3CACC76870B620E7" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\BVT_EUSB_CancelRequest_TransferInRequest.cmd" />
+                </Component>
+                <Component Id="cmpEBF2B577EF430B495E183D5DA08E2E99" Guid="{36FB3F19-0020-48B0-8D13-B5F5B65C5515}">
+                    <File Id="fil1193649F2D646F29AB3BBDF65BC86F54" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\BVT_EUSB_OperateDeviceChannel.cmd" />
+                </Component>
+                <Component Id="cmpF7AE50AB99F8B99F2F4A0244D319ECD8" Guid="{8C304218-5478-4BE3-8EF7-D2161B19EA9E}">
+                    <File Id="filDFCE292275D085F16198E21FC0115C32" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\BVT_EUSB_OperateIo_InternalIoControl.cmd" />
+                </Component>
+                <Component Id="cmp3C2A509F61DC735A9928A3C59AD97F77" Guid="{ECFE909B-A9E3-4A9B-BFA5-CA2C116AF4FB}">
+                    <File Id="fil4BFBEFD50FF3C272B7F63AD7A732B011" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\BVT_EUSB_OperateIo_IoControl.cmd" />
+                </Component>
+                <Component Id="cmp17143D25885F56D4587F39B783960A42" Guid="{8E66C785-C7FD-46B8-86A0-4E9607F77940}">
+                    <File Id="fil0C044C5C70181B548AC7E816D47A2972" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\BVT_EUSB_OperateIo_QueryDeviceText.cmd" />
+                </Component>
+                <Component Id="cmp1B192908B055C0D7E41EC2C93CC0D388" Guid="{90A7816B-9712-4AFF-AE92-361B5EA891A2}">
+                    <File Id="fil9C44F20AEEB1840AF81141F7F269342B" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\BVT_EUSB_OperateIo_TransferIn.cmd" />
+                </Component>
+                <Component Id="cmp03886856CB6C693B119763A92F6D4EDB" Guid="{8DEA14A1-E027-4533-ABB6-5E2C73644018}">
+                    <File Id="filA0D0F95EF4F81DC12EBE75497AEC5B7B" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\S1_EUSB_RdpeusbOperateDeviceChannel_Invalid_MajorVersion.cmd" />
+                </Component>
+                <Component Id="cmp67E49F6420577562A3D8F81990854F71" Guid="{72AC76B4-0438-4BB3-8CC9-58DD09C9133D}">
+                    <File Id="fil87435D90C4C200259FC6C85ACF72B0D9" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\S3_EUSB_OperateIo_CyclePort.cmd" />
+                </Component>
+                <Component Id="cmp9F53E36D34688C9F9078C3C96284BC83" Guid="{BF943600-362F-4F9C-BDDA-47DD6195E7D8}">
+                    <File Id="filB28D9D8AA40A1486CAB07F6798ED6A02" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\S3_EUSB_OperateIo_GetBusInfo.cmd" />
+                </Component>
+                <Component Id="cmpF3F6C999A13B6BA574F3D428FE537FB1" Guid="{DBF1F457-2565-4A7F-A3AB-8E46E10CF944}">
+                    <File Id="fil82EE8E0739F01C6E12928944719B1B47" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\S3_EUSB_OperateIo_GetConfiguration.cmd" />
+                </Component>
+                <Component Id="cmp84BD9F2A412B595AA651A7B9046B6CFB" Guid="{9E67FC27-8A50-4DFF-83D8-343AB448FE09}">
+                    <File Id="filC177C7466A6550C64AD747361F6E8EB4" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\S3_EUSB_OperateIo_GetControllerName.cmd" />
+                </Component>
+                <Component Id="cmp2948E8DE8BE320556C817E264633A9BB" Guid="{A60ED42D-1795-4466-B7BA-B05000F62196}">
+                    <File Id="fil3F6EE77E3289C8D79F8AFDF20670DA82" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\S3_EUSB_OperateIo_GetCurrentFrameNumber.cmd" />
+                </Component>
+                <Component Id="cmp38BBC967A6AF6100A6D6878275C81F34" Guid="{4C4BC33E-53A5-40E0-85D6-1A39DAD57EE1}">
+                    <File Id="fil96880190FDFCBD9437A4E9334DC903F4" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\S3_EUSB_OperateIo_GetHubCount.cmd" />
+                </Component>
+                <Component Id="cmp397FBCC8C19CD9C029B761EE8E3F413F" Guid="{47D987BB-E3C5-450A-AAFF-3E87C6863E94}">
+                    <File Id="fil4809E06CC66B31E18E5FA1EDAB7E8014" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\S3_EUSB_OperateIo_GetInterface.cmd" />
+                </Component>
+                <Component Id="cmp0A3BE5C55DC7039FBD92FA3FA8D805F4" Guid="{A5674687-376B-4780-84E9-8A38744863D3}">
+                    <File Id="fil1BF7EAB5BE0136D0CE7FBD7D147F8DB7" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\S3_EUSB_OperateIo_GetPortStatus.cmd" />
+                </Component>
+                <Component Id="cmp9544D240B040AEF394A1A71AEF3BF0EE" Guid="{EBBE4A45-DABE-4369-9754-AD5FA017E38E}">
+                    <File Id="filB854597B4D645815A3B4081B78EB50A0" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\S3_EUSB_OperateIo_GetStatus.cmd" />
+                </Component>
+                <Component Id="cmpB91EA2518FD6655BDF2EF921F947401B" Guid="{BEDFAC0D-E3CC-40CC-BB91-811F7C92EB4E}">
+                    <File Id="filE1553D666AD0B600D7DF66BDCFAFAFB6" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\S3_EUSB_OperateIo_OsFeatureDescriptor.cmd" />
+                </Component>
+                <Component Id="cmp3EDEAAC26EF1FDC663FE1A8FD18907E2" Guid="{55F7C2B8-5173-43A7-921F-1A037A0D40E3}">
+                    <File Id="filC8D1E8ED3244D13EA12EB306BB9EB433" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\S3_EUSB_OperateIo_OSRFX2_BargraphDisplay.cmd" />
+                </Component>
+                <Component Id="cmpC929A306F834053C79978F6B9D4AA961" Guid="{F26EEBA4-EDFC-4B99-BC09-BDBBA005A930}">
+                    <File Id="filC7A73B7C8F05C90865BABF92CFEBD2E6" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\S3_EUSB_OperateIo_OSRFX2_BulkWriteRead.cmd" />
+                </Component>
+                <Component Id="cmpF3809E3F82F68A572CA689BD0DB7ACFC" Guid="{14B4E920-002B-4652-A753-5CDF4EDA6FAC}">
+                    <File Id="fil2C4F9868A834C0682F26543326C4781C" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\S3_EUSB_OperateIo_OSRFX2_InterruptIn.cmd" />
+                </Component>
+                <Component Id="cmpBB9143FBF9EDAF41CB28E7EC16DB57C2" Guid="{4CA2F87B-1900-4F48-B87F-D04D728E9409}">
+                    <File Id="filBF2EA22BC72F36206ECA8EAD30C1D867" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\S3_EUSB_OperateIo_OSRFX2_IsHighSpeed.cmd" />
+                </Component>
+                <Component Id="cmp21A9D2F17B6B2F01327B5435172B88F0" Guid="{B4A3A787-493C-4726-AC22-85AEC0DF543D}">
+                    <File Id="fil0C006B75B4C5CF3A25D61FA71A378038" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\S3_EUSB_OperateIo_OSRFX2_ReadSwitches.cmd" />
+                </Component>
+                <Component Id="cmp4FC34D37A153974D9FD2DFF62F6027AF" Guid="{15F6FBA1-0829-428B-B062-E722E3759595}">
+                    <File Id="filDD75AEE5DFE25C4E02CA9F03E5043113" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\S3_EUSB_OperateIo_OSRFX2_SegmentDisplay.cmd" />
+                </Component>
+                <Component Id="cmp8EF5527A1FE046E42EA95C772282AE4D" Guid="{A40DF7A6-B0F5-4BB0-892A-362B89A6146D}">
+                    <File Id="fil30D3FA46DEC69BB9461143209B16488E" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\S3_EUSB_OperateIo_PipeRequest.cmd" />
+                </Component>
+                <Component Id="cmp16696BE9C5E9891CDB33D3C56F926B05" Guid="{26BB2606-A5E4-48EE-AC82-34622A2639CB}">
+                    <File Id="filCE1DA84FBF34A2DFAB276A42BBEDA468" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\S3_EUSB_OperateIo_ResetPort.cmd" />
+                </Component>
+                <Component Id="cmpBD3FAE4557D3F362C2F5637BCE6D4B49" Guid="{B70224B5-BB00-44BE-81BF-4E616757AD9D}">
+                    <File Id="fil76AF1595A00B9CFDCE7DF0621349EDED" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\S3_EUSB_OperateIo_SelectConfiguration.cmd" />
+                </Component>
+                <Component Id="cmpA206A7746C3F3A925D99C39E94C2D385" Guid="{0FB49638-49F2-49DB-8B4F-4CBB99BE471A}">
+                    <File Id="fil662A4D037EEA30384EF64217A82B0338" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEUSB\S3_EUSB_OperateIo_SelectInterface.cmd" />
+                </Component>
+            </Directory>
+            <Directory Id="dirA9B557AD84C578584799A4376B5F48CE" Name="RDPEVOR">
+                <Component Id="cmp544468775D4275CAB61165A6B31BFE33" Guid="{BD0E2B76-6F6C-45C5-814D-E630293521D3}">
+                    <File Id="filAC6FA80719429DDE46E16482CD6B3E56" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEVOR\Rdpevor_ProtocolSupportTest_Positive.cmd" />
+                </Component>
+                <Component Id="cmp019773C56ED7AFD4A03C918225673206" Guid="{CDA0C15B-3D4C-4490-B609-670AA5D47022}">
+                    <File Id="filC1B359ADCB40B4125769768B875835D5" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEVOR\Rdpevor_VideoControlTest_Negative_InvalidPacketLength.cmd" />
+                </Component>
+                <Component Id="cmp089B9380E5E2555D17186465266687C2" Guid="{973E8F72-CF80-4569-B2C9-589AF829E4B4}">
+                    <File Id="fil5742FE87B10C83B3D2CE7B039ACF1A7E" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEVOR\Rdpevor_VideoControlTest_Positive.cmd" />
+                </Component>
+                <Component Id="cmp4AB7F8D468DF0A96327F8E8146060DFF" Guid="{64F34999-E9C3-4C00-AB8C-519FADBF4DCB}">
+                    <File Id="fil4B1ED5E38FE426B6F1637D2EEC0B8DDC" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEVOR\Rdpevor_VideoStreamingTest_Negative_InvalidPacketLength.cmd" />
+                </Component>
+                <Component Id="cmpAD7746B2CD8F4C68B02716666C38A8AD" Guid="{C63B4229-6EDE-4A6F-A22C-0E4C8221EEE9}">
+                    <File Id="fil8BF08A1D8D450E32BAE01A4D6EAFCECA" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEVOR\Rdpevor_VideoStreamingTest_Positive.cmd" />
+                </Component>
+                <Component Id="cmp81AD276088CE4EE31DD0B191477D1029" Guid="{09DDB23C-D121-48C9-8C17-F553B56C3018}">
+                    <File Id="filDE39FAB784EC3E34CA708DA78C70F401" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPEVOR\Rdpevor_VideoStreamingTest_Positive_OverUDPTransport.cmd" />
+                </Component>
+            </Directory>
+            <Directory Id="dir954A5273EA75BF54DC6B787F3629BC17" Name="RDPRFX">
+                <Component Id="cmp0A036037BA1D14B276D1A4BDA815FE08" Guid="{289DE31F-D4FA-4E21-9C93-383A1CABE0C1}">
+                    <File Id="filC250EC4E1D1AB9810A17E1458B6F837B" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_HeaderMessage_NegativeTest_TsRfxSync_InvalidBlockLen.cmd" />
+                </Component>
+                <Component Id="cmp376EFAC9FD9A7A36B9CA3BA47BECF6C9" Guid="{81664109-68DB-40BA-8D20-C050263CFFB0}">
+                    <File Id="fil8C0AE466354537407097E325E6B08C3E" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_HeaderMessage_NegativeTest_UnspecifiedMessage.cmd" />
+                </Component>
+                <Component Id="cmp9292AFE196A54677DB56B5CA83416721" Guid="{04378386-F942-4395-A68D-6E3771FF1A56}">
+                    <File Id="fil4A9CF0C2B106019BF22C87094E371281" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_HeaderMessage_PositiveTest_ChannelBoundaryTest_1x1Channel.cmd" />
+                </Component>
+                <Component Id="cmp50D06DEE1135B27BE3D19BE34854AB99" Guid="{9ABBA3D2-A640-46CA-A615-DB8E5BF6EA8E}">
+                    <File Id="filDB21FE340DFED1EE19B921F5C84D41E3" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_HeaderMessage_PositiveTest_ChannelBoundaryTest_2x2Channel.cmd" />
+                </Component>
+                <Component Id="cmp26B3F2480CA83357A323D3A5AF08E5EE" Guid="{BE643C97-D00F-4031-B4A1-E38C104E76CA}">
+                    <File Id="fil41C50976316D6A7BF1AE589E77D9367F" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_HeaderMessage_PositiveTest_ChannelBoundaryTest_4095x2047Channel.cmd" />
+                </Component>
+                <Component Id="cmp9AF77C296A7C9B8E2CFFDB619388A087" Guid="{6CE51DF2-0F56-4886-AF48-E651A65D8DBE}">
+                    <File Id="fil64C707F028A96F8BAFF7554EA7C5B8D3" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_HeaderMessage_PositiveTest_ChannelBoundaryTest_4096x2048Channel.cmd" />
+                </Component>
+                <Component Id="cmpC51E6616081DFA9E532E9CAE696A2C8F" Guid="{37889761-7A4C-47E7-9B07-EA3C60396EF4}">
+                    <File Id="filA085ED3E78BCD213284815485D0450B8" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_HeaderMessage_PositiveTest_OrderTest_ChannelsVersionsContext.cmd" />
+                </Component>
+                <Component Id="cmp6DACD420213E5CFED7969616CD42F5E2" Guid="{AF48C84E-86D2-4476-B763-57F3BA0D8C4C}">
+                    <File Id="fil9CE97AEC0C212E4469DE3BBE3FA4A8FD" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_HeaderMessage_PositiveTest_OrderTest_ContextVersionsChannels.cmd" />
+                </Component>
+                <Component Id="cmpF837EA72ABF7519357AFE75E6ECAB815" Guid="{EE13B28D-CEAA-4FF8-9D33-297FB4544C1E}">
+                    <File Id="filB02888DE5D22F2EE6154CF2E28667092" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_HeaderMessage_PositiveTest_OrderTest_VersionsChannelsContext.cmd" />
+                </Component>
+                <Component Id="cmp80CC728AB1DCF8C0DAA7DC6E3E11AE7A" Guid="{455F9C30-938B-4A9F-9FC7-D0FBBE6BEF87}">
+                    <File Id="fil107B67B0EAE4D0BF31E14BB932D36BE9" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_HeaderMessage_PositiveTest_OrderTest_VersionsContextChannels.cmd" />
+                </Component>
+                <Component Id="cmp562ED232677192799AD5D954EC375D5A" Guid="{D0421EFB-E7FD-4256-83B2-4AB5BD8B83C0}">
+                    <File Id="filA816111DB73F0E2978F89E1616537154" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_ImageMode_NegativeTest_TsRfxFrameBegin_InvalidBlockLen.cmd" />
+                </Component>
+                <Component Id="cmp8E1A2E54BFE74125F22C1BC6E9531D62" Guid="{3DFA4567-0C18-4FD8-A3C9-5438F88D0730}">
+                    <File Id="fil46B34EB3B199ACF29C45A7F2F130C5A8" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_ImageMode_NegtiveTest_DuplicatedTile.cmd" />
+                </Component>
+                <Component Id="cmp576A7DC40A7913799862871DD17A5D23" Guid="{60F237C9-4D87-4777-AD67-73DFFEEEF1DA}">
+                    <File Id="fil5B055ECE914A5658E5C7BF617A5E4100" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_ImageMode_PositiveTest_ClippedByRegion.cmd" />
+                </Component>
+                <Component Id="cmpA830FCFF4C973AB59B57D7400476DA64" Guid="{1781328A-61FB-4CF2-8219-B9DF77437B07}">
+                    <File Id="fil17C642F9743B8B31C485C2C127299B98" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_ImageMode_PositiveTest_FourTilesComposeOneRectWithCommonBoundary.cmd" />
+                </Component>
+                <Component Id="cmp696BC26006312DB104DDB61F290E615F" Guid="{5EF80075-8A69-410F-BC24-81748BE3459B}">
+                    <File Id="filEB006E81E7F326A7424843B9417B3895" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_ImageMode_PositiveTest_FourTilesComposeOneRectWithoutCommonBoundary.cmd" />
+                </Component>
+                <Component Id="cmpB1F3BAFD88E3DF042EBD6BBD9DD8151E" Guid="{CFFB8931-F7EA-449B-877F-54F21A81DC9C}">
+                    <File Id="fil705FD087DB7932278F4943E8BEA08CCF" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_ImageMode_PositiveTest_ListOfRects.cmd" />
+                </Component>
+                <Component Id="cmpC0CE45B96C85678C6629F7FF2D7B8C1E" Guid="{6FDBFA6E-12EB-44E4-8E12-D391C108AC1D}">
+                    <File Id="fil5F1E9DFD67140C4FBF13F8CABD1FC386" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_ImageMode_PositiveTest_ListOfRectsOverlap.cmd" />
+                </Component>
+                <Component Id="cmp462EA36D9694B7055ACB47F00C81A8EE" Guid="{F679F2D7-17D7-4179-AA78-2B9970EA6B91}">
+                    <File Id="fil440F0F8E3A2E4E96B12487EC3AA9AB78" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_ImageMode_PositiveTest_ListOfRectsOverlapWithDuplicateTiles.cmd" />
+                </Component>
+                <Component Id="cmp4E06428915B7C06FBDC1E0D2AF06A6C8" Guid="{741AA6E3-0FDB-439D-B809-C29DF89D85C5}">
+                    <File Id="fil05791D4B5CF703D0CFAA43158094743E" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_ImageMode_PositiveTest_MultiQuantVals.cmd" />
+                </Component>
+                <Component Id="cmp6BD1AE1EA5BDA4D22924DE1ADB14995C" Guid="{4F4C4E2A-B629-48FA-8983-A5B9D9C36B2F}">
+                    <File Id="fil50DF688A1E976038B99BC91CC9D4A0D5" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_ImageMode_PositiveTest_numRectsSetToZero.cmd" />
+                </Component>
+                <Component Id="cmpD291CD572B68357CA7D679752CAF9494" Guid="{9277DEB0-719E-485D-B7BD-9FD3070880F2}">
+                    <File Id="fil3EC5E0B339141531E4BBDD3A91D467F0" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_ImageMode_PositiveTest_OutOfRects.cmd" />
+                </Component>
+                <Component Id="cmpEA9FCDE227EAED6AAAF856FB5221F97E" Guid="{A950F398-4E64-4CE5-9BD0-2F53189727F8}">
+                    <File Id="fil6481C854D6241F63C39B3D70F562FD11" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_ImageMode_PositiveTest_RLGR1.cmd" />
+                </Component>
+                <Component Id="cmp1898316B8542C34448A73EA6A3AEA669" Guid="{62E8E716-E6F3-412F-A57F-EA007A834EBF}">
+                    <File Id="fil2BF2830BB86AEBB1E2EDBFAE4669B017" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_ImageMode_PositiveTest_RLGR3.cmd" />
+                </Component>
+                <Component Id="cmpAA6ADADE98B9F524D45347E3C368DAF9" Guid="{20198411-BC90-4B51-9EC8-ABB1A2C85CEA}">
+                    <File Id="fil328481410CBF173CF68626CAE543693C" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_MUST_NegativeTest_TsRfxChannels.cmd" />
+                </Component>
+                <Component Id="cmpD32A8FC25C86B11F4DD0291FD5BA400D" Guid="{42E37A39-7413-45D8-B3CE-A1D7C5CC960A}">
+                    <File Id="fil9A6A266EFFB66DF7915E1BA5B1EA1DC7" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_MUST_NegativeTest_TsRfxCodecChannelT.cmd" />
+                </Component>
+                <Component Id="cmp4BFDDE54E2B742BEB25AE110B8314848" Guid="{4B6FAF98-4E3F-4B35-AA18-63BACE98468E}">
+                    <File Id="fil763088EA11BEA9E0EEBCDBCDC8FE9BCC" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_MUST_NegativeTest_TsRfxSync.cmd" />
+                </Component>
+                <Component Id="cmpEC1865C15D426839B610DF219AC012C2" Guid="{A9B8BFEB-FF6D-4760-A071-2D5DB32A3840}">
+                    <File Id="fil762DC08BC275C8F48BC48FDE0C151A82" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_PositiveTest_ImageWithoutEncoding.cmd" />
+                </Component>
+                <Component Id="cmp79F3680A04628EFE526F61A52A31ECC1" Guid="{D2BE7E52-EF6E-4AA4-AF96-5C3CA2C162CB}">
+                    <File Id="fil13664E846EB4BAAA0EF41889F188A9FD" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_VerifyClientCapabilities.cmd" />
+                </Component>
+                <Component Id="cmp360DDCE8DDDACD7FD04770DDE4B864C9" Guid="{672A109C-DEDF-447A-B496-CED32DA2311E}">
+                    <File Id="fil9987C410C1D033C1EFC522EFC6DEAB4F" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_VerifyClientCoreData.cmd" />
+                </Component>
+                <Component Id="cmp4DAA77E16545DADB50C9F12D51774756" Guid="{7E7621D8-89AB-45EC-9A37-43A8538C9DE5}">
+                    <File Id="filDB2ED7F7DAA538B23E9E066E34D959F1" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_VideoMode_NegativeTest_TsRfxFrameBegin_InvalidBlockLen.cmd" />
+                </Component>
+                <Component Id="cmp178622ED41385F2CF3BD6985ACB544B6" Guid="{5EA713DC-233B-42BE-8ED8-281D9AFFD03D}">
+                    <File Id="fil0F6404FF84749B52DBD85989D030190E" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_VideoMode_NegativeTest_UnsupportedEntropyAlgorithm.cmd" />
+                </Component>
+                <Component Id="cmp83842D2F565EBC52BC15D5D9F8672A02" Guid="{6C9465F3-0F0D-4BB6-B07E-AB55BA56B290}">
+                    <File Id="fil07AAC2010552028FE0D49C14AE5B86F0" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_VideoMode_NegtiveTest_DuplicatedTile.cmd" />
+                </Component>
+                <Component Id="cmpF8CF651060A5B90238DCDE9C4CF18664" Guid="{13F1AA0D-0728-431E-BA86-B46E2FA055B9}">
+                    <File Id="filEF527F3D5F0D99CAEA3138DB929F4F5B" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_VideoMode_PositiveTest_Differencing.cmd" />
+                </Component>
+                <Component Id="cmpCEC9C2A728F74950BDB8A2BADD3DDB2D" Guid="{8939FA4B-B210-4389-AA71-4B8FD67F9DFA}">
+                    <File Id="fil1B0789587A9A9964E8D26FD0931E2B6D" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_VideoMode_PositiveTest_FourTilesComposeOneRectWithCommonBoundary.cmd" />
+                </Component>
+                <Component Id="cmp5BC487693757FAD5144CD261330EC247" Guid="{0F60EAFE-B6A9-410C-9383-67EE93E7B49E}">
+                    <File Id="filF1AF344237DF61A5F70086297A8EBECF" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_VideoMode_PositiveTest_FourTilesComposeOneRectWithoutCommonBoundary.cmd" />
+                </Component>
+                <Component Id="cmpA4AAB089862DCC3D16407930B23E0646" Guid="{A6763A0E-6A93-4A3B-A967-F574A571655B}">
+                    <File Id="filB810D5CA3A3508DF297A1552D6D4B1BF" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_VideoMode_PositiveTest_ListOfRects.cmd" />
+                </Component>
+                <Component Id="cmpCDFFA75957AEACCB0C2A208FFE098C42" Guid="{69FC4490-9A65-463C-A325-F776360DE6D3}">
+                    <File Id="fil3E0F3ECAFB53FCF6FE9E340DD05BA25F" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_VideoMode_PositiveTest_ListOfRectsOverlap.cmd" />
+                </Component>
+                <Component Id="cmp4DF01E8F850CE0555061A278FE3DE0F8" Guid="{1DEE1087-B355-4584-BF66-D5C6EACFDFA3}">
+                    <File Id="fil0FA5737321EA85418F0173F7C373E873" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_VideoMode_PositiveTest_ListOfRectsOverlapWithDuplicateTiles.cmd" />
+                </Component>
+                <Component Id="cmp7C56366459F4C5C67EA65FD1B7A39642" Guid="{A030BB31-BE26-44D2-8ED3-C1DAFA6D6145}">
+                    <File Id="fil0EA5664EAF90D5C66F6510B9ECCF1A9D" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_VideoMode_PositiveTest_numRectsSetToZero.cmd" />
+                </Component>
+                <Component Id="cmp31BFB550217A5ACFC12E51777E6A7FEE" Guid="{6415A27B-AD0C-4EF3-846B-1E7160AC75AA}">
+                    <File Id="fil08E56B80DBFE08A4A8C9799B75B4F997" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_VideoMode_PositiveTest_OutOfRects.cmd" />
+                </Component>
+                <Component Id="cmp3501F5C565E198CBA9AD48F6C9CC7334" Guid="{A3087F96-3717-40CC-BF87-B4A00151A61B}">
+                    <File Id="fil8097FD5ACC946A6AE6D2DB1E0B0C35DD" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_VideoMode_PositiveTest_RLGR1.cmd" />
+                </Component>
+                <Component Id="cmp165BCF0586BB4A5903B90333ABA094E5" Guid="{3517D3CB-7102-4B65-9380-BA345E6652C5}">
+                    <File Id="fil32BA061AA3A80BA8E0B602135FE0AF47" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_VideoMode_PositiveTest_RLGR3.cmd" />
+                </Component>
+                <Component Id="cmpEA472314F1454DE487A3D6DEE8A96AA9" Guid="{AC721A85-34DF-4C24-B5FA-91F8BB087A12}">
+                    <File Id="fil7B0F2C3DCDA73A3B9BB3548D6D080198" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_VideoMode_PositiveTest_SendTsRfxChannelsInStream.cmd" />
+                </Component>
+                <Component Id="cmpD61EEB957AEFFF5C7E915AB56A5719F1" Guid="{7A5CA6A2-7F79-40B5-9C78-164A5021FDB7}">
+                    <File Id="filADC536A0267C67416FAB96BA657857AD" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_VideoMode_PositiveTest_SendTsRfxCodecVersioinsInStream.cmd" />
+                </Component>
+                <Component Id="cmp0B2707CF9FAAE38B2EEB9843AA2850FF" Guid="{A6C6CA2C-1F4C-4CF7-9BEA-2A214618887D}">
+                    <File Id="filDECE287E96121AFCD7AB9570B5235635" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_VideoMode_PositiveTest_SendTsRfxContextInStream.cmd" />
+                </Component>
+                <Component Id="cmpF149F721F76AF3D72A29EBE7FE6783F9" Guid="{003B0178-0803-4016-A532-6EB72AD936EA}">
+                    <File Id="filFD3A3A5297B150EB9EB5F85F36B567F3" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RDPRFX\Rdprfx_VideoMode_PositiveTest_SendTsRfxSyncInStream.cmd" />
+                </Component>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="TESTSUITE_BATCH_FILES">
+            <ComponentRef Id="cmpFCAAD6DD85DB25F572053095E3B64DA3" />
+            <ComponentRef Id="cmpD1BBC57B5F896AE795A786A6D60C9B62" />
+            <ComponentRef Id="cmpCBAE3EF84FE9E33FC43F3BED6639A2A2" />
+            <ComponentRef Id="cmp178E9936ED92DB681D9EBD63E311B82F" />
+            <ComponentRef Id="cmpF6C820DA89E540D9688B4857F8498830" />
+            <ComponentRef Id="cmpEF4152DA0B67C00073DA2FB37F8F9209" />
+            <ComponentRef Id="cmp7B13141653AD31BD0ECACA2F09E44F38" />
+            <ComponentRef Id="cmp5C8C6BF70151A0850E784009009625BC" />
+            <ComponentRef Id="cmp3E24545DC6FBA5A15848120B3B8F477C" />
+            <ComponentRef Id="cmp9414226DD0DE510E92BD1F48327955F7" />
+            <ComponentRef Id="cmp3651917B6E6FBBD9B2DCAD76463BF57A" />
+            <ComponentRef Id="cmpC449F033F8DF8F88C6EEC8964BF2FE38" />
+            <ComponentRef Id="cmpA74FB871C8881E9AE03D5165C047BE17" />
+            <ComponentRef Id="cmp2F22AAE335B366E524A8FBC41853926D" />
+            <ComponentRef Id="cmpC7523E75C7D834889C4068ED20832F4D" />
+            <ComponentRef Id="cmp3C634BE70AF5D8954EB7A7DE0573C0D5" />
+            <ComponentRef Id="cmp2A5D9554DE8B6F15E881097020A80CDF" />
+            <ComponentRef Id="cmpCAE50320D31A9E6E7AB47503FD169F72" />
+            <ComponentRef Id="cmpA5E49E3D31A37952926E03DDA7241734" />
+            <ComponentRef Id="cmp524A3D5B76F1DDD42C964F083F6CCAC3" />
+            <ComponentRef Id="cmp8C608FCC6EDD2836B945045B1739D795" />
+            <ComponentRef Id="cmp29A01B1D6AFD84FADADFDD1AEF4028E0" />
+            <ComponentRef Id="cmpBB7BD578AD5E6B1463C1F9BCA8AFA7B0" />
+            <ComponentRef Id="cmp9524FF03087456E60F947F6F7B035B73" />
+            <ComponentRef Id="cmp13F0D2688E91EFBB5A12FAE07D671710" />
+            <ComponentRef Id="cmpC0E934996981774A98DF7BB45FA996F4" />
+            <ComponentRef Id="cmpD0A1BDAE14117CC2F57D07C08FFABF19" />
+            <ComponentRef Id="cmp0D7B81EE8A5BF37C341A502B7849F9CD" />
+            <ComponentRef Id="cmp1B8E85FA8372A4FD071078C94373A89D" />
+            <ComponentRef Id="cmpA7C951C8BFC53B2D17EA6AF523ACB396" />
+            <ComponentRef Id="cmp3F2AE463BE9CA9AC162B033CFEF01E38" />
+            <ComponentRef Id="cmpC750E618BCC3B15E95C6AEE75C6DC6B1" />
+            <ComponentRef Id="cmpCED1474CD345C6182332AB9BC45943F6" />
+            <ComponentRef Id="cmp25CA70B9BB90F518A6ACFEB1DEB2D0F4" />
+            <ComponentRef Id="cmp32BB44770C492A20B145E0D4F6756D20" />
+            <ComponentRef Id="cmp75719BBC4107106B137B53030E889799" />
+            <ComponentRef Id="cmp075F97DCF2FC85934755E6CEC49AD07B" />
+            <ComponentRef Id="cmpBDD1C5FF75238CF78BDE77157DAD857D" />
+            <ComponentRef Id="cmp57E0869CD7080673DDBB5474291434D5" />
+            <ComponentRef Id="cmp257F2AE8AAB78BA986089E4CA0146727" />
+            <ComponentRef Id="cmp2E9170CC183DFF2FA3219AEA2393712A" />
+            <ComponentRef Id="cmp5D1E4BE2DBABAC0248CE7F82A96107DF" />
+            <ComponentRef Id="cmp0D2B299811055681417198847F4FBA08" />
+            <ComponentRef Id="cmp69AAFC114D70D7CFF98BEA27A5281369" />
+            <ComponentRef Id="cmpF5C89961EB8E8EA8C4C6ADAE1DD8CCCD" />
+            <ComponentRef Id="cmpDB414DC201F5351EED8213A6C4117E3E" />
+            <ComponentRef Id="cmp78749C2D7FDDE292BC33BAB51C49E81A" />
+            <ComponentRef Id="cmpB6414FF6625B035CCA3B102028A925DC" />
+            <ComponentRef Id="cmp46CF43CAF730FB43773931093C75F7BC" />
+            <ComponentRef Id="cmpDE0ADFBFFCCFDAB6390881FE0811D684" />
+            <ComponentRef Id="cmp5B2FAF48F2C37C24DD6BD15240E4EE71" />
+            <ComponentRef Id="cmp0CE48B4BAA317F5B171735CD51B6971A" />
+            <ComponentRef Id="cmpA9D4B63D1AED73679D01A127158D4AB2" />
+            <ComponentRef Id="cmp3885B76630A67E671B2B113FF407EE26" />
+            <ComponentRef Id="cmp9C1C87F7E6F59BAB630EE35B9F24417E" />
+            <ComponentRef Id="cmpF057B5AEA489DCBEF6FB900589223681" />
+            <ComponentRef Id="cmp829692405748594D2405396A51FBAAF0" />
+            <ComponentRef Id="cmpE46128BCE0BC98C1307DD6788562E4C5" />
+            <ComponentRef Id="cmpB2E506AF4DD6608672DBA4ED17EB0ED4" />
+            <ComponentRef Id="cmpCC8B9406B5F25541D666C762CD844F5E" />
+            <ComponentRef Id="cmp45B2BDB69C7B2BFAF8C1C6EA115A18AC" />
+            <ComponentRef Id="cmpE13673EED5FF999735484A8090EB5FBB" />
+            <ComponentRef Id="cmp7B7AEAAFB396E4DD8AED053A1636AD23" />
+            <ComponentRef Id="cmpE0EEBBAD379C45C9026D9865689B506E" />
+            <ComponentRef Id="cmpC7C366E1CB3FFCFD8F0216DC1F98F2FE" />
+            <ComponentRef Id="cmp960FA818B47ED23818E4173F44B7B737" />
+            <ComponentRef Id="cmp904823FCCA1F7972A9A747858EFF78B7" />
+            <ComponentRef Id="cmp8A4E3431A3A1D653561A9174D485881D" />
+            <ComponentRef Id="cmp45559AB66D75FA8EEBF1B5D3DFA0AE47" />
+            <ComponentRef Id="cmp216B24349E52678B53F567A2D35F0620" />
+            <ComponentRef Id="cmp252A6716894AD2E8D8CFA972356D889D" />
+            <ComponentRef Id="cmpB7FC28C7781E75F44F77A376477F5555" />
+            <ComponentRef Id="cmp46FA610A73F206BEB10B198438CF4444" />
+            <ComponentRef Id="cmp1B767F3F8098B6E8234CC7E70EF848D1" />
+            <ComponentRef Id="cmp0426AC640D7A8C5251FD76FD69EF43FE" />
+            <ComponentRef Id="cmpE5EFA82411D4BA8FBB3ED787B99452D6" />
+            <ComponentRef Id="cmp378E5750722B6E27719D10E8F6877181" />
+            <ComponentRef Id="cmpD92C0DB21D2CE1F5357918A228BBCE30" />
+            <ComponentRef Id="cmpB46C1904547E4CD186A47F72D028333F" />
+            <ComponentRef Id="cmpCBBF3D167A7820C1BF8E7EB1663FF79D" />
+            <ComponentRef Id="cmpAB32CE9F15CD31DF02072F46B8503519" />
+            <ComponentRef Id="cmp07BDB1D733DAF8FFBE51B6A807630625" />
+            <ComponentRef Id="cmp29FD585A82871B3C5B50B3A428A80D9F" />
+            <ComponentRef Id="cmp2A3CE6ED540E9DFAF48F46AE6B5EA5BD" />
+            <ComponentRef Id="cmpB54202F6889127D6B34505213A9F5D06" />
+            <ComponentRef Id="cmp031200F7C57B501CED650635AF49BE0E" />
+            <ComponentRef Id="cmpF892716B07CEB4B1EA32AE30809E10BF" />
+            <ComponentRef Id="cmp7CE4144666A1E7D86198606B49033B24" />
+            <ComponentRef Id="cmpEE40D97F83DA99532A2C375F687A478B" />
+            <ComponentRef Id="cmp95472381E6FE9665425E681427E8C6D5" />
+            <ComponentRef Id="cmpAF054838E6C58F56DEEE171F9DEB36B4" />
+            <ComponentRef Id="cmpBA99BAC55046264DBE704C07ADF35E73" />
+            <ComponentRef Id="cmpFE55DB804962A909857C6F1AA5018C16" />
+            <ComponentRef Id="cmp4016B9FD689517C44260EB25024B3775" />
+            <ComponentRef Id="cmp140C1B7DC3AF86F899CB597F8EF869D5" />
+            <ComponentRef Id="cmp8C3A39B9E86C71DCC38CAFF3577746A7" />
+            <ComponentRef Id="cmpBDDEC5CD7FD9D2E5473E056C25993E85" />
+            <ComponentRef Id="cmp32F74E1715689EC0ED207032F1B95F8D" />
+            <ComponentRef Id="cmpFAB7D042B4150F80059BAB672D6D8A55" />
+            <ComponentRef Id="cmpB6BACA6CB424282D29EDC7D2AB1C065A" />
+            <ComponentRef Id="cmp3BBEA5B0950024DA235D80FD10F3F1F9" />
+            <ComponentRef Id="cmpF43C8DA445F26813CCAC7AE849B0252C" />
+            <ComponentRef Id="cmp51C44323FEFE49D438FD4EF0C256A606" />
+            <ComponentRef Id="cmpDFEB0BAFBD52048189ECF44CA9E42865" />
+            <ComponentRef Id="cmp855346BDE7387E091219404AE80E6B40" />
+            <ComponentRef Id="cmp6AA7AA56F0DAFD8BB8C43B790CAE6F52" />
+            <ComponentRef Id="cmp4BE4ADF87E906CA9A6E57FE06E0CCF99" />
+            <ComponentRef Id="cmpC51CC458DFBA47567DD381452FBF98EB" />
+            <ComponentRef Id="cmp6C1A7FB09F82BCA63AC9D19781CDFE0A" />
+            <ComponentRef Id="cmp84FE4B565A20272C837D0587A48B6FD7" />
+            <ComponentRef Id="cmpCE27701C68AF1C89B2661DCD5B051014" />
+            <ComponentRef Id="cmpF40C5F5B3E09B642C9477188E8AAFAAB" />
+            <ComponentRef Id="cmp5367C03ED0219AB52B0D73E72C0434AA" />
+            <ComponentRef Id="cmp9A53D832D64DD2E1786C7D967B0C7EEC" />
+            <ComponentRef Id="cmpD982A69E3BA7031561537AA1D24E5AAC" />
+            <ComponentRef Id="cmp14DEF29B3D4483DA9A6B45BCF9E4D827" />
+            <ComponentRef Id="cmp20D874332CDFC5E36323F24B03F38219" />
+            <ComponentRef Id="cmp241E121A6C5A592564F112BE9AF76688" />
+            <ComponentRef Id="cmp182ED8314DFF0F6A1147C4450E134183" />
+            <ComponentRef Id="cmp5846EB60FCDC83CA18F509099EA3F789" />
+            <ComponentRef Id="cmp8D1C2E9F977C6CF60FC0F37BE00B544E" />
+            <ComponentRef Id="cmp4EC6AB4994D81A13D1E0513945FEACD0" />
+            <ComponentRef Id="cmpFB289BCB4DC201474008B3898E41980C" />
+            <ComponentRef Id="cmp7C17B94B69E82DFC9B02DC35F216CB41" />
+            <ComponentRef Id="cmp55DBCC39CD4AD23744EC02B1B44A08E8" />
+            <ComponentRef Id="cmp4FA7F2FF03BA767612D256A07C008722" />
+            <ComponentRef Id="cmpEACB3F49066C57BAAFC113704202570B" />
+            <ComponentRef Id="cmp3D7D82287F784173E091BE071F5D2B40" />
+            <ComponentRef Id="cmpF9230BCB2D5F899E7B20D773BB15AF51" />
+            <ComponentRef Id="cmp3314EF710CD7ECFED792943E0E870445" />
+            <ComponentRef Id="cmpED259D10AE97363E4DE8F755E3C655E7" />
+            <ComponentRef Id="cmp749AB4D33AD6BE969ADD29D853EA55A1" />
+            <ComponentRef Id="cmpFE3A7CC09C043F78D68DCEDD849DB2CB" />
+            <ComponentRef Id="cmp58461456AC311011B617FC8E610BE07A" />
+            <ComponentRef Id="cmpA1EE118DA871EEAA16C31C894A999D2D" />
+            <ComponentRef Id="cmpE04624D0A2C5F21A93AACF716FCC8615" />
+            <ComponentRef Id="cmpC10BC8834A2D0BA6D112CB254EC8DEE9" />
+            <ComponentRef Id="cmp9DCE7FB811BE2E9F23853A94E524190E" />
+            <ComponentRef Id="cmp7D58DD9A96FA9F2A2983442A76A594AD" />
+            <ComponentRef Id="cmp646B70FA590666BCF3132628BC4D89FD" />
+            <ComponentRef Id="cmp30FDECB93BCF7EFDDF2D31B844232092" />
+            <ComponentRef Id="cmpA2484F84CD0A8C6DB352F4974162FC79" />
+            <ComponentRef Id="cmp99A403B35CCF8BA2FFA7BC1DC062447A" />
+            <ComponentRef Id="cmp1E7D16377EAC23ED3F28E0B86D7DF0F7" />
+            <ComponentRef Id="cmpED481A8EB63F92E6A83904C640CCE03A" />
+            <ComponentRef Id="cmpCEA6AD2DF8EE9658B1E87E36D3AD05B4" />
+            <ComponentRef Id="cmpDBC5D301A27C6B2118D303A8103CAFEE" />
+            <ComponentRef Id="cmpFA368BD1ACA90823C03DC702B4C26115" />
+            <ComponentRef Id="cmp365C5B9CC3E2DCFBAE55A01C35F7EA8B" />
+            <ComponentRef Id="cmp6D999FD5FBDE172E7F3638579B840042" />
+            <ComponentRef Id="cmp7071BC48B70909E6B5A5A2ACAC3569C2" />
+            <ComponentRef Id="cmp1B65B68D7A810A8296F8A2CEBA43D417" />
+            <ComponentRef Id="cmpBA16140009CA1552A04DABB366F63E3D" />
+            <ComponentRef Id="cmp03729D6327916013E909E06CE304B030" />
+            <ComponentRef Id="cmp1C9150001C69E23D758335F74AB3A270" />
+            <ComponentRef Id="cmpC7541B376BA0B6736EA03782F5D4093B" />
+            <ComponentRef Id="cmp093E3C3B43CF1CA45DCA885A6DD18341" />
+            <ComponentRef Id="cmpFFFBBAACEA9E79ACA56A195C37E84E88" />
+            <ComponentRef Id="cmp36CCEBF2D26EE80858AE6845521BA42E" />
+            <ComponentRef Id="cmp02D4DDE11D135C6D2735D34252C48F83" />
+            <ComponentRef Id="cmp79C62092DCEFC090D15C6D64AFCA8687" />
+            <ComponentRef Id="cmp07ED7ED8352826470D6C1AF03A37CD7F" />
+            <ComponentRef Id="cmpEDF4A9F5F418E2DA0909200B033CA493" />
+            <ComponentRef Id="cmpBFD1006A2719B42F04B3C65504B89EE0" />
+            <ComponentRef Id="cmpF239EAC7C399A2BD9CE1E317D5252090" />
+            <ComponentRef Id="cmp003D77646F00034FEEF7234F2E0DC499" />
+            <ComponentRef Id="cmp09D4DA5EB122C2AAA874AC8E97A3F9AA" />
+            <ComponentRef Id="cmp96F6CA9F851F1BD78B5A1BE7431E6A43" />
+            <ComponentRef Id="cmp7151A00F868B260250B04A46CE195901" />
+            <ComponentRef Id="cmp9A1E0433A5D3346716720692BF2FD6EC" />
+            <ComponentRef Id="cmp8A9F3E0213FCFDBFD32C2A0A536CBCEA" />
+            <ComponentRef Id="cmp36FE3E750C153521537B40DEB31F7F72" />
+            <ComponentRef Id="cmpE84AD614747448EBE8E2DDF4C5D1852A" />
+            <ComponentRef Id="cmp1443C98ED4D2D9A108F4A16A6EDA8FC5" />
+            <ComponentRef Id="cmp968BDA9B46CF2FF64D2E186C45F13A3A" />
+            <ComponentRef Id="cmp9781758C136BD4717C975B558BB17DB1" />
+            <ComponentRef Id="cmpF58D781843C1EF8B30D2F5269564E29A" />
+            <ComponentRef Id="cmp6ECB2C6669443B29109EE491217571B0" />
+            <ComponentRef Id="cmp847ED44C4684F874255D6EBCEF71FD18" />
+            <ComponentRef Id="cmp129C5134B70CB14B080A6F2F70E4C8A2" />
+            <ComponentRef Id="cmpDBAC7EFBB2A9225DE5D50848950F7154" />
+            <ComponentRef Id="cmpFDFA33AB682A22F6DF848190461723AC" />
+            <ComponentRef Id="cmp7A5EE79CAFC7259AF2B350E7C02E9678" />
+            <ComponentRef Id="cmp7957E68647FD5C4690A7A8E9E25C472F" />
+            <ComponentRef Id="cmp10FB9919059F1D361D01E24F5B96A857" />
+            <ComponentRef Id="cmp27738CF62380FC57CDE4E08B6FD597CD" />
+            <ComponentRef Id="cmp2E99AD1C1C3B8B52C95C27B95DD5B91B" />
+            <ComponentRef Id="cmp91E55DC46778DAFD7868469CEED47F50" />
+            <ComponentRef Id="cmp8EB75E68C76243275CA0A8655C75E1BC" />
+            <ComponentRef Id="cmp71575518A08FA0EEEE6C876EDD3067EF" />
+            <ComponentRef Id="cmp8C6374BF3443A232119810E3533D9941" />
+            <ComponentRef Id="cmpB8213914C16F81F4D5BDBFDF847C0CC4" />
+            <ComponentRef Id="cmp73D6CE73D328CE6948CDEF145D1FB8F4" />
+            <ComponentRef Id="cmpEA52429178D84BEFAE7921B899AEAE00" />
+            <ComponentRef Id="cmpEF43FC4837A83346F757EFAB47FD6724" />
+            <ComponentRef Id="cmp76AF179135009F5EC15FB8E94C99582B" />
+            <ComponentRef Id="cmp3A9C34FF8DE09143A8597C0929D9F555" />
+            <ComponentRef Id="cmpABAE962E1290C0A01FF5F9CC344016DC" />
+            <ComponentRef Id="cmpD7C0B391915261D5D464DC5AB2A57B50" />
+            <ComponentRef Id="cmpEE3F391D367C97E8F4BAE86EBFAF4BD4" />
+            <ComponentRef Id="cmp5DFE353B6C0FA7171C37D58E0C271C74" />
+            <ComponentRef Id="cmpF7BF7BF54514CEA54E35D0EBDB9AC379" />
+            <ComponentRef Id="cmpBC5D3BAD884DF4ECC8AF5577366B6143" />
+            <ComponentRef Id="cmp50195FE1DD032E25B6B17CB5CDDF18D9" />
+            <ComponentRef Id="cmp30471EFE96DF8A2D151B487B518EAFF1" />
+            <ComponentRef Id="cmp9573AFA4187BAD9CEC360024FC11B105" />
+            <ComponentRef Id="cmp4FFEA4D83798002168C03144C31A3B21" />
+            <ComponentRef Id="cmpC4F8A185F6B25D54A75D6949D8ACB8BD" />
+            <ComponentRef Id="cmpFDE9FC9F7F792D9D97E2B8B83075B74E" />
+            <ComponentRef Id="cmp667EDF0AF85E35102199167313039E12" />
+            <ComponentRef Id="cmp37880AA89AD9EC27518BDEAA968E5898" />
+            <ComponentRef Id="cmp6CEA4F3E2194B07CBD9138EDE5342F7E" />
+            <ComponentRef Id="cmp7F4DD6B30BDC19D8948336BDC8C4245F" />
+            <ComponentRef Id="cmp4D3B78900D634C276628E6C20DD2BA83" />
+            <ComponentRef Id="cmpDB773BAFDD411E31B8C15C35427B54FB" />
+            <ComponentRef Id="cmp3F9884B0E6462463BC9EE1BC1BDB888C" />
+            <ComponentRef Id="cmpC063531D0F838820F621224442D696CB" />
+            <ComponentRef Id="cmpE9D2F1FA2B226AF00C2F5FA22B699490" />
+            <ComponentRef Id="cmpF6F87C2B808C6227BB4BC9F341326476" />
+            <ComponentRef Id="cmp210E02FA2459D361DE9838E3AB4D2667" />
+            <ComponentRef Id="cmpCC4F5352C239B7A6DDB17FE33369632C" />
+            <ComponentRef Id="cmp98CF240D604645075B63A3C05A1CC7D3" />
+            <ComponentRef Id="cmpA58C9A1F01FD8277EC1E2FEA1FA251A8" />
+            <ComponentRef Id="cmpD3B9CA22872D592AAAA1D3B16459921D" />
+            <ComponentRef Id="cmpA519750C48EE1A2F84C253B2DAF5D460" />
+            <ComponentRef Id="cmp38C50F5AEF94A6B8F04BEC66CDA8B4CD" />
+            <ComponentRef Id="cmpD2F40FE96CB3DADADF6BF9A6C8F02EC8" />
+            <ComponentRef Id="cmp22323E683E522F426F1753F2791CDF52" />
+            <ComponentRef Id="cmp7E467005B297D44F3367CCE7F5010AFD" />
+            <ComponentRef Id="cmp21640DA828DFACA0B60D9E29527F868D" />
+            <ComponentRef Id="cmp2301C5838C741264121A982400518E10" />
+            <ComponentRef Id="cmp9E0A7FF9FC3212D9ADEACD488F61C551" />
+            <ComponentRef Id="cmp4276354A2F1993186A376EAD371C8EFA" />
+            <ComponentRef Id="cmpF0EFE5B0BFBD1E9907A09673CC980480" />
+            <ComponentRef Id="cmp370E9C957FDC51F8E6945B67E0261508" />
+            <ComponentRef Id="cmp0473E2F44D52E6DE019511B3929AA75A" />
+            <ComponentRef Id="cmp2BE82C91CB59BFBD69570DAB9FDB4C1D" />
+            <ComponentRef Id="cmp8A7A85BBBDA9A38EE14435205370154E" />
+            <ComponentRef Id="cmp764657F9670E185EBFA38FE22949C5AE" />
+            <ComponentRef Id="cmp13CC464C8BB916A7A662A4F77040B5E1" />
+            <ComponentRef Id="cmpF23AA5EE252BF3C24212F5141F51E453" />
+            <ComponentRef Id="cmp5A047B17FE024A5A1B4E3C16418C3636" />
+            <ComponentRef Id="cmp50F3AE64C76AE88FC87178602DDD59C3" />
+            <ComponentRef Id="cmp0A50E858969C6EDB74FE587D8CDCC73B" />
+            <ComponentRef Id="cmp9844EE95926AB0EF5A0AD1E8E8676BC6" />
+            <ComponentRef Id="cmpEF7042256E28F7951FB229470CEEF7DE" />
+            <ComponentRef Id="cmp974CCAA17CF2D0861A1017ED33E99CB8" />
+            <ComponentRef Id="cmpD4CD5D46EA9C2DF829ADDCCA75F06213" />
+            <ComponentRef Id="cmpBDC94C3A0A3D2C01DA59758B4DCC700A" />
+            <ComponentRef Id="cmpB3E106AC090B3517B0C6FC8460817C43" />
+            <ComponentRef Id="cmp04AACAA0753F93C97670CE478ABE4B98" />
+            <ComponentRef Id="cmpF327A4ED780D50D60DEB8EEAA8C34501" />
+            <ComponentRef Id="cmp4FE45ED4171875E00366A9A74B037DFC" />
+            <ComponentRef Id="cmp397B82BC77626F3F9FE93C5C6EDB6042" />
+            <ComponentRef Id="cmp798D32B439FFA6AB809C8D87D07B69FC" />
+            <ComponentRef Id="cmpD88A6B555CF21B8E4FDB0FD5CA3AE4F9" />
+            <ComponentRef Id="cmp8ABE76D070FC820A70E24D2E8AD734BE" />
+            <ComponentRef Id="cmpAFE7BB8A45696FF9A630FA01E3CC16D0" />
+            <ComponentRef Id="cmpCF5053852BF9DBAEECD1E0CFD3DA413B" />
+            <ComponentRef Id="cmpEF42757A87A9AE54416B2BC056F75014" />
+            <ComponentRef Id="cmp0EC777FD34A5BAD8337BD3FE59A66E7F" />
+            <ComponentRef Id="cmpA5DF9B22803CD58EAD732BFD0E541DC6" />
+            <ComponentRef Id="cmp8C3730D09DE15DEE9D0C250EB2638FFF" />
+            <ComponentRef Id="cmpEBAE46FF10C5BA8F04E62DD3D5B500A5" />
+            <ComponentRef Id="cmp5D1C473C9C5EF09F60D32050AA1AC3EE" />
+            <ComponentRef Id="cmp5C8B93D30505A3B6DAAE5B3D7473B14A" />
+            <ComponentRef Id="cmp87E62E912B3F71D6F38BBA9B44B721B4" />
+            <ComponentRef Id="cmp93E589C0E416A17F14D50B8B78F32840" />
+            <ComponentRef Id="cmp268E99EB98CCA56363927B9F0D49F1CB" />
+            <ComponentRef Id="cmp18F39A0A1C43301E0D799D4FF085255C" />
+            <ComponentRef Id="cmpCC293A48EF3010109A15D62F2CC5E159" />
+            <ComponentRef Id="cmpBB552AE6092ACFAFFFFCAA505D5770BB" />
+            <ComponentRef Id="cmp76F17A5C2A7CC0EB8FFF8AEC2608AE1B" />
+            <ComponentRef Id="cmp0265BCDE60A0F2ED13961B5800E3CA0A" />
+            <ComponentRef Id="cmpE2050068F2AC689D975B4BD00CFE311F" />
+            <ComponentRef Id="cmpE24DA4E89F4D7218A5F1750A5907A0AF" />
+            <ComponentRef Id="cmpE2466B6954E18FD939EFF9B1F9198D16" />
+            <ComponentRef Id="cmp6F47F64647F3E6AB3A02821FF1AEB7BB" />
+            <ComponentRef Id="cmpEC63D75CA683FB7675F97DC1A1E1ED88" />
+            <ComponentRef Id="cmp5D219DDF48BE0F0AF3BEE56CFE06171D" />
+            <ComponentRef Id="cmp14F27AA35EADD7A6D2AC9CEC81251CAB" />
+            <ComponentRef Id="cmpB31BE469B8596BB5C73AC0A5DC989B9A" />
+            <ComponentRef Id="cmp74D93AE0F182CC7A9C2CF3020DBFDFC0" />
+            <ComponentRef Id="cmpF4E57F363811B94A721E8DD10591E820" />
+            <ComponentRef Id="cmp0848DBB2ED30A5E7ECBAB6956323C79E" />
+            <ComponentRef Id="cmpED7CFAE28B8DA1DD353900FA591A1B36" />
+            <ComponentRef Id="cmp38C6AB5C3D158C0AE758DB4372B28F2B" />
+            <ComponentRef Id="cmp64F7ED3F6EA3C3BA28C2C2DBEE609CA4" />
+            <ComponentRef Id="cmp1D9155DD4F3885B88188827D6E83AACE" />
+            <ComponentRef Id="cmpAFA9020D8CB5E84273F2CBC42B01F742" />
+            <ComponentRef Id="cmp3DC5B687B8D42026BBA93F1ED9A38B42" />
+            <ComponentRef Id="cmp87806A674899DAE955DDE0551CAA5351" />
+            <ComponentRef Id="cmpEF0C9A33306B2E3831C7C41D71B20DDF" />
+            <ComponentRef Id="cmpE019A62C854EAA5AD12DE21404B5C04E" />
+            <ComponentRef Id="cmp553C80E7C04B36D25428E3C813F7ED73" />
+            <ComponentRef Id="cmp50D42695FA04C4012139FCAB300D7C43" />
+            <ComponentRef Id="cmpA98A66B2168B80AF45E2929FEAB14056" />
+            <ComponentRef Id="cmp02434CEDC9976EF9489052FB91299E90" />
+            <ComponentRef Id="cmp1F883AC7D7CBD1E5F357D84B023A5C34" />
+            <ComponentRef Id="cmp0CB13695BCB6C9BACAAE7B16C7629724" />
+            <ComponentRef Id="cmpD2EA5C1AFAC1DD8A542FB76A38AB1673" />
+            <ComponentRef Id="cmpB511EE1649C98E4EB93093086307027F" />
+            <ComponentRef Id="cmp70332A2934903E2B2761493BD77ED0F1" />
+            <ComponentRef Id="cmp09565E8632D8F5710BD19567E3BC7D3E" />
+            <ComponentRef Id="cmp9900AD09E2B6A0E1EE01AF0FB1ABC770" />
+            <ComponentRef Id="cmp6B53E76B2FC0A546E416BEA82B650F30" />
+            <ComponentRef Id="cmpC4E0D1A578ABA14843E995A4A39073F7" />
+            <ComponentRef Id="cmpF3004E812E8636D1DC4AD7BB4889F56F" />
+            <ComponentRef Id="cmpDE582CF394DCED6316DAC444EABEC276" />
+            <ComponentRef Id="cmp164C24B63D20F34322DAED9093EE5FAE" />
+            <ComponentRef Id="cmpB54891CDD6FCDA65D8C08ACC93FAF81F" />
+            <ComponentRef Id="cmp6F0635E8DE8C022F6F5F8FF6EB461F50" />
+            <ComponentRef Id="cmp6761CB8C65E81C0C42948D04EFD8E1F8" />
+            <ComponentRef Id="cmp2C96264C2D7836E615D626A282E18F26" />
+            <ComponentRef Id="cmp5521564937DF6939A0895C3EF543DFA7" />
+            <ComponentRef Id="cmp96067BA625EDB759DC4B426944F00CE4" />
+            <ComponentRef Id="cmpD9A5379076FD2A62C2B3F8BBC29DD855" />
+            <ComponentRef Id="cmpACDA6992C381E02933E424820F37B53C" />
+            <ComponentRef Id="cmp09780B74200CE1FD0457140D28483471" />
+            <ComponentRef Id="cmp4868CF6DA4878AB01EDA19D3F9C4341C" />
+            <ComponentRef Id="cmp3B4D635B6DAB36F70FD80AD830F9BF0A" />
+            <ComponentRef Id="cmp46761F62BE01378506D9A62F743F5F2C" />
+            <ComponentRef Id="cmpA469C6108A625DBDC8F16966D6EF104F" />
+            <ComponentRef Id="cmp3C2AF86914CDB32A49AA0AB0D73D1326" />
+            <ComponentRef Id="cmp0467763751F914B1EB0E2473562647C7" />
+            <ComponentRef Id="cmp545A79137A380CF5F7454957440F50E5" />
+            <ComponentRef Id="cmp1D5A72424E08651348A8D25A69223234" />
+            <ComponentRef Id="cmp9CFE98CBC0BA307A7DB43560AB4C5675" />
+            <ComponentRef Id="cmp41120A1D16B64E12D02A1E74892C431A" />
+            <ComponentRef Id="cmpB111617B92A719C16C3C8FE5C32E3569" />
+            <ComponentRef Id="cmpF330706B48BAF7AC67B1253F8A14A6EB" />
+            <ComponentRef Id="cmp4AB91991607E52C9E1026BD3D2FAEEAF" />
+            <ComponentRef Id="cmp0178AE40E0EA96F3A803D37E6BA6FA6B" />
+            <ComponentRef Id="cmpF724FC39B8B8C7F4A1B04AB870AB12D0" />
+            <ComponentRef Id="cmpD6709C24CD837619F9C9F60281B3BCF2" />
+            <ComponentRef Id="cmpC90583CFF538ED9E827D22F2155402F2" />
+            <ComponentRef Id="cmpB6BF83EB319D53AD15D7B60637BBA14E" />
+            <ComponentRef Id="cmp8D84BE67C2A336FF9A82DF26F243FA96" />
+            <ComponentRef Id="cmpF4F7CE0125335BAB5F499C572177B587" />
+            <ComponentRef Id="cmpD214EBC4F15511891531C1F1F3B36FA2" />
+            <ComponentRef Id="cmp4204B6797B2BCAFDBDB0D63D9F97CCEB" />
+            <ComponentRef Id="cmp5B059DA5127BB9854F9F48546145022A" />
+            <ComponentRef Id="cmp64059199A08ED7FD4B711B5895307B0D" />
+            <ComponentRef Id="cmp015C1040F6B757CEEF51FB42341DD471" />
+            <ComponentRef Id="cmp641A914DA35D20490BA9CB7E6B1ADBFF" />
+            <ComponentRef Id="cmp9E8AA5662A06EA257AAADAB71BF838AA" />
+            <ComponentRef Id="cmp5505875DD8C27F673EC3DEA31097996D" />
+            <ComponentRef Id="cmp169837F0872604A9C68CAAFF6C5D96C6" />
+            <ComponentRef Id="cmp8D55B03B53E712BBEC8FAB30E9AFF843" />
+            <ComponentRef Id="cmp147F293A3B78544F994ABB33B2E6C5C8" />
+            <ComponentRef Id="cmp0EA413AC8A4D940D8EAA5091C9941057" />
+            <ComponentRef Id="cmp4E1FB25567634E6F74BDEF2ADFFA7BC5" />
+            <ComponentRef Id="cmp394FF00D24624EB412FD94E3FA4CE1F2" />
+            <ComponentRef Id="cmp5C72DCAFCB410B8D30AD2FEA757D5495" />
+            <ComponentRef Id="cmpAF6F778B0482C4551D61D4533C86E099" />
+            <ComponentRef Id="cmpBD4680927973296BA79EFC1080D3DEDE" />
+            <ComponentRef Id="cmp93B0A747335A6A45134AAB8BD9EB5691" />
+            <ComponentRef Id="cmp2FA955C89B9579210131D72970E960BA" />
+            <ComponentRef Id="cmp8662A400205AC8C3B6B32D10F1E8B93D" />
+            <ComponentRef Id="cmpC123E1FD4ECABE4CA77CC5644C290067" />
+            <ComponentRef Id="cmpEBF2B577EF430B495E183D5DA08E2E99" />
+            <ComponentRef Id="cmpF7AE50AB99F8B99F2F4A0244D319ECD8" />
+            <ComponentRef Id="cmp3C2A509F61DC735A9928A3C59AD97F77" />
+            <ComponentRef Id="cmp17143D25885F56D4587F39B783960A42" />
+            <ComponentRef Id="cmp1B192908B055C0D7E41EC2C93CC0D388" />
+            <ComponentRef Id="cmp03886856CB6C693B119763A92F6D4EDB" />
+            <ComponentRef Id="cmp67E49F6420577562A3D8F81990854F71" />
+            <ComponentRef Id="cmp9F53E36D34688C9F9078C3C96284BC83" />
+            <ComponentRef Id="cmpF3F6C999A13B6BA574F3D428FE537FB1" />
+            <ComponentRef Id="cmp84BD9F2A412B595AA651A7B9046B6CFB" />
+            <ComponentRef Id="cmp2948E8DE8BE320556C817E264633A9BB" />
+            <ComponentRef Id="cmp38BBC967A6AF6100A6D6878275C81F34" />
+            <ComponentRef Id="cmp397FBCC8C19CD9C029B761EE8E3F413F" />
+            <ComponentRef Id="cmp0A3BE5C55DC7039FBD92FA3FA8D805F4" />
+            <ComponentRef Id="cmp9544D240B040AEF394A1A71AEF3BF0EE" />
+            <ComponentRef Id="cmpB91EA2518FD6655BDF2EF921F947401B" />
+            <ComponentRef Id="cmp3EDEAAC26EF1FDC663FE1A8FD18907E2" />
+            <ComponentRef Id="cmpC929A306F834053C79978F6B9D4AA961" />
+            <ComponentRef Id="cmpF3809E3F82F68A572CA689BD0DB7ACFC" />
+            <ComponentRef Id="cmpBB9143FBF9EDAF41CB28E7EC16DB57C2" />
+            <ComponentRef Id="cmp21A9D2F17B6B2F01327B5435172B88F0" />
+            <ComponentRef Id="cmp4FC34D37A153974D9FD2DFF62F6027AF" />
+            <ComponentRef Id="cmp8EF5527A1FE046E42EA95C772282AE4D" />
+            <ComponentRef Id="cmp16696BE9C5E9891CDB33D3C56F926B05" />
+            <ComponentRef Id="cmpBD3FAE4557D3F362C2F5637BCE6D4B49" />
+            <ComponentRef Id="cmpA206A7746C3F3A925D99C39E94C2D385" />
+            <ComponentRef Id="cmp544468775D4275CAB61165A6B31BFE33" />
+            <ComponentRef Id="cmp019773C56ED7AFD4A03C918225673206" />
+            <ComponentRef Id="cmp089B9380E5E2555D17186465266687C2" />
+            <ComponentRef Id="cmp4AB7F8D468DF0A96327F8E8146060DFF" />
+            <ComponentRef Id="cmpAD7746B2CD8F4C68B02716666C38A8AD" />
+            <ComponentRef Id="cmp81AD276088CE4EE31DD0B191477D1029" />
+            <ComponentRef Id="cmp0A036037BA1D14B276D1A4BDA815FE08" />
+            <ComponentRef Id="cmp376EFAC9FD9A7A36B9CA3BA47BECF6C9" />
+            <ComponentRef Id="cmp9292AFE196A54677DB56B5CA83416721" />
+            <ComponentRef Id="cmp50D06DEE1135B27BE3D19BE34854AB99" />
+            <ComponentRef Id="cmp26B3F2480CA83357A323D3A5AF08E5EE" />
+            <ComponentRef Id="cmp9AF77C296A7C9B8E2CFFDB619388A087" />
+            <ComponentRef Id="cmpC51E6616081DFA9E532E9CAE696A2C8F" />
+            <ComponentRef Id="cmp6DACD420213E5CFED7969616CD42F5E2" />
+            <ComponentRef Id="cmpF837EA72ABF7519357AFE75E6ECAB815" />
+            <ComponentRef Id="cmp80CC728AB1DCF8C0DAA7DC6E3E11AE7A" />
+            <ComponentRef Id="cmp562ED232677192799AD5D954EC375D5A" />
+            <ComponentRef Id="cmp8E1A2E54BFE74125F22C1BC6E9531D62" />
+            <ComponentRef Id="cmp576A7DC40A7913799862871DD17A5D23" />
+            <ComponentRef Id="cmpA830FCFF4C973AB59B57D7400476DA64" />
+            <ComponentRef Id="cmp696BC26006312DB104DDB61F290E615F" />
+            <ComponentRef Id="cmpB1F3BAFD88E3DF042EBD6BBD9DD8151E" />
+            <ComponentRef Id="cmpC0CE45B96C85678C6629F7FF2D7B8C1E" />
+            <ComponentRef Id="cmp462EA36D9694B7055ACB47F00C81A8EE" />
+            <ComponentRef Id="cmp4E06428915B7C06FBDC1E0D2AF06A6C8" />
+            <ComponentRef Id="cmp6BD1AE1EA5BDA4D22924DE1ADB14995C" />
+            <ComponentRef Id="cmpD291CD572B68357CA7D679752CAF9494" />
+            <ComponentRef Id="cmpEA9FCDE227EAED6AAAF856FB5221F97E" />
+            <ComponentRef Id="cmp1898316B8542C34448A73EA6A3AEA669" />
+            <ComponentRef Id="cmpAA6ADADE98B9F524D45347E3C368DAF9" />
+            <ComponentRef Id="cmpD32A8FC25C86B11F4DD0291FD5BA400D" />
+            <ComponentRef Id="cmp4BFDDE54E2B742BEB25AE110B8314848" />
+            <ComponentRef Id="cmpEC1865C15D426839B610DF219AC012C2" />
+            <ComponentRef Id="cmp79F3680A04628EFE526F61A52A31ECC1" />
+            <ComponentRef Id="cmp360DDCE8DDDACD7FD04770DDE4B864C9" />
+            <ComponentRef Id="cmp4DAA77E16545DADB50C9F12D51774756" />
+            <ComponentRef Id="cmp178622ED41385F2CF3BD6985ACB544B6" />
+            <ComponentRef Id="cmp83842D2F565EBC52BC15D5D9F8672A02" />
+            <ComponentRef Id="cmpF8CF651060A5B90238DCDE9C4CF18664" />
+            <ComponentRef Id="cmpCEC9C2A728F74950BDB8A2BADD3DDB2D" />
+            <ComponentRef Id="cmp5BC487693757FAD5144CD261330EC247" />
+            <ComponentRef Id="cmpA4AAB089862DCC3D16407930B23E0646" />
+            <ComponentRef Id="cmpCDFFA75957AEACCB0C2A208FFE098C42" />
+            <ComponentRef Id="cmp4DF01E8F850CE0555061A278FE3DE0F8" />
+            <ComponentRef Id="cmp7C56366459F4C5C67EA65FD1B7A39642" />
+            <ComponentRef Id="cmp31BFB550217A5ACFC12E51777E6A7FEE" />
+            <ComponentRef Id="cmp3501F5C565E198CBA9AD48F6C9CC7334" />
+            <ComponentRef Id="cmp165BCF0586BB4A5903B90333ABA094E5" />
+            <ComponentRef Id="cmpEA472314F1454DE487A3D6DEE8A96AA9" />
+            <ComponentRef Id="cmpD61EEB957AEFFF5C7E915AB56A5719F1" />
+            <ComponentRef Id="cmp0B2707CF9FAAE38B2EEB9843AA2850FF" />
+            <ComponentRef Id="cmpF149F721F76AF3D72A29EBE7FE6783F9" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

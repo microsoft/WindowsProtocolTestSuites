@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="TESTSUITE_DATA_DIR">
+            <Component Id="cmpB6D00791AD4A143E79A284496CAA5F7C" Guid="{5FFB9937-BC69-4E8D-821E-5E9C74C44879}">
+                <File Id="fil543F9AE4C7DAEA86CED6BC681E342753" KeyPath="yes" Source="!(wix.TESTSUITE_DATA_DIR)\DirectCredSSP.RDP" />
+            </Component>
+            <Component Id="cmp7C5B7ECF4A3E94BF7845C6CD9282CCF2" Guid="{FF32CBD7-623C-47A1-8BBF-C44AF4B76B90}">
+                <File Id="fil58355FAE3EA9F07BEEA2BA535B121273" KeyPath="yes" Source="!(wix.TESTSUITE_DATA_DIR)\DirectCredSSPFullScreen.RDP" />
+            </Component>
+            <Component Id="cmpFF2F103D50F6E225686378F3B2A36B4A" Guid="{C459AD20-1400-4C89-99E5-9268E914F288}">
+                <File Id="filF99DF4005619092F09E5ACF04B16E078" KeyPath="yes" Source="!(wix.TESTSUITE_DATA_DIR)\DirectTls.RDP" />
+            </Component>
+            <Component Id="cmpA87FCA80605FC440B5CFB6499AB72373" Guid="{C71756A9-DA34-47DB-8F81-87D38334D7C1}">
+                <File Id="filFBF8EB4EFB3B8EF869545BDD936AD791" KeyPath="yes" Source="!(wix.TESTSUITE_DATA_DIR)\DirectTlsFullScreen.RDP" />
+            </Component>
+            <Component Id="cmp517A23612AA791728FE85BA46C2456E0" Guid="{694F35C7-3428-4707-AAFB-9BCBA94A8177}">
+                <File Id="fil6BAD12125E78B73706CF11EFCF4278CA" KeyPath="yes" Source="!(wix.TESTSUITE_DATA_DIR)\DisconnectAll.bat" />
+            </Component>
+            <Component Id="cmp6A2ED45957F6B3A6E0EF57DD042255FA" Guid="{C1671BF2-AA8B-4982-A891-4483AFFBC1C0}">
+                <File Id="filBC989D9F797B4B35607066F8390AFF67" KeyPath="yes" Source="!(wix.TESTSUITE_DATA_DIR)\Negotiate.RDP" />
+            </Component>
+            <Component Id="cmp5681BF9D527D074BAC9726F92137F6C6" Guid="{AD95B396-F2F7-43EA-9C4B-974153D88523}">
+                <File Id="filDA1506B1F2519695743AE0A21916A430" KeyPath="yes" Source="!(wix.TESTSUITE_DATA_DIR)\NegotiateFullScreen.RDP" />
+            </Component>
+            <Component Id="cmp82B7974572CD02BF2AD383CFCF4F1066" Guid="{8FEF7D6A-3B8B-4E43-8905-5757E8870438}">
+                <File Id="fil348B57EB7AF845ED54CFF2551B2A5336" KeyPath="yes" Source="!(wix.TESTSUITE_DATA_DIR)\RDP_UIControl.xml" />
+            </Component>
+            <Component Id="cmp588EE2B3C6ABB734638CF28B8101BCC2" Guid="{9E847031-DEF3-4C97-8CEC-39D69C77292F}">
+                <File Id="filD493CB187E7E70FFDA35E87CFA176070" KeyPath="yes" Source="!(wix.TESTSUITE_DATA_DIR)\TriggerNetworkFailure.bat" />
+            </Component>
+            <Component Id="cmp986ABF49B697E6FA141DC4B78D1E88E4" Guid="{0FC31C41-B7CB-4A81-8E2B-A9E998F07FC9}">
+                <File Id="filE40E178A5B0CB65758BFC3CA2180DB70" KeyPath="yes" Source="!(wix.TESTSUITE_DATA_DIR)\TriggerNetworkFailure.ps1" />
+            </Component>
+            <Directory Id="dir59B1EABC0E0F62B0A3C6DC7BEF7B59E9" Name="SuperLogViewer">
+                <Component Id="cmpA17ED6C9539872FD3666324714686F0C" Guid="{B60129AF-7AA0-43CA-8906-FDD043FC2752}">
+                    <File Id="filB9F3172B4B19C977F2FE5E26446A51E0" KeyPath="yes" Source="!(wix.TESTSUITE_DATA_DIR)\SuperLogViewer\RDPColorRule.asset" />
+                </Component>
+                <Component Id="cmp4B002A6E2F475F3D9D7C7782B5A26AD3" Guid="{4560B83D-12E8-4E14-A141-B2A17A49C994}">
+                    <File Id="filCC541490E3FC75E88DF34E1FBD1FFB74" KeyPath="yes" Source="!(wix.TESTSUITE_DATA_DIR)\SuperLogViewer\RDPColorRule.metadata" />
+                </Component>
+                <Directory Id="dir16634DA24143E7E60D9835C6BE538981" Name="OPNs">
+                    <Component Id="cmpD477EB6154059B8293DBDF57BF821BBD" Guid="{DD6A0CEA-9ABE-4269-86E4-B5B2DF2AD7A0}">
+                        <File Id="fil3BE6C3CABD644FA4C78F04715B0EA5F9" KeyPath="yes" Source="!(wix.TESTSUITE_DATA_DIR)\SuperLogViewer\OPNs\Protocol_Test_Suite.opn" />
+                    </Component>
+                    <Component Id="cmpA8A03056B27F1B149AB72FAEBBB32E30" Guid="{62BDB2BF-A584-4853-A7DF-9DA522E62D85}">
+                        <File Id="fil4C7F3853B99A349831D18D5F98BFB297" KeyPath="yes" Source="!(wix.TESTSUITE_DATA_DIR)\SuperLogViewer\OPNs\RDPBCGRTest.opn" />
+                    </Component>
+                    <Component Id="cmp871E10A239BAF03851B0E93D99699A42" Guid="{C780DACB-759D-409E-ADDD-392C81EA64C4}">
+                        <File Id="fil3583C47609A1B52B2036C5DF3F4B3574" KeyPath="yes" Source="!(wix.TESTSUITE_DATA_DIR)\SuperLogViewer\OPNs\RDPEDYCTest.opn" />
+                    </Component>
+                    <Component Id="cmpE896BE4EF9D6606B7EE271B117C9D494" Guid="{802A51EE-075D-4404-9FF7-6CC2510FA9D4}">
+                        <File Id="fil4C3854A4CADE8D90B8DC5B47BB111416" KeyPath="yes" Source="!(wix.TESTSUITE_DATA_DIR)\SuperLogViewer\OPNs\RDPEGFXTest.opn" />
+                    </Component>
+                    <Component Id="cmpCD669155E3A2771B1064463A18CF1E36" Guid="{8D20188C-B88F-4759-9CBC-BBA81162DC07}">
+                        <File Id="filEEBD11B7A34E4D2F833279899E23F79A" KeyPath="yes" Source="!(wix.TESTSUITE_DATA_DIR)\SuperLogViewer\OPNs\RDPEMTTest.opn" />
+                    </Component>
+                    <Component Id="cmp27AD6A51CFAD4C603EA36F81CBDF0B3E" Guid="{6FDB97F3-F38F-4FCC-8386-539AD04C2700}">
+                        <File Id="filDD10D94A57FAB46BB250D3BB633B84A6" KeyPath="yes" Source="!(wix.TESTSUITE_DATA_DIR)\SuperLogViewer\OPNs\RDPEUDPTest.opn" />
+                    </Component>
+                </Directory>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="TESTSUITE_DATA_FILES">
+            <ComponentRef Id="cmpB6D00791AD4A143E79A284496CAA5F7C" />
+            <ComponentRef Id="cmp7C5B7ECF4A3E94BF7845C6CD9282CCF2" />
+            <ComponentRef Id="cmpFF2F103D50F6E225686378F3B2A36B4A" />
+            <ComponentRef Id="cmpA87FCA80605FC440B5CFB6499AB72373" />
+            <ComponentRef Id="cmp517A23612AA791728FE85BA46C2456E0" />
+            <ComponentRef Id="cmp6A2ED45957F6B3A6E0EF57DD042255FA" />
+            <ComponentRef Id="cmp5681BF9D527D074BAC9726F92137F6C6" />
+            <ComponentRef Id="cmp82B7974572CD02BF2AD383CFCF4F1066" />
+            <ComponentRef Id="cmp588EE2B3C6ABB734638CF28B8101BCC2" />
+            <ComponentRef Id="cmp986ABF49B697E6FA141DC4B78D1E88E4" />
+            <ComponentRef Id="cmpA17ED6C9539872FD3666324714686F0C" />
+            <ComponentRef Id="cmp4B002A6E2F475F3D9D7C7782B5A26AD3" />
+            <ComponentRef Id="cmpD477EB6154059B8293DBDF57BF821BBD" />
+            <ComponentRef Id="cmpA8A03056B27F1B149AB72FAEBBB32E30" />
+            <ComponentRef Id="cmp871E10A239BAF03851B0E93D99699A42" />
+            <ComponentRef Id="cmpE896BE4EF9D6606B7EE271B117C9D494" />
+            <ComponentRef Id="cmpCD669155E3A2771B1064463A18CF1E36" />
+            <ComponentRef Id="cmp27AD6A51CFAD4C603EA36F81CBDF0B3E" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

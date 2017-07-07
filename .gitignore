@@ -74,3 +74,9 @@ TestSuites/MS-AZOD/src/Deploy/DOCS_FILES.wxs
 TestSuites/MS-AZOD/src/Deploy/Scripts_FILES.wxs
 TestSuites/MS-AZOD/src/Deploy/TestSuiteBatchFiles.wxs
 TestSuites/MS-AZOD/src/Deploy/TestSuiteBinFiles.wxs
+TestSuites/MS-ADOD/src/Deploy/Scripts_FILES.wxs
+TestSuites/MS-ADOD/src/Deploy/TestSuiteBatchFiles.wxs
+TestSuites/MS-ADOD/src/Deploy/TestSuiteBinFiles.wxs
+TestSuites/RDP/Server/src/Deploy/Batch.wxs
+TestSuites/RDP/Server/src/Deploy/Bin.wxs
+TestSuites/RDP/Server/src/Deploy/DOCS_FILES.wxs

@@ -1,0 +1,321 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="TESTSUITE_BIN_DIR">
+            <Component Id="cmp0D260A9130233CC80B758481F52E8989" Guid="{BFDC887E-0653-46D2-9AC1-55FBE9D177F3}">
+                <File Id="filAC86BBF8EC303C542515EB29835A0592" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\Check-PSRemoting.ps1" />
+            </Component>
+            <Component Id="cmpF5EEC661B016AF2C4D8F29E50137C6DF" Guid="{6DC504D0-45DA-4B91-B6D3-5895AF719331}">
+                <File Id="filC8CC66CBCD1A74B93A1C718E4BB5C022" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\ClientLocal.TestSettings" />
+            </Component>
+            <Component Id="cmp95B77479361F7B3735AAB588995C5334" Guid="{5B02420C-3BA2-4F45-B00D-727826AFEABA}">
+                <File Id="fil4CCED2C9424FD64B47EF80CE4DFAD5D4" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\End.png" />
+            </Component>
+            <Component Id="cmpC0C8AC9D17DD793BA8326330454E0B46" Guid="{654E1FAB-84FD-44D9-A42C-A9E1E5C0484E}">
+                <File Id="filA89AA677628AE5B536CB8E62B1B6A5D8" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\MonitorAdd.png" />
+            </Component>
+            <Component Id="cmpA81B45749E72194A5B2A06E5D64A888B" Guid="{5367A209-5E49-462E-B6D9-51F9D69065EB}">
+                <File Id="filC404B45C482555008F1C82370A2D1ACC" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\MonitorRemove.png" />
+            </Component>
+            <Component Id="cmp8046E32D8BB6E08CC6A1A3EEE996C78F" Guid="{58590558-31DA-4C38-9DF7-E49D53C3299F}">
+                <File Id="filA01560F69808FB7D70DD5F1A67E4D86D" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\OrientationChange1.png" />
+            </Component>
+            <Component Id="cmp425E0EF170791EA867131AA6DD1FA5F5" Guid="{3B2AC660-9043-46C2-9283-D632614EC9E5}">
+                <File Id="filC5AFEF26C0EE2EFD8D1E0878A9ADBBCB" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\OrientationChange2.png" />
+            </Component>
+            <Component Id="cmp333F80AD3C8A7953D2E0A85552BC3481" Guid="{5364E855-0F9A-45F2-8892-7B73C21918F3}">
+                <File Id="fil613332AAA5B503E74221CEC8CD179895" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\OrientationChange3.png" />
+            </Component>
+            <Component Id="cmp9DE29B6DC62CED255C25F3DB71FF5730" Guid="{253F3885-E368-407B-8C18-B5DB7C1E823B}">
+                <File Id="fil07A050D2DD79281FEE6ECC1C5384311A" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\OrientationChange4.png" />
+            </Component>
+            <Component Id="cmpF9A0F7BAEF29F9EA14FCE2473C78BEA8" Guid="{95E77AFA-1A68-46CF-8900-FF69B503DFD9}">
+                <File Id="filF488DDCCB320E7CA5348BD264FB37742" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\OriginalPic_1.png" />
+            </Component>
+            <Component Id="cmp2DA9C8F2A9D903EC404E0D08107FB6BC" Guid="{C6243F02-BF26-4CA8-B947-096881B411AE}">
+                <File Id="fil561AAE5022CA46F2FE3EE629999586DA" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\OriginalPic_10.png" />
+            </Component>
+            <Component Id="cmp8CED0AD723539A13F6B6746F9EFCBFBD" Guid="{964B2E8E-D409-4BAD-926D-9A6DC484F247}">
+                <File Id="fil092EF9C9BAEF756DB4366E4D4A9009CC" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\OriginalPic_2.png" />
+            </Component>
+            <Component Id="cmp23B200FEC209FD0014187B769C0366C8" Guid="{0A10EF04-D1AD-4BD1-BA81-1D2DADBB471E}">
+                <File Id="filAB0D6FCA4B5BD9C21D07E2DE2B0A2842" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\OriginalPic_3.png" />
+            </Component>
+            <Component Id="cmpB1225BD7259C4D3F5D7E4CF7EB1B59E1" Guid="{8560511D-C761-4813-8ED3-E2AE45665995}">
+                <File Id="fil5339EBBC93D404D9B52514124F7A9F19" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\OriginalPic_4.png" />
+            </Component>
+            <Component Id="cmpD519EB45AF7BA108EAFC599410E6E782" Guid="{6605001B-1052-4ACE-9E25-4BB23F2D9BF0}">
+                <File Id="fil97040034E19980D53B7DF73D180DE12A" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\OriginalPic_5.png" />
+            </Component>
+            <Component Id="cmp9ABFDED42772388D6C12A8E3E3364F22" Guid="{A88A6467-70EA-48CC-9C22-E6EDD8DC06CF}">
+                <File Id="filD52A6B1E647826566751364B6F3DEB19" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\OriginalPic_6.png" />
+            </Component>
+            <Component Id="cmp79B0922476EEDCB134AB84534BBAD52A" Guid="{12ACACC1-E398-4673-8D56-FA48D81DF9FE}">
+                <File Id="fil47A78B7578B3CEEC0C1D8FB6529A6996" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\OriginalPic_7.png" />
+            </Component>
+            <Component Id="cmpFC084DA0FD9EAE9BA17C4D26A509F4DF" Guid="{CB334AAC-4B5E-43AF-9C81-EBC66ADB7E95}">
+                <File Id="fil0C38D4AFD4FB112021F16A5A1E2B58DB" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\OriginalPic_8.png" />
+            </Component>
+            <Component Id="cmpFB9090E1A49806AC28FF44B30E732456" Guid="{FBF77C89-E616-45B3-9F62-9876AB113C6F}">
+                <File Id="fil127781D7DAEC69DDCC43DA21CB9FCBC3" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\OriginalPic_9.png" />
+            </Component>
+            <Component Id="cmp8F15618C6375B40CC7077A3A3AD17A43" Guid="{5FD65390-F356-4FCD-8AD2-3BE0E31DBFF9}">
+                <File Id="fil7AC8EAC14AF8D29497D968D09C6DA2DB" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\OriginalPic_Large_1.png" />
+            </Component>
+            <Component Id="cmp3BA60DFEC244892C19DA254CC696C3B3" Guid="{43411B27-8A23-48A2-B0F9-8AEB88E335E5}">
+                <File Id="filC31D195C304D1AA8A629FAACF0F2948E" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\OriginalPic_Large_2.png" />
+            </Component>
+            <Component Id="cmp2E85BA17BA32F1838EE524B7AE0F9A98" Guid="{F41AAB75-F182-4343-9A15-357592620D29}">
+                <File Id="fil8F807E9C751A6C7271A7DB0484C9E41F" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\OriginalPic_Large_3.png" />
+            </Component>
+            <Component Id="cmpD497E30F899BEC2EFAF07C896ECCA5DD" Guid="{6C26226E-5A1D-4BDD-8F41-CB68A67F65CB}">
+                <File Id="fil46FDA9B410E188E92411BE9B38020C4F" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\OriginalPic_Large_4.png" />
+            </Component>
+            <Component Id="cmp8553E521B90971EC5476B55447947BCF" Guid="{2C79BB46-B7B7-4216-AD4E-BBE2B75EB980}">
+                <File Id="filCD88BCDE05280CE1D82D5B4F40E853EE" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\OriginalPic_Large_5.png" />
+            </Component>
+            <Component Id="cmp61857659EB05FA6DC7ECB1DE53439FF0" Guid="{FC87AD61-FEC2-442E-ACBC-509BB5206C58}">
+                <File Id="filC15E9A3186214B3A0B6251C12FD55103" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDPConnectWithDirectCredSSP.ps1" />
+            </Component>
+            <Component Id="cmpBEA3E2582A0DDA029DEB5A211BD0CCA6" Guid="{A3AA867E-01BB-44ED-9EFE-44486206D8D0}">
+                <File Id="filC7B55E4149DF8A6080A0F755B306E13E" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDPConnectWithDirectCredSSPFullScreen.ps1" />
+            </Component>
+            <Component Id="cmp2AED99A6BC5F36B2CC3242E88008103D" Guid="{F9EAAD2A-CF8B-4017-B12B-5668D022A661}">
+                <File Id="fil27D2CFBBCCBF4C20F9CF4C08298E55C2" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDPConnectWithDirectTLS.ps1" />
+            </Component>
+            <Component Id="cmp024DEFAF891F128674CFF9A60FEA54A1" Guid="{DA5CBAB1-1B47-43D5-BCC5-F108006B9CCC}">
+                <File Id="fil0975D211F476DB9D5AC754A332FF44B3" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDPConnectWithDirectTLSFullScreen.ps1" />
+            </Component>
+            <Component Id="cmp4E40FB49B1EAC3129FD89A0EDECA80E4" Guid="{24C054B9-3A21-4630-8C35-F84D32397948}">
+                <File Id="fil1C40B4055D78D22E23286B0BB3B2D11B" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDPConnectWithNegotiationApproach.ps1" />
+            </Component>
+            <Component Id="cmpC972A6B888AB123C5711BEDA9B470759" Guid="{F8272D0F-4963-489F-99E7-13006D33CE44}">
+                <File Id="filA7C8CE208D07C372DCAF96735DBE211C" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDPConnectWithNegotiationApproachFullScreen.ps1" />
+            </Component>
+            <Component Id="cmp3590B63B6CF1E5BC837E24FED9D9CBA7" Guid="{394EF536-5600-4A49-A2F6-8D4D97490408}">
+                <File Id="filEBA2309A41900EF4C0C33F2B289438D0" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RdpedispTestImage.bmp" />
+            </Component>
+            <Component Id="cmpD0F5AA1230B3AE2706BBBED1920C6A77" Guid="{802AEB36-84DF-443E-81FA-95DBF4365C29}">
+                <File Id="fil942B2C887F6D24DAF83DB98C1955270E" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RdpegfxClearCodecTestImage.bmp" />
+            </Component>
+            <Component Id="cmp7950739DF8D3FC6BC391521CB5F716D2" Guid="{6B48B8A6-7761-4930-A434-64FF5DF36011}">
+                <File Id="filF3DC89F2719D595EAE7057AF61CB222F" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RdpegfxH264TestData.xml" />
+            </Component>
+            <Component Id="cmp2BE44CA037E0377CC859B646CB37DBCA" Guid="{540CC0CD-33A7-4853-8CF4-F90929DB8F8C}">
+                <File Id="fil6B54508D3203DE565B88DAC17FFF96AE" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RdpegfxRfxProgressiveCodecTestImage.bmp" />
+            </Component>
+            <Component Id="cmp8356570FC541940AAA7662E1E4473295" Guid="{03C5F848-6F21-494A-915D-998BD1315036}">
+                <File Id="fil60AF8AC584CA940D3DD227054C15813C" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDPEGFX_H264Codec_PositiveTest_AVC420_BaseProfile.xml" />
+            </Component>
+            <Component Id="cmp44041A3B4FE634D5E63BFB47A9353960" Guid="{5809E728-9166-449F-891B-B36918055A0B}">
+                <File Id="filD655D8DDE335DF871E3B901BBF82F9A4" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDPEGFX_H264Codec_PositiveTest_AVC420_HighProfile.xml" />
+            </Component>
+            <Component Id="cmp8467963FC2736BAD5FF1117293A0A88A" Guid="{3AF547EE-8E41-4548-90D5-466813266AAE}">
+                <File Id="filB39979CD50832EC39F2ADCD68B3B72BA" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDPEGFX_H264Codec_PositiveTest_AVC420_MainProfile.xml" />
+            </Component>
+            <Component Id="cmp59EB29971E4453C3CA7321AFC7E2150B" Guid="{164B6DD1-6173-4679-A0EA-5FDA5BC32A96}">
+                <File Id="filF4C8D7DF417CB32110F3242DA797D5E2" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDPEGFX_H264Codec_PositiveTest_AVC420_MainProfile_CABACEnabled.xml" />
+            </Component>
+            <Component Id="cmpE18AE80944F703B18D774B8B7793722B" Guid="{40326120-2374-4509-BD09-701FBA5C17A2}">
+                <File Id="filFEC06F143B15AF2648D7E0EF89DC0F41" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Chroma420Separated_MainProfile.xml" />
+            </Component>
+            <Component Id="cmp967B0D58F9231F027AF7792F8D02DBD6" Guid="{6A4B3ADD-9309-4BC0-91BB-55436C25291F}">
+                <File Id="fil22709CD2DC12CE052AD1258D13DBD9A6" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Chroma420Together_MainProfile.xml" />
+            </Component>
+            <Component Id="cmp0C52447477916BB9DB900D324C01BC85" Guid="{29D0CECA-677B-4D1E-8212-73DF8F2E574C}">
+                <File Id="fil22A043CD60B5FCA1B33FF8857DB23FF5" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Chroma420Together_MainProfile_LargeSize.xml" />
+            </Component>
+            <Component Id="cmp0360FA5135C05F0A32F8D90904EC91CE" Guid="{B27125A2-DE52-4449-9472-51A8207ED372}">
+                <File Id="fil9868F50181F889B9812FF10D156F38B2" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_BaseProfile.xml" />
+            </Component>
+            <Component Id="cmp02381742163154624F74C55563F7E594" Guid="{E87035D0-F5B5-4AE7-A5ED-14B0E3566D89}">
+                <File Id="filBAEE43B9201349E5E3048435A12BE4C2" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_HighProfile.xml" />
+            </Component>
+            <Component Id="cmpA73DC85A3C1032246505E67AD06A4754" Guid="{A00E4988-AB8F-4185-9661-E45B30EBAA1D}">
+                <File Id="filC14ED3FEED14CCF8708913FBACC42467" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile.xml" />
+            </Component>
+            <Component Id="cmp29A469C114EDAE54F359A73D45DB68FA" Guid="{77AD41DC-6B36-4823-BA1C-D8872CBA0451}">
+                <File Id="fil23F1EF4E9A6AC563AE73C5B856AB31AB" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile_CABACEnabled.xml" />
+            </Component>
+            <Component Id="cmpAD8857ADDC583F292512D5E463F6DDAE" Guid="{42D02720-8E34-4BEE-A72A-979202721D6A}">
+                <File Id="fil8D88FEA7A180B46BDCB177F74B5DCE16" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile_ISliceOnly.xml" />
+            </Component>
+            <Component Id="cmp61C393F6A08E8464E0BE7DF2D831A3D5" Guid="{22EC166E-DD4E-488A-9C1C-228C56CA29C0}">
+                <File Id="filDA2C072D48C01CA069847643F27521D5" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile_LargeSize.xml" />
+            </Component>
+            <Component Id="cmpCB7F515C86D558B842D8456C7726C573" Guid="{B1421F69-2E0A-48C1-8B6B-09DFDB64A16C}">
+                <File Id="filAFF161982AF5EFAA4A06BC7CD372D151" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RdpevorTestData.xml" />
+            </Component>
+            <Component Id="cmpD356F33728F5D09832D98C5C40D9DD1D" Guid="{097CD91A-01BE-4F61-9CBA-3F988535DBB0}">
+                <File Id="fil39445CFEB67FE569A9FB001092D1ACCD" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\Rdprfx.bmp" />
+            </Component>
+            <Component Id="cmp78B91CD5469DA48DCEC9BC156A6D6522" Guid="{66952520-348E-46EC-B288-CEE39AB26838}">
+                <File Id="fil124BC927DCA91DB2685442E068138D7D" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RdprfxVideoMode.bmp" />
+            </Component>
+            <Component Id="cmp7947295CABB05A181E29E63C77144363" Guid="{30891BCE-4DC9-4492-BF9F-4DD41CC64E80}">
+                <File Id="fil551BD6E80FCCF2F84DB1C0F14A4AD683" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDP_ClientAdapter.dll" />
+            </Component>
+            <Component Id="cmp217FCB8AE750F98A0AA1FEAFC13DB776" Guid="{C9545B82-A046-412F-AFDB-160A52B681AE}">
+                <File Id="fil5D3ADDF3DEE544A8D67C4DB57A303EC1" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDP_ClientAdapter.pdb" />
+            </Component>
+            <Component Id="cmpBDB67EDBFF5B671F0AD972B3D5A946BC" Guid="{9971524D-D7E6-447F-898C-8FFBAA798A3E}">
+                <File Id="filCAD17066ED2F3416F8BAE2D1154E36D7" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDP_ClientTestSuite.deployment.ptfconfig" />
+            </Component>
+            <Component Id="cmp33ADC5CAE01DB431157A8DE15AD50F8D" Guid="{27D5F3BE-F8A3-41C5-9BDD-A5E6BABCACF2}">
+                <File Id="fil4C9D32996F4790151D0709128BBDE06E" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDP_ClientTestSuite.dll" />
+            </Component>
+            <Component Id="cmp1A10AF54C2EFCF2D9133EF63CAA59F54" Guid="{D6775CEC-4016-4AAD-9B5B-A6680D6C5A3A}">
+                <File Id="filA8CE8FB4025DD6ADF274FDA99F2C2914" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDP_ClientTestSuite.pdb" />
+            </Component>
+            <Component Id="cmp6293C045D5D6D071E76E928CAC384103" Guid="{A33E465B-9BC8-4CB0-99AA-3126BCCA2B72}">
+                <File Id="filD81918B21D2E92A2DCD3C426BF6F672B" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\RDP_ClientTestSuite.ptfconfig" />
+            </Component>
+            <Component Id="cmp183839D220D34A1DAA5A046F9141C6E3" Guid="{FC742C4B-569E-4C33-ADF6-1FBB26FEC459}">
+                <File Id="fil8BB67B97C330DD07BFE60DCDD3E6FF01" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\Run-TaskWithPSRemoting.ps1" />
+            </Component>
+            <Component Id="cmp3421B531726B4347978713D781C2283C" Guid="{1FA6AD5E-7364-49D9-B7FC-04AA9B26027D}">
+                <File Id="filBA9A881C3409500A82EEB61D42018DDA" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\TriggerClientAutoReconnect.ps1" />
+            </Component>
+            <Component Id="cmp7029EDDD12C9E1A291DC5E8ACA5783B7" Guid="{25FDB24F-E4C5-42D2-99B3-530594A018DC}">
+                <File Id="fil55A5EF4401E930AEBD247BB13913841E" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\TriggerClientDisconnect.ps1" />
+            </Component>
+            <Component Id="cmp83DF5FBFE7E1C24835BDDEDF056A3CAF" Guid="{CA676E2C-769E-46BF-A5B0-CC33DDCEB1F6}">
+                <File Id="fil9DBCB6B9A10E183756865AE04D01FDFA" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\TriggerClientDisconnectAll.ps1" />
+            </Component>
+            <Component Id="cmp12B3259C2791A538B9035FD4C8DE3F80" Guid="{9BAC28E4-CF07-4F7B-83A7-04F9745F48B8}">
+                <File Id="fil8EAC861C839B23CDE6D96E043D537469" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\TriggerContinuousTouchEventOnClient.ps1" />
+            </Component>
+            <Component Id="cmp2EC687D6F1B9D364C321B33D87AA74DC" Guid="{408DF820-8020-4DED-BAA3-47A69A0866C7}">
+                <File Id="fil8F4A4C9D440AA8C600B824892087A444" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\TriggerDismissHoveringContactPduOnClient.ps1" />
+            </Component>
+            <Component Id="cmp7792B9DF7565C6D3F575D4517C8D4A3D" Guid="{E5280CE4-F170-4EF0-934E-F5D7DCD2FA6A}">
+                <File Id="filE38EA582337C6F5F980841159CB743C4" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\TriggerInitializeDisplaySettings.ps1" />
+            </Component>
+            <Component Id="cmp893806A2F01818FB35D91E8B57914BAB" Guid="{876C6B6B-C4CA-4026-9986-20DA74D66F9F}">
+                <File Id="fil0F7AF0BBFE7E12895F78B5D58449834A" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\TriggerInputEvents.ps1" />
+            </Component>
+            <Component Id="cmp4FA82C22B8AEBE5C6EDB992D6BE9B72C" Guid="{C037B53B-B3D0-4ADD-83F6-3B5C8BA58507}">
+                <File Id="fil0D50C7146E565715C3974A00A6F41065" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\TriggerMaximizeRDPClientWindow.ps1" />
+            </Component>
+            <Component Id="cmp6830407A2BCF32F19728B8F321E56A23" Guid="{7B7B11FC-7B6C-45EC-BEC9-4651187E0418}">
+                <File Id="filA649D5C2B2B1D98B6487EB317689013D" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\TriggerMultiTouchEventOnClient.ps1" />
+            </Component>
+            <Component Id="cmp2996661D177589DDA30F4BF0B2EDBE83" Guid="{C4FEF13F-D290-43FF-A125-AC5C61C7EA5A}">
+                <File Id="filD19E3F9BB8EEC34FFA52EC0D4F6BF12F" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\TriggerOneTouchEventOnClient.ps1" />
+            </Component>
+            <Component Id="cmp58A27D130A3391F3FBE0AF3F9C4509F5" Guid="{1FAD1116-A4B1-4826-B813-4FED06F4069C}">
+                <File Id="fil839B03C0A9A522E2A4CB002F829C229D" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\TriggerOrientationChangeOnClient.ps1" />
+            </Component>
+            <Component Id="cmp7DE5608FEB752EA69CC7347EC232BB53" Guid="{53C70248-A8AB-433E-8EDB-9C4689F68455}">
+                <File Id="fil194C1AC3D73FD16B5827CE16262C06F1" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\TriggerPositionSpecifiedTouchEventOnClient.ps1" />
+            </Component>
+            <Component Id="cmpEC08DE8559930996BFE8BCBD93CD4446" Guid="{951288F6-23B6-402C-A931-564C37B0B7F2}">
+                <File Id="fil89C879D3ED2C1D4A8FC8E6B764A32557" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\TriggerResolutionChangeOnClient.ps1" />
+            </Component>
+            <Directory Id="dir7B906802133A75F96E4D24E9396D56C3" Name="NonWindowsSUTImplementation">
+                <Component Id="cmp8801BB00E72439B0E54B26FF7D962B35" Guid="{8BC4E471-89FE-400B-B30E-CEB6B8FE55DA}">
+                    <File Id="filF0F52A1D7ABD45F63DD780AEB9EFEF42" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\NonWindowsSUTImplementation\RDPConnectWithDirectCredSSP.ps1" />
+                </Component>
+                <Component Id="cmpCF2F64851F4485A999EF67C005E6B796" Guid="{6B188CC6-478A-4F6D-AF43-1F408C26542B}">
+                    <File Id="filB7D1320ECDF3F2DA015AFAFAD2696A96" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\NonWindowsSUTImplementation\RDPConnectWithDirectTLS.ps1" />
+                </Component>
+                <Component Id="cmpCF62FCBD378AFE587982324997D97508" Guid="{C474AB2E-5488-4EC6-9F2F-F099D4C2F411}">
+                    <File Id="fil9888B105F10A1160EF65CC2BA9F8FDEB" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\NonWindowsSUTImplementation\RDPConnectWithNegotiationApproach.ps1" />
+                </Component>
+                <Component Id="cmp729C122992E074A0E90A1DC404C77D1B" Guid="{12D2F23E-8026-4B34-89EF-519E6E2010F6}">
+                    <File Id="filF55B95377DDFB3BB1F9E64E86144FFEF" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\NonWindowsSUTImplementation\TriggerClientAutoReconnect.ps1" />
+                </Component>
+                <Component Id="cmpE886BCDF40A7908AB2E33D3653EA4A26" Guid="{669FF6A9-D094-4327-B86E-B5BED5B089E2}">
+                    <File Id="fil67935F03B1340FC09E5DEED1F2BDA880" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\NonWindowsSUTImplementation\TriggerClientDisconnect.ps1" />
+                </Component>
+                <Component Id="cmp4DB255517FAB92B4E42CD6FC0CBDA59F" Guid="{B12190BB-D623-4AF0-84EE-207A58AC0A1F}">
+                    <File Id="fil749AD44F1C9CEBDAF35F5659F26BDD24" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\NonWindowsSUTImplementation\TriggerClientDisconnectAll.ps1" />
+                </Component>
+                <Component Id="cmp70C0DDB9D16FCF6914216F76FF4C7A89" Guid="{61F2A966-6662-4CF7-B0D5-FBB0FC822A51}">
+                    <File Id="fil372831F3E34B31FEF941408F306BE08F" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\NonWindowsSUTImplementation\TriggerInputEvents.ps1" />
+                </Component>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="TESTSUITE_BIN_FILES">
+            <ComponentRef Id="cmp0D260A9130233CC80B758481F52E8989" />
+            <ComponentRef Id="cmpF5EEC661B016AF2C4D8F29E50137C6DF" />
+            <ComponentRef Id="cmp95B77479361F7B3735AAB588995C5334" />
+            <ComponentRef Id="cmpC0C8AC9D17DD793BA8326330454E0B46" />
+            <ComponentRef Id="cmpA81B45749E72194A5B2A06E5D64A888B" />
+            <ComponentRef Id="cmp8046E32D8BB6E08CC6A1A3EEE996C78F" />
+            <ComponentRef Id="cmp425E0EF170791EA867131AA6DD1FA5F5" />
+            <ComponentRef Id="cmp333F80AD3C8A7953D2E0A85552BC3481" />
+            <ComponentRef Id="cmp9DE29B6DC62CED255C25F3DB71FF5730" />
+            <ComponentRef Id="cmpF9A0F7BAEF29F9EA14FCE2473C78BEA8" />
+            <ComponentRef Id="cmp2DA9C8F2A9D903EC404E0D08107FB6BC" />
+            <ComponentRef Id="cmp8CED0AD723539A13F6B6746F9EFCBFBD" />
+            <ComponentRef Id="cmp23B200FEC209FD0014187B769C0366C8" />
+            <ComponentRef Id="cmpB1225BD7259C4D3F5D7E4CF7EB1B59E1" />
+            <ComponentRef Id="cmpD519EB45AF7BA108EAFC599410E6E782" />
+            <ComponentRef Id="cmp9ABFDED42772388D6C12A8E3E3364F22" />
+            <ComponentRef Id="cmp79B0922476EEDCB134AB84534BBAD52A" />
+            <ComponentRef Id="cmpFC084DA0FD9EAE9BA17C4D26A509F4DF" />
+            <ComponentRef Id="cmpFB9090E1A49806AC28FF44B30E732456" />
+            <ComponentRef Id="cmp8F15618C6375B40CC7077A3A3AD17A43" />
+            <ComponentRef Id="cmp3BA60DFEC244892C19DA254CC696C3B3" />
+            <ComponentRef Id="cmp2E85BA17BA32F1838EE524B7AE0F9A98" />
+            <ComponentRef Id="cmpD497E30F899BEC2EFAF07C896ECCA5DD" />
+            <ComponentRef Id="cmp8553E521B90971EC5476B55447947BCF" />
+            <ComponentRef Id="cmp61857659EB05FA6DC7ECB1DE53439FF0" />
+            <ComponentRef Id="cmpBEA3E2582A0DDA029DEB5A211BD0CCA6" />
+            <ComponentRef Id="cmp2AED99A6BC5F36B2CC3242E88008103D" />
+            <ComponentRef Id="cmp024DEFAF891F128674CFF9A60FEA54A1" />
+            <ComponentRef Id="cmp4E40FB49B1EAC3129FD89A0EDECA80E4" />
+            <ComponentRef Id="cmpC972A6B888AB123C5711BEDA9B470759" />
+            <ComponentRef Id="cmp3590B63B6CF1E5BC837E24FED9D9CBA7" />
+            <ComponentRef Id="cmpD0F5AA1230B3AE2706BBBED1920C6A77" />
+            <ComponentRef Id="cmp7950739DF8D3FC6BC391521CB5F716D2" />
+            <ComponentRef Id="cmp2BE44CA037E0377CC859B646CB37DBCA" />
+            <ComponentRef Id="cmp8356570FC541940AAA7662E1E4473295" />
+            <ComponentRef Id="cmp44041A3B4FE634D5E63BFB47A9353960" />
+            <ComponentRef Id="cmp8467963FC2736BAD5FF1117293A0A88A" />
+            <ComponentRef Id="cmp59EB29971E4453C3CA7321AFC7E2150B" />
+            <ComponentRef Id="cmpE18AE80944F703B18D774B8B7793722B" />
+            <ComponentRef Id="cmp967B0D58F9231F027AF7792F8D02DBD6" />
+            <ComponentRef Id="cmp0C52447477916BB9DB900D324C01BC85" />
+            <ComponentRef Id="cmp0360FA5135C05F0A32F8D90904EC91CE" />
+            <ComponentRef Id="cmp02381742163154624F74C55563F7E594" />
+            <ComponentRef Id="cmpA73DC85A3C1032246505E67AD06A4754" />
+            <ComponentRef Id="cmp29A469C114EDAE54F359A73D45DB68FA" />
+            <ComponentRef Id="cmpAD8857ADDC583F292512D5E463F6DDAE" />
+            <ComponentRef Id="cmp61C393F6A08E8464E0BE7DF2D831A3D5" />
+            <ComponentRef Id="cmpCB7F515C86D558B842D8456C7726C573" />
+            <ComponentRef Id="cmpD356F33728F5D09832D98C5C40D9DD1D" />
+            <ComponentRef Id="cmp78B91CD5469DA48DCEC9BC156A6D6522" />
+            <ComponentRef Id="cmp7947295CABB05A181E29E63C77144363" />
+            <ComponentRef Id="cmp217FCB8AE750F98A0AA1FEAFC13DB776" />
+            <ComponentRef Id="cmpBDB67EDBFF5B671F0AD972B3D5A946BC" />
+            <ComponentRef Id="cmp33ADC5CAE01DB431157A8DE15AD50F8D" />
+            <ComponentRef Id="cmp1A10AF54C2EFCF2D9133EF63CAA59F54" />
+            <ComponentRef Id="cmp6293C045D5D6D071E76E928CAC384103" />
+            <ComponentRef Id="cmp183839D220D34A1DAA5A046F9141C6E3" />
+            <ComponentRef Id="cmp3421B531726B4347978713D781C2283C" />
+            <ComponentRef Id="cmp7029EDDD12C9E1A291DC5E8ACA5783B7" />
+            <ComponentRef Id="cmp83DF5FBFE7E1C24835BDDEDF056A3CAF" />
+            <ComponentRef Id="cmp12B3259C2791A538B9035FD4C8DE3F80" />
+            <ComponentRef Id="cmp2EC687D6F1B9D364C321B33D87AA74DC" />
+            <ComponentRef Id="cmp7792B9DF7565C6D3F575D4517C8D4A3D" />
+            <ComponentRef Id="cmp893806A2F01818FB35D91E8B57914BAB" />
+            <ComponentRef Id="cmp4FA82C22B8AEBE5C6EDB992D6BE9B72C" />
+            <ComponentRef Id="cmp6830407A2BCF32F19728B8F321E56A23" />
+            <ComponentRef Id="cmp2996661D177589DDA30F4BF0B2EDBE83" />
+            <ComponentRef Id="cmp58A27D130A3391F3FBE0AF3F9C4509F5" />
+            <ComponentRef Id="cmp7DE5608FEB752EA69CC7347EC232BB53" />
+            <ComponentRef Id="cmpEC08DE8559930996BFE8BCBD93CD4446" />
+            <ComponentRef Id="cmp8801BB00E72439B0E54B26FF7D962B35" />
+            <ComponentRef Id="cmpCF2F64851F4485A999EF67C005E6B796" />
+            <ComponentRef Id="cmpCF62FCBD378AFE587982324997D97508" />
+            <ComponentRef Id="cmp729C122992E074A0E90A1DC404C77D1B" />
+            <ComponentRef Id="cmpE886BCDF40A7908AB2E33D3653EA4A26" />
+            <ComponentRef Id="cmp4DB255517FAB92B4E42CD6FC0CBDA59F" />
+            <ComponentRef Id="cmp70C0DDB9D16FCF6914216F76FF4C7A89" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

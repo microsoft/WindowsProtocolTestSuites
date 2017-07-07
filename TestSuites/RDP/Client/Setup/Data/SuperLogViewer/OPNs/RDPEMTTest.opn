@@ -1,0 +1,57 @@
+protocol RDPEMTest;
+
+using Etw;
+using EtwEvent;
+using WindowsReference;
+using Utility;
+using RDPEMT;
+using Protocol_Test_Suite;
+
+annotation string Source;
+annotation string Destination;
+    
+public autostart actor RDPEMTEncActor (Protocol_Test_Suite.ep_Protocol_Test_Suite node)
+{
+   	process node accepts
+  		m:Event_2 where (Contains(m.MessageName, "RDPEMT:"))
+    {
+        switch(m.MessageName)
+        {
+            case "RDPEMT:ReceivedPDU" =>
+                uint action = (m.Payload[0] as uint) & 0x0F;
+                switch(action)
+                {
+                    case 0x0 =>
+                        RDP_TUNNEL_CREATEREQUEST msg = BinaryDecoder<RDP_TUNNEL_CREATEREQUEST>(m.Payload) as RDP_TUNNEL_CREATEREQUEST;
+						msg#Source = "Client";
+						msg#Destination = "Server";
+                        dispatch endpoint RDPEMT.Server accepts msg;
+                    case 0x2 =>
+                        RDP_TUNNEL_DATA msg = BinaryDecoder<RDP_TUNNEL_DATA>(m.Payload) as RDP_TUNNEL_DATA;
+						msg#Source = "Client";
+						msg#Destination = "Server";
+                        dispatch endpoint RDPEMT.Server accepts msg;
+                    default =>
+                        throw "RDPEMT unkonw action code " + Utility.DecToHexFormat(4, action);
+                }
+            case "RDPEMT:SentPDU" =>
+                uint action = (m.Payload[0] as uint) & 0x0F;
+                switch(action)
+                {
+                    case 0x1 =>
+                        RDP_TUNNEL_CREATERESPONSE msg = BinaryDecoder<RDP_TUNNEL_CREATERESPONSE>(m.Payload) as RDP_TUNNEL_CREATERESPONSE;
+						msg#Source = "Server";
+						msg#Destination = "Client";
+                        dispatch endpoint RDPEMT.Server issues msg;
+                    case 0x2 =>
+                        RDP_TUNNEL_DATA msg = BinaryDecoder<RDP_TUNNEL_DATA>(m.Payload) as RDP_TUNNEL_DATA;
+						msg#Source = "Server";
+						msg#Destination = "Client";
+                        dispatch endpoint RDPEMT.Server issues msg;
+                    default =>
+                        throw "RDPEMT unknown action code " + Utility.DecToHexFormat(4, action);
+                }
+        }
+    }
+}
+

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<test_case_xml>
+  <define_test_case name="RDP_UIControl">
+    <c_process process_name="mstsc" timeout_seconds="20">
+        <c_mita_global_window query="@ClassName='TscShellContainerClass'">
+        <a_maximize /> 
+        <a_minimize />
+        <g_sleep seconds="1" /> 
+        <a_maximize /> 
+        <g_sleep seconds="1" /> 
+        <g_click /> 
+        <g_send_keys keys="{CAPSLOCK}" /> 
+        <g_send_keys keys="{CAPSLOCK}" /> 
+        <g_send_keys keys="a" /> 
+        <a_minimize />
+        </c_mita_global_window>
+     </c_process>
+  </define_test_case>
+</test_case_xml>

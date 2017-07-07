@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?define SRCDIR=$(env.TestSuiteRoot)\drop\ProtocolTestManager?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="RDPSERVERDOCFOLDER">
+            <Component Id="cmp48AD032396B74B9CADD83E0969A9C038" Guid="{FAE0E2EB-3EED-4596-953A-2CDA91FD5545}">
+                <File Id="fil48AD032396B74B9CADD83E0969A9C038" Source="..\Plugins\RDPServerPlugin\RDPServerPlugin\Docs\arrow_right.png" />
+            </Component>
+            <Component Id="cmp467A3DEDE8204184908A0F1D35D2C86C" Guid="{3F48CF36-6055-4C50-ADCB-A8A64940425C}">
+                <File Id="fil467A3DEDE8204184908A0F1D35D2C86C" Source="..\Plugins\RDPServerPlugin\RDPServerPlugin\Docs\index.html" />
+            </Component>
+            <Component Id="cmp208A0530927344CD8A458D1DD43DCF74" Guid="{427C356C-7C90-423B-89F8-7881DDF4A2D9}">
+                <File Id="fil208A0530927344CD8A458D1DD43DCF74" Source="..\Plugins\RDPServerPlugin\RDPServerPlugin\Docs\note.png" />
+            </Component>
+            <Component Id="cmpDF7980A6E05049B68F3921E4F5D58F63" Guid="{4BD36255-5F38-479D-924F-518927E40424}">
+                <File Id="filDF7980A6E05049B68F3921E4F5D58F63" Source="..\Plugins\RDPServerPlugin\RDPServerPlugin\Docs\workgroup.png" />
+            </Component>
+            <Component Id="cmp3250E6BCC3094F5DAA62BE62F793FACA" Guid="{752CBE00-ABBD-4A25-A717-3B6F55C3DAC4}">
+                <File Id="fil3250E6BCC3094F5DAA62BE62F793FACA" Source="..\Plugins\RDPServerPlugin\RDPServerPlugin\Docs\network.html" />
+            </Component>
+            <Component Id="cmp04CADC39902D4FFAB3BC61D62A07F41A" Guid="{DA641BC0-570A-4E1D-9573-13711891FA6B}">
+                <File Id="fil04CADC39902D4FFAB3BC61D62A07F41A" Source="..\Plugins\RDPServerPlugin\RDPServerPlugin\Docs\domain.png" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="LIBFOLDER">
+            <?if $(env.DEBUGVER) = 1?>
+              <Component Id="RDPServerPlugin.pdb" Guid="*">
+                <File Id="RDPServerPlugin.pdb" Source="$(var.SRCDIR)\lib\RDPServerPlugin.pdb" />
+              </Component>
+            <?endif ?>
+            <Component Id="RDPServerPlugin.dll" Guid="{BCFAA6DA-F049-4981-AB35-104D0FBB3722}">
+                <File Id="RDPServerPlugin.dll" Source="$(var.SRCDIR)\lib\RDPServerPlugin.dll" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="RDPSERVERCONFIG">
+            <Component Id="RDPServerConfigFile" Guid="{AE60F360-B046-497C-BA30-920F0A30B421}">
+                <File Id="RDPServerConfigFile" Source="..\Plugins\RDPServerPlugin\RDPServerPlugin\config.xml" />
+            </Component>
+          <Directory Id="dir57E3454D882E4626AF6006AAFF789907" Name="SUTControlAdapter">
+            <Component Id="cmpCB375D5D73A04E6C879196F533BDC87D" Guid="{CE71A2E9-8B9C-4D33-A30C-7EF527D7D749}">
+              <File Id="filCB375D5D73A04E6C879196F533BDC87D" Source="..\Plugins\RDPServerPlugin\RDPServerPlugin\SUTControlAdapter\Check-PSRemoting.ps1" />
+            </Component>
+            <Component Id="cmp90D7D2985FD74FC7AFAFF9344DA52503" Guid="{F335DB19-9F45-4429-A7CC-CE9CDB7498A4}">
+              <File Id="fil90D7D2985FD74FC7AFAFF9344DA52503" Source="..\Plugins\RDPServerPlugin\RDPServerPlugin\SUTControlAdapter\RDPConnectWithNegotiationApproach.ps1" />
+            </Component>
+            <Component Id="cmpA5613987C30C47DF9E9B4687A2FC88B4" Guid="{8853ACF1-2447-4953-B20C-513711681D30}">
+              <File Id="filA5613987C30C47DF9E9B4687A2FC88B4" Source="..\Plugins\RDPServerPlugin\RDPServerPlugin\SUTControlAdapter\Run-TaskWithPSRemoting.ps1" />
+            </Component>
+            <Component Id="cmpFD331717764D41299DBBA14C5B3BA442" Guid="{24012823-D7D1-4656-837C-35020AD84268}">
+              <File Id="filFD331717764D41299DBBA14C5B3BA442" Source="..\Plugins\RDPServerPlugin\RDPServerPlugin\SUTControlAdapter\TriggerClientDisconnectAll.ps1" />
+            </Component>
+          </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="RDPSERVER_PLUGIN">
+            <ComponentRef Id="cmp48AD032396B74B9CADD83E0969A9C038" />
+            <ComponentRef Id="cmp467A3DEDE8204184908A0F1D35D2C86C" />
+            <ComponentRef Id="cmp208A0530927344CD8A458D1DD43DCF74" />
+            <ComponentRef Id="cmpDF7980A6E05049B68F3921E4F5D58F63" />
+            <ComponentRef Id="cmp3250E6BCC3094F5DAA62BE62F793FACA" />
+            <ComponentRef Id="cmp04CADC39902D4FFAB3BC61D62A07F41A" />
+            <ComponentRef Id="cmpCB375D5D73A04E6C879196F533BDC87D" />
+            <ComponentRef Id="cmp90D7D2985FD74FC7AFAFF9344DA52503" />
+            <ComponentRef Id="cmpA5613987C30C47DF9E9B4687A2FC88B4" />
+            <ComponentRef Id="cmpFD331717764D41299DBBA14C5B3BA442" />
+            <ComponentRef Id="RDPServerPlugin.dll" />
+            <ComponentRef Id="RDPServerConfigFile" />
+            <?if $(env.DEBUGVER) = 1?>
+              <ComponentRef Id="RDPServerPlugin.pdb" />
+            <?endif ?>
+        </ComponentGroup>
+    </Fragment>
+</Wix>
