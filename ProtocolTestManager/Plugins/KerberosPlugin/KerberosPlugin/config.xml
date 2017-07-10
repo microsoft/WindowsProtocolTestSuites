@@ -42,6 +42,9 @@
       <Rule name = "LdapApplicationServer">
         <Category name = "LdapApplicationServer"/>
       </Rule>
+      <Rule name = "Kerberos Proxy Service">
+        <Category name = "Kerberos Proxy Service"/>
+      </Rule>
     </Group>
     <Group name ="Feature">
       <Rule name = "BVT">
@@ -61,6 +64,9 @@
       </Rule>
       <Rule name = "Kerberos Error">
         <Category name = "Kerberos Error"/>
+      </Rule>
+      <Rule name = "KKDCP">
+        <Category name = "KKDCP"/>
       </Rule>
     </Group>
   </ConfigCaseRule>

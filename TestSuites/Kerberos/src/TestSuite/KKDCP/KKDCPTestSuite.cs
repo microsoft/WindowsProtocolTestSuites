@@ -30,6 +30,8 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite
         [TestMethod]
         [Priority(1)]
         [TestCategory(TestCategories.KPS)]
+        [TestCategory(TestCategories.SingleRealm)]
+        [TestCategory(TestCategories.DFL2K12)]
         [TestCategory(TestCategories.KKDCP)]
         [Description("This test case is designed to test KPS when Target Domain is not present.")]
         public void KPSNullTargetDomain()
@@ -67,6 +69,8 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite
         [TestMethod]
         [Priority(1)]
         [TestCategory(TestCategories.KPS)]
+        [TestCategory(TestCategories.SingleRealm)]
+        [TestCategory(TestCategories.DFL2K12)]
         [TestCategory(TestCategories.KKDCP)]
         [Description("This test case is designed to test KPS when Target Domain provided is not valid.")]
         public void KPSInvalidTargetDomain()
