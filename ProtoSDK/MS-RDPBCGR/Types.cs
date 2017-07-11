@@ -632,7 +632,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  An X.224 Class 0 Connection Confirm TPDU, as specified
         ///  in [X224] section 13.4.
         /// </summary>
-        public X224Crq x224Ccf;
+        public X224Ccf x224Ccf;
 
         /// <summary>
         ///  Optional RDP Negotiation Response structure or an optional
@@ -724,7 +724,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  An X.224 Class 0 Connection Confirm TPDU, as specified
         ///  in [X224] section 13.4.
         /// </summary>
-        public X224Crq x224Ccf;
+        public X224Ccf x224Ccf;
 
         /// <summary>
         ///  Optional RDP Negotiation Response structure or an optional
