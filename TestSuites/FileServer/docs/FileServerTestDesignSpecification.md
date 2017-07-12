@@ -1,4 +1,4 @@
-#File Server Protocol Family Server Test Design Specification 
+﻿#File Server Protocol Family Server Test Design Specification 
 
 ## Content
 
@@ -2409,6 +2409,37 @@ See [Scenario](#3.1.11.1.1)
 ||TREE_CONNECT|
 ||CREATE (File in the directory, with DELETE access mask and FILE_DELETE_ON_CLOSE create option)|
 ||CLOSE to commit the delete|
+||**From client1**|
+||Receive LEASE_BREAK|
+||Send LEASE_BREAK_ACK if server requires|
+||CLOSE|
+||TREE_DISCONNECT|
+||LOGOFF|
+||**From client2**|
+||TREE_DISCONNECT|
+||LOGOFF|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|DirectoryLeasing_BreakReadCachingByChildAdded|
+|**Description**|Test whether server can handle READ lease break notification triggered by adding child item on a directory.|
+|**Prerequisites**||
+|**Test Execution Steps**|**Test preparation**|
+||Create a directory on a share|
+||Create a file in the directory|
+||**From client1**|
+||NEGOTIATE|
+||SESSION_SETUP|
+||TREE_CONNECT|
+||CREATE (Directory, with SMB2_CREATE_REQUEST_LEASE_V2 with LeaseState SMB2_LEASE_READ_CACHING)|
+||**From client2 to trigger lease break by adding the child item**|
+||NEGOTIATE|
+||SESSION_SETUP|
+||TREE_CONNECT|
+||CREATE (File in the directory, with ADD access mask create option)|
+||CLOSE to commit the add|
 ||**From client1**|
 ||Receive LEASE_BREAK|
 ||Send LEASE_BREAK_ACK if server requires|
