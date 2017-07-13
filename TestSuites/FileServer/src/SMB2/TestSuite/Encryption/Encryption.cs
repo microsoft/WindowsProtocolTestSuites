@@ -7,6 +7,7 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Linq;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 {
@@ -253,7 +254,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 CurrentTestCaseName + "_" + Guid.NewGuid() + ".txt",
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                 out fileId,
-                out serverCreateContexts);
+                out serverCreateContexts,
+                RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE,
+                null,
+                shareAccess: ShareAccess_Values.FILE_SHARE_READ | ShareAccess_Values.FILE_SHARE_WRITE | ShareAccess_Values.FILE_SHARE_DELETE,
+                checker: (header, response) =>
+                {
+                    BaseTestSite.Assert.IsTrue(
+                        header.Signature.SequenceEqual(BitConverter.GetBytes((long)0).Concat(BitConverter.GetBytes((long)0)).ToArray()),
+                        "[MS-SMB2] 3.3.4.1.1 If the server encrypts the message, as specified in section 3.1.4.3, the server MUST set the Signature field of the SMB2 header to zero, actually the Signature field is [{0}].", string.Join(", ", header.Signature));
+                });
+            
             string content = Smb2Utility.CreateRandomString(TestConfig.WriteBufferLengthInKb);
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends encrpyted WRITE request and expects success.");
             client.Write(treeId, fileId, content);
