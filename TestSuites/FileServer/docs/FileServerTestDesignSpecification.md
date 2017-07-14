@@ -1576,7 +1576,28 @@ This is used to test SMB2 common user scenarios.
 ||Server sends SESSION_SETUP response|
 ||According to the status code of last step, client may send more SESSION_SETUP request as needed|
 |**Cleanup**||
+|--------------------------|--------------------------------------------------------------------------------------------------------------|
+| **Test ID**              | Signing_WithEncryption                                                                   |
+| **Description**          | This test case is designed to test whether server set the Signature field to zero in Encrypted message.      |
+| **Prerequisites**        |                                                                                                              |
+| **Test Execution Steps** | 1.  Client sends NEGOTIATE request with SMB2\_GLOBAL\_CAP\_ENCRYPTION                                        |
+|                          | 2.  Server sends NEGOTIATE response with SMB2\_GLOBAL\_CAP\_ENCRYPTION                                       |
+|                          | 3.  Client sends SESSION\_SETUP request                                                                      |
+|                          | 4.  Server sends SESSION\_SETUP response                                                                     |
+|                          | 5.  According to the status code of last step, client may send more SESSION\_SETUP request as needed         |
+|                          | 6.  Client sends TREE\_CONNECT request to connect an encrypted share                                         |
+|                          | 7.  Server sends TREE\_CONNECT response with SMB2\_SHAREFLAG\_ENCRYPT\_DATA                                  |
+|                          | 8.  Client sends encrypted CREATE request                                                                    |
+|                          | 9.  Server sends encrypted CREATE response                                                                   |
+|                          | 10. Client sends encrypted CLOSE request                                                                     |
+|                          | 11. Server sends encrypted CLOSE response                                                                    |
+|                          | 12. Client sends encrypted TREE\_DISCONNECT request                                                          |
+|                          | 13. Server sends encrypted TREE\_DISCONNECT response                                                         |
+|                          | 14. Client sends LOGOFF request                                                                              |
+|                          | 15. Server sends LOGOFF response                                                                             |
+| **Cleanup**              |                                                                                                              |
 
+||
 
 ####<a name="3.1.21"> TreeMgmt
 
