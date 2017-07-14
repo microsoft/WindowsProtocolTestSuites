@@ -1577,7 +1577,7 @@ This is used to test SMB2 common user scenarios.
 ||According to the status code of last step, client may send more SESSION_SETUP request as needed|
 |**Cleanup**||
 |--------------------------|--------------------------------------------------------------------------------------------------------------|
-| **Test ID**              | Signing_WithEncryption                                                                   |
+| **Test ID**              | Signing_VerifySignatureWhenEncrypted                                                                   |
 | **Description**          | This test case is designed to test whether server set the Signature field to zero in Encrypted message.      |
 | **Prerequisites**        |                                                                                                              |
 | **Test Execution Steps** | 1.  Client sends NEGOTIATE request with SMB2\_GLOBAL\_CAP\_ENCRYPTION                                        |

@@ -93,7 +93,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestCategory(TestCategories.Smb30)]
         [TestCategory(TestCategories.Signing)]
         [Description("This test case is designed to test whether server set the Signature field to zero in Encrypted message.")]
-        public void Signing_WithEncryption()
+        public void Signing_VerifySignatureWhenEncrypted()
         {
             #region Check Applicability
             TestConfig.CheckDialect(DialectRevision.Smb30);
@@ -104,6 +104,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client.Negotiate(
                 TestConfig.RequestDialects,
                 TestConfig.IsSMB1NegotiateEnabled,
+                SecurityMode_Values.NEGOTIATE_SIGNING_REQUIRED,
                 capabilityValue: Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU | Capabilities_Values.GLOBAL_CAP_LEASING | Capabilities_Values.GLOBAL_CAP_ENCRYPTION
                 );
 
@@ -112,7 +113,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 TestConfig.DefaultSecurityPackage,
                 TestConfig.SutComputerName,
                 TestConfig.AccountCredential,
-                TestConfig.UseServerGssToken);
+                TestConfig.UseServerGssToken,
+                SESSION_SETUP_Request_SecurityMode_Values.NEGOTIATE_SIGNING_REQUIRED);
 
             string uncSharepath =
                 Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.EncryptedFileShare);
