@@ -457,7 +457,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 Site.Assert.AreEqual<RDP_NEG_RSP_type_Values>(RDP_NEG_RSP_type_Values.V1, rdpNegData.type, "The type field of RDP_NEG_RSP MUST be set to 0x02 (TYPE_RDP_NEG_RSP).");
 
-                byte flags = (byte)(RDP_NEG_RSP_flags_Values.EXTENDED_CLIENT_DATA_SUPPORTED | RDP_NEG_RSP_flags_Values.DYNVC_GFX_PROTOCOL_SUPPORTED | RDP_NEG_RSP_flags_Values.NEGRSP_FLAG_RESERVED | RDP_NEG_RSP_flags_Values.RESTRICTED_ADMIN_MODE_SUPPORTED);
+                byte flags = (byte)(RDP_NEG_RSP_flags_Values.EXTENDED_CLIENT_DATA_SUPPORTED | RDP_NEG_RSP_flags_Values.DYNVC_GFX_PROTOCOL_SUPPORTED | RDP_NEG_RSP_flags_Values.NEGRSP_FLAG_RESERVED | RDP_NEG_RSP_flags_Values.RESTRICTED_ADMIN_MODE_SUPPORTED | RDP_NEG_RSP_flags_Values.REDIRECTED_AUTHENTICATION_MODE_SUPPORTED);
                 byte negFlags = (byte)~flags;
                 Site.Assert.AreEqual<byte>(0, (byte)(((byte)(rdpNegData.flags)) & negFlags), "The flags field of RDP_NEG_RSP contains protocol flags: "
                     + "EXTENDED_CLIENT_DATA_SUPPORTED (0x01), DYNVC_GFX_PROTOCOL_SUPPORTED (0x02), NEGRSP_FLAG_RESERVED (0x04),  RESTRICTED_ADMIN_MODE_SUPPORTED (0x08).");
@@ -1033,16 +1033,20 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
 
             Site.Assert.IsTrue(serverCoreData.version == TS_UD_SC_CORE_version_Values.V1
-                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V2, "The version field of TS_UD_SC_CORE contains value: 0x00080001, 0x00080004.");
+                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V2
+                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V3
+                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V4
+                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V5
+                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V6, "The version field of TS_UD_SC_CORE contains value: 0x00080001, 0x00080004.");
 
             
             uint flags =(uint)(requestedProtocols_Values.PROTOCOL_RDP_FLAG | requestedProtocols_Values.PROTOCOL_SSL_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_EX);
             uint negFlags = (uint)(~flags);
             Site.Assert.AreEqual<uint>(0, (uint)serverCoreData.clientRequestedProtocols & negFlags, "The clientRequestedProtocols field of TS_UD_SC_CORE, which contains the flags sent by the client in the requestedProtocols field of the RDP Negotiation Request."
                 + "Available flags: PROTOCOL_RDP (0x00000000), PROTOCOL_SSL (0x00000001), PROTOCOL_HYBRID (0x00000002), PROTOCOL_HYBRID_EX (0x00000008).");
-            
 
-            flags = (uint)(SC_earlyCapabilityFlags_Values.RNS_UD_SC_DYNAMIC_DST_SUPPORTED | SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED);
+
+            flags = (uint)(SC_earlyCapabilityFlags_Values.RNS_UD_SC_DYNAMIC_DST_SUPPORTED | SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED | SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED_V2);
             negFlags = (uint)(~flags);
             Site.Assert.AreEqual<uint>(0, (uint)serverCoreData.earlyCapabilityFlags & negFlags, "The earlyCapabilityFlags field of TS_UD_SC_CORE contains flags: "
                 + "RNS_UD_SC_EDGE_ACTIONS_SUPPORTED (0x00000001), RNS_UD_SC_DYNAMIC_DST_SUPPORTED (0x00000002).");
