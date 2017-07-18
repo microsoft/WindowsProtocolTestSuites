@@ -8,8 +8,19 @@
 # Run Task to change remote screen orientation
 $pwdConverted = ConvertTo-SecureString $ptfpropSUTUserPassword -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential $ptfpropSUTUserName, $pwdConverted -ErrorAction Stop
-$buildfolder = Get-ChildItem "C:\MicrosoftProtocolTests\RDP\Client-Endpoint"
-$buildNo = $buildfolder[0].Name
+# use regular expression to extract build number from the path or current script
+$buildFolderRegEx = New-Object -TypeName regex -ArgumentList "^C:\\MicrosoftProtocolTests\\RDP\\Client-Endpoint\\(?<buildNo>\d+\.\d+\.\d+\.\d+)\\"
+$buildNo = $null
+$scriptFolder = $MyInvocation.MyCommand.Definition
+$matchResult = $buildFolderRegEx.Match($scriptFolder)
+if($matchResult.Success)
+{
+	$buildNo = $matchResult.Groups["buildNo"].Value
+}
+if($buildNo -eq $null)
+{
+    return -1 # failed to get build number
+}
 $path = "C:\MicrosoftProtocolTests\RDP\Client-Endpoint\" + $buildNo + "\Scripts"
 $scriptblock = {
 	param([int]$width, [int]$height, [int]$orientation, [string]$path)
