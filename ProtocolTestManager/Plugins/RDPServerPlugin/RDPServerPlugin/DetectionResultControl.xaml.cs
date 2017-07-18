@@ -48,15 +48,15 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             switch (result)
             {
                 case true:
-                    imagePath = "/RDPPlugin;component/Icons/supported.png"; ;
+                    imagePath = "/RDPServerPlugin;component/Icons/supported.png"; ;
                     detectResult = DetectResult.Supported;
                     break;
                 case false:
-                    imagePath = "/RDPPlugin;component/Icons/unsupported.png";
+                    imagePath = "/RDPServerPlugin;component/Icons/unsupported.png";
                     detectResult = DetectResult.UnSupported;
                     break;
                 case null:
-                    imagePath = "/RDPPlugin;component/Icons/undetected.png";
+                    imagePath = "/RDPServerPlugin;component/Icons/undetected.png";
                     detectResult = DetectResult.DetectFail;
                     break;
                 default:
@@ -215,8 +215,6 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
             // Add protocolItems
             AddResultItem(ref protocolItems, "MS-RDPBCGR", true);
-
-            AddResultItem(ref protocolItems, "MS-RDPEUDP", detectionInfo.IsSupportRDPEUDP);
 
             // Add featuresItems
 

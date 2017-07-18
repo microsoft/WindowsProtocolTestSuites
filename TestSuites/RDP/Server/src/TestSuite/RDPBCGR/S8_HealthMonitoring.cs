@@ -8,6 +8,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
+using Microsoft.Win32;
+using Microsoft.Protocols.TestSuites.Rdp;
+using System.Management;
 
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 {
@@ -20,6 +23,16 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Description(@"This test case is used to verify SUT can send Heartbeat PDU periodically to notify the connection exist. ")]
         public void S8_HealthMonitoring_PositiveTest()
         {
+            string osVersion = this.GetOsVersion(this.Site.Properties["RDP.ServerName"]);
+            if (!string.IsNullOrEmpty(osVersion))
+            {
+                osVersion = osVersion.Replace(".", string.Empty).Substring(0, 2);
+                int version = int.Parse(osVersion);
+                if (version < 63) // OS Version is bellow 6.3(Windows Server 2012R2)
+                {
+                    return;// Skip this test case as RDP in Windows Server 2012 is RDP 8.0 and not support Heartbeat PDU
+                }
+            }
             #region Test Steps
             //1. Initiate and complete an RDP connection to RDP Server (SUT). In basic exchange phase, notify the support of Heartbeat PDU in earlyCapabilityFlags of core data
             //2. Test suite expects Server Heartbeat PDU several times, verify the messages received.
@@ -35,7 +48,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             rdpbcgrAdapter.EstablishRDPConnection(requestProtocol, SVCNames, CompressionType.PACKET_COMPR_TYPE_NONE,
                 false, // Is reconnect
                 true,  // Is auto logon
-                supportHeartbeatPDU:true);
+                supportHeartbeatPDU: true);
 
             int times = 5;
             int period = 0;
@@ -45,15 +58,36 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 Server_Heartbeat_PDU heartbeatPdu = rdpbcgrAdapter.ExpectPacket<Server_Heartbeat_PDU>(timeout);
                 Site.Assert.IsNotNull(heartbeatPdu, "RDP Server MUST send heartbeat PDU periodly if it support heartbeat PDU.");
                 period = heartbeatPdu.period;
-                if(i==0)
+                if (i == 0)
                 {
                     startTime = DateTime.Now;
                 }
             }
-            DateTime stopTime = DateTime.Now; 
-           
-            Site.Log.Add(LogEntryKind.Comment, "After received {0} heartbeat PDU, actual duration is {1} seconds, the period in heartbeat PDU is {2}.", times, (stopTime-startTime).TotalSeconds, period);
+            DateTime stopTime = DateTime.Now;
+
+            Site.Log.Add(LogEntryKind.Comment, "After received {0} heartbeat PDU, actual duration is {1} seconds, the period in heartbeat PDU is {2}.", times, (stopTime - startTime).TotalSeconds, period);
             #endregion Test Code
+        }
+
+        /// <summary>
+        /// Get Remote OS version
+        /// </summary>
+        /// <param name="ipAddress">Remote Ip address</param>
+        /// <returns></returns>
+        public string GetOsVersion(string ipAddress)
+        {
+            ManagementScope scope = new ManagementScope(string.Format(@"\\{0}\root\cimv2",ipAddress));
+            SelectQuery query = new SelectQuery();
+            query.QueryString = "select * from Win32_OperatingSystem";
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
+            ManagementObjectCollection queryCollection = searcher.Get();
+            
+            foreach (ManagementObject mo in queryCollection)
+            {
+                return mo["version"].ToString();
+            }
+
+            return string.Empty;
         }
     }
 }

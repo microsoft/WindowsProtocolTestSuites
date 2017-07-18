@@ -121,7 +121,7 @@ Run this test suite in a Domain environment that contains the following computer
 
 * A computer configured as the SUT (System Under Test). It can be any version of Windows or a SUT implementation that is not based on the Windows operating system.
 
-* A computer configured as a Domain Controller (DC). If this computer is running Windows, it must be running Windows Server 2008 R2, Windows Server 2012 or Windows Server 2012 R2. The DC can be on the SUT.
+* A computer configured as a Domain Controller (DC). If this computer is running Windows, it must be running Windows Server 2008 R2, Windows Server 2012 or Windows Server 2012 R2 or later. The DC can be on the SUT.
 
 Run this test suite in a Workgroup environment that contains the following computers, physical or virtual: 
 
@@ -160,7 +160,7 @@ Note
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Windows Server 2008 R2, Windows 2012, Windows 2012 R2 or a directory domain service implementation that is not based on the Windows operating system| 
+| Operating system| Windows Server 2008 R2, Windows 2012, Windows 2012 R2 or later or a directory domain service implementation that is not based on the Windows operating system| 
 | Services| Directory domain service (such as the Windows Active Directory Domain Services (AD DS))| 
 | Memory| 1 GB RAM| 
 | Disk space| 60 GB| 
@@ -171,21 +171,12 @@ All of the following software must be installed on the driver computer _before_ 
 |  **Required Software**| 
 | ------------- |
 | Microsoft® Visual Studio® 2012 Update 4| 
-| ![image3.png](./image/RDP_ServerUserGuide/image3.png)Note| 
-|            You can download Visual Studio Ultimate 2012 Trial (30 days) from below website| 
-|            [http://www.microsoft.com/en-us/download/details.aspx?id=30678](http://www.microsoft.com/en-us/download/details.aspx?id=30678)| 
-|            You can download Visual Studio 2012 Update 4 or later from below website| 
-|            [http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305](http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305)| 
-| Protocol Test Framework (build 1.0.2220.0)| 
+| Protocol Test Framework (build 1.0.5500.0)| 
 |  **Optional Software** | 
 |       Message Analyzer| 
 | ![image3.png](./image/RDP_ServerUserGuide/image3.png)Note| 
 |              You can download the latest Message Analyzer from below website. | 
 |              [https://www.microsoft.com/en-us/download/details.aspx?id=44226](https://www.microsoft.com/en-us/download/details.aspx?id=44226)| 
-|              To be able to see the latest download, you must log on to the site and join Message Analyzer project.| 
-| Sign in by your Microsoft account at the top right corner.| 
-| Back to Home page and search **Message Analyzer**.| 
-| Join **Message Analyzer and Network Monitor** from the search result.| 
 
 ![image2.png](./image/RDP_ServerUserGuide/image2.png)
 Note
@@ -195,7 +186,7 @@ Visual Studio 2012 Professional is the minimum requirement.
 ![image2.png](./image/RDP_ServerUserGuide/image2.png)
 Note 
 
-Visual Studio need update to Update 4 or later.
+Visual Studio need update to Update 4.
 
 ## <a name="_Toc396908230"/>Network Setup
 
@@ -286,7 +277,7 @@ This section describes how to set up the driver computer.
 ![image6.png](./image/RDP_ServerUserGuide/image6.png)
 Important 
 
->Microsoft Visual Studio 2012 Update 4 (or later) and Protocol Test Framework (build 1.0.2220.0) must be installed on the driver computer before you run the test suite installer.
+>Microsoft Visual Studio 2012 Update 4 and Protocol Test Framework (build 1.0.5500.0) must be installed on the driver computer before you run the test suite installer.
 
 To set up the driver computer
 
@@ -336,17 +327,11 @@ Note
 | Bin| Test suite binaries and configuration files| 
 | Docs| The version of each of the following protocol specifications used to develop this test suite:| 
 | | **MS-RDPBCGR.pdf** | 
-| | **RDP_ServerUserGuide.docx** – A user guide that explains how to install and configure the driver computer, the SUT, and the DC, as well as how to run test cases| 
+| | **RDP_ServerUserGuide.md** – A user guide that explains how to install and configure the driver computer, the SUT, and the DC, as well as how to run test cases| 
 | | **Test suite design documents**, containing conceptual information about the protocol, including probable use, relationships to other protocols, message flow, state diagrams, a short list of properties, and justification for the test and adapter design choices:| 
-| |  **MS-RDPBCGR_ServerTestDesignSpecification.docx**| 
-| Source| Test suite source code| 
-| EULA.rtf| The End User License Agreement| 
+| |  **MS-RDPBCGR_ServerTestDesignSpecification.md**| 
+| LICENSE.rtf| The End User License Agreement| 
 
-Additionally the installation process also adds following folders and files to the driver computer at C:\MicrosoftProtocolTests\RDP\Server-Endpoint\Infrastructure\src\, which contains the protocol SDK source code of projects that test suite will referenced.
-
-|  **File or Folder**|  **Description**| 
-| -------------| ------------- |
-| ProtoSDK|  Protocol SDK source code used by Test Suite.| 
 
 ## <a name="_Toc396908240"/>Configuration
 
@@ -495,6 +480,10 @@ For running test case with Visual Studio: _C:\MicrosoftProtocolTests\RDP\Server-
 For further information about test log settings, see the PTF User Guide in the PTF installation directory.
 
 ## <a name="_Toc396908247"/>Debugging Test Cases
+
+![image2.png](./image/RDP_ServerUserGuide/image2.png)
+Note 
+You can get test suite source code from github [https://github.com/Microsoft/WindowsProtocolTestSuites](https://github.com/Microsoft/WindowsProtocolTestSuites)
 
 You can use the Visual Studio solution (.sln) file included with this test suite to debug additional test cases that you create for your protocol implementation. 
 

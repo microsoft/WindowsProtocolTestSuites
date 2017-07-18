@@ -77,7 +77,7 @@ if not defined KeyFile (
 )
 
 if ErrorLevel 1 (
-	echo Error: Failed to build RDP test suite
+	echo Error: Failed to build RDP Server test suite
 	exit /b 1
 )
 
