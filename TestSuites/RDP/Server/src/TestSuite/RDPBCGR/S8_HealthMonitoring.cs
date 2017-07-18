@@ -30,7 +30,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 int version = int.Parse(osVersion);
                 if (version < 63) // OS Version is bellow 6.3(Windows Server 2012R2)
                 {
-                    return;// Skip this test case as RDP in Windows Server 2012 is RDP 8.0 and not support Heartbeat PDU
+                    Site.Assert.Inconclusive("Skip this test case as RDP in Windows Server 2012 is RDP 8.0 and not support Heartbeat PDU.");
                 }
             }
             #region Test Steps
