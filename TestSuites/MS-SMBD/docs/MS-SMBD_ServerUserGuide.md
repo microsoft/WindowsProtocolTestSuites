@@ -114,9 +114,9 @@ Refer to the Privacy Statement and EULA for further information
 
 Run this test suite in a domain or non-domain environment that contains the following computers (physical or virtual): 
 
-* A driver computer running Microsoft® Windows Server® 2012R2, with the latest updates
+* A driver computer running Microsoft® Windows Server® 2012R2 or later versions
 
-* A system under test running Microsoft® Windows Server® 2012R2, with the latest updates
+* A system under test running Microsoft® Windows Server® 2012R2 or later versions
 
 ### <a name="_Toc395696799"/>Driver Computer 
 
@@ -124,7 +124,7 @@ The minimum requirements for the driver computer are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft Windows Server 2012R2, Standard Edition, with the latest updates| 
+| Operating system| Microsoft Windows Server 2012R2, Standard Edition or later versions| 
 | Feature| An RDMA capable NIC is installed and ready to use| 
 | Memory| 2 GB RAM| 
 | Disk space| 60 GB | 
@@ -135,7 +135,7 @@ The minimum requirements for the SUT are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft Windows Server 2012R2, Standard Edition, with the latest updates, or a SUT implementation that is not based on the Windows operating system| 
+| Operating system| Microsoft Windows Server 2012R2, Standard Edition or later versions, or a SUT implementation that is not based on the Windows operating system| 
 | Feature| An RDMA capable NIC is installed and ready to use| 
 | Memory| 2 GB RAM| 
 | Disk space| 60 GB| 
@@ -147,8 +147,7 @@ All of the following software must be installed on the driver computer before in
 | ------------- |
 |  **Microsoft® Visual Studio® 2013** | 
 |      ![image3.png](./image/MS-SMBD_ServerUserGuide/image3.png)Note| 
-|            You can download Visual Studio Ultimate 2013 Trial (30 days) from below website| 
-|            [http://www.microsoft.com/en-us/download/details.aspx?id=48144](http://www.microsoft.com/en-us/download/details.aspx?id=48144)| 
+|            Download Visual Studio Ultimate 2013| 
 | **Microsoft Protocol Test Framework**| 
 | Microsoft Protocol Test Framework is a common framework to support protocol test suite. | 
 | ![image2.png](./image/MS-SMBD_ServerUserGuide/image2.png)Note| 

@@ -167,7 +167,7 @@ If the KDC is running on Windows, the minimum requirements are as follows:
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft Windows Server 2012 R2, 64-bit edition, with the latest updates| 
+| Operating system| Microsoft Windows Server 2012 R2 or later versions| 
 | Services| Active Directory Domain Services (AD DS)| 
 | | DNS Server| 
 | Memory| 1 GB RAM| 
@@ -179,7 +179,7 @@ If the KDC is running on Windows, the minimum requirements are as follows:
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft Windows Server 2012 R2, 64-bit edition, with the latest updates| 
+| Operating system| Microsoft Windows Server 2012 R2 or later versions| 
 | Services| Active Directory Domain Services (AD DS)| 
 | | DNS Server| 
 | Memory| 1 GB RAM| 
@@ -191,7 +191,7 @@ If the application server computer is running on Windows, the minimum requiremen
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft Windows Server 2012 R2, 64-bit edition, with the latest updates| 
+| Operating system| Microsoft Windows Server 2012 R2 or later versions| 
 | Services| File And Storage Service (**File Service Resource Manager** installed)| 
 | | Web Server (IIS) (**Windows Authentication** enabled)| 
 | Memory| 1 GB RAM| 
@@ -203,7 +203,7 @@ If the application server computer is running on Windows, the minimum requiremen
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft Windows Server 2012 R2, 64-bit edition, with the latest updates| 
+| Operating system| Microsoft Windows Server 2012 R2 or later versions| 
 | Services| File And Storage Service (**File Service Resource Manager** installed)| 
 | | Web Server (IIS) (**Windows Authentication** enabled)| 
 | Memory| 1 GB RAM| 
@@ -215,7 +215,7 @@ If the KKDCP is running on Windows, the minimum requirements are as follows:
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft Windows Server 2012 R2, 64-bit edition, with the latest updates| 
+| Operating system| Microsoft Windows Server 2012 R2 or later versions| 
 | Services| Web Server (IIS) | 
 | Memory| 1 GB RAM| 
 | Disk space| 60 GB| 
@@ -226,7 +226,7 @@ The minimum requirements for the driver computer are as follows:
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft Windows 8.1, 64-bit edition, with the latest updates| 
+| Operating system| Microsoft Windows 8.1 or later versions| 
 | Memory| 2 GB RAM| 
 | Disk space| 60 GB| 
 
@@ -237,10 +237,8 @@ All of the following software must be installed on the driver computer _before_ 
 | ------------- |
 | **Microsoft® Visual Studio® 2012**| 
 |      ![notice.png](./image/notice.png)Note| 
-|            You can download Visual Studio Ultimate 2012 Trial (30 days) from below website| 
-|            [http://www.microsoft.com/en-us/download/details.aspx?id=30678](http://www.microsoft.com/en-us/download/details.aspx?id=30678)| 
-|            You can download Visual Studio 2012 Update 4 or later from below website| 
-|            [http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305](http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305)| 
+|            Download Visual Studio Ultimate 2012| 
+|            Download Visual Studio 2012 Update 4 or later| 
 | **Spec Explorer 3.5.3146.0 or later**|
 |            You can download Spec Explorer from below website|
 |            [http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/](http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)| 

@@ -154,7 +154,7 @@ If the PDC is running Windows, the minimum requirements are as follows:
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft® Windows Server® 2012 R2 with the latest updates| 
+| Operating system| Microsoft® Windows Server® 2012 R2 or later versions| 
 | Services| Active Directory Domain Services (AD DS)| 
 | | DNS Server| 
 | Memory| 1 GB RAM| 
@@ -178,7 +178,7 @@ If the AD client computer is running Windows, the minimum requirements are as fo
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft® Windows 8.1 Enterprise with the latest updates| 
+| Operating system| Microsoft® Windows 8.1 Enterprise or later versions| 
 | Services| Windows Remote Management (WinRM) Service| 
 | Memory| 1 GB RAM| 
 | Disk space| 60 GB| 
@@ -201,7 +201,7 @@ The minimum requirements for the driver computer are as follows:
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft® Windows Server® 2012 R2 with the latest updates| 
+| Operating system| Microsoft® Windows Server® 2012 R2 or later versions| 
 | Services| Windows Remote Management (WinRM) Client;| 
 | | Routing Services;| 
 | |  &#42; Telnet Client (only needed if the client computer is non-Windows Operating System.) | 
@@ -214,19 +214,17 @@ All of the following software must be installed on the driver computer before th
 |  **Required Software** | 
 | ------------- |
 | **Microsoft® Visual Studio® 2012**| 
-|      ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)Note| 
-|            You can download Visual Studio Ultimate 2012 Trial (30 days) from below website| 
-|            [http://www.microsoft.com/en-us/download/details.aspx?id=30678](http://www.microsoft.com/en-us/download/details.aspx?id=30678)| 
-|            You can download Visual Studio 2012 Update 4 or later from below website| 
-|            [http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305](http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305)| 
+|      ![image2.png](./image/MS-ADOD_ODUserGuide/image2.png)Note| 
+|            Download Visual Studio Ultimate 2012|
+|            Download Visual Studio 2012 Update 4 or later|
 | **Spec Explorer** (build 3.5.3146.0 or later)| 
 | Spec Explorer is a model based testing tool used by test suite to design model and generate test cases.| 
-|      ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)Note| 
+|      ![image2.png](./image/MS-ADOD_ODUserGuide/image2.png)Note| 
 |            You can download Spec Explorer from below website| 
 |            [http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/](http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)| 
 | **Microsoft Protocol Test Framework**| 
 | Microsoft Protocol Test Framework is a common framework to support protocol test suite. | 
-|      ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)Note| 
+|      ![image2.png](./image/MS-ADOD_ODUserGuide/image2.png)Note| 
 |            You can download Microsoft protocol Test Framework from below website| 
 |            [https://github.com/microsoft/protocoltestframework](https://github.com/microsoft/protocoltestframework) | 
 | Windows PowerShell 3.0 is required.| 
