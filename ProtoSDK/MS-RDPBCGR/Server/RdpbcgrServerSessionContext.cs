@@ -10,6 +10,12 @@ using Microsoft.Protocols.TestTools.StackSdk.Compression.Mppc;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 {
+    public enum RdpbcgrServerSessionState
+    {
+        WaitForNeogotiate,
+        WaitForAuthenticationOfRDSTLS,
+    }
+
     /// <summary>
     /// Maintain the important parameters of the session during RDPBCGR transport, 
     /// including the main sent or received PDUs, Channel Manager, the selected Encryption Algorithm etc.
@@ -65,7 +71,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
         //Auto-detect result
         private List<uint> autoDetectedRTTList;
-        
+
         private uint autoDetectedBandwidth = 102400;
 
         // In Server_License_Error_Pdu_Valid_Client
@@ -140,7 +146,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             pduCountToUpdate = ConstValue.PDU_COUNT_TO_UPDATE_SESSION_KEY;
             isSwitchOn = true;
             virtualChannelIdFactory = new Queue<ushort>();
-            serverAutoDetectRequestData = new Dictionary<ushort,NETWORK_DETECTION_REQUEST>();
+            serverAutoDetectRequestData = new Dictionary<ushort, NETWORK_DETECTION_REQUEST>();
             unprocessedPacketBuffer = new List<StackPacket>();
             serverInitiateMultitransportRequestPduDictionary = new Dictionary<uint, Server_Initiate_Multitransport_Request_PDU>();
             autoDetectedRTTList = new List<uint>();
@@ -151,7 +157,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             virtualChannelIdFactory.Enqueue(ConstValue.RDPSND_CHANNEL_ID);
 
             // Store channel ids that maybe used by subsequent rdp requirement.
-            for (UInt16 channelId = ConstValue.RDP_STORED_ID; channelId <= ConstValue.MAX_CHANNLE_ID; ++channelId) 
+            for (UInt16 channelId = ConstValue.RDP_STORED_ID; channelId <= ConstValue.MAX_CHANNLE_ID; ++channelId)
             {
                 virtualChannelIdFactory.Enqueue(channelId);
             }
@@ -276,7 +282,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 else
                     return true;
             }
-            
+
         }
 
         /// <summary>
@@ -576,7 +582,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// </summary>
         public requestedProtocols_Values ClientRequestedProtocol
         {
-            get 
+            get
             {
                 lock (contextLock)
                 {
@@ -584,7 +590,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     {
                         return 0;
                     }
-                    else 
+                    else
                     {
                         return x224ConnectionRequestPdu.rdpNegData.requestedProtocols;
                     }
@@ -662,7 +668,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             get
             {
-                lock(contextLock)
+                lock (contextLock)
                 {
                     if (mcsConnectInitialPdu != null)
                     {
@@ -1643,7 +1649,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 lock (contextLock)
                 {
-                    if (this.autoDetectedRTTList != null && autoDetectedRTTList.Count !=0)
+                    if (this.autoDetectedRTTList != null && autoDetectedRTTList.Count != 0)
                     {
                         uint totalRtt = 0;
                         foreach (uint rtt in autoDetectedRTTList)
@@ -1657,7 +1663,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 }
             }
         }
-        
+
         /// <summary>
         /// Get the detected network characteristic: BandWith
         /// </summary>
@@ -1685,6 +1691,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 }
             }
         }
+
+        public object State { get; internal set; }
         #endregion public properties
 
 
@@ -1705,7 +1713,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
                 if (pdu.GetType() == typeof(Client_X_224_Connection_Request_Pdu))
                 {
-                    x224ConnectionRequestPdu = (Client_X_224_Connection_Request_Pdu)pdu.Clone();                    
+                    x224ConnectionRequestPdu = (Client_X_224_Connection_Request_Pdu)pdu.Clone();
                 }
                 else if (pdu.GetType() == typeof(Server_X_224_Connection_Confirm_Pdu))
                 {
@@ -1726,7 +1734,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                         pdu.Clone();
                     serverRandom = RdpbcgrUtility.CloneByteArray(mcsConnectResponsePdu.mcsCrsp.gccPdu.serverSecurityData.serverRandom);
                     ioChannelId = mcsConnectResponsePdu.mcsCrsp.gccPdu.serverNetworkData.MCSChannelId;
-                    if(mcsConnectResponsePdu.mcsCrsp.gccPdu.serverMessageChannelData != null)
+                    if (mcsConnectResponsePdu.mcsCrsp.gccPdu.serverMessageChannelData != null)
                         mcsMsgChannelId = mcsConnectResponsePdu.mcsCrsp.gccPdu.serverMessageChannelData.MCSChannelID;
                     encryptionAlgorithm = new EncryptionAlgorithm(RdpEncryptionMethod);
                 }
@@ -1757,14 +1765,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 }
                 else if (pdu.GetType() == typeof(Server_Auto_Detect_Request_PDU))
                 {
-                    
+
                     NETWORK_DETECTION_REQUEST requestData = ((Server_Auto_Detect_Request_PDU)pdu).autoDetectReqData.Clone();
                     if (requestData.requestType == AUTO_DETECT_REQUEST_TYPE.RDP_RTT_REQUEST_IN_CONNECTTIME || requestData.requestType == AUTO_DETECT_REQUEST_TYPE.RDP_RTT_REQUEST_AFTER_CONNECTTIME)
                     {
                         RDP_RTT_REQUEST rttRequest = (RDP_RTT_REQUEST)requestData;
                         rttRequest.sendTime = DateTime.Now;
                         this.serverAutoDetectRequestData.Add(rttRequest.sequenceNumber, rttRequest);
-                    }  
+                    }
                 }
                 else if (pdu.GetType() == typeof(Client_Auto_Detect_Response_PDU))
                 {
@@ -1775,7 +1783,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                         RDP_RTT_REQUEST rttRequest = (RDP_RTT_REQUEST)serverAutoDetectRequestData[responseData.sequenceNumber];
                         if (rttRequest != null)
                         {
-                            TimeSpan interval = DateTime.Now -  rttRequest.sendTime;
+                            TimeSpan interval = DateTime.Now - rttRequest.sendTime;
                             this.autoDetectedRTTList.Add((uint)interval.TotalMilliseconds);
                             serverAutoDetectRequestData.Remove(responseData.sequenceNumber);
                         }
@@ -1783,7 +1791,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     else if (responseData.responseType == AUTO_DETECT_RESPONSE_TYPE.RDP_BW_RESULTS_AFTER_CONNECT || responseData.responseType == AUTO_DETECT_RESPONSE_TYPE.RDP_BW_RESULTS_DURING_CONNECT)
                     {
                         RDP_BW_RESULTS bwResult = (RDP_BW_RESULTS)responseData;
-                        if(bwResult.timeDelta != 0)
+                        if (bwResult.timeDelta != 0)
                             this.autoDetectedBandwidth = (uint)(bwResult.byteCount / bwResult.timeDelta);
                     }
                     else if (responseData.responseType == AUTO_DETECT_RESPONSE_TYPE.RDP_NETCHAR_SYNC)
@@ -1894,7 +1902,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 unprocessedPacketBuffer.Add(pdu);
             }
-            
+
         }
 
         /// <summary>
@@ -1933,7 +1941,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                             return pdu;
                         }
                     }
-                    
+
                 }
             }
             return null;
@@ -2112,7 +2120,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 return channelManager.ReassembleChunkData(pdu);
             }
         }
-        
+
         /// <summary>
         /// Decompress payload of slow path or fast path output.
         /// </summary>
@@ -2162,7 +2170,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="data">The data to be compressed.</param>
         /// <param name="type">The type to compress.</param>
         /// <returns>The compressed data.</returns>
-        internal byte[] Compress(compressedType_Values type, byte[] data, int maxBit =16)
+        internal byte[] Compress(compressedType_Values type, byte[] data, int maxBit = 16)
         {
             if (data == null)
             {
@@ -2199,5 +2207,5 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         }
 
         #endregion
-    }      
+    }
 }

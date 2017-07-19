@@ -3319,6 +3319,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             // Check slow-path/fast-path type
             StackPacket pdu = null;
+            if(serverSessionContext.State ==)
             if (ConstValue.SLOW_PATH_PDU_INDICATOR_VALUE == data[ConstValue.SLOW_PATH_PDU_INDICATOR_INDEX])
             {
                 // Slow-Path Situation

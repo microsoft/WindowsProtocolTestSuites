@@ -10,6 +10,7 @@ using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.Gcc;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.Mcs;
 using Microsoft.Protocols.TestTools.StackSdk.Asn1;
+using System.Linq;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 {
@@ -198,7 +199,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         public ErrorPdu(Exception e, byte[] packetData)
         {
             this.e = e;
-            if(packetData !=null)
+            if (packetData != null)
             {
                 pduData = new byte[packetData.Length];
                 Array.Copy(packetData, pduData, packetData.Length);
@@ -1064,7 +1065,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         public Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request(RdpbcgrClientContext clientContext)
             : base(clientContext)
         {
-        }       
+        }
 
         /// <summary>
         /// The constructor of the class with no parameter.
@@ -1234,7 +1235,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                             mcsCi.gccPdu.clientCoreData.supportedColorDepths;
                         cloneMCSInitialPdu.mcsCi.gccPdu.clientCoreData.desktopPhysicalWidth =
                             mcsCi.gccPdu.clientCoreData.desktopPhysicalWidth;
-                        cloneMCSInitialPdu.mcsCi.gccPdu.clientCoreData.desktopPhysicalHeight=
+                        cloneMCSInitialPdu.mcsCi.gccPdu.clientCoreData.desktopPhysicalHeight =
                             mcsCi.gccPdu.clientCoreData.desktopPhysicalHeight;
                         cloneMCSInitialPdu.mcsCi.gccPdu.clientCoreData.desktopOrientation =
                             mcsCi.gccPdu.clientCoreData.desktopOrientation;
@@ -1332,7 +1333,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                             attributes.Add(attribute.Clone());
                         }
                         cloneMCSInitialPdu.mcsCi.gccPdu.clientMonitorExtendedData.monitorAttributesArray = attributes.ToArray();
-                                               
+
 
                     }
                     #endregion clone mcsCi.gccPdu filed
@@ -1480,7 +1481,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
                 RdpbcgrEncoder.EncodeStructure(coreData, gccPdu.clientCoreData.deviceScaleFactor.actualData);
 
-            labelCoreEnd:
+                labelCoreEnd:
                 userData.AddRange(coreData.ToArray());
             }
             #endregion Encode clientCoreData structure TS_UD_CS_CORE
@@ -1573,7 +1574,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             #endregion Encode clientMultitransportChannelData TS_UD_CS_MONITOR_EX
 
             #region Encode clientMonitorExtendedData TS_UD_CS_MULTITRANSPORT
-            
+
             if (gccPdu.clientMonitorExtendedData != null)
             {
                 List<byte> monitorExtendData = new List<byte>();
@@ -1649,7 +1650,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     privilege.Add(new Privilege(i));
                 }
 
-                gccCCrq.nonConductedPrivileges = new  Asn1SetOf<Privilege>(privilege.ToArray());
+                gccCCrq.nonConductedPrivileges = new Asn1SetOf<Privilege>(privilege.ToArray());
             }
 
             if (gccPdu.conferenceDescription != null)
@@ -1965,7 +1966,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                             else
                             {
                                 X509_CERTIFICATE_CHAIN x509cert = (X509_CERTIFICATE_CHAIN)mcsCrsp.gccPdu.serverSecurityData.serverCertificate.certData;
-                                for(int i = 0; i < x509cert.CertBlobArray.Length; i++)
+                                for (int i = 0; i < x509cert.CertBlobArray.Length; i++)
                                 {
                                     x509cert.CertBlobArray[i].abCert = RdpbcgrUtility.CloneByteArray(x509cert.CertBlobArray[i].abCert);
                                 }
@@ -2014,7 +2015,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 RdpbcgrEncoder.EncodeStructure(coreData, (uint)gccPdu.serverCoreData.version);
                 RdpbcgrEncoder.EncodeStructure(coreData, (uint)gccPdu.serverCoreData.clientRequestedProtocols);
                 //earlyCapabilityFlags is optional.
-                if(gccPdu.serverCoreData.earlyCapabilityFlags != 0)
+                if (gccPdu.serverCoreData.earlyCapabilityFlags != 0)
                     RdpbcgrEncoder.EncodeStructure(coreData, (uint)gccPdu.serverCoreData.earlyCapabilityFlags);
 
                 userData.AddRange(coreData.ToArray());
@@ -2048,8 +2049,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 RdpbcgrEncoder.EncodeStructure(securityData, (uint)gccPdu.serverSecurityData.encryptionMethod);
                 RdpbcgrEncoder.EncodeStructure(securityData, (uint)gccPdu.serverSecurityData.encryptionLevel);
 
-                
-                if (gccPdu.serverSecurityData.encryptionMethod != EncryptionMethods.ENCRYPTION_METHOD_NONE || 
+
+                if (gccPdu.serverSecurityData.encryptionMethod != EncryptionMethods.ENCRYPTION_METHOD_NONE ||
                     gccPdu.serverSecurityData.encryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE)
                 {
                     RdpbcgrEncoder.EncodeStructure(securityData, gccPdu.serverSecurityData.serverRandomLen.actualData);
@@ -2148,13 +2149,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             #region Workaround for Windows encoding issue
 
             //reset the ConnectPDULength to one-byte length: 0x2A
-            byte[] returnButter = null; 
+            byte[] returnButter = null;
             if ((perBuffer2.ByteArrayData[7] & 0x80) == 0x80)
             {
                 //If length is two-byte, delete one byte
                 returnButter = new byte[perBuffer2.ByteArrayData.Length - 1];
                 Array.Copy(perBuffer2.ByteArrayData, returnButter, 7);
-                Array.Copy(perBuffer2.ByteArrayData, 8, returnButter, 7, returnButter.Length - 7);                
+                Array.Copy(perBuffer2.ByteArrayData, 8, returnButter, 7, returnButter.Length - 7);
             }
             else
             {
@@ -2791,7 +2792,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     cloneClientInfoPdu.infoPacket.extraInfo.performanceFlags = infoPacket.extraInfo.performanceFlags;
                     cloneClientInfoPdu.infoPacket.extraInfo.reserved1 = infoPacket.extraInfo.reserved1;
                     cloneClientInfoPdu.infoPacket.extraInfo.reserved2 = infoPacket.extraInfo.reserved2;
-                                        
+
                     cloneClientInfoPdu.infoPacket.extraInfo.cbDynamicDSTTimeZoneKeyName = infoPacket.extraInfo.cbDynamicDSTTimeZoneKeyName;
                     if (infoPacket.extraInfo.cbDynamicDSTTimeZoneKeyName != null && infoPacket.extraInfo.cbDynamicDSTTimeZoneKeyName.actualData > 0)
                     {
@@ -3231,7 +3232,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// This flag is understood only by RDP 7.0, 7.1, 8.0, and 8.1 servers.
         /// </summary>
         INFO_VIDEO_DISABLE = 0x00400000,
-        
+
         /// <summary>
         /// Indicates that the client supports Hi-Def RAIL ([MS-RDPERP] section 1.3.3). The INFO_HIDEF_RAIL_SUPPORTED flag MUST be ignored if the INFO_RAIL (0x00008000) flag is not specified. 
         /// Furthermore, a client that specifies the INFO_HIDEF_RAIL_SUPPORTED flag MUST send the Remote Programs Capability Set ([MS-RDPERP] section 2.2.1.1.1) to the server.The INFO_HIDEF_RAIL_SUPPORTED flag is understood only by RDP 8.1 servers.
@@ -6348,7 +6349,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// An unused flag that is reserved for future use.
         /// </summary>
         NEGRSP_FLAG_RESERVED = 0x04,
-        
+
         /// <summary>
         /// Indicates that the server supports credential-less logon over CredSSP (also known as "restricted admin mode") 
         /// and it is acceptable for the client to send empty credentials in the TSPasswordCreds structure defined in [MS-CSSP] section 2.2.1.2.1.
@@ -7530,7 +7531,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     /// <summary>
     /// Flags of TS_UD_CS_MCS_MSGCHANNEL
     /// </summary>
-    public enum FLAGS_TS_UD_CS_MCS_MSGCHANNEL: uint
+    public enum FLAGS_TS_UD_CS_MCS_MSGCHANNEL : uint
     {
         /// <summary>
         /// None.
@@ -7567,7 +7568,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// The desktop is not rotated.
         /// </summary>
-        ORIENTATION_LANDSCAPE = 0, 
+        ORIENTATION_LANDSCAPE = 0,
 
         /// <summary>
         /// The desktop is rotated clockwise by 90 degrees.
@@ -7670,7 +7671,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// which describe extended attributes of each display monitor specified in the Client Monitor Data block. 
         /// The number of Monitor Attribute structures is specified by the monitorCount field.
         /// </summary>
-        public TS_MONITOR_ATTRIBUTES[] monitorAttributesArray; 
+        public TS_MONITOR_ATTRIBUTES[] monitorAttributesArray;
     }
 
     /// <summary>
@@ -7907,7 +7908,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// </summary>
         public SERVER_CERTIFICATE serverCertificate;
 
-        
+
     }
 
     /// <summary>
@@ -8919,7 +8920,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         }
 
         public Server_Auto_Reconnect_Status_Pdu(RdpbcgrServerSessionContext sessionContext)
-            :base(sessionContext)
+            : base(sessionContext)
         {
         }
 
@@ -9265,7 +9266,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// Monitoring of the destination virtual machine is being initiated.
         /// </summary>
         TS_STATUS_VM_STARTING_MONITORING = 0x00000504,
-        
+
         /// <summary>
         /// Monitoring of the destination virtual machine is being reinitiated.
         /// </summary>
@@ -10401,8 +10402,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 RdpbcgrEncoder.EncodeBytes(channelBuffer, rawPdus[i].virtualChannelData);
                 RdpbcgrEncoder.EncodeSlowPathPdu(
                     totalBuffer,
-                    rawPdus[i].commonHeader, 
-                    channelBuffer.ToArray(), 
+                    rawPdus[i].commonHeader,
+                    channelBuffer.ToArray(),
                     serverSessionContext);
             }
 
@@ -10713,7 +10714,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// OS X platform
         /// </summary>
-        OSMAJORTYPE_OSX = 0x0006, 
+        OSMAJORTYPE_OSX = 0x0006,
 
         /// <summary>
         /// Android platform
@@ -12415,7 +12416,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// An unused flag that MUST be ignored by the server 
         /// if it is present in the client-to-server Input Capability Set.
         /// </summary>
-        INPUT_FLAG_UNUSED2 = 0x0080, 
+        INPUT_FLAG_UNUSED2 = 0x0080,
 
         /// <summary>
         /// Indicates support for horizontal mouse wheel notifications 
@@ -13380,7 +13381,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  integer value.
         /// </summary>
         public ushort flagsHi;
-        
+
         /// <summary>
         /// Create an instance of the class that is identical to the current PDU. 
         /// </summary>
@@ -13542,7 +13543,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             TS_SECURITY_HEADER1 cloneHeader = new TS_SECURITY_HEADER1();
             cloneHeader.flags = flags;
-            cloneHeader.flagsHi = flagsHi;        
+            cloneHeader.flagsHi = flagsHi;
             cloneHeader.dataSignature = RdpbcgrUtility.CloneByteArray(dataSignature);
 
             return cloneHeader;
@@ -15097,7 +15098,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             return dataBuffer.ToArray();
         }
     }
-    
+
     /// <summary>
     ///  The TS_SET_KEYBOARD_IME_STATUS_PDU structure contains
     ///  the actual contents of the Set Keyboard IME Status
@@ -15952,7 +15953,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  desktop.
         /// </summary>
         public ushort yPos;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -16092,7 +16093,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  even number of bytes).
         /// </summary>
         public byte[] andMaskData;
-        
+
         /// <summary>
         ///  An 8-bit, unsigned integer. Padding. Values in this field MUST be ignored.
         /// </summary>
@@ -16787,7 +16788,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.width);
             RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.height);
             RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.bitmapDataLength);
-            if(surfStreamData.bitmapData.exBitmapDataHeader != null)
+            if (surfStreamData.bitmapData.exBitmapDataHeader != null)
             {
                 RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.exBitmapDataHeader.highUniqueId);
                 RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.exBitmapDataHeader.lowUniqueId);
@@ -17227,7 +17228,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// A 32-bit, unsigned integer that contains the high-order bits of a unique 64-bit identifier for the bitmap data.
         /// </summary>
         public uint highUniqueId;
-        
+
         /// <summary>
         /// A 32-bit, unsigned integer that contains the low-order bits of a unique 64-bit identifier for the bitmap data.
         /// </summary>
@@ -17301,7 +17302,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// A 32-bit, unsigned integer. The ID identifying the frame.
         /// </summary>
         public uint frameId;
-    } 
+    }
 
     /// <summary>
     /// A 16-bit, unsigned integer. Identifies the beginning and end of a frame.
@@ -19043,7 +19044,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// The Stream Surface Bits Command (section 2.2.9.2.2) is supported.
         /// </summary>
-        SURFCMDS_STREAMSURFACEBITS =  0x00000040
+        SURFCMDS_STREAMSURFACEBITS = 0x00000040
     }
 
     /// <summary>
@@ -19414,10 +19415,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// A 16-bit unsigned integer that specifies a request type code. 
         /// </summary>
-        public AUTO_DETECT_REQUEST_TYPE requestType;    
-    
+        public AUTO_DETECT_REQUEST_TYPE requestType;
+
         public abstract NETWORK_DETECTION_REQUEST Clone();
-        
+
 
     }
 
@@ -19570,7 +19571,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// Bandwidth Measure Results, The Bandwidth Measure Results message is encapsulated in the autoDetectReqData field of an Auto-Detect Request PDU (section 2.2.14.3) sent during the Optional Connect-Time Auto-Detection phase of the RDP Connection Sequence (see section 1.3.1.1 for an overview of the RDP Connection Sequence phases).
         /// </summary>
         RDP_BW_RESULTS_DURING_CONNECT = 0x0003,
-        
+
         /// <summary>
         /// Bandwidth Measure Results, One of two possible meanings:
         /// The Bandwidth Measure Results message is encapsulated in the autoDetectReqData field of an Auto-Detect Request PDU (section 2.2.14.3) sent after the Optional Connect-Time Auto-Detection phase of the RDP Connection Sequence (see section 1.3.1.1 for an overview of the RDP Connection Sequence phases).
@@ -19753,7 +19754,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             return encodedBytes;
         }
     }
-       
+
     /// <summary>
     /// The Auto-Detect Response PDU is sent by the client to the server and is used to 
     /// detect network characteristics such as bandwidth and round-trip time.
@@ -19771,12 +19772,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         public NETWORK_DETECTION_RESPONSE autodetectRspPduData;
 
         public Client_Auto_Detect_Response_PDU()
-            :base()
+            : base()
         {
         }
 
         public Client_Auto_Detect_Response_PDU(RdpbcgrClientContext clientContext)
-            :base(clientContext)
+            : base(clientContext)
         {
         }
         public override StackPacket Clone()
@@ -19806,7 +19807,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             return encodedBytes;
         }
-                
+
     }
 
     /// <summary>
@@ -20019,7 +20020,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// of the associated Initiate Multitransport Request PDU (section 2.2.15.1).
         /// </summary>
         public uint requestId;
-        
+
         /// <summary>
         /// A 32-bit unsigned integer that specifies an error code.
         /// </summary>
@@ -20031,7 +20032,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         }
 
         public Client_Initiate_Multitransport_Response_PDU(RdpbcgrClientContext context)
-            :base(context)
+            : base(context)
         {
         }
 
@@ -20042,7 +20043,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             errorPDU.requestId = requestId;
             errorPDU.hrResponse = hrResponse;
 
-            return errorPDU;          
+            return errorPDU;
         }
 
         public override byte[] ToBytes()
@@ -20057,7 +20058,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrEncoder.EncodeSlowPathPdu(totalBuffer, commonHeader, dataBuffer, context);
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
-            
+
             return encodedBytes;
         }
     }
@@ -20711,4 +20712,319 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     }
     #endregion
     #endregion self-defined structures
+
+    #region RDSTLS
+
+    public enum RDSTLS_VersionEnum : UInt16
+    {
+        RDSTLS_VERSION_1 = 0x0001
+    }
+
+    public enum RDSTLS_PduTypeEnum : UInt16
+    {
+        RDSTLS_TYPE_CAPABILITIES = 0x0001
+    }
+
+    public enum RDSTLS_DataTypeEnum : UInt16
+    {
+        RDSTLS_DATA_CAPABILITIES = 0x0001
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 6)]
+    public struct RDSTLS_CommonHeader
+    {
+        [FieldOffset(0)]
+        public RDSTLS_VersionEnum Version;
+
+        [FieldOffset(2)]
+        public RDSTLS_PduTypeEnum PduType;
+
+        [FieldOffset(4)]
+        public RDSTLS_DataTypeEnum DataType;
+
+        public RDSTLS_CommonHeader Clone()
+        {
+            var result = new RDSTLS_CommonHeader();
+            result.Version = Version;
+            result.PduType = PduType;
+            result.DataType = DataType;
+            return result;
+        }
+    }
+
+    /// <summary>
+    /// 2.2.17.1	RDSTLS Capabilities PDU
+    /// The RDSTLS Capabilities PDU is sent by the server to the client and allows the server to advertise the supported RDSTLS versions.
+    /// </summary>
+    public class RDSTLS_CapabilitiesPDU : RdpbcgrServerPdu
+    {
+        /// <summary>
+        /// Version (2 bytes): A 16-bit unsigned integer that specifies the RDSTLS version. 
+        ///   This field MUST be set to RDSTLS_VERSION_1 (0x0001).
+        ///   
+        /// PduType(2 bytes): A 16-bit unsigned integer that specifies the RDSTLS PDU type.
+        ///   This field MUST be set to RDSTLS_TYPE_CAPABILITIES(0x0001).
+        ///   
+        /// DataType(2 bytes): A 16-bit unsigned integer that specifies the type of data contained in the PDU.
+        ///   This field MUST be set to RDSTLS_DATA_CAPABILITIES (0x0001).
+        /// </summary>
+        public RDSTLS_CommonHeader Header;
+
+        /// <summary>
+        /// SupportedVersions (2 bytes): A 16-bit unsigned integer that specifies the RDSTLS versions supported by the server. 
+        /// This field MUST be set to RDSTLS_VERSION_1 (0x0001).
+        /// </summary>
+        public RDSTLS_VersionEnum SupportedVersions;
+
+        public override StackPacket Clone()
+        {
+            var resultPdu = new RDSTLS_CapabilitiesPDU();
+            resultPdu.Header = Header.Clone();
+            resultPdu.SupportedVersions = SupportedVersions;
+            return resultPdu;
+        }
+
+        public override byte[] ToBytes()
+        {
+            var result = new List<byte>();
+            result.AddRange(RdpbcgrUtility.StructToBytes(Header));
+            result.AddRange(RdpbcgrUtility.StructToBytes(SupportedVersions));
+            return result.ToArray();
+        }
+    }
+
+    /// <summary>
+    /// 2.2.17.2	RDSTLS Authentication Request PDU with Password Credentials
+    /// The RDSTLS Authentication Request PDU is sent by the client to the server and is used to request user 
+    /// authentication using data acquired from the Server Redirection Packet(section 2.2.13.1).
+    /// </summary>
+    public class RDSTLS_AuthenticationRequestPDUwithPasswordCredentials : RdpbcgrClientPdu
+    {
+        /// <summary>
+        /// Version (2 bytes): A 16-bit unsigned integer that specifies the RDSTLS version. 
+        ///   This field MUST be set to RDSTLS_VERSION_1 (0x0001).
+        /// 
+        /// PduType(2 bytes): A 16-bit unsigned integer that specifies the RDSTLS PDU type.
+        ///   This field MUST be set to RDSTLS_TYPE_AUTHREQ(0x0002).
+        ///   
+        /// DataType(2 bytes): A 16-bit unsigned integer that specifies the type of data contained in the PDU.
+        ///   This field MUST be set to RDSTLS_DATA_PASSWORD_CREDS (0x0001).
+        /// </summary>
+        public RDSTLS_CommonHeader Header;
+
+        /// <summary>
+        /// RedirectionGuidLength (2 bytes): A 16-bit unsigned integer that specifies the length, in bytes, of the RedirectionGuid field.
+        /// </summary>
+        public UInt16 RedirectionGuidLength;
+
+        /// <summary>
+        /// RedirectionGuid (variable): A variable-length array of bytes containing a GUID 
+        ///   (as defined in [MS-DTYP] section 2.3.2) that functions as a unique identifier for the current redirected 
+        ///   connection. This value SHOULD be acquired from the RedirectionGuid field of the Server Redirection Packet (section 2.2.13.1).
+        /// </summary>
+        public Guid RedirectionGuid;
+
+        /// <summary>
+        /// UserNameLength (2 bytes): A 16-bit unsigned integer that specifies the length, in bytes, of the UserName field.
+        /// </summary>
+        public UInt16 UserNameLength;
+
+        /// <summary>
+        /// UserName (variable): A variable-length array of bytes containing the username of the user in Unicode format, 
+        ///   including a null-terminator. This value SHOULD be acquired from the UserName field of the Server Redirection Packet (section 2.2.13.1).
+        /// </summary>
+        public string UserName;
+
+        /// <summary>
+        /// DomainLength (2 bytes): A 16-bit unsigned integer that specifies the length, in bytes, of the Domain field.
+        /// </summary>
+        public UInt16 DomainLength;
+
+        /// <summary>
+        /// Domain (variable): A variable-length array of bytes containing the domain to which the user connected in Unicode format, 
+        ///   including a null-terminator. This value SHOULD be acquired from the Domain field of the Server Redirection Packet (section 2.2.13.1).
+        /// </summary>
+        public string Domain;
+
+        /// <summary>
+        /// PasswordLength (2 bytes): A 16-bit unsigned integer that specifies the length, in bytes, of the Password field.
+        /// </summary>
+        public UInt16 PasswordLength;
+
+        /// <summary>
+        /// Password (variable): A variable-length array of bytes containing an encrypted password blob. 
+        ///   This value SHOULD be acquired from the Password field of the Server Redirection Packet (section 2.2.13.1).
+        /// </summary>
+        public byte[] Password;
+
+        public override StackPacket Clone()
+        {
+            var resultPdu = new RDSTLS_AuthenticationRequestPDUwithPasswordCredentials();
+            resultPdu.Header = Header.Clone();
+            resultPdu.RedirectionGuidLength = RedirectionGuidLength;
+            resultPdu.RedirectionGuid = RedirectionGuid;
+            resultPdu.UserNameLength = UserNameLength;
+            resultPdu.UserName = String.Copy(UserName);
+            resultPdu.DomainLength = DomainLength;
+            resultPdu.Domain = String.Copy(Domain);
+            resultPdu.PasswordLength = PasswordLength;
+            resultPdu.Password = Password.ToArray();
+            return resultPdu;
+        }
+
+        public override byte[] ToBytes()
+        {
+            var result = new List<byte>();
+            result.AddRange(RdpbcgrUtility.StructToBytes(Header));
+            result.AddRange(RdpbcgrUtility.StructToBytes(RedirectionGuidLength));
+            result.AddRange(RdpbcgrUtility.StructToBytes(RedirectionGuid));
+            result.AddRange(RdpbcgrUtility.StructToBytes(UserNameLength));
+            result.AddRange(RdpbcgrUtility.StructToBytes(UserName));
+            result.AddRange(RdpbcgrUtility.StructToBytes(DomainLength));
+            result.AddRange(RdpbcgrUtility.StructToBytes(Domain));
+            result.AddRange(RdpbcgrUtility.StructToBytes(PasswordLength));
+            result.AddRange(RdpbcgrUtility.StructToBytes(Password));
+            return result.ToArray();
+        }
+    }
+
+    /// <summary>
+    /// 2.2.17.3	RDSTLS Authentication Request PDU with Auto-Reconnect Cookie
+    /// The RDSTLS Authentication Request PDU is sent by the client to the server and is used to request user 
+    /// authentication using an auto-reconnect cookie that was generated as specified in section 5.5.
+    /// </summary>
+    public class RDSTLS_AuthenticationRequestPDUwithAutoReconnectCookie : RdpbcgrClientPdu
+    {
+        /// <summary>
+        /// Version (2 bytes): A 16-bit unsigned integer that specifies the RDSTLS version. 
+        ///   This field MUST be set to RDSTLS_VERSION_1 (0x0001).
+        ///   
+        /// PduType(2 bytes): A 16-bit unsigned integer that specifies the RDSTLS PDU type.
+        ///   This field MUST be set to RDSTLS_TYPE_AUTHREQ(0x0002).
+        ///   
+        /// DataType(2 bytes): A 16-bit unsigned integer that specifies the type of data contained in the PDU.
+        ///   This field MUST be set to RDSTLS_DATA_AUTORECONNECT_COOKIE (0x0002).
+        /// </summary>
+        public RDSTLS_CommonHeader Header;
+
+        /// <summary>
+        /// SessionID (4 bytes): A 32-bit unsigned integer that specifies the identifier of the session to which the client MUST be connected.
+        /// </summary>
+        public UInt32 SessionID;
+
+        /// <summary>
+        /// AutoReconnectCookieLength (2 bytes): A 16-bit unsigned integer that specifies the length, in bytes, of the AutoReconnectCookie field.
+        /// </summary>
+        public UInt16 AutoReconnectCookieLength;
+
+        /// <summary>
+        /// AutoReconnectCookie (variable): A variable-length array of bytes containing an auto-reconnect cookie that was generated as specified in section 5.5.
+        /// </summary>
+        public byte[] AutoReconnectCookie;
+
+        public override StackPacket Clone()
+        {
+            var resultPdu = new RDSTLS_AuthenticationRequestPDUwithAutoReconnectCookie();
+            resultPdu.Header = Header.Clone();
+            resultPdu.SessionID = SessionID;
+            resultPdu.AutoReconnectCookieLength = AutoReconnectCookieLength;
+            resultPdu.AutoReconnectCookie = AutoReconnectCookie.ToArray();
+            return resultPdu;
+        }
+
+        public override byte[] ToBytes()
+        {
+            var result = new List<byte>();
+            result.AddRange(RdpbcgrUtility.StructToBytes(Header));
+            result.AddRange(RdpbcgrUtility.StructToBytes(SessionID));
+            result.AddRange(RdpbcgrUtility.StructToBytes(AutoReconnectCookieLength));
+            result.AddRange(RdpbcgrUtility.StructToBytes(AutoReconnectCookie));
+            return result.ToArray();
+        }
+    }
+
+    public enum RDSTLS_ResultCodeEnum : UInt32
+    {
+        /// <summary>
+        /// User authentication succeeded.
+        /// </summary>
+        RDSTLS_RESULT_SUCCESS = 0x00000000,
+
+        /// <summary>
+        /// The user does not have permission to access the server.
+        /// </summary>
+        RDSTLS_RESULT_ACCESS_DENIED = 0x00000005,
+
+        /// <summary>
+        /// The username is unknown or the supplied password is incorrect.
+        /// </summary>
+        RDSTLS_RESULT_LOGON_FAILURE = 0x0000052e,
+
+        /// <summary>
+        /// The user account has time restrictions and cannot be accessed at this time.
+        /// </summary>
+        RDSTLS_RESULT_INVALID_LOGON_HOURS = 0x00000530,
+
+        /// <summary>
+        /// The password associated with the user account has expired.
+        /// </summary>
+        RDSTLS_RESULT_PASSWORD_EXPIRED = 0x00000532,
+
+        /// <summary>
+        /// The user account is currently disabled.
+        /// </summary>
+        RDSTLS_RESULT_ACCOUNT_DISABLED = 0x00000533,
+
+        /// <summary>
+        /// The password associated with the user account has to be changed.
+        /// </summary>
+        RDSTLS_RESULT_PASSWORD_MUST_CHANGE = 0x00000773,
+
+        /// <summary>
+        /// The user account is currently locked out and cannot be accessed.
+        /// </summary>
+        RDSTLS_RESULT_ACCOUNT_LOCKED_OUT = 0x00000775
+    }
+
+    /// <summary>
+    /// 2.2.17.4	RDSTLS Authentication Response PDU
+    /// The RDSTLS Authentication Response PDU is sent by the server to the client and is used to indicate the result of user authentication.
+    /// </summary>
+    public class RDSTLS_AuthenticationResponsePDU : RdpbcgrClientPdu
+    {
+        /// <summary>
+        /// Version (2 bytes): A 16-bit unsigned integer that specifies the RDSTLS version. 
+        ///   This field MUST be set to RDSTLS_VERSION_1 (0x0001).
+        ///   
+        /// PduType(2 bytes): A 16-bit unsigned integer that specifies the RDSTLS PDU type.
+        ///   This field MUST be set to RDSTLS_TYPE_AUTHRSP(0x0004).
+        ///   
+        /// DataType(2 bytes): A 16-bit unsigned integer that specifies the type of data contained in the PDU.
+        ///   This field MUST be set to RDSTLS_DATA_RESULT_CODE (0x0001).
+        /// </summary>
+        public RDSTLS_CommonHeader Header;
+
+        /// <summary>
+        /// ResultCode (4 bytes): A 16-bit unsigned integer that specifies the user authentication result.
+        /// </summary>
+        public RDSTLS_ResultCodeEnum ResultCode;
+
+        public override StackPacket Clone()
+        {
+            var resultPdu = new RDSTLS_AuthenticationResponsePDU();
+            resultPdu.Header = Header.Clone();
+            resultPdu.ResultCode = ResultCode;
+            return resultPdu;
+        }
+
+        public override byte[] ToBytes()
+        {
+            var result = new List<byte>();
+            result.AddRange(RdpbcgrUtility.StructToBytes(Header));
+            result.AddRange(RdpbcgrUtility.StructToBytes(ResultCode));
+            return result.ToArray();
+        }
+    }
+
+    #endregion
 }
