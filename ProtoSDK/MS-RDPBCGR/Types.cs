@@ -20715,19 +20715,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
     #region RDSTLS
 
-    public enum RDSTLS_VersionEnum : UInt16
+    public enum RDSTLS_VersionEnum : ushort
     {
         RDSTLS_VERSION_1 = 0x0001
     }
 
-    public enum RDSTLS_PduTypeEnum : UInt16
+    public enum RDSTLS_PduTypeEnum : ushort
     {
-        RDSTLS_TYPE_CAPABILITIES = 0x0001
+        RDSTLS_TYPE_CAPABILITIES = 0x0001,
+        RDSTLS_TYPE_AUTHREQ = 0x0002,
+
+        RDSTLS_TYPE_AUTHRSP = 0x0004
     }
 
-    public enum RDSTLS_DataTypeEnum : UInt16
+    public enum RDSTLS_DataTypeEnum : ushort
     {
-        RDSTLS_DATA_CAPABILITIES = 0x0001
+        RDSTLS_DATA_CAPABILITIES = 0x0001,
+        RDSTLS_DATA_PASSWORD_CREDS = 0x0001,
+        RDSTLS_DATA_AUTORECONNECT_COOKIE = 0x0002,
+        RDSTLS_DATA_RESULT_CODE = 0x0001
     }
 
     [StructLayout(LayoutKind.Explicit, Size = 6)]
@@ -20943,7 +20949,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         }
     }
 
-    public enum RDSTLS_ResultCodeEnum : UInt32
+    public enum RDSTLS_ResultCodeEnum : uint
     {
         /// <summary>
         /// User authentication succeeded.

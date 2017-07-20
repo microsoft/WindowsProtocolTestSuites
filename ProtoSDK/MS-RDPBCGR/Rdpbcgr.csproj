@@ -131,7 +131,7 @@
     <Compile Include="ConstValue.cs" />
     <Compile Include="CredSspStream.cs" />
     <Compile Include="EncryptionAlgorithm.cs" />
-    <Compile Include="RdpbcgrDecoder.cs" />
+    <Compile Include="Client\RdpbcgrClientDecoder.cs" />
     <Compile Include="RdpbcgrEncoder.cs" />
     <Compile Include="RleDecompressor.cs" />
     <Compile Include="Types.cs" />

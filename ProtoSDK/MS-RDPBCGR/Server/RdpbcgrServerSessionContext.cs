@@ -10,12 +10,6 @@ using Microsoft.Protocols.TestTools.StackSdk.Compression.Mppc;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 {
-    public enum RdpbcgrServerSessionState
-    {
-        WaitForNeogotiate,
-        WaitForAuthenticationOfRDSTLS,
-    }
-
     /// <summary>
     /// Maintain the important parameters of the session during RDPBCGR transport, 
     /// including the main sent or received PDUs, Channel Manager, the selected Encryption Algorithm etc.
@@ -131,6 +125,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         private Queue<UInt16> virtualChannelIdFactory;
 
         private bool isClientToServerEncrypted = true;
+        private bool isAuthenticatingRDSTLS;
         #endregion
         #endregion
 
@@ -161,6 +156,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 virtualChannelIdFactory.Enqueue(channelId);
             }
+
+            isAuthenticatingRDSTLS = false;
         }
         #endregion constructor
 
@@ -1692,7 +1689,28 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             }
         }
 
-        public object State { get; internal set; }
+        /// <summary>
+        /// Indicating whether the RDSTLS authentication is ongoing.
+        /// </summary>
+        public bool IsAuthenticatingRDSTLS
+        {
+            get
+            {
+                lock (contextLock)
+                {
+                    return isAuthenticatingRDSTLS;
+                }
+
+            }
+            set
+            {
+                lock (contextLock)
+                {
+                    isAuthenticatingRDSTLS = value;
+                }
+            }
+        }
+
         #endregion public properties
 
 
@@ -2021,6 +2039,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     ioCompressor.Dispose();
                     ioCompressor = null;
                 }
+
+                isAuthenticatingRDSTLS = false;
             }
         }
 

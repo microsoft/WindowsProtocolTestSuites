@@ -132,8 +132,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     break;
 
                 case EncryptionLevel.ENCRYPTION_LEVEL_LOW:
-                    //securityHeaderType = SecurityHeaderType.Basic;
-                    //break;
+                //securityHeaderType = SecurityHeaderType.Basic;
+                //break;
 
                 case EncryptionLevel.ENCRYPTION_LEVEL_CLIENT_COMPATIBLE:
                 case EncryptionLevel.ENCRYPTION_LEVEL_HIGH:
@@ -381,6 +381,42 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             return bytes.ToString();
         }
 
+        private string ParseUnicodeString(byte[] data)
+        {
+            try
+            {
+                string result = String.Empty;
+
+                int currentIndex = 0;
+
+                while (currentIndex < data.Length)
+                {
+                    UInt16 code = ParseUInt16(data, ref currentIndex, false);
+                    char charCode = (char)code;
+                    result += charCode;
+                }
+
+                return result;
+            }
+            catch 
+            {
+                throw new FormatException(ConstValue.ERROR_MESSAGE_INVALID_UNICODE_STRING);
+            }
+        }
+
+        private Guid ParseGuid(byte[] data)
+        {
+            try
+            {
+                var guid = new Guid(data);
+                return guid;
+            }
+            catch
+            {
+                throw new FormatException(ConstValue.ERROR_MESSAGE_INVALID_GUID);
+            }
+        }
+
         #endregion Private Methods: Base Type Parsers
 
 
@@ -473,7 +509,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             if ((length1 & 0x80) == 0x80)
             {
                 byte length2 = ParseByte(data, ref currentIndex);
-                header.userDataLength = (uint)(((length1 & 0x7F)<<8) + length2);
+                header.userDataLength = (uint)(((length1 & 0x7F) << 8) + length2);
             }
             else
             {
@@ -847,16 +883,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 }
                 else
                 {
-                    cookie =  null;
+                    cookie = null;
                 }
-                currentIndex += (offset + 2);                
+                currentIndex += (offset + 2);
             }
             else
             {
                 routingToken = null;
                 cookie = null;
             }
-        }        
+        }
         #endregion Sub Field Parsers: X224 Request PDU
 
 
@@ -888,7 +924,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             coreData.keyboardFunctionKey = ParseUInt32(data, ref currentIndex, false);
             coreData.imeFileName = ParseString(data, ref currentIndex, 64);
             //below fields are optional fields, verify the length before parsing.
-            if(currentIndex < endIndex)
+            if (currentIndex < endIndex)
                 coreData.postBeta2ColorDepth = new UInt16Class(ParseUInt16(data, ref currentIndex, false));
             if (currentIndex < endIndex)
                 coreData.clientProductId = new UInt16Class(ParseUInt16(data, ref currentIndex, false));
@@ -918,7 +954,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 coreData.desktopScaleFactor = new UInt32Class(ParseUInt32(data, ref currentIndex, false));
             if (currentIndex < endIndex)
                 coreData.deviceScaleFactor = new UInt32Class(ParseUInt32(data, ref currentIndex, false));
-            
+
             return coreData;
         }
 
@@ -949,7 +985,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 CHANNEL_DEF channelDef;
                 byte[] name = GetBytes(data, ref currentIndex, 8);
                 ASCIIEncoding converter = new ASCIIEncoding();
-                channelDef.name = converter.GetString(name) ;
+                channelDef.name = converter.GetString(name);
                 channelDef.options = (Channel_Options)ParseUInt32(data, ref currentIndex, false);
                 netData.channelDefArray.Add(channelDef);
             }
@@ -1018,7 +1054,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             monData.Flags = ParseUInt32(data, ref currentIndex, false);
             monData.monitorCount = ParseUInt32(data, ref currentIndex, false);
             monData.monitorDefArray = new Collection<TS_MONITOR_DEF>();
-            for (int i = 0; i < monData.monitorCount; ++i) 
+            for (int i = 0; i < monData.monitorCount; ++i)
             {
                 TS_MONITOR_DEF monDef;
                 monDef.left = ParseUInt32(data, ref currentIndex, false);
@@ -1113,7 +1149,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <returns>TS_SECURITY_PACKET</returns>
         private TS_SECURITY_PACKET ParseSecurityExchange(
             RdpbcgrServerSessionContext serverSessionContext,
-            byte[] data, 
+            byte[] data,
             ref int currentIndex)
         {
             TS_SECURITY_PACKET secExchangeData = new TS_SECURITY_PACKET();
@@ -1165,7 +1201,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             if ((infoData.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE)
             {
                 converter = new UnicodeEncoding();
-                
+
 
                 byte[] domain = GetBytes(data, ref currentIndex, (int)infoData.cbDomain);
                 infoData.Domain = converter.GetString(domain);
@@ -1229,7 +1265,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             TS_EXTENDED_INFO_PACKET extData = new TS_EXTENDED_INFO_PACKET();
             extData.clientAddressFamily = (clientAddressFamily_Values)ParseUInt16(data, ref currentIndex, false);
-            
+
             extData.cbClientAddress = ParseUInt16(data, ref currentIndex, false);
             byte[] clientAddress = GetBytes(data, ref currentIndex, extData.cbClientAddress);
             extData.clientAddress = converter.GetString(clientAddress);
@@ -1246,7 +1282,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 extData.autoReconnectCookie = ParseAutoReconnectCookie(data, ref currentIndex);
             }
-            if(currentIndex < data.Length)
+            if (currentIndex < data.Length)
                 extData.reserved1 = new UInt16Class(ParseUInt16(data, ref currentIndex, false));
             if (currentIndex < data.Length)
                 extData.reserved2 = new UInt16Class(ParseUInt16(data, ref currentIndex, false));
@@ -2520,7 +2556,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             for (int i = 0; i < pdu.numberOfAreas; ++i)
             {
                 pdu.areasToRefresh.Add(ParseInclusiveRect(data, ref currentIndex));
-            } 
+            }
 
             return pdu;
         }
@@ -2605,7 +2641,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         private Collection<TS_FP_INPUT_EVENT> ParseTsFpInputEvents(byte[] data, ref int currentIndex)
         {
             Collection<TS_FP_INPUT_EVENT> collectionEvents = new Collection<TS_FP_INPUT_EVENT>();
-        
+
             while (currentIndex < data.Length)
             {
                 TS_FP_INPUT_EVENT inputEvent = new TS_FP_INPUT_EVENT();
@@ -2616,7 +2652,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 GetFpEventHeaderInfo(eventHeader, out eventFlags, out eventCode);
                 inputEvent.eventHeader.eventFlagsAndCode = eventHeader;
 
-                switch(eventCode)
+                switch (eventCode)
                 {
                     case eventCode_Values.FASTPATH_INPUT_EVENT_MOUSE:
                         inputEvent.eventData = ParseTsFpInputMouse(data, ref currentIndex);
@@ -2654,7 +2690,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         private TS_FP_POINTER_EVENT ParseTsFpInputMouse(byte[] data, ref int currentIndex)
         {
             TS_FP_POINTER_EVENT mouse = new TS_FP_POINTER_EVENT();
-            
+
             mouse.pointerFlags = ParseUInt16(data, ref currentIndex, false);
             mouse.xPos = ParseUInt16(data, ref currentIndex, false);
             mouse.yPos = ParseUInt16(data, ref currentIndex, false);
@@ -2672,7 +2708,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         private TS_FP_POINTERX_EVENT ParseTsFpInputMousex(byte[] data, ref int currentIndex)
         {
             TS_FP_POINTERX_EVENT mousex = new TS_FP_POINTERX_EVENT();
-           
+
             mousex.pointerFlags = ParseUInt16(data, ref currentIndex, false);
             mousex.xPos = ParseUInt16(data, ref currentIndex, false);
             mousex.yPos = ParseUInt16(data, ref currentIndex, false);
@@ -2690,7 +2726,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         private TS_FP_KEYBOARD_EVENT ParseTsFpInputScancode(byte[] data, ref int currentIndex)
         {
             TS_FP_KEYBOARD_EVENT scancode = new TS_FP_KEYBOARD_EVENT();
-            
+
             scancode.keyCode = ParseByte(data, ref currentIndex);
 
             return scancode;
@@ -2706,8 +2742,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         private TS_FP_UNICODE_KEYBOARD_EVENT ParseTsFpInputUnicode(byte[] data, ref int currentIndex)
         {
             TS_FP_UNICODE_KEYBOARD_EVENT unicode = new TS_FP_UNICODE_KEYBOARD_EVENT();
-            
-            unicode.unicodeCode= ParseUInt16(data, ref currentIndex, false);
+
+            unicode.unicodeCode = ParseUInt16(data, ref currentIndex, false);
 
             return unicode;
         }
@@ -2999,7 +3035,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             }
             else
             {
-                if(!serverSessionContext.IsClientToServerEncrypted)
+                if (!serverSessionContext.IsClientToServerEncrypted)
                     securityHeaderType = SecurityHeaderType.Basic;
                 // Get decrypted user data
                 byte[] decryptedUserData = DecryptSendDataRequest(serverSessionContext, userData, securityHeaderType);
@@ -3010,7 +3046,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     // Decode Virtual Channel PDU
                     return DecodeVirtualChannelPDU(data, decryptedUserData, securityHeaderType);
                 }
-                
+
                 else
                 {
                     // Decode other Send Data Indication PDUs
@@ -3102,7 +3138,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 case pduType2_Values.PDUTYPE2_SYNCHRONIZE:
                     pdu = DecodeSynchronizePDU(data, decryptedUserData, securityHeaderType);
                     break;
-                
+
                 case pduType2_Values.PDUTYPE2_REFRESH_RECT:
                     pdu = DecodeRefreshRectPDU(data, decryptedUserData, securityHeaderType);
                     break;
@@ -3194,7 +3230,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     // Update client context and client
                     server.ServerContext.SessionContexts[i].UpdateContext(pdu);
                     server.CheckDecryptionCount(server.ServerContext.SessionContexts[i]);
-                    
+
                     break;
                 }
                 else
@@ -3319,36 +3355,48 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             // Check slow-path/fast-path type
             StackPacket pdu = null;
-            if(serverSessionContext.State ==)
-            if (ConstValue.SLOW_PATH_PDU_INDICATOR_VALUE == data[ConstValue.SLOW_PATH_PDU_INDICATOR_INDEX])
+
+            if (serverSessionContext.IsAuthenticatingRDSTLS)
             {
-                // Slow-Path Situation
-                if (data.Length <= ConstValue.X224_TPDU_TYPE_INDICATOR_INDEX)
-                {
-                    throw new FormatException(ConstValue.ERROR_MESSAGE_DATA_INDEX_OUT_OF_RANGE);
-                }
-
-                X224_TPDU_TYPE x224Type = (X224_TPDU_TYPE)data[ConstValue.X224_TPDU_TYPE_INDICATOR_INDEX];
-                switch (x224Type)
-                {
-                    // X224 Connection Confirm PDU
-                    case X224_TPDU_TYPE.ConnectionRequest:
-                        pdu = DecodeX224ConnectionRequestPDU(data);
-                        break;
-
-                    // MCS PDU
-                    case X224_TPDU_TYPE.Data:
-                        pdu = SwitchDecodeMcsPDU(serverSessionContext, data);
-                        break;
-
-                    default:
-                        throw new FormatException(ConstValue.ERROR_MESSAGE_ENUM_UNRECOGNIZED);
-                }
+                pdu = SwitchRDSTLSAuthenticationPDU(serverSessionContext, data);
             }
             else
             {
-                // Fast-Path Situation
-                pdu = DecodeTsFpInputPDU(serverSessionContext, data);
+                if (ConstValue.SLOW_PATH_PDU_INDICATOR_VALUE == data[ConstValue.SLOW_PATH_PDU_INDICATOR_INDEX])
+                {
+                    // Slow-Path Situation
+                    if (data.Length <= ConstValue.X224_TPDU_TYPE_INDICATOR_INDEX)
+                    {
+                        throw new FormatException(ConstValue.ERROR_MESSAGE_DATA_INDEX_OUT_OF_RANGE);
+                    }
+
+                    X224_TPDU_TYPE x224Type = (X224_TPDU_TYPE)data[ConstValue.X224_TPDU_TYPE_INDICATOR_INDEX];
+                    switch (x224Type)
+                    {
+                        // X224 Connection Confirm PDU
+                        case X224_TPDU_TYPE.ConnectionRequest:
+                            pdu = DecodeX224ConnectionRequestPDU(data);
+                            break;
+
+                        // MCS PDU
+                        case X224_TPDU_TYPE.Data:
+                            pdu = SwitchDecodeMcsPDU(serverSessionContext, data);
+                            break;
+
+                        default:
+                            throw new FormatException(ConstValue.ERROR_MESSAGE_ENUM_UNRECOGNIZED);
+                    }
+                }
+                else
+                {
+                    // Fast-Path Situation
+                    pdu = DecodeTsFpInputPDU(serverSessionContext, data);
+                }
+            }
+
+            if (pdu == null)
+            {
+                throw new FormatException(ConstValue.ERROR_MESSAGE_UNRECOGNIZED_PDU);
             }
 
             return pdu;
@@ -3400,10 +3448,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             }
 
             // Check if data length exceeded expectation
-            if(data.Length != currentIndex)
+            if (data.Length != currentIndex)
             {
 
-                server.AddWarning("{0} bytes of extra data found when decoding X224 Connection Request PDU", data.Length - currentIndex); 
+                server.AddWarning("{0} bytes of extra data found when decoding X224 Connection Request PDU", data.Length - currentIndex);
             }
 
             // temprory command out for winblue behavior change
@@ -3551,7 +3599,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
                     default:
                         break;
-                    //throw new FormatException(ConstValue.ERROR_MESSAGE_ENUM_UNRECOGNIZED);
+                        //throw new FormatException(ConstValue.ERROR_MESSAGE_ENUM_UNRECOGNIZED);
                 }
                 currentIndex = orgIndex + userDataLength;
             }
@@ -3653,7 +3701,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         public StackPacket DecodeSecurityExchangePdu(
             RdpbcgrServerSessionContext serverSessionContext,
             byte[] data,
-            byte[] decryptedUserData, 
+            byte[] decryptedUserData,
             SecurityHeaderType type)
         {
             int currentIndex = 0;
@@ -4118,7 +4166,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 string messageName = "RDPBCGR:" + pdu.GetType().Name;
                 ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, pdu.GetType().Name, decryptedUserData);
             }
-            
+
             while (userDataIndex < decryptedUserData.Length)
             {
                 pdu.slowPathInputEvents.Add(ParseSlowPathInputEvent(decryptedUserData, ref userDataIndex));
@@ -4183,14 +4231,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             int decryptedDataIndex = 0;
 
             //[yunzed]
-            if( numberEvents == 0 )
+            if (numberEvents == 0)
             {
                 Console.WriteLine("numberEvents is 0, so parse the additional numberEvents");
                 pdu.numberEvents = ParseByte(decryptedData, ref decryptedDataIndex);
             }
 
             // TS_FP_UPDATE_PDU: fpOutputUpdates
-            pdu.fpInputEvents= ParseTsFpInputEvents(decryptedData, ref decryptedDataIndex);
+            pdu.fpInputEvents = ParseTsFpInputEvents(decryptedData, ref decryptedDataIndex);
 
             // ETW Provider Dump Message
             if (pdu.dataSignature != null)
@@ -4361,6 +4409,116 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             return pdu;
         }
+        #endregion
+
+        #region PDU Decoders: 2 type of PDU in RDSTLS authentication
+        public StackPacket SwitchRDSTLSAuthenticationPDU(RdpbcgrServerSessionContext serverSessionContext, byte[] data)
+        {
+            StackPacket pdu = null;
+
+            int currentIndex = 0;
+
+            var header = ParseRDSTLSCommonHeader(data, ref currentIndex);
+
+            if (header.Version != RDSTLS_VersionEnum.RDSTLS_VERSION_1)
+            {
+                return null;
+            }
+
+            if (header.PduType != RDSTLS_PduTypeEnum.RDSTLS_TYPE_AUTHREQ)
+            {
+                return null;
+            }
+
+            switch (header.DataType)
+            {
+                case RDSTLS_DataTypeEnum.RDSTLS_DATA_PASSWORD_CREDS:
+                    pdu = DecodeRDSTLSAuthenticationRequestPDUwithPasswordCredentials(data);
+                    break;
+
+                case RDSTLS_DataTypeEnum.RDSTLS_DATA_AUTORECONNECT_COOKIE:
+                    pdu = DecodeRDSTLSAuthenticationRequestPDUwithAutoReconnectCookie(data);
+                    break;
+
+                default:
+                    pdu = null;
+                    break;
+            }
+
+            return pdu;
+        }
+
+        public RDSTLS_CommonHeader ParseRDSTLSCommonHeader(byte[] data, ref int currentIndex)
+        {
+            var pdu = new RDSTLS_CommonHeader();
+            pdu.Version = (RDSTLS_VersionEnum)ParseUInt16(data, ref currentIndex, false);
+            pdu.PduType = (RDSTLS_PduTypeEnum)ParseUInt16(data, ref currentIndex, false);
+            pdu.DataType = (RDSTLS_DataTypeEnum)ParseUInt16(data, ref currentIndex, false);
+            return pdu;
+        }
+
+        public RDSTLS_AuthenticationRequestPDUwithPasswordCredentials DecodeRDSTLSAuthenticationRequestPDUwithPasswordCredentials(byte[] data)
+        {
+            var pdu = new RDSTLS_AuthenticationRequestPDUwithPasswordCredentials();
+
+            int currentIndex = 0;
+
+            pdu.Header = ParseRDSTLSCommonHeader(data, ref currentIndex);
+
+            // parse redirection guid
+            pdu.RedirectionGuidLength = ParseUInt16(data, ref currentIndex, false);
+
+            var guidBytes = GetBytes(data, ref currentIndex, pdu.RedirectionGuidLength);
+            pdu.RedirectionGuid = ParseGuid(guidBytes);
+
+            // parse user name
+            pdu.UserNameLength = ParseUInt16(data, ref currentIndex, false);
+
+            var userNameBytes = GetBytes(data, ref currentIndex, pdu.UserNameLength);
+            pdu.UserName = ParseUnicodeString(userNameBytes);
+
+            // parse domain
+            pdu.DomainLength = ParseUInt16(data, ref currentIndex, false);
+
+            var domainBytes = GetBytes(data, ref currentIndex, pdu.DomainLength);
+            pdu.Domain = ParseUnicodeString(domainBytes);
+
+            // parse password
+            pdu.PasswordLength = ParseUInt16(data, ref currentIndex, false);
+
+            pdu.Password = GetBytes(data, ref currentIndex, pdu.PasswordLength);
+
+            // check total length
+            if (currentIndex != data.Length)
+            {
+                throw new FormatException(ConstValue.ERROR_MESSAGE_DATA_LENGTH_INCONSISTENT);
+            }
+
+            return pdu;
+        }
+
+        public RDSTLS_AuthenticationRequestPDUwithAutoReconnectCookie DecodeRDSTLSAuthenticationRequestPDUwithAutoReconnectCookie(byte[] data)
+        {
+            var pdu = new RDSTLS_AuthenticationRequestPDUwithAutoReconnectCookie();
+
+            int currentIndex = 0;
+
+            pdu.Header = ParseRDSTLSCommonHeader(data, ref currentIndex);
+
+            // parse auto reconnect cookie
+            pdu.AutoReconnectCookieLength = ParseUInt16(data, ref currentIndex, false);
+
+            pdu.AutoReconnectCookie = GetBytes(data, ref currentIndex, pdu.AutoReconnectCookieLength);
+
+            // check total length
+            if (currentIndex != data.Length)
+            {
+                throw new FormatException(ConstValue.ERROR_MESSAGE_DATA_LENGTH_INCONSISTENT);
+            }
+
+            return pdu;
+        }
+
         #endregion
 
         #endregion Public Methods: PDU Decoders
