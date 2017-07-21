@@ -184,7 +184,7 @@ All of the following software must be installed on the driver computer ***before
 | Protocol Test Manager provides a graphical UI for easily configuring and running Microsoft Windows Protocol Test Suites.| 
 | **Microsoft Message Analyzer**| 
 |        ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)Note| 
-|              You can download the latest Message Analyzer from below website. | 
+|              You can download the latest Message Analyzer (MA) from below website. We need to install MA so that our test cases will call MA library to do live capture and verification of the network trace. It’s all automatic process, so users will only need to install the latest version of MA first. | 
 |              [http://www.microsoft.com/en-us/download/details.aspx?id=44226](http://www.microsoft.com/en-us/download/details.aspx?id=44226)           | 
 |  **Optional Software** | 
 |  | 
