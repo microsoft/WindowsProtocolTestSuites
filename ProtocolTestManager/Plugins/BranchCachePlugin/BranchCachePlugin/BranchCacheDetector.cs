@@ -58,7 +58,7 @@ namespace Microsoft.Protocols.TestManager.BranchCachePlugin
         public string ContentServerName { get; private set; }
         public string HostedCacheServerName { get; private set; }
         public IPAddress SUTIpAddress { get; private set; }
-        public SecurityPackageType SecurityPackageType {get; private set;}
+        public SecurityPackageType SecurityPackageType { get; private set; }
         public AccountCredential Credential { get; private set; }
         public List<Smb2Client> ClientList = null;
 
@@ -71,8 +71,8 @@ namespace Microsoft.Protocols.TestManager.BranchCachePlugin
         /// </summary>
         /// <param name="logger">Enanle the log while detector start</param>
         public BranchCacheDetector(Logger logger)
-        {          
-            logWriter = logger;            
+        {
+            logWriter = logger;
             logWriter.AddLineToLog(LogLevel.Information);
         }
 
@@ -155,6 +155,10 @@ namespace Microsoft.Protocols.TestManager.BranchCachePlugin
             networkInfo.LocalIpList = new List<IPAddress>();
             foreach (NetworkInterface adapter in NetworkInterface.GetAllNetworkInterfaces())
             {
+                if (adapter.OperationalStatus != OperationalStatus.Up)
+                {
+                    continue;
+                }
                 if (adapter.NetworkInterfaceType == NetworkInterfaceType.Ethernet
                     || adapter.NetworkInterfaceType == NetworkInterfaceType.Wireless80211
                     || adapter.NetworkInterfaceType == NetworkInterfaceType.GigabitEthernet)
@@ -432,7 +436,7 @@ namespace Microsoft.Protocols.TestManager.BranchCachePlugin
                 uint.MaxValue,
                 out hashHeader,
                 out hashData);
-            
+
             // Retrieve Content Information V1
             status = ReadHash(
                 client,
@@ -533,7 +537,7 @@ namespace Microsoft.Protocols.TestManager.BranchCachePlugin
             else
                 return Platform.NonWindows;
         }
-              
+
         private ManagementObjectCollection QueryWmiObject(string machineName, string queryString)
         {
             ConnectionOptions options = new ConnectionOptions() { Timeout = new TimeSpan(0, 0, 5) };
@@ -606,7 +610,7 @@ namespace Microsoft.Protocols.TestManager.BranchCachePlugin
                 1,
                 Packet_Header_Flags_Values.NONE,
                 messageId++,
-                new DialectRevision[] {DialectRevision.Smb30},
+                new DialectRevision[] { DialectRevision.Smb30 },
                 SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
                 Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU | Capabilities_Values.GLOBAL_CAP_LEASING | Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL | Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES,
                 clientGuid,
@@ -682,7 +686,7 @@ namespace Microsoft.Protocols.TestManager.BranchCachePlugin
         private uint ReadHash(
             Smb2Client client,
             Packet_Header_Flags_Values headerFlags,
-            ulong messageId, 
+            ulong messageId,
             uint treeId,
             ulong sessionId,
             FILEID fileId,
@@ -737,11 +741,11 @@ namespace Microsoft.Protocols.TestManager.BranchCachePlugin
         }
 
         private void SendIoctlPayload(
-            Smb2Client client, 
-            CtlCode_Values code, 
-            byte[] payload, 
-            Packet_Header_Flags_Values headerFlags, 
-            ulong messageId, 
+            Smb2Client client,
+            CtlCode_Values code,
+            byte[] payload,
+            Packet_Header_Flags_Values headerFlags,
+            ulong messageId,
             uint treeId,
             ulong sessionId,
             FILEID fileId)
@@ -822,5 +826,5 @@ namespace Microsoft.Protocols.TestManager.BranchCachePlugin
         }
 
         #endregion
-    }  
+    }
 }
