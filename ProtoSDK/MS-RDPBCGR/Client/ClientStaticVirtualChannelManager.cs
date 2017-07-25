@@ -44,7 +44,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     compressType = CompressionType.PACKET_COMPR_TYPE_NONE;
                 }
                 else if (context.CompressionTypeSupported == CompressionType.PACKET_COMPR_TYPE_RDP6 ||
-                      context.CompressionTypeSupported == CompressionType.PACKET_COMPR_TYPE_RDP62)
+                      context.CompressionTypeSupported == CompressionType.PACKET_COMPR_TYPE_RDP61)
                 {
                     compressType = CompressionType.PACKET_COMPR_TYPE_64K;
                 }
