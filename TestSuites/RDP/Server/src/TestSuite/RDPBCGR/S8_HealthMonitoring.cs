@@ -26,9 +26,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             string osVersion = this.GetOsVersion(this.Site.Properties["RDP.ServerName"]);
             if (!string.IsNullOrEmpty(osVersion))
             {
-                osVersion = osVersion.Replace(".", string.Empty).Substring(0, 2);
-                int version = int.Parse(osVersion);
-                if (version < 63) // OS Version is bellow 6.3(Windows Server 2012R2)
+                Version osVer = new Version(osVersion);
+                Version win81Ver = new Version("6.3");
+
+                var result = osVer.CompareTo(win81Ver);
+                if (result < 0) // OS Version is bellow 6.3(Windows Server 2012R2)
                 {
                     Site.Assert.Inconclusive("Skip this test case as RDP in Windows Server 2012 is RDP 8.0 and not support Heartbeat PDU.");
                 }
@@ -76,12 +78,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <returns></returns>
         public string GetOsVersion(string ipAddress)
         {
-            ManagementScope scope = new ManagementScope(string.Format(@"\\{0}\root\cimv2",ipAddress));
+            ManagementScope scope = new ManagementScope(string.Format(@"\\{0}\root\cimv2", ipAddress));
             SelectQuery query = new SelectQuery();
             query.QueryString = "select * from Win32_OperatingSystem";
             ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
             ManagementObjectCollection queryCollection = searcher.Get();
-            
+
             foreach (ManagementObject mo in queryCollection)
             {
                 return mo["version"].ToString();
