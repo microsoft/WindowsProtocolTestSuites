@@ -106,7 +106,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             #region Trigger client to connect
             //Trigger client to connect. 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(transportProtocol, true);
+            triggerClientRDPConnect(GetCurrentMethodName(), transportProtocol, true);
             #endregion
 
             #region RDPBCGR Connection
@@ -152,7 +152,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// </summary>
         private void StopRDPConnection()
         {
-            int iResult = this.sutControlAdapter.TriggerClientDisconnectAll();
+            int iResult = this.sutControlAdapter.TriggerClientDisconnectAll(string.Empty);
             this.TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
             this.rdpbcgrAdapter.Reset();
             this.rdpegfxAdapter.Reset();
@@ -414,10 +414,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="usingRemoteFX">Whether the output image is using RemoteFX codec</param>
         /// <param name="rect">The Rectangle on the image to be compared</param>
         /// <param name="callStackIndex">Call stack index from the test method, which help to get test method name in the function</param>
-        private void VerifySUTDisplay(bool usingRemoteFX, RDPGFX_RECT16 rect, int callStackIndex = 1)
+        private void VerifySUTDisplay(string caseName, bool usingRemoteFX, RDPGFX_RECT16 rect, int callStackIndex = 1)
         {
             Rectangle compareRect = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
-            base.VerifySUTDisplay(usingRemoteFX, compareRect, callStackIndex + 1);
+            base.VerifySUTDisplay(caseName, usingRemoteFX, compareRect, callStackIndex + 1);
         }
 
         /// <summary>
@@ -426,14 +426,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="usingRemoteFX">Whether the output image is using RemoteFX codec</param>
         /// <param name="rects">Array of rectangles on the image to be compared</param>
         /// <param name="callStackIndex">Call stack index from the test method, which help to get test method name in the function</param>
-        private void VerifySUTDisplay(bool usingRemoteFX, RDPGFX_RECT16[] rects, int callStackIndex = 1)
+        private void VerifySUTDisplay(string caseName, bool usingRemoteFX, RDPGFX_RECT16[] rects, int callStackIndex = 1)
         {
             if (rects != null && rects.Length > 0)
             {
                 foreach (RDPGFX_RECT16 rect in rects)
                 {
                     Rectangle compareRect = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
-                    base.VerifySUTDisplay(usingRemoteFX, compareRect, callStackIndex + 1);
+                    base.VerifySUTDisplay(caseName, usingRemoteFX, compareRect, callStackIndex + 1);
                 }
             }
         }

@@ -41,12 +41,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
             RDPConnect(NotificationType.SurfaceManagementCommand);
 
-            MonitorAddition();
+            MonitorAddition(GetCurrentMethodName());
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send Surface management commands");
             this.rdpedispAdapter.restartGraphicsPipeline(originalDesktopWidth, originalDesktopHeight);
 
-            MonitorRemoval();
+            MonitorRemoval(GetCurrentMethodName());
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send Surface management commands");
             this.rdpedispAdapter.restartGraphicsPipeline(originalDesktopWidth, originalDesktopHeight);
@@ -79,9 +79,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
             RDPConnect(NotificationType.DeactivationReactivation);
 
-            MonitorAddition();
+            MonitorAddition(GetCurrentMethodName());
 
-            MonitorRemoval();
+            MonitorRemoval(GetCurrentMethodName());
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Initialize Deactivation-Reactivation Sequence");
             this.rdpedispAdapter.initiateDeactivationReactivation(originalDesktopWidth, originalDesktopHeight);
@@ -96,12 +96,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         /// <summary>
         /// Common test body Monitor Addition
         /// </summary>
-        private void MonitorAddition()
+        private void MonitorAddition(string caseName)
         {
 
             // interactive adapter
             // ToDo: automatic method
-            int result = this.rdpedispSutControlAdapter.TriggerMonitorAdditionRemovalOnClient("Add a monitor and \"Extend these displays\"");
+            int result = this.rdpedispSutControlAdapter.TriggerMonitorAdditionRemovalOnClient(caseName, "Add a monitor and \"Extend these displays\"");
             this.TestSite.Assert.IsTrue(result >= 0, "Test case fails due to fail operation.");
 
             // Add a monitor
@@ -127,11 +127,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         /// <summary>
         /// Common test body Monitor Removal
         /// </summary>
-        private void MonitorRemoval()
+        private void MonitorRemoval(string caseName)
         {
             // interactive adapter
             // ToDo: automatic method
-            int result = this.rdpedispSutControlAdapter.TriggerMonitorAdditionRemovalOnClient("Remove a monitor");
+            int result = this.rdpedispSutControlAdapter.TriggerMonitorAdditionRemovalOnClient(caseName, "Remove a monitor");
             this.TestSite.Assert.IsTrue(result >= 0, "Test case fails due to fail operation.");
 
             // Remove a monitor

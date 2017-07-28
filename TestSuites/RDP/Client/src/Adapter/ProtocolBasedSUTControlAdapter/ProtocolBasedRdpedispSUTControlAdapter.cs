@@ -36,7 +36,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <param name="width">width of new desktop resolution</param>
         /// <param name="height">height of new desktop resolution</param>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public int TriggerResolutionChangeOnClient(ushort width, ushort height)
+        public int TriggerResolutionChangeOnClient(string caseName, ushort width, ushort height)
         {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
@@ -63,7 +63,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
             // Create request message
             ushort reqId = controlHandler.GetNextRequestId();
-            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.DISPLAY_UPDATE_RESOLUTION,
+            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.DISPLAY_UPDATE_RESOLUTION, caseName,
                 reqId, helpMessage, payloadList.ToArray());
 
             //Send the request and get response if necessary
@@ -76,7 +76,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// </summary>
         /// <param name="orientation">new orientation</param>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public int TriggerOrientationChangeOnClient(int orientation)
+        public int TriggerOrientationChangeOnClient(string caseName,int orientation)
         {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
@@ -99,7 +99,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
             // Create request message
             ushort reqId = controlHandler.GetNextRequestId();
-            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.DISPLAY_UPDATE_RESOLUTION,
+            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.DISPLAY_UPDATE_RESOLUTION, caseName,
                 reqId, helpMessage, payloadList.ToArray());
 
             //Send the request and get response if necessary
@@ -114,7 +114,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <param name="height">height of new desktop resolution</param>
         /// <param name="orientation">new orientation</param>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public int TriggerInitializeDisplaySettings(ushort width, ushort height, int orientation)
+        public int TriggerInitializeDisplaySettings(string caseName, ushort width, ushort height, int orientation)
         {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
@@ -147,7 +147,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
             // Create request message
             ushort reqId = controlHandler.GetNextRequestId();
-            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.DISPLAY_UPDATE_RESOLUTION,
+            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.DISPLAY_UPDATE_RESOLUTION, caseName,
                 reqId, helpMessage, payloadList.ToArray());
 
             //Send the request and get response if necessary
@@ -160,7 +160,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// </summary>
         /// <param name="Action">Action of monitor updates: "Add a monitor" or "Remove a monitor"</param>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public int TriggerMonitorAdditionRemovalOnClient(String Action)
+        public int TriggerMonitorAdditionRemovalOnClient(string caseName, String Action)
         {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
@@ -178,7 +178,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             
             // Create request message
             ushort reqId = controlHandler.GetNextRequestId();
-            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.DISPLAY_UPDATE_MONITORS,
+            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.DISPLAY_UPDATE_MONITORS, caseName,
                 reqId, helpMessage, payload);
 
             //Send the request and get response if necessary
@@ -191,7 +191,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// </summary>
         /// <param name="Action">Action of monitor position update: "Move position of monitors"</param>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public int TriggerMonitorReposition(String Action)
+        public int TriggerMonitorReposition(string caseName, String Action)
         {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
@@ -205,7 +205,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
             // Create request message
             ushort reqId = controlHandler.GetNextRequestId();
-            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.DISPLAY_UPDATE_MONITORS,
+            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.DISPLAY_UPDATE_MONITORS, caseName,
                 reqId, helpMessage, payload);
 
             //Send the request and get response if necessary
@@ -217,7 +217,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// This method is used to trigger client to maximize RDP client window.
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public int TriggerMaximizeRDPClientWindow()
+        public int TriggerMaximizeRDPClientWindow(string caseName)
         {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
@@ -226,7 +226,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
             // Create request message
             ushort reqId = controlHandler.GetNextRequestId();
-            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.DISPLAY_FULLSCREEN,
+            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.DISPLAY_FULLSCREEN, caseName,
                 reqId, helpMessage, payload);
 
             //Send the request and get response if necessary

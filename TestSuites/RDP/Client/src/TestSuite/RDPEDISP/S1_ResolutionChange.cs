@@ -33,7 +33,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             #region Test Code
             RDPConnect(NotificationType.SurfaceManagementCommand);
 
-            ChangeDesktopResolution();
+            ChangeDesktopResolution(GetCurrentMethodName());
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send Surface management commands");
             this.rdpedispAdapter.restartGraphicsPipeline(changedDesktopWidth, changedDekstopHeight);
@@ -66,7 +66,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             #region Test Code
             RDPConnect(NotificationType.DeactivationReactivation);
 
-            ChangeDesktopResolution();
+            ChangeDesktopResolution(GetCurrentMethodName());
                         
             this.TestSite.Log.Add(LogEntryKind.Comment, "Initialize Deactivation-Reactivation Sequence");
             this.rdpedispAdapter.initiateDeactivationReactivation(changedDesktopWidth, changedDekstopHeight);
@@ -83,9 +83,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         /// <summary>
         /// Common test body
         /// </summary>
-        private void ChangeDesktopResolution()
+        private void ChangeDesktopResolution(string caseName)
         {
-            int result = this.rdpedispSutControlAdapter.TriggerResolutionChangeOnClient(changedDesktopWidth, changedDekstopHeight);
+            int result = this.rdpedispSutControlAdapter.TriggerResolutionChangeOnClient(caseName, changedDesktopWidth, changedDekstopHeight);
             System.Threading.Thread.Sleep(SUTAdapterWaitTime);
             this.TestSite.Assert.IsTrue(result >= 0, "Test case fails due to fail operation.");
 

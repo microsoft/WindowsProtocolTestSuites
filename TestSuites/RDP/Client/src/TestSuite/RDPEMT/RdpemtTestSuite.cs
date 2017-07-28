@@ -93,7 +93,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
                 rdpedycServer.Dispose();
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to close all RDP connections for clean up.");
-            int iResult = this.sutControlAdapter.TriggerClientDisconnectAll();
+            int iResult = this.sutControlAdapter.TriggerClientDisconnectAll(string.Empty);
             this.TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
 
             if (rdpemtServerL != null)
@@ -140,7 +140,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
             #region Trigger client to connect
             //Trigger client to connect. 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(transportProtocol);
+            triggerClientRDPConnect(GetCurrentMethodName(), transportProtocol);
             #endregion
 
             #region RDPBCGR Connection

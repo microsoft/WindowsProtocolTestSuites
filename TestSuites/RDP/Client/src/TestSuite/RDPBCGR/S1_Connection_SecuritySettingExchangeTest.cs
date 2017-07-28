@@ -15,7 +15,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestMethod]
         [Priority(1)]
         [TestCategory("RDP7.0")]
-        [TestCategory("RDPBCGR")]        
+        [TestCategory("RDPBCGR")]
         [Description(@"This test case is used to verify 
                       SUT drops the connection if the length field within tpktHeader in License Error PDU is not consistent with the received data.")]
         public void S1_ConnectionTest_SecurityExchange_NegativeTest_LicenseError_InvalidTKPKLength()
@@ -36,7 +36,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Trigger client to initiate a RDP connection
             //Trigger client to initiate a RDP connection.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(transportProtocol);
+            triggerClientRDPConnect(GetCurrentMethodName(), transportProtocol);
             #endregion
 
             //Expect the transport layer connection request.
@@ -78,7 +78,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             //Expect SUT start a channel join sequence
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to start the channel join sequence.");
-            this.rdpbcgrAdapter.ChannelJoinRequestAndConfirm(NegativeType.None); 
+            this.rdpbcgrAdapter.ChannelJoinRequestAndConfirm(NegativeType.None);
             #endregion
 
             //Expects SUT continue the connection by sending a Client Security Exchange PDU 
@@ -97,14 +97,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a Server License Error Pdu - Valid Client with setting the length of tpktHeader to an invalid value (less than the actual value).");
             this.rdpbcgrAdapter.Server_License_Error_Pdu_Valid_Client(NegativeType.InvalidTPKLength);
 
-            RDPClientTryDropConnection("invalid TKPK length in License Error Pdu");            
+            RDPClientTryDropConnection("invalid TKPK length in License Error Pdu");
             #endregion
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("RDP7.0")]
-        [TestCategory("RDPBCGR")]        
+        [TestCategory("RDPBCGR")]
         [Description(@"This test case is used to verify 
                       SUT drops the connection if the length field within MCS Header in License Error PDU is not consistent with the received data.")]
         public void S1_ConnectionTest_SecurityExchange_NegativeTest_LicenseError_InvalidMCSLength()
@@ -125,7 +125,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Trigger client to initiate a RDP connection
             //Trigger client to initiate a RDP connection.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(transportProtocol);
+            triggerClientRDPConnect(GetCurrentMethodName(), transportProtocol);
             #endregion
 
             //Expect the transport layer connection request.
@@ -164,7 +164,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             //Respond a Server MCS Attach User Confirm PDU
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server MCS Attach User Confirm PDU to SUT");
             this.rdpbcgrAdapter.MCSAttachUserConfirm(NegativeType.None);
-                       
+
             //Expect SUT start a channel join sequence
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to start the channel join sequence.");
             this.rdpbcgrAdapter.ChannelJoinRequestAndConfirm(NegativeType.None);
@@ -186,14 +186,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a Server License Error Pdu - Valid Client with setting the length within MCS Header to an invalid value (less than the actual value).");
             this.rdpbcgrAdapter.Server_License_Error_Pdu_Valid_Client(NegativeType.InvalidMCSLength);
 
-            RDPClientTryDropConnection("invalid MCS length in License Error Pdu");            
+            RDPClientTryDropConnection("invalid MCS length in License Error Pdu");
             #endregion
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("RDP7.0")]
-        [TestCategory("RDPBCGR")]        
+        [TestCategory("RDPBCGR")]
         [Description(@"This test case is used to verify 
                       SUT drops the connection if the SEC_LICENSE_PKT (0x0080) flag within securityHeader in License Error PDU is not present.")]
         public void S1_ConnectionTest_SecurityExchange_NegativeTest_LicenseError_InvalidFlag()
@@ -214,7 +214,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Trigger client to initiate a RDP connection
             //Trigger client to initiate a RDP connection.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(transportProtocol);
+            triggerClientRDPConnect(GetCurrentMethodName(), transportProtocol);
             #endregion
 
             //Expect the transport layer connection request.
@@ -275,14 +275,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a Server License Error Pdu - Valid Client with not presenting the SEC_LICENSE_PKT (0x0080) flag within securityHeader.");
             this.rdpbcgrAdapter.Server_License_Error_Pdu_Valid_Client(NegativeType.InvalidFlagInSecurityHeader);
 
-            RDPClientTryDropConnection("invalid Server License Error Pdu without SEC_LICENSE_PKT");            
+            RDPClientTryDropConnection("invalid Server License Error Pdu without SEC_LICENSE_PKT");
             #endregion
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("RDP7.0")]
-        [TestCategory("RDPBCGR")]        
+        [TestCategory("RDPBCGR")]
         [Description(@"This test case is used to verify 
                       SUT drops the connection if MAC signature within securityHeader in License Error PDU is not valid and SEC_ENCRYPT (0x0008) flag is present.")]
         public void S1_ConnectionTest_SecurityExchange_NegativeTest_LicenseError_InvalidSignature()
@@ -301,7 +301,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 this.TestSite.Log.Add(LogEntryKind.Debug, "This case requires the encryption level set to Client or High for RDP standard connection");
                 return;
             }
-            
+
             //Start RDP listening.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening with transport protocol: {0}", transportProtocol.ToString());
             this.rdpbcgrAdapter.StartRDPListening(transportProtocol);
@@ -309,7 +309,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Trigger client to initiate a RDP connection
             //Trigger client to initiate a RDP connection.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(transportProtocol);
+            triggerClientRDPConnect(GetCurrentMethodName(), transportProtocol);
             #endregion
 
             //Expect the transport layer connection request.
@@ -370,9 +370,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a Server License Error Pdu - Valid Client, the SEC_ENCRYPT flag is present and the signature within securityHeader is invalid.");
             this.rdpbcgrAdapter.Server_License_Error_Pdu_Valid_Client(NegativeType.InvalidSignatureInSecurityHeader);
 
-            RDPClientTryDropConnection("Server License Error Pdu with invalid MAC signature");            
+            RDPClientTryDropConnection("Server License Error Pdu with invalid MAC signature");
             #endregion
         }
-                
+
     }
 }

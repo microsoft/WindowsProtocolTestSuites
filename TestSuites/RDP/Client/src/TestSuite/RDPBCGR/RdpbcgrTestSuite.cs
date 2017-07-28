@@ -78,7 +78,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             base.TestCleanup();
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to close all RDP connections for clean up.");
-            int iResult = this.sutControlAdapter.TriggerClientDisconnectAll();
+            int iResult = this.sutControlAdapter.TriggerClientDisconnectAll(string.Empty);
             this.TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Stop RDP listening.");

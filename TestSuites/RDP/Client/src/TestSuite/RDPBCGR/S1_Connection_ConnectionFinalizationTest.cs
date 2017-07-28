@@ -48,7 +48,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Trigger client to initiate a RDP connection
             //Trigger client to initiate a RDP connection.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(transportProtocol);
+            triggerClientRDPConnect(GetCurrentMethodName(), transportProtocol);
             #endregion
 
             //Expect the transport layer connection request
@@ -176,9 +176,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
         [Description(@"This test case is used to ensure SUT can complete the Connection Finalization phase successfully with a valid sending and receiving PDU sequences.
-                        The concrete sequences is: Server Synchronize PDU -> Client Synchronize PDU -> Client Control PDU – Cooperate 
-                        -> Server Control PDU – Cooperate -> Client Control PDU - Request Control -> Client Persistent Key List PDU 
-                        -> Server Control PDU – Granted Control -> Client Font List PDU -> Server Font Map PDU.")]
+                        The concrete sequences is: Server Synchronize PDU -> Client Synchronize PDU -> Client Control PDU ?Cooperate 
+                        -> Server Control PDU ?Cooperate -> Client Control PDU - Request Control -> Client Persistent Key List PDU 
+                        -> Server Control PDU ?Granted Control -> Client Font List PDU -> Server Font Map PDU.")]
         public void S1_ConnectionTest_ConnectionFinalization_PositiveTest_BitmapHostCacheSupported_sequenceTest_1()
         {
             #region Test Description
@@ -209,7 +209,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Trigger client to initiate a RDP connection
             //Trigger client to initiate a RDP connection.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(transportProtocol);
+            triggerClientRDPConnect(GetCurrentMethodName(), transportProtocol);
             #endregion
 
             //Expect the transport layer connection request
@@ -340,9 +340,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
         [Description(@"This test case is used to ensure SUT can complete the Connection Finalization phase successfully with a valid sending and receiving PDU sequences. 
-                        The concrete sequences is: Client Synchronize PDU -> Client Control PDU – Cooperate -> Server Synchronize PDU 
-                        -> Client Control PDU - Request Control -> Server Control PDU – Cooperate -> Client Persistent Key List PDU 
-                        -> Client Font List PDU -> Server Control PDU – Granted Control -> Server Font Map PDU.")]
+                        The concrete sequences is: Client Synchronize PDU -> Client Control PDU ?Cooperate -> Server Synchronize PDU 
+                        -> Client Control PDU - Request Control -> Server Control PDU ?Cooperate -> Client Persistent Key List PDU 
+                        -> Client Font List PDU -> Server Control PDU ?Granted Control -> Server Font Map PDU.")]
         public void S1_ConnectionTest_ConnectionFinalization_PositiveTest_BitmapHostCacheSupported_sequenceTest_2()
         {
             #region Test Description
@@ -373,7 +373,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Trigger client to initiate a RDP connection
             //Trigger client to initiate a RDP connection.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(transportProtocol);
+            triggerClientRDPConnect(GetCurrentMethodName(), transportProtocol);
             #endregion
 
             //Expect the transport layer connection request
@@ -503,9 +503,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
         [Description(@"This test case is used to ensure SUT can complete the Connection Finalization phase successfully with a valid sending and receiving PDU sequences.  
-                        The concrete sequences is: Server Synchronize PDU ->  Server Control PDU – Cooperate -> Client Synchronize PDU 
-                        -> Client Control PDU – Cooperate -> Client Control PDU - Request Control -> Client Persistent Key List PDU 
-                        -> Server Control PDU – Granted Control -> Client Font List PDU -> Server Font Map PDU.")]
+                        The concrete sequences is: Server Synchronize PDU ->  Server Control PDU ?Cooperate -> Client Synchronize PDU 
+                        -> Client Control PDU ?Cooperate -> Client Control PDU - Request Control -> Client Persistent Key List PDU 
+                        -> Server Control PDU ?Granted Control -> Client Font List PDU -> Server Font Map PDU.")]
         public void S1_ConnectionTest_ConnectionFinalization_PositiveTest_BitmapHostCacheSupported_sequenceTest_3()
         {
             #region Test Description
@@ -536,7 +536,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Trigger client to initiate a RDP connection
             //Trigger client to initiate a RDP connection.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(transportProtocol);
+            triggerClientRDPConnect(GetCurrentMethodName(), transportProtocol);
             #endregion
 
             //Expect the transport layer connection request

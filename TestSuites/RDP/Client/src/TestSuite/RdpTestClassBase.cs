@@ -11,6 +11,7 @@ using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
+using System.Runtime.CompilerServices;
 
 namespace Microsoft.Protocols.TestSuites.Rdp
 {
@@ -184,7 +185,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             return null;
         }
 
-        protected void triggerClientRDPConnect(EncryptedProtocol enProtocol, bool fullScreen = false)
+        protected void triggerClientRDPConnect(string caseName, EncryptedProtocol enProtocol, bool fullScreen = false)
         {
             int iResult = 0;
             string strMethod;
@@ -193,26 +194,26 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 || enProtocol == EncryptedProtocol.NegotiationTls)
             {
                 if (fullScreen)
-                    iResult = this.sutControlAdapter.RDPConnectWithNegotiationApproachFullScreen();
+                    iResult = this.sutControlAdapter.RDPConnectWithNegotiationApproachFullScreen(caseName);
                 else
-                    iResult = this.sutControlAdapter.RDPConnectWithNegotiationApproach();
+                    iResult = this.sutControlAdapter.RDPConnectWithNegotiationApproach(caseName);
                 strMethod = "RDPConnectWithNegotiationApproach";
 
             }
             else if (enProtocol == EncryptedProtocol.DirectCredSsp)
             {
                 if (fullScreen)
-                    iResult = this.sutControlAdapter.RDPConnectWithDirectCredSSPFullScreen();
+                    iResult = this.sutControlAdapter.RDPConnectWithDirectCredSSPFullScreen(caseName);
                 else
-                    iResult = this.sutControlAdapter.RDPConnectWithDirectCredSSP();
+                    iResult = this.sutControlAdapter.RDPConnectWithDirectCredSSP(caseName);
                 strMethod = "RDPConnectWithDirectCredSSP";
             }
             else
             {
                 if (fullScreen)
-                    iResult = this.sutControlAdapter.RDPConnectWithDirectTLSFullScreen();
+                    iResult = this.sutControlAdapter.RDPConnectWithDirectTLSFullScreen(caseName);
                 else
-                    iResult = this.sutControlAdapter.RDPConnectWithDirectTLS();
+                    iResult = this.sutControlAdapter.RDPConnectWithDirectTLS(caseName);
                 strMethod = "RDPConnectWithDirectTLS";
             }
             TestSite.Assume.IsTrue(iResult >= 0, "SUT Control Adapter: {0} should be successful: {1}.", strMethod, iResult);
@@ -528,7 +529,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <param name="usingRemoteFX">Whether the output image is using RemoteFX codec</param>
         /// <param name="compareRect">The Rectangle on the image to be compared</param>
         /// <param name="callStackIndex">Call stack index from the test method</param>
-        protected void VerifySUTDisplay(bool usingRemoteFX, Rectangle compareRect, int callStackIndex = 1)
+        protected void VerifySUTDisplay(string caseName, bool usingRemoteFX, Rectangle compareRect, int callStackIndex = 1)
         {
             if (!verifySUTDisplay || this.rdpbcgrAdapter.SimulatedScreen == null)
             {
@@ -543,7 +544,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             string pathForSUTScreenShot = bitmapSavePath + @"\" + sf.GetMethod().Name + "_" + imageId + "_ScreenShot.bmp";
             // Not save the bitmap to the path directly since the interface has limit on the length of path.
             // Save the bitmap into a temprory file and copy it to the right file path.
-            int result = this.sutControlAdapter.CaptureScreenShot(tmpFilePath);
+            int result = this.sutControlAdapter.CaptureScreenShot(caseName, tmpFilePath);
             File.Copy(tmpFilePath, pathForSUTScreenShot, true);
             this.TestSite.Assume.IsTrue(result >= 0, "To verify output of RDP client, the protocol-based SUT control adapter should be used and the Agent on SUT should support screenshot control command.");
 
@@ -627,6 +628,17 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 this.TestSite.Log.Add(LogEntryKind.Warning, "Non-Windows RDP client did not terminate the connection when invalid " + requestDesc + " received.");
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Please double check the RDP client behavior is as expected.");
             }
+        }
+
+        /// <summary>
+        /// Get Testcase Name
+        /// </summary>
+        /// <returns>Case Name</returns>
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static string GetCurrentMethodName()
+        {
+            var st = new StackTrace(new StackFrame(1));
+            return st.GetFrame(0).GetMethod().Name;
         }
     }
 }

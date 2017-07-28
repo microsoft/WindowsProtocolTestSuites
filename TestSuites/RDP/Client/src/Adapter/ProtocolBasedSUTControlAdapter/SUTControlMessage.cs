@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,8 @@ namespace Microsoft.Protocols.TestSuites
         #region Fields
         public SUTControl_MessageType messageType;
         public SUTControl_TestsuiteId testsuiteId;
+        public uint caseNameLength;
+        public string caseName;
         public ushort commandId;
         public ushort requestId;
 
@@ -61,14 +64,23 @@ namespace Microsoft.Protocols.TestSuites
         /// </summary>
         /// <param name="testsuiteId"></param>
         /// <param name="commandId"></param>
+        /// <param name="caseName"></param>
         /// <param name="requestId"></param>
         /// <param name="helpMessage"></param>
         /// <param name="payload"></param>
-        public SUT_Control_Request_Message(SUTControl_TestsuiteId testsuiteId, ushort commandId, ushort requestId, string helpMessage, byte[] payload)
+        public SUT_Control_Request_Message(SUTControl_TestsuiteId testsuiteId, ushort commandId, string caseName, ushort requestId, string helpMessage, byte[] payload)
         {
             this.messageType = SUTControl_MessageType.SUT_CONTROL_REQUEST;
             this.testsuiteId = testsuiteId;
             this.commandId = commandId;
+
+            this.caseNameLength = 0;
+            this.caseName = caseName;
+            if (!string.IsNullOrEmpty(this.caseName))
+            {
+                this.caseNameLength = (uint)Encoding.UTF8.GetByteCount(this.caseName);
+            }
+
             this.requestId = requestId;
 
             this.helpMessageLength = 0;
@@ -96,6 +108,13 @@ namespace Microsoft.Protocols.TestSuites
             bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes((ushort)this.messageType)));
             bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes((ushort)this.testsuiteId)));
             bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes((ushort)this.commandId)));
+
+            bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes(this.caseNameLength)));
+            if (!string.IsNullOrEmpty(this.caseName) && this.caseNameLength > 0)
+            {
+                bufferList.AddRange(Encoding.UTF8.GetBytes(this.caseName));
+            }
+
             bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes((ushort)this.requestId)));
             
             bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes(this.helpMessageLength)));
@@ -127,9 +146,19 @@ namespace Microsoft.Protocols.TestSuites
 
                 this.testsuiteId = (SUTControl_TestsuiteId)BitConverter.ToUInt16(Utility.GetNumericBytes(rawData, index, 2), 0);
                 index += 2;
-
+                
                 this.commandId = BitConverter.ToUInt16(Utility.GetNumericBytes(rawData, index, 2), 0);
                 index += 2;
+
+                this.caseNameLength = BitConverter.ToUInt32(Utility.GetNumericBytes(rawData, index, 4), 0);
+                index += 4;
+
+                if (this.caseNameLength > 0)
+                {
+                    int size = (int)caseNameLength;
+                    this.caseName = Encoding.UTF8.GetString(rawData, index, size);
+                    index += size;
+                }
 
                 this.requestId = BitConverter.ToUInt16(Utility.GetNumericBytes(rawData, index, 2), 0);
                 index += 2;
@@ -171,6 +200,10 @@ namespace Microsoft.Protocols.TestSuites
 
         public SUTControl_MessageType messageType;
         public SUTControl_TestsuiteId testsuiteId;
+
+        public uint caseNameLength;
+        public string caseName;
+
         public ushort commandId;
         public ushort requestId;
 
@@ -201,11 +234,19 @@ namespace Microsoft.Protocols.TestSuites
         /// <param name="requestId"></param>
         /// <param name="errorMessage"></param>
         /// <param name="payload"></param>
-        public SUT_Control_Response_Message(SUTControl_TestsuiteId testsuiteId, ushort commandId, ushort requestId, uint resultCode, string errorMessage, byte[] payload)
+        public SUT_Control_Response_Message(SUTControl_TestsuiteId testsuiteId, ushort commandId, string caseName, ushort requestId, uint resultCode, string errorMessage, byte[] payload)
         {
             this.messageType = SUTControl_MessageType.SUT_CONTROL_RESPONSE;
             this.testsuiteId = testsuiteId;
             this.commandId = commandId;
+
+            this.caseNameLength = 0;
+            this.caseName = caseName;
+            if (!string.IsNullOrEmpty(this.caseName))
+            {
+                this.caseNameLength = (uint)Encoding.UTF8.GetByteCount(this.caseName);
+            }
+
             this.requestId = requestId;
             this.resultCode = resultCode;
 
@@ -234,6 +275,13 @@ namespace Microsoft.Protocols.TestSuites
             bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes((ushort)this.messageType)));
             bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes((ushort)this.testsuiteId)));
             bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes((ushort)this.commandId)));
+
+            bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes(this.caseNameLength)));
+            if (!string.IsNullOrEmpty(this.caseName) && this.caseNameLength > 0)
+            {
+                bufferList.AddRange(Encoding.UTF8.GetBytes(this.caseName));
+            }
+
             bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes((ushort)this.requestId)));
             bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes(this.resultCode)));
 
@@ -269,6 +317,16 @@ namespace Microsoft.Protocols.TestSuites
 
                 this.commandId = BitConverter.ToUInt16(Utility.GetNumericBytes(rawData, index, 2), 0);
                 index += 2;
+
+                this.caseNameLength = BitConverter.ToUInt32(Utility.GetNumericBytes(rawData, index, 4), 0);
+                index += 4;
+
+                if (this.caseNameLength > 0)
+                {
+                    int size = (int)caseNameLength;
+                    this.caseName = Encoding.UTF8.GetString(rawData, index, size);
+                    index += size;
+                }
 
                 this.requestId = BitConverter.ToUInt16(Utility.GetNumericBytes(rawData, index, 2), 0);
                 index += 2;

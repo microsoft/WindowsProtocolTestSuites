@@ -37,7 +37,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
             RDPConnect(NotificationType.SurfaceManagementCommand);
 
-            MonitorReposition();
+            MonitorReposition(GetCurrentMethodName());
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send Surface management commands");
             this.rdpedispAdapter.restartGraphicsPipeline(originalDesktopWidth, originalDesktopHeight);
@@ -67,7 +67,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
             RDPConnect(NotificationType.DeactivationReactivation);
 
-            MonitorReposition();
+            MonitorReposition(GetCurrentMethodName());
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Initialize Deactivation-Reactivation Sequence");
             this.rdpedispAdapter.initiateDeactivationReactivation(originalDesktopWidth, originalDesktopHeight);
@@ -82,12 +82,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         /// <summary>
         /// Common test body Monitor reposition
         /// </summary>
-        private void MonitorReposition()
+        private void MonitorReposition(string caseName)
         {
 
             // interactive adapter
             // ToDo: automatic method
-            int result = this.rdpedispSutControlAdapter.TriggerMonitorReposition("Move position of monitors");
+            int result = this.rdpedispSutControlAdapter.TriggerMonitorReposition(caseName, "Move position of monitors");
             this.TestSite.Assert.IsTrue(result >= 0, "Test case fails due to fail operation.");
 
             // Add a monitor

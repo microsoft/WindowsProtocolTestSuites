@@ -50,7 +50,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(false, surfRect);
+            this.VerifySUTDisplay(GetCurrentMethodName(), false, surfRect);
 
             // Delete the surface
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
@@ -97,7 +97,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(false, surfRect);
+            this.VerifySUTDisplay(GetCurrentMethodName(), false, surfRect);
 
             // Bottom-right corner
             this.TestSite.Log.Add(LogEntryKind.Comment, "The bitmap is sent to the client by frame {0}. whose bottom and right borders are overlapped with surface", fid);
@@ -107,7 +107,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(false, surfRect);
+            this.VerifySUTDisplay(GetCurrentMethodName(), false, surfRect);
 
             // Bottom-left corner
             this.TestSite.Log.Add(LogEntryKind.Comment, "The bitmap is sent to the client by frame {0}. whose bottom and left borders are overlapped with surface", fid);
@@ -117,7 +117,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(false, surfRect);
+            this.VerifySUTDisplay(GetCurrentMethodName(), false, surfRect);
 
             // Delete the surface
             this.rdpegfxAdapter.DeleteSurface(surf.Id);

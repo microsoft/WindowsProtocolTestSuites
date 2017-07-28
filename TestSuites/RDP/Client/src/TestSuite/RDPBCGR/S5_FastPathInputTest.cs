@@ -49,7 +49,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Trigger client to connect
             //Trigger client to connect.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(transportProtocol);
+            triggerClientRDPConnect(GetCurrentMethodName(), transportProtocol);
             #endregion
 
             //Waiting for the transport level connection request.
@@ -69,7 +69,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             this.TestSite.Log.Add(LogEntryKind.Comment, @"Triggering SUT to generate input events, including Keyboard Event or Unicode Keyboard Event, Mouse Event or 
             Extended Mouse Event, Synchronize Event, Client Refresh Rect and Client Suppress Output.");
-            int iResult = this.sutControlAdapter.TriggerInputEvents();
+            int iResult = this.sutControlAdapter.TriggerInputEvents(GetCurrentMethodName());
             this.TestSite.Assume.IsTrue(iResult >= 0, "SUT Control Adapter: TriggerInputEvents should be successful: {0}. This test case must be run under \"interactive\" mode", iResult);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Fast-Path Input PDU with a Mouse Event.");

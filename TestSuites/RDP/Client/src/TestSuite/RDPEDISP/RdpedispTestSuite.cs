@@ -140,7 +140,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         private void InitializeDisplaySetting()
         {
             this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to initialize display settings ...");
-            int result = this.rdpedispSutControlAdapter.TriggerInitializeDisplaySettings(originalDesktopWidth, originalDesktopHeight, OrientationToDEVMODEValue(MonitorLayout_OrientationValues.ORIENTATION_LANDSCAPE));
+            int result = this.rdpedispSutControlAdapter.TriggerInitializeDisplaySettings(string.Empty, originalDesktopWidth, originalDesktopHeight, OrientationToDEVMODEValue(MonitorLayout_OrientationValues.ORIENTATION_LANDSCAPE));
             this.TestSite.Assert.IsTrue(result >= 0, "Cannot initialize display settings on client automatically");
             System.Threading.Thread.Sleep(SUTAdapterWaitTime);
         }
@@ -155,7 +155,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
             //Trigger client to connect. 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(transportProtocol, true);
+            triggerClientRDPConnect(GetCurrentMethodName(), transportProtocol, true);
             #endregion
 
             #region RDPBCGR Connection
@@ -206,7 +206,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         /// </summary>
         private void StopRDPConnection()
         {
-            int iResult = this.sutControlAdapter.TriggerClientDisconnectAll();
+            int iResult = this.sutControlAdapter.TriggerClientDisconnectAll(string.Empty);
             this.TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
             this.rdpbcgrAdapter.Reset();
             if(this.rdpegfxAdapter != null)

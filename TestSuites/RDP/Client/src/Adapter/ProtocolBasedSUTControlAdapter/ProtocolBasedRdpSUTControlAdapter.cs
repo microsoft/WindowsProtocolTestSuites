@@ -39,14 +39,14 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// and the client should use Direct Approach with TLS as the security protocol.
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public int RDPConnectWithDirectTLS()
+        public int RDPConnectWithDirectTLS(string caseName)
         {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);         
             // Create payload
             byte[] payload = CreateRDPConncectPayload(connectPayloadType, localIP, localPort, true, false);
 
-            return Start_RDP_Connection(payload, helpMessage);
+            return Start_RDP_Connection(caseName, payload, helpMessage);
         }
 
         /// <summary>
@@ -54,14 +54,14 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// and the client should use Direct Approach with TLS as the security protocol.
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public int RDPConnectWithDirectTLSFullScreen()
+        public int RDPConnectWithDirectTLSFullScreen(string caseName)
         {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
             // Create payload
             byte[] payload = CreateRDPConncectPayload(connectPayloadType,localIP, localPort, true, true);
 
-            return Start_RDP_Connection(payload, helpMessage);
+            return Start_RDP_Connection(caseName, payload, helpMessage);
         }
 
         /// <summary>
@@ -69,14 +69,14 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// and the client should use Direct Approach with CredSSP as the security protocol.
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public int RDPConnectWithDirectCredSSP()
+        public int RDPConnectWithDirectCredSSP(string caseName)
         {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
             // Create payload
             byte[] payload = CreateRDPConncectPayload(connectPayloadType, localIP, localPort, true, false);
 
-            return Start_RDP_Connection(payload, helpMessage);
+            return Start_RDP_Connection(caseName, payload, helpMessage);
         }
 
         /// <summary>
@@ -84,14 +84,14 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// and the client should use Direct Approach with CredSSP as the security protocol.
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public int RDPConnectWithDirectCredSSPFullScreen()
+        public int RDPConnectWithDirectCredSSPFullScreen(string caseName)
         {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
             // Create payload
             byte[] payload = CreateRDPConncectPayload(connectPayloadType, localIP, localPort, true, true);
 
-            return Start_RDP_Connection(payload, helpMessage);
+            return Start_RDP_Connection(caseName, payload, helpMessage);
         }
 
         /// <summary>
@@ -99,14 +99,14 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// and the client should use Negotiation-Based Approach to advertise the support for TLS, CredSSP or RDP standard security protocol.
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public int RDPConnectWithNegotiationApproach()
+        public int RDPConnectWithNegotiationApproach(string caseName)
         {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
             // Create payload
             byte[] payload = CreateRDPConncectPayload(connectPayloadType, localIP, localPort, false, false);
 
-            return Start_RDP_Connection(payload, helpMessage);
+            return Start_RDP_Connection(caseName, payload, helpMessage);
         }
 
         /// <summary>
@@ -114,21 +114,21 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// and the client should use Negotiation-Based Approach to advertise the support for TLS, CredSSP or RDP standard security protocol.
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public int RDPConnectWithNegotiationApproachFullScreen()
+        public int RDPConnectWithNegotiationApproachFullScreen(string caseName)
         {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
             // Create payload
             byte[] payload = CreateRDPConncectPayload(connectPayloadType, localIP, localPort, false, true);
 
-            return Start_RDP_Connection(payload, helpMessage);
+            return Start_RDP_Connection(caseName, payload, helpMessage);
         }
 
         /// <summary>
         /// This method is used to trigger RDP client initiate a disconnection of current session.
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public int TriggerClientDisconnect()
+        public int TriggerClientDisconnect(string caseName)
         {      
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
@@ -137,7 +137,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             
             // Create request message
             ushort reqId = controlHandler.GetNextRequestId();
-            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.CLOSE_RDP_CONNECTION,
+            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.CLOSE_RDP_CONNECTION, caseName,
                 reqId, helpMessage, payload);
             
             //Send the request and get response if necessary
@@ -150,7 +150,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// This method is used to trigger RDP client to close all RDP connection to a server for clean up.
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public int TriggerClientDisconnectAll()
+        public int TriggerClientDisconnectAll(string caseName)
         {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
@@ -159,7 +159,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
             // Create request message
             ushort reqId = controlHandler.GetNextRequestId();
-            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.CLOSE_RDP_CONNECTION,
+            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.CLOSE_RDP_CONNECTION, caseName,
                 reqId, helpMessage, payload);
 
             //Send the request and get response if necessary
@@ -171,7 +171,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// This method is used to trigger RDP client to start an Auto-Reconnect sequence after a network interruption.
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public int TriggerClientAutoReconnect()
+        public int TriggerClientAutoReconnect(string caseName)
         {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
@@ -180,7 +180,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
             // Create request message
             ushort reqId = controlHandler.GetNextRequestId();
-            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.AUTO_RECONNECT,
+            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.AUTO_RECONNECT, caseName,
                         reqId, helpMessage, payload);
 
             //Send the request and get response if necessary
@@ -192,7 +192,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// This method is used to trigger the client to server input events. 
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public int TriggerInputEvents()
+        public int TriggerInputEvents(string caseName)
         {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
@@ -210,7 +210,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             
             // Create request message
             ushort reqId = controlHandler.GetNextRequestId();
-            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.BASIC_INPUT,
+            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.BASIC_INPUT, caseName,
                 reqId, helpMessage, payload);
 
             //Send the request and get response if necessary
@@ -223,7 +223,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// </summary>
         /// <param name="filePath">Filepath to save captured image</param>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public int CaptureScreenShot(string filePath)
+        public int CaptureScreenShot(string caseName, string filePath)
         {
             if (!controlHandler.IsUsingTCP)
             {
@@ -236,7 +236,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
             // Create request message
             ushort reqId = controlHandler.GetNextRequestId();
-            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.SCREEN_SHOT,
+            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.SCREEN_SHOT, caseName,
                         reqId, helpMessage, payload);
 
             //Send the request and get response if necessary
@@ -307,10 +307,10 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <param name="payload">Payload of SUT control request message</param>
         /// <param name="helpMessage">helpMessage of SUT control request message</param>
         /// <returns></returns>
-        private int Start_RDP_Connection(byte[] payload, string helpMessage)
+        private int Start_RDP_Connection(string caseName, byte[] payload, string helpMessage)
         {
             ushort reqId = controlHandler.GetNextRequestId();
-            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.START_RDP_CONNECTION,
+            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.START_RDP_CONNECTION, caseName,
                         reqId, helpMessage, payload);
 
             byte[] resposePayload = null;

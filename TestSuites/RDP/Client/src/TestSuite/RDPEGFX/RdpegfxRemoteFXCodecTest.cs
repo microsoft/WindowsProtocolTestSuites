@@ -50,7 +50,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(true, surfRect);
+            this.VerifySUTDisplay(GetCurrentMethodName(), true, surfRect);
 
             // Delete the surface
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
@@ -89,7 +89,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(true, surfRect);
+            this.VerifySUTDisplay(GetCurrentMethodName(), true, surfRect);
 
             // Delete the surface
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
@@ -128,7 +128,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(true, surfRect);
+            this.VerifySUTDisplay(GetCurrentMethodName(), true, surfRect);
 
             // Delete the surface
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
@@ -167,7 +167,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(true, surfRect);
+            this.VerifySUTDisplay(GetCurrentMethodName(), true, surfRect);
 
             // Delete the surface
             this.rdpegfxAdapter.DeleteSurface(surf.Id);

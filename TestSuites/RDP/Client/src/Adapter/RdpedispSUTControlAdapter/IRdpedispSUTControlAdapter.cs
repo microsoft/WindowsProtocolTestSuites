@@ -15,7 +15,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
                     "2.Enter a return value, using a nonnegative value for a successful operation or a negative value for a failed operation.\r\n\r\n" +
                     "3.To pass the value to the test case, click the Succeed button. Or, to end the test case, enter a message into the Failure Message dialog box and then click Fail.")]
         [DefaultValue("1")]
-        int TriggerResolutionChangeOnClient(ushort width, ushort height);
+        int TriggerResolutionChangeOnClient(string caseName, ushort width, ushort height);
 
         /// <summary>
         /// This method is used to trigger screen orientation change on the client.
@@ -26,7 +26,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
                     "3.Enter a return value, using a nonnegative value for a successful operation or a negative value for a failed operation.\r\n\r\n" +
                     "4.To pass the value to the test case, click the Succeed button. Or, to end the test case, enter a message into the Failure Message dialog box and then click Fail.")]
         [DefaultValue("1")]
-        int TriggerOrientationChangeOnClient(int orientation);
+        int TriggerOrientationChangeOnClient(string caseName, int orientation);
 
         /// <summary>
         /// This method is used to trigger client to initialize display settings.
@@ -37,7 +37,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
                     "3.Enter a return value, using a nonnegative value for a successful operation or a negative value for a failed operation.\r\n\r\n" +
                     "4.To pass the value to the test case, click the Succeed button. Or, to end the test case, enter a message into the Failure Message dialog box and then click Fail.")]
         [DefaultValue("1")]
-        int TriggerInitializeDisplaySettings(ushort width, ushort height, int orientation);
+        int TriggerInitializeDisplaySettings(string caseName, ushort width, ushort height, int orientation);
 
         /// <summary>
         /// This method is used to trigger screen addition or removal on the client.
@@ -47,7 +47,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
                     "2.Enter a return value, using a nonnegative value for a successful operation or a negative value for a failed operation.\r\n\r\n" +
                     "3.To pass the value to the test case, click the Succeed button. Or, to end the test case, enter a message into the Failure Message dialog box and then click Fail.")]
         [DefaultValue("1")]
-        int TriggerMonitorAdditionRemovalOnClient(String Action);
+        int TriggerMonitorAdditionRemovalOnClient(string caseName, String Action);
 
         /// <summary>
         /// This method is used to trigger repositioning of monitors on the client.
@@ -57,7 +57,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
                     "2.Enter a return value, using a nonnegative value for a successful operation or a negative value for a failed operation.\r\n\r\n" +
                     "3.To pass the value to the test case, click the Succeed button. Or, to end the test case, enter a message into the Failure Message dialog box and then click Fail.")]
         [DefaultValue("1")]
-        int TriggerMonitorReposition(String Action);
+        int TriggerMonitorReposition(string caseName, String Action);
 
         /// <summary>
         /// This method is used to trigger client to maximize RDP client window.
@@ -67,6 +67,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
                     "2.Enter a return value, using a nonnegative value for a successful operation or a negative value for a failed operation.\r\n\r\n" +
                     "3.To pass the value to the test case, click the Succeed button. Or, to end the test case, enter a message into the Failure Message dialog box and then click Fail.")]
         [DefaultValue("1")]
-        int TriggerMaximizeRDPClientWindow();
+        int TriggerMaximizeRDPClientWindow(string caseName);
     }
 }

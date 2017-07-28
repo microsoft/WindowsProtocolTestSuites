@@ -48,7 +48,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Trigger client to connect
             //Trigger client to connect.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(transportProtocol);
+            triggerClientRDPConnect(GetCurrentMethodName(), transportProtocol);
             #endregion
 
             #region First Connection
@@ -75,7 +75,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Auto-Reconnect Sequence
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to start an Auto-Reconnect.");
-            int iResult = this.sutControlAdapter.TriggerClientAutoReconnect();
+            int iResult = this.sutControlAdapter.TriggerClientAutoReconnect(GetCurrentMethodName());
             TestSite.Assume.IsTrue(iResult >= 0, "SUT Control Adapter: TriggerClientAutoReconnect should be successful: {0}.", iResult);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting the transport layer connection request.");
@@ -132,7 +132,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Trigger client to connect
             //Trigger client to connect.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(transportProtocol);
+            triggerClientRDPConnect(GetCurrentMethodName(), transportProtocol);
             #endregion
 
             #region First Connection
@@ -159,7 +159,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Auto-Reconnect Sequence
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to start an Auto-Reconnect.");
-            int iResult = this.sutControlAdapter.TriggerClientAutoReconnect();
+            int iResult = this.sutControlAdapter.TriggerClientAutoReconnect(GetCurrentMethodName());
             TestSite.Assume.IsTrue(iResult >= 0, "SUT Control Adapter: TriggerClientAutoReconnect should be successful: {0}.", iResult);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting the transport layer connection request.");

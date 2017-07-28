@@ -64,7 +64,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         [MethodHelp("1.Touch the screen of the client.\r\n\r\n" +
                     "2.Enter a return value, using a positive value for a successful operation or a negative value for a failed operation.\r\n\r\n" +
                     "3.To pass the value to the test case, click the Succeed button. Or, to end the test case, enter a message into the Failure Message dialog box and then click Fail.")]
-        public int TriggerOneTouchEventOnClient()
+        public int TriggerOneTouchEventOnClient(string caseName)
         {
             this.rdprfxAdapter.Accept(rdpbcgrAdapter.ServerStack, rdpbcgrAdapter.SessionContext);
             this.rdprfxAdapter.ReceiveAndCheckClientCoreData();
@@ -83,7 +83,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         [MethodHelp("1.Touch the screen several times to trigger touch events (at least touch 5 times).\r\n\r\n" +
                     "2.Enter a return value, using a positive value for a successful operation or a negative value for a failed operation.\r\n\r\n" +
                     "3.To pass the value to the test case, click the Succeed button. Or, to end the test case, enter a message into the Failure Message dialog box and then click Fail.")]
-        public int TriggerContinuousTouchEventOnClient()
+        public int TriggerContinuousTouchEventOnClient(string caseName)
         {
             this.rdprfxAdapter.Accept(rdpbcgrAdapter.ServerStack, rdpbcgrAdapter.SessionContext);
             this.rdprfxAdapter.ReceiveAndCheckClientCoreData();
@@ -103,7 +103,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         [MethodHelp("1.Touch the screen of the client with multiple touch points, the number of touch points is specified in the parameter contactCout.\r\n\r\n" +
                     "2.Enter a return value, using a positive value for a successful operation or a negative value for a failed operation.\r\n\r\n" +
                     "3.To pass the value to the test case, click the Succeed button. Or, to end the test case, enter a message into the Failure Message dialog box and then click Fail.")]
-        public int TriggerMultiTouchEventOnClient(ushort contactCount)
+        public int TriggerMultiTouchEventOnClient(string caseName, ushort contactCount)
         {
             this.rdprfxAdapter.Accept(rdpbcgrAdapter.ServerStack, rdpbcgrAdapter.SessionContext);
             this.rdprfxAdapter.ReceiveAndCheckClientCoreData();
@@ -119,7 +119,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         /// This method is only used by managed adapter. This method is used to trigger touch events at specified position. 
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public int TriggerPositionSpecifiedTouchEventOnClient()
+        public int TriggerPositionSpecifiedTouchEventOnClient(string caseName)
         {
             this.rdprfxAdapter.Accept(rdpbcgrAdapter.ServerStack, rdpbcgrAdapter.SessionContext);
             this.rdprfxAdapter.ReceiveAndCheckClientCoreData();
@@ -138,7 +138,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         [MethodHelp("1.If your device supports proximity, trigger the RDPINPUT_DISMISS_HOVERING_CONTACT_PDU message on client, and enter a positive return value. \r\n\r\n" +
                     "2.If your device does not support proximity, enter a negative return value.\r\n\r\n" +
                     "3.To pass the value to the test case, click the Succeed button. Or, to end the test case, enter a message into the Failure Message dialog box and then click Fail.")]
-        public int TriggerDismissHoveringContactPduOnClient()
+        public int TriggerDismissHoveringContactPduOnClient(string caseName)
         {
             this.rdprfxAdapter.Accept(rdpbcgrAdapter.ServerStack, rdpbcgrAdapter.SessionContext);
             this.rdprfxAdapter.ReceiveAndCheckClientCoreData();
