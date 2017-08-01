@@ -206,7 +206,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
                 Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES,
                 clientGuid);
-            client.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, false);
+            client.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.FileServerNameContainingSharedVHD, TestConfig.AccountCredential, false);
             client.TreeConnect(uncShareName, out treeId);
         }
 
