@@ -4185,7 +4185,6 @@ The server MUST verify the request size. If the size of the SMB2 CREATE Request 
 |---|---|
 |**Test ID**|ResilientWithPersistentHandle_OpenFromDiffClient|
 |**Description**|Verify that whether Open.IsResilient will impact persistent handle.|
-||Without resilient handle, server will return STATUS_FILE_NOT_AVAILABLE when open the same file when Open.IsPersistent is True and Open is disconnected.|
 |**Prerequisites**||
 |**Test Execution Steps**|SMB2 Negotiate with SUT|
 ||SMB2 Session Setup|
@@ -4197,7 +4196,7 @@ The server MUST verify the request size. If the size of the SMB2 CREATE Request 
 ||SMB2 Session Setup|
 ||SMB2 Tree Connect to the same Share|
 ||SMB2 Create with same file name|
-||Verify the Create Response with Status SUCCESS |
+||Verify the Create Response with Status STATUS_FILE_NOT_AVAILABLE |
 
 
 ######<a name="3.2.12.2.2"> Resilient Open Scavenger Timer
