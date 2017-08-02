@@ -1441,7 +1441,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             Site.Assert.IsTrue(compressType == (byte)CompressionType.PACKET_COMPR_TYPE_8K
                 || compressType == (byte)CompressionType.PACKET_COMPR_TYPE_64K
                 || compressType == (byte)CompressionType.PACKET_COMPR_TYPE_RDP6
-                || compressType == (byte)CompressionType.PACKET_COMPR_TYPE_RDP62, "In TS_FP_UPDATE, the compress type values in compressionFlags are: "
+                || compressType == (byte)CompressionType.PACKET_COMPR_TYPE_RDP61, "In TS_FP_UPDATE, the compress type values in compressionFlags are: "
                 + "PACKET_COMPR_TYPE_8K (0x0), PACKET_COMPR_TYPE_64K (0x1), PACKET_COMPR_TYPE_RDP6 (0x2), PACKET_COMPR_TYPE_RDP61 (0x3).");
 
             if (update is TS_FP_UPDATE_PALETTE)

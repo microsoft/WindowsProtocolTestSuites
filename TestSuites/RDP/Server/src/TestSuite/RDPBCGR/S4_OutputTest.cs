@@ -48,7 +48,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             rdpbcgrAdapter.ConnectToServer(this.transportProtocol);
 
             string[] SVCNames = new string[] { RdpConstValue.SVCNAME_RDPEDYC };
-            rdpbcgrAdapter.EstablishRDPConnection(requestProtocol, SVCNames, CompressionType.PACKET_COMPR_TYPE_RDP62,
+            rdpbcgrAdapter.EstablishRDPConnection(requestProtocol, SVCNames, CompressionType.PACKET_COMPR_TYPE_RDP61,
                 false, // Is reconnect
                 true,  // Is auto logon
                 supportFastPathInput:true,

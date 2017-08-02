@@ -87,7 +87,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
 
             this.Site.Log.Add(LogEntryKind.Comment, "Send a Client Info PDU.");
-            rdpbcgrAdapter.SendClientInfoPDU(NegativeType.None, CompressionType.PACKET_COMPR_TYPE_RDP62, false);
+            rdpbcgrAdapter.SendClientInfoPDU(NegativeType.None, CompressionType.PACKET_COMPR_TYPE_RDP61, false);
 
             #endregion Security Commencement phase / Secure Setting Exchange Phase
 

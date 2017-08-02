@@ -241,7 +241,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
 
             this.Site.Log.Add(LogEntryKind.Comment, "Send a Client Info PDU.");
-            rdpbcgrAdapter.SendClientInfoPDU(NegativeType.None, CompressionType.PACKET_COMPR_TYPE_RDP62, false);
+            rdpbcgrAdapter.SendClientInfoPDU(NegativeType.None, CompressionType.PACKET_COMPR_TYPE_RDP61, false);
 
             Server_License_Error_Pdu_Valid_Client licenseErrorPdu = rdpbcgrAdapter.ExpectPacket<Server_License_Error_Pdu_Valid_Client>(timeout);
             this.Site.Assert.IsNotNull(licenseErrorPdu, "RDP Server MUST send a Server License Error PDU during Licensing phase.");
@@ -319,7 +319,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
 
             this.Site.Log.Add(LogEntryKind.Comment, "Send a Client Info PDU.");
-            rdpbcgrAdapter.SendClientInfoPDU(NegativeType.None, CompressionType.PACKET_COMPR_TYPE_RDP62, false);
+            rdpbcgrAdapter.SendClientInfoPDU(NegativeType.None, CompressionType.PACKET_COMPR_TYPE_RDP61, false);
 
             Server_License_Error_Pdu_Valid_Client licenseErrorPdu = rdpbcgrAdapter.ExpectPacket<Server_License_Error_Pdu_Valid_Client>(timeout);
             this.Site.Assert.IsNotNull(licenseErrorPdu, "RDP Server MUST send a Server License Error PDU during Licensing phase.");
@@ -417,7 +417,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
 
             this.Site.Log.Add(LogEntryKind.Comment, "Send a Client Info PDU.");
-            rdpbcgrAdapter.SendClientInfoPDU(NegativeType.None, CompressionType.PACKET_COMPR_TYPE_RDP62, false);
+            rdpbcgrAdapter.SendClientInfoPDU(NegativeType.None, CompressionType.PACKET_COMPR_TYPE_RDP61, false);
 
             Server_License_Error_Pdu_Valid_Client licenseErrorPdu = rdpbcgrAdapter.ExpectPacket<Server_License_Error_Pdu_Valid_Client>(timeout);
             this.Site.Assert.IsNotNull(licenseErrorPdu, "RDP Server MUST send a Server License Error PDU during Licensing phase.");
@@ -489,7 +489,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             string[] SVCNames = new string[] { RdpConstValue.SVCNAME_RDPEDYC };
             rdpbcgrAdapter.EstablishRDPConnection(requestProtocol, 
                 SVCNames, 
-                CompressionType.PACKET_COMPR_TYPE_RDP62, 
+                CompressionType.PACKET_COMPR_TYPE_RDP61, 
                 false, // Is reconnect
                 true  // Is Auto logon
                 );
@@ -526,7 +526,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             rdpbcgrAdapter.ConnectToServer(this.transportProtocol);
 
             string[] SVCNames = new string[] { RdpConstValue.SVCNAME_RDPEDYC };
-            rdpbcgrAdapter.EstablishRDPConnection(requestProtocol, SVCNames, CompressionType.PACKET_COMPR_TYPE_RDP62);
+            rdpbcgrAdapter.EstablishRDPConnection(requestProtocol, SVCNames, CompressionType.PACKET_COMPR_TYPE_RDP61);
 
             this.Site.Log.Add(LogEntryKind.Comment, "Send a Client Shutdown Request PDU.");
             rdpbcgrAdapter.SendClientShutdownRequestPDU();
