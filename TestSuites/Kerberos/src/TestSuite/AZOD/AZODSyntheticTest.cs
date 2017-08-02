@@ -92,8 +92,10 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite.AZOD
 
         [TestMethod]
         [Priority(1)]
-        [TestCategory("Non-BVT")]
-        [TestCategory("Single Realm")]
+        [TestCategory(TestCategories.Smb2Ap)]
+        [TestCategory(TestCategories.SingleRealm)]
+        [TestCategory(TestCategories.DFL2K12)]
+        [TestCategory(TestCategories.Claim)]
         [Description("This test case is designed to verify the process that a user logons to an SMB2 server using Kerberos authentication with Claims enabled, and the access is denied due to no authorization")]
         public void CBAC_Smb2_Negative_AccessFile()
         {

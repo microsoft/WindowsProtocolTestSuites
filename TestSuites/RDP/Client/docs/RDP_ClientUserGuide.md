@@ -263,10 +263,8 @@ All of the following software must be installed on the driver computer _before_ 
 | ------------- |
 | Microsoft® Visual Studio® 2012 Update 4| 
 | ![image3.png](./image/RDP_ClientUserGuide/image3.png)Note| 
-|            You can download Visual Studio Ultimate 2012 Trial (30 days) from below website| 
-|            [http://www.microsoft.com/en-us/download/details.aspx?id=30678](http://www.microsoft.com/en-us/download/details.aspx?id=30678)| 
-|            You can download Visual Studio 2012 Update 4 or later from below website| 
-|            [http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305](http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305)| 
+|            Download Visual Studio Ultimate 2012| 
+|            Download Visual Studio 2012 Update 4 or later|
 | Protocol Test Framework (build 1.0.5500.0)| 
 |              You can download the Protocol Test Framework from below website. | 
 |                [https://github.com/Microsoft/ProtocolTestFramework/releases](https://github.com/Microsoft/ProtocolTestFramework/releases)| 

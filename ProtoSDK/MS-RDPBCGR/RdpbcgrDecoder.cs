@@ -815,32 +815,32 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
         #region Sub Field Parsers: X224 Confirm PDU
         /// <summary>
-        /// Parse X224Crq
+        /// Parse X224Ccf
         /// (parser index is updated according to parsed length)
         /// </summary>
         /// <param name="data">data to be parsed</param>
         /// <param name="currentIndex">current parser index</param>
-        /// <returns>X224Crq</returns>
-        private X224Crq ParseX224Crq(byte[] data, ref int currentIndex)
+        /// <returns>X224Ccf</returns>
+        private X224Ccf ParseX224Ccf(byte[] data, ref int currentIndex)
         {
-            X224Crq crq = new X224Crq();
+            X224Ccf ccf = new X224Ccf();
 
             // X224Crq: LengthIndicator
-            crq.lengthIndicator = ParseByte(data, ref currentIndex);
+            ccf.lengthIndicator = ParseByte(data, ref currentIndex);
 
             // X224Crq: TypeCredit
-            crq.typeCredit = ParseByte(data, ref currentIndex);
+            ccf.typeCredit = ParseByte(data, ref currentIndex);
 
             // X224Crq: DestRef
-            crq.destRef = ParseUInt16(data, ref currentIndex, true);
+            ccf.destRef = ParseUInt16(data, ref currentIndex, true);
 
             // X224Crq: SrcRef
-            crq.srcRef = ParseUInt16(data, ref currentIndex, true);
+            ccf.srcRef = ParseUInt16(data, ref currentIndex, true);
 
             // X224Crq: ClassOptions
-            crq.classOptions = ParseByte(data, ref currentIndex);
+            ccf.classOptions = ParseByte(data, ref currentIndex);
 
-            return crq;
+            return ccf;
         }
 
 
@@ -4557,8 +4557,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             // TpktHeader
             TpktHeader tpktHeader = ParseTpktHeader(data, ref currentIndex);
 
-            // X224Crq
-            X224Crq x224Ccf = ParseX224Crq(data, ref currentIndex);
+            // X224Ccf
+            X224Ccf x224Ccf = ParseX224Ccf(data, ref currentIndex);
 
             // RDP_NEG_RSP/RDP_NEG_FAILURE (optional field)
             if (currentIndex < data.Length)

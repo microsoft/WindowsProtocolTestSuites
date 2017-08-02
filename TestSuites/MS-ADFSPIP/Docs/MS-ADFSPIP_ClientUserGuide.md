@@ -133,7 +133,7 @@ The minimum requirements for the DCCA are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft® Windows Server® 2012 R2, Enterprise Edition | 
+| Operating system| Microsoft® Windows Server® 2012 R2, Enterprise Edition or later versions | 
 | Services| Active Directory Domain Services (AD DS) | 
 | | Active Directory Certificate Service (AD CS)| 
 | Memory| 1 GB RAM| 
@@ -145,7 +145,7 @@ The minimum requirements for the ADFS are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft® Windows Server® 2012 R2, Enterprise Edition| 
+| Operating system| Microsoft® Windows Server® 2012 R2, Enterprise Edition or later versions| 
 | Services| Active Directory Federation Service (AD FS)| 
 | Memory| 1 GB RAM| 
 | Disk space| 60 GB| 
@@ -156,7 +156,7 @@ The minimum requirements for the SUT are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft® Windows Server® 2012 R2, Enterprise Edition| 
+| Operating system| Microsoft® Windows Server® 2012 R2, Enterprise Edition or later versions| 
 | Services| Web Application Proxy| 
 | Memory| 1 GB RAM| 
 | Disk space| 60 GB| 
@@ -176,7 +176,7 @@ The minimum requirements for the DRIVER computer are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft® Windows 8.1| 
+| Operating system| Microsoft® Windows 8.1 or later versions| 
 | Memory| 1 GB RAM| 
 | Disk space| 60 GB | 
 

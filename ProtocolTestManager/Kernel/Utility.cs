@@ -302,6 +302,24 @@ namespace Microsoft.Protocols.TestManager.Kernel
         }
 
         /// <summary>
+        /// Stop the auto-detection
+        /// </summary>
+        public void StopDetection(Action callback)
+        {
+            detector.DetectLogCallback = null;
+            detectSteps[stepIndex].DetectingStatus = TestManager.Detector.DetectingStatus.Canceling;
+            detector.StopDetection(callback);
+            if (stepIndex < detectSteps.Count) detectSteps[stepIndex].DetectingStatus = TestManager.Detector.DetectingStatus.Pending;
+            if (logWriter != null)
+            {
+                logWriter.Close();
+                logWriter.Dispose();
+                logWriter = null;
+            }
+            stepIndex = 0;
+        }
+
+        /// <summary>
         /// Get a object to show on the UI as the detection summary.
         /// </summary>
         /// <returns>A object to show in the content control.</returns>
