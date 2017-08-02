@@ -116,7 +116,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             this.clientRdpudpVerfionInfoValidFlag = null;
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to close all RDP connections for clean up.");
-            int iResult = this.sutControlAdapter.TriggerClientDisconnectAll(string.Empty);
+            int iResult = this.sutControlAdapter.TriggerClientDisconnectAll(this.TestContext.TestName);
             this.TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
 
             if (rdpemtServerL != null)
@@ -175,7 +175,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             #region Trigger Client To Connect
             // Trigger client to connect. 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(GetCurrentMethodName(), transportProtocol);
+            triggerClientRDPConnect(transportProtocol);
             #endregion
 
             #region RDPBCGR Connection

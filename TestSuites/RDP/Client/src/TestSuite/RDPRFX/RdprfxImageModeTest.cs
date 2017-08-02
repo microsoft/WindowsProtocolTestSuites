@@ -43,7 +43,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             #region Trigger client to connect
             //Trigger client to connect. 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(GetCurrentMethodName(), transportProtocol, true);
+            triggerClientRDPConnect(transportProtocol, true);
             #endregion
 
             #region RDPBCGR Connection
@@ -98,7 +98,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
             Rectangle compareRect = new Rectangle(destLeft, destTop, image_64X64.Width, image_64X64.Height);
-            this.VerifySUTDisplay(GetCurrentMethodName(), true, compareRect);             
+            this.VerifySUTDisplay(true, compareRect);             
            
             #endregion
         }
@@ -131,7 +131,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             #region Trigger client to connect
             //Trigger client to connect. 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(GetCurrentMethodName(), transportProtocol, true);
+            triggerClientRDPConnect(transportProtocol, true);
             #endregion
 
             #region RDPBCGR Connection
@@ -186,7 +186,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
             Rectangle compareRect = new Rectangle(destLeft, destTop, image_64X64.Width, image_64X64.Height);
-            this.VerifySUTDisplay(GetCurrentMethodName(), true, compareRect);
+            this.VerifySUTDisplay(true, compareRect);
            
             #endregion
         }
@@ -218,7 +218,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             #region Trigger client to connect
             //Trigger client to connect. 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(GetCurrentMethodName(), transportProtocol, true);
+            triggerClientRDPConnect(transportProtocol, true);
             #endregion
 
             #region RDPBCGR Connection
@@ -293,7 +293,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
             Rectangle compareRect = new Rectangle(destLeft, destTop, image_64X64.Width, image_64X64.Height);
-            this.VerifySUTDisplay(GetCurrentMethodName(), true, compareRect); 
+            this.VerifySUTDisplay(true, compareRect); 
 
             #endregion
         }
@@ -325,7 +325,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             #region Trigger client to connect
             //Trigger client to connect. 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(GetCurrentMethodName(), transportProtocol, true);
+            triggerClientRDPConnect(transportProtocol, true);
             #endregion
 
             #region RDPBCGR Connection
@@ -402,7 +402,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
             Rectangle compareRect = new Rectangle(destLeft, destTop, image_64X64.Width, image_64X64.Height);
-            this.VerifySUTDisplay(GetCurrentMethodName(), true, compareRect);
+            this.VerifySUTDisplay(true, compareRect);
 
             #endregion
         }
@@ -431,7 +431,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             #region Trigger client to connect
             //Trigger client to connect. 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(GetCurrentMethodName(), transportProtocol);
+            triggerClientRDPConnect(transportProtocol);
             #endregion
 
             #region RDPBCGR Connection
@@ -506,7 +506,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             */
             #endregion
 
-            FourTilesComposeOneRectWithoutCommonBoundary(GetCurrentMethodName(), OperationalMode.ImageMode);
+            FourTilesComposeOneRectWithoutCommonBoundary(OperationalMode.ImageMode);
         }
 
         [TestMethod]
@@ -527,7 +527,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             */
             #endregion
 
-            FourTilesComposeOneRectWithCommonBoundary(GetCurrentMethodName(), OperationalMode.ImageMode);
+            FourTilesComposeOneRectWithCommonBoundary(OperationalMode.ImageMode);
         }
 
         [TestMethod]
@@ -557,7 +557,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             #region Trigger client to connect
             //Trigger client to connect. 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(GetCurrentMethodName(), transportProtocol, true);
+            triggerClientRDPConnect(transportProtocol, true);
             #endregion
 
             #region RDPBCGR Connection
@@ -597,7 +597,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
             Rectangle compareRect = new Rectangle(destLeft, destTop, image_64X64.Width, image_64X64.Height);
-            this.VerifySUTDisplay(GetCurrentMethodName(), true, compareRect);
+            this.VerifySUTDisplay(true, compareRect);
 
             #endregion
         }
@@ -620,7 +620,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             */
             #endregion
 
-            SendNumRectsSetToZero(GetCurrentMethodName(), OperationalMode.ImageMode);
+            SendNumRectsSetToZero(OperationalMode.ImageMode);
         }
 
         [TestMethod]
@@ -641,7 +641,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             */
             #endregion
 
-            SendOutOfRects(GetCurrentMethodName(), OperationalMode.ImageMode);
+            SendOutOfRects(OperationalMode.ImageMode);
         }
 
 
@@ -663,7 +663,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             */
             #endregion
 
-            SendListOfRects(GetCurrentMethodName(), OperationalMode.ImageMode);
+            SendListOfRects(OperationalMode.ImageMode);
         }
 
         [TestMethod]
@@ -684,7 +684,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             */
             #endregion
 
-            SendListOfRectsOverlap(GetCurrentMethodName(), OperationalMode.ImageMode);
+            SendListOfRectsOverlap(OperationalMode.ImageMode);
         }
 
         [TestMethod]
@@ -705,7 +705,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             */
             #endregion
 
-            SendListOfRectsOverlapWithDuplicateTiles(GetCurrentMethodName(), OperationalMode.ImageMode);
+            SendListOfRectsOverlapWithDuplicateTiles(OperationalMode.ImageMode);
         }
 
         [TestMethod]

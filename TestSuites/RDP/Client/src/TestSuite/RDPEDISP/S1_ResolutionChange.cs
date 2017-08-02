@@ -33,7 +33,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             #region Test Code
             RDPConnect(NotificationType.SurfaceManagementCommand);
 
-            ChangeDesktopResolution(GetCurrentMethodName());
+            ChangeDesktopResolution(this.TestContext.TestName);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send Surface management commands");
             this.rdpedispAdapter.restartGraphicsPipeline(changedDesktopWidth, changedDekstopHeight);
@@ -66,7 +66,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             #region Test Code
             RDPConnect(NotificationType.DeactivationReactivation);
 
-            ChangeDesktopResolution(GetCurrentMethodName());
+            ChangeDesktopResolution(this.TestContext.TestName);
                         
             this.TestSite.Log.Add(LogEntryKind.Comment, "Initialize Deactivation-Reactivation Sequence");
             this.rdpedispAdapter.initiateDeactivationReactivation(changedDesktopWidth, changedDekstopHeight);

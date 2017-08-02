@@ -36,7 +36,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
             RDPConnect(NotificationType.SurfaceManagementCommand);
 
-            ChangeDesktopOrientation(GetCurrentMethodName(), MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT);
+            ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send Surface management commands");
             this.rdpedispAdapter.restartGraphicsPipeline(originalDesktopHeight, originalDesktopWidth);
@@ -71,7 +71,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
             RDPConnect(NotificationType.DeactivationReactivation);
 
-            ChangeDesktopOrientation(GetCurrentMethodName(), MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT);
+            ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT);
                         
             this.TestSite.Log.Add(LogEntryKind.Comment, "Initialize Deactivation-Reactivation Sequence");
             this.rdpedispAdapter.initiateDeactivationReactivation(originalDesktopHeight, originalDesktopWidth);
@@ -112,21 +112,21 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
             RDPConnect(NotificationType.SurfaceManagementCommand);
 
-            ChangeDesktopOrientation(GetCurrentMethodName(), MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT);
+            ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send Surface management commands");
             this.rdpedispAdapter.restartGraphicsPipeline(originalDesktopHeight, originalDesktopWidth);
 
             System.Threading.Thread.Sleep(1000);
 
-            ChangeDesktopOrientation(GetCurrentMethodName(), MonitorLayout_OrientationValues.ORIENTATION_LANDSCAPE_FLIPPED);
+            ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_LANDSCAPE_FLIPPED);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send Surface management commands");
             this.rdpedispAdapter.restartGraphicsPipeline(originalDesktopWidth, originalDesktopHeight);
 
             System.Threading.Thread.Sleep(1000);
 
-            ChangeDesktopOrientation(GetCurrentMethodName(), MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT_FLIPPED);
+            ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT_FLIPPED);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send Surface management commands");
             this.rdpedispAdapter.restartGraphicsPipeline(originalDesktopHeight, originalDesktopWidth);
@@ -164,7 +164,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
             RDPConnect(NotificationType.DeactivationReactivation);
 
-            ChangeDesktopOrientation(GetCurrentMethodName(), MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT);                       
+            ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT);                       
             
             this.TestSite.Log.Add(LogEntryKind.Comment, "Initialize Deactivation-Reactivation Sequence");
             this.rdpedispAdapter.initiateDeactivationReactivation(originalDesktopHeight, originalDesktopWidth);
@@ -173,23 +173,23 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             this.rdpedispAdapter.RdprfxSendImage(testImage, originalDesktopHeight, originalDesktopWidth);
 
             rdpedycServer.Dispose();
-            this.sutControlAdapter.TriggerClientDisconnect(GetCurrentMethodName());
+            this.sutControlAdapter.TriggerClientDisconnect(this.TestContext.TestName);
 
             RDPConnect(NotificationType.DeactivationReactivation, false);
 
-            ChangeDesktopOrientation(GetCurrentMethodName(), MonitorLayout_OrientationValues.ORIENTATION_LANDSCAPE_FLIPPED);
+            ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_LANDSCAPE_FLIPPED);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Initialize Deactivation-Reactivation Sequence");
             this.rdpedispAdapter.initiateDeactivationReactivation(originalDesktopWidth, originalDesktopHeight);
             this.rdpedispAdapter.RdprfxSendImage(testImage, originalDesktopWidth, originalDesktopHeight);
 
             rdpedycServer.Dispose();
-            this.sutControlAdapter.TriggerClientDisconnect(GetCurrentMethodName());
+            this.sutControlAdapter.TriggerClientDisconnect(this.TestContext.TestName);
 
             // TODO: Solve the conflict between rdpbcgr and rdpedyc BUG #6736 and merge two cases
             RDPConnect(NotificationType.DeactivationReactivation, false);
 
-            ChangeDesktopOrientation(GetCurrentMethodName(), MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT_FLIPPED);                       
+            ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT_FLIPPED);                       
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Initialize Deactivation-Reactivation Sequence");
             this.rdpedispAdapter.initiateDeactivationReactivation(originalDesktopHeight, originalDesktopWidth);
@@ -236,7 +236,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             Bitmap instructionBitmap = new Bitmap(Site.Properties["RdpedispOrientationChange1Image"]);
             SendInstruction(screenWidth, screenHeight, instructionBitmap);
 
-            ChangeDesktopOrientation(GetCurrentMethodName(), MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT, true);
+            ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT, true);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send Surface management commands");
             this.rdpegfxAdapter.ResetGraphics(originalDesktopHeight, originalDesktopWidth);
@@ -246,7 +246,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             instructionBitmap = new Bitmap(Site.Properties["RdpedispOrientationChange2Image"]);
             SendInstruction(screenHeight, screenWidth, instructionBitmap);
 
-            ChangeDesktopOrientation(GetCurrentMethodName(), MonitorLayout_OrientationValues.ORIENTATION_LANDSCAPE_FLIPPED, true);
+            ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_LANDSCAPE_FLIPPED, true);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send Surface management commands");
             this.rdpegfxAdapter.ResetGraphics(originalDesktopWidth, originalDesktopHeight);
@@ -256,7 +256,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             instructionBitmap = new Bitmap(Site.Properties["RdpedispOrientationChange3Image"]);
             SendInstruction(screenWidth, screenHeight, instructionBitmap);
 
-            ChangeDesktopOrientation(GetCurrentMethodName(), MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT_FLIPPED, true);
+            ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT_FLIPPED, true);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send Surface management commands");
             this.rdpegfxAdapter.ResetGraphics(originalDesktopHeight, originalDesktopWidth);
@@ -267,7 +267,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             instructionBitmap = new Bitmap(Site.Properties["RdpedispOrientationChange4Image"]);
             SendInstruction(screenHeight, screenWidth, instructionBitmap);
 
-            ChangeDesktopOrientation(GetCurrentMethodName(), MonitorLayout_OrientationValues.ORIENTATION_LANDSCAPE, true);
+            ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_LANDSCAPE, true);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send Surface management commands");
             this.rdpegfxAdapter.ResetGraphics(originalDesktopWidth, originalDesktopHeight);

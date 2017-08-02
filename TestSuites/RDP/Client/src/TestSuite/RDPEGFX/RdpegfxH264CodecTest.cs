@@ -43,7 +43,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public void RDPEGFX_H264Codec_PositiveTest_AVC420_BaseProfile()
         {
             String h264TestDataPath = GetTestDataFile();
-            SendH264CodecStream(GetCurrentMethodName(), h264TestDataPath, false);
+            SendH264CodecStream(h264TestDataPath, false);
         }
 
         [TestMethod]
@@ -56,7 +56,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public void RDPEGFX_H264Codec_PositiveTest_AVC420_HighProfile()
         {
             String h264TestDataPath = GetTestDataFile();
-            SendH264CodecStream(GetCurrentMethodName(), h264TestDataPath, false);
+            SendH264CodecStream(h264TestDataPath, false);
         }
 
         [TestMethod]
@@ -70,7 +70,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public void RDPEGFX_H264Codec_PositiveTest_AVC420_MainProfile()
         {
             String h264TestDataPath = GetTestDataFile();
-            SendH264CodecStream(GetCurrentMethodName(), h264TestDataPath, false);
+            SendH264CodecStream(h264TestDataPath, false);
         }
 
         [TestMethod]
@@ -83,7 +83,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public void RDPEGFX_H264Codec_PositiveTest_AVC420_MainProfile_CABACEnabled()
         {
             String h264TestDataPath = GetTestDataFile();
-            SendH264CodecStream(GetCurrentMethodName(), h264TestDataPath, false);
+            SendH264CodecStream(h264TestDataPath, false);
         }
 
 
@@ -96,7 +96,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public void RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile_ISliceOnly()
         {
             String h264TestDataPath = GetTestDataFile();
-            SendH264CodecStream(GetCurrentMethodName(), h264TestDataPath, true);
+            SendH264CodecStream(h264TestDataPath, true);
         }
 
         [TestMethod]
@@ -108,7 +108,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public void RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_BaseProfile()
         {                
             String h264TestDataPath = GetTestDataFile();            
-            SendH264CodecStream(GetCurrentMethodName(), h264TestDataPath, true);
+            SendH264CodecStream(h264TestDataPath, true);
         }
 
 
@@ -122,7 +122,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public void RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile()
         {
             String h264TestDataPath = GetTestDataFile();
-            SendH264CodecStream(GetCurrentMethodName(), h264TestDataPath, true);
+            SendH264CodecStream(h264TestDataPath, true);
         }
 
 
@@ -135,7 +135,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public void RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile_CABACEnabled()
         {
             String h264TestDataPath = GetTestDataFile();
-            SendH264CodecStream(GetCurrentMethodName(), h264TestDataPath, true);
+            SendH264CodecStream(h264TestDataPath, true);
         }
         
         [TestMethod]
@@ -147,7 +147,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public void RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile_LargeSize()
         {
             String h264TestDataPath = GetTestDataFile();
-            SendH264CodecStream(GetCurrentMethodName(), h264TestDataPath, true);
+            SendH264CodecStream(h264TestDataPath, true);
         }
 
         [TestMethod]
@@ -159,7 +159,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public void RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_HighProfile()
         {
             String h264TestDataPath = GetTestDataFile();
-            SendH264CodecStream(GetCurrentMethodName(), h264TestDataPath, true);
+            SendH264CodecStream(h264TestDataPath, true);
         }
         
         [TestMethod]
@@ -172,7 +172,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public void RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Chroma420Separated_MainProfile()
         {
             String h264TestDataPath = GetTestDataFile();
-            SendH264CodecStream(GetCurrentMethodName(), h264TestDataPath, true);
+            SendH264CodecStream(h264TestDataPath, true);
         }
 
         [TestMethod]
@@ -184,7 +184,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public void RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Chroma420Together_MainProfile()
         {
             String h264TestDataPath = GetTestDataFile();
-            SendH264CodecStream(GetCurrentMethodName(), h264TestDataPath, true);
+            SendH264CodecStream(h264TestDataPath, true);
         }
 
         [TestMethod]
@@ -196,7 +196,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public void RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Chroma420Together_MainProfile_LargeSize()
         {
             String h264TestDataPath = GetTestDataFile();
-            SendH264CodecStream(GetCurrentMethodName(), h264TestDataPath, true);
+            SendH264CodecStream(h264TestDataPath, true);
         }
                
         #region private methods
@@ -206,7 +206,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// </summary>
         /// <param name="h264DataFile">XML file of H264 data</param>
         /// <param name="isAVC444">Whether need RDP client support AVC444</param>
-        private void SendH264CodecStream(string caseName, string h264DataFile, bool isAVC444)
+        private void SendH264CodecStream(string h264DataFile, bool isAVC444)
         {
             //Load H264 data
             RdpegfxH264TestDatas h264TestData = GetH264TestData(h264DataFile);
@@ -277,7 +277,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                 }
 
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-                this.VerifySUTDisplay(caseName, true, compareRect, 2);
+                this.VerifySUTDisplay(true, compareRect, 2);
                 
             }
 

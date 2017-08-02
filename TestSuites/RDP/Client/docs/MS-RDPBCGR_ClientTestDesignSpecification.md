@@ -109,7 +109,7 @@ The Connection Sequence is one of the most important message flows; it exchanges
 Figure 1\-1: Remote Desktop Protocol (RDP) connection sequence
 
 ### <a name="_Toc427051962"/>Protocol Properties
-* RPCBCGR is a block protocol and is based on TCP.
+* MS-RPCBCGR is a block protocol and is based on TCP.
 
 * In RDPBCGR, the client and the server roles are as mentioned in the protocol document. For example, in a normal connection sequence the client sends the requests and the server responds. After the normal connection sequence, the client sends the keyboard input and the server sends basic output concurrently. 
 
@@ -2730,6 +2730,3 @@ This scenario only contains BVT test case.
 * Technical Document: 
 
 	**[MS-RDPBCGR].pdf** 
-
-	**[MS-RDPBCGR].pdf**
-

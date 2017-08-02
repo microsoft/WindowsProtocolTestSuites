@@ -41,12 +41,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
             RDPConnect(NotificationType.SurfaceManagementCommand);
 
-            MonitorAddition(GetCurrentMethodName());
+            MonitorAddition(this.TestContext.TestName);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send Surface management commands");
             this.rdpedispAdapter.restartGraphicsPipeline(originalDesktopWidth, originalDesktopHeight);
 
-            MonitorRemoval(GetCurrentMethodName());
+            MonitorRemoval(this.TestContext.TestName);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send Surface management commands");
             this.rdpedispAdapter.restartGraphicsPipeline(originalDesktopWidth, originalDesktopHeight);
@@ -79,9 +79,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
             RDPConnect(NotificationType.DeactivationReactivation);
 
-            MonitorAddition(GetCurrentMethodName());
+            MonitorAddition(this.TestContext.TestName);
 
-            MonitorRemoval(GetCurrentMethodName());
+            MonitorRemoval(this.TestContext.TestName);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Initialize Deactivation-Reactivation Sequence");
             this.rdpedispAdapter.initiateDeactivationReactivation(originalDesktopWidth, originalDesktopHeight);

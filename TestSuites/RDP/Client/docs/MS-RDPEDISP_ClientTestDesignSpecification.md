@@ -1,4 +1,4 @@
-# RDP Client MS-RD PEDISP  Test Design Specification 
+# RDP Client MS-RDPEDISP  Test Design Specification 
 
 ## Contents
 
