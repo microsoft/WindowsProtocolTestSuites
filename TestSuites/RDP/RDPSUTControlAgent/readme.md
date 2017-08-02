@@ -1,5 +1,5 @@
 ## Prerequisites
-CSharp version of RDPSUTControlAgent are developed and must be installed on windows platform, Java version are used for Linux platform.
+CSharp version of RDPSUTControlAgent is developed for windows platform, Java version is used for Linux platform.
 You should install the following software in order to build and run this agent.
 
 ### For windows platform

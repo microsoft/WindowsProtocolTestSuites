@@ -27,7 +27,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         public void Rdpei_TouchInputTest_Positive_TouchReadiness()
         {
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
-            StartRDPConnection(GetCurrentMethodName());
+            StartRDPConnection();
 
             Site.Log.Add(LogEntryKind.Debug, "Creating dynamic virtual channels for MS-RDPEI ...");
             bool bProtocolSupported = this.rdpeiServer.CreateRdpeiDvc(waitTime);
@@ -52,7 +52,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         public void Rdpei_TouchInputTest_Positive_SingleTouchEvent()
         {
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
-            StartRDPConnection(GetCurrentMethodName());
+            StartRDPConnection();
 
             Site.Log.Add(LogEntryKind.Debug, "Creating dynamic virtual channels for MS-RDPEI ...");
             bool bProtocolSupported = this.rdpeiServer.CreateRdpeiDvc(waitTime);
@@ -67,7 +67,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             RDPINPUT_CS_READY_PDU csReadyPdu = this.rdpeiServer.ExpectRdpInputCsReadyPdu(waitTime);
             TestSite.Assert.IsTrue(csReadyPdu != null, "Client is expected to send RDPINPUT_CS_READY_PDU to the server.");
 
-            this.rdpeiSUTControlAdapter.TriggerOneTouchEventOnClient(GetCurrentMethodName());
+            this.rdpeiSUTControlAdapter.TriggerOneTouchEventOnClient(this.TestContext.TestName);
             // RDPEI running phase
             Site.Log.Add(LogEntryKind.Debug, "Expecting RDPINPUT_TOUCH_EVENT_PDU ...");
             RDPINPUT_TOUCH_EVENT_PDU touchEventPdu = this.rdpeiServer.ExpectRdpInputTouchEventPdu(waitTime);
@@ -97,7 +97,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             }
 
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
-            StartRDPConnection(GetCurrentMethodName());
+            StartRDPConnection();
 
             Site.Log.Add(LogEntryKind.Debug, "Creating dynamic virtual channels for MS-RDPEI ...");
             bool bProtocolSupported = this.rdpeiServer.CreateRdpeiDvc(waitTime);
@@ -198,7 +198,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         public void Rdpei_TouchInputTest_Positive_MultiTouchEvent()
         {
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
-            StartRDPConnection(GetCurrentMethodName());
+            StartRDPConnection();
 
             Site.Log.Add(LogEntryKind.Debug, "Creating dynamic virtual channels for MS-RDPEI ...");
             bool bProtocolSupported = this.rdpeiServer.CreateRdpeiDvc(waitTime);
@@ -214,7 +214,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             TestSite.Assert.IsTrue(csReadyPdu != null, "Client is expected to send RDPINPUT_CS_READY_PDU to the server.");
 
             ushort contactCount = (csReadyPdu.maxTouchContacts > 5) ? (ushort)5 : csReadyPdu.maxTouchContacts;
-            this.rdpeiSUTControlAdapter.TriggerMultiTouchEventOnClient(GetCurrentMethodName(), contactCount);
+            this.rdpeiSUTControlAdapter.TriggerMultiTouchEventOnClient(this.TestContext.TestName, contactCount);
 
             // RDPEI running phase
             Site.Log.Add(LogEntryKind.Debug, "Expecting multitouch RDPINPUT_TOUCH_EVENT_PDU ...");
@@ -256,7 +256,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         public void Rdpei_TouchInputTest_Positive_ContactStateTransition()
         {
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
-            StartRDPConnection(GetCurrentMethodName());
+            StartRDPConnection();
 
             Site.Log.Add(LogEntryKind.Debug, "Creating dynamic virtual channels for MS-RDPEI ...");
             bool bProtocolSupported = this.rdpeiServer.CreateRdpeiDvc(waitTime);
@@ -271,7 +271,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             RDPINPUT_CS_READY_PDU csReadyPdu = this.rdpeiServer.ExpectRdpInputCsReadyPdu(waitTime);
             TestSite.Assert.IsTrue(csReadyPdu != null, "Client is expected to send RDPINPUT_CS_READY_PDU to the server.");
 
-            this.rdpeiSUTControlAdapter.TriggerContinuousTouchEventOnClient(GetCurrentMethodName());
+            this.rdpeiSUTControlAdapter.TriggerContinuousTouchEventOnClient(this.TestContext.TestName);
             // RDPEI running phase
             this.stateMachine = new TouchContactStateMachine();
             this.stateMachine.Initialize();
@@ -300,7 +300,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         public void Rdpei_TouchInputTest_Positive_DismissHoveringContact()
         {
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
-            StartRDPConnection(GetCurrentMethodName());
+            StartRDPConnection();
 
             Site.Log.Add(LogEntryKind.Debug, "Creating dynamic virtual channels for MS-RDPEI ...");
             bool bProtocolSupported = this.rdpeiServer.CreateRdpeiDvc(waitTime);
@@ -316,7 +316,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             TestSite.Assert.IsTrue(csReadyPdu != null, "Client is expected to send RDPINPUT_CS_READY_PDU to the server.");
 
             // Trigger the user to determin whether the client device supports proximity. If not, negative value will be returned when using interactive adapter.
-            if (this.rdpeiSUTControlAdapter.TriggerDismissHoveringContactPduOnClient(GetCurrentMethodName()) < 0)
+            if (this.rdpeiSUTControlAdapter.TriggerDismissHoveringContactPduOnClient(this.TestContext.TestName) < 0)
             {
                 TestSite.Assert.Inconclusive("The client device does not support proximity.");
             }
@@ -381,7 +381,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         public void Rdpei_TouchInputTest_Negative_InvalidEventIdInInitializingPhase()
         {
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
-            StartRDPConnection(GetCurrentMethodName());
+            StartRDPConnection();
 
             Site.Log.Add(LogEntryKind.Debug, "Creating dynamic virtual channels for MS-RDPEI ...");
             bool bProtocolSupported = this.rdpeiServer.CreateRdpeiDvc(waitTime);
@@ -405,7 +405,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         public void Rdpei_TouchInputTest_Negative_InvalidScReadyPduLength()
         {
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
-            StartRDPConnection(GetCurrentMethodName());
+            StartRDPConnection();
 
             Site.Log.Add(LogEntryKind.Debug, "Creating dynamic virtual channels for MS-RDPEI ...");
             bool bProtocolSupported = this.rdpeiServer.CreateRdpeiDvc(waitTime);
@@ -431,7 +431,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         public void Rdpei_TouchInputTest_Negative_TouchEventWithoutNegotiation()
         {
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
-            StartRDPConnection(GetCurrentMethodName());
+            StartRDPConnection();
 
             Site.Log.Add(LogEntryKind.Debug, "Creating dynamic virtual channels for MS-RDPEI ...");
             bool bProtocolSupported = this.rdpeiServer.CreateRdpeiDvc(waitTime);

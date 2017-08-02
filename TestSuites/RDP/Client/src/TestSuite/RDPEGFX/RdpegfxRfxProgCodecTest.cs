@@ -50,7 +50,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(GetCurrentMethodName(), true, surfRect);
+            this.VerifySUTDisplay(true, surfRect);
 
             // Delete the surface
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
@@ -90,7 +90,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(GetCurrentMethodName(), true, surfRect);
+            this.VerifySUTDisplay(true, surfRect);
 
             // Delete the surface
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
@@ -129,7 +129,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(GetCurrentMethodName(), true, surfRect);
+            this.VerifySUTDisplay(true, surfRect);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Get second bitmap by adding a diagonal to first bitmap");
             // Add a diagonal to the test image and send it again, the image data should be sent in tile diff method.
@@ -142,7 +142,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(GetCurrentMethodName(), true, surfRect);
+            this.VerifySUTDisplay(true, surfRect);
 
             // Delete the surface
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
@@ -181,7 +181,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(GetCurrentMethodName(), true, surfRect);
+            this.VerifySUTDisplay(true, surfRect);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Get second bitmap by adding a diagonal to first bitmap");
             // Add a diagonal to the test image and send it again, the image data should be sent in tile diff method.
@@ -194,7 +194,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(GetCurrentMethodName(), true, surfRect);
+            this.VerifySUTDisplay(true, surfRect);
 
             // Delete the surface
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
@@ -235,7 +235,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(GetCurrentMethodName(), true, surfRect);
+            this.VerifySUTDisplay(true, surfRect);
 
             // Delete the surface
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
@@ -276,7 +276,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(GetCurrentMethodName(), true, surfRect);
+            this.VerifySUTDisplay(true, surfRect);
 
             // Delete the surface
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
@@ -313,7 +313,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(GetCurrentMethodName(), true, surfRect);
+            this.VerifySUTDisplay(true, surfRect);
 
             // Delete the surface
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
@@ -350,7 +350,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(GetCurrentMethodName(), true, surfRect);
+            this.VerifySUTDisplay(true, surfRect);
 
             // Delete the surface
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
@@ -389,7 +389,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(GetCurrentMethodName(), true, surfRect);
+            this.VerifySUTDisplay(true, surfRect);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Get second bitmap by adding a diagonal to first bitmap");
             // Add a diagonal to the test image and send it again, the image data should be sent in tile diff method.
@@ -402,7 +402,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(GetCurrentMethodName(), true, surfRect);
+            this.VerifySUTDisplay(true, surfRect);
 
             // Delete the surface
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
@@ -441,7 +441,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(GetCurrentMethodName(), true, surfRect);
+            this.VerifySUTDisplay(true, surfRect);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Get second bitmap by adding a diagonal to first bitmap");
             // Add a diagonal to the test image and send it again, the image data should be sent in tile diff method.
@@ -454,7 +454,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(GetCurrentMethodName(), true, surfRect);
+            this.VerifySUTDisplay(true, surfRect);
 
             // Delete the surface
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
@@ -493,7 +493,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(GetCurrentMethodName(), true, surfRect);
+            this.VerifySUTDisplay(true, surfRect);
 
             // Delete the surface
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
@@ -532,7 +532,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(GetCurrentMethodName(), true, surfRect);
+            this.VerifySUTDisplay(true, surfRect);
 
             // Delete the surface
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
