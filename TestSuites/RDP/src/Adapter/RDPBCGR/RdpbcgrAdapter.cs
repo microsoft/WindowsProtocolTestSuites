@@ -1630,7 +1630,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             UnicodeEncoding encoder = new UnicodeEncoding();
             RDP_SERVER_REDIRECTION_PACKET redirectPacket = new RDP_SERVER_REDIRECTION_PACKET();
 
-            redirectPacket.Flags = 0x0400;
+            redirectPacket.Flags = RDP_SERVER_REDIRECTION_PACKET_FlagsEnum.SEC_REDIRECTION_PKT;
             redirectPacket.SessionID = RdpbcgrTestData.Test_Redirection_SessionId;
 
             if (presentRoutingToken)
@@ -1677,7 +1677,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             UnicodeEncoding encoder = new UnicodeEncoding();
             RDP_SERVER_REDIRECTION_PACKET redirectPacket = new RDP_SERVER_REDIRECTION_PACKET();
 
-            redirectPacket.Flags = 0x0400;
+            redirectPacket.Flags = RDP_SERVER_REDIRECTION_PACKET_FlagsEnum.SEC_REDIRECTION_PKT;
             redirectPacket.SessionID = RdpbcgrTestData.Test_Redirection_SessionId;
 
             string serverIP = ((System.Net.IPEndPoint)(sessionContext.LocalIdentity)).Address.ToString();

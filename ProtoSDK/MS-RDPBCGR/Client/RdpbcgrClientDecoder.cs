@@ -3005,7 +3005,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             int startIndex = currentIndex;
 
             // RDP_SERVER_REDIRECTION_PACKET: flags
-            packet.Flags = ParseUInt16(data, ref currentIndex, false);
+            packet.Flags = (RDP_SERVER_REDIRECTION_PACKET_FlagsEnum)ParseUInt16(data, ref currentIndex, false);
 
             // RDP_SERVER_REDIRECTION_PACKET: length
             packet.Length = ParseUInt16(data, ref currentIndex, false);

@@ -87,13 +87,19 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region RDSTLS authentication
             if (serverSelectedProtocol == selectedProtocols_Values.PROTOCOL_RDSTLS)
             {
+                this.site.Log.Add(LogEntryKind.Comment, "Negotiation type is RDSTLS.");
+
                 sessionContext.IsAuthenticatingRDSTLS = true;
+
+                this.site.Log.Add(LogEntryKind.Comment, "Sending RDSTLS capability PDU.");
 
                 SendRDSTLSCapabilityPDU();
 
                 ExpectPacket<RDSTLS_AuthenticationRequestPDUwithPasswordCredentials>(sessionContext, pduWaitTimeSpan);
 
                 sessionContext.IsAuthenticatingRDSTLS = false;
+
+                this.site.Log.Add(LogEntryKind.Comment, "Sending RDSTLS authentication response PDU.");
 
                 SendRDSTLSAuthenticationResponsePDU();
             }

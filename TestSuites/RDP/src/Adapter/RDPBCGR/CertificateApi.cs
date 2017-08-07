@@ -28,6 +28,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             ref uint pcchString
             );
 
+        /// <summary>
+        /// Encode the certificate according to the windows implementation.
+        /// </summary>
+        /// <param name="certificate">The certificate to be encoded.</param>
+        /// <returns></returns>
         public static byte[] EncodeCertificate(X509Certificate2 certificate)
         {
             uint cbSerialized = 0;

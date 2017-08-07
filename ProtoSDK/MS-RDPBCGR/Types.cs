@@ -20226,6 +20226,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         }
     }
 
+    public enum RDP_SERVER_REDIRECTION_PACKET_FlagsEnum : ushort
+    {
+        SEC_REDIRECTION_PKT = 0x0400
+    }
+
     /// <summary>
     /// 2.2.13.1	Server Redirection Packet (RDP_SERVER_REDIRECTION_PACKET)
     /// The RDP_SERVER_REDIRECTION_PACKET structure contains information to enable a client 
@@ -20241,7 +20246,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// The server redirection identifier. 
         /// This field MUST be set to SEC_REDIRECTION_PKT (0x0400).
         /// </summary>
-        public UInt16 Flags;
+        public RDP_SERVER_REDIRECTION_PACKET_FlagsEnum Flags;
 
         /// <summary>
         /// Length (2 bytes): A 16-bit unsigned integer. 
@@ -20394,7 +20399,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             // pack all
             var result = new List<byte>();
 
-            RdpbcgrEncoder.EncodeStructure(result, Flags);
+            RdpbcgrEncoder.EncodeStructure(result, (ushort)Flags);
             RdpbcgrEncoder.EncodeStructure(result, Length);
             RdpbcgrEncoder.EncodeStructure(result, SessionID);
             RdpbcgrEncoder.EncodeStructure(result, (uint)RedirFlags);
