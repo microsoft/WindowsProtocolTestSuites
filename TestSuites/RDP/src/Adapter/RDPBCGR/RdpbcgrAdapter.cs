@@ -88,6 +88,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         public event SuppressOutputRequestHandler SuppressOutputRequest;
         public event VirtualChannelRequestHandler VirtualChannelRequest;
         public event TS_FRAME_ACKNOWLEDGE_PDUHandler TS_FRAME_ACKNOWLEDGE_PDUReceived;
+        public event RDSTLS_AuthenticationRequestPDUwithPasswordCredentialsHandler RDSTLS_AuthenticationRequestPDUwithPasswordCredentialsReceived;
         #endregion
 
         #region Constructor
@@ -197,14 +198,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 return serverConfig.CapabilitySetting;
             }
         }
-        public SimulatedScreen SimulatedScreen 
+        public SimulatedScreen SimulatedScreen
         {
             get
             {
                 return simulatedScreen;
             }
         }
-        
+
         public UInt16 RDPDRChannelId
         {
             get
@@ -366,11 +367,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 confirmPdu.rdpNegData.flags |= RDP_NEG_RSP_flags_Values.DYNVC_GFX_PROTOCOL_SUPPORTED;
             }
-            if(bSupportRestrictedAdminMode)
+            if (bSupportRestrictedAdminMode)
             {
                 confirmPdu.rdpNegData.flags |= RDP_NEG_RSP_flags_Values.RESTRICTED_ADMIN_MODE_SUPPORTED;
             }
-            if(bReservedSet)
+            if (bReservedSet)
             {
                 confirmPdu.rdpNegData.flags |= RDP_NEG_RSP_flags_Values.NEGRSP_FLAG_RESERVED;
             }
@@ -446,13 +447,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="mcsChannelId_Net">MCSChannelId value for Server Network Data</param>
         /// <param name="mcsChannelId_MSGChannel">MCSChannelId value for Server Message Channel Data</param>
         public void Server_MCS_Connect_Response(
-            EncryptionMethods enMothod, 
-            EncryptionLevel enLevel, 
-            TS_UD_SC_CORE_version_Values rdpVersion, 
+            EncryptionMethods enMothod,
+            EncryptionLevel enLevel,
+            TS_UD_SC_CORE_version_Values rdpVersion,
             NegativeType invalidType,
-            MULTITRANSPORT_TYPE_FLAGS multiTransportTypeFlags = MULTITRANSPORT_TYPE_FLAGS.None, 
-            bool hasEarlyCapabilityFlags = false, 
-            SC_earlyCapabilityFlags_Values earlyCapabilityFlagsValue = SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED, 
+            MULTITRANSPORT_TYPE_FLAGS multiTransportTypeFlags = MULTITRANSPORT_TYPE_FLAGS.None,
+            bool hasEarlyCapabilityFlags = false,
+            SC_earlyCapabilityFlags_Values earlyCapabilityFlagsValue = SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED,
             UInt16 mcsChannelId_Net = ConstValue.IO_CHANNEL_ID,
             UInt16 mcsChannelId_MSGChannel = ConstValue.MCS_MESSAGE_CHANNEL_ID)
         {
@@ -483,7 +484,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             connectRespPdu.mcsCrsp.gccPdu.serverCoreData.version = rdpVersion;
             connectRespPdu = new Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response_Ex(connectRespPdu, sessionContext, invalidType);
 
-            
+
             switch (invalidType)
             {
                 case NegativeType.None:
@@ -858,7 +859,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             capSet.SetFromConfig(serverConfig.CapabilitySetting);
             return capSet.CapabilitySets;
         }
-        
+
         /// <summary>
         /// Send Server Demand Active Pdu to client.
         /// </summary>
@@ -1274,7 +1275,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             // size of bpp + flags + reserved + codecId + width + height + bitmapDataLength = 12
             // size of exBitmapDataHeader = 24, if bitmapData.flags contains TSBitmapDataExFlags_Values.EX_COMPRESSED_BITMAP_HEADER_PRESENT
             int subLength = 22;
-            if(streamCmd.bitmapData.exBitmapDataHeader != null)
+            if (streamCmd.bitmapData.exBitmapDataHeader != null)
             {
                 subLength += 24;
             }
@@ -1347,7 +1348,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     else if (spOutputPdu.commonHeader.securityHeader is TS_SECURITY_HEADER1)
                     {
                         ((TS_SECURITY_HEADER1)spOutputPdu.commonHeader.securityHeader).dataSignature = new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8 }; //invalid signature
-                    }else if (spOutputPdu.commonHeader.securityHeader is TS_SECURITY_HEADER2)
+                    }
+                    else if (spOutputPdu.commonHeader.securityHeader is TS_SECURITY_HEADER2)
                     {
                         ((TS_SECURITY_HEADER2)spOutputPdu.commonHeader.securityHeader).dataSignature = new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8 }; //invalid signature
                     }
@@ -1628,54 +1630,94 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             UnicodeEncoding encoder = new UnicodeEncoding();
             RDP_SERVER_REDIRECTION_PACKET redirectPacket = new RDP_SERVER_REDIRECTION_PACKET();
 
-            #region Initialize Server Redirectioin Packet
             redirectPacket.Flags = 0x0400;
-            redirectPacket.Length = 12;
-            redirectPacket.SessionId = RdpbcgrTestData.Test_Redirection_SessionId;
+            redirectPacket.SessionID = RdpbcgrTestData.Test_Redirection_SessionId;
 
             if (presentRoutingToken)
             {
-                redirectPacket.TargetNetAddressLength = 0;
-
                 byte[] routingTokenBytes = ASCIIEncoding.ASCII.GetBytes(RdpbcgrTestData.Test_Redirection_RoutingToken);
                 redirectPacket.LoadBalanceInfo = routingTokenBytes;
-                redirectPacket.LoadBalanceInfoLength = (uint)redirectPacket.LoadBalanceInfo.Length;
                 redirectPacket.RedirFlags |= RedirectionFlags.LB_LOAD_BALANCE_INFO;
-                redirectPacket.Length += (ushort)(4 + redirectPacket.LoadBalanceInfoLength);
             }
             else
             {
-                string serverIP = ((System.Net.IPEndPoint)(sessionContext.LocalIdentity)).Address.ToString() + '\0';
-                redirectPacket.TargetNetAddress = encoder.GetBytes(serverIP);
-                redirectPacket.TargetNetAddressLength = (uint)redirectPacket.TargetNetAddress.Length;
+                string serverIP = ((System.Net.IPEndPoint)(sessionContext.LocalIdentity)).Address.ToString();
+                redirectPacket.TargetNetAddress = serverIP;
                 redirectPacket.RedirFlags = RedirectionFlags.LB_TARGET_NET_ADDRESS;
-                redirectPacket.Length += (ushort)(4 + redirectPacket.TargetNetAddressLength);
-                redirectPacket.LoadBalanceInfoLength = 0;
             }
 
-            redirectPacket.UserName = encoder.GetBytes(RdpbcgrTestData.Test_UserName + '\0');
-            redirectPacket.UserNameLength = (uint)redirectPacket.UserName.Length;
+            redirectPacket.UserName = RdpbcgrTestData.Test_UserName;
             redirectPacket.RedirFlags |= RedirectionFlags.LB_USERNAME;
             redirectPacket.RedirFlags |= RedirectionFlags.LB_DONTSTOREUSERNAME;
-            redirectPacket.Length += (ushort)(4 + redirectPacket.UserNameLength);
 
-            redirectPacket.Domain = encoder.GetBytes(RdpbcgrTestData.Test_Domain + '\0');
-            redirectPacket.DomainLength = (uint)redirectPacket.Domain.Length;
+            redirectPacket.Domain = RdpbcgrTestData.Test_Domain;
             redirectPacket.RedirFlags |= RedirectionFlags.LB_DOMAIN;
-            redirectPacket.Length += (ushort)(4 + redirectPacket.DomainLength);
 
-            redirectPacket.Password = encoder.GetBytes(RdpbcgrTestData.Test_Password + '\0');
-            redirectPacket.PasswordLength = (uint)redirectPacket.Password.Length;
+            redirectPacket.Password = encoder.GetBytes(RdpbcgrTestData.Test_Password);
             redirectPacket.RedirFlags |= RedirectionFlags.LB_PASSWORD;
-            redirectPacket.Length += (ushort)(4 + redirectPacket.PasswordLength);
-
-            redirectPacket.TargetFQDNLength = 0;
-            redirectPacket.TargetNetBiosNameLength = 0;
-            redirectPacket.TargetNetAddressesLength = 0;
 
             redirectPacket.Pad = new byte[8];
-            redirectPacket.Length += 8;
-            #endregion
+
+            redirectPacket.UpdateLength();
+
+            if (this.serverConfig.encryptedProtocol == EncryptedProtocol.Rdp)
+            {
+                Server_Redirection_Pdu redirPdu = this.rdpbcgrServerStack.CreateStandardRedirectionPdu(sessionContext, redirectPacket);
+                SendPdu(redirPdu);
+            }
+            else
+            {
+                Enhanced_Security_Server_Redirection_Pdu redirPdu = this.rdpbcgrServerStack.CreateEnhancedRedirectionPdu(sessionContext, redirectPacket);
+                SendPdu(redirPdu);
+            }
+        }
+
+        public void SendServerRedirectionPduRDSTLS()
+        {
+            UnicodeEncoding encoder = new UnicodeEncoding();
+            RDP_SERVER_REDIRECTION_PACKET redirectPacket = new RDP_SERVER_REDIRECTION_PACKET();
+
+            redirectPacket.Flags = 0x0400;
+            redirectPacket.SessionID = RdpbcgrTestData.Test_Redirection_SessionId;
+
+            string serverIP = ((System.Net.IPEndPoint)(sessionContext.LocalIdentity)).Address.ToString();
+            redirectPacket.TargetNetAddress = serverIP;
+            redirectPacket.RedirFlags = RedirectionFlags.LB_TARGET_NET_ADDRESS;
+
+
+            redirectPacket.UserName = RdpbcgrTestData.Test_UserName;
+            redirectPacket.RedirFlags |= RedirectionFlags.LB_USERNAME;
+
+            redirectPacket.Domain = RdpbcgrTestData.Test_Domain;
+            redirectPacket.RedirFlags |= RedirectionFlags.LB_DOMAIN;
+
+            redirectPacket.Password = RdpbcgrUtility.EncodeUnicodeStringToBytes(RdpbcgrTestData.Test_Password);
+            redirectPacket.RedirFlags |= RedirectionFlags.LB_PASSWORD;
+            redirectPacket.RedirFlags |= RedirectionFlags.LB_PASSWORD_IS_PK_ENCRYPTED;
+
+            redirectPacket.TargetNetAddresses = new TARGET_NET_ADDRESSES();
+            redirectPacket.TargetNetAddresses.address = new TARGET_NET_ADDRESS[1];
+            redirectPacket.TargetNetAddresses.address[0] = new TARGET_NET_ADDRESS();
+            redirectPacket.TargetNetAddresses.address[0].address = serverIP;
+            redirectPacket.RedirFlags |= RedirectionFlags.LB_TARGET_NET_ADDRESSES;
+
+            redirectPacket.RedirectionGuid = RdpbcgrUtility.EncodeUnicodeStringToBytes(RdpbcgrTestData.Test_RedirectionGuid);
+            redirectPacket.RedirFlags |= RedirectionFlags.LB_REDIRECTION_GUID;
+
+            var certificate = new X509Certificate2(certFile, certPwd);
+            redirectPacket.TargetCertificate = CertificateApi.EncodeCertificate(certificate);
+            redirectPacket.RedirFlags |= RedirectionFlags.LB_TARGET_CERTIFICATE;
+
+            redirectPacket.TargetFQDN = "RDPServer.CONTOSO.com";
+            redirectPacket.RedirFlags |= RedirectionFlags.LB_TARGET_FQDN;
+
+            redirectPacket.TargetNetBiosName = "RDPSERVER";
+            redirectPacket.RedirFlags |= RedirectionFlags.LB_TARGET_NETBIOS_NAME;
+
+
+            redirectPacket.Pad = new byte[8];
+
+            redirectPacket.UpdateLength();
 
             if (this.serverConfig.encryptedProtocol == EncryptedProtocol.Rdp)
             {
@@ -1763,7 +1805,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             Server_Auto_Detect_Request_PDU autoDetectRequestPdu = rdpbcgrServerStack.CreateServerAutoDetectRequestPDU(sessionContext, netResult);
 
             SendPdu(autoDetectRequestPdu);
-        }        
+        }
 
         /// <summary>
         /// Send a Tunnel Data PDU with RDP_BW_START in its subheader
@@ -1972,7 +2014,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 site.Assert.Fail("Create UDP connection failed");
             }
 
-            
+
             //Authendicate the UDP channel
             X509Certificate2 cert = new X509Certificate2(certFile, certPwd);
             RdpemtServer rdpemtServer = new RdpemtServer(rdpudpSocket, cert, false);
@@ -2112,6 +2154,20 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
         }
 
+        #endregion
+
+        #region RDSTLS authentication
+        public void SendRDSTLSCapabilityPDU()
+        {
+            var pdu = rdpbcgrServerStack.CreateRDSTLSCapabilityPDU(sessionContext);
+            SendPdu(pdu);
+        }
+
+        public void SendRDSTLSAuthenticationResponsePDU()
+        {
+            var pdu = rdpbcgrServerStack.CreateRDSTLSAuthenticationResponsePDU(sessionContext);
+            SendPdu(pdu);
+        }
         #endregion
 
         #endregion
@@ -2655,6 +2711,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 ReceiveVirtualChannelPdu((Virtual_Channel_RAW_Pdu)request);
             }
+            else if (request is RDSTLS_AuthenticationRequestPDUwithPasswordCredentials)
+            {
+                ReceivedRDSTLS_AuthenticationRequestPDUwithPasswordCredentials((RDSTLS_AuthenticationRequestPDUwithPasswordCredentials)request);
+            }
 
             TS_FRAME_ACKNOWLEDGE_PDU ackPdu = request as TS_FRAME_ACKNOWLEDGE_PDU;
             if (ackPdu != null && TS_FRAME_ACKNOWLEDGE_PDUReceived != null)
@@ -2986,6 +3046,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
         }
 
+        private void ReceivedRDSTLS_AuthenticationRequestPDUwithPasswordCredentials(RDSTLS_AuthenticationRequestPDUwithPasswordCredentials pdu)
+        {
+            if (RDSTLS_AuthenticationRequestPDUwithPasswordCredentialsReceived != null)
+            {
+                RDSTLS_AuthenticationRequestPDUwithPasswordCredentialsReceived(pdu);
+            }
+        }
+
         #endregion "Receive Functions"
 
         #region Private mothods
@@ -3024,13 +3092,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             string strIsWindows = site.Properties["IsWindowsImplementation"];
             if (strIsWindows != null)
             {
-                isWindowsImplementation = Boolean.Parse(strIsWindows);                
+                isWindowsImplementation = Boolean.Parse(strIsWindows);
             }
 
             string strVerifySUTDisplay = site.Properties["VerifySUTDisplay.Enable"];
             if (strVerifySUTDisplay != null)
             {
-                verifySUTDisplay = Boolean.Parse(strVerifySUTDisplay);                
+                verifySUTDisplay = Boolean.Parse(strVerifySUTDisplay);
             }
 
             string strVerifySUTDisplayAssessValueThreshold = site.Properties["VerifySUTDisplay.IQA.AssessValueThreshold"];
@@ -3060,7 +3128,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 this.IQAAlgorithm = IQA_Algorithm.SSIM;
             }
-             
+
             //Update test data
             string tempStr;
             if (PtfPropUtility.GetStringPtfProperty(site, "RDP.ServerDomain", out tempStr))
@@ -3075,7 +3143,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 RdpbcgrTestData.Test_Password = tempStr;
             }
-
+            if (PtfPropUtility.GetStringPtfProperty(site, "SUTRedirectionGuid", out tempStr))
+            {
+                RdpbcgrTestData.Test_RedirectionGuid = tempStr;
+            }
         }
 
         private bool slowPathInputPdu_ContainEvent(TS_INPUT_PDU inputPdu, TS_INPUT_EVENT_messageType_Values eventType)

@@ -385,7 +385,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             try
             {
-                string result = String.Empty;
+                var result = new StringBuilder(data.Length / 2);
 
                 int currentIndex = 0;
 
@@ -393,27 +393,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 {
                     UInt16 code = ParseUInt16(data, ref currentIndex, false);
                     char charCode = (char)code;
-                    result += charCode;
+                    if (charCode != 0)
+                    {
+                        result.Append(charCode);
+                    }
                 }
 
-                return result;
-            }
-            catch 
-            {
-                throw new FormatException(ConstValue.ERROR_MESSAGE_INVALID_UNICODE_STRING);
-            }
-        }
-
-        private Guid ParseGuid(byte[] data)
-        {
-            try
-            {
-                var guid = new Guid(data);
-                return guid;
+                return result.ToString();
             }
             catch
             {
-                throw new FormatException(ConstValue.ERROR_MESSAGE_INVALID_GUID);
+                throw new FormatException(ConstValue.ERROR_MESSAGE_INVALID_UNICODE_STRING);
             }
         }
 
@@ -3189,21 +3179,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             StackPacket pdu = null;
             expectedLength = 0;
-
-            // Get bytes for only one packet
-            byte[] packetData = GetPacket(receivedBytes);
-            if (null == packetData)
-            {
-                // Received bytes does not contain enough data
-                consumedLength = 0;
-                return null;
-            }
-            consumedLength = packetData.Length;
+            consumedLength = 0;
 
             for (int i = 0; i < server.ServerContext.SessionContexts.Count; i++)
             {
                 if (endPoint == server.ServerContext.SessionContexts[i].Identity)
                 {
+                    // Get bytes for only one packet
+                    byte[] packetData = GetPacket(receivedBytes, server.ServerContext.SessionContexts[i]);
+                    if (null == packetData)
+                    {
+                        // Received bytes does not contain enough data
+                        consumedLength = 0;
+                        return null;
+                    }
+
+                    consumedLength = packetData.Length;
+
                     try
                     {
                         // ETW Provider Dump Message
@@ -3246,61 +3238,72 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// Get a complete packet buffer from received bytes
         /// </summary>
         /// <param name="receivedBytes">received bytes</param>
+        /// <param name="sessionContext">session context</param>
         /// <returns>data buffer contains a complete packet</returns>
-        private byte[] GetPacket(byte[] receivedBytes)
+        private byte[] GetPacket(byte[] receivedBytes, RdpbcgrServerSessionContext sessionContext)
         {
             if (receivedBytes == null || receivedBytes.Length == 0)
             {
                 return null;
             }
 
-            // Get packet length according to PDU type (slow-path/fast-path)
-            int packetLength = 0;
-            if (ConstValue.SLOW_PATH_PDU_INDICATOR_VALUE == receivedBytes[ConstValue.SLOW_PATH_PDU_INDICATOR_INDEX])
+            if (sessionContext.IsAuthenticatingRDSTLS)
             {
-                // Slow-path PDU
-                if (receivedBytes.Length < Marshal.SizeOf(typeof(TpktHeader)))
-                {
-                    // the buffer doesn't contain the complete slow-path pdu header
-                    return null;
-                }
-
-                // receivedBytes[2] and receivedBytes[3] make the length field of TpktHeader
-                int tempIndex = 2;
-                packetLength = ParseUInt16(receivedBytes, ref tempIndex, true);
+                // for RDSTLS, return the received raw bytes directly
+                return receivedBytes;
             }
             else
             {
-                // Fast-path PDU
-                if (1 == receivedBytes.Length)
+                // for non-RDSTLS, check X.224 header for PDUs
+
+                // Get packet length according to PDU type (slow-path/fast-path)
+                int packetLength = 0;
+                if (ConstValue.SLOW_PATH_PDU_INDICATOR_VALUE == receivedBytes[ConstValue.SLOW_PATH_PDU_INDICATOR_INDEX])
                 {
-                    // the buffer doesn't contain the complete fast-path pdu header
+                    // Slow-path PDU
+                    if (receivedBytes.Length < Marshal.SizeOf(typeof(TpktHeader)))
+                    {
+                        // the buffer doesn't contain the complete slow-path pdu header
+                        return null;
+                    }
+
+                    // receivedBytes[2] and receivedBytes[3] make the length field of TpktHeader
+                    int tempIndex = 2;
+                    packetLength = ParseUInt16(receivedBytes, ref tempIndex, true);
+                }
+                else
+                {
+                    // Fast-path PDU
+                    if (1 == receivedBytes.Length)
+                    {
+                        // the buffer doesn't contain the complete fast-path pdu header
+                        return null;
+                    }
+
+                    // "length2"(receivedBytes[2]) does not exists in received data
+                    // but "length1"(receivedBytes[1]) indicates that length2 exists
+                    if ((2 == receivedBytes.Length)
+                        && ((receivedBytes[1] & ConstValue.MOST_SIGNIFICANT_BIT_FILTER) != receivedBytes[1]))
+                    {
+                        return null;
+                    }
+
+                    // receivedBytes[1] and receivedBytes[2] are the corresponding
+                    // "length1" and "length2" fields in TS_FP_UPDATE_PDU
+                    packetLength = CalculateFpUpdatePduLength(receivedBytes[1], receivedBytes[2]);
+                }
+
+                // Received bytes does not contain enough data
+                if (receivedBytes.Length < packetLength)
+                {
                     return null;
                 }
 
-                // "length2"(receivedBytes[2]) does not exists in received data
-                // but "length1"(receivedBytes[1]) indicates that length2 exists
-                if ((2 == receivedBytes.Length)
-                    && ((receivedBytes[1] & ConstValue.MOST_SIGNIFICANT_BIT_FILTER) != receivedBytes[1]))
-                {
-                    return null;
-                }
-
-                // receivedBytes[1] and receivedBytes[2] are the corresponding
-                // "length1" and "length2" fields in TS_FP_UPDATE_PDU
-                packetLength = CalculateFpUpdatePduLength(receivedBytes[1], receivedBytes[2]);
+                // Copy data to buffer
+                byte[] buffer = new byte[packetLength];
+                Array.Copy(receivedBytes, buffer, packetLength);
+                return buffer;
             }
-
-            // Received bytes does not contain enough data
-            if (receivedBytes.Length < packetLength)
-            {
-                return null;
-            }
-
-            // Copy data to buffer
-            byte[] buffer = new byte[packetLength];
-            Array.Copy(receivedBytes, buffer, packetLength);
-            return buffer;
         }
 
 
@@ -4467,9 +4470,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             // parse redirection guid
             pdu.RedirectionGuidLength = ParseUInt16(data, ref currentIndex, false);
-
-            var guidBytes = GetBytes(data, ref currentIndex, pdu.RedirectionGuidLength);
-            pdu.RedirectionGuid = ParseGuid(guidBytes);
+            pdu.RedirectionGuid = GetBytes(data, ref currentIndex, pdu.RedirectionGuidLength);
 
             // parse user name
             pdu.UserNameLength = ParseUInt16(data, ref currentIndex, false);

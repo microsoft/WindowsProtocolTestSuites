@@ -125,7 +125,6 @@
     <Compile Include="Server\ServerStaticVirtualChannelManager.cs" />
     <Compile Include="StaticVirtualChannel.cs" />
     <Compile Include="StaticVirtualChannelManager.cs" />
-    <Compile Include="TypesExtension.cs" />
     <Compile Include="Client\RdpbcgrClient.cs" />
     <Compile Include="Client\RdpbcgrClientContext.cs" />
     <Compile Include="ConstValue.cs" />

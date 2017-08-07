@@ -94,6 +94,10 @@
     <Property name="SUTUserPassword" value="Password01!">
       <Description>The logon password of SUTUserName.</Description>
     </Property>
+    <!-- The redirection GUID for RDSTLS. -->
+    <Property name="SUTRedirectionGuid" value="RDSTLS2017.">
+      <Description>The redirection GUID for RDSTLS.</Description>
+    </Property>
     <!-- The system drive letter of SUT machine. -->
     <Property name="SUTSystemDrive" value="C">
       <Description>The system drive letter of SUT machine.</Description>

@@ -496,6 +496,43 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             return BitConverter.ToUInt64(bytes, 0);
         }
+
+        private string ParseUnicodeString(byte[] data, ref int index, int size, bool isBigEndian = false, bool isZeroTerminated = true)
+        {
+            try
+            {
+                if (size <= 0 || size % 2 != 0)
+                {
+                    throw new FormatException(ConstValue.ERROR_MESSAGE_INVALID_UNICODE_STRING);
+                }
+
+                string result = string.Empty;
+                int i = 0;
+                UInt16 character = 0;
+
+                while (i < size)
+                {
+                    character = ParseUInt16(data, ref index, isBigEndian);
+
+                    result += (char)character;
+                }
+
+                if (isZeroTerminated)
+                {
+                    if (character != 0)
+                    {
+                        throw new FormatException(ConstValue.ERROR_MESSAGE_INVALID_UNICODE_STRING);
+                    }
+                }
+
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         #endregion Private Methods: Base Type Parsers
 
 
@@ -2974,7 +3011,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             packet.Length = ParseUInt16(data, ref currentIndex, false);
 
             // RDP_SERVER_REDIRECTION_PACKET: sessionId
-            packet.SessionId = ParseUInt32(data, ref currentIndex, false);
+            packet.SessionID = ParseUInt32(data, ref currentIndex, false);
 
             // RDP_SERVER_REDIRECTION_PACKET: redirFlags
             packet.RedirFlags = (RedirectionFlags)ParseUInt32(data, ref currentIndex, false);
@@ -2983,7 +3020,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // RDP_SERVER_REDIRECTION_PACKET: targetNetAddress
                 packet.TargetNetAddressLength = ParseUInt32(data, ref currentIndex, false);
-                packet.TargetNetAddress = GetBytes(data, ref currentIndex, (int)packet.TargetNetAddressLength);
+                packet.TargetNetAddress = ParseUnicodeString(data, ref currentIndex, (int)packet.TargetNetAddressLength);
             }
 
             if ((packet.RedirFlags & RedirectionFlags.LB_LOAD_BALANCE_INFO) == RedirectionFlags.LB_LOAD_BALANCE_INFO)
@@ -2997,14 +3034,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // RDP_SERVER_REDIRECTION_PACKET: userName
                 packet.UserNameLength = ParseUInt32(data, ref currentIndex, false);
-                packet.UserName = GetBytes(data, ref currentIndex, (int)packet.UserNameLength);
+                packet.UserName = ParseUnicodeString(data, ref currentIndex, (int)packet.UserNameLength);
             }
 
             if ((packet.RedirFlags & RedirectionFlags.LB_DOMAIN) == RedirectionFlags.LB_DOMAIN)
             {
                 // RDP_SERVER_REDIRECTION_PACKET: domain
                 packet.DomainLength = ParseUInt32(data, ref currentIndex, false);
-                packet.Domain = GetBytes(data, ref currentIndex, (int)packet.DomainLength);
+                packet.Domain = ParseUnicodeString(data, ref currentIndex, (int)packet.DomainLength);
             }
 
             if ((packet.RedirFlags & RedirectionFlags.LB_PASSWORD) == RedirectionFlags.LB_PASSWORD)
@@ -3018,7 +3055,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // RDP_SERVER_REDIRECTION_PACKET: targetFqdn
                 packet.TargetFQDNLength = ParseUInt32(data, ref currentIndex, false);
-                packet.TargetFQDN = GetBytes(data, ref currentIndex, (int)packet.TargetFQDNLength);
+                packet.TargetFQDN = ParseUnicodeString(data, ref currentIndex, (int)packet.TargetFQDNLength);
             }
 
             if ((packet.RedirFlags & RedirectionFlags.LB_TARGET_NETBIOS_NAME)
@@ -3026,7 +3063,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // RDP_SERVER_REDIRECTION_PACKET: targetNetBiosName
                 packet.TargetNetBiosNameLength = ParseUInt32(data, ref currentIndex, false);
-                packet.TargetNetBiosName = GetBytes(data, ref currentIndex, (int)packet.TargetNetBiosNameLength);
+                packet.TargetNetBiosName = ParseUnicodeString(data, ref currentIndex, (int)packet.TargetNetBiosNameLength);
+            }
+
+            if (packet.RedirFlags.HasFlag(RedirectionFlags.LB_CLIENT_TSV_URL))
+            {
+                packet.TsvUrlLength = ParseUInt32(data, ref currentIndex, false);
+                packet.TsvUrl = GetBytes(data, ref currentIndex, (int)packet.TsvUrlLength);
             }
 
             if ((packet.RedirFlags & RedirectionFlags.LB_TARGET_NET_ADDRESSES)
@@ -3039,8 +3082,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 for (int i = 0; i < packet.TargetNetAddresses.addressCount; ++i)
                 {
                     packet.TargetNetAddresses.address[i].addressLength = ParseUInt32(data, ref currentIndex, false);
-                    packet.TargetNetAddresses.address[i].address = GetBytes(data, ref currentIndex,
-                        (int)packet.TargetNetAddresses.address[i].addressLength);
+                    packet.TargetNetAddresses.address[i].address = ParseUnicodeString(data, ref currentIndex, (int)packet.TargetNetAddresses.address[i].addressLength);
                 }
             }
 

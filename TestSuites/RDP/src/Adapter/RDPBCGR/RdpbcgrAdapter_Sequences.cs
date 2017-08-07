@@ -29,15 +29,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="multiTransportTypeFlags">Flags of Multitransport Channel Data</param>
         /// <param name="supportRDPEGFX">Whether support RDPEGFX</param>
         /// <param name="supportRestrictedAdminMode">Whether support restricted admin mode</param>
-        public void EstablishRDPConnection( 
-            selectedProtocols_Values serverSelectedProtocol, 
-            EncryptionMethods enMethod, 
-            EncryptionLevel enLevel , 
+        public void EstablishRDPConnection(
+            selectedProtocols_Values serverSelectedProtocol,
+            EncryptionMethods enMethod,
+            EncryptionLevel enLevel,
             bool isExtendedClientDataSupported,
             bool expectAutoReconnect,
             TS_UD_SC_CORE_version_Values rdpServerVersion,
             MULTITRANSPORT_TYPE_FLAGS multiTransportTypeFlags = MULTITRANSPORT_TYPE_FLAGS.None,
-            bool supportRDPEGFX = false, 
+            bool supportRDPEGFX = false,
             bool supportRestrictedAdminMode = false)
         {
             #region Logging
@@ -47,7 +47,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 Encyrption Level = {2},
                 Extended Client Data Supported = {3},
                 Auto-Reconnection Expected = {4},
-                RDP Version Code= {5}).", 
+                RDP Version Code= {5}).",
                 serverSelectedProtocol.ToString(), enMethod.ToString(), enLevel.ToString(), isExtendedClientDataSupported, expectAutoReconnect, rdpServerVersion.ToString());
             #endregion
 
@@ -84,13 +84,29 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             //} 
             #endregion
 
+            #region RDSTLS authentication
+            if (serverSelectedProtocol == selectedProtocols_Values.PROTOCOL_RDSTLS)
+            {
+                sessionContext.IsAuthenticatingRDSTLS = true;
+
+                SendRDSTLSCapabilityPDU();
+
+                ExpectPacket<RDSTLS_AuthenticationRequestPDUwithPasswordCredentials>(sessionContext, pduWaitTimeSpan);
+
+                sessionContext.IsAuthenticatingRDSTLS = false;
+
+                SendRDSTLSAuthenticationResponsePDU();
+            }
+            #endregion
+
+
             #region Basic Setting Exchange
             ExpectPacket<Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request>(sessionContext, pduWaitTimeSpan);
 
             Server_MCS_Connect_Response(
-                enMethod, 
-                enLevel, 
-                rdpServerVersion, 
+                enMethod,
+                enLevel,
+                rdpServerVersion,
                 NegativeType.None,
                 multiTransportTypeFlags,
                 false,
@@ -172,19 +188,19 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     {
                         WaitForPacket<Client_Persistent_Key_List_Pdu>(sessionContext, pduWaitTimeSpan);
                     }
-                }                
+                }
             }
 
             WaitForPacket<Client_Font_List_Pdu>(sessionContext, pduWaitTimeSpan);
 
-            ServerFontMap(); 
+            ServerFontMap();
             #endregion
         }
 
 
-       /// <summary>
-       /// Start a server Initiated disconnection sequence
-       /// </summary>
+        /// <summary>
+        /// Start a server Initiated disconnection sequence
+        /// </summary>
         /// <param name="sendDisonnectPdu">Indicates if server send MCS Disconnect Provider Ultimatum PDU to client.</param>
         /// <param name="adminInitiated">Indicates it's an Administrator-Initiated disconnection or User-Initiated disconnection.</param>
         /// <param name="invalidType">Indicates the invalid type for negative cases</param>
@@ -234,7 +250,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Capabilities Exchange
             Server_Demand_Active(NegativeType.None);
 
-            WaitForPacket<Client_Confirm_Active_Pdu>(sessionContext, pduWaitTimeSpan); 
+            WaitForPacket<Client_Confirm_Active_Pdu>(sessionContext, pduWaitTimeSpan);
             #endregion
 
             #region Connection Finalization
@@ -252,7 +268,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             WaitForPacket<Client_Font_List_Pdu>(sessionContext, pduWaitTimeSpan);
 
-            ServerFontMap(); 
+            ServerFontMap();
             #endregion
         }
 
@@ -282,7 +298,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     this.WaitForDisconnection(pduWaitTimeSpan);
                     break;
                 }
-            } 
+            }
         }
 
     }

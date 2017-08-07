@@ -20,8 +20,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             site.CaptureRequirementIfAreEqual<byte>(0, clientPdu.x224Crq.classOptions, 9,
                @"[In Client X.224 Connection Request PDU] x224Crq (7 bytes): An X.224 Class 0 Connection Request "
                + @"transport protocol data unit (TPDU), as specified in [X224] section 13.3.");
-            
-            if (clientPdu != null && clientPdu.routingToken != null )
+
+            if (clientPdu != null && clientPdu.routingToken != null)
             {
                 int len = clientPdu.routingToken.Length;
                 site.CaptureRequirementIfIsTrue(clientPdu.routingToken[len - 2] == 0x0D && clientPdu.routingToken[len - 1] == 0x0A, 10,
@@ -31,7 +31,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             if (clientPdu.rdpNegData != null)
             {
-                site.CaptureRequirementIfAreEqual<type_Values>(type_Values.V1, clientPdu.rdpNegData.type, 22, 
+                site.CaptureRequirementIfAreEqual<type_Values>(type_Values.V1, clientPdu.rdpNegData.type, 22,
                     @"[In RDP Negotiation Request] type ( 1 byte): it MUST be set to 0x01 (TYPE_RDP_NEG_REQ) to indicate "
                     + @"that the packet is a Negotiation Request.");
 
@@ -39,29 +39,28 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 site.CaptureRequirementIfIsTrue(isRDPNegDataSatisfied, 24,
                     @"[In RDP Negotiation Request] flags (1 byte): An 8-bit, unsigned integer that contains protocol flags. "
                     + @"this flags field  MUST be set to 0x00 or CORRELATION_INFO_PRESENT(0x08).");
-                
+
                 site.CaptureRequirementIfAreEqual<length_Values>(length_Values.V1, clientPdu.rdpNegData.length, 26,
                     @"[In RDP Negotiation Request] length (2 bytes): length MUST be set to 0x0008 (8 bytes).");
 
-                
 
-                
-                site.CaptureRequirementIfIsTrue(clientPdu.rdpNegData.requestedProtocols == (requestedProtocols_Values.PROTOCOL_HYBRID_FLAG | requestedProtocols_Values.PROTOCOL_SSL_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_EX) ||
-                    clientPdu.rdpNegData.requestedProtocols == (requestedProtocols_Values.PROTOCOL_HYBRID_FLAG | requestedProtocols_Values.PROTOCOL_SSL_FLAG) ||
-                    clientPdu.rdpNegData.requestedProtocols == requestedProtocols_Values.PROTOCOL_RDP_FLAG ||
-                    clientPdu.rdpNegData.requestedProtocols == requestedProtocols_Values.PROTOCOL_SSL_FLAG, 28,
-                    @"In RDP Negotiation Request the requestedProtocols can take one of the following values. 1. PROTOCOL_RDP_FLAG"
-                    + @" 0x00000000 Legacy RDP encryption 2. PROTOCOL_SSL_FLAG 0x00000001  TLS 1.0. 3. PROTOCOL_HYBRID_FLAG 0x00000002  CredSSP. ");
-                
 
-                if( (clientPdu.rdpNegData.requestedProtocols&requestedProtocols_Values.PROTOCOL_HYBRID_FLAG) != 0 )
+                uint bitmask = ~(uint)(requestedProtocols_Values.PROTOCOL_RDP_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_FLAG | requestedProtocols_Values.PROTOCOL_SSL_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_EX | requestedProtocols_Values.PROTOCOL_RDSTLS);
+                site.CaptureRequirementIfIsTrue(
+                    (((uint)clientPdu.rdpNegData.requestedProtocols & bitmask) == 0), 28,
+                    @"In RDP Negotiation Request the requestedProtocols can take combining of the following flags. 1. PROTOCOL_RDP_FLAG"
+                    + @" 0x00000000 Legacy RDP encryption 2. PROTOCOL_SSL_FLAG 0x00000001  TLS 1.0. 3. PROTOCOL_HYBRID_FLAG 0x00000002  CredSSP. "
+                    + @" 4. PROTOCOL_RDSTLS 0x00000004  RDSTLS.");
+
+
+                if ((clientPdu.rdpNegData.requestedProtocols & requestedProtocols_Values.PROTOCOL_HYBRID_FLAG) != 0)
                 {
                     site.CaptureRequirementIfAreNotEqual<requestedProtocols_Values>(0, clientPdu.rdpNegData.requestedProtocols & requestedProtocols_Values.PROTOCOL_SSL_FLAG, 32,
                         @"In RDP Negotiation Request (RDP_NEG_REQ), requestedProtocols (4 bytes) : If PROTOCOL_HYBRID_FLAG (0x00000002)"
                         + @" flag is set, then the PROTOCOL_SSL (0x00000001) SHOULD also be set because Transport Layer Security (TLS) "
                         + @"is a subset of CredSSP.");
                 }
-            }            
+            }
         }
 
         /// <summary>
@@ -76,7 +75,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             //<?>
             //site.CaptureRequirementIfAreEqual<byte>(0, connectInitialPdu.x224Data.type, 66, 
             // @"[In Client MCS Connect Initial PDU with GCC Conference Create Request] x224Data (3 bytes): An X.224 Class 0 Data PDU, as specified in [X224] section 13.7.");
-            
+
             if (!serverConfig.isExtendedClientDataSupported)
             {
                 //<capture> also capture R265
@@ -93,7 +92,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 @"In TS_UD_HEADER, the type field can take one of the following values: CS_CORE 0xC001,CS_SECURITY 0xC002,CS_NET 0xC003,CS_CLUSTER 0xC004,"
                 + @"SC_CORE 0x0C01,SC_SECURITY 0x0C02,SC_NET 0xOC03");
             //<capture> also caputre R93
-            site.CaptureRequirementIfAreEqual<TS_UD_HEADER_type_Values>(TS_UD_HEADER_type_Values.CS_CORE, connectInitialPdu.mcsCi.gccPdu.clientCoreData.header.type, 82, 
+            site.CaptureRequirementIfAreEqual<TS_UD_HEADER_type_Values>(TS_UD_HEADER_type_Values.CS_CORE, connectInitialPdu.mcsCi.gccPdu.clientCoreData.header.type, 82,
                 @"In TS_UD_HEADER, if the type is CS_CORE0xC001 then the data block which follows User Data Header (TS_UD_HEADER) contains Client Core Data");
             site.CaptureRequirementIfAreEqual<TS_UD_HEADER_type_Values>(TS_UD_HEADER_type_Values.CS_SECURITY, connectInitialPdu.mcsCi.gccPdu.clientSecurityData.header.type, 83,
                 @"In TS_UD_HEADER, if the type is CS_SECURITY 0xC002 then the data block which follows User Data Header (TS_UD_HEADER) contains Client Security Data");
@@ -128,7 +127,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 VerifyStructure(connectInitialPdu.mcsCi.gccPdu.clientNetworkData);
             }
-            if(connectInitialPdu.mcsCi.gccPdu.clientClusterData != null)
+            if (connectInitialPdu.mcsCi.gccPdu.clientClusterData != null)
             {
                 VerifyStructure(connectInitialPdu.mcsCi.gccPdu.clientClusterData);
             }
@@ -182,15 +181,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="clientInfo"></param>
         public void VerifyPdu(Client_Info_Pdu clientInfo)
         {
-            site.CaptureRequirementIfIsTrue(clientInfo.commonHeader.securityHeader is TS_SECURITY_HEADER || 
-                clientInfo.commonHeader.securityHeader is TS_SECURITY_HEADER1 || 
-                clientInfo.commonHeader.securityHeader is TS_SECURITY_HEADER2, 422, 
+            site.CaptureRequirementIfIsTrue(clientInfo.commonHeader.securityHeader is TS_SECURITY_HEADER ||
+                clientInfo.commonHeader.securityHeader is TS_SECURITY_HEADER1 ||
+                clientInfo.commonHeader.securityHeader is TS_SECURITY_HEADER2, 422,
                 @"[In Client Info PDU Data (CLIENT_INFO_PDU)]securityHeader (variable):   This field MUST contain one"
                 + @" of the following headers:[Basic Security Header,Non-FIPS Security Header, FIPS Security Header ].");
 
             if (serverConfig.encryptionLevel == EncryptionLevel.ENCRYPTION_LEVEL_NONE)
             {
-                bool isR423Satisfied = (clientInfo.commonHeader.securityHeader is TS_SECURITY_HEADER) && 
+                bool isR423Satisfied = (clientInfo.commonHeader.securityHeader is TS_SECURITY_HEADER) &&
                     (!(clientInfo.commonHeader.securityHeader is TS_SECURITY_HEADER1)) &&
                     (!(clientInfo.commonHeader.securityHeader is TS_SECURITY_HEADER2));
                 site.CaptureRequirementIfIsTrue(isR423Satisfied, 423,
@@ -223,11 +222,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
                 site.CaptureRequirementIfIsNotNull(clientInfo.infoPacket, 430,
                     @"[In Info Packet (TS_INFO_PACKET)]The Info Packet  SHOULD be encrypted (see sections 5.3 and"
-                    + @" 5.4 for an overview of RDP security mechanisms)."); 
+                    + @" 5.4 for an overview of RDP security mechanisms).");
             }
             VerifyStructure(clientInfo.infoPacket);
         }
-        
+
         /// <summary>
         /// 2.2.1.13.2
         /// </summary>
@@ -250,7 +249,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 this.serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_56BIT ||
                 this.serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_128BIT)
             {
-                site.CaptureRequirementIfIsInstanceOfType(confirmActivePdu.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER1),702,
+                site.CaptureRequirementIfIsInstanceOfType(confirmActivePdu.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER1), 702,
                     @"[In Client Confirm Active PDU]securityHeader (variable):  The securityHeader in Server"
                     + @" Demand Active PDU is a Non-FIPS Security Header (section 2.2.8.1.1.2.2) if the "
                     + @"Encryption LevelMethod selected by the server (see sections 5.3.2 and 2.2.1.4.3) is "
@@ -312,7 +311,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// </summary>
         /// <param name="clientSyncPdu"></param>
         public void VerifyPdu(Client_Synchronize_Pdu clientSyncPdu)
-        {            
+        {
             if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_40BIT ||
                 serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_56BIT ||
                 serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_128BIT)
@@ -323,7 +322,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     + @"Encryption LevelMethod selected by the server (see sections 5.3.2 and 2.2.1.4.3) is"
                     + @" ENCRYPTION_METHOD_40BIT (0x00000001), ENCRYPTION_METHOD_56BIT (0x00000008), "
                     + @"ENCRYPTIONMETHOD_128BIT (0x00000002)");
-                                
+
             }
             else if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_FIPS)
             {
@@ -331,7 +330,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     @"In Client Synchronize PDU, securityHeader (variable):The securityHeader in Server Demand"
                     + @" Active PDU is a FIPS Security Header,if the Encryption LevelMethod selected by the server"
                     + @" is ENCRYPTION_METHOD_FIPS (0x00000010).");
-                                
+
             }
             site.CaptureRequirementIfAreEqual<int>(7, (clientSyncPdu.synchronizePduData.shareDataHeader.shareControlHeader.pduType.typeAndVersionLow & 0xf), 736,
                 @"In TS_SYNCHONIZE_PDU the type subfield of the pduType field of the Share Control Header "
@@ -377,7 +376,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             site.CaptureRequirementIfIsTrue(clientCoopPdu.controlPduData.controlId == 0 && clientCoopPdu.controlPduData.grantId == 0, 751,
                 @"In controlPduData of Client Control PDU - Cooperate, The grantId and controlId fields of the "
                 + @"Control PDU Data MUST both be set to zero.");
-            
+
             site.CaptureRequirementIfAreEqual<action_Values>(action_Values.CTRLACTION_COOPERATE, clientCoopPdu.controlPduData.action, 752,
                 @"In controlPduData of Client Control PDU - Cooperate, the action field MUST be set to "
                 + @"CTRLACTION_COOPERATE (0x0004).");
@@ -393,7 +392,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 clientCoopPdu.controlPduData.action == action_Values.CTRLACTION_GRANTED_CONTROL ||
                 clientCoopPdu.controlPduData.action == action_Values.CTRLACTION_DETACH ||
                 clientCoopPdu.controlPduData.action == action_Values.CTRLACTION_COOPERATE;
-            site.CaptureRequirementIfIsTrue(isR758Satisfied, 758, 
+            site.CaptureRequirementIfIsTrue(isR758Satisfied, 758,
                 @"In TS_CONTROL_PDU, the action field must take one of the following values  1.CTRLACTION_REQUEST_CONTROL"
                 + @" 0x0001 - Request control 2.CTRLACTION_GRANTED_CONTROL 0x0002 - Granted control 3.CTRLACTION_DETACH "
                 + @"0x0003 - Detach 4.CTRLACTION_COOPERATE 0x0004 - Cooperate");
@@ -429,7 +428,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     + @"by the server is ENCRYPTION_METHOD_NONE (0), then securityHeader MUST NOT be included in the Client Control PDU"
                     + @" - Request Control.");
             }
-            site.CaptureRequirementIfIsTrue(clientCtlRequestPdu.controlPduData.controlId == 0 && clientCtlRequestPdu.controlPduData.grantId == 0, 775, 
+            site.CaptureRequirementIfIsTrue(clientCtlRequestPdu.controlPduData.controlId == 0 && clientCtlRequestPdu.controlPduData.grantId == 0, 775,
                 @"In Client Control PDU - Request Control, the grantId and controlId fields of the Control PDU Data MUST both be set to zero.");
 
             site.CaptureRequirementIfAreEqual<action_Values>(action_Values.CTRLACTION_REQUEST_CONTROL, clientCtlRequestPdu.controlPduData.action, 776,
@@ -473,7 +472,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             site.CaptureRequirementIfAreEqual<pduType2_Values>(pduType2_Values.PDUTYPE2_BITMAPCACHE_PERSISTENT_LIST, keyListPdu.persistentKeyListPduData.shareDataHeader.pduType2, 794,
                 @"In Client Persistent Key List PDU, the pduType2 field of the Share Data Header in Client Persistent Key List PDU"
                 + @" MUST be set to PDUTYPE2_BITMAPCACHE_PERSISTENT_LIST (43).");
-            
+
             //2.22.17.1
             //CaptureRequirement(keyListPdu.persistentKeyListPduData.numEntriesCache0 == keyListPdu.persistentKeyListPduData.
         }
@@ -509,10 +508,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             site.CaptureRequirementIfAreEqual<int>(7, (fontListPdu.fontListPduData.shareDataHeader.shareControlHeader.pduType.typeAndVersionLow & 0xf), 851,
                 @"In TS_FONT_LIST_PDU, the type subfield of the pduType field of the Share Control Header MUST be set to PDUTYPE_DATAPDU (7).");
-            
-            site.CaptureRequirementIfAreEqual<pduType2_Values>(pduType2_Values.PDUTYPE2_FONTLIST, fontListPdu.fontListPduData.shareDataHeader.pduType2, 852, 
+
+            site.CaptureRequirementIfAreEqual<pduType2_Values>(pduType2_Values.PDUTYPE2_FONTLIST, fontListPdu.fontListPduData.shareDataHeader.pduType2, 852,
                 @"In TS_FONT_LIST_PDU, the pduType2 field of the Share Data Header MUST be set to PDUTYPE2_FONTLIST (39).");
-            
+
             //2.2.1.18.1
             site.CaptureRequirementIfAreEqual<ushort>(0, fontListPdu.fontListPduData.numberFonts, 854,
                 @"In TS_FONT_LIST_PDU, numberFonts field SHOULD be set to 0.");
@@ -521,7 +520,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             site.CaptureRequirementIfAreEqual<ushort>(0x0003, fontListPdu.fontListPduData.listFlags, 858,
                 @"In TS_FONT_LIST_PDU, listFlags field SHOULD be set to 0x0003 which is the logical OR'ed value of FONTLIST_FIRST (0x0001)"
                 + @" and FONTLIST_LAST (0x0002).");
-            site.CaptureRequirementIfAreEqual<ushort>(0x0032, fontListPdu.fontListPduData.entrySize, 860, 
+            site.CaptureRequirementIfAreEqual<ushort>(0x0032, fontListPdu.fontListPduData.entrySize, 860,
                 @"In TS_FONT_LIST_PDU, entrySize field SHOULD be set to 0x0032 (50 bytes).");
         }
 
@@ -539,7 +538,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     @"[In Client Shutdown Request PDU,securityHeader (variable) is a Non-FIPS Security Header (section 2.2.8.1.1.2.2)"
                     + @" if the Encryption Method selected by the server is ENCRYPTION_METHOD_40BIT (0x00000001), ENCRYPTION_METHOD_56BIT"
                     + @" (0x00000008), or ENCRYPTION_METHOD_128BIT (0x00000002).");
-                
+
             }
             else if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_FIPS)
             {
@@ -577,15 +576,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="inputPdu"></param>
         public void VerifyPdu(TS_INPUT_PDU inputPdu)
         {
-            int versionLow = inputPdu.shareDataHeader.shareControlHeader.pduType.typeAndVersionLow>>4&0x0F;
+            int versionLow = inputPdu.shareDataHeader.shareControlHeader.pduType.typeAndVersionLow >> 4 & 0x0F;
             site.CaptureRequirementIfAreEqual<int>(1, versionLow, 1542,
                 @"In TS_SHARECONTROLHEADER structure, for PduType's subfield, versionLow field MUST be set to TS_PROTOCOL_VERSION (0x1).");
             // not capture 1543
             //CaptureRequirement(inputPdu.shareDataHeader.shareControlHeader.pduType.versionHigh == 0, 1543);
             site.CaptureRequirementIfAreEqual<versionHigh_Values>(versionHigh_Values.V1, inputPdu.shareDataHeader.shareControlHeader.pduType.versionHigh, 1544,
                 @"In TS_SHARECONTROLHEADER, for PduType's subfield, the versionHigh field must be 1 byte which is the most "
-                + @"significant byte of pduType field.");            
-            
+                + @"significant byte of pduType field.");
+
             site.CaptureRequirementIfIsTrue(inputPdu.shareDataHeader.streamId == streamId_Values.STREAM_UNDEFINED ||
                 inputPdu.shareDataHeader.streamId == streamId_Values.STREAM_LOW ||
                 inputPdu.shareDataHeader.streamId == streamId_Values.STREAM_MED ||
@@ -595,13 +594,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 + @" 0x01,STREAM_MED 0x02,STREAM_HI 0x04");
 
             //R1612 cannot be verified
-            if( inputPdu.commonHeader.securityHeader != null && (inputPdu.commonHeader.securityHeader.flags & TS_SECURITY_HEADER_flags_Values.SEC_FLAGSHI_VALID ) == TS_SECURITY_HEADER_flags_Values.SEC_FLAGSHI_VALID )
+            if (inputPdu.commonHeader.securityHeader != null && (inputPdu.commonHeader.securityHeader.flags & TS_SECURITY_HEADER_flags_Values.SEC_FLAGSHI_VALID) == TS_SECURITY_HEADER_flags_Values.SEC_FLAGSHI_VALID)
                 CaptureRequirement(inputPdu.commonHeader.securityHeader.flagsHi != 0, 1611);
 
             if (inputPdu.commonHeader.securityHeader is TS_SECURITY_HEADER2)
             {
                 TS_SECURITY_HEADER2 header2 = (TS_SECURITY_HEADER2)inputPdu.commonHeader.securityHeader;
-                site.CaptureRequirementIfAreEqual<TS_SECURITY_HEADER2_length_Values>(TS_SECURITY_HEADER2_length_Values.V1, header2.length,  1619,
+                site.CaptureRequirementIfAreEqual<TS_SECURITY_HEADER2_length_Values>(TS_SECURITY_HEADER2_length_Values.V1, header2.length, 1619,
                     @"The TS_SECURITY_HEADER2 structure,the length field MUST be set to 0x0010 (16 bytes) for legacy reasons.");
                 //have defined ConstValue.TSFIPS_VERSION1 in sdk
                 site.CaptureRequirementIfAreEqual<byte>(1, header2.version, 1621,
@@ -666,12 +665,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             int encryptionFlags;
             TS_FP_INPUT_EVENT e;
 
-            actionCode = fpInputPdu.fpInputHeader.actionCode&0x3;
+            actionCode = fpInputPdu.fpInputHeader.actionCode & 0x3;
             numberEvents = (fpInputPdu.fpInputHeader.actionCode & 0x3c) >> 2;
             encryptionFlags = (fpInputPdu.fpInputHeader.actionCode & 0xc0) >> 6;
 
-            CaptureRequirement(actionCode == 0 || actionCode == 3, 1700);            
-            if( fpInputPdu.numberEvents != 0 )
+            CaptureRequirement(actionCode == 0 || actionCode == 3, 1700);
+            if (fpInputPdu.numberEvents != 0)
             {
                 CaptureRequirement(numberEvents == 0, 1704);
             }
@@ -724,11 +723,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 site.CaptureRequirementIfAreEqual<TS_FP_FIPS_INFO_length_Values>(TS_FP_FIPS_INFO_length_Values.V1, fpInputPdu.fipsInformation.length, 1721,
                     @"In TS_FP_FIPS_INFO structure, the length field MUST be set to 0x0010 (16 bytes).");
                 //ConstValue.TSFIPS_VERSION1
-                site.CaptureRequirementIfAreEqual<byte>(1, fpInputPdu.fipsInformation.version, 1723, 
+                site.CaptureRequirementIfAreEqual<byte>(1, fpInputPdu.fipsInformation.version, 1723,
                     @"In TS_FP_FIPS_INFO structure, the version field SHOULD be set to TSFIPS_VERSION1 (0x01).");
             }
 
-            if( numberEvents == 0 )
+            if (numberEvents == 0)
                 numberEvents = fpInputPdu.numberEvents;
 
             for (int i = 0; i < fpInputPdu.fpInputEvents.Count; i++)
@@ -772,7 +771,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             site.CaptureRequirementIfAreEqual<ShareControlHeaderType>((ShareControlHeaderType)(refreshPdu.refreshRectPduData.shareDataHeader.shareControlHeader.pduType.typeAndVersionLow & 0xF), ShareControlHeaderType.PDUTYPE_DATAPDU, 2163,
                 @"In Refresh Rect PDU Data,the type subfield of the pduType field of the Share Control Header MUST"
                 + @" be set to PDUTYPE_DATAPDU (7).");
-            site.CaptureRequirementIfAreEqual<pduType2_Values>(pduType2_Values.PDUTYPE2_REFRESH_RECT, refreshPdu.refreshRectPduData.shareDataHeader.pduType2, 2164, 
+            site.CaptureRequirementIfAreEqual<pduType2_Values>(pduType2_Values.PDUTYPE2_REFRESH_RECT, refreshPdu.refreshRectPduData.shareDataHeader.pduType2, 2164,
                 @"In Refresh Rect PDU Data,the pduType2 field of the Share Data Header MUST be set to PDUTYPE2_REFRESH_RECT (33).");
             site.CaptureRequirementIfAreEqual<int>(refreshPdu.refreshRectPduData.numberOfAreas, refreshPdu.refreshRectPduData.areasToRefresh.Count, 2168,
                 @"In Refresh Rect PDU Data(TS_REFRESH_RECT_PDU), the areasToRefresh field is an array of TS_RECTANGLE16"
@@ -809,14 +808,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     @"In Client Suppress Output PDU,If Enhanced RDP Security  is in effect or the Encryption Method selected"
                     + @" by the server is ENCRYPTION_METHOD_NONE (0), then this securityHeader MUST NOT be included in the PDU.");
             }
-            site.CaptureRequirementIfAreEqual<ShareControlHeaderType>(ShareControlHeaderType.PDUTYPE_DATAPDU,(ShareControlHeaderType)(suppressPdu.suppressOutputPduData.shareDataHeader.shareControlHeader.pduType.typeAndVersionLow & 0xF), 2179,
+            site.CaptureRequirementIfAreEqual<ShareControlHeaderType>(ShareControlHeaderType.PDUTYPE_DATAPDU, (ShareControlHeaderType)(suppressPdu.suppressOutputPduData.shareDataHeader.shareControlHeader.pduType.typeAndVersionLow & 0xF), 2179,
                 @"In Suppress Output PDU Data, the type subfield of the pduType field of the Share Control Header (section 2.2.8.1.1.1.1)"
                 + @" MUST be set to PDUTYPE_DATAPDU (7).");
             site.CaptureRequirementIfAreEqual<pduType2_Values>(pduType2_Values.PDUTYPE2_SUPPRESS_OUTPUT, suppressPdu.suppressOutputPduData.shareDataHeader.pduType2, 2180,
                 @"In Suppress Output PDU Data, the type subfield of the pduType2 field of the Share Data Header MUST be set to "
                 + @"PDUTYPE2_SUPPRESS_OUTPUT (35).");
             bool isR2182Satisfied = suppressPdu.suppressOutputPduData.allowDisplayUpdates == AllowDisplayUpdates_SUPPRESS_OUTPUT.ALLOW_DISPLAY_UPDATES || suppressPdu.suppressOutputPduData.allowDisplayUpdates == AllowDisplayUpdates_SUPPRESS_OUTPUT.SUPPRESS_DISPLAY_UPDATES;
-            site.CaptureRequirementIfIsTrue(isR2182Satisfied, 2182, 
+            site.CaptureRequirementIfIsTrue(isR2182Satisfied, 2182,
                 @"In Suppress Output PDU Data, allowDisplayUpdates can be of two flags: SUPPRESS_DISPLAY_UPDATES 0x00, ALLOW_DISPLAY_UPDATES 0x01");
             if (suppressPdu.suppressOutputPduData.allowDisplayUpdates == AllowDisplayUpdates_SUPPRESS_OUTPUT.ALLOW_DISPLAY_UPDATES)
             {
@@ -829,7 +828,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             else
             {
                 bool isR2188Satisified = suppressPdu.suppressOutputPduData.desktopRect.right - suppressPdu.suppressOutputPduData.desktopRect.left == 0 &&
-                    suppressPdu.suppressOutputPduData.desktopRect.bottom - suppressPdu.suppressOutputPduData.desktopRect.top == 0; 
+                    suppressPdu.suppressOutputPduData.desktopRect.bottom - suppressPdu.suppressOutputPduData.desktopRect.top == 0;
                 site.CaptureRequirementIfIsTrue(isR2188Satisified, 2188,
                     @"In Suppress Output PDU Data, the desktopRect field MUST NOT be included in the PDU, if the "
                     + @"allowDisplayUpdates field is set to SUPPRESS_DISPLAY_UPDATES (0).");
@@ -899,24 +898,24 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 || (highColorDepth_Values)core.highColorDepth.actualData == highColorDepth_Values.V5;
             site.CaptureRequirementIfIsTrue(isR154Satisfied, 154,
                 @"In Client Core Data, highColorDepth can have one of the following values 4,8,15,16,24");
-            
+
             site.CaptureRequirementIfIsTrue(core.supportedColorDepths.actualData <= 15, 164,
                 @"In Client Core Data, supportedColorDepths can have one of the following values RNS_UD_24BPP_SUPPORT 0x0001, "
                 + @"RNS_UD_16BPP_SUPPORT 0x0002, RNS_UD_15BPP_SUPPORT 0x0004, RNS_UD_32BPP_SUPPORT 0x0008");
-            
+
             ushort earlyCapabilityFlags = (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_ERRINFO_PDU | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_WANT_32BPP_SESSION
                 | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_STATUSINFO_PDU | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_STRONG_ASYMMETRIC_KEYS | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_UNUSED | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_VALID_CONNECTION_TYPE | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_MONITOR_LAYOUT_PDU
                 | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_NETWORK_AUTODETECT | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_DYNVC_GFX_PROTOCOL | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_DYNAMIC_TIME_ZONE | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_HEARTBEAT_PDU;
-            ushort negEarlyCapabilityFlags =  (ushort)~earlyCapabilityFlags;
+            ushort negEarlyCapabilityFlags = (ushort)~earlyCapabilityFlags;
             bool isR173Satisfy = ((ushort)core.earlyCapabilityFlags.actualData & negEarlyCapabilityFlags) == 0;
-                           
+
             site.CaptureRequirementIfIsTrue(isR173Satisfy, 173,
                     @"[In Client Core Data (TS_UD_CS_CORE)] earlyCapabilityFlags (2 bytes):In Client Core Data, the earlyCapabilityFlags"
                     + @" can be any of the following values: RNS_UD_CS_SUPPORT_ERRINFO_PDU 0x0001, RNS_UD_CS_WANT_32BPP_SESSION 0x0002, "
                     + @"RNS_UD_CS_SUPPORT_STATUSINFO_PDU 0x0004, RNS_UD_CS_STRONG_ASYMMETRIC_KEYS 0x0008, RNS_UD_CS_VALID_CONNECTION_TYPE"
                     + @" 0x0020, RNS_UD_CS_SUPPORT_MONITOR_LAYOUT_PDU 0x0040");
-            
-            
+
+
         }
 
 
@@ -964,7 +963,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     + @" 0x20000000, CHANNEL_OPTION_ENCRYPT_CS 0x10000000, CHANNEL_OPTION_PRI_HIGH 0x08000000, CHANNEL_OPTION_PRI_MED"
                     + @" 0x04000000,CHANNEL_OPTION_PRI_LOW 0x02000000, CHANNEL_OPTION_COMPRESS_RDP 0x00800000, CHANNEL_OPTION_COMPRESS"
                     + @" 0x00400000, CHANNEL_OPTION_SHOW_PROTOCOL 0x00200000, REMOTE_CONTROL_PERSISTENT 0x00100000");
-                
+
             }
         }
 
@@ -994,12 +993,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 nTotalHeight += (monitor.monitorDefArray[i].bottom - monitor.monitorDefArray[i].top + 1);
 
                 Site.CaptureRequirementIfIsTrue((monitor.monitorDefArray[i].right - monitor.monitorDefArray[i].left + 1) >= 200 &&
-                (monitor.monitorDefArray[i].bottom-monitor.monitorDefArray[i].top+1)>=200,
+                (monitor.monitorDefArray[i].bottom - monitor.monitorDefArray[i].top + 1) >= 200,
                     268,
                     "The minimum permitted size of the virtual desktop is 200 x 200 pixels.");
             }
 
-            Site.CaptureRequirementIfIsTrue(nTotalWidth<=32766,
+            Site.CaptureRequirementIfIsTrue(nTotalWidth <= 32766,
                 266,
                 "The maximum width of the virtual desktop resulting from the union of the monitors contained in the monitorDefArray"
                 + @" field MUST NOT exceed 32766 pixels.");
@@ -1011,7 +1010,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 271,
                 "[In Client Monitor Data (TS_UD_CS_MONITOR)]header (4 bytes):The User Data Header type field MUST be set to "
                 + @"CS_MONITOR (0xC005).");
-            Site.CaptureRequirementIfIsTrue(monitor.monitorCount<=15,
+            Site.CaptureRequirementIfIsTrue(monitor.monitorCount <= 15,
                 275,
                 "[In Client Monitor Data (TS_UD_CS_MONITOR)]monitorCount (4 bytes):  The number of display monitor definitions "
                 + @"in the monitorDefArray field (the maximum allowed is 16).");
@@ -1029,19 +1028,19 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         public void VerifyStructure(TS_INFO_PACKET info)
         {
             //Unicode = 2 * Ansi
-            site.CaptureRequirementIfAreEqual<int>(info.Domain.Length*2, (int)info.cbDomain, 464,
+            site.CaptureRequirementIfAreEqual<int>(info.Domain.Length * 2, (int)info.cbDomain, 464,
                 @"In the TS_INFO_PACKET structure, cbDomain represents the size in bytes of the character data in the Domain field."
                 + @" This size excludes the length of the mandatory null terminator.");
-            site.CaptureRequirementIfAreEqual<int>(info.UserName.Length*2, (int)info.cbUserName, 466,
+            site.CaptureRequirementIfAreEqual<int>(info.UserName.Length * 2, (int)info.cbUserName, 466,
                 @"In the TS_INFO_PACKET structure, cbUserName represents the size in bytes of the character data in the UserName "
                 + @"field. This size excludes the length of the mandatory null terminator.");
-            site.CaptureRequirementIfAreEqual<int>(info.Password.Length*2, (int)info.cbPassword, 468,
+            site.CaptureRequirementIfAreEqual<int>(info.Password.Length * 2, (int)info.cbPassword, 468,
                 @"In the TS_INFO_PACKET structure, cbPassword represents the size in bytes of the character data in the Password "
                 + @"field. This size excludes the length of the mandatory null terminator.");
-            site.CaptureRequirementIfAreEqual<int>(info.AlternateShell.Length*2, (int)info.cbAlternateShell, 470,
+            site.CaptureRequirementIfAreEqual<int>(info.AlternateShell.Length * 2, (int)info.cbAlternateShell, 470,
                 @"In the TS_INFO_PACKET structure, cbAlternateShell represents the size in bytes of the character data in the "
                 + @"AlternateShell field. This size excludes the length of the mandatory null terminator.");
-            site.CaptureRequirementIfAreEqual<int>(info.WorkingDir.Length*2, (int)info.cbWorkingDir, 472,
+            site.CaptureRequirementIfAreEqual<int>(info.WorkingDir.Length * 2, (int)info.cbWorkingDir, 472,
                 @"In the TS_INFO_PACKET structure, cbWorkingDir represents the size in bytes of the character data in the WorkingDir"
                 + @" field. This size excludes the length of the mandatory null terminator.");
             //<bug> Domain not contains /0
@@ -1075,15 +1074,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                         @"[In Extended Info Packet (TS_EXTENDED_INFO_PACKET)]clientAddressFamily (2 bytes):clientAddressFamily can have the "
                         + @"following values: 1.AF_INET 0x00002 2.AF_INET6 0x0017");
                 }
-             
+
                 Console.WriteLine("RS503, clientDir.Length = " + info.extraInfo.clientDir.Length);
                 Console.WriteLine("RS503, cbClientDir=" + info.extraInfo.cbClientDir);
-                
+
                 bool isR505Satisfied = info.extraInfo.cbClientDir <= 512;
                 site.CaptureRequirementIfIsTrue(isR505Satisfied, 505,
                     @"[In Extended Info Packet (TS_EXTENDED_INFO_PACKET)] clientDir (variable):The maximum allowed length is 512 bytes "
                     + @"(including the mandatory null terminator).");
-               
+
                 bool isR528Satisfied = info.extraInfo.cbAutoReconnectLen <= 128;
                 site.CaptureRequirementIfIsTrue(isR528Satisfied, 528,
                     @"[Extended Info Packet (TS_EXTENDED_INFO_PACKET)]autoReconnectCookie (28 bytes):the maximum allowed length "
@@ -1115,7 +1114,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             site.CaptureRequirementIfAreEqual<originatorId_Values>(originatorId_Values.V1, confirmActive.originatorId, 711,
                 @"In TS_CONFIRM_ACTIVE_PDU structure, the originatorId MUST be set to the server channel ID (in Microsoft RDP server "
                 + @"implementations, this value is always 0x03EA)");
-            site.CaptureRequirementIfAreEqual<ushort>((ushort)confirmActive.sourceDescriptor.Length, confirmActive.lengthSourceDescriptor, 713, 
+            site.CaptureRequirementIfAreEqual<ushort>((ushort)confirmActive.sourceDescriptor.Length, confirmActive.lengthSourceDescriptor, 713,
                 @"In TS_CONFIRM_ACTIVE_PDU structure, the lengthSourceDescriptor gives the size in bytes of the sourceDescriptor field.");
             site.CaptureRequirementIfAreEqual<ushort>(confirmActive.numberCapabilities, (ushort)confirmActive.capabilitySets.Count, 718,
                 @"In TS_CONFIRM_ACTIVE_PDU structure, numberCapabilities gives the number of capability sets included "
@@ -1130,7 +1129,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             site.CaptureRequirementIfAreEqual<capabilitySetType_Values>(capabilitySetType_Values.CAPSTYPE_GENERAL, general.capabilitySetType, 1043,
                 @"In TS_GENERAL_CAPABILITYSET structure, the capabilitySetType field MUST be set to CAPSTYPE_GENERAL (1).");
-            
+
             CaptureRequirement(general.osMajorType == osMajorType_Values.OSMAJORTYPE_MACINTOSH ||
                 general.osMajorType == osMajorType_Values.OSMAJORTYPE_OS2 ||
                 general.osMajorType == osMajorType_Values.OSMAJORTYPE_UNIX ||
@@ -1141,9 +1140,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 general.osMajorType == osMajorType_Values.OSMAJORTYPE_CHROME_OS,
                 1047);
             CaptureRequirement(general.osMinorType >= osMinorType_Values.OSMINORTYPE_WINDOWS_31X && general.osMinorType <= osMinorType_Values.OSMINORTYPE_WINDOWS_RT, 1054);
-            CaptureRequirement(general.protocolVersion == protocolVersion_Values.V1,1065);
-            CaptureRequirement(general.generalCompressionTypes == generalCompressionTypes_Values.V1,1069);
-            CaptureRequirement(general.updateCapabilityFlag == updateCapabilityFlag_Values.V1,1080);
+            CaptureRequirement(general.protocolVersion == protocolVersion_Values.V1, 1065);
+            CaptureRequirement(general.generalCompressionTypes == generalCompressionTypes_Values.V1, 1069);
+            CaptureRequirement(general.updateCapabilityFlag == updateCapabilityFlag_Values.V1, 1080);
             CaptureRequirement(general.remoteUnshareFlag == remoteUnshareFlag_Values.V1, 1082);
         }
 
@@ -1153,9 +1152,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="bitmap"></param>
         public void VerifyStructure(TS_BITMAP_CAPABILITYSET bitmap)
         {
-            site.CaptureRequirementIfAreEqual<capabilitySetType_Values>(capabilitySetType_Values.CAPSTYPE_BITMAP, bitmap.capabilitySetType, 1096, 
+            site.CaptureRequirementIfAreEqual<capabilitySetType_Values>(capabilitySetType_Values.CAPSTYPE_BITMAP, bitmap.capabilitySetType, 1096,
                 @"In TS_BITMAP_CAPABILITYSET structure, the capabilitySetType field MUST be set to CAPSTYPE_BITMAP (2).");
-            site.CaptureRequirementIfAreEqual<ushort>(1, bitmap.receive1BitPerPixel,1104, 
+            site.CaptureRequirementIfAreEqual<ushort>(1, bitmap.receive1BitPerPixel, 1104,
                 @"In TS_BITMAP_CAPABILITYSET structure, the receive1BitPerPixel field indicates whether the client "
                 + @"can receive 1 bit-per-pixel. This field is ignored and SHOULD be set to TRUE (0x0001).");
             site.CaptureRequirementIfAreEqual<ushort>(1, bitmap.receive4BitsPerPixel, 1106,
@@ -1184,7 +1183,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="order"></param>
         public void VerifyStructure(TS_ORDER_CAPABILITYSET order)
         {
-            site.CaptureRequirementIfAreEqual<capabilitySetType_Values>(capabilitySetType_Values.CAPSTYPE_ORDER, order.capabilitySetType, 1137, 
+            site.CaptureRequirementIfAreEqual<capabilitySetType_Values>(capabilitySetType_Values.CAPSTYPE_ORDER, order.capabilitySetType, 1137,
                 @"In TS_ORDER_CAPABILITYSET structure, the capabilitySetType field MUST be set to CAPSTYPE_ORDER (3).");
             bool isR1141Satisfied = order.terminalDescriptor[0] == 0 &&
                 order.terminalDescriptor[1] == 0 &&
@@ -1249,25 +1248,25 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             site.CaptureRequirementIfAreEqual<capabilitySetType_Values>(capabilitySetType_Values.CAPSTYPE_BITMAPCACHE_REV2, cache2.capabilitySetType, 1248,
                 @"In TS_BITMAPCACHE_CAPABILITYSET_REV2 structure capabilitySetType field MUST be set to "
                 + @"CAPSTYPE_BITMAPCACHE_REV2 (19).");
-            bool isR1252Satisfied = cache2.CacheFlags == CacheFlags_Values.ALLOW_CACHE_WAITING_LIST_FLAG || 
+            bool isR1252Satisfied = cache2.CacheFlags == CacheFlags_Values.ALLOW_CACHE_WAITING_LIST_FLAG ||
                 cache2.CacheFlags == CacheFlags_Values.PERSISTENT_KEYS_EXPECTED_FLAG ||
                 cache2.CacheFlags == (CacheFlags_Values.ALLOW_CACHE_WAITING_LIST_FLAG | CacheFlags_Values.PERSISTENT_KEYS_EXPECTED_FLAG) ||
                 cache2.CacheFlags == CacheFlags_Values.None;
             site.CaptureRequirementIfIsTrue(isR1252Satisfied, 1252,
                 @"In TS_BITMAPCACHE_CAPABILITYSET_REV2 structure,  the CacheFlags can be of the following"
                 + @" PERSISTENT_KEYS_EXPECTED_FLAG 0x0001, ALLOW_CACHE_WAITING_LIST_FLAG 0x0002, None 0x0000");
-            
+
             site.CaptureRequirementIfIsTrue(cache2.NumCellCaches <= 5, 1258,
                 @"In TS_BITMAPCACHE_CAPABILITYSET_REV2 structure, the NumCellCaches field is the number of"
                 + @" bitmap caches (with a maximum allowed value of 5). ");
-            
+
             if (cache2.NumCellCaches >= 1)
             {
                 //<?>
                 CaptureRequirement((cache2.BitmapCache1CellInfo.NumEntriesAndK & 0xfffffff) <= 600, 1260);
             }
 
-            if (cache2.NumCellCaches>=2)
+            if (cache2.NumCellCaches >= 2)
             {
                 //<?>
                 CaptureRequirement((cache2.BitmapCache2CellInfo.NumEntriesAndK & 0xfffffff) <= 600, 1263);
@@ -1298,7 +1297,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="pointer"></param>
         public void VerifyStructure(TS_POINTER_CAPABILITYSET pointer)
         {
-            site.CaptureRequirementIfAreEqual<capabilitySetType_Values>(capabilitySetType_Values.CAPSTYPE_POINTER, pointer.capabilitySetType,  1284,
+            site.CaptureRequirementIfAreEqual<capabilitySetType_Values>(capabilitySetType_Values.CAPSTYPE_POINTER, pointer.capabilitySetType, 1284,
                 @"In TS_POINTER_CAPABILITY_SET structure, capabilitySetType gives the type of the capability"
                 + @" set. This field MUST be set to CAPSTYPE_POINTER (8).");
         }
@@ -1361,7 +1360,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             bool isR1348Satisfied = glyph.GlyphSupportLevel == GlyphSupportLevel_Values.GLYPH_SUPPORT_NONE ||
                 glyph.GlyphSupportLevel == GlyphSupportLevel_Values.GLYPH_SUPPORT_PARTIAL ||
                 glyph.GlyphSupportLevel == GlyphSupportLevel_Values.GLYPH_SUPPORT_FULL ||
-                glyph.GlyphSupportLevel == GlyphSupportLevel_Values.GLYPH_SUPPORT_ENCODE; 
+                glyph.GlyphSupportLevel == GlyphSupportLevel_Values.GLYPH_SUPPORT_ENCODE;
             site.CaptureRequirementIfIsTrue(isR1348Satisfied, 1348,
                 @"In TS_GLYPHCACHE_CAPABILITYSET  structure, the GlyphSupportLevel  field  can be the following "
                 + @"GLYPH_SUPPORT_NONE 0,GLYPH_SUPPORT_PARTIAL 1,GLYPH_SUPPORT_FULL 2,GLYPH_SUPPORT_ENCODE 3");
@@ -1398,7 +1397,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="sound">The TS_SOUND_CAPABILITYSET structure.</param>
         public void VerifyStructure(TS_SOUND_CAPABILITYSET sound)
         {
-            site.CaptureRequirementIfAreEqual<capabilitySetType_Values>(capabilitySetType_Values.CAPSTYPE_SOUND, sound.capabilitySetType,  1387, 
+            site.CaptureRequirementIfAreEqual<capabilitySetType_Values>(capabilitySetType_Values.CAPSTYPE_SOUND, sound.capabilitySetType, 1387,
                 @"In TS_SOUND_CAPABILITYSET structure, the capabilitySetType field MUST be set to CAPSTYPE_SOUND (12).");
         }
 
@@ -1421,7 +1420,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 + @" INPUT_EVENT_SCANCODE 0x0004, INPUT_EVENT_UNICODE 0x0005, INPUT_EVENT_MOUSE 0x8001, "
                 + @"INPUT_EVENT_MOUSEX 0x8002");
 
-            switch(input.messageType )
+            switch (input.messageType)
             {
                 case TS_INPUT_EVENT_messageType_Values.INPUT_EVENT_MOUSE:
                     site.CaptureRequirementIfIsInstanceOfType(input.slowPathInputData, typeof(TS_POINTER_EVENT), 1649,
@@ -1448,7 +1447,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                         @"In TS_INPUT_EVENT structure, when the messageType is INPUT_EVENT_UNICODE 0x0005 "
                         + @"then the input event is a Unicode Keyboard Event.");
                     break;
-            }            
+            }
 
         }
 
@@ -1461,8 +1460,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             int code;
             int flag;
 
-            code = input.eventHeader.eventFlagsAndCode>>5;
-            flag = input.eventHeader.eventFlagsAndCode&0x1F;
+            code = input.eventHeader.eventFlagsAndCode >> 5;
+            flag = input.eventHeader.eventFlagsAndCode & 0x1F;
             bool isR1730Satisfied = code == 0 || code == 1 || code == 2 || code == 3 || code == 4;
             site.CaptureRequirementIfIsTrue(isR1730Satisfied, 1730,
                 @"In TS_FP_INPUT_EVENT structure, eventCode can be the following: FASTPATH_INPUT_EVENT_SCANCODE"

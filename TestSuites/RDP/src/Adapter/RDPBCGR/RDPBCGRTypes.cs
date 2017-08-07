@@ -212,24 +212,24 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
     /// <summary>
     /// This class is used to store test data.
     /// </summary>
-    public  class RdpbcgrTestData
+    public class RdpbcgrTestData
     {
         /// <summary>
         /// The session identifier for reconnection test.
         /// </summary>
-        public const uint Test_LogonId = 1; 
+        public const uint Test_LogonId = 1;
 
         /// <summary>
         /// Byte buffer containing a 16-byte, random number generated as a key for secure reconnection.
         /// </summary>
         public static byte[] Test_ArcRadndomBits = new byte[]{
-            0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 
+            0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
             0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
 
         /// <summary>
         /// The session identifier which used for server redirection test.
         /// </summary>
-        public const uint Test_Redirection_SessionId = 1; 
+        public const uint Test_Redirection_SessionId = 1;
 
         /// <summary>
         /// The routing token is used in redirection test.
@@ -250,6 +250,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// The User Password which used for server redirection test.
         /// </summary>
         public static string Test_Password = "TestPassword";
+
+        /// <summary>
+        /// The redirection GUID for RDSTLS redirection test.
+        /// </summary>
+        public static string Test_RedirectionGuid = "RDSTLSRedirectionGuid";
     }
 
     /// <summary>
@@ -445,13 +450,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         #endregion
     }
-    
+
     /// <summary>
     /// Wrapper of SlowPathOutputPdu to set MCS encoded length to an invalid value.
     /// </summary>
     public class SlowPathOutputPduEx : SlowPathOutputPdu
     {
-        public SlowPathOutputPduEx(SlowPathOutputPdu orgPdu, RdpbcgrServerSessionContext serverSessionContext):base(serverSessionContext)
+        public SlowPathOutputPduEx(SlowPathOutputPdu orgPdu, RdpbcgrServerSessionContext serverSessionContext) : base(serverSessionContext)
         {
             this.commonHeader = orgPdu.commonHeader;
 
@@ -479,7 +484,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             byte[] bytes = base.ToBytes();
             bytes[13] = (byte)(bytes[13] - 1);
-            return bytes ;
+            return bytes;
         }
     }
 
@@ -503,10 +508,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <returns>The byte array of the structure.</returns>
         public override byte[] ToBytes()
         {
-            byte[] rawData=base.ToBytes();
+            byte[] rawData = base.ToBytes();
             rawData[13] = (byte)(rawData[13] - 1);
             return rawData;
-        } 
+        }
     }
 
     /// <summary>
@@ -522,7 +527,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.mcsCrsp = orgPdu.mcsCrsp;
             this.invalidType = invalidType;
         }
-        
+
         /// <summary>
         /// Set the MCS encoded length field to an invalid value (less than the actual). or be used when ASN workaround doesn't work.
         /// </summary>
@@ -530,7 +535,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <returns>The byte array of the structure.</returns>
         public override byte[] ToBytes()
         {
-            byte[] rawData = base.ToBytes();            
+            byte[] rawData = base.ToBytes();
 
             if (invalidType == NegativeType.InvalidEncodedLength)
             {
@@ -548,13 +553,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 rawData[9] = (byte)(rawData[9] - 1);
             }
-                        
+
             return rawData;
         }
 
         private NegativeType invalidType = NegativeType.None;
     }
-   
+
     public class Server_Demand_Active_Pdu_Ex : Server_Demand_Active_Pdu
     {
         public Server_Demand_Active_Pdu_Ex(Server_Demand_Active_Pdu orgPdu, RdpbcgrServerSessionContext serverSessionContext)
@@ -575,9 +580,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         public override byte[] ToBytes()
         {
             byte[] rawData = base.ToBytes();
-            
+
             rawData[13] = (byte)(rawData[13] - 1);
-            
+
             return rawData;
         }
     }
@@ -589,7 +594,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             this.commonHeader = orgPdu.commonHeader;
             this.preamble = orgPdu.preamble;
-            this.validClientMessage = orgPdu.validClientMessage;            
+            this.validClientMessage = orgPdu.validClientMessage;
         }
 
         /// <summary>
@@ -600,10 +605,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         public override byte[] ToBytes()
         {
             byte[] rawData = base.ToBytes();
-            
+
             rawData[13] = (byte)(rawData[13] - 1);
-           
+
             return rawData;
         }
-    }  
+    }
 }
