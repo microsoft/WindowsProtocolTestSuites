@@ -1,11 +1,10 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using Microsoft.Protocols.TestManager.Detector;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using Microsoft.Protocols.TestManager.Detector;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestManager.Kernel
 {
@@ -87,19 +86,51 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         private delegate DetectionOutcome DetectionDelegate();
 
+        private Thread detectThread = null;
         /// <summary>
         /// Begins the auto-detection.
         /// </summary>
         /// <param name="DetectionEvent">Callback function when the detection finished.</param>
         public void BeginDetection(DetectionCallback DetectionEvent)
         {
-            DetectionDelegate detectdelegate = new DetectionDelegate(RunDetection);
-            IAsyncResult result = detectdelegate.BeginInvoke(
-                (r) =>
+            detectThread = new Thread(new ThreadStart(()=>
+            {
+                var outcome = RunDetection();
+                if (DetectionEvent != null)
                 {
-                    var outcome = detectdelegate.EndInvoke(r);
-                    if (DetectionEvent != null) DetectionEvent(outcome);
-                }, null);
+                    DetectionEvent(outcome);
+                }
+            }));
+            detectThread.Start();
+        }
+
+        /// <summary>
+        /// Stop the auto-detection
+        /// </summary>
+        public void StopDetection(Action callback)
+        {
+            if (detectThread != null)
+            {
+                try
+                {
+                    detectThread.Interrupt();
+                    detectThread.Abort();
+                }
+                catch { }
+            }
+
+            if (detectThread != null)
+            {
+                while (detectThread.ThreadState != ThreadState.Aborted)
+                {
+                    Thread.Sleep(100);
+                }
+
+                if (callback != null)
+                {
+                    callback();
+                }
+            }
         }
 
         /// <summary>

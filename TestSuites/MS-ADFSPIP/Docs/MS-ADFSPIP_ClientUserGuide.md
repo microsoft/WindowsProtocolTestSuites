@@ -47,7 +47,7 @@
 
 ### <a name="_Toc374100960"/>Introduction
 
-This guide provides information about how to install, configure, and run MS-ADFSPIP Test Suite and its environment. This suite of tools is designed to test the implementations of Device Registration Discovery Protocol, as specified in Microsoft document [MS-DVRD], and Device Registration Enrollment Protocol, as specified in Microsoft document [MS-DVRE].This guide provides information about using this test suite on the Microsoft® Windows® operating system.
+This guide provides information about how to install, configure, and run MS-ADFSPIP Test Suite and its environment. This suite of tools is designed to test the implementation of ADFS Proxy and Web Application Proxy integration, as described in [MS-ADFSPIP]. This guide provides information about using this test suite on the Microsoft® Windows® operating system.
 
 This suite of tools tests only the protocol implementation behaviors that are observed on the wire. For detailed information about the design of this test suite, see MS-ADFSPIP_ClientTestDesignSpecification.md. 
 
@@ -133,7 +133,7 @@ The minimum requirements for the DCCA are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft® Windows Server® 2012 R2, Enterprise Edition | 
+| Operating system| Microsoft® Windows Server® 2012 R2, Enterprise Edition or later versions | 
 | Services| Active Directory Domain Services (AD DS) | 
 | | Active Directory Certificate Service (AD CS)| 
 | Memory| 1 GB RAM| 
@@ -145,7 +145,7 @@ The minimum requirements for the ADFS are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft® Windows Server® 2012 R2, Enterprise Edition| 
+| Operating system| Microsoft® Windows Server® 2012 R2, Enterprise Edition or later versions| 
 | Services| Active Directory Federation Service (AD FS)| 
 | Memory| 1 GB RAM| 
 | Disk space| 60 GB| 
@@ -156,7 +156,7 @@ The minimum requirements for the SUT are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft® Windows Server® 2012 R2, Enterprise Edition| 
+| Operating system| Microsoft® Windows Server® 2012 R2, Enterprise Edition or later versions| 
 | Services| Web Application Proxy| 
 | Memory| 1 GB RAM| 
 | Disk space| 60 GB| 
@@ -176,7 +176,7 @@ The minimum requirements for the DRIVER computer are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft® Windows 8.1| 
+| Operating system| Microsoft® Windows 8.1 or later versions| 
 | Memory| 1 GB RAM| 
 | Disk space| 60 GB | 
 

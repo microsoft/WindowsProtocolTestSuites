@@ -147,6 +147,15 @@
                         </Setter.Value>
                     </Setter>
                 </DataTrigger>
+                <DataTrigger Binding="{Binding DetectingStatus}" Value="Canceling">
+                    <Setter TargetName="ContentCtrl" Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding DetectingStatus}" AutomationProperties.Name="{Binding DetectingContent}" Foreground="Red" TextAlignment="Center"></TextBlock>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
             </DataTemplate.Triggers>
         </DataTemplate>
 
@@ -154,7 +163,7 @@
             <DoubleAnimation Storyboard.TargetName="AnimatedRotateTransform" Storyboard.TargetProperty="Angle"
                              From="0" By="10" To="360" Duration="0:0:1" RepeatBehavior="Forever"/>
         </Storyboard>
-        
+
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot" Width="Auto" Height="Auto">

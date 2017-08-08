@@ -1,4 +1,4 @@
-﻿:: Copyright (c) Microsoft. All rights reserved.
+:: Copyright (c) Microsoft. All rights reserved.
 :: Licensed under the MIT license. See LICENSE file in the project root for full license information.
 @ECHO OFF
 FOR /F Tokens^=^3^,5Delims^=^<^"^= %%a IN (..\Bin\RDP_ClientTestSuite.deployment.ptfconfig) DO (
@@ -31,6 +31,13 @@ SET TestCategorys="((TestCategory=RDP7.0|TestCategory=RDP7.1|TestCategory=RDP8.0
 )
 
 IF "%RDPVersion%" == "10.0" (
+SET TestCategorys="((TestCategory=RDP7.0|TestCategory=RDP7.1|TestCategory=RDP8.0|TestCategory=RDP8.1|TestCategory=RDP10.0)&TestCategory!=Interactive&TestCategory!=DeviceNeeded)&(TestCategory=RDPBCGR|TestCategory=RDPRFX|TestCategory=RDPEVOR|TestCategory=RDPEUDP|TestCategory=RDPEMT|TestCategory=RDPEGFX|TestCategory=RDPEDISP|(TestCategory=RDPEI&(TestCategory=BVT|TestCategory=TouchSimulated)))"
+
+::including RDPEUSB cases
+::SET TestCategorys="((TestCategory=RDP7.0|TestCategory=RDP7.1|TestCategory=RDP8.0|TestCategory=RDP8.1|TestCategory=RDP10.0)&TestCategory!=Interactive&TestCategory!=DeviceNeeded)&(TestCategory=RDPBCGR|TestCategory=RDPRFX|TestCategory=RDPEVOR|TestCategory=RDPEUDP|TestCategory=RDPEMT|TestCategory=RDPEGFX|TestCategory=RDPEUSB|TestCategory=RDPEDISP|(TestCategory=RDPEI&(TestCategory=BVT|TestCategory=TouchSimulated)))"
+)
+
+IF "%RDPVersion%" == "10.3" (
 SET TestCategorys="((TestCategory=RDP7.0|TestCategory=RDP7.1|TestCategory=RDP8.0|TestCategory=RDP8.1|TestCategory=RDP10.0)&TestCategory!=Interactive&TestCategory!=DeviceNeeded)&(TestCategory=RDPBCGR|TestCategory=RDPRFX|TestCategory=RDPEVOR|TestCategory=RDPEUDP|TestCategory=RDPEMT|TestCategory=RDPEGFX|TestCategory=RDPEDISP|(TestCategory=RDPEI&(TestCategory=BVT|TestCategory=TouchSimulated)))"
 
 ::including RDPEUSB cases

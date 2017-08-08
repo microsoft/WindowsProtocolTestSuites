@@ -116,7 +116,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite
             }
         }
 
-        
+        [TestMethod]
         [Priority(1)]
         [TestCategory(TestCategories.KDC)]
         [TestCategory(TestCategories.SingleRealm)]
@@ -1808,6 +1808,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite
         [Priority(1)]
         [TestCategory(TestCategories.KDC)]
         [TestCategory(TestCategories.SingleRealm)]
+        [TestCategory(TestCategories.DFL2K8R2)]
         [TestCategory(TestCategories.KilePac)]
         public void APDS_KERBEROS_PAC_VALIDATION()
         {

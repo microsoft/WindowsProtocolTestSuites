@@ -110,7 +110,7 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// </summary>
         public void GenerateTextReport(string filename, string outcome, Utility.SortBy sortBy, CaseListItem.Separator separator)
         {
-            string upperCaseOutcome = outcome.ToUpper();
+            string upperCaseOutcome = (outcome == null) ? null : outcome.ToUpper();
             bool pass = true, fail = true, inconclusive = false, notrun = false;
             if (outcome != null)
             {

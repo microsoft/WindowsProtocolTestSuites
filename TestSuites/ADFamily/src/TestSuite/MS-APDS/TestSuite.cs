@@ -64,6 +64,10 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
         /// The user principle used to test authentication policy.
         /// </summary>
         private string testUser;
+        /// <summary>
+        /// The managed service account used to test authentication policy.
+        /// </summary>
+        private string testManagedServiceAccount;
 
         #endregion
 
@@ -117,6 +121,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
             blockCDException = apdsServerAdapter.ENDPOINTNetbiosName;
 
             testUser = apdsServerAdapter.TrustDomainDnsName + "\\" + apdsServerAdapter.DomainAdministratorName;
+            testManagedServiceAccount = apdsServerAdapter.ManagedServiceAccountName;
 
 
             // Get default registry key for DC blocker.

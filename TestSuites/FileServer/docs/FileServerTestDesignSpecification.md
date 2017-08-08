@@ -1,4 +1,4 @@
-#File Server Protocol Family Server Test Design Specification 
+﻿#File Server Protocol Family Server Test Design Specification 
 
 ## Content
 
@@ -1576,7 +1576,28 @@ This is used to test SMB2 common user scenarios.
 ||Server sends SESSION_SETUP response|
 ||According to the status code of last step, client may send more SESSION_SETUP request as needed|
 |**Cleanup**||
+|--------------------------|--------------------------------------------------------------------------------------------------------------|
+| **Test ID**              | Signing_VerifySignatureWhenEncrypted                                                                   |
+| **Description**          | This test case is designed to test whether server set the Signature field to zero in Encrypted message.      |
+| **Prerequisites**        |                                                                                                              |
+| **Test Execution Steps** | 1.  Client sends NEGOTIATE request with SMB2\_GLOBAL\_CAP\_ENCRYPTION                                        |
+|                          | 2.  Server sends NEGOTIATE response with SMB2\_GLOBAL\_CAP\_ENCRYPTION                                       |
+|                          | 3.  Client sends SESSION\_SETUP request                                                                      |
+|                          | 4.  Server sends SESSION\_SETUP response                                                                     |
+|                          | 5.  According to the status code of last step, client may send more SESSION\_SETUP request as needed         |
+|                          | 6.  Client sends TREE\_CONNECT request to connect an encrypted share                                         |
+|                          | 7.  Server sends TREE\_CONNECT response with SMB2\_SHAREFLAG\_ENCRYPT\_DATA                                  |
+|                          | 8.  Client sends encrypted CREATE request                                                                    |
+|                          | 9.  Server sends encrypted CREATE response                                                                   |
+|                          | 10. Client sends encrypted CLOSE request                                                                     |
+|                          | 11. Server sends encrypted CLOSE response                                                                    |
+|                          | 12. Client sends encrypted TREE\_DISCONNECT request                                                          |
+|                          | 13. Server sends encrypted TREE\_DISCONNECT response                                                         |
+|                          | 14. Client sends LOGOFF request                                                                              |
+|                          | 15. Server sends LOGOFF response                                                                             |
+| **Cleanup**              |                                                                                                              |
 
+||
 
 ####<a name="3.1.21"> TreeMgmt
 
@@ -2409,6 +2430,37 @@ See [Scenario](#3.1.11.1.1)
 ||TREE_CONNECT|
 ||CREATE (File in the directory, with DELETE access mask and FILE_DELETE_ON_CLOSE create option)|
 ||CLOSE to commit the delete|
+||**From client1**|
+||Receive LEASE_BREAK|
+||Send LEASE_BREAK_ACK if server requires|
+||CLOSE|
+||TREE_DISCONNECT|
+||LOGOFF|
+||**From client2**|
+||TREE_DISCONNECT|
+||LOGOFF|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|DirectoryLeasing_BreakReadCachingByChildAdded|
+|**Description**|Test whether server can handle READ lease break notification triggered by adding child item on a directory.|
+|**Prerequisites**||
+|**Test Execution Steps**|**Test preparation**|
+||Create a directory on a share|
+||Create a file in the directory|
+||**From client1**|
+||NEGOTIATE|
+||SESSION_SETUP|
+||TREE_CONNECT|
+||CREATE (Directory, with SMB2_CREATE_REQUEST_LEASE_V2 with LeaseState SMB2_LEASE_READ_CACHING)|
+||**From client2 to trigger lease break by adding the child item**|
+||NEGOTIATE|
+||SESSION_SETUP|
+||TREE_CONNECT|
+||CREATE (File in the directory, with ADD access mask create option)|
+||CLOSE to commit the add|
 ||**From client1**|
 ||Receive LEASE_BREAK|
 ||Send LEASE_BREAK_ACK if server requires|
@@ -4133,7 +4185,6 @@ The server MUST verify the request size. If the size of the SMB2 CREATE Request 
 |---|---|
 |**Test ID**|ResilientWithPersistentHandle_OpenFromDiffClient|
 |**Description**|Verify that whether Open.IsResilient will impact persistent handle.|
-||Without resilient handle, server will return STATUS_FILE_NOT_AVAILABLE when open the same file when Open.IsPersistent is True and Open is disconnected.|
 |**Prerequisites**||
 |**Test Execution Steps**|SMB2 Negotiate with SUT|
 ||SMB2 Session Setup|
@@ -4145,7 +4196,7 @@ The server MUST verify the request size. If the size of the SMB2 CREATE Request 
 ||SMB2 Session Setup|
 ||SMB2 Tree Connect to the same Share|
 ||SMB2 Create with same file name|
-||Verify the Create Response with Status SUCCESS |
+||Verify the Create Response with Status STATUS_FILE_NOT_AVAILABLE |
 
 
 ######<a name="3.2.12.2.2"> Resilient Open Scavenger Timer

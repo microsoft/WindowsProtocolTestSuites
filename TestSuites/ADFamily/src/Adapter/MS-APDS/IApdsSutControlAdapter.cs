@@ -94,6 +94,19 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
         /// to clear the Protected Users Group members.
         /// </param>
         [MethodHelp("Set the user to be a member of Protected Users Group.")]
-        void SetProtectedUser(string userName); 
+        void SetProtectedUser(string userName);
+
+        /// <summary>
+        /// Sets the UserAllowedToAuthenticateFrom value on the target DC.
+        /// This value is set on the primary DC and applies to our managed service account.
+        /// </summary>
+        /// <param name="restrictedPrinciple">
+        /// The computer which will be restricted to be authenticated from. 
+        /// Pass null to clear the A2AF setting.
+        /// This value restricts the computer from which the managed service account i.e. 
+        /// contoso\msa01 is allowed to logon.
+        /// </param>
+        [MethodHelp("Set the UserAllowedToAuthenticateFrom value on the target DC.")]
+        void SetA2AFServiceAccount(string restrictedPrinciple);
     }
 }

@@ -11,6 +11,8 @@ pushd $scriptsPath
 #----------------------------------------------------------------------------
 # Starting script
 #----------------------------------------------------------------------------
+
+
 $settingFile = "$scriptsPath\ParamConfig.xml"
 if(Test-Path -Path $settingFile)
 {    
@@ -36,6 +38,25 @@ else
 {
     Write-Host "$settingFile not found. Will keep the default setting of all the test context info..."
 }
+
+$DropConnectionForInvalidRequest = "true"
+$SutOsVersion = Invoke-Command -ComputerName $tcComputerName -ScriptBlock {""+[System.Environment]::OSVersion.Version.Major.ToString() + "." + [System.Environment]::OSVersion.Version.Minor.ToString()}
+$SutOsBuildNumber = Invoke-Command -ComputerName $tcComputerName -ScriptBlock {[System.Environment]::OSVersion.Version.Build}
+
+if([double]$SutOSVersion -ge "10.0")
+{
+    
+    if([double] $SutOsBuildNumber -eq "15063")
+    {
+        $RDPVersion = "10.3"
+    }
+
+    if([double] $SutOsBuildNumber -ge "15063")
+    {
+        $DropConnectionForInvalidRequest = "false"
+    }
+}
+
 
 #-----------------------------------------------------
 # Create $logPath if not exist
@@ -169,10 +190,13 @@ if ($osVersion.ToUpper() -eq "NONWINDOWS")
     .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Protocol" "RDP" 
     .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Encryption.Level" "Low" 
     .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Encryption.Method" "128bit" 
+    .\Modify-ConfigFileNode.ps1 $DepPtfConfig "DropConnectionForInvalidRequest" "true"
+    
 }
 else
 {
     .\Modify-ConfigFileNode.ps1 $DepPtfConfig "IsWindowsImplementation"      "true"
+    .\Modify-ConfigFileNode.ps1 $DepPtfConfig "DropConnectionForInvalidRequest" $DropConnectionForInvalidRequest
 }
 
 if ($workgroupDomain.ToUpper() -eq "DOMAIN")

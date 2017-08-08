@@ -18,6 +18,13 @@ namespace Microsoft.Protocols.TestManager.UI
     public partial class App : Application
     {
         private Mutex mutex = null;
+
+        public App() : base()
+        {
+            this.Dispatcher.UnhandledException += OnDispatcherUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+        }
+
         protected override void OnStartup(StartupEventArgs e)
         {
             bool isNewInstance = false;
@@ -41,6 +48,31 @@ namespace Microsoft.Protocols.TestManager.UI
                 mutex.ReleaseMutex();
             }
             base.OnExit(e);
+        }
+
+        void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs args)
+        {
+            Exception e = (Exception)args.Exception;
+
+            ShowErrorMessage(e.ToString());
+            args.Handled = true;
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            ShowErrorMessage(e.ToString());
+        }
+
+        void ShowErrorMessage(string msg)
+        {
+            string errorMsg = string.Format("An unexpected error occurred. You have found a bug.{0} Detail Exception:{1}", Environment.NewLine, msg);
+            //Show message
+            MessageBox.Show(
+                    errorMsg,
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error,
+                    MessageBoxResult.None);
         }
     }
 }

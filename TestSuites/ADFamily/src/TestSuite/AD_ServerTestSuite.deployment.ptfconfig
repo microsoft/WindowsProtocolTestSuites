@@ -187,6 +187,18 @@
       </Property>
       <!-- END - ENDPOINT -->
     </Group>
+    <Group name="MS_APDS">
+      <Property name="ManagedServiceAccountName" value="msa01">
+        <Description>
+          Type:string! Usage: The name for Managed Service Account in the local domain.
+        </Description>
+      </Property>
+      <Property name="ManagedServiceAccountPassword" value="Password01!">
+        <Description>
+          Type:string! Usage: The password for Managed Service Account in the local domain.
+        </Description>
+      </Property>
+    </Group>
     <Group name="MS_DRSR">
       <Property name="TestDS" value="true">
         <Description>

@@ -632,7 +632,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  An X.224 Class 0 Connection Confirm TPDU, as specified
         ///  in [X224] section 13.4.
         /// </summary>
-        public X224Crq x224Ccf;
+        public X224Ccf x224Ccf;
 
         /// <summary>
         ///  Optional RDP Negotiation Response structure or an optional
@@ -724,7 +724,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  An X.224 Class 0 Connection Confirm TPDU, as specified
         ///  in [X224] section 13.4.
         /// </summary>
-        public X224Crq x224Ccf;
+        public X224Ccf x224Ccf;
 
         /// <summary>
         ///  Optional RDP Negotiation Response structure or an optional
@@ -3265,10 +3265,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         PACKET_COMPR_TYPE_RDP6 = 2,
 
         /// <summary>
-        ///  RDP 6.2 bulk compression (see  [MS-RDPEGDI] section
+        ///  RDP 6.1 bulk compression (see  [MS-RDPEGDI] section
         ///  ).
         /// </summary>
-        PACKET_COMPR_TYPE_RDP62 = 3,
+        PACKET_COMPR_TYPE_RDP61 = 3,
 
         /// <summary>
         ///  No compression is supported.
@@ -6919,7 +6919,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         ///  RDP 10.2 clients
         /// </summary>
-        V5 = 0x00080007
+        V5 = 0x00080007,
+
+        /// <summary>
+        ///  RDP 10.3 clients
+        /// </summary>
+        V6 = 0x00080008
     }
 
     /// <summary>
@@ -7833,7 +7838,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// RDP 10.2 servers
         /// </summary>
-        V5 = 0x00080007
+        V5 = 0x00080007,
+
+        /// <summary>
+        /// RDP 10.3 servers
+        /// </summary>
+        V6 = 0x00080008
     }
 
     /// <summary>

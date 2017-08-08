@@ -15,7 +15,7 @@ Windows Protocol Test Suites provide interoperability testing against the implem
 * **Branch Cache Test Suite**. It is designed to test the implementations of MS-PCCRTP, MS-PCCRR, MS-PCHC and MS-PCCRC protocol.
 * **AZOD Test Suite**. It is designed to test the implementations of MS-AZOD protocol.
 * **ADFamily Test Suite**. It is designed to test the implementations of the Active Directory protocols including [MS-ADTS], [MS-APDS], [MS-DRSR] [MS-FRS2], [MS-LSAD], [MS-LSAT], [MS-SAMR] and [MS-NRPC]. 
-* **ADFSPIP Client Test Suite**. It is designed to test the implementations of Device Registration Discovery Protocol, as specified in Microsoft document [MS-DVRD], and Device Registration Enrollment Protocol, as specified in Microsoft document [MS-DVRE]. 
+* **ADFSPIP Client Test Suite**. It is designed to test the implementations of ADFS Proxy and Web Application Proxy integration, as described in [MS-ADFSPIP].
 * **ADOD Test Suite**. It is designed to test the implementations of MS-ADOD protocol.
 
 ## Components
@@ -35,7 +35,7 @@ You can use the script in **InstallPrerequisites** folder to automatically downl
 * .NET Framework 3.5
 * .Net framework 4.0 or higher
 * [Wix toolset](http://wixtoolset.org/) v3.10 or higher
-* [Visual Studio](https://www.microsoft.com/en-us/download/details.aspx?id=30682) or [Visual Studio Agent](https://www.microsoft.com/en-us/download/details.aspx?id=38186), version 2012 or higher
+* Visual Studio or Visual Studio Agent, version 2012 or higher
 * [Protocol Test Framework](https://github.com/microsoft/protocoltestframework). You can use a released MSI file or build it from source code.
 * [Spec Explorer](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/). It is only required for the test suites that contain Model-Based Test cases. If you want to regenerate Model-Based Test cases, you must install Visual Studio 2012, otherwise higher versions of Visual Studio are supported.
 
