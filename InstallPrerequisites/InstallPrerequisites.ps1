@@ -317,7 +317,6 @@ else
     Write-Host ".NET Framework 3.5 feature is enabled" -ForegroundColor Green
 }
 
-Write-Host $downloadList.Length
 foreach($item in $downloadList)
 {
     $isInstalled = $false;
@@ -367,7 +366,20 @@ foreach($item in $downloadList)
         }
     }
     else{
-        $content = $item.AppName + " is already installed"
+		if($item.AppName -match "Microsoft Agents for Visual Studio"){
+			if($item.BackwardCompatible){
+				$content = $item.AppName + " or Microsoft Visual Studio or later version is already installed"
+			}else{
+				$content = $item.AppName + " or Microsoft Visual Studio is already installed"
+			}
+		}else{
+			if($item.BackwardCompatible){
+				$content = $item.AppName + " or later version is already installed"
+			}else{
+				$content = $item.AppName + " is already installed"
+			}
+		}
+        
         Write-Host $content -ForegroundColor Green
     }
 }
