@@ -1,10 +1,12 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using Microsoft.Protocols.TestManager.Kernel;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -52,15 +54,17 @@ namespace Microsoft.Protocols.TestManager.UI
 
         void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs args)
         {
-            Exception e = (Exception)args.Exception;
+            Exception e = args.Exception;
 
             ShowErrorMessage(e.ToString());
+            LogExceptionDetail(e);
             args.Handled = true;
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             ShowErrorMessage(e.ToString());
+            LogExceptionDetail((Exception)e.ExceptionObject);
         }
 
         void ShowErrorMessage(string msg)
@@ -73,6 +77,17 @@ namespace Microsoft.Protocols.TestManager.UI
                     MessageBoxButton.OK,
                     MessageBoxImage.Error,
                     MessageBoxResult.None);
+        }
+
+        void LogExceptionDetail(Exception e)
+        {
+            Utility util = new Utility();
+            string errorLog = Path.Combine(util.AppConfig.AppDataDirectory, "Exception_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss-fff") + ".log");
+            using (StreamWriter errorWriter = new StreamWriter(errorLog))
+            {
+                errorWriter.WriteLine("Error Message: " + e.Message);
+                errorWriter.WriteLine("Stack Trace: " + e.StackTrace);
+            }
         }
     }
 }
