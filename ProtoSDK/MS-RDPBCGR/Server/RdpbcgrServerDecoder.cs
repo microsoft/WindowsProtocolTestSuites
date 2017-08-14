@@ -381,7 +381,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             return bytes.ToString();
         }
 
-        private string ParseUnicodeString(byte[] data)
+        private string ParseUnicodeString(byte[] data, bool isZeroTerminated)
         {
             try
             {
@@ -393,10 +393,24 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 {
                     UInt16 code = ParseUInt16(data, ref currentIndex, false);
                     char charCode = (char)code;
-                    if (charCode != 0)
+                }
+
+                if (isZeroTerminated)
+                {
+                    int index = result.Length - 1;
+                    if (result[index] != 0)
                     {
-                        result.Append(charCode);
+                        throw new Exception();
                     }
+                    while (index > 0)
+                    {
+                        if (result[index - 1] != 0)
+                        {
+                            break;
+                        }
+                        index--;
+                    }
+                    result.Remove(index, result.Length - index);
                 }
 
                 return result.ToString();
@@ -4476,13 +4490,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             pdu.UserNameLength = ParseUInt16(data, ref currentIndex, false);
 
             var userNameBytes = GetBytes(data, ref currentIndex, pdu.UserNameLength);
-            pdu.UserName = ParseUnicodeString(userNameBytes);
+            pdu.UserName = ParseUnicodeString(userNameBytes, true);
 
             // parse domain
             pdu.DomainLength = ParseUInt16(data, ref currentIndex, false);
 
             var domainBytes = GetBytes(data, ref currentIndex, pdu.DomainLength);
-            pdu.Domain = ParseUnicodeString(domainBytes);
+            pdu.Domain = ParseUnicodeString(domainBytes, true);
 
             // parse password
             pdu.PasswordLength = ParseUInt16(data, ref currentIndex, false);
