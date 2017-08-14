@@ -1705,13 +1705,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             redirectPacket.RedirFlags |= RedirectionFlags.LB_REDIRECTION_GUID;
 
             var certificate = new X509Certificate2(certFile, certPwd);
-            redirectPacket.TargetCertificate = CertificateApi.EncodeCertificate(certificate);
+            redirectPacket.TargetCertificate = RdpbcgrUtility.EncodeCertificate(certificate);
             redirectPacket.RedirFlags |= RedirectionFlags.LB_TARGET_CERTIFICATE;
 
-            redirectPacket.TargetFQDN = "RDPServer.CONTOSO.com";
+            redirectPacket.TargetFQDN = RdpbcgrTestData.Test_FullQualifiedDomainName;
             redirectPacket.RedirFlags |= RedirectionFlags.LB_TARGET_FQDN;
 
-            redirectPacket.TargetNetBiosName = "RDPSERVER";
+            redirectPacket.TargetNetBiosName = RdpbcgrTestData.Test_NetBiosName;
             redirectPacket.RedirFlags |= RedirectionFlags.LB_TARGET_NETBIOS_NAME;
 
 
@@ -3146,6 +3146,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             if (PtfPropUtility.GetStringPtfProperty(site, "SUTRedirectionGuid", out tempStr))
             {
                 RdpbcgrTestData.Test_RedirectionGuid = tempStr;
+            }
+            if (PtfPropUtility.GetStringPtfProperty(site, "SUTFullQualifiedDomainName", out tempStr))
+            {
+                RdpbcgrTestData.Test_FullQualifiedDomainName = tempStr;
+            }
+            if (PtfPropUtility.GetStringPtfProperty(site, "SUTNetBiosName", out tempStr))
+            {
+                RdpbcgrTestData.Test_NetBiosName = tempStr;
             }
         }
 

@@ -254,7 +254,17 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <summary>
         /// The redirection GUID for RDSTLS redirection test.
         /// </summary>
-        public static string Test_RedirectionGuid = "RDSTLSRedirectionGuid";
+        public static string Test_RedirectionGuid = "SUTRedirectionGuid";
+
+        /// <summary>
+        /// The full qualified domain name of SUT for RDSTLS redirection test.
+        /// </summary>
+        public static string Test_FullQualifiedDomainName = "SUTFullQualifiedDomainName";
+
+        /// <summary>
+        /// The NetBios name of SUT for RDSTLS redirection test.
+        /// </summary>
+        public static string Test_NetBiosName = "SUTNetBiosName";
     }
 
     /// <summary>

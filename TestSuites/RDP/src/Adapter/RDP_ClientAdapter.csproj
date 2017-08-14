@@ -75,7 +75,6 @@
     <Compile Include="ImageQualityAccessment\Ssim.cs" />
     <Compile Include="IRdpSutControlAdapter.cs" />
     <Compile Include="PtfPropUtility.cs" />
-    <Compile Include="RDPBCGR\CertificateApi.cs" />
     <Compile Include="RDPBCGR\IRdpbcgrAdapter.cs" />
     <Compile Include="RDPBCGR\RdpbcgrAdapter.cs" />
     <Compile Include="RDPBCGR\RdpbcgrAdapter_Sequences.cs" />

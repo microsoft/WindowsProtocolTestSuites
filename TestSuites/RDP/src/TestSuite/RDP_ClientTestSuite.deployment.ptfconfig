@@ -95,8 +95,16 @@
       <Description>The logon password of SUTUserName.</Description>
     </Property>
     <!-- The redirection GUID for RDSTLS. -->
-    <Property name="SUTRedirectionGuid" value="RDSTLS2017.">
+    <Property name="SUTRedirectionGuid" value="RDSTLSForTestSuite">
       <Description>The redirection GUID for RDSTLS.</Description>
+    </Property>
+    <!-- The full qualified domain name of SUT for RDSTLS redirection test. -->
+    <Property name="SUTFullQualifiedDomainName" value="RDPServer.CONTOSO.com">
+      <Description>The full qualified domain name of SUT for RDSTLS redirection test.</Description>
+    </Property>
+    <!-- The NetBios name of SUT for RDSTLS redirection test. -->
+    <Property name="SUTNetBiosName" value="RDPServer">
+      <Description>The NetBios name of SUT for RDSTLS redirection test.</Description>
     </Property>
     <!-- The system drive letter of SUT machine. -->
     <Property name="SUTSystemDrive" value="C">

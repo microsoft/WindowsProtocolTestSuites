@@ -245,7 +245,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         [TestMethod]
         [Priority(1)]
-        [TestCategory("RDP7.0")]
+        [TestCategory("RDP8.0")]
         [TestCategory("RDPBCGR")]
         [TestCategory("ServerRedirection")]
         [Description("This test case is used to ensure SUT can process server redirection through RDSTLS protocol successfully by returning redirection GUID obtained in server redirection PDU.")]
@@ -270,8 +270,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Test Sequence
             this.TestSite.Assert.IsTrue(isClientSupportServerRedirection, "SUT should support server redirection.");
 
-            // override transportProtocol to negotiate TLS
-            transportProtocol = EncryptedProtocol.NegotiationTls;
+            if (transportProtocol != EncryptedProtocol.NegotiationTls)
+            {
+                // Make this test case inconclusive if the chosen protocol is not negotiation TLS
+                this.TestSite.Assert.Inconclusive("The transport protocol of RDSTLS authentication should be negotiation TLS.");
+            }
 
             //Start RDP listening.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening.");
@@ -315,10 +318,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.rdpbcgrAdapter.SetServerCapability(true, true, true, true, true, true, true, true, true, true);
 
             #region Register Verification Methods.
-            this.rdpbcgrAdapter.X224ConnectionRequest += new X224ConnectioRequestHandler(this.BVT_ServerRedirection_PositiveTest_RDSTLSAuthenticationWithPasswordCredentials_CheckNegotiation);
-            this.rdpbcgrAdapter.RDSTLS_AuthenticationRequestPDUwithPasswordCredentialsReceived += new RDSTLS_AuthenticationRequestPDUwithPasswordCredentialsHandler(this.BVT_ServerRedirection_PositiveTest_RDSTLSAuthenticationWithPasswordCredentials_CheckRDSTLSAuthentication);
-            this.rdpbcgrAdapter.McsConnectRequest += new McsConnectRequestHandler(this.BVT_ServerRedirection_PositiveTest_RDSTLSAuthenticationWithPasswordCredentials_CheckRDSTLSAuthentication_VerifySessionId);
-            this.rdpbcgrAdapter.ClientInfoRequest += new ClientInfoRequestHandler(this.BVT_ServerRedirection_PositiveTest_RDSTLSAuthenticationWithPasswordCredentials_CheckRDSTLSAuthentication_VerifyClientInfo);
+            this.rdpbcgrAdapter.X224ConnectionRequest += new X224ConnectioRequestHandler(this.CheckNegotiationFlag);
+            this.rdpbcgrAdapter.RDSTLS_AuthenticationRequestPDUwithPasswordCredentialsReceived += new RDSTLS_AuthenticationRequestPDUwithPasswordCredentialsHandler(this.CheckRDSTLSAuthenticationFields);
+            this.rdpbcgrAdapter.McsConnectRequest += new McsConnectRequestHandler(this.CheckRDSTLSAuthentication_VerifySessionId);
+            this.rdpbcgrAdapter.ClientInfoRequest += new ClientInfoRequestHandler(this.CheckRDSTLSAuthentication_VerifyClientInfoFields);
             #endregion
 
             //Waiting for the RDP connection sequence.
@@ -326,10 +329,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.rdpbcgrAdapter.EstablishRDPConnection(selectedProtocols_Values.PROTOCOL_RDSTLS, enMethod, enLevel, true, false, rdpServerVersion);
 
             #region Unregister Verification Methods.
-            this.rdpbcgrAdapter.X224ConnectionRequest -= new X224ConnectioRequestHandler(this.BVT_ServerRedirection_PositiveTest_RDSTLSAuthenticationWithPasswordCredentials_CheckNegotiation);
-            this.rdpbcgrAdapter.RDSTLS_AuthenticationRequestPDUwithPasswordCredentialsReceived -= new RDSTLS_AuthenticationRequestPDUwithPasswordCredentialsHandler(this.BVT_ServerRedirection_PositiveTest_RDSTLSAuthenticationWithPasswordCredentials_CheckRDSTLSAuthentication);
-            this.rdpbcgrAdapter.McsConnectRequest -= new McsConnectRequestHandler(this.BVT_ServerRedirection_PositiveTest_RDSTLSAuthenticationWithPasswordCredentials_CheckRDSTLSAuthentication_VerifySessionId);
-            this.rdpbcgrAdapter.ClientInfoRequest -= new ClientInfoRequestHandler(this.BVT_ServerRedirection_PositiveTest_RDSTLSAuthenticationWithPasswordCredentials_CheckRDSTLSAuthentication_VerifyClientInfo);
+            this.rdpbcgrAdapter.X224ConnectionRequest -= new X224ConnectioRequestHandler(this.CheckNegotiationFlag);
+            this.rdpbcgrAdapter.RDSTLS_AuthenticationRequestPDUwithPasswordCredentialsReceived -= new RDSTLS_AuthenticationRequestPDUwithPasswordCredentialsHandler(this.CheckRDSTLSAuthenticationFields);
+            this.rdpbcgrAdapter.McsConnectRequest -= new McsConnectRequestHandler(this.CheckRDSTLSAuthentication_VerifySessionId);
+            this.rdpbcgrAdapter.ClientInfoRequest -= new ClientInfoRequestHandler(this.CheckRDSTLSAuthentication_VerifyClientInfoFields);
             #endregion
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server Save Session Info PDU to SUT to notify user has logged on.");
@@ -340,7 +343,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #endregion
         }
 
-        private void BVT_ServerRedirection_PositiveTest_RDSTLSAuthenticationWithPasswordCredentials_CheckRDSTLSAuthentication_VerifyClientInfo(Client_Info_Pdu clientInfoPdu)
+        private void CheckRDSTLSAuthentication_VerifyClientInfoFields(Client_Info_Pdu clientInfoPdu)
         {
             // user name
             this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_UserName, clientInfoPdu.infoPacket.UserName, "User name should equal to that set in server redirection PDU.");
@@ -350,12 +353,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         }
 
-        private void BVT_ServerRedirection_PositiveTest_RDSTLSAuthenticationWithPasswordCredentials_CheckRDSTLSAuthentication_VerifySessionId(Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request mcsConnectRequest)
+        private void CheckRDSTLSAuthentication_VerifySessionId(Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request mcsConnectRequest)
         {
             this.TestSite.Assert.AreEqual<uint>(RdpbcgrTestData.Test_Redirection_SessionId, mcsConnectRequest.mcsCi.gccPdu.clientClusterData.RedirectedSessionID, "Session ID should equal to that set in server redirection PDU.");
         }
 
-        private void BVT_ServerRedirection_PositiveTest_RDSTLSAuthenticationWithPasswordCredentials_CheckRDSTLSAuthentication(RDSTLS_AuthenticationRequestPDUwithPasswordCredentials pdu)
+        private void CheckRDSTLSAuthenticationFields(RDSTLS_AuthenticationRequestPDUwithPasswordCredentials pdu)
         {
             // redirection GUID
             var redirectionGuid = RdpbcgrUtility.EncodeUnicodeStringToBytes(RdpbcgrTestData.Test_RedirectionGuid);
@@ -374,7 +377,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Assert.AreEqual<bool>(true, checkPassword, "Password should equal to that set in server redirection PDU.");
         }
 
-        private void BVT_ServerRedirection_PositiveTest_RDSTLSAuthenticationWithPasswordCredentials_CheckNegotiation(Client_X_224_Connection_Request_Pdu x224Request)
+        private void CheckNegotiationFlag(Client_X_224_Connection_Request_Pdu x224Request)
         {
             this.TestSite.Assert.AreEqual<bool>(true, x224Request.rdpNegData.requestedProtocols.HasFlag(requestedProtocols_Values.PROTOCOL_RDSTLS), @"The request protocol for redirected connection should include the RDSTLS protocol.");
         }
