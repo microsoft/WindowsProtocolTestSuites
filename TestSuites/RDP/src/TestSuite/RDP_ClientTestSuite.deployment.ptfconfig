@@ -99,11 +99,11 @@
       <Description>The redirection GUID for RDSTLS.</Description>
     </Property>
     <!-- The full qualified domain name of SUT for RDSTLS redirection test. -->
-    <Property name="SUTFullQualifiedDomainName" value="RDPServer.CONTOSO.com">
+    <Property name="DriverComputerFullQualifiedDomainName" value="RDPServer.CONTOSO.com">
       <Description>The full qualified domain name of SUT for RDSTLS redirection test.</Description>
     </Property>
     <!-- The NetBios name of SUT for RDSTLS redirection test. -->
-    <Property name="SUTNetBiosName" value="RDPServer">
+    <Property name="DriverComputerNetBiosName" value="RDPServer">
       <Description>The NetBios name of SUT for RDSTLS redirection test.</Description>
     </Property>
     <!-- The system drive letter of SUT machine. -->

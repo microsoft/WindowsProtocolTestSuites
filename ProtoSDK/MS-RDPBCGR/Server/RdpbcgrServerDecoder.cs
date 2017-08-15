@@ -393,6 +393,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 {
                     UInt16 code = ParseUInt16(data, ref currentIndex, false);
                     char charCode = (char)code;
+                    result.Append(charCode);
                 }
 
                 if (isZeroTerminated)
