@@ -58,6 +58,15 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// </summary>
         [Argument("separator")]
         public string Separator { get; set; }
+
+        /// <summary>
+        /// The categories of cases to run. This will override the cases
+        /// stored in the profile.
+        /// Saparate by comma without space.
+        /// </summary>
+        [Argument("category")]
+        public string Category { get; set; }
+
         /// <summary>
         /// Key: argument name, Value: An instance of Argument to the key.
         /// </summary>
