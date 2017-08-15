@@ -44,6 +44,14 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             Workgroup,
         }
 
+        private const string ServerDomain = "Server Domain";
+        private const string ServerName = "Server Name";
+        private const string ServerPort = "Server Port";
+        private const string ServerUserName = "Server User Name";
+        private const string ServerUserPassword = "Server User Password";
+        private const string ClientName = "Client Name";
+        private const string RDPVersion = "RDP Version";
+
         #endregion Private Types
 
         #region Variables
@@ -79,13 +87,14 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 Properties = new Dictionary<string, List<string>>()
             };
 
-            prereq.AddProperty("Server Domain", config.ServerDomain);
-            prereq.AddProperty("Server Name", config.ServerName);
-            prereq.AddProperty("Server Port", config.ServerPort);
+            prereq.AddProperty(RDPValueDetector.ServerDomain, config.ServerDomain);
+            prereq.AddProperty(RDPValueDetector.ServerName, config.ServerName);
+            prereq.AddProperty(RDPValueDetector.ServerPort, config.ServerPort);
 
-            prereq.AddProperty("Server User Name", config.ServerUserName);
-            prereq.AddProperty("Server User Password", config.ServerUserPassword);
-            prereq.AddProperty("Client Name", config.ClientName);
+            prereq.AddProperty(RDPValueDetector.ServerUserName, config.ServerUserName);
+            prereq.AddProperty(RDPValueDetector.ServerUserPassword, config.ServerUserPassword);
+            prereq.AddProperty(RDPValueDetector.ClientName, config.ClientName);
+            prereq.AddProperty(RDPValueDetector.RDPVersion, config.Version);
 
             return prereq;
         }
@@ -126,13 +135,14 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         public bool RunDetection()
         {
             // set config if properties changed
-            config.ServerDomain = properties["Server Domain"];
-            config.ServerName = properties["Server Name"];
-            config.ServerPort = properties["Server Port"];
+            config.ServerDomain = properties[RDPValueDetector.ServerDomain];
+            config.ServerName = properties[RDPValueDetector.ServerName];
+            config.ServerPort = properties[RDPValueDetector.ServerPort];
 
-            config.ServerUserName = properties["Server User Name"];
-            config.ServerUserPassword = properties["Server User Password"];
-            config.ClientName = properties["Client Name"];
+            config.ServerUserName = properties[RDPValueDetector.ServerUserName];
+            config.ServerUserPassword = properties[RDPValueDetector.ServerUserPassword];
+            config.ClientName = properties[RDPValueDetector.ClientName];
+            config.Version = properties[RDPValueDetector.RDPVersion];
 
             if (!PingSUT())
             {

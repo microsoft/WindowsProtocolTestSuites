@@ -101,7 +101,6 @@ namespace Microsoft.Protocols.TestSuites
         /// <summary>
         /// Encode method
         /// </summary>
-        /// <param name="marshaler"></param>
         public byte[] Encode()
         {
             List<byte> bufferList = new List<byte>();
@@ -135,8 +134,9 @@ namespace Microsoft.Protocols.TestSuites
         /// <summary>
         /// Decode method
         /// </summary>
-        /// <param name="marshaler"></param>
-        /// <returns></returns>
+        /// <param name="rawData">Decode source binary data</param>
+		/// <param name="index">Decode position</param>
+        /// <returns>Is decode success</returns>
         public bool Decode(byte[] rawData, ref int index)
         {
             try
@@ -303,8 +303,9 @@ namespace Microsoft.Protocols.TestSuites
         /// <summary>
         /// Decode method
         /// </summary>
-        /// <param name="marshaler"></param>
-        /// <returns></returns>
+        /// <param name="rawData">Decode source binary data</param>
+		/// <param name="index">Decode position</param>
+        /// <returns>Is decode success</returns>
         public bool Decode(byte[] rawData, ref int index)
         {
             try

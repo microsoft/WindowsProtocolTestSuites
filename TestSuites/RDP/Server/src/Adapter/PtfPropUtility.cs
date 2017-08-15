@@ -41,7 +41,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// </summary>
         /// <param name="testSite">The test site where to get from.</param>
         /// <param name="propName">The property name.</param>
-        /// <param name="propStrValue">The output property value.</param>
+        /// <param name="propIntValue">The output property value.</param>
         /// <returns>true if value was converted successfully; otherwise, false.</returns>
         public static bool GetIntPtfProperty(ITestSite testSite, string propName, out int propIntValue)
         {
@@ -66,21 +66,21 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// </summary>
         /// <param name="testSite">The test site where to get from.</param>
         /// <param name="propName">The property name.</param>
-        /// <param name="propStrValue">The output property value.</param>
+        /// <param name="propUintValue">The output property value.</param>
         /// <returns>true if value was converted successfully; otherwise, false.</returns>
-        public static bool GetUIntPtfProperty(ITestSite testSite, string propName, out uint propIntValue)
+        public static bool GetUIntPtfProperty(ITestSite testSite, string propName, out uint propUintValue)
         {
             bool bSucceed = false;
 
             string propValue = testSite.Properties[propName];
             if (propValue == null)
             {
-                propIntValue = 0;
+                propUintValue = 0;
                 return false;
             }
             else
             {
-                bSucceed = uint.TryParse(propValue, out propIntValue);
+                bSucceed = uint.TryParse(propValue, out propUintValue);
             }
 
             return bSucceed;
@@ -91,7 +91,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// </summary>
         /// <param name="testSite">The test site where to get from.</param>
         /// <param name="propName">The property name.</param>
-        /// <param name="propStrValue">The output property value.</param>
+        /// <param name="propBoolValue">The output property value.</param>
         /// <returns>true if value was converted successfully; otherwise, false.</returns>
         public static bool GetBoolPtfProperty(ITestSite testSite, string propName, out bool propBoolValue)
         {

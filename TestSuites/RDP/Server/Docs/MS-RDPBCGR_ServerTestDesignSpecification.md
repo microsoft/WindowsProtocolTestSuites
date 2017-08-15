@@ -189,7 +189,7 @@ The typical scenario sequence is the following:
 
 * The server responds with an MCS Attach User Confirm PDU containing the User Channel ID. 
 
-* The client then sent multiple MCS Channel Join Request PDUs to the server. 
+* The client then sends multiple MCS Channel Join Request PDUs to the server. 
 
 * The server confirms each channel with an MCS Channel Join Confirm PDU. 
 
@@ -376,33 +376,33 @@ The typical scenario sequence is the following:
 
 * The client initiates an RDP connection to the server, and completes the Connection Initiation phase, Basic Setting Exchange phase, Channel Connection phase, RDP Security Commencement phase and Secure Setting Exchange Phase.
 
-* The server send a Server Auto-Detect Request PDU with RDP_RTT_REQUEST
+* The server sends a Server Auto-Detect Request PDU with RDP_RTT_REQUEST
 
-* The client response a Client Auto-Detect Response PDU with RDP_RTT_RESPONSE
+* The client responses a Client Auto-Detect Response PDU with RDP_RTT_RESPONSE
 
-* The server send a Server Auto-Detect Request PDU with RDP_BW_START
+* The server sends a Server Auto-Detect Request PDU with RDP_BW_START
 
-* The server send several Server Auto-Detect Request PDUs with RDP_BW_PAYLOAD
+* The server sends several Server Auto-Detect Request PDUs with RDP_BW_PAYLOAD
 
-* The server send a Server Auto-Detect Request PDU with RDP_BW_STOP
+* The server sends a Server Auto-Detect Request PDU with RDP_BW_STOP
 
-* The client response a Client Auto-Detect Response PDU with RDP_BW_RESULTS
+* The client responses a Client Auto-Detect Response PDU with RDP_BW_RESULTS
 
-* The server send a Server Auto-Detect Request PDU with RDP_NETCHAR_RESULT
+* The server sends a Server Auto-Detect Request PDU with RDP_NETCHAR_RESULT
 
 Continuous Network Characteristics Detection
 
 * The client builds an RDP connection to the server.
 
-* The server send a Security Header with RDP_RTT_REQUEST
+* The server sends a Security Header with RDP_RTT_REQUEST
 
-* The client response a Client Auto-Detect Response PDU with RDP_RTT_RESPONSE
+* The client responses a Client Auto-Detect Response PDU with RDP_RTT_RESPONSE
 
-* The server send a Security Header with RDP_BW_START
+* The server sends a Security Header with RDP_BW_START
 
-* The server send a Security Header with RDP_BW_STOP
+* The server sends a Security Header with RDP_BW_STOP
 
-* The client response a Client Auto-Detect Response PDU with RDP_BW_RESULTS
+* The client responses a Client Auto-Detect Response PDU with RDP_BW_RESULTS
 
 Network Characteristics Sync after Auto Reconnection
 
@@ -410,9 +410,9 @@ Network Characteristics Sync after Auto Reconnection
 
 * A disconnection occurred due to a network error, and the client is trying to reconnect.
 
-* During Optional Connect-Time Auto-Detection phase of the connection, the server send a Server Auto-Detect Request PDU with RDP_RTT_REQUEST
+* During Optional Connect-Time Auto-Detection phase of the connection, the server sends a Server Auto-Detect Request PDU with RDP_RTT_REQUEST
 
-* The client response a Client Auto-Detect Response PDU with RDP_NETCHAR_SYNC
+* The client responses a Client Auto-Detect Response PDU with RDP_NETCHAR_SYNC
 
 Scenario Testing:
 Server Auto-Detect Request PDUs with the following structures:
@@ -446,7 +446,7 @@ The typical scenario sequence is the following:
 
 * The client initiates an RDP connection to the server, and completes the Connection Initiation phase, Basic Setting Exchange phase, Channel Connection phase, RDP Security Commencement phase, Secure Setting Exchange Phase and Licensing phase.
 
-* The server send two Server Initiate Multitransport Request PDUs to initial reliable and lossy UDP connection
+* The server sends two Server Initiate Multitransport Request PDUs to initial reliable and lossy UDP connection
 
 Scenario Testing:
 
@@ -566,7 +566,7 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 |  **S1_Connection**| | 
 |  **Test ID**| S1_Connection_ConnectionInitiation_PositiveTest| 
 |  **Priority**| P0| 
-|  **Description** | This test case tests RDP server can correctly process Client X.224 Connection Request PDU with all security protocols supported and response a correct  Server X.224 Connection Confirm PDU| 
+|  **Description** | This test case tests RDP server can correctly process Client X.224 Connection Request PDU with all security protocols supported and responses a correct  Server X.224 Connection Confirm PDU| 
 |  **Prerequisites**| N/A| 
 |  **Test Execution Steps**| Start RDP connection to SUT by sending a Client X.224 Connection Request PDU.| 
 | | routingToken and cookie are not present| 
@@ -584,7 +584,7 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 |  **S1_Connection**| | 
 |  **Test ID**| S1_Connection_BasicSettingExchange_PositiveTest| 
 |  **Priority**| P0| 
-|  **Description** | This test case tests the SUT can process the valid Client MCS Connect Initial PDU with GCC Conference Create Request correctly and response a valid Server MCS Connect Response PDU with GCC Conference Create Response.| 
+|  **Description** | This test case tests the SUT can process the valid Client MCS Connect Initial PDU with GCC Conference Create Request correctly and responses a valid Server MCS Connect Response PDU with GCC Conference Create Response.| 
 |  **Prerequisites**|  | 
 |  **Test Execution Steps**| Initiate an RDP connection to RDP server (SUT) and complete the Connection Initiation phase. | 
 | | Test Suite continues the connection sequence by sending a valid Client MCS Connect Initial PDU with GCC Conference Create Request.| 
