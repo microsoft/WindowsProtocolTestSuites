@@ -23,7 +23,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Description(@"This test case is used to verify SUT can send Heartbeat PDU periodically to notify the connection exist. ")]
         public void S8_HealthMonitoring_PositiveTest()
         {
-            string osVersion = this.GetOsVersion(this.Site.Properties["RDP.ServerName"]);
+            string osVersion = this.Site.Properties["RDP.Version"];
             if (!string.IsNullOrEmpty(osVersion))
             {
                 Version osVer = new Version(osVersion);
@@ -35,6 +35,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     Site.Assert.Inconclusive("Skip this test case as RDP in Windows Server 2012 is RDP 8.0 and not support Heartbeat PDU.");
                 }
             }
+
             #region Test Steps
             //1. Initiate and complete an RDP connection to RDP Server (SUT). In basic exchange phase, notify the support of Heartbeat PDU in earlyCapabilityFlags of core data
             //2. Test suite expects Server Heartbeat PDU several times, verify the messages received.
@@ -46,7 +47,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.Site.Log.Add(LogEntryKind.Comment, "Establish transport connection with RDP Server, encrypted protocol is {0}.", transportProtocol.ToString());
             rdpbcgrAdapter.ConnectToServer(this.transportProtocol);
 
-            string[] SVCNames = new string[] { "drdynvc" };
+            string[] SVCNames = new string[] { RdpConstValue.SVCNAME_RDPEDYC };
             rdpbcgrAdapter.EstablishRDPConnection(requestProtocol, SVCNames, CompressionType.PACKET_COMPR_TYPE_NONE,
                 false, // Is reconnect
                 true,  // Is auto logon
@@ -69,27 +70,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             Site.Log.Add(LogEntryKind.Comment, "After received {0} heartbeat PDU, actual duration is {1} seconds, the period in heartbeat PDU is {2}.", times, (stopTime - startTime).TotalSeconds, period);
             #endregion Test Code
-        }
-
-        /// <summary>
-        /// Get Remote OS version
-        /// </summary>
-        /// <param name="ipAddress">Remote Ip address</param>
-        /// <returns></returns>
-        public string GetOsVersion(string ipAddress)
-        {
-            ManagementScope scope = new ManagementScope(string.Format(@"\\{0}\root\cimv2", ipAddress));
-            SelectQuery query = new SelectQuery();
-            query.QueryString = "select * from Win32_OperatingSystem";
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
-            ManagementObjectCollection queryCollection = searcher.Get();
-
-            foreach (ManagementObject mo in queryCollection)
-            {
-                return mo["version"].ToString();
-            }
-
-            return string.Empty;
         }
     }
 }
