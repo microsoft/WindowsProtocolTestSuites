@@ -34,13 +34,23 @@ namespace Microsoft.Protocols.TestManager.CLI
                 List<TestCase> testCases = (arg.Category != null) ? p.GetTestCases(arg.Category) : p.GetTestCases(arg.SelectedOnly);
 
                 p.RunTestSuite(testCases);
+
+                Utility.SortBy sortBy = Utility.SortBy.Name;
+                CaseListItem.Separator separator = CaseListItem.Separator.Space;
+                if (arg.SortBy != null) sortBy = Arguments.GetEnumArg<Utility.SortBy>("sortby", arg.SortBy);
+                if (arg.Separator != null) separator = Arguments.GetEnumArg<CaseListItem.Separator>("separator", arg.Separator);
+                string report = p.GenerateTextReport(arg.Report, arg.OutCome, sortBy, separator);
+
                 if (arg.Report != null)
                 {
-                    Utility.SortBy sortBy = Utility.SortBy.Name;
-                    CaseListItem.Separator separator = CaseListItem.Separator.Space;
-                    if (arg.SortBy != null) sortBy = Arguments.GetEnumArg<Utility.SortBy>("sortby", arg.SortBy);
-                    if (arg.Separator != null) separator = Arguments.GetEnumArg<CaseListItem.Separator>("separator", arg.Separator);
-                    p.GenerateTextReport(arg.Report, arg.OutCome, sortBy, separator);
+                    using (StreamWriter sw = new StreamWriter(arg.Report))
+                    {
+                        sw.Write(report);
+                    }
+                }
+                else
+                {
+                    Console.Write(report);
                 }
             }
             catch (InvalidArgumentException e)
@@ -146,7 +156,7 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// <summary>
         /// Generates text report.
         /// </summary>
-        public void GenerateTextReport(string filename, string outcome, Utility.SortBy sortBy, CaseListItem.Separator separator)
+        public string GenerateTextReport(string filename, string outcome, Utility.SortBy sortBy, CaseListItem.Separator separator)
         {
             string upperCaseOutcome = (outcome == null) ? null : outcome.ToUpper();
             bool pass = true, fail = true, inconclusive = false, notrun = false;
@@ -159,10 +169,7 @@ namespace Microsoft.Protocols.TestManager.CLI
             }
             var list = util.GenerateTextCaseListItems(pass,fail, inconclusive, notrun);
             string report = Utility.GeneratePlainTextReport(list, true, sortBy, separator);
-            using (StreamWriter sw = new StreamWriter(filename))
-            {
-                sw.Write(report);
-            }
+            return report;
         }
     }
 }
