@@ -39,7 +39,9 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite.Claim
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [TestCategory(TestCategories.Smb2Ap)]
         [TestCategory(TestCategories.SingleRealm)]
+        [TestCategory(TestCategories.DFL2K12)]
         [TestCategory(TestCategories.Claim)] 
         public void Kerberos_SingleRealm_ADSource_User_Only()
         {
@@ -80,11 +82,91 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite.Claim
             }
         }
 
-
         /// <summary>
         /// This case tests AD source claims in cross realm environment
         /// </summary>
-        void claimsTest_Kerberos_CrossRealm_ADSource_User_Only(bool ctaFromConfig)
+        [TestMethod]
+        [Priority(1)]
+        [TestCategory(TestCategories.Smb2Ap)]
+        [TestCategory(TestCategories.CrossRealm)]
+        [TestCategory(TestCategories.DFL2K12)]
+        [TestCategory(TestCategories.Claim)] 
+        public void Kerberos_CrossRealm_ADSource_User_Only_Transform_Use_AD_and_CTA()
+        {
+            claimsTest_Kerberos_CrossRealm_ADSource_User_Only(false);
+        }
+
+        /// This case tests AD source claims in cross realm environment
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [TestCategory(TestCategories.Smb2Ap)]
+        [TestCategory(TestCategories.CrossRealm)]
+        [TestCategory(TestCategories.DFL2K12)]
+        [TestCategory(TestCategories.Claim)]
+        public void Kerberos_CrossRealm_ADSource_User_Only_Transform_From_Config()
+        {
+            claimsTest_Kerberos_CrossRealm_ADSource_User_Only(true);
+
+        }
+
+        private CLAIMS_SET? GetADUserClaims_SingleRealm(string realm, string user, string userPwd, string server, string servicePwd, string serviceSpn)
+        {
+            base.Logging();
+
+            client = new KerberosTestClient(this.testConfig.LocalRealm.RealmName,
+                this.testConfig.LocalRealm.User[2].Username,
+                this.testConfig.LocalRealm.User[2].Password,
+                KerberosAccountType.User,
+                testConfig.LocalRealm.KDC[0].IPAddress,
+                testConfig.LocalRealm.KDC[0].Port,
+                testConfig.TransportType,
+                testConfig.SupportedOid);
+
+            KdcOptions options = KdcOptions.FORWARDABLE | KdcOptions.CANONICALIZE | KdcOptions.RENEWABLE;
+            client.SendAsRequest(options, null);
+            METHOD_DATA methodData;
+            KerberosKrbError krbError = client.ExpectPreauthRequiredError(out methodData);
+
+            BaseTestSite.Log.Add(LogEntryKind.Comment, "Create and send AS request with PaEncTimeStamp, PaPacRequest and paPacOptions.");
+            string timeStamp = KerberosUtility.CurrentKerberosTime.Value;
+            PaEncTimeStamp paEncTimeStamp = new PaEncTimeStamp(timeStamp,
+                0,
+                client.Context.SelectedEType,
+                client.Context.CName.Password,
+                this.client.Context.CName.Salt);
+            PaPacRequest paPacRequest = new PaPacRequest(true);
+            PaPacOptions paPacOptions = new PaPacOptions(PacOptions.Claims | PacOptions.ForwardToFullDc);
+            Asn1SequenceOf<PA_DATA> seqOfPaData = new Asn1SequenceOf<PA_DATA>(new PA_DATA[] { paEncTimeStamp.Data, paPacRequest.Data, paPacOptions.Data });
+            client.SendAsRequest(options, seqOfPaData);
+            KerberosAsResponse asResponse = client.ExpectAsResponse();
+
+            BaseTestSite.Log.Add(LogEntryKind.Comment, "Create and send FAST armored TGS request: {0}.", this.testConfig.LocalRealm.FileServer[0].Smb2ServiceName);
+            Asn1SequenceOf<PA_DATA> seqOfPaData2 = new Asn1SequenceOf<PA_DATA>(new PA_DATA[] { paPacRequest.Data, paPacOptions.Data });
+            client.SendTgsRequest(this.testConfig.LocalRealm.FileServer[0].Smb2ServiceName, options, seqOfPaData2);
+            KerberosTgsResponse tgsResponse = client.ExpectTgsResponse();
+            EncryptionKey key = testConfig.QueryKey(this.testConfig.LocalRealm.FileServer[0].Smb2ServiceName, client.Context.Realm.ToString(), client.Context.SelectedEType);
+            tgsResponse.DecryptTicket(key);
+            BaseTestSite.Assert.IsNotNull(tgsResponse.EncPart, "The encrypted part of TGS-REP is decrypted.");
+
+            if (this.testConfig.IsKileImplemented)
+            {
+                BaseTestSite.Assert.IsNotNull(tgsResponse.TicketEncPart.authorization_data, "The ticket contains Authorization data.");
+                AdWin2KPac adWin2kPac = FindOneInAuthData<AdWin2KPac>(tgsResponse.TicketEncPart.authorization_data.Elements);
+                BaseTestSite.Assert.IsNotNull(adWin2kPac, "The Authorization data contains AdWin2KPac.");
+                    
+                foreach (PacInfoBuffer buf in adWin2kPac.Pac.PacInfoBuffers)
+                {
+                    if (buf.GetType() == typeof(ClientClaimsInfo))
+                    {
+                        return ((ClientClaimsInfo)buf).NativeClaimSet;
+                    }
+                }
+            }
+            return null;
+        }
+
+        private void claimsTest_Kerberos_CrossRealm_ADSource_User_Only(bool ctaFromConfig)
         {
             client = new KerberosTestClient(this.testConfig.LocalRealm.RealmName,
                  this.testConfig.LocalRealm.User[2].Username,
@@ -254,86 +336,6 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite.Claim
 
             BaseTestSite.Assert.AreEqual(expectedClaims.Count, claims.ClaimsArrays[0].ClaimEntries.Count(),"Claims count should be equal.");
             BaseTestSite.Assert.AreEqual<int>(0, errors, "Expect no error should be found when compare claims from reference TGS ticket");
-        }
-
-        /// <summary>
-        /// This case tests AD source claims in cross realm environment
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        [TestCategory(TestCategories.CrossRealm)]
-        [TestCategory(TestCategories.Claim)] 
-        public void Kerberos_CrossRealm_ADSource_User_Only_Transform_Use_AD_and_CTA()
-        {
-            claimsTest_Kerberos_CrossRealm_ADSource_User_Only(false);
-        }
-
-        /// This case tests AD source claims in cross realm environment
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        [TestCategory(TestCategories.CrossRealm)]
-        [TestCategory(TestCategories.Claim)]
-        public void Kerberos_CrossRealm_ADSource_User_Only_Transform_From_Config()
-        {
-            claimsTest_Kerberos_CrossRealm_ADSource_User_Only(true);
-
-        }
-
-        public CLAIMS_SET? GetADUserClaims_SingleRealm(string realm, string user, string userPwd, string server, string servicePwd, string serviceSpn)
-        {
-            base.Logging();
-
-            client = new KerberosTestClient(this.testConfig.LocalRealm.RealmName,
-                this.testConfig.LocalRealm.User[2].Username,
-                this.testConfig.LocalRealm.User[2].Password,
-                KerberosAccountType.User,
-                testConfig.LocalRealm.KDC[0].IPAddress,
-                testConfig.LocalRealm.KDC[0].Port,
-                testConfig.TransportType,
-                testConfig.SupportedOid);
-
-            KdcOptions options = KdcOptions.FORWARDABLE | KdcOptions.CANONICALIZE | KdcOptions.RENEWABLE;
-            client.SendAsRequest(options, null);
-            METHOD_DATA methodData;
-            KerberosKrbError krbError = client.ExpectPreauthRequiredError(out methodData);
-
-            BaseTestSite.Log.Add(LogEntryKind.Comment, "Create and send AS request with PaEncTimeStamp, PaPacRequest and paPacOptions.");
-            string timeStamp = KerberosUtility.CurrentKerberosTime.Value;
-            PaEncTimeStamp paEncTimeStamp = new PaEncTimeStamp(timeStamp,
-                0,
-                client.Context.SelectedEType,
-                client.Context.CName.Password,
-                this.client.Context.CName.Salt);
-            PaPacRequest paPacRequest = new PaPacRequest(true);
-            PaPacOptions paPacOptions = new PaPacOptions(PacOptions.Claims | PacOptions.ForwardToFullDc);
-            Asn1SequenceOf<PA_DATA> seqOfPaData = new Asn1SequenceOf<PA_DATA>(new PA_DATA[] { paEncTimeStamp.Data, paPacRequest.Data, paPacOptions.Data });
-            client.SendAsRequest(options, seqOfPaData);
-            KerberosAsResponse asResponse = client.ExpectAsResponse();
-
-            BaseTestSite.Log.Add(LogEntryKind.Comment, "Create and send FAST armored TGS request: {0}.", this.testConfig.LocalRealm.FileServer[0].Smb2ServiceName);
-            Asn1SequenceOf<PA_DATA> seqOfPaData2 = new Asn1SequenceOf<PA_DATA>(new PA_DATA[] { paPacRequest.Data, paPacOptions.Data });
-            client.SendTgsRequest(this.testConfig.LocalRealm.FileServer[0].Smb2ServiceName, options, seqOfPaData2);
-            KerberosTgsResponse tgsResponse = client.ExpectTgsResponse();
-            EncryptionKey key = testConfig.QueryKey(this.testConfig.LocalRealm.FileServer[0].Smb2ServiceName, client.Context.Realm.ToString(), client.Context.SelectedEType);
-            tgsResponse.DecryptTicket(key);
-            BaseTestSite.Assert.IsNotNull(tgsResponse.EncPart, "The encrypted part of TGS-REP is decrypted.");
-
-            if (this.testConfig.IsKileImplemented)
-            {
-                BaseTestSite.Assert.IsNotNull(tgsResponse.TicketEncPart.authorization_data, "The ticket contains Authorization data.");
-                AdWin2KPac adWin2kPac = FindOneInAuthData<AdWin2KPac>(tgsResponse.TicketEncPart.authorization_data.Elements);
-                BaseTestSite.Assert.IsNotNull(adWin2kPac, "The Authorization data contains AdWin2KPac.");
-                    
-                foreach (PacInfoBuffer buf in adWin2kPac.Pac.PacInfoBuffers)
-                {
-                    if (buf.GetType() == typeof(ClientClaimsInfo))
-                    {
-                        return ((ClientClaimsInfo)buf).NativeClaimSet;
-                    }
-                }
-            }
-            return null;           
         }
     }
 }

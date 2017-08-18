@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.DirectoryServices;
 using System.DirectoryServices.Protocols;
 using System.DirectoryServices.ActiveDirectory;
 using System.Collections;
@@ -15,13 +16,16 @@ using System.Text.RegularExpressions;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
+using DSSearchScope = System.DirectoryServices.SearchScope;
+using SearchScope = System.DirectoryServices.Protocols.SearchScope;
+
 namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
 {
     static class Utility
     {
         static string RegistryPath = @"SOFTWARE\Microsoft\ProtocolTestSuites";
         static string RegistryPath64 = @"SOFTWARE\Wow6432Node\Microsoft\ProtocolTestSuites";
-        
+
         public static System.Net.IPHostEntry GetHost(string hostName)
         {
             try
@@ -52,6 +56,11 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
             IPAddress netmask = IPAddress.Any;
             foreach (NetworkInterface adapter in NetworkInterface.GetAllNetworkInterfaces())
             {
+                if (adapter.OperationalStatus != OperationalStatus.Up)
+                {
+                    continue;
+                }
+
                 foreach (UnicastIPAddressInformation unicastIPAddressInformation in adapter.GetIPProperties().UnicastAddresses)
                 {
                     if (unicastIPAddressInformation.Address.AddressFamily == AddressFamily.InterNetwork)
@@ -84,6 +93,36 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
         public static string GetNetbiosName(this System.Net.IPHostEntry host)
         {
             return host.HostName.Split('.')[0];
+        }
+
+        public static string GetDomainNetbiosName(string dnsName)
+        {
+            if (String.IsNullOrEmpty(dnsName))
+            {
+                return string.Empty;
+            }
+
+            string netbiosName = string.Empty;
+
+            DirectoryEntry rootDSE = new DirectoryEntry(string.Format("LDAP://{0}/RootDSE", dnsName));
+
+            string configurationNamingContext = rootDSE.Properties["configurationNamingContext"][0].ToString();
+
+            DirectoryEntry searchRoot = new DirectoryEntry("LDAP://cn=Partitions," + configurationNamingContext);
+
+            DirectorySearcher searcher = new DirectorySearcher(searchRoot);
+            searcher.SearchScope = DSSearchScope.OneLevel;
+            searcher.PropertiesToLoad.Add("netbiosname");
+            searcher.Filter = string.Format("(&(objectcategory=Crossref)(dnsRoot={0})(netBIOSName=*))", dnsName);
+
+            SearchResult result = searcher.FindOne();
+
+            if (result != null)
+            {
+                netbiosName = result.Properties["netbiosname"][0].ToString();
+            }
+
+            return netbiosName;
         }
 
         public static bool LdapPingHost(System.Net.IPHostEntry host, int port = 389)
@@ -210,6 +249,11 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
                     properties.Add(p);
                     continue;
                 }
+                if (!rules.IsSelected("Protocol.MS-APDS") && p.IndexOf("MS_APDS") >= 0)
+                {
+                    properties.Add(p);
+                    continue;
+                }
                 if (!rules.IsSelected("Protocol.MS-DRSR") && p.IndexOf("MS_DRSR") >= 0)
                 {
                     properties.Add(p);
@@ -269,7 +313,8 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
                 {
                     properties.Add(p);
                     continue;
-                } if (p.IndexOf("MS_FRS2.TestSuiteIssueFixed") >= 0)
+                }
+                if (p.IndexOf("MS_FRS2.TestSuiteIssueFixed") >= 0)
                 {
                     properties.Add(p);
                     continue;
@@ -303,10 +348,9 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
                                                  .Where((s) => s.Contains("ADFamily"))
                                                  .FirstOrDefault();
 
-            Match versionMatch = Regex.Match(registryKeyName, @"\d\.\d\.\d{4}\.\d");
+            Match versionMatch = Regex.Match(registryKeyName, @"\d\.\d\.\d\.\d");
             return versionMatch.Value;
         }
-
 
         public static LdapSearchResponse LdapPing(string server)
         {
@@ -367,11 +411,11 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
 
     public class AutoDetectionException : Exception
     {
-        public AutoDetectionException(string message):base(message)
+        public AutoDetectionException(string message) : base(message)
         {
-            
+
         }
-        public AutoDetectionException(string format, params Object[] args):
+        public AutoDetectionException(string format, params Object[] args) :
             base(string.Format(format, args))
         {
         }

@@ -186,6 +186,10 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
             foreach (NetworkInterface adapter in NetworkInterface.GetAllNetworkInterfaces())
             {
+                if (adapter.OperationalStatus != OperationalStatus.Up)
+                {
+                    continue;
+                }
                 if (adapter.NetworkInterfaceType == NetworkInterfaceType.Ethernet
                     || adapter.NetworkInterfaceType == NetworkInterfaceType.Wireless80211
                     || adapter.NetworkInterfaceType == NetworkInterfaceType.GigabitEthernet)

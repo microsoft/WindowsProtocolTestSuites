@@ -23,6 +23,9 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
         [PtfConfig("Common.PrimaryDomain.DNSName")]
         public string PrimaryDomainDnsName { get; set; }
 
+        [PtfConfig("Common.PrimaryDomain.NetBiosName")]
+        public string PrimaryDomainNetBiosName { get; set; }
+
         [PtfConfig("Common.PrimaryDomain.ServerGUID")]
         public string PrimaryDomainServerGuid { get; set; }
 
@@ -31,6 +34,9 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
 
         [PtfConfig("Common.ADLDSPortNum")]
         public string AdldsPort { get; set; }
+
+        [PtfConfig("Common.LDSApplicationNC")]
+        public string LdsAppNc { get; set; }
 
         [PtfConfig("Common.WritableDC1.NetbiosName")]
         public string Dc1NetBiosName { get; set; }
@@ -77,6 +83,9 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
         [PtfConfig("Common.ChildDomain.DNSName")]
         public string ChildDomainDnsName { get; set; }
 
+        [PtfConfig("Common.ChildDomain.NetBiosName")]
+        public string ChildDomainNetBiosName { get; set; }
+
         [PtfConfig("Common.CDC.NetbiosName")]
         public string CdcNetbiosName { get; set; }
 
@@ -88,6 +97,9 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
 
         [PtfConfig("Common.TrustDomain.DNSName")]
         public string TrustDomainDnsName { get; set; }
+
+        [PtfConfig("Common.TrustDomain.NetBiosName")]
+        public string TrustDomainNetBiosName { get; set; }
 
         [PtfConfig("Common.TDC.NetbiosName")]
         public string TdcNetbiosName { get; set; }
@@ -130,11 +142,20 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
         [PtfConfig("MS_ADTS_Schema.LdsTDXmlPath")]
         public string SchemaLdsTdPath { get; set; }
 
+        [PtfConfig("MS_ADTS_Schema.OpenXmlPath2016")]
+        public string SchemaOpenXmlPath { get; set; }
+
+        [PtfConfig("MS_ADTS_Schema.LdsOpenXmlPath2016")]
+        public string SchemaLdsOpenXmlPath { get; set; }
+
         [PtfConfig("MS_LSAT.SUT.Server.Computer.Name")]
         public string LsatSutName { get; set; }
 
         [PtfConfig("MS_NRPC.SUT.SubnetNames.IP.V4")]
         public string NrpcSutSubnet { get; set; }
+
+        [PtfConfig("MS_FRS2.ReplicationDirectoryName")]
+        public string ReplicaDirName { get; set; }
 
         public bool EndpointPasswordVerified = false;
 

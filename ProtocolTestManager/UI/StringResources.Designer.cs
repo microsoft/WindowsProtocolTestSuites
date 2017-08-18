@@ -279,6 +279,15 @@ namespace Microsoft.Protocols.TestManager.UI {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Cancel.
+        /// </summary>
+        internal static string StopDetectButton {
+            get {
+                return ResourceManager.GetString("StopDetectButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Summary.
         /// </summary>
         internal static string Summary {

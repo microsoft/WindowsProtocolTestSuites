@@ -1954,6 +1954,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite.KILE
                 "The computer account of a KDC: the KDC MUST return KDC_ERR_ETYPE_NOTSUPP.");            
 
         }
+        [TestMethod]
         [Priority(0)]        
         [TestCategory(TestCategories.KDC)]
         [TestCategory(TestCategories.SingleRealm)]

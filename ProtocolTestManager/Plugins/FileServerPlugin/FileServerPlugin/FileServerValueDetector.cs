@@ -14,6 +14,8 @@ using System.Net;
 using System.Reflection;
 using System.Net.NetworkInformation;
 using Microsoft.Protocols.TestManager.FileServerPlugin;
+using System.Windows;
+using System.ComponentModel;
 
 namespace Microsoft.Protocols.TestManager.Detector
 {
@@ -137,6 +139,21 @@ namespace Microsoft.Protocols.TestManager.Detector
             detectionInfo.userName = properties[userTitle];
             detectionInfo.password = properties[passwordTitle];
             detectionInfo.securityPackageType = (SecurityPackageType)Enum.Parse(typeof(SecurityPackageType), properties["Authentication"]);
+
+            if (detectionInfo.securityPackageType == SecurityPackageType.Kerberos)
+            {
+                IPAddress address;
+                if (IPAddress.TryParse(detectionInfo.targetSUT, out address))
+                {
+                    uint krbWithIpErrcode = 0x80090303;
+                    Win32Exception winException = new Win32Exception((int)krbWithIpErrcode);
+
+                    string msg = String.Format("When using Kerberos authenication, target address should be an FQDN or hostname rather than IP.\n"
+                        + "You may encounter error 0x{0:x8} ({1}).", winException.NativeErrorCode, winException.Message);
+                    string boxTitle = "Warning";
+                    MessageBox.Show(msg, boxTitle, MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
 
             if (detectionInfo.targetSUT == detectionInfo.domainName || string.IsNullOrEmpty(detectionInfo.domainName))
                 env = EnvironmentType.Workgroup;
@@ -826,6 +843,13 @@ namespace Microsoft.Protocols.TestManager.Detector
             try
             {
                 detector.CheckUsernamePassword(detectionInfo);
+            }
+            catch (SspiException ex)
+            {
+                Win32Exception winException = new Win32Exception((int)ex.ErrorCode);
+                logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLineToLog(LogLevel.Information);
+                logWriter.AddLog(LogLevel.Error, string.Format("The User cannot log on\r\nError: 0x{0:x8} ({1})\r\nPlease check the credential", winException.NativeErrorCode, winException.Message));
             }
             catch (Exception ex)
             {
