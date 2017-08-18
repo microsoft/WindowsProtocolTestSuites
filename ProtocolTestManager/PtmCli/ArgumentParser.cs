@@ -64,7 +64,7 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// stored in the profile.
         /// Separate by comma without space.
         /// </summary>
-        [Argument("category")]
+        [Argument("categories")]
         public string Category { get; set; }
 
         /// <summary>
