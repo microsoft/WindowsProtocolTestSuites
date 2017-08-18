@@ -1,8 +1,8 @@
 Protocol Test Manager Command Line Interface
 Description:
 ptmcli.exe <-p|-profile profileName> [-s|-selected] [-r|-report reportfile]
-           [-outcome pass,fail,inconclusive,notrun] [-sortby name|outcome]
-           [-separator comma|space]
+           [-category categories] [-outcome pass,fail,inconclusive,notrun]
+		   [-sortby name|outcome] [-separator comma|space]
 
 Options:
 -p | -profile profileName   Specifies the file name of profile of the test 
@@ -14,9 +14,13 @@ Options:
 
 -r | -report reportfile     Specifies the file name of the plain text report.
 
+-category                   Specifies the categories 
+                            This parameter overrides the test cases in
+							profile.
+
 -outcome                    Specifies the outcome of the test cases to be
                             included in the plain text report.
-                            Saparate using comma without space.
+                            Separate using comma without space.
                             Possible values: pass,fail,inconclusive,notrun
                             Default value: pass,fail.
 

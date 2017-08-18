@@ -41,7 +41,7 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// <summary>
         /// Choose the outcome of the test cases to be included in the text report.
         /// Possible values are pass, fail, inconclusive, notrun.
-        /// Saparate by comma without space.
+        /// Separate by comma without space.
         /// </summary>
         [Argument("outcome")]
         public string OutCome { get; set; }
@@ -62,7 +62,7 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// <summary>
         /// The categories of cases to run. This will override the cases
         /// stored in the profile.
-        /// Saparate by comma without space.
+        /// Separate by comma without space.
         /// </summary>
         [Argument("category")]
         public string Category { get; set; }
