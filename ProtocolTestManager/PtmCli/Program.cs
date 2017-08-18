@@ -43,10 +43,18 @@ namespace Microsoft.Protocols.TestManager.CLI
                     p.GenerateTextReport(arg.Report, arg.OutCome, sortBy, separator);
                 }
             }
+            catch (InvalidArgumentException e)
+            {
+                Console.Error.WriteLine("ERROR:");
+                Console.Error.WriteLine(e.Message);
+                Console.Error.WriteLine();
+                PrintHelpText();
+                Environment.Exit(-1);
+            }
             catch (Exception e)
             {
-                System.Console.Error.WriteLine("ERROR:");
-                System.Console.Error.WriteLine(e.Message);
+                Console.Error.WriteLine("ERROR:");
+                Console.Error.WriteLine(e.Message);
                 Environment.Exit(-1);
             }
         }
