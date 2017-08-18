@@ -23,7 +23,7 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// <summary>
         /// The path of the profile.
         /// </summary>
-        [Argument("profile", "p")]
+        [Argument("profile", "p", ArgType.StringValue, Presence.Required)]
         public string Profile { get; set; }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// <summary>
         /// Choose the outcome of the test cases to be included in the text report.
         /// Possible values are pass, fail, inconclusive, notrun.
-        /// Saparate by comma without space.
+        /// Separate by comma without space.
         /// </summary>
         [Argument("outcome")]
         public string OutCome { get; set; }
@@ -58,6 +58,15 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// </summary>
         [Argument("separator")]
         public string Separator { get; set; }
+
+        /// <summary>
+        /// The categories of cases to run. This will override the cases
+        /// stored in the profile.
+        /// Separate by comma without space.
+        /// </summary>
+        [Argument("categories")]
+        public string Category { get; set; }
+
         /// <summary>
         /// Key: argument name, Value: An instance of Argument to the key.
         /// </summary>
@@ -80,8 +89,8 @@ namespace Microsoft.Protocols.TestManager.CLI
                 if (attribute == null) continue;
                 if (attribute.ArgumentType == ArgType.Switch) property.SetValue(arg, false, null);
                 else property.SetValue(arg, null, null);
-                arg.KnownArgs.Add(attribute.Name, new Argument(attribute.ArgumentType, property));
-                if (attribute.Alias != null) arg.KnownArgs.Add(attribute.Alias, new Argument(attribute.ArgumentType, property));
+                arg.KnownArgs.Add(attribute.Name, new Argument(attribute.ArgumentType, attribute.Presence, property));
+                if (attribute.Alias != null) arg.KnownArgs.Add(attribute.Alias, new Argument(attribute.ArgumentType, attribute.Presence, property));
             }
 
             for (int i = 0; i < args.Length; i++)
@@ -93,6 +102,7 @@ namespace Microsoft.Protocols.TestManager.CLI
                 string name = args[i].Substring(1);
                 if (!arg.KnownArgs.ContainsKey(name))
                     throw new InvalidArgumentException(string.Format(StringResources.UnknownArgumentMessage, args[i]));
+
                 Argument argInfo = arg.KnownArgs[name];
                 switch (argInfo.ArgumentType)
                 {
@@ -106,6 +116,15 @@ namespace Microsoft.Protocols.TestManager.CLI
                         break;
                 }
             }
+
+            foreach (var argument in arg.KnownArgs.Values)
+            {
+                if ((argument.Presence == Presence.Required) && (argument.Property.GetValue(arg, null) == null))
+                {
+                    throw new InvalidArgumentException(string.Format(StringResources.MissingArgumentValue, argument.Property.Name));
+                }
+            }
+
             return arg;
         }
 
@@ -142,16 +161,33 @@ namespace Microsoft.Protocols.TestManager.CLI
     }
 
     /// <summary>
+    /// Presence of the argument.
+    /// </summary>
+    enum Presence
+    {
+        /// <summary>
+        /// The property is optional
+        /// </summary>
+        Optional,
+        /// <summary>
+        /// The property is mandatory
+        /// </summary>
+        Required
+    }
+
+    /// <summary>
     /// Argument class to hold the argument ArgType and the PropertyInfo
     /// </summary>
     sealed class Argument
     {
-        public Argument(ArgType type, PropertyInfo property)
+        public Argument(ArgType type, Presence presence, PropertyInfo property)
         {
             ArgumentType = type;
+            Presence = presence;
             Property = property;
         }
         public ArgType ArgumentType;
+        public Presence Presence;
         public PropertyInfo Property;
     }
 
@@ -174,11 +210,18 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// Argument type
         /// </summary>
         public ArgType ArgumentType { get; set; }
-        public ArgumentAttribute(string name, string alias = null, ArgType type = ArgType.StringValue)
+
+        /// <summary>
+        /// Presence type
+        /// </summary>
+        public Presence Presence { get; set; }
+
+        public ArgumentAttribute(string name, string alias = null, ArgType type = ArgType.StringValue, Presence presence = Presence.Optional)
         {
             Name = name;
             Alias = alias;
             ArgumentType = type;
+            Presence = presence;
         }
     }
 

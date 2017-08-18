@@ -414,6 +414,15 @@ namespace Microsoft.Protocols.TestManager.Kernel
         }
 
         /// <summary>
+        /// Gets current TestSuite object.
+        /// </summary>
+        /// <returns>A TestSuite object</returns>
+        public TestSuite GetTestSuite()
+        {
+            return testSuite;
+        }
+
+        /// <summary>
         /// The number of the selected test cases.
         /// </summary>
         public int SelectedCaseCount
