@@ -89,6 +89,10 @@
       <Project>{A5814E1E-D79C-49A9-A8EA-BA8ED6E0EB39}</Project>
       <Name>Rpce</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RSVD\Rsvd.csproj">
+      <Project>{6233f472-b2b6-42b1-8676-530c8d0be6ed}</Project>
+      <Name>Rsvd</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj">
       <Project>{C7F08825-D3C9-4DDD-9BA3-06733B1ABE36}</Project>
       <Name>Smb2</Name>
@@ -133,13 +137,19 @@
     <Compile Include="Compound\Compound.cs" />
     <Compile Include="CreateClose\CreateClose.cs" />
     <Compile Include="DurableHandle\SMB2DurableHandleTestBase.cs" />
+    <Compile Include="HVRS\MS-FSA_Clarification.cs" />
+    <Compile Include="HVRS\MS-SMB2_Clarification.cs" />
+    <Compile Include="HVRS\StringResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StringResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="IOCTL\EnumerateSnapshots.cs" />
     <Compile Include="Negotiate\Negotiation.cs" />
     <Compile Include="DurableHandle\DurableHandle.cs" />
     <Compile Include="DurableHandle\DurableHandleV2.cs" />
     <Compile Include="Encryption\Encryption.cs" />
     <Compile Include="IOCTL\CopyOffload.cs" />
-    <Compile Include="IOCTL\FileLevelTrim.cs" />
     <Compile Include="IOCTL\SetGetIntegrityInformation.cs" />
     <Compile Include="IOCTL\ValidateNegotiateInfo.cs" />
     <Compile Include="Leasing\FileLeasing.cs" />
@@ -163,8 +173,16 @@
     <Compile Include="Signing\Signing.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MS-SMB2_ServerTestSuite.deployment.ptfconfig" />
+    <Content Include="MS-SMB2_ServerTestSuite.deployment.ptfconfig">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="MS-SMB2_ServerTestSuite.ptfconfig" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="HVRS\StringResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>StringResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
