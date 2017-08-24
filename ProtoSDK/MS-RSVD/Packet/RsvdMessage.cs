@@ -41,6 +41,58 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd
     }
     #endregion
 
+    /// <summary>
+    /// This packet is sent by a server in response to an SVHDX_TUNNEL_OP_VHDSET_FILE_QUERY request 
+    /// where the SetFileInformationType is SvhdxSetFileInformationTypeSnapshotEntry
+    /// </summary>
+    public struct SVHDX_TUNNEL_VHDSET_FILE_QUERY_INFORMATION_SNAPSHOT_ENTRY_RESPONSE
+    {
+        /// <summary>
+        /// The set file information type
+        /// The server MUST set this to SvhdxSetFileInformationTypeSnapshotEntry
+        /// </summary>
+        [StaticSize(4)]
+        public VHDSet_InformationType SetFileInformationType;
+
+        /// <summary>
+        /// The time, in milliseconds since Jan 1, 1970, when the snapshot was created
+        /// </summary>
+        [StaticSize(8)]
+        public ulong SnapshotCreationTime;
+
+        /// <summary>
+        /// The type of snapshot
+        /// </summary>
+        [StaticSize(4)]
+        public Snapshot_Type SnapshotType;
+
+        /// <summary>
+        /// Set to 1 when the snapshot is valid, set to 0 when the snapshot is invalid
+        /// </summary>
+        [StaticSize(4)]
+        public uint IsValidSnapshot;
+
+        /// <summary>
+        /// The globally unique ID of the snapshot
+        /// </summary>
+        [StaticSize(16)]
+        public Guid SnapshotId;
+
+        /// <summary>
+        /// The parent snapshot ID. 
+        /// This field will be set for CDP snapshots
+        /// </summary>
+        [StaticSize(16)]
+        public Guid ParentSnapshotId;
+
+        /// <summary>
+        /// The ID of the log file associated with this snapshot. 
+        /// This field will be set for CDP snapshots
+        /// </summary>
+        [StaticSize(16)]
+        public Guid LogFileId;
+    }
+
     #region FSCTL_SVHDX_SYNC_TUNNEL_REQUEST
 
     /// <summary>

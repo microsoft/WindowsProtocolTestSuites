@@ -21,6 +21,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         public const string RsvdVersion2 = "RSVDVersion2";
         public const string Fsa = "FSA";
         public const string Sqos = "SQOS";
+        public const string Hvrs = "HVRS";
 
         public const string Auth = "Auth";
         public const string ShareAccessCheck = "ShareAccessCheck";

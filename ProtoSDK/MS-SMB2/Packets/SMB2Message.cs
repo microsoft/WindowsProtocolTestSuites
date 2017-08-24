@@ -11082,6 +11082,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  The file system supports per-user quotas.
         /// </summary>
         FILE_VOLUME_QUOTAS = 0x00000020,
+
+        /// <summary>
+        /// The file system supports sharing logical clusters between files on the same volume.
+        /// </summary>
+        FILE_SUPPORTS_BLOCK_REFCOUNTING = 0x08000000,
     }
 
     /// <summary>
@@ -12700,6 +12705,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// Indicates the Hash Algorithms client provided are not supported by Server
         /// </summary>
         public const uint STATUS_SMB_NO_PREAUTH_INTEGRITY_HASH_OVERLAP = 0xC05D0000;
+
+        public const uint STATUS_OFFLOAD_READ_FILE_NOT_SUPPORTED = 0xC000A2A3;
+
+        public const uint STATUS_MEDIA_WRITE_PROTECTED = 0xC00000A2;
+
         #endregion
 
         public static string GetStatusCode(uint status)
@@ -12896,6 +12906,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     break;
                 case Smb2Status.STATUS_SMB_NO_PREAUTH_INTEGRITY_HASH_OVERLAP:
                     statusCode = "STATUS_SMB_NO_PREAUTH_INTEGRITY_HASH_OVERLAP";
+                    break;
+                case Smb2Status.STATUS_OFFLOAD_READ_FILE_NOT_SUPPORTED:
+                    statusCode = "STATUS_OFFLOAD_READ_FILE_NOT_SUPPORTED";
+                    break;
+                case Smb2Status.STATUS_MEDIA_WRITE_PROTECTED:
+                    statusCode = "STATUS_MEDIA_WRITE_PROTECTED";
                     break;
                 default:
                     statusCode = string.Format("0x{0:x}", status);
