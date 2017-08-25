@@ -50,10 +50,10 @@ TestSuites/MS-SMB/src/Deploy/TestSuiteBinFiles.wxs
 TestSuites/MS-SMB/src/Deploy/TestSuiteScripts.wxs
 TestSuites/FileServer/src/Deploy/Bin.wxs
 TestSuites/FileServer/src/Deploy/Batch.wxs
-TestSuites/RDP/src/Deploy/TestSuiteBatchFiles.wxs
-TestSuites/RDP/src/Deploy/TestSuiteBinFiles.wxs
-TestSuites/RDP/src/Deploy/TestSuiteDataFiles.wxs
-TestSuites/RDP/src/Deploy/TestSuiteScripts.wxs
+TestSuites/RDP/Client/src/Deploy/TestSuiteBatchFiles.wxs
+TestSuites/RDP/Client/src/Deploy/TestSuiteBinFiles.wxs
+TestSuites/RDP/Client/src/Deploy/TestSuiteDataFiles.wxs
+TestSuites/RDP/Client/src/Deploy/TestSuiteScripts.wxs
 TestSuites/FileServer/src/Deploy/Batch.wxs
 TestSuites/FileServer/src/Deploy/Bin.wxs
 TestSuites/Kerberos/src/Deploy/TestSuiteBatchFiles.wxs
@@ -74,3 +74,9 @@ TestSuites/MS-AZOD/src/Deploy/DOCS_FILES.wxs
 TestSuites/MS-AZOD/src/Deploy/Scripts_FILES.wxs
 TestSuites/MS-AZOD/src/Deploy/TestSuiteBatchFiles.wxs
 TestSuites/MS-AZOD/src/Deploy/TestSuiteBinFiles.wxs
+TestSuites/MS-ADOD/src/Deploy/Scripts_FILES.wxs
+TestSuites/MS-ADOD/src/Deploy/TestSuiteBatchFiles.wxs
+TestSuites/MS-ADOD/src/Deploy/TestSuiteBinFiles.wxs
+TestSuites/RDP/Server/src/Deploy/Batch.wxs
+TestSuites/RDP/Server/src/Deploy/Bin.wxs
+TestSuites/RDP/Server/src/Deploy/DOCS_FILES.wxs

@@ -1,0 +1,35 @@
+
+<Config>
+  <ConfigFilePath>
+    <PtfFileName>Bin\RDP_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>Bin\RDP_ServerTestSuite.ptfconfig</PtfFileName>
+  </ConfigFilePath>
+  <PtfFileNames>
+    <PtfFileName>RDP_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>RDP_ServerTestSuite.ptfconfig</PtfFileName>
+  </PtfFileNames>
+  <DllFileNames>
+    <DllFileName>Bin\RDP_ServerTestSuite.dll</DllFileName>
+  </DllFileNames>
+  <AutoDetectionDllName>RDPServerPlugin.dll</AutoDetectionDllName>
+ 
+  <ConfigCaseRule>
+    <Group name ="Protocol" >
+      <Rule name = "RDPBCGR">
+        <Category name = "RDPBCGR"/>
+      </Rule>
+    </Group>
+
+    <Group name = "Priority">
+      <Rule name = "BVT">
+        <Category name = "BVT"/>
+      </Rule>
+
+      <Rule name = "NonBVT">
+        <Category name = "!BVT"/>
+      </Rule>
+    </Group>
+    
+  </ConfigCaseRule>
+  <TestSetting>Bin\ServerLocal.TestSettings</TestSetting>  
+</Config>

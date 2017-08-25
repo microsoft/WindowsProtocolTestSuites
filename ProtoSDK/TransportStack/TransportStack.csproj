@@ -153,7 +153,7 @@
       <Name>Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Messages\Messages.csproj">
-      <Project>{75544419-3F4E-4308-A676-165F45C1462E}</Project>
+      <Project>{75544419-3f4e-4308-a676-165f45c1462e}</Project>
       <Name>Messages</Name>
     </ProjectReference>
   </ItemGroup>
