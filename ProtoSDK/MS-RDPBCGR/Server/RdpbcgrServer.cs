@@ -30,12 +30,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         #region Field members
         //A manager context to manage all RDPBCGR session context
         private RdpbcgrServerContext serverContext;
-        
+
         private int serverPort;
 
         // The selected security protocol
         private EncryptedProtocol encryptedProtocol;
-                
+
         // This member indicates UpdateSessionKey has completed
         private ManualResetEvent updateSessionKeyEvent;
 
@@ -151,7 +151,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 return serverContext;
             }
-        } 
+        }
 
 
         /// <summary>
@@ -287,7 +287,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="timeout">Time for expecting a disconnect.</param>
         /// <exception cref="TimeoutException">An error occurred when time out.</exception>
         public virtual void ExpectDisconnect(
-            RdpbcgrServerSessionContext sessionContext, 
+            RdpbcgrServerSessionContext sessionContext,
             TimeSpan timeout)
         {
             if (sessionContext == null)
@@ -359,7 +359,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// An error occurred when The session has not been established.</exception>
         /// <exception cref="TimeoutException">An error occurred when time out.</exception>
         public virtual void ExpectDisconnect(
-            TimeSpan timeout, 
+            TimeSpan timeout,
             out RdpbcgrServerSessionContext sessionContext)
         {
             if (this.transportStack == null && this.directedTransportStack == null)
@@ -373,7 +373,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             if (transportEvent.EventType == EventType.Disconnected)
             {
                 sessionContext = this.serverContext.LookupSession(transportEvent.EndPoint);
-                this.serverContext.RemoveSession(sessionContext);     
+                this.serverContext.RemoveSession(sessionContext);
             }
             else if (transportEvent.EventType == EventType.Exception)
             {
@@ -416,7 +416,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 this.transportStack.Disconnect(sessionContext.Identity);
             }
-            
+
             this.serverContext.RemoveSession(sessionContext);
         }
 
@@ -457,7 +457,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <exception cref="InvalidOperationException">
         /// An error occurred when The session has not been established.</exception>
         public void SendPdu(
-            RdpbcgrServerSessionContext sessionContext, 
+            RdpbcgrServerSessionContext sessionContext,
             RdpbcgrServerPdu pdu)
         {
             if (pdu == null)
@@ -526,7 +526,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <exception cref="InvalidOperationException">
         /// An error occurred when The session has not been established.</exception>
         public void SendVirtualChannelPdu(
-            RdpbcgrServerSessionContext sessionContext, 
+            RdpbcgrServerSessionContext sessionContext,
             UInt16 channelId,
             bool isRawPdu,
             RdpbcgrServerPdu virtualChannelPdu)
@@ -568,7 +568,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// An error occurred when The session has not been established.</exception>
         /// <exception cref="TimeoutException">An error occurred when time out.</exception>
         public StackPacket ExpectPdu(
-            RdpbcgrServerSessionContext sessionContext, 
+            RdpbcgrServerSessionContext sessionContext,
             TimeSpan timeout)
         {
             if (sessionContext == null)
@@ -637,7 +637,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// An error occurred when The session has not been established.</exception>
         /// <exception cref="TimeoutException">An error occurred when time out.</exception>
         public StackPacket ExpectPdu(
-            TimeSpan timeout, 
+            TimeSpan timeout,
             out RdpbcgrServerSessionContext sessionContext)
         {
             if (timeout.TotalMilliseconds < 0)
@@ -649,7 +649,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             TransportEvent transportEvent = null;
 
             transportEvent = ExpectTransportEvent(timeout);
-           
+
             if (transportEvent.EventType == EventType.ReceivedPacket)
             {
                 sessionContext = this.serverContext.LookupSession(transportEvent.EndPoint);
@@ -668,7 +668,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             else
             {
                 throw new InvalidOperationException("Unknown object received from transport.");
-            }   
+            }
         }
 
         /// <summary>
@@ -768,7 +768,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrClientPdu pdu = null;
 
             // reassemble the virtual channel data
-            if (!isRawPdu)   
+            if (!isRawPdu)
             {
                 TimeSpan totalTime = timeout + DateTime.Now.TimeOfDay;
                 Virtual_Channel_Complete_Pdu completePdu = null;
@@ -788,7 +788,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 pdu = completePdu;
             }
             // raw PDU, so return it directly
-            else             
+            else
             {
                 pdu = ExpectChannelPdu(sessionContext, timeout);
             }
@@ -812,13 +812,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <exception cref="TimeoutException">An error occurred when time out.</exception>
         public RdpbcgrClientPdu ExpectVirtualChannelPdu(
             bool isRawPdu,
-            TimeSpan timeout,            
+            TimeSpan timeout,
             out RdpbcgrServerSessionContext sessionContext)
         {
             RdpbcgrClientPdu pdu = null;
 
             // reassemble the virtual channel data
-            if (!isRawPdu)   
+            if (!isRawPdu)
             {
                 TimeSpan totalTime = timeout + DateTime.Now.TimeOfDay;
                 Virtual_Channel_Complete_Pdu completePdu = null;
@@ -835,11 +835,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
                     completePdu = sessionContext.ReassembleChunkData((Virtual_Channel_RAW_Pdu)pdu);
                 }
-                
+
                 pdu = completePdu;
             }
             // raw PDU, so return it directly
-            else             
+            else
             {
                 pdu = ExpectChannelPdu(timeout, out sessionContext);
             }
@@ -879,7 +879,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             TimeSpan totalTime = timeout + DateTime.Now.TimeOfDay;
 
             // reassemble the virtual channel data
-            if (!isRawPdu)   
+            if (!isRawPdu)
             {
                 Virtual_Channel_Complete_Pdu completePdu = null;
                 while (completePdu == null)
@@ -911,10 +911,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     string messageName = "RDPEDYC:ReceivedPDU";
                     ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer1, pdu.GetType().Name, completePdu.virtualChannelData);
                 }
-                
+
             }
             // raw PDU, so return it directly
-            else             
+            else
             {
                 while (true)
                 {
@@ -945,7 +945,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 }
             }
 
-            
+
 
             return pdu;
         }
@@ -977,10 +977,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             sessionContext = null;
 
             // reassemble the virtual channel data
-            if (!isRawPdu)   
+            if (!isRawPdu)
             {
                 Virtual_Channel_Complete_Pdu completePdu = null;
-                
+
                 while (completePdu == null)
                 {
                     pdu = ExpectChannelPdu(totalTime - DateTime.Now.TimeOfDay, out sessionContext);
@@ -1005,7 +1005,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 pdu = completePdu;
             }
             // raw PDU, so return it directly
-            else             
+            else
             {
                 while (true)
                 {
@@ -1048,7 +1048,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// An error occurred when The session has not been established.</exception>
         /// <exception cref="TimeoutException">An error occurred when time out.</exception>
         public RdpbcgrClientPdu ExpectVirtualChannelPdu(
-            RdpbcgrServerSessionContext sessionContext,             
+            RdpbcgrServerSessionContext sessionContext,
             bool isRawPdu,
             TimeSpan timeout,
             out ushort channelId)
@@ -1063,7 +1063,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             TimeSpan totalTime = timeout + DateTime.Now.TimeOfDay;
 
             // reassemble the virtual channel data
-            if (!isRawPdu)   
+            if (!isRawPdu)
             {
                 Virtual_Channel_Complete_Pdu completePdu = null;
 
@@ -1087,7 +1087,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 pdu = completePdu;
             }
             // raw PDU, so return it directly
-            else             
+            else
             {
                 pdu = ExpectChannelPdu(sessionContext, totalTime - DateTime.Now.TimeOfDay);
 
@@ -1121,7 +1121,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <exception cref="InvalidOperationException">
         /// An error occurred when The session has not been established.</exception>
         /// <exception cref="TimeoutException">An error occurred when time out.</exception>
-        public RdpbcgrClientPdu ExpectVirtualChannelPdu( 
+        public RdpbcgrClientPdu ExpectVirtualChannelPdu(
             bool isRawPdu,
             TimeSpan timeout,
             out RdpbcgrServerSessionContext sessionContext,
@@ -1133,10 +1133,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             sessionContext = null;
 
             // reassemble the virtual channel data
-            if (!isRawPdu)  
+            if (!isRawPdu)
             {
                 Virtual_Channel_Complete_Pdu completePdu = null;
-                
+
                 while (completePdu == null)
                 {
                     pdu = ExpectChannelPdu(totalTime - DateTime.Now.TimeOfDay, out sessionContext);
@@ -1156,7 +1156,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 pdu = completePdu;
             }
             // raw PDU, so return it directly
-            else             
+            else
             {
                 pdu = ExpectChannelPdu(totalTime - DateTime.Now.TimeOfDay, out sessionContext);
 
@@ -1215,7 +1215,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             x224.x224Ccf.destRef = 0;
             x224.x224Ccf.srcRef = ConstValue.SOURCE_REFERENCE;
             x224.x224Ccf.classOptions = 0;
-                
+
             RDP_NEG_RSP pdu = new RDP_NEG_RSP();
             pdu.type = RDP_NEG_RSP_type_Values.V1;
             pdu.flags = flags;
@@ -1223,7 +1223,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             pdu.selectedProtocol = selectedProtocols;
 
             x224.rdpNegData = pdu;
-            
+
             return x224;
         }
 
@@ -1338,7 +1338,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             serverCoreData.clientRequestedProtocols = sessionContext.ClientRequestedProtocol;
             coreDataSize += sizeof(uint);
 
-            if(hasEarlyCapabilityFlags)
+            if (hasEarlyCapabilityFlags)
             {
                 serverCoreData.earlyCapabilityFlags = earlyCapabilityFlagsValue;
                 coreDataSize += sizeof(uint);
@@ -1368,14 +1368,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 serverSecurityData.serverRandom = RdpbcgrUtility.GenerateRandom(ConstValue.SERVER_RANDOM_SIZE);
                 serverSecurityData.serverRandom = new byte[] {
                     0x10 ,0x11 ,0x77 ,0x20 ,0x30 ,0x61 ,0x0a ,0x12 ,0xe4 ,0x34 ,0xa1 ,0x1e ,0xf2 ,0xc3 ,0x9f ,0x31,
-                    0x7d ,0xa4 ,0x5f ,0x01 ,0x89 ,0x34 ,0x96 ,0xe0 ,0xff ,0x11 ,0x08 ,0x69 ,0x7f ,0x1a ,0xc3 ,0xd2 
+                    0x7d ,0xa4 ,0x5f ,0x01 ,0x89 ,0x34 ,0x96 ,0xe0 ,0xff ,0x11 ,0x08 ,0x69 ,0x7f ,0x1a ,0xc3 ,0xd2
                 };
                 serverSecurityData.serverRandomLen = new UInt32Class((uint)serverSecurityData.serverRandom.Length);
                 serverSecurityData.serverCertificate = serverCertificate;
                 serverSecurityData.serverCertLen = new UInt32Class((uint)serverCerLen);
             }
 
-            
+
 
             int securityDataSize;
             if (serverSecurityData.serverCertificate == null ||
@@ -1400,14 +1400,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             }
 
             serverSecurityData.header.length = (ushort)securityDataSize;
-            
+
             #endregion
 
             #region Filling serverNetworkData TS_UD_CS_NET
             TS_UD_SC_NET serverNetworkData = new TS_UD_SC_NET();
             serverNetworkData.header.type = TS_UD_HEADER_type_Values.SC_NET;
             serverNetworkData.MCSChannelId = mcsChannelId_Net;
-            
+
             if (sessionContext.VirtualChannelDefines != null)
             {
                 serverNetworkData.channelCount = (ushort)sessionContext.VirtualChannelDefines.Length;
@@ -1460,14 +1460,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             #region Filling connectGCC
             mcsResponsePdu.mcsCrsp.gccPdu.serverCoreData = serverCoreData;
             mcsResponsePdu.mcsCrsp.gccPdu.serverNetworkData = serverNetworkData;
-            mcsResponsePdu.mcsCrsp.gccPdu.serverSecurityData = serverSecurityData;            
+            mcsResponsePdu.mcsCrsp.gccPdu.serverSecurityData = serverSecurityData;
             mcsResponsePdu.mcsCrsp.gccPdu.nodeID = ConstValue.GCC_RESPONSE_NODEID;
             mcsResponsePdu.mcsCrsp.gccPdu.tag = ConstValue.GCC_RESPONSE_TAG;
             mcsResponsePdu.mcsCrsp.gccPdu.ccrResult = ConstValue.GCC_RESPONSE_RESULT;
             mcsResponsePdu.mcsCrsp.gccPdu.H221Key = ConstValue.H221_KEY;
-            if(sessionContext.IsClientMessageChannelDataRecieved)
+            if (sessionContext.IsClientMessageChannelDataRecieved)
                 mcsResponsePdu.mcsCrsp.gccPdu.serverMessageChannelData = serverMessageChannelData;
-            if(sessionContext.IsClientMultitransportChannelDataRecieved)
+            if (sessionContext.IsClientMultitransportChannelDataRecieved)
                 mcsResponsePdu.mcsCrsp.gccPdu.serverMultitransportChannelData = serverMultitransportChannelData;
             #endregion
 
@@ -1585,10 +1585,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 | TS_SECURITY_HEADER_flags_Values.SEC_LICENSE_ENCRYPT_CS);
 
             //There's always security header for License Pdu
-            if (sessionContext.RdpEncryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_NONE) 
+            if (sessionContext.RdpEncryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_NONE)
             {
                 licenseErrorPdu.commonHeader.securityHeader = new TS_SECURITY_HEADER();
-                licenseErrorPdu.commonHeader.securityHeader.flags = 
+                licenseErrorPdu.commonHeader.securityHeader.flags =
                     TS_SECURITY_HEADER_flags_Values.SEC_LICENSE_PKT
                     | TS_SECURITY_HEADER_flags_Values.SEC_LICENSE_ENCRYPT_CS;
                 licenseErrorPdu.commonHeader.securityHeader.flagsHi = 0;
@@ -1738,7 +1738,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             synchronizePduData.targetUser = (ushort)sessionContext.IOChannelId;
 
             RdpbcgrUtility.FillShareDataHeader(ref synchronizePduData.shareDataHeader,
-                (ushort)(Marshal.SizeOf((ushort)synchronizePduData.messageType) + Marshal.SizeOf(synchronizePduData.targetUser) ),
+                (ushort)(Marshal.SizeOf((ushort)synchronizePduData.messageType) + Marshal.SizeOf(synchronizePduData.targetUser)),
                 sessionContext,
                 streamId_Values.STREAM_UNDEFINED,
                 pduType2_Values.PDUTYPE2_SYNCHRONIZE,
@@ -1790,7 +1790,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             return controlCooperatePdu;
         }
-         
+
 
         /// <summary>
         /// Create Request Control PDU.
@@ -1898,7 +1898,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             }
 
             Server_Deactivate_All_Pdu deactivateAllPdu = new Server_Deactivate_All_Pdu(sessionContext);
-            RdpbcgrUtility.FillCommonHeader(sessionContext, 
+            RdpbcgrUtility.FillCommonHeader(sessionContext,
                 ref deactivateAllPdu.commonHeader,
                 defaultSecurityHeaderFlag
                 );
@@ -2026,8 +2026,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrUtility.FillX224Data(ref mcsDisconnectProviderUltimatumPdu.x224Data);
 
             return mcsDisconnectProviderUltimatumPdu;
-        }        
-        #endregion 
+        }
+        #endregion
 
 
         #region Error reporting and status update
@@ -2544,7 +2544,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             ptr4Length += (int)(Marshal.SizeOf(updatePtr4.messageType)
                                     + Marshal.SizeOf(updatePtr4.pad2Octets)
-                                    + ConstValue.COLOR_PTR_UPDATE_SIZE_DEFAULT 
+                                    + ConstValue.COLOR_PTR_UPDATE_SIZE_DEFAULT
                                     + 2);
 
             RdpbcgrUtility.FillShareDataHeader(ref updatePtr4.shareDataHeader,
@@ -2644,7 +2644,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             List<TS_FP_UPDATE> outputUpdateList = new List<TS_FP_UPDATE>();
             TS_FP_UPDATE outputUpdate = new TS_FP_UPDATE();
 
-            fastpathOutputPdu.fpOutputHeader = 
+            fastpathOutputPdu.fpOutputHeader =
                 (byte)(((int)nested_TS_FP_UPDATE_PDU_fpOutputHeader_actionCode_Values.FASTPATH_OUTPUT_ACTION_FASTPATH & 0x03)
                 | ((int)((int)reserved_Values.V1 & 0x0f) << 2));
 
@@ -2735,7 +2735,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             bitmapUpdate.bitmapUpdateData.rectangles[0] = bitmapData;
 
             bitmapUpdate.size = (ushort)(Marshal.SizeOf((ushort)bitmapUpdate.bitmapUpdateData.updateType)
-                                + Marshal.SizeOf(bitmapUpdate.bitmapUpdateData.numberRectangles) 
+                                + Marshal.SizeOf(bitmapUpdate.bitmapUpdateData.numberRectangles)
                                 + ConstValue.BITMAP_DATA_SIZE_DEFAULT);
 
             outputUpdateList.Add(bitmapUpdate);
@@ -2892,9 +2892,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             fastpathOutputPdu.length1 = (byte)(totalSize >> 7);
             fastpathOutputPdu.length2 = (byte)(totalSize & 127);
 
-            return fastpathOutputPdu; 
+            return fastpathOutputPdu;
         }
-        
+
         /// <summary>
         /// Create fast path update PDU.
         /// </summary>
@@ -2935,7 +2935,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             fastpathOutputPdu.fpOutputUpdates = udpates;
 
-            return fastpathOutputPdu; 
+            return fastpathOutputPdu;
         }
         #endregion
 
@@ -3178,8 +3178,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                                         0);
 
             return monitorLayoutPdu;
-        }       
-        #endregion 
+        }
+        #endregion
 
 
         #region Virtual channel
@@ -3399,7 +3399,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <exception cref="InvalidOperationException">
         /// An error occurred when the session has not been established.</exception>
         /// <exception cref="TimeoutException">An error occurred when time out.</exception>
-        public void ExpectConnectSequence(RdpbcgrServerSessionContext sessionContext,TimeSpan timeout)
+        public void ExpectConnectSequence(RdpbcgrServerSessionContext sessionContext, TimeSpan timeout)
         {
             if (sessionContext == null)
             {
@@ -3436,13 +3436,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             Client_X_224_Connection_Request_Pdu x224ConnectRequestPdu =
                 (Client_X_224_Connection_Request_Pdu)ExpectPdu(totalTime - DateTime.Now.TimeOfDay);
 
-            Server_X_224_Connection_Confirm_Pdu x224ConnectConfirmPdu = 
-                CreateX224ConnectionConfirmPdu(sessionContext,selectedProtocols);
-            SendPdu(sessionContext, x224ConnectConfirmPdu);           
+            Server_X_224_Connection_Confirm_Pdu x224ConnectConfirmPdu =
+                CreateX224ConnectionConfirmPdu(sessionContext, selectedProtocols);
+            SendPdu(sessionContext, x224ConnectConfirmPdu);
             #endregion
 
             #region Basic settings exchange
-            Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request mcsInitialPdu = 
+            Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request mcsInitialPdu =
                 (Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request)
                 ExpectPdu(totalTime - DateTime.Now.TimeOfDay);
 
@@ -3733,7 +3733,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// An error occurred when the session has not been established.</exception>
         /// <exception cref="TimeoutException">An error occurred when time out.</exception>
         public void ExpectDisconnectSequence(
-            RdpbcgrServerSessionContext sessionContext, 
+            RdpbcgrServerSessionContext sessionContext,
             bool isLogon,
             TimeSpan timeout)
         {
@@ -3845,7 +3845,41 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrEncoder.EncodeNetworkDetectionRequest(reqDataBuffer, networkDetectionRequest, isSubHeader);
             return RdpbcgrUtility.ToBytes(reqDataBuffer);
         }
-        
+
+        #endregion
+
+        #region RDSTLS
+        public RDSTLS_CapabilitiesPDU CreateRDSTLSCapabilityPDU(RdpbcgrServerSessionContext sessionContext)
+        {
+            var pdu = new RDSTLS_CapabilitiesPDU();
+
+            // fill common header
+            var header = new RDSTLS_CommonHeader();
+            header.Version = RDSTLS_VersionEnum.RDSTLS_VERSION_1;
+            header.PduType = RDSTLS_PduTypeEnum.RDSTLS_TYPE_CAPABILITIES;
+            header.DataType = RDSTLS_DataTypeEnum.RDSTLS_DATA_CAPABILITIES;
+            pdu.Header = header;
+
+            pdu.SupportedVersions = RDSTLS_VersionEnum.RDSTLS_VERSION_1;
+
+            return pdu;
+        }
+
+        public RDSTLS_AuthenticationResponsePDU CreateRDSTLSAuthenticationResponsePDU(RdpbcgrServerSessionContext sessionContext)
+        {
+            var pdu = new RDSTLS_AuthenticationResponsePDU();
+
+            // fill common header
+            var header = new RDSTLS_CommonHeader();
+            header.Version = RDSTLS_VersionEnum.RDSTLS_VERSION_1;
+            header.PduType = RDSTLS_PduTypeEnum.RDSTLS_TYPE_AUTHRSP;
+            header.DataType = RDSTLS_DataTypeEnum.RDSTLS_DATA_RESULT_CODE;
+            pdu.Header = header;
+
+            pdu.ResultCode = RDSTLS_ResultCodeEnum.RDSTLS_RESULT_SUCCESS;
+
+            return pdu;
+        }
         #endregion
 
         #region Private methods
@@ -4038,9 +4072,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             orderCapabilitySet.numberFonts = 0;
             orderCapabilitySet.orderFlags = (orderFlags_Values)170;
             orderCapabilitySet.orderSupport =
-                new byte[] { 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01, 
-                         0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 
-                         0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 
+                new byte[] { 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01,
+                         0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01,
+                         0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00,
                          0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00};
             orderCapabilitySet.textFlags = 1697;
             orderCapabilitySet.orderSupportExFlags =
@@ -4182,9 +4216,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     this.directedTransportStack.AddEvent(packetEvent);
                 }
                 else
-                {   
+                {
                     this.transportStack.AddEvent(packetEvent);
-                } 
+                }
             }
         }
 
@@ -4201,7 +4235,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 UpdateSessionKeyPdu pdu = new UpdateSessionKeyPdu();
                 TransportEvent packetEvent = new TransportEvent(EventType.ReceivedPacket, sessionContext.Identity, pdu);
-                
+
                 if (this.encryptedProtocol == EncryptedProtocol.DirectTls ||
                     this.EncryptedProtocol == EncryptedProtocol.DirectCredSsp ||
                 this.encryptedProtocol == EncryptedProtocol.NegotiationTls ||
@@ -4330,7 +4364,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="dwkeySize">the size of the key to use in bits</param>
         /// <param name="updateToContext">if set the modulus, private exponent, public exponent to serverContext</param>
         /// <returns>The certiface.</returns>
-        public SERVER_CERTIFICATE GenerateCertificate(int dwkeySize, out byte[] priviateExp, out byte[] publicExp, out byte[] modulus )
+        public SERVER_CERTIFICATE GenerateCertificate(int dwkeySize, out byte[] priviateExp, out byte[] publicExp, out byte[] modulus)
         {
             RSACryptoServiceProvider pk = new RSACryptoServiceProvider(dwkeySize);
             RSAParameters rsaParams = pk.ExportParameters(true);
@@ -4368,14 +4402,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             publicKey.bitlen = (uint)(rsaParams.Modulus.Length * 8);
             publicKey.datalen = (uint)(rsaParams.Modulus.Length - 1);
             publicKey.keylen = (uint)(publicKey.modulus.Length); //264
-            //264 bytes
-            
+                                                                 //264 bytes
+
 
             proprietaryCert.PublicKeyBlob = publicKey;
-            proprietaryCert.wPublicKeyBlobLen = (ushort)(20 + publicKey.keylen); 
+            proprietaryCert.wPublicKeyBlobLen = (ushort)(20 + publicKey.keylen);
             proprietaryCert.SignatureBlob = RdpbcgrUtility.SignProprietaryCertificate(proprietaryCert);
             Array.Resize<byte>(ref proprietaryCert.SignatureBlob, ConstValue.PROPRIETARY_CERTIFICATE_SIGNATURE_SIZE + 9); // 72
-            proprietaryCert.wSignatureBlobLen = (ushort)(proprietaryCert.SignatureBlob.Length);   
+            proprietaryCert.wSignatureBlobLen = (ushort)(proprietaryCert.SignatureBlob.Length);
 
             //create server certificate from proprietary certificate 
             SERVER_CERTIFICATE serverCert = new SERVER_CERTIFICATE();
@@ -4403,7 +4437,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     this.serverPort);
                 this.directedTransportStack = new RdpbcgrServerTransportStack(this, config, decoder.DecodePacketCallback, cert);
             }
-            else if(this.encryptedProtocol == EncryptedProtocol.DirectCredSsp)
+            else if (this.encryptedProtocol == EncryptedProtocol.DirectCredSsp)
             {
                 RdpcbgrServerTransportConfig config = new RdpcbgrServerTransportConfig(
                     SecurityStreamType.CredSsp,

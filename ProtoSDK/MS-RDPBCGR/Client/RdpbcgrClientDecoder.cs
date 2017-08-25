@@ -489,13 +489,50 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         private UInt64 ParseUInt64(byte[] data, ref int index, bool isBigEndian = false)
         {
             byte[] bytes = GetBytes(data, ref index, sizeof(UInt64));
-            if(isBigEndian)
+            if (isBigEndian)
             {
                 Array.Reverse(bytes, 0, sizeof(UInt64));
             }
 
             return BitConverter.ToUInt64(bytes, 0);
         }
+
+        private string ParseUnicodeString(byte[] data, ref int index, int size, bool isBigEndian = false, bool isZeroTerminated = true)
+        {
+            try
+            {
+                if (size <= 0 || size % 2 != 0)
+                {
+                    throw new FormatException(ConstValue.ERROR_MESSAGE_INVALID_UNICODE_STRING);
+                }
+
+                string result = string.Empty;
+                int i = 0;
+                UInt16 character = 0;
+
+                while (i < size)
+                {
+                    character = ParseUInt16(data, ref index, isBigEndian);
+
+                    result += (char)character;
+                }
+
+                if (isZeroTerminated)
+                {
+                    if (character != 0)
+                    {
+                        throw new FormatException(ConstValue.ERROR_MESSAGE_INVALID_UNICODE_STRING);
+                    }
+                }
+
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         #endregion Private Methods: Base Type Parsers
 
 
@@ -922,7 +959,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             // TS_UD_SC_CORE: clientRequestedProtocols
             coreData.clientRequestedProtocols = (requestedProtocols_Values)ParseUInt32(data, ref currentIndex, false);
 
-            if(currentIndex <= startIndex+coreData.header.length-1)
+            if (currentIndex <= startIndex + coreData.header.length - 1)
                 coreData.earlyCapabilityFlags = (SC_earlyCapabilityFlags_Values)ParseUInt32(data, ref currentIndex, false);
 
             return coreData;
@@ -1077,7 +1114,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             multitransport.header.type = (TS_UD_HEADER_type_Values)ParseUInt16(data, ref currentIndex, false);
             multitransport.header.length = ParseUInt16(data, ref currentIndex, false);
-            multitransport.flags = (MULTITRANSPORT_TYPE_FLAGS) ParseUInt32(data, ref currentIndex, false);
+            multitransport.flags = (MULTITRANSPORT_TYPE_FLAGS)ParseUInt32(data, ref currentIndex, false);
 
             return multitransport;
         }
@@ -2968,13 +3005,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             int startIndex = currentIndex;
 
             // RDP_SERVER_REDIRECTION_PACKET: flags
-            packet.Flags = ParseUInt16(data, ref currentIndex, false);
+            packet.Flags = (RDP_SERVER_REDIRECTION_PACKET_FlagsEnum)ParseUInt16(data, ref currentIndex, false);
 
             // RDP_SERVER_REDIRECTION_PACKET: length
             packet.Length = ParseUInt16(data, ref currentIndex, false);
 
             // RDP_SERVER_REDIRECTION_PACKET: sessionId
-            packet.SessionId = ParseUInt32(data, ref currentIndex, false);
+            packet.SessionID = ParseUInt32(data, ref currentIndex, false);
 
             // RDP_SERVER_REDIRECTION_PACKET: redirFlags
             packet.RedirFlags = (RedirectionFlags)ParseUInt32(data, ref currentIndex, false);
@@ -2983,7 +3020,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // RDP_SERVER_REDIRECTION_PACKET: targetNetAddress
                 packet.TargetNetAddressLength = ParseUInt32(data, ref currentIndex, false);
-                packet.TargetNetAddress = GetBytes(data, ref currentIndex, (int)packet.TargetNetAddressLength);
+                packet.TargetNetAddress = ParseUnicodeString(data, ref currentIndex, (int)packet.TargetNetAddressLength);
             }
 
             if ((packet.RedirFlags & RedirectionFlags.LB_LOAD_BALANCE_INFO) == RedirectionFlags.LB_LOAD_BALANCE_INFO)
@@ -2997,14 +3034,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // RDP_SERVER_REDIRECTION_PACKET: userName
                 packet.UserNameLength = ParseUInt32(data, ref currentIndex, false);
-                packet.UserName = GetBytes(data, ref currentIndex, (int)packet.UserNameLength);
+                packet.UserName = ParseUnicodeString(data, ref currentIndex, (int)packet.UserNameLength);
             }
 
             if ((packet.RedirFlags & RedirectionFlags.LB_DOMAIN) == RedirectionFlags.LB_DOMAIN)
             {
                 // RDP_SERVER_REDIRECTION_PACKET: domain
                 packet.DomainLength = ParseUInt32(data, ref currentIndex, false);
-                packet.Domain = GetBytes(data, ref currentIndex, (int)packet.DomainLength);
+                packet.Domain = ParseUnicodeString(data, ref currentIndex, (int)packet.DomainLength);
             }
 
             if ((packet.RedirFlags & RedirectionFlags.LB_PASSWORD) == RedirectionFlags.LB_PASSWORD)
@@ -3018,7 +3055,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // RDP_SERVER_REDIRECTION_PACKET: targetFqdn
                 packet.TargetFQDNLength = ParseUInt32(data, ref currentIndex, false);
-                packet.TargetFQDN = GetBytes(data, ref currentIndex, (int)packet.TargetFQDNLength);
+                packet.TargetFQDN = ParseUnicodeString(data, ref currentIndex, (int)packet.TargetFQDNLength);
             }
 
             if ((packet.RedirFlags & RedirectionFlags.LB_TARGET_NETBIOS_NAME)
@@ -3026,7 +3063,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // RDP_SERVER_REDIRECTION_PACKET: targetNetBiosName
                 packet.TargetNetBiosNameLength = ParseUInt32(data, ref currentIndex, false);
-                packet.TargetNetBiosName = GetBytes(data, ref currentIndex, (int)packet.TargetNetBiosNameLength);
+                packet.TargetNetBiosName = ParseUnicodeString(data, ref currentIndex, (int)packet.TargetNetBiosNameLength);
+            }
+
+            if (packet.RedirFlags.HasFlag(RedirectionFlags.LB_CLIENT_TSV_URL))
+            {
+                packet.TsvUrlLength = ParseUInt32(data, ref currentIndex, false);
+                packet.TsvUrl = GetBytes(data, ref currentIndex, (int)packet.TsvUrlLength);
             }
 
             if ((packet.RedirFlags & RedirectionFlags.LB_TARGET_NET_ADDRESSES)
@@ -3039,8 +3082,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 for (int i = 0; i < packet.TargetNetAddresses.addressCount; ++i)
                 {
                     packet.TargetNetAddresses.address[i].addressLength = ParseUInt32(data, ref currentIndex, false);
-                    packet.TargetNetAddresses.address[i].address = GetBytes(data, ref currentIndex,
-                        (int)packet.TargetNetAddresses.address[i].addressLength);
+                    packet.TargetNetAddresses.address[i].address = ParseUnicodeString(data, ref currentIndex, (int)packet.TargetNetAddresses.address[i].addressLength);
                 }
             }
 
@@ -3490,7 +3532,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 bitmapDataEx.exBitmapDataHeader = ParseExBitmapdataHeader(data, ref currentIndex);
             }
-            
+
             // TS_BITMAP_DATA_EX: bitmapData
             bitmapDataEx.bitmapData = GetBytes(data, ref currentIndex, (int)bitmapDataEx.bitmapDataLength);
 
@@ -3504,7 +3546,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="currentIndex">current parser index</param>
         /// <returns></returns>
         private TS_COMPRESSED_BITMAP_HEADER_EX ParseExBitmapdataHeader(
-            byte[] data, 
+            byte[] data,
             ref int currentIndex)
         {
             TS_COMPRESSED_BITMAP_HEADER_EX exTsCompressedBitmapHeader = new TS_COMPRESSED_BITMAP_HEADER_EX();
@@ -3939,7 +3981,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             ushort sequenceNumber = ParseUInt16(data, ref currentIndex, false);
             AUTO_DETECT_REQUEST_TYPE requestType = (AUTO_DETECT_REQUEST_TYPE)ParseUInt16(data, ref currentIndex, false);
 
-            if (requestType == AUTO_DETECT_REQUEST_TYPE.RDP_RTT_REQUEST_IN_CONNECTTIME 
+            if (requestType == AUTO_DETECT_REQUEST_TYPE.RDP_RTT_REQUEST_IN_CONNECTTIME
                 || requestType == AUTO_DETECT_REQUEST_TYPE.RDP_RTT_REQUEST_AFTER_CONNECTTIME)
             {
                 RDP_RTT_REQUEST req = new RDP_RTT_REQUEST();
@@ -4502,37 +4544,51 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 throw new FormatException(ConstValue.ERROR_MESSAGE_DATA_INDEX_OUT_OF_RANGE);
             }
 
-            // Check slow-path/fast-path type
             StackPacket pdu = null;
-            if (ConstValue.SLOW_PATH_PDU_INDICATOR_VALUE == data[ConstValue.SLOW_PATH_PDU_INDICATOR_INDEX])
+
+            if (clientContext.IsAuthenticatingRDSTLS)
             {
-                // Slow-Path Situation
-                if (data.Length <= ConstValue.X224_TPDU_TYPE_INDICATOR_INDEX)
-                {
-                    throw new FormatException(ConstValue.ERROR_MESSAGE_DATA_INDEX_OUT_OF_RANGE);
-                }
-
-                X224_TPDU_TYPE x224Type = (X224_TPDU_TYPE)data[ConstValue.X224_TPDU_TYPE_INDICATOR_INDEX];
-                switch (x224Type)
-                {
-                    // X224 Connection Confirm PDU
-                    case X224_TPDU_TYPE.ConnectionConfirm:
-                        pdu = DecodeX224ConnectionConfirmPDU(data);
-                        break;
-
-                    // MCS PDU
-                    case X224_TPDU_TYPE.Data:
-                        pdu = SwitchDecodeMcsPDU(data);
-                        break;
-
-                    default:
-                        throw new FormatException(ConstValue.ERROR_MESSAGE_ENUM_UNRECOGNIZED);
-                }
+                // switch RDSTLS PDU
+                pdu = SwitchRDSTLSAuthenticationPDU(data);
             }
             else
             {
-                // Fast-Path Situation
-                pdu = DecodeTsFpUpdatePDU(data);
+                // Check slow-path/fast-path type
+                if (ConstValue.SLOW_PATH_PDU_INDICATOR_VALUE == data[ConstValue.SLOW_PATH_PDU_INDICATOR_INDEX])
+                {
+                    // Slow-Path Situation
+                    if (data.Length <= ConstValue.X224_TPDU_TYPE_INDICATOR_INDEX)
+                    {
+                        throw new FormatException(ConstValue.ERROR_MESSAGE_DATA_INDEX_OUT_OF_RANGE);
+                    }
+
+                    X224_TPDU_TYPE x224Type = (X224_TPDU_TYPE)data[ConstValue.X224_TPDU_TYPE_INDICATOR_INDEX];
+                    switch (x224Type)
+                    {
+                        // X224 Connection Confirm PDU
+                        case X224_TPDU_TYPE.ConnectionConfirm:
+                            pdu = DecodeX224ConnectionConfirmPDU(data);
+                            break;
+
+                        // MCS PDU
+                        case X224_TPDU_TYPE.Data:
+                            pdu = SwitchDecodeMcsPDU(data);
+                            break;
+
+                        default:
+                            throw new FormatException(ConstValue.ERROR_MESSAGE_ENUM_UNRECOGNIZED);
+                    }
+                }
+                else
+                {
+                    // Fast-Path Situation
+                    pdu = DecodeTsFpUpdatePDU(data);
+                }
+            }
+
+            if (pdu == null)
+            {
+                throw new FormatException(ConstValue.ERROR_MESSAGE_UNRECOGNIZED_PDU);
             }
 
             return pdu;
@@ -5605,7 +5661,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             // Virtual_Channel_RAW_Pdu: commonHeader
             pdu.commonHeader = ParseMcsCommonHeader(data, ref dataIndex, type);
-                     
+
 
             // user data index
             int userDataIndex = 0;
@@ -5617,7 +5673,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             // requestId
             pdu.requestId = ParseUInt32(decryptedUserData, ref userDataIndex, false);
-            
+
             // request protocol
             pdu.requestedProtocol = (Multitransport_Protocol_value)ParseUInt16(decryptedUserData, ref userDataIndex, false);
 
@@ -5669,10 +5725,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             // reserved
             pdu.period = ParseByte(decryptedUserData, ref userDataIndex);
-            
+
             // reserved
             pdu.count1 = ParseByte(decryptedUserData, ref userDataIndex);
-            
+
             // reserved
             pdu.count2 = ParseByte(decryptedUserData, ref userDataIndex);
 
@@ -5680,7 +5736,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             VerifyDataLength(decryptedUserData.Length, userDataIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
             return pdu;
         }
-                
+
         #endregion PDU Decorder: 1 type of PDU in Connection Health Monitoring
 
         #region PDU Decorder : 1 type of PDU in Auto-detect
@@ -5711,9 +5767,116 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             return pdu;
         }
-       
+
 
         #endregion PDU Decorder : 1 type of PDU in Auto-detect
+
+        #region RDSTLS
+        public StackPacket SwitchRDSTLSAuthenticationPDU(byte[] data)
+        {
+            StackPacket pdu = null;
+
+            int currentIndex = 0;
+
+            var header = ParseRDSTLSCommonHeader(data, ref currentIndex);
+
+            if (header.Version != RDSTLS_VersionEnum.RDSTLS_VERSION_1)
+            {
+                return null;
+            }
+
+            switch (header.PduType)
+            {
+                case RDSTLS_PduTypeEnum.RDSTLS_TYPE_CAPABILITIES:
+                    if (header.DataType == RDSTLS_DataTypeEnum.RDSTLS_DATA_CAPABILITIES)
+                    {
+                        pdu = DecodeRDSTLSCapabilitiesPDU(data);
+                    }
+                    else
+                    {
+                        pdu = null;
+                    }
+                    break;
+
+                case RDSTLS_PduTypeEnum.RDSTLS_TYPE_AUTHRSP:
+                    if (header.DataType == RDSTLS_DataTypeEnum.RDSTLS_DATA_RESULT_CODE)
+                    {
+                        pdu = DecodeRDSTLSAuthenticationResponsePDU(data);
+                    }
+                    else
+                    {
+                        pdu = null;
+                    }
+                    break;
+
+                default:
+                    pdu = null;
+                    break;
+            }
+
+            return pdu;
+        }
+
+        public RDSTLS_CommonHeader ParseRDSTLSCommonHeader(byte[] data, ref int currentIndex)
+        {
+            var pdu = new RDSTLS_CommonHeader();
+            pdu.Version = (RDSTLS_VersionEnum)ParseUInt16(data, ref currentIndex, false);
+            pdu.PduType = (RDSTLS_PduTypeEnum)ParseUInt16(data, ref currentIndex, false);
+            pdu.DataType = (RDSTLS_DataTypeEnum)ParseUInt16(data, ref currentIndex, false);
+            return pdu;
+        }
+
+        public RDSTLS_CapabilitiesPDU DecodeRDSTLSCapabilitiesPDU(byte[] data)
+        {
+            var pdu = new RDSTLS_CapabilitiesPDU();
+
+            int currentIndex = 0;
+
+            pdu.Header = ParseRDSTLSCommonHeader(data, ref currentIndex);
+
+            if (pdu.Header.DataType != RDSTLS_DataTypeEnum.RDSTLS_DATA_CAPABILITIES)
+            {
+                return null;
+            }
+
+            // parse supported versions
+            pdu.SupportedVersions = (RDSTLS_VersionEnum)ParseUInt16(data, ref currentIndex, false);
+
+            // check total length
+            if (currentIndex != data.Length)
+            {
+                throw new FormatException(ConstValue.ERROR_MESSAGE_DATA_LENGTH_INCONSISTENT);
+            }
+
+            return pdu;
+        }
+
+        public RDSTLS_AuthenticationResponsePDU DecodeRDSTLSAuthenticationResponsePDU(byte[] data)
+        {
+            var pdu = new RDSTLS_AuthenticationResponsePDU();
+
+            int currentIndex = 0;
+
+            pdu.Header = ParseRDSTLSCommonHeader(data, ref currentIndex);
+
+            if (pdu.Header.DataType != RDSTLS_DataTypeEnum.RDSTLS_DATA_CAPABILITIES)
+            {
+                return null;
+            }
+
+            // parse result code
+            pdu.ResultCode = (RDSTLS_ResultCodeEnum)ParseUInt32(data, ref currentIndex, false);
+
+            // check total length
+            if (currentIndex != data.Length)
+            {
+                throw new FormatException(ConstValue.ERROR_MESSAGE_DATA_LENGTH_INCONSISTENT);
+            }
+
+            return pdu;
+        }
+
+        #endregion
 
         #endregion Public Methods: PDU Decoders
     }

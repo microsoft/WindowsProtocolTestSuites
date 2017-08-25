@@ -47,11 +47,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
     public delegate void RefreshRectRequestHandler(Client_Refresh_Rect_Pdu refreshPdu);
 
-    public delegate void SuppressOutputRequestHandler(Client_Suppress_Output_Pdu suppressPdu); 
+    public delegate void SuppressOutputRequestHandler(Client_Suppress_Output_Pdu suppressPdu);
 
     public delegate void VirtualChannelRequestHandler(Virtual_Channel_RAW_Pdu vcPdu);
 
     public delegate void TS_FRAME_ACKNOWLEDGE_PDUHandler(TS_FRAME_ACKNOWLEDGE_PDU ackPdu);
+
+    public delegate void RDSTLS_AuthenticationRequestPDUwithPasswordCredentialsHandler(RDSTLS_AuthenticationRequestPDUwithPasswordCredentials pdu);
     #endregion
 
     public interface IRdpbcgrAdapter : IAdapter
@@ -78,11 +80,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         event SuppressOutputRequestHandler SuppressOutputRequest;
         event VirtualChannelRequestHandler VirtualChannelRequest;
         event TS_FRAME_ACKNOWLEDGE_PDUHandler TS_FRAME_ACKNOWLEDGE_PDUReceived;
+        event RDSTLS_AuthenticationRequestPDUwithPasswordCredentialsHandler RDSTLS_AuthenticationRequestPDUwithPasswordCredentialsReceived;
         #endregion
 
         #region Properties
-        RdpbcgrServerSessionContext SessionContext{get;}
-        RdpbcgrServer ServerStack {get;}
+        RdpbcgrServerSessionContext SessionContext { get; }
+        RdpbcgrServer ServerStack { get; }
         ServerCapabilitySetting CapabilitySetting { get; }
         SimulatedScreen SimulatedScreen { get; }
         UInt16 RDPDRChannelId { get; }
@@ -209,14 +212,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="mcsChannelId_Net">MCSChannelId value for Server Network Data</param>
         /// <param name="mcsChannelId_MSGChannel">MCSChannelId value for Server Message Channel Data</param>
         void Server_MCS_Connect_Response(
-            EncryptionMethods enMothod, 
-            EncryptionLevel enLevel, 
-            TS_UD_SC_CORE_version_Values rdpVersion, 
+            EncryptionMethods enMothod,
+            EncryptionLevel enLevel,
+            TS_UD_SC_CORE_version_Values rdpVersion,
             NegativeType invalidType,
-            MULTITRANSPORT_TYPE_FLAGS multiTransportTypeFlags = MULTITRANSPORT_TYPE_FLAGS.None, 
-            bool hasEarlyCapabilityFlags = false, 
-            SC_earlyCapabilityFlags_Values earlyCapabilityFlagsValue = SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED, 
-            UInt16 mcsChannelId_Net = ConstValue.IO_CHANNEL_ID, 
+            MULTITRANSPORT_TYPE_FLAGS multiTransportTypeFlags = MULTITRANSPORT_TYPE_FLAGS.None,
+            bool hasEarlyCapabilityFlags = false,
+            SC_earlyCapabilityFlags_Values earlyCapabilityFlagsValue = SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED,
+            UInt16 mcsChannelId_Net = ConstValue.IO_CHANNEL_ID,
             UInt16 mcsChannelId_MSGChannel = ConstValue.MCS_MESSAGE_CHANNEL_ID);
 
         /// <summary>
@@ -266,7 +269,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <summary>
         /// Send Server Font Map Pdu to client.
         /// </summary>
-        void ServerFontMap(); 
+        void ServerFontMap();
 
         #endregion
 
@@ -296,7 +299,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// Send Server Set Error Info PDU to client.
         /// </summary>
         /// <param name="value">The error code.</param>
-        void ServerSetErrorInfoPdu(errorInfo_Values value); 
+        void ServerSetErrorInfoPdu(errorInfo_Values value);
         #endregion
 
         #region Keyboard Status PDUs
@@ -312,7 +315,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <summary>
         /// Send Server Set Keyboard IME Status PDU to client.
         /// </summary>
-        void ServerSetKeyboardIme(); 
+        void ServerSetKeyboardIme();
         #endregion
 
         #region Basic Output
@@ -422,7 +425,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// </summary>
         /// <param name="frequency">Frequency of the beep the client MUST play.</param>
         /// <param name="duration">Duration of the beep the client MUST play.</param>
-        void PlaySound(uint frequency, uint duration); 
+        void PlaySound(uint frequency, uint duration);
         #endregion
 
         #endregion
@@ -433,7 +436,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// </summary>
         /// <param name="notificationType">The Logon Notification type.</param>
         /// <param name="errorType">The Logon Error type. Only used when Notification Type is LogonError.</param>
-        void ServerSaveSessionInfo(LogonNotificationType notificationType, ErrorNotificationType_Values errorType); 
+        void ServerSaveSessionInfo(LogonNotificationType notificationType, ErrorNotificationType_Values errorType);
 
         /// <summary>
         /// Send an Early User Authorization Result PDU
@@ -453,7 +456,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <summary>
         /// Send Monitor Layout Pdu to client. 
         /// </summary>
-        void MonitorLayoutPdu(); 
+        void MonitorLayoutPdu();
         #endregion
 
         #region Virtual Channel
@@ -464,7 +467,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="channelId">The channel Id of the virtual channel. </param>
         /// <param name="virtualChannelData">The virtual channel data to be sent. </param>
         /// <param name="invalidType">Invalid Type</param>
-        void SendVirtualChannelPDU(UInt16 channelId, byte[] virtualChannelData, StaticVirtualChannel_InvalidType invalidType); 
+        void SendVirtualChannelPDU(UInt16 channelId, byte[] virtualChannelData, StaticVirtualChannel_InvalidType invalidType);
 
         #endregion
 
@@ -475,7 +478,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// </summary>
         /// <param name="presentRoutingToken">Indicates if present routing token (LoadBalanceInfo).</param>
         void SendServerRedirectionPdu(bool presentRoutingToken);
-        
+
+        void SendServerRedirectionPduRDSTLS();
+
         #endregion
 
         #region Auto-Detection
@@ -502,7 +507,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <summary>
         /// Send a Server Auto-Detect Request PDU with RDP_NETCHAR_RESULT
         /// </summary>
-        void SendAutoDetectRequestPdu_NetcharResult(ushort sequenceNumber);        
+        void SendAutoDetectRequestPdu_NetcharResult(ushort sequenceNumber);
 
         /// <summary>
         /// Send a Tunnel Data PDU with RDP_BW_START in its subheader
@@ -532,7 +537,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="sequenceNumber"></param>
         /// <param name="timeout"></param>
         void WaitForAndCheckTunnelDataPdu_BWResult(Multitransport_Protocol_value requestedProtocol, ushort sequenceNumber, TimeSpan timeout);
-                        
+
         /// <summary>
         /// Check whether the latest received Auto-Detect Response PDU is a valid PDU
         /// </summary>
@@ -573,7 +578,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="subHdDataArr">Array of Auto-detect data, will be send as subheader of TunnelDataPdu</param>
         void SendTunnelData(Multitransport_Protocol_value requestedProtocol, byte[] data, byte[][] subHdDataArr = null);
 
-             
+
         #endregion Multitransport 
 
         #region Connection Health Monitoring
@@ -635,7 +640,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             bool expectAutoReconnect,
             TS_UD_SC_CORE_version_Values rdpServerVersion,
             MULTITRANSPORT_TYPE_FLAGS multiTransportTypeFlags = MULTITRANSPORT_TYPE_FLAGS.None,
-            bool supportRDPEGFX = false, 
+            bool supportRDPEGFX = false,
             bool supportRestrictedAdminMode = false);
 
         /// <summary>

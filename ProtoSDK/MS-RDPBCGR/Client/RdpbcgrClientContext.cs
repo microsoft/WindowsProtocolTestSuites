@@ -132,6 +132,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         private Decompressor ioDecompressor;
 
         private RdpbcgrClient client;
+        private bool isAuthenticatingRDSTLS;
 
         #endregion private members
 
@@ -156,6 +157,28 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 }
             }
         }
+
+        /// <summary>
+        /// Indicating whether RDSTLS authentication is ongoing.
+        /// </summary>
+        public bool IsAuthenticatingRDSTLS
+        {
+            get
+            {
+                lock (contextLock)
+                {
+                    return isAuthenticatingRDSTLS;
+                }
+            }
+            set
+            {
+                lock (contextLock)
+                {
+                    isAuthenticatingRDSTLS = value;
+                }
+            }
+        }
+
 
         /// <summary>
         /// Static virtual channel Manager
@@ -888,7 +911,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 {
                     if (demandActivePdu != null && demandActivePdu.capabilitySets != null)
                     {
-                        return demandActivePdu.capabilitySets; 
+                        return demandActivePdu.capabilitySets;
                     }
 
                     return null;
@@ -1118,7 +1141,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         public uint RequestIdReliable
         {
             get
-            {                
+            {
                 return requestIdReliable;
             }
         }
@@ -1182,7 +1205,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             this.client = bcgrClient;
             isSwitchOn = true;
             unprocessedPacketBuffer = new List<StackPacket>(); ;
-
+            isAuthenticatingRDSTLS = false;
         }
         #endregion constructor
 
@@ -1384,6 +1407,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     ioDecompressor.Dispose();
                     ioDecompressor = null;
                 }
+
+                isAuthenticatingRDSTLS = false;
             }
         }
 

@@ -44,6 +44,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             }
         }
 
+        internal static uint CalculateUnicodeStringEncodingSize(string unicodeString, bool isZeroTerminited)
+        {
+            uint result = (uint)unicodeString.Length * 2;
+            if (isZeroTerminited)
+            {
+                result += 2;
+            }
+            return result;
+        }
 
         /// <summary>
         /// Encode a Unicode string to a byte list.
@@ -63,7 +72,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 if (uniString != null)
                 {
                     byte[] uniBuffer = Encoding.Unicode.GetBytes(uniString);
-                    
+
                     if (uniBuffer.Length < (bytesNumber - 1))
                     {
                         uniBuffer.CopyTo(stringBuffer, 0);
@@ -146,7 +155,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="context">The context used to encrypt the data body.
         /// If the securityHeader is the type of TS_SECURITY_HEADER, then this argument can be null.
         /// Otherwise, this argument can not be null, it will not encrypt the dataBody.</param>
-        internal static void EncodeSecurityData(List<byte> buffer, 
+        internal static void EncodeSecurityData(List<byte> buffer,
                                                 TS_SECURITY_HEADER securityHeader,
                                                 byte[] dataBody,
                                                 RdpbcgrClientContext context)
@@ -185,12 +194,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                         byte[] dataSignature = null;
                         EncodeStructure(buffer, (ushort)fipsHeader.length);
                         EncodeStructure(buffer, fipsHeader.version);
-                        
+
                         // If the padlen equals 0, calculate it.
                         // Otherwise, keep the old value.
                         if (fipsHeader.padlen == 0)
                         {
-                            fipsHeader.padlen = (byte)(ConstValue.TRIPLE_DES_PAD 
+                            fipsHeader.padlen = (byte)(ConstValue.TRIPLE_DES_PAD
                                               - (dataBody.Length % ConstValue.TRIPLE_DES_PAD));
                         }
 
@@ -300,7 +309,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             EncodeStructure(sendBuffer, commonHeader.tpktHeader);
             EncodeStructure(sendBuffer, commonHeader.x224Data);
-            
+
             List<byte> securityBuffer = new List<byte>();
             EncodeSecurityData(securityBuffer, commonHeader.securityHeader, dataBody, context);
 
@@ -320,7 +329,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             EncodeStructure(sendBuffer, commonHeader.tpktHeader);
             EncodeStructure(sendBuffer, commonHeader.x224Data);
-            
+
             List<byte> securityBuffer = new List<byte>();
             EncodeSecurityData(securityBuffer, commonHeader.securityHeader, dataBody, context);
 
@@ -353,7 +362,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             if (requestType == AUTO_DETECT_REQUEST_TYPE.RDP_RTT_REQUEST_IN_CONNECTTIME || requestType == AUTO_DETECT_REQUEST_TYPE.RDP_RTT_REQUEST_AFTER_CONNECTTIME)
             {
                 //RDP_RTT_REQUEST
-                
+
             }
             else if (requestType == AUTO_DETECT_REQUEST_TYPE.RDP_BW_START_IN_CONNECTTIME || requestType == AUTO_DETECT_REQUEST_TYPE.RDP_BW_START_AFTER_CONNECTTIME_OR_RELIABLEUDP || requestType == AUTO_DETECT_REQUEST_TYPE.RDP_BW_START_AFTER_CONNECTTIME_OR_LOSSYUDP)
             {
@@ -420,14 +429,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 //RDP_RTT_RESPONSE
             }
-            else if(networkDetectionResponse.responseType == AUTO_DETECT_RESPONSE_TYPE.RDP_BW_RESULTS_AFTER_CONNECT ||
+            else if (networkDetectionResponse.responseType == AUTO_DETECT_RESPONSE_TYPE.RDP_BW_RESULTS_AFTER_CONNECT ||
                 networkDetectionResponse.responseType == AUTO_DETECT_RESPONSE_TYPE.RDP_BW_RESULTS_DURING_CONNECT)
             {
                 RDP_BW_RESULTS bwResult = (RDP_BW_RESULTS)networkDetectionResponse;
                 EncodeStructure(sendBuffer, bwResult.timeDelta);
                 EncodeStructure(sendBuffer, bwResult.byteCount);
             }
-            else if( networkDetectionResponse.responseType ==  AUTO_DETECT_RESPONSE_TYPE.RDP_NETCHAR_SYNC)
+            else if (networkDetectionResponse.responseType == AUTO_DETECT_RESPONSE_TYPE.RDP_NETCHAR_SYNC)
             {
                 RDP_NETCHAR_SYNC sync = (RDP_NETCHAR_SYNC)networkDetectionResponse;
                 EncodeStructure(sendBuffer, sync.bandwidth);
