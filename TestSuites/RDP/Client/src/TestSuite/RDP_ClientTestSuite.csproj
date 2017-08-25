@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1CEBA0F7-04B6-49F7-AF02-322FDF6CC5D2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Microsoft.Protocols.TestSuites.Rdp</RootNamespace>
+    <AssemblyName>RDP_ClientTestSuite</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>.\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'fxcop|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\fxcop\</OutputPath>
+    <DefineConstants>FXCOP;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+    <OutputPath>.\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Protocols.TestTools">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Protocols.TestTools.ExtendedLogging">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Protocols.TestTools.VSTS">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="RDP_ClientTestSuite.deployment.ptfconfig">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="RDP_ClientTestSuite.ptfconfig" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="RDPBCGR\RdpbcgrTestSuite.cs" />
+    <Compile Include="RDPBCGR\S10_FastPathOutputTest.cs" />
+    <Compile Include="RDPBCGR\S1_ConnectionTest.cs" />
+    <Compile Include="RDPBCGR\S1_ConnectionTest_CapabilityExchange.cs" />
+    <Compile Include="RDPBCGR\S1_Connection_BasicSettingExchangeTest.cs" />
+    <Compile Include="RDPBCGR\S1_Connection_ChannelConnectionTest.cs" />
+    <Compile Include="RDPBCGR\S1_Connection_ConnectionFinalizationTest.cs" />
+    <Compile Include="RDPBCGR\S1_Connection_DisconnectionTest.cs" />
+    <Compile Include="RDPBCGR\S1_Connection_InitiationTest.cs" />
+    <Compile Include="RDPBCGR\S1_Connection_SecuritySettingExchangeTest.cs" />
+    <Compile Include="RDPBCGR\S2_ReactivationTest.cs" />
+    <Compile Include="RDPBCGR\S3_AutoReconnectTest.cs" />
+    <Compile Include="RDPBCGR\S4_SlowPathInputTest.cs" />
+    <Compile Include="RDPBCGR\S5_FastPathInputTest.cs" />
+    <Compile Include="RDPBCGR\S6_AutoDetectTest.cs" />
+    <Compile Include="RDPBCGR\S7_StaticVirtualChannelTest.cs" />
+    <Compile Include="RDPBCGR\S8_ServerRedirectionTest.cs" />
+    <Compile Include="RDPBCGR\S9_HealthMonitoringTest.cs" />
+    <Compile Include="RDPEDISP\RdpedispTestSuite.cs" />
+    <Compile Include="RDPEDISP\S1_ResolutionChange.cs" />
+    <Compile Include="RDPEDISP\S2_OrientationChange.cs" />
+    <Compile Include="RDPEDISP\S3_MonitorAdditionRemoval.cs" />
+    <Compile Include="RDPEDISP\S4_MonitorReposition.cs" />
+    <Compile Include="RDPEGFX\RdpegfxClearCodecTest.cs" />
+    <Compile Include="RDPEGFX\RDPegfxCompressionTest.cs" />
+    <Compile Include="RDPEGFX\RdpegfxFrameSegmentationTest.cs" />
+    <Compile Include="RDPEGFX\RdpegfxH264CodecTest.cs" />
+    <Compile Include="RDPEGFX\RdpegfxRfxProgCodecTest.cs" />
+    <Compile Include="RDPEGFX\RdpegfxSurfaceToCacheToSurfaceTest.cs" />
+    <Compile Include="RDPEGFX\RdpegfxSurfaceToScreenTest.cs" />
+    <Compile Include="RDPEGFX\RdpegfxCapabilityExchangeTest.cs" />
+    <Compile Include="RDPEGFX\RdpegfxSurfaceToSurfaceTest.cs" />
+    <Compile Include="RDPEGFX\RdpegfxTestSuite.cs" />
+    <Compile Include="RDPEGFX\RdpegfxRemoteFXCodecTest.cs" />
+    <Compile Include="RDPEGFX\RdpegfxWireToSurfaceTest.cs" />
+    <Compile Include="RDPEI\RdpeiTestSuite.cs" />
+    <Compile Include="RDPEI\S1_TouchInputTest.cs" />
+    <Compile Include="RDPEI\S2_TouchControlTest.cs" />
+    <Compile Include="RDPEMT\S3_Tunneling_StaticVC_Traffic.cs" />
+    <Compile Include="RDPEUDP\RdpeudpTestSuite.cs" />
+    <Compile Include="RDPEUDP\S1_Connection.cs" />
+    <Compile Include="RDPEUDP\S2_DataTransfer.cs" />
+    <Compile Include="RDPEMT\RdpemtTestSuite.cs" />
+    <Compile Include="RDPEMT\S1_Connection.cs" />
+    <Compile Include="RDPEMT\S2_AutoDetect.cs" />
+    <Compile Include="RDPEUSB\RdpeusbTestSuite.cs" />
+    <Compile Include="RDPEUSB\S1_OperateDeviceChannel.cs" />
+    <Compile Include="RDPEUSB\S2_CancelRequest.cs" />
+    <Compile Include="RDPEUSB\S3_OperateIo.cs" />
+    <Compile Include="RDPEVOR\RdpevorNegativeTest.cs" />
+    <Compile Include="RDPEVOR\RdpevorPositiveTest.cs" />
+    <Compile Include="RDPEVOR\RdpevorTestSuite.cs" />
+    <Compile Include="RDPRFX\RdprfxEncodedHeaderMessageTest.cs" />
+    <Compile Include="RDPRFX\RdprfxCapabilityExchangeTest.cs" />
+    <Compile Include="RDPRFX\RdprfxImageModeTest.cs" />
+    <Compile Include="RDPRFX\RdprfxMUSTBehaviorNegativeTest.cs" />
+    <Compile Include="RDPRFX\RdprfxTestSuite.cs" />
+    <Compile Include="RDPRFX\RdprfxVideoModeTest.cs" />
+    <Compile Include="RdpTestClassBase.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Common\Common.csproj">
+      <Project>{FE653643-6342-4300-871E-683C7BA31494}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPBCGR\Rdpbcgr.csproj">
+      <Project>{FA218CAB-320C-45E9-B641-04622418988E}</Project>
+      <Name>Rdpbcgr</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEDISP\Rdpedisp.csproj">
+      <Project>{37f00834-1559-42c8-a137-cc4e963d4b82}</Project>
+      <Name>Rdpedisp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEDYC\Rdpedyc.csproj">
+      <Project>{CFBAFDE2-F509-4AC8-817A-0C26C1B27653}</Project>
+      <Name>Rdpedyc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEFS\Rdpefs.csproj">
+      <Project>{e5a90e66-44b4-4f13-b2a6-f7990770a977}</Project>
+      <Name>Rdpefs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEGFX\Rdpegfx.csproj">
+      <Project>{c89ac3fb-7ffc-49d8-b99b-a76c9411aec6}</Project>
+      <Name>Rdpegfx</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEGT\Rdpegt.csproj">
+      <Project>{80264e7b-a9dd-4c8a-ab1e-86c1b80466d9}</Project>
+      <Name>Rdpegt</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEI\Rdpei.csproj">
+      <Project>{6EE0BB46-E1A0-42D5-85AA-E4F0B3A8C5CA}</Project>
+      <Name>Rdpei</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEMT\Rdpemt.csproj">
+      <Project>{9E44ED93-D10D-42E3-A8BF-AD1923859857}</Project>
+      <Name>Rdpemt</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEUDP\Rdpeudp.csproj">
+      <Project>{B6F8EB97-B6A5-4092-9ED0-12C0487DA124}</Project>
+      <Name>Rdpeudp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEUSB\Rdpeusb.csproj">
+      <Project>{698f6802-be9f-4483-a5c7-b4bbfa51d47b}</Project>
+      <Name>Rdpeusb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEVOR\Rdpevor.csproj">
+      <Project>{2467a7e3-8e85-4f7b-80bb-effe8d48b3de}</Project>
+      <Name>Rdpevor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPRFX\Rdprfx.csproj">
+      <Project>{9dd86de1-3231-4713-9b45-493f4fe4199c}</Project>
+      <Name>Rdprfx</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Sspi\Sspi.csproj">
+      <Project>{D0CB354B-2CD3-49C1-8ECA-2F6EBADBCCEE}</Project>
+      <Name>Sspi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Adapter\RDP_ClientAdapter.csproj">
+      <Project>{407A6664-47AB-44DA-9917-ECB50F879772}</Project>
+      <Name>RDP_ClientAdapter</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin\" />
+  </Target>
+</Project>

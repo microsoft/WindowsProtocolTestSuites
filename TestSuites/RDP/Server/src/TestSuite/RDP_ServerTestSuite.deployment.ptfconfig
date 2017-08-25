@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+
+  <Properties>
+
+    <!--Block Begin: Properties that required to be set ***-->
+    <!--Whether a negotiation protocol is used.-->
+    <Property name="RDP.Security.Negotiation" value="True"/>
+    <!--One of the TLS, CredSSP, or RDP.-->
+    <Property name="RDP.Security.Protocol" value="TLS"/>
+
+    <!-- Domain of the tested RDP Server -->
+    <Property name="RDP.ServerDomain" value=""/>
+    <!-- Computer name or IP of the tested RDP Server-->
+    <Property name="RDP.ServerName" value="192.168.2.4"/>
+    <!-- Port of RDP service on RDP Server-->
+    <Property name="RDP.ServerPort" value="3389"/>
+    <!--The user name of local host (RDP server). -->
+    <Property name="RDP.ServerUserName" value="Administrator"/>
+    <!--The logon password of "RDP.ServerUserName". -->
+    <Property name="RDP.ServerUserPassword" value="Password01!"/>
+    <!-- Computer name or IP of the driver computer-->
+    <Property name="RDP.ClientName" value="192.168.2.1"/>
+    
+    <!-- Whether verify RDPBCGR message received -->
+    <Property name="VerifyRdpbcgrMessages" value="true"/>
+    <!-- Whether verify SHOULD behaviors in TD -->
+    <Property name="VerifyShouldBehaviors" value="true"/>
+    <Property name="WaitTime" value="20"/>
+    
+    <!--The version of the RDP intends to test. It should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3.-->
+    <!--The seperator between the RDP.Version is required to be ".".-->
+    <Property name="RDP.Version" value="8.1">
+      <Choice>7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3</Choice>
+      <Description>The version of the RDP intends to test, it should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3</Description>
+    </Property>
+    <!-- Block End -->
+    
+  </Properties>
+  <Adapters>
+  </Adapters>
+
+  <!-- The default profile name.-->
+  <TestLog defaultprofile="Verbose">
+    <Sinks>
+    </Sinks>
+    <Profiles>
+    </Profiles>
+  </TestLog>
+</TestSite>

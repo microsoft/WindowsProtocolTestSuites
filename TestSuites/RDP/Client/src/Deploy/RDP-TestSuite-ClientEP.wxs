@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?define TESTSUITE_NAME=RDP?>
+<?define TESTSUITE_ENDPOINT=Client?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+	
+  <Product Id="*" 
+           Name="Microsoft $(var.TESTSUITE_NAME) $(var.TESTSUITE_ENDPOINT) Endpoint Test Suite" 
+           Language="1033" 
+           Version="$(env.TESTSUITE_VERSION)" 
+           Manufacturer="Microsoft Corporation" 
+           UpgradeCode="635820CC-50FA-487F-98EC-706F425D8292">
+		
+    
+    <Package Id="*" 
+             InstallScope="perMachine"
+             InstallPrivileges="elevated"
+             Description="Microsoft $(var.TESTSUITE_NAME) $(var.TESTSUITE_ENDPOINT) Endpoint Test Suite v$(env.TESTSUITE_VERSION)"
+             Manufacturer="Microsoft Corporation"
+             InstallerVersion="300"
+             Compressed="yes" />
+    
+		<Media Id="1" Cabinet="TestSuite_AllInOne.cab" EmbedCab="yes" />
+
+    <MajorUpgrade DowngradeErrorMessage ="A later version of [ProductName] is already installed. Setup will now exit." />
+
+    <Feature Id="TestSuiteFeatures" Level="1" ConfigurableDirectory="TESTSUITE_ROOT_DIR" />
+
+    <WixVariable Id="TESTSUITE_NAME" Value="$(var.TESTSUITE_NAME)" Overridable="no" />
+    <WixVariable Id="TESTSUITE_ENDPOINT" Value="$(var.TESTSUITE_ENDPOINT)" Overridable="no" />
+    <WixVariable Id="TESTSUITE_VERSION" Value="$(env.TESTSUITE_VERSION)" Overridable="no" />
+   
+    <WixVariable Id="TESTSUITE_BATCH_DIR" Value="$(env.TestSuiteRoot)\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\src\Batch" />
+	  <WixVariable Id="TESTSUITE_BIN_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\Bin" />
+    <WixVariable Id="TESTSUITE_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\Setup\Scripts" />
+    <WixVariable Id="TESTSUITE_DATA_DIR" Value="$(env.TestSuiteRoot)\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\Setup\Data" />
+    <!-- The scripts are supposed to be cmd scripts, no parameter. -->
+    <!-- The scripts exist in drop\TestSuites\RDP\Client\scripts directory. -->
+    <WixVariable Id="CONFIG_TESTSUITE_SCRIPT" Value="Config-TestSuite.cmd" />
+    <WixVariable Id="CONFIG_SUT_SCRIPT" Value="Config-SUT.cmd" />
+    <WixVariable Id="CONFIG_DOMAIN_SCRIPT" Value="Config-Domain.cmd" />
+    <!-- The script should exist in drop\TestSuites\RDP\Client\batch directory. -->
+    <WixVariable Id="RUN_TESTS_COMMAND" Value="RunAllTestCases.cmd" />
+    <!--WixVariable Id="RUN_BVT_COMMAND" Value="RunBVTTestCases.cmd" />
+    <WixVariable Id="RUN_RDPBCGR_BVT_COMMAND" Value="Rdpbcgr_RunBVTTestCases.cmd" />
+    <WixVariable Id="RUN_RDPBCGR_TESTS_COMMAND" Value="Rdpbcgr_RunAllTestCases.cmd" />
+    <WixVariable Id="RUN_RDPRFX_BVT_COMMAND" Value="Rdprfx_RunBVTTestCases.cmd" />
+    <WixVariable Id="RUN_RDPRFX_TESTS_COMMAND" Value="Rdprfx_RunAllTestCases.cmd" />
+    <WixVariable Id="RUN_RDPEVOR_BVT_COMMAND" Value="Rdpevor_RunBVTTestCases.cmd" />
+    <WixVariable Id="RUN_RDPEVOR_TESTS_COMMAND" Value="Rdpevor_RunAllTestCases.cmd" />
+    <WixVariable Id="RUN_RDPEUSB_BVT_COMMAND" Value="Rdpeusb_RunBVTTestCases.cmd" />
+    <WixVariable Id="RUN_RDPEUSB_TESTS_COMMAND" Value="Rdpeusb_RunAllTestCases.cmd" />
+    <WixVariable Id="RUN_RDPEUDP_BVT_COMMAND" Value="Rdpeudp_RunBVTTestCases.cmd" />
+    <WixVariable Id="RUN_RDPEUDP_TESTS_COMMAND" Value="Rdpeudp_RunAllTestCases.cmd" />
+    <WixVariable Id="RUN_RDPEMT_BVT_COMMAND" Value="Rdpemt_RunBVTTestCases.cmd" />
+    <WixVariable Id="RUN_RDPEMT_TESTS_COMMAND" Value="Rdpemt_RunAllTestCases.cmd" />
+    <WixVariable Id="RUN_RDPEGFX_BVT_COMMAND" Value="Rdpegfx_RunBVTTestCases.cmd" />
+    <WixVariable Id="RUN_RDPEGFX_TESTS_COMMAND" Value="Rdpegfx_RunAllTestCases.cmd" />
+    <WixVariable Id="RUN_RDPEI_BVT_COMMAND" Value="Rdpei_RunBVTTestCases.cmd" />
+    <WixVariable Id="RUN_RDPEI_TESTS_COMMAND" Value="Rdpei_RunAllTestCases.cmd" />
+    <WixVariable Id="RUN_RDPEDISP_BVT_COMMAND" Value="Rdpedisp_RunBVTTestCases.cmd" />
+    <WixVariable Id="RUN_RDPEDISP_TESTS_COMMAND" Value="Rdpedisp_RunAllTestCases.cmd" /-->
+    <!-- Required PTF version should be the same as required Protocol Stack SDK version. -->
+    <!--WixVariable Id="MIN_PROTOCOL_TEST_FRAMEWORK_VERSION" Value="1.0.0.0" />
+    <WixVariable Id="MIN_SPEC_EXPLORER_VERSION" Value="3.2.2497.0" /-->
+    <DirectoryRef Id="TESTSUITE_ROOT_DIR">
+      <Component Id="LICENSE.rtf" Guid="{DE678C76-D6F3-4F07-A160-2851A2C308C5}">
+        <File Id="LICENSE.rtf" Source="LICENSE.rtf" />
+      </Component>
+    </DirectoryRef>
+
+  </Product>
+</Wix>
