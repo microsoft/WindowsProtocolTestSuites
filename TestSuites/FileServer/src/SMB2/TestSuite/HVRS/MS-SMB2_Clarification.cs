@@ -1,4 +1,7 @@
-﻿using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
@@ -42,7 +45,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Hvrs)]
-        [Description("C0001: This test case is designed to test whether the server supports the SMB 3.0 or higher dialect.")]
+        [TestCategory(TestCategories.Smb30)]
+        [Description("This test case is designed to test whether the server supports the SMB 3.0 or higher dialect.")]
         public void BVT_SMBDialect()
         {
             smb2Functionalclient.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.ShareServerName, TestConfig.ShareServerIP);
@@ -69,7 +73,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Hvrs)]
-        [Description("C0002: This test case is designed to test whether the server supports persistent handles.")]
+        [TestCategory(TestCategories.Smb30)]
+        [Description("This test case is designed to test whether the server supports persistent handles.")]
         public void BVT_PersistentHandles()
         {
             #region Check Applicability
@@ -115,7 +120,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Hvrs)]
-        [Description("C0003: This test case is designed to test whether the server supports the FSCTL_LMR_REQUEST_RESILIENCY.")]
+        [TestCategory(TestCategories.Smb30)]
+        [Description("This test case is designed to test whether the server supports the FSCTL_LMR_REQUEST_RESILIENCY.")]
         public void BVT_Resiliency()
         {
             #region Check Applicaility

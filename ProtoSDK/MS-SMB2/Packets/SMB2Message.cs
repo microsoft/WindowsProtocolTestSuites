@@ -12706,8 +12706,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// </summary>
         public const uint STATUS_SMB_NO_PREAUTH_INTEGRITY_HASH_OVERLAP = 0xC05D0000;
 
+        /// <summary>
+        /// Offload read operations cannot be performed on:
+        /// Compressed files
+        /// Sparse files
+        /// Encrypted files
+        /// File system metadata files
+        /// </summary>
         public const uint STATUS_OFFLOAD_READ_FILE_NOT_SUPPORTED = 0xC000A2A3;
 
+        /// <summary>
+        /// The volume is write-protected and changes to it cannot be made. 
+        /// </summary>
         public const uint STATUS_MEDIA_WRITE_PROTECTED = 0xC00000A2;
 
         #endregion

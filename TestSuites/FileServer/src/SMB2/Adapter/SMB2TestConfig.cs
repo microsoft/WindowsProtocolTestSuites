@@ -11,7 +11,6 @@ using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd;
 using System.Globalization;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter
@@ -91,8 +90,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter
         private string shareServerName;
         private string shareName;
         private IPAddress shareServerIP;
-        private string nameOfSqosVHD;
-        private string initiatorHostName;
         private bool isOffLoadImplemented;
         #endregion
 
@@ -163,44 +160,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter
             }
         }
 
-        /// <summary>
-        /// Specifies the computer name on which the initiator resides
-        /// </summary>
-        public string InitiatorHostName
-        {
-            get
-            {
-                if (initiatorHostName == null)
-                {
-                    initiatorHostName = System.Net.Dns.GetHostName();
-                }
-                return initiatorHostName;
-            }
-        }
-
-        /// <summary>
-        /// Specifies the highest protocol version supported by the server
-        /// </summary>
-        public uint ServerServiceVersion
-        {
-            get
-            {
-                return ParseUint("RsvdServerServiceVersion", "RSVD");
-            }
-        }
-
-        public string NameOfSqosVHD
-        {
-            get
-            {
-                if (nameOfSqosVHD == null)
-                {
-                    nameOfSqosVHD = GetProperty("SQOS", "SqosVHDName");
-                }
-                return nameOfSqosVHD;
-            }
-        }
-
         public bool IsOffLoadImplemented
         {
             get
@@ -231,17 +190,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter
         #endregion
 
         #region Methods
-        /// <summary>
-        /// Get property value from grouped ptf config.
-        /// </summary>
-        /// <param name="propertyName">The name of the property.</param>
-        /// <param name="checkNullOrEmpty">Check if the property is null or the value is empty.</param>
-        /// <returns>The value of the property.</returns>
-        //public string GetProperty(string propertyName, string groupName = "HVRS", bool checkNullOrEmpty = true)
-        //{
-        //    return GetProperty(groupName, propertyName, checkNullOrEmpty);
-        //}
-
         private void ParseSharePath()
         {
             string sharePath = GetProperty("HVRS", "SharePath");
@@ -253,23 +201,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter
             shareServerName = sharePath.Substring(0, sharePath.IndexOf(@"\"));
             shareName = sharePath.Substring(shareServerName.Length + 1);
         }
-
-        private ulong ParseUlong(string propertyName, string groupName = "RSVD")
-        {
-            if (GetProperty(groupName, propertyName).StartsWith("0x"))
-                return ulong.Parse(GetProperty(groupName, propertyName).Substring(2), NumberStyles.HexNumber);
-            else
-                return ulong.Parse(GetProperty(groupName, propertyName));
-        }
-
-        private uint ParseUint(string propertyName, string groupName = "RSVD")
-        {
-            if (GetProperty(groupName, propertyName).StartsWith("0x"))
-                return uint.Parse(GetProperty(groupName, propertyName).Substring(2), NumberStyles.HexNumber);
-            else
-                return uint.Parse(GetProperty(groupName, propertyName));
-        }
-
         #endregion 
 
         #endregion

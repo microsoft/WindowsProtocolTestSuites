@@ -1,4 +1,7 @@
-﻿using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
@@ -45,12 +48,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Hvrs)]
-        [Description("C0004: This test case is designed to test whether the server supports the FSCTL_OFFLOAD_READ and FSCTL_OFFLOAD_WRITE.")]
+        [Description("This test case is designed to test whether the server supports the FSCTL_OFFLOAD_READ and FSCTL_OFFLOAD_WRITE.")]
         public void BVT_OffloadReadWrite()
         {
             // Check the flag, if IsOffLoadImplemented == false, skip this case
 
-            CheckHvrsCapability(TestConfig.IsOffLoadImplemented, StringResource.C0004);
+            CheckHvrsCapability(TestConfig.IsOffLoadImplemented, 
+            "If the server doesn't support the FSCTL_OFFLOAD_READ and FSCTL_OFFLOAD_WRITE commands, " +
+            "as specified in [MS-FSA] sections 2.1.5.9.18 and 2.1.5.9.19, " +
+            "then any small computer system interface (SCSI) ODX commands initiated by the virtual machine operating system fail.");
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create a file wiht specified length {0} as for offload copy.", TestConfig.WriteBufferLengthInKb * 1024);
             string content = Smb2Utility.CreateRandomString(TestConfig.WriteBufferLengthInKb);
@@ -96,7 +102,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     }
                     else if (header.Status == Smb2Status.STATUS_OFFLOAD_READ_FILE_NOT_SUPPORTED)
                     {
-                        BaseTestSite.Log.Add(LogEntryKind.Debug, "ffload read operations cannot be performed on: Compressed files, Sparse files, Encrypted files, File system metadata files.");
+                        BaseTestSite.Log.Add(LogEntryKind.Debug, "offload read operations cannot be performed on: Compressed files, Sparse files, Encrypted files, File system metadata files.");
                     }
                     else
                     {
@@ -193,7 +199,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to test whether the server supports the FSCTL_SET_ZERO_DATA.")]
         public void BVT_SetZeroData()
         {
-            CheckHvrsCapability(TestConfig.IsSetZeroDataImplemented, StringResource.C0005);
+            CheckHvrsCapability(TestConfig.IsSetZeroDataImplemented, 
+            "If the server supports the FSCTL_SET_ZERO_DATA command, " +
+            "as specified in [MS-FSA] section 2.1.5.9.36, " +
+            "then Hyper-V can issue this command to optimize the performance of virtual-disk-creation operations.");
             
             FsCtl_Set_ZeroData_IsZeroDataSupported(
                 smb2Functionalclient,
@@ -382,11 +391,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             FILEID srcFileId;
             string fileName = "DuplicateExtentsToFile_" + Guid.NewGuid() + ".txt";
             int clusterSize = TestConfig.VolumnClusterSize;
-            string content = Smb2Utility.CreateRandomString(clusterSize*2);
+            string content = Smb2Utility.CreateRandomString(clusterSize * 2);
             NewTestFile(smb2Functionalclient, fileName, content, out treeId, out srcFileId);
             long sourceFileOffset = 0;
-            long targetFileOffset = clusterSize*1024;
-            long byteCount = clusterSize*1024;
+            long targetFileOffset = clusterSize * 1024;
+            long byteCount = clusterSize * 1024;
 
             smb2Functionalclient.DuplicateExtentsToFile(
                 treeId,
@@ -396,15 +405,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 byteCount,
                 checker: (Packet_Header header, IOCTL_Response response) =>
                 {
-                    
+
                     if (header.Status == Smb2Status.STATUS_INVALID_DEVICE_REQUEST)
                     {
                         // check if the server advertises the FILE_SUPPROTS_BLOCK_REFCOUNTING flag for a given open.
                         bool res = FSInfo_Query_FileFsAttributeInformation_IsSupported(smb2Functionalclient, treeId, srcFileId, FileSystemAttributes_Values.FILE_SUPPORTS_BLOCK_REFCOUNTING);
-                        BaseTestSite.Assert.AreEqual(false, res, StringResource.C0007);
-                        
+                        BaseTestSite.Assert.AreEqual(false, res, 
+                        "If the server adverties the FILE_SUPPORTS_BLOCK_REFCOUNTING flag for a given Open, " +
+                        "the server must support the FSCTL_DUPLICATE_EXTENTS_TO_FILE command, " +
+                        "as specified in [MS-FSA] section 2.1.5.9.4.");
+
                     }
-                    else if(header.Status == Smb2Status.STATUS_SUCCESS)
+                    else if (header.Status == Smb2Status.STATUS_SUCCESS)
                     {
                         BaseTestSite.Log.Add(LogEntryKind.Debug, "The server supports FSCTL_DUPLICATE_EXTENTS_TO_FILE, and response with STATUS_SUCCESS.");
                     }
@@ -412,7 +424,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     {
                         BaseTestSite.Log.Add(LogEntryKind.Debug, "If Open.File.Volume.IsReadOnly is TRUE, the operation MUST be failed with STATUS_MEDIA_WRITE_PROTECTED.");
                     }
-                    else 
+                    else
                     {
                         BaseTestSite.Log.Add(LogEntryKind.Warning, "Unexpected Response: {0}", Smb2Status.GetStatusCode(header.Status));
                     }
@@ -423,10 +435,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             // Clean.
         }
 
+
         private void NewTestFile(Smb2FunctionalClient client, string fileName, string content, out uint treeId, out FILEID fileId)
         {
             client.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.ShareServerName, TestConfig.ShareServerIP);
-            //client.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start the client by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT");
             client.Negotiate(
                 TestConfig.RequestDialects,
@@ -502,14 +514,23 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 fileId,
                 out buffer,
                 checker: (Packet_Header header, QUERY_INFO_Response response) =>
-                    {
-                        BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, header.Status, 
-                            "Query File system should return STATUS_SUCCESS, the server returns with {0}", Smb2Status.GetStatusCode(header.Status));
-                    }
+                {
+                    BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, header.Status,
+                        "Query File system should return STATUS_SUCCESS, the server returns with {0}", Smb2Status.GetStatusCode(header.Status));
+                }
                 );
 
             fsAttributeInfo = TypeMarshal.ToStruct<FileFsAttributeInformation>(buffer);
             return fsAttributeInfo.FileSystemAttributes.HasFlag(attribute);
+        }
+
+        private void CheckHvrsCapability(bool flag, string statement)
+        {
+            if (!flag)
+            {
+                BaseTestSite.Log.Add(LogEntryKind.TestStep, statement);
+                Site.Assert.Inconclusive("Test case is not applicable in this server.");
+            }
         }
     }
 

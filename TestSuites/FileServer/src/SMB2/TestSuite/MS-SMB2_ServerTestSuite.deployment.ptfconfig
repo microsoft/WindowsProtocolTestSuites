@@ -61,7 +61,6 @@
                   If no such share, leave it blank
               </Description>
           </Property>
-          <!--Deterniming Test C0004\C0005\C0006\C0007\C0009\C0010-->
           <Property name="IsOffLoadImplemented" value="false">
               <Choice>True, False</Choice>
               <Description>
