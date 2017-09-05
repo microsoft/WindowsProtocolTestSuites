@@ -7225,7 +7225,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  been set. For non-French locale clients, this field
         ///  MUST be set to 0.
         /// </summary>
-        public uint extEncryptionMethods;
+        public encryptionMethod_Values extEncryptionMethods;
     }
 
     /// <summary>
