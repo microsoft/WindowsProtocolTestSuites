@@ -1626,7 +1626,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="redirectionPacket"></param>
         public void VerifyStructure(RDP_SERVER_REDIRECTION_PACKET redirectionPacket)
         {
-            Site.Assert.AreEqual<ushort>(0x0400, redirectionPacket.Flags, "In Server Redirection Packet , the Flags field MUST be set to SEC_REDIRECTION_PKT (0x0400).");
+            Site.Assert.AreEqual<RDP_SERVER_REDIRECTION_PACKET_FlagsEnum>(RDP_SERVER_REDIRECTION_PACKET_FlagsEnum.SEC_REDIRECTION_PKT, redirectionPacket.Flags, "In Server Redirection Packet , the Flags field MUST be set to SEC_REDIRECTION_PKT (0x0400).");
 
             uint flags = (uint)(RedirectionFlags.LB_TARGET_NET_ADDRESS | RedirectionFlags.LB_LOAD_BALANCE_INFO | RedirectionFlags.LB_USERNAME
                 | RedirectionFlags.LB_DOMAIN | RedirectionFlags.LB_PASSWORD | RedirectionFlags.LB_DONTSTOREUSERNAME | RedirectionFlags.LB_SMARTCARD_LOGON

@@ -135,6 +135,7 @@
                 <Directory Id="TESTSUITE_BATCH_DIR" Name="Batch" />
                 <Directory Id="TESTSUITE_BIN_DIR" Name="Bin" />
                 <Directory Id="DOCS_FILES_DIR" Name="Docs" />
+				<Directory Id="TESTSUITE_SCRIPTS_DIR" Name="Scripts" />
               </Directory>
             </Directory>
           </Directory>
@@ -255,6 +256,7 @@
       <ComponentRef Id="DesktopShortcuts" />
       <ComponentGroupRef Id="BATCH_FILES" />
       <ComponentGroupRef Id="DOCS_FILES" />
+	  <ComponentGroupRef Id="TESTSUITE_SCRIPTS_FILES" />
       <ComponentGroupRef Id="TESTSUITE_MISC_FILES"/>
 
     </FeatureRef>
