@@ -3264,8 +3264,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             if (sessionContext.IsAuthenticatingRDSTLS)
             {
-                // for RDSTLS, return the received raw bytes directly
-                return receivedBytes;
+                // for RDSTLS, check whether data is ready
+                int consumedBytes;
+                bool checkResult = CheckRDSTLSAuthenticationPDU(receivedBytes, out consumedBytes);
+                if (!checkResult)
+                {
+                    // skip invalid PDU
+                    return receivedBytes;
+                }
+                if (consumedBytes == 0)
+                {
+                    return null;
+                }
+                var buffer = new byte[consumedBytes];
+                Array.Copy(receivedBytes, buffer, consumedBytes);
+                return buffer;
             }
             else
             {
@@ -4430,6 +4443,109 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         #endregion
 
         #region PDU Decoders: 2 type of PDU in RDSTLS authentication
+        public bool CheckRDSTLSAuthenticationPDU(byte[] data, out int consumedLength)
+        {
+            try
+            {
+                bool result;
+                int currentIndex = 0;
+
+                // check common header
+                var version = (RDSTLS_VersionEnum)ParseUInt16(data, ref currentIndex, false);
+                if (version != RDSTLS_VersionEnum.RDSTLS_VERSION_1)
+                {
+                    consumedLength = 0;
+                    return false;
+                }
+
+                var pduType = (RDSTLS_PduTypeEnum)ParseUInt16(data, ref currentIndex, false);
+                if (pduType != RDSTLS_PduTypeEnum.RDSTLS_TYPE_AUTHREQ)
+                {
+                    consumedLength = 0;
+                    return false;
+                }
+
+                var dataType = (RDSTLS_DataTypeEnum)ParseUInt16(data, ref currentIndex, false);
+                switch (dataType)
+                {
+                    case RDSTLS_DataTypeEnum.RDSTLS_DATA_PASSWORD_CREDS:
+                        result = CheckRDSTLSAuthenticationRequestPDUwithPasswordCredentials(data, ref currentIndex, out consumedLength);
+                        break;
+                    case RDSTLS_DataTypeEnum.RDSTLS_DATA_AUTORECONNECT_COOKIE:
+                        result = CheckRDSTLSAuthenticationRequestPDUwithAutoReconnectCookie(data, ref currentIndex, out consumedLength);
+                        break;
+                    default:
+                        consumedLength = 0;
+                        result = false;
+                        break;
+                }
+
+                return result;
+            }
+            catch (FormatException formatException)
+            {
+                if (formatException.Message == ConstValue.ERROR_MESSAGE_DATA_INDEX_OUT_OF_RANGE)
+                {
+                    // more data needed
+                    consumedLength = 0;
+                    return true;
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        public bool CheckRDSTLSAuthenticationRequestPDUwithPasswordCredentials(byte[] data, ref int currentIndex, out int consumedLength)
+        {
+            // skip common header
+            currentIndex += 6;
+
+            // check redirection guid
+            int redirectionGuidLength = ParseUInt16(data, ref currentIndex, false);
+            currentIndex += redirectionGuidLength;
+
+            // check user name
+            int userNameLength = ParseUInt16(data, ref currentIndex, false);
+            currentIndex += userNameLength;
+
+            // check domain
+            int domainLength = ParseUInt16(data, ref currentIndex, false);
+            currentIndex += domainLength;
+
+            // check password
+            int passwordLength = ParseUInt16(data, ref currentIndex, false);
+            currentIndex += passwordLength;
+
+            if (currentIndex > data.Length)
+            {
+                // more data needed
+                consumedLength = 0;
+                return true;
+            }
+
+            consumedLength = currentIndex;
+            return true;
+        }
+
+        public bool CheckRDSTLSAuthenticationRequestPDUwithAutoReconnectCookie(byte[] data, ref int currentIndex, out int consumedLength)
+        {
+            // check auto reconnect cookie
+            int autoReconnectCookieLength = ParseUInt16(data, ref currentIndex, false);
+            currentIndex += autoReconnectCookieLength;
+
+            if (currentIndex > data.Length)
+            {
+                // more data needed
+                consumedLength = 0;
+                return true;
+            }
+
+            consumedLength = currentIndex;
+            return true;
+        }
+
         public StackPacket SwitchRDSTLSAuthenticationPDU(RdpbcgrServerSessionContext serverSessionContext, byte[] data)
         {
             StackPacket pdu = null;
