@@ -3264,16 +3264,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             if (sessionContext.IsAuthenticatingRDSTLS)
             {
-                // for RDSTLS, check whether data is ready
-                int consumedBytes;
-                bool checkResult = CheckRDSTLSAuthenticationPDU(receivedBytes, out consumedBytes);
-                if (!checkResult)
-                {
-                    // skip invalid PDU
-                    return receivedBytes;
-                }
+                // for RDSTLS, check whether whole PDU is ready
+                int consumedBytes = GetLengthOfRDSTLSAuthenticationPDU(receivedBytes);
                 if (consumedBytes == 0)
                 {
+                    // incomplete PDU
                     return null;
                 }
                 var buffer = new byte[consumedBytes];
@@ -4443,41 +4438,48 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         #endregion
 
         #region PDU Decoders: 2 type of PDU in RDSTLS authentication
-        public bool CheckRDSTLSAuthenticationPDU(byte[] data, out int consumedLength)
+        /// <summary>
+        /// Get the length of RDSTLS Authentication PDU.
+        /// </summary>
+        /// <param name="data">Buffer containing the PDU data.</param>
+        /// <returns>Length of RDSTLS PDU, or zero if more data needed.</returns>
+        public int GetLengthOfRDSTLSAuthenticationPDU(byte[] data)
         {
             try
             {
-                bool result;
+                int result = 0;
                 int currentIndex = 0;
 
                 // check common header
                 var version = (RDSTLS_VersionEnum)ParseUInt16(data, ref currentIndex, false);
                 if (version != RDSTLS_VersionEnum.RDSTLS_VERSION_1)
                 {
-                    consumedLength = 0;
-                    return false;
+                    throw new FormatException(ConstValue.ERROR_MESSAGE_UNRECOGNIZED_PDU);
                 }
 
                 var pduType = (RDSTLS_PduTypeEnum)ParseUInt16(data, ref currentIndex, false);
                 if (pduType != RDSTLS_PduTypeEnum.RDSTLS_TYPE_AUTHREQ)
                 {
-                    consumedLength = 0;
-                    return false;
+                    throw new FormatException(ConstValue.ERROR_MESSAGE_UNRECOGNIZED_PDU);
                 }
 
                 var dataType = (RDSTLS_DataTypeEnum)ParseUInt16(data, ref currentIndex, false);
+                bool invalid = false;
                 switch (dataType)
                 {
                     case RDSTLS_DataTypeEnum.RDSTLS_DATA_PASSWORD_CREDS:
-                        result = CheckRDSTLSAuthenticationRequestPDUwithPasswordCredentials(data, ref currentIndex, out consumedLength);
+                        result = GetLengthOfRDSTLSAuthenticationRequestPDUwithPasswordCredentials(data);
                         break;
                     case RDSTLS_DataTypeEnum.RDSTLS_DATA_AUTORECONNECT_COOKIE:
-                        result = CheckRDSTLSAuthenticationRequestPDUwithAutoReconnectCookie(data, ref currentIndex, out consumedLength);
+                        result = CheckRDSTLSAuthenticationRequestPDUwithAutoReconnectCookie(data);
                         break;
                     default:
-                        consumedLength = 0;
-                        result = false;
+                        invalid = true;
                         break;
+                }
+                if (invalid)
+                {
+                    throw new FormatException(ConstValue.ERROR_MESSAGE_UNRECOGNIZED_PDU);
                 }
 
                 return result;
@@ -4487,8 +4489,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 if (formatException.Message == ConstValue.ERROR_MESSAGE_DATA_INDEX_OUT_OF_RANGE)
                 {
                     // more data needed
-                    consumedLength = 0;
-                    return true;
+                    return 0;
                 }
                 else
                 {
@@ -4497,53 +4498,128 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             }
         }
 
-        public bool CheckRDSTLSAuthenticationRequestPDUwithPasswordCredentials(byte[] data, ref int currentIndex, out int consumedLength)
+        /// <summary>
+        /// Get the length of RDSTLS authentication PDU with password credentials.
+        /// </summary>
+        /// <param name="data">Buffer containing the PDU data.</param>
+        /// <returns>Length of RDSTLS PDU, or zero if more data needed.</returns>
+        public int GetLengthOfRDSTLSAuthenticationRequestPDUwithPasswordCredentials(byte[] data)
         {
-            // skip common header
-            currentIndex += 6;
-
-            // check redirection guid
-            int redirectionGuidLength = ParseUInt16(data, ref currentIndex, false);
-            currentIndex += redirectionGuidLength;
-
-            // check user name
-            int userNameLength = ParseUInt16(data, ref currentIndex, false);
-            currentIndex += userNameLength;
-
-            // check domain
-            int domainLength = ParseUInt16(data, ref currentIndex, false);
-            currentIndex += domainLength;
-
-            // check password
-            int passwordLength = ParseUInt16(data, ref currentIndex, false);
-            currentIndex += passwordLength;
-
-            if (currentIndex > data.Length)
+            try
             {
-                // more data needed
-                consumedLength = 0;
-                return true;
-            }
+                int currentIndex = 0;
 
-            consumedLength = currentIndex;
-            return true;
+                // check common header
+                var version = (RDSTLS_VersionEnum)ParseUInt16(data, ref currentIndex, false);
+                if (version != RDSTLS_VersionEnum.RDSTLS_VERSION_1)
+                {
+                    throw new FormatException(ConstValue.ERROR_MESSAGE_UNRECOGNIZED_PDU);
+                }
+
+                var pduType = (RDSTLS_PduTypeEnum)ParseUInt16(data, ref currentIndex, false);
+                if (pduType != RDSTLS_PduTypeEnum.RDSTLS_TYPE_AUTHREQ)
+                {
+                    throw new FormatException(ConstValue.ERROR_MESSAGE_UNRECOGNIZED_PDU);
+                }
+
+                var dataType = (RDSTLS_DataTypeEnum)ParseUInt16(data, ref currentIndex, false);
+                if (dataType != RDSTLS_DataTypeEnum.RDSTLS_DATA_PASSWORD_CREDS)
+                {
+                    throw new FormatException(ConstValue.ERROR_MESSAGE_UNRECOGNIZED_PDU);
+                }
+
+                // check redirection guid
+                int redirectionGuidLength = ParseUInt16(data, ref currentIndex, false);
+                currentIndex += redirectionGuidLength;
+
+                // check user name
+                int userNameLength = ParseUInt16(data, ref currentIndex, false);
+                currentIndex += userNameLength;
+
+                // check domain
+                int domainLength = ParseUInt16(data, ref currentIndex, false);
+                currentIndex += domainLength;
+
+                // check password
+                int passwordLength = ParseUInt16(data, ref currentIndex, false);
+                currentIndex += passwordLength;
+
+                if (currentIndex > data.Length)
+                {
+                    // more data needed
+                    return 0;
+                }
+
+                return currentIndex;
+            }
+            catch (FormatException formatException)
+            {
+                if (formatException.Message == ConstValue.ERROR_MESSAGE_DATA_INDEX_OUT_OF_RANGE)
+                {
+                    // more data needed
+                    return 0;
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
 
-        public bool CheckRDSTLSAuthenticationRequestPDUwithAutoReconnectCookie(byte[] data, ref int currentIndex, out int consumedLength)
+        /// <summary>
+        /// Get the length of RDSTLS authentication PDU with auto-reconnect cookie.
+        /// </summary>
+        /// <param name="data">Buffer containing the PDU data.</param>
+        /// <returns>Length of RDSTLS PDU, or zero if more data needed.</returns>
+        public int CheckRDSTLSAuthenticationRequestPDUwithAutoReconnectCookie(byte[] data)
         {
-            // check auto reconnect cookie
-            int autoReconnectCookieLength = ParseUInt16(data, ref currentIndex, false);
-            currentIndex += autoReconnectCookieLength;
-
-            if (currentIndex > data.Length)
+            try
             {
-                // more data needed
-                consumedLength = 0;
-                return true;
-            }
+                int currentIndex = 0;
 
-            consumedLength = currentIndex;
-            return true;
+                // check common header
+                var version = (RDSTLS_VersionEnum)ParseUInt16(data, ref currentIndex, false);
+                if (version != RDSTLS_VersionEnum.RDSTLS_VERSION_1)
+                {
+                    throw new FormatException(ConstValue.ERROR_MESSAGE_UNRECOGNIZED_PDU);
+                }
+
+                var pduType = (RDSTLS_PduTypeEnum)ParseUInt16(data, ref currentIndex, false);
+                if (pduType != RDSTLS_PduTypeEnum.RDSTLS_TYPE_AUTHREQ)
+                {
+                    throw new FormatException(ConstValue.ERROR_MESSAGE_UNRECOGNIZED_PDU);
+                }
+
+                var dataType = (RDSTLS_DataTypeEnum)ParseUInt16(data, ref currentIndex, false);
+                if (dataType != RDSTLS_DataTypeEnum.RDSTLS_DATA_AUTORECONNECT_COOKIE)
+                {
+                    throw new FormatException(ConstValue.ERROR_MESSAGE_UNRECOGNIZED_PDU);
+                }
+
+                // check auto reconnect cookie
+                int autoReconnectCookieLength = ParseUInt16(data, ref currentIndex, false);
+                currentIndex += autoReconnectCookieLength;
+
+                if (currentIndex > data.Length)
+                {
+                    // more data needed
+                    return 0;
+                }
+
+                return currentIndex;
+            }
+            catch (FormatException formatException)
+            {
+                if (formatException.Message == ConstValue.ERROR_MESSAGE_DATA_INDEX_OUT_OF_RANGE)
+                {
+                    // more data needed
+                    return 0;
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
 
         public StackPacket SwitchRDSTLSAuthenticationPDU(RdpbcgrServerSessionContext serverSessionContext, byte[] data)
