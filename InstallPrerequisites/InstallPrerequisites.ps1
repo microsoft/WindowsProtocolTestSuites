@@ -85,7 +85,11 @@ Function CheckIfNet4IsInstalled{
 
 # Check if application is installed on current machine.
 Function CheckIfAppInstalled{
-    Param ([string]$AppName)
+    Param (
+		[string]$AppName,	# Application Name
+		[string]$Version,	# Application Version
+		[bool]$Compatible	# Is support backward compatible
+	)
 
     #check if the required software is installed on current machine
     if ([IntPtr]::Size -eq 4) {
@@ -97,11 +101,24 @@ Function CheckIfAppInstalled{
             'HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*'
         )
     }
-    $app = Get-ItemProperty $regpath | .{process{if($_.DisplayName -and $_.UninstallString) { $_ } }} | Where-Object {$_.DisplayName.Contains($AppName)} | Select DisplayName
+	
+    $app = Get-ItemProperty $regpath | .{process{if($_.DisplayName -and $_.UninstallString) { $_ } }} | Where-Object {$_.DisplayName -match $AppName} | Select DisplayName, DisplayVersion -First 1
+    
     if($app){
-        return $true;
+		if($Compatible){
+            return ([System.Version]$app.DisplayVersion -ge [System.Version]$Version);
+		}else{
+			return ([System.Version]$app.DisplayVersion -eq [System.Version]$Version);
+		}
     }else{
-        return $false;
+		if($AppName -match "Microsoft Agents for Visual Studio"){
+			#If Test Agent was not installed we also need check if Visual Studio installed.
+			$app = Get-ItemProperty $regpath | .{process{if($_.DisplayName -and $_.UninstallString) { $_ } }} | Where-Object {$_.DisplayName -match "Microsoft Visual Studio \d{4} Devenv"} | Sort-Object -Property DisplayVersion -Descending | Select DisplayName, Version, DisplayVersion -First 1
+			if($app){
+				return $true;
+			}
+		}
+		return $false;
     }
 }
 
@@ -165,7 +182,7 @@ Function GetDownloadTools{
     Write-Host "Get information of all the Prerequisite tools from Configure file"
     foreach($item in $toolXML.Dependency.tools.tool)
     {
-        $tool = '' | select Name,FileName,AppName,Version,URL,Arguments,InstallFileName,NeedRestart
+        $tool = '' | select Name,FileName,AppName,Version,URL,Arguments,InstallFileName,NeedRestart,BackwardCompatible
 
         $tool.Name = $item.name;
         $tool.FileName = $item.FileName;
@@ -174,9 +191,15 @@ Function GetDownloadTools{
         $tool.URL = $item.url;
         $tool.InstallFileName = $item.InstallFileName;
         $tool.NeedRestart = $false
+		$tool.BackwardCompatible = $true
+		
         if($item.NeedRestart)
         {
             $tool.NeedRestart = [bool]$item.NeedRestart;
+        }
+		if($item.BackwardCompatible)
+        {
+            $tool.BackwardCompatible = [bool]$item.BackwardCompatible;
         }
         $tool.Arguments = $item.arguments;
 
@@ -294,7 +317,6 @@ else
     Write-Host ".NET Framework 3.5 feature is enabled" -ForegroundColor Green
 }
 
-Write-Host $downloadList.Length
 foreach($item in $downloadList)
 {
     $isInstalled = $false;
@@ -310,7 +332,7 @@ foreach($item in $downloadList)
     }
     else
     {
-        $isInstalled = CheckIfAppInstalled -AppName $item.AppName
+        $isInstalled = CheckIfAppInstalled -AppName $item.AppName -Version $item.version -Compatible $item.BackwardCompatible
         if(-not $isInstalled)
         {
             $content = "Application: " +$item.AppName + " is not installed"
@@ -344,7 +366,20 @@ foreach($item in $downloadList)
         }
     }
     else{
-        $content = $item.AppName + " is already installed"
+		if($item.AppName -match "Microsoft Agents for Visual Studio"){
+			if($item.BackwardCompatible){
+				$content = $item.AppName + " or later version or Microsoft Visual Studio is already installed"
+			}else{
+				$content = $item.AppName + " or Microsoft Visual Studio is already installed"
+			}
+		}else{
+			if($item.BackwardCompatible){
+				$content = $item.AppName + " or later version is already installed"
+			}else{
+				$content = $item.AppName + " is already installed"
+			}
+		}
+        
         Write-Host $content -ForegroundColor Green
     }
 }

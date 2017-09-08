@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(EnvironmentConfig)" Condition="'$(BUILD_COREXT)'=='1'" />
+  <PropertyGroup>
+	<DefineSolutionProperties>false</DefineSolutionProperties>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>3.5</ProductVersion>
+    <ProjectGuid>98e83996-6cd9-452c-b957-ecdf755fb365</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>RDP-TestSuite-ServerEP</OutputName>
+    <OutputType>Package</OutputType>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+    <SuppressSpecificWarnings>1055</SuppressSpecificWarnings>
+    <SuppressIces>ICE30</SuppressIces>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <SuppressSpecificWarnings>1055</SuppressSpecificWarnings>
+    <SuppressIces>ICE30</SuppressIces>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Bin.wxs" />
+    <Compile Include="Batch.wxs" />
+	<Compile Include="Scripts.wxs" />
+    <Compile Include="DependencyCheckWarningDlg.wxs" />
+    <Compile Include="DOCS_FILES.wxs" />
+    <Compile Include="RDP-TestSuite-ServerEP.wxs" />
+    <Compile Include="TestSuiteMiscFiles.wxs" />
+    <Compile Include="TestSuitePrivacyStatementDlg.wxs" />
+    <Compile Include="TestSuitePrivacyStatementLowMsiVersionDlg.wxs" />
+    <Compile Include="TestSuiteProduct.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="UiText.wxl" />
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixVSExtension">
+      <HintPath>$(WIX_PATH)\WixVSExtension.dll</HintPath>
+      <Name>WixVSExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WIX_PATH)\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WIX_PATH)\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <Binplace Include="$(TargetDir)\en-us\$(TargetFileName)">
+      <DestinationFolder>$(TestSuitesDrop)\RDP\Server\Deploy</DestinationFolder>
+      <Visible>false</Visible>
+    </Binplace>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Common\Common.csproj">
+      <Name>Common</Name>
+      <Project>{fe653643-6342-4300-871e-683c7ba31494}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\CryptoLib\CryptoLib.csproj">
+      <Name>CryptoLib</Name>
+      <Project>{bf6afaf0-7592-467f-ad5c-18429d854057}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Messages\Messages.csproj">
+      <Name>Messages</Name>
+      <Project>{75544419-3f4e-4308-a676-165f45c1462e}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPBCGR\Rdpbcgr.csproj">
+      <Name>Rdpbcgr</Name>
+      <Project>{fa218cab-320c-45e9-b641-04622418988e}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEDYC\Rdpedyc.csproj">
+      <Name>Rdpedyc</Name>
+      <Project>{cfbafde2-f509-4ac8-817a-0c26c1b27653}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEMT\Rdpemt.csproj">
+      <Name>Rdpemt</Name>
+      <Project>{9e44ed93-d10d-42e3-a8bf-ad1923859857}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEUDP\Rdpeudp.csproj">
+      <Name>Rdpeudp</Name>
+      <Project>{b6f8eb97-b6a5-4092-9ed0-12c0487da124}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPRFX\Rdprfx.csproj">
+      <Name>Rdprfx</Name>
+      <Project>{9dd86de1-3231-4713-9b45-493f4fe4199c}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Sspi\Sspi.csproj">
+      <Name>Sspi</Name>
+      <Project>{d0cb354b-2cd3-49c1-8eca-2f6ebadbccee}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\TransportStack\TransportStack.csproj">
+      <Name>TransportStack</Name>
+      <Project>{967d976a-c792-4893-9235-14615ae1ff58}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Adapter\RDP_ServerAdapter.csproj">
+      <Name>RDP_ServerAdapter</Name>
+      <Project>{9365a99e-8869-4e1c-bb3d-93f33aa51cc2}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\TestSuite\RDP_ServerTestSuite.csproj">
+      <Name>RDP_ServerTestSuite</Name>
+      <Project>{1976765d-bf0a-40c4-a785-e1e8ea4b872f}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="LICENSE.rtf" />
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)en-us\$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\deploy\" />
+  </Target>
+  <Target Name="GenDeployWxsFile" DependsOnTargets="ResolveWixExtensionReferences" BeforeTargets="Compile">
+    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Bin&quot; -out Bin.wxs -template fragment -gg -cg BIN_FILES -dr TESTSUITE_BIN_DIR -var wix.TESTSUITE_BIN_DIR -sreg -sfrag -srd" />
+    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;..\Batch&quot; -out Batch.wxs -template fragment -gg -cg BATCH_FILES -dr TESTSUITE_BATCH_DIR -var wix.TESTSUITE_BATCH_DIR -sreg -sfrag -srd" />
+	<Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\RDP\Server\Setup\Scripts&quot; -out Scripts.wxs -template fragment -gg -cg TESTSUITE_SCRIPTS_FILES -dr TESTSUITE_SCRIPTS_DIR -var wix.TESTSUITE_SCRIPTS_DIR -sreg -sfrag -srd" />
+    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\RDP\Server\Docs&quot; -out DOCS_FILES.wxs -template fragment -gg -cg DOCS_FILES -dr DOCS_FILES_DIR -var wix.DOCS_FILES_DIR -sreg -sfrag -srd" />
+  </Target>
+  
+  <Target Name="CopyFilesToBin" BeforeTargets="GenDeployWxsFile">
+    <Copy SourceFiles="@(APDSAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Bin\Adapter\MS-APDS\SUTControlAdapter" />	
+    <Copy SourceFiles="@(DRSRAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Bin\Adapter\MS-DRSR\SUTControlAdapter" />	
+    <Copy SourceFiles="@(LSADAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Bin\Adapter\MS-LSAD\SUTControlAdapter" />	
+    <Copy SourceFiles="@(NRPCAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Bin\Adapter\MS-NRPC\SUTControlAdapter" />	
+    <Copy SourceFiles="..\ServerLocal.testsettings" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Bin" />
+    <Copy SourceFiles="..\TestSuite\RDP_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Bin" />
+    <Copy SourceFiles="..\TestSuite\RDP_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Bin" />
+  </Target>
+</Project>

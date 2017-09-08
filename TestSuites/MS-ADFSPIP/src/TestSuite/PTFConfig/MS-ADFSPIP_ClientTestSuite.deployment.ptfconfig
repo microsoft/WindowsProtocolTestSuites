@@ -52,7 +52,7 @@
       <Property name="DriverShareFolder" value="\\192.168.1.100\temp\"/>
       <Property name="SutShareFolder"    value="\\192.168.1.50\temp\"/>
       <Property name="ProxyCert"         value="C:\Proxy.PFX"/>
-      <Property name="RealADFSIP"        value="192.168.1.2"/>
+      <Property name="RealADFSIP"        value="192.168.1.100"/>
     </Group>
   </Properties>
 

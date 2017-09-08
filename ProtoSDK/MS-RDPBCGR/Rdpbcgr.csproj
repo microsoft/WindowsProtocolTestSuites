@@ -125,13 +125,12 @@
     <Compile Include="Server\ServerStaticVirtualChannelManager.cs" />
     <Compile Include="StaticVirtualChannel.cs" />
     <Compile Include="StaticVirtualChannelManager.cs" />
-    <Compile Include="TypesExtension.cs" />
     <Compile Include="Client\RdpbcgrClient.cs" />
     <Compile Include="Client\RdpbcgrClientContext.cs" />
     <Compile Include="ConstValue.cs" />
     <Compile Include="CredSspStream.cs" />
     <Compile Include="EncryptionAlgorithm.cs" />
-    <Compile Include="RdpbcgrDecoder.cs" />
+    <Compile Include="Client\RdpbcgrClientDecoder.cs" />
     <Compile Include="RdpbcgrEncoder.cs" />
     <Compile Include="RleDecompressor.cs" />
     <Compile Include="Types.cs" />
@@ -147,15 +146,15 @@
       <Name>Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\CryptoLib\CryptoLib.csproj">
-      <Project>{BF6AFAF0-7592-467F-AD5C-18429D854057}</Project>
+      <Project>{bf6afaf0-7592-467f-ad5c-18429d854057}</Project>
       <Name>CryptoLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\Messages\Messages.csproj">
-      <Project>{75544419-3F4E-4308-A676-165F45C1462E}</Project>
+      <Project>{75544419-3f4e-4308-a676-165f45c1462e}</Project>
       <Name>Messages</Name>
     </ProjectReference>
     <ProjectReference Include="..\Sspi\Sspi.csproj">
-      <Project>{D0CB354B-2CD3-49C1-8ECA-2F6EBADBCCEE}</Project>
+      <Project>{d0cb354b-2cd3-49c1-8eca-2f6ebadbccee}</Project>
       <Name>Sspi</Name>
     </ProjectReference>
     <ProjectReference Include="..\TransportStack\TransportStack.csproj">

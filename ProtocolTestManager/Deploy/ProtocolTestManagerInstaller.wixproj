@@ -28,6 +28,7 @@
 	<Compile Include="ADFSPIPPlugin.wxs" />
 	<Compile Include="BranchCachePlugin.wxs" />
     <Compile Include="RDPPlugin.wxs" />
+	<Compile Include="RDPServerPlugin.wxs" />
 	<Compile Include="AZODPlugin.wxs" />
 	<Compile Include="ADODPlugin.wxs" />
     <Compile Include="KerberosPlugin.wxs" />
@@ -118,6 +119,14 @@
     <ProjectReference Include="..\Plugins\RDPPlugin\RDPPlugin\RDPPlugin.csproj">
       <Name>RDPPlugin</Name>
       <Project>{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+	<ProjectReference Include="..\Plugins\RDPServerPlugin\RDPServerPlugin\RDPServerPlugin.csproj">
+      <Name>RDPServerPlugin</Name>
+      <Project>{10425342-C543-487F-8D5B-F26F636F2D45}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>

@@ -58,8 +58,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.ResilientHan
             /// 2. Send Resiliency request
             /// 3. Disconnect
             /// 4. Open the same file from different client (different client guid)
-            /// 5. The expected result of OPEN is successful.            
-            /// 
+            /// 5. The expected result of OPEN is STATUS_FILE_NOT_AVAILABLE according to section 3.3.5.9:
+            /// If Connection.Dialect belongs to the SMB 3.x dialect family and the request does not contain SMB2_CREATE_DURABLE_HANDLE_RECONNECT 
+            /// Create Context or SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2 Create Context, the server MUST look up an existing open in the GlobalOpenTable 
+            /// where Open.FileName matches the file name in the Buffer field of the request. 
+            /// If an Open entry is found, and if all the following conditions are satisfied, the server MUST fail the request with STATUS_FILE_NOT_AVAILABLE.
+            /// ¡ì   Open.IsPersistent is TRUE
+            /// ¡ì	Open.Connection is NULL
+            /// ¡ì	Open.OplockLevel is not equal to SMB2_OPLOCK_LEVEL_BATCH
+            /// ¡ì	Open.OplockLevel is not equal to SMB2_OPLOCK_LEVEL_LEASE or Open.Lease.LeaseState does not include SMB2_LEASE_HANDLE_CACHING
 
             #region Check Applicability
             TestConfig.CheckDialect(DialectRevision.Smb30);
@@ -121,7 +128,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.ResilientHan
                 false,
                 out createGuid,
                 out treeId,
-                out fileId);
+                out fileId,
+                responseChecker: (Packet_Header header, CREATE_Response response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_FILE_NOT_AVAILABLE, header.Status, "The server MUST fail the request with STATUS_FILE_NOT_AVAILABLE.");
+                });
         }
 
         #endregion
@@ -135,7 +146,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.ResilientHan
             bool isPersistentHandle,
             out Guid createGuid,
             out uint treeId,
-            out FILEID fileId)
+            out FILEID fileId,
+            ResponseChecker<CREATE_Response> responseChecker = null)
         {
             // connect to share
             ConnectToShare(
@@ -163,6 +175,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.ResilientHan
             #endregion
 
             // open file
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Create Open with file name '{0}'", fileName);
+
             Smb2CreateContextResponse[] createContextResponses;
             client.Create(
                 treeId,
@@ -170,11 +186,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.ResilientHan
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileId,
                 out createContextResponses,
-                createContexts: createContextList.ToArray<Smb2CreateContextRequest>()
+                createContexts: createContextList.ToArray<Smb2CreateContextRequest>(),
+                checker: responseChecker
             );
-            BaseTestSite.Log.Add(
-                LogEntryKind.Debug,
-                "Create Open with file name '{0}'", fileName);
 
             #region check whether Persistent Handle is created successfully with current status
             if (isPersistentHandle)
