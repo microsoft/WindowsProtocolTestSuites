@@ -21,7 +21,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
         /// <summary>
         /// SMB2 client.
         /// </summary>
-        public Smb2Client Client;
+        public Smb2FunctionalClient Client;
         /// <summary>
         /// The maximum amount of time in milliseconds to wait for the operation to complete. 
         /// </summary>
@@ -106,6 +106,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
         private TestConfigBase testConfig;
 
         /// <summary>
+        /// test site
+        /// </summary>
+        private ITestSite Site;
+
+        /// <summary>
         /// Indicates whether the client has executed TreeConnect or not.
         /// </summary>
         public bool IsInitialized
@@ -175,20 +180,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
             CreateContexts = null;
             OperationMessageId = 0;
 
-            Client = new Smb2Client(Timeout);
-            Client.DisableVerifySignature = this.testConfig.DisableVerifySignature;
+            Client = new Smb2FunctionalClient(Timeout, testConfig, Site);
         }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="timeout">The maximum amount of time in milliseconds to wait for the operation to complete. </param>
-        public LeasingClientInfo(TimeSpan timeout, TestConfigBase testConfig)
+        public LeasingClientInfo(TimeSpan timeout, TestConfigBase testConfig, ITestSite site)
         {
             Timeout = timeout;
             this.testConfig = testConfig;
             ClientGuid = Guid.NewGuid();
-
+            Site = site;
             Initialize();
         }
 
@@ -197,12 +201,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
         /// </summary>
         /// <param name="timeout">The maximum amount of time in milliseconds to wait for the operation to complete. </param>
         /// <param name="clientGuid">The identifier of the client.</param>
-        public LeasingClientInfo(TimeSpan timeout, TestConfigBase testConfig, Guid clientGuid)
+        public LeasingClientInfo(TimeSpan timeout, TestConfigBase testConfig, Guid clientGuid, ITestSite site)
         {
             Timeout = timeout;
             this.testConfig = testConfig;
             ClientGuid = clientGuid;
-
+            Site = site;
             Initialize();
         }
         
@@ -211,32 +215,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
         /// </summary>
         public void Cleanup()
         {
-            Packet_Header header;
-
             if (!FileId.Equals(FILEID.Zero))
             {
-                CLOSE_Response response;
-
-                Client.Close(1, 1, Flags, MessageId++, SessionId, TreeId, FileId, Flags_Values.NONE,
-                    out header, out response);
-
-                GrantedCredit = header.CreditRequestResponse;
+                Client.Close(
+                    TreeId, 
+                    FileId,
+                    (header, response) =>
+                    {
+                        GrantedCredit = header.CreditRequestResponse;
+                    });
             }
 
             unchecked
             {
                 if (TreeId != (uint)-1)
                 {
-                    TREE_DISCONNECT_Response response;
-                    Client.TreeDisconnect(1, 1, Flags, MessageId++, SessionId, TreeId,
-                        out header, out response);
+                    Client.TreeDisconnect(TreeId);
                 }
             }
 
             if (SessionId != 0)
             {
-                LOGOFF_Response logoffResponse;
-                Client.LogOff(1, 1, Flags, MessageId++, SessionId, out header, out logoffResponse);
+                Client.LogOff();
             }
 
             Client.Disconnect();
@@ -266,12 +266,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
         /// <param name="leaseBreakNotify">Lease break notification payload in the notification.</param>
         public void OnLeaseBreakNotificationReceived(Packet_Header respHeader, LEASE_BREAK_Notification_Packet leaseBreakNotify)
         {
-            uint status = 0;
-            Packet_Header header;
-            LEASE_BREAK_Response leaseBreakResp;
-
-            status = Client.LeaseBreakAcknowledgment(1, 1, Flags, MessageId++, SessionId,
-                TreeId, leaseBreakNotify.LeaseKey, leaseBreakNotify.NewLeaseState, out header, out leaseBreakResp);
+            Client.LeaseBreakAcknowledgment(TreeId, leaseBreakNotify.LeaseKey, leaseBreakNotify.NewLeaseState);
         }
     }
 
@@ -388,140 +383,100 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
             }
         }
 
-        private void InitializeClient(LeasingClientInfo clientInfo, ModelDialectRevision dialect, bool isClientSupportDirectoryLeasing = false)
+        private void InitializeClient(LeasingClientInfo clientInfo, ModelDialectRevision maxSmbVersionClientSupported, bool isClientSupportDirectoryLeasing = false)
         {
+            clientInfo.Client.Smb2Client.LeaseBreakNotificationReceived += new Action<Packet_Header, LEASE_BREAK_Notification_Packet>(OnLeaseBreakNotificationReceived);
             #region Connect to server
-            switch (testConfig.UnderlyingTransport)
-            {
-                case Smb2TransportType.Tcp:
-                    Site.Assert.IsTrue(
-                        testConfig.SutIPAddress != null && testConfig.SutIPAddress != System.Net.IPAddress.None,
-                        "Server IP should not be empty when transport type is TCP.");
-                    Site.Log.Add(LogEntryKind.Debug, "Connect to server {0} over TCP", testConfig.SutIPAddress.ToString());
-                    clientInfo.Client.ConnectOverTCP(testConfig.SutIPAddress);
-                    break;
-                case Smb2TransportType.NetBios:
-                    Site.Assert.IsFalse(string.IsNullOrEmpty(testConfig.SutComputerName), "Server name should not be null when transport type is NetBIOS.");
-                    Site.Log.Add(LogEntryKind.Debug, "Connect to server {0} over NetBios", testConfig.SutComputerName);
-                    clientInfo.Client.ConnectOverNetbios(testConfig.SutComputerName);
-                    break;
-                default:
-                    Site.Assert.Fail("The transport type is {0}, but currently only Tcp and NetBIOS are supported.", testConfig.UnderlyingTransport);
-                    break;
-            }
+            clientInfo.Client.ConnectToServer(testConfig.UnderlyingTransport, testConfig.SutComputerName, testConfig.SutIPAddress);
             #endregion
 
-            uint status = 0;
-            Packet_Header responseHeader = new Packet_Header();
-            DialectRevision selectedDialect;
-            DialectRevision[] dialects = Smb2Utility.GetDialects(ModelUtility.GetDialectRevision(dialect));
-            NEGOTIATE_Response negotiatePayload;
+            DialectRevision[] dialects = Smb2Utility.GetDialects(ModelUtility.GetDialectRevision(maxSmbVersionClientSupported));
+            NEGOTIATE_Response_Capabilities_Values? capabilities = null;
 
             #region Negotiate
-            status = clientInfo.Client.Negotiate(0, 1, Packet_Header_Flags_Values.NONE, clientInfo.MessageId++,
-                dialects, SecurityMode_Values.NONE, isClientSupportDirectoryLeasing ? Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING : Capabilities_Values.NONE,
-                clientInfo.ClientGuid,
-                out selectedDialect,
-                out clientInfo.ServerGssToken,
-                out responseHeader,
-                out negotiatePayload);
-            Site.Assert.AreEqual(ModelUtility.GetDialectRevision(dialect), negotiatePayload.DialectRevision,
-                "DialectRevision 0x{0:x4} is expected.", (ushort)ModelUtility.GetDialectRevision(dialect));
-            Site.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, status, "Negotiation is expected success");
-            clientInfo.Dialect = selectedDialect;
+            uint status = clientInfo.Client.Negotiate(
+                dialects,
+                testConfig.IsSMB1NegotiateEnabled,
+                capabilityValue: isClientSupportDirectoryLeasing ? Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING : Capabilities_Values.NONE,
+                clientGuid: clientInfo.ClientGuid,
+                checker: (header, response) =>
+                {
+                    Site.Assert.AreEqual(
+                        Smb2Status.STATUS_SUCCESS,
+                        header.Status,
+                        "{0} should succeed", header.Command);
+                    clientInfo.Dialect = response.DialectRevision;
+                    capabilities = response.Capabilities;
+                    // out clientInfo.ServerGssToken
+                });
 
             #region Validate Negotiate Response
-            if (Smb2Utility.IsSmb3xFamily(selectedDialect))
+            if (Smb2Utility.IsSmb3xFamily(clientInfo.Dialect))
             {
                 Site.Assert.AreEqual<bool>(leasingConfig.IsLeasingSupported,
-                    negotiatePayload.Capabilities.HasFlag(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LEASING),
+                    capabilities.Value.HasFlag(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LEASING),
                     "Expect that the Capabilities in the response {0} SMB2_GLOBAL_CAP_LEASING 0x00000002.", leasingConfig.IsLeasingSupported ? "contains" : "does not contain");
                 Site.Assert.AreEqual<bool>(leasingConfig.IsDirectoryLeasingSupported & isClientSupportDirectoryLeasing,
-                    negotiatePayload.Capabilities.HasFlag(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING),
+                    capabilities.Value.HasFlag(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING),
                     "Expect that the Capabilities in the response {0} SMB2_GLOBAL_CAP_DIRECTORY_LEASING 0x00000020.",
                     leasingConfig.IsDirectoryLeasingSupported & isClientSupportDirectoryLeasing ? "contains" : "does not contain");
             }
-            else if (selectedDialect == DialectRevision.Smb21)
+            else if (clientInfo.Dialect == DialectRevision.Smb21)
             {
                 Site.Assert.AreEqual<bool>(leasingConfig.IsLeasingSupported,
-                    negotiatePayload.Capabilities.HasFlag(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LEASING),
+                    capabilities.Value.HasFlag(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LEASING),
                     "Expect that the Capabilities in the response {0} SMB2_GLOBAL_CAP_LEASING 0x00000002.", leasingConfig.IsLeasingSupported ? "contains" : "does not contain");
-                Site.Assert.IsFalse(negotiatePayload.Capabilities.HasFlag(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING),
+                Site.Assert.IsFalse(capabilities.Value.HasFlag(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING),
                     "Expect that the Capabilities in the response does not contain SMB2_GLOBAL_CAP_DIRECTORY_LEASING 0x00000020.");
             }
             else
             {
-                Site.Assert.IsFalse(negotiatePayload.Capabilities.HasFlag(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LEASING),
+                Site.Assert.IsFalse(capabilities.Value.HasFlag(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LEASING),
                     "Expect that the Capabilities in the response does not contain SMB2_GLOBAL_CAP_LEASING 0x00000002.");
-                Site.Assert.IsFalse(negotiatePayload.Capabilities.HasFlag(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING),
+                Site.Assert.IsFalse(capabilities.Value.HasFlag(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING),
                     "Expect that the Capabilities in the response does not contain SMB2_GLOBAL_CAP_DIRECTORY_LEASING 0x00000020.");
             }
             #endregion
             #endregion
 
             #region SESSION_SETUP
-            Packet_Header header;
-            SESSION_SETUP_Response sessionSetupResponse;
 
-            SspiClientSecurityContext sspiClientGss =
-                new SspiClientSecurityContext(
-                    testConfig.DefaultSecurityPackage,
-                    testConfig.AccountCredential,
-                    Smb2Utility.GetCifsServicePrincipalName(testConfig.SutComputerName),
-                    ClientSecurityContextAttribute.None,
-                    SecurityTargetDataRepresentation.SecurityNativeDrep);
-
-            // Server GSS token is used only for Negotiate authentication when enabled
-            if (testConfig.DefaultSecurityPackage == SecurityPackageType.Negotiate && testConfig.UseServerGssToken)
-                sspiClientGss.Initialize(clientInfo.ServerGssToken);
-            else
-                sspiClientGss.Initialize(null);
-
-            do
-            {
-                status = clientInfo.Client.SessionSetup(
-                    1,
-                    64,
-                    Packet_Header_Flags_Values.NONE,
-                    clientInfo.MessageId++,
-                    clientInfo.SessionId,
-                    SESSION_SETUP_Request_Flags.NONE,
-                    SESSION_SETUP_Request_SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
-                    SESSION_SETUP_Request_Capabilities_Values.NONE,
-                    0,
-                    sspiClientGss.Token,
-                    out clientInfo.SessionId,
-                    out clientInfo.ServerGssToken,
-                    out header,
-                    out sessionSetupResponse);
-
-                if ((status == Smb2Status.STATUS_MORE_PROCESSING_REQUIRED || status == Smb2Status.STATUS_SUCCESS) &&
-                    clientInfo.ServerGssToken != null && clientInfo.ServerGssToken.Length > 0)
+            status = clientInfo.Client.SessionSetup(
+                testConfig.DefaultSecurityPackage,
+                testConfig.SutComputerName,
+                testConfig.AccountCredential,
+                testConfig.UseServerGssToken,
+                capabilities: SESSION_SETUP_Request_Capabilities_Values.NONE,
+                checker: (header, response) =>
                 {
-                    sspiClientGss.Initialize(clientInfo.ServerGssToken);
-                }
-            } while (status == Smb2Status.STATUS_MORE_PROCESSING_REQUIRED);
-
-            if (status == Smb2Status.STATUS_SUCCESS)
-            {
-                clientInfo.SessionKey = sspiClientGss.SessionKey;
-                clientInfo.Client.GenerateCryptoKeys(clientInfo.SessionId, clientInfo.SessionKey, true, false);
-            }
-
-            clientInfo.GrantedCredit = header.CreditRequestResponse;
-            Site.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, status, "SessionSetup should succeed, actual status is {0}", Smb2Status.GetStatusCode(status));
+                    Site.Assert.AreEqual(
+                        Smb2Status.STATUS_SUCCESS,
+                        header.Status,
+                        "SessionSetup should succeed, actual status is {0}", Smb2Status.GetStatusCode(header.Status));
+                    clientInfo.GrantedCredit = header.CreditRequestResponse;
+                    clientInfo.SessionId = header.SessionId;
+                    //out clientInfo.ServerGssToken
+                });
             #endregion
 
             #region TREE_CONNECT to share
-            TREE_CONNECT_Response treeConnectPayload;
-            status = clientInfo.Client.TreeConnect(1, 1, clientInfo.Flags, clientInfo.MessageId++, clientInfo.SessionId, uncSharePath,
-                out clientInfo.TreeId, out header, out treeConnectPayload);
-            Site.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, status, "TreeConnect to {0} should succeed, actual status is {1}", uncSharePath, Smb2Status.GetStatusCode(status));
-            if (treeConnectPayload.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_FORCE_LEVELII_OPLOCK))
+            TREE_CONNECT_Response? treeConnectResponse = null;
+            status = clientInfo.Client.TreeConnect(
+                uncSharePath, 
+                out clientInfo.TreeId,
+                checker: (header, response) =>
+                {
+                    Site.Assert.AreEqual(
+                        Smb2Status.STATUS_SUCCESS,
+                        header.Status,
+                        "TreeConnect to {0} should succeed, actual status is {1}", uncSharePath, Smb2Status.GetStatusCode(header.Status));
+                    treeConnectResponse = response;
+                });
+            if (treeConnectResponse.Value.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_FORCE_LEVELII_OPLOCK))
             {
                 Site.Assert.Inconclusive("This test case is not applicable for the share whose ShareFlags includes SHAREFLAG_FORCE_LEVELII_OPLOCK.");
             }
-            if (treeConnectPayload.Capabilities.HasFlag(Share_Capabilities_Values.SHARE_CAP_SCALEOUT))
+            if (treeConnectResponse.Value.Capabilities.HasFlag(Share_Capabilities_Values.SHARE_CAP_SCALEOUT))
             {
                 Site.Assert.Inconclusive("This test case is not applicable for the share whose Capabilities includes SHARE_CAP_SCALEOUT.");
             }
@@ -530,62 +485,50 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
 
         private void CreateFile(ModelDialectRevision dialect, string target, bool isDirectory)
         {
-            LeasingClientInfo clientInfo = new LeasingClientInfo(testConfig.Timeout, testConfig);
+            LeasingClientInfo clientInfo = new LeasingClientInfo(testConfig.Timeout, testConfig, Site);
             clientInfo.File = target;
 
             InitializeClient(clientInfo, dialect);
 
-            Packet_Header header;
-            CREATE_Response createResponse;
             Smb2CreateContextResponse[] serverCreateContexts;
-            uint status = 0;
-
-            status = clientInfo.Client.Create(1, 64, clientInfo.Flags, clientInfo.MessageId++, clientInfo.SessionId, clientInfo.TreeId, clientInfo.File,
-                AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
-                ShareAccess_Values.FILE_SHARE_READ | ShareAccess_Values.FILE_SHARE_WRITE | ShareAccess_Values.FILE_SHARE_DELETE,
+            uint status = clientInfo.Client.Create(
+                clientInfo.TreeId,
+                clientInfo.File, 
                 isDirectory ? CreateOptions_Values.FILE_DIRECTORY_FILE : CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                CreateDisposition_Values.FILE_OPEN_IF,
-                File_Attributes.NONE,
-                ImpersonationLevel_Values.Impersonation,
-                SecurityFlags_Values.NONE,
-                RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE,
-                null,
                 out clientInfo.FileId,
                 out serverCreateContexts,
-                out header,
-                out createResponse);
-            clientInfo.GrantedCredit = header.CreditRequestResponse;
-            Site.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, status, "Create a file {0} should succeed, actual status is {1}", clientInfo.File, Smb2Status.GetStatusCode(status));
-            
+                checker: (header, response) =>
+                {
+                    Site.Assert.AreEqual(
+                        Smb2Status.STATUS_SUCCESS,
+                        header.Status,
+                        "Create a file {0} should succeed, actual status is {1}", clientInfo.File, Smb2Status.GetStatusCode(header.Status));
+                    clientInfo.GrantedCredit = header.CreditRequestResponse;
+                });
             clientInfo.Cleanup();
         }
 
         private void DeleteFile(ModelDialectRevision dialect, string target, bool isDirectory)
         {
-            LeasingClientInfo clientInfo = new LeasingClientInfo(testConfig.Timeout, testConfig);
+            LeasingClientInfo clientInfo = new LeasingClientInfo(testConfig.Timeout, testConfig, Site);
 
             InitializeClient(clientInfo, dialect);
 
-            Packet_Header header;
-            CREATE_Response createResponse;
             Smb2CreateContextResponse[] serverCreateContexts;
-            uint status = 0;
-
-            status = clientInfo.Client.Create(1, 64, clientInfo.Flags, clientInfo.MessageId++, clientInfo.SessionId, clientInfo.TreeId, target,
-                AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
-                ShareAccess_Values.FILE_SHARE_READ | ShareAccess_Values.FILE_SHARE_WRITE | ShareAccess_Values.FILE_SHARE_DELETE,
+            clientInfo.Client.Create(
+                clientInfo.TreeId,
+                target,
                 (isDirectory ? CreateOptions_Values.FILE_DIRECTORY_FILE : CreateOptions_Values.FILE_NON_DIRECTORY_FILE) | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
-                CreateDisposition_Values.FILE_OPEN_IF,
-                File_Attributes.NONE,
-                ImpersonationLevel_Values.Impersonation,
-                SecurityFlags_Values.NONE,
-                RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE,
-                null,
                 out clientInfo.FileId,
                 out serverCreateContexts,
-                out header,
-                out createResponse);
-            clientInfo.GrantedCredit = header.CreditRequestResponse;
+                checker: (header, response) =>
+                {
+                    Site.Assert.AreEqual(
+                        Smb2Status.STATUS_SUCCESS,
+                        header.Status,
+                        "Create a file {0} should succeed, actual status is {1}", clientInfo.File, Smb2Status.GetStatusCode(header.Status));
+                    clientInfo.GrantedCredit = header.CreditRequestResponse;
+                });
 
             FileDispositionInformation deleteInfo;
             deleteInfo.DeletePending = 1;
@@ -593,21 +536,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
             byte[] inputBuffer;
             inputBuffer = TypeMarshal.ToBytes<FileDispositionInformation>(deleteInfo);
 
-            SET_INFO_Response responsePayload;
-            clientInfo.Client.SetInfo(
-                1,
-                1,
-                clientInfo.Flags,
-                clientInfo.MessageId++,
-                clientInfo.SessionId,
+            clientInfo.Client.SetFileAttributes(
                 clientInfo.TreeId,
-                SET_INFO_Request_InfoType_Values.SMB2_0_INFO_FILE,
                 (byte)FileInformationClasses.FileDispositionInformation,
-                SET_INFO_Request_AdditionalInformation_Values.NONE,
                 clientInfo.FileId,
-                inputBuffer,
-                out header,
-                out responsePayload);
+                inputBuffer);
             clientInfo.Cleanup();
         }
 
@@ -676,22 +609,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
         {
             string parentDirectory = "LeasingDir_" + Guid.NewGuid().ToString();
             CreateFile(dialect, parentDirectory, true);
-                        
-            originalClient = new LeasingClientInfo(testConfig.Timeout, testConfig);
+
+            originalClient = new LeasingClientInfo(testConfig.Timeout, testConfig, Site);
             originalClient.ParentDirectory = parentDirectory;
             originalClient.File = parentDirectory + "\\" + Guid.NewGuid().ToString();
 
-            originalClient.Client.LeaseBreakNotificationReceived += new Action<Packet_Header, LEASE_BREAK_Notification_Packet>(OnLeaseBreakNotificationReceived);
+            //originalClient.Client.Smb2Client.LeaseBreakNotificationReceived += new Action<Packet_Header, LEASE_BREAK_Notification_Packet>(OnLeaseBreakNotificationReceived);
 
             bool isClientSupportDirectoryLeasing = clientSupportDirectoryLeasingType == ClientSupportDirectoryLeasingType.ClientSupportDirectoryLeasing;
             InitializeClient(originalClient, dialect, isClientSupportDirectoryLeasing);
 
-            clients.Add(new LeasingClientInfo(testConfig.Timeout, testConfig, originalClient.ClientGuid)); // SameClientId
-            clients.Add(new LeasingClientInfo(testConfig.Timeout, testConfig, originalClient.ClientGuid)); // SameClientGuidDifferentLeaseKey
-            clients.Add(new LeasingClientInfo(testConfig.Timeout, testConfig)); // Second client
+            clients.Add(new LeasingClientInfo(testConfig.Timeout, testConfig, originalClient.ClientGuid, Site)); // SameClientId
+            clients.Add(new LeasingClientInfo(testConfig.Timeout, testConfig, originalClient.ClientGuid, Site)); // SameClientGuidDifferentLeaseKey
+            clients.Add(new LeasingClientInfo(testConfig.Timeout, testConfig, Site)); // Second client
 
-            clients[(int)OperatorType.SameClientId].Client.LeaseBreakNotificationReceived += new Action<Packet_Header, LEASE_BREAK_Notification_Packet>(clients[(int)OperatorType.SameClientId].OnLeaseBreakNotificationReceived);
-        }
+            //clients[(int)OperatorType.SameClientId].Client.Smb2Client.LeaseBreakNotificationReceived += new Action<Packet_Header, LEASE_BREAK_Notification_Packet>(clients[(int)OperatorType.SameClientId].OnLeaseBreakNotificationReceived);
+         }
 
         public void CreateRequest(ConnectTargetType connectTargetType, LeaseContextType leaseContextType,
             LeaseKeyType leaseKey, uint leaseState, LeaseFlagsValues leaseFlags,
@@ -699,7 +632,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
         {
             ValidateLeaseState(leaseState);
 
-            uint status = 0;
             #region Fill Contexts
             LeaseKey = (leaseKey == LeaseKeyType.ValidLeaseKey ? Guid.NewGuid() : Guid.Empty);
             ParentLeaseKey = (parentLeaseKey == ParentLeaseKeyType.EmptyParentLeaseKey ? Guid.Empty : Guid.NewGuid());
@@ -740,25 +672,23 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
             }
             #endregion
 
-            Packet_Header header;
-            CREATE_Response createResponse;
             Smb2CreateContextResponse[] serverCreateContexts;
-            
-            status = originalClient.Client.Create(1, 64, originalClient.Flags, originalClient.MessageId++, originalClient.SessionId, originalClient.TreeId, originalClient.File,
-                AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
-                ShareAccess_Values.FILE_SHARE_READ | ShareAccess_Values.FILE_SHARE_WRITE | ShareAccess_Values.FILE_SHARE_DELETE,
+
+            uint status = originalClient.Client.Create(
+                originalClient.TreeId,
+                originalClient.File,
                 (connectTargetType == ConnectTargetType.ConnectToDirectory) ? CreateOptions_Values.FILE_DIRECTORY_FILE : CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                CreateDisposition_Values.FILE_OPEN_IF,
-                File_Attributes.NONE,
-                ImpersonationLevel_Values.Impersonation,
-                SecurityFlags_Values.NONE,
-                RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                originalClient.CreateContexts,
                 out originalClient.FileId,
                 out serverCreateContexts,
-                out header,
-                out createResponse);
-
+                RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
+                originalClient.CreateContexts,
+                checker: (header, response) =>
+                {
+                    Site.Assert.AreEqual(
+                        Smb2Status.STATUS_SUCCESS,
+                        header.Status,
+                        "Create a file {0} should succeed, actual status is {1}", originalClient.File, Smb2Status.GetStatusCode(header.Status));
+                });
             #region Handle Create Response
 
             // 3.3.5.9.11   Handling the SMB2_CREATE_REQUEST_LEASE_V2 Create Context
@@ -897,19 +827,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
             #region Write Data
             if (status == Smb2Status.STATUS_SUCCESS && (connectTargetType == ConnectTargetType.ConnectToNonDirectory))
             {
-                WRITE_Response writeResponse;
                 byte[] data = Encoding.ASCII.GetBytes(Smb2Utility.CreateRandomString(1));
-                status = originalClient.Client.Write(1, 1, originalClient.Flags, originalClient.MessageId++, originalClient.SessionId, originalClient.TreeId, 0, originalClient.FileId,
-                    Channel_Values.CHANNEL_NONE, WRITE_Request_Flags_Values.None, new byte[0], data, out header, out writeResponse);
-                originalClient.GrantedCredit = header.CreditRequestResponse;
-                Site.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, status, "Write data to the file {0} failed with error code={1}", originalClient.File, Smb2Status.GetStatusCode(status));
+                status = originalClient.Client.Write(
+                    originalClient.TreeId, 
+                    originalClient.FileId, 
+                    data,
+                    checker: (header, response) =>
+                    {
+                        Site.Assert.AreEqual(
+                            Smb2Status.STATUS_SUCCESS, status, 
+                            "Write data to the file {0} failed with error code={1}", 
+                            originalClient.File, Smb2Status.GetStatusCode(header.Status)
+                            );
+                        originalClient.GrantedCredit = header.CreditRequestResponse;
+                    });
 
-                FLUSH_Response flushResponse;
-                status = originalClient.Client.Flush(1, 1, originalClient.Flags, originalClient.MessageId++, originalClient.SessionId, originalClient.TreeId, originalClient.FileId,
-                    out header, out flushResponse);
-                originalClient.GrantedCredit = header.CreditRequestResponse;
-                Site.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, status, "Flush data to the file {0} failed with error code={1}", originalClient.File, Smb2Status.GetStatusCode(status));
-            }
+                status = originalClient.Client.Flush(
+                    originalClient.TreeId, 
+                    originalClient.FileId,
+                    checker: (header, response) =>
+                    {
+                        Site.Assert.AreEqual(
+                            Smb2Status.STATUS_SUCCESS, status,
+                            "Flush data to the file {0} failed with error code={1}",
+                            originalClient.File, Smb2Status.GetStatusCode(header.Status)
+                            );
+                        originalClient.GrantedCredit = header.CreditRequestResponse;
+                    });
+           }
             #endregion
 
             if (status == Smb2Status.STATUS_SUCCESS)
@@ -922,34 +867,33 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
         {
             Guid leaseKey = ((modelLeaseKeyType == ModelLeaseKeyType.ValidLeaseKey) ? LeaseKey : Guid.NewGuid());
 
-            uint status = 0;
-            Packet_Header header;
-            LEASE_BREAK_Response leaseBreakResp;
-
-            status = originalClient.Client.LeaseBreakAcknowledgment(1, 1, originalClient.Flags, originalClient.MessageId++, originalClient.SessionId, 
-                originalClient.TreeId, leaseKey, (LeaseStateValues)leaseState, out header, out leaseBreakResp);
-
-            Site.Assert.AreEqual<Smb2Command>(Smb2Command.OPLOCK_BREAK, header.Command, "Expect that the Command is OPLOCK_BREAK.");
-
-            if (status == Smb2Status.STATUS_SUCCESS)
+            uint status = originalClient.Client.LeaseBreakAcknowledgment(
+            originalClient.TreeId,
+            leaseKey,
+            (LeaseStateValues)leaseState,
+            checker: (header, response) =>
             {
-                Site.CaptureRequirementIfAreEqual<ushort>(36, leaseBreakResp.StructureSize,
-                    RequirementCategory.MUST_BE_SPECIFIED_VALUE.Id,
-                    RequirementCategory.MUST_BE_SPECIFIED_VALUE.Description);
-                Site.CaptureRequirementIfAreEqual<ulong>(0, leaseBreakResp.Reserved,
-                    RequirementCategory.MUST_BE_ZERO.Id,
-                    RequirementCategory.MUST_BE_ZERO.Description);
-                Site.CaptureRequirementIfAreEqual<ulong>(0, leaseBreakResp.Flags,
-                    RequirementCategory.MUST_BE_ZERO.Id,
-                    RequirementCategory.MUST_BE_ZERO.Description);
-                Site.Assert.AreEqual<Guid>(leaseKey, leaseBreakResp.LeaseKey, "Expect that the field LeaseKey equals {0}.", leaseKey.ToString());
-                Site.CaptureRequirementIfAreEqual<ulong>(0, leaseBreakResp.LeaseDuration,
-                    RequirementCategory.MUST_BE_ZERO.Id,
-                    RequirementCategory.MUST_BE_ZERO.Description);
-            }
+                Site.Assert.AreEqual<Smb2Command>(Smb2Command.OPLOCK_BREAK, header.Command, "Expect that the Command is OPLOCK_BREAK.");
+                if (header.Status == Smb2Status.STATUS_SUCCESS)
+                {
+                    Site.CaptureRequirementIfAreEqual<ushort>(36, response.StructureSize,
+                        RequirementCategory.MUST_BE_SPECIFIED_VALUE.Id,
+                        RequirementCategory.MUST_BE_SPECIFIED_VALUE.Description);
+                    Site.CaptureRequirementIfAreEqual<ulong>(0, response.Reserved,
+                        RequirementCategory.MUST_BE_ZERO.Id,
+                        RequirementCategory.MUST_BE_ZERO.Description);
+                    Site.CaptureRequirementIfAreEqual<ulong>(0, response.Flags,
+                        RequirementCategory.MUST_BE_ZERO.Id,
+                        RequirementCategory.MUST_BE_ZERO.Description);
+                    Site.Assert.AreEqual<Guid>(leaseKey, response.LeaseKey, "Expect that the field LeaseKey equals {0}.", leaseKey.ToString());
+                    Site.CaptureRequirementIfAreEqual<ulong>(0, response.LeaseDuration,
+                        RequirementCategory.MUST_BE_ZERO.Id,
+                        RequirementCategory.MUST_BE_ZERO.Description);
+                }
+                originalClient.LeaseState = response.LeaseState;
+            });
 
-            originalClient.LeaseState = leaseBreakResp.LeaseState;
-            this.LeaseBreakResponse((ModelSmb2Status)status, (uint)leaseBreakResp.LeaseState);
+            this.LeaseBreakResponse((ModelSmb2Status)status, (uint)originalClient.LeaseState);
         }
 
         public void FileOperationToBreakLeaseRequest(FileOperation operation, OperatorType operatorType, ModelDialectRevision dialect, out LeasingConfig c)
@@ -973,38 +917,35 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
             {
                 #region WRITE_DATA
 
-                uint status = Smb2Status.STATUS_SUCCESS;
-
-                Packet_Header header;
-                CREATE_Response createResponse;
                 Smb2CreateContextResponse[] serverCreateContexts;
                     
                 if (!clientInfo.IsOpened)
                 {
-                    status = clientInfo.Client.Create(1, 64, clientInfo.Flags, clientInfo.MessageId++, clientInfo.SessionId, clientInfo.TreeId, originalClient.File,
-                        AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
-                        ShareAccess_Values.FILE_SHARE_READ | ShareAccess_Values.FILE_SHARE_WRITE | ShareAccess_Values.FILE_SHARE_DELETE,
+                    clientInfo.Client.Create(
+                        clientInfo.TreeId,
+                        originalClient.File,
                         originalClient.IsDirectory ? CreateOptions_Values.FILE_DIRECTORY_FILE : CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                        CreateDisposition_Values.FILE_OPEN_IF,
-                        File_Attributes.NONE,
-                        ImpersonationLevel_Values.Impersonation,
-                        SecurityFlags_Values.NONE,
-                        clientInfo.CreateContexts == null ? RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE : RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                        clientInfo.CreateContexts,
                         out clientInfo.FileId,
                         out serverCreateContexts,
-                        out header,
-                        out createResponse);
-                    Site.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, status, "Expect that creation succeeds.");
+                        clientInfo.CreateContexts == null ? RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE : RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
+                        clientInfo.CreateContexts,
+                        checker: (header, response) =>
+                        {
+                            Site.Assert.AreEqual(
+                                Smb2Status.STATUS_SUCCESS,
+                                header.Status,
+                                "Create a file {0} should succeed, actual status is {1}", originalClient.File, Smb2Status.GetStatusCode(header.Status));
+                        });
                 }
 
                 byte[] data = Encoding.ASCII.GetBytes("Write data to break READ caching.");
-                ushort creditCharge = Smb2Utility.CalculateCreditCharge((uint)data.Length, ModelUtility.GetDialectRevision(dialect));
 
+                clientInfo.Client.WriteRequest(
+                    clientInfo.TreeId,
+                    clientInfo.FileId,
+                    data,
+                    out clientInfo.MessageId);
                 clientInfo.LastOperationMessageId = clientInfo.MessageId;
-                clientInfo.Client.WriteRequest(creditCharge, 64, clientInfo.Flags, clientInfo.MessageId++, clientInfo.SessionId, clientInfo.TreeId,
-                    0, clientInfo.FileId, Channel_Values.CHANNEL_NONE, WRITE_Request_Flags_Values.None, new byte[0], data);
-                clientInfo.MessageId += (ulong)creditCharge;
 
                 #endregion
             }
@@ -1012,29 +953,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
             {
                 #region SIZE_CHANGED
 
-                uint status = Smb2Status.STATUS_SUCCESS;
-
-                Packet_Header header;
-                CREATE_Response createResponse;
                 Smb2CreateContextResponse[] serverCreateContexts;
 
                 if (!clientInfo.IsOpened)
                 {
-                    status = clientInfo.Client.Create(1, 64, clientInfo.Flags, clientInfo.MessageId++, clientInfo.SessionId, clientInfo.TreeId, originalClient.File,
-                        AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
-                        ShareAccess_Values.FILE_SHARE_READ | ShareAccess_Values.FILE_SHARE_WRITE | ShareAccess_Values.FILE_SHARE_DELETE,
+                    clientInfo.Client.Create(
+                        clientInfo.TreeId,
+                        originalClient.File,
                         originalClient.IsDirectory ? CreateOptions_Values.FILE_DIRECTORY_FILE : CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                        CreateDisposition_Values.FILE_OPEN,
-                        File_Attributes.NONE,
-                        ImpersonationLevel_Values.Impersonation,
-                        SecurityFlags_Values.NONE,
-                        clientInfo.CreateContexts == null ? RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE : RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                        clientInfo.CreateContexts,
                         out clientInfo.FileId,
                         out serverCreateContexts,
-                        out header,
-                        out createResponse);
-                    Site.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, status, "Expect that creation succeeds.");
+                        clientInfo.CreateContexts == null ? RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE : RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
+                        clientInfo.CreateContexts,
+                        checker: (header, response) =>
+                        {
+                            Site.Assert.AreEqual(
+                                Smb2Status.STATUS_SUCCESS,
+                                header.Status,
+                                "Create a file {0} should succeed, actual status is {1}", originalClient.File, Smb2Status.GetStatusCode(header.Status));
+                        });
                 }
 
                 FileEndOfFileInformation changeSizeInfo;
@@ -1043,49 +980,40 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
                 byte[] inputBuffer;
                 inputBuffer = TypeMarshal.ToBytes<FileEndOfFileInformation>(changeSizeInfo);
 
-                clientInfo.LastOperationMessageId = clientInfo.MessageId;
-                clientInfo.Client.SetInfoRequest(
-                    1,
-                    1,
-                    clientInfo.Flags,
-                    clientInfo.MessageId++,
-                    clientInfo.SessionId,
+                clientInfo.Client.SetFileAttributesRequest(
                     clientInfo.TreeId,
-                    SET_INFO_Request_InfoType_Values.SMB2_0_INFO_FILE,
                     (byte)FileInformationClasses.FileEndOfFileInformation,
-                    SET_INFO_Request_AdditionalInformation_Values.NONE,
-                    clientInfo.FileId, 
-                    inputBuffer);
-
+                    clientInfo.FileId,
+                    inputBuffer,
+                    out clientInfo.MessageId);
+                clientInfo.LastOperationMessageId = clientInfo.MessageId;
                 #endregion
             }
             else if (operation == FileOperation.RANGE_LOCK)
             {
                 #region RANGE_LOCK
 
-                uint status = Smb2Status.STATUS_SUCCESS;
-
-                Packet_Header header;
-                CREATE_Response createResponse;
                 Smb2CreateContextResponse[] serverCreateContexts;
 
                 if (!clientInfo.IsOpened)
                 {
-                    status = clientInfo.Client.Create(1, 64, clientInfo.Flags, clientInfo.MessageId++, clientInfo.SessionId, clientInfo.TreeId, originalClient.File,
-                        AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
-                        ShareAccess_Values.FILE_SHARE_READ | ShareAccess_Values.FILE_SHARE_WRITE | ShareAccess_Values.FILE_SHARE_DELETE,
+                    clientInfo.Client.Create(
+                        clientInfo.TreeId,
+                        originalClient.File,
                         originalClient.IsDirectory ? CreateOptions_Values.FILE_DIRECTORY_FILE : CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                        CreateDisposition_Values.FILE_OPEN,
-                        File_Attributes.NONE,
-                        ImpersonationLevel_Values.Impersonation,
-                        SecurityFlags_Values.NONE,
-                        clientInfo.CreateContexts == null ? RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE : RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                        clientInfo.CreateContexts,
                         out clientInfo.FileId,
                         out serverCreateContexts,
-                        out header,
-                        out createResponse);
-                    Site.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, status, "Expect that creation succeeds.");
+                        clientInfo.CreateContexts == null ? RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE : RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
+                        clientInfo.CreateContexts,
+                        createDisposition: CreateDisposition_Values.FILE_OPEN,
+                        checker: (header, response) =>
+                        {
+                            Site.Assert.AreEqual(
+                                Smb2Status.STATUS_SUCCESS,
+                                header.Status,
+                                "Create a file {0} should succeed, actual status is {1}", originalClient.File, Smb2Status.GetStatusCode(header.Status));
+                        }
+                    );
                 }
 
                 clientInfo.Locks = new LOCK_ELEMENT[1];
@@ -1094,19 +1022,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
                 clientInfo.Locks[0].Length = (ulong)1 * 1024 / 2;
                 clientInfo.Locks[0].Flags = LOCK_ELEMENT_Flags_Values.LOCKFLAG_SHARED_LOCK;
 
+                clientInfo.Client.LockRequest(clientInfo.TreeId, clientInfo.LockSequence++, clientInfo.FileId, clientInfo.Locks, out clientInfo.MessageId);
                 clientInfo.LastOperationMessageId = clientInfo.MessageId;
-                clientInfo.Client.LockRequest(
-                    1,
-                    1,
-                    clientInfo.Flags,
-                    clientInfo.MessageId++,
-                    clientInfo.SessionId,
-                    clientInfo.TreeId,
-                    clientInfo.LockSequence++,
-                    clientInfo.FileId,
-                    clientInfo.Locks
-                    );
-
                 #endregion
             }
             else if (operation == FileOperation.OPEN_OVERWRITE)
@@ -1119,17 +1036,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
                     InitializeClient(clientInfo, dialect);
                 }
 
+                clientInfo.Client.CreateRequest(
+                        clientInfo.TreeId,
+                        originalClient.File,
+                        originalClient.IsDirectory ? CreateOptions_Values.FILE_DIRECTORY_FILE : CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                        out clientInfo.MessageId,
+                        clientInfo.CreateContexts == null ? RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE : RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
+                        clientInfo.CreateContexts,
+                        createDisposition: CreateDisposition_Values.FILE_OVERWRITE
+                    );
                 clientInfo.LastOperationMessageId = clientInfo.MessageId;
-                clientInfo.Client.CreateRequest(1, 64, clientInfo.Flags, clientInfo.MessageId++, clientInfo.SessionId, clientInfo.TreeId, originalClient.File,
-                    AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
-                    ShareAccess_Values.FILE_SHARE_READ | ShareAccess_Values.FILE_SHARE_WRITE | ShareAccess_Values.FILE_SHARE_DELETE,                        
-                    originalClient.IsDirectory ? CreateOptions_Values.FILE_DIRECTORY_FILE : CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                    CreateDisposition_Values.FILE_OVERWRITE,
-                    File_Attributes.NONE,
-                    ImpersonationLevel_Values.Impersonation,
-                    SecurityFlags_Values.NONE,
-                    clientInfo.CreateContexts == null ? RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE : RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                    clientInfo.CreateContexts);
 
                 #endregion
             }
@@ -1145,17 +1061,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
 
                 if (!clientInfo.IsOpened)
                 {
+                    clientInfo.Client.CreateRequest(
+                            clientInfo.TreeId,
+                            originalClient.File,
+                            originalClient.IsDirectory ? CreateOptions_Values.FILE_DIRECTORY_FILE : CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                            out clientInfo.MessageId,
+                            clientInfo.CreateContexts == null ? RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE : RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
+                            clientInfo.CreateContexts,
+                            createDisposition: CreateDisposition_Values.FILE_OPEN
+                        );
                     clientInfo.LastOperationMessageId = clientInfo.MessageId;
-                    clientInfo.Client.CreateRequest(1, 64, clientInfo.Flags, clientInfo.MessageId++, clientInfo.SessionId, clientInfo.TreeId, originalClient.File,
-                        AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
-                        ShareAccess_Values.FILE_SHARE_READ | ShareAccess_Values.FILE_SHARE_WRITE | ShareAccess_Values.FILE_SHARE_DELETE,
-                        originalClient.IsDirectory ? CreateOptions_Values.FILE_DIRECTORY_FILE : CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                        CreateDisposition_Values.FILE_OPEN,
-                        File_Attributes.NONE,
-                        ImpersonationLevel_Values.Impersonation,
-                        SecurityFlags_Values.NONE,
-                        clientInfo.CreateContexts == null ? RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE : RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                        clientInfo.CreateContexts);
                 }
 
                 #endregion
@@ -1172,17 +1087,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
 
                 if (!clientInfo.IsOpened)
                 {
-                    clientInfo.LastOperationMessageId = clientInfo.MessageId;
-                    clientInfo.Client.CreateRequest(1, 64, clientInfo.Flags, clientInfo.MessageId++, clientInfo.SessionId, clientInfo.TreeId, originalClient.File,
-                        AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
-                        ShareAccess_Values.FILE_SHARE_READ,
+                    clientInfo.Client.CreateRequest(
+                        clientInfo.TreeId,
+                        originalClient.File,
                         originalClient.IsDirectory ? CreateOptions_Values.FILE_DIRECTORY_FILE : CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                        CreateDisposition_Values.FILE_OPEN,
-                        File_Attributes.NONE,
-                        ImpersonationLevel_Values.Impersonation,
-                        SecurityFlags_Values.NONE,
+                        out clientInfo.MessageId,
                         clientInfo.CreateContexts == null ? RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE : RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                        clientInfo.CreateContexts);
+                        clientInfo.CreateContexts,
+                        shareAccess: ShareAccess_Values.FILE_SHARE_READ,
+                        createDisposition: CreateDisposition_Values.FILE_OPEN
+                    );
+                    clientInfo.LastOperationMessageId = clientInfo.MessageId;
                 }
                 #endregion
             }
@@ -1198,17 +1113,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
 
                 if (!clientInfo.IsOpened)
                 {
-                    clientInfo.LastOperationMessageId = clientInfo.MessageId;
-                    clientInfo.Client.CreateRequest(1, 64, clientInfo.Flags, clientInfo.MessageId++, clientInfo.SessionId, clientInfo.TreeId, originalClient.File,
-                        AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
-                        ShareAccess_Values.FILE_SHARE_READ,
+                    clientInfo.Client.CreateRequest(
+                        clientInfo.TreeId,
+                        originalClient.File,
                         originalClient.IsDirectory ? CreateOptions_Values.FILE_DIRECTORY_FILE : CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                        CreateDisposition_Values.FILE_OVERWRITE,
-                        File_Attributes.NONE,
-                        ImpersonationLevel_Values.Impersonation,
-                        SecurityFlags_Values.NONE,
+                        out clientInfo.MessageId,
                         clientInfo.CreateContexts == null ? RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE : RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                        clientInfo.CreateContexts);
+                        clientInfo.CreateContexts,
+                        shareAccess: ShareAccess_Values.FILE_SHARE_READ,
+                        createDisposition: CreateDisposition_Values.FILE_OVERWRITE
+                    );
+                    clientInfo.LastOperationMessageId = clientInfo.MessageId;
                 }
 
                 #endregion
@@ -1223,29 +1138,27 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
                     InitializeClient(clientInfo, dialect);
                 }
 
-                uint status = Smb2Status.STATUS_SUCCESS;
-
-                Packet_Header header;
-                CREATE_Response createResponse;
                 Smb2CreateContextResponse[] serverCreateContexts;
 
                 if (!clientInfo.IsOpened)
                 {
-                    clientInfo.Client.Create(1, 64, clientInfo.Flags, clientInfo.MessageId++, clientInfo.SessionId, clientInfo.TreeId, originalClient.File,
-                        AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
-                        ShareAccess_Values.FILE_SHARE_READ | ShareAccess_Values.FILE_SHARE_WRITE | ShareAccess_Values.FILE_SHARE_DELETE,
+                    uint status = clientInfo.Client.Create(
+                        clientInfo.TreeId,
+                        originalClient.File,
                         (originalClient.IsDirectory ? CreateOptions_Values.FILE_DIRECTORY_FILE : CreateOptions_Values.FILE_NON_DIRECTORY_FILE) | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
-                        CreateDisposition_Values.FILE_OPEN,
-                        File_Attributes.NONE,
-                        ImpersonationLevel_Values.Impersonation,
-                        SecurityFlags_Values.NONE,
-                        clientInfo.CreateContexts == null ? RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE : RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                        clientInfo.CreateContexts,
                         out clientInfo.FileId,
                         out serverCreateContexts,
-                        out header,
-                        out createResponse);
-                    Site.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, status, "Expect that creation succeeds.");
+                        clientInfo.CreateContexts == null ? RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE : RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
+                        clientInfo.CreateContexts,
+                        createDisposition: CreateDisposition_Values.FILE_OPEN,
+                        checker: (header, response) =>
+                        {
+                            Site.Assert.AreEqual(
+                                Smb2Status.STATUS_SUCCESS,
+                                header.Status,
+                                "Create a file {0} should succeed, actual status is {1}", originalClient.File, Smb2Status.GetStatusCode(header.Status));
+                        }
+                    );
                 }
 
                 FileDispositionInformation deleteInfo;
@@ -1254,19 +1167,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
                 byte[] inputBuffer;
                 inputBuffer = TypeMarshal.ToBytes<FileDispositionInformation>(deleteInfo);
 
-                clientInfo.LastOperationMessageId = clientInfo.MessageId;
-                clientInfo.Client.SetInfoRequest(
-                    1,
-                    1,
-                    clientInfo.Flags,
-                    clientInfo.MessageId++,
-                    clientInfo.SessionId,
+                clientInfo.Client.SetFileAttributesRequest(
                     clientInfo.TreeId,
-                    SET_INFO_Request_InfoType_Values.SMB2_0_INFO_FILE,
                     (byte)FileInformationClasses.FileDispositionInformation,
-                    SET_INFO_Request_AdditionalInformation_Values.NONE,
                     clientInfo.FileId,
-                    inputBuffer);
+                    inputBuffer,
+                    out clientInfo.MessageId);
+                clientInfo.LastOperationMessageId = clientInfo.MessageId;
                 #endregion
             }
             else if (operation == FileOperation.RENAMEED)
@@ -1279,29 +1186,27 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
                     InitializeClient(clientInfo, dialect);
                 }
 
-                uint status = Smb2Status.STATUS_SUCCESS;
-
-                Packet_Header header;
-                CREATE_Response createResponse;
                 Smb2CreateContextResponse[] serverCreateContexts;
 
                 if (!clientInfo.IsOpened)
                 {
-                    status = clientInfo.Client.Create(1, 64, clientInfo.Flags, clientInfo.MessageId++, clientInfo.SessionId, clientInfo.TreeId, originalClient.File,
-                        AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
-                        ShareAccess_Values.FILE_SHARE_READ | ShareAccess_Values.FILE_SHARE_WRITE | ShareAccess_Values.FILE_SHARE_DELETE,
+                    clientInfo.Client.Create(
+                        clientInfo.TreeId,
+                        originalClient.File,
                         originalClient.IsDirectory ? CreateOptions_Values.FILE_DIRECTORY_FILE : CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                        CreateDisposition_Values.FILE_OPEN,
-                        File_Attributes.NONE,
-                        ImpersonationLevel_Values.Impersonation,
-                        SecurityFlags_Values.NONE,
-                        clientInfo.CreateContexts == null ? RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE : RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                        clientInfo.CreateContexts,
                         out clientInfo.FileId,
                         out serverCreateContexts,
-                        out header,
-                        out createResponse);
-                    Site.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, status, "Expect that creation succeeds.");
+                        clientInfo.CreateContexts == null ? RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE : RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
+                        clientInfo.CreateContexts,
+                        createDisposition: CreateDisposition_Values.FILE_OPEN,
+                        checker: (header, response) =>
+                        {
+                            Site.Assert.AreEqual(
+                                Smb2Status.STATUS_SUCCESS,
+                                header.Status,
+                                "Create a file {0} should succeed, actual status is {1}", originalClient.File, Smb2Status.GetStatusCode(header.Status));
+                        }
+                    );
                 }
                 
                 string newFileName = originalClient.ParentDirectory + "\\" + Guid.NewGuid().ToString();
@@ -1315,19 +1220,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
                 byte[] inputBuffer;
                 inputBuffer = TypeMarshal.ToBytes<FileRenameInformation>(info);
 
-                clientInfo.LastOperationMessageId = clientInfo.MessageId;
-                clientInfo.Client.SetInfoRequest(
-                    1,
-                    1,
-                    clientInfo.Flags,
-                    clientInfo.MessageId++,
-                    clientInfo.SessionId,
+                clientInfo.Client.SetFileAttributesRequest(
                     clientInfo.TreeId,
-                    SET_INFO_Request_InfoType_Values.SMB2_0_INFO_FILE,
                     (byte)FileInformationClasses.FileRenameInformation,
-                    SET_INFO_Request_AdditionalInformation_Values.NONE,
                     clientInfo.FileId,
-                    inputBuffer);
+                    inputBuffer,
+                    out clientInfo.MessageId);
+                clientInfo.LastOperationMessageId = clientInfo.MessageId;
 
                 originalClient.File = newFileName;
                 #endregion
@@ -1342,29 +1241,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
                     InitializeClient(clientInfo, dialect);
                 }
 
-                uint status = Smb2Status.STATUS_SUCCESS;
-
-                Packet_Header header;
-                CREATE_Response createResponse;
                 Smb2CreateContextResponse[] serverCreateContexts;
 
                 if (!clientInfo.IsOpened)
                 {
-                    status = clientInfo.Client.Create(1, 64, clientInfo.Flags, clientInfo.MessageId++, clientInfo.SessionId, clientInfo.TreeId, originalClient.ParentDirectory,
-                        AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
-                        ShareAccess_Values.FILE_SHARE_READ | ShareAccess_Values.FILE_SHARE_WRITE | ShareAccess_Values.FILE_SHARE_DELETE,
+                    clientInfo.Client.Create(
+                        clientInfo.TreeId,
+                        originalClient.ParentDirectory,
                         CreateOptions_Values.FILE_DIRECTORY_FILE,
-                        CreateDisposition_Values.FILE_OPEN,
-                        File_Attributes.NONE,
-                        ImpersonationLevel_Values.Impersonation,
-                        SecurityFlags_Values.NONE,
-                        RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE,
-                        null,
                         out clientInfo.FileId,
                         out serverCreateContexts,
-                        out header,
-                        out createResponse);
-                    Site.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, status, "Expect that creation succeeds.");
+                        createDisposition: CreateDisposition_Values.FILE_OPEN,
+                        checker: (header, response) =>
+                        {
+                            Site.Assert.AreEqual(
+                                Smb2Status.STATUS_SUCCESS,
+                                header.Status,
+                                "Create a file {0} should succeed, actual status is {1}", originalClient.File, Smb2Status.GetStatusCode(header.Status));
+                        }
+                    );
                 }
 
                 string newFileName = "LeasingDir_" + Guid.NewGuid().ToString();
@@ -1378,20 +1273,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
                 byte[] inputBuffer;
                 inputBuffer = TypeMarshal.ToBytes<FileRenameInformation>(info);
 
-                clientInfo.LastOperationMessageId = clientInfo.MessageId;
-                clientInfo.Client.SetInfoRequest(
-                    1,
-                    1,
-                    clientInfo.Flags,
-                    clientInfo.MessageId++,
-                    clientInfo.SessionId,
+                clientInfo.Client.SetFileAttributesRequest(
                     clientInfo.TreeId,
-                    SET_INFO_Request_InfoType_Values.SMB2_0_INFO_FILE,
                     (byte)FileInformationClasses.FileRenameInformation,
-                    SET_INFO_Request_AdditionalInformation_Values.NONE,
                     clientInfo.FileId,
-                    inputBuffer);
-                // Does not need to update these two fields File and ParentDirectory in orginal client because the operation will fail.
+                    inputBuffer,
+                    out clientInfo.MessageId);
+                clientInfo.LastOperationMessageId = clientInfo.MessageId;
+                 // Does not need to update these two fields File and ParentDirectory in orginal client because the operation will fail.
                 #endregion
             }
 
@@ -1405,117 +1294,82 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
             if (lastOperation.Operation == FileOperation.WRITE_DATA)
             {
                 #region WRITE_DATA
-                Packet_Header header;
-                WRITE_Response writeResponse;
 
-                uint status = clientInfo.Client.WriteResponse(
+                clientInfo.Client.WriteResponse(
                     clientInfo.LastOperationMessageId,
-                    out header,
-                    out writeResponse);
-
-                clientInfo.GrantedCredit = header.CreditRequestResponse;
+                    (header, response) =>
+                    {
+                        clientInfo.GrantedCredit = header.CreditRequestResponse;
+                    });
                 #endregion
             }
             else if (lastOperation.Operation == FileOperation.SIZE_CHANGED)
             {
                 #region SIZE_CHANGED
-                Packet_Header header;
-                SET_INFO_Response responsePayload;
 
-                uint status = clientInfo.Client.SetInfoResponse(
+                clientInfo.Client.SetInfoResponse(
                     clientInfo.LastOperationMessageId,
-                    out header,
-                    out responsePayload);
-
-                clientInfo.GrantedCredit = header.CreditRequestResponse;
+                    (header, response) =>
+                    {
+                        clientInfo.GrantedCredit = header.CreditRequestResponse;
+                    });
                 #endregion
             }
             else if (lastOperation.Operation == FileOperation.RANGE_LOCK)
             {
                 #region RANGE_LOCK
-                uint status;
-
-                Packet_Header header;
-                LOCK_Response responsePayload;
-                status = clientInfo.Client.LockResponse(
+                clientInfo.Client.LockResponse(
                     clientInfo.LastOperationMessageId,
-                    out header,
-                    out responsePayload);
-
-                clientInfo.GrantedCredit = header.CreditRequestResponse;
+                    (header, response) =>
+                    {
+                        clientInfo.GrantedCredit = header.CreditRequestResponse;
+                    });
 
                 clientInfo.Locks[0].Flags = LOCK_ELEMENT_Flags_Values.LOCKFLAG_UNLOCK;
-
-                clientInfo.Client.Lock(
-                    1,
-                    1,
-                    clientInfo.Flags,
-                    clientInfo.MessageId++,
-                    clientInfo.SessionId,
-                    clientInfo.TreeId,
-                    clientInfo.LockSequence++,
-                    clientInfo.FileId,
-                    clientInfo.Locks,
-                    out header,
-                    out responsePayload
-                    );
+                clientInfo.Client.Lock(clientInfo.TreeId, clientInfo.LockSequence++, clientInfo.FileId, clientInfo.Locks);
                 #endregion
             }
             else if (lastOperation.Operation == FileOperation.OPEN_OVERWRITE)
             {
                 #region OPEN_OVERWRITE
-                uint status;
-
-                Packet_Header header;
-                CREATE_Response createResponse;
                 Smb2CreateContextResponse[] serverCreateContexts;
 
-                status = clientInfo.Client.CreateResponse(
+                clientInfo.Client.CreateResponse(
                     clientInfo.LastOperationMessageId,
                     out clientInfo.FileId,
                     out serverCreateContexts,
-                    out header,
-                    out createResponse);
-
-                clientInfo.GrantedCredit = header.CreditRequestResponse;
+                    checker: (header, response) =>
+                    {
+                        clientInfo.GrantedCredit = header.CreditRequestResponse;
+                    });
                 #endregion
             }
             else if (lastOperation.Operation == FileOperation.OPEN_WITHOUT_OVERWRITE)
             {
                 #region OPEN_BY_ANOTHER_CLIENT
-                uint status;
-
-                Packet_Header header;
-                CREATE_Response createResponse;
                 Smb2CreateContextResponse[] serverCreateContexts;
-
-                status = clientInfo.Client.CreateResponse(
+                clientInfo.Client.CreateResponse(
                     clientInfo.LastOperationMessageId,
                     out clientInfo.FileId,
                     out serverCreateContexts,
-                    out header,
-                    out createResponse);
-
-                clientInfo.GrantedCredit = header.CreditRequestResponse;
+                    checker: (header, response) =>
+                    {
+                        clientInfo.GrantedCredit = header.CreditRequestResponse;
+                    });
                 #endregion
             }
             else if (lastOperation.Operation == FileOperation.OPEN_SHARING_VIOLATION)
             {
                 #region OPEN_SHARING_VIOLATION
-                uint status;
-
-                Packet_Header header;
-                CREATE_Response createResponse;
                 Smb2CreateContextResponse[] serverCreateContexts;
-
-                status = clientInfo.Client.CreateResponse(
+                uint status = clientInfo.Client.CreateResponse(
                     clientInfo.LastOperationMessageId,
                     out clientInfo.FileId,
                     out serverCreateContexts,
-                    out header,
-                    out createResponse);
-
-                clientInfo.GrantedCredit = header.CreditRequestResponse;
+                    checker: (header, response) =>
+                    {
+                        clientInfo.GrantedCredit = header.CreditRequestResponse;
+                    });
 
                 if (testConfig.Platform != Platform.NonWindows)
                 {
@@ -1526,21 +1380,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
             else if (lastOperation.Operation == FileOperation.OPEN_SHARING_VIOLATION_WITH_OVERWRITE)
             {
                 #region OPEN_SHARING_VIOLATION_WITH_OVERWRITE
-                uint status;
-
-                Packet_Header header;
-                CREATE_Response createResponse;
                 Smb2CreateContextResponse[] serverCreateContexts;
-
-                status = clientInfo.Client.CreateResponse(
+                uint status = clientInfo.Client.CreateResponse(
                     clientInfo.LastOperationMessageId,
                     out clientInfo.FileId,
                     out serverCreateContexts,
-                    out header,
-                    out createResponse);
-
-                clientInfo.GrantedCredit = header.CreditRequestResponse;
-
+                    checker: (header, response) =>
+                    {
+                        clientInfo.GrantedCredit = header.CreditRequestResponse;
+                    });
                 if (testConfig.Platform != Platform.NonWindows)
                 {
                     Site.Assert.AreEqual(Smb2Status.STATUS_SHARING_VIOLATION, status, "Expect that creation fails with STATUS_SHARING_VIOLATION.");
@@ -1550,43 +1398,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
             else if (lastOperation.Operation == FileOperation.DELETED)
             {
                 #region DELETED
-                Packet_Header header;
-                SET_INFO_Response responsePayload;
-
-                uint status = clientInfo.Client.SetInfoResponse(
+                clientInfo.Client.SetInfoResponse(
                     clientInfo.LastOperationMessageId,
-                    out header,
-                    out responsePayload);
-
-                clientInfo.GrantedCredit = header.CreditRequestResponse;
+                    (header, response) =>
+                    {
+                        clientInfo.GrantedCredit = header.CreditRequestResponse;
+                    });
                 #endregion
             }
             else if (lastOperation.Operation == FileOperation.RENAMEED)
             {
                 #region RENAMEED
-                Packet_Header header;
-                SET_INFO_Response responsePayload;
-
-                uint status = clientInfo.Client.SetInfoResponse(
+                clientInfo.Client.SetInfoResponse(
                     clientInfo.LastOperationMessageId,
-                    out header,
-                    out responsePayload);
-
-                clientInfo.GrantedCredit = header.CreditRequestResponse;
+                    (header, response) =>
+                    {
+                        clientInfo.GrantedCredit = header.CreditRequestResponse;
+                    });
                 #endregion
             }
             else if (lastOperation.Operation == FileOperation.PARENT_DIR_RENAMED)
             {
                 #region PARENT_DIR_RENAMED
-                Packet_Header header;
-                SET_INFO_Response responsePayload;
-
-                uint status = clientInfo.Client.SetInfoResponse(
+                clientInfo.Client.SetInfoResponse(
                     clientInfo.LastOperationMessageId,
-                    out header,
-                    out responsePayload);
-
-                clientInfo.GrantedCredit = header.CreditRequestResponse;
+                    (header, response) =>
+                    {
+                        clientInfo.GrantedCredit = header.CreditRequestResponse;
+                    });
 
                 clientInfo.Reset(lastOperation.Operator == OperatorType.SecondClient);
                 #endregion

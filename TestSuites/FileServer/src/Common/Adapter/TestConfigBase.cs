@@ -640,6 +640,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
+        public void CheckServerEncrypt(DialectRevision selectedDialect = DialectRevision.Smb2Unknown)
+        {
+            if (this.IsGlobalEncryptDataEnabled)
+            {
+                if (selectedDialect == DialectRevision.Smb2Unknown)
+                {
+                    selectedDialect = MaxSmbVersionSupported < MaxSmbVersionClientSupported ? MaxSmbVersionSupported : MaxSmbVersionClientSupported;
+                }
+                if (selectedDialect < DialectRevision.Smb30)
+                {
+                    if (this.IsGlobalRejectUnencryptedAccessEnabled)
+                    {
+                        Site.Assert.Inconclusive("Test case is not applicable when dialect is less than SMB 3.0, both IsGlobalEncryptDataEnabled and IsGlobalRejectUnencryptedAccessEnabled set to true.");
+                    }
+                }
+                else
+                {
+                    Site.Assert.Inconclusive("Test case is not applicable when dialect is SMB 3.0 or later and IsGlobalEncryptDataEnabled set to true.");
+                }
+            }
+        }
+
         public void CheckEncryptionAlgorithm(EncryptionAlgorithm cipherId)
         {
             if (!SupportedEncryptionAlgorithmList.Contains(cipherId))

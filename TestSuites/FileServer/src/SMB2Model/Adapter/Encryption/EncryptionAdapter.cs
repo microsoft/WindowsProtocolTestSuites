@@ -13,7 +13,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Encryptio
     public class EncryptionAdapter : ModelManagedAdapterBase, IEncryptionAdapter
     {
         #region Fields
-        
+
         private Smb2FunctionalClient testClient;
         private EncryptionConfig encryptionConfig;
         private uint treeId;
@@ -92,10 +92,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Encryptio
                         "{0} should succeed", header.Command);
 
                     negotiateResponse = response;
-                });
-
+                },
+                ifHandleRejectUnencryptedAccessSeparately: true
+            );
 
             selectedDialect = negotiateResponse.Value.DialectRevision;
+            if (clientSupportsEncryptionType == ClientSupportsEncryptionType.ClientNotSupportsEncryption)
+            {
+                testConfig.CheckServerEncrypt(selectedDialect);
+            }
             if (Smb2Utility.IsSmb3xFamily(selectedDialect) && clientSupportsEncryptionType == ClientSupportsEncryptionType.ClientSupportsEncryption)
             {
                 /// TD section 3.3.5.4
@@ -135,6 +140,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Encryptio
 
         public void TreeConnectRequest(ConnectToShareType connectToShareType, ModelRequestType modelRequestType)
         {
+            if (testConfig.IsGlobalEncryptDataEnabled && (connectToShareType == ConnectToShareType.ConnectToUnEncryptedShare || modelRequestType == ModelRequestType.UnEncryptedRequest))
+            {
+                Site.Assert.Inconclusive("This test case is not applicable due to IsGlobalEncryptDataEnabled is True");
+            }
             string sharePath = (connectToShareType == ConnectToShareType.ConnectToEncryptedShare) ?
                 Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.EncryptedFileShare) : Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare);
 
@@ -158,7 +167,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Encryptio
                     {
                         treeConnectResponse = response;
                     });
-                
+
                 ShareEncryptDataType shareEncryptDataType = treeConnectResponse.Value.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_ENCRYPT_DATA) ? ShareEncryptDataType.ShareEncryptDataSet : ShareEncryptDataType.ShareEncryptDataNotSet;
 
                 //TODO: To be implemented after TRANSFORM_HEADER added into Smb2FunctionalClient
@@ -172,9 +181,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Encryptio
 
         public void FileOperationVerifyEncryptionRequest(ModelRequestType modelRequestType)
         {
+            //if (testConfig.IsGlobalEncryptDataEnabled && modelRequestType == ModelRequestType.UnEncryptedRequest)
+            //{
+            //    Site.Assert.Inconclusive("This test case is not applicable due to IsGlobalEncryptDataEnabled is True");
+            //}
             uint status = 0;
 
-            if(modelRequestType == ModelRequestType.UnEncryptedRequest)
+            if (modelRequestType == ModelRequestType.UnEncryptedRequest)
             {
                 testClient.EnableSessionSigningAndEncryption(enableSigning: testConfig.SendSignedRequest, enableEncryption: false);
             }

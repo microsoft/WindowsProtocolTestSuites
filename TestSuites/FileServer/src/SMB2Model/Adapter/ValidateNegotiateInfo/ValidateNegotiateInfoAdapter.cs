@@ -54,17 +54,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateN
             c = new ValidateNegotiateInfoConfig
             {
                 Platform = testConfig.Platform,
-                ValidateNegotiateInfoSupported = testConfig.IsIoCtlCodeSupported(CtlCode_Values.FSCTL_VALIDATE_NEGOTIATE_INFO) ? 
+                ValidateNegotiateInfoSupported = testConfig.IsIoCtlCodeSupported(CtlCode_Values.FSCTL_VALIDATE_NEGOTIATE_INFO) ?
                     ValidateNegotiateInfoInServer.SupportValidateNegotiateInfo : ValidateNegotiateInfoInServer.NotSupportValidateNegotiateInfo
             };
             validateNegotiateInfoConfig = c;
         }
-    
+
         /// <summary>
         /// Negotiate, SessionSetup and TreeConnect
         /// </summary>
         public void SetupConnection(ModelDialectRevision dialect, ModelCapabilities capabilities, SecurityMode_Values securityMode)
         {
+            if (testConfig.IsGlobalEncryptDataEnabled && dialect >= ModelDialectRevision.Smb30 && (capabilities != ModelCapabilities.FullCapabilitiesForSmb30))
+            {
+                Site.Assert.Inconclusive("This test case is not applicable due to IsGlobalEncryptDataEnabled is True but capabilities does not contain GLOBAL_CAP_ENCRYPTION");
+            }
             #region Connect to server
             testClient = new Smb2FunctionalClient(testConfig.Timeout, testConfig, this.Site);
             testClient.ConnectToServer(testConfig.UnderlyingTransport, testConfig.SutComputerName, testConfig.SutIPAddress);
@@ -77,7 +81,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateN
             testClient.Negotiate(
                 Packet_Header_Flags_Values.NONE,
                 Smb2Utility.GetDialects(ModelUtility.GetDialectRevision(dialect)),
-                securityMode,               
+                securityMode,
                 (Capabilities_Values)capabilities,
                 clientGuid,
                 (header, response) =>
@@ -98,7 +102,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateN
 
             #region treeconnect
             testClient.TreeConnect(
-                Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare), 
+                Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare),
                 out treeId);
             #endregion
 
@@ -193,7 +197,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateN
                                          negotiateResponse.ServerGuid.ToString(),
                                          validateNegotiateInfoResponse.Guid.ToString());
                 }
-                
+
                 testClient.TreeDisconnect(treeId);
                 testClient.LogOff();
                 testClient.Disconnect();

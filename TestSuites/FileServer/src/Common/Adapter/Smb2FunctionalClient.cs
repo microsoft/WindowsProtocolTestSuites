@@ -414,7 +414,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
         public uint MultiProtocolNegotiate(
             string[] dialects,
-            ResponseChecker<NEGOTIATE_Response> checker = null)
+            ResponseChecker<NEGOTIATE_Response> checker = null,
+            bool ifHandleRejectUnencryptedAccessSeparately = false)
         {
             Packet_Header header;
             NEGOTIATE_Response negotiateResponse;
@@ -450,7 +451,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             SecurityMode_Values securityMode = SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
             Capabilities_Values? capabilityValue = null,
             Guid? clientGuid = null,
-            ResponseChecker<NEGOTIATE_Response> checker = null
+            ResponseChecker<NEGOTIATE_Response> checker = null,
+            bool ifHandleRejectUnencryptedAccessSeparately = false
             )
         {
             if (isSmb1NegotiateEnabled)
@@ -495,15 +497,23 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                             respHeader = header;
                             respNegotiate = response;
                         }
-                    });
+                    },
+                    ifHandleRejectUnencryptedAccessSeparately
+                );
 
                 if (isSmb2002Selected)
                 {
+                    if (!ifHandleRejectUnencryptedAccessSeparately)
+                    {
+                        if (testConfig.IsGlobalEncryptDataEnabled && testConfig.IsGlobalRejectUnencryptedAccessEnabled)
+                        {
+                            baseTestSite.Assert.Inconclusive("Test case is not applicable when dialect is less than SMB 3.0, both IsGlobalEncryptDataEnabled and IsGlobalRejectUnencryptedAccessEnabled set to true.");
+                        }
+                    }
                     if (checker != null)
                     {
                         checker(respHeader.Value, respNegotiate.Value);
                     }
-
                     return status;
                 }
             }
@@ -514,7 +524,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     securityMode,
                     capabilityValue,
                     clientGuid,
-                    checker: checker);
+                    checker: checker,
+                    ifHandleRejectUnencryptedAccessSeparately: ifHandleRejectUnencryptedAccessSeparately);
         }
 
         public uint Negotiate(
@@ -523,7 +534,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             SecurityMode_Values securityMode = SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
             Capabilities_Values? capabilityValue = null,
             Guid? clientGuid = null,
-            ResponseChecker<NEGOTIATE_Response> checker = null)
+            ResponseChecker<NEGOTIATE_Response> checker = null,
+            bool ifHandleRejectUnencryptedAccessSeparately = false)
         {
             PreauthIntegrityHashID[] preauthHashAlgs = null;
             EncryptionAlgorithm[] encryptionAlgs = null;
@@ -546,7 +558,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 clientGuid,
                 preauthHashAlgs,
                 encryptionAlgs,
-                checker
+                checker,
+                ifHandleRejectUnencryptedAccessSeparately
             );
         }
 
@@ -558,7 +571,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             Guid? clientGuid = null,
             PreauthIntegrityHashID[] preauthHashAlgs = null,
             EncryptionAlgorithm[] encryptionAlgs = null,
-            ResponseChecker<NEGOTIATE_Response> checker = null)
+            ResponseChecker<NEGOTIATE_Response> checker = null,
+            bool ifHandleRejectUnencryptedAccessSeparately = false)
         {
             Packet_Header header;
             NEGOTIATE_Response negotiateResponse;
@@ -574,9 +588,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             if (null == capabilityValue)
             {
                 if (Array.IndexOf(dialects, DialectRevision.Smb30) >= 0)
+                {
                     capabilityValue = Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU | Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL | Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_ENCRYPTION;
+                }
                 else
+                {
                     capabilityValue = Capabilities_Values.NONE;
+                }
+            }
+
+            if (testConfig.IsGlobalEncryptDataEnabled && (Array.IndexOf(dialects, DialectRevision.Smb30) >= 0 || Array.IndexOf(dialects, DialectRevision.Smb302) >= 0 || Array.IndexOf(dialects, DialectRevision.Smb311) >= 0))
+            {
+                capabilityValue |= Capabilities_Values.GLOBAL_CAP_ENCRYPTION;
             }
 
             // Guid should be zero when dialect is 2.0 and should not be zero when dialect is not 2.0
@@ -598,6 +621,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 out negotiateResponse,
                 preauthHashAlgs: preauthHashAlgs,
                 encryptionAlgs: encryptionAlgs);
+            if (!ifHandleRejectUnencryptedAccessSeparately)
+            {
+                if (testConfig.IsGlobalEncryptDataEnabled && selectedDialect < DialectRevision.Smb30 && testConfig.IsGlobalRejectUnencryptedAccessEnabled)
+                {
+                    baseTestSite.Assert.Inconclusive("Test case is not applicable when dialect is less than SMB 3.0, both IsGlobalEncryptDataEnabled and IsGlobalRejectUnencryptedAccessEnabled set to true.");
+                }
+            }
 
             maxBufferSize = negotiateResponse.MaxReadSize < negotiateResponse.MaxWriteSize ?
                 negotiateResponse.MaxReadSize : negotiateResponse.MaxWriteSize;
@@ -1286,6 +1316,55 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 sessionChannelSequence);
 
             ProduceCredit(messageId, header);
+
+            InnerResponseChecker(checker, header, writeResponse);
+
+            return status;
+        }
+
+        public void WriteRequest(
+            uint treeId,
+            FILEID fileId,
+            byte[] data,
+            out ulong messageId,
+            ulong offset = 0)
+        {
+            messageId = generateMessageId(sequenceWindow);
+            ushort creditCharge = generateCreditCharge(64);
+
+            // Need to consume credit from sequence window first according to TD
+            ConsumeCredit(messageId, creditCharge);
+
+            client.WriteRequest(
+                creditCharge,
+                generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
+                testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                messageId,
+                sessionId,
+                treeId,
+                offset,
+                fileId,
+                Channel_Values.CHANNEL_NONE,
+                WRITE_Request_Flags_Values.None,
+                new byte[0],
+                data
+                );
+        }
+
+        public uint WriteResponse(
+           ulong messageId,
+           ResponseChecker<WRITE_Response> checker = null)
+        {
+            Packet_Header header;
+            WRITE_Response writeResponse;
+
+            uint status = client.WriteResponse(
+                messageId,
+                out header,
+                out writeResponse
+                );
+
+            ProduceCredit(header.MessageId, header);
 
             InnerResponseChecker(checker, header, writeResponse);
 
@@ -2127,6 +2206,53 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             return status;
         }
 
+        public void SetFileAttributesRequest(
+            uint treeId,
+            byte fileInfoClass,
+            FILEID fileId,
+            byte[] inputBuffer,
+            out ulong messageId)
+        {
+            messageId = generateMessageId(sequenceWindow);
+            ushort creditCharge = generateCreditCharge(1);
+
+            // Need to consume credit from sequence window first according to TD
+            ConsumeCredit(messageId, creditCharge);
+
+            client.SetInfoRequest(
+                creditCharge,
+                generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
+                testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                messageId,
+                sessionId,
+                treeId,
+                SET_INFO_Request_InfoType_Values.SMB2_0_INFO_FILE,
+                fileInfoClass,
+                SET_INFO_Request_AdditionalInformation_Values.NONE,
+                fileId,
+                inputBuffer);
+        }
+
+        public uint SetInfoResponse(
+            ulong messageId,
+            ResponseChecker<SET_INFO_Response> checker = null)
+        {
+            Packet_Header header;
+            SET_INFO_Response setupResponse;
+
+            uint status = client.SetInfoResponse(
+                messageId,
+                out header,
+                out setupResponse
+                );
+
+            ProduceCredit(header.MessageId, header);
+
+            InnerResponseChecker(checker, header, setupResponse);
+
+            return status;
+        }
+
         #endregion
 
         #region Change Notify
@@ -2196,6 +2322,51 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 out lockResponse);
 
             ProduceCredit(messageId, header);
+
+            InnerResponseChecker(checker, header, lockResponse);
+
+            return status;
+        }
+
+        public void LockRequest(
+            uint treeId,
+            uint lockSequence,
+            FILEID fileId,
+            LOCK_ELEMENT[] locks,
+            out ulong messageId)
+        {
+            messageId = generateMessageId(sequenceWindow);
+            ushort creditCharge = generateCreditCharge(1);
+
+            // Need to consume credit from sequence window first according to TD
+            ConsumeCredit(messageId, creditCharge);
+
+            client.LockRequest(
+                creditCharge,
+                generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
+                testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                messageId,
+                sessionId,
+                treeId,
+                lockSequence,
+                fileId,
+                locks);
+        }
+
+        public uint LockResponse(
+            ulong messageId,
+            ResponseChecker<LOCK_Response> checker = null)
+        {
+            Packet_Header header;
+            LOCK_Response lockResponse;
+
+            uint status = client.LockResponse(
+                messageId,
+                out header,
+                out lockResponse
+                );
+
+            ProduceCredit(header.MessageId, header);
 
             InnerResponseChecker(checker, header, lockResponse);
 
@@ -2575,6 +2746,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 }
 
                 needContinueAuthenticating = false;
+                if (testConfig.IsGlobalEncryptDataEnabled && Dialect >= DialectRevision.Smb30 && Dialect != DialectRevision.Smb2Unknown)
+                {
+                    EnableSessionSigningAndEncryption(false, true);
+                }
             }
 
             InnerResponseChecker(checker, header, sessionSetupResponse);

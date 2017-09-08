@@ -39,6 +39,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private IpVersion ipVersion;
         private Smb2Client smb2Client;
         private TimeSpan timeout;
+        private FSATestConfig testConfig;
+        private DialectRevision selectedDialect;
 
         // The following suppression is adopted because this field will be used by reflection.
         [SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
@@ -65,9 +67,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.requestDialects = new DialectRevision[] { DialectRevision.Smb2002, DialectRevision.Smb21, DialectRevision.Smb30 };
         }
 
-        public Smb2TransportAdapter(DialectRevision[] dialects)
+        public Smb2TransportAdapter(DialectRevision[] dialects, FSATestConfig testConfig)
         {
             this.requestDialects = dialects;
+            this.testConfig = testConfig;
         }
 
         #endregion
@@ -205,8 +208,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         public bool IsSendSignedRequest
         {
             get { return this.isSendSignedRequest; }
-            set 
-            { 
+            set
+            {
                 this.isSendSignedRequest = value;
                 this.packetHeaderFlag = this.isSendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE;
             }
@@ -292,8 +295,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             if (this.smb2Client != null)
             {
                 this.DeleteTestFile();
-                this.TreeDisconnect();
-                this.LogOff();
                 this.smb2Client.Disconnect();
                 this.smb2Client.Dispose();
                 this.smb2Client = null;
@@ -307,11 +308,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// Negotiate method, will be called automatically when initialize
         /// </summary>
         /// <returns>NTStatus code</returns>
-        protected MessageStatus Negotiate()
+        public MessageStatus Negotiate()
         {
             uint status;
-            DialectRevision selectedDialect;
             NEGOTIATE_Response negotiateResponse;
+            Capabilities_Values capabilityValue = Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING |
+                Capabilities_Values.GLOBAL_CAP_LARGE_MTU | Capabilities_Values.GLOBAL_CAP_LEASING |
+                Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL | Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES;
+            if (testConfig.IsGlobalEncryptDataEnabled && (Array.IndexOf(this.requestDialects, DialectRevision.Smb30) >= 0 ||
+                Array.IndexOf(this.requestDialects, DialectRevision.Smb302) >= 0 || Array.IndexOf(this.requestDialects, DialectRevision.Smb311) >= 0))
+            {
+                capabilityValue |= Capabilities_Values.GLOBAL_CAP_ENCRYPTION;
+            }
             status = this.smb2Client.Negotiate(
                 1,
                 1,
@@ -319,12 +327,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 this.messageId++,
                 this.requestDialects,
                 SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
-                Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU | Capabilities_Values.GLOBAL_CAP_LEASING | Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL | Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES,
+                capabilityValue,
                 Guid.NewGuid(),
                 out selectedDialect,
                 out this.gssToken,
                 out packetHeader,
                 out negotiateResponse);
+
+            if (testConfig.IsGlobalEncryptDataEnabled && testConfig.IsGlobalRejectUnencryptedAccessEnabled)
+            {
+                site.Assert.Inconclusive("Test case is not applicable when dialect is less than SMB 3.0, both IsGlobalEncryptDataEnabled and IsGlobalRejectUnencryptedAccessEnabled set to true.");
+            }
             return (MessageStatus)status;
         }
 
@@ -377,6 +390,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             {
                 sessionKey = sspiClientGss.SessionKey;
                 this.smb2Client.GenerateCryptoKeys(sessionId, sessionKey, true, false);
+                if (testConfig.IsGlobalEncryptDataEnabled && selectedDialect >= DialectRevision.Smb30 && selectedDialect != DialectRevision.Smb2Unknown)
+                {
+                    this.smb2Client.EnableSessionSigningAndEncryption(sessionId, false, true);
+                }
             }
 
             return (MessageStatus)status;
@@ -451,10 +468,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// </summary>
         protected void DeleteTestFile()
         {
-            if (string.IsNullOrEmpty(this.fileName) 
-                || this.fileName.Contains("Existing") 
-                || this.fileName.Contains("Quota") 
-                || this.fileName.Contains("MountPoint") 
+            if (string.IsNullOrEmpty(this.fileName)
+                || this.fileName.Contains("Existing")
+                || this.fileName.Contains("Quota")
+                || this.fileName.Contains("MountPoint")
                 || this.fileName.Contains("link"))
             {
                 //Do not remove these existing files.
