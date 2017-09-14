@@ -1037,9 +1037,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 || serverCoreData.version == TS_UD_SC_CORE_version_Values.V3
                 || serverCoreData.version == TS_UD_SC_CORE_version_Values.V4
                 || serverCoreData.version == TS_UD_SC_CORE_version_Values.V5
-                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V6, "The version field of TS_UD_SC_CORE contains value: 0x00080001, 0x00080004.");
+                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V6
+                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V7, "The version field of TS_UD_SC_CORE contains value: 0x00080001, 0x00080009.");
 
-            
+
             uint flags =(uint)(requestedProtocols_Values.PROTOCOL_RDP_FLAG | requestedProtocols_Values.PROTOCOL_SSL_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_EX);
             uint negFlags = (uint)(~flags);
             Site.Assert.AreEqual<uint>(0, (uint)serverCoreData.clientRequestedProtocols & negFlags, "The clientRequestedProtocols field of TS_UD_SC_CORE, which contains the flags sent by the client in the requestedProtocols field of the RDP Negotiation Request."
