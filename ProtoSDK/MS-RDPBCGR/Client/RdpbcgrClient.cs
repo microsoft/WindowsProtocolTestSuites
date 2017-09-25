@@ -1416,9 +1416,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             clientSecurityData.header.type = TS_UD_HEADER_type_Values.CS_SECURITY;
             clientSecurityData.encryptionMethods = encryptionMethod;
             clientSecurityData.extEncryptionMethods = 0;
-            int securityDataSize = Marshal.SizeOf(clientSecurityData.header)
-                                 + Marshal.SizeOf((uint)clientSecurityData.encryptionMethods)
-                                 + Marshal.SizeOf(clientSecurityData.extEncryptionMethods);
+            int securityDataSize = 12;
             clientSecurityData.header.length = (ushort)securityDataSize;
             #endregion Filling clientSecurityData TS_UD_CS_SEC
 

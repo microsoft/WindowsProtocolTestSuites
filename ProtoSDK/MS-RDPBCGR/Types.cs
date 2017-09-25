@@ -1492,7 +1492,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 List<byte> securityData = new List<byte>();
                 RdpbcgrEncoder.EncodeStructure(securityData, gccPdu.clientSecurityData.header);
                 RdpbcgrEncoder.EncodeStructure(securityData, (uint)gccPdu.clientSecurityData.encryptionMethods);
-                RdpbcgrEncoder.EncodeStructure(securityData, gccPdu.clientSecurityData.extEncryptionMethods);
+                RdpbcgrEncoder.EncodeStructure(securityData, (uint)gccPdu.clientSecurityData.extEncryptionMethods);
                 userData.AddRange(securityData.ToArray());
             }
             #endregion Encode clientSecurityData TS_UD_CS_SEC
