@@ -415,7 +415,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         public uint MultiProtocolNegotiate(
             string[] dialects,
             ResponseChecker<NEGOTIATE_Response> checker = null,
-            bool ifHandleRejectUnencryptedAccessSeparately = false)
+            bool ifHandleRejectUnencryptedAccessSeparately = false,
+            bool ifAddGLOBAL_CAP_ENCRYPTION = true)
         {
             Packet_Header header;
             NEGOTIATE_Response negotiateResponse;
@@ -452,8 +453,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             Capabilities_Values? capabilityValue = null,
             Guid? clientGuid = null,
             ResponseChecker<NEGOTIATE_Response> checker = null,
-            bool ifHandleRejectUnencryptedAccessSeparately = false
-            )
+            bool ifHandleRejectUnencryptedAccessSeparately = false,
+            bool ifAddGLOBAL_CAP_ENCRYPTION = true)
         {
             if (isSmb1NegotiateEnabled)
             {
@@ -498,7 +499,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                             respNegotiate = response;
                         }
                     },
-                    ifHandleRejectUnencryptedAccessSeparately
+                    ifHandleRejectUnencryptedAccessSeparately,
+                    ifAddGLOBAL_CAP_ENCRYPTION
                 );
 
                 if (isSmb2002Selected)
@@ -525,7 +527,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     capabilityValue,
                     clientGuid,
                     checker: checker,
-                    ifHandleRejectUnencryptedAccessSeparately: ifHandleRejectUnencryptedAccessSeparately);
+                    ifHandleRejectUnencryptedAccessSeparately: ifHandleRejectUnencryptedAccessSeparately,
+                    ifAddGLOBAL_CAP_ENCRYPTION: ifAddGLOBAL_CAP_ENCRYPTION);
         }
 
         public uint Negotiate(
@@ -535,7 +538,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             Capabilities_Values? capabilityValue = null,
             Guid? clientGuid = null,
             ResponseChecker<NEGOTIATE_Response> checker = null,
-            bool ifHandleRejectUnencryptedAccessSeparately = false)
+            bool ifHandleRejectUnencryptedAccessSeparately = false,
+            bool ifAddGLOBAL_CAP_ENCRYPTION = true)
         {
             PreauthIntegrityHashID[] preauthHashAlgs = null;
             EncryptionAlgorithm[] encryptionAlgs = null;
@@ -559,7 +563,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 preauthHashAlgs,
                 encryptionAlgs,
                 checker,
-                ifHandleRejectUnencryptedAccessSeparately
+                ifHandleRejectUnencryptedAccessSeparately,
+                ifAddGLOBAL_CAP_ENCRYPTION
             );
         }
 
@@ -572,7 +577,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             PreauthIntegrityHashID[] preauthHashAlgs = null,
             EncryptionAlgorithm[] encryptionAlgs = null,
             ResponseChecker<NEGOTIATE_Response> checker = null,
-            bool ifHandleRejectUnencryptedAccessSeparately = false)
+            bool ifHandleRejectUnencryptedAccessSeparately = false,
+            bool ifAddGLOBAL_CAP_ENCRYPTION = true)
         {
             Packet_Header header;
             NEGOTIATE_Response negotiateResponse;
@@ -596,12 +602,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     capabilityValue = Capabilities_Values.NONE;
                 }
             }
-
-            if (testConfig.IsGlobalEncryptDataEnabled && (Array.IndexOf(dialects, DialectRevision.Smb30) >= 0 || Array.IndexOf(dialects, DialectRevision.Smb302) >= 0 || Array.IndexOf(dialects, DialectRevision.Smb311) >= 0))
+            if (ifAddGLOBAL_CAP_ENCRYPTION && (Array.IndexOf(dialects, DialectRevision.Smb30) >= 0 || Array.IndexOf(dialects, DialectRevision.Smb302) >= 0 || Array.IndexOf(dialects, DialectRevision.Smb311) >= 0))
             {
                 capabilityValue |= Capabilities_Values.GLOBAL_CAP_ENCRYPTION;
             }
-
             // Guid should be zero when dialect is 2.0 and should not be zero when dialect is not 2.0
             if (null == clientGuid)
                 clientGuid = (dialects.Length == 1 && dialects[0] == DialectRevision.Smb2002) ? Guid.Empty : Guid.NewGuid();

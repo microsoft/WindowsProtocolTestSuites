@@ -93,14 +93,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Encryptio
 
                     negotiateResponse = response;
                 },
-                ifHandleRejectUnencryptedAccessSeparately: true
+                ifHandleRejectUnencryptedAccessSeparately: true,
+                ifAddGLOBAL_CAP_ENCRYPTION: false
             );
 
             selectedDialect = negotiateResponse.Value.DialectRevision;
-            if (clientSupportsEncryptionType == ClientSupportsEncryptionType.ClientNotSupportsEncryption)
-            {
-                testConfig.CheckServerEncrypt(selectedDialect);
-            }
+
             if (Smb2Utility.IsSmb3xFamily(selectedDialect) && clientSupportsEncryptionType == ClientSupportsEncryptionType.ClientSupportsEncryption)
             {
                 /// TD section 3.3.5.4
@@ -140,10 +138,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Encryptio
 
         public void TreeConnectRequest(ConnectToShareType connectToShareType, ModelRequestType modelRequestType)
         {
-            if (testConfig.IsGlobalEncryptDataEnabled && (connectToShareType == ConnectToShareType.ConnectToUnEncryptedShare || modelRequestType == ModelRequestType.UnEncryptedRequest))
-            {
-                Site.Assert.Inconclusive("This test case is not applicable due to IsGlobalEncryptDataEnabled is True");
-            }
             string sharePath = (connectToShareType == ConnectToShareType.ConnectToEncryptedShare) ?
                 Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.EncryptedFileShare) : Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare);
 

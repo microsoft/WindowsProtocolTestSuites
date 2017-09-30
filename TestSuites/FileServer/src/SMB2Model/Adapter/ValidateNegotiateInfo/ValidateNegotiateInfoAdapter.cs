@@ -65,10 +65,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateN
         /// </summary>
         public void SetupConnection(ModelDialectRevision dialect, ModelCapabilities capabilities, SecurityMode_Values securityMode)
         {
-            if (testConfig.IsGlobalEncryptDataEnabled && dialect >= ModelDialectRevision.Smb30 && (capabilities != ModelCapabilities.FullCapabilitiesForSmb30))
-            {
-                Site.Assert.Inconclusive("This test case is not applicable due to IsGlobalEncryptDataEnabled is True but capabilities does not contain GLOBAL_CAP_ENCRYPTION");
-            }
             #region Connect to server
             testClient = new Smb2FunctionalClient(testConfig.Timeout, testConfig, this.Site);
             testClient.ConnectToServer(testConfig.UnderlyingTransport, testConfig.SutComputerName, testConfig.SutIPAddress);
@@ -108,6 +104,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateN
 
             Connection_Dialect = ModelUtility.GetModelDialectRevision(negotiateResponse.DialectRevision);
             Connection_ClientCapabilities = (Capabilities_Values)capabilities;
+            if (dialect >= ModelDialectRevision.Smb30) // GLOBAL_CAP_ENCRYPTION will be added in Functional client when dialect >= SMB30
+            {
+                Connection_ClientCapabilities |= Capabilities_Values.GLOBAL_CAP_ENCRYPTION;
+            }
             Connection_ClientSecurityMode = securityMode;
             Connection_ClientGuid = clientGuid;
         }
