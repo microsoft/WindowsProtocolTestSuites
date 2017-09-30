@@ -1492,7 +1492,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 List<byte> securityData = new List<byte>();
                 RdpbcgrEncoder.EncodeStructure(securityData, gccPdu.clientSecurityData.header);
                 RdpbcgrEncoder.EncodeStructure(securityData, (uint)gccPdu.clientSecurityData.encryptionMethods);
-                RdpbcgrEncoder.EncodeStructure(securityData, gccPdu.clientSecurityData.extEncryptionMethods);
+                RdpbcgrEncoder.EncodeStructure(securityData, (uint)gccPdu.clientSecurityData.extEncryptionMethods);
                 userData.AddRange(securityData.ToArray());
             }
             #endregion Encode clientSecurityData TS_UD_CS_SEC
@@ -7225,7 +7225,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  been set. For non-French locale clients, this field
         ///  MUST be set to 0.
         /// </summary>
-        public uint extEncryptionMethods;
+        public encryptionMethod_Values extEncryptionMethods;
     }
 
     /// <summary>
@@ -7854,7 +7854,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// RDP 10.3 servers
         /// </summary>
-        V6 = 0x00080008
+        V6 = 0x00080008,
+
+        /// <summary>
+        /// RDP 10.4 servers
+        /// </summary>
+        V7 = 0x00080009
     }
 
     /// <summary>
