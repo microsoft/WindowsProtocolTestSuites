@@ -954,8 +954,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         #endregion
 
         #region Negotiate
-        // If call this function directly rather than call it from FunctionalClient, 
-        // remember to handle the IsGlobalEncryptDataEnabled and IsGlobalRejectUnencryptedAccessEnabled
         public uint Negotiate(
             ushort creditCharge,
             ushort creditRequest,

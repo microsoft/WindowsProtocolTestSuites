@@ -640,6 +640,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
+        /// <summary>
+        /// Check values of IsGlobalEncryptDataEnabled and IsGlobalRejectUnencryptedAccessEnabled for those part encryption required test cases
+        /// Such as encrypt on one channel, encrypt at first and unencrypt later
+        /// </summary>
+        /// <param name="selectedDialect"></param>
         public void CheckServerEncrypt(DialectRevision selectedDialect = DialectRevision.Smb2Unknown)
         {
             if (this.IsGlobalEncryptDataEnabled)

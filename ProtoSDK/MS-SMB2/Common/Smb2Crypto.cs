@@ -30,7 +30,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             {
                 Smb2SinglePacket singlePacket = originalPacket as Smb2SinglePacket;
                 sessionId = singlePacket.Header.SessionId;
-                // [MS-SMB2] Section 3.2.4.1.8, the request being sent is SMB2 NEGOTIATE, or the request being sent is SMB2 SESSION_SETUP with the SMB2_SESSION_FLAG_BINDING bit set in the Flags field, the client MUST NOT encrypt the message
+                // [MS-SMB2] Section 3.2.4.1.8, the request being sent is SMB2 NEGOTIATE, 
+                // or the request being sent is SMB2 SESSION_SETUP with the SMB2_SESSION_FLAG_BINDING bit set in the Flags field, 
+                // the client MUST NOT encrypt the message
                 if (sessionId == 0 ||
                     (singlePacket.Header.Command == Smb2Command.NEGOTIATE && (singlePacket is Smb2NegotiateRequestPacket)))
                 {
@@ -59,16 +61,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             }
 
             Smb2CryptoInfo cryptoInfo = cryptoInfoTable[sessionId];
-            bool oldEnableSessionEncryption = cryptoInfo.EnableSessionEncryption;
-            bool oldEnableSessionSigning = cryptoInfo.EnableSessionSigning;
-            if (notEncrypt)
-            {
-                cryptoInfo.EnableSessionEncryption = false;
-                cryptoInfo.EnableSessionSigning = true;
-            }
 
             #region Encrypt
-            // Try to encrypt the message whenever the encryption is supported or not. 
+            // Try to encrypt the message whenever the encryption is supported or not except for sesstion setup. 
             // If it's not supported, do it for negative test.
             // For compound packet, the encryption is done for the entire message.
             if (!notEncrypt)
@@ -106,36 +101,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
                 }
             }
             #endregion
-            if (notEncrypt)
-            {
-                cryptoInfo.EnableSessionEncryption = oldEnableSessionEncryption;
-                cryptoInfo.EnableSessionSigning = oldEnableSessionSigning;
-            }
             return originalPacket.ToBytes();
-        }
-
-        /// <summary>
-        /// Check if packet should encrypt or signed according to packet type and content
-        /// </summary>
-        /// <param name="mustNotEncrypt">Packet must not be encrypted if true</param>
-        /// <param name="mustNotSign">Packet must not be signed if true</param>
-        /// <param name="packet">Packet</param>
-        /// <param name="sessionId">Extract the sessionId</param>
-        private static void CheckIfEncryptedAndSigned(ref bool mustNotEncrypt, ref bool mustNotSign, Smb2SinglePacket packet, out ulong sessionId)
-        {
-            sessionId = packet.Header.SessionId;
-            // [MS-SMB2] Section 3.2.4.1.8, the request being sent is SMB2 NEGOTIATE, or the request being sent is SMB2 SESSION_SETUP with the SMB2_SESSION_FLAG_BINDING bit set in the Flags field, the client MUST NOT encrypt the message
-            if (sessionId == 0 ||
-                (packet.Header.Command == Smb2Command.NEGOTIATE && (packet is Smb2NegotiateRequestPacket)))
-            {
-                mustNotEncrypt = true;
-                mustNotSign = true;
-            }
-            else if ((packet.Header.Command == Smb2Command.SESSION_SETUP && (packet is Smb2SessionSetupRequestPacket) &&
-                (packet as Smb2SessionSetupRequestPacket).PayLoad.Flags == SESSION_SETUP_Request_Flags.SESSION_FLAG_BINDING))
-            {
-                mustNotEncrypt = true;
-            }
         }
 
         public static byte[] Decrypt(byte[] bytes, Dictionary<ulong, Smb2CryptoInfo> cryptoInfoTable, Smb2Role role)

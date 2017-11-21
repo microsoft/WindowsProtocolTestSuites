@@ -2752,7 +2752,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 needContinueAuthenticating = false;
                 if (testConfig.IsGlobalEncryptDataEnabled && Dialect >= DialectRevision.Smb30 && Dialect != DialectRevision.Smb2Unknown)
                 {
-                    EnableSessionSigningAndEncryption(false, true);
+                    EnableSessionSigningAndEncryption(testConfig.SendSignedRequest, true);
                 }
             }
 

@@ -120,7 +120,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Encryptio
         {
             uint status = 0;
             SESSION_SETUP_Response? sessionSetupResponse = null;
-
             status = testClient.SessionSetup(
                 testConfig.DefaultSecurityPackage,
                 testConfig.SutComputerName,
@@ -175,10 +174,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Encryptio
 
         public void FileOperationVerifyEncryptionRequest(ModelRequestType modelRequestType)
         {
-            //if (testConfig.IsGlobalEncryptDataEnabled && modelRequestType == ModelRequestType.UnEncryptedRequest)
-            //{
-            //    Site.Assert.Inconclusive("This test case is not applicable due to IsGlobalEncryptDataEnabled is True");
-            //}
             uint status = 0;
 
             if (modelRequestType == ModelRequestType.UnEncryptedRequest)

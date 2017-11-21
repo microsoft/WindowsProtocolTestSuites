@@ -614,16 +614,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
             originalClient.ParentDirectory = parentDirectory;
             originalClient.File = parentDirectory + "\\" + Guid.NewGuid().ToString();
 
-            //originalClient.Client.Smb2Client.LeaseBreakNotificationReceived += new Action<Packet_Header, LEASE_BREAK_Notification_Packet>(OnLeaseBreakNotificationReceived);
-
             bool isClientSupportDirectoryLeasing = clientSupportDirectoryLeasingType == ClientSupportDirectoryLeasingType.ClientSupportDirectoryLeasing;
             InitializeClient(originalClient, dialect, isClientSupportDirectoryLeasing);
 
             clients.Add(new LeasingClientInfo(testConfig.Timeout, testConfig, originalClient.ClientGuid, Site)); // SameClientId
             clients.Add(new LeasingClientInfo(testConfig.Timeout, testConfig, originalClient.ClientGuid, Site)); // SameClientGuidDifferentLeaseKey
             clients.Add(new LeasingClientInfo(testConfig.Timeout, testConfig, Site)); // Second client
-
-            //clients[(int)OperatorType.SameClientId].Client.Smb2Client.LeaseBreakNotificationReceived += new Action<Packet_Header, LEASE_BREAK_Notification_Packet>(clients[(int)OperatorType.SameClientId].OnLeaseBreakNotificationReceived);
          }
 
         public void CreateRequest(ConnectTargetType connectTargetType, LeaseContextType leaseContextType,

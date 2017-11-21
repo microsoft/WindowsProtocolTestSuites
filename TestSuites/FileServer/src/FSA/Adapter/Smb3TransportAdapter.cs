@@ -315,8 +315,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             Capabilities_Values capabilityValue = Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING |
                 Capabilities_Values.GLOBAL_CAP_LARGE_MTU | Capabilities_Values.GLOBAL_CAP_LEASING |
                 Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL | Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES;
-            if (testConfig.IsGlobalEncryptDataEnabled && (Array.IndexOf(this.requestDialects, DialectRevision.Smb30) >= 0 ||
-                Array.IndexOf(this.requestDialects, DialectRevision.Smb302) >= 0 || Array.IndexOf(this.requestDialects, DialectRevision.Smb311) >= 0))
+            if (testConfig.IsGlobalEncryptDataEnabled && (Array.IndexOf(this.requestDialects, DialectRevision.Smb30) >= 0))
             {
                 capabilityValue |= Capabilities_Values.GLOBAL_CAP_ENCRYPTION;
             }
@@ -336,7 +335,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             if (testConfig.IsGlobalEncryptDataEnabled && testConfig.IsGlobalRejectUnencryptedAccessEnabled)
             {
-                site.Assert.Inconclusive("Test case is not applicable when dialect is less than SMB 3.0, both IsGlobalEncryptDataEnabled and IsGlobalRejectUnencryptedAccessEnabled set to true.");
+                site.Assert.Inconclusive("Test case is not applicable when both IsGlobalEncryptDataEnabled and IsGlobalRejectUnencryptedAccessEnabled set to true.");
             }
             return (MessageStatus)status;
         }
@@ -389,10 +388,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             if (status == Smb2Status.STATUS_SUCCESS)
             {
                 sessionKey = sspiClientGss.SessionKey;
-                this.smb2Client.GenerateCryptoKeys(sessionId, sessionKey, true, false);
+                this.smb2Client.GenerateCryptoKeys(sessionId, sessionKey, testConfig.SendSignedRequest, false);
                 if (testConfig.IsGlobalEncryptDataEnabled && selectedDialect >= DialectRevision.Smb30 && selectedDialect != DialectRevision.Smb2Unknown)
                 {
-                    this.smb2Client.EnableSessionSigningAndEncryption(sessionId, false, true);
+                    this.smb2Client.EnableSessionSigningAndEncryption(sessionId, testConfig.SendSignedRequest, true);
                 }
             }
 
