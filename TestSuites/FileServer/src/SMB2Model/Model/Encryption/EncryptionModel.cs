@@ -346,6 +346,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Encryption
             {
                 return;
             }
+            if (createFileRequest.modelRequestType == ModelRequestType.UnEncryptedRequest
+                && (config.IsGlobalEncryptDataEnabled
+                    || Encryption_TreeId == EncryptionTreeId.TreeIdToEncryptShare)
+                && config.IsGlobalRejectUnencryptedAccessEnabled)
+            {
+                ModelHelper.Log(LogType.Requirement,
+                    "3.3.1.5: RejectUnencryptedAccess: A Boolean that, if set, " +
+                    "indicates that the server will reject any unencrypted messages. " +
+                    "This flag is applicable only if EncryptData is TRUE or if " +
+                    "Share.EncryptData (as defined in section 3.3.1.6) is TRUE.");
+                Condition.IsTrue(status == ModelSmb2Status.STATUS_ACCESS_DENIED);
+                return;
+            }
 
             //TODO: To be implemented after TRANSFORM_HEADER added into Smb2FunctionalClient
             if (createFileRequest.modelRequestType == ModelRequestType.EncryptedRequest)
@@ -448,7 +461,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Encryption
                     return false;
                 }
             }
-
+            
             if (Encryption_TreeId == EncryptionTreeId.NoTreeId)
             {
                 ModelHelper.Log(LogType.Requirement,
