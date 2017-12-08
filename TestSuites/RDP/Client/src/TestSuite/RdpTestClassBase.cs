@@ -15,13 +15,13 @@ using System.Runtime.CompilerServices;
 
 namespace Microsoft.Protocols.TestSuites.Rdp
 {
-    public abstract class RdpTestClassBase:TestClassBase
+    public abstract class RdpTestClassBase : TestClassBase
     {
         const int TileSize = 0x40; //The remoteFX tile size.
         const int VideoMode_TileRowNum = 5; //The row number of tiles to be sent to client.
         const int VideoMode_TileColNum = 5; //The column number of tiles to be sent to client.
         const string RDPVersionPattern = "RDP\\d+\\.\\d+"; // Used to match the RDP version in TestCategory. It MUST follow this format.
-        
+
         #region Adapter Instances
         protected IRdpbcgrAdapter rdpbcgrAdapter;
         protected IRdpSutControlAdapter sutControlAdapter;
@@ -33,7 +33,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         protected selectedProtocols_Values selectedProtocol;
         protected EncryptionMethods enMethod;
         protected EncryptionLevel enLevel;
-        protected TS_UD_SC_CORE_version_Values rdpServerVersion;        
+        protected TS_UD_SC_CORE_version_Values rdpServerVersion;
         protected TimeSpan waitTime = new TimeSpan(0, 0, 40);
         protected TimeSpan shortWaitTime = new TimeSpan(0, 0, 5);
         protected bool isClientSupportFastPathInput = true;
@@ -98,7 +98,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             LoadConfig();
 
             this.rdpbcgrAdapter.ConfirmActiveRequest += new ConfirmActiveRequestHandler(this.testClassBase_getConfirmActivePduInfo);
-            
+
         }
 
         protected override void TestCleanup()
@@ -236,44 +236,47 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             {
                 assumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityProtocol);
             }
-            else
-            {//TLS, CredSSP, or RDP
-                if (strRDPSecurityProtocol.Equals("TLS", StringComparison.CurrentCultureIgnoreCase))
+
+            // Check the combination of RdpSecurityNegotiation and RdpSecurityProtocol
+            if (strRDPSecurityProtocol.Equals("TLS", StringComparison.CurrentCultureIgnoreCase))
+            {
+                selectedProtocol = selectedProtocols_Values.PROTOCOL_SSL_FLAG;
+                if (isNegotiationBased)
                 {
-                    selectedProtocol = selectedProtocols_Values.PROTOCOL_SSL_FLAG;
-                    if (isNegotiationBased)
-                    {
-                        transportProtocol = EncryptedProtocol.NegotiationTls;
-                    }
-                    else
-                    {
-                        transportProtocol = EncryptedProtocol.DirectTls;
-                    }
-                }
-                else if (strRDPSecurityProtocol.Equals("CredSSP", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    selectedProtocol = selectedProtocols_Values.PROTOCOL_HYBRID_FLAG;
-                    if (isNegotiationBased)
-                    {
-                        transportProtocol = EncryptedProtocol.NegotiationCredSsp;
-                    }
-                    else
-                    {
-                        transportProtocol = EncryptedProtocol.DirectCredSsp;
-                    }
-                }
-                else if (strRDPSecurityProtocol.Equals("RDP", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    selectedProtocol = selectedProtocols_Values.PROTOCOL_RDP_FLAG;
-                    if (!isNegotiationBased)
-                    {
-                        this.TestSite.Log.Add(LogEntryKind.Warning, "The property \"RDP.Security.Protocol\" is not valid and will be ingored. (When  use RDP as security protocol, the negotiation-based approch MUST be used.");
-                    }
+                    transportProtocol = EncryptedProtocol.NegotiationTls;
                 }
                 else
                 {
-                    assumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityProtocol);
+                    this.TestSite.Assume.Fail("For direct approach, TLS is not supported!");
                 }
+            }
+            else if (strRDPSecurityProtocol.Equals("CredSSP", StringComparison.CurrentCultureIgnoreCase))
+            {
+                selectedProtocol = selectedProtocols_Values.PROTOCOL_HYBRID_FLAG;
+                if (isNegotiationBased)
+                {
+                    transportProtocol = EncryptedProtocol.NegotiationCredSsp;
+                }
+                else
+                {
+                    transportProtocol = EncryptedProtocol.DirectCredSsp;
+                }
+            }
+            else if (strRDPSecurityProtocol.Equals("RDP", StringComparison.CurrentCultureIgnoreCase))
+            {
+                selectedProtocol = selectedProtocols_Values.PROTOCOL_RDP_FLAG;
+                if (isNegotiationBased)
+                {
+                    transportProtocol = EncryptedProtocol.Rdp;
+                }
+                else
+                {
+                    this.TestSite.Assume.Fail("For direct approach, RDP is not supported!");
+                }
+            }
+            else
+            {
+                assumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityProtocol);
             }
             #endregion
 
@@ -394,7 +397,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             {
                 verifySUTDisplay = false;
             }
-            
+
             int shiftX, shiftY;
             if (!PtfPropUtility.GetIntPtfProperty(TestSite, "VerifySUTDisplay.Shift.X", out shiftX))
             {
@@ -405,7 +408,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             {
                 shiftY = 0;
             }
-            
+
             sutDisplayShift = new Point(shiftX, shiftY);
 
             if (!PtfPropUtility.GetStringPtfProperty(TestSite, "VerifySUTDisplay.BitmapSavePath", out bitmapSavePath))
@@ -460,7 +463,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
             if (!PtfPropUtility.GetBoolPtfProperty(TestSite, RdpPtfPropNames.IsWindowsImplementation, out isWindowsImplementation))
             {
-                isWindowsImplementation  = true; //if property not found, set to true as default value
+                isWindowsImplementation = true; //if property not found, set to true as default value
             }
 
             if (!PtfPropUtility.GetBoolPtfProperty(TestSite, RdpPtfPropNames.DropConnectionForInvalidRequest, out DropConnectionForInvalidRequest))
@@ -492,7 +495,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 imageForVideoMode = Image.FromFile(rdprfxVideoModeImageFile);
             }
             catch (System.IO.FileNotFoundException)
-            {   
+            {
                 //capture screen if failed to get image from file
                 //Capture 64*64 bitmap for Image Mode
                 image_64X64 = captureScreenImage(0, 0, TileSize, TileSize);
@@ -522,7 +525,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 isClientSupportTunnelingStaticVCTraffic);
             #endregion
         }
-        
+
         /// <summary>
         /// Verify SUT Dispaly
         /// </summary>
@@ -596,7 +599,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                         isclientSupportPersistentBitmapCache = true;
                     }
 
-                }               
+                }
             }
         }
 
@@ -612,17 +615,17 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             if (isWindowsImplementation)
             {
                 string RDPClientVersion = this.Site.Properties["RDP.Version"].ToString();
-                if (string.CompareOrdinal(RDPClientVersion,"10.3") ==0) // Windows client will not interrupt the connection for RDPClient 10.3.
+                if (string.CompareOrdinal(RDPClientVersion, "10.3") == 0) // Windows client will not interrupt the connection for RDPClient 10.3.
                 {
                     DropConnectionForInvalidRequest = true; //A switch to avoid waiting till timeout. 
                 }
                 else
                 {
                     DropConnectionForInvalidRequest = false; //A switch to avoid waiting till timeout. 
-                }                
+                }
             }
 
-            if (DropConnectionForInvalidRequest) 
+            if (DropConnectionForInvalidRequest)
             {
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Expect RDP client to drop the connection");
                 bool bDisconnected = this.rdpbcgrAdapter.WaitForDisconnection(waitTime);
@@ -631,8 +634,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                     this.TestSite.Assert.IsTrue(bDisconnected, "RDP client should terminate the connection when invalid " + requestDesc + " received.");
                 }
             }
-            else 
-            {                
+            else
+            {
                 this.TestSite.Log.Add(LogEntryKind.Warning, "Non-Windows RDP client did not terminate the connection when invalid " + requestDesc + " received.");
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Please double check the RDP client behavior is as expected.");
             }

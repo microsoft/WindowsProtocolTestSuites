@@ -210,8 +210,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             CreateTransportStack(address);
 
-            if (this.encryptedProtocol == EncryptedProtocol.DirectTls ||
-                this.encryptedProtocol == EncryptedProtocol.DirectCredSsp ||
+            if (this.encryptedProtocol == EncryptedProtocol.DirectCredSsp ||
                 this.encryptedProtocol == EncryptedProtocol.NegotiationTls ||
                 this.encryptedProtocol == EncryptedProtocol.NegotiationCredSsp)
             {
@@ -404,8 +403,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 throw new InvalidOperationException("The session is not started!");
             }
 
-            if (this.encryptedProtocol == EncryptedProtocol.DirectTls ||
-                this.EncryptedProtocol == EncryptedProtocol.DirectCredSsp ||
+            if (this.EncryptedProtocol == EncryptedProtocol.DirectCredSsp ||
                 this.encryptedProtocol == EncryptedProtocol.NegotiationTls ||
                 this.encryptedProtocol == EncryptedProtocol.NegotiationCredSsp)
             {
@@ -478,8 +476,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             sessionContext.UpdateContext(pdu);
 
-            if (this.encryptedProtocol == EncryptedProtocol.DirectCredSsp ||
-                this.encryptedProtocol == EncryptedProtocol.DirectTls)
+            if (this.encryptedProtocol == EncryptedProtocol.DirectCredSsp)
             {
                 this.directedTransportStack.SendPacket(sessionContext.Identity, pdu);
             }
@@ -3409,8 +3406,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             #region default parameters
 
             selectedProtocols_Values selectedProtocols;
-            if (encryptedProtocol == EncryptedProtocol.DirectTls
-                || encryptedProtocol == EncryptedProtocol.NegotiationTls)
+            if (encryptedProtocol == EncryptedProtocol.NegotiationTls)
             {
                 selectedProtocols = selectedProtocols_Values.PROTOCOL_SSL_FLAG;
             }
@@ -3918,8 +3914,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             }
 
             TransportEvent transportEvent = null;
-            if (this.encryptedProtocol == EncryptedProtocol.DirectTls ||
-                this.EncryptedProtocol == EncryptedProtocol.DirectCredSsp ||
+            if (this.EncryptedProtocol == EncryptedProtocol.DirectCredSsp ||
                 this.encryptedProtocol == EncryptedProtocol.NegotiationTls ||
                 this.encryptedProtocol == EncryptedProtocol.NegotiationCredSsp)
             {
@@ -4208,8 +4203,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 UpdateSessionKeyPdu pdu = new UpdateSessionKeyPdu();
                 TransportEvent packetEvent = new TransportEvent(EventType.ReceivedPacket, sessionContext.Identity, pdu);
 
-                if (this.encryptedProtocol == EncryptedProtocol.DirectTls ||
-                    this.EncryptedProtocol == EncryptedProtocol.DirectCredSsp ||
+                if (this.EncryptedProtocol == EncryptedProtocol.DirectCredSsp ||
                     this.encryptedProtocol == EncryptedProtocol.NegotiationTls ||
                     this.encryptedProtocol == EncryptedProtocol.NegotiationCredSsp)
                 {
@@ -4236,8 +4230,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 UpdateSessionKeyPdu pdu = new UpdateSessionKeyPdu();
                 TransportEvent packetEvent = new TransportEvent(EventType.ReceivedPacket, sessionContext.Identity, pdu);
 
-                if (this.encryptedProtocol == EncryptedProtocol.DirectTls ||
-                    this.EncryptedProtocol == EncryptedProtocol.DirectCredSsp ||
+                if (this.EncryptedProtocol == EncryptedProtocol.DirectCredSsp ||
                 this.encryptedProtocol == EncryptedProtocol.NegotiationTls ||
                 this.encryptedProtocol == EncryptedProtocol.NegotiationCredSsp)
                 {
@@ -4429,15 +4422,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             this.transportStack = new TransportStackServerMock(
                 serverContext, decoder.DecodePacketCallback);
 #else  
-            if (this.encryptedProtocol == EncryptedProtocol.DirectTls)
-            {
-                RdpcbgrServerTransportConfig config = new RdpcbgrServerTransportConfig(
-                    SecurityStreamType.Ssl,
-                    address,
-                    this.serverPort);
-                this.directedTransportStack = new RdpbcgrServerTransportStack(this, config, decoder.DecodePacketCallback, cert);
-            }
-            else if (this.encryptedProtocol == EncryptedProtocol.DirectCredSsp)
+            if (this.encryptedProtocol == EncryptedProtocol.DirectCredSsp)
             {
                 RdpcbgrServerTransportConfig config = new RdpcbgrServerTransportConfig(
                     SecurityStreamType.CredSsp,

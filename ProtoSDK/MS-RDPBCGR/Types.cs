@@ -35,11 +35,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         NegotiationCredSsp,
 
         /// <summary>
-        /// Enhanced RDP Security, External Security Protocol is TLS with Direct Approach
-        /// </summary>
-        DirectTls,
-
-        /// <summary>
         /// Enhanced RDP Security, External Security Protocol is CredSSP with Direct Approach
         /// </summary>
         DirectCredSsp,
