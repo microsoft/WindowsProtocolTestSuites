@@ -414,7 +414,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Encryption
         private static bool VerifyTreeConnect(ModelSmb2Status status, ModelRequestType modelRequestType, EncryptionConfig c)
         {
             ModelHelper.Log(LogType.Requirement, "3.3.5.2.11 Verifying the Tree Connect");
+            if (Encryption_TreeId == EncryptionTreeId.NoTreeId)
+            {
+                ModelHelper.Log(LogType.Requirement,
+                    "The server MUST look up the TreeConnect in Session.TreeConnectTable by using the TreeId in the SMB2 header of the request. " +
+                    "If no tree connect is found, the request MUST be failed with STATUS_NETWORK_NAME_DELETED.");
+                ModelHelper.Log(LogType.TestInfo, "No tree connect is found.");
+                ModelHelper.Log(LogType.TestTag, TestTag.InvalidIdentifier);
 
+                Condition.IsTrue(status == ModelSmb2Status.STATUS_NETWORK_NAME_DELETED);
+                return false;
+            }
             if (Smb2Utility.IsSmb3xFamily(negotiateDialect))
             {
                 ModelHelper.Log(LogType.Requirement,
@@ -462,18 +472,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Encryption
                 }
             }
             
-            if (Encryption_TreeId == EncryptionTreeId.NoTreeId)
-            {
-                ModelHelper.Log(LogType.Requirement,
-                    "The server MUST look up the TreeConnect in Session.TreeConnectTable by using the TreeId in the SMB2 header of the request. " +
-                    "If no tree connect is found, the request MUST be failed with STATUS_NETWORK_NAME_DELETED.");
-                ModelHelper.Log(LogType.TestInfo, "No tree connect is found.");
-                ModelHelper.Log(LogType.TestTag, TestTag.InvalidIdentifier);
-
-                Condition.IsTrue(status == ModelSmb2Status.STATUS_NETWORK_NAME_DELETED);
-                return false;
-            }
-
             return true;
         }
 
