@@ -34,6 +34,7 @@
     <WixVariable Id="TESTSUITE_BATCH_DIR" Value="$(env.TestSuiteRoot)\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\src\Batch" />
 	<WixVariable Id="TESTSUITE_BIN_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\$(var.TESTSUITE_NAME)\Bin" />
 	<WixVariable Id="DOCS_FILES_DIR" Value="$(env.TestSuiteRoot)\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\Docs" />
+	<WixVariable Id="TESTSUITE_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\Setup\Scripts" />
 
     <WixVariable Id="RUN_TESTS_COMMAND" Value="RunAllTestCases.cmd" />
     <DirectoryRef Id="TESTSUITE_ROOT_DIR">

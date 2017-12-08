@@ -42,6 +42,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         private int transportBufferSize;
         private StreamConfig transportConfig;
         private bool isAutoReactivate;
+        protected const ushort TS_UD_CS_SEC_SecurityDataSize = 12;
 
         /// <summary>
         /// A TCP transport instance, sending and receiving all the PDUs.
@@ -1401,10 +1402,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             clientSecurityData.header.type = TS_UD_HEADER_type_Values.CS_SECURITY;
             clientSecurityData.encryptionMethods = encryptionMethod;
             clientSecurityData.extEncryptionMethods = 0;
-            int securityDataSize = Marshal.SizeOf(clientSecurityData.header)
-                                 + Marshal.SizeOf((uint)clientSecurityData.encryptionMethods)
-                                 + Marshal.SizeOf(clientSecurityData.extEncryptionMethods);
-            clientSecurityData.header.length = (ushort)securityDataSize;
+            clientSecurityData.header.length = RdpbcgrClient.TS_UD_CS_SEC_SecurityDataSize;
             #endregion Filling clientSecurityData TS_UD_CS_SEC
 
             #region Filling clientNetworkData TS_UD_CS_NET

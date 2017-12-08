@@ -241,14 +241,12 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             if (strRDPSecurityProtocol.Equals("TLS", StringComparison.CurrentCultureIgnoreCase))
             {
                 selectedProtocol = selectedProtocols_Values.PROTOCOL_SSL_FLAG;
-                if (isNegotiationBased)
-                {
-                    transportProtocol = EncryptedProtocol.NegotiationTls;
-                }
-                else
-                {
-                    this.TestSite.Assume.Fail("For direct approach, TLS is not supported!");
-                }
+                this.TestSite.Assume.IsTrue(
+                        isNegotiationBased,
+                        "When TLS is used as the security protocol, {0} is set to 'TLS', {1} must be true.",
+                        RdpPtfPropNames.RdpSecurityProtocol,
+                        RdpPtfPropNames.RdpSecurityNegotiation);
+                transportProtocol = EncryptedProtocol.NegotiationTls;
             }
             else if (strRDPSecurityProtocol.Equals("CredSSP", StringComparison.CurrentCultureIgnoreCase))
             {
@@ -265,14 +263,12 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             else if (strRDPSecurityProtocol.Equals("RDP", StringComparison.CurrentCultureIgnoreCase))
             {
                 selectedProtocol = selectedProtocols_Values.PROTOCOL_RDP_FLAG;
-                if (isNegotiationBased)
-                {
-                    transportProtocol = EncryptedProtocol.Rdp;
-                }
-                else
-                {
-                    this.TestSite.Assume.Fail("For direct approach, RDP is not supported!");
-                }
+                this.TestSite.Assume.IsTrue(
+                        isNegotiationBased,
+                        "When RDP is used as the security protocol, {0} is set to 'RDP', {1} must be true.",
+                        RdpPtfPropNames.RdpSecurityProtocol,
+                        RdpPtfPropNames.RdpSecurityNegotiation);
+                transportProtocol = EncryptedProtocol.Rdp;
             }
             else
             {
