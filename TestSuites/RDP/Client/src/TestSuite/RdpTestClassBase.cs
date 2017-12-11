@@ -188,35 +188,40 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         protected void triggerClientRDPConnect(EncryptedProtocol enProtocol, bool fullScreen = false)
         {
             int iResult = 0;
-            string strMethod;
-            if (enProtocol == EncryptedProtocol.Rdp
-                || enProtocol == EncryptedProtocol.NegotiationCredSsp
-                || enProtocol == EncryptedProtocol.NegotiationTls)
+            string strMethod = null;
+            switch (enProtocol)
             {
-                if (fullScreen)
-                    iResult = this.sutControlAdapter.RDPConnectWithNegotiationApproachFullScreen(this.TestContext.TestName);
-                else
-                    iResult = this.sutControlAdapter.RDPConnectWithNegotiationApproach(this.TestContext.TestName);
-                strMethod = "RDPConnectWithNegotiationApproach";
+                // negotiation based approach
+                case EncryptedProtocol.Rdp:
+                case EncryptedProtocol.NegotiationCredSsp:
+                case EncryptedProtocol.NegotiationTls:
+                    {
+                        if (fullScreen)
+                        {
+                            iResult = this.sutControlAdapter.RDPConnectWithNegotiationApproachFullScreen(this.TestContext.TestName);
+                        }
+                        else
+                        {
+                            iResult = this.sutControlAdapter.RDPConnectWithNegotiationApproach(this.TestContext.TestName);
+                        }
+                        strMethod = "RDPConnectWithNegotiationApproach";
+                    }
+                    break;
 
+                // direct approach
+                case EncryptedProtocol.DirectCredSsp:
+                    {
+                        if (fullScreen)
+                            iResult = this.sutControlAdapter.RDPConnectWithDirectCredSSPFullScreen(this.TestContext.TestName);
+                        else
+                            iResult = this.sutControlAdapter.RDPConnectWithDirectCredSSP(this.TestContext.TestName);
+                        strMethod = "RDPConnectWithDirectCredSSP";
+                    }
+                    break;
             }
-            else if (enProtocol == EncryptedProtocol.DirectCredSsp)
-            {
-                if (fullScreen)
-                    iResult = this.sutControlAdapter.RDPConnectWithDirectCredSSPFullScreen(this.TestContext.TestName);
-                else
-                    iResult = this.sutControlAdapter.RDPConnectWithDirectCredSSP(this.TestContext.TestName);
-                strMethod = "RDPConnectWithDirectCredSSP";
-            }
-            else
-            {
-                if (fullScreen)
-                    iResult = this.sutControlAdapter.RDPConnectWithDirectTLSFullScreen(this.TestContext.TestName);
-                else
-                    iResult = this.sutControlAdapter.RDPConnectWithDirectTLS(this.TestContext.TestName);
-                strMethod = "RDPConnectWithDirectTLS";
-            }
-            TestSite.Assume.IsTrue(iResult >= 0, "SUT Control Adapter: {0} should be successful: {1}.", strMethod, iResult);
+
+            TestSite.Assert.IsTrue(strMethod != null, "Unknown encryption protocol: {0}!", enProtocol);
+            TestSite.Assert.IsTrue(iResult >= 0, "SUT Control Adapter: {0} should be successful: {1}.", strMethod, iResult);
         }
 
         protected void LoadConfig()

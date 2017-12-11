@@ -33,37 +33,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
 
         #region IRdpSutControlAdapter Implementation
-
-        /// <summary>
-        /// This method used to trigger client to initiate a RDP connection from RDP client, 
-        /// and the client should use Direct Approach with TLS as the security protocol.
-        /// </summary>
-        /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public int RDPConnectWithDirectTLS(string caseName)
-        {
-            // Get help message
-            string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);         
-            // Create payload
-            byte[] payload = CreateRDPConncectPayload(connectPayloadType, localIP, localPort, true, false);
-
-            return Start_RDP_Connection(caseName, payload, helpMessage);
-        }
-
-        /// <summary>
-        /// This method used to trigger client to initiate a full screen RDP connection from RDP client, 
-        /// and the client should use Direct Approach with TLS as the security protocol.
-        /// </summary>
-        /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public int RDPConnectWithDirectTLSFullScreen(string caseName)
-        {
-            // Get help message
-            string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
-            // Create payload
-            byte[] payload = CreateRDPConncectPayload(connectPayloadType,localIP, localPort, true, true);
-
-            return Start_RDP_Connection(caseName, payload, helpMessage);
-        }
-
+        
         /// <summary>
         /// This method used to trigger client to initiate a RDP connection from RDP client, 
         /// and the client should use Direct Approach with CredSSP as the security protocol.

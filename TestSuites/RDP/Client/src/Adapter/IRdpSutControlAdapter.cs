@@ -15,30 +15,6 @@ namespace Microsoft.Protocols.TestSuites.Rdp
     {
         /// <summary>
         /// This method used to trigger client to initiate a RDP connection from RDP client, 
-        /// and the client should use Direct Approach with TLS as the security protocol.
-        /// </summary>
-        /// <param name="caseName">Name of test case</param>
-        /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        [MethodHelp("1.Initiate a remote desktop connection from the client using the Direct Approach connection sequence and the TLS security protocol.\r\n\r\n"+
-                    "2.Enter a return value, using a positive value for a successful connection or a negative value for a failed connection.\r\n\r\n"+
-                    "3.To pass the value to the test case, click the Succeed button. Or, to end the test case, enter a message into the Failure Message dialog box and then click Fail.")]
-        [DefaultValue("1")]
-        int RDPConnectWithDirectTLS(string caseName);
-
-        /// <summary>
-        /// This method used to trigger client to initiate a full screen RDP connection from RDP client, 
-        /// and the client should use Direct Approach with TLS as the security protocol.
-        /// </summary>
-        /// <param name="caseName">Name of test case</param>
-        /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        [MethodHelp("1.Initiate a full screen remote desktop connection from the client using the Direct Approach connection sequence and the TLS security protocol.\r\n\r\n" +
-                    "2.Enter a return value, using a positive value for a successful connection or a negative value for a failed connection.\r\n\r\n" +
-                    "3.To pass the value to the test case, click the Succeed button. Or, to end the test case, enter a message into the Failure Message dialog box and then click Fail.")]
-        [DefaultValue("1")]
-        int RDPConnectWithDirectTLSFullScreen(string caseName);
-
-        /// <summary>
-        /// This method used to trigger client to initiate a RDP connection from RDP client, 
         /// and the client should use Direct Approach with CredSSP as the security protocol.
         /// </summary>
         /// <param name="caseName">Name of test case</param>
