@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+  <Properties>
+    <!-- Test suite properties which value not changed when running in different test environments -->
+    <!--<Property name="BeaconLogTargetServer" value="Xiaotian-Think" />-->
+    <Property name="TestName" value="RDP Server Endpoint Test" />
+    <Property name="ProtocolName" value="RDP" />
+    <Property name="Version" value="1.0" />  
+ </Properties>
+
+  <Adapters>
+    <!-- RDP Protocol Adapters-->
+    <Adapter xsi:type="managed" name="IRdpbcgrAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdpbcgr.RdpbcgrAdapter"/>
+    
+    <!-- SUT Control Adapters-->
+    
+  </Adapters>
+  
+  <TestLog defaultprofile="Verbose">
+    <Sinks>
+      <!-- File location should be relative path -->
+      <File id="XMLLog" directory="..\..\Log" file="RDP-Log.xml" format="xml"/>
+      <File id="Debug" directory="..\..\DebugLog" file="DEBUG_log.txt" format="text"/>
+      <Sink id="BeaconLog" type="Microsoft.Protocols.TestTools.Logging.BeaconLogSink" assembly="Microsoft.Protocols.TestTools"/>
+    </Sinks>
+    <Profiles>
+      <Profile name="Verbose" extends="Error">
+        <!-- Show for CommandlineConsole -->
+        <Rule kind="CheckFailed" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="CheckInconclusive" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="Comment" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="Warning" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="Debug" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="TestFailed" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="TestInconclusive" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="TestPassed" sink="CommandLineConsole" delete="false"/>
+
+        <!-- Show for Console -->
+        <Rule kind="Checkpoint" sink="Console" delete="false"/>
+        <Rule kind="Debug" sink="Console" delete="false"/>
+        <Rule kind="BeginGroup" sink="Console" delete="false"/>
+        <Rule kind="EndGroup" sink="Console" delete="false"/>
+
+        <!-- Show for XML log -->
+        <Rule kind="Checkpoint" sink="XMLLog" delete="false"/>
+        <Rule kind="CheckSucceeded" sink="XMLLog" delete="false"/>
+        <Rule kind="CheckFailed" sink="XMLLog" delete="false"/>
+        <Rule kind="CheckInconclusive" sink="XMLLog" delete="false"/>
+        <Rule kind="Comment" sink="XMLLog" delete="false"/>
+        <Rule kind="Warning" sink="XMLLog" delete="false"/>
+        <Rule kind="Debug" sink="XMLLog" delete="false"/>
+        <Rule kind="TestFailed" sink="XMLLog" delete="false"/>
+        <Rule kind="TestInconclusive" sink="XMLLog" delete="false"/>
+        <Rule kind="TestPassed" sink="XMLLog" delete="false"/>
+
+
+        <!-- Show for beacon log -->
+        <Rule kind="Checkpoint" sink="BeaconLog" delete="false"/>
+        <Rule kind="CheckSucceeded" sink="BeaconLog" delete="false"/>
+        <Rule kind="Comment" sink="BeaconLog" delete="false"/>
+        <Rule kind="Debug" sink="BeaconLog" delete="false"/>
+
+        <!-- Show for debugging -->
+        <Rule kind="BeginGroup" sink ="Debug"/>
+        <Rule kind="EndGroup" sink="Debug"/>
+        <Rule kind="Checkpoint" sink="Debug"/>
+        <Rule kind="CheckSucceeded" sink="Debug"/>
+        <Rule kind="CheckFailed" sink="Debug"/>
+        <Rule kind="CheckInconclusive" sink="Debug"/>
+        <Rule kind="EnterMethod" sink="Debug"/>
+        <Rule kind="ExitMethod" sink="Debug"/>
+        <Rule kind="Comment" sink="Debug"/>
+        <Rule kind="Warning" sink="Debug"/>
+        <Rule kind="Debug" sink="Debug"/>
+        <Rule kind="TestFailed" sink="Debug"/>
+        <Rule kind="TestInconclusive" sink="Debug"/>
+        <Rule kind="TestPassed" sink="Debug"/>
+        
+        <Rule kind="CheckFailed" sink="Etw" delete="false" />
+        <!--<Rule kind="Checkpoint" sink="Etw" delete="false"/>-->
+        <!--<Rule kind="TestInProgress" sink="Etw" delete="false"/>-->
+        <Rule kind="Comment" sink="Etw" delete="false"/>
+        <Rule kind="TestFailed" sink="Etw" delete="false"/>
+        <Rule kind="TestInconclusive" sink="Etw" delete="false"/>
+        <Rule kind="TestPassed" sink="Etw" delete="false"/>
+        <Rule kind="TestError" sink="Etw" delete="false"/>
+        <Rule kind="TestTimeout" sink="Etw" delete="false"/>
+        <Rule kind="TestAborted" sink="Etw" delete="false"/>
+        <Rule kind="TestStep" sink="Etw" delete="false"/>
+        
+      </Profile>
+    </Profiles>
+  </TestLog>
+</TestSite>

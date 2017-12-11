@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using Microsoft.Protocols.TestTools.ExtendedLogging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using System.Numerics;
-
-using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestTools.ExtendedLogging;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 {
@@ -201,24 +201,24 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security.Cryptography", "CA5350:MD5CannotBeUsed")]
         public static byte[] SignProprietaryCertificate(PROPRIETARYSERVERCERTIFICATE certificate)
         {
-            byte[] privateExp = { 
-                                    0x87, 0xa7, 0x19, 0x32, 0xda, 0x11, 0x87, 0x55, 
-                                    0x58, 0x00, 0x16, 0x16, 0x25, 0x65, 0x68, 0xf8, 
-                                    0x24, 0x3e, 0xe6, 0xfa, 0xe9, 0x67, 0x49, 0x94, 
-                                    0xcf, 0x92, 0xcc, 0x33, 0x99, 0xe8, 0x08, 0x60, 
-                                    0x17, 0x9a, 0x12, 0x9f, 0x24, 0xdd, 0xb1, 0x24, 
-                                    0x99, 0xc7, 0x3a, 0xb8, 0x0a, 0x7b, 0x0d, 0xdd, 
-                                    0x35, 0x07, 0x79, 0x17, 0x0b, 0x51, 0x9b, 0xb3, 
+            byte[] privateExp = {
+                                    0x87, 0xa7, 0x19, 0x32, 0xda, 0x11, 0x87, 0x55,
+                                    0x58, 0x00, 0x16, 0x16, 0x25, 0x65, 0x68, 0xf8,
+                                    0x24, 0x3e, 0xe6, 0xfa, 0xe9, 0x67, 0x49, 0x94,
+                                    0xcf, 0x92, 0xcc, 0x33, 0x99, 0xe8, 0x08, 0x60,
+                                    0x17, 0x9a, 0x12, 0x9f, 0x24, 0xdd, 0xb1, 0x24,
+                                    0x99, 0xc7, 0x3a, 0xb8, 0x0a, 0x7b, 0x0d, 0xdd,
+                                    0x35, 0x07, 0x79, 0x17, 0x0b, 0x51, 0x9b, 0xb3,
                                     0xc7, 0x10, 0x01, 0x13, 0xe7, 0x3f, 0xf3, 0x5f
                                 };
-            byte[] modulus = { 
-                                 0x3d, 0x3a, 0x5e, 0xbd, 0x72, 0x43, 0x3e, 0xc9, 
-                                 0x4d, 0xbb, 0xc1, 0x1e, 0x4a, 0xba, 0x5f, 0xcb, 
-                                 0x3e, 0x88, 0x20, 0x87, 0xef, 0xf5, 0xc1, 0xe2, 
-                                 0xd7, 0xb7, 0x6b, 0x9a, 0xf2, 0x52, 0x45, 0x95, 
-                                 0xce, 0x63, 0x65, 0x6b, 0x58, 0x3a, 0xfe, 0xef, 
-                                 0x7c, 0xe7, 0xbf, 0xfe, 0x3d, 0xf6, 0x5c, 0x7d, 
-                                 0x6c, 0x5e, 0x06, 0x09, 0x1a, 0xf5, 0x61, 0xbb, 
+            byte[] modulus = {
+                                 0x3d, 0x3a, 0x5e, 0xbd, 0x72, 0x43, 0x3e, 0xc9,
+                                 0x4d, 0xbb, 0xc1, 0x1e, 0x4a, 0xba, 0x5f, 0xcb,
+                                 0x3e, 0x88, 0x20, 0x87, 0xef, 0xf5, 0xc1, 0xe2,
+                                 0xd7, 0xb7, 0x6b, 0x9a, 0xf2, 0x52, 0x45, 0x95,
+                                 0xce, 0x63, 0x65, 0x6b, 0x58, 0x3a, 0xfe, 0xef,
+                                 0x7c, 0xe7, 0xbf, 0xfe, 0x3d, 0xf6, 0x5c, 0x7d,
+                                 0x6c, 0x5e, 0x06, 0x09, 0x1a, 0xf5, 0x61, 0xbb,
                                  0x20, 0x93, 0x09, 0x5f, 0x05, 0x6d, 0xea, 0x87
                              };
             if (privateExp == null)
@@ -497,9 +497,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         internal static void FillCommonHeader(
             RdpbcgrServerSessionContext context,
             ref SlowPathPduCommonHeader commonHeader,
-            TS_SECURITY_HEADER_flags_Values flag, 
-            ushort length = 0, 
-            byte level = 0, 
+            TS_SECURITY_HEADER_flags_Values flag,
+            ushort length = 0,
+            byte level = 0,
             byte type = 0,
             byte userDataLength = 0
             )
@@ -742,7 +742,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 securityHeader = header;
             }
             // else no security header
-            if (((flag & TS_SECURITY_HEADER_flags_Values.SEC_AUTODETECT_REQ) == TS_SECURITY_HEADER_flags_Values.SEC_AUTODETECT_REQ 
+            if (((flag & TS_SECURITY_HEADER_flags_Values.SEC_AUTODETECT_REQ) == TS_SECURITY_HEADER_flags_Values.SEC_AUTODETECT_REQ
                 || (flag & TS_SECURITY_HEADER_flags_Values.SEC_TRANSPORT_REQ) == TS_SECURITY_HEADER_flags_Values.SEC_TRANSPORT_REQ
                 || (flag & TS_SECURITY_HEADER_flags_Values.SEC_HEARTBEAT) == TS_SECURITY_HEADER_flags_Values.SEC_HEARTBEAT)
                 && securityHeader == null)
@@ -1016,7 +1016,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <returns>The cloned byte array.</returns>
         internal static byte[] CloneByteArray(byte[] byteArray)
         {
-            return (byteArray == null) ? null : (byte[])byteArray.Clone();
+            return (byteArray == null) ? null : byteArray.ToArray();
+        }
+
+        internal static string CloneString(string sourceString)
+        {
+            return (sourceString == null) ? null : String.Copy(sourceString);
         }
 
 
@@ -1046,6 +1051,72 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         }
 
 
+        /// <summary>
+        /// Encode string into byte array.
+        /// </summary>
+        /// <param name="sourceString">The source string.</param>
+        /// <returns></returns>
+        public static byte[] EncodeUnicodeStringToBytes(string sourceString)
+        {
+            var result = new List<byte>();
+            RdpbcgrEncoder.EncodeUnicodeString(result, sourceString, RdpbcgrEncoder.CalculateUnicodeStringEncodingSize(sourceString, true));
+            return result.ToArray();
+        }
+
+        #region certificate API for RDSTLS
+        [DllImport("Crypt32.dll", CharSet = CharSet.Unicode)]
+        private static extern bool CertSerializeCertificateStoreElement(
+                IntPtr pCertContext,
+                uint dwFlags,
+                [MarshalAs(UnmanagedType.LPArray,ArraySubType = UnmanagedType.U1)]
+            byte[] pbElement,
+                ref uint pcbElement
+                );
+
+        private const uint CRYPT_STRING_BASE64 = 0x00000001;
+
+        [DllImport("Crypt32.dll", CharSet = CharSet.Unicode)]
+        private static extern bool CryptBinaryToString(
+            [MarshalAs(UnmanagedType.LPArray,ArraySubType = UnmanagedType.U1)]
+            byte[] pbBinary,
+            uint cbBinary,
+            uint dwFlags,
+            [MarshalAs(UnmanagedType.LPArray,ArraySubType = UnmanagedType.U2)]
+            char[] pszString,
+            ref uint pcchString
+            );
+
+        /// <summary>
+        /// Encode the certificate according to the windows implementation.
+        /// </summary>
+        /// <param name="certificate">The certificate to be encoded.</param>
+        /// <returns></returns>
+        public static byte[] EncodeCertificate(X509Certificate2 certificate)
+        {
+            uint cbSerialized = 0;
+            bool bRet;
+            bRet = CertSerializeCertificateStoreElement(certificate.Handle, 0, null, ref cbSerialized);
+            byte[] serialized = new byte[cbSerialized];
+            bRet = CertSerializeCertificateStoreElement(certificate.Handle, 0, serialized, ref cbSerialized);
+
+            uint cbCrypted = 0;
+
+            bRet = CryptBinaryToString(serialized, cbSerialized, CRYPT_STRING_BASE64, null, ref cbCrypted);
+            char[] crypted = new char[cbCrypted];
+            bRet = CryptBinaryToString(serialized, cbSerialized, CRYPT_STRING_BASE64, crypted, ref cbCrypted);
+
+            var result = new byte[crypted.Length * 2];
+            for (int i = 0; i < crypted.Length; i++)
+            {
+                result[2 * i + 0] = (byte)((crypted[i] & 0x00ff) >> 0);
+                result[2 * i + 1] = (byte)((crypted[i] & 0xff00) >> 8);
+            }
+
+            return result;
+        }
+
+        #endregion
+
         #region private methods
         /// <summary>
         /// Do RSA encryption.
@@ -1058,7 +1129,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             byte[] tempData = data;
             byte[] tempExponent = exponent;
-            byte[] tempModulus = modulus; 
+            byte[] tempModulus = modulus;
 
             Array.Resize(ref tempData, tempData.Length + 1);
 

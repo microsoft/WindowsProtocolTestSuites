@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	<DefineSolutionProperties>false</DefineSolutionProperties>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>3.5</ProductVersion>
+    <ProjectGuid>{19ecda75-b299-425c-a130-7013de44b82b}</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>RDP-TestSuite-ClientEP</OutputName>
+    <OutputType>Package</OutputType>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+    <SuppressSpecificWarnings>1055</SuppressSpecificWarnings>
+    <SuppressIces>ICE30</SuppressIces>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'fxcop|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>fxcop</DefineConstants>
+    <SuppressSpecificWarnings>1055</SuppressSpecificWarnings>
+    <SuppressIces>ICE30</SuppressIces>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <SuppressSpecificWarnings>1055</SuppressSpecificWarnings>
+    <SuppressIces>ICE30</SuppressIces>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="EndpointDlg.wxs" />
+    <Compile Include="DependencyCheckWarningDlg.wxs" />
+    <Compile Include="TestSuiteBatchFiles.wxs" />
+    <Compile Include="TestSuiteBinFiles.wxs" />
+    <Compile Include="RDP-TestSuite-ClientEP.wxs" />
+    <Compile Include="TestSuiteDataFiles.wxs" />
+    <Compile Include="TestSuiteImportMergeModules.wxs" />
+    <Compile Include="TestSuiteMiscFiles.wxs" />
+    <Compile Include="TestSuitePrivacyStatementDlg.wxs" />
+    <Compile Include="TestSuitePrivacyStatementLowMsiVersionDlg.wxs" />
+    <Compile Include="TestSuiteProduct.wxs" />
+    <Compile Include="TestSuiteScripts.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="UiText.wxl" />
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixVSExtension">
+      <HintPath>$(WIX)\bin\WixVSExtension.dll</HintPath>
+      <Name>WixVSExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WIX)\bin\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WIX)\bin\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TestSuite\RDP_ClientTestSuite.csproj">
+      <Name>MS-RDPBCGR_ClientTestSuite</Name>
+      <Project>{1CEBA0F7-04B6-49F7-AF02-322FDF6CC5D2}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Common\Common.csproj">
+      <Project>{FE653643-6342-4300-871E-683C7BA31494}</Project>
+      <Name>Common</Name>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPBCGR\Rdpbcgr.csproj">
+      <Project>{FA218CAB-320C-45E9-B641-04622418988E}</Project>
+      <Name>Rdpbcgr</Name>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEDISP\Rdpedisp.csproj">
+      <Project>{37f00834-1559-42c8-a137-cc4e963d4b82}</Project>
+      <Name>Rdpedisp</Name>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEDYC\Rdpedyc.csproj">
+      <Project>{CFBAFDE2-F509-4AC8-817A-0C26C1B27653}</Project>
+      <Name>Rdpedyc</Name>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEGFX\Rdpegfx.csproj">
+      <Project>{c89ac3fb-7ffc-49d8-b99b-a76c9411aec6}</Project>
+      <Name>Rdpegfx</Name>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEGT\Rdpegt.csproj">
+      <Project>{80264e7b-a9dd-4c8a-ab1e-86c1b80466d9}</Project>
+      <Name>Rdpegt</Name>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEI\Rdpei.csproj">
+      <Project>{6EE0BB46-E1A0-42D5-85AA-E4F0B3A8C5CA}</Project>
+      <Name>Rdpei</Name>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEMT\Rdpemt.csproj">
+      <Project>{9E44ED93-D10D-42E3-A8BF-AD1923859857}</Project>
+      <Name>Rdpemt</Name>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEUDP\Rdpeudp.csproj">
+      <Project>{B6F8EB97-B6A5-4092-9ED0-12C0487DA124}</Project>
+      <Name>Rdpeudp</Name>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEUSB\Rdpeusb.csproj">
+      <Project>{698f6802-be9f-4483-a5c7-b4bbfa51d47b}</Project>
+      <Name>Rdpeusb</Name>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEVOR\Rdpevor.csproj">
+      <Project>{2467a7e3-8e85-4f7b-80bb-effe8d48b3de}</Project>
+      <Name>Rdpevor</Name>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPRFX\Rdprfx.csproj">
+      <Project>{9dd86de1-3231-4713-9b45-493f4fe4199c}</Project>
+      <Name>Rdprfx</Name>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Sspi\Sspi.csproj">
+      <Project>{D0CB354B-2CD3-49C1-8ECA-2F6EBADBCCEE}</Project>
+      <Name>Sspi</Name>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Adapter\RDP_ClientAdapter.csproj">
+      <Project>{407A6664-47AB-44DA-9917-ECB50F879772}</Project>
+      <Name>RDP_ClientAdapter</Name>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" />
+  <Target Name="GenDeployWxsFile" DependsOnTargets="ResolveWixExtensionReferences" BeforeTargets="Compile">
+    <Exec Command='"$(WIX)\bin\heat.exe" dir "..\Batch" -out TestSuiteBatchFiles.wxs -template fragment -gg -cg TESTSUITE_BATCH_FILES -dr TESTSUITE_BATCH_DIR -var wix.TESTSUITE_BATCH_DIR -sreg -sfrag -srd' />
+    <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" -out TestSuiteBinFiles.wxs -template fragment -gg -cg TESTSUITE_BIN_FILES -dr TESTSUITE_BIN_DIR -var wix.TESTSUITE_BIN_DIR -sreg -sfrag -srd' />
+    <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\TestSuites\RDP\Client\Setup\Scripts" -out TestSuiteScripts.wxs -template fragment -gg -cg TESTSUITE_SCRIPTS_FILES -dr TESTSUITE_SCRIPTS_DIR -var wix.TESTSUITE_SCRIPTS_DIR -sreg -sfrag -srd' />
+    <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\TestSuites\RDP\Client\Setup\Data" -out TestSuiteDataFiles.wxs -template fragment -gg -cg TESTSUITE_DATA_FILES -dr TESTSUITE_DATA_DIR -var wix.TESTSUITE_DATA_DIR -sreg -sfrag -srd' />
+  </Target>
+  
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)en-us\$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\deploy\" />
+  </Target>
+  <ItemGroup>
+    <TestPTFConfigFile Include="..\TestSuite\*.ptfconfig" />
+    <TestBMPFile Include="..\TestSuite\*.bmp" />
+    <TestSuiteXMLFile Include="..\TestSuite\*.xml" />
+    <RdpedispEnhancedAdapterImages Include="..\TestSuite\RDPEDISP\RdpedispEnhancedAdapterImages\*.png" />
+    <H264TestData Include="..\TestSuite\RDPEGFX\H264TestData\*" />
+    <H264TestDataBaseImage Include="..\TestSuite\RDPEGFX\H264TestData\BaseImage\*" />
+    <SUTControlAdapter Include="..\Adapter\SUTControlAdapter\*.ps1" />
+    <RdpeiSUTControlAdapter Include="..\Adapter\RdpeiSUTControlAdapter\*.ps1" />
+    <NonWindowsSUTImplementation Include="..\Adapter\NonWindowsSUTImplementation\*.ps1" />
+    <RdpedispSUTControlAdapter Include="..\Adapter\RdpedispSUTControlAdapter\*.ps1" />
+  </ItemGroup>
+  <Target Name="CopyFilesToBin" BeforeTargets="GenDeployWxsFile" >
+    <Copy SourceFiles="..\ClientLocal.TestSettings" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
+    <Copy SourceFiles="@(TestPTFConfigFile)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
+    <Copy SourceFiles="@(TestBMPFile)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
+    <Copy SourceFiles="@(TestSuiteXMLFile)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
+    <Copy SourceFiles="@(H264TestData)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
+    <Copy SourceFiles="@(RdpedispEnhancedAdapterImages)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
+    <Copy SourceFiles="@(H264TestDataBaseImage)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
+    <Copy SourceFiles="@(SUTControlAdapter)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
+    <Copy SourceFiles="@(RdpeiSUTControlAdapter)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
+    <Copy SourceFiles="@(NonWindowsSUTImplementation)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin\NonWindowsSUTImplementation" />
+    <Copy SourceFiles="@(RdpedispSUTControlAdapter)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
+  </Target>
+</Project>
