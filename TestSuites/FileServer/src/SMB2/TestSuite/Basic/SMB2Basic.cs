@@ -4,6 +4,7 @@
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite;
 using Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter;
+using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
@@ -513,6 +514,1849 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client1.LogOff();
         }
 
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.ChangeNotify)]
+        [Description("This test case is designed to verify CHANGE_NOTIFY for CompletionFilter FILE_NOTIFY_CHANGE_FILE_NAME is handled correctly.")]
+        public void BVT_SMB2Basic_ChangeNotify_ChangeFileName()
+        {
+            uint status;
+            string testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Test directory \"{0}\" was created on share \"{1}\"", testDirectory, TestConfig.BasicFileShare);
+
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start a client1 to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE.");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory,
+                CreateOptions_Values.FILE_DIRECTORY_FILE,
+                out FILEID fileIdDir,
+                out Smb2CreateContextResponse[] serverCreateContexts);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_FILE_NAME and flag WATCH_TREE", testDirectory);
+            client1.ChangeNotify(
+                treeIdClient1,
+                fileIdDir,
+                CompletionFilter_Values.FILE_NOTIFY_CHANGE_FILE_NAME,
+                flags: CHANGE_NOTIFY_Request_Flags_Values.WATCH_TREE);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to create a file under directory by sending CREATE request");
+            string fileName = Guid.NewGuid().ToString();
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory + "\\" + fileName,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdFile,
+                out serverCreateContexts);
+            client1.Close(treeIdClient1, fileIdFile);
+
+            client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client2 to open a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE.");
+            client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
+            status = client2.Create(
+                treeIdClient2,
+                testDirectory + "\\" + fileName,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
+                out FILEID fileIdFileToBeRenamed,
+                out serverCreateContexts,
+                createDisposition: CreateDisposition_Values.FILE_OPEN);
+
+            string newName = "Renamed_" + fileName;
+            FileRenameInformation fileRenameInfo;
+            fileRenameInfo.ReplaceIfExists = TypeMarshal.ToBytes(false)[0];
+            fileRenameInfo.Reserved = new byte[7];
+            fileRenameInfo.RootDirectory = FileRenameInformation_RootDirectory_Values.V1;
+            fileRenameInfo.FileName = Encoding.Unicode.GetBytes(newName);
+            fileRenameInfo.FileNameLength = (uint)fileRenameInfo.FileName.Length;
+            byte[] inputBuffer;
+            inputBuffer = TypeMarshal.ToBytes<FileRenameInformation>(fileRenameInfo);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client2 renames the file from {0} to {1} by sending SET_INFO request", testDirectory + "\\" + fileName, fileRenameInfo.FileName);
+            status = client2.SetFileAttributes(
+                        treeIdClient2,
+                        (byte)FileInformationClasses.FileRenameInformation,
+                        fileIdFileToBeRenamed,
+                        inputBuffer,
+                        (header, response) => { });
+
+            BaseTestSite.Assert.IsTrue(
+                changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_SUCCESS,
+                receivedChangeNotifyHeader.Status, "CHANGE_NOTIFY is expected to success, actually server returns {0}.",
+                Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Tear down client2 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client2.Close(treeIdClient2, fileIdFileToBeRenamed);
+            client2.TreeDisconnect(treeIdClient2);
+            client2.LogOff();
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Tear down client1 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeIdClient1, fileIdDir);
+            client1.TreeDisconnect(treeIdClient1);
+            client1.LogOff();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.ChangeNotify)]
+        [Description("This test case is designed to verify CHANGE_NOTIFY for CompletionFilter FILE_NOTIFY_CHANGE_DIR_NAME is handled correctly.")]
+        public void BVT_SMB2Basic_ChangeNotify_ChangeDirName()
+        {
+            uint status;
+            string testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Test directory \"{0}\" was created on share \"{1}\"", testDirectory, TestConfig.BasicFileShare);
+
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client1 to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory,
+                CreateOptions_Values.FILE_DIRECTORY_FILE,
+                out FILEID fileIdDir,
+                out Smb2CreateContextResponse[] serverCreateContexts);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_DIR_NAME and flag WATCH_TREE", testDirectory);
+            client1.ChangeNotify(
+                treeIdClient1,
+                fileIdDir,
+                CompletionFilter_Values.FILE_NOTIFY_CHANGE_DIR_NAME,
+                flags: CHANGE_NOTIFY_Request_Flags_Values.WATCH_TREE);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to create a directory under previous directory by sending CREATE request");
+            string dirName = Guid.NewGuid().ToString();
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory + "\\" + dirName,
+                CreateOptions_Values.FILE_DIRECTORY_FILE,
+                out FILEID fileIdInnerDir,
+                out serverCreateContexts);
+            client1.Close(treeIdClient1, fileIdInnerDir);
+
+            client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client2 to open a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
+
+            status = client2.Create(
+                treeIdClient2,
+                testDirectory + "\\" + dirName,
+                CreateOptions_Values.FILE_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
+                out FILEID fileIdDirToBeRenamed,
+                out serverCreateContexts,
+                createDisposition: CreateDisposition_Values.FILE_OPEN);
+
+            string newName = "Renamed_" + dirName;
+            FileRenameInformation fileRenameInfo;
+            fileRenameInfo.ReplaceIfExists = TypeMarshal.ToBytes(false)[0];
+            fileRenameInfo.Reserved = new byte[7];
+            fileRenameInfo.RootDirectory = FileRenameInformation_RootDirectory_Values.V1;
+            fileRenameInfo.FileName = Encoding.Unicode.GetBytes(newName);
+            fileRenameInfo.FileNameLength = (uint)fileRenameInfo.FileName.Length;
+            byte[] inputBuffer;
+            inputBuffer = TypeMarshal.ToBytes<FileRenameInformation>(fileRenameInfo);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client2 renames the directory from {0} to {1} by sending SET_INFO request", testDirectory + "\\" + dirName, fileRenameInfo.FileName);
+            status = client2.SetFileAttributes(
+                        treeIdClient2,
+                        (byte)FileInformationClasses.FileRenameInformation,
+                        fileIdDirToBeRenamed,
+                        inputBuffer,
+                        (header, response) => { });
+
+            BaseTestSite.Assert.IsTrue(
+                changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_SUCCESS,
+                receivedChangeNotifyHeader.Status, "CHANGE_NOTIFY is expected to success, actually server returns {0}.",
+                Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Tear down client2 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client2.Close(treeIdClient2, fileIdDirToBeRenamed);
+            client2.TreeDisconnect(treeIdClient2);
+            client2.LogOff();
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Tear down client1 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeIdClient1, fileIdDir);
+            client1.TreeDisconnect(treeIdClient1);
+            client1.LogOff();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.ChangeNotify)]
+        [Description("This test case is designed to verify CHANGE_NOTIFY for CompletionFilter FILE_NOTIFY_CHANGE_ATTRIBUTES is handled correctly.")]
+        public void BVT_SMB2Basic_ChangeNotify_ChangeAttributes()
+        {
+            uint status;
+            string testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Test directory \"{0}\" was created on share \"{1}\"", testDirectory, TestConfig.BasicFileShare);
+
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client1 to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory,
+                CreateOptions_Values.FILE_DIRECTORY_FILE,
+                out FILEID fileIdDir,
+                out Smb2CreateContextResponse[] serverCreateContexts);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_ATTRIBUTES and flag WATCH_TREE", testDirectory);
+            client1.ChangeNotify(
+                treeIdClient1,
+                fileIdDir,
+                CompletionFilter_Values.FILE_NOTIFY_CHANGE_ATTRIBUTES,
+                flags: CHANGE_NOTIFY_Request_Flags_Values.WATCH_TREE);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to create a file under directory by sending CREATE request");
+            string fileName = Guid.NewGuid().ToString();
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory + "\\" + fileName,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdFile,
+                out serverCreateContexts);
+            client1.Close(treeIdClient1, fileIdFile);
+
+            client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client2 to open a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
+
+            status = client2.Create(
+                treeIdClient2,
+                testDirectory + "\\" + fileName,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdFileToBeModified,
+                out serverCreateContexts,
+                createDisposition: CreateDisposition_Values.FILE_OPEN);
+
+            client2.QueryFileAttributes(
+                treeIdClient2,
+                (byte)FileInformationClasses.FileBasicInformation,
+                QUERY_INFO_Request_Flags_Values.SL_RESTART_SCAN,
+                fileIdFileToBeModified,
+                new byte[0] { },
+                out byte[] outputBuffer);
+
+            FileBasicInformation fileBasicInfoToSet = TypeMarshal.ToStruct<FileBasicInformation>(outputBuffer);
+            DateTime dateTimeToSet = DateTime.UtcNow;
+            fileBasicInfoToSet.FileAttributes = File_Attributes.FILE_ATTRIBUTE_HIDDEN;
+            byte[] inputBuffer;
+            inputBuffer = TypeMarshal.ToBytes<FileBasicInformation>(fileBasicInfoToSet);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client2 sets attribute for the file to FILE_ATTRIBUTE_HIDDEN by sending SET_INFO request");
+            client2.SetFileAttributes(
+                treeIdClient2,
+                (byte)FileInformationClasses.FileBasicInformation,
+                fileIdFileToBeModified,
+                inputBuffer);
+
+            BaseTestSite.Assert.IsTrue(
+                changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_SUCCESS,
+                receivedChangeNotifyHeader.Status, "CHANGE_NOTIFY is expected to success, actually server returns {0}.",
+                Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Tear down client2 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client2.Close(treeIdClient2, fileIdFileToBeModified);
+            client2.TreeDisconnect(treeIdClient2);
+            client2.LogOff();
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Tear down client1 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeIdClient1, fileIdDir);
+            client1.TreeDisconnect(treeIdClient1);
+            client1.LogOff();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.ChangeNotify)]
+        [Description("This test case is designed to verify CHANGE_NOTIFY for CompletionFilter FILE_NOTIFY_CHANGE_SIZE is handled correctly.")]
+        public void BVT_SMB2Basic_ChangeNotify_ChangeSize()
+        {
+            uint status;
+            string testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Test directory \"{0}\" was created on share \"{1}\"", testDirectory, TestConfig.BasicFileShare);
+
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client1 to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory,
+                CreateOptions_Values.FILE_DIRECTORY_FILE,
+                out FILEID fileIdDir,
+                out Smb2CreateContextResponse[] serverCreateContexts);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_SIZE and flag WATCH_TREE", testDirectory);
+            client1.ChangeNotify(
+                treeIdClient1,
+                fileIdDir,
+                CompletionFilter_Values.FILE_NOTIFY_CHANGE_SIZE,
+                flags: CHANGE_NOTIFY_Request_Flags_Values.WATCH_TREE);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to create a file by sending CREATE request");
+            string fileName = Guid.NewGuid().ToString();
+            string filePath = testDirectory + "\\" + fileName;
+            status = client1.Create(
+                treeIdClient1,
+                filePath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdFile,
+                out serverCreateContexts);
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 writes 1-byte content to file {0} by sending WRITE request", filePath);
+            client1.Write(treeIdClient1, fileIdFile, Smb2Utility.CreateRandomString(1));
+            client1.Close(treeIdClient1, fileIdFile);
+
+            client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client2 to open a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
+
+            status = client2.Create(
+                treeIdClient2,
+                filePath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdFileToBeModified,
+                out serverCreateContexts,
+                createDisposition: CreateDisposition_Values.FILE_OPEN);
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client2 starts to write 3 bytes to the file {0} by sending WRITE request", testDirectory + "\\" + fileName);
+            client2.Write(treeIdClient2, fileIdFileToBeModified, Smb2Utility.CreateRandomString(3));
+
+            BaseTestSite.Assert.IsTrue(
+                changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_SUCCESS,
+                receivedChangeNotifyHeader.Status,
+                "CHANGE_NOTIFY is expected to success, actually server returns {0}.",
+                Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Tear down client2 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client2.Close(treeIdClient2, fileIdFileToBeModified);
+            client2.TreeDisconnect(treeIdClient2);
+            client2.LogOff();
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Tear down client1 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeIdClient1, fileIdDir);
+            client1.TreeDisconnect(treeIdClient1);
+            client1.LogOff();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.ChangeNotify)]
+        [Description("This test case is designed to verify CHANGE_NOTIFY for CompletionFilter FILE_NOTIFY_CHANGE_LAST_ACCESS is handled correctly.")]
+        public void BVT_SMB2Basic_ChangeNotify_ChangeLastAccess()
+        {
+            uint status;
+            string testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Test directory \"{0}\" was created on share \"{1}\"", testDirectory, TestConfig.BasicFileShare);
+
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client1 to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory,
+                CreateOptions_Values.FILE_DIRECTORY_FILE,
+                out FILEID fileIdDir,
+                out Smb2CreateContextResponse[] serverCreateContexts);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_LAST_ACCESS and flag WATCH_TREE", testDirectory);
+            client1.ChangeNotify(
+                treeIdClient1,
+                fileIdDir,
+                CompletionFilter_Values.FILE_NOTIFY_CHANGE_LAST_ACCESS,
+                flags: CHANGE_NOTIFY_Request_Flags_Values.WATCH_TREE);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to create a file under previous directory by sending CREATE request");
+            string fileName = Guid.NewGuid().ToString();
+            string filePath = testDirectory + "\\" + fileName;
+            status = client1.Create(
+                treeIdClient1,
+                filePath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdFile,
+                out serverCreateContexts);
+            client1.Close(treeIdClient1, fileIdFile);
+
+            client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client2 to open a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
+
+            status = client2.Create(
+                treeIdClient2,
+                filePath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdFileToBeModified,
+                out serverCreateContexts,
+                createDisposition: CreateDisposition_Values.FILE_OPEN);
+
+            client2.QueryFileAttributes(
+                treeIdClient2,
+                (byte)FileInformationClasses.FileBasicInformation,
+                QUERY_INFO_Request_Flags_Values.SL_RESTART_SCAN,
+                fileIdFileToBeModified,
+                new byte[0] { },
+                out byte[] outputBuffer);
+
+            FileBasicInformation fileBasicInfoToSet = TypeMarshal.ToStruct<FileBasicInformation>(outputBuffer);
+            DateTime dateTimeToSet = DateTime.UtcNow;
+            fileBasicInfoToSet.LastAccessTime = Smb2Utility.ConvertToFileTime(dateTimeToSet);
+            byte[] inputBuffer;
+            inputBuffer = TypeMarshal.ToBytes<FileBasicInformation>(fileBasicInfoToSet);
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client2 sets LastAccessTime for the file to {0} by sending SET_INFO request", dateTimeToSet.ToString("MM/dd/yyy hh:mm:ss.ffffff"));
+            client2.SetFileAttributes(
+                treeIdClient2,
+                (byte)FileInformationClasses.FileBasicInformation,
+                fileIdFileToBeModified,
+                inputBuffer);
+
+            BaseTestSite.Assert.IsTrue(
+                changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_SUCCESS,
+                receivedChangeNotifyHeader.Status,
+                "CHANGE_NOTIFY is expected to success, actually server returns {0}.",
+                Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down client2 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client2.Close(treeIdClient2, fileIdFileToBeModified);
+            client2.TreeDisconnect(treeIdClient2);
+            client2.LogOff();
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down client1 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeIdClient1, fileIdDir);
+            client1.TreeDisconnect(treeIdClient1);
+            client1.LogOff();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.ChangeNotify)]
+        [Description("This test case is designed to verify CHANGE_NOTIFY with CompletionFilter FILE_NOTIFY_CHANGE_LAST_WRITE is handled correctly.")]
+        public void BVT_SMB2Basic_ChangeNotify_ChangeLastWrite()
+        {
+            uint status;
+            string testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Test directory \"{0}\" was created on share \"{1}\"", testDirectory, TestConfig.BasicFileShare);
+
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client1 to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory,
+                CreateOptions_Values.FILE_DIRECTORY_FILE,
+                out FILEID fileIdDir,
+                out Smb2CreateContextResponse[] serverCreateContexts);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_LAST_WRITE and flag WATCH_TREE", testDirectory);
+            client1.ChangeNotify(
+                treeIdClient1,
+                fileIdDir,
+                CompletionFilter_Values.FILE_NOTIFY_CHANGE_LAST_WRITE,
+                flags: CHANGE_NOTIFY_Request_Flags_Values.WATCH_TREE);
+
+            string fileName = Guid.NewGuid().ToString();
+            string filePath = testDirectory + "\\" + fileName;
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to create a file {0} under directory {1} by sending CREATE request", fileName, testDirectory);
+            status = client1.Create(
+                treeIdClient1,
+                filePath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdFile,
+                out serverCreateContexts);
+            client1.Close(treeIdClient1, fileIdFile);
+
+            client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client2 to open a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
+
+            status = client2.Create(
+                treeIdClient2,
+                filePath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdFileToBeModified,
+                out serverCreateContexts,
+                createDisposition: CreateDisposition_Values.FILE_OPEN);
+
+            client2.QueryFileAttributes(
+                treeIdClient2,
+                (byte)FileInformationClasses.FileBasicInformation,
+                QUERY_INFO_Request_Flags_Values.SL_RESTART_SCAN,
+                fileIdFileToBeModified,
+                new byte[0] { },
+                out byte[] outputBuffer);
+
+            FileBasicInformation fileBasicInfoToSet = TypeMarshal.ToStruct<FileBasicInformation>(outputBuffer);
+            DateTime dateTimeToSet = DateTime.UtcNow;
+            fileBasicInfoToSet.LastWriteTime = Smb2Utility.ConvertToFileTime(dateTimeToSet);
+            byte[] inputBuffer;
+            inputBuffer = TypeMarshal.ToBytes<FileBasicInformation>(fileBasicInfoToSet);
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client2 sets LastWriteTime for the file to {0} by sending SET_INFO request", dateTimeToSet.ToString("MM/dd/yyy hh:mm:ss.ffffff"));
+            client2.SetFileAttributes(
+                treeIdClient2,
+                (byte)FileInformationClasses.FileBasicInformation,
+                fileIdFileToBeModified,
+                inputBuffer);
+
+            BaseTestSite.Assert.IsTrue(
+                changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_SUCCESS,
+                receivedChangeNotifyHeader.Status, "CHANGE_NOTIFY is expected to success, actually server returns {0}.",
+                Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down client2 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client2.Close(treeIdClient2, fileIdFileToBeModified);
+            client2.TreeDisconnect(treeIdClient2);
+            client2.LogOff();
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down client1 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeIdClient1, fileIdDir);
+            client1.TreeDisconnect(treeIdClient1);
+            client1.LogOff();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.ChangeNotify)]
+        [Description("This test case is designed to verify CHANGE_NOTIFY with CompletionFilter FILE_NOTIFY_CHANGE_CREATION is handled correctly.")]
+        public void BVT_SMB2Basic_ChangeNotify_ChangeCreation()
+        {
+            uint status;
+            string testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Test directory \"{0}\" was created on share \"{1}\"", testDirectory, TestConfig.BasicFileShare);
+
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client1 to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory,
+                CreateOptions_Values.FILE_DIRECTORY_FILE,
+                out FILEID fileIdDir,
+                out Smb2CreateContextResponse[] serverCreateContexts);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_CREATION and flag WATCH_TREE", testDirectory);
+            client1.ChangeNotify(
+                treeIdClient1,
+                fileIdDir,
+                CompletionFilter_Values.FILE_NOTIFY_CHANGE_CREATION,
+                flags: CHANGE_NOTIFY_Request_Flags_Values.WATCH_TREE);
+
+            string fileName = Guid.NewGuid().ToString();
+            string filePath = testDirectory + "\\" + fileName;
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to create a file under directory by sending CREATE request");
+            status = client1.Create(
+                treeIdClient1,
+                filePath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdFile,
+                out serverCreateContexts);
+            client1.Close(treeIdClient1, fileIdFile);
+
+            client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client2 to open a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
+            status = client2.Create(
+                treeIdClient2,
+                filePath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdFileToBeModified,
+                out serverCreateContexts,
+                createDisposition: CreateDisposition_Values.FILE_OPEN);
+
+            client2.QueryFileAttributes(
+                treeIdClient2,
+                (byte)FileInformationClasses.FileBasicInformation,
+                QUERY_INFO_Request_Flags_Values.SL_RESTART_SCAN,
+                fileIdFileToBeModified,
+                new byte[0] { },
+                out byte[] outputBuffer);
+
+            FileBasicInformation fileBasicInfoToSet = TypeMarshal.ToStruct<FileBasicInformation>(outputBuffer);
+            DateTime dateTimeToSet = DateTime.UtcNow;
+            fileBasicInfoToSet.CreationTime = Smb2Utility.ConvertToFileTime(dateTimeToSet);
+            byte[] inputBuffer;
+            inputBuffer = TypeMarshal.ToBytes<FileBasicInformation>(fileBasicInfoToSet);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client2 sends SET_INFO request to set CreationTime for the file to {0}", dateTimeToSet.ToString("MM/dd/yyy hh:mm:ss.ffffff"));
+            client2.SetFileAttributes(
+                treeIdClient2,
+                (byte)FileInformationClasses.FileBasicInformation,
+                fileIdFileToBeModified,
+                inputBuffer);
+
+            BaseTestSite.Assert.IsTrue(
+                changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_SUCCESS,
+                receivedChangeNotifyHeader.Status, "CHANGE_NOTIFY is expected to success, actually server returns {0}.",
+                Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Tear down client2 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client2.Close(treeIdClient2, fileIdFileToBeModified);
+            client2.TreeDisconnect(treeIdClient2);
+            client2.LogOff();
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Tear down client1 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeIdClient1, fileIdDir);
+            client1.TreeDisconnect(treeIdClient1);
+            client1.LogOff();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.ChangeNotify)]
+        [Description("This test case is designed to verify CHANGE_NOTIFY with CompletionFilter FILE_NOTIFY_CHANGE_EA is handled correctly.")]
+        public void BVT_SMB2Basic_ChangeNotify_ChangeEa()
+        {
+            uint status;
+            string testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Test directory \"{0}\" was created on share \"{1}\"", testDirectory, TestConfig.BasicFileShare);
+
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client1 to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory,
+                CreateOptions_Values.FILE_DIRECTORY_FILE,
+                out FILEID fileIdDir,
+                out Smb2CreateContextResponse[] serverCreateContexts);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_EA and flag WATCH_TREE", testDirectory);
+            client1.ChangeNotify(
+                treeIdClient1,
+                fileIdDir,
+                CompletionFilter_Values.FILE_NOTIFY_CHANGE_EA,
+                flags: CHANGE_NOTIFY_Request_Flags_Values.WATCH_TREE);
+
+            string fileName = Guid.NewGuid().ToString();
+            string filePath = testDirectory + "\\" + fileName;
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to create a file under previous directory");
+            status = client1.Create(
+                treeIdClient1,
+                filePath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdFile,
+                out serverCreateContexts);
+            client1.Close(treeIdClient1, fileIdFile);
+
+            client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client2 to open a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
+            status = client2.Create(
+                treeIdClient2,
+                filePath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdFileToBeModified,
+                out serverCreateContexts,
+                createDisposition: CreateDisposition_Values.FILE_OPEN);
+
+            string eaName = "EA_NAME";
+            string eaValue = "EA_VAL";
+            FileFullEaInformation fileFullEaInfo;
+            fileFullEaInfo.NextEntryOffset = 0;
+            fileFullEaInfo.Flags = 0;
+            fileFullEaInfo.EaNameLength = (byte)eaName.Length;
+            fileFullEaInfo.EaValueLength = (ushort)eaValue.Length;
+            fileFullEaInfo.EaName = Encoding.ASCII.GetBytes(eaName + "\0");
+            fileFullEaInfo.EaValue = Encoding.ASCII.GetBytes(eaValue);
+            byte[] inputBuffer = TypeMarshal.ToBytes<FileFullEaInformation>(fileFullEaInfo);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client2 sets FileFullEAInfo for the file by sending SET_INFO request");
+            client2.SetFileAttributes(
+                treeIdClient2,
+                (byte)FileInformationClasses.FileFullEaInformation,
+                fileIdFileToBeModified,
+                inputBuffer);
+
+            BaseTestSite.Assert.IsTrue(
+                changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_SUCCESS,
+                receivedChangeNotifyHeader.Status,
+                "CHANGE_NOTIFY is expected to success, actually server returns {0}.",
+                Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Tear down client2 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client2.Close(treeIdClient2, fileIdFileToBeModified);
+            client2.TreeDisconnect(treeIdClient2);
+            client2.LogOff();
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Tear down client1 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeIdClient1, fileIdDir);
+            client1.TreeDisconnect(treeIdClient1);
+            client1.LogOff();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.ChangeNotify)]
+        [Description("This test case is designed to verify CHANGE_NOTIFY with CompletionFilter FILE_NOTIFY_CHANGE_SECURITY is handled correctly.")]
+        public void BVT_SMB2Basic_ChangeNotify_ChangeSecurity()
+        {
+            uint status;
+            string testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Test directory \"{0}\" was created on share \"{1}\"", testDirectory, TestConfig.BasicFileShare);
+
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client1 to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory,
+                CreateOptions_Values.FILE_DIRECTORY_FILE,
+                out FILEID fileIdDir,
+                out Smb2CreateContextResponse[] serverCreateContexts);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_SECURITY and flag WATCH_TREE", testDirectory);
+            client1.ChangeNotify(
+                treeIdClient1,
+                fileIdDir,
+                CompletionFilter_Values.FILE_NOTIFY_CHANGE_SECURITY,
+                flags: CHANGE_NOTIFY_Request_Flags_Values.WATCH_TREE);
+
+            string fileName = Guid.NewGuid().ToString();
+            string filePath = testDirectory + "\\" + fileName;
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to create a file under previous directory by sending CREATE request");
+            status = client1.Create(
+                treeIdClient1,
+                filePath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdFile,
+                out serverCreateContexts);
+            client1.Close(treeIdClient1, fileIdFile);
+
+            client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client2 to open a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
+            status = client2.Create(
+                treeIdClient2,
+                filePath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdFileToBeModified,
+                out serverCreateContexts,
+                accessMask: AccessMask.READ_CONTROL | AccessMask.WRITE_DAC | AccessMask.FILE_READ_ATTRIBUTES | AccessMask.WRITE_OWNER | AccessMask.ACCESS_SYSTEM_SECURITY,
+                createDisposition: CreateDisposition_Values.FILE_OPEN);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client2 sets DACL_SECURITY_INFORMATION for the file by sending SET_INFO request");
+            _ACL sacl = DtypUtility.CreateAcl(false);
+            _SECURITY_DESCRIPTOR sd = DtypUtility.CreateSecurityDescriptor(
+                SECURITY_DESCRIPTOR_Control.DACLTrusted,
+                null,
+                null,
+                sacl,
+                null);
+            client2.SetSecurityDescriptor(
+                treeIdClient2,
+                fileIdFileToBeModified,
+                SET_INFO_Request_AdditionalInformation_Values.DACL_SECURITY_INFORMATION,
+                sd);
+
+            BaseTestSite.Assert.IsTrue(
+                changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_SUCCESS,
+                receivedChangeNotifyHeader.Status,
+                "CHANGE_NOTIFY is expected to success, actually server returns {0}.",
+                Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Tear down client2 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client2.Close(treeIdClient2, fileIdFileToBeModified);
+            client2.TreeDisconnect(treeIdClient2);
+            client2.LogOff();
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Tear down client1 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeIdClient1, fileIdDir);
+            client1.TreeDisconnect(treeIdClient1);
+            client1.LogOff();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.ChangeNotify)]
+        [Description("This test case is designed to verify CHANGE_NOTIFY with CompletionFilter FILE_NOTIFY_CHANGE_STREAM_NAME is handled correctly.")]
+        public void BVT_SMB2Basic_ChangeNotify_ChangeStreamName()
+        {
+            uint status;
+            string testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Test directory \"{0}\" was created on share \"{1}\"", testDirectory, TestConfig.BasicFileShare);
+
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client1 to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory,
+                CreateOptions_Values.FILE_DIRECTORY_FILE,
+                out FILEID fileIdDir,
+                out Smb2CreateContextResponse[] serverCreateContexts);
+
+            string fileName = Guid.NewGuid().ToString();
+            string filePath = testDirectory + "\\" + fileName;
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to create a file under previous directory by sending CREATE request");
+            status = client1.Create(
+                treeIdClient1,
+                filePath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdFile,
+                out serverCreateContexts);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_STREAM_NAME and flag WATCH_TREE", testDirectory);
+            client1.ChangeNotify(
+                treeIdClient1,
+                fileIdDir,
+                CompletionFilter_Values.FILE_NOTIFY_CHANGE_STREAM_NAME,
+                flags: CHANGE_NOTIFY_Request_Flags_Values.WATCH_TREE);
+
+            client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client2 to open a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE (FILE)");
+            client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
+            status = client2.Create(
+                treeIdClient2,
+                filePath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdFileToBeModified,
+                out serverCreateContexts,
+                createDisposition: CreateDisposition_Values.FILE_OPEN);
+
+            string dataStreamPath = filePath + ":$DATA";
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client2 starts to create a data stream by sending CREATE request");
+            status = client2.Create(
+                treeIdClient2,
+                dataStreamPath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdDataStream,
+                out serverCreateContexts,
+                fileAttributes: File_Attributes.FILE_ATTRIBUTE_NORMAL);
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client2 starts to write to data stream by sending WRITE request");
+            client2.Write(treeIdClient2, fileIdDataStream, "5678955667788");
+            client2.Close(treeIdClient2, fileIdDataStream);
+
+            BaseTestSite.Assert.IsTrue(
+                changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_SUCCESS,
+                receivedChangeNotifyHeader.Status, "CHANGE_NOTIFY is expected to success, actually server returns {0}.",
+                Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down client2 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client2.Close(treeIdClient2, fileIdFileToBeModified);
+            client2.TreeDisconnect(treeIdClient2);
+            client2.LogOff();
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down client1 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeIdClient1, fileIdDir);
+            client1.TreeDisconnect(treeIdClient1);
+            client1.LogOff();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.ChangeNotify)]
+        [Description("This test case is designed to verify CHANGE_NOTIFY with CompletionFilter FILE_NOTIFY_CHANGE_STREAM_SIZE is handled correctly.")]
+        public void BVT_SMB2Basic_ChangeNotify_ChangeStreamSize()
+        {
+            uint status;
+            string testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Test directory \"{0}\" was created on share \"{1}\"", testDirectory, TestConfig.BasicFileShare);
+
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client1 to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory,
+                CreateOptions_Values.FILE_DIRECTORY_FILE,
+                out FILEID fileIdDir,
+                out Smb2CreateContextResponse[] serverCreateContexts);
+
+            string fileName = Guid.NewGuid().ToString();
+            string filePath = testDirectory + "\\" + fileName;
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to create a file under previous directory by sending CREATE request");
+            status = client1.Create(
+                treeIdClient1,
+                filePath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdFile,
+                out serverCreateContexts);
+
+            string dataStreamPath = filePath + ":$DATA";
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to create a data stream by sending CREATE request");
+            status = client1.Create(
+                treeIdClient1,
+                dataStreamPath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdDataStream,
+                out serverCreateContexts,
+                fileAttributes: File_Attributes.FILE_ATTRIBUTE_NORMAL);
+            client1.Write(treeIdClient1, fileIdDataStream, "567895566");
+            client1.Close(treeIdClient1, fileIdDataStream);
+            client1.Close(treeIdClient1, fileIdFile);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_STREAM_SIZE and flag WATCH_TREE", testDirectory);
+            client1.ChangeNotify(
+                treeIdClient1,
+                fileIdDir,
+                CompletionFilter_Values.FILE_NOTIFY_CHANGE_STREAM_SIZE,
+                flags: CHANGE_NOTIFY_Request_Flags_Values.WATCH_TREE);
+
+            client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client2 to open a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE (FILE)");
+            client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
+            status = client2.Create(
+                treeIdClient2,
+                filePath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdFileToBeModified,
+                out serverCreateContexts,
+                createDisposition: CreateDisposition_Values.FILE_OPEN);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client2 starts to open a data stream by sending CREATE request");
+            status = client2.Create(
+                treeIdClient2,
+                dataStreamPath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdDataStreamToBeModified,
+                out serverCreateContexts,
+                fileAttributes: File_Attributes.FILE_ATTRIBUTE_NORMAL);
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client2 starts to write to data stream by sending WRITE request");
+            client2.Write(treeIdClient2, fileIdDataStreamToBeModified, "5678955667788");
+            client2.Close(treeIdClient2, fileIdDataStreamToBeModified);
+
+            BaseTestSite.Assert.IsTrue(
+                changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_SUCCESS,
+                receivedChangeNotifyHeader.Status, "CHANGE_NOTIFY is expected to success, actually server returns {0}.",
+                Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down client2 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client2.Close(treeIdClient2, fileIdFileToBeModified);
+            client2.TreeDisconnect(treeIdClient2);
+            client2.LogOff();
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down client1 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeIdClient1, fileIdDir);
+            client1.TreeDisconnect(treeIdClient1);
+            client1.LogOff();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.ChangeNotify)]
+        [Description("This test case is designed to verify CHANGE_NOTIFY with CompletionFilter FILE_NOTIFY_CHANGE_STREAM_WRITE is handled correctly.")]
+        public void BVT_SMB2Basic_ChangeNotify_ChangeStreamWrite()
+        {
+            uint status;
+            string testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Test directory \"{0}\" was created on share \"{1}\"", testDirectory, TestConfig.BasicFileShare);
+
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client1 to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory,
+                CreateOptions_Values.FILE_DIRECTORY_FILE,
+                out FILEID fileIdDir,
+                out Smb2CreateContextResponse[] serverCreateContexts);
+
+            string fileName = Guid.NewGuid().ToString();
+            string filePath = testDirectory + "\\" + fileName;
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to create a file under previous directory by sending CREATE request");
+            status = client1.Create(
+                treeIdClient1,
+                filePath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdFile,
+                out serverCreateContexts);
+
+            string dataStreamPath = filePath + ":$DATA";
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to create a data stream by sending CREATE request");
+            status = client1.Create(
+                treeIdClient1,
+                dataStreamPath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdDataStream,
+                out serverCreateContexts,
+                fileAttributes: File_Attributes.FILE_ATTRIBUTE_NORMAL);
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to write to data stream by sending WRITE request");
+            client1.Write(treeIdClient1, fileIdDataStream, "567895566");
+            client1.Close(treeIdClient1, fileIdDataStream);
+            client1.Close(treeIdClient1, fileIdFile);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_STREAM_WRITE and flag WATCH_TREE", testDirectory);
+            client1.ChangeNotify(
+                treeIdClient1,
+                fileIdDir,
+                CompletionFilter_Values.FILE_NOTIFY_CHANGE_STREAM_WRITE,
+                flags: CHANGE_NOTIFY_Request_Flags_Values.WATCH_TREE);
+
+            client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start client2 to open a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE (FILE)");
+            client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
+            status = client2.Create(
+                treeIdClient2,
+                filePath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdFileToBeModified,
+                out serverCreateContexts,
+                createDisposition: CreateDisposition_Values.FILE_OPEN);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client2 starts to open a data stream by sending CREATE request");
+            status = client2.Create(
+                treeIdClient2,
+                dataStreamPath,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdDataStreamToBeModified,
+                out serverCreateContexts,
+                fileAttributes: File_Attributes.FILE_ATTRIBUTE_NORMAL);
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client2 starts to write to data stream by sending WRITE request");
+            client2.Write(treeIdClient2, fileIdDataStreamToBeModified, "5678955667788");
+            client2.Close(treeIdClient2, fileIdDataStreamToBeModified);
+
+            BaseTestSite.Assert.IsTrue(
+                changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_SUCCESS,
+                receivedChangeNotifyHeader.Status, "CHANGE_NOTIFY is expected to success, actually server returns {0}.",
+                Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down client2 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client2.Close(treeIdClient2, fileIdFileToBeModified);
+            client2.TreeDisconnect(treeIdClient2);
+            client2.LogOff();
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down client1 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeIdClient1, fileIdDir);
+            client1.TreeDisconnect(treeIdClient1);
+            client1.LogOff();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.ChangeNotify)]
+        [Description("This test case is designed to verify that server must send an CHANGE_NOTIFY response with STATUS_NOTIFY_CLEANUP status code for all pending CHANGE_NOTIFY requests associated with the FileId that is closed.")]
+        public void BVT_SMB2Basic_ChangeNotify_ServerReceiveSmb2Close()
+        {
+            uint status;
+            string testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Test directory \"{0}\" was created on share \"{1}\"", testDirectory, TestConfig.BasicFileShare);
+
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start a client to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client1.SessionSetup(
+                TestConfig.DefaultSecurityPackage,
+                TestConfig.SutComputerName,
+                TestConfig.AccountCredential,
+                TestConfig.UseServerGssToken);
+            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory,
+                CreateOptions_Values.FILE_DIRECTORY_FILE,
+                out FILEID fileIdDir,
+                out Smb2CreateContextResponse[] serverCreateContexts);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_LAST_ACCESS", testDirectory);
+            client1.ChangeNotify(
+                treeIdClient1,
+                fileIdDir,
+                CompletionFilter_Values.FILE_NOTIFY_CHANGE_LAST_ACCESS);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client starts to close a directory by sending a CLOSE Request");
+            client1.Close(treeIdClient1, fileIdDir);
+
+            BaseTestSite.Assert.IsTrue(
+                changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_NOTIFY_CLEANUP,
+                receivedChangeNotifyHeader.Status,
+                "CHANGE_NOTIFY is expected to return STATUS_NOTIFY_CLEANUP after CLOSE, actually server returns {0}.",
+                Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Tear down the client by sending the following requests: TREE_DISCONNECT; LOG_OFF");
+            client1.TreeDisconnect(treeIdClient1);
+            client1.LogOff();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.ChangeNotify)]
+        [Description("This test case is designed to verify that server must send an CHANGE_NOTIFY response with STATUS_INVALID status code if CHANGE_NOTIFY request is for a non-directory file.")]
+        public void BVT_SMB2Basic_ChangeNotify_NonDirectoryFile()
+        {
+            uint status;
+            string testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Test directory \"{0}\" was created on share \"{1}\"", testDirectory, TestConfig.BasicFileShare);
+
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start a client to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client1.SessionSetup(
+                TestConfig.DefaultSecurityPackage,
+                TestConfig.SutComputerName,
+                TestConfig.AccountCredential,
+                TestConfig.UseServerGssToken);
+            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory + "\\test123",
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out FILEID fileIdFile,
+                out Smb2CreateContextResponse[] serverCreateContexts);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client starts to register CHANGE_NOTIFY on a non-directory file \"{0}\"", testDirectory + "\\" + Guid.NewGuid().ToString());
+            client1.ChangeNotify(
+                treeIdClient1,
+                fileIdFile,
+                CompletionFilter_Values.FILE_NOTIFY_CHANGE_LAST_ACCESS);
+
+            BaseTestSite.Assert.IsTrue(
+                changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_INVALID_PARAMETER,
+                receivedChangeNotifyHeader.Status,
+                "CHANGE_NOTIFY on a non-directory file is expected to return STATUS_INVALID_PARAMETER, actually server returns {0}.",
+                Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeIdClient1, fileIdFile);
+            client1.TreeDisconnect(treeIdClient1);
+            client1.LogOff();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.ChangeNotify)]
+        [Description("This test case is designed to verify the MaxTransactSize in CHANGE_NOTIFY request in SMB 2.0.2.")]
+        public void BVT_SMB2Basic_ChangeNotify_MaxTransactSizeCheck_Smb2002()
+        {
+            TestConfig.CheckDialect(DialectRevision.Smb2002);
+
+            uint status;
+            string testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Test directory \"{0}\" was created on share \"{1}\"", testDirectory, TestConfig.BasicFileShare);
+
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client to create a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client1.Negotiate(
+                new DialectRevision[] { DialectRevision.Smb2002 },
+                TestConfig.IsSMB1NegotiateEnabled);
+            //BaseTestSite.Assert.AreNotSame(
+            //0x10000,
+            //client1.MaxTransactSize,
+            //"MaxTransactSize is expected to be 65536 for SMB 2.0.2, actually server returns {0}.",
+            //client1.MaxTransactSize);
+
+            status = client1.SessionSetup(
+                TestConfig.DefaultSecurityPackage,
+                TestConfig.SutComputerName,
+                TestConfig.AccountCredential,
+                TestConfig.UseServerGssToken);
+            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory,
+                CreateOptions_Values.FILE_DIRECTORY_FILE,
+                out FILEID fileIdDir,
+                out Smb2CreateContextResponse[] serverCreateContexts);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_LAST_ACCESS and MaxOutputBufferLength {1}", testDirectory, client1.MaxTransactSize + 1);
+            client1.ChangeNotify(
+                treeIdClient1,
+                fileIdDir,
+                CompletionFilter_Values.FILE_NOTIFY_CHANGE_LAST_ACCESS,
+                maxOutputBufferLength: client1.MaxTransactSize + 1);
+
+            BaseTestSite.Assert.IsTrue(
+                changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_INVALID_PARAMETER,
+                receivedChangeNotifyHeader.Status,
+                "CHANGE_NOTIFY is expected to return STATUS_INVALID_PARAMETER, actually server returns {0}.",
+                Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeIdClient1, fileIdDir);
+            client1.TreeDisconnect(treeIdClient1);
+            client1.LogOff();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb21)]
+        [TestCategory(TestCategories.ChangeNotify)]
+        [Description("This test case is designed to verify the MaxTransactSize in CHANGE_NOTIFY request in SMB 2.1.0.")]
+        public void BVT_SMB2Basic_ChangeNotify_MaxTransactSizeCheck_Smb21()
+        {
+            TestConfig.CheckDialect(DialectRevision.Smb21);
+
+            uint status;
+            string testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Test directory \"{0}\" was created on share \"{1}\"", testDirectory, TestConfig.BasicFileShare);
+
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client to create a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client1.Negotiate(
+                new DialectRevision[] { DialectRevision.Smb21 },
+                TestConfig.IsSMB1NegotiateEnabled);
+
+            status = client1.SessionSetup(
+                TestConfig.DefaultSecurityPackage,
+                TestConfig.SutComputerName,
+                TestConfig.AccountCredential,
+                TestConfig.UseServerGssToken);
+            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory,
+                CreateOptions_Values.FILE_DIRECTORY_FILE,
+                out FILEID fileIdDir,
+                out Smb2CreateContextResponse[] serverCreateContexts);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_LAST_ACCESS and MaxOutputBufferLength {1}", testDirectory, client1.MaxTransactSize + 1);
+            client1.ChangeNotify(
+                treeIdClient1,
+                fileIdDir,
+                CompletionFilter_Values.FILE_NOTIFY_CHANGE_LAST_ACCESS,
+                maxOutputBufferLength: client1.MaxTransactSize + 1);
+
+            BaseTestSite.Assert.IsTrue(
+                changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_INVALID_PARAMETER,
+                receivedChangeNotifyHeader.Status,
+                "CHANGE_NOTIFY is expected to return STATUS_INVALID_PARAMETER, actually server returns {0}.",
+                Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeIdClient1, fileIdDir);
+            client1.TreeDisconnect(treeIdClient1);
+            client1.LogOff();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb30)]
+        [TestCategory(TestCategories.ChangeNotify)]
+        [Description("This test case is designed to verify the MaxTransactSize in CHANGE_NOTIFY request in SMB 3.0.")]
+        public void BVT_SMB2Basic_ChangeNotify_MaxTransactSizeCheck_Smb30()
+        {
+            TestConfig.CheckDialect(DialectRevision.Smb30);
+
+            uint status;
+            string testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Test directory \"{0}\" was created on share \"{1}\"", testDirectory, TestConfig.BasicFileShare);
+
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client to create a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client1.Negotiate(
+                new DialectRevision[] { DialectRevision.Smb30 },
+                TestConfig.IsSMB1NegotiateEnabled);
+
+            status = client1.SessionSetup(
+                TestConfig.DefaultSecurityPackage,
+                TestConfig.SutComputerName,
+                TestConfig.AccountCredential,
+                TestConfig.UseServerGssToken);
+            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory,
+                CreateOptions_Values.FILE_DIRECTORY_FILE,
+                out FILEID fileIdDir,
+                out Smb2CreateContextResponse[] serverCreateContexts);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_LAST_ACCESS and MaxOutputBufferLength {1}", testDirectory, client1.MaxTransactSize + 1);
+            client1.ChangeNotify(
+                treeIdClient1,
+                fileIdDir,
+                CompletionFilter_Values.FILE_NOTIFY_CHANGE_LAST_ACCESS,
+                maxOutputBufferLength: client1.MaxTransactSize + 1);
+
+            BaseTestSite.Assert.IsTrue(
+                changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_INVALID_PARAMETER,
+                receivedChangeNotifyHeader.Status,
+                "CHANGE_NOTIFY is expected to return STATUS_INVALID_PARAMETER, actually server returns {0}.",
+                Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeIdClient1, fileIdDir);
+            client1.TreeDisconnect(treeIdClient1);
+            client1.LogOff();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb302)]
+        [TestCategory(TestCategories.ChangeNotify)]
+        [Description("This test case is designed to verify the MaxTransactSize in CHANGE_NOTIFY request in SMB 3.0.2.")]
+        public void BVT_SMB2Basic_ChangeNotify_MaxTransactSizeCheck_Smb302()
+        {
+            TestConfig.CheckDialect(DialectRevision.Smb302);
+
+            uint status;
+            string testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Test directory \"{0}\" was created on share \"{1}\"", testDirectory, TestConfig.BasicFileShare);
+
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client to create a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client1.Negotiate(
+                new DialectRevision[] { DialectRevision.Smb302 },
+                TestConfig.IsSMB1NegotiateEnabled);
+            status = client1.SessionSetup(
+                TestConfig.DefaultSecurityPackage,
+                TestConfig.SutComputerName,
+                TestConfig.AccountCredential,
+                TestConfig.UseServerGssToken);
+            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory,
+                CreateOptions_Values.FILE_DIRECTORY_FILE,
+                out FILEID fileIdDir,
+                out Smb2CreateContextResponse[] serverCreateContexts);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_LAST_ACCESS and MaxOutputBufferLength {1}", testDirectory, client1.MaxTransactSize + 1);
+            client1.ChangeNotify(
+                treeIdClient1,
+                fileIdDir,
+                CompletionFilter_Values.FILE_NOTIFY_CHANGE_LAST_ACCESS,
+                maxOutputBufferLength: client1.MaxTransactSize + 1);
+
+            BaseTestSite.Assert.IsTrue(
+                changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_INVALID_PARAMETER,
+                receivedChangeNotifyHeader.Status,
+                "CHANGE_NOTIFY is expected to return STATUS_INVALID_PARAMETER, actually server returns {0}.",
+                Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeIdClient1, fileIdDir);
+            client1.TreeDisconnect(treeIdClient1);
+            client1.LogOff();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.ChangeNotify)]
+        [Description("This test case is designed to verify the MaxTransactSize in CHANGE_NOTIFY request in SMB 3.1.1.")]
+        public void BVT_SMB2Basic_ChangeNotify_MaxTransactSizeCheck_Smb311()
+        {
+
+            TestConfig.CheckDialect(DialectRevision.Smb311);
+
+            uint status;
+            string testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Test directory \"{0}\" was created on share \"{1}\"", testDirectory, TestConfig.BasicFileShare);
+
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client to create a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client1.Negotiate(
+                new DialectRevision[] { DialectRevision.Smb311 },
+                TestConfig.IsSMB1NegotiateEnabled);
+            status = client1.SessionSetup(
+                TestConfig.DefaultSecurityPackage,
+                TestConfig.SutComputerName,
+                TestConfig.AccountCredential,
+                TestConfig.UseServerGssToken);
+            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory,
+                CreateOptions_Values.FILE_DIRECTORY_FILE,
+                out FILEID fileIdDir,
+                out Smb2CreateContextResponse[] serverCreateContexts);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_LAST_ACCESS and MaxOutputBufferLength {1}", testDirectory, client1.MaxTransactSize + 1);
+            client1.ChangeNotify(
+                treeIdClient1,
+                fileIdDir,
+                CompletionFilter_Values.FILE_NOTIFY_CHANGE_LAST_ACCESS,
+                maxOutputBufferLength: client1.MaxTransactSize + 1);
+
+            BaseTestSite.Assert.IsTrue(
+                changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_INVALID_PARAMETER,
+                receivedChangeNotifyHeader.Status,
+                "CHANGE_NOTIFY is expected to return STATUS_INVALID_PARAMETER, actually server returns {0}.",
+                Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeIdClient1, fileIdDir);
+            client1.TreeDisconnect(treeIdClient1);
+            client1.LogOff();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.ChangeNotify)]
+        [Description("This test case is designed to verify that server must send an CHANGE_NOTIFY response with STATUS_ACCESS_DENIED status code if CHANGE_NOTIFY request is for a directory which GrantedAccess does not include FILE_LIST_DIRECTORY.")]
+        public void BVT_SMB2Basic_ChangeNotify_NoFileListDirectoryInGrantedAccess()
+        {
+            uint status;
+            string testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            BaseTestSite.Log.Add(
+                LogEntryKind.Debug,
+                "Test directory \"{0}\" was created on share \"{1}\"", testDirectory, TestConfig.BasicFileShare);
+
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start a client to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client1.SessionSetup(
+                TestConfig.DefaultSecurityPackage,
+                TestConfig.SutComputerName,
+                TestConfig.AccountCredential,
+                TestConfig.UseServerGssToken);
+            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            status = client1.Create(
+                treeIdClient1,
+                testDirectory,
+                CreateOptions_Values.FILE_DIRECTORY_FILE,
+                out FILEID fileIdDir,
+                out Smb2CreateContextResponse[] serverCreateContexts,
+                accessMask: AccessMask.GENERIC_WRITE | AccessMask.DELETE);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client starts to register CHANGE_NOTIFY on a directory \"{0}\" with CompletionFilter FILE_NOTIFY_LAST_ACCESS", testDirectory);
+            client1.ChangeNotify(
+                treeIdClient1,
+                fileIdDir,
+                CompletionFilter_Values.FILE_NOTIFY_CHANGE_LAST_ACCESS);
+
+            BaseTestSite.Assert.IsTrue(
+                changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_ACCESS_DENIED,
+                receivedChangeNotifyHeader.Status,
+                "CHANGE_NOTIFY on a directory which GrantedAccess does not include FILE_LIST_DIRECTORY is expected to return STATUS_ACCESS_DENIED, actually server returns {0}.",
+                Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeIdClient1, fileIdDir);
+            client1.TreeDisconnect(treeIdClient1);
+            client1.LogOff();
+        }
+
         #endregion
 
         private void OnChangeNotifyResponseReceived(FILE_NOTIFY_INFORMATION[] fileNotifyInfo, Packet_Header respHeader, CHANGE_NOTIFY_Response changeNotify)
@@ -523,6 +2367,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             receivedChangeNotify = changeNotify;
             receivedFileNotifyInfo = fileNotifyInfo;
             receivedChangeNotifyHeader = respHeader;
+            if (receivedChangeNotifyHeader.Status == Smb2Status.STATUS_SUCCESS)
+            {
+                BaseTestSite.Assert.AreNotSame(
+                    0,
+                    receivedChangeNotify.OutputBufferLength,
+                    "If the status field of the SMB2 header of the response indicated success, the client MUST copy the received information OutputBufferLength in the SMB2 CHANGE_NOTIFY Response to the application");
+                BaseTestSite.Assert.IsTrue(fileNotifyInfo[0].NextEntryOffset % 4 == 0, "NextEntryOffset MUST always be an integral multiple of 4");
+                BaseTestSite.Assert.AreNotSame(0, fileNotifyInfo[0].Action, "");
+                BaseTestSite.Assert.AreNotSame(0, fileNotifyInfo[0].FileNameLength, "");
+            }
             changeNotificationReceived.Set();
         }
 

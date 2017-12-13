@@ -93,6 +93,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// </summary>
         protected ulong maxMidEverProduced;
 
+        /// <summary>
+        /// The maximum size, in bytes, of the buffer that can be used for QUERY_INFO, QUERY_DIRECTORY, SET_INFO and CHANGE_NOTIFY operations.
+        /// </summary>
+        protected uint maxTransactSize;
+
         #endregion
 
         public event Action<Packet_Header> RequestSent;
@@ -302,6 +307,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
+        /// <summary>
+        /// The maximum size, in bytes, of the buffer that can be used for QUERY_INFO, QUERY_DIRECTORY, SET_INFO and CHANGE_NOTIFY operations.
+        /// </summary>
+        public uint MaxTransactSize
+        {
+            get
+            {
+                return maxTransactSize;
+            }
+        }
+
         #endregion
 
         #region Connect and Disconnect
@@ -494,6 +510,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
                             respHeader = header;
                             respNegotiate = response;
+                            maxTransactSize = response.MaxTransactSize;
                         }
                     });
 
@@ -602,6 +619,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             maxBufferSize = negotiateResponse.MaxReadSize < negotiateResponse.MaxWriteSize ?
                 negotiateResponse.MaxReadSize : negotiateResponse.MaxWriteSize;
 
+            maxTransactSize = negotiateResponse.MaxTransactSize;
             SetCreditGoal();
 
             ProduceCredit(messageId, header);
@@ -2133,10 +2151,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         public void ChangeNotify(
             uint treeId,
             FILEID fileId,
-            CompletionFilter_Values completionFilter)
+            CompletionFilter_Values completionFilter,
+            CHANGE_NOTIFY_Request_Flags_Values flags = CHANGE_NOTIFY_Request_Flags_Values.NONE,
+            uint maxOutputBufferLength = DefaultMaxOutputResponse)
         {
-            uint maxOutputBufferLength = DefaultMaxOutputResponse;
-
             ulong messageId = generateMessageId(sequenceWindow);
             ushort creditCharge = generateCreditCharge(1);
 
@@ -2152,7 +2170,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 treeId,
                 maxOutputBufferLength,
                 fileId,
-                CHANGE_NOTIFY_Request_Flags_Values.NONE,
+                flags,
                 completionFilter);
 
             /// TODO: granted credit is in  interim response
