@@ -247,7 +247,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Encryption
 
             ModelTreeConnectRequest treeConnectRequest = ModelHelper.RetrieveOutstandingRequest<ModelTreeConnectRequest>(ref request);
 
-            if (!VerifySession(status, treeConnectRequest.modelRequestType))
+            if (!VerifySession(status, treeConnectRequest.modelRequestType, c))
             {
                 return;
             }
@@ -337,7 +337,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Encryption
             ModelFileOperationVerifyEncryptionRequest createFileRequest = ModelHelper.RetrieveOutstandingRequest<ModelFileOperationVerifyEncryptionRequest>(ref request);
 
 
-            if (!VerifySession(status, createFileRequest.modelRequestType))
+            if (!VerifySession(status, createFileRequest.modelRequestType, c))
             {
                 return;
             }
@@ -346,9 +346,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Encryption
             {
                 return;
             }
-            if (createFileRequest.modelRequestType == ModelRequestType.UnEncryptedRequest
+            ModelHelper.Log(LogType.TestInfo,
+                        "The server implements {0}, Request.IsEncrypted is {1}, Connection.ServerCapabilities {2}include SMB2_GLOBAL_CAP_ENCRYPTION, " +
+                        "TreeConnect.Share.EncryptData is {3}, " +
+                        "EncryptData is {4}, RejectUnencryptedAccess is {5}",
+                        config.MaxSmbVersionSupported,
+                        createFileRequest.modelRequestType == ModelRequestType.UnEncryptedRequest ? "FALSE" : "TRUE",
+                        Connection_ServerCapabilities_SMB2_GLOBAL_CAP_ENCRYPTION ? "" : "does not ",
+                        Encryption_TreeId == EncryptionTreeId.TreeIdToEncryptShare ? "TRUE" : "FALSE",
+                        config.IsGlobalEncryptDataEnabled ? "TRUE" : "FALSE",
+                        config.IsGlobalRejectUnencryptedAccessEnabled ? "TRUE" : "FALSE");
+            if (((createFileRequest.modelRequestType == ModelRequestType.UnEncryptedRequest
                 && (config.IsGlobalEncryptDataEnabled
-                    || Encryption_TreeId == EncryptionTreeId.TreeIdToEncryptShare)
+                    || Encryption_TreeId == EncryptionTreeId.TreeIdToEncryptShare))
+                || (createFileRequest.modelRequestType == ModelRequestType.EncryptedRequest && !Connection_ServerCapabilities_SMB2_GLOBAL_CAP_ENCRYPTION))
                 && config.IsGlobalRejectUnencryptedAccessEnabled)
             {
                 ModelHelper.Log(LogType.Requirement,
@@ -390,12 +401,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Encryption
 
         #region Private Methods
 
-        private static bool VerifySession(ModelSmb2Status status, ModelRequestType modelRequestType)
+        private static bool VerifySession(ModelSmb2Status status, ModelRequestType modelRequestType, EncryptionConfig c)
         {
             ModelHelper.Log(LogType.Requirement, "3.3.5.2.9 Verifying the Session");
+            Condition.IsTrue(config.Platform == c.Platform);
             if (Smb2Utility.IsSmb3xFamily(negotiateDialect)
                 && Session_EncryptData == SessionEncryptDataType.SessionEncryptDataSet
-                && modelRequestType == ModelRequestType.UnEncryptedRequest)
+                && (modelRequestType == ModelRequestType.UnEncryptedRequest
+                && (c.Platform != Platform.WindowsServer2012 || config.IsGlobalRejectUnencryptedAccessEnabled))) // 2012 allow unencrypt request when RejectUnencryptedAccessEnabled is FALSE
             {
                 ModelHelper.Log(LogType.Requirement,
                     "If Connection.Dialect belongs to the SMB 3.x dialect family, and Session.EncryptData is TRUE, " +
@@ -430,9 +443,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Encryption
                 ModelHelper.Log(LogType.Requirement,
                     "If the Connection.Dialect belongs to the SMB 3.x dialect family, the server MUST fail the request with STATUS_ACCESS_DENIED in the following cases");
                 ModelHelper.Log(LogType.TestInfo, "The Connection.Dialect is {0}.", negotiateDialect);
-
+                Condition.IsTrue(config.Platform == c.Platform);
                 if (Encryption_TreeId == EncryptionTreeId.TreeIdToEncryptShare
                     && Connection_ServerCapabilities_SMB2_GLOBAL_CAP_ENCRYPTION
+                    && (c.Platform != Platform.WindowsServer2012 || config.IsGlobalRejectUnencryptedAccessEnabled) // 2012 allow unencrypt request when RejectUnencryptedAccessEnabled is FALSE
                     && modelRequestType == ModelRequestType.UnEncryptedRequest)
                 {
                     ModelHelper.Log(LogType.Requirement,
@@ -454,7 +468,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Encryption
                         "\tEncryptData or TreeConnect.Share.EncryptData or Request.IsEncrypted is TRUE, RejectUnencryptedAccess is TRUE, " +
                         "and Connection.ServerCapabilities does not include SMB2_GLOBAL_CAP_ENCRYPTION.");
 
-                    Condition.IsTrue(config.Platform == c.Platform);
                     ModelHelper.Log(LogType.TestInfo,
                         "The server implements {0}, EncryptData is {1}, TreeConnect.Share.EncryptData is {2}, " +
                         "Request.IsEncrypted is {3}, RejectUnencryptedAccess is TRUE, " +
