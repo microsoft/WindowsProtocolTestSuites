@@ -532,17 +532,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start a client1 to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE.");
+                "Start a client1 to create a directory \"{0}\" by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE.", testDirectory);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            uint treeIdClient1;
+            status = client1.TreeConnect(uncSharePath, out treeIdClient1);
+            FILEID fileIdDir;
+            Smb2CreateContextResponse[] serverCreateContexts;
             status = client1.Create(
                 treeIdClient1,
                 testDirectory,
                 CreateOptions_Values.FILE_DIRECTORY_FILE,
-                out FILEID fileIdDir,
-                out Smb2CreateContextResponse[] serverCreateContexts);
+                out fileIdDir,
+                out serverCreateContexts);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -553,31 +556,35 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 CompletionFilter_Values.FILE_NOTIFY_CHANGE_FILE_NAME,
                 flags: CHANGE_NOTIFY_Request_Flags_Values.WATCH_TREE);
 
+            string fileName = Guid.NewGuid().ToString();
+            string filePath = testDirectory + "\\" + fileName;
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client1 starts to create a file under directory by sending CREATE request");
-            string fileName = Guid.NewGuid().ToString();
+                "Client1 starts to create a file \"{0}\" under directory \"{1}\" by sending CREATE request", fileName, testDirectory);
+            FILEID fileIdFile;
             status = client1.Create(
                 treeIdClient1,
-                testDirectory + "\\" + fileName,
+                filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdFile,
+                out fileIdFile,
                 out serverCreateContexts);
             client1.Close(treeIdClient1, fileIdFile);
 
             client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client2 to open a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE.");
+                "Start client2 to open a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE.", filePath);
             client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
+            uint treeIdClient2;
+            status = client2.TreeConnect(uncSharePath, out treeIdClient2);
+            FILEID fileIdFileToBeRenamed;
             status = client2.Create(
                 treeIdClient2,
-                testDirectory + "\\" + fileName,
+                filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
-                out FILEID fileIdFileToBeRenamed,
+                out fileIdFileToBeRenamed,
                 out serverCreateContexts,
                 createDisposition: CreateDisposition_Values.FILE_OPEN);
 
@@ -593,7 +600,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client2 renames the file from {0} to {1} by sending SET_INFO request", testDirectory + "\\" + fileName, fileRenameInfo.FileName);
+                "Client2 renames the file from \"{0}\" to \"{1}\" by sending SET_INFO request", fileName, newName);
             status = client2.SetFileAttributes(
                         treeIdClient2,
                         (byte)FileInformationClasses.FileRenameInformation,
@@ -643,17 +650,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client1 to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+                "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            uint treeIdClient1;
+            status = client1.TreeConnect(uncSharePath, out treeIdClient1);
+            FILEID fileIdDir;
+            Smb2CreateContextResponse[] serverCreateContexts;
             status = client1.Create(
                 treeIdClient1,
                 testDirectory,
                 CreateOptions_Values.FILE_DIRECTORY_FILE,
-                out FILEID fileIdDir,
-                out Smb2CreateContextResponse[] serverCreateContexts);
+                out fileIdDir,
+                out serverCreateContexts);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -664,32 +674,35 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 CompletionFilter_Values.FILE_NOTIFY_CHANGE_DIR_NAME,
                 flags: CHANGE_NOTIFY_Request_Flags_Values.WATCH_TREE);
 
+            string dirName = Guid.NewGuid().ToString();
+            string dirPath = testDirectory + "\\" + dirName;
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client1 starts to create a directory under previous directory by sending CREATE request");
-            string dirName = Guid.NewGuid().ToString();
+                "Client1 starts to create a directory \"{0}\" under directory \"{1}\" by sending CREATE request", dirName, testDirectory);
+            FILEID fileIdInnerDir;
             status = client1.Create(
                 treeIdClient1,
-                testDirectory + "\\" + dirName,
+                dirPath,
                 CreateOptions_Values.FILE_DIRECTORY_FILE,
-                out FILEID fileIdInnerDir,
+                out fileIdInnerDir,
                 out serverCreateContexts);
             client1.Close(treeIdClient1, fileIdInnerDir);
 
             client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client2 to open a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+                "Start client2 to open a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", dirPath);
             client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
-
+            uint treeIdClient2;
+            status = client2.TreeConnect(uncSharePath, out treeIdClient2);
+            FILEID fileIdDirToBeRenamed;
             status = client2.Create(
                 treeIdClient2,
-                testDirectory + "\\" + dirName,
+                dirPath,
                 CreateOptions_Values.FILE_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
-                out FILEID fileIdDirToBeRenamed,
+                out fileIdDirToBeRenamed,
                 out serverCreateContexts,
                 createDisposition: CreateDisposition_Values.FILE_OPEN);
 
@@ -705,7 +718,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client2 renames the directory from {0} to {1} by sending SET_INFO request", testDirectory + "\\" + dirName, fileRenameInfo.FileName);
+                "Client2 renames the directory from \"{0}\" to \"{1}\" by sending SET_INFO request", dirName, newName);
             status = client2.SetFileAttributes(
                         treeIdClient2,
                         (byte)FileInformationClasses.FileRenameInformation,
@@ -755,17 +768,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client1 to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+                "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            uint treeIdClient1;
+            status = client1.TreeConnect(uncSharePath, out treeIdClient1);
+            FILEID fileIdDir;
+            Smb2CreateContextResponse[] serverCreateContexts;
             status = client1.Create(
                 treeIdClient1,
                 testDirectory,
                 CreateOptions_Values.FILE_DIRECTORY_FILE,
-                out FILEID fileIdDir,
-                out Smb2CreateContextResponse[] serverCreateContexts);
+                out fileIdDir,
+                out serverCreateContexts);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -776,42 +792,46 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 CompletionFilter_Values.FILE_NOTIFY_CHANGE_ATTRIBUTES,
                 flags: CHANGE_NOTIFY_Request_Flags_Values.WATCH_TREE);
 
+            string fileName = Guid.NewGuid().ToString();
+            string filePath = testDirectory + "\\" + fileName;
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client1 starts to create a file under directory by sending CREATE request");
-            string fileName = Guid.NewGuid().ToString();
+                "Client1 starts to create a file \"{0}\" under directory \"{1}\" by sending CREATE request", fileName, testDirectory);
+            FILEID fileIdFile;
             status = client1.Create(
                 treeIdClient1,
-                testDirectory + "\\" + fileName,
+                filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdFile,
+                out fileIdFile,
                 out serverCreateContexts);
             client1.Close(treeIdClient1, fileIdFile);
 
             client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client2 to open a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+                "Start client2 to open a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", filePath);
             client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
-
+            uint treeIdClient2;
+            status = client2.TreeConnect(uncSharePath, out treeIdClient2);
+            FILEID fileIdFileToBeModified;
             status = client2.Create(
                 treeIdClient2,
-                testDirectory + "\\" + fileName,
+                filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdFileToBeModified,
+                out fileIdFileToBeModified,
                 out serverCreateContexts,
                 createDisposition: CreateDisposition_Values.FILE_OPEN);
 
+            byte[] outputBuffer;
             client2.QueryFileAttributes(
                 treeIdClient2,
                 (byte)FileInformationClasses.FileBasicInformation,
                 QUERY_INFO_Request_Flags_Values.SL_RESTART_SCAN,
                 fileIdFileToBeModified,
                 new byte[0] { },
-                out byte[] outputBuffer);
+                out outputBuffer);
 
             FileBasicInformation fileBasicInfoToSet = TypeMarshal.ToStruct<FileBasicInformation>(outputBuffer);
             DateTime dateTimeToSet = DateTime.UtcNow;
@@ -821,7 +841,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client2 sets attribute for the file to FILE_ATTRIBUTE_HIDDEN by sending SET_INFO request");
+                "Client2 sets attribute for the file \"{0}\" to FILE_ATTRIBUTE_HIDDEN by sending SET_INFO request", filePath);
             client2.SetFileAttributes(
                 treeIdClient2,
                 (byte)FileInformationClasses.FileBasicInformation,
@@ -870,17 +890,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client1 to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+                "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            uint treeIdClient1;
+            status = client1.TreeConnect(uncSharePath, out treeIdClient1);
+            FILEID fileIdDir;
+            Smb2CreateContextResponse[] serverCreateContexts;
             status = client1.Create(
                 treeIdClient1,
                 testDirectory,
                 CreateOptions_Values.FILE_DIRECTORY_FILE,
-                out FILEID fileIdDir,
-                out Smb2CreateContextResponse[] serverCreateContexts);
+                out fileIdDir,
+                out serverCreateContexts);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -891,42 +914,44 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 CompletionFilter_Values.FILE_NOTIFY_CHANGE_SIZE,
                 flags: CHANGE_NOTIFY_Request_Flags_Values.WATCH_TREE);
 
-            BaseTestSite.Log.Add(
-                LogEntryKind.TestStep,
-                "Client1 starts to create a file by sending CREATE request");
             string fileName = Guid.NewGuid().ToString();
             string filePath = testDirectory + "\\" + fileName;
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to create a file \"{0}\" by sending CREATE request", filePath);
+            FILEID fileIdFile;
             status = client1.Create(
                 treeIdClient1,
                 filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdFile,
+                out fileIdFile,
                 out serverCreateContexts);
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client1 writes 1-byte content to file {0} by sending WRITE request", filePath);
+                "Client1 writes 1-byte content to file \"{0}\" by sending WRITE request", filePath);
             client1.Write(treeIdClient1, fileIdFile, Smb2Utility.CreateRandomString(1));
             client1.Close(treeIdClient1, fileIdFile);
 
             client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client2 to open a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+                "Start client2 to open a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", filePath);
             client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
-
+            uint treeIdClient2;
+            status = client2.TreeConnect(uncSharePath, out treeIdClient2);
+            FILEID fileIdFileToBeModified;
             status = client2.Create(
                 treeIdClient2,
                 filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdFileToBeModified,
+                out fileIdFileToBeModified,
                 out serverCreateContexts,
                 createDisposition: CreateDisposition_Values.FILE_OPEN);
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client2 starts to write 3 bytes to the file {0} by sending WRITE request", testDirectory + "\\" + fileName);
+                "Client2 starts to write 3 bytes to the file \"{0}\" by sending WRITE request", testDirectory + "\\" + fileName);
             client2.Write(treeIdClient2, fileIdFileToBeModified, Smb2Utility.CreateRandomString(3));
 
             BaseTestSite.Assert.IsTrue(
@@ -972,17 +997,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client1 to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+                "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            uint treeIdClient1;
+            status = client1.TreeConnect(uncSharePath, out treeIdClient1);
+            FILEID fileIdDir;
+            Smb2CreateContextResponse[] serverCreateContexts;
             status = client1.Create(
                 treeIdClient1,
                 testDirectory,
                 CreateOptions_Values.FILE_DIRECTORY_FILE,
-                out FILEID fileIdDir,
-                out Smb2CreateContextResponse[] serverCreateContexts);
+                out fileIdDir,
+                out serverCreateContexts);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -993,43 +1021,46 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 CompletionFilter_Values.FILE_NOTIFY_CHANGE_LAST_ACCESS,
                 flags: CHANGE_NOTIFY_Request_Flags_Values.WATCH_TREE);
 
-            BaseTestSite.Log.Add(
-                LogEntryKind.TestStep,
-                "Client1 starts to create a file under previous directory by sending CREATE request");
             string fileName = Guid.NewGuid().ToString();
             string filePath = testDirectory + "\\" + fileName;
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to create a file \"{0}\" under directory \"{1}\" by sending CREATE request", fileName, testDirectory);
+            FILEID fileIdFile;
             status = client1.Create(
                 treeIdClient1,
                 filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdFile,
+                out fileIdFile,
                 out serverCreateContexts);
             client1.Close(treeIdClient1, fileIdFile);
 
             client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client2 to open a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+                "Start client2 to open a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", filePath);
             client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
-
+            uint treeIdClient2;
+            status = client2.TreeConnect(uncSharePath, out treeIdClient2);
+            FILEID fileIdFileToBeModified;
             status = client2.Create(
                 treeIdClient2,
                 filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdFileToBeModified,
+                out fileIdFileToBeModified,
                 out serverCreateContexts,
                 createDisposition: CreateDisposition_Values.FILE_OPEN);
 
+            byte[] outputBuffer;
             client2.QueryFileAttributes(
                 treeIdClient2,
                 (byte)FileInformationClasses.FileBasicInformation,
                 QUERY_INFO_Request_Flags_Values.SL_RESTART_SCAN,
                 fileIdFileToBeModified,
                 new byte[0] { },
-                out byte[] outputBuffer);
+                out outputBuffer);
 
             FileBasicInformation fileBasicInfoToSet = TypeMarshal.ToStruct<FileBasicInformation>(outputBuffer);
             DateTime dateTimeToSet = DateTime.UtcNow;
@@ -1038,7 +1069,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             inputBuffer = TypeMarshal.ToBytes<FileBasicInformation>(fileBasicInfoToSet);
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client2 sets LastAccessTime for the file to {0} by sending SET_INFO request", dateTimeToSet.ToString("MM/dd/yyy hh:mm:ss.ffffff"));
+                "Client2 sets LastAccessTime for the file \"{0}\" to \"{1}\" by sending SET_INFO request", filePath, dateTimeToSet.ToString("MM/dd/yyy hh:mm:ss.ffffff"));
             client2.SetFileAttributes(
                 treeIdClient2,
                 (byte)FileInformationClasses.FileBasicInformation,
@@ -1084,17 +1115,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client1 to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+                "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            uint treeIdClient1;
+            status = client1.TreeConnect(uncSharePath, out treeIdClient1);
+            FILEID fileIdDir;
+            Smb2CreateContextResponse[] serverCreateContexts;
             status = client1.Create(
                 treeIdClient1,
                 testDirectory,
                 CreateOptions_Values.FILE_DIRECTORY_FILE,
-                out FILEID fileIdDir,
-                out Smb2CreateContextResponse[] serverCreateContexts);
+                out fileIdDir,
+                out serverCreateContexts);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -1109,39 +1143,42 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             string filePath = testDirectory + "\\" + fileName;
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client1 starts to create a file {0} under directory {1} by sending CREATE request", fileName, testDirectory);
+                "Client1 starts to create a file \"{0}\" under directory \"{1}\" by sending CREATE request", fileName, testDirectory);
+            FILEID fileIdFile;
             status = client1.Create(
                 treeIdClient1,
                 filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdFile,
+                out fileIdFile,
                 out serverCreateContexts);
             client1.Close(treeIdClient1, fileIdFile);
 
             client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client2 to open a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+                "Start client2 to open a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", filePath);
             client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
-
+            uint treeIdClient2;
+            status = client2.TreeConnect(uncSharePath, out treeIdClient2);
+            FILEID fileIdFileToBeModified;
             status = client2.Create(
                 treeIdClient2,
                 filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdFileToBeModified,
+                out fileIdFileToBeModified,
                 out serverCreateContexts,
                 createDisposition: CreateDisposition_Values.FILE_OPEN);
 
+            byte[] outputBuffer;
             client2.QueryFileAttributes(
                 treeIdClient2,
                 (byte)FileInformationClasses.FileBasicInformation,
                 QUERY_INFO_Request_Flags_Values.SL_RESTART_SCAN,
                 fileIdFileToBeModified,
                 new byte[0] { },
-                out byte[] outputBuffer);
+                out outputBuffer);
 
             FileBasicInformation fileBasicInfoToSet = TypeMarshal.ToStruct<FileBasicInformation>(outputBuffer);
             DateTime dateTimeToSet = DateTime.UtcNow;
@@ -1150,7 +1187,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             inputBuffer = TypeMarshal.ToBytes<FileBasicInformation>(fileBasicInfoToSet);
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client2 sets LastWriteTime for the file to {0} by sending SET_INFO request", dateTimeToSet.ToString("MM/dd/yyy hh:mm:ss.ffffff"));
+                "Client2 sets LastWriteTime for the file \"{0}\" to \"{1}\" by sending SET_INFO request", filePath, dateTimeToSet.ToString("MM/dd/yyy hh:mm:ss.ffffff"));
             client2.SetFileAttributes(
                 treeIdClient2,
                 (byte)FileInformationClasses.FileBasicInformation,
@@ -1195,17 +1232,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client1 to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+                "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            uint treeIdClient1;
+            status = client1.TreeConnect(uncSharePath, out treeIdClient1);
+            FILEID fileIdDir;
+            Smb2CreateContextResponse[] serverCreateContexts;
             status = client1.Create(
                 treeIdClient1,
                 testDirectory,
                 CreateOptions_Values.FILE_DIRECTORY_FILE,
-                out FILEID fileIdDir,
-                out Smb2CreateContextResponse[] serverCreateContexts);
+                out fileIdDir,
+                out serverCreateContexts);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -1220,38 +1260,42 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             string filePath = testDirectory + "\\" + fileName;
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client1 starts to create a file under directory by sending CREATE request");
+                "Client1 starts to create a file \"{0}\" under directory \"{1}\" by sending CREATE request", fileName, testDirectory);
+            FILEID fileIdFile;
             status = client1.Create(
                 treeIdClient1,
                 filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdFile,
+                out fileIdFile,
                 out serverCreateContexts);
             client1.Close(treeIdClient1, fileIdFile);
 
             client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client2 to open a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+                "Start client2 to open a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", filePath);
             client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
+            uint treeIdClient2;
+            status = client2.TreeConnect(uncSharePath, out treeIdClient2);
+            FILEID fileIdFileToBeModified;
             status = client2.Create(
                 treeIdClient2,
                 filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdFileToBeModified,
+                out fileIdFileToBeModified,
                 out serverCreateContexts,
                 createDisposition: CreateDisposition_Values.FILE_OPEN);
 
+            byte[] outputBuffer;
             client2.QueryFileAttributes(
                 treeIdClient2,
                 (byte)FileInformationClasses.FileBasicInformation,
                 QUERY_INFO_Request_Flags_Values.SL_RESTART_SCAN,
                 fileIdFileToBeModified,
                 new byte[0] { },
-                out byte[] outputBuffer);
+                out outputBuffer);
 
             FileBasicInformation fileBasicInfoToSet = TypeMarshal.ToStruct<FileBasicInformation>(outputBuffer);
             DateTime dateTimeToSet = DateTime.UtcNow;
@@ -1261,7 +1305,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client2 sends SET_INFO request to set CreationTime for the file to {0}", dateTimeToSet.ToString("MM/dd/yyy hh:mm:ss.ffffff"));
+                "Client2 sets CreationTime for the file \"{0}\" to \"{1}\" by sending SET_INFO request", filePath, dateTimeToSet.ToString("MM/dd/yyy hh:mm:ss.ffffff"));
             client2.SetFileAttributes(
                 treeIdClient2,
                 (byte)FileInformationClasses.FileBasicInformation,
@@ -1270,7 +1314,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Assert.IsTrue(
                 changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
-                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+                "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
 
             BaseTestSite.Assert.AreEqual(
                 Smb2Status.STATUS_SUCCESS,
@@ -1310,17 +1354,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client1 to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+                "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            uint treeIdClient1;
+            status = client1.TreeConnect(uncSharePath, out treeIdClient1);
+            FILEID fileIdDir;
+            Smb2CreateContextResponse[] serverCreateContexts;
             status = client1.Create(
                 treeIdClient1,
                 testDirectory,
                 CreateOptions_Values.FILE_DIRECTORY_FILE,
-                out FILEID fileIdDir,
-                out Smb2CreateContextResponse[] serverCreateContexts);
+                out fileIdDir,
+                out serverCreateContexts);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -1335,28 +1382,31 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             string filePath = testDirectory + "\\" + fileName;
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client1 starts to create a file under previous directory");
+                "Client1 starts to create a file \"{0}\" under directory \"{1}\" by sending CREATE request", fileName, testDirectory);
+            FILEID fileIdFile;
             status = client1.Create(
                 treeIdClient1,
                 filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdFile,
+                out fileIdFile,
                 out serverCreateContexts);
             client1.Close(treeIdClient1, fileIdFile);
 
             client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client2 to open a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+                "Start client2 to open a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", filePath);
             client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
+            uint treeIdClient2;
+            status = client2.TreeConnect(uncSharePath, out treeIdClient2);
+            FILEID fileIdFileToBeModified;
             status = client2.Create(
                 treeIdClient2,
                 filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdFileToBeModified,
+                out fileIdFileToBeModified,
                 out serverCreateContexts,
                 createDisposition: CreateDisposition_Values.FILE_OPEN);
 
@@ -1373,7 +1423,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client2 sets FileFullEAInfo for the file by sending SET_INFO request");
+                "Client2 sets FileFullEAInfo for the file \"{0}\" by sending SET_INFO request", filePath);
             client2.SetFileAttributes(
                 treeIdClient2,
                 (byte)FileInformationClasses.FileFullEaInformation,
@@ -1423,17 +1473,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client1 to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+                "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            uint treeIdClient1;
+            status = client1.TreeConnect(uncSharePath, out treeIdClient1);
+            FILEID fileIdDir;
+            Smb2CreateContextResponse[] serverCreateContexts;
             status = client1.Create(
                 treeIdClient1,
                 testDirectory,
                 CreateOptions_Values.FILE_DIRECTORY_FILE,
-                out FILEID fileIdDir,
-                out Smb2CreateContextResponse[] serverCreateContexts);
+                out fileIdDir,
+                out serverCreateContexts);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -1448,35 +1501,38 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             string filePath = testDirectory + "\\" + fileName;
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client1 starts to create a file under previous directory by sending CREATE request");
+                "Client1 starts to create a file \"{0}\" under directory \"{1}\" by sending CREATE request", fileName, testDirectory);
+            FILEID fileIdFile;
             status = client1.Create(
                 treeIdClient1,
                 filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdFile,
+                out fileIdFile,
                 out serverCreateContexts);
             client1.Close(treeIdClient1, fileIdFile);
 
             client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client2 to open a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+                "Start client2 to open a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", filePath);
             client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
+            uint treeIdClient2;
+            status = client2.TreeConnect(uncSharePath, out treeIdClient2);
+            FILEID fileIdFileToBeModified;
             status = client2.Create(
                 treeIdClient2,
                 filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdFileToBeModified,
+                out fileIdFileToBeModified,
                 out serverCreateContexts,
                 accessMask: AccessMask.READ_CONTROL | AccessMask.WRITE_DAC | AccessMask.FILE_READ_ATTRIBUTES | AccessMask.WRITE_OWNER | AccessMask.ACCESS_SYSTEM_SECURITY,
                 createDisposition: CreateDisposition_Values.FILE_OPEN);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client2 sets DACL_SECURITY_INFORMATION for the file by sending SET_INFO request");
+                "Client2 sets DACL_SECURITY_INFORMATION for the file \"{0}\" by sending SET_INFO request", filePath);
             _ACL sacl = DtypUtility.CreateAcl(false);
             _SECURITY_DESCRIPTOR sd = DtypUtility.CreateSecurityDescriptor(
                 SECURITY_DESCRIPTOR_Control.DACLTrusted,
@@ -1533,28 +1589,32 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client1 to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+                "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            uint treeIdClient1;
+            status = client1.TreeConnect(uncSharePath, out treeIdClient1);
+            FILEID fileIdDir;
+            Smb2CreateContextResponse[] serverCreateContexts;
             status = client1.Create(
                 treeIdClient1,
                 testDirectory,
                 CreateOptions_Values.FILE_DIRECTORY_FILE,
-                out FILEID fileIdDir,
-                out Smb2CreateContextResponse[] serverCreateContexts);
+                out fileIdDir,
+                out serverCreateContexts);
 
             string fileName = Guid.NewGuid().ToString();
             string filePath = testDirectory + "\\" + fileName;
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client1 starts to create a file under previous directory by sending CREATE request");
+                "Client1 starts to create a file \"{0}\" under directory \"{1}\" by sending CREATE request", fileName, testDirectory);
+            FILEID fileIdFile;
             status = client1.Create(
                 treeIdClient1,
                 filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdFile,
+                out fileIdFile,
                 out serverCreateContexts);
 
             BaseTestSite.Log.Add(
@@ -1569,39 +1629,42 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client2 to open a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE (FILE)");
+                "Start client2 to open a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", filePath);
             client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
+            uint treeIdClient2;
+            status = client2.TreeConnect(uncSharePath, out treeIdClient2);
+            FILEID fileIdFileToBeModified;
             status = client2.Create(
                 treeIdClient2,
                 filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdFileToBeModified,
+                out fileIdFileToBeModified,
                 out serverCreateContexts,
                 createDisposition: CreateDisposition_Values.FILE_OPEN);
 
             string dataStreamPath = filePath + ":$DATA";
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client2 starts to create a data stream by sending CREATE request");
+                "Client2 starts to create a data stream \"{0}\" by sending CREATE request", dataStreamPath);
+            FILEID fileIdDataStream;
             status = client2.Create(
                 treeIdClient2,
                 dataStreamPath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdDataStream,
+                out fileIdDataStream,
                 out serverCreateContexts,
                 fileAttributes: File_Attributes.FILE_ATTRIBUTE_NORMAL);
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client2 starts to write to data stream by sending WRITE request");
-            client2.Write(treeIdClient2, fileIdDataStream, "5678955667788");
+                "Client2 starts to write to data stream \"{0}\" by sending WRITE request", dataStreamPath);
+            client2.Write(treeIdClient2, fileIdDataStream, Smb2Utility.CreateRandomString(12));
             client2.Close(treeIdClient2, fileIdDataStream);
 
             BaseTestSite.Assert.IsTrue(
                 changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
-                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+                "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
 
             BaseTestSite.Assert.AreEqual(
                 Smb2Status.STATUS_SUCCESS,
@@ -1637,42 +1700,50 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client1 to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+                "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            uint treeIdClient1;
+            status = client1.TreeConnect(uncSharePath, out treeIdClient1);
+            FILEID fileIdDir;
+            Smb2CreateContextResponse[] serverCreateContexts;
             status = client1.Create(
                 treeIdClient1,
                 testDirectory,
                 CreateOptions_Values.FILE_DIRECTORY_FILE,
-                out FILEID fileIdDir,
-                out Smb2CreateContextResponse[] serverCreateContexts);
+                out fileIdDir,
+                out serverCreateContexts);
 
             string fileName = Guid.NewGuid().ToString();
             string filePath = testDirectory + "\\" + fileName;
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client1 starts to create a file under previous directory by sending CREATE request");
+                "Client1 starts to create a file \"{0}\" under directory \"{1}\" by sending CREATE request", fileName, testDirectory);
+            FILEID fileIdFile;
             status = client1.Create(
                 treeIdClient1,
                 filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdFile,
+                out fileIdFile,
                 out serverCreateContexts);
 
             string dataStreamPath = filePath + ":$DATA";
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client1 starts to create a data stream by sending CREATE request");
+                "Client1 starts to create a data stream \"{0}\" by sending CREATE request", dataStreamPath);
+            FILEID fileIdDataStream;
             status = client1.Create(
                 treeIdClient1,
                 dataStreamPath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdDataStream,
+                out fileIdDataStream,
                 out serverCreateContexts,
                 fileAttributes: File_Attributes.FILE_ATTRIBUTE_NORMAL);
-            client1.Write(treeIdClient1, fileIdDataStream, "567895566");
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to write to data stream \"{0}\" by sending WRITE request", dataStreamPath);
+            client1.Write(treeIdClient1, fileIdDataStream, Smb2Utility.CreateRandomString(9));
             client1.Close(treeIdClient1, fileIdDataStream);
             client1.Close(treeIdClient1, fileIdFile);
 
@@ -1688,33 +1759,36 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client2 to open a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE (FILE)");
+                "Start client2 to open a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", filePath);
             client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
+            uint treeIdClient2;
+            status = client2.TreeConnect(uncSharePath, out treeIdClient2);
+            FILEID fileIdFileToBeModified;
             status = client2.Create(
                 treeIdClient2,
                 filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdFileToBeModified,
+                out fileIdFileToBeModified,
                 out serverCreateContexts,
                 createDisposition: CreateDisposition_Values.FILE_OPEN);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client2 starts to open a data stream by sending CREATE request");
+                "Client2 starts to open a data stream \"{0}\" by sending CREATE request", dataStreamPath);
+            FILEID fileIdDataStreamToBeModified;
             status = client2.Create(
                 treeIdClient2,
                 dataStreamPath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdDataStreamToBeModified,
+                out fileIdDataStreamToBeModified,
                 out serverCreateContexts,
                 fileAttributes: File_Attributes.FILE_ATTRIBUTE_NORMAL);
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client2 starts to write to data stream by sending WRITE request");
-            client2.Write(treeIdClient2, fileIdDataStreamToBeModified, "5678955667788");
+                "Client2 starts to write to data stream \"{0}\" by sending WRITE request", dataStreamPath);
+            client2.Write(treeIdClient2, fileIdDataStreamToBeModified, Smb2Utility.CreateRandomString(12));
             client2.Close(treeIdClient2, fileIdDataStreamToBeModified);
 
             BaseTestSite.Assert.IsTrue(
@@ -1755,45 +1829,50 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client1 to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+                "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            uint treeIdClient1;
+            status = client1.TreeConnect(uncSharePath, out treeIdClient1);
+            FILEID fileIdDir;
+            Smb2CreateContextResponse[] serverCreateContexts;
             status = client1.Create(
                 treeIdClient1,
                 testDirectory,
                 CreateOptions_Values.FILE_DIRECTORY_FILE,
-                out FILEID fileIdDir,
-                out Smb2CreateContextResponse[] serverCreateContexts);
+                out fileIdDir,
+                out serverCreateContexts);
 
             string fileName = Guid.NewGuid().ToString();
             string filePath = testDirectory + "\\" + fileName;
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client1 starts to create a file under previous directory by sending CREATE request");
+                "Client1 starts to create a file \"{0}\" under directory \"{1}\" by sending CREATE request", fileName, testDirectory);
+            FILEID fileIdFile;
             status = client1.Create(
                 treeIdClient1,
                 filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdFile,
+                out fileIdFile,
                 out serverCreateContexts);
 
             string dataStreamPath = filePath + ":$DATA";
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client1 starts to create a data stream by sending CREATE request");
+                "Client1 starts to create a data stream \"{0}\" by sending CREATE request", dataStreamPath);
+            FILEID fileIdDataStream;
             status = client1.Create(
                 treeIdClient1,
                 dataStreamPath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdDataStream,
+                out fileIdDataStream,
                 out serverCreateContexts,
                 fileAttributes: File_Attributes.FILE_ATTRIBUTE_NORMAL);
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client1 starts to write to data stream by sending WRITE request");
-            client1.Write(treeIdClient1, fileIdDataStream, "567895566");
+                "Client1 starts to write to data stream \"{0}\" by sending WRITE request", dataStreamPath);
+            client1.Write(treeIdClient1, fileIdDataStream, Smb2Utility.CreateRandomString(9));
             client1.Close(treeIdClient1, fileIdDataStream);
             client1.Close(treeIdClient1, fileIdFile);
 
@@ -1809,38 +1888,41 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client2 to open a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE (FILE)");
+                "Start client2 to open a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", filePath);
             client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            status = client2.TreeConnect(uncSharePath, out uint treeIdClient2);
+            uint treeIdClient2;
+            status = client2.TreeConnect(uncSharePath, out treeIdClient2);
+            FILEID fileIdFileToBeModified;
             status = client2.Create(
                 treeIdClient2,
                 filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdFileToBeModified,
+                out fileIdFileToBeModified,
                 out serverCreateContexts,
                 createDisposition: CreateDisposition_Values.FILE_OPEN);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client2 starts to open a data stream by sending CREATE request");
+                "Client2 starts to open a data stream \"{0}\" by sending CREATE request", dataStreamPath);
+            FILEID fileIdDataStreamToBeModified;
             status = client2.Create(
                 treeIdClient2,
                 dataStreamPath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdDataStreamToBeModified,
+                out fileIdDataStreamToBeModified,
                 out serverCreateContexts,
                 fileAttributes: File_Attributes.FILE_ATTRIBUTE_NORMAL);
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client2 starts to write to data stream by sending WRITE request");
-            client2.Write(treeIdClient2, fileIdDataStreamToBeModified, "5678955667788");
+                "Client2 starts to write to data stream \"{0}\" by sending WRITE request", dataStreamPath);
+            client2.Write(treeIdClient2, fileIdDataStreamToBeModified, Smb2Utility.CreateRandomString(13));
             client2.Close(treeIdClient2, fileIdDataStreamToBeModified);
 
             BaseTestSite.Assert.IsTrue(
                 changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
-                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+                "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
 
             BaseTestSite.Assert.AreEqual(
                 Smb2Status.STATUS_SUCCESS,
@@ -1876,7 +1958,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start a client to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+                "Start a client to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client1.SessionSetup(
@@ -1884,13 +1966,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 TestConfig.SutComputerName,
                 TestConfig.AccountCredential,
                 TestConfig.UseServerGssToken);
-            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            uint treeIdClient1;
+            status = client1.TreeConnect(uncSharePath, out treeIdClient1);
+            FILEID fileIdDir;
+            Smb2CreateContextResponse[] serverCreateContexts;
             status = client1.Create(
                 treeIdClient1,
                 testDirectory,
                 CreateOptions_Values.FILE_DIRECTORY_FILE,
-                out FILEID fileIdDir,
-                out Smb2CreateContextResponse[] serverCreateContexts);
+                out fileIdDir,
+                out serverCreateContexts);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -1902,12 +1987,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client starts to close a directory by sending a CLOSE Request");
+                "Client starts to close a directory \"{0}\" by sending a CLOSE Request", testDirectory);
             client1.Close(treeIdClient1, fileIdDir);
 
             BaseTestSite.Assert.IsTrue(
                 changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
-                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+                "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
 
             BaseTestSite.Assert.AreEqual(
                 Smb2Status.STATUS_NOTIFY_CLEANUP,
@@ -1938,9 +2023,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
 
+            string fileName = Guid.NewGuid().ToString();
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start a client to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+                "Start a client to create a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", fileName);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client1.SessionSetup(
@@ -1948,17 +2034,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 TestConfig.SutComputerName,
                 TestConfig.AccountCredential,
                 TestConfig.UseServerGssToken);
-            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            uint treeIdClient1;
+            status = client1.TreeConnect(uncSharePath, out treeIdClient1);
+            FILEID fileIdFile;
+            Smb2CreateContextResponse[] serverCreateContexts;
             status = client1.Create(
                 treeIdClient1,
-                testDirectory + "\\test123",
+                fileName,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out FILEID fileIdFile,
-                out Smb2CreateContextResponse[] serverCreateContexts);
+                out fileIdFile,
+                out serverCreateContexts);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client starts to register CHANGE_NOTIFY on a non-directory file \"{0}\"", testDirectory + "\\" + Guid.NewGuid().ToString());
+                "Client starts to register CHANGE_NOTIFY on a non-directory file \"{0}\"", fileName);
             client1.ChangeNotify(
                 treeIdClient1,
                 fileIdFile,
@@ -1966,7 +2055,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Assert.IsTrue(
                 changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
-                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+                "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
 
             BaseTestSite.Assert.AreEqual(
                 Smb2Status.STATUS_INVALID_PARAMETER,
@@ -2000,29 +2089,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client to create a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client1.Negotiate(
                 new DialectRevision[] { DialectRevision.Smb2002 },
                 TestConfig.IsSMB1NegotiateEnabled);
-            //BaseTestSite.Assert.AreNotSame(
-            //0x10000,
-            //client1.MaxTransactSize,
-            //"MaxTransactSize is expected to be 65536 for SMB 2.0.2, actually server returns {0}.",
-            //client1.MaxTransactSize);
-
             status = client1.SessionSetup(
                 TestConfig.DefaultSecurityPackage,
                 TestConfig.SutComputerName,
                 TestConfig.AccountCredential,
                 TestConfig.UseServerGssToken);
-            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            uint treeIdClient1;
+            status = client1.TreeConnect(uncSharePath, out treeIdClient1);
+            FILEID fileIdDir;
+            Smb2CreateContextResponse[] serverCreateContexts;
             status = client1.Create(
                 treeIdClient1,
                 testDirectory,
                 CreateOptions_Values.FILE_DIRECTORY_FILE,
-                out FILEID fileIdDir,
-                out Smb2CreateContextResponse[] serverCreateContexts);
+                out fileIdDir,
+                out serverCreateContexts);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -2035,7 +2121,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Assert.IsTrue(
                 changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
-                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+                "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
 
             BaseTestSite.Assert.AreEqual(
                 Smb2Status.STATUS_INVALID_PARAMETER,
@@ -2067,24 +2153,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client to create a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client1.Negotiate(
                 new DialectRevision[] { DialectRevision.Smb21 },
                 TestConfig.IsSMB1NegotiateEnabled);
-
             status = client1.SessionSetup(
                 TestConfig.DefaultSecurityPackage,
                 TestConfig.SutComputerName,
                 TestConfig.AccountCredential,
                 TestConfig.UseServerGssToken);
-            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            uint treeIdClient1;
+            status = client1.TreeConnect(uncSharePath, out treeIdClient1);
+            FILEID fileIdDir;
+            Smb2CreateContextResponse[] serverCreateContexts;
             status = client1.Create(
                 treeIdClient1,
                 testDirectory,
                 CreateOptions_Values.FILE_DIRECTORY_FILE,
-                out FILEID fileIdDir,
-                out Smb2CreateContextResponse[] serverCreateContexts);
+                out fileIdDir,
+                out serverCreateContexts);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -2097,7 +2185,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Assert.IsTrue(
                 changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
-                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+                "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
 
             BaseTestSite.Assert.AreEqual(
                 Smb2Status.STATUS_INVALID_PARAMETER,
@@ -2129,24 +2217,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client to create a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client1.Negotiate(
                 new DialectRevision[] { DialectRevision.Smb30 },
                 TestConfig.IsSMB1NegotiateEnabled);
-
             status = client1.SessionSetup(
                 TestConfig.DefaultSecurityPackage,
                 TestConfig.SutComputerName,
                 TestConfig.AccountCredential,
                 TestConfig.UseServerGssToken);
-            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            uint treeIdClient1;
+            status = client1.TreeConnect(uncSharePath, out treeIdClient1);
+            FILEID fileIdDir;
+            Smb2CreateContextResponse[] serverCreateContexts;
             status = client1.Create(
                 treeIdClient1,
                 testDirectory,
                 CreateOptions_Values.FILE_DIRECTORY_FILE,
-                out FILEID fileIdDir,
-                out Smb2CreateContextResponse[] serverCreateContexts);
+                out fileIdDir,
+                out serverCreateContexts);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -2159,7 +2249,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Assert.IsTrue(
                 changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
-                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+                "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
 
             BaseTestSite.Assert.AreEqual(
                 Smb2Status.STATUS_INVALID_PARAMETER,
@@ -2191,7 +2281,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client to create a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client1.Negotiate(
                 new DialectRevision[] { DialectRevision.Smb302 },
@@ -2201,13 +2291,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 TestConfig.SutComputerName,
                 TestConfig.AccountCredential,
                 TestConfig.UseServerGssToken);
-            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            uint treeIdClient1;
+            status = client1.TreeConnect(uncSharePath, out treeIdClient1);
+            FILEID fileIdDir;
+            Smb2CreateContextResponse[] serverCreateContexts;
             status = client1.Create(
                 treeIdClient1,
                 testDirectory,
                 CreateOptions_Values.FILE_DIRECTORY_FILE,
-                out FILEID fileIdDir,
-                out Smb2CreateContextResponse[] serverCreateContexts);
+                out fileIdDir,
+                out serverCreateContexts);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -2220,7 +2313,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Assert.IsTrue(
                 changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
-                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+                "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
 
             BaseTestSite.Assert.AreEqual(
                 Smb2Status.STATUS_INVALID_PARAMETER,
@@ -2253,7 +2346,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client to create a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client1.Negotiate(
                 new DialectRevision[] { DialectRevision.Smb311 },
@@ -2263,13 +2356,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 TestConfig.SutComputerName,
                 TestConfig.AccountCredential,
                 TestConfig.UseServerGssToken);
-            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            uint treeIdClient1;
+            status = client1.TreeConnect(uncSharePath, out treeIdClient1);
+            FILEID fileIdDir;
+            Smb2CreateContextResponse[] serverCreateContexts;
             status = client1.Create(
                 treeIdClient1,
                 testDirectory,
                 CreateOptions_Values.FILE_DIRECTORY_FILE,
-                out FILEID fileIdDir,
-                out Smb2CreateContextResponse[] serverCreateContexts);
+                out fileIdDir,
+                out serverCreateContexts);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -2282,7 +2378,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Assert.IsTrue(
                 changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
-                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+                "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
 
             BaseTestSite.Assert.AreEqual(
                 Smb2Status.STATUS_INVALID_PARAMETER,
@@ -2314,7 +2410,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start a client to create a directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+                "Start a client to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client1.SessionSetup(
@@ -2322,13 +2418,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 TestConfig.SutComputerName,
                 TestConfig.AccountCredential,
                 TestConfig.UseServerGssToken);
-            status = client1.TreeConnect(uncSharePath, out uint treeIdClient1);
+            uint treeIdClient1;
+            status = client1.TreeConnect(uncSharePath, out treeIdClient1);
+            FILEID fileIdDir;
+            Smb2CreateContextResponse[] serverCreateContexts;
             status = client1.Create(
                 treeIdClient1,
                 testDirectory,
                 CreateOptions_Values.FILE_DIRECTORY_FILE,
-                out FILEID fileIdDir,
-                out Smb2CreateContextResponse[] serverCreateContexts,
+                out fileIdDir,
+                out serverCreateContexts,
                 accessMask: AccessMask.GENERIC_WRITE | AccessMask.DELETE);
 
             BaseTestSite.Log.Add(
@@ -2341,7 +2440,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Assert.IsTrue(
                 changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
-                "Change notification should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+                "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
 
             BaseTestSite.Assert.AreEqual(
                 Smb2Status.STATUS_ACCESS_DENIED,
