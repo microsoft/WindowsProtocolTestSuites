@@ -315,7 +315,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             Capabilities_Values capabilityValue = Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING |
                 Capabilities_Values.GLOBAL_CAP_LARGE_MTU | Capabilities_Values.GLOBAL_CAP_LEASING |
                 Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL | Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES;
-            if (testConfig.IsGlobalEncryptDataEnabled && (Array.IndexOf(this.requestDialects, DialectRevision.Smb30) >= 0))
+            if (Array.IndexOf(this.requestDialects, DialectRevision.Smb30) >= 0)
             {
                 capabilityValue |= Capabilities_Values.GLOBAL_CAP_ENCRYPTION;
             }
