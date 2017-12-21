@@ -268,11 +268,6 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             else if (strRDPSecurityProtocol.Equals("RDP", StringComparison.CurrentCultureIgnoreCase))
             {
                 selectedProtocol = selectedProtocols_Values.PROTOCOL_RDP_FLAG;
-                this.TestSite.Assume.IsTrue(
-                        isNegotiationBased,
-                        "When RDP is used as the security protocol, {0} is set to 'RDP', {1} must be true.",
-                        RdpPtfPropNames.RdpSecurityProtocol,
-                        RdpPtfPropNames.RdpSecurityNegotiation);
                 transportProtocol = EncryptedProtocol.Rdp;
             }
             else

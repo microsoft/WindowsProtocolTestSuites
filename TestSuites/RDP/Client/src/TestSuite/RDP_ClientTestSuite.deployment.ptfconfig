@@ -18,7 +18,7 @@
     <!--Negotiation-Base: True; Direct Approach: False.-->
     <Property name="RDP.Security.Negotiation" value="True">
       <Choice>True, False</Choice>
-      <Description>Negotiation-Base: True; Direct Approach: False. For direct approach, only CredSSP is valid for security protocol.</Description>
+      <Description>Negotiation-Base: True; Direct Approach: False. When security protocol is RDP, this value is ignored. For direct approach, only CredSSP is valid for security protocol.</Description>
     </Property>
     <!--One of the TLS, CredSSP, or RDP.-->
     <Property name="RDP.Security.Protocol" value="TLS">

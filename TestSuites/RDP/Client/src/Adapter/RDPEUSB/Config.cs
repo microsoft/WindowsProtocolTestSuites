@@ -77,11 +77,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
 
                 case RdpSecurityProtocolValues.RDP:
                     SelectedProtocol = selectedProtocols_Values.PROTOCOL_RDP_FLAG;
-                    site.Assume.IsTrue(
-                        IsNegotiationBased,
-                        "When RDP is used as the security protocol, {0} is set to 'RDP', {1} must be true.",
-                        ConfigPropNames.RdpSecurityProtocol,
-                        ConfigPropNames.RdpSecurityNegotiation);
                     TransportProtocol = EncryptedProtocol.Rdp;
                     break;
 
