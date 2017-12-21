@@ -13,7 +13,7 @@
 		* [ Transport](#2.4.1)
 * [Test Suite Design](#3)
 	* [SMB2 BVT](#3.1)
-		* [ SMB2Basic\_QueryDir\_WriteFlush\_ChangeNotify\_Read](#3.1.1)
+		* [ SMB2Basic\_ChangeNotify\_NoFileListDirectoryInGrantedAccess](#3.1.1)
 		* [ SMB2Basic\_CancelRegisteredChangeNotify](#3.1.2)
 		* [ SMB2Basic\_QueryAndSet\_FileInfo](#3.1.3)
 		* [ SMB2Basic\_LockAndUnLock](#3.1.4)
@@ -58,7 +58,6 @@
 		* [ SMB2Basic\_ChangeNotify\_MaxTransactSizeCheck\_Smb30](#3.1.43)
 		* [ SMB2Basic\_ChangeNotify\_MaxTransactSizeCheck\_Smb302](#3.1.44)
 		* [ SMB2Basic\_ChangeNotify\_MaxTransactSizeCheck\_Smb311](#3.1.45)
-		* [ SMB2Basic\_ChangeNotify\_NoFileListDirectoryInGrantedAccess](#3.1.46)
 	* [SMB2 Feature Test](#3.2)
 		* [AppInstanceId](#3.2.1)
 		* [AppInstanceVersion](#3.2.2)
@@ -212,84 +211,36 @@ Test scenarios are categorized as below table and will be described in following
 
 This is used to test SMB2 common user scenarios.
 
-####<a name="3.1.1"> SMB2Basic\_QueryDir\_WriteFlush\_ChangeNotify\_Read
+####<a name="3.1.1"> SMB2Basic\_ChangeNotify\_NoFileListDirectoryInGrantedAccess
 
 #####<a name="3.1.1.1"> Scenario
 
-| **Description**               | This tests common query, write, flush, change-notify operations.                                                                                                       |
-|-------------------------------|---------------------------------------------------------------------------------|
-| **Message Sequence**          | **From client1 query information on an open of a directory then open the sub directory according to the queried info and register change notify on the sub directory** |
-|                               |NEGOTIATE |       ||ECHO|                                                                                                                                                                    
-||SESSION\_SETUP |                                                                                                                                                         
-||TREE\_CONNECT|                                                                                                                                                           
-||CREATE  |                                                                                                                                                                
-||QUERY\_DIRECTORY  |                                                                                                                                                      
-||CLOSE |                                                                                                                                                                  
-||CREATE (Directory, e.g. *dir1* get from QUERY\_DIRECTORY response)  |                                                                                                    
-||CHANGE\_NOTIFY (with SMB2\_WATCH\_TREE for Flags AND FILE\_NOTIFY\_CHANGE\_LAST\_WRITE for CompletionFilter) |                                                           
-||**From client2 create a new file in the sub directory where client1 registered change notify** ||                                                                         
-||NEGOTIATE   |                                                                                                                                                            
-||SESSION\_SETUP   |                                                                                                                                                       
-||TREE\_CONNECT  |                                                                                                                                                         
-||CREATE (File: new file in *dir1*) |                                                                                                                                      
-||WRITE |                                                                                                                                                                  
-||**From client1 to expect a CHANGE\_NOTIFY response then read what client2 wrote** |                                                                                      
-||Expect to receive CHANGE\_NOTIFY response |                                                                                                                              
-||CLOSE |                                                                                                                                                                  
-||CREATE(File: the new file created by client2 in dir1)|                                                                                                                   
-||READ |                                                                                                                                                                   
-||CLOSE |                                                                                                                                                                  
-||**From client2 requests to flush data** |                                                                                                                                
-||FLUSH  |                                                                                                                                                                 
-||CLOSE  |                                                                                                                                                                 
-||TREE\_DISCONNECT |                                                                                                                                                        
-||LOGOFF  |                                                                                                                                                                
-||**From client1 open the new file created by client2**  |                                                                                                                 
-||CREATE(File: the new file created by client2 in dir1) |                                                                                                                  
-||READ |                                                                                                                                                                   
-||CLOSE |                                                                                                                                                                  
-||TREE\_DISCONNECT |                                                                                                                                                       
-||LOGOFF |                                                                                                                                                                 
+|||
+|---|---|
+| **Description**               | Verify server must send an CHANGE\_NOTIFY response with STATUS\_ACCESS\_DENIED status code if CHANGE\_NOTIFY request is for a directory which GrantedAccess does not include FILE\_LIST\_DIRECTORY.|
+| **Message Sequence**          | 1.  Start a client to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE (without FILE\_LIST\_DIRECTORY in GrantedAccess). |
+|                               | 2.  Client starts to register CHANGE\_NOTIFY on a directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_LAST\_ACCESS. |
+|                               | 3.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
 #####<a name="3.1.1.2"> Test Case
- 
-|<empty>  |<empty>  |
-|-------|-----|
-| **Test ID**              | BVT\_SMB2Basic\_QueryDir\_WriteFlush\_ChangeNotify\_Read |
-| **Description**         | This test case is designed to test whether server can handle common QUERY, WRITE, FLUSH, CHANGE\_NOTIFY operations. |
-| **Prerequisites**   | |
-| **Test Execution Steps** | From client1 query information on an open of a directory then open the sub directory according to the queried info and register change notify on the sub directory |
-||   NEGOTIATE|  
-||   ECHO   |  
-||  SESSION\_SETUP |  
-||    TREE\_CONNECT  |  
-||  CREATE  | 
-||   QUERY\_DIRECTORY  |
-||   CLOSE|  
-||   CREATE (Directory, e.g. dir1 get from QUERY\_DIRECTORY response) | 
-||   CHANGE\_NOTIFY (with SMB2\_WATCH\_TREE for Flags AND FILE\_NOTIFY\_CHANGE\_LAST\_WRITE for CompletionFilter)|                                                        
-||  From client2 create a new file in the sub directory where client1 registered change notify   |  
-||NEGOTIATE  |   
-||SESSION\_SETUP| 
-||TREE\_CONNECT|
-||CREATE (File: new file in dir1) | 
-||WRITE|
-||FLUSH |
-||From client1 to expect a CHANGE\_NOTIFY response| 
-||Expect to receive CHANGE\_NOTIFY response| 
-||CLOSE |
-|| From client2 close the new created file| 
-||CLOSE|
-||TREE\_DISCONNECT|
-||LOGOFF|
-||From client1 open the new file created by client2 |    
-||CREATE(File: the new file created by client2 in dir1)|    
-||READ | 
-||CLOSE | 
-|| TREE\_DISCONNECT | 
-|| LOGOFF|   
-| **Cleanup** | |
+
+|||
+|---|---|
+| **Test ID** | BVT\_SMB2Basic\_ChangeNotify\_NoFileListDirectoryInGrantedAccess |
+| **Description** | Test whether server sends an CHANGE\_NOTIFY response with STATUS\_ACCESS\_DENIED status code if CHANGE\_NOTIFY request is for a directory which GrantedAccess does not include FILE\_LIST\_DIRECTORY. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (Directory without FILE\_LIST\_DIRECTORY in GrantedAccess)|
+|                          | CHANGE\_NOTIFY (FILE\_NOTIFY\_CHANGE\_LAST\_ACCESS for CompletionFilter) |
+|                          | Expect STATUS\_ACCESS\_DENIED in CHANGE\_NOTIFY response |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
 
 ####<a name="3.1.2"> SMB2Basic\_CancelRegisteredChangeNotify
 
@@ -2178,12 +2129,14 @@ This is used to test SMB2 common user scenarios.
 |---|---|
 | **Description**               | Verify ChangeNotify for CompletionFilter FILE\_NOTIFY\_CHANGE\_EA is handled correctly.|
 | **Message Sequence**          | 1.  Start a client1 to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
-|                               | 2.  Client1 starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_EA and flag WATCH\_TREE. |
-|                               | 3.  Client1 starts to create a file under previous directory by sending CREATE request. |
-|                               | 4.  Start a client2 to open a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
-|                               | 5.  Client2 sets FileFullEAInfo for the file by sending SET_INFO request. |
-|                               | 6.  Tear down the client2 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
-|                               | 7.  Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
+|                               | 2.  Client1 starts to create a file under previous directory by sending CREATE request. |
+|                               | 3.  Client1 sets FileFullEAInfo for the file by sending SET_INFO request. |
+|                               | 4.  Client1 starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_EA and flag WATCH\_TREE. |
+|                               | 5.  Start a client2 to open a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
+|                               | 6.  Client2 quries FileFullEAInfo for the file by sending QUERY\_INFO request. |
+|                               | 7.  Client2 sets new FileFullEAInfo for the file by sending SET\_INFO request. |
+|                               | 8.  Tear down the client2 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
+|                               | 9.  Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
 #####<a name="3.1.34.2"> Test Case
@@ -2198,14 +2151,16 @@ This is used to test SMB2 common user scenarios.
 |                          | SESSION\_SETUP |
 |                          | TREE\_CONNECT|
 |                          | CREATE (Directory)|
-|                          | CHANGE\_NOTIFY (FILE\_NOTIFY\_CHANGE\_EA for CompletionFilter and WATCH\_TREE for flag) |
 |                          | CREATE (File) |
+|                          | SET_INFO (FileFullEAInfo) |
+|                          | CHANGE\_NOTIFY (FILE\_NOTIFY\_CHANGE\_EA for CompletionFilter and WATCH\_TREE for flag) |
 |                          | Create Client2 |
 |                          | NEGOTIATE |
 |                          | SESSION\_SETUP |
 |                          | TREE\_CONNECT|
 |                          | CREATE (Open File) |
-|                          | SET_INFO (FileFullEAInfo) |
+|                          | QUERY\_INFO (FileFullEAInfo) |
+|                          | SET\_INFO (New FileFullEAInfo) |
 |                          | Expect STATUS\_SUCCESS in CHANGE\_NOTIFY response |
 |                          | Close Client2 |
 |                          | CLOSE |
@@ -2640,38 +2595,6 @@ This is used to test SMB2 common user scenarios.
 |                          | CREATE (Directory)|
 |                          | CHANGE\_NOTIFY (FILE\_NOTIFY\_CHANGE\_LAST\_ACCESS for CompletionFilter and MaxTransactSize + 1 for maxOutputBufferLength) |
 |                          | Expect STATUS\_INVALID\_PARAMETER in CHANGE\_NOTIFY response |
-|                          | CLOSE |
-|                          | TREE\_DISCONNECT |
-|                          | LOGOFF |
-| **Cleanup**              ||
-
-
-####<a name="3.1.46"> SMB2Basic\_ChangeNotify\_NoFileListDirectoryInGrantedAccess
-
-#####<a name="3.1.46.1"> Scenario
-
-|||
-|---|---|
-| **Description**               | Verify server must send an CHANGE\_NOTIFY response with STATUS\_ACCESS\_DENIED status code if CHANGE\_NOTIFY request is for a directory which GrantedAccess does not include FILE\_LIST\_DIRECTORY.|
-| **Message Sequence**          | 1.  Start a client to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE (without FILE\_LIST\_DIRECTORY in GrantedAccess). |
-|                               | 2.  Client starts to register CHANGE\_NOTIFY on a directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_LAST\_ACCESS. |
-|                               | 3.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
-| **Cluster Involved Scenario** | **NO** |
-
-#####<a name="3.1.46.2"> Test Case
-
-|||
-|---|---|
-| **Test ID** | BVT\_SMB2Basic\_ChangeNotify\_NoFileListDirectoryInGrantedAccess |
-| **Description** | Test whether server sends an CHANGE\_NOTIFY response with STATUS\_ACCESS\_DENIED status code if CHANGE\_NOTIFY request is for a directory which GrantedAccess does not include FILE\_LIST\_DIRECTORY. |
-| **Prerequisites** ||
-| **Test Execution Steps** | Create Client |
-|                          | NEGOTIATE |
-|                          | SESSION\_SETUP |
-|                          | TREE\_CONNECT|
-|                          | CREATE (Directory without FILE\_LIST\_DIRECTORY in GrantedAccess)|
-|                          | CHANGE\_NOTIFY (FILE\_NOTIFY\_CHANGE\_LAST\_ACCESS for CompletionFilter) |
-|                          | Expect STATUS\_ACCESS\_DENIED in CHANGE\_NOTIFY response |
 |                          | CLOSE |
 |                          | TREE\_DISCONNECT |
 |                          | LOGOFF |

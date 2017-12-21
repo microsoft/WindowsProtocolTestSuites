@@ -79,6 +79,32 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         }
         #endregion
 
+        #region Utility
+        private string ComposeRandomFileName(int fileNameLength)
+        {
+            int randomNumber = 0;
+            char fileNameLetter = ' ';
+            string ramdomFileName = null;
+            Random randomRange = new Random((int)System.DateTime.Now.Ticks);
+            for (int i = 0; i < fileNameLength; i++)
+            {
+                //Create a random fileNameLetter from 'a' to 'z'by range 1 to 52
+                randomNumber = randomRange.Next(1, 52);
+                if (randomNumber > 26)
+                {
+                    //Convert to char type
+                    fileNameLetter = (char)(97 + randomNumber % 26);
+                }
+                else
+                {
+                    fileNameLetter = (char)(97 + randomNumber % 26);
+                }
+                ramdomFileName = ramdomFileName + fileNameLetter.ToString(); ;
+            }
+            return ramdomFileName;
+        }
+        #endregion
+
         #region Test cases
 
         [TestMethod]
@@ -1369,15 +1395,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 out fileIdDir,
                 out serverCreateContexts);
 
-            BaseTestSite.Log.Add(
-                LogEntryKind.TestStep,
-                "Client1 starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_EA and flag WATCH_TREE", testDirectory);
-            client1.ChangeNotify(
-                treeIdClient1,
-                fileIdDir,
-                CompletionFilter_Values.FILE_NOTIFY_CHANGE_EA,
-                flags: CHANGE_NOTIFY_Request_Flags_Values.WATCH_TREE);
-
             string fileName = Guid.NewGuid().ToString();
             string filePath = testDirectory + "\\" + fileName;
             BaseTestSite.Log.Add(
@@ -1390,7 +1407,36 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileIdFile,
                 out serverCreateContexts);
+
+            string eaName = ComposeRandomFileName(8);
+            string eaValue = ComposeRandomFileName(8);
+            FileFullEaInformation fileFullEaInfo;
+            fileFullEaInfo.NextEntryOffset = 0;
+            fileFullEaInfo.Flags = 0;
+            fileFullEaInfo.EaNameLength = (byte)eaName.Length;
+            fileFullEaInfo.EaName = Encoding.ASCII.GetBytes(eaName + "\0");
+            fileFullEaInfo.EaValueLength = (ushort)eaValue.Length;
+            fileFullEaInfo.EaValue = Encoding.ASCII.GetBytes(eaValue);
+            byte[] inputBuffer = TypeMarshal.ToBytes<FileFullEaInformation>(fileFullEaInfo);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 sets FileFullEAInfo for the file \"{0}\" by sending SET_INFO request", filePath);
+            client1.SetFileAttributes(
+                treeIdClient1,
+                (byte)FileInformationClasses.FileFullEaInformation,
+                fileIdFile,
+                inputBuffer);
             client1.Close(treeIdClient1, fileIdFile);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_EA and flag WATCH_TREE", testDirectory);
+            client1.ChangeNotify(
+                treeIdClient1,
+                fileIdDir,
+                CompletionFilter_Values.FILE_NOTIFY_CHANGE_EA,
+                flags: CHANGE_NOTIFY_Request_Flags_Values.WATCH_TREE);
 
             client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             BaseTestSite.Log.Add(
@@ -1410,16 +1456,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 out serverCreateContexts,
                 createDisposition: CreateDisposition_Values.FILE_OPEN);
 
-            string eaName = "EA_NAME";
-            string eaValue = "EA_VAL";
-            FileFullEaInformation fileFullEaInfo;
-            fileFullEaInfo.NextEntryOffset = 0;
-            fileFullEaInfo.Flags = 0;
-            fileFullEaInfo.EaNameLength = (byte)eaName.Length;
-            fileFullEaInfo.EaValueLength = (ushort)eaValue.Length;
-            fileFullEaInfo.EaName = Encoding.ASCII.GetBytes(eaName + "\0");
-            fileFullEaInfo.EaValue = Encoding.ASCII.GetBytes(eaValue);
-            byte[] inputBuffer = TypeMarshal.ToBytes<FileFullEaInformation>(fileFullEaInfo);
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client2 sends QUERY_INFO request to query file full extended attributes.");
+            byte[] outputBuffer;
+            client2.QueryFileAttributes(
+                treeIdClient2,
+                (byte)FileInformationClasses.FileFullEaInformation,
+                QUERY_INFO_Request_Flags_Values.SL_RESTART_SCAN,
+                fileIdFileToBeModified,
+                new byte[0] { },
+                out outputBuffer);
+
+            FileFullEaInformation fileFullEaInfoQueried = TypeMarshal.ToStruct<FileFullEaInformation>(outputBuffer); ;
+            string newEaValue = ComposeRandomFileName(6);
+            fileFullEaInfoQueried.EaValueLength = 6;
+            fileFullEaInfoQueried.EaValue = Encoding.ASCII.GetBytes(newEaValue);
+            inputBuffer = TypeMarshal.ToBytes<FileFullEaInformation>(fileFullEaInfoQueried);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -1508,7 +1559,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileIdFile,
-                out serverCreateContexts);
+                out serverCreateContexts,
+                accessMask: AccessMask.MAXIMAL_ACCESS | AccessMask.GENERIC_ALL);
             client1.Close(treeIdClient1, fileIdFile);
 
             client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
@@ -1527,19 +1579,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileIdFileToBeModified,
                 out serverCreateContexts,
-                accessMask: AccessMask.READ_CONTROL | AccessMask.WRITE_DAC | AccessMask.FILE_READ_ATTRIBUTES | AccessMask.WRITE_OWNER | AccessMask.ACCESS_SYSTEM_SECURITY,
+                accessMask: AccessMask.MAXIMAL_ACCESS | AccessMask.GENERIC_ALL,
                 createDisposition: CreateDisposition_Values.FILE_OPEN);
 
-            BaseTestSite.Log.Add(
-                LogEntryKind.TestStep,
-                "Client2 sets DACL_SECURITY_INFORMATION for the file \"{0}\" by sending SET_INFO request", filePath);
             _ACL sacl = DtypUtility.CreateAcl(false);
             _SECURITY_DESCRIPTOR sd = DtypUtility.CreateSecurityDescriptor(
-                SECURITY_DESCRIPTOR_Control.DACLTrusted,
+                SECURITY_DESCRIPTOR_Control.SACLAutoInherited | SECURITY_DESCRIPTOR_Control.SACLInheritanceRequired |
+                SECURITY_DESCRIPTOR_Control.SACLPresent | SECURITY_DESCRIPTOR_Control.SelfRelative,
                 null,
                 null,
                 sacl,
                 null);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client2 sets DACL_SECURITY_INFORMATION for the file \"{0}\" by sending SET_INFO request", filePath);
             client2.SetSecurityDescriptor(
                 treeIdClient2,
                 fileIdFileToBeModified,
