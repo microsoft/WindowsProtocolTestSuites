@@ -1406,7 +1406,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileIdFile,
-                out serverCreateContexts);
+                out serverCreateContexts,
+                accessMask: AccessMask.FILE_READ_EA |
+                            AccessMask.FILE_WRITE_EA |
+                            AccessMask.GENERIC_READ |
+                            AccessMask.GENERIC_WRITE |
+                            AccessMask.DELETE |
+                            AccessMask.FILE_READ_ATTRIBUTES |
+                            AccessMask.FILE_WRITE_ATTRIBUTES);
 
             string eaName = ComposeRandomFileName(8);
             string eaValue = ComposeRandomFileName(8);
@@ -1454,7 +1461,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileIdFileToBeModified,
                 out serverCreateContexts,
-                createDisposition: CreateDisposition_Values.FILE_OPEN);
+                createDisposition: CreateDisposition_Values.FILE_OPEN,
+                accessMask: AccessMask.FILE_READ_EA |
+                            AccessMask.FILE_WRITE_EA |
+                            AccessMask.GENERIC_READ |
+                            AccessMask.GENERIC_WRITE |
+                            AccessMask.DELETE |
+                            AccessMask.FILE_READ_ATTRIBUTES |
+                            AccessMask.FILE_WRITE_ATTRIBUTES);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client2 sends QUERY_INFO request to query file full extended attributes.");
             byte[] outputBuffer;
@@ -1560,7 +1574,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileIdFile,
                 out serverCreateContexts,
-                accessMask: AccessMask.MAXIMAL_ACCESS | AccessMask.GENERIC_ALL);
+                accessMask: AccessMask.GENERIC_READ |
+                            AccessMask.GENERIC_WRITE |
+                            AccessMask.DELETE |
+                            AccessMask.WRITE_DAC |
+                            AccessMask.WRITE_OWNER |
+                            AccessMask.ACCESS_SYSTEM_SECURITY |
+                            AccessMask.FILE_WRITE_ATTRIBUTES);
             client1.Close(treeIdClient1, fileIdFile);
 
             client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
@@ -1579,8 +1599,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileIdFileToBeModified,
                 out serverCreateContexts,
-                accessMask: AccessMask.MAXIMAL_ACCESS | AccessMask.GENERIC_ALL,
-                createDisposition: CreateDisposition_Values.FILE_OPEN);
+                createDisposition: CreateDisposition_Values.FILE_OPEN,
+                accessMask: AccessMask.GENERIC_READ |
+                            AccessMask.GENERIC_WRITE |
+                            AccessMask.DELETE |
+                            AccessMask.WRITE_DAC |
+                            AccessMask.WRITE_OWNER |
+                            AccessMask.ACCESS_SYSTEM_SECURITY |
+                            AccessMask.FILE_WRITE_ATTRIBUTES);
 
             _ACL sacl = DtypUtility.CreateAcl(false);
             _SECURITY_DESCRIPTOR sd = DtypUtility.CreateSecurityDescriptor(
