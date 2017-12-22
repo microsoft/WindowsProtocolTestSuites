@@ -3229,6 +3229,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         INFO_VIDEO_DISABLE = 0x00400000,
 
         /// <summary>
+        /// An unused flag that is reserved for future use. This flag MUST NOT be set.
+        /// </summary>
+        INFO_RESERVED1 = 0x00800000,
+
+        /// <summary>
+        /// An unused flag that is reserved for future use. This flag MUST NOT be set.
+        /// </summary>
+        INFO_RESERVED2 = 0x01000000,
+
+        /// <summary>
         /// Indicates that the client supports Hi-Def RAIL ([MS-RDPERP] section 1.3.3). The INFO_HIDEF_RAIL_SUPPORTED flag MUST be ignored if the INFO_RAIL (0x00008000) flag is not specified. 
         /// Furthermore, a client that specifies the INFO_HIDEF_RAIL_SUPPORTED flag MUST send the Remote Programs Capability Set ([MS-RDPERP] section 2.2.1.1.1) to the server.The INFO_HIDEF_RAIL_SUPPORTED flag is understood only by RDP 8.1 servers.
         /// </summary>
@@ -6930,7 +6940,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         ///  RDP 10.3 clients
         /// </summary>
-        V6 = 0x00080008
+        V6 = 0x00080008,
+
+        /// <summary>
+        ///  RDP 10.4 clients
+        /// </summary>
+        V7 = 0x00080009
     }
 
     /// <summary>
