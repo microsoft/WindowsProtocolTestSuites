@@ -1795,7 +1795,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 2.  Client1 starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_FILE\_NAME and flag WATCH\_TREE. |
 |                               | 3.  Client1 starts to create a file under directory by sending CREATE request. |
 |                               | 4.  Start a client2 to open a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
-|                               | 5.  Client2 renames the file by sending SET_INFO request. |
+|                               | 5.  Client2 renames the file by sending SET\_INFO request. |
 |                               | 6.  Tear down the client2 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 |                               | 7.  Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
@@ -1820,7 +1820,7 @@ This is used to test SMB2 common user scenarios.
 |                          | SESSION\_SETUP |
 |                          | TREE\_CONNECT|
 |                          | CREATE (Open File) |
-|                          | SET_INFO (FileRenameInformation) |
+|                          | SET\_INFO (FileRenameInformation) |
 |                          | Expect STATUS\_SUCCESS in CHANGE\_NOTIFY response |
 |                          | Close Client2 |
 |                          | CLOSE |
@@ -1842,9 +1842,9 @@ This is used to test SMB2 common user scenarios.
 | **Description**               | Verify ChangeNotify for CompletionFilter FILE\_NOTIFY\_CHANGE\_DIR\_NAME is handled correctly.|
 | **Message Sequence**          | 1.  Start a client1 to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
 |                               | 2.  Client1 starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_DIR\_NAME and flag WATCH\_TREE. |
-|                               | 3.  Client1 starts to create a directory under previous directory by sending CREATE request. |
+|                               | 3.  Client1 starts to create a directory under directory by sending CREATE request. |
 |                               | 4.  Start a client2 to open a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
-|                               | 5.  Client2 renames the directory by sending SET_INFO request. |
+|                               | 5.  Client2 renames the directory by sending SET\_INFO request. |
 |                               | 6.  Tear down the client2 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 |                               | 7.  Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
@@ -1868,7 +1868,7 @@ This is used to test SMB2 common user scenarios.
 |                          | SESSION\_SETUP |
 |                          | TREE\_CONNECT|
 |                          | CREATE (Open Directory) |
-|                          | SET_INFO (FileRenameInformation) |
+|                          | SET\_INFO (FileRenameInformation) |
 |                          | Expect STATUS\_SUCCESS in CHANGE\_NOTIFY response |
 |                          | Close Client2 |
 |                          | CLOSE |
@@ -1890,9 +1890,9 @@ This is used to test SMB2 common user scenarios.
 | **Description**               | Verify ChangeNotify for CompletionFilter FILE\_NOTIFY\_CHANGE\_ATTRIBUTES is handled correctly.|
 | **Message Sequence**          | 1.  Start a client1 to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
 |                               | 2.  Client1 starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_ATTRIBUTES and flag WATCH\_TREE. |
-|                               | 3.  Client1 starts to create a file under previous directory by sending CREATE request. |
+|                               | 3.  Client1 starts to create a file under directory by sending CREATE request. |
 |                               | 4.  Start a client2 to open a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
-|                               | 5.  Client2 sets attribute for the file to FILE\_ATTRIBUTE\_HIDDEN by sending SET_INFO request. |
+|                               | 5.  Client2 sets attribute for the file to FILE\_ATTRIBUTE\_HIDDEN by sending SET\_INFO request. |
 |                               | 6.  Tear down the client2 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 |                               | 7.  Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
@@ -1916,7 +1916,7 @@ This is used to test SMB2 common user scenarios.
 |                          | SESSION\_SETUP |
 |                          | TREE\_CONNECT|
 |                          | CREATE (Open File) |
-|                          | SET_INFO (FileBasicInformation with FileAttribute FILE\_ATTRIBUTE\_HIDDEN) |
+|                          | SET\_INFO (FileBasicInformation with FileAttribute FILE\_ATTRIBUTE\_HIDDEN) |
 |                          | Expect STATUS\_SUCCESS in CHANGE\_NOTIFY response |
 |                          | Close Client2 |
 |                          | CLOSE |
@@ -1938,7 +1938,7 @@ This is used to test SMB2 common user scenarios.
 | **Description**               | Verify ChangeNotify for CompletionFilter FILE\_NOTIFY\_CHANGE\_SIZE is handled correctly.|
 | **Message Sequence**          | 1.  Start a client1 to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
 |                               | 2.  Client1 starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_SIZE and flag WATCH\_TREE. |
-|                               | 3.  Client1 starts to create a file under previous directory by sending CREATE request. |
+|                               | 3.  Client1 starts to create a file under directory by sending CREATE request. |
 |                               | 4.  Start a client2 to open a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
 |                               | 5.  Client2 starts to write to the file by sending WRITE request. |
 |                               | 6.  Tear down the client2 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
@@ -1986,9 +1986,9 @@ This is used to test SMB2 common user scenarios.
 | **Description**               | Verify ChangeNotify for CompletionFilter FILE\_NOTIFY\_CHANGE\_LAST\_ACCESS is handled correctly.|
 | **Message Sequence**          | 1.  Start a client1 to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
 |                               | 2.  Client1 starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_LAST\_ACCESS and flag WATCH\_TREE. |
-|                               | 3.  Client1 starts to create a file under previous directory by sending CREATE request. |
+|                               | 3.  Client1 starts to create a file under directory by sending CREATE request. |
 |                               | 4.  Start a client2 to open a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
-|                               | 5.  Client2 sets LastAccessTime for the file by sending SET_INFO request. |
+|                               | 5.  Client2 sets LastAccessTime for the file by sending SET\_INFO request. |
 |                               | 6.  Tear down the client2 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 |                               | 7.  Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
@@ -2012,7 +2012,7 @@ This is used to test SMB2 common user scenarios.
 |                          | SESSION\_SETUP |
 |                          | TREE\_CONNECT|
 |                          | CREATE (Open File) |
-|                          | SET_INFO (FileBasicInformation with new LastAccessTime) |
+|                          | SET\_INFO (FileBasicInformation with new LastAccessTime) |
 |                          | Expect STATUS\_SUCCESS in CHANGE\_NOTIFY response |
 |                          | Close Client2 |
 |                          | CLOSE |
@@ -2034,9 +2034,9 @@ This is used to test SMB2 common user scenarios.
 | **Description**               | Verify ChangeNotify for CompletionFilter FILE\_NOTIFY\_CHANGE\_LAST\_WRITE is handled correctly.|
 | **Message Sequence**          | 1.  Start a client1 to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
 |                               | 2.  Client1 starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_LAST\_WRITE and flag WATCH\_TREE. |
-|                               | 3.  Client1 starts to create a file under previous directory by sending CREATE request. |
+|                               | 3.  Client1 starts to create a file under directory by sending CREATE request. |
 |                               | 4.  Start a client2 to open a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
-|                               | 5.  Client2 sets LastWriteTime for the file by sending SET_INFO request. |
+|                               | 5.  Client2 sets LastWriteTime for the file by sending SET\_INFO request. |
 |                               | 6.  Tear down the client2 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 |                               | 7.  Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
@@ -2060,7 +2060,7 @@ This is used to test SMB2 common user scenarios.
 |                          | SESSION\_SETUP |
 |                          | TREE\_CONNECT|
 |                          | CREATE (Open File) |
-|                          | SET_INFO (FileBasicInformation with new LastWriteTime) |
+|                          | SET\_INFO (FileBasicInformation with new LastWriteTime) |
 |                          | Expect STATUS\_SUCCESS in CHANGE\_NOTIFY response |
 |                          | Close Client2 |
 |                          | CLOSE |
@@ -2082,9 +2082,9 @@ This is used to test SMB2 common user scenarios.
 | **Description**               | Verify ChangeNotify for CompletionFilter FILE\_NOTIFY\_CHANGE\_CREATION is handled correctly.|
 | **Message Sequence**          | 1.  Start a client1 to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
 |                               | 2.  Client1 starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_CREATION and flag WATCH\_TREE. |
-|                               | 3.  Client1 starts to create a file under previous directory by sending CREATE request. |
+|                               | 3.  Client1 starts to create a file under directory by sending CREATE request. |
 |                               | 4.  Start a client2 to open a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
-|                               | 5.  Client2 sets CreationTime for the file by sending SET_INFO request. |
+|                               | 5.  Client2 sets CreationTime for the file by sending SET\_INFO request. |
 |                               | 6.  Tear down the client2 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 |                               | 7.  Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
@@ -2108,7 +2108,7 @@ This is used to test SMB2 common user scenarios.
 |                          | SESSION\_SETUP |
 |                          | TREE\_CONNECT|
 |                          | CREATE (Open File) |
-|                          | SET_INFO (FileBasicInformation with new CreationTime) |
+|                          | SET\_INFO (FileBasicInformation with new CreationTime) |
 |                          | Expect STATUS\_SUCCESS in CHANGE\_NOTIFY response |
 |                          | Close Client2 |
 |                          | CLOSE |
@@ -2128,15 +2128,11 @@ This is used to test SMB2 common user scenarios.
 |||
 |---|---|
 | **Description**               | Verify ChangeNotify for CompletionFilter FILE\_NOTIFY\_CHANGE\_EA is handled correctly.|
-| **Message Sequence**          | 1.  Start a client1 to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
-|                               | 2.  Client1 starts to create a file under previous directory by sending CREATE request. |
-|                               | 3.  Client1 sets FileFullEAInfo for the file by sending SET_INFO request. |
-|                               | 4.  Client1 starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_EA and flag WATCH\_TREE. |
-|                               | 5.  Start a client2 to open a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
-|                               | 6.  Client2 quries FileFullEAInfo for the file by sending QUERY\_INFO request. |
-|                               | 7.  Client2 sets new FileFullEAInfo for the file by sending SET\_INFO request. |
-|                               | 8.  Tear down the client2 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
-|                               | 9.  Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
+| **Message Sequence**          | 1.  Start a client to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
+|                               | 2.  Client starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_EA and flag WATCH\_TREE. |
+|                               | 3.  Client starts to create a file under directory by sending CREATE request. |
+|                               | 4.  Client sets FileFullEAInfo for the file by sending SET_INFO request. |
+|                               | 5.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
 #####<a name="3.1.34.2"> Test Case
@@ -2146,27 +2142,16 @@ This is used to test SMB2 common user scenarios.
 | **Test ID** | BVT\_SMB2Basic\_ChangeNotify\_ChangeEa |
 | **Description** | Test whether ChangeNotify with CompletionFilter FILE\_NOTIFY\_CHANGE\_EA is handled correctly. |
 | **Prerequisites** ||
-| **Test Execution Steps** | Create Client1 |
+| **Test Execution Steps** | Create Client |
 |                          | NEGOTIATE |
 |                          | SESSION\_SETUP |
 |                          | TREE\_CONNECT|
 |                          | CREATE (Directory)|
-|                          | CREATE (File) |
-|                          | SET_INFO (FileFullEAInfo) |
 |                          | CHANGE\_NOTIFY (FILE\_NOTIFY\_CHANGE\_EA for CompletionFilter and WATCH\_TREE for flag) |
-|                          | Create Client2 |
-|                          | NEGOTIATE |
-|                          | SESSION\_SETUP |
-|                          | TREE\_CONNECT|
-|                          | CREATE (Open File) |
-|                          | QUERY\_INFO (FileFullEAInfo) |
-|                          | SET\_INFO (New FileFullEAInfo) |
+|                          | CREATE (File) |
+|                          | SET\_INFO (FileFullEAInfo) |
 |                          | Expect STATUS\_SUCCESS in CHANGE\_NOTIFY response |
-|                          | Close Client2 |
-|                          | CLOSE |
-|                          | TREE\_DISCONNECT |
-|                          | LOGOFF |
-|                          | Close Client1 |
+|                          | Close Client |
 |                          | CLOSE |
 |                          | TREE\_DISCONNECT |
 |                          | LOGOFF |
@@ -2180,13 +2165,11 @@ This is used to test SMB2 common user scenarios.
 |||
 |---|---|
 | **Description**               | Verify ChangeNotify for CompletionFilter FILE\_NOTIFY\_CHANGE\_SECURITY is handled correctly.|
-| **Message Sequence**          | 1.  Start a client1 to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
-|                               | 2.  Client1 starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_SECURITY and flag WATCH\_TREE. |
-|                               | 3.  Client1 starts to create a file under previous directory by sending CREATE request. |
-|                               | 4.  Start a client2 to open a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
-|                               | 5.  Client2 sets DACL\_SECURITY\_INFORMATION for the file by sending SET_INFO request. |
-|                               | 6.  Tear down the client2 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
-|                               | 7.  Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
+| **Message Sequence**          | 1.  Start a client to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
+|                               | 2.  Client starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_SECURITY and flag WATCH\_TREE. |
+|                               | 3.  Client starts to create a file under directory by sending CREATE request. |
+|                               | 4.  Client sets SACL\_SECURITY\_INFORMATION for the file by sending SET_INFO request. |
+|                               | 5.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
 #####<a name="3.1.35.2"> Test Case
@@ -2196,25 +2179,16 @@ This is used to test SMB2 common user scenarios.
 | **Test ID** | BVT\_SMB2Basic\_ChangeNotify\_ChangeSecurity |
 | **Description** | Test whether ChangeNotify with CompletionFilter FILE\_NOTIFY\_CHANGE\_SECURITY is handled correctly. |
 | **Prerequisites** ||
-| **Test Execution Steps** | Create Client1 |
+| **Test Execution Steps** | Create Client |
 |                          | NEGOTIATE |
 |                          | SESSION\_SETUP |
 |                          | TREE\_CONNECT|
 |                          | CREATE (Directory)|
 |                          | CHANGE\_NOTIFY (FILE\_NOTIFY\_CHANGE\_SECURITY for CompletionFilter and WATCH\_TREE for flag) |
 |                          | CREATE (File) |
-|                          | Create Client2 |
-|                          | NEGOTIATE |
-|                          | SESSION\_SETUP |
-|                          | TREE\_CONNECT|
-|                          | CREATE (Open File) |
-|                          | SET_INFO (DACL\_SECURITY\_INFORMATION) |
+|                          | SET\_INFO (SACL\_SECURITY\_INFORMATION) |
 |                          | Expect STATUS\_SUCCESS in CHANGE\_NOTIFY response |
-|                          | Close Client2 |
-|                          | CLOSE |
-|                          | TREE\_DISCONNECT |
-|                          | LOGOFF |
-|                          | Close Client1 |
+|                          | Close Client |
 |                          | CLOSE |
 |                          | TREE\_DISCONNECT |
 |                          | LOGOFF |
@@ -2229,10 +2203,10 @@ This is used to test SMB2 common user scenarios.
 |---|---|
 | **Description**               | Verify ChangeNotify for CompletionFilter FILE\_NOTIFY\_CHANGE\_STREAM\_NAME is handled correctly.|
 | **Message Sequence**          | 1.  Start a client1 to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
-|                               | 2.  Client1 starts to create a file under previous directory by sending CREATE request. |
+|                               | 2.  Client1 starts to create a file under directory by sending CREATE request. |
 |                               | 3.  Client1 starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_STREAM\_NAME and flag WATCH\_TREE. |
 |                               | 4.  Start a client2 to open a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
-|                               | 5.  Client2 starts to create a data stream of a file under previous directory by sending CREATE request. |
+|                               | 5.  Client2 starts to create a data stream of a file under directory by sending CREATE request. |
 |                               | 6.  Tear down the client2 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 |                               | 7.  Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
@@ -2277,13 +2251,13 @@ This is used to test SMB2 common user scenarios.
 |---|---|
 | **Description**               | Verify ChangeNotify for CompletionFilter FILE\_NOTIFY\_CHANGE\_STREAM\_SIZE is handled correctly.|
 | **Message Sequence**          | 1.  Start a client1 to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
-|                               | 2.  Client1 starts to create a file under previous directory by sending CREATE request. |
-|                               | 3.  Client1 starts to create a data stream of a file under previous directory by sending CREATE request. |
-|                               | 4.  Client1 starts to write to a data stream of a file under previous directory by sending WRITE request. |
+|                               | 2.  Client1 starts to create a file under directory by sending CREATE request. |
+|                               | 3.  Client1 starts to create a data stream of a file under directory by sending CREATE request. |
+|                               | 4.  Client1 starts to write to a data stream of a file under directory by sending WRITE request. |
 |                               | 5.  Client1 starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_STREAM\_SIZE and flag WATCH\_TREE. |
 |                               | 6.  Start a client2 to open a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
-|                               | 7.  Client2 starts to open a data stream of a file under previous directory by sending CREATE request. |
-|                               | 8.  Client2 starts to write to a data stream of a file under previous directory by sending WRITE request. |
+|                               | 7.  Client2 starts to open a data stream of a file under directory by sending CREATE request. |
+|                               | 8.  Client2 starts to write to a data stream of a file under directory by sending WRITE request. |
 |                               | 9.  Tear down the client2 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 |                               | 10. Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
@@ -2331,13 +2305,13 @@ This is used to test SMB2 common user scenarios.
 |---|---|
 | **Description**               | Verify ChangeNotify for CompletionFilter FILE\_NOTIFY\_CHANGE\_STREAM\_WRITE is handled correctly.|
 | **Message Sequence**          | 1.  Start a client1 to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
-|                               | 2.  Client1 starts to create a file under previous directory by sending CREATE request. |
-|                               | 3.  Client1 starts to create a data stream of a file under previous directory by sending CREATE request. |
-|                               | 4.  Client1 starts to write to a data stream of a file under previous directory by sending WRITE request. |
+|                               | 2.  Client1 starts to create a file under directory by sending CREATE request. |
+|                               | 3.  Client1 starts to create a data stream of a file under directory by sending CREATE request. |
+|                               | 4.  Client1 starts to write to a data stream of a file under directory by sending WRITE request. |
 |                               | 5.  Client1 starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_STREAM\_WRITE and flag WATCH\_TREE. |
 |                               | 6.  Start a client2 to open a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
-|                               | 7.  Client2 starts to open a data stream of a file under previous directory by sending CREATE request. |
-|                               | 8.  Client2 starts to write to a data stream of a file under previous directory by sending WRITE request. |
+|                               | 7.  Client2 starts to open a data stream of a file under directory by sending CREATE request. |
+|                               | 8.  Client2 starts to write to a data stream of a file under directory by sending WRITE request. |
 |                               | 9.  Tear down the client2 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 |                               | 10. Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |

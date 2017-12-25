@@ -1395,6 +1395,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 out fileIdDir,
                 out serverCreateContexts);
 
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_EA and flag WATCH_TREE", testDirectory);
+            client1.ChangeNotify(
+                treeIdClient1,
+                fileIdDir,
+                CompletionFilter_Values.FILE_NOTIFY_CHANGE_EA,
+                flags: CHANGE_NOTIFY_Request_Flags_Values.WATCH_TREE);
+
             string fileName = Guid.NewGuid().ToString();
             string filePath = testDirectory + "\\" + fileName;
             BaseTestSite.Log.Add(
@@ -1406,14 +1415,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 filePath,
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileIdFile,
-                out serverCreateContexts,
-                accessMask: AccessMask.FILE_READ_EA |
-                            AccessMask.FILE_WRITE_EA |
-                            AccessMask.GENERIC_READ |
-                            AccessMask.GENERIC_WRITE |
-                            AccessMask.DELETE |
-                            AccessMask.FILE_READ_ATTRIBUTES |
-                            AccessMask.FILE_WRITE_ATTRIBUTES);
+                out serverCreateContexts);
 
             string eaName = ComposeRandomFileName(8);
             string eaValue = ComposeRandomFileName(8);
@@ -1436,65 +1438,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 inputBuffer);
             client1.Close(treeIdClient1, fileIdFile);
 
-            BaseTestSite.Log.Add(
-                LogEntryKind.TestStep,
-                "Client1 starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_EA and flag WATCH_TREE", testDirectory);
-            client1.ChangeNotify(
-                treeIdClient1,
-                fileIdDir,
-                CompletionFilter_Values.FILE_NOTIFY_CHANGE_EA,
-                flags: CHANGE_NOTIFY_Request_Flags_Values.WATCH_TREE);
-
-            client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
-            BaseTestSite.Log.Add(
-                LogEntryKind.TestStep,
-                "Start client2 to open a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", filePath);
-            client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
-            status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
-            status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            uint treeIdClient2;
-            status = client2.TreeConnect(uncSharePath, out treeIdClient2);
-            FILEID fileIdFileToBeModified;
-            status = client2.Create(
-                treeIdClient2,
-                filePath,
-                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out fileIdFileToBeModified,
-                out serverCreateContexts,
-                createDisposition: CreateDisposition_Values.FILE_OPEN,
-                accessMask: AccessMask.FILE_READ_EA |
-                            AccessMask.FILE_WRITE_EA |
-                            AccessMask.GENERIC_READ |
-                            AccessMask.GENERIC_WRITE |
-                            AccessMask.DELETE |
-                            AccessMask.FILE_READ_ATTRIBUTES |
-                            AccessMask.FILE_WRITE_ATTRIBUTES);
-
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client2 sends QUERY_INFO request to query file full extended attributes.");
-            byte[] outputBuffer;
-            client2.QueryFileAttributes(
-                treeIdClient2,
-                (byte)FileInformationClasses.FileFullEaInformation,
-                QUERY_INFO_Request_Flags_Values.SL_RESTART_SCAN,
-                fileIdFileToBeModified,
-                new byte[0] { },
-                out outputBuffer);
-
-            FileFullEaInformation fileFullEaInfoQueried = TypeMarshal.ToStruct<FileFullEaInformation>(outputBuffer); ;
-            string newEaValue = ComposeRandomFileName(6);
-            fileFullEaInfoQueried.EaValueLength = 6;
-            fileFullEaInfoQueried.EaValue = Encoding.ASCII.GetBytes(newEaValue);
-            inputBuffer = TypeMarshal.ToBytes<FileFullEaInformation>(fileFullEaInfoQueried);
-
-            BaseTestSite.Log.Add(
-                LogEntryKind.TestStep,
-                "Client2 sets FileFullEAInfo for the file \"{0}\" by sending SET_INFO request", filePath);
-            client2.SetFileAttributes(
-                treeIdClient2,
-                (byte)FileInformationClasses.FileFullEaInformation,
-                fileIdFileToBeModified,
-                inputBuffer);
-
             BaseTestSite.Assert.IsTrue(
                 changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
                 "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
@@ -1504,13 +1447,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 receivedChangeNotifyHeader.Status,
                 "CHANGE_NOTIFY is expected to success, actually server returns {0}.",
                 Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
-
-            BaseTestSite.Log.Add(
-                LogEntryKind.TestStep,
-                "Tear down client2 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
-            client2.Close(treeIdClient2, fileIdFileToBeModified);
-            client2.TreeDisconnect(treeIdClient2);
-            client2.LogOff();
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -1579,34 +1515,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                             AccessMask.DELETE |
                             AccessMask.WRITE_DAC |
                             AccessMask.WRITE_OWNER |
-                            AccessMask.ACCESS_SYSTEM_SECURITY |
-                            AccessMask.FILE_WRITE_ATTRIBUTES);
-            client1.Close(treeIdClient1, fileIdFile);
-
-            client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
-            BaseTestSite.Log.Add(
-                LogEntryKind.TestStep,
-                "Start client2 to open a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", filePath);
-            client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
-            status = client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
-            status = client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
-            uint treeIdClient2;
-            status = client2.TreeConnect(uncSharePath, out treeIdClient2);
-            FILEID fileIdFileToBeModified;
-            status = client2.Create(
-                treeIdClient2,
-                filePath,
-                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out fileIdFileToBeModified,
-                out serverCreateContexts,
-                createDisposition: CreateDisposition_Values.FILE_OPEN,
-                accessMask: AccessMask.GENERIC_READ |
-                            AccessMask.GENERIC_WRITE |
-                            AccessMask.DELETE |
-                            AccessMask.WRITE_DAC |
-                            AccessMask.WRITE_OWNER |
-                            AccessMask.ACCESS_SYSTEM_SECURITY |
-                            AccessMask.FILE_WRITE_ATTRIBUTES);
+                            AccessMask.ACCESS_SYSTEM_SECURITY);
 
             _ACL sacl = DtypUtility.CreateAcl(false);
             _SECURITY_DESCRIPTOR sd = DtypUtility.CreateSecurityDescriptor(
@@ -1619,12 +1528,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client2 sets DACL_SECURITY_INFORMATION for the file \"{0}\" by sending SET_INFO request", filePath);
-            client2.SetSecurityDescriptor(
-                treeIdClient2,
-                fileIdFileToBeModified,
-                SET_INFO_Request_AdditionalInformation_Values.DACL_SECURITY_INFORMATION,
+                "Client1 sets DACL_SECURITY_INFORMATION for the file \"{0}\" by sending SET_INFO request", filePath);
+            client1.SetSecurityDescriptor(
+                treeIdClient1,
+                fileIdFile,
+                SET_INFO_Request_AdditionalInformation_Values.SACL_SECURITY_INFORMATION,
                 sd);
+            client1.Close(treeIdClient1, fileIdFile);
 
             BaseTestSite.Assert.IsTrue(
                 changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
@@ -1635,13 +1545,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 receivedChangeNotifyHeader.Status,
                 "CHANGE_NOTIFY is expected to success, actually server returns {0}.",
                 Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
-
-            BaseTestSite.Log.Add(
-                LogEntryKind.TestStep,
-                "Tear down client2 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
-            client2.Close(treeIdClient2, fileIdFileToBeModified);
-            client2.TreeDisconnect(treeIdClient2);
-            client2.LogOff();
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
