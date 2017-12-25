@@ -529,12 +529,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                 bool supportedVersion = ((adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_8) ||
                                         (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_81) ||
                                         (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_10) ||
+                                        (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_101) ||
                                         (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_102) ||
-                                        (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_103)
+                                        (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_103) ||
+                                        (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_104)
                                         );
 
-                Site.Assert.IsTrue(supportedVersion, "The version of RDPEGFX capability set MUST be set to : {0}, {1}, {2}, {3} or {4}. Received version: {5} in capset[{6}]",
-                                    CapsVersions.RDPGFX_CAPVERSION_8, CapsVersions.RDPGFX_CAPVERSION_81, CapsVersions.RDPGFX_CAPVERSION_10, CapsVersions.RDPGFX_CAPVERSION_102, CapsVersions.RDPGFX_CAPVERSION_103, adv.capsSets[index].version, index);
+                Site.Assert.IsTrue(supportedVersion, "The version of RDPEGFX capability set MUST be set to : {0}, {1}, {2}, {3}, {4}, {5} or {6}. Received version: {7} in capset[{8}]",
+                                    CapsVersions.RDPGFX_CAPVERSION_8, CapsVersions.RDPGFX_CAPVERSION_81, CapsVersions.RDPGFX_CAPVERSION_10, CapsVersions.RDPGFX_CAPVERSION_101, CapsVersions.RDPGFX_CAPVERSION_102, CapsVersions.RDPGFX_CAPVERSION_103, CapsVersions.RDPGFX_CAPVERSION_104, adv.capsSets[index].version, index);
 
 
                 Site.Assert.AreEqual((uint)4, adv.capsSets[index].capsDataLength,
