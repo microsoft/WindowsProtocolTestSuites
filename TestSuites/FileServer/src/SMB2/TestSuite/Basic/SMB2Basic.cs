@@ -1380,7 +1380,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
+                "Start client to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
@@ -1397,7 +1397,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client1 starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_EA and flag WATCH_TREE", testDirectory);
+                "Client starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_EA and flag WATCH_TREE", testDirectory);
             client1.ChangeNotify(
                 treeIdClient1,
                 fileIdDir,
@@ -1408,7 +1408,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             string filePath = testDirectory + "\\" + fileName;
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client1 starts to create a file \"{0}\" under directory \"{1}\" by sending CREATE request", fileName, testDirectory);
+                "Client starts to create a file \"{0}\" under directory \"{1}\" by sending CREATE request", fileName, testDirectory);
             FILEID fileIdFile;
             status = client1.Create(
                 treeIdClient1,
@@ -1430,7 +1430,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client1 sets FileFullEAInfo for the file \"{0}\" by sending SET_INFO request", filePath);
+                "Client sets FileFullEAInfo for the file \"{0}\" by sending SET_INFO request", filePath);
             client1.SetFileAttributes(
                 treeIdClient1,
                 (byte)FileInformationClasses.FileFullEaInformation,
@@ -1450,7 +1450,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Tear down client1 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+                "Tear down client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
             client1.Close(treeIdClient1, fileIdDir);
             client1.TreeDisconnect(treeIdClient1);
             client1.LogOff();
@@ -1474,7 +1474,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
+                "Start client to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             status = client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
@@ -1491,7 +1491,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client1 starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_SECURITY and flag WATCH_TREE", testDirectory);
+                "Client starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_SECURITY and flag WATCH_TREE", testDirectory);
             client1.ChangeNotify(
                 treeIdClient1,
                 fileIdDir,
@@ -1502,7 +1502,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             string filePath = testDirectory + "\\" + fileName;
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client1 starts to create a file \"{0}\" under directory \"{1}\" by sending CREATE request", fileName, testDirectory);
+                "Client starts to create a file \"{0}\" under directory \"{1}\" by sending CREATE request", fileName, testDirectory);
             FILEID fileIdFile;
             status = client1.Create(
                 treeIdClient1,
@@ -1528,7 +1528,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client1 sets DACL_SECURITY_INFORMATION for the file \"{0}\" by sending SET_INFO request", filePath);
+                "Client sets SACL_SECURITY_INFORMATION for the file \"{0}\" by sending SET_INFO request", filePath);
             client1.SetSecurityDescriptor(
                 treeIdClient1,
                 fileIdFile,
@@ -1548,7 +1548,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Tear down client1 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+                "Tear down client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
             client1.Close(treeIdClient1, fileIdDir);
             client1.TreeDisconnect(treeIdClient1);
             client1.LogOff();
