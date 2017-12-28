@@ -557,7 +557,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             uint treeIdClient1;
             FILEID fileIdDir;
-            SmbClientConnectAndOpen(out client1, testDirectory, out treeIdClient1, out fileIdDir);
+            SmbClientConnectAndOpenFile(out client1, testDirectory, out treeIdClient1, out fileIdDir);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -580,7 +580,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client2 to open a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", filePath);
             uint treeIdClient2;
             FILEID fileIdFileToBeRenamed;
-            SmbClientConnectAndOpen(
+            SmbClientConnectAndOpenFile(
                 out client2,
                 filePath,
                 out treeIdClient2,
@@ -640,7 +640,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             uint treeIdClient1;
             FILEID fileIdDir;
-            SmbClientConnectAndOpen(out client1, testDirectory, out treeIdClient1, out fileIdDir);
+            SmbClientConnectAndOpenFile(out client1, testDirectory, out treeIdClient1, out fileIdDir);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -663,7 +663,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client2 to open a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             uint treeIdClient2;
             FILEID fileIdDirToBeRenamed;
-            SmbClientConnectAndOpen(
+            SmbClientConnectAndOpenFile(
                 out client2,
                 dirPath,
                 out treeIdClient2,
@@ -723,7 +723,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             uint treeIdClient1;
             FILEID fileIdDir;
-            SmbClientConnectAndOpen(out client1, testDirectory, out treeIdClient1, out fileIdDir);
+            SmbClientConnectAndOpenFile(out client1, testDirectory, out treeIdClient1, out fileIdDir);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -746,7 +746,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client2 to open a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", filePath);
             uint treeIdClient2;
             FILEID fileIdFileToBeModified;
-            SmbClientConnectAndOpen(
+            SmbClientConnectAndOpenFile(
                 out client2,
                 filePath,
                 out treeIdClient2,
@@ -804,7 +804,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             uint treeIdClient1;
             FILEID fileIdDir;
-            SmbClientConnectAndOpen(out client1, testDirectory, out treeIdClient1, out fileIdDir);
+            SmbClientConnectAndOpenFile(out client1, testDirectory, out treeIdClient1, out fileIdDir);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -827,7 +827,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client2 to open a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", filePath);
             uint treeIdClient2;
             FILEID fileIdFileToBeModified;
-            SmbClientConnectAndOpen(
+            SmbClientConnectAndOpenFile(
                 out client2,
                 filePath,
                 out treeIdClient2,
@@ -837,7 +837,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client2 starts to write 3 bytes to the file \"{0}\" by sending WRITE request", testDirectory + "\\" + fileName);
+                "Client2 starts to write 3 bytes to the file \"{0}\" by sending WRITE request", filePath);
             client2.Write(treeIdClient2, fileIdFileToBeModified, Smb2Utility.CreateRandomString(3));
 
             BaseTestSite.Assert.IsTrue(
@@ -878,7 +878,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             uint treeIdClient1;
             FILEID fileIdDir;
-            SmbClientConnectAndOpen(out client1, testDirectory, out treeIdClient1, out fileIdDir);
+            SmbClientConnectAndOpenFile(out client1, testDirectory, out treeIdClient1, out fileIdDir);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -901,7 +901,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client2 to open a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", filePath);
             uint treeIdClient2;
             FILEID fileIdFileToBeModified;
-            SmbClientConnectAndOpen(
+            SmbClientConnectAndOpenFile(
                 out client2,
                 filePath,
                 out treeIdClient2,
@@ -959,7 +959,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             uint treeIdClient1;
             FILEID fileIdDir;
-            SmbClientConnectAndOpen(out client1, testDirectory, out treeIdClient1, out fileIdDir);
+            SmbClientConnectAndOpenFile(out client1, testDirectory, out treeIdClient1, out fileIdDir);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -982,7 +982,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client2 to open a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", filePath);
             uint treeIdClient2;
             FILEID fileIdFileToBeModified;
-            SmbClientConnectAndOpen(
+            SmbClientConnectAndOpenFile(
                 out client2,
                 filePath,
                 out treeIdClient2,
@@ -1039,7 +1039,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             uint treeIdClient1;
             FILEID fileIdDir;
-            SmbClientConnectAndOpen(out client1, testDirectory, out treeIdClient1, out fileIdDir);
+            SmbClientConnectAndOpenFile(out client1, testDirectory, out treeIdClient1, out fileIdDir);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -1062,7 +1062,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client2 to open a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", filePath);
             uint treeIdClient2;
             FILEID fileIdFileToBeModified;
-            SmbClientConnectAndOpen(
+            SmbClientConnectAndOpenFile(
                 out client2,
                 filePath,
                 out treeIdClient2,
@@ -1120,7 +1120,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             uint status;
             uint treeIdClient1;
             FILEID fileIdDir;
-            SmbClientConnectAndOpen(out client1, testDirectory, out treeIdClient1, out fileIdDir);
+            SmbClientConnectAndOpenFile(out client1, testDirectory, out treeIdClient1, out fileIdDir);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -1192,7 +1192,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             uint status;
             uint treeIdClient1;
             FILEID fileIdDir;
-            SmbClientConnectAndOpen(out client1, testDirectory, out treeIdClient1, out fileIdDir);
+            SmbClientConnectAndOpenFile(out client1, testDirectory, out treeIdClient1, out fileIdDir);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -1269,7 +1269,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             uint treeIdClient1;
             FILEID fileIdDir;
-            SmbClientConnectAndOpen(out client1, testDirectory, out treeIdClient1, out fileIdDir);
+            SmbClientConnectAndOpenFile(out client1, testDirectory, out treeIdClient1, out fileIdDir);
 
             string fileName = Guid.NewGuid().ToString();
             string filePath = testDirectory + "\\" + fileName;
@@ -1292,7 +1292,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client2 to open a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", filePath);
             uint treeIdClient2;
             FILEID fileIdFileToBeModified;
-            SmbClientConnectAndOpen(
+            SmbClientConnectAndOpenFile(
                 out client2,
                 filePath,
                 out treeIdClient2,
@@ -1343,7 +1343,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             uint treeIdClient1;
             FILEID fileIdDir;
-            SmbClientConnectAndOpen(out client1, testDirectory, out treeIdClient1, out fileIdDir);
+            SmbClientConnectAndOpenFile(out client1, testDirectory, out treeIdClient1, out fileIdDir);
 
             string fileName = Guid.NewGuid().ToString();
             string filePath = testDirectory + "\\" + fileName;
@@ -1372,7 +1372,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client2 to open a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", filePath);
             uint treeIdClient2;
             FILEID fileIdFileToBeModified;
-            SmbClientConnectAndOpen(
+            SmbClientConnectAndOpenFile(
                 out client2,
                 filePath,
                 out treeIdClient2,
@@ -1422,7 +1422,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client1 to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             uint treeIdClient1;
             FILEID fileIdDir;
-            SmbClientConnectAndOpen(out client1, testDirectory, out treeIdClient1, out fileIdDir);
+            SmbClientConnectAndOpenFile(out client1, testDirectory, out treeIdClient1, out fileIdDir);
 
             string fileName = Guid.NewGuid().ToString();
             string filePath = testDirectory + "\\" + fileName;
@@ -1451,7 +1451,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client2 to open a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", filePath);
             uint treeIdClient2;
             FILEID fileIdFileToBeModified;
-            SmbClientConnectAndOpen(
+            SmbClientConnectAndOpenFile(
                 out client2,
                 filePath,
                 out treeIdClient2,
@@ -1501,7 +1501,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             uint treeIdClient1;
             FILEID fileIdDir;
-            SmbClientConnectAndOpen(out client1, testDirectory, out treeIdClient1, out fileIdDir);
+            SmbClientConnectAndOpenFile(out client1, testDirectory, out treeIdClient1, out fileIdDir);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -1551,7 +1551,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client to create a file \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", fileName);
             uint treeIdClient1;
             FILEID fileIdFile;
-            SmbClientConnectAndOpen(out client1, fileName, out treeIdClient1, out fileIdFile, createOption: CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE);
+            SmbClientConnectAndOpenFile(out client1, fileName, out treeIdClient1, out fileIdFile, createOption: CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -1597,7 +1597,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             uint treeIdClient1;
             FILEID fileIdDir;
-            SmbClientConnectAndOpen(out client1, testDirectory, out treeIdClient1, out fileIdDir);
+            SmbClientConnectAndOpenFile(out client1, testDirectory, out treeIdClient1, out fileIdDir);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -1644,7 +1644,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             uint treeIdClient1;
             FILEID fileIdDir;
-            SmbClientConnectAndOpen(out client1, testDirectory, out treeIdClient1, out fileIdDir);
+            SmbClientConnectAndOpenFile(out client1, testDirectory, out treeIdClient1, out fileIdDir);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -1691,7 +1691,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             uint treeIdClient1;
             FILEID fileIdDir;
-            SmbClientConnectAndOpen(out client1, testDirectory, out treeIdClient1, out fileIdDir);
+            SmbClientConnectAndOpenFile(out client1, testDirectory, out treeIdClient1, out fileIdDir);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -1738,7 +1738,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             uint treeIdClient1;
             FILEID fileIdDir;
-            SmbClientConnectAndOpen(out client1, testDirectory, out treeIdClient1, out fileIdDir);
+            SmbClientConnectAndOpenFile(out client1, testDirectory, out treeIdClient1, out fileIdDir);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -1785,7 +1785,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             uint treeIdClient1;
             FILEID fileIdDir;
-            SmbClientConnectAndOpen(out client1, testDirectory, out treeIdClient1, out fileIdDir);
+            SmbClientConnectAndOpenFile(out client1, testDirectory, out treeIdClient1, out fileIdDir);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -1830,7 +1830,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             uint treeIdClient1;
             FILEID fileIdDir;
-            SmbClientConnectAndOpen(out client1, testDirectory, out treeIdClient1, out fileIdDir, applyAccessMask: AccessMask.GENERIC_WRITE | AccessMask.DELETE);
+            SmbClientConnectAndOpenFile(out client1, testDirectory, out treeIdClient1, out fileIdDir, applyAccessMask: AccessMask.GENERIC_WRITE | AccessMask.DELETE);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -1862,7 +1862,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         /// <summary>
         /// Connect by sending NEGOTIATE, SESSION_SETUP and TREE_CONNECT request and create file by sending CREATE request.
         /// </summary>
-        private void SmbClientConnectAndOpen(
+        private void SmbClientConnectAndOpenFile(
             out Smb2FunctionalClient client,
             string fileName,
             out uint treeId,
