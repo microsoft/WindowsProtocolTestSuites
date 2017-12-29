@@ -345,6 +345,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         uint SendImageWithH264AVC444Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, RFX_AVC444_BITMAP_STREAM avc444BitmapStream,
             Image baseImage);
 
+        uint SendImageWithH264AVC444v2Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, RFX_AVC444_BITMAP_STREAM avc444BitmapStream,
+           Image baseImage);
+
         /// <summary>
         /// Send a uncompressed bitmap data, the data segment(s) can be compressed or uncompressed according to parameter.
         /// </summary>

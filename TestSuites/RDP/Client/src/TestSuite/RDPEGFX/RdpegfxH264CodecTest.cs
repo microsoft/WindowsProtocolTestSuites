@@ -161,7 +161,19 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             String h264TestDataPath = GetTestDataFile();
             SendH264CodecStream(h264TestDataPath, true);
         }
-        
+
+        [TestMethod]
+        [Priority(1)]
+        [TestCategory("Positive")]
+        [TestCategory("RDP10.0")]
+        [TestCategory("RDPEGFX")]
+        [Description("Verify client can accept a RFX_AVC444_BITMAP_STREAM structure with H264 encoded bitmap using YUV444 mode and Main profile, the image size is large (1024*768), luma frame and chroma frame are together in one RFX_AVC444_BITMAP_STREAM structure.")]
+        public void RDPEGFX_H264Codec_PositiveTest_AVC444v2_MainProfile()
+        {
+            String h264TestDataPath = GetTestDataFile();
+            SendH264CodecStream(h264TestDataPath, true);
+        }
+
         [TestMethod]
         [Priority(0)]
         [TestCategory("BVT")]
@@ -268,6 +280,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                 {                    
                     this.TestSite.Log.Add(LogEntryKind.Comment, "Sending H264 AVC444 Encoded Bitmap Data Messages to client.");
                     fid = this.rdpegfxAdapter.SendImageWithH264AVC444Codec(surf.Id, pixFormat, bmRect, data.AVC444BitmapStream.To_RFX_AVC444_BITMAP_STREAM(), data.GetBaseImage());
+                    // Test case pass if frame acknowledge is received.
+                    this.rdpegfxAdapter.ExpectFrameAck(fid);
+                }
+                else if (codecId == (ushort)CodecType.RDPGFX_CODECID_AVC444v2 && data.AVC444BitmapStream != null)
+                {
+                    this.TestSite.Log.Add(LogEntryKind.Comment, "Sending H264 AVC444 Encoded Bitmap Data Messages to client.");
+                    fid = this.rdpegfxAdapter.SendImageWithH264AVC444v2Codec(surf.Id, pixFormat, bmRect, data.AVC444BitmapStream.To_RFX_AVC444_BITMAP_STREAM(), data.GetBaseImage());
                     // Test case pass if frame acknowledge is received.
                     this.rdpegfxAdapter.ExpectFrameAck(fid);
                 }

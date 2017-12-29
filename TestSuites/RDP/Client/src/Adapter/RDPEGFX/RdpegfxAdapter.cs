@@ -18,7 +18,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
     public class RdpegfxAdapter : ManagedAdapterBase, IRdpegfxAdapter
     {
         #region Private Variables
-                
+
 
         List<RdpegfxPdu> rdpegfxPdusToSent;
         TimeSpan waitTime;
@@ -28,7 +28,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         SurfaceManager surfManager;
         bool frAckSuspend = false;
         RdpegfxNegativeTypes currentTestType;
-        
+
         // For RFX codec.
         private RdprfxServer rdprfxServer;
         private List<byte> pendingRfxBuffer;
@@ -67,7 +67,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                     }
                     rdpegfxPdusToSent.Clear();
                 }
-                return byteList.ToArray();                
+                return byteList.ToArray();
             }
             return null;
         }
@@ -143,7 +143,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         {
             if (fid == null)
             {
-                 fid = egfxServer.GetFrameId();
+                fid = egfxServer.GetFrameId();
             }
             RDPGFX_START_FRAME startFrame = egfxServer.CreateStartFramePdu(fid.Value);
             AddPdusToBuffer(startFrame);
@@ -217,7 +217,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="rects">This is to specify rectangle areas in surface </param>
         void MakeSolidFillPdu(ushort sid, RDPGFX_COLOR32 color, RDPGFX_RECT16[] rects)
         {
-            RDPGFX_SOLIDFILL solidFill = egfxServer.CreateSolidFillPdu(sid, color, rects);     
+            RDPGFX_SOLIDFILL solidFill = egfxServer.CreateSolidFillPdu(sid, color, rects);
             // Change pdu based testtype. 
             if (currentTestType == RdpegfxNegativeTypes.SurfaceManagement_SolidFill_ToInexistentSurface)
                 solidFill.surfaceId = 0xffff;   // Set the surface id to an inexsit surface's id 0xffff
@@ -381,7 +381,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             rdpegfxPdusToSent = new List<RdpegfxPdu>();
 
             // Set no rdp8.0 compression temperarily.
-            byte compFlag = (byte) PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_RDP8;
+            byte compFlag = (byte)PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_RDP8;
             segPdu = new EGFXRdpSegmentedPdu(compFlag);
 
             surfManager = new SurfaceManager();
@@ -411,9 +411,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// </summary>
         public override void Reset()
         {
-            base.Reset();      
+            base.Reset();
             segPdu.compressFlag = (byte)PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_RDP8;
-            
+
             rdpegfxPdusToSent.Clear();
             currentTestType = RdpegfxNegativeTypes.None;
 
@@ -436,7 +436,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         #endregion
 
         #region IRdpegfxAdapter Members
-        
+
         /// <summary>
         /// Attach a RdpbcgrAdapter object
         /// </summary>
@@ -530,12 +530,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                                         (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_81) ||
                                         (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_10) ||
                                         (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_102) ||
-                                        (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_103)
+                                        (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_103) ||
+                                        (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_104) ||
+                                        (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_105)
                                         );
 
                 Site.Assert.IsTrue(supportedVersion, "The version of RDPEGFX capability set MUST be set to : {0}, {1}, {2}, {3} or {4}. Received version: {5} in capset[{6}]",
                                     CapsVersions.RDPGFX_CAPVERSION_8, CapsVersions.RDPGFX_CAPVERSION_81, CapsVersions.RDPGFX_CAPVERSION_10, CapsVersions.RDPGFX_CAPVERSION_102, CapsVersions.RDPGFX_CAPVERSION_103, adv.capsSets[index].version, index);
-                
+
 
                 Site.Assert.AreEqual((uint)4, adv.capsSets[index].capsDataLength,
                     "Data Length of RDPEGFX capability set MUST be set to {0} (Section 2.2.4.1), Received capsDataLength: {1} in capset[{2}]!",
@@ -547,7 +549,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                                     capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE ||
                                     capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_THINCLIENT ||
                                     capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC420_ENABLED) ||
-                                    capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_THINCLIENT | CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC420_ENABLED)||
+                                    capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_THINCLIENT | CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC420_ENABLED) ||
                                     capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED)
                                     );
                 Site.Assert.IsTrue(validFlag, "Unknown capability flags {0}", capsFlag);
@@ -568,7 +570,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             while (capsAdv == null && DateTime.Now < endTime)
             {
                 // System.Threading.Thread.Sleep(100);
-                capsAdv =egfxServer.ExpectRdpegfxPdu<RDPGFX_CAPS_ADVERTISE>(waitTime);
+                capsAdv = egfxServer.ExpectRdpegfxPdu<RDPGFX_CAPS_ADVERTISE>(waitTime);
             }
 
             // If validation fails, return NULL.
@@ -605,7 +607,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public void SendCapabilityConfirm(CapsFlags capFlag, CapsVersions version = CapsVersions.RDPGFX_CAPVERSION_8)
         {
             MakeCapabilityConfirmPdu(capFlag, version);
-            PackAndSendServerPdu();            
+            PackAndSendServerPdu();
         }
 
         /// <summary>
@@ -649,7 +651,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         {
             ushort w = (ushort)(rect.right - rect.left);
             ushort h = (ushort)(rect.bottom - rect.top);
-            
+
             // Create a surface and output it to screen
             Surface surface = surfManager.CreateSurface(w, h, surfaceId);
             if (null == surface)
@@ -660,7 +662,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             MakeCreateSurfacePdu(surface.Id, w, h, pixFormat);
             MakeMapSurfaceToOutputPdu(surface.Id, rect.left, rect.top);
-            
+
             PackAndSendServerPdu();
 
             return surface;
@@ -1015,7 +1017,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         {
             TimeSpan timeout = waitTime;
             DateTime endTime = DateTime.Now + timeout;
-            if (frAckSuspend)            
+            if (frAckSuspend)
             {
                 // Frame ack suspend, check new frame ack in 200 ms to see if suspend is disabled.  
                 // This can make sure process of frame ack packet even if suspend is enabled
@@ -1025,10 +1027,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             RDPGFX_FRAME_ACK frameAck = null;
             do
-            {                
+            {
                 frameAck = egfxServer.ExpectRdpegfxPdu<RDPGFX_FRAME_ACK>(timeout);
 
-                if (frameAck != null)  
+                if (frameAck != null)
                 {
                     // Expected message is received, validate it
                     Validate(frameAck, fid);
@@ -1038,7 +1040,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                     {
                         frameAck = null;
                     }
-                }       
+                }
             } while (frameAck == null && (DateTime.Now < endTime));
 
             if (!frAckSuspend)
@@ -1083,7 +1085,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="entropy"> Indicate Entropy Algorithm.</param>
         /// <param name="tileImage"> The image to be encoded as RFX codec.</param>
         /// <return> A byte array of image encoded as RFX codec.</return>
-        private byte[] PackRfxTileImage(uint index, OperationalMode opMode, EntropyAlgorithm entropy, System.Drawing.Image tileImage) 
+        private byte[] PackRfxTileImage(uint index, OperationalMode opMode, EntropyAlgorithm entropy, System.Drawing.Image tileImage)
         {
             lock (syncLocker)
             {
@@ -1215,7 +1217,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             List<Dictionary<TileIndex, EncodedTile>> layerTileList = new List<Dictionary<TileIndex, EncodedTile>>();
 
             byte tileLayerNum = 0;
-            
+
             // Get layer number
             foreach (KeyValuePair<TileIndex, EncodedTile[]> tile in tileDict)
             {
@@ -1251,13 +1253,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="bSubDiff">Indicates if sub-diffing with last frame of this surface</param>
         /// <param name="bReduceExtrapolate">Indicates if use Reduce Extrapolate method in DWT step.</param>
         /// <returns> A list of layer byte stream, each layer is built by a dictionary with frameId and byte stream frame pair </returns>
-        public List<Dictionary<uint, byte[]>> RfxProgressiveCodecEncode(Surface surf, Image image, PixelFormat pixFormat, bool hasSync, bool hasContext,                                                  
+        public List<Dictionary<uint, byte[]>> RfxProgressiveCodecEncode(Surface surf, Image image, PixelFormat pixFormat, bool hasSync, bool hasContext,
                                                     ImageQuality_Values quality, bool bProg, bool bSubDiff, bool bReduceExtrapolate)
         {
             bool multipleTileInRegion = true;
-            List<Dictionary<TileIndex, EncodedTile>> layerTileList = new List<Dictionary<TileIndex,EncodedTile>>();
+            List<Dictionary<TileIndex, EncodedTile>> layerTileList = new List<Dictionary<TileIndex, EncodedTile>>();
 
-            if (image == null)  return null;
+            if (image == null) return null;
 
             uint fid = 0;
             List<Dictionary<uint, byte[]>> layerDataList = new List<Dictionary<uint, byte[]>>();  // To save different layer data encoded by RFX Prog Codec.            
@@ -1265,7 +1267,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             surf.UpdateFromBitmap((System.Drawing.Bitmap)image);
             Dictionary<TileIndex, EncodedTile[]> tileDict = surf.ProgressiveEncode(quality, bProg, bSubDiff, bReduceExtrapolate, false);
-            if(multipleTileInRegion)
+            if (multipleTileInRegion)
             {
                 layerTileList = ConvertTileDictToLayer(tileDict);
             }
@@ -1277,7 +1279,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             if (bProg)  // Progressive codec is enabled
             {
-                
+
                 for (int i = 0; i < layerTileList.Count; i++)
                 {
                     Dictionary<uint, byte[]> tileFrameDict = new Dictionary<uint, byte[]>();
@@ -1293,15 +1295,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                     tileFrameDict.Add(fid, EncodePdusToSent());
 
                     // Add tile first frames into layer data list
-                    layerDataList.Add(tileFrameDict);  
-                }   
+                    layerDataList.Add(tileFrameDict);
+                }
             }
             else  // Non-progressive encoding(i.e. tile_simple)
             {
 
                 Dictionary<uint, byte[]> tileSimpleFrameDict = new Dictionary<uint, byte[]>();
                 fid = MakeStartFramePdu();
-                
+
                 foreach (Dictionary<TileIndex, EncodedTile> layerTileDict in layerTileList)
                 {
                     byte[] tileUpgradeData = blockMngr.PackRfxProgCodecDataBlock(hasSync, hasContext, bSubDiff, bReduceExtrapolate, layerTileDict, RFXProgCodecBlockType.WBT_TILE_SIMPLE);
@@ -1356,7 +1358,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="bands"> The dictionary of band layer image and position </param>
         /// <param name="subcodecs"> The dictionary of subcodec layer image, subcodecID and position </param>
         /// <returns> Frame Id </returns>
-        public uint SendImageWithClearCodec(ushort sId, PixelFormat pixFormat, byte ccFlag, ushort graphIdx, RDPGFX_RECT16 bmRect, Image residualBmp, 
+        public uint SendImageWithClearCodec(ushort sId, PixelFormat pixFormat, byte ccFlag, ushort graphIdx, RDPGFX_RECT16 bmRect, Image residualBmp,
                             Dictionary<RDPGFX_POINT16, Bitmap> bands, Dictionary<RDPGFX_POINT16, BMP_INFO> subcodecs)
         {
             uint fid = MakeStartFramePdu();
@@ -1369,7 +1371,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             }
 
             ccStream.LoadResidualBitmap((Bitmap)residualBmp);
-            if(bands != null)
+            if (bands != null)
             {
                 foreach (KeyValuePair<RDPGFX_POINT16, Bitmap> band in bands)
                 {
@@ -1549,6 +1551,27 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             return fid;
         }
+
+        public uint SendImageWithH264AVC444v2Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, RFX_AVC444_BITMAP_STREAM avc444BitmapStream,
+           Image baseImage)
+        {
+            uint fid = MakeStartFramePdu();
+            MakeWireToSurfacePdu1(sId, CodecType.RDPGFX_CODECID_AVC444v2, pixFormat, bmRect, avc444BitmapStream.Encode());
+            MakeEndFramePdu(fid);
+            PackAndSendServerPdu();
+
+            if (this.bcgrAdapter.SimulatedScreen != null)
+            {
+                if (baseImage == null)
+                {
+                    Site.Assume.Inconclusive("Cannot verify the output since base image is not find, check the existance and format of BaseImage element in test data file.");
+                }
+                this.bcgrAdapter.SimulatedScreen.RenderUncompressedImage(sId, baseImage, bmRect.left, bmRect.top);
+            }
+
+            return fid;
+        }
+
         /// <summary>
         /// Send clearcodec encoded glyph in batch (make sure glyphnum + startGlyphRect.right is not bigger than surf.width)
         /// </summary>
@@ -1563,7 +1586,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             uint fid = MakeStartFramePdu();
 
             ushort glyphIdx = startGlyphIdx;
-            RDPGFX_RECT16 glyphRect = new RDPGFX_RECT16(startGlyphPos.x, startGlyphPos.y, 
+            RDPGFX_RECT16 glyphRect = new RDPGFX_RECT16(startGlyphPos.x, startGlyphPos.y,
                                             (ushort)(startGlyphPos.x + glyph.Width),
                                             (ushort)(startGlyphPos.y + glyph.Height));
 
@@ -1572,7 +1595,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             {
                 ClearCodec_BitmapStream ccStream = new ClearCodec_BitmapStream(ClearCodec_BitmapStream.CLEARCODEC_FLAG_GLYPH_INDEX, glyphIdx);
                 ccStream.LoadResidualBitmap((Bitmap)glyph);
-                ccStream.seqNumber = egfxServer.Get_ClearCodecBitmapStream_SeqNum();               
+                ccStream.seqNumber = egfxServer.Get_ClearCodecBitmapStream_SeqNum();
                 MakeWireToSurfacePdu1(surf.Id, CodecType.RDPGFX_CODECID_CLEARCODEC, PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                         glyphRect, ccStream.Encode());
                 glyphIdx++;
