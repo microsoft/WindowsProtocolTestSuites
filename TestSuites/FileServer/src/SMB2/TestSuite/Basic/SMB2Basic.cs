@@ -1830,7 +1830,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Start client to create a directory \"{0}\" by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", testDirectory);
             uint treeIdClient1;
             FILEID fileIdDir;
-            SmbClientConnectAndOpenFile(out client1, testDirectory, out treeIdClient1, out fileIdDir, applyAccessMask: AccessMask.GENERIC_WRITE | AccessMask.DELETE);
+            SmbClientConnectAndOpenFile(
+                out client1,
+                testDirectory,
+                out treeIdClient1,
+                out fileIdDir,
+                applyAccessMask: AccessMask.GENERIC_WRITE | AccessMask.DELETE);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -2074,15 +2079,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             receivedChangeNotifyHeader = respHeader;
             if (receivedChangeNotifyHeader.Status == Smb2Status.STATUS_SUCCESS)
             {
-                // According to MS-SMB2 3.5.16, 
-                BaseTestSite.Assert.AreNotSame(
-                    0,
-                    receivedChangeNotify.OutputBufferLength,
+                // According to MS-SMB2 3.5.16
+                BaseTestSite.Assert.IsTrue(
+                    receivedChangeNotify.OutputBufferLength != 0,
                     "If the status field of the SMB2 header of the response indicated success, the client MUST copy the received information OutputBufferLength in the SMB2 CHANGE_NOTIFY Response to the application");
 
-                // According to MS-FSCC 2.7.1,
-                BaseTestSite.Assert.IsTrue(fileNotifyInfo[0].NextEntryOffset % 4 == 0, "NextEntryOffset MUST always be an integral multiple of 4");
-                BaseTestSite.Assert.AreNotSame(0, fileNotifyInfo[0].Action, "The changes that occurred on the file. This field MUST contain one of the following values except 0.");
+                // According to MS-FSCC 2.7.1
+                BaseTestSite.Assert.IsTrue(
+                    fileNotifyInfo[0].NextEntryOffset % 4 == 0,
+                    "NextEntryOffset MUST always be an integral multiple of 4");
+                BaseTestSite.Assert.IsTrue(
+                    fileNotifyInfo[0].Action != 0,
+                    "The changes that occurred on the file. This field MUST contain one of the following values. (For details of Action value, see MS-FSCC section 2.7.1)");
             }
             changeNotificationReceived.Set();
         }
