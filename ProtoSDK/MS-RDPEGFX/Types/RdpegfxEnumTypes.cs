@@ -140,9 +140,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <summary>
         /// Specifies the version of the capability, which is supported in RDP 10.3
         /// </summary>
-        RDPGFX_CAPVERSION_103 = 0x000A0301,
-        RDPGFX_CAPVERSION_104 = 0x000A0400,
-        RDPGFX_CAPVERSION_105 = 0x000A0501
+        RDPGFX_CAPVERSION_103 = 0x000A0301
     }
 
     public enum MaxCacheSlotNumber : int
@@ -244,9 +242,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// The bitmap data encapsulated in the bitmapData field is compressed using the MPEG-4 AVC/H.264 Codec in YUV444 mode.
         /// </summary>
         RDPGFX_CODECID_AVC444 = 0x000E,
+        /// <summary>
+        /// The bitmap data encapsulated in the bitmapData field is compressed using the MPEG-4 AVC/H.264 Codec in YUV444v2 mode.
+        /// </summary>
         RDPGFX_CODECID_AVC444v2 = 0x000F
-
-
     }
 
     /// <summary>

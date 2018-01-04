@@ -19,7 +19,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
     /// The protocol adapter of MS-RDPEGFX client test suite.
     /// </summary>
     public interface IRdpegfxAdapter : IAdapter
-    {        
+    {
 
         /// <summary>
         /// Attach a RdpbcgrAdapter object
@@ -271,7 +271,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="subcodecs"> The dictionary of subcodec layer image, subcodecID and position. </param>
         /// <returns> Frame Id. </returns>
         uint SendImageWithClearCodec(ushort sId, PixelFormat pixFormat, byte ccFlag, ushort graphIdx, RDPGFX_RECT16 bmRect,
-                                        System.Drawing.Image residualBmp, Dictionary<RDPGFX_POINT16, System.Drawing.Bitmap> bands, 
+                                        System.Drawing.Image residualBmp, Dictionary<RDPGFX_POINT16, System.Drawing.Bitmap> bands,
                                         Dictionary<RDPGFX_POINT16, BMP_INFO> subcodecs);
 
         /// <summary>
@@ -332,7 +332,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             uint stream1NumRects, RDPGFX_RECT16[] steam1RegionRects, RDPGFX_AVC420_QUANT_QUALITY[] stream1QuantQualityVals, byte[] avc420EncodedBitstream1,
             uint stream2NumRects, RDPGFX_RECT16[] steam2RegionRects, RDPGFX_AVC420_QUANT_QUALITY[] stream2QuantQualityVals, byte[] avc420EncodedBitstream2,
             Image baseImage);
-        
+
         /// <summary>
         /// Send bitmap data in H264 AVC444 codec
         /// </summary>
@@ -345,7 +345,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         uint SendImageWithH264AVC444Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, RFX_AVC444_BITMAP_STREAM avc444BitmapStream,
             Image baseImage);
 
-        uint SendImageWithH264AVC444v2Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, RFX_AVC444_BITMAP_STREAM avc444BitmapStream,
+        /// <summary>
+        /// Send bitmap data in H264 AVC444v2 codec
+        /// </summary>
+        /// <param name="sId">This is used to indicate the target surface id</param>
+        /// <param name="pixFormat">This is used to indicate the pixel format to fill target surface.</param>
+        /// <param name="bmRect">The rectangle of whole Image</param>
+        /// <param name="avc444v2BitmapStream">A RFX_AVC444V2_BITMAP_STREAM structure for encoded information</param>
+        /// <param name="baseImage">Base Image used to verify output</param>
+        uint SendImageWithH264AVC444v2Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, RFX_AVC444V2_BITMAP_STREAM avc444v2BitmapStream,
            Image baseImage);
 
         /// <summary>

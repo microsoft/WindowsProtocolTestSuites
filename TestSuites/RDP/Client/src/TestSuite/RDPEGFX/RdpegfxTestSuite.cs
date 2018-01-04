@@ -244,7 +244,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Debug, "Sending capability confirm to client.");
             // Set first capset in capability advertise request, if no capdata in request, use default flag.
             CapsFlags capFlag = CapsFlags.RDPGFX_CAPS_FLAG_DEFAULT;
-            CapsVersions version = CapsVersions.RDPGFX_CAPVERSION_104;
+            CapsVersions version = CapsVersions.RDPGFX_CAPVERSION_8;
             if (capsAdv.capsSetCount > 0)
             {
                 foreach (RDPGFX_CAPSET capSet in capsAdv.capsSets)
