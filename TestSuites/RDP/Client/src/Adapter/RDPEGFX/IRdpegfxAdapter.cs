@@ -334,27 +334,17 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             Image baseImage);
 
         /// <summary>
-        /// Send bitmap data in H264 AVC444 codec
+        /// Send bitmap data in H264 AVC444/AVC444v2 codec
         /// </summary>
         /// <param name="sId">This is used to indicate the target surface id</param>
         /// <param name="pixFormat">This is used to indicate the pixel format to fill target surface.</param>
         /// <param name="bmRect">The rectangle of whole Image</param>
-        /// <param name="avc444BitmapStream">A RFX_AVC444_BITMAP_STREAM structure for encoded information</param>
+        /// <param name="codec">Codec type.</param>
+        /// <param name="avc444BitmapStream">An IRFX_AVC444_BITMAP_STREAM interface for encoded information</param>
         /// <param name="baseImage">Base Image used to verify output</param>
         /// <returns></returns>
-        uint SendImageWithH264AVC444Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, RFX_AVC444_BITMAP_STREAM avc444BitmapStream,
+        uint SendImageWithH264AVC444Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, CodecType codec, IRFX_AVC444_BITMAP_STREAM avc444BitmapStream,
             Image baseImage);
-
-        /// <summary>
-        /// Send bitmap data in H264 AVC444v2 codec
-        /// </summary>
-        /// <param name="sId">This is used to indicate the target surface id</param>
-        /// <param name="pixFormat">This is used to indicate the pixel format to fill target surface.</param>
-        /// <param name="bmRect">The rectangle of whole Image</param>
-        /// <param name="avc444v2BitmapStream">A RFX_AVC444V2_BITMAP_STREAM structure for encoded information</param>
-        /// <param name="baseImage">Base Image used to verify output</param>
-        uint SendImageWithH264AVC444v2Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, RFX_AVC444V2_BITMAP_STREAM avc444v2BitmapStream,
-           Image baseImage);
 
         /// <summary>
         /// Send a uncompressed bitmap data, the data segment(s) can be compressed or uncompressed according to parameter.

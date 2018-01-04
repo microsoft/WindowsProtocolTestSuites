@@ -217,7 +217,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// Common function to send H264 data to the client
         /// </summary>
         /// <param name="h264DataFile">XML file of H264 data</param>
-        /// <param name="isAVC444">Whether need RDP client support AVC444</param>
+        /// <param name="isAVC444">Whether need RDP client support AVC444/AVC444v2</param>
         private void SendH264CodecStream(string h264DataFile, bool isAVC444)
         {
             //Load H264 data
@@ -228,11 +228,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             RDPEGFX_CapabilityExchange();
             if (isAVC444)
             {
-                this.TestSite.Assume.IsTrue(this.isH264AVC444Supported, "This test case need RDP client indicate support AVC444(RDPGFX_CAPSET_VERSION10,RDPGFX_CAPSET_VERSION102).");
+                this.TestSite.Assume.IsTrue(this.isH264AVC444Supported, "This test case requires RDP client to support AVC444/AVC444v2.");
             }
             else
             {
-                this.TestSite.Assume.IsTrue(this.isH264AVC420Supported, "To test H264 codec, client must indicates support for H264 codec in RDPGFX_CAPS_ADVERTISE_PDU");
+                this.TestSite.Assume.IsTrue(this.isH264AVC420Supported, "To test H264 codec, client must indicate support for H264 codec in RDPGFX_CAPS_ADVERTISE_PDU");
             }
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create a surface and fill it with green color.");
@@ -279,14 +279,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                 else if (codecId == (ushort)CodecType.RDPGFX_CODECID_AVC444 && data.AVC444BitmapStream != null)
                 {
                     this.TestSite.Log.Add(LogEntryKind.Comment, "Sending H264 AVC444 Encoded Bitmap Data Messages to client.");
-                    fid = this.rdpegfxAdapter.SendImageWithH264AVC444Codec(surf.Id, pixFormat, bmRect, data.AVC444BitmapStream.To_RFX_AVC444_BITMAP_STREAM(), data.GetBaseImage());
+                    fid = this.rdpegfxAdapter.SendImageWithH264AVC444Codec(surf.Id, pixFormat, bmRect, CodecType.RDPGFX_CODECID_AVC444, data.AVC444BitmapStream.To_RFX_AVC444_BITMAP_STREAM(), data.GetBaseImage());
                     // Test case pass if frame acknowledge is received.
                     this.rdpegfxAdapter.ExpectFrameAck(fid);
                 }
                 else if (codecId == (ushort)CodecType.RDPGFX_CODECID_AVC444v2 && data.AVC444v2BitmapStream != null)
                 {
                     this.TestSite.Log.Add(LogEntryKind.Comment, "Sending H264 AVC444v2 Encoded Bitmap Data Messages to client.");
-                    fid = this.rdpegfxAdapter.SendImageWithH264AVC444v2Codec(surf.Id, pixFormat, bmRect, data.AVC444v2BitmapStream.To_RFX_AVC444V2_BITMAP_STREAM(), data.GetBaseImage());
+                    fid = this.rdpegfxAdapter.SendImageWithH264AVC444Codec(surf.Id, pixFormat, bmRect, CodecType.RDPGFX_CODECID_AVC444v2, data.AVC444v2BitmapStream.To_RFX_AVC444V2_BITMAP_STREAM(), data.GetBaseImage());
                     // Test case pass if frame acknowledge is received.
                     this.rdpegfxAdapter.ExpectFrameAck(fid);
                 }

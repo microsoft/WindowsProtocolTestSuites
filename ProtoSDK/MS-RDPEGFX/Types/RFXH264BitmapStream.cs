@@ -142,11 +142,24 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// </summary>
         Invalid = 0x03
     }
+
+    /// <summary>
+    /// Common interface for AVC444/AVC444v2 bitmap stream.
+    /// </summary>
+    public interface IRFX_AVC444_BITMAP_STREAM
+    {
+        /// <summary>
+        /// Encode bitmap stream.
+        /// </summary>
+        /// <returns>Array of bytes containing bitmap stream.</returns>
+        byte[] Encode();
+    }
+
     /// <summary>
     /// The RFX_AVC444_BITMAP_STREAM structure encapsulates regions of 
     /// a graphics frame compressed using MPEG-4 AVC/H.264 compression techniques [ITU-H.264-201201] in YUV444 mode. 
     /// </summary>
-    public class RFX_AVC444_BITMAP_STREAM
+    public class RFX_AVC444_BITMAP_STREAM : IRFX_AVC444_BITMAP_STREAM
     {
         /// <summary>
         /// A 30-bit unsigned integer that specifies the size, in bytes, of the luma frame present in the avc420EncodedBitstream1 field. 
@@ -209,7 +222,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         }
     }
 
-    public class RFX_AVC444V2_BITMAP_STREAM
+    public class RFX_AVC444V2_BITMAP_STREAM : IRFX_AVC444_BITMAP_STREAM
     {
         /// <summary>
         /// A 30-bit unsigned integer that specifies the size, in bytes, of the luma frame present in the avc420EncodedBitstream1 field. 
@@ -528,7 +541,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         }
 
         /// <summary>
-        /// Encoded Data for AVC 444 mode
+        /// Encoded Data for AVC 444 v2 mode
         /// </summary>
         [XmlElementAttribute]
         public AVC444v2BitmapStream AVC444v2BitmapStream
@@ -728,7 +741,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         }
 
         /// <summary>
-        /// Convert this AVC444BitmapStream to RFX_AVC444_BITMAP_STREAM
+        /// Convert this AVC444v2BitmapStream to RFX_AVC444V2_BITMAP_STREAM
         /// </summary>
         public RFX_AVC444V2_BITMAP_STREAM To_RFX_AVC444V2_BITMAP_STREAM()
         {

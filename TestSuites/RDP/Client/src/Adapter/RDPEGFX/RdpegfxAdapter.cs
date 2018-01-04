@@ -1429,7 +1429,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             {
                 if (baseImage == null)
                 {
-                    Site.Assume.Inconclusive("Cannot verify the output since base image is not find, check the existance and format of BaseImage element in test data file.");
+                    Site.Assume.Inconclusive("Cannot verify the output since base image is not found, check the existance and format of BaseImage element in test data file.");
                 }
                 this.bcgrAdapter.SimulatedScreen.RenderUncompressedImage(sId, baseImage, bmRect.left, bmRect.top);
             }
@@ -1457,7 +1457,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             {
                 if (baseImage == null)
                 {
-                    Site.Assume.Inconclusive("Cannot verify the output since base image is not find, check the existance and format of BaseImage element in test data file.");
+                    Site.Assume.Inconclusive("Cannot verify the output since base image is not found, check the existance and format of BaseImage element in test data file.");
                 }
                 this.bcgrAdapter.SimulatedScreen.RenderUncompressedImage(sId, baseImage, bmRect.left, bmRect.top);
             }
@@ -1513,7 +1513,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             {
                 if (baseImage == null)
                 {
-                    Site.Assume.Inconclusive("Cannot verify the output since base image is not find, check the existance and format of BaseImage element in test data file.");
+                    Site.Assume.Inconclusive("Cannot verify the output since base image is not found, check the existance and format of BaseImage element in test data file.");
                 }
                 this.bcgrAdapter.SimulatedScreen.RenderUncompressedImage(sId, baseImage, bmRect.left, bmRect.top);
             }
@@ -1527,43 +1527,23 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="sId">This is used to indicate the target surface id</param>
         /// <param name="pixFormat">This is used to indicate the pixel format to fill target surface.</param>
         /// <param name="bmRect">The rectangle of whole Image</param>
-        /// <param name="avc444BitmapStream">A RFX_AVC444_BITMAP_STREAM structure for encoded information</param>
+        /// <param name="codec">Codec type.</param>
+        /// <param name="avc444BitmapStream">An IRFX_AVC444_BITMAP_STREAM interface for encoded information</param>
         /// <param name="baseImage">Base Image used to verify output</param>
         /// <returns></returns>
-        public uint SendImageWithH264AVC444Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, RFX_AVC444_BITMAP_STREAM avc444BitmapStream,
+        public uint SendImageWithH264AVC444Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, CodecType codec, IRFX_AVC444_BITMAP_STREAM avc444BitmapStream,
             Image baseImage)
         {
-            uint fid = MakeStartFramePdu();
-            MakeWireToSurfacePdu1(sId, CodecType.RDPGFX_CODECID_AVC444, pixFormat, bmRect, avc444BitmapStream.Encode());
-            MakeEndFramePdu(fid);
-            PackAndSendServerPdu();
+            bool checkType = (codec == CodecType.RDPGFX_CODECID_AVC444 && avc444BitmapStream is RFX_AVC444_BITMAP_STREAM)
+                || (codec == CodecType.RDPGFX_CODECID_AVC444v2 && avc444BitmapStream is RFX_AVC444V2_BITMAP_STREAM);
 
-            if (this.bcgrAdapter.SimulatedScreen != null)
+            if (!checkType)
             {
-                if (baseImage == null)
-                {
-                    Site.Assume.Inconclusive("Cannot verify the output since base image is not find, check the existance and format of BaseImage element in test data file.");
-                }
-                this.bcgrAdapter.SimulatedScreen.RenderUncompressedImage(sId, baseImage, bmRect.left, bmRect.top);
+                Site.Assume.Fail("The codec type and bitmap stream type is inconsistent.");
             }
 
-            return fid;
-        }
-
-        /// <summary>
-        /// Send bitmap data in H264 AVC444v2 codec
-        /// </summary>
-        /// <param name="sId">This is used to indicate the target surface id</param>
-        /// <param name="pixFormat">This is used to indicate the pixel format to fill target surface.</param>
-        /// <param name="bmRect">The rectangle of whole Image</param>
-        /// <param name="avc444v2BitmapStream">A RFX_AVC444V2_BITMAP_STREAM structure for encoded information</param>
-        /// <param name="baseImage">Base Image used to verify output</param>
-        /// <returns></returns>
-        public uint SendImageWithH264AVC444v2Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, RFX_AVC444V2_BITMAP_STREAM avc444v2BitmapStream,
-           Image baseImage)
-        {
             uint fid = MakeStartFramePdu();
-            MakeWireToSurfacePdu1(sId, CodecType.RDPGFX_CODECID_AVC444v2, pixFormat, bmRect, avc444v2BitmapStream.Encode());
+            MakeWireToSurfacePdu1(sId, codec, pixFormat, bmRect, avc444BitmapStream.Encode());
             MakeEndFramePdu(fid);
             PackAndSendServerPdu();
 
@@ -1571,7 +1551,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             {
                 if (baseImage == null)
                 {
-                    Site.Assume.Inconclusive("Cannot verify the output since base image is not find, check the existance and format of BaseImage element in test data file.");
+                    Site.Assume.Inconclusive("Cannot verify the output since base image is not found, check the existance and format of BaseImage element in test data file.");
                 }
                 this.bcgrAdapter.SimulatedScreen.RenderUncompressedImage(sId, baseImage, bmRect.left, bmRect.top);
             }
