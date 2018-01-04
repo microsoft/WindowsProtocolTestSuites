@@ -530,9 +530,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                                         (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_81) ||
                                         (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_10) ||
                                         (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_102) ||
-                                        (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_103) ||
-                                        (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_104) ||
-                                        (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_105)
+                                        (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_103)
                                         );
 
                 Site.Assert.IsTrue(supportedVersion, "The version of RDPEGFX capability set MUST be set to : {0}, {1}, {2}, {3} or {4}. Received version: {5} in capset[{6}]",
@@ -1552,11 +1550,20 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             return fid;
         }
 
-        public uint SendImageWithH264AVC444v2Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, RFX_AVC444_BITMAP_STREAM avc444BitmapStream,
+        /// <summary>
+        /// Send bitmap data in H264 AVC444v2 codec
+        /// </summary>
+        /// <param name="sId">This is used to indicate the target surface id</param>
+        /// <param name="pixFormat">This is used to indicate the pixel format to fill target surface.</param>
+        /// <param name="bmRect">The rectangle of whole Image</param>
+        /// <param name="avc444v2BitmapStream">A RFX_AVC444V2_BITMAP_STREAM structure for encoded information</param>
+        /// <param name="baseImage">Base Image used to verify output</param>
+        /// <returns></returns>
+        public uint SendImageWithH264AVC444v2Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, RFX_AVC444V2_BITMAP_STREAM avc444v2BitmapStream,
            Image baseImage)
         {
             uint fid = MakeStartFramePdu();
-            MakeWireToSurfacePdu1(sId, CodecType.RDPGFX_CODECID_AVC444v2, pixFormat, bmRect, avc444BitmapStream.Encode());
+            MakeWireToSurfacePdu1(sId, CodecType.RDPGFX_CODECID_AVC444v2, pixFormat, bmRect, avc444v2BitmapStream.Encode());
             MakeEndFramePdu(fid);
             PackAndSendServerPdu();
 

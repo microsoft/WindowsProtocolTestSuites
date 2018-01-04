@@ -46,7 +46,7 @@
     <DeploymentItem filename="Adapter\RdpeiSUTControlAdapter\TriggerOneTouchEventOnClient.ps1" />
     <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Chroma420Separated_MainProfile.xml" />
     <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\RDPEGFX_H264Codec_PositiveTest_AVC420_HighProfile.xml" />
-    <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\RDPEGFX_H264Codec_PositiveTest_AVC444v2_MainProfile.xml" />
+    <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\RDPEGFX_H264Codec_PositiveTest_AVC444v2.xml" />
     <DeploymentItem filename="Adapter\RdpedispSUTControlAdapter\TriggerResolutionChangeOnClient.ps1" />
     <DeploymentItem filename="TestSuite\RDPEDISP\RdpedispEnhancedAdapterImages\OrientationChange4.png" />
     <DeploymentItem filename="Adapter\RdpeiSUTControlAdapter\TriggerDismissHoveringContactPduOnClient.ps1" />
