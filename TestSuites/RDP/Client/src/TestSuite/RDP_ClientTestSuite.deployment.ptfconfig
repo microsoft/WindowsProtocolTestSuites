@@ -7,7 +7,7 @@
 
     <!--Block Begin: Properties that required to be set ***-->
     <!--The RDP listening port number.-->
-    <Property name="RDP.ServerPort" value="4488">
+    <Property name="RDP.ServerPort" value="3389">
       <Description>The RDP listening port number.</Description>
     </Property>
     <!--The version of IP address to use. Ipv4 or Ipv6.-->
@@ -52,7 +52,7 @@
     </Property>  
     <!--The version of the RDP intends to test. It should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3.-->
     <!--The seperator between the RDP.Version is required to be ".".-->
-    <Property name="RDP.Version" value="10.1">
+    <Property name="RDP.Version" value="8.1">
       <Choice>7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3</Choice>
       <Description>The version of the RDP intends to test, it should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3</Description>
     </Property>
@@ -72,7 +72,7 @@
       <Description>The logon password of "RDP.ServerUserName".</Description>
     </Property>
     <!--The pfx format certificate with private key, which used to secure TLS or CredSSP transport.  -->
-    <Property name="CertificatePath" value="C:\127.0.0.1.pfx">
+    <Property name="CertificatePath" value="C:\DriverComputer.pfx">
       <Description>The pfx format certificate with private key, which used to secure TLS or CredSSP transport.</Description>
     </Property>
     <!--The password of the pfx certificate-->
