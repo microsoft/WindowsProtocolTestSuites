@@ -1539,7 +1539,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             if (!checkType)
             {
-                Site.Assume.Fail("The codec type and bitmap stream type is inconsistent.");
+                Site.Assume.Fail("The codec type and bitmap stream type is inconsistent with codec:{0} and avc444BitmapStream:{1}.", codec, avc444BitmapStream.GetType().Name);
             }
 
             uint fid = MakeStartFramePdu();
