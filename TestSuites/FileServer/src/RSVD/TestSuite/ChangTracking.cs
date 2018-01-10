@@ -37,6 +37,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion2)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if server supports handling change tracking.")]
         public void BVT_ChangeTracking()
         {

@@ -25,6 +25,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         public RuleType RuleGroupType { set; get; }
 
+        public bool RefreshFeatureMapping = false;
+
         private RuleSelectStatus selectStatus;
         public RuleSelectStatus SelectStatus
         {
@@ -33,7 +35,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 if (selectStatus != value)
                 {
                     ChangeSelectStatus(value);
-                    if (ContentModified != null) ContentModified();
+                    if (ContentModified != null)
+                    {
+                        RefreshFeatureMapping = true;
+                        ContentModified();
+                        RefreshFeatureMapping = false;
+                    }
                 }
             }
             get
@@ -95,7 +102,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
             };
             rule.ContentModified += () =>
             {
-                if (ContentModified != null) ContentModified();
+                if (ContentModified != null)
+                {
+                    RefreshFeatureMapping = true;
+                    ContentModified();
+                    RefreshFeatureMapping = false;
+                }
             };
             base.Add(rule);
             UpdateSelectStatus();

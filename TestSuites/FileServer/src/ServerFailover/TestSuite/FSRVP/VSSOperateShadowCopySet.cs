@@ -147,6 +147,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsrvp)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if the general file server supports the VSS provider to create a writable snapshot for remote files.")]
         public void BVT_VSSOperateShadowCopySet_WritableSnapshot_GeneralFileServer()
         {
@@ -160,6 +161,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsrvp)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if the scaleout file server supports the VSS provider to create a writable snapshot for remote files.")]
         public void BVT_VSSOperateShadowCopySet_WritableSnapshot_ScaleoutFileServer()
         {
@@ -172,6 +174,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
 
         [TestMethod]
         [TestCategory(TestCategories.Fsrvp)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Compatibility)]
         [Description("Check if the server returns correctly when adding different sharePath on multi nodes to a shadow copy set.")]
         public void VSSOperateShadowCopySet_DifferentNodeSharePath()
@@ -187,6 +190,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsrvp)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if the server returns correctly when adding different sharePath on the cluster and the owner node to a shadow copy set.")]
         public void BVT_VSSOperateShadowCopySet_ClusterSharePath_OwnerNode()
         {
@@ -220,6 +224,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsrvp)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if the server returns correctly when adding different sharePath on the cluster and the non-owner node to a shadow copy set.")]
         public void BVT_VSSOperateShadowCopySet_ClusterSharePath_NonOwnerNode()
         {

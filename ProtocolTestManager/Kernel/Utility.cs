@@ -93,6 +93,19 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 throw new Exception(string.Format(StringResource.LoadFilterError, e.Message));
             }
+
+            if (filter != null)
+            {
+                try
+                {
+                    filter.featureMapping = LoadFeatureMappingFromXml(appConfig.FeatureMapping, out filter.featureIndex, out filter.mappingIndex);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(string.Format(StringResource.LoadFeatureMappingError, e.Message));
+                }
+            }
+
             appConfig.InitDefaultConfigurations();
 
             LastRuleSelectionFilename = testSuiteInfo.LastProfile;
@@ -430,6 +443,60 @@ namespace Microsoft.Protocols.TestManager.Kernel
             get { return selectedCases.Count; }
         }
 
+        #endregion
+
+        #region Feature Mapping
+        private Dictionary<string, int> GetMappingConfigFromXmlNode(XmlNode mappingConfig)
+        {
+            Dictionary<string, int> mappingConfigTable = new Dictionary<string, int>();
+            var configs = mappingConfig.SelectNodes("Config");
+            foreach (XmlNode config in configs)
+            {
+                mappingConfigTable.Add(config.Attributes[0].Value, Convert.ToInt32(config.Attributes[1].Value));
+            }
+            return mappingConfigTable;
+        }
+        private List<string> GetMappingFromXmlNode(XmlNode feature)
+        {
+            List<string> mappingList = new List<string>();
+            var mappings = feature.SelectNodes("Mapping");
+            foreach (XmlNode mapping in mappings)
+            {
+                mappingList.Add(mapping.Attributes[0].Value);
+            }
+            return mappingList;
+        }
+
+        private Dictionary<string, List<string>> LoadFeatureMappingFromXml(XmlNode featureMappingNode, out int featureIndex, out int mappingIndex)
+        {
+            if (featureMappingNode == null) {
+                featureIndex = -1;
+                mappingIndex = -1;
+                return null;
+            }
+            Dictionary<string, List<string>> dic = new Dictionary<string, List<string>>();
+
+            var mappingConfig = featureMappingNode.SelectSingleNode("Config");
+            Dictionary<string, int> mappingConfigTable = GetMappingConfigFromXmlNode(mappingConfig);
+            int _featureIndex = mappingConfigTable["featureIndex"];
+            int _mappingIndex = mappingConfigTable["mappingIndex"];
+            if (_featureIndex == _mappingIndex)
+            {
+                featureIndex = -1;
+                mappingIndex = -1;
+                return null;
+            }
+            featureIndex = _featureIndex;
+            mappingIndex = _mappingIndex;
+
+            var features = featureMappingNode.SelectNodes("Feature");
+            foreach (XmlNode feature in features)
+            {
+                List<string> mappingList = GetMappingFromXmlNode(feature);
+                dic.Add(feature.Attributes[0].Value, mappingList);
+            }
+            return dic;
+        }
         #endregion
 
         #region PTF Properties

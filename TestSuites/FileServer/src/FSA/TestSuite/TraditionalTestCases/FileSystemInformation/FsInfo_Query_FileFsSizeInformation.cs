@@ -17,6 +17,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Query FileFsSizeInformation from a file and check if OutputBuffer.SectorsPerAllocationUnit of server response is correct.")]
         public void FsInfo_Query_FileFsSizeInformation_File_SectorsPerAllocationUnit()
         {
@@ -26,6 +27,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Query FileFsSizeInformation from a directory and check if OutputBuffer.SectorsPerAllocationUnit of server response is correct.")]
         public void FsInfo_Query_FileFsSizeInformation_Dir_SectorsPerAllocationUnit()
         {

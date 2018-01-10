@@ -244,7 +244,19 @@ namespace Microsoft.Protocols.TestManager.Kernel {
                 return ResourceManager.GetString("LoadPtfconfigError", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to the feature mapping from the config.xml:
+        ///{0}.
+        /// </summary>
+        internal static string LoadFeatureMappingError
+        {
+            get
+            {
+                return ResourceManager.GetString("LoadFeatureMappingError", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to [TestPassed].
         /// </summary>

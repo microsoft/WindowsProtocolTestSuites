@@ -19,6 +19,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileInformation)]
         [TestCategory(TestCategories.AlternateDataStream)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Set FileValidDataLengthInformation to an Alternate Data Stream on a DataFile.")]
         public void AlternateDataStream_Set_FileValidDataLengthInformation_File()
         {
@@ -31,6 +33,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileInformation)]
         [TestCategory(TestCategories.AlternateDataStream)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Set FileValidDataLengthInformation to an Alternate Data Stream on a DirectoryFile.")]
         public void AlternateDataStream_Set_FileValidDataLengthInformation_Dir()
         {

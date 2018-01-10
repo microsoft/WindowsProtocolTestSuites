@@ -37,6 +37,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if server supports handling tunnel operation RSVD_TUNNEL_GET_FILE_INFO_OPERATION.")]
         public void BVT_TunnelGetFileInfoToSharedVHD()
         {
@@ -74,6 +75,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if server supports handling tunnel operation RSVD_TUNNEL_SCSI_OPERATION.")]
         public void BVT_TunnelSCSIToSharedVHD()
         {
@@ -130,6 +132,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if server supports handling tunnel operation RSVD_TUNNEL_CHECK_CONNECTION_STATUS_OPERATION.")]
         public void BVT_TunnelCheckConnectionStatusToSharedVHD()
         {
@@ -163,6 +166,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if server supports handling tunnel operation RSVD_TUNNEL_SRB_STATUS_OPERATION.")]
         public void BVT_TunnelSRBStatusToSharedVHD()
         {
@@ -209,6 +213,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if server supports handling tunnel operation RSVD_TUNNEL_GET_DISK_INFO_OPERATION.")]
         public void BVT_TunnelGetDiskInfoToSharedVHD()
         {
@@ -249,6 +254,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if server supports handling tunnel operation RSVD_TUNNEL_VALIDATE_DISK_OPERATION.")]
         public void BVT_TunnelValidateDiskToSharedVHD()
         {

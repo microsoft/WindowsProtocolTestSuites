@@ -38,6 +38,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if server handles SHARED_VIRTUAL_DISK_SUPPORT request to a shared virtual disk file correctly.")]
         public void BVT_QuerySharedVirtualDiskSupport()
         {

@@ -37,6 +37,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion2)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if server supports handling tunnel operation to extract the target VHD set file.")]
         public void BVT_Extract_VHDSet()
         {
@@ -93,6 +94,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion2)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if server supports handling an Optimize request.")]
         public void BVT_Optimize()
         {

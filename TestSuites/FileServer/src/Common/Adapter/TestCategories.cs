@@ -7,8 +7,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
     {
         public const string Bvt = "BVT";
         public const string Model = "Model";
-        public const string Cluster = "Cluster";
+        public const string Failover = "Failover";
 
+        public const string NonSmb = "NonSmb";
         public const string Smb2002 = "Smb2002";
         public const string Smb21 = "Smb21";
         public const string Smb30 = "Smb30";

@@ -15,6 +15,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Send FSCTL_SET_SPARSE request to a file and check if SparseFile is supported.")]
         public void FsCtl_Set_Sparse_File_IsSparseFileSupported()
         {
@@ -24,6 +26,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Send FSCTL_SET_SPARSE request to a directory and check if SparseFile is supported.")]
         public void FsCtl_Set_Sparse_Dir_IsSparseFileSupported()
         {

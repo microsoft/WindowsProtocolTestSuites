@@ -18,6 +18,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Try to set FileShortNameInfo to a file and check if ShortName is supported.")]
         public void FileInfo_Set_FileShortNameInfo_File_IsShortNameSupported()
         {
@@ -27,6 +29,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Try to set FileShortNameInfo to a directory and check if ShortName is supported.")]
         public void FileInfo_Set_FileShortNameInfo_Dir_IsShortNameSupported()
         {

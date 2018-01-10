@@ -38,6 +38,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion2)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if server supports handling tunnel operation to create and delete a VM checkpoint.")]
         public void BVT_Create_Delete_Checkpoint()
         {
@@ -57,6 +58,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion2)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if server supports querying a list of changed ranges since the designated snapshot.")]
         public void BVT_QueryVirtualDiskChanges()
         {
@@ -123,6 +125,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion2)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if server supports applying a specified snapshot.")]
         public void BVT_ApplySnapshot()
         {
@@ -206,6 +209,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion2)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if the server supports opening a shared VHD set file with using a Target Specifier.")]
         public void BVT_OpenSharedVHDSetByTargetSpecifier()
         {
