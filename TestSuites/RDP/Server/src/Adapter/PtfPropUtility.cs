@@ -9,6 +9,15 @@ using Microsoft.Protocols.TestTools;
 namespace Microsoft.Protocols.TestSuites.Rdp
 {
     /// <summary>
+    /// Define the ptf property names.
+    /// </summary>
+    public class RdpPtfPropNames
+    {
+        public const string RdpSecurityProtocol = "RDP.Security.Protocol";
+        public const string RdpSecurityNegotiation = "RDP.Security.Negotiation";
+    }
+
+    /// <summary>
     /// A helper class to get specified type of PTF properties.
     /// </summary>
     public class PtfPropUtility
