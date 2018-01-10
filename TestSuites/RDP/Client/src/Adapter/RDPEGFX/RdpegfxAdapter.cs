@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Threading;
 using System.Collections.Generic;
 using Microsoft.Protocols.TestTools;
@@ -526,33 +527,106 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             // Check capability version, capLen, and flags.
             for (ushort index = 0; index < adv.capsSetCount; index++)
             {
-                bool supportedVersion = ((adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_8) ||
-                                        (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_81) ||
-                                        (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_10) ||
-                                        (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_101) ||
-                                        (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_102) ||
-                                        (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_103) ||
-                                        (adv.capsSets[index].version == CapsVersions.RDPGFX_CAPVERSION_104)
-                                        );
+                uint capsFlag;
+                bool validFlag;
 
-                Site.Assert.IsTrue(supportedVersion, "The version of RDPEGFX capability set MUST be set to : {0}, {1}, {2}, {3}, {4}, {5} or {6}. Received version: {7} in capset[{8}]",
-                                    CapsVersions.RDPGFX_CAPVERSION_8, CapsVersions.RDPGFX_CAPVERSION_81, CapsVersions.RDPGFX_CAPVERSION_10, CapsVersions.RDPGFX_CAPVERSION_101, CapsVersions.RDPGFX_CAPVERSION_102, CapsVersions.RDPGFX_CAPVERSION_103, CapsVersions.RDPGFX_CAPVERSION_104, adv.capsSets[index].version, index);
+                switch (adv.capsSets[index].version)
+                {
+                    case CapsVersions.RDPGFX_CAPVERSION_8:
+                        Site.Assert.AreEqual((uint)4, adv.capsSets[index].capsDataLength,
+                            "Data Length of RDPEGFX capability set MUST be set to {0} (Section 2.2.3.1), Received capsDataLength: {1} in capset[{2}]!",
+                            4, adv.capsSets[index].capsDataLength, index);
 
+                        capsFlag = BitConverter.ToUInt32(adv.capsSets[index].capsData, 0);
+                        validFlag = (capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_DEFAULT ||
+                                            capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE ||
+                                            capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_THINCLIENT
+                                            );
+                        Site.Assert.IsTrue(validFlag, "Unknown capability flags {0} (Section 2.2.3.1).", capsFlag);
+                        break;
+                    case CapsVersions.RDPGFX_CAPVERSION_81:
+                        Site.Assert.AreEqual((uint)4, adv.capsSets[index].capsDataLength,
+                            "Data Length of RDPEGFX capability set MUST be set to {0} (Section 2.2.3.2), Received capsDataLength: {1} in capset[{2}]!",
+                            4, adv.capsSets[index].capsDataLength, index);
 
-                Site.Assert.AreEqual((uint)4, adv.capsSets[index].capsDataLength,
-                    "Data Length of RDPEGFX capability set MUST be set to {0} (Section 2.2.4.1), Received capsDataLength: {1} in capset[{2}]!",
-                    4, adv.capsSets[index].capsDataLength, index);
+                        capsFlag = BitConverter.ToUInt32(adv.capsSets[index].capsData, 0);
+                        validFlag = (capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_DEFAULT ||
+                                            capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_THINCLIENT ||
+                                            capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE ||
+                                            capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC420_ENABLED) ||
+                                            capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC420_ENABLED | CapsFlags.RDPGFX_CAPS_FLAG_THINCLIENT)
+                                            );
+                        Site.Assert.IsTrue(validFlag, "Unknown capability flags {0} (Section 2.2.3.2).", capsFlag);
+                        break;
+                    case CapsVersions.RDPGFX_CAPVERSION_10:
+                        Site.Assert.AreEqual((uint)4, adv.capsSets[index].capsDataLength,
+                            "Data Length of RDPEGFX capability set MUST be set to {0} (Section 2.2.3.3), Received capsDataLength: {1} in capset[{2}]!",
+                            4, adv.capsSets[index].capsDataLength, index);
 
-                // Reach here, capsData must be 4 bytes.
-                uint capsFlag = BitConverter.ToUInt32(adv.capsSets[index].capsData, 0);
-                bool validFlag = (capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_DEFAULT ||
-                                    capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE ||
-                                    capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_THINCLIENT ||
-                                    capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC420_ENABLED) ||
-                                    capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_THINCLIENT | CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC420_ENABLED) ||
-                                    capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED)
-                                    );
-                Site.Assert.IsTrue(validFlag, "Unknown capability flags {0}", capsFlag);
+                        capsFlag = BitConverter.ToUInt32(adv.capsSets[index].capsData, 0);
+                        validFlag = (capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_DEFAULT ||
+                                            capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE ||
+                                            capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED ||
+                                            capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED)
+                                            );
+                        Site.Assert.IsTrue(validFlag, "Unknown capability flags {0} (Section 2.2.3.3).", capsFlag);
+                        break;
+                    case CapsVersions.RDPGFX_CAPVERSION_101:
+                        Site.Assert.AreEqual((uint)16, adv.capsSets[index].capsDataLength,
+                            "Data Length of RDPEGFX capability set MUST be set to {0} (Section 2.2.3.4), Received capsDataLength: {1} in capset[{2}]!",
+                            16, adv.capsSets[index].capsDataLength, index);
+
+                        byte[] allZero = new byte[] {
+                            0, 0, 0, 0,
+                            0, 0, 0, 0,
+                            0, 0, 0, 0,
+                            0, 0, 0, 0
+                        };
+                        bool reservedIsAllZero = adv.capsSets[index].capsData.SequenceEqual(allZero);
+                        Site.Assert.IsTrue(reservedIsAllZero, "The reserved field MUST be set to all zero (Section 2.2.3.4).");
+                        break;
+                    case CapsVersions.RDPGFX_CAPVERSION_102:
+                        Site.Assert.AreEqual((uint)4, adv.capsSets[index].capsDataLength,
+                            "Data Length of RDPEGFX capability set MUST be set to {0} (Section 2.2.3.5), Received capsDataLength: {1} in capset[{2}]!",
+                            4, adv.capsSets[index].capsDataLength, index);
+
+                        capsFlag = BitConverter.ToUInt32(adv.capsSets[index].capsData, 0);
+                        validFlag = (capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_DEFAULT ||
+                                            capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE ||
+                                            capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED ||
+                                            capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED)
+                                            );
+                        Site.Assert.IsTrue(validFlag, "Unknown capability flags {0} (Section 2.2.3.5).", capsFlag);
+                        break;
+                    case CapsVersions.RDPGFX_CAPVERSION_103:
+                        Site.Assert.AreEqual((uint)4, adv.capsSets[index].capsDataLength,
+                            "Data Length of RDPEGFX capability set MUST be set to {0} (Section 2.2.3.6), Received capsDataLength: {1} in capset[{2}]!",
+                            4, adv.capsSets[index].capsDataLength, index);
+
+                        capsFlag = BitConverter.ToUInt32(adv.capsSets[index].capsData, 0);
+                        validFlag = (capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_DEFAULT ||
+                                            capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED
+                                            );
+                        Site.Assert.IsTrue(validFlag, "Unknown capability flags {0} (Section 2.2.3.6).", capsFlag);
+                        break;
+                    case CapsVersions.RDPGFX_CAPVERSION_104:
+                        Site.Assert.AreEqual((uint)4, adv.capsSets[index].capsDataLength,
+                            "Data Length of RDPEGFX capability set MUST be set to {0} (Section 2.2.3.7), Received capsDataLength: {1} in capset[{2}]!",
+                            4, adv.capsSets[index].capsDataLength, index);
+
+                        capsFlag = BitConverter.ToUInt32(adv.capsSets[index].capsData, 0);
+                        validFlag = (capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_DEFAULT ||
+                                            capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE ||
+                                            capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED ||
+                                            capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED)
+                                            );
+                        Site.Assert.IsTrue(validFlag, "Unknown capability flags {0} (Section 2.2.3.7).", capsFlag);
+                        break;
+                    default:
+                        Site.Assert.Fail("The version of RDPEGFX capability set MUST be set to : {0}, {1}, {2}, {3}, {4}, {5} or {6}. Received version: {7} in capset[{8}]",
+                            CapsVersions.RDPGFX_CAPVERSION_8, CapsVersions.RDPGFX_CAPVERSION_81, CapsVersions.RDPGFX_CAPVERSION_10, CapsVersions.RDPGFX_CAPVERSION_101, CapsVersions.RDPGFX_CAPVERSION_102, CapsVersions.RDPGFX_CAPVERSION_103, CapsVersions.RDPGFX_CAPVERSION_104, adv.capsSets[index].version, index);
+                        break;
+                }
             }
 
             return true;
