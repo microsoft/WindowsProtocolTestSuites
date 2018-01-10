@@ -185,7 +185,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     Stack<Rule> ruleStack = null;
 
                     // Unselect all rules in mappingRuleGroup after RulePage is initialized
-                    if (featureRuleGroup.IsSelected != null)
+                    if (featureRuleGroup.IsSelected == false)
                     {
                         mappingRuleGroup.SelectStatus = RuleSelectStatus.NotSelected;
                     }
