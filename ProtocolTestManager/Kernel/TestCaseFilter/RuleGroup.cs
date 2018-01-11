@@ -25,7 +25,49 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         public RuleType RuleGroupType { set; get; }
 
-        public bool RefreshFeatureMapping = false;
+        /// <summary>
+        /// A feature mapping table
+        /// </summary>
+        public Dictionary<string, List<string>> featureMappingTable = null;
+
+        /// <summary>
+        /// RuleGroup as a mapping filter 
+        /// </summary>
+        public RuleGroup mappingRuleGroup = null;
+
+        /// <summary>
+        /// A rule table created from a mapping filter rule group
+        /// </summary>
+        public Dictionary<string, Rule> ruleTable = null;
+
+        /// <summary>
+        /// Refresh feature mapping from target filter ruleGroup to mapping filter ruleGroup
+        /// </summary>
+        private void RefreshFeatureMapping()
+        {
+            if (featureMappingTable != null)
+            {
+                {
+                    List<string> categories = GetCategories(RuleGroupType == RuleType.Selector);
+
+                    // Unselect all features in mappingFilter
+                    mappingRuleGroup.SelectStatus = RuleSelectStatus.NotSelected;
+
+                    // Select mapping features in mappingFilter based on featureMappingTable
+                    foreach (var category in categories)
+                    {
+                        if (featureMappingTable.ContainsKey(category))
+                        {
+                            List<string> featureMappingList = featureMappingTable[category];
+                            foreach (var featureMapping in featureMappingList)
+                            {
+                                ruleTable[featureMapping].SelectStatus = RuleSelectStatus.Selected;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         private RuleSelectStatus selectStatus;
         public RuleSelectStatus SelectStatus
@@ -37,9 +79,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     ChangeSelectStatus(value);
                     if (ContentModified != null)
                     {
-                        RefreshFeatureMapping = true;
+                        RefreshFeatureMapping();
                         ContentModified();
-                        RefreshFeatureMapping = false;
                     }
                 }
             }
@@ -104,9 +145,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 if (ContentModified != null)
                 {
-                    RefreshFeatureMapping = true;
+                    RefreshFeatureMapping();
                     ContentModified();
-                    RefreshFeatureMapping = false;
                 }
             };
             base.Add(rule);

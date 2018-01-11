@@ -13,13 +13,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
     [XmlRoot]
     public class TestCaseFilter : List<RuleGroup>
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public Dictionary<string, List<string>> featureMapping = null;
-        public int featureIndex = -1;
-        public int mappingIndex = -1;
-
         [SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", Justification = "By Design")]
         public static TestCaseFilter LoadFromXml(XmlNode RuleDefinitions)
         {
@@ -164,69 +157,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         public ContentModifiedEventHandler ContentModified;
 
-        /// <summary>
-        /// Add mapping for features if FeatureMapping is defined in config.xml
-        /// </summary>
-        private void RefreshFeatureMapping()
-        {
-            if (featureMapping != null)
-            {
-                // Check value of featureIndex and mappingIndex defined in config.xml is valid or not
-                if ( (featureIndex == -1 || mappingIndex == -1) ||
-                     (featureIndex >= this.Count || mappingIndex >= this.Count) )
-                {
-                    return;
-                }
-                RuleGroup featureRuleGroup = this[featureIndex];
-                if (featureRuleGroup.RefreshFeatureMapping)
-                {
-                    RuleGroup mappingRuleGroup = this[mappingIndex];
-                    List<string> categories = featureRuleGroup.GetCategories(featureRuleGroup.RuleGroupType == RuleType.Selector);
-                    Stack<Rule> ruleStack = null;
-
-                    // Unselect all rules in mappingRuleGroup after RulePage is initialized
-                    if (featureRuleGroup.IsSelected == false)
-                    {
-                        mappingRuleGroup.SelectStatus = RuleSelectStatus.NotSelected;
-                    }
-
-                    foreach (var category in categories)
-                    {
-                        if (featureMapping.ContainsKey(category))
-                        {
-                            List<string> values = featureMapping[category];
-                            List<string> featureMappingList = new List<string>();
-                            foreach (var value in values)
-                            {
-                                if (!featureMappingList.Contains(value))
-                                {
-                                    featureMappingList.Add(value);
-                                }
-                            }
-
-                            ruleStack = new Stack<Rule>();
-                            foreach (Rule r in mappingRuleGroup) ruleStack.Push(r);
-                            while (ruleStack.Count > 0)
-                            {
-                                Rule r = ruleStack.Pop();
-                                if (r.CategoryList.Count != 0 && featureMappingList.Contains(r.CategoryList[0]))
-                                {
-                                    r.SelectStatus = RuleSelectStatus.Selected;
-                                }
-                                foreach (Rule childRule in r) ruleStack.Push(childRule);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         public List<TestCase> FilterTestCaseList(List<TestCase> inputList)
         {
             List<TestCase> result = new List<TestCase>();
             List<Filter> filters = new List<Filter>();
-
-            RefreshFeatureMapping();
 
             foreach (RuleGroup g in this)
             {

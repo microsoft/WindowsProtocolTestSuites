@@ -94,16 +94,24 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 throw new Exception(string.Format(StringResource.LoadFilterError, e.Message));
             }
 
-            if (filter != null)
+            try
             {
-                try
+                int targetFilterIndex = -1, mappingFilterIndex = -1;
+                Dictionary<string, List<string>> featureMappingTable = LoadFeatureMappingFromXml(appConfig.FeatureMapping, out targetFilterIndex, out mappingFilterIndex);
+                if (featureMappingTable != null)
                 {
-                    filter.featureMapping = LoadFeatureMappingFromXml(appConfig.FeatureMapping, out filter.featureIndex, out filter.mappingIndex);
+                    if (filter != null)
+                    {
+                        RuleGroup targetFilterGroup = filter[targetFilterIndex], mappingFilterGroup = filter[mappingFilterIndex];
+                        targetFilterGroup.featureMappingTable = featureMappingTable;
+                        targetFilterGroup.mappingRuleGroup = mappingFilterGroup;
+                        targetFilterGroup.ruleTable = createRuleTableFromRuleGroup(mappingFilterGroup);
+                    }
                 }
-                catch (Exception e)
-                {
-                    throw new Exception(string.Format(StringResource.LoadFeatureMappingError, e.Message));
-                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(string.Format(StringResource.LoadFeatureMappingError, e.Message));
             }
 
             appConfig.InitDefaultConfigurations();
@@ -446,56 +454,96 @@ namespace Microsoft.Protocols.TestManager.Kernel
         #endregion
 
         #region Feature Mapping
-        private Dictionary<string, int> GetMappingConfigFromXmlNode(XmlNode mappingConfig)
+        /// <summary>
+        /// Create a config table from a given xml node
+        /// </summary>
+        /// <param name="featureMappingConfig"></param>
+        /// <returns>A feature mapping config table</returns>
+        private Dictionary<string, int> GetFeatureMappingConfigFromXmlNode(XmlNode featureMappingConfig)
         {
-            Dictionary<string, int> mappingConfigTable = new Dictionary<string, int>();
-            var configs = mappingConfig.SelectNodes("Config");
+            Dictionary<string, int> featureMappingConfigTable = new Dictionary<string, int>();
+            var configs = featureMappingConfig.SelectNodes("Config");
             foreach (XmlNode config in configs)
             {
-                mappingConfigTable.Add(config.Attributes[0].Value, Convert.ToInt32(config.Attributes[1].Value));
+                featureMappingConfigTable.Add(config.Attributes[0].Value, Convert.ToInt32(config.Attributes[1].Value));
             }
-            return mappingConfigTable;
+            return featureMappingConfigTable;
         }
-        private List<string> GetMappingFromXmlNode(XmlNode feature)
+        /// <summary>
+        /// Create a feature list from a given xml node
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns>A feature list</returns>
+        private List<string> GetFeatureFromXmlNode(XmlNode target)
         {
-            List<string> mappingList = new List<string>();
-            var mappings = feature.SelectNodes("Mapping");
-            foreach (XmlNode mapping in mappings)
-            {
-                mappingList.Add(mapping.Attributes[0].Value);
-            }
-            return mappingList;
-        }
-
-        private Dictionary<string, List<string>> LoadFeatureMappingFromXml(XmlNode featureMappingNode, out int featureIndex, out int mappingIndex)
-        {
-            if (featureMappingNode == null) {
-                featureIndex = -1;
-                mappingIndex = -1;
-                return null;
-            }
-            Dictionary<string, List<string>> dic = new Dictionary<string, List<string>>();
-
-            var mappingConfig = featureMappingNode.SelectSingleNode("Config");
-            Dictionary<string, int> mappingConfigTable = GetMappingConfigFromXmlNode(mappingConfig);
-            int _featureIndex = mappingConfigTable["featureIndex"];
-            int _mappingIndex = mappingConfigTable["mappingIndex"];
-            if (_featureIndex == _mappingIndex)
-            {
-                featureIndex = -1;
-                mappingIndex = -1;
-                return null;
-            }
-            featureIndex = _featureIndex;
-            mappingIndex = _mappingIndex;
-
-            var features = featureMappingNode.SelectNodes("Feature");
+            List<string> featureList = new List<string>();
+            var features = target.SelectNodes("Feature");
             foreach (XmlNode feature in features)
             {
-                List<string> mappingList = GetMappingFromXmlNode(feature);
-                dic.Add(feature.Attributes[0].Value, mappingList);
+                featureList.Add(feature.Attributes[0].Value);
             }
-            return dic;
+            return featureList;
+        }
+        /// <summary>
+        /// Create a feature mapping table from a given xml node
+        /// </summary>
+        /// <param name="featureMappingNode"></param>
+        /// <param name="targetFilterIndex"></param>
+        /// <param name="mappingFilterIndex"></param>
+        /// <returns>A feature mapping table</returns>
+        private Dictionary<string, List<string>> LoadFeatureMappingFromXml(XmlNode featureMappingNode, out int targetFilterIndex, out int mappingFilterIndex)
+        {
+            if (featureMappingNode == null) {
+                targetFilterIndex = -1;
+                mappingFilterIndex = -1;
+                return null;
+            }
+
+            var featureMappingConfig = featureMappingNode.SelectSingleNode("Config");
+            Dictionary<string, int> configTable = GetFeatureMappingConfigFromXmlNode(featureMappingConfig);
+            int _targetFilterIndex = configTable["targetFilterIndex"];
+            int _mappingFilterIndex = configTable["mappingFilterIndex"];
+            if ((_targetFilterIndex == _mappingFilterIndex) ||
+                (_targetFilterIndex >= filter.Count || _mappingFilterIndex >= filter.Count))
+            {
+                targetFilterIndex = -1;
+                mappingFilterIndex = -1;
+                return null;
+            }
+
+            var targets = featureMappingNode.SelectNodes("Target");
+            Dictionary<string, List<string>> featureMappingTable = new Dictionary<string, List<string>>();
+            foreach (XmlNode target in targets)
+            {
+                List<string> featureList = GetFeatureFromXmlNode(target);
+                featureMappingTable.Add(target.Attributes[0].Value, featureList);
+            }
+            targetFilterIndex = _targetFilterIndex;
+            mappingFilterIndex = _mappingFilterIndex;
+            return featureMappingTable;
+        }
+
+        /// <summary>
+        /// Create a dictionary (key: rule name, value: rule) to store rules from a given ruleGroup to speedup rule lookup performance
+        /// </summary>
+        /// <param name="ruleGroup">A rule group</param>
+        /// <returns>A rule table</returns>
+        private Dictionary<string, Rule> createRuleTableFromRuleGroup(RuleGroup ruleGroup)
+        {
+            Dictionary<string, Rule> ruleTable = new Dictionary<string, Rule>();
+            Stack<Rule> ruleStack = new Stack<Rule>();
+            foreach (Rule r in ruleGroup) ruleStack.Push(r);
+            while (ruleStack.Count > 0)
+            {
+                Rule r = ruleStack.Pop();
+                if (r.CategoryList.Count != 0 &&
+                    !ruleTable.ContainsKey(r.CategoryList[0]))
+                {
+                    ruleTable.Add(r.CategoryList[0], r);
+                }
+                foreach (Rule childRule in r) ruleStack.Push(childRule);
+            }
+            return ruleTable;
         }
         #endregion
 
