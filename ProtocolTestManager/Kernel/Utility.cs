@@ -28,6 +28,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
         private TestCaseFilter filter = null;
         private TestSuite testSuite = null;
         private TestEngine testEngine = null;
+        private int targetFilterIndex = -1;
+        private int mappingFilterIndex = -1;
 
         public Utility()
         {
@@ -96,18 +98,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
             try
             {
-                int targetFilterIndex = -1, mappingFilterIndex = -1;
-                Dictionary<string, List<string>> featureMappingTable = LoadFeatureMappingFromXml(appConfig.FeatureMapping, out targetFilterIndex, out mappingFilterIndex);
-                if (featureMappingTable != null)
-                {
-                    if (filter != null)
-                    {
-                        RuleGroup targetFilterGroup = filter[targetFilterIndex], mappingFilterGroup = filter[mappingFilterIndex];
-                        targetFilterGroup.featureMappingTable = featureMappingTable;
-                        targetFilterGroup.mappingRuleGroup = mappingFilterGroup;
-                        targetFilterGroup.ruleTable = createRuleTableFromRuleGroup(mappingFilterGroup);
-                    }
-                }
+                LoadFeatureMappingFromXml(appConfig.FeatureMapping);
             }
             catch (Exception e)
             {
@@ -156,6 +147,14 @@ namespace Microsoft.Protocols.TestManager.Kernel
             try
             {
                 testSuite.LoadFrom(appConfig.TestSuiteAssembly);
+                Dictionary<string, List<Rule>> featureMappingTable = CreateFeatureMappingTable();
+                if (featureMappingTable != null)
+                {
+                    RuleGroup targetFilterGroup = filter[targetFilterIndex];
+                    RuleGroup mappingFilterGroup = filter[mappingFilterIndex];
+                    targetFilterGroup.featureMappingTable = featureMappingTable;
+                    targetFilterGroup.mappingRuleGroup = mappingFilterGroup;
+                }
             }
             catch (Exception e)
             {
@@ -469,36 +468,18 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
             return featureMappingConfigTable;
         }
+
         /// <summary>
-        /// Create a feature list from a given xml node
-        /// </summary>
-        /// <param name="target"></param>
-        /// <returns>A feature list</returns>
-        private List<string> GetFeatureFromXmlNode(XmlNode target)
-        {
-            List<string> featureList = new List<string>();
-            var features = target.SelectNodes("Feature");
-            foreach (XmlNode feature in features)
-            {
-                featureList.Add(feature.Attributes[0].Value);
-            }
-            return featureList;
-        }
-        /// <summary>
-        /// Create a feature mapping table from a given xml node
+        /// Load feature mapping config from given xml node
         /// </summary>
         /// <param name="featureMappingNode"></param>
-        /// <param name="targetFilterIndex"></param>
-        /// <param name="mappingFilterIndex"></param>
-        /// <returns>A feature mapping table</returns>
-        private Dictionary<string, List<string>> LoadFeatureMappingFromXml(XmlNode featureMappingNode, out int targetFilterIndex, out int mappingFilterIndex)
+        private void LoadFeatureMappingFromXml(XmlNode featureMappingNode)
         {
             if (featureMappingNode == null) {
-                targetFilterIndex = -1;
-                mappingFilterIndex = -1;
-                return null;
+                return;
             }
 
+            // Parse Config section
             var featureMappingConfig = featureMappingNode.SelectSingleNode("Config");
             Dictionary<string, int> configTable = GetFeatureMappingConfigFromXmlNode(featureMappingConfig);
             int _targetFilterIndex = configTable["targetFilterIndex"];
@@ -506,20 +487,61 @@ namespace Microsoft.Protocols.TestManager.Kernel
             if ((_targetFilterIndex == _mappingFilterIndex) ||
                 (_targetFilterIndex >= filter.Count || _mappingFilterIndex >= filter.Count))
             {
-                targetFilterIndex = -1;
-                mappingFilterIndex = -1;
-                return null;
-            }
-
-            var targets = featureMappingNode.SelectNodes("Target");
-            Dictionary<string, List<string>> featureMappingTable = new Dictionary<string, List<string>>();
-            foreach (XmlNode target in targets)
-            {
-                List<string> featureList = GetFeatureFromXmlNode(target);
-                featureMappingTable.Add(target.Attributes[0].Value, featureList);
+                return;
             }
             targetFilterIndex = _targetFilterIndex;
             mappingFilterIndex = _mappingFilterIndex;
+        }
+
+        /// <summary>
+        /// Create a feature mapping table
+        /// </summary>
+        /// <returns>A feature mapping table</returns>
+        private Dictionary<string, List<Rule>> CreateFeatureMappingTable()
+        {
+            if (targetFilterIndex == -1 ||
+                mappingFilterIndex == -1)
+            {
+                return null;
+            }
+            Dictionary<string, List<Rule>> featureMappingTable = new Dictionary<string, List<Rule>>();
+            RuleGroup targetFilterGroup = filter[targetFilterIndex];
+            RuleGroup mappingFilterGroup = filter[mappingFilterIndex];
+            Dictionary<string, Rule> mappingRuleTable = createRuleTableFromRuleGroup(mappingFilterGroup);
+            Dictionary<string, Rule> targetRuleTable = createRuleTableFromRuleGroup(targetFilterGroup);
+
+            List<TestCase> testCaseList = testSuite.TestCaseList;
+            foreach (TestCase testCase in testCaseList)
+            {
+                List<string> categories = testCase.Category;
+                foreach (string target in targetRuleTable.Keys)
+                {
+                    if (categories.Contains(target))
+                    {
+                        Rule currentRule;
+                        foreach (string category in categories)
+                        {
+                            if (!category.Equals(target))
+                            {
+                                mappingRuleTable.TryGetValue(category, out currentRule);
+                                if (currentRule == null)
+                                {
+                                    continue;
+                                }
+                                if (featureMappingTable.ContainsKey(target))
+                                {
+                                    featureMappingTable[target].Add(currentRule);
+                                }
+                                else
+                                {
+                                    featureMappingTable[target] = new List<Rule> { currentRule };
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
             return featureMappingTable;
         }
 

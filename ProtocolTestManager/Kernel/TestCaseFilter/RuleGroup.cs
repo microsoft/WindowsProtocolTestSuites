@@ -28,17 +28,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <summary>
         /// A feature mapping table
         /// </summary>
-        public Dictionary<string, List<string>> featureMappingTable = null;
+        public Dictionary<string, List<Rule>> featureMappingTable = null;
 
         /// <summary>
-        /// RuleGroup as a mapping filter 
+        /// A RuleGroup defined as a mapping filter
         /// </summary>
         public RuleGroup mappingRuleGroup = null;
-
-        /// <summary>
-        /// A rule table created from a mapping filter rule group
-        /// </summary>
-        public Dictionary<string, Rule> ruleTable = null;
 
         /// <summary>
         /// Refresh feature mapping from target filter ruleGroup to mapping filter ruleGroup
@@ -47,22 +42,20 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             if (featureMappingTable != null)
             {
+                List<string> categories = GetCategories(RuleGroupType == RuleType.Selector);
+
+                // Unselect all features in mappingFilter
+                mappingRuleGroup.SelectStatus = RuleSelectStatus.NotSelected;
+
+                // Select mapping features in mappingFilter based on featureMappingTable
+                foreach (string category in categories)
                 {
-                    List<string> categories = GetCategories(RuleGroupType == RuleType.Selector);
-
-                    // Unselect all features in mappingFilter
-                    mappingRuleGroup.SelectStatus = RuleSelectStatus.NotSelected;
-
-                    // Select mapping features in mappingFilter based on featureMappingTable
-                    foreach (var category in categories)
+                    if (featureMappingTable.ContainsKey(category))
                     {
-                        if (featureMappingTable.ContainsKey(category))
+                        List<Rule> ruleList = featureMappingTable[category];
+                        foreach (Rule rule in ruleList)
                         {
-                            List<string> featureMappingList = featureMappingTable[category];
-                            foreach (var featureMapping in featureMappingList)
-                            {
-                                ruleTable[featureMapping].SelectStatus = RuleSelectStatus.Selected;
-                            }
+                            rule.SelectStatus = RuleSelectStatus.Selected;
                         }
                     }
                 }

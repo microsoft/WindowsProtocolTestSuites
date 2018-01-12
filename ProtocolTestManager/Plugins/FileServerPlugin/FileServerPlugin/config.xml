@@ -77,7 +77,7 @@
     </Group>
 
     <Group name = "SMB Dialect">
-      <Rule name = "Server-Supported SMB Dialect">
+      <Rule name = "SMB Dialects (Please select all supported dialects)">
         <Rule name = "SMB 2.0.2">
           <Category name = "Smb2002"/>
         </Rule>
@@ -100,7 +100,7 @@
     </Group>
 
     <Group name ="Feature">
-      <Rule name = "Cluster">
+      <Rule name = "Cluster Required">
         <Rule name = "RSVD (Remote Shared Virtual Disk)">
           <Rule name = "RSVDVersion1">
             <Category name = "RSVDVersion1"/>
@@ -119,7 +119,7 @@
           <Category name = "SWN"/>
         </Rule>
       </Rule>
-      <Rule name = "Non-Cluster">
+      <Rule name = "Others">
         <Rule name = "Auth (Authentication and Authorization)">
           <Rule name = "Authentication">
             <Rule name = "KerberosAuthentication">
@@ -347,108 +347,6 @@
         when any rule is selected in SMB Dialect filter (index=1)
       -->
     </Config>
-    <Target name = "Smb2002">
-      <!-- When Smb2002 in SMB Dialect filter is selected, the following features in Feature filter will be automatically selected. -->
-      <Feature name = "ChangeNotify"/>
-      <Feature name = "QueryAndSetFileInfo"/>
-      <Feature name = "LockUnlock"/>
-      <Feature name = "CreateClose"/>
-      <Feature name = "Compound"/>
-      <Feature name = "Negotiate"/>
-      <Feature name = "Session"/>
-      <Feature name = "Tree"/>
-      <Feature name = "Credit"/>
-      <Feature name = "Signing"/>
-      <Feature name = "OplockOnShareWithoutForceLevel2OrSOFS"/>
-      <Feature name = "OplockOnShareWithoutForceLevel2WithSOFS"/>
-      <Feature name = "OplockOnShareWithForceLevel2WithoutSOFS"/>
-      <Feature name = "OplockOnShareWithForceLevel2AndSOFS"/>
-      <Feature name = "DurableHandleV1BatchOplock"/>
-    </Target>
-    <Target name = "Smb21">
-      <!-- When Smb21 in SMB Dialect filter is selected, the following features in Feature filter will be automatically selected. -->
-      <Feature name = "FsctlLmrRequestResiliency"/>
-      <Feature name = "Negotiate"/>
-      <Feature name = "Session"/>
-      <Feature name = "Credit"/>
-      <Feature name = "DurableHandleV1BatchOplock"/>
-      <Feature name = "DurableHandleV1LeaseV1"/>
-      <Feature name = "LeaseV1"/>
-      <Feature name = "ChangeNotify"/>
-      <Feature name = "MixedOplockLease"/>
-      <Feature name = "OperateOneFileFromTwoNodes"/>
-    </Target>
-    <Target name = "Smb30">
-      <!-- When Smb30 in SMB Dialect filter is selected, the following features in Feature filter will be automatically selected. -->
-      <Feature name = "FsctlFileLevelTrim"/>
-      <Feature name = "FsctlValidateNegotiateInfo"/>
-      <Feature name = "FsctlSetGetIntegrityInformation"/>
-      <Feature name = "FsctlOffloadReadWrite"/>
-      <Feature name = "FsctlEnumerateSnapShots"/>
-      <Feature name = "Signing"/>
-      <Feature name = "Encryption"/>
-      <Feature name = "DurableHandleV2BatchOplock"/>
-      <Feature name = "DurableHandleV2LeaseV1"/>
-      <Feature name = "DurableHandleV2LeaseV2"/>
-      <Feature name = "PersistentHandle"/>
-      <Feature name = "AppInstanceId"/>
-      <Feature name = "Replay"/>
-      <Feature name = "DirectoryLeasing"/>
-      <Feature name = "LeaseV2"/>
-      <Feature name = "MultipleChannel"/>
-      <Feature name = "ChangeNotify"/>
-      <Feature name = "CombinedFeature"/>
-      <Feature name = "SWN"/>
-      <Feature name = "Failover"/>
-    </Target>
-    <Target name = "Smb302">
-      <!-- When Smb302 in SMB Dialect filter is selected, the following features in Feature filter will be automatically selected. -->
-      <Feature name = "ChangeNotify"/>
-      <Feature name = "SWN"/>
-    </Target>
-    <Target name = "Smb311">
-      <!-- When Smb311 in SMB Dialect filter is selected, the following features in Feature filter will be automatically selected. -->
-      <Feature name = "FsctlValidateNegotiateInfo"/>
-      <Feature name = "Negotiate"/>
-      <Feature name = "Tree"/>
-      <Feature name = "Encryption"/>
-      <Feature name = "AppInstanceId"/>
-      <Feature name = "AppInstanceVersion"/>
-      <Feature name = "ChangeNotify"/>
-    </Target>
-    <Target name = "NonSmb">
-      <!-- When NonSmb in SMB Dialect filter is selected, the following features in Feature filter will be automatically selected. -->
-      <Feature name = "DFSC"/>
-      <Feature name = "SWN"/>
-      <Feature name = "FSRVP"/>
-      <Feature name = "RSVDVersion1"/>
-      <Feature name = "RSVDVersion2"/>
-      <Feature name = "SQOS"/>
-      <Feature name = "ShareAccessCheck"/>
-      <Feature name = "FolderAccessCheck"/>
-      <Feature name = "FileAccessCheck"/>
-      <Feature name = "CBAC"/>
-      <Feature name = "KerberosAuthentication"/>
-      <Feature name = "ChangeNotification"/>
-      <Feature name = "CreateFile"/>
-      <Feature name = "OpenFile"/>
-      <Feature name = "CloseFile"/>
-      <Feature name = "IoCtlRequest"/>
-      <Feature name = "LockAndUnlock"/>
-      <Feature name = "QueryFileInformation"/>
-      <Feature name = "SetFileInformation"/>
-      <Feature name = "QueryFileSystemInformation"/>
-      <Feature name = "SetFileSystemInformation"/>
-      <Feature name = "QueryQuotaInformation"/>
-      <Feature name = "SetQuotaInformation"/>
-      <Feature name = "QuerySecurityInformation"/>
-      <Feature name = "SetSecurityInformation"/>
-      <Feature name = "QueryDirectory"/>
-      <Feature name = "ReadFile"/>
-      <Feature name = "WriteFile"/>
-      <Feature name = "FlushCachedData"/>
-      <Feature name = "AlternateDataStream"/>
-    </Target>
   </FeatureMapping>
 
   <TestCategories>TestCategories.xml</TestCategories>
