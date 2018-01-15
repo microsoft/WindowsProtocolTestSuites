@@ -15,7 +15,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         #region Test Cases
         [TestMethod]
         [TestCategory(TestCategories.Smb30)]
-        [TestCategory(TestCategories.CombinedFeature)]
+        [TestCategory(TestCategories.CombinedFeatureNonClusterRequired)]
         [TestCategory(TestCategories.Positive)]
         [Description("Operate file via multi-channel with encryption on both channels.")]
         public void MultipleChannel_EncryptionOnBothChannels()
@@ -82,7 +82,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Smb30)]
-        [TestCategory(TestCategories.CombinedFeature)]
+        [TestCategory(TestCategories.CombinedFeatureNonClusterRequired)]
         [TestCategory(TestCategories.Compatibility)]
         [Description("Operate file via multi-channel only with encryption on main channel.")]
         public void MultipleChannel_Negative_EncryptionOnMainChannel()
@@ -156,7 +156,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Smb30)]
-        [TestCategory(TestCategories.CombinedFeature)]
+        [TestCategory(TestCategories.CombinedFeatureNonClusterRequired)]
         [TestCategory(TestCategories.Compatibility)]
         [Description("Operate file via multi-channel only with encryption on alternative channel.")]
         public void MultipleChannel_Negative_EncryptionOnAlternativeChannel()

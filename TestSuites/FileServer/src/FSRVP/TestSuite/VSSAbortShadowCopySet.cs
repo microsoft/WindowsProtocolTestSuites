@@ -15,7 +15,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSRVP.TestSuite
         #region Test Cases for VSSAbortShadowCopySet
         
         [TestMethod]
-        [TestCategory(TestCategories.Fsrvp)]
+        [TestCategory(TestCategories.FsrvpNonClusterRequired)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Check if the server supports AbortShadowCopySet after calling StartShadowCopySet.")]
@@ -29,7 +29,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSRVP.TestSuite
 
         
         [TestMethod]
-        [TestCategory(TestCategories.Fsrvp)]
+        [TestCategory(TestCategories.FsrvpNonClusterRequired)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Check if the server supports AbortShadowCopySet after calling AddShadowCopySet.")]
@@ -43,7 +43,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSRVP.TestSuite
 
         
         [TestMethod]
-        [TestCategory(TestCategories.Fsrvp)]
+        [TestCategory(TestCategories.FsrvpNonClusterRequired)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Compatibility)]
         [Description("Check if the server responses with FSRVP_E_BAD_STATE when calling AbortShadowCopySet after called RecoveryCompleteShadowCopySet.")]
