@@ -547,7 +547,7 @@ The typical scenario sequence is the following:
 
 * RDP Server instructs client to fill the surface with a solid color.
 
-* RDP Server send a H264 encoded image, using AVC420 mode or AVC444 mode, to the surface.
+* RDP Server send a H264 encoded image, using AVC420 mode, AVC444 mode or AVC444v2 mode, to the surface.
 
 * RDP Server instructs client to delete created surface
 
@@ -559,9 +559,9 @@ This scenario will test the following messages:
 
 * RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1
 
-* RFX\_AVC420\_BITMAP_STREAM
+* RFX\_AVC444\_BITMAP\_STREAM
 
-* RFX\_AVC420\_BITMAP_STREAM
+* RFX\_AVC444V2\_BITMAP\_STREAM
 
 ## <a name="_Toc427065085"/>Test Suite Design
 
@@ -1004,6 +1004,24 @@ In order to keep it simple, the common prerequisites and clean requirements are 
 | | If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Create a RFX\_AVC444\_BITMAP\_STREAM structure for its chroma frame, set LC to 0x2.| 
 | | Encode the  RFX\_AVC444\_BITMAP\_STREAM structure into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1 and send it as a frame to client| 
+| | Expect a frame acknowledge and validate frameId.| 
+| | If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
+| | Step 5: Delete the surface.| 
+|  **Cleanup**| N/A| 
+
+|  **H264 Codec Test**| | 
+| -------------| ------------- |
+|  **Test ID**| RDPEGFX\_H264Codec\_PositiveTest\_AVC444v2| 
+|  **Priority**| P1| 
+|  **Description** | Verify client can accept a RFX\_AVC444V2\_BITMAP\_STREAM structure with H264 encoded bitmap using YUV444v2 mode.| 
+|  **Prerequisites**| N/A| 
+|  **Test Execution Steps**| Step 1: Capability Exchange| 
+| | Step 2: Create a surface, instruct client to output bitmap data of surface and fill the surface with green color.| 
+| | Step 3: Get H264 encoded data frames, the H264 data is encoded as following:| 
+| | Using YUV444v2 mode| 
+| | Step 4: For each frame:| 
+| | Create a RFX\_AVC444V2\_BITMAP\_STREAM structure for its frame.| 
+| | Encode the  RFX\_AVC444V2\_BITMAP\_STREAM structure into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1 and send it as a frame to client.| 
 | | Expect a frame acknowledge and validate frameId.| 
 | | If the test suite is configured to verify image display, verify the graphic rendered on SUT.| 
 | | Step 5: Delete the surface.| 

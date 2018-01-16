@@ -1109,7 +1109,7 @@ Use the step below to run specific test cases.
 
 **To run specified test cases**
 
-* From the directory C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\ _&#60; protocol &#62;_ \, double-click the .cmd file for the test case that you want to run.
+* From the command line environment, run C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\CommonRunSingleCase.cmd\ &#60; TestCaseName &#62; to run specific test case.
 
 ### <a name="_Toc421010918"/>Example of How to run test case under interactive mode
 The following example illustrates how to run test case under interactive mode.
