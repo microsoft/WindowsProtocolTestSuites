@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asn1Base", "..\..\..\ProtoS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sqos", "..\..\..\ProtoSDK\MS-SQOS\Sqos.csproj", "{014B338D-1B5E-434B-BA05-B2C6D6797D07}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileServerToolForModelCases", "FileServerToolForModelCases\FileServerToolForModelCases.csproj", "{D217CB9B-C712-49FC-B135-4742A625BB94}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|amd64 = Debug|amd64
