@@ -147,14 +147,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
             try
             {
                 testSuite.LoadFrom(appConfig.TestSuiteAssembly);
-                Dictionary<string, List<Rule>> featureMappingTable = CreateFeatureMappingTable();
-                if (featureMappingTable != null)
-                {
-                    RuleGroup targetFilterGroup = filter[targetFilterIndex];
-                    RuleGroup mappingFilterGroup = filter[mappingFilterIndex];
-                    targetFilterGroup.featureMappingTable = featureMappingTable;
-                    targetFilterGroup.mappingRuleGroup = mappingFilterGroup;
-                }
             }
             catch (Exception e)
             {
@@ -172,6 +164,16 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 }
             }
 
+            if (filter != null) {
+                Dictionary<string, List<Rule>> featureMappingTable = CreateFeatureMappingTable();
+                if (featureMappingTable != null)
+                {
+                    RuleGroup targetFilterGroup = filter[targetFilterIndex];
+                    RuleGroup mappingFilterGroup = filter[mappingFilterIndex];
+                    targetFilterGroup.featureMappingTable = featureMappingTable;
+                    targetFilterGroup.mappingRuleGroup = mappingFilterGroup;
+                }
+            }
         }
 
         /// <summary>
