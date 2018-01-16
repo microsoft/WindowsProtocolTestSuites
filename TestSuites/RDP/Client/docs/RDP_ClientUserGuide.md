@@ -720,7 +720,7 @@ To change configuration settings, edit the **RDP_ClientTestSuite.deployment.ptfc
 
 #### <a name="_Toc421010908"/>Required Configuration Settings
 
-#####Common Required Properties
+##### Common Required Properties
 The following table describes the required properties for all the test cases.
 
 |  **Property**|  **Description**| 
@@ -776,7 +776,7 @@ The following table describes the required properties for all the test cases.
 | | If VerifySUTDisplay.Enable is false, this property should be ignored.| 
 | | Default value: **0**| 
 
-#####Required Properties for RDPBCGR
+##### Required Properties for RDPBCGR
 The following table describes the properties which are only required for test cases of RDPBCGR.
 
 |  **Property**|  **Description**| 
@@ -791,13 +791,13 @@ The following table describes the properties which are only required for test ca
 |  **RDP.Client.SupportServerRedirection**| Indicates if the remote desktop client (SUT) supports Server Redirection. The possible values are **True** and **False**.| 
 | | Default value: **True**| 
 
-#####Required Properties for RDPEUSB
+##### Required Properties for RDPEUSB
 There’s no other required property for test cases of RDPEUSB.
 
-#####Required Properties for RDPEVOR
+##### Required Properties for RDPEVOR
 There’s no other required property for test cases of RDPEVOR.
 
-#####Required Properties for RDPRFX
+##### Required Properties for RDPRFX
 The following table describes the properties which are only required for test cases of RDPRFX.
 
 |  **Property**|  **Description**| 
@@ -805,7 +805,7 @@ The following table describes the properties which are only required for test ca
 |  **RDPRFX.Image**| Determine how test suite get the image data, which is used by RDPRFX test cases to send image to the client. It should be Screen, or the path of an image file.| 
 | | Default value: **Screen**| 
 
-#####Required Properties for RDPEUDP
+##### Required Properties for RDPEUDP
 There’s no other required property for test cases of RDPEUDP.
 
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
@@ -813,7 +813,7 @@ Note
 
 >RDPEUDP test cases must be run under TLS or CredSSP security protocols.
 
-#####Required Properties for RDPEMT
+##### Required Properties for RDPEMT
 There’s no other required property for test cases of RDPEMT.
 
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
@@ -821,10 +821,10 @@ Note
 
 >RDPEMT test cases must be run under TLS or CredSSP security protocols.
 
-#####Required Properties for RDPEI
+##### Required Properties for RDPEI
 There’s no other required property for test cases of RDPEI.
 
-#####Required Properties for RDPEGFX
+##### Required Properties for RDPEGFX
 The following table describes the properties which are only required for test cases of RDPEGFX.
 
 
@@ -842,7 +842,7 @@ The following table describes the properties which are only required for test ca
 |  **RdpegfxH264TestDataPath**| The path of data files, which is used to test H264 codec.| 
 | | Default value: **.\**| 
 
-#####Required Properties for RDPEDISP
+##### Required Properties for RDPEDISP
 
 |  **Property**|  **Description**| 
 | -------------| ------------- |
@@ -889,27 +889,9 @@ The following table describes the optional configuration properties and provides
 
 This test suite includes command files that you can use to complete some basic test cases. Each test case verifies the protocol implementation based on a given scenario. 
 
-You can find and run these test cases in the following directories: 
+You can find all command files for test cases in the following directories: 
 
 * C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch
-
-* C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPBCGR
-
-* C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPEUSB
-
-* C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPRFX
-
-* C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPEVOR
-
-* C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPEUDP
-
-* C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPEMT
-
-* C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPEI
-
-* C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPEGFX
-
-* C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\RDPEDISP
 
 You can run these command files at the command prompt or via the graphical user interface.
 
@@ -1109,7 +1091,7 @@ Use the step below to run specific test cases.
 
 **To run specified test cases**
 
-* From the command line environment, run C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\CommonRunSingleCase.cmd\ &#60; TestCaseName &#62; to run specific test case.
+* From the command prompt, run C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\CommonRunSingleCase.cmd\ &#60; TestCaseName &#62; to run specific test case.
 
 ### <a name="_Toc421010918"/>Example of How to run test case under interactive mode
 The following example illustrates how to run test case under interactive mode.
