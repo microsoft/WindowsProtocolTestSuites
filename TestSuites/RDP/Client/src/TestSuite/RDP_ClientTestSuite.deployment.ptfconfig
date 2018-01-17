@@ -44,12 +44,12 @@
     <Property name="IsWindowsImplementation" value="true">
       <Choice>true, false</Choice>
       <Description>Indicates if SUT is Windows Implementation.</Description>
-    </Property>  
-     <!--Indicates if SUT drops the connection when an invalid request received.-->
+    </Property>
+    <!--Indicates if SUT drops the connection when an invalid request received.-->
     <Property name="DropConnectionForInvalidRequest" value="true">
       <Choice>true, false</Choice>
       <Description>Indicates if SUT drops the connection when an invalid request received.</Description>
-    </Property>  
+    </Property>
     <!--The version of the RDP intends to test. It should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3.-->
     <!--The seperator between the RDP.Version is required to be ".".-->
     <Property name="RDP.Version" value="8.1">
@@ -80,7 +80,7 @@
       <Description>The password of the pfx certificate.</Description>
     </Property>
     <!-- Block End -->
-    
+
     <!-- Block Begin: Properties that only used when the SUT is Windows OS-->
     <!-- The host name or IP address of SUT machine (RDP Client). -->
     <Property name="SUTName" value="SUT01">
@@ -98,7 +98,7 @@
     <Property name="SUTRedirectionGuid" value="RDSTLSForTestSuite">
       <Description>The redirection GUID for RDSTLS.</Description>
     </Property>
-    <!-- The full qualified domain name of driver computer for RDSTLS redirection test. -->
+    <!-- The full qualified domain name of driver computer for RDSTLS redirection test. If not in a domain environment, this value can be set arbitrarily.  -->
     <Property name="DriverComputerFullQualifiedDomainName" value="RDPServer.CONTOSO.com">
       <Description>The full qualified domain name of driver computer for RDSTLS redirection test.</Description>
     </Property>
@@ -114,10 +114,6 @@
     <Property name="RDPConnectWithNegotiationApproach_Task" value="Negotiate_RDPConnect">
       <Description>The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproach.</Description>
     </Property>
-    <!-- The Windows task name for SUT Control interface: RDPConnectWithDirectTLS. -->
-    <Property name="RDPConnectWithDirectTLS_Task" value="DirectTls_RDPConnect">
-      <Description>The Windows task name for SUT Control interface: RDPConnectWithDirectTLS.</Description>
-    </Property>
     <!-- The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSP. -->
     <Property name="RDPConnectWithDirectCredSSP_Task" value="DirectCredSSP_RDPConnect">
       <Description>The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSP.</Description>
@@ -126,13 +122,9 @@
     <Property name="RDPConnectWithNegotiationApproachFullScreen_Task" value="Negotiate_FullScreen_RDPConnect">
       <Description>The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproachFullScreen.</Description>
     </Property>
-    <!-- The Windows task name for SUT Control interface: RDPConnectWithDirectTLS. -->
-    <Property name="RDPConnectWithDirectTLSFullScreen_Task" value="DirectTls_FullScreen_RDPConnect">
-      <Description>The Windows task name for SUT Control interface: RDPConnectWithDirectTLS.</Description>
-    </Property>
-    <!-- The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSP. -->
+    <!-- The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSPFullScreen. -->
     <Property name="RDPConnectWithDirectCredSSPFullScreen_Task" value="DirectCredSSP_FullScreen_RDPConnect">
-      <Description>The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSP.</Description>
+      <Description>The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSPFullScreen.</Description>
     </Property>
     <!-- The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproach. -->
     <Property name="TriggerClientAutoReconnect_Task" value="TriggerNetworkFailure">
@@ -171,7 +163,7 @@
       <Description>The Windows task name for RDPEDISP SUT Control interface: MaximizeRDPClientWindow.</Description>
     </Property>
     <!-- Block End -->
-    
+
     <!--Block Begin: Properties that should to be set-->
     <!--Indicates if RDP client (SUT) support Fast-Path Input.-->
     <Property name="RDP.Client.SupportFastPathInput" value="true">
@@ -224,16 +216,16 @@
       <Choice>SSIM, MS-SSIM, G-SSIM</Choice>
       <Description>Set the algorithm used to assess whether two images are similar, the algorithm should be one of SSIM, MS-SSIM, G-SSIM.</Description>
     </Property>
-    <!-- Set threshold value for expected assess value, which is used for IQA algorithm when verifying RemoteFX codec, the test suite conclude two images similar if the IQA value not smaller than this bar -->
+    <!-- Set threshold value for expected assess value, which is used for IQA algorithm when verifying RemoteFX codec, the test suite concludes two images similar if the IQA value not smaller than this bar -->
     <Property name="VerifySUTDisplay.IQA.AssessValueThreshold" value="0.98">
-      <Description>Set threshold value for expected assess value, which should not be larger than 1. It is used for IQA algorithm when verifying RemoteFX codec, the test suite conclude two images similar if the IQA value not smaller than this bar.</Description>
+      <Description>Set threshold value for expected assess value, which should not be larger than 1. It is used for IQA algorithm when verifying RemoteFX codec, the test suite concludes two images similar if the IQA value not smaller than this bar.</Description>
     </Property>
-    <!-- Shift for the window of RDP client (SUT), set them to zero if the RDP client used full screen mode-->
+    <!-- Shift for the window of RDP client (SUT), set them to zero if the RDP client uses full screen mode-->
     <Property name="VerifySUTDisplay.Shift.X" value="0">
-      <Description>Shift for the window of RDP client (SUT), set them to zero if the RDP client used full screen mode.</Description>
+      <Description>Shift for the window of RDP client (SUT), set it to zero if the RDP client uses full screen mode.</Description>
     </Property>
     <Property name="VerifySUTDisplay.Shift.Y" value="0">
-      <Description>Shift for the window of RDP client (SUT), set them to zero if the RDP client used full screen mode.</Description>
+      <Description>Shift for the window of RDP client (SUT), set it to zero if the RDP client uses full screen mode.</Description>
     </Property>
     <!-- The original width of screen resolution-->
     <Property name="originalDesktopWidth" value="1024">
