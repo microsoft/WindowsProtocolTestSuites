@@ -126,9 +126,9 @@
     <Property name="RDPConnectWithDirectCredSSPFullScreen_Task" value="DirectCredSSP_FullScreen_RDPConnect">
       <Description>The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSPFullScreen.</Description>
     </Property>
-    <!-- The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproach. -->
+    <!-- The Windows task name for SUT Control interface: TriggerClientAutoReconnect. -->
     <Property name="TriggerClientAutoReconnect_Task" value="TriggerNetworkFailure">
-      <Description>The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproach.</Description>
+      <Description>The Windows task name for SUT Control interface: TriggerClientAutoReconnect.</Description>
     </Property>
     <!-- The Windows task name for SUT Control interface:TriggerInputEvents. -->
     <Property name="TriggerInputEvents_Task" value="TriggerInputEvents">
