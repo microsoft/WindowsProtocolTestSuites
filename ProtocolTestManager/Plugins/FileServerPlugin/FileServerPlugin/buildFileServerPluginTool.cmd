@@ -15,19 +15,6 @@ if not defined buildtool (
     goto :eof
 )
 
-if not defined vspath (
-	if defined VS110COMNTOOLS (
- 		set vspath="%VS110COMNTOOLS%"
-	) else if defined VS120COMNTOOLS (
-		set vspath="%VS120COMNTOOLS%"
-	) else if defined VS140COMNTOOLS (
-		set vspath="%VS140COMNTOOLS%"
-	) else (
-		echo Error: Visual Studio or Visual Studio test agent should be installed, version 2012 or higher
-		exit /b 1
-	)
-)
-
 set CurrentPath=%~dp0
 set TestSuiteRoot=%CurrentPath%
 
