@@ -62,7 +62,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
             {
                 case RdpSecurityProtocolValues.TLS:
                     SelectedProtocol = selectedProtocols_Values.PROTOCOL_SSL_FLAG;
-                    TransportProtocol = IsNegotiationBased ? EncryptedProtocol.NegotiationTls : EncryptedProtocol.DirectTls;
+                    site.Assume.IsTrue(
+                        IsNegotiationBased,
+                        "When TLS is used as the security protocol, {0} is set to 'TLS', {1} must be true.",
+                        ConfigPropNames.RdpSecurityProtocol,
+                        ConfigPropNames.RdpSecurityNegotiation);
+                    TransportProtocol = EncryptedProtocol.NegotiationTls;
                     break;
 
                 case RdpSecurityProtocolValues.CredSSP:
@@ -72,11 +77,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
 
                 case RdpSecurityProtocolValues.RDP:
                     SelectedProtocol = selectedProtocols_Values.PROTOCOL_RDP_FLAG;
-                    site.Assume.IsTrue(
-                        IsNegotiationBased,
-                        "When RDP is used as the security protocol, {0} is set to 'RDP', {1} must be true.",
-                        ConfigPropNames.RdpSecurityProtocol,
-                        ConfigPropNames.RdpSecurityNegotiation);
                     TransportProtocol = EncryptedProtocol.Rdp;
                     break;
 

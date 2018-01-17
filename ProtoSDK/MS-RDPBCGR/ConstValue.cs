@@ -787,7 +787,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
 
         #region Slow-Path Output
-        internal const UInt32 NUMBER_COLORS = 1;
+        internal const UInt32 NUMBER_COLORS = 256;
         internal const byte PALETTE_ENTRY_RED = 1;
         internal const byte PALETTE_ENTRY_GREEN = 10;
         internal const byte PALETTE_ENTRY_BLUE = 100;
