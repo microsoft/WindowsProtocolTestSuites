@@ -31,4 +31,4 @@ if not defined vspath (
 set CurrentPath=%~dp0
 set TestSuiteRoot=%CurrentPath%
 
-%buildtool% "%TestSuiteRoot%\FileServerToolForModelCases\FileServerToolForModelCases.csproj" /t:clean;rebuild
+%buildtool% "%TestSuiteRoot%\FileServerPluginTool\FileServerPluginTool.csproj" /t:clean;rebuild

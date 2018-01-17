@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-namespace Microsoft.Protocols.TestManager.FileServerToolForModelCases
+namespace Microsoft.Protocols.TestManager.FileServerPluginTool
 {
     class Program
     {
@@ -10,7 +10,7 @@ namespace Microsoft.Protocols.TestManager.FileServerToolForModelCases
             AppConfig config = AppConfig.LoadConfig();
             TestSuite testSuite = new TestSuite();
             testSuite.LoadFrom(config.TestSuiteAssembly);
-            testSuite.AppendCategoryForFileServerModelCases();
+            testSuite.AppendCategoryForFileServerCases();
         }
     }
 }

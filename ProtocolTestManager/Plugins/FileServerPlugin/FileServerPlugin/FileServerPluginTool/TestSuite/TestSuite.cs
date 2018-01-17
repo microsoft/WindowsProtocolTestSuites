@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Xml;
 using System.IO;
 
-namespace Microsoft.Protocols.TestManager.FileServerToolForModelCases
+namespace Microsoft.Protocols.TestManager.FileServerPluginTool
 {
     /// <summary>
     /// This class defines the structure of a test suite.
@@ -91,12 +91,12 @@ namespace Microsoft.Protocols.TestManager.FileServerToolForModelCases
         }
 
         /// <summary>
-        /// Append categories for model-based cases in FileServer
+        /// Append categories for test cases in FileServer
         ///   1. Add "Positive" for model-based cases without the following test categories in Priority Filter.
         ///        BVT, Positive, UnexpectedFields, InvalidIdentifier, OutOfBoundary, Compatibility, UnexpectedContext
         ///   2. Add "NonSmb" to FSA model-based cases.
         /// </summary>
-        public void AppendCategoryForFileServerModelCases()
+        public void AppendCategoryForFileServerCases()
         {
             string testCategoriesXmlPath = "TestCategories.xml";
             if (File.Exists(testCategoriesXmlPath))
@@ -114,8 +114,10 @@ namespace Microsoft.Protocols.TestManager.FileServerToolForModelCases
                     TestCase currentCase = TestCaseList[i];
                     List<string> categories = currentCase.Category;
 
+                    // Model-based case
                     if (categories.Contains("Model"))
                     {
+                        // TestCase which does not have any category in Priority Filter
                         if (!categories.Contains("BVT") &&
                             !categories.Contains("Positive") &&
                             !categories.Contains("UnexpectedFields") &&
@@ -127,6 +129,7 @@ namespace Microsoft.Protocols.TestManager.FileServerToolForModelCases
                             isModel = true;
                         }
 
+                        // FSA case
                         if (categories.Contains("FSA"))
                         {
                             if (!categories.Contains("NonSmb"))

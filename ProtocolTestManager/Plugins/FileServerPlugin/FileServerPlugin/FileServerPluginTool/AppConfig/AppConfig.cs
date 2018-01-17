@@ -9,7 +9,7 @@ using System.Xml;
 using Microsoft.Win32;
 using System.Text.RegularExpressions;
 
-namespace Microsoft.Protocols.TestManager.FileServerToolForModelCases
+namespace Microsoft.Protocols.TestManager.FileServerPluginTool
 {
     /// <summary>
     /// This class represents test suite specific configurations for the PTM.
@@ -34,7 +34,7 @@ namespace Microsoft.Protocols.TestManager.FileServerToolForModelCases
         /// <summary>
         /// Path of TestSuiteIntro.xml
         /// </summary>
-        const string TestSuiteIntroXmlDir = @"../../../UI/TestSuiteIntro.xml";
+        const string TestSuiteIntroXmlPath = @"../../../UI/TestSuiteIntro.xml";
 
         /// <summary>
         /// Test suite assemblies.
@@ -42,8 +42,9 @@ namespace Microsoft.Protocols.TestManager.FileServerToolForModelCases
         public List<string> TestSuiteAssembly;
 
         /// <summary>
-        /// Load configuration file and set TestSuiteDir
+        /// Load configuration file and return TestSuiteDir
         /// </summary>
+        /// <returns>TestSuiteDir</returns>
         public string CreateTestSuiteDir()
         {
             XmlDocument doc = new XmlDocument();
@@ -51,7 +52,7 @@ namespace Microsoft.Protocols.TestManager.FileServerToolForModelCases
             XmlReaderSettings settings = new XmlReaderSettings();
             settings.XmlResolver = null;
             settings.DtdProcessing = DtdProcessing.Prohibit;
-            XmlReader xmlReader = XmlReader.Create(TestSuiteIntroXmlDir, settings);
+            XmlReader xmlReader = XmlReader.Create(TestSuiteIntroXmlPath, settings);
             doc.Load(xmlReader);
 
             // Get Registry info 

@@ -102,7 +102,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
             //Apply rules
             return true;
         }
-
         public void UnselectAllRules()
         {
             foreach (RuleGroup ruleGroup in this)
@@ -161,7 +160,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             List<TestCase> result = new List<TestCase>();
             List<Filter> filters = new List<Filter>();
-
             foreach (RuleGroup g in this)
             {
                 filters.Add(new Filter(g.GetCategories(g.RuleGroupType == RuleType.Selector), g.RuleGroupType));

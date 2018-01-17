@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
 
-namespace Microsoft.Protocols.TestManager.FileServerToolForModelCases
+namespace Microsoft.Protocols.TestManager.FileServerPluginTool
 {
     /// <summary>
     /// Represents a test case.
