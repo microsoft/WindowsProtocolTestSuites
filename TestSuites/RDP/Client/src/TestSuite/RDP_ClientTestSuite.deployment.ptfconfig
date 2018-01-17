@@ -44,12 +44,12 @@
     <Property name="IsWindowsImplementation" value="true">
       <Choice>true, false</Choice>
       <Description>Indicates if SUT is Windows Implementation.</Description>
-    </Property>  
-     <!--Indicates if SUT drops the connection when an invalid request received.-->
+    </Property>
+    <!--Indicates if SUT drops the connection when an invalid request received.-->
     <Property name="DropConnectionForInvalidRequest" value="true">
       <Choice>true, false</Choice>
       <Description>Indicates if SUT drops the connection when an invalid request received.</Description>
-    </Property>  
+    </Property>
     <!--The version of the RDP intends to test. It should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3.-->
     <!--The seperator between the RDP.Version is required to be ".".-->
     <Property name="RDP.Version" value="8.1">
@@ -80,7 +80,7 @@
       <Description>The password of the pfx certificate.</Description>
     </Property>
     <!-- Block End -->
-    
+
     <!-- Block Begin: Properties that only used when the SUT is Windows OS-->
     <!-- The host name or IP address of SUT machine (RDP Client). -->
     <Property name="SUTName" value="SUT01">
@@ -98,7 +98,7 @@
     <Property name="SUTRedirectionGuid" value="RDSTLSForTestSuite">
       <Description>The redirection GUID for RDSTLS.</Description>
     </Property>
-    <!-- The full qualified domain name of driver computer for RDSTLS redirection test. -->
+    <!-- The full qualified domain name of driver computer for RDSTLS redirection test. If not in a domain environment, this value can be set arbitrarily.  -->
     <Property name="DriverComputerFullQualifiedDomainName" value="RDPServer.CONTOSO.com">
       <Description>The full qualified domain name of driver computer for RDSTLS redirection test.</Description>
     </Property>
@@ -171,7 +171,7 @@
       <Description>The Windows task name for RDPEDISP SUT Control interface: MaximizeRDPClientWindow.</Description>
     </Property>
     <!-- Block End -->
-    
+
     <!--Block Begin: Properties that should to be set-->
     <!--Indicates if RDP client (SUT) support Fast-Path Input.-->
     <Property name="RDP.Client.SupportFastPathInput" value="true">
