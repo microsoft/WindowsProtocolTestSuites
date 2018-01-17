@@ -98,7 +98,7 @@ namespace Microsoft.Protocols.TestManager.FileServerToolForModelCases
         /// </summary>
         public void AppendCategoryForFileServerModelCases()
         {
-            string testCategoriesXmlPath = System.IO.Path.Combine(@"../../../FileServerPlugin/", "TestCategories.xml");
+            string testCategoriesXmlPath = "TestCategories.xml";
             if (File.Exists(testCategoriesXmlPath))
             {
                 File.Delete(testCategoriesXmlPath);

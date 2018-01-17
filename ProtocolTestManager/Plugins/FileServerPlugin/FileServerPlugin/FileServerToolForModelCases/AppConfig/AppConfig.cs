@@ -29,12 +29,12 @@ namespace Microsoft.Protocols.TestManager.FileServerToolForModelCases
         /// <summary>
         /// Path of config.xml
         /// </summary>
-        string ConfigXmlPath = @"../../../FileServerPlugin/config.xml";
+        string ConfigXmlPath = "config.xml";
 
         /// <summary>
         /// Path of TestSuiteIntro.xml
         /// </summary>
-        const string TestSuiteIntroXmlDir = @"../../../../../UI/TestSuiteIntro.xml";
+        const string TestSuiteIntroXmlDir = @"../../../UI/TestSuiteIntro.xml";
 
         /// <summary>
         /// Test suite assemblies.
