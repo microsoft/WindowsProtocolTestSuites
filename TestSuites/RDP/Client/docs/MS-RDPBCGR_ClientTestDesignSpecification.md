@@ -1030,6 +1030,23 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 
 
 
+|  **S8_ServerRedirection**| | 
+| -------------| ------------- |
+|  **Test ID**| BVT\_ServerRedirection\_PositiveTest\_RDSTLSAuthenticationWithPasswordCredentials| 
+|  **Priority**| P1| 
+|  **Description** | This test case is used to ensure SUT can process server redirection successfully through RDSTLS authentication with the information sent in the Server Redirection PDU.| 
+|  **Prerequisites**| SUT supports server redirection and RDSTLS authentication.| 
+|  **Test Execution Steps**| Trigger SUT to initiate and complete an RDP connection. | 
+| | Test Suite sends SUT a Server Redirection PDU which sets the address, credential and certificate to the same machine where the Test Suite is located.| 
+| | Test Suite expects SUT terminates the current connection.| 
+| | Test Suite then expects SUT initiates a new connection. Expectation:| 
+| | In Client X.224 Connection Request PDU, the RDSTLS protocol is enabled.| 
+| | In Client RDSTLS Authentication Request PDU with Password Credentials, credential is those given in step 2.| 
+| | In Client Info PDU, it’s expected that SUT sets the credentials to that sent by Test Suite in step 2.|  
+|  **Cleanup**| N/A| 
+
+
+
 |  **S9_HealthMonitoring**| | 
 | -------------| ------------- |
 |  **Test ID**| BVT\_HealthMonitoring\_PositiveTest\_SendHeartbeat| 
