@@ -16,7 +16,7 @@ using Microsoft.Protocols.TestSuites.Rdp;
 namespace Microsoft.Protocols.TestSuites.Rdpegfx
 {
     public partial class RdpegfxTestSuite : RdpTestClassBase
-    {        
+    {
         [TestMethod]
         [Priority(1)]
         [TestCategory("Positive")]
@@ -106,8 +106,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("RDPEGFX")]
         [Description("Verify client can accept a RFX_AVC444_BITMAP_STREAM structure with H264 encoded bitmap using YUV420p mode and Base profile.")]
         public void RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_BaseProfile()
-        {                
-            String h264TestDataPath = GetTestDataFile();            
+        {
+            String h264TestDataPath = GetTestDataFile();
             SendH264CodecStream(h264TestDataPath, true);
         }
 
@@ -137,7 +137,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             String h264TestDataPath = GetTestDataFile();
             SendH264CodecStream(h264TestDataPath, true);
         }
-        
+
         [TestMethod]
         [Priority(1)]
         [TestCategory("Positive")]
@@ -161,7 +161,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             String h264TestDataPath = GetTestDataFile();
             SendH264CodecStream(h264TestDataPath, true);
         }
-        
+
         [TestMethod]
         [Priority(0)]
         [TestCategory("BVT")]
@@ -198,37 +198,49 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             String h264TestDataPath = GetTestDataFile();
             SendH264CodecStream(h264TestDataPath, true);
         }
-               
+
+        [TestMethod]
+        [Priority(1)]
+        [TestCategory("Positive")]
+        [TestCategory("RDP10.0")]
+        [TestCategory("RDPEGFX")]
+        [Description("Verify client can accept a RFX_AVC444V2_BITMAP_STREAM structure with H264 encoded bitmap using YUV444v2 mode.")]
+        public void RDPEGFX_H264Codec_PositiveTest_AVC444v2()
+        {
+            String h264TestDataPath = GetTestDataFile();
+            SendH264CodecStream(h264TestDataPath, true);
+        }
+
         #region private methods
 
         /// <summary>
         /// Common function to send H264 data to the client
         /// </summary>
         /// <param name="h264DataFile">XML file of H264 data</param>
-        /// <param name="isAVC444">Whether need RDP client support AVC444</param>
+        /// <param name="isAVC444">Whether need RDP client support AVC444/AVC444v2</param>
         private void SendH264CodecStream(string h264DataFile, bool isAVC444)
         {
             //Load H264 data
             RdpegfxH264TestDatas h264TestData = GetH264TestData(h264DataFile);
-            
+
             // Init for capability exchange
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Do capability exchange.");            
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Do capability exchange.");
             RDPEGFX_CapabilityExchange();
             if (isAVC444)
             {
-                this.TestSite.Assume.IsTrue(this.isH264AVC444Supported, "This test case need RDP client indicate support AVC444(RDPGFX_CAPSET_VERSION10,RDPGFX_CAPSET_VERSION102).");
+                this.TestSite.Assume.IsTrue(this.isH264AVC444Supported, "This test case requires RDP client to support AVC444/AVC444v2.");
             }
             else
             {
-                this.TestSite.Assume.IsTrue(this.isH264AVC420Supported, "To test H264 codec, client must indicates support for H264 codec in RDPGFX_CAPS_ADVERTISE_PDU");
+                this.TestSite.Assume.IsTrue(this.isH264AVC420Supported, "To test H264 codec, client must indicate support for H264 codec in RDPGFX_CAPS_ADVERTISE_PDU");
             }
-            
+
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create a surface and fill it with green color.");
             // Create & output a surface 
             RDPGFX_POINT16 surfPos = new RDPGFX_POINT16((ushort)h264TestData.SurfaceInfo.outputOriginX, (ushort)h264TestData.SurfaceInfo.outputOriginY);
             RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(surfPos, h264TestData.SurfaceInfo.width, h264TestData.SurfaceInfo.height);
             RDPGFX_RECT16 compareRect = RdpegfxTestUtility.ConvertToRect(surfPos, h264TestData.SurfaceInfo.width, h264TestData.SurfaceInfo.height);
-            if (isWindowsImplementation && compareRect.top < 32 && compareRect.bottom >32)
+            if (isWindowsImplementation && compareRect.top < 32 && compareRect.bottom > 32)
             {
                 // Ignore the field of RDP client connection bar
                 compareRect.top = 32;
@@ -255,19 +267,26 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                 bmRect.top = data.DestRect.top;
                 bmRect.right = data.DestRect.right;
                 bmRect.bottom = data.DestRect.bottom;
-                
+
                 if (codecId == (ushort)CodecType.RDPGFX_CODECID_AVC420 && data.AVC420BitmapStream != null)
                 {
-                    
+
                     this.TestSite.Log.Add(LogEntryKind.Comment, "Sending H264 AVC420 Encoded Bitmap Data Messages to client.");
                     fid = this.rdpegfxAdapter.SendImageWithH264AVC420Codec(surf.Id, pixFormat, bmRect, data.AVC420BitmapStream.To_RFX_AVC420_BITMAP_STREAM(), data.GetBaseImage());
                     // Test case pass if frame acknowledge is received.
                     this.rdpegfxAdapter.ExpectFrameAck(fid);
                 }
                 else if (codecId == (ushort)CodecType.RDPGFX_CODECID_AVC444 && data.AVC444BitmapStream != null)
-                {                    
+                {
                     this.TestSite.Log.Add(LogEntryKind.Comment, "Sending H264 AVC444 Encoded Bitmap Data Messages to client.");
-                    fid = this.rdpegfxAdapter.SendImageWithH264AVC444Codec(surf.Id, pixFormat, bmRect, data.AVC444BitmapStream.To_RFX_AVC444_BITMAP_STREAM(), data.GetBaseImage());
+                    fid = this.rdpegfxAdapter.SendImageWithH264AVC444Codec(surf.Id, pixFormat, bmRect, CodecType.RDPGFX_CODECID_AVC444, data.AVC444BitmapStream.To_RFX_AVC444_BITMAP_STREAM(), data.GetBaseImage());
+                    // Test case pass if frame acknowledge is received.
+                    this.rdpegfxAdapter.ExpectFrameAck(fid);
+                }
+                else if (codecId == (ushort)CodecType.RDPGFX_CODECID_AVC444v2 && data.AVC444v2BitmapStream != null)
+                {
+                    this.TestSite.Log.Add(LogEntryKind.Comment, "Sending H264 AVC444v2 Encoded Bitmap Data Messages to client.");
+                    fid = this.rdpegfxAdapter.SendImageWithH264AVC444Codec(surf.Id, pixFormat, bmRect, CodecType.RDPGFX_CODECID_AVC444v2, data.AVC444v2BitmapStream.To_RFX_AVC444V2_BITMAP_STREAM(), data.GetBaseImage());
                     // Test case pass if frame acknowledge is received.
                     this.rdpegfxAdapter.ExpectFrameAck(fid);
                 }
@@ -278,7 +297,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
                 this.VerifySUTDisplay(true, compareRect, 2);
-                
+
             }
 
             // Delete the surface
@@ -286,7 +305,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Debug, "Surface {0} is deleted", surf.Id);
 
         }
-        
+
         /// <summary>
         /// Get Test Data file path
         /// </summary>
@@ -304,7 +323,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                 Site.Assert.Fail("Cannot get its test data path");
             }
 
-            return h264TestDataPath +@"\"+ testCaseName + ".xml";
+            return h264TestDataPath + @"\" + testCaseName + ".xml";
         }
 
         #endregion private methods

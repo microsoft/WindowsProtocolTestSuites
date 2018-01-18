@@ -87,6 +87,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("Operate file via multi-channel only with encryption on main channel.")]
         public void MultipleChannel_Negative_EncryptionOnMainChannel()
         {
+            #region Check Applicability
+            TestConfig.CheckServerEncrypt();
+            #endregion
             uncSharePath = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.EncryptedFileShare);
 
             uint treeId;
@@ -161,6 +164,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("Operate file via multi-channel only with encryption on alternative channel.")]
         public void MultipleChannel_Negative_EncryptionOnAlternativeChannel()
         {
+            #region Check Applicability
+            TestConfig.CheckServerEncrypt();
+            #endregion
             uncSharePath = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.EncryptedFileShare);
 
             uint treeId;

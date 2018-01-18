@@ -851,15 +851,17 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 || core.version == version_Values.V3
                 || core.version == version_Values.V4
                 || core.version == version_Values.V5
-                || core.version == version_Values.V6,
+                || core.version == version_Values.V6
+                || core.version == version_Values.V7,
                 98,
-                string.Format("In Client Core Data, RDP client version number should be one of {0}, {1}, {2}, {3}, {4}, {5}.",
+                string.Format("In Client Core Data, RDP client version number should be one of {0}, {1}, {2}, {3}, {4}, {5}, {6}.",
                 version_Values.V1.ToString(),
                 version_Values.V2.ToString(),
                 version_Values.V3.ToString(),
                 version_Values.V4.ToString(),
                 version_Values.V5.ToString(),
-                version_Values.V6.ToString())
+                version_Values.V6.ToString(),
+                version_Values.V7.ToString())
                 );
             Site.CaptureRequirementIfIsTrue(core.desktopWidth >= 0,
                 100,
@@ -926,15 +928,26 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             uint encryptionMethods = (uint)encryptionMethod_Values._40BIT_ENCRYPTION_FLAG | (uint)encryptionMethod_Values._56BIT_ENCRYPTION_FLAG
                 | (uint)encryptionMethod_Values._128BIT_ENCRYPTION_FLAG | (uint)encryptionMethod_Values.FIPS_ENCRYPTION_FLAG;
             uint negEncryptionMethods = ~encryptionMethods;
-            bool isR213Satisfied = ((uint)sec.encryptionMethods & negEncryptionMethods) == 0;
-            Site.CaptureRequirementIfIsTrue(isR213Satisfied, 213,
-                @"In Client Security Data, encryptionMethods can take one of the following values:  \r\n40BIT_ENCRYPTION_FLAG "
-                + @"0x00000001,\r\n128BIT_ENCRYPTION_FLAG 0x0000000,\r\n256BIT_ENCRYPTION_FLAG 0x00000008,\r\nFIPS_ENCRYPTION_FLAG 0x00000010");
-            //<?> should decide whether is french clients
-            Site.CaptureRequirementIfAreEqual<uint>(sec.extEncryptionMethods, 0,
-                222,
-                "In Client Security Data for non-French locale clients, the extEncryptionMethods field MUST be set to 0. ");
+            if (sec.encryptionMethods != 0)
+            {
+                // non-French client
+                bool isR213Satisfied = ((uint)sec.encryptionMethods & negEncryptionMethods) == 0;
+                Site.CaptureRequirementIfIsTrue(isR213Satisfied, 213,
+                    @"In Client Security Data, encryptionMethods MUST be specified at least one of the following values:  \r\n40BIT_ENCRYPTION_FLAG "
+                    + @"0x00000001,\r\n128BIT_ENCRYPTION_FLAG 0x0000000,\r\n256BIT_ENCRYPTION_FLAG 0x00000008,\r\nFIPS_ENCRYPTION_FLAG 0x00000010");
 
+                Site.CaptureRequirementIfAreEqual<uint>((uint)sec.extEncryptionMethods, 0,
+                    222,
+                    "In Client Security Data for non-French locale clients, the extEncryptionMethods field MUST be set to 0. ");
+            }
+            else
+            {
+                // French client
+                bool isExtEncryptionMethodsSatisfied = ((uint)sec.extEncryptionMethods & negEncryptionMethods) == 0;
+                Site.Assert.IsTrue(isExtEncryptionMethodsSatisfied,
+                    @"In French locale clients, encryptionMethods MUST be set to zero and extEncryptionMethods MUST be specified at least one of the following values:"
+                    + @"\r\n40BIT_ENCRYPTION_FLAG 0x00000001,\r\n128BIT_ENCRYPTION_FLAG 0x0000000,\r\n256BIT_ENCRYPTION_FLAG 0x00000008,\r\nFIPS_ENCRYPTION_FLAG 0x00000010");
+            }
         }
 
         public void VerifyStructure(TS_UD_CS_NET net)

@@ -18,7 +18,7 @@
     <!--Negotiation-Base: True; Direct Approach: False.-->
     <Property name="RDP.Security.Negotiation" value="True">
       <Choice>True, False</Choice>
-      <Description>Negotiation-Base: True; Direct Approach: False</Description>
+      <Description>Negotiation-Base: True; Direct Approach: False. When security protocol is RDP, this value is ignored. For direct approach, only CredSSP is valid for security protocol.</Description>
     </Property>
     <!--One of the TLS, CredSSP, or RDP.-->
     <Property name="RDP.Security.Protocol" value="TLS">
@@ -49,12 +49,12 @@
     <Property name="DropConnectionForInvalidRequest" value="true">
       <Choice>true, false</Choice>
       <Description>Indicates if SUT drops the connection when an invalid request received.</Description>
-    </Property>
-    <!--The version of the RDP intends to test. It should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3.-->
+    </Property>  
+    <!--The version of the RDP intends to test. It should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4-->
     <!--The seperator between the RDP.Version is required to be ".".-->
     <Property name="RDP.Version" value="8.1">
-      <Choice>7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3</Choice>
-      <Description>The version of the RDP intends to test, it should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3</Description>
+      <Choice>7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4</Choice>
+      <Description>The version of the RDP intends to test, it should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4</Description>
     </Property>
     <!-- Block End -->
 

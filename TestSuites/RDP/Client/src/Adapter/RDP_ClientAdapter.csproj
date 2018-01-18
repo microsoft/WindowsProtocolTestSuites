@@ -193,8 +193,6 @@
     <None Include="SUTControlAdapter\Check-PSRemoting.ps1" />
     <None Include="SUTControlAdapter\RDPConnectWithDirectCredSSP.ps1" />
     <None Include="SUTControlAdapter\RDPConnectWithDirectCredSSPFullScreen.ps1" />
-    <None Include="SUTControlAdapter\RDPConnectWithDirectTLS.ps1" />
-    <None Include="SUTControlAdapter\RDPConnectWithDirectTLSFullScreen.ps1" />
     <None Include="SUTControlAdapter\RDPConnectWithNegotiationApproach.ps1" />
     <None Include="SUTControlAdapter\RDPConnectWithNegotiationApproachFullScreen.ps1" />
     <None Include="SUTControlAdapter\Run-TaskWithPSRemoting.ps1" />

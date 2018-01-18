@@ -1021,7 +1021,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             secData.encryptionMethods = (encryptionMethod_Values)ParseUInt32(data, ref currentIndex, false);
 
             // TS_UD_SC_SEC1: encryptionLevel
-            secData.extEncryptionMethods = (uint)ParseUInt32(data, ref currentIndex, false);
+            secData.extEncryptionMethods = (encryptionMethod_Values)ParseUInt32(data, ref currentIndex, false);
 
             return secData;
         }
