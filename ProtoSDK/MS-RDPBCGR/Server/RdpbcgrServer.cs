@@ -2362,8 +2362,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             updatePalette.paletteData.updateType = updateType_Values.UPDATETYPE_PALETTE;
             updatePalette.paletteData.pad2Octets = 0;
             updatePalette.paletteData.numberColors = ConstValue.NUMBER_COLORS;
-            updatePalette.paletteData.paletteEntries = new TS_PALETTE_ENTRY[1];
-            updatePalette.paletteData.paletteEntries[0] = paletteEntry;
+            updatePalette.paletteData.paletteEntries = new TS_PALETTE_ENTRY[ConstValue.NUMBER_COLORS];
+                    
+            for (int i = 0; i < updatePalette.paletteData.paletteEntries.Length; i++)
+            {
+                updatePalette.paletteData.paletteEntries[i] = paletteEntry;
+            }
             RdpbcgrUtility.FillShareDataHeader(ref updatePalette.shareDataHeader,
                                         (ushort)paletteLength,
                                         sessionContext,
@@ -2686,7 +2690,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 | ((int)compressedType_Values.None << 6));
             paletteUpdate.compressionFlags = compressedType_Values.None;
             paletteUpdate.paletteUpdateData.updateType = updateType_Values.UPDATETYPE_PALETTE;
-            paletteUpdate.paletteUpdateData.numberColors = 1;
+            paletteUpdate.paletteUpdateData.numberColors = ConstValue.NUMBER_COLORS;
             paletteUpdate.paletteUpdateData.pad2Octets = 0;
 
             TS_PALETTE_ENTRY paletteEntry = new TS_PALETTE_ENTRY();
@@ -2694,8 +2698,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             paletteEntry.blue = ConstValue.PALETTE_ENTRY_BLUE;
             paletteEntry.green = ConstValue.PALETTE_ENTRY_GREEN;
 
-            paletteUpdate.paletteUpdateData.paletteEntries = new TS_PALETTE_ENTRY[1];
-            paletteUpdate.paletteUpdateData.paletteEntries[0] = paletteEntry;
+            paletteUpdate.paletteUpdateData.paletteEntries = new TS_PALETTE_ENTRY[ConstValue.NUMBER_COLORS];
+            for (int i =0; i< paletteUpdate.paletteUpdateData.paletteEntries.Length; i++)
+            {
+                paletteUpdate.paletteUpdateData.paletteEntries[i] = paletteEntry;
+            }               
+            
 
             paletteUpdate.size = (ushort)(Marshal.SizeOf((ushort)paletteUpdate.paletteUpdateData.updateType)
                                 + Marshal.SizeOf(paletteUpdate.paletteUpdateData.pad2Octets)
