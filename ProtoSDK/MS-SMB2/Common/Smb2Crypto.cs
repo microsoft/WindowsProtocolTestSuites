@@ -23,10 +23,26 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
         {
             ulong sessionId;
             bool isCompound = false;
+            bool notEncryptNotSign = false;
+            bool notEncrypt = false;
 
             if (originalPacket is Smb2SinglePacket)
             {
-                sessionId = (originalPacket as Smb2SinglePacket).Header.SessionId;
+                Smb2SinglePacket singlePacket = originalPacket as Smb2SinglePacket;
+                sessionId = singlePacket.Header.SessionId;
+                // [MS-SMB2] Section 3.2.4.1.8, the request being sent is SMB2 NEGOTIATE, 
+                // or the request being sent is SMB2 SESSION_SETUP with the SMB2_SESSION_FLAG_BINDING bit set in the Flags field, 
+                // the client MUST NOT encrypt the message
+                if (sessionId == 0 ||
+                    (singlePacket.Header.Command == Smb2Command.NEGOTIATE && (singlePacket is Smb2NegotiateRequestPacket)))
+                {
+                    notEncryptNotSign = true;
+                }
+                else if ((singlePacket.Header.Command == Smb2Command.SESSION_SETUP && (singlePacket is Smb2SessionSetupRequestPacket) &&
+                    (singlePacket as Smb2SessionSetupRequestPacket).PayLoad.Flags == SESSION_SETUP_Request_Flags.SESSION_FLAG_BINDING))
+                {
+                    notEncrypt = true;
+                }
             }
             else if (originalPacket is Smb2CompoundPacket)
             {
@@ -39,19 +55,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
                 throw new NotImplementedException(string.Format("Signing and encryption are not implemented for packet: {0}", originalPacket.ToString()));
             }
 
-            // Signing and encryption not required if session id is not available yet
-            if (sessionId == 0 || !cryptoInfoTable.ContainsKey(sessionId))
+            if (sessionId == 0 || notEncryptNotSign || !cryptoInfoTable.ContainsKey(sessionId))
+            {
                 return originalPacket.ToBytes();
+            }
 
             Smb2CryptoInfo cryptoInfo = cryptoInfoTable[sessionId];
 
             #region Encrypt
-            // Try to encrypt the message whenever the encryption is supported or not. 
+            // Try to encrypt the message whenever the encryption is supported or not except for sesstion setup. 
             // If it's not supported, do it for negative test.
             // For compound packet, the encryption is done for the entire message.
-            byte[] encryptedBinary = Encrypt(sessionId, cryptoInfo, role, originalPacket);
-            if (encryptedBinary != null)
-                return encryptedBinary;
+            if (!notEncrypt)
+            {
+                byte[] encryptedBinary = Encrypt(sessionId, cryptoInfo, role, originalPacket);
+                if (encryptedBinary != null)
+                {
+                    return encryptedBinary;
+                }
+            }
             #endregion
 
             #region Sign
@@ -79,10 +101,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
                 }
             }
             #endregion
-
             return originalPacket.ToBytes();
         }
-
 
         public static byte[] Decrypt(byte[] bytes, Dictionary<ulong, Smb2CryptoInfo> cryptoInfoTable, Smb2Role role)
         {
@@ -135,9 +155,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
 
             // Encrypt all messages after session setup if global encryption enabled.
             // Encrypt all messages after tree connect if global encryption disabled but share encryption enabled.
-            if (header.Command != Smb2Command.NEGOTIATE
-             && header.Command != Smb2Command.SESSION_SETUP
-             && (cryptoInfo.EnableSessionEncryption
+            if ((cryptoInfo.EnableSessionEncryption
                  || (cryptoInfo.EnableTreeEncryption.Contains(header.TreeId)
                      && header.Command != Smb2Command.TREE_CONNECT
                      )
