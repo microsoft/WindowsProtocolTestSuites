@@ -300,9 +300,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
             // Remove the channel from dictionary
             channelDicbyId.Remove(channelId);
-        }
-        
-       
+        }     
 
         /// <summary>
         /// Send a PDU using a specific transport
@@ -323,6 +321,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// </summary>
         public void Dispose()
         {
+            //Close all Dynamic Virtual Channels before disconect SUT.
+            foreach (KeyValuePair<UInt32, DynamicVirtualChannel> channelId in channelDicbyId)
+            {                
+                this.SendDVCClosePDU(channelId.Key, channelId.Value.TransportType);                
+            }
+
             foreach (DynamicVC_TransportType type in transportDic.Keys)
             {
                 transportDic[type].Dispose();
