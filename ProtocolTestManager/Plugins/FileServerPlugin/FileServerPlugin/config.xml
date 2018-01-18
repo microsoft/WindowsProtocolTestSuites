@@ -76,8 +76,8 @@
       </Rule>
     </Group>
 
-    <Group name = "SMB Dialect">
-      <Rule name = "SMB Dialects (Please select all supported dialects)">
+    <Group name = "SMB Dialect (Please select all supported dialects)">
+      <Rule name = "SMB Dialects">
         <Rule name = "SMB 2.0.2">
           <Category name = "Smb2002"/>
         </Rule>
