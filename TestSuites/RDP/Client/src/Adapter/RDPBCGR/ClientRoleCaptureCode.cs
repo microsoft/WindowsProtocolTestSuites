@@ -851,15 +851,17 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 || core.version == version_Values.V3
                 || core.version == version_Values.V4
                 || core.version == version_Values.V5
-                || core.version == version_Values.V6,
+                || core.version == version_Values.V6
+                || core.version == version_Values.V7,
                 98,
-                string.Format("In Client Core Data, RDP client version number should be one of {0}, {1}, {2}, {3}, {4}, {5}.",
+                string.Format("In Client Core Data, RDP client version number should be one of {0}, {1}, {2}, {3}, {4}, {5}, {6}.",
                 version_Values.V1.ToString(),
                 version_Values.V2.ToString(),
                 version_Values.V3.ToString(),
                 version_Values.V4.ToString(),
                 version_Values.V5.ToString(),
-                version_Values.V6.ToString())
+                version_Values.V6.ToString(),
+                version_Values.V7.ToString())
                 );
             Site.CaptureRequirementIfIsTrue(core.desktopWidth >= 0,
                 100,

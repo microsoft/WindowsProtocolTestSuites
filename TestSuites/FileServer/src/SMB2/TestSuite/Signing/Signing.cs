@@ -59,6 +59,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         {
             #region Check Applicability
             TestConfig.CheckDialect(DialectRevision.Smb2002);
+            testConfig.CheckServerEncrypt();
             TestConfig.CheckSigning();
             #endregion
             

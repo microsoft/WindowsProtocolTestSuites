@@ -54,12 +54,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateN
             c = new ValidateNegotiateInfoConfig
             {
                 Platform = testConfig.Platform,
-                ValidateNegotiateInfoSupported = testConfig.IsIoCtlCodeSupported(CtlCode_Values.FSCTL_VALIDATE_NEGOTIATE_INFO) ? 
+                ValidateNegotiateInfoSupported = testConfig.IsIoCtlCodeSupported(CtlCode_Values.FSCTL_VALIDATE_NEGOTIATE_INFO) ?
                     ValidateNegotiateInfoInServer.SupportValidateNegotiateInfo : ValidateNegotiateInfoInServer.NotSupportValidateNegotiateInfo
             };
             validateNegotiateInfoConfig = c;
         }
-    
+
         /// <summary>
         /// Negotiate, SessionSetup and TreeConnect
         /// </summary>
@@ -77,7 +77,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateN
             testClient.Negotiate(
                 Packet_Header_Flags_Values.NONE,
                 Smb2Utility.GetDialects(ModelUtility.GetDialectRevision(dialect)),
-                securityMode,               
+                securityMode,
                 (Capabilities_Values)capabilities,
                 clientGuid,
                 (header, response) =>
@@ -98,12 +98,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateN
 
             #region treeconnect
             testClient.TreeConnect(
-                Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare), 
+                Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare),
                 out treeId);
             #endregion
 
             Connection_Dialect = ModelUtility.GetModelDialectRevision(negotiateResponse.DialectRevision);
             Connection_ClientCapabilities = (Capabilities_Values)capabilities;
+            if (dialect >= ModelDialectRevision.Smb30) // GLOBAL_CAP_ENCRYPTION will be added in Functional client when dialect >= SMB30
+            {
+                Connection_ClientCapabilities |= Capabilities_Values.GLOBAL_CAP_ENCRYPTION;
+            }
             Connection_ClientSecurityMode = securityMode;
             Connection_ClientGuid = clientGuid;
         }
@@ -193,7 +197,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateN
                                          negotiateResponse.ServerGuid.ToString(),
                                          validateNegotiateInfoResponse.Guid.ToString());
                 }
-                
+
                 testClient.TreeDisconnect(treeId);
                 testClient.LogOff();
                 testClient.Disconnect();

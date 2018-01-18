@@ -253,11 +253,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     break;
 
                 case Transport.SMB2:
-                    this.transAdapter = new Smb2TransportAdapter(new Smb2.DialectRevision[] { Smb2.DialectRevision.Smb2002, Smb2.DialectRevision.Smb21 });
+                    this.transAdapter = new Smb2TransportAdapter(new Smb2.DialectRevision[] { Smb2.DialectRevision.Smb2002, Smb2.DialectRevision.Smb21 }, testConfig);
                     break;
 
                 case Transport.SMB3:
-                    this.transAdapter = new Smb2TransportAdapter(new Smb2.DialectRevision[] { Smb2.DialectRevision.Smb30, Smb2.DialectRevision.Smb302 });
+                    this.transAdapter = new Smb2TransportAdapter(new Smb2.DialectRevision[] { Smb2.DialectRevision.Smb30, Smb2.DialectRevision.Smb302 }, testConfig);
                     break;
 
                 default:
