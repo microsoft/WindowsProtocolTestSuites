@@ -44,28 +44,39 @@ namespace Microsoft.Protocols.TestManager.FileServerPluginTool
 
                 foreach (Type type in types)
                 {
-                    //search for class, ont interfaces and other type
+                    // Search for class, interfaces and other type
                     if (type.IsClass)
                     {
                         MethodInfo[] methods = type.GetMethods();
                         foreach (MethodInfo method in methods)
                         {
-                            //methods loop, serch for methods with TestMethodAttribute
-                            object[] objs = method.GetCustomAttributes(false);
+                            // Search for methods with TestMethodAttribute
+                            object[] attributes = method.GetCustomAttributes(false);
                             bool isTestMethod = false;
                             bool isIgnored = false;
-                            foreach (object attribute in method.GetCustomAttributes(false))
+                            foreach (object attribute in attributes)
                             {
-                                if (attribute.GetType().Name == "TestMethodAttribute") isTestMethod = true;
-                                if (attribute.GetType().Name == "IgnoreAttribute") isIgnored = true;
+                                // Break the loop when "IgnoreAttribute" is found
+                                if (attribute.GetType().Name == "IgnoreAttribute")
+                                {
+                                    isIgnored = true;
+                                    break;
+                                }
+
+                                // Do not break the loop when "TestMethodAttribute" is found
+                                // It's possible to have "IgnoreAttribute" after "TestMethodAttribute"
+                                if (attribute.GetType().Name == "TestMethodAttribute")
+                                {
+                                    isTestMethod = true;
+                                }
                             }
                             if (isTestMethod && !isIgnored)
                             {
-                                //GetCategory
+                                // GetCategory
                                 List<string> categories = new List<string>();
-                                foreach (object attribute in objs)
+                                foreach (object attribute in attributes)
                                 {
-                                    //record TestCategories
+                                    // Record TestCategories
                                     if (attribute.GetType().Name == "TestCategoryAttribute")
                                     {
                                         PropertyInfo property = attribute.GetType().GetProperty("TestCategories");
@@ -91,7 +102,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPluginTool
         }
 
         /// <summary>
-        /// Append categories for test cases in FileServer
+        /// Append categories for FileServer test cases in TestCategories.xml
         ///   1. Add "Positive" for model-based cases without the following test categories in Priority Filter.
         ///        BVT, Positive, UnexpectedFields, InvalidIdentifier, OutOfBoundary, Compatibility, UnexpectedContext
         ///   2. Add "NonSmb" to FSA model-based cases.
