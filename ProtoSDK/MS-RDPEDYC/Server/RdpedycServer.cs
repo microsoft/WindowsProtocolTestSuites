@@ -321,20 +321,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// </summary>
         public void Dispose()
         {
-            //Close all Dynamic Virtual Channels before disconect SUT.
-            foreach (KeyValuePair<UInt32, DynamicVirtualChannel> channelId in channelDicbyId)
+            //Try to close all opening Dynamic Virtual Channels before disconect SUT.
+            if (channelDicbyId !=null)
             {
-                try
+                uint[] channelIds = new uint[channelDicbyId.Keys.Count];
+                channelDicbyId.Keys.CopyTo(channelIds, 0);
+                for(int i =0; i< channelIds.Length; i++)
                 {
-                    //Will not expect DVC close response, since TD mentions the SUT may return DVC close response.
-                    //[MS-RDPEDYC] Section 3.2.5.2: When a DVC client manager receives a DYNVC_CLOSE (section 2.2.4) PDU, the client MAY respond with a DYNVC_CLOSE (section 2.2.4) PDU specifying the ChannelId.
-                    this.SendDVCClosePDU(channelId.Key, channelId.Value.TransportType);
+                    try
+                    {
+                        //Will not expect DVC close response, since TD mentions the SUT may return DVC close response.
+                        //[MS-RDPEDYC] Section 3.2.5.2: When a DVC client manager receives a DYNVC_CLOSE (section 2.2.4) PDU, the client MAY respond with a DYNVC_CLOSE (section 2.2.4) PDU specifying the ChannelId.
+                        this.SendDVCClosePDU(channelIds[i], channelDicbyId[channelIds[i]].TransportType);
+                    }
+                    catch
+                    {
+                        //The RDP connection may be lost already, then the DVC close PDU cannot be received successfully.
+                        //Ignore the DVC close reponse failure here and continue.
+                    }
                 }
-                catch
-                {
-                    //The RDP connection may be lost already, then the DVC close PDU cannot be received successfully.
-                    //Ignore the DVC close reponse failure here and continue.
-                }                
             }
 
             foreach (DynamicVC_TransportType type in transportDic.Keys)
