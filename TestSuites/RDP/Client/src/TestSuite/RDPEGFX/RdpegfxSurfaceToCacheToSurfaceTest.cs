@@ -535,7 +535,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Evict the existing cache slot.");
             fid = this.rdpegfxAdapter.EvictCachEntry(cacheSlot);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
-            this.TestSite.Assert.IsNotNull(fid, "Evit the existing cache slog should succeed.");
+            this.TestSite.Assert.IsNotNull(fid, "Evit the existing cache slot should succeed.");
          
             //Evict the existing cacheslot
             try
@@ -543,7 +543,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Evict the existing cache slot.");
                 fid = this.rdpegfxAdapter.EvictCachEntry(cacheSlot);
                 // this.rdpegfxAdapter.ExpectFrameAck(fid);
-                this.TestSite.Assert.IsNotNull(fid, "Evit the existing cache slog should succeed.");
+                this.TestSite.Assert.IsNotNull(fid, "Evit the existing cache slot should succeed.");
             }
             catch (Exception ex)
             {
