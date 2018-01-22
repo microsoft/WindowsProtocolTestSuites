@@ -99,6 +99,18 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
             this.rdpbcgrAdapter.ConfirmActiveRequest += new ConfirmActiveRequestHandler(this.testClassBase_getConfirmActivePduInfo);
 
+            if (isWindowsImplementation)
+            {
+                string RDPClientVersion = this.Site.Properties["RDP.Version"].ToString();
+                if (string.CompareOrdinal(RDPClientVersion, "10.3") == 0) // Windows client will not interrupt the connection for RDPClient 10.3.
+                {
+                    DropConnectionForInvalidRequest = true; //A switch to avoid waiting till timeout. 
+                }
+                else
+                {
+                    DropConnectionForInvalidRequest = false; //A switch to avoid waiting till timeout. 
+                }
+            }
         }
 
         protected override void TestCleanup()
@@ -608,19 +620,6 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <param name="requestDesc">The description about the invalid request for logging output</param>
         public void RDPClientTryDropConnection(string requestDesc)
         {
-            if (isWindowsImplementation)
-            {
-                string RDPClientVersion = this.Site.Properties["RDP.Version"].ToString();
-                if (string.CompareOrdinal(RDPClientVersion, "10.3") == 0) // Windows client will not interrupt the connection for RDPClient 10.3.
-                {
-                    DropConnectionForInvalidRequest = true; //A switch to avoid waiting till timeout. 
-                }
-                else
-                {
-                    DropConnectionForInvalidRequest = false; //A switch to avoid waiting till timeout. 
-                }
-            }
-
             if (DropConnectionForInvalidRequest)
             {
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Expect RDP client to drop the connection");
