@@ -356,35 +356,35 @@
       <Config name="targetFilterIndex" index = "1"/>
       <Config name="mappingFilterIndex" index = "2"/>
       <!--
-        SMB Dialect (index=1) is set as target filter and
-        Feature (index=2) is set as mapping filter.
-        
         To use feature mapping, please make sure that
         each testcase must have a test category in target filter and a test category in mapping filter.
-        
+
         When a category in target filter is selected,
         categories in mapping filter that occur in the same testcase will be automatically selected.
-        
+
+        SMB Dialect (index=1) is set as target filter and
+        Feature (index=2) is set as mapping filter.
+
         For example, there are 3 test cases as follows:
-        
+
         [TestCategories.Smb2002]
         [TestCategories.Negotiate]
         TestCase1
-        
+
         [TestCategories.Smb2002]
         [TestCategories.Encryption]
         TestCase2
-        
+
         [TestCategories.NonSmb]
         [TestCategories.Frsvp]
         TestCase3
-        
+
         Suppose Smb2002 and NonSmb are categories in SMB Dialect filter (target filter)
         while Negotiate, Encryption and Frsvp are categories in Feature filter (mapping filter).
-        
+
         If user selects Smb2002 in SMB Dialect filter,
         Negotiate and Encryption will be automatically selected in Feature filter.
-        
+
         Frsvp will not be selected since Smb2002 is not in TestCase3.
       -->
     </Config>

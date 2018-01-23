@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Xml;
 using System.IO;
 
-namespace Microsoft.Protocols.TestManager.FileServerPluginTool
+namespace Microsoft.Protocols.TestManager.TestCategoryGenerationTool
 {
     /// <summary>
     /// This class defines the structure of a test suite.

@@ -7,8 +7,8 @@
     <ProjectGuid>{D217CB9B-C712-49FC-B135-4742A625BB94}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FileServerPluginTool</RootNamespace>
-    <AssemblyName>FileServerPluginTool</AssemblyName>
+    <RootNamespace>TestCategoryGenerationTool</RootNamespace>
+    <AssemblyName>TestCategoryGenerationTool</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
