@@ -233,7 +233,7 @@ $settingXml.Save("$settingFile")
 # Create task to detect whether the SUT Adapter works
 #-----------------------------------------------------
 Write-Host "Creating task to detect whether the SUT Adapter works and try 10 times if fails ..."
-$batchPath = "$scriptsPath\..\Batch\RDPBCGR"
+$batchPath = "$scriptsPath\..\Batch"
 cmd /c schtasks /Create /SC Weekly /TN WaitForSUTControlAdapterReady /TR "powershell $scriptsPath\WaitForSUTControlAdapterReady.ps1 $tcComputerName $userNameInTC $userPwdInTC $batchPath" /IT /F
 
 #-----------------------------------------------------

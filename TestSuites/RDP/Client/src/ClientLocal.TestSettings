@@ -6,7 +6,6 @@
     <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_8.png" />
     <DeploymentItem filename="TestSuite\Rdprfx.bmp" />
     <DeploymentItem filename="Adapter\SUTControlAdapter\Check-PSRemoting.ps1" />
-    <DeploymentItem filename="Adapter\SUTControlAdapter\RDPConnectWithDirectTLSFullScreen.ps1" />
     <DeploymentItem filename="TestSuite\RDPEDISP\RdpedispEnhancedAdapterImages\OrientationChange2.png" />
     <DeploymentItem filename="TestSuite\RDPEDISP\RdpedispEnhancedAdapterImages\OrientationChange3.png" />
     <DeploymentItem filename="Adapter\RdpedispSUTControlAdapter\TriggerInitializeDisplaySettings.ps1" />
@@ -61,7 +60,6 @@
     <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_5.png" />
     <DeploymentItem filename="Adapter\RdpeiSUTControlAdapter\TriggerPositionSpecifiedTouchEventOnClient.ps1" />
     <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_Large_1.png" />
-    <DeploymentItem filename="Adapter\SUTControlAdapter\RDPConnectWithDirectTLS.ps1" />
     <DeploymentItem filename="Adapter\RdpeiSUTControlAdapter\TriggerContinuousTouchEventOnClient.ps1" />
     <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_10.png" />
     <DeploymentItem filename="TestSuite\RDPEDISP\RdpedispEnhancedAdapterImages\OrientationChange1.png" />
