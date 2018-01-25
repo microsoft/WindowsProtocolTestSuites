@@ -9,12 +9,11 @@ namespace Microsoft.Protocols.TestManager.TestCategoryGenerationTool
     {
         static public void usage()
         {
-            System.Console.WriteLine("\nTestCategoryGenerationTool.exe  TestCategoryType");
+            System.Console.WriteLine("\nTestCategoryGenerationTool.exe  TestSuiteName");
             System.Console.WriteLine("-------------------------------------------------");
-            System.Console.WriteLine("Please select TestCategoryType below:");
+            System.Console.WriteLine("Please select TestSuiteName below:");
             System.Console.WriteLine("  FileServer");
             System.Console.WriteLine("  Kerberos");
-            System.Console.WriteLine("  MS-RAA");
             System.Console.WriteLine("  MS-AZOD");
             System.Console.WriteLine("  ADFamily");
             System.Console.WriteLine("  MS-ADOD");
@@ -45,7 +44,7 @@ namespace Microsoft.Protocols.TestManager.TestCategoryGenerationTool
                 throw new Exception(e.Message);
             }
 
-            if (config.TargetType == AppConfig.TestCaseType.FILE_SERVER)
+            if (config.TargetTestSuiteType == AppConfig.TestSuiteType.FILE_SERVER)
             {
                 testSuite.AppendCategoryForFileServerCases();
             }

@@ -17,7 +17,7 @@ namespace Microsoft.Protocols.TestManager.TestCategoryGenerationTool
         /// <summary>
         /// Target type of test case
         /// </summary>
-        public TestCaseType TargetType { get; set; }
+        public TestSuiteType TargetTestSuiteType { get; set; }
 
         /// <summary>
         /// Name of test suite
@@ -47,7 +47,7 @@ namespace Microsoft.Protocols.TestManager.TestCategoryGenerationTool
         /// <summary>
         /// Enum of test case types
         /// </summary>
-        public enum TestCaseType : ushort
+        public enum TestSuiteType : ushort
         {
             /// <summary>
             /// File Server
@@ -60,99 +60,90 @@ namespace Microsoft.Protocols.TestManager.TestCategoryGenerationTool
             KERBEROS = 0x02,
 
             /// <summary>
-            /// MS-RAA
-            /// </summary>
-            RAA = 0x03,
-
-            /// <summary>
             /// MS-AZOD
             /// </summary>
-            AZOD = 0x04,
+            AZOD = 0x03,
 
             /// <summary>
             /// ADFamily
             /// </summary>
-            AD_FAMILY = 0x05,
+            AD_FAMILY = 0x04,
 
             /// <summary>
             /// MS-ADOD
             /// </summary>
-            ADOD = 0x06,
+            ADOD = 0x05,
 
             /// <summary>
             /// RDP-Client
             /// </summary>
-            RDP_CLIENT = 0x07,
+            RDP_CLIENT = 0x06,
 
             /// <summary>
             /// RDP-Server
             /// </summary>
-            RDP_SERVER = 0x08,
+            RDP_SERVER = 0x07,
 
             /// <summary>
             /// MS-ADFSPIP
             /// </summary>
-            ADFSPIP = 0x09,
+            ADFSPIP = 0x08,
 
             /// <summary>
             /// BranchCache
             /// </summary>
-            BRANCH_CACHE = 0x0a,
+            BRANCH_CACHE = 0x09,
         }
 
         /// <summary>
         /// Get test case type
         /// </summary>
-        /// <param name="testCaseType"></param>
+        /// <param name="testSuiteName"></param>
         /// <returns>TestCaseType</returns>
-        private TestCaseType GetTestCaseType(string testCaseType)
+        private TestSuiteType GetTestSuiteType(string testSuiteName)
         {
-            TestCaseType type;
-            if (testCaseType.Equals("FileServer"))
+            TestSuiteType type;
+            if (testSuiteName.Equals("FileServer"))
             {
-                type = TestCaseType.FILE_SERVER;
+                type = TestSuiteType.FILE_SERVER;
             }
-            else if (testCaseType.Equals("Kerberos"))
+            else if (testSuiteName.Equals("Kerberos"))
             {
-                type = TestCaseType.KERBEROS;
+                type = TestSuiteType.KERBEROS;
             }
-            else if (testCaseType.Equals("MS-RAA"))
+            else if (testSuiteName.Equals("MS-AZOD"))
             {
-                type = TestCaseType.RAA;
+                type = TestSuiteType.AZOD;
             }
-            else if (testCaseType.Equals("MS-AZOD"))
+            else if (testSuiteName.Equals("ADFamily"))
             {
-                type = TestCaseType.AZOD;
+                type = TestSuiteType.AD_FAMILY;
             }
-            else if (testCaseType.Equals("ADFamily"))
+            else if (testSuiteName.Equals("MS-ADOD"))
             {
-                type = TestCaseType.AD_FAMILY;
+                type = TestSuiteType.ADOD;
             }
-            else if (testCaseType.Equals("MS-ADOD"))
+            else if (testSuiteName.Equals("RDP-Client"))
             {
-                type = TestCaseType.ADOD;
+                type = TestSuiteType.RDP_CLIENT;
             }
-            else if (testCaseType.Equals("RDP-Client"))
+            else if (testSuiteName.Equals("RDP-Server"))
             {
-                type = TestCaseType.RDP_CLIENT;
+                type = TestSuiteType.RDP_SERVER;
             }
-            else if (testCaseType.Equals("RDP-Server"))
+            else if (testSuiteName.Equals("MS-ADFSPIP"))
             {
-                type = TestCaseType.RDP_SERVER;
+                type = TestSuiteType.ADFSPIP;
             }
-            else if (testCaseType.Equals("MS-ADFSPIP"))
+            else if (testSuiteName.Equals("BranchCache"))
             {
-                type = TestCaseType.ADFSPIP;
-            }
-            else if (testCaseType.Equals("BranchCache"))
-            {
-                type = TestCaseType.BRANCH_CACHE;
+                type = TestSuiteType.BRANCH_CACHE;
             }
             else
             {
-                return (TestCaseType)0xff;
+                return (TestSuiteType)0xff;
             }
-            TestSuiteName = testCaseType;
+            TestSuiteName = testSuiteName;
             return type;
         }
 
@@ -163,21 +154,20 @@ namespace Microsoft.Protocols.TestManager.TestCategoryGenerationTool
         /// <param name="endpoint"></param>
         /// <param name="version"></param>
         /// <returns>Test suite folder</returns>
-        private string GetTestSuiteFolder(TestCaseType type, string endpoint, string version)
+        private string GetTestSuiteFolder(TestSuiteType type, string endpoint, string version)
         {
             switch (type)
             {
-                case TestCaseType.AD_FAMILY:
-                case TestCaseType.FILE_SERVER:
-                case TestCaseType.KERBEROS:
-                case TestCaseType.RAA:
+                case TestSuiteType.AD_FAMILY:
+                case TestSuiteType.FILE_SERVER:
+                case TestSuiteType.KERBEROS:
                     break;
-                case TestCaseType.ADOD:
-                case TestCaseType.AZOD:
-                case TestCaseType.BRANCH_CACHE:
+                case TestSuiteType.ADOD:
+                case TestSuiteType.AZOD:
+                case TestSuiteType.BRANCH_CACHE:
                     return TestSuiteFolderFormat.Replace("$(TestSuiteVersion)", version);
-                case TestCaseType.RDP_CLIENT:
-                case TestCaseType.RDP_SERVER:
+                case TestSuiteType.RDP_CLIENT:
+                case TestSuiteType.RDP_SERVER:
                     return TestSuiteFolderFormat
                         .Replace("$(TestSuiteVersion)",  version)
                         .Replace("$(TestSuiteEndpoint)", endpoint);
@@ -191,7 +181,7 @@ namespace Microsoft.Protocols.TestManager.TestCategoryGenerationTool
         /// Load configuration file and return TestSuiteDir
         /// </summary>
         /// <returns>TestSuiteDir</returns>
-        public string CreateTestSuiteDir(TestCaseType type)
+        public string CreateTestSuiteDir(TestSuiteType type)
         {
             XmlDocument doc = new XmlDocument();
             doc.XmlResolver = null;
@@ -268,8 +258,8 @@ namespace Microsoft.Protocols.TestManager.TestCategoryGenerationTool
         public static AppConfig LoadConfig(string testSuiteName)
         {
             AppConfig config = new AppConfig();
-            config.TargetType = config.GetTestCaseType(testSuiteName);
-            if (config.TargetType == (TestCaseType)(0xff))
+            config.TargetTestSuiteType = config.GetTestSuiteType(testSuiteName);
+            if (config.TargetTestSuiteType == (TestSuiteType)(0xff))
             {
                 Program.usage();
                 System.Environment.Exit(-1);
@@ -284,7 +274,7 @@ namespace Microsoft.Protocols.TestManager.TestCategoryGenerationTool
             doc.Load(xmlReader);
 
             // Load DllFileNames
-            string testSuiteDir = config.CreateTestSuiteDir(config.TargetType);
+            string testSuiteDir = config.CreateTestSuiteDir(config.TargetTestSuiteType);
             config.TestSuiteAssembly = new List<string>();
             XmlNode DllFileNamesNode = doc.DocumentElement.SelectSingleNode("DllFileNames");
             foreach (XmlNode xn in DllFileNamesNode.SelectNodes("DllFileName"))
