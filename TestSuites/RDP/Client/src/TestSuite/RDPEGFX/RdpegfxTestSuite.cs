@@ -61,7 +61,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening with transport protocol: {0}", transportProtocol.ToString());
             this.rdpbcgrAdapter.StartRDPListening(transportProtocol);
 
-
         }
 
         protected override void TestCleanup()
