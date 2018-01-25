@@ -105,7 +105,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 out serverCreateContexts);
 
             // The destination file of CopyOffload Write should be equal to or larger than the size of original file
-            client.Write(treeId, fileIdDest, Smb2Utility.CreateRandomString(TestConfig.WriteBufferLengthInKb);
+            client.Write(treeId, fileIdDest, Smb2Utility.CreateRandomString(TestConfig.WriteBufferLengthInKb));
             client.Flush(treeId, fileIdDest);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. Client sends IOCTL request with FSCTL_OFFLOAD_WRITE to ask server to copy the content from source to destination.");
