@@ -30,10 +30,10 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />	
+    <Reference Include="System" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />

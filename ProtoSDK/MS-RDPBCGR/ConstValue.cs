@@ -490,9 +490,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// The orderSupport field of 2.2.7.1.3 Order Capability Set (TS_ORDER_CAPABILITYSET).
         /// </summary>
         internal static readonly byte[] ORDER_CAP_ORDER_SUPPORT_DEFAULT =
-            new byte[] { 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01, 
-                         0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x01, 
-                         0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 
+            new byte[] { 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01,
+                         0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x01,
+                         0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00,
                          0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00};
 
         internal static readonly byte[] TERMINALDESCRIPTOR =
@@ -673,8 +673,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// (TS_BITMAPCACHE_PERSISTENT_LIST_PDU).
         /// </summary>
         internal static readonly TS_BITMAPCACHE_PERSISTENT_LIST_ENTRY[] PERSISTENT_KEY_LIST_ENTRY_DEFAULT =
-            new TS_BITMAPCACHE_PERSISTENT_LIST_ENTRY[] { 
-            new TS_BITMAPCACHE_PERSISTENT_LIST_ENTRY(0x1651, 0x2948), 
+            new TS_BITMAPCACHE_PERSISTENT_LIST_ENTRY[] {
+            new TS_BITMAPCACHE_PERSISTENT_LIST_ENTRY(0x1651, 0x2948),
             new TS_BITMAPCACHE_PERSISTENT_LIST_ENTRY(0x9c89, 0xa9cd),
             new TS_BITMAPCACHE_PERSISTENT_LIST_ENTRY(0xbdb7, 0x6db4),
             new TS_BITMAPCACHE_PERSISTENT_LIST_ENTRY(0xaf64, 0xc3bc),
@@ -787,7 +787,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
 
         #region Slow-Path Output
-        internal const UInt32 NUMBER_COLORS = 1;
+        internal const UInt32 NUMBER_COLORS = 256;
         internal const byte PALETTE_ENTRY_RED = 1;
         internal const byte PALETTE_ENTRY_GREEN = 10;
         internal const byte PALETTE_ENTRY_BLUE = 100;
@@ -872,7 +872,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// </summary>
         internal static readonly byte[] NON_FIPS_PAD1 = new byte[] { 0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36,
                                                                      0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36,
-                                                                     0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 
+                                                                     0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36,
                                                                      0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36,
                                                                      0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36,};
 
@@ -958,7 +958,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// signing Proprietary Certificates with the RSA algorithm.
         /// Section 5.3.3.1.1 Terminal Services Signing Key.
         /// </summary>
-        internal static readonly byte[] PROPRIETARY_CERTIFICATE_MODULUS = new byte[] { 
+        internal static readonly byte[] PROPRIETARY_CERTIFICATE_MODULUS = new byte[] {
                                0x3d, 0x3a, 0x5e, 0xbd, 0x72, 0x43, 0x3e, 0xc9,
                                0x4d, 0xbb, 0xc1, 0x1e, 0x4a, 0xba, 0x5f, 0xcb,
                                0x3e, 0x88, 0x20, 0x87, 0xef, 0xf5, 0xc1, 0xe2,
@@ -1184,14 +1184,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         internal const string ERROR_MESSAGE_DATA_INDEX_OUT_OF_RANGE = "[Decode Error] data index out of range.";
         internal const string ERROR_MESSAGE_DATA_NULL_REF = "[Decode Error] data is of null-referenced.";
         internal const string ERROR_MESSAGE_ENUM_UNRECOGNIZED = "[Decode Error] unrecognized enum value.";
-        internal const string ERROR_MESSAGE_DECRYPTION_FAILED = "[Decode Error] data decyption failed.";
+        internal const string ERROR_MESSAGE_DECRYPTION_FAILED = "[Decode Error] data decryption failed.";
         internal const string ERROR_MESSAGE_NOT_SUPPORTED_X509_CERTIFICATE =
             "[Decode Error] X509 certificate is not supported.";
+        internal const string ERROR_MESSAGE_UNRECOGNIZED_PDU = "[Decode Error] PDU unrecognized!";
+        internal const string ERROR_MESSAGE_INVALID_GUID = "[Decode Error] Invalid GUID!";
+        internal const string ERROR_MESSAGE_INVALID_UNICODE_STRING = "[Decode Error] Invalid Unicode string!";
         #endregion Constants: Error Messages
         #endregion Constants in RdpbcgrDecoder
         #endregion internal member
-                
+
         public const int TEST_PORT = 3389;
-        
     }
 }

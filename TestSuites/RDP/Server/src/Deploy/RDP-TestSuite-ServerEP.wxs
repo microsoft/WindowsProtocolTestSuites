@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?define TESTSUITE_NAME=RDP?>
+<?define TESTSUITE_ENDPOINT=Server?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+	 
+  <Product Id="*"
+           Name="Microsoft $(var.TESTSUITE_NAME) $(var.TESTSUITE_ENDPOINT) Endpoint Test Suite"
+           Language="1033"
+           Version="$(env.TESTSUITE_VERSION)"
+           Manufacturer="Microsoft Corporation"
+           UpgradeCode="A5FD7DA8-4CE0-4C0D-8C21-7F3A9122A9E7">
+
+    <Package Id="*"
+             InstallScope="perMachine"
+             InstallPrivileges="elevated"
+             Description="Microsoft $(var.TESTSUITE_NAME) $(var.TESTSUITE_ENDPOINT) Endpoint Test Suite v$(env.TESTSUITE_VERSION)"
+             Manufacturer="Microsoft Corporation"
+             InstallerVersion="300"
+             Compressed="yes" />
+
+    <Media Id="1" Cabinet="TestSuite_AllInOne.cab" EmbedCab="yes" />
+
+    <MajorUpgrade DowngradeErrorMessage ="A later version of [ProductName] is already installed. Setup will now exit." />
+
+    <Feature Id="TestSuiteFeatures" Level="1" ConfigurableDirectory="TESTSUITE_ROOT_DIR" />
+
+    <WixVariable Id="TESTSUITE_NAME" Value="$(var.TESTSUITE_NAME)" Overridable="no" />
+    <WixVariable Id="TESTSUITE_ENDPOINT" Value="$(var.TESTSUITE_ENDPOINT)" Overridable="no" />
+    <WixVariable Id="TESTSUITE_VERSION" Value="$(env.TESTSUITE_VERSION)" Overridable="no" />
+
+    <WixVariable Id="TESTSUITE_BATCH_DIR" Value="$(env.TestSuiteRoot)\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\src\Batch" />
+	<WixVariable Id="TESTSUITE_BIN_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\$(var.TESTSUITE_NAME)\Bin" />
+	<WixVariable Id="DOCS_FILES_DIR" Value="$(env.TestSuiteRoot)\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\Docs" />
+	<WixVariable Id="TESTSUITE_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\Setup\Scripts" />
+
+    <WixVariable Id="RUN_TESTS_COMMAND" Value="RunAllTestCases.cmd" />
+    <DirectoryRef Id="TESTSUITE_ROOT_DIR">
+      <Component Id="LICENSE.rtf" Guid="{D02148FA-F1C8-4B4A-8B51-A9F16C6E0710}">
+        <File Id="LICENSE.rtf" Source="LICENSE.rtf" />
+      </Component>
+    </DirectoryRef>
+
+  </Product>
+</Wix>
