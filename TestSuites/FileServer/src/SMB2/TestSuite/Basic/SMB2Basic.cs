@@ -806,6 +806,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             FILEID fileIdDir;
             SmbClientConnectAndOpenFile(out client1, testDirectory, out treeIdClient1, out fileIdDir);
 
+            string fileName = Guid.NewGuid().ToString();
+            string filePath = testDirectory + "\\" + fileName;
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client1 starts to create a file \"{0}\" by sending CREATE request and write 1-kbyte content to file by sending WRITE request", filePath);
+            SmbClientCreateNewFileAndWrite(client1, treeIdClient1, filePath, 1);
+
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
                 "Client1 starts to register CHANGE_NOTIFY on directory \"{0}\" with CompletionFilter FILE_NOTIFY_CHANGE_SIZE and flag WATCH_TREE", testDirectory);
@@ -814,13 +821,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 fileIdDir,
                 CompletionFilter_Values.FILE_NOTIFY_CHANGE_SIZE,
                 flags: CHANGE_NOTIFY_Request_Flags_Values.WATCH_TREE);
-
-            string fileName = Guid.NewGuid().ToString();
-            string filePath = testDirectory + "\\" + fileName;
-            BaseTestSite.Log.Add(
-                LogEntryKind.TestStep,
-                "Client1 starts to create a file \"{0}\" by sending CREATE request and write 1-byte content to file by sending WRITE request", filePath);
-            SmbClientCreateNewFileAndWrite(client1, treeIdClient1, filePath, 1);
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -835,10 +835,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 createOption: CreateOptions_Values.FILE_NON_DIRECTORY_FILE |
                               CreateOptions_Values.FILE_DELETE_ON_CLOSE);
 
+            Random random = new Random();
+            long newEofPos = random.Next(0, 1023);
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Client2 starts to write 3 bytes to the file \"{0}\" by sending WRITE request", filePath);
-            client2.Write(treeIdClient2, fileIdFileToBeModified, Smb2Utility.CreateRandomString(3));
+                "Client2 sets new EOF Information (newEofPos={0}) for the file \"{1}\" by sending SET_INFO request", newEofPos, filePath);
+            client2.SetFileAttributes(
+                treeIdClient2,
+                (byte)FileInformationClasses.FileEndOfFileInformation,
+                fileIdFileToBeModified,
+                CreateFileEndOfFileInfo(newEofPos));
 
             BaseTestSite.Assert.IsTrue(
                 changeNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
@@ -2051,6 +2057,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             fileFullEaInfo.EaValueLength = (ushort)eaValue.Length;
             fileFullEaInfo.EaValue = Encoding.ASCII.GetBytes(eaValue);
             return TypeMarshal.ToBytes<FileFullEaInformation>(fileFullEaInfo);
+        }
+
+        /// <summary>
+        /// Create a buffer for FileEndOfFileInformation according to MS-FSCC 2.4.13.
+        /// This information class is used to set end-of-file information for a file.
+        /// </summary>
+        /// <param name="newEofPos">New end of file position as a byte offset from the start of the file</param>
+        private byte[] CreateFileEndOfFileInfo(long newEofPos)
+        {
+            FileEndOfFileInformation fileEofInfo;
+            fileEofInfo.EndOfFile = newEofPos;
+            return TypeMarshal.ToBytes<FileEndOfFileInformation>(fileEofInfo);
         }
 
         /// <summary>
