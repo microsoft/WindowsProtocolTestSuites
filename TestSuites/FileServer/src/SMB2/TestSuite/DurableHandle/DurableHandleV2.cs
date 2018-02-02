@@ -187,7 +187,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Smb30)]
-        [TestCategory(TestCategories.PersistentHandle)]
+        [TestCategory(TestCategories.PersistentHandleNonClusterRequired)]
         [TestCategory(TestCategories.Positive)]
         [Description("Test reconnect with DurableHandleV2 when no persistent handle is granted by the server and the share does not have CA capability.")]
         public void DurableHandleV2_NoPersistenceGrantedOnNonCAShare()

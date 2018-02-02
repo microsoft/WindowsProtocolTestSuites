@@ -19,6 +19,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Query FileFsObjectIdInformation from a file and check if ObjectIDs are supported.")]
         public void FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported()
         {
@@ -28,6 +29,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Query FileFsObjectIdInformation from a directory and check if ObjectIDs are supported.")]
         public void FsInfo_Query_FileFsObjectIdInformation_Dir_IsObjectIdSupported()
         {

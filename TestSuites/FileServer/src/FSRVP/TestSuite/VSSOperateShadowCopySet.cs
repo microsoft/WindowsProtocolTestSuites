@@ -147,7 +147,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSRVP.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
-        [TestCategory(TestCategories.Fsrvp)]
+        [TestCategory(TestCategories.FsrvpNonClusterRequired)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if the server supports the VSS provider to create a writable snapshot for remote files.")]
         public void BVT_VSSOperateShadowCopySet_WritableSnapshot_SingleNode()
         {

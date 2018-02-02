@@ -104,7 +104,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         #region BVT_FileServerFailover_FileServer
 
         [TestMethod]
-        [TestCategory(TestCategories.Cluster)]
+        [TestCategory(TestCategories.Failover)]
         [TestCategory(TestCategories.Smb30)]
         [TestCategory(TestCategories.Swn)]
         [TestCategory(TestCategories.Positive)]
@@ -120,7 +120,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         #region BVT_FileServerFailover_ScaleOutFileServer
 
         [TestMethod]
-        [TestCategory(TestCategories.Cluster)]
+        [TestCategory(TestCategories.Failover)]
         [TestCategory(TestCategories.Smb30)]
         [TestCategory(TestCategories.Swn)]
         [TestCategory(TestCategories.Positive)]
@@ -136,7 +136,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         #region FileServerFailover_ScaleOutFileServer_ReconnectWithoutFailover
 
         [TestMethod]
-        [TestCategory(TestCategories.Cluster)]
+        [TestCategory(TestCategories.Failover)]
         [TestCategory(TestCategories.Smb30)]
         [TestCategory(TestCategories.Swn)]
         [TestCategory(TestCategories.Positive)]

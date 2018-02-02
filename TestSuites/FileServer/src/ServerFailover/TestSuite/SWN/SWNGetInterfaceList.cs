@@ -94,6 +94,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Swn)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Bvt)]
         [Description("Ensure that the file server sets the valid value for Version field of the structure WITNESS_INTERFACE_INFO.")]
         public void BVT_SWN_CheckProtocolVersion()
@@ -124,6 +125,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Swn)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Bvt)]
         [Description("Ensure that the file server does not response the interface list correctly until there is an available node.")]
         public void BVT_SWNGetInterfaceList_ClusterSingleNode()
@@ -133,6 +135,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Swn)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Bvt)]
         [Description("Ensure that single node does not response the interface list correctly until there is an available node.")]
         public void BVT_SWNGetInterfaceList_ScaleOutSingleNode()

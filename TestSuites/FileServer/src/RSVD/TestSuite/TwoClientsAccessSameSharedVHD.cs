@@ -61,6 +61,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.RsvdVersion1)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Compatibility)]
         [Description("Check if server handles Read request to a shared virtual disk file from two clients correctly.")]
         public void TwoClientsReadSameSharedVHD()
@@ -97,6 +98,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.RsvdVersion1)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Compatibility)]
         [Description("Check if server handles Write request to a shared virtual disk file from two clients correctly.")]
         public void TwoClientsWriteSameSharedVHD()

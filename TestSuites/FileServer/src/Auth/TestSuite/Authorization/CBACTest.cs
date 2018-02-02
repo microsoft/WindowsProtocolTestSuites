@@ -120,7 +120,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.CBAC)]
-        [TestCategory(TestCategories.Positive)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("This test case is designed to test whether users can access the share if the policy CountryCodeEquals156Policy is applied on the share.")]
         public void BVT_CBAC_CountryCodeEquals156Policy()
         {
@@ -133,6 +133,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.CBAC)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether users can access the share if the policy CountryCodeNotEquals156Policy is applied on the share.")]
         public void CBAC_CountryCodeNotEquals156Policy()
@@ -146,6 +147,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.CBAC)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether users can access the share if the policy CountryCodeAnyOf156Or840Policy is applied on the share.")]
         public void CBAC_CountryCodeAnyOf156Or840Policy()
@@ -160,6 +162,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.CBAC)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether users can access the share if the policy CountryCodeNotAnyOf156Or840Policy is applied on the share.")]
         public void CBAC_CountryCodeNotAnyOf156Or840Policy()
@@ -174,6 +177,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.CBAC)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether users can access the share if the policy CountryCodeGreaterThan392Policy is applied on the share.")]
         public void CBAC_CountryCodeGreaterThan392Policy()
@@ -188,6 +192,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.CBAC)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether users can access the share if the policy CountryCodeGreaterThanOrEquals392Policy is applied on the share.")]
         public void CBAC_CountryCodeGreaterThanOrEquals392Policy()
@@ -202,6 +207,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.CBAC)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether users can access the share if the policy CountryCodeLessThan392Policy is applied on the share.")]
         public void CBAC_CountryCodeLessThan392Policy()
@@ -216,6 +222,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.CBAC)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether users can access the share if the policy CountryCodeLessThanOrEquals392Policy is applied on the share.")]
         public void CBAC_CountryCodeLessThanOrEquals392Policy()
@@ -230,6 +237,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.CBAC)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether users can access the share if the policy CountryCodeEquals156AndITDepartmentPolicy is applied on the share.")]
         public void CBAC_CountryCodeEquals156AndITDepartmentPolicy()
@@ -245,6 +253,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.CBAC)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether users can access the share if the policy CountryCodeEquals156OrITDepartmentPolicy is applied on the share.")]
         public void CBAC_CountryCodeEquals156OrITDepartmentPolicy()
@@ -260,6 +269,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.CBAC)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether noclaimuser can access the share if any policy is applied on the share.")]
         public void CBAC_NoUserClaimBlockWriteControl()

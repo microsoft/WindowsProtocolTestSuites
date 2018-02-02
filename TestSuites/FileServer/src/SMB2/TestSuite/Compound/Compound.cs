@@ -68,7 +68,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Compound
 
         [TestMethod]
         [TestCategory(TestCategories.Smb30)]
-        [TestCategory(TestCategories.CombinedFeature)]
+        [TestCategory(TestCategories.CombinedFeatureNonClusterRequired)]
         [TestCategory(TestCategories.Positive)]
         [Description("Send encrypted and compounded related requests (Create, Write and Close a same file) to SUT and verify response")]
         public void Compound_Encrypt_RelatedRequests()
@@ -80,7 +80,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Compound
 
         [TestMethod]
         [TestCategory(TestCategories.Smb30)]
-        [TestCategory(TestCategories.CombinedFeature)]
+        [TestCategory(TestCategories.CombinedFeatureNonClusterRequired)]
         [TestCategory(TestCategories.Positive)]
         [Description("Send encrypted and compounded unrelated requests (two Creates request to different files) to SUT and verify response")]
         public void Compound_Encrypt_UnrelatedRequests()

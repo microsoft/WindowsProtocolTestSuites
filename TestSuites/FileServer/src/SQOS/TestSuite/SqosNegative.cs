@@ -45,6 +45,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Sqos)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("This test case is to test if server can handle an SQOS request with an invalid protocol version correctly")]
         public void Sqos_InvalidProtocolVersion()
@@ -76,6 +77,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Sqos)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("This test case is to test if server can handle an SQOS request with an invalid Option correctly")]
         public void Sqos_InvalidOption()
@@ -114,6 +116,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Sqos)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("This test case is to test if server can handle an SQOS request with an invalid policy id correctly")]
         public void Sqos_InvalidPolicyId()
@@ -149,6 +152,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Sqos)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.OutOfBoundary)]
         [Description("This test case is to test if server can handle an SQOS request correctly when Request.Reservation is greater than Request.Limit")]
         public void Sqos_ReservationGreaterThanLimit()
@@ -187,6 +191,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Sqos)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.OutOfBoundary)]
         [Description("This test case is to test if server can handle an SQOS request with an invalid small InitiatorNameOffset correctly")]
         public void Sqos_InvalidInitiatorNameOffset_Small()
@@ -196,6 +201,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Sqos)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.OutOfBoundary)]
         [Description("This test case is to test if server can handle an SQOS request with an invalid large InitiatorNameOffset correctly")]
         public void Sqos_InvalidInitiatorNameOffset_Large()
@@ -205,6 +211,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Sqos)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.OutOfBoundary)]
         [Description("This test case is to test if server can handle an SQOS request with an invalid small InitiatorNodeNameOffset correctly")]
         public void Sqos_InvalidInitiatorNodeNameOffset_Small()
@@ -214,6 +221,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Sqos)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.OutOfBoundary)]
         [Description("This test case is to test if server can handle an SQOS request with an invalid large InitiatorNodeNameOffset correctly")]
         public void Sqos_InvalidInitiatorNodeNameOffset_Large()
@@ -223,6 +231,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Sqos)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Compatibility)]
         [Description("This test case is to test if server can handle an SQOS request with SET_POLICY option to an open which is not associated to a logical flow")]
         public void Sqos_SetPolicyToNonAssociatedLogicalFlow()
@@ -251,6 +260,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Sqos)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Compatibility)]
         [Description("This test case is to test if server can handle an SQOS version 1.0 request with ProtocolVersion field is set to 1.1")]
         public void Sqos_InvalidRequestType()

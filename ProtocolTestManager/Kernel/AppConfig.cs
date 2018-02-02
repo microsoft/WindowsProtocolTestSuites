@@ -174,6 +174,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public XmlNode RuleDefinitions;
 
         /// <summary>
+        /// Feature mapping for selection rules
+        /// </summary>
+        [SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", Justification = "By Design")]
+        public XmlNode FeatureMapping;
+
+        /// <summary>
         /// Adapter definitions node.
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", Justification = "By Design")]
@@ -316,6 +322,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
 
             config.RuleDefinitions = doc.DocumentElement.SelectSingleNode("ConfigCaseRule");
+            config.FeatureMapping = doc.DocumentElement.SelectSingleNode("FeatureMapping");
 
             // Adapters
             config.AdapterDefinitions = doc.DocumentElement.SelectSingleNode("Adapters");

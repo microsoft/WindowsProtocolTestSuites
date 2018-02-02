@@ -16,6 +16,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.AlternateDataStream)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Delete an Alternate Data Stream from a DataFile.")]
         public void BVT_AlternateDataStream_DeleteStream_File()
         {
@@ -30,6 +31,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.AlternateDataStream)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Delete an Alternate Data Stream from a DirectoryFile.")]
         public void BVT_AlternateDataStream_DeleteStream_Dir()
         {
