@@ -99,7 +99,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             MaAdapter.Reset();
             MaAdapter.StartCapture(publishDCAdapter.capturePath_SamLogonResponseEx);
 
-            string exePath = string.Format(@"C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\{0}\Bin\ResponseTrigger.exe", publishDCAdapter.GetInstalledTestSuiteVersion());
+            string exePath = GetResponseTriggerPath();
             ProcessStartInfo startInfo = new ProcessStartInfo(exePath);
             startInfo.Arguments = publishDCAdapter.PDCIPAddress + " " + publishDCAdapter.PrimaryDomainDnsName + " ex";
             startInfo.UseShellExecute = false;
@@ -426,7 +426,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             MaAdapter.Reset();
             MaAdapter.StartCapture(publishDCAdapter.capturePath_SamLogonResponse);
 
-            string exePath = string.Format(@"C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\{0}\Bin\ResponseTrigger.exe", publishDCAdapter.GetInstalledTestSuiteVersion());
+            string exePath = GetResponseTriggerPath();
             ProcessStartInfo startInfo = new ProcessStartInfo(exePath);
             startInfo.Arguments = publishDCAdapter.PDCIPAddress + " " + publishDCAdapter.PrimaryDomainDnsName + " nonex";
             startInfo.UseShellExecute = false;
@@ -2031,6 +2031,19 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
                     of SearchResultDone entry is set to 0 (success).");
 
             #endregion
+        }
+
+        public string GetResponseTriggerPath()
+        {
+            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string subPath = baseDirectory.Substring(0, baseDirectory.LastIndexOf("Batch"));
+            string triggerPath = string.Format(@"{0}\Bin\ResponseTrigger.exe", subPath);
+            if (!(new FileInfo(triggerPath)).Exists)
+            {
+                triggerPath = string.Format(@"C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\{0}\Bin\ResponseTrigger.exe", publishDCAdapter.GetInstalledTestSuiteVersion()); // use default path
+            }
+
+            return triggerPath;
         }
         #endregion
     }

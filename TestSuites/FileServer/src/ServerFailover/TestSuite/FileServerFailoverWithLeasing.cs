@@ -15,7 +15,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
     {
         #region Test Cases
         [TestMethod]
-        [TestCategory(TestCategories.Cluster)]
+        [TestCategory(TestCategories.Failover)]
         [TestCategory(TestCategories.Smb30)]
         [TestCategory(TestCategories.Positive)]
         [Description("Operate directory with lease and durable handle before server failover and expect lease break notification.")]
@@ -35,7 +35,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         }
 
         [TestMethod]
-        [TestCategory(TestCategories.Cluster)]
+        [TestCategory(TestCategories.Failover)]
         [TestCategory(TestCategories.Smb30)]
         [TestCategory(TestCategories.Positive)]
         [Description("Operate file with lease and durable handle before server failover and expect lease break notification.")]

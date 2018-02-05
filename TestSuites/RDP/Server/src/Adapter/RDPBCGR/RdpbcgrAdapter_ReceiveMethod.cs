@@ -1037,9 +1037,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 || serverCoreData.version == TS_UD_SC_CORE_version_Values.V3
                 || serverCoreData.version == TS_UD_SC_CORE_version_Values.V4
                 || serverCoreData.version == TS_UD_SC_CORE_version_Values.V5
-                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V6, "The version field of TS_UD_SC_CORE contains value: 0x00080001, 0x00080004.");
+                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V6
+                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V7,
+                "The version field of TS_UD_SC_CORE contains value: 0x00080001,0x00080004,0x00080005,0x00080006,0x00080007,0x00080008,0x00080009.");
 
-            
+
             uint flags =(uint)(requestedProtocols_Values.PROTOCOL_RDP_FLAG | requestedProtocols_Values.PROTOCOL_SSL_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_EX);
             uint negFlags = (uint)(~flags);
             Site.Assert.AreEqual<uint>(0, (uint)serverCoreData.clientRequestedProtocols & negFlags, "The clientRequestedProtocols field of TS_UD_SC_CORE, which contains the flags sent by the client in the requestedProtocols field of the RDP Negotiation Request."
@@ -1626,7 +1628,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="redirectionPacket"></param>
         public void VerifyStructure(RDP_SERVER_REDIRECTION_PACKET redirectionPacket)
         {
-            Site.Assert.AreEqual<ushort>(0x0400, redirectionPacket.Flags, "In Server Redirection Packet , the Flags field MUST be set to SEC_REDIRECTION_PKT (0x0400).");
+            Site.Assert.AreEqual<RDP_SERVER_REDIRECTION_PACKET_FlagsEnum>(RDP_SERVER_REDIRECTION_PACKET_FlagsEnum.SEC_REDIRECTION_PKT, redirectionPacket.Flags, "In Server Redirection Packet , the Flags field MUST be set to SEC_REDIRECTION_PKT (0x0400).");
 
             uint flags = (uint)(RedirectionFlags.LB_TARGET_NET_ADDRESS | RedirectionFlags.LB_LOAD_BALANCE_INFO | RedirectionFlags.LB_USERNAME
                 | RedirectionFlags.LB_DOMAIN | RedirectionFlags.LB_PASSWORD | RedirectionFlags.LB_DONTSTOREUSERNAME | RedirectionFlags.LB_SMARTCARD_LOGON

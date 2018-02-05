@@ -24,7 +24,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 }
             }
             groupList = new List<TestCaseGroup>();
-            foreach (KeyValuePair<string, TestCaseGroup> item in groups)
+            foreach (KeyValuePair<string, TestCaseGroup> item in groups.OrderBy(key => key.Key))
             {
                 groupList.Add(item.Value);
             }

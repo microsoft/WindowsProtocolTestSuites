@@ -78,6 +78,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Client sends SMB2 create request to open a file in a DFS path with DFS Link, verify if server normalize the path correctly.")]
         public void NormalizePathWithDFSLink()
@@ -87,6 +88,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Client sends SMB2 create request to open a file in a DFS path without DFS Link, verify if server normalize the path correctly.")]
         public void NormalizePathWithoutDFSlink()

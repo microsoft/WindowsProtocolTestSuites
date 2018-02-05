@@ -29,6 +29,7 @@
   <ItemGroup>
     <Compile Include="Bin.wxs" />
     <Compile Include="Batch.wxs" />
+	<Compile Include="Scripts.wxs" />
     <Compile Include="DependencyCheckWarningDlg.wxs" />
     <Compile Include="DOCS_FILES.wxs" />
     <Compile Include="RDP-TestSuite-ServerEP.wxs" />
@@ -168,6 +169,7 @@
   <Target Name="GenDeployWxsFile" DependsOnTargets="ResolveWixExtensionReferences" BeforeTargets="Compile">
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Bin&quot; -out Bin.wxs -template fragment -gg -cg BIN_FILES -dr TESTSUITE_BIN_DIR -var wix.TESTSUITE_BIN_DIR -sreg -sfrag -srd" />
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;..\Batch&quot; -out Batch.wxs -template fragment -gg -cg BATCH_FILES -dr TESTSUITE_BATCH_DIR -var wix.TESTSUITE_BATCH_DIR -sreg -sfrag -srd" />
+	<Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\RDP\Server\Setup\Scripts&quot; -out Scripts.wxs -template fragment -gg -cg TESTSUITE_SCRIPTS_FILES -dr TESTSUITE_SCRIPTS_DIR -var wix.TESTSUITE_SCRIPTS_DIR -sreg -sfrag -srd" />
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\RDP\Server\Docs&quot; -out DOCS_FILES.wxs -template fragment -gg -cg DOCS_FILES -dr DOCS_FILES_DIR -var wix.DOCS_FILES_DIR -sreg -sfrag -srd" />
   </Target>
   

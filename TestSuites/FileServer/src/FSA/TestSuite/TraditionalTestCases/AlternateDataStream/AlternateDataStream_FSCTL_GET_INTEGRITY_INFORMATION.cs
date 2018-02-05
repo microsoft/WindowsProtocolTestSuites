@@ -19,6 +19,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.AlternateDataStream)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("FSCTL_GET_INTEGRITY_INFORMATION on an Alternate Data Stream on a DataFile.")]
         public void AlternateDataStream_FsCtl_Get_IntegrityInformation_File()
         {
@@ -31,6 +33,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.AlternateDataStream)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("FSCTL_GET_INTEGRITY_INFORMATION on an Alternate Data Stream on a DirectoryFile.")]
         public void AlternateDataStream_FsCtl_Get_IntegrityInformation_Dir()
         {

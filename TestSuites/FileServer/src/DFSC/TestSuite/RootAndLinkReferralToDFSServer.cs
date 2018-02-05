@@ -34,6 +34,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Client sends a DFS root referral request v4 to DFS Server first, and then link referral request v4.")]
         public void BVT_RootAndLinkReferralStandaloneV4ToDFSServer()
         {
@@ -51,6 +52,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Client sends a DFS root referral request v4 to DFS Server first, and then link referral request v4.")]
         public void BVT_RootAndLinkReferralDomainV4ToDFSServer()
         {
@@ -69,6 +71,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Client sends a DFS root referral request v1 to DFS Server first, and then link referral request v1.")]
         public void RootAndLinkReferralEXStandaloneV1ToDFSServer()
@@ -83,6 +86,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Client sends a DFS link referral request v1 to DFS Server first and expects positive response.")]
         public void LinkReferralDomainV1ToDFSServer()
@@ -93,6 +97,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Client sends a DFS root referral request v2 to DFS Server first, and then link referral request v2.")]
         public void RootAndLinkReferralStandaloneV2ToDFSServer()
@@ -110,6 +115,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         /// </summary>
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Client sends a DFS link referral request v4 to DFS Server and expects interlink returned.")]
         public void LinkReferralStandaloneToDFSServerReturnInterlink()
@@ -130,6 +136,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         /// </summary>
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Client sends a DFS link referral request v4 to DFS Server and expects interlink returned.")]
         public void LinkReferralDomainToDFSServerReturnInterlink()
@@ -152,6 +159,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         /// </summary>
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Client sends a DFS link referral request v3 to DFS Server and expects root target returned.")]
         public void LinkReferralStandaloneToDFSServerReturnRootTarget()
@@ -173,6 +181,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         /// </summary>
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Client sends a DFS link referral request v4 to DFS Server and expects root target returned.")]
         public void LinkReferralDomainToDFSServerReturnRootTarget()
@@ -189,6 +198,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("Client sends a v4 invalid Root referral request to DFS server and expects negative response.")]
         public void InvalidRootReferralStandaloneToDFSServer()
@@ -213,6 +223,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("Client sends a v4 invalid Root referral request to DFS server and expects negative response.")]
         public void InvalidRootReferralDomainToDFSServer()

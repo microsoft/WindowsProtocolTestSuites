@@ -17,6 +17,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.AlternateDataStream)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Write and Read from an Alternate Data Stream on a DataFile.")]
         public void BVT_AlternateDataStream_WriteAndRead_File()
         {
@@ -27,6 +28,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.AlternateDataStream)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Write and Read from an Alternate Data Stream on a DirectoryFile.")]
         public void BVT_AlternateDataStream_WriteAndRead_Dir()
         {

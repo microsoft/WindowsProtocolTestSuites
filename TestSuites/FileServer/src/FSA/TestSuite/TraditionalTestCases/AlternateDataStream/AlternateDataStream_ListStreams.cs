@@ -16,6 +16,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.AlternateDataStream)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("List all the Data Streams on a DataFile.")]
         public void BVT_AlternateDataStream_ListStreams_File()
         {
@@ -28,6 +29,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.AlternateDataStream)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("List all the Data Streams on a DirectoryFile.")]
         public void BVT_AlternateDataStream_ListStreams_Dir()
         {

@@ -17,6 +17,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Send FSCTL_SET_ZERO_DATA request to a file and check if ZeroData is supported.")]
         public void FsCtl_Set_ZeroData_File_IsZeroDataSupported()
         {
@@ -26,6 +28,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Send FSCTL_SET_ZERO_DATA request to a directory and check if ZeroData is supported.")]
         public void FsCtl_Set_ZeroData_Dir_IsZeroDataSupported()
         {

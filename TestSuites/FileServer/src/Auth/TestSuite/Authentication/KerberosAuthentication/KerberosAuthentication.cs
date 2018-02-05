@@ -117,6 +117,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.KerberosAuthentication)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("This test case is designed to test whether server can handle Kerberos Authentication using GSSAPI correctly.")]
         public void BVT_KerbAuth_AccessFile_Success()
         {
@@ -127,6 +128,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.KerberosAuthentication)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("This test case is designed to test whether server can handle wrong cname in the Authenticator in AP_REQ.")]
         public void KerbAuth_Authenticator_CNameNotMatch()
@@ -138,6 +140,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.KerberosAuthentication)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("This test case is designed to test whether server can handle wrong crealm in the Authenticator in AP_REQ.")]
         public void KerbAuth_Authenticator_CRealmNotMatch()
@@ -149,6 +152,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.KerberosAuthentication)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.InvalidIdentifier)]
         [Description("This test case is designed to test whether server can handle wrong encryption key of the Authenticator in AP_REQ.")]
         public void KerbAuth_Authenticator_WrongEncKey()
@@ -160,6 +164,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.KerberosAuthentication)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedContext)]
         [Description("This test case is designed to test whether server can handle unknown Realm in the Ticket in AP_REQ.")]
         public void KerbAuth_Ticket_WrongRealm()
@@ -171,6 +176,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.KerberosAuthentication)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedContext)]
         [Description("This test case is designed to test whether server can handle unknown SName in the Ticket in AP_REQ.")]
         public void KerbAuth_Ticket_WrongSName()
@@ -182,6 +188,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.KerberosAuthentication)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedContext)]
         [Description("This test case is designed to test whether server can handle invalid KVNO in the Ticket in AP_REQ.")]
         public void KerbAuth_Ticket_WrongKvno()
@@ -193,6 +200,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.KerberosAuthentication)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedContext)]
         [Description("This test case is designed to test whether server can handle invalid Ticket in AP_REQ.")]
         public void KerbAuth_Ticket_NotValid()
@@ -204,6 +212,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.KerberosAuthentication)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedContext)]
         [Description("This test case is designed to test whether server can handle expired Ticket in AP_REQ.")]
         public void KerbAuth_Ticket_Expired()
@@ -215,6 +224,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.KerberosAuthentication)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedContext)]
         [Description("This test case is designed to test whether server can handle wrong encryption key of the Ticket in AP_REQ.")]
         public void KerbAuth_Ticket_WrongEncKey()
@@ -226,6 +236,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.KerberosAuthentication)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedContext)]
         [Description("This test case is designed to test whether server can handle unknown AuthorizationData in the Ticket.")]
         public void KerbAuth_AuthData_UnknownType_Ticket()
@@ -237,6 +248,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.KerberosAuthentication)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedContext)]
         [Description("This test case is designed to test whether server can handle " +
                      "unknown AuthorizationData contained in AD-IF-RELEVANT in the Ticket.")]
@@ -249,6 +261,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.KerberosAuthentication)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedContext)]
         [Description("This test case is designed to test whether server can handle unknown AuthorizationData in the Authenticator.")]
         public void KerbAuth_AuthData_UnknownType_Authenticator()
@@ -260,6 +273,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.KerberosAuthentication)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedContext)]
         [Description("This test case is designed to test whether server can handle " +
                      "unknown AuthorizationData contained in AD-IF-RELEVANT in the Authenticator.")]
@@ -272,6 +286,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.KerberosAuthentication)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether server can handle Replay correctly.")]
         public void KerbAuth_Replay()

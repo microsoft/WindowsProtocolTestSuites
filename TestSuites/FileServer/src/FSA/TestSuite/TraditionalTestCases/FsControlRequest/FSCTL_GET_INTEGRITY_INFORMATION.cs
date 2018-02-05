@@ -20,6 +20,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Send FSCTL_GET_INTEGRITY_INFORMATION request to a file and check if Integrity is supported.")]
         public void FsCtl_Get_IntegrityInformation_File_IsIntegritySupported()
         {
@@ -30,6 +31,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Send FSCTL_GET_INTEGRITY_INFORMATION request to a directory and check if Integrity is supported.")]
         public void FsCtl_Get_IntegrityInformation_Dir_IsIntegritySupported()
         {
@@ -42,6 +44,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Send FSCTL_GET_INTEGRITY_INFORMATION request to a file and check if server responses correctly when OutputBufferSize is less than IntegrityBuffer.")]
         public void FsCtl_Get_IntegrityInformation_File_OutputBufferSizeLessThanIntegrityBuffer()
         {
@@ -51,6 +55,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Send FSCTL_GET_INTEGRITY_INFORMATION request to a directory and check if server responses correctly when OutputBufferSize is less than IntegrityBuffer.")]
         public void FsCtl_Get_IntegrityInformation_Dir_OutputBufferSizeLessThanIntegrityBuffer()
         {
@@ -64,6 +70,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Send FSCTL_GET_INTEGRITY_INFORMATION request to a system file and check if server responses correctly.")]
         public void FsCtl_Get_IntegrityInformation_File_SystemFile()
         {
@@ -73,6 +81,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Send FSCTL_GET_INTEGRITY_INFORMATION request to a system directory and check if server responses correctly.")]
         public void FsCtl_Get_IntegrityInformation_Dir_SystemFile()
         {
@@ -85,6 +95,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Send FSCTL_GET_INTEGRITY_INFORMATION request to a file and check if OutputValue of server response is correct.")]
         public void FsCtl_Get_IntegrityInformation_File_OutputValue_Common()
         {
@@ -94,6 +106,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Send FSCTL_GET_INTEGRITY_INFORMATION request to a directory and check if OutputValue of server response is correct.")]
         public void FsCtl_Get_IntegrityInformation_Dir_OutputValue_Common()
         {
@@ -107,6 +121,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Send FSCTL_GET_INTEGRITY_INFORMATION request to a file and check if Checksum of server response is correct.")]
         public void FsCtl_Get_IntegrityInformation_File_OutputValue_ChecksumEnforcement()
         {
@@ -116,6 +132,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Send FSCTL_GET_INTEGRITY_INFORMATION request to a directory and check if Checksum of server response is correct.")]
         public void FsCtl_Get_IntegrityInformation_Dir_OutputValue_ChecksumEnforcement()
         {

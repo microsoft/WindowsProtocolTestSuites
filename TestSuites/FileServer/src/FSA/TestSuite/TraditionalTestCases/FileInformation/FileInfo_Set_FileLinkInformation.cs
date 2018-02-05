@@ -17,6 +17,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Try to set FileLinkInfo to a file and check if FileLink is supported.")]
         public void FileInfo_Set_FileLinkInfo_File_IsFileLinkInfoSupported()
         {
@@ -26,6 +28,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Try to set FileLinkInfo to a directory and check if FileLink is supported.")]
         public void FileInfo_Set_FileLinkInfo_Dir_IsFileLinkInfoSupported()
         {

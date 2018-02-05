@@ -80,3 +80,4 @@ TestSuites/MS-ADOD/src/Deploy/TestSuiteBinFiles.wxs
 TestSuites/RDP/Server/src/Deploy/Batch.wxs
 TestSuites/RDP/Server/src/Deploy/Bin.wxs
 TestSuites/RDP/Server/src/Deploy/DOCS_FILES.wxs
+TestSuites/RDP/Server/src/Deploy/Scripts.wxs

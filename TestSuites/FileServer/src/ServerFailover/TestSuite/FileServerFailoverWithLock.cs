@@ -14,7 +14,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
     {
         #region Test Cases
         [TestMethod]
-        [TestCategory(TestCategories.Cluster)]
+        [TestCategory(TestCategories.Failover)]
         [TestCategory(TestCategories.Smb30)]
         [TestCategory(TestCategories.Positive)]
         [Description("Operate files with lock during failover and expect the lock is maintained after failover.")]

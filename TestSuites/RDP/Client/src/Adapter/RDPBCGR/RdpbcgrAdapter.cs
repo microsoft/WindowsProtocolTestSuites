@@ -2190,14 +2190,16 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
             catch (TimeoutException)
             {
+                site.Assert.Fail("Timeout when expecting {0}", typeof(T));
             }
             catch (InvalidOperationException ex)
             {
-                site.Log.Add(LogEntryKind.Warning, "Exception thrown out when receiving client PDUs {0}.", ex.Message);
+                string exceptionMsg = (ex.InnerException != null) ? ex.InnerException.Message : ex.Message;
+                site.Assert.Fail("Exception thrown out when receiving client PDUs: {0}", exceptionMsg);
             }
             if (receivedPdu == null)
             {
-                site.Assert.Fail("Timeout when expecting {0}", typeof(T));
+                site.Assert.Fail("Can't get expecting PDU {0}", typeof(T));
             }
             else
             {
