@@ -496,7 +496,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <param name="bufferSize">Indicate buffer size</param>
         /// <param name="inputBuffer">InputBufferFSCTL_SIS_COPYFILE</param>
         /// <param name="isCopyFileSisLinkTrue">True: if InputBuffer.Flags.COPYFILE_SIS_LINK is true</param>
-        /// <param name="isIsEncryptedTrue">Ture if encrypted</param>
+        /// <param name="isIsEncryptedTrue">True if encrypted</param>
         /// <returns>An NTSTATUS code that specifies the result</returns>
         MessageStatus FsctlSisCopyFile(
             BufferSize bufferSize,
