@@ -58,6 +58,13 @@
 		* [ SMB2Basic\_ChangeNotify\_MaxTransactSizeCheck\_Smb30](#3.1.43)
 		* [ SMB2Basic\_ChangeNotify\_MaxTransactSizeCheck\_Smb302](#3.1.44)
 		* [ SMB2Basic\_ChangeNotify\_MaxTransactSizeCheck\_Smb311](#3.1.45)
+		* [ HVRS\OffloadReadWrite](#3.1.46)
+		* [ HVRS\SetZeroData](#3.1.47)
+		* [ HVRS\FileLevelTrim](#3.1.48)
+		* [ HVRS\DuplicateExtentsToFile](#3.1.49)
+		* [ HVRS\SMBDialect](#3.1.50)
+		* [ HVRS\PersistentHandles](#3.1.51)
+		* [ HVRS\Resiliency](#3.1.52)
 	* [SMB2 Feature Test](#3.2)
 		* [AppInstanceId](#3.2.1)
 		* [AppInstanceVersion](#3.2.2)
@@ -180,6 +187,8 @@ This test suite includes test cases of following File Sharing protocols:
 4.  MS-RSVD
 
 5.  MS-DFSC
+
+6.  MS-HVRS
 
 ###<a name="2.3">Restrictions
 
@@ -2571,6 +2580,221 @@ This is used to test SMB2 common user scenarios.
 |                          | LOGOFF |
 | **Cleanup**              ||
 
+####<a name="3.1.46"> HVRS\OffloadReadWrite
+
+#####<a name="3.1.46.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify the FSCTL_OFFLOAD_READ and FSCTL_OFFLOAD_WRITE |
+| **Message Sequence**          | 1.  Start a client to create and write to a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE; 5. WRITE; 6. FLUSH. |
+|                               | 2.  Client sends IOCTL request with FSCTL_OFFLOAD_READ. |
+|                               | 3.  Client create another file as the destination of offload copy. |
+|                               | 4.  Client sends IOCTL request with FSCTL_OFFLOAD_WRITE. |
+|                               | 5.  Read the content in destination of offload copy. |
+|                               | 6.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
+| **Cluster Involved Scenario** | **NO** |
+
+#####<a name="3.1.46.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT_OffloadReadWrite |
+| **Description** | Test whether the server supports the FSCTL_OFFLOAD_READ and FSCTL_OFFLOAD_WRITE. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | WRITE |
+|                          | FLUSH |
+|                          | IOCtl with FSCTL\_OFFLOAD\_READ |
+|                          | CREATE (File)|
+|                          | IOCtl with FSCTL\_OFFLOAD\_WRITE |
+|                          | READ |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
+
+####<a name="3.1.47"> HVRS\SetZeroData
+
+#####<a name="3.1.47.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify the FSCTL_SET_ZERO_DATA |
+| **Message Sequence**          | 1.  Start a client to create and write to a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE; 5. WRITE; 6. FLUSH. |
+|                               | 2.  Client sends IOCTL request with FSCTL_SET_ZERO_DATA. |
+| **Cluster Involved Scenario** | **NO** |
+
+#####<a name="3.1.47.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT_SetZeroData |
+| **Description** | Test whether the server supports the FSCTL_SET_ZERO_DATA. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | WRITE |
+|                          | FLUSH |
+|                          | IOCtl with FSCTL_SET_ZERO_DATA |
+| **Cleanup**              ||
+
+####<a name="3.1.48"> HVRS\FileLevelTrim
+
+#####<a name="3.1.48.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify the FFSCTL_FILE_LEVEL_TRIM |
+| **Message Sequence**          | 1.  Start a client to create and write to a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE; 5. WRITE. |
+|                               | 2.  Client sends FSCTL_FILE_LEVEL_TRIM. |
+|                               | 3.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
+| **Cluster Involved Scenario** | **NO** |
+
+#####<a name="3.1.48.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT_FileLevelTrim |
+| **Description** | Test whether the server supports the FSCTL_FILE_LEVEL_TRIM. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | WRITE |
+|                          | CLOSE |
+|                          | CREATE (File)|
+|                          | IOCtl with FSCTL_FILE_LEVEL_TRIM (with key field zero) |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
+
+|||
+|---|---|
+| **Test ID** | FileLevelTrim_Negative_NonZeroKeyInRequest |
+| **Description** | Test the server response when non-zero value is set to the Key field of FSCTL_FILE_LEVEL_TRIM request. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | WRITE |
+|                          | CLOSE |
+|                          | CREATE (File)|
+|                          | IOCtl with FSCTL_FILE_LEVEL_TRIM (with key field a non-zero value) |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
+
+####<a name="3.1.49"> HVRS\DuplicateExtentsToFile
+
+#####<a name="3.1.49.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify the FSCTL_DUPLICATE_EXTENTS_TO_FILE |
+| **Message Sequence**          | 1.  Start a client to create and write to a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE; 5. WRITE; 6. FLUSH. |
+|                               | 2.  Client sends FSCTL_DUPLICATE_EXTENTS_TO_FILE. |
+| **Cluster Involved Scenario** | **No** |
+
+#####<a name="3.1.49.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT_DuplicateExtentsToFile |
+| **Description** | Test whether the server supports the FSCTL_DUPLICATE_EXTENTS_TO_FILE. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | WRITE |
+|                          | FLUSH |
+|                          | IOCtl with FSCTL_DUPLICATE_EXTENTS_TO_FILE|
+| **Cleanup**              ||
+
+####<a name="3.1.50"> HVRS\SMBDialect
+
+#####<a name="3.1.50.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Test whether the server supports the SMB 3.0 or higher dialect |
+| **Message Sequence**          | 1.  NEGOTIATE. |
+| **Cluster Involved Scenario** | **NO** |
+
+#####<a name="3.1.50.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT_SMBDialect |
+| **Description** | Test whether the server supports the SMB 3.0 or higher dialect. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+| **Cleanup**              ||
+
+####<a name="3.1.51"> HVRS\PersistentHandles
+
+#####<a name="3.1.51.1"> Scenario
+
+|||
+|---|---|
+| **Description**               |Test whether the server supports persistent handles |
+| **Message Sequence**          | 1.  NEGOTIATE. |
+| **Cluster Involved Scenario** | **NO** |
+
+#####<a name="3.1.51.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT_PersistentHandles |
+| **Description** |Test whether the server supports persistent handles.|
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+| **Cleanup**              ||
+
+####<a name="3.1.52"> HVRS\Resiliency
+
+#####<a name="3.1.52.1"> Scenario
+
+|||
+|---|---|
+| **Description**               |Test whether the server supports the FSCTL_LMR_REQUEST_RESILIENCY |
+| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                               | 2.  Client sends FSCTL_LMR_REQUEST_RESILIENCY. |
+| **Cluster Involved Scenario** | **NO** |
+
+#####<a name="3.1.52.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT_Resiliency |
+| **Description** | Test whether the server supports the FSCTL_LMR_REQUEST_RESILIENCY.|
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | IOCtl with FSCTL_LMR_REQUEST_RESILIENCY |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
 
 ###<a name="3.2">SMB2 Feature Test
 
