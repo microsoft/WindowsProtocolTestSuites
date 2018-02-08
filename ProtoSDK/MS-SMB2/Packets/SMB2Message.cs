@@ -129,7 +129,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// When set, indicates that the client has previously connected to the specified cluster share
         /// using the SMB dialect of the connection on which the request is received.
         /// </summary>
-        SMB2_SHAREFLAG_CLUSTER_RECONNECT = 0x0001
+        SMB2_SHAREFLAG_CLUSTER_RECONNECT = 0x0001,
+
+        /// <summary>
+        /// When set, indicates that the client can handle synchronous share redirects
+        /// via a Share Redirect error context response as specified in section 2.2.2.2.2.
+        /// </summary>
+        SMB2_SHAREFLAG_REDIRECT_TO_OWNER = 0x0002,
+
+        /// <summary>
+        /// When set, indicates that a tree connect request extension,
+        /// as specified in section 2.2.9.1, is present,
+        /// starting at the Buffer field of this tree connect request.
+        /// </summary>
+        SMB2_SHAREFLAG_EXTENSION_PRESENT = 0x0004
     }
 
     /// <summary>
@@ -216,6 +229,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// If set, the server supports the encryption of remote file access messages on this share. 
         /// </summary>
         SHAREFLAG_ENCRYPT_DATA = 0x00008000,
+
+        /// <summary>
+        /// If set, the share supports identity remoting.
+        /// The client can request remoted identity access for the share
+        /// via the SMB2_REMOTED_IDENTITY_TREE_CONNECT context as specified in section 2.2.9.2.1.
+        /// </summary>
+        SHAREFLAG_IDENTITY_REMOTING = 0x00040000,
     }
 
     /// <summary>
@@ -305,6 +325,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  of the share. This flag is only valid for the SMB 3.02 dialect.
         /// </summary>
         SHARE_CAP_ASYMMETRIC = 0x00000080,
+
+        /// <summary>
+        /// The specified share is present on a server configuration that supports synchronous share level redirection
+        /// via a Share Redirect error context response (section 2.2.2.2.2).
+        /// This flag is not valid for SMB 2.0.2, 2.1, 3.0, and 3.0.2 dialects.
+        /// </summary>
+        SHARE_CAP_REDIRECT_TO_OWNER = 0x00000100,
     }
 
     /// <summary>
@@ -3165,7 +3192,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// An identifier for the error context
         /// </summary>        
         [StaticSize(4)]
-        public uint ErrorId;
+        public Error_Id ErrorId;
 
         /// <summary>
         /// Variable-length error data
@@ -3175,19 +3202,43 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
     }
 
     /// <summary>
-    /// Error Data format struct (when ErrorContextCount ==0)
+    /// An identifier for the error context.
     /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
+    public enum Error_Id : uint
+    {
+        /// <summary>
+        /// Unless otherwise specified, all errors defined in the [MS-SMB2] protocol use this error ID.
+        /// </summary>
+        ERROR_ID_DEFAULT = 0x00000000,
+
+        /// <summary>
+        /// The ErrorContextData field contains a share redirect message described in section 2.2.2.2.2.
+        /// </summary>
+        ERROR_ID_SHARE_REDIRECT = 0x72645253,
+    }
+
+    /// <summary>
+    /// Error Data format struct (when ErrorContextCount !=0)
+    /// </summary>
     public struct ErrorData_Format
     {
         /// <summary>
         /// If the error code in the header of the response is set to STATUS_STOPPED_ON_SYMLINK,
         /// this field MUST contain a Symbolic Link Error Response as specified in section 2.2.2.2.1.
         /// </summary>
-        [FieldOffset(0)]
         public Symbolic_Link_Error_Response SymbolicLinkErrorResponse;
 
-        [FieldOffset(0)]
+        /// <summary>
+        /// If the error code in the header of the response is set to STATUS_BAD_NETWORK_NAME,
+        /// and the ErrorId in the SMB2 Error Context response is set to SMB2_ERROR_ID_SHARE_REDIRECT,
+        /// this field MUST contain a Share Redirect Error Response as specified in section 2.2.2.2.2.
+        /// </summary>
+        public Share_Redirect_Error_Context_Response ShareRedirectErrorContextResponse;
+
+        /// <summary>
+        /// If the error code in the header of the response is STATUS_BUFFER_TOO_SMALL,
+        /// this field MUST be set to a 4-byte value indicating the minimum required buffer length.
+        /// </summary>
         public byte[] BufferTooSmallErrorResponse;
     }
 
@@ -4342,6 +4393,115 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  Possible value.
         /// </summary>
         V1 = 0xa000000c,
+    }
+
+    /// <summary>
+    /// Servers which negotiate SMB 3.1.1 or higher can return this error context
+    /// to a client in response to a tree connect request
+    /// with the SMB2_TREE_CONNECT_FLAG_REDIRECT_TO_OWNER bit set
+    /// in the Flags field of the SMB2 TREE_CONNECT request.
+    /// </summary>
+    public partial struct Share_Redirect_Error_Context_Response
+    {
+        /// <summary>
+        /// This field MUST be set to the size of the structure.
+        /// </summary>
+        [StaticSize(4)]
+        public uint StructureSize;
+
+        /// <summary>
+        /// This field MUST be set to 3.
+        /// </summary>
+        [StaticSize(4)]
+        public uint NotificationType;
+
+        /// <summary>
+        /// The offset from the start of this structure to the ResourceName field.
+        /// </summary>
+        [StaticSize(4)]
+        public uint ResourceNameOffset;
+
+        /// <summary>
+        /// The length of the share name provided in the ResourceName field, in bytes.
+        /// </summary>
+        [StaticSize(4)]
+        public uint ResourceNameLength;
+
+        /// <summary>
+        /// This field MUST be set to zero.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort Flags;
+
+        /// <summary>
+        /// This field MUST be set to zero.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort TargetType;
+
+        /// <summary>
+        /// The number of MOVE_DST_IPADDR structures in the IPAddrMoveList field.
+        /// </summary>
+        [StaticSize(4)]
+        public uint IPAddrCount;
+
+        /// <summary>
+        /// Array of MOVE_DST_IPADDR structures, as specified in section 2.2.2.2.2.1.
+        /// </summary>
+        [Size("IPAddrCount")]
+        public Move_Dst_IpAddr[] IPAddrMoveList;
+
+        /// <summary>
+        /// Name of the share as a counted Unicode string, as specified in [MS-DTYP] section 2.3.10.
+        /// </summary>
+        [Size("ResourceNameLength")]
+        public byte[] ResourceName;
+    }
+
+    /// <summary>
+    /// The MOVE_DST_IPADDR structure is used in Share Redirect Error Context Response
+    /// to indicate the destination IP address.
+    /// </summary>
+    public struct Move_Dst_IpAddr
+    {
+        /// <summary>
+        /// This field indicates the type of destination IP address.
+        /// </summary>
+        [StaticSize(4)]
+        public Move_Dst_IpAddr_Type Type;
+
+        /// <summary>
+        /// This field MUST NOT be used and MUST be reserved.
+        /// The server SHOULD set this field to zero, and the client MUST ignore it on receipt.
+        /// </summary>
+        [StaticSize(4)]
+        public uint Reserved;
+
+        /// <summary>
+        /// This field is interpreted in different ways depending on the type of IP address passed in.
+        /// If the value of the Type field is MOVE_DST_IPADDR_V4, this field is the IPv4Address field followed by Reserved2 fields.
+        /// If the value of the Type field is MOVE_DST_IPADDR_V6, this field is the IPv6Address field.
+        /// </summary>
+        [StaticSize(16)]
+        public byte[] IPv6Address;
+    }
+
+    /// <summary>
+    /// Enum of Type field in Move_Dst_IpAddr
+    /// </summary>
+    public enum Move_Dst_IpAddr_Type : uint
+    {
+        /// <summary>
+        /// The type of destination IP address in this structure is IPv4 address.
+        /// The fields after Reserved field in this structure are interpreted as IPv4Address
+        /// followed by Reserved2 as described below.
+        /// </summary>
+        MOVE_DST_IPADDR_V4 = 0x00000001,
+
+        /// <summary>
+        /// The type of destination IP address in this structure is IPv6 address.
+        /// </summary>
+        MOVE_DST_IPADDR_V6 = 0x00000002
     }
 
     /// <summary>
@@ -7272,6 +7432,370 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  Possible value.
         /// </summary>
         V1 = 0,
+    }
+
+    /// <summary>
+    /// If the Flags field of the SMB2 TREE_CONNECT request has the SMB2_TREE_CONNECT_FLAG_EXTENSION_PRESENT bit set,
+    /// the following structure MUST be added at the beginning of the Buffer field.
+    /// </summary>
+    public struct TREE_CONNECT_Request_Extension
+    {
+        /// <summary>
+        /// The offset from the start of the SMB2 TREE_CONNECT request of an array of tree connect contexts.
+        /// </summary>
+        [StaticSize(4)]
+        public uint TreeConnectContextOffset;
+
+        /// <summary>
+        /// The count of elements in the tree connect context array.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort TreeConnectContextCount;
+
+        /// <summary>
+        /// MUST be set to zero.
+        /// </summary>
+        [StaticSize(10)]
+        public byte[] Reserved;
+
+        /// <summary>
+        /// This field is a variable-length buffer that contains the full share path name
+        /// as specified in section 2.2.9.
+        /// </summary>
+        public byte[] PathName;
+
+        /// <summary>
+        /// A variable length array of SMB2_TREE_CONNECT_CONTEXT structures
+        /// as described in section 2.2.9.2.
+        /// </summary>
+        [Size("TreeConnectContextCount")]
+        public TREE_CONNECT_CONTEXT[] TreeConnectContexts;
+    }
+
+    /// <summary>
+    /// The SMB2_TREE_CONNECT_CONTEXT structure is used by the SMB2 TREE_CONNECT request and
+    /// the SMB2 TREE_CONNECT response to encode additional properties.
+    /// </summary>
+    public struct TREE_CONNECT_CONTEXT
+    {
+        /// <summary>
+        /// Specifies the type of context in the Data field.
+        /// </summary>
+        [StaticSize(2)]
+        public ContextType_Values ContextType;
+
+        /// <summary>
+        /// The length, in bytes, of the Data field.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort DataLentgh;
+
+        /// <summary>
+        /// This field MUST NOT be used and MUST be reserved.
+        /// This value MUST be set to 0 by the client, and MUST be ignored by the server.
+        /// </summary>
+        [StaticSize(4)]
+        public uint Reserved;
+
+        /// <summary>
+        /// A variable-length field that contains the tree connect context specified by the ContextType field.
+        /// </summary>
+        public SMB2_REMOTED_IDENTITY_TREE_CONNECT Data;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public struct BLOB_DATA
+    {
+        /// <summary>
+        /// Size of the data, in bytes, in BlobData.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort BlobSize;
+
+        /// <summary>
+        /// Blob Data
+        /// </summary>
+        [Size("BlobSize")]
+        public byte[] BlobData;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public struct SID_ATTR_DATA
+    {
+        /// <summary>
+        /// SID, as specified in [MS-DTYP] section 2.4.2.2, information in BLOB_DATA format as specified in section 2.2.9.2.1.1.
+        /// BlobSize MUST be set to the size of SID and BlobData MUST be set to the SID value.
+        /// </summary>
+        public BLOB_DATA SidData;
+
+        /// <summary>
+        /// Specified attributes of the SID.
+        /// </summary>
+        [StaticSize(4)]
+        public SE_GROUP_ATTR Attr;
+
+    }
+
+    /// <summary>
+    /// Specified attributes of the SID
+    /// </summary>
+    public enum SE_GROUP_ATTR : uint
+    {
+        /// <summary>
+        /// The SID is enabled for access checks. A SID without this attribute is ignored
+        /// during an access check unless the SE_GROUP_USE_FOR_DENY_ONLY attribute is set.
+        /// </summary>
+        SE_GROUP_ENABLED = 0x00000004,
+
+        /// <summary>
+        /// The SID is enabled by default.
+        /// </summary>
+        SE_GROUP_ENABLED_BY_DEFAULT = 0x00000002,
+
+        /// <summary>
+        /// The SID is a mandatory integrity SID.
+        /// </summary>
+        SE_GROUP_INTEGRITY = 0x00000020,
+
+        /// <summary>
+        /// The SID is enabled for mandatory integrity checks.
+        /// </summary>
+        SE_GROUP_INTEGRITY_ENABLED = 0x00000040,
+
+        /// <summary>
+        /// The SID is a logon SID that identifies the logon session associated with an access token.
+        /// </summary>
+        SE_GROUP_LOGON_ID = 0xC0000000,
+
+        /// <summary>
+        /// The SID cannot have the SE_GROUP_ENABLED attribute cleared.
+        /// </summary>
+        SE_GROUP_MANDATORY = 0x00000001,
+
+        /// <summary>
+        /// The SID identifies a group account for which the user of the token is the owner of the group,
+        /// or the SID can be assigned as the owner of the token or objects.
+        /// </summary>
+        SE_GROUP_OWNER = 0x00000008,
+
+        /// <summary>
+        /// The SID identifies a domain-local group.
+        /// </summary>
+        SE_GROUP_RESOURCE = 0x20000000,
+
+        /// <summary>
+        /// The SID is a deny-only SID in a restricted token. If this attribute is set,
+        /// SE_GROUP_ENABLED is not set, and the SID cannot be reenabled.
+        /// </summary>
+        SE_GROUP_USE_FOR_DENY_ONLY = 0x00000010,
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public struct SID_ARRAY_DATA
+    {
+        /// <summary>
+        /// Number of SID_ATTR_DATA elements in SidAttrList array.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort SidAttrCount;
+
+        /// <summary>
+        /// An array with SidAttrCount number of SID_ATTR_DATA elements as specified in section 2.2.9.2.1.2.
+        /// </summary>
+        [Size("SidAttrCount")]
+        public SID_ATTR_DATA[] SidAttrList;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public struct LUID_ATTR_DATA
+    {
+        /// <summary>
+        /// LUID is a locally unique identifier, as specified in [MS-DTYP] section 2.3.7.
+        /// </summary>
+        [StaticSize(8)]
+        public _LUID Luid;
+
+        /// <summary>
+        /// LUID attributes as specified in [MS-LSAD] section 2.2.5.4.
+        /// </summary>
+        [StaticSize(2)]
+        public uint Attr;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public struct PRIVILEGE_ARRAY_DATA
+    {
+        /// <summary>
+        /// Number of PRIVILEGE_DATA elements in PrivilegeList array.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort PrivilegeCount;
+
+        /// <summary>
+        /// An array with PrivilegeCount number of PRIVILEGE_DATA elements as specified in section 2.2.9.2.1.5.
+        /// </summary>
+        [Size("PrivilegeCount")]
+        public BLOB_DATA[] PrivilegeList;
+    }
+
+    /// <summary>
+    /// Specifies the type of context in the Data field.
+    /// This field MUST be one of the following values.
+    /// </summary>
+    public enum ContextType_Values : ushort
+    {
+        /// <summary>
+        /// This value is reserved.
+        /// </summary>
+        RESERVED_TREE_CONNECT_CONTEXT_ID = 0x00000001,
+
+        /// <summary>
+        /// The Data field contains remoted identity tree connect context data as specified in section 2.2.9.2.1.
+        /// </summary>
+        REMOTED_IDENTITY_TREE_CONNECT_CONTEXT_ID = 0x00000002,
+    }
+
+    /// <summary>
+    /// The SMB2_REMOTED_IDENTITY_TREE_CONNECT context is specified in SMB2_TREE_CONNECT_CONTEXT structure
+    /// when the ContextType is set to SMB2_REMOTED_IDENTITY_TREE_CONNECT_CONTEXT_ID.
+    /// </summary>
+    public struct SMB2_REMOTED_IDENTITY_TREE_CONNECT
+    {
+        /// <summary>
+        /// A 16-bit integer specifying the type of ticket requested.
+        /// The value in this field MUST be set to 0x0001.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort TicketType;
+
+        /// <summary>
+        /// A 16-bit integer specifying the total size of this structure.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort TicketSize;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes, from the beginning of
+        /// this structure to the user information in the TicketInfo buffer.
+        /// The user information is stored in SID_ATTR_DATA format as specified in section 2.2.9.2.1.2.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort User;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes, from the beginning of
+        /// this structure to the null-terminated Unicode string containing the username
+        /// in the TicketInfo field.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort UserName;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes, from the beginning of
+        /// this structure to the null-terminated Unicode string containing the domain name
+        /// in the TicketInfo field.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort Domain;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes, from the beginning of
+        /// this structure to the information about the groups in the TicketInfo buffer.
+        /// The information is stored in SID_ARRAY_DATA format as specified in section 2.2.9.2.1.3.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort Groups;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes, from the beginning of
+        /// this structure to the information about the restricted groups in the TicketInfo field.
+        /// The information is stored in SID_ARRAY_DATA format as specified in section 2.2.9.2.1.3.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort RestrictedGroups;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes, from the beginning of
+        /// this structure to the information about the privileges in the TicketInfo field.
+        /// The information is stored in PRIVILEGE_ARRAY_DATA format as specified in section 2.2.9.2.1.6.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort Privileges;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes, from the beginning of
+        /// this structure to the information about the primary group in the TicketInfo field.
+        /// The information is stored in SID_ARRAY_DATA format as specified in section 2.2.9.2.1.3.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort PrimaryGroup;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes, from the beginning of
+        /// this structure to the information about the owner in the TicketInfo field.
+        /// The information is stored in BLOB_DATA format as specified in section 2.2.9.2.1.1,
+        /// where BlobData contains the SID, as specified in [MS-DTYP] section 2.4.2.2,
+        /// representing the owner, and BlobSize contains the size of SID.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort Owner;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes, from the beginning of
+        /// this structure to the information about the DACL, as specified in [MS-DTYP] section 2.5.2,
+        /// in the TicketInfo field. Information about the DACL is stored in BLOB_DATA format
+        /// as specified in section 2.2.9.2.1.1, where BlobSize contains the size of the ACL structure,
+        /// as specified in [MS-DTYP] section 2.4.5, and BlobData contains the DACL data.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort DefaultDacl;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes, from the beginning of
+        /// this structure to the information about the device groups in the TicketInfo field.
+        /// The information is stored in SID_ARRAY_DATA format as specified in section 2.2.9.2.1.3.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort DeviceGroups;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes, from the beginning of
+        /// this structure to the user claims data in the TicketInfo field.
+        /// Information about user claims is stored in BLOB_DATA format as specified
+        /// in section 2.2.9.2.1.1, where BlobData contains an array of
+        /// CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1 structures, as specified in [MS-DTYP] section 2.4.10.1,
+        /// representing the claims issued to the user, and BlobSize contains the size of the user claims data.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort UserClaims;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes, from the beginning of
+        /// this structure to the device claims data in the TicketInfo field.
+        /// Information about device claims is stored in BLOB_DATA format as specified
+        /// in section 2.2.9.2.1.1, where BlobData contains an array of
+        /// CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1 structures, as specified in [MS-DTYP] section 2.4.10.1,
+        /// representing the claims issued to the account of the device which the user is connected from,
+        /// and BlobSize contains the size of the device claims data.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort DeviceClaims;
+
+        /// <summary>
+        /// A variable-length buffer containing the remoted identity tree connect context data,
+        /// including the information about all the previously defined fields in this structure.
+        /// </summary>
+        public byte[] TicketInfo;
     }
 
     /// <summary>
