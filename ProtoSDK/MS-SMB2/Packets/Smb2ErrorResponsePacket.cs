@@ -12,7 +12,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
     public class Smb2ErrorResponsePacket : Smb2StandardPacket<ERROR_Response_packet>
     {
         /// <summary>
-        /// Covert an Smb2ErrrorResponsePacket to a byte array 
+        /// Convert an Smb2ErrorResponsePacket to a byte array 
         /// </summary>
         /// <returns>The byte array</returns>
         public override byte[] ToBytes()
@@ -29,12 +29,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 for (int i = 0; i < this.PayLoad.ErrorContextCount; i++)
                 {
                     temp = temp.Concat(TypeMarshal.ToBytes<uint>(this.PayLoad.ErrorContextErrorData[i].ErrorDataLength)).ToArray();
-                    temp = temp.Concat(TypeMarshal.ToBytes<uint>(this.PayLoad.ErrorContextErrorData[i].ErrorId)).ToArray();
+                    temp = temp.Concat(TypeMarshal.ToBytes<Error_Id>(this.PayLoad.ErrorContextErrorData[i].ErrorId)).ToArray();
 
                     switch (this.Header.Status)
                     {
                         case Smb2Status.STATUS_STOPPED_ON_SYMLINK:
                             temp = temp.Concat(TypeMarshal.ToBytes<Symbolic_Link_Error_Response>(this.PayLoad.ErrorContextErrorData[i].ErrorData.SymbolicLinkErrorResponse)).ToArray();
+                            break;
+                        case Smb2Status.STATUS_BAD_NETWORK_NAME:
+                            temp = temp.Concat(TypeMarshal.ToBytes<Share_Redirect_Error_Context_Response>(this.PayLoad.ErrorContextErrorData[i].ErrorData.ShareRedirectErrorContextResponse)).ToArray();
                             break;
                         case Smb2Status.STATUS_BUFFER_TOO_SMALL:
                             temp = temp.Concat(this.PayLoad.ErrorContextErrorData[i].ErrorData.BufferTooSmallErrorResponse).ToArray();
@@ -83,14 +86,30 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     Error_Context tempContext = new Error_Context();
                     tempContext.ErrorDataLength = TypeMarshal.ToStruct<uint>(data.Skip(consumedLen).Take(4).ToArray());
                     consumedLen += 4;
-                    tempContext.ErrorId = TypeMarshal.ToStruct<uint>(data.Skip(consumedLen).Take(4).ToArray());
+                    tempContext.ErrorId = TypeMarshal.ToStruct<Error_Id>(data.Skip(consumedLen).Take(4).ToArray());
                     consumedLen += 4;
                     switch (this.Header.Status)
                     {
                         case Smb2Status.STATUS_STOPPED_ON_SYMLINK:
                             tempContext.ErrorData.SymbolicLinkErrorResponse = TypeMarshal.ToStruct<Symbolic_Link_Error_Response>(data.Skip(consumedLen).Take((int)tempContext.ErrorDataLength).ToArray());
                             break;
+                        case Smb2Status.STATUS_BAD_NETWORK_NAME:
+                            tempContext.ErrorData.ShareRedirectErrorContextResponse = TypeMarshal.ToStruct<Share_Redirect_Error_Context_Response>(data.Skip(consumedLen).Take((int)tempContext.ErrorDataLength).ToArray());
+                            tempContext.ErrorData.ShareRedirectErrorContextResponse.ResourceName = data.Skip(consumedLen + (int)tempContext.ErrorData.ShareRedirectErrorContextResponse.ResourceNameOffset).Take((int)tempContext.ErrorData.ShareRedirectErrorContextResponse.ResourceNameLength).ToArray();
 
+                            for (int j = 0; j < tempContext.ErrorData.ShareRedirectErrorContextResponse.IPAddrCount; j += 1)
+                            {
+                                if (tempContext.ErrorData.ShareRedirectErrorContextResponse.IPAddrMoveList[j].Type == Move_Dst_IpAddr_Type.MOVE_DST_IPADDR_V4)
+                                {
+                                    // If the value of the Type field is MOVE_DST_IPADDR_V4, this field is the IPv4Address field followed by Reserved2 fields.
+                                    // Reserved2 (12 bytes): The client MUST set this to 0, and the server MUST ignore it on receipt
+                                    for (int z = 4; z < 16; z += 1)
+                                    {
+                                        tempContext.ErrorData.ShareRedirectErrorContextResponse.IPAddrMoveList[j].IPv6Address[z] = 0;
+                                    }
+                                }
+                            }
+                            break;
                         case Smb2Status.STATUS_BUFFER_TOO_SMALL:
                             tempContext.ErrorData.BufferTooSmallErrorResponse = data.Skip(consumedLen).Take((int)tempContext.ErrorDataLength).ToArray();
                             break;
@@ -103,7 +122,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             }
             else
             {
-                // If the ByteCount field is zero then the server MUST supply an ErrorData field that is one byte in length, and SHOULD set that byte to zero                
+                // If the ByteCount field is zero then the server MUST supply an ErrorData field that is one byte in length, and SHOULD set that byte to zero
                 int byteCountValue = (int)(this.PayLoad.ByteCount == 0 ? 1 : this.PayLoad.ByteCount);
                 this.PayLoad.ErrorData = data.Skip(consumedLen).Take(byteCountValue).ToArray();
                 consumedLen += byteCountValue;
