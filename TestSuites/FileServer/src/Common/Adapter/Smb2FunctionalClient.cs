@@ -1993,6 +1993,109 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             return status;
         }
 
+        public uint SetZeroData(
+            uint treeId,
+            FILEID fileId,
+            ulong fileOffset,
+            ulong beyondFileZero,
+            ResponseChecker<IOCTL_Response> checker = null)
+        {
+            FSCTL_SET_ZERO_DATA_Request setZeroDataRequest = new FSCTL_SET_ZERO_DATA_Request();
+            setZeroDataRequest.FileOffset = fileOffset;
+            setZeroDataRequest.BeyondFinalZero = beyondFileZero;
+            uint inputBufferSize = (uint)TypeMarshal.ToBytes<FSCTL_SET_ZERO_DATA_Request>(setZeroDataRequest).Length;
+
+            byte[] requestInput = TypeMarshal.ToBytes(setZeroDataRequest);
+
+            ulong messageId = generateMessageId(sequenceWindow);
+            ushort creditCharge = generateCreditCharge(1);
+
+            byte[] inputResponse;
+            byte[] outputBuffer;
+            Packet_Header header;
+            IOCTL_Response ioCtlResponse;
+
+            uint status = client.IoCtl(
+                creditCharge,
+                generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
+                testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                messageId,
+                sessionId,
+                treeId,
+                CtlCode_Values.FSCTL_SET_ZERO_DATA,
+                fileId,
+                inputBufferSize,
+                requestInput,
+                inputBufferSize,
+                IOCTL_Request_Flags_Values.SMB2_0_IOCTL_IS_FSCTL,
+                out inputResponse,
+                out outputBuffer,
+                out header,
+                out ioCtlResponse,
+                sessionChannelSequence
+                );
+
+
+            ProduceCredit(messageId, header);
+
+            InnerResponseChecker(checker, header, ioCtlResponse);
+
+            return status;
+        }
+
+        public uint DuplicateExtentsToFile(
+            uint treeId,
+            FILEID fileId,
+            long sourceFileOffset,
+            long targetFileOffset,
+            long byteCount,
+            ResponseChecker<IOCTL_Response> checker = null)
+        {
+            FSCTL_DUPLICATE_EXTENTS_TO_FILE_Request request = new FSCTL_DUPLICATE_EXTENTS_TO_FILE_Request();
+            request.SourceFileId = fileId;
+            request.SourceFileOffset = sourceFileOffset;
+            request.TargetFileOffset = targetFileOffset;
+            request.ByteCount = byteCount;
+
+            byte[] requestInput = TypeMarshal.ToBytes(request);
+            uint inputBufferSize = (uint)TypeMarshal.ToBytes<FSCTL_DUPLICATE_EXTENTS_TO_FILE_Request>(request).Length;
+            byte[] responseInput;
+            byte[] responseOutput;
+
+            Packet_Header header;
+            IOCTL_Response ioCtlResponse;
+
+            ulong messageId = generateMessageId(sequenceWindow);
+            ushort creditCharge = generateCreditCharge(1);
+
+            ConsumeCredit(messageId, creditCharge);
+
+            uint status = client.IoCtl(
+                creditCharge,
+                generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
+                testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                messageId,
+                sessionId,
+                treeId,
+                CtlCode_Values.FSCTL_DUPLICATE_EXTENTS_TO_FILE,
+                fileId,
+                inputBufferSize,
+                requestInput,
+                inputBufferSize,
+                IOCTL_Request_Flags_Values.SMB2_0_IOCTL_IS_FSCTL,
+                out responseInput,
+                out responseOutput,
+                out header,
+                out ioCtlResponse,
+                sessionChannelSequence);
+
+            ProduceCredit(messageId, header);
+
+            InnerResponseChecker(checker, header, ioCtlResponse);
+
+            return status;
+        }
+
         #endregion
 
         #region Query Directory
@@ -2138,6 +2241,51 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             InnerResponseChecker(checker, header, queryInfoResponse);
 
             sd = DtypUtility.DecodeSecurityDescriptor(outputBuffer);
+            return status;
+        }
+
+        public uint QueryFSAttributes(
+            uint treeId,
+            byte fileInfoClass,
+            FILEID fileId,
+            out byte[] outputBuffer,
+            ResponseChecker<QUERY_INFO_Response> checker = null)
+        {
+            uint maxOutputBufferLength = 1024;
+            Packet_Header header;
+            QUERY_INFO_Response queryInfoResponse;
+
+            ulong messageId = generateMessageId(sequenceWindow);
+            ushort creditCharge = generateCreditCharge(1);
+
+            QUERY_INFO_Request_Flags_Values queryInfoFlags = QUERY_INFO_Request_Flags_Values.V1;
+
+            // Need to consume credit from sequence window first according to TD
+            ConsumeCredit(messageId, creditCharge);
+
+            uint status = client.QueryInfo(
+                creditCharge,
+                generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
+                testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                messageId,
+                sessionId,
+                treeId,
+                InfoType_Values.SMB2_0_INFO_FILESYSTEM,
+                fileInfoClass,
+                maxOutputBufferLength,
+                AdditionalInformation_Values.NONE,
+                queryInfoFlags,
+                fileId,
+                null,
+                out outputBuffer,
+                out header,
+                out queryInfoResponse,
+                sessionChannelSequence);
+
+            ProduceCredit(messageId, header);
+
+            InnerResponseChecker(checker, header, queryInfoResponse);
+
             return status;
         }
 
