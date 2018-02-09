@@ -179,7 +179,49 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             FileServerFailoverTest(TestConfig.ClusteredScaleOutFileServerName,
                 FileServerType.ScaleOutFileServer);
         }
+        #endregion
 
+        #region FileServerFailover_SMB311_Redirect_To_Owner_SOFS
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Failover)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("This test case is designed to test server can handle a TreeConnect request with flag SMB2_SHAREFLAG_REDIRECT_TO_OWNER when SMB dialect is 3.1.1 and share type includes STYPE_CLUSTER_SOFS.")]
+        public void FileServerFailover_SMB311_Redirect_To_Owner_SOFS()
+        {
+            #region Check Applicability
+            TestConfig.CheckDialect(DialectRevision.Smb311);
+            #endregion
+
+            string server = TestConfig.ClusteredScaleOutFileServerName;
+            IPAddress currentAccessIpAddr = null;
+            IPAddress[] accessIpList = Dns.GetHostEntry(server).AddressList;
+            currentAccessIpAddr = accessIpList[0];
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client by sending the following requests: NEGOTIATE; SESSION_SETUP");
+            Smb2FunctionalClient client = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client.ConnectToServer(TestConfig.UnderlyingTransport, server, currentAccessIpAddr);
+            client.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            client.SessionSetup(TestConfig.DefaultSecurityPackage, server, TestConfig.AccountCredential, false);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends TREE_CONNECT request with flag SMB2_SHAREFLAG_REDIRECT_TO_OWNER and expects STATUS_BAD_NETWORK_NAME.");
+            string uncSharePath = Smb2Utility.GetUncPath(server, testConfig.CAShareName);
+            uint treeId;
+            client.TreeConnect(
+                uncSharePath,
+                out treeId,
+                (header, response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        Smb2Status.STATUS_BAD_NETWORK_NAME,
+                        header.Status,
+                        "If Connection.Dialect is 3.1.1, TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS, and the SMB2_TREE_CONNECT_FLAG_REDIRECT_TO_OWNER bit is set in the Flags field of the SMB2 TREE_CONNECT request, the server MUST fail the tree connect request with a STATUS_BAD_NETWORK_NAME error, actually server returns {0}.", Smb2Status.GetStatusCode(header.Status)
+                    );
+                },
+                TreeConnect_Flags.SMB2_SHAREFLAG_REDIRECT_TO_OWNER);
+            client.LogOff();
+            client.Disconnect();
+        }
         #endregion
 
         #region Test Utility
