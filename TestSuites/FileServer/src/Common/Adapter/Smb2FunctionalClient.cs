@@ -1546,6 +1546,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             byte[] buffer,
             out byte[] respOutput,
             uint maxOutputResponse = DefaultMaxOutputResponse,
+            bool signRequest = true,
             ResponseChecker<IOCTL_Response> checker = null)
         {
             uint status = 0;
@@ -1565,7 +1566,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             status = client.IoCtl(
                 creditCharge,
                 generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
-                testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                signRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
                 messageId,
                 sessionId,
                 treeId,
