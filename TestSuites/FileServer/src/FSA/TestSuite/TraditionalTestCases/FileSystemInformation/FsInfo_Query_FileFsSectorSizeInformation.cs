@@ -30,6 +30,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Query FileFsSectorSizeInformation from a file and check if server responses correctly when OutputBufferSize is less than SectorSize.")]
         public void FsInfo_Query_FileFsSectorSizeInformation_File_OutputBufferSizeLessThanSectorSizeInfo()
         {
@@ -39,6 +41,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Query FileFsSectorSizeInformation from a directory and check if server responses correctly when OutputBufferSize is less than SectorSize.")]
         public void FsInfo_Query_FileFsSectorSizeInformation_Dir_OutputBufferSizeLessThanSectorSizeInfo()
         {
@@ -51,6 +55,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Query FileFsSectorSizeInformation from a file and check if server responses correctly when OutputBufferSize equals to SectorSize.")]
         public void FsInfo_Query_FileFsSectorSizeInformation_File_OutputBufferSizeEqualToSectorSizeInfo()
         {
@@ -60,6 +65,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Query FileFsSectorSizeInformation from a directory and check if server responses correctly when OutputBufferSize equals to SectorSize.")]
         public void FsInfo_Query_FileFsSectorSizeInformation_Dir_OutputBufferSizeEqualToSectorSizeInfo()
         {
@@ -71,6 +78,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Query FileFsSectorSizeInformation from a file and check if server responses correctly when OutputBufferSize is greater than SectorSize.")]
         public void FsInfo_Query_FileFsSectorSizeInformation_File_OutputBufferSizeGreaterThanSectorSizeInfo()
         {
@@ -80,6 +89,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Query FileFsSectorSizeInformation from a directory and check if server responses correctly when OutputBufferSize is greater than SectorSize.")]
         public void FsInfo_Query_FileFsSectorSizeInformation_Dir_OutputBufferSizeGreaterThanSectorSizeInfo()
         {
@@ -94,6 +105,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Query FileFsSectorSizeInformation from a file and check if the outputValue of server response is correct.")]
         public void FsInfo_Query_FileFsSectorSizeInformation_File_OutputValue_Common()
         {
@@ -103,6 +116,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Query FileFsSectorSizeInformation from a directory and check if the outputValue of server response is correct.")]
         public void FsInfo_Query_FileFsSectorSizeInformation_Dir_OutputValue_Common()
         {

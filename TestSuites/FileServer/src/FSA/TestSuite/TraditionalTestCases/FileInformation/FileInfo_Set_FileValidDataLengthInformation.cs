@@ -17,6 +17,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Try to set FileValidDataLengthInfo to a file and check if valid data length information is supported.")]
         public void FileInfo_Set_FileValidDataLengthInfo_File_IsSupported()
         {
@@ -26,6 +28,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Try to set FileValidDataLengthInfo to a directory and check if valid data length information is supported.")]
         public void FileInfo_Set_FileValidDataLengthInfo_Dir_IsSupported()
         {

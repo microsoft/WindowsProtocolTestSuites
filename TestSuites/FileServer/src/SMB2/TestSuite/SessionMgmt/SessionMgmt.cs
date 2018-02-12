@@ -157,6 +157,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.SessionMgmt
         [TestMethod]
         [TestCategory(TestCategories.Smb21)]
         [TestCategory(TestCategories.Session)]
+        [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether server can handle reconnect with different dialect.")]
         public void SessionMgmt_ReconnectWithDifferentDialect()
         {

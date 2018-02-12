@@ -35,11 +35,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         NegotiationCredSsp,
 
         /// <summary>
-        /// Enhanced RDP Security, External Security Protocol is TLS with Direct Approach
-        /// </summary>
-        DirectTls,
-
-        /// <summary>
         /// Enhanced RDP Security, External Security Protocol is CredSSP with Direct Approach
         /// </summary>
         DirectCredSsp,
@@ -3232,6 +3227,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// This flag is understood only by RDP 7.0, 7.1, 8.0, and 8.1 servers.
         /// </summary>
         INFO_VIDEO_DISABLE = 0x00400000,
+
+        /// <summary>
+        /// An unused flag that is reserved for future use. This flag MUST NOT be set.
+        /// </summary>
+        INFO_RESERVED1 = 0x00800000,
+
+        /// <summary>
+        /// An unused flag that is reserved for future use. This flag MUST NOT be set.
+        /// </summary>
+        INFO_RESERVED2 = 0x01000000,
 
         /// <summary>
         /// Indicates that the client supports Hi-Def RAIL ([MS-RDPERP] section 1.3.3). The INFO_HIDEF_RAIL_SUPPORTED flag MUST be ignored if the INFO_RAIL (0x00008000) flag is not specified. 
@@ -6935,7 +6940,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         ///  RDP 10.3 clients
         /// </summary>
-        V6 = 0x00080008
+        V6 = 0x00080008,
+
+        /// <summary>
+        ///  RDP 10.4 clients
+        /// </summary>
+        V7 = 0x00080009
     }
 
     /// <summary>

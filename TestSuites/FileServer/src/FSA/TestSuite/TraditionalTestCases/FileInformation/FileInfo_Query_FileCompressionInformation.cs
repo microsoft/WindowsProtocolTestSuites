@@ -17,6 +17,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Query FileCompressionInfo from a file and check if Compression is supported.")]
         public void FileInfo_Query_FileCompressionInfo_File_IsCompressionSupported() 
         {
@@ -26,6 +28,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Query FileCompressionInfo from a directory and check if Compression is supported.")]
         public void FileInfo_Query_FileCompressionInfo_Dir_IsCompressionSupported()
         {

@@ -117,7 +117,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
     /// <summary>
     /// Value of LC field in RFX_AVC444_BITMAP_STREAM
     /// </summary>
-    public enum AVC444LCValue: byte
+    public enum AVC444LCValue : byte
     {
         /// <summary>
         /// A luma frame is contained in the avc420EncodedBitstream1 field, 
@@ -142,11 +142,24 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// </summary>
         Invalid = 0x03
     }
+
+    /// <summary>
+    /// Common interface for AVC444/AVC444v2 bitmap stream.
+    /// </summary>
+    public interface IRFX_AVC444_BITMAP_STREAM
+    {
+        /// <summary>
+        /// Encode bitmap stream.
+        /// </summary>
+        /// <returns>Array of bytes containing bitmap stream.</returns>
+        byte[] Encode();
+    }
+
     /// <summary>
     /// The RFX_AVC444_BITMAP_STREAM structure encapsulates regions of 
     /// a graphics frame compressed using MPEG-4 AVC/H.264 compression techniques [ITU-H.264-201201] in YUV444 mode. 
     /// </summary>
-    public class RFX_AVC444_BITMAP_STREAM
+    public class RFX_AVC444_BITMAP_STREAM : IRFX_AVC444_BITMAP_STREAM
     {
         /// <summary>
         /// A 30-bit unsigned integer that specifies the size, in bytes, of the luma frame present in the avc420EncodedBitstream1 field. 
@@ -155,18 +168,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         public uint cbAvc420EncodedBitstream1;
 
         public AVC444LCValue LC;
-                
+
         /// <summary>
         /// An RFX_AVC420_BITMAP_STREAM structure that contains the first YUV420p subframe of a single frame 
         /// that was encoded using the MPEG-4 AVC/H.264 codec in YUV444 mode.
         /// </summary>
-        public  RFX_AVC420_BITMAP_STREAM avc420EncodedBitstream1;
+        public RFX_AVC420_BITMAP_STREAM avc420EncodedBitstream1;
 
         /// <summary>
         /// An RFX_AVC420_BITMAP_STREAM structure that contains the second YUV420p subframe (if it exists)
         /// of a single frame that was encoded using the MPEG-4 AVC/H.264 codec in YUV444 mode.
         /// </summary>
-        public  RFX_AVC420_BITMAP_STREAM avc420EncodedBitstream2;
+        public RFX_AVC420_BITMAP_STREAM avc420EncodedBitstream2;
 
         public RFX_AVC444_BITMAP_STREAM(AVC444LCValue lc, RFX_AVC420_BITMAP_STREAM avc420EncodedBitstream1, RFX_AVC420_BITMAP_STREAM avc420EncodedBitstream2)
         {
@@ -191,7 +204,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
 
             if (LC == AVC444LCValue.BothLumaChroma || LC == AVC444LCValue.OnlyLuma)
             {
-                cbAvc420EncodedBitstream1 =(uint)bitStream1.Length;
+                cbAvc420EncodedBitstream1 = (uint)bitStream1.Length;
             }
 
             uint avc420EncodedBitstreamInfo = (cbAvc420EncodedBitstream1 | (((uint)LC) << 30));
@@ -208,6 +221,70 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             return bufList.ToArray();
         }
     }
+
+    public class RFX_AVC444V2_BITMAP_STREAM : IRFX_AVC444_BITMAP_STREAM
+    {
+        /// <summary>
+        /// A 30-bit unsigned integer that specifies the size, in bytes, of the luma frame present in the avc420EncodedBitstream1 field. 
+        /// If no luma frame is present, then this field MUST be set to zero.
+        /// </summary>
+        public uint cbAvc420EncodedBitstream1;
+
+        public AVC444LCValue LC;
+
+        /// <summary>
+        /// An RFX_AVC420_BITMAP_STREAM structure that contains the first YUV420p subframe of a single frame 
+        /// that was encoded using the MPEG-4 AVC/H.264 codec in YUV444 mode.
+        /// </summary>
+        public RFX_AVC420_BITMAP_STREAM avc420EncodedBitstream1;
+
+        /// <summary>
+        /// An RFX_AVC420_BITMAP_STREAM structure that contains the second YUV420p subframe (if it exists)
+        /// of a single frame that was encoded using the MPEG-4 AVC/H.264 codec in YUV444 mode.
+        /// </summary>
+        public RFX_AVC420_BITMAP_STREAM avc420EncodedBitstream2;
+
+        public RFX_AVC444V2_BITMAP_STREAM(AVC444LCValue lc, RFX_AVC420_BITMAP_STREAM avc420EncodedBitstream1, RFX_AVC420_BITMAP_STREAM avc420EncodedBitstream2)
+        {
+            this.LC = lc;
+            this.avc420EncodedBitstream1 = avc420EncodedBitstream1;
+            this.avc420EncodedBitstream2 = avc420EncodedBitstream2;
+        }
+
+        /// <summary>
+        /// Encode to binary
+        /// </summary>
+        /// <returns></returns>
+        public byte[] Encode()
+        {
+            List<byte> bufList = new List<byte>();
+            byte[] bitStream1 = null;
+            if (avc420EncodedBitstream1 != null)
+                bitStream1 = avc420EncodedBitstream1.Encode();
+            byte[] bitStream2 = null;
+            if (avc420EncodedBitstream2 != null)
+                bitStream2 = avc420EncodedBitstream2.Encode();
+
+            if (LC == AVC444LCValue.BothLumaChroma || LC == AVC444LCValue.OnlyLuma)
+            {
+                cbAvc420EncodedBitstream1 = (uint)bitStream1.Length;
+            }
+
+            uint avc420EncodedBitstreamInfo = (cbAvc420EncodedBitstream1 | (((uint)LC) << 30));
+            bufList.AddRange(TypeMarshal.ToBytes<uint>(avc420EncodedBitstreamInfo));
+            if (bitStream1 != null)
+            {
+                bufList.AddRange(bitStream1);
+            }
+            if (bitStream2 != null)
+            {
+                bufList.AddRange(bitStream2);
+            }
+
+            return bufList.ToArray();
+        }
+    }
+
     #region Types for test data
     /// <summary>
     /// Type to store Test data for RDPEGFX H264 codec
@@ -231,7 +308,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             get;
             set;
         }
-        
+
     }
 
     public class SurfaceInfo
@@ -296,7 +373,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 ushort res = 0;
                 try
                 {
-                    if(Width.StartsWith("0x", StringComparison.CurrentCultureIgnoreCase))
+                    if (Width.StartsWith("0x", StringComparison.CurrentCultureIgnoreCase))
                     {
                         res = Convert.ToUInt16(Width, 16);
                     }
@@ -431,7 +508,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             get;
             set;
         }
-               
+
 
         /// <summary>
         /// Dest rect
@@ -458,6 +535,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// </summary>
         [XmlElementAttribute]
         public AVC444BitmapStream AVC444BitmapStream
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Encoded Data for AVC 444 v2 mode
+        /// </summary>
+        [XmlElementAttribute]
+        public AVC444v2BitmapStream AVC444v2BitmapStream
         {
             get;
             set;
@@ -537,7 +624,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             catch { }
             return null;
         }
-                
+
     }
     public class AVC444BitmapStream
     {
@@ -592,7 +679,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <summary>
         /// Convert this AVC444BitmapStream to RFX_AVC444_BITMAP_STREAM
         /// </summary>
-        public RFX_AVC444_BITMAP_STREAM  To_RFX_AVC444_BITMAP_STREAM()
+        public RFX_AVC444_BITMAP_STREAM To_RFX_AVC444_BITMAP_STREAM()
         {
             RFX_AVC420_BITMAP_STREAM stream1 = null;
             if (AVC420EncodedBitstream1 != null)
@@ -601,6 +688,70 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             if (AVC420EncodedBitstream2 != null)
                 stream2 = AVC420EncodedBitstream2.To_RFX_AVC420_BITMAP_STREAM();
             return new RFX_AVC444_BITMAP_STREAM((AVC444LCValue)LCCode, stream1, stream2);
+        }
+    }
+    public class AVC444v2BitmapStream
+    {
+        /// <summary>
+        /// string: LC code
+        /// </summary>
+        [XmlElementAttribute]
+        public string LC
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// First YUV420p subframe 
+        /// </summary>
+        [XmlElementAttribute]
+        public AVC420BitmapStream AVC420EncodedBitstream1
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Second YUV420p subframe 
+        /// </summary>
+        [XmlElementAttribute]
+        public AVC420BitmapStream AVC420EncodedBitstream2
+        {
+            get;
+            set;
+        }
+
+        public byte LCCode
+        {
+            get
+            {
+                byte res = 0;
+                try
+                {
+                    if (LC.StartsWith("0x", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        res = Convert.ToByte(LC, 16);
+                    }
+                    res = byte.Parse(LC);
+                }
+                catch { }
+                return res;
+            }
+        }
+
+        /// <summary>
+        /// Convert this AVC444v2BitmapStream to RFX_AVC444V2_BITMAP_STREAM
+        /// </summary>
+        public RFX_AVC444V2_BITMAP_STREAM To_RFX_AVC444V2_BITMAP_STREAM()
+        {
+            RFX_AVC420_BITMAP_STREAM stream1 = null;
+            if (AVC420EncodedBitstream1 != null)
+                stream1 = AVC420EncodedBitstream1.To_RFX_AVC420_BITMAP_STREAM();
+            RFX_AVC420_BITMAP_STREAM stream2 = null;
+            if (AVC420EncodedBitstream2 != null)
+                stream2 = AVC420EncodedBitstream2.To_RFX_AVC420_BITMAP_STREAM();
+            return new RFX_AVC444V2_BITMAP_STREAM((AVC444LCValue)LCCode, stream1, stream2);
         }
     }
     public class AVC420BitmapStream
@@ -759,7 +910,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <summary>
         /// qualities value of this rect
         /// </summary>
-        [XmlElementAttribute]        
+        [XmlElementAttribute]
         public Quality Quality
         {
             get;
@@ -850,7 +1001,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             set;
         }
     }
-       
+
 
     /// <summary>
     /// Quality

@@ -11,6 +11,7 @@ using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using System.Globalization;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter
 {
@@ -82,6 +83,127 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter
         }
         #endregion
 
+        #region HRVS
+
+        #region Private Fields
+        private string sharePath;
+        private string shareServerName;
+        private string shareName;
+        private IPAddress shareServerIP;
+        private bool isOffLoadImplemented;
+        #endregion
+
+        #region Variable
+        public string SharePath
+        {
+            get
+            {
+                if (sharePath == null)
+                {
+                    sharePath = GetProperty("HVRS", "SharePath");
+                }
+                return sharePath;
+            }
+        }
+
+        public string ShareServerName
+        {
+            get
+            {
+                if (shareServerName == null)
+                {
+                    ParseSharePath();
+                }
+                return shareServerName;
+            }
+        }
+
+        /// <summary>
+        /// Name of the share containing the shared virtual disk file
+        /// </summary>
+        public string ShareName
+        {
+            get
+            {
+                if (shareName == null)
+                {
+                    ParseSharePath();
+                }
+                return shareName;
+            }
+        }
+
+        public IPAddress ShareServerIP
+        {
+            get
+            {
+                if (shareServerIP == null)
+                {
+                    if (IPAddress.TryParse(ShareServerName, out shareServerIP))
+                    {
+                        return shareServerIP;
+                    }
+                    else
+                    {
+                        try
+                        {
+                            shareServerIP = Dns.GetHostEntry(ShareServerName).AddressList[0];
+                        }
+                        catch
+                        {
+                            throw new Exception(string.Format("Cannot resolve IP address of CAShareServerName ({0}) from DNS.", ShareServerName));
+                        }
+
+                    }
+                }
+                return shareServerIP;
+            }
+        }
+
+        public bool IsOffLoadImplemented
+        {
+            get
+            {
+                if (isOffLoadImplemented == false)
+                {
+                    isOffLoadImplemented = bool.Parse(GetProperty("HVRS", "IsOffLoadImplemented"));
+                }
+                return isOffLoadImplemented;
+            }
+        }
+
+        public bool IsSetZeroDataImplemented
+        {
+            get
+            {
+                return bool.Parse(GetProperty("HVRS", "IsSetZeroDataImplemented"));
+            }
+        }
+
+        public int VolumnClusterSize
+        {
+            get
+            {
+                return int.Parse(GetProperty("HVRS", "VolumnClusterSize"));
+            }
+        }
+        #endregion
+
+        #region Methods
+        private void ParseSharePath()
+        {
+            string sharePath = GetProperty("HVRS", "SharePath");
+            if (!sharePath.StartsWith(@"\\"))
+            {
+                Site.Assert.Inconclusive(@"ShareContainingSharedVHD should start with \\");
+            }
+            sharePath = sharePath.Trim('\\');
+            shareServerName = sharePath.Substring(0, sharePath.IndexOf(@"\"));
+            shareName = sharePath.Substring(shareServerName.Length + 1);
+        }
+        #endregion 
+
+        #endregion
         public SMB2TestConfig(ITestSite site):base(site)
         {
         }

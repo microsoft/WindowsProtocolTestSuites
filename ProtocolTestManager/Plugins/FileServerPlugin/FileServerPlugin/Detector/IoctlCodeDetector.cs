@@ -122,7 +122,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     "Client sends IOCTL request with FSCTL_OFFLOAD_READ to ask server to generate the token of the content for offload copy.");
                 STORAGE_OFFLOAD_TOKEN token;
                 ulong fileOffsetToRead = 0; //FileOffset should be aligned to logical sector boundary on the volume, e.g. 512 bytes
-                ulong copyLengthToRead = (ulong)contentLength / 2 * 1024; //CopyLength should be aligned to logical sector boundary on the volume, e.g. 512 bytes
+                ulong copyLengthToRead = (ulong)contentLength * 1024; //CopyLength should be aligned to logical sector boundary on the volume, e.g. 512 bytes
                 ulong transferLength;
 
                 // Request hardware to generate a token that represents a range of file to be copied
@@ -200,8 +200,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                         throw new Exception("CREATE failed with " + Smb2Status.GetStatusCode(header.Status));
                     }
 
-                    // Bug 8016334
-                    // The destination file of CopyOffload Write should not be zero, it should be at least 512 bytes, which is the sector size.
+                    // The destination file of CopyOffload Write should be equal to or larger than the size of original file
                     client.Write(
                         1,
                         1,
@@ -214,7 +213,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                         Channel_Values.CHANNEL_NONE,
                         WRITE_Request_Flags_Values.None,
                         new byte[0],
-                        Smb2Utility.CreateRandomByteArray(512),
+                        Smb2Utility.CreateRandomByteArray(contentLength * 1024),
                         out header,
                         out writeResponse,
                         0);
@@ -256,8 +255,8 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
                     logWriter.AddLog(LogLevel.Information,
                         "Client sends IOCTL request with FSCTL_OFFLOAD_WRITE to ask server to copy the content from source to destination.");
-                    ulong fileOffsetToWrite = (ulong)contentLength / 2 * 1024; //FileOffset should be aligned to logical sector boundary on the volume, e.g. 512 bytes
-                    ulong copyLengthToWrite = transferLength; //CopyLength should be aligned to logical sector boundary on the volume, e.g. 512 bytes
+                    ulong fileOffsetToWrite = 0; //FileOffset should be aligned to logical sector boundary on the volume, e.g. 512 bytes
+                    ulong copyLengthToWrite = (ulong)contentLength * 1024; //CopyLength should be aligned to logical sector boundary on the volume, e.g. 512 bytes
                     ulong transferOffset = 0; //TransferOffset should be aligned to logical sector boundary on the volume, e.g. 512 bytes
 
                     FSCTL_OFFLOAD_WRITE_INPUT offloadWriteInput = new FSCTL_OFFLOAD_WRITE_INPUT();

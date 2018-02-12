@@ -18,6 +18,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Query FileFullEaInformation from a file and check if ExtendedAttributes is supported.")]
         public void FileInfo_Query_FileFullEaInformation_File_IsEASupported()
         {
@@ -27,6 +29,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Query FileFullEaInformation from a directory and check if ExtendedAttributes is supported.")]
         public void FileInfo_Query_FileFullEaInformation_Dir_IsEASupported()
         {

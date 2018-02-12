@@ -64,6 +64,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if server supports SCSI persistent reservation service actions: Register and Reserve, by tunnel operation RSVD_TUNNEL_SCSI_OPERATION.")]
         public void BVT_TunnelSCSIPersistentReserve_RegisterAndReserve()
         {
@@ -103,6 +104,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if server can handle SCSI Persistent Reservation Conflict by tunnel operation RSVD_TUNNEL_SCSI_OPERATION.")]
         public void BVT_TunnelSCSIPersistentReserve_ReserveConflict()
         {
@@ -171,6 +173,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if server supports SCSI persistent reservation service actions: Reserve and Release, by tunnel operation RSVD_TUNNEL_SCSI_OPERATION.")]
         public void BVT_TunnelSCSIPersistentReserve_ReserveAndRelease()
         {
@@ -247,6 +250,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if server supports SCSI persistent reservation service action: Preempt, by tunnel operation RSVD_TUNNEL_SCSI_OPERATION.")]
         public void BVT_TunnelSCSIPersistentReserve_Preempt()
         {

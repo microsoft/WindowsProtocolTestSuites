@@ -16,7 +16,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         #region Test Case
         [TestMethod]
         [TestCategory(TestCategories.Smb30)]
-        [TestCategory(TestCategories.CombinedFeature)]
+        [TestCategory(TestCategories.CombinedFeatureNonClusterRequired)]
         [TestCategory(TestCategories.Positive)]
         [Description("Operate file via multi-channel with file lease and the lease break is expected from main channel.")]
         public void MultipleChannel_FileLease()

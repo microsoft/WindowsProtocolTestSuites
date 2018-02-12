@@ -16,6 +16,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.AlternateDataStream)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Create new Alternate Data Streams on a DataFile.")]
         public void BVT_AlternateDataStream_CreateStream_File()
         {
@@ -26,6 +27,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.AlternateDataStream)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Create new Alternate Data Streams on a DirectoryFile.")]
         public void BVT_AlternateDataStream_CreateStream_Dir()
         {

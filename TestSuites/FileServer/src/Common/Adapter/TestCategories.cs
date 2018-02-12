@@ -7,8 +7,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
     {
         public const string Bvt = "BVT";
         public const string Model = "Model";
-        public const string Cluster = "Cluster";
+        public const string Failover = "Failover";
 
+        public const string NonSmb = "NonSmb";
         public const string Smb2002 = "Smb2002";
         public const string Smb21 = "Smb21";
         public const string Smb30 = "Smb30";
@@ -16,11 +17,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         public const string Smb311 = "Smb311";
         public const string Dfsc = "DFSC";
         public const string Swn = "SWN";
+        // For FSRVP test cases which require cluster environment
         public const string Fsrvp = "FSRVP";
+        // For FSRVP test cases which do not require cluster environment
+        public const string FsrvpNonClusterRequired = "FSRVPNonClusterRequired";
         public const string RsvdVersion1 = "RSVDVersion1";
         public const string RsvdVersion2 = "RSVDVersion2";
         public const string Fsa = "FSA";
         public const string Sqos = "SQOS";
+        public const string Hvrs = "HVRS";
 
         public const string Auth = "Auth";
         public const string ShareAccessCheck = "ShareAccessCheck";
@@ -57,7 +62,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         public const string DurableHandleV2LeaseV1 = "DurableHandleV2LeaseV1";
         public const string DurableHandleV2LeaseV2 = "DurableHandleV2LeaseV2";
 
+        // For PersistentHandle cases which require cluster environment
         public const string PersistentHandle = "PersistentHandle";
+        // For PersistentHandle cases which do not require cluster environment
+        public const string PersistentHandleNonClusterRequired = "PersistentHandleNonClusterRequired";
 
         public const string AppInstanceId = "AppInstanceId";
         public const string AppInstanceVersion = "AppInstanceVersion";
@@ -72,8 +80,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         public const string QueryAndSetFileInfo = "QueryAndSetFileInfo";
         public const string LockUnlock = "LockUnlock";
 
-        // For some advanced test cases which cover more than 1 feature.
+        // For some advanced test cases which cover more than 1 feature and require cluster environment.
         public const string CombinedFeature = "CombinedFeature";
+
+        // For some advanced test cases which cover more than 1 feature and do not require cluster environment.
+        public const string CombinedFeatureNonClusterRequired = "CombinedFeatureNonClusterRequired";
 
         // For functional test cases
         public const string MixedOplockLease = "MixedOplockLease";
