@@ -450,12 +450,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             #endregion
         }
 
-        private UInt32 ReverseBytes(UInt32 value)
-        {
-            return (value & 0x000000FFU) << 24 | (value & 0x0000FF00U) << 8 |
-                   (value & 0x00FF0000U) >> 8 | (value & 0xFF000000U) >> 24;
-        }
-
         private void verifyErrorResponse(ERROR_Response_packet error, string uncSharePath, string sofsHostedNode)
         {
             #region Verify ERROR_Response_packet
