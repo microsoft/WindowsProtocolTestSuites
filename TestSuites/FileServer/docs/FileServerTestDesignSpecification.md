@@ -212,10 +212,11 @@ Test scenarios are categorized as below table and will be described in following
 | SMB2 BVT                 | 78         | SMB2 common scenarios.                                                                                            |
 | SMB2 Feature Test        | 2591       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
-| FSRVP Test               | 14          | Test for MS-FSRVP                                                                                                 |
+| FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 48         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
 | RSVD Test                | 29         | Test for MS-RSVD                                                                                                  |
-| DFSC Test                | 43         | Test for MS-DFSC                                                                                                         |
+| DFSC Test                | 43         | Test for MS-DFSC                                                                                                  |
+| HVRS Test                | 8          | Test for MS-HVRS                                                                                                  |
 
 ###<a name="3.1">SMB2 BVT
 
