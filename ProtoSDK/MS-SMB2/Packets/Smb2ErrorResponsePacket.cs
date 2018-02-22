@@ -37,7 +37,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                             temp = temp.Concat(TypeMarshal.ToBytes<Symbolic_Link_Error_Response>(this.PayLoad.ErrorContextErrorData[i].ErrorData.SymbolicLinkErrorResponse)).ToArray();
                             break;
                         case Smb2Status.STATUS_BAD_NETWORK_NAME:
-                            temp = temp.Concat(TypeMarshal.ToBytes<Share_Redirect_Error_Context_Response>(this.PayLoad.ErrorContextErrorData[i].ErrorData.ShareRedirectErrorContextResponse)).ToArray();
+                            if (this.PayLoad.ErrorContextErrorData[i].ErrorId == Error_Id.ERROR_ID_SHARE_REDIRECT)
+                            {
+                                temp = temp.Concat(TypeMarshal.ToBytes<Share_Redirect_Error_Context_Response>(this.PayLoad.ErrorContextErrorData[i].ErrorData.ShareRedirectErrorContextResponse)).ToArray();
+                            }
                             break;
                         case Smb2Status.STATUS_BUFFER_TOO_SMALL:
                             temp = temp.Concat(this.PayLoad.ErrorContextErrorData[i].ErrorData.BufferTooSmallErrorResponse).ToArray();
@@ -94,18 +97,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                             tempContext.ErrorData.SymbolicLinkErrorResponse = TypeMarshal.ToStruct<Symbolic_Link_Error_Response>(data.Skip(consumedLen).Take((int)tempContext.ErrorDataLength).ToArray());
                             break;
                         case Smb2Status.STATUS_BAD_NETWORK_NAME:
-                            tempContext.ErrorData.ShareRedirectErrorContextResponse = TypeMarshal.ToStruct<Share_Redirect_Error_Context_Response>(data.Skip(consumedLen).Take((int)tempContext.ErrorDataLength).ToArray());
-                            tempContext.ErrorData.ShareRedirectErrorContextResponse.ResourceName = data.Skip(consumedLen + (int)tempContext.ErrorData.ShareRedirectErrorContextResponse.ResourceNameOffset).Take((int)tempContext.ErrorData.ShareRedirectErrorContextResponse.ResourceNameLength).ToArray();
-
-                            for (int j = 0; j < tempContext.ErrorData.ShareRedirectErrorContextResponse.IPAddrCount; j += 1)
+                            if (tempContext.ErrorId == Error_Id.ERROR_ID_SHARE_REDIRECT)
                             {
-                                if (tempContext.ErrorData.ShareRedirectErrorContextResponse.IPAddrMoveList[j].Type == Move_Dst_IpAddr_Type.MOVE_DST_IPADDR_V4)
+                                tempContext.ErrorData.ShareRedirectErrorContextResponse = TypeMarshal.ToStruct<Share_Redirect_Error_Context_Response>(data.Skip(consumedLen).Take((int)tempContext.ErrorDataLength).ToArray());
+                                tempContext.ErrorData.ShareRedirectErrorContextResponse.ResourceName = data.Skip(consumedLen + (int)tempContext.ErrorData.ShareRedirectErrorContextResponse.ResourceNameOffset).Take((int)tempContext.ErrorData.ShareRedirectErrorContextResponse.ResourceNameLength).ToArray();
+
+                                for (int j = 0; j < tempContext.ErrorData.ShareRedirectErrorContextResponse.IPAddrCount; j += 1)
                                 {
-                                    // If the value of the Type field is MOVE_DST_IPADDR_V4, this field is the IPv4Address field followed by Reserved2 fields.
-                                    // Reserved2 (12 bytes): The client MUST set this to 0, and the server MUST ignore it on receipt
-                                    for (int z = 4; z < 16; z += 1)
+                                    if (tempContext.ErrorData.ShareRedirectErrorContextResponse.IPAddrMoveList[j].Type == Move_Dst_IpAddr_Type.MOVE_DST_IPADDR_V4)
                                     {
-                                        tempContext.ErrorData.ShareRedirectErrorContextResponse.IPAddrMoveList[j].IPv6Address[z] = 0;
+                                        // If the value of the Type field is MOVE_DST_IPADDR_V4, this field is the IPv4Address field followed by Reserved2 fields.
+                                        // Reserved2 (12 bytes): The client MUST set this to 0, and the server MUST ignore it on receipt
+                                        for (int z = 4; z < 16; z += 1)
+                                        {
+                                            tempContext.ErrorData.ShareRedirectErrorContextResponse.IPAddrMoveList[j].IPv6Address[z] = 0;
+                                        }
                                     }
                                 }
                             }

@@ -450,24 +450,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             #endregion
         }
 
-        private void verifyErrorResponse(ERROR_Response_packet error, string uncSharePath, string sofsHostedNode)
+        private void verifyErrorContext(Error_Context ctx, string uncSharePath, string sofsHostedNode)
         {
-            #region Verify ERROR_Response_packet
-            BaseTestSite.Assert.IsTrue(
-                error.StructureSize == 9,
-                "The server MUST set this field (StructureSize) to 9, indicating the size of the response structure, not including the header. Actually server returns {0}.", error.StructureSize);
-            BaseTestSite.Assert.IsTrue(
-                error.ErrorContextCount > 0,
-                "For the SMB dialect 3.1.1, if this field (ErrorContextCount) is nonzero, the ErrorData field MUST be formatted as a variable-length array of SMB2 ERROR Context structures containing ErrorContextCount entries.");
-            BaseTestSite.Assert.IsTrue(
-                error.Reserved == 0,
-                "The server MUST set this (Reserved) to 0. Actually server returns {0}.", error.Reserved);
-            //BaseTestSite.Assert.IsTrue(error.ErrorData == null, "");
-            #endregion
-
             #region Verify Error_Context
-            Error_Context[] ctxList = error.ErrorContextErrorData;
-            Error_Context ctx = ctxList[0];
             BaseTestSite.Assert.AreEqual(
                 Error_Id.ERROR_ID_SHARE_REDIRECT,
                 ctx.ErrorId,
@@ -605,26 +590,37 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 (header, response) => { },
                 TreeConnect_Flags.SMB2_SHAREFLAG_REDIRECT_TO_OWNER);
 
-            if (status != Smb2Status.STATUS_SUCCESS)
+            if (status != Smb2Status.STATUS_SUCCESS &&
+                client.Smb2Client.Error != null)
             {
-                BaseTestSite.Assert.AreEqual(
-                    Smb2Status.STATUS_BAD_NETWORK_NAME,
-                    status,
-                    "If TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS," +
-                    "Connection.Dialect is \"3.1.1\" and" +
-                    "the SMB2_TREE_CONNECT_FLAG_REDIRECT_TO_OWNER bit is set" +
-                    "in the Flags field of the SMB2 TREE_CONNECT request," +
-                    "the server MUST query the underlying object store in an implementation-specific manner " +
-                    "to determine whether the share is hosted on this node." +
-                    "If not, the server MUST return error data as specified in section 2.2.2" +
-                    "with ErrorData set to SMB2 ERROR Context response formatted as ErrorId" +
-                    "set to SMB2_ERROR_ID_SHARE_REDIRECT, and ErrorContextData set to the Share Redirect error context data" +
-                    "as specified in section 2.2.2.2.2 with IPAddrMoveList set to" +
-                    "the list of IP addresses obtained in an implementation-specific manner." +
-                    "Actually server returns {0}.", Smb2Status.GetStatusCode(status)
-                );
                 ERROR_Response_packet error = client.Smb2Client.Error.PayLoad;
-                verifyErrorResponse(error, uncSharePath, sofsHostedNode);
+                if (error.ErrorContextCount > 0)
+                {
+                    for (int i = 0; i < error.ErrorContextCount; i++)
+                    {
+                        Error_Context ctx = error.ErrorContextErrorData[i];
+                        if (ctx.ErrorId == Error_Id.ERROR_ID_SHARE_REDIRECT)
+                        {
+                            BaseTestSite.Assert.AreEqual(
+                                Smb2Status.STATUS_BAD_NETWORK_NAME,
+                                status,
+                                "If TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS," +
+                                "Connection.Dialect is \"3.1.1\" and" +
+                                "the SMB2_TREE_CONNECT_FLAG_REDIRECT_TO_OWNER bit is set" +
+                                "in the Flags field of the SMB2 TREE_CONNECT request," +
+                                "the server MUST query the underlying object store in an implementation-specific manner " +
+                                "to determine whether the share is hosted on this node." +
+                                "If not, the server MUST return error data as specified in section 2.2.2" +
+                                "with ErrorData set to SMB2 ERROR Context response formatted as ErrorId" +
+                                "set to SMB2_ERROR_ID_SHARE_REDIRECT, and ErrorContextData set to the Share Redirect error context data" +
+                                "as specified in section 2.2.2.2.2 with IPAddrMoveList set to" +
+                                "the list of IP addresses obtained in an implementation-specific manner." +
+                                "Actually server returns {0}.", Smb2Status.GetStatusCode(status)
+                            );
+                            verifyErrorContext(ctx, uncSharePath, sofsHostedNode);
+                        }
+                    }
+                }
             }
             client.LogOff();
             client.Disconnect();
