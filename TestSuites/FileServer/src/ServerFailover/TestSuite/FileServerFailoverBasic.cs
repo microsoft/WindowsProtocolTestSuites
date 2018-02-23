@@ -195,13 +195,27 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             TestConfig.CheckDialect(DialectRevision.Smb311);
             #endregion
 
-            string sofsHostedNode = getClusterOwnerNode(TestConfig.ClusteredScaleOutFileServerName).ToLower();
-            string hostedNode = TestConfig.ClusterNode01.ToLower().Contains(sofsHostedNode) ?
-                TestConfig.ClusterNode01 : TestConfig.ClusterNode02;
-            string nonHostedNode = !TestConfig.ClusterNode01.ToLower().Contains(hostedNode) ?
-                TestConfig.ClusterNode01 : TestConfig.ClusterNode02;
+            if (testConfig.IsWindowsPlatform)
+            {
+                // Use GetClusterResourceOwner to get active host node
+                string sofsHostedNode = sutController.GetClusterResourceOwner(TestConfig.ClusteredScaleOutFileServerName).ToLower();
+                string hostedNode = TestConfig.ClusterNode01.ToLower().Contains(sofsHostedNode) ?
+                    TestConfig.ClusterNode01 : TestConfig.ClusterNode02;
+                string nonHostedNode = !TestConfig.ClusterNode01.ToLower().Contains(hostedNode) ?
+                    TestConfig.ClusterNode01 : TestConfig.ClusterNode02;
 
-            TestRedirectToOwner(hostedNode, nonHostedNode);
+                TestRedirectToOwner(hostedNode, nonHostedNode);
+            }
+            else
+            {
+                // For non-Windows platform,
+                // since we cannot find which host node is active, node01/node02 is treated as host node for testing respectively.
+                bool isRedirectToOwnerTested = TestRedirectToOwner(TestConfig.ClusterNode01, TestConfig.ClusterNode02);
+                if (isRedirectToOwnerTested == false)
+                {
+                    TestRedirectToOwner(TestConfig.ClusterNode02, TestConfig.ClusterNode01);
+                }
+            }
         }
         #endregion
 
@@ -216,14 +230,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             WITNESS_INTERFACE_LIST interfaceList = new WITNESS_INTERFACE_LIST();
 
             currentAccessIpAddr = SWNTestUtility.GetCurrentAccessIP(server);
-            BaseTestSite.Log.Add(LogEntryKind.Debug, "Get current file server IP: {0}.", currentAccessIpAddr);            
+            BaseTestSite.Log.Add(LogEntryKind.Debug, "Get current file server IP: {0}.", currentAccessIpAddr);
 
             #region Register SWN witness
             if (witnessType == WitnessType.SwnWitness)
             {
                 if (TestConfig.IsWindowsPlatform && fsType == FileServerType.ScaleOutFileServer)
                 {
-                    // Windows Server: when stopping a non-owner node of ScaleOutFS, no notication will be sent by SMB witness.
+                    // Windows Server: when stopping a non-owner node of ScaleOutFS, no notification will be sent by SMB witness.
                     // So get one IP of the owner node of ScaleOutFS to access.                    
                     string resourceOwnerNode = sutController.GetClusterResourceOwner(server);
                     IPAddress[] ownerIpList = Dns.GetHostEntry(resourceOwnerNode).AddressList;
@@ -453,6 +467,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             #endregion
         }
 
+        /// <summary>
+        /// Verify members in Error_Context
+        /// </summary>
+        /// <param name="ctx">Error_Context in Error Response</param>
+        /// <param name="uncSharePath">uncSharePath</param>
+        /// <param name="sofsHostedNode">ScaleOutFS hosted node</param>
         private void verifyErrorContext(Error_Context ctx, string uncSharePath, string sofsHostedNode)
         {
             #region Verify Error_Context
@@ -551,8 +571,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             #endregion
         }
 
-        private uint TestRedirectToOwner(string sofsHostedNode, string nonSofsHostedNode)
+        /// <summary>
+        /// Verify behavior of redirect to owner specified in MS-SMB2 section 3.3.5.7
+        /// </summary>
+        /// <param name="sofsHostedNode">ScaleOutFS hosted node</param>
+        /// <param name="nonSofsHostedNode">Non ScaleOutFS hosted node</param>
+        /// <returns>Redirect to owner is tested or not</returns>
+        private bool TestRedirectToOwner(string sofsHostedNode, string nonSofsHostedNode)
         {
+            bool isRedirectToOwnerTested = false;
             #region Get IP address list from ScaleOutFS
             string server = TestConfig.ClusteredScaleOutFileServerName;
             IPAddress[] accessIpList = Dns.GetHostEntry(server).AddressList;
@@ -621,41 +648,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                                 "Actually server returns {0}.", Smb2Status.GetStatusCode(status)
                             );
                             verifyErrorContext(ctx, uncSharePath, sofsHostedNode);
+                            isRedirectToOwnerTested = true;
                         }
                     }
                 }
             }
             client.LogOff();
             client.Disconnect();
-            return status;
-        }
-
-        private string getClusterOwnerNode(string targetName)
-        {
-            ConnectionOptions options = new ConnectionOptions();
-            options.Authentication = AuthenticationLevel.PacketPrivacy;
-            options.Username = testConfig.UserName;
-            options.Password = testConfig.UserPassword;
-            string nameSpace = "MSCluster";
-
-            // Connect with the mscluster WMI namespace on the cluster
-            ManagementScope s = new ManagementScope(string.Format(@"\\{0}\root\{1}", TestConfig.ClusterName, nameSpace), options);
-            s.Connect();
-
-            string wmiClassName = "MSCluster_Resource";
-            ManagementClass mgmtClass = new ManagementClass(s, new ManagementPath(wmiClassName), null);
-            mgmtClass.Get();
-            ManagementObjectCollection objCollection = mgmtClass.GetInstances();
-
-            foreach (ManagementObject cluster in objCollection)
-            {
-                string resName = cluster["Name"].ToString();
-                if (resName.Contains(targetName))
-                {
-                    return cluster["OwnerNode"].ToString();
-                }
-            }
-            return null;
+            return isRedirectToOwnerTested;
         }
         #endregion
     }

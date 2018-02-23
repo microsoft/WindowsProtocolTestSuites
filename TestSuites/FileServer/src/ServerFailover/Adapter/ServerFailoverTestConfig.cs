@@ -32,13 +32,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.Adapter
         }
 
         #region Cluster Configuration
-        public string ClusterName
-        {
-            get
-            {
-                return GetProperty("ClusterName");
-            }
-        }
         public string ClusterNode01
         {
             get
