@@ -496,7 +496,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 BaseTestSite.Assert.AreEqual(
                     (uint)0,
                     dstMoveIpAddr.Reserved,
-                    "This field MUST NOT be used and MUST be reserved. The server SHOULD set this field to zero, and the client MUST ignore it on receipt. Actually server returns {0}", dstMoveIpAddr.Reserved);
+                    "The server SHOULD set this field to zero, and the client MUST ignore it on receipt. Actually server returns {0}", dstMoveIpAddr.Reserved);
                 if (addressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                 {
                     BaseTestSite.Assert.AreEqual(
@@ -508,7 +508,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                     {
                         BaseTestSite.Assert.IsTrue(
                             dstMoveIpAddr.IPv6Address[k] == 0,
-                            "The client MUST set this to 0.");
+                            "The client MUST set this (Reserved2) to 0.");
                     }
                 }
                 else if (addressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
@@ -516,7 +516,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                     BaseTestSite.Assert.AreEqual(
                         Move_Dst_IpAddr_Type.MOVE_DST_IPADDR_V6,
                         dstMoveIpAddr.Type,
-                        "Type of destination IP address should be MOVE_DST_IPADDR_V4, actually server returns {0}", dstMoveIpAddr.Type);
+                        "Type of destination IP address should be MOVE_DST_IPADDR_V6, actually server returns {0}", dstMoveIpAddr.Type);
                 }
             }
 
@@ -581,7 +581,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             client.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             client.SessionSetup(TestConfig.DefaultSecurityPackage, server, TestConfig.AccountCredential, false);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends TREE_CONNECT request with flag SMB2_SHAREFLAG_REDIRECT_TO_OWNER and expects STATUS_BAD_NETWORK_NAME.");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends TREE_CONNECT request with flag SMB2_SHAREFLAG_REDIRECT_TO_OWNER.");
             string uncSharePath = Smb2Utility.GetUncPath(server, testConfig.CAShareName);
             uint treeId;
             uint status = client.TreeConnect(
