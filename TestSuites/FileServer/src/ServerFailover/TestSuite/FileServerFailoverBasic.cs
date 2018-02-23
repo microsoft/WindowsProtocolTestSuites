@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Management;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 {
@@ -194,11 +195,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             TestConfig.CheckDialect(DialectRevision.Smb311);
             #endregion
 
-            uint status = TestRedirectToOwner(TestConfig.ClusterNode01, TestConfig.ClusterNode02);
-            if (status != Smb2Status.STATUS_BAD_NETWORK_NAME)
-            {
-                status = TestRedirectToOwner(TestConfig.ClusterNode02, TestConfig.ClusterNode01);
-            }
+            string sofsHostedNode = getClusterOwnerNode(TestConfig.ClusteredScaleOutFileServerName).ToLower();
+            string hostedNode = TestConfig.ClusterNode01.ToLower().Contains(sofsHostedNode) ?
+                TestConfig.ClusterNode01 : TestConfig.ClusterNode02;
+            string nonHostedNode = !TestConfig.ClusterNode01.ToLower().Contains(hostedNode) ?
+                TestConfig.ClusterNode01 : TestConfig.ClusterNode02;
+
+            TestRedirectToOwner(hostedNode, nonHostedNode);
         }
         #endregion
 
@@ -625,6 +628,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             client.LogOff();
             client.Disconnect();
             return status;
+        }
+
+        private string getClusterOwnerNode(string targetName)
+        {
+            ConnectionOptions options = new ConnectionOptions();
+            options.Authentication = AuthenticationLevel.PacketPrivacy;
+            options.Username = testConfig.UserName;
+            options.Password = testConfig.UserPassword;
+            string nameSpace = "MSCluster";
+
+            // Connect with the mscluster WMI namespace on the cluster
+            ManagementScope s = new ManagementScope(string.Format(@"\\{0}\root\{1}", TestConfig.ClusterName, nameSpace), options);
+            s.Connect();
+
+            string wmiClassName = "MSCluster_Resource";
+            ManagementClass mgmtClass = new ManagementClass(s, new ManagementPath(wmiClassName), null);
+            mgmtClass.Get();
+            ManagementObjectCollection objCollection = mgmtClass.GetInstances();
+
+            foreach (ManagementObject cluster in objCollection)
+            {
+                string resName = cluster["Name"].ToString();
+                if (resName.Contains(targetName))
+                {
+                    return cluster["OwnerNode"].ToString();
+                }
+            }
+            return null;
         }
         #endregion
     }
