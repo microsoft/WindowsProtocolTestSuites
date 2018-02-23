@@ -12,7 +12,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Management;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 {
