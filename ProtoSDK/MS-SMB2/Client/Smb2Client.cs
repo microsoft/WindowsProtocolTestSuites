@@ -223,7 +223,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         // Disable signature verification by default.
         private bool disableVerifySignature = true;
 
-        public Smb2ErrorResponsePacket error;
+        private Smb2ErrorResponsePacket error;
 
         #endregion
 
