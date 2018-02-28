@@ -27,11 +27,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
         /// </summary>
         /// <param name="dialect">DialectRevision</param>
         /// <returns>ModelDialectRevision</returns>
-        public static ModelDialectRevision GetModelDialectRevision(DialectRevision dialect)
+        public static ModelDialectRevision GetModelDialectRevision(DialectRevision dialect, bool treat311as302 = true)
         {
             ModelDialectRevision revision = (ModelDialectRevision)(uint)dialect;
 
-            if (Enum.IsDefined(typeof(ModelDialectRevision), revision))
+            if (Enum.IsDefined(typeof(ModelDialectRevision), revision) && (!treat311as302 || revision != ModelDialectRevision.Smb311))
             {
                 return revision;
             }

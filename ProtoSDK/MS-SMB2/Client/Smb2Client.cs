@@ -969,7 +969,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             out NEGOTIATE_Response responsePayload,
             ushort channelSequence = 0,
             PreauthIntegrityHashID[] preauthHashAlgs = null,
-            EncryptionAlgorithm[] encryptionAlgs = null)
+            EncryptionAlgorithm[] encryptionAlgs = null,
+            bool addDefaultEncryption = false)
         {
             var request = new Smb2NegotiateRequestPacket();
 
@@ -1045,6 +1046,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 if (response.NegotiateContext_ENCRYPTION != null)
                 {
                     this.cipherId = response.NegotiateContext_ENCRYPTION.Value.Ciphers[0];
+                }
+                if (addDefaultEncryption && response.NegotiateContext_ENCRYPTION == null) // For model encryption case, send encrypted message event if client says it does not support encryption
+                {
+                    this.cipherId = EncryptionAlgorithm.ENCRYPTION_AES128_CCM;
                 }
 
                 preauthContext = new PreauthIntegrityContext(hashId);
