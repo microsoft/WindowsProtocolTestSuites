@@ -613,10 +613,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends TREE_CONNECT request with flag SMB2_SHAREFLAG_REDIRECT_TO_OWNER.");
             string uncSharePath = Smb2Utility.GetUncPath(server, testConfig.CAShareName);
             uint treeId;
+            Share_Capabilities_Values shareCap = Share_Capabilities_Values.NONE;
             uint status = client.TreeConnect(
                 uncSharePath,
                 out treeId,
-                (header, response) => { },
+                (header, response) =>
+                {
+                    if (header.Status == Smb2Status.STATUS_SUCCESS)
+                    {
+                        shareCap = response.Capabilities;
+                    }
+                },
                 TreeConnect_Flags.SMB2_SHAREFLAG_REDIRECT_TO_OWNER);
 
             if (status != Smb2Status.STATUS_SUCCESS &&
@@ -630,6 +637,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                         Error_Context ctx = error.ErrorContextErrorData[i];
                         if (ctx.ErrorId == Error_Id.ERROR_ID_SHARE_REDIRECT)
                         {
+                            Share_Capabilities_Values shareCaps = GetShareCapabilities(sofsHostedNode, uncSharePath, TreeConnect_Flags.SMB2_SHAREFLAG_REDIRECT_TO_OWNER);
+                            if (!shareCaps.HasFlag(Share_Capabilities_Values.SHARE_CAP_REDIRECT_TO_OWNER))
+                            {
+                                BaseTestSite.Assert.Inconclusive(
+                                    "The share {0} does not have the capability SHARE_CAP_REDIRECT_TO_OWNER",
+                                    Smb2Utility.GetUncPath(TestConfig.ClusteredScaleOutFileServerName, testConfig.CAShareName)
+                                );
+                            }
+
                             BaseTestSite.Assert.AreEqual(
                                 Smb2Status.STATUS_BAD_NETWORK_NAME,
                                 status,
@@ -652,9 +668,56 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                     }
                 }
             }
+
+            if (status == Smb2Status.STATUS_SUCCESS)
+            {
+                if (!shareCap.HasFlag(Share_Capabilities_Values.SHARE_CAP_REDIRECT_TO_OWNER))
+                {
+                    BaseTestSite.Assert.Inconclusive(
+                        "The share {0} does not have the capability SHARE_CAP_REDIRECT_TO_OWNER",
+                        Smb2Utility.GetUncPath(TestConfig.ClusteredScaleOutFileServerName, testConfig.CAShareName)
+                    );
+                }
+                client.TreeDisconnect(treeId);
+            }
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the client by sending the following requests: LOG_OFF; DISCONNECT.");
             client.LogOff();
             client.Disconnect();
             return isRedirectToOwnerTested;
+        }
+
+        /// <summary>
+        /// Get share capabilities
+        /// </summary>
+        /// <param name="server">The host node</param>
+        /// <param name="sharePath">The path to the share</param>
+        /// <param name="flags">Tree Connect flag</param>
+        /// <returns>Share capabilities</returns>
+        private Share_Capabilities_Values GetShareCapabilities(string server, string sharePath, TreeConnect_Flags flags = TreeConnect_Flags.SMB2_SHAREFLAG_NONE)
+        {
+            IPAddress shareIpAddr = Dns.GetHostEntry(server).AddressList[0];
+
+            Smb2FunctionalClient client = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client.ConnectToServer(TestConfig.UnderlyingTransport, server, shareIpAddr);
+            client.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            client.SessionSetup(TestConfig.DefaultSecurityPackage, server, TestConfig.AccountCredential, false);
+            Share_Capabilities_Values shareCaps = Share_Capabilities_Values.NONE;
+            uint treeId;
+            uint status = client.TreeConnect(
+                sharePath,
+                out treeId,
+                (header, response) =>
+                {
+                    shareCaps = response.Capabilities;
+                },
+                flags);
+            if (status == Smb2Status.STATUS_SUCCESS)
+            {
+                client.TreeDisconnect(treeId);
+            }
+            client.LogOff();
+            client.Disconnect();
+            return shareCaps;
         }
         #endregion
     }
