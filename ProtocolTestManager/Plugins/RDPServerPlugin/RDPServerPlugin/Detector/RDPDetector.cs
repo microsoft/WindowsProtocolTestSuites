@@ -50,7 +50,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         public const string SystemManagementAutomationAssemblyNameV3 =
             "System.Management.Automation, Version=3.0.0.0, Culture=neutral, " +
             "PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL";
-        public const string SUTControlScriptLocation = @"..\etc\RDP\SUTControlAdapter\";
+        public const string SUTControlScriptLocation = @"..\etc\RDP-Server\SUTControlAdapter\";
         #endregion Variables
         #region Constructor
 
