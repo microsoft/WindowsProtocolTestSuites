@@ -1172,7 +1172,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             Packet_Header_Flags_Values flags,
             ulong messageId,
             ulong sessionId,
-            string path,
+            byte[] buffer,
             out uint treeId,
             out Packet_Header responseHeader,
             out TREE_CONNECT_Response responsePayload,
@@ -1189,9 +1189,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             request.Header.SessionId = sessionId;
             request.Header.Status = channelSequence;
 
-            request.Buffer = Encoding.Unicode.GetBytes(path);
+            request.Buffer = buffer;
             request.PayLoad.PathOffset = request.BufferOffset;
-            request.PayLoad.PathLength = (ushort)request.Buffer.Length;
+            request.PayLoad.PathLength = (ushort)buffer.Length;
             request.PayLoad.Flags = treeConnectFlags;
 
             var response = SendPacketAndExpectResponse<Smb2TreeConnectResponsePacket>(request);

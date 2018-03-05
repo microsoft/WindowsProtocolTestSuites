@@ -128,7 +128,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                         flags,
                         messageId,
                         sessionId,
-                        string.Format(@"\\{0}\{1}", server, share),
+                        Encoding.Unicode.GetBytes(string.Format(@"\\{0}\{1}", server, share)),
                         out treeId,
                         out header,
                         out response);
@@ -1315,7 +1315,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     treeconnect_SigningRequired? headerFlags| Packet_Header_Flags_Values.FLAGS_SIGNED:headerFlags,
                     messageId++,
                     sessionId,
-                    "\\\\" + serverPrincipleName + "\\" + shareName,
+                    Encoding.Unicode.GetBytes("\\\\" + serverPrincipleName + "\\" + shareName),
                     out treeId,
                     out header,
                     out treeConnectResponse);

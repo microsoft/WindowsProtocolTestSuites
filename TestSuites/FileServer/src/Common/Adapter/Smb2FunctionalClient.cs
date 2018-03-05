@@ -890,13 +890,29 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             // Need to consume credit from sequence window first according to TD
             ConsumeCredit(messageId, creditCharge);
 
+            byte[] buffer = Encoding.Unicode.GetBytes(uncSharePath);
+            /*
+             * [ToDo]
+             *   According to [MS-SMB2] section 2.2.9,
+             *   1. If SMB2_TREE_CONNECT_FLAG_EXTENSION_PRESENT is not set in the Flags field of this structure,
+             *      this field is a variable-length buffer that contains the full share path name.
+             *   2. If SMB2_TREE_CONNECT_FLAG_EXTENSION_PRESENT is set in the Flags field in this structure,
+             *      this field is a variable-length buffer that contains the tree connect request extension,
+             *      as specified in section 2.2.9.1.
+             *
+             * if (flags.HasFlag(TreeConnect_Flags.SMB2_SHAREFLAG_EXTENSION_PRESENT))
+             * {
+             *     buffer = CreateTreeConnectRequestExtension();
+             * }
+             */
+
             uint status = client.TreeConnect(
                     creditCharge,
                     generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
                     headerFlags,
                     messageId,
                     sessionId,
-                    uncSharePath,
+                    buffer,
                     out treeId,
                     out header,
                     out treeConnectResponse,
