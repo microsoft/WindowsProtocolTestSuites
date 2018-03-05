@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using System.Text;
 
 namespace Microsoft.Protocols.TestManager.FileServerPlugin
 {
@@ -707,7 +708,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     info.smb2Info.IsRequireMessageSigning ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
                     messageId++,
                     sessionId,
-                    uncShare,
+                    Encoding.Unicode.GetBytes(uncShare),
                     out treeId,
                     out header,
                     out treeConnectResp);

@@ -10,6 +10,7 @@ using System.Net.NetworkInformation;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using System.Text;
 
 namespace Microsoft.Protocols.TestManager.BranchCachePlugin
 {
@@ -295,7 +296,7 @@ namespace Microsoft.Protocols.TestManager.BranchCachePlugin
                 Packet_Header_Flags_Values.FLAGS_SIGNED,
                 messageId++,
                 sessionId,
-                uncSharePath,
+                Encoding.Unicode.GetBytes(uncSharePath),
                 out treeId,
                 out header,
                 out treeConnectResp);
@@ -377,7 +378,7 @@ namespace Microsoft.Protocols.TestManager.BranchCachePlugin
                 Packet_Header_Flags_Values.FLAGS_SIGNED,
                 messageId++,
                 sessionId,
-                uncSharePath,
+                Encoding.Unicode.GetBytes(uncSharePath),
                 out treeId,
                 out header,
                 out treeConnectResp);
