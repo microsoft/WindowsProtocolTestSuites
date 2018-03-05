@@ -13,9 +13,9 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
+using System.IO;
 
-
-namespace Microsoft.Protocols.TestManager.RDPPlugin
+namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 {
     public class RDPDetector : IDisposable
     {
@@ -58,6 +58,7 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
             "System.Management.Automation, Version=3.0.0.0, Culture=neutral, " +
             "PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL";
         public const string SUTControlScriptLocation = @"..\etc\RDP-Client\SUTControlAdapter\";
+            
         #endregion Variables
         #region Constructor
 

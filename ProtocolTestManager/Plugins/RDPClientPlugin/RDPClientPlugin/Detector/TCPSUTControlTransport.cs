@@ -9,7 +9,7 @@ using System.Net.Sockets;
 using System.IO;
 using Microsoft.Protocols.TestTools.StackSdk;
 
-namespace Microsoft.Protocols.TestManager.RDPPlugin
+namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 {
     /// <summary>
     /// TCP transport

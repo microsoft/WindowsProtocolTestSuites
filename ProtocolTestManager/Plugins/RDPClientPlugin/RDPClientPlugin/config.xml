@@ -28,7 +28,7 @@
   <DllFileNames>
     <DllFileName>Bin\RDP_ClientTestSuite.dll</DllFileName>
   </DllFileNames>
-  <AutoDetectionDllName>RDPPlugin.dll</AutoDetectionDllName>
+  <AutoDetectionDllName>RDPClientPlugin.dll</AutoDetectionDllName>
  
   <ConfigCaseRule>
     <Group name ="Protocol" >
