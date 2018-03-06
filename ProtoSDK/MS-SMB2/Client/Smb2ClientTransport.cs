@@ -1315,7 +1315,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     treeconnect_SigningRequired? headerFlags| Packet_Header_Flags_Values.FLAGS_SIGNED:headerFlags,
                     messageId++,
                     sessionId,
-                    Encoding.Unicode.GetBytes("\\\\" + serverPrincipleName + "\\" + shareName),
+                    "\\\\" + serverPrincipleName + "\\" + shareName,
                     out treeId,
                     out header,
                     out treeConnectResponse);

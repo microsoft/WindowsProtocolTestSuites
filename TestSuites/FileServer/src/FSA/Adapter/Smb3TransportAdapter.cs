@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using System.Text;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
@@ -414,7 +413,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     this.packetHeaderFlag,
                     this.messageId++,
                     this.sessionId,
-                    Encoding.Unicode.GetBytes(uncSharepath),
+                    uncSharepath,
                     out this.treeId,
                     out packetHeader,
                     out treeConnectResponse);

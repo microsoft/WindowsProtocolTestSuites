@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Management;
 using System.Net;
 using System.Net.NetworkInformation;
-using System.Text;
 
 namespace Microsoft.Protocols.TestManager.FileServerPlugin
 {
@@ -587,7 +586,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                             (info.smb2Info.IsRequireMessageSigning || info.smb2Info.MaxSupportedDialectRevision == DialectRevision.Smb311) ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
                             messageId++,
                             sessionId,
-                            Encoding.Unicode.GetBytes(uncShare),
+                            uncShare,
                             out treeId,
                             out header,
                             out treeConnectResp);
@@ -675,7 +674,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 (info.smb2Info.IsRequireMessageSigning || info.smb2Info.MaxSupportedDialectRevision == DialectRevision.Smb311) ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
                 messageId++,
                 sessionId,
-                Encoding.Unicode.GetBytes(uncSharePath),
+                uncSharePath,
                 out treeId,
                 out header,
                 out treeConnectResp);
