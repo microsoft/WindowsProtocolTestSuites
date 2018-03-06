@@ -27,7 +27,7 @@
   <ItemGroup>
 	<Compile Include="ADFSPIPPlugin.wxs" />
 	<Compile Include="BranchCachePlugin.wxs" />
-    <Compile Include="RDPPlugin.wxs" />
+    <Compile Include="RDPClientPlugin.wxs" />
 	<Compile Include="RDPServerPlugin.wxs" />
 	<Compile Include="AZODPlugin.wxs" />
 	<Compile Include="ADODPlugin.wxs" />
@@ -116,8 +116,8 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLLOCATION</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\Plugins\RDPPlugin\RDPPlugin\RDPPlugin.csproj">
-      <Name>RDPPlugin</Name>
+    <ProjectReference Include="..\Plugins\RDPClientPlugin\RDPClientPlugin\RDPClientPlugin.csproj">
+      <Name>RDPClientPlugin</Name>
       <Project>{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>

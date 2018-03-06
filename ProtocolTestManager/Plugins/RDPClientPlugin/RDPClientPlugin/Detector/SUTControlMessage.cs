@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Microsoft.Protocols.TestManager.RDPPlugin
+namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 {
     #region Types
-
+    
     public enum SUTControl_MessageType : ushort
     {
         SUT_CONTROL_REQUEST = 0x0000,
@@ -37,6 +37,8 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
         #region Fields
         public SUTControl_MessageType messageType;
         public SUTControl_TestsuiteId testsuiteId;
+        public uint caseNameLength;
+        public string caseName;
         public ushort commandId;
         public ushort requestId;
 
@@ -61,14 +63,23 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
         /// </summary>
         /// <param name="testsuiteId"></param>
         /// <param name="commandId"></param>
+        /// <param name="caseName"></param>
         /// <param name="requestId"></param>
         /// <param name="helpMessage"></param>
         /// <param name="payload"></param>
-        public SUT_Control_Request_Message(SUTControl_TestsuiteId testsuiteId, ushort commandId, ushort requestId, string helpMessage, byte[] payload)
+        public SUT_Control_Request_Message(SUTControl_TestsuiteId testsuiteId, ushort commandId, string caseName, ushort requestId, string helpMessage, byte[] payload)
         {
             this.messageType = SUTControl_MessageType.SUT_CONTROL_REQUEST;
             this.testsuiteId = testsuiteId;
             this.commandId = commandId;
+
+            this.caseNameLength = 0;
+            this.caseName = caseName;
+            if (!string.IsNullOrEmpty(this.caseName))
+            {
+                this.caseNameLength = (uint)Encoding.UTF8.GetByteCount(this.caseName);
+            }
+
             this.requestId = requestId;
 
             this.helpMessageLength = 0;
@@ -89,15 +100,21 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
         /// <summary>
         /// Encode method
         /// </summary>
-        /// <param name="marshaler"></param>
         public byte[] Encode()
         {
             List<byte> bufferList = new List<byte>();
             bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes((ushort)this.messageType)));
             bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes((ushort)this.testsuiteId)));
             bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes((ushort)this.commandId)));
+
+            bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes(this.caseNameLength)));
+            if (!string.IsNullOrEmpty(this.caseName) && this.caseNameLength > 0)
+            {
+                bufferList.AddRange(Encoding.UTF8.GetBytes(this.caseName));
+            }
+
             bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes((ushort)this.requestId)));
-            
+
             bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes(this.helpMessageLength)));
             if (helpMessage != null && helpMessage.Length > 0)
             {
@@ -105,7 +122,7 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
             }
 
             bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes(this.payloadLength)));
-            if(payload != null)
+            if (payload != null)
             {
                 bufferList.AddRange(this.payload);
             }
@@ -116,8 +133,9 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
         /// <summary>
         /// Decode method
         /// </summary>
-        /// <param name="marshaler"></param>
-        /// <returns></returns>
+        /// <param name="rawData">Decode source binary data</param>
+		/// <param name="index">Decode position</param>
+        /// <returns>Is decode success</returns>
         public bool Decode(byte[] rawData, ref int index)
         {
             try
@@ -130,6 +148,16 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
 
                 this.commandId = BitConverter.ToUInt16(Utility.GetNumericBytes(rawData, index, 2), 0);
                 index += 2;
+
+                this.caseNameLength = BitConverter.ToUInt32(Utility.GetNumericBytes(rawData, index, 4), 0);
+                index += 4;
+
+                if (this.caseNameLength > 0)
+                {
+                    int size = (int)caseNameLength;
+                    this.caseName = Encoding.UTF8.GetString(rawData, index, size);
+                    index += size;
+                }
 
                 this.requestId = BitConverter.ToUInt16(Utility.GetNumericBytes(rawData, index, 2), 0);
                 index += 2;
@@ -171,6 +199,10 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
 
         public SUTControl_MessageType messageType;
         public SUTControl_TestsuiteId testsuiteId;
+
+        public uint caseNameLength;
+        public string caseName;
+
         public ushort commandId;
         public ushort requestId;
 
@@ -201,11 +233,19 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
         /// <param name="requestId"></param>
         /// <param name="errorMessage"></param>
         /// <param name="payload"></param>
-        public SUT_Control_Response_Message(SUTControl_TestsuiteId testsuiteId, ushort commandId, ushort requestId, uint resultCode, string errorMessage, byte[] payload)
+        public SUT_Control_Response_Message(SUTControl_TestsuiteId testsuiteId, ushort commandId, string caseName, ushort requestId, uint resultCode, string errorMessage, byte[] payload)
         {
             this.messageType = SUTControl_MessageType.SUT_CONTROL_RESPONSE;
             this.testsuiteId = testsuiteId;
             this.commandId = commandId;
+
+            this.caseNameLength = 0;
+            this.caseName = caseName;
+            if (!string.IsNullOrEmpty(this.caseName))
+            {
+                this.caseNameLength = (uint)Encoding.UTF8.GetByteCount(this.caseName);
+            }
+
             this.requestId = requestId;
             this.resultCode = resultCode;
 
@@ -234,6 +274,13 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
             bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes((ushort)this.messageType)));
             bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes((ushort)this.testsuiteId)));
             bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes((ushort)this.commandId)));
+
+            bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes(this.caseNameLength)));
+            if (!string.IsNullOrEmpty(this.caseName) && this.caseNameLength > 0)
+            {
+                bufferList.AddRange(Encoding.UTF8.GetBytes(this.caseName));
+            }
+
             bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes((ushort)this.requestId)));
             bufferList.AddRange(Utility.ChangeBytesOrderForNumeric(BitConverter.GetBytes(this.resultCode)));
 
@@ -255,8 +302,9 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
         /// <summary>
         /// Decode method
         /// </summary>
-        /// <param name="marshaler"></param>
-        /// <returns></returns>
+        /// <param name="rawData">Decode source binary data</param>
+		/// <param name="index">Decode position</param>
+        /// <returns>Is decode success</returns>
         public bool Decode(byte[] rawData, ref int index)
         {
             try
@@ -269,6 +317,16 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
 
                 this.commandId = BitConverter.ToUInt16(Utility.GetNumericBytes(rawData, index, 2), 0);
                 index += 2;
+
+                this.caseNameLength = BitConverter.ToUInt32(Utility.GetNumericBytes(rawData, index, 4), 0);
+                index += 4;
+
+                if (this.caseNameLength > 0)
+                {
+                    int size = (int)caseNameLength;
+                    this.caseName = Encoding.UTF8.GetString(rawData, index, size);
+                    index += size;
+                }
 
                 this.requestId = BitConverter.ToUInt16(Utility.GetNumericBytes(rawData, index, 2), 0);
                 index += 2;

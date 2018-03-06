@@ -13,9 +13,9 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
+using System.IO;
 
-
-namespace Microsoft.Protocols.TestManager.RDPPlugin
+namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 {
     public class RDPDetector : IDisposable
     {
@@ -57,7 +57,8 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
         public const string SystemManagementAutomationAssemblyNameV3 =
             "System.Management.Automation, Version=3.0.0.0, Culture=neutral, " +
             "PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL";
-        public const string SUTControlScriptLocation = @"..\etc\RDP\SUTControlAdapter\";
+        public const string SUTControlScriptLocation = @"..\etc\RDP-Client\SUTControlAdapter\";
+            
         #endregion Variables
         #region Constructor
 
@@ -588,11 +589,13 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
 
             ushort reqId = ++requestId;
             string helpMessage = "Trigger RDP client to start an RDP connection by SUT Remote Control Protocol.";
-            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.START_RDP_CONNECTION,
+            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.START_RDP_CONNECTION, "RDPClientPlugin",
                         reqId, helpMessage, payload);
 
             TCPSUTControlTransport transport = new TCPSUTControlTransport();
-            IPEndPoint agentEndpoint = new IPEndPoint(IPAddress.Parse(detectInfo.SUTName), detectInfo.AgentListenPort);
+            IPAddress sutIP = GetHostIP(detectInfo.SUTName);           
+                
+            IPEndPoint agentEndpoint = new IPEndPoint(sutIP, detectInfo.AgentListenPort);
             
             transport.Connect(timeout, agentEndpoint);
             transport.SendSUTControlRequestMessage(requestMessage);
@@ -604,10 +607,11 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
             string helpMessage = "Trigger RDP client to disconnect all connections.";
             byte[] payload = null;
             ushort reqId = ++requestId;
-            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.CLOSE_RDP_CONNECTION,
+            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.CLOSE_RDP_CONNECTION, "RDPClientPlugin",
                reqId, helpMessage, payload);
             TCPSUTControlTransport transport = new TCPSUTControlTransport();
-            IPEndPoint agentEndpoint = new IPEndPoint(IPAddress.Parse(detectInfo.SUTName), detectInfo.AgentListenPort);
+            IPAddress sutIP = GetHostIP(detectInfo.SUTName);
+            IPEndPoint agentEndpoint = new IPEndPoint(sutIP, detectInfo.AgentListenPort);
             
             transport.Connect(timeout, agentEndpoint); 
             transport.SendSUTControlRequestMessage(requestMessage);
@@ -731,6 +735,34 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
 
 
             return 0;
+        }
+        private IPAddress GetHostIP(string hostname)
+        {
+            try
+            {
+                IPHostEntry host = Dns.GetHostEntry(hostname);
+                foreach (IPAddress ip in host.AddressList)
+                {
+                    if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        DetectorUtil.WriteLog("Parse the host name or the ip address as: " + ip.ToString()); 
+                        return ip;
+                    }
+                }
+            }            
+            catch (Exception e)
+            {
+                DetectorUtil.WriteLog("Exception occured when parsing the host name or the ip address: " + e.Message);
+                DetectorUtil.WriteLog("" + e.StackTrace);
+                if (e.InnerException != null)
+                {
+                    DetectorUtil.WriteLog("**" + e.InnerException.Message);
+                    DetectorUtil.WriteLog("**" + e.InnerException.StackTrace);
+                }
+                DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);                
+            }
+            return null;
+
         }
 
         #endregion Methods

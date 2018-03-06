@@ -9,7 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Protocols.TestManager.Detector;
 
-namespace Microsoft.Protocols.TestManager.RDPPlugin
+namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 {
     public class RDPValueDetector : IValueDetector
     {

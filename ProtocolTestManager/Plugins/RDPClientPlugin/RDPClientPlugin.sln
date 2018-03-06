@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDPPlugin", "RDPPlugin\RDPPlugin.csproj", "{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProtocolSDK", "ProtocolSDK", "{EF0AC845-FE1F-4CF3-8D0A-9F457721E4FA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "..\..\..\ProtoSDK\Common\Common.csproj", "{FE653643-6342-4300-871E-683C7BA31494}"
@@ -41,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransportStack", "..\..\..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyValueDetector", "..\..\PropertyValueDetector\PropertyValueDetector.csproj", "{7982ACF0-F1A4-4996-A339-641CAFA093CE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDPClientPlugin", "RDPClientPlugin\RDPClientPlugin.csproj", "{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,12 +48,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}.Fxcop|Any CPU.ActiveCfg = Release|Any CPU
-		{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}.Fxcop|Any CPU.Build.0 = Release|Any CPU
-		{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FE653643-6342-4300-871E-683C7BA31494}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FE653643-6342-4300-871E-683C7BA31494}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE653643-6342-4300-871E-683C7BA31494}.Fxcop|Any CPU.ActiveCfg = Release|Any CPU
@@ -156,6 +150,12 @@ Global
 		{7982ACF0-F1A4-4996-A339-641CAFA093CE}.Fxcop|Any CPU.Build.0 = Release|Any CPU
 		{7982ACF0-F1A4-4996-A339-641CAFA093CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7982ACF0-F1A4-4996-A339-641CAFA093CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}.Fxcop|Any CPU.ActiveCfg = Release|Any CPU
+		{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}.Fxcop|Any CPU.Build.0 = Release|Any CPU
+		{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
