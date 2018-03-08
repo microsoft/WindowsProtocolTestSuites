@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using System.Linq;
+using System.Security.Principal;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 {
@@ -890,7 +892,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             // Need to consume credit from sequence window first according to TD
             ConsumeCredit(messageId, creditCharge);
 
-            byte[] buffer = Encoding.Unicode.GetBytes(uncSharePath);
             /*
              * According to [MS-SMB2] section 2.2.9,
              * 1. If SMB2_TREE_CONNECT_FLAG_EXTENSION_PRESENT is not set in the Flags field of this structure,
@@ -899,8 +900,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
              *    this field is a variable-length buffer that contains the tree connect request extension,
              *    as specified in section 2.2.9.1.
              */
+            uint status;
+            if (flags.HasFlag(TreeConnect_Flags.SMB2_SHAREFLAG_EXTENSION_PRESENT))
+            {
+                TREE_CONNECT_Request_Extension extension = CreateTreeConnectRequestExt(uncSharePath);
+                byte[] buffer = TypeMarshal.ToBytes<TREE_CONNECT_Request_Extension>(extension);
+                Smb2Utility.Align8(0, ref buffer);
 
-            uint status = client.TreeConnect(
+                status = client.TreeConnect(
                     creditCharge,
                     generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
                     headerFlags,
@@ -912,6 +919,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     out treeConnectResponse,
                     0,
                     flags);
+            }
+            else
+            {
+                status = client.TreeConnect(
+                    creditCharge,
+                    generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
+                    headerFlags,
+                    messageId,
+                    sessionId,
+                    uncSharePath,
+                    out treeId,
+                    out header,
+                    out treeConnectResponse,
+                    0,
+                    flags);
+            }
 
             ProduceCredit(messageId, header);
 
@@ -2977,6 +3000,43 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             // Set creditGoal to expect server grant credits that could at leaset accept request with max buffer size
             CreditGoal = maxBufferSizeInCredit;
         }
+
+        #region SMB2 TREE_CONNECT Request Extension
+        private TREE_CONNECT_Request_Extension CreateTreeConnectRequestExt(string sharePath)
+        {
+            TREE_CONNECT_Request_Extension ext = new TREE_CONNECT_Request_Extension();
+            ext.TreeConnectContextCount = 1;
+            ext.Reserved = new byte[10];
+            ext.PathName = Encoding.Unicode.GetBytes(sharePath);
+            Tree_Connect_Context ctx = CreateTreeConnectContext();
+            ext.TreeConnectContexts = new Tree_Connect_Context[1] { ctx };
+            return ext;
+        }
+
+        private Tree_Connect_Context CreateTreeConnectContext()
+        {
+            Tree_Connect_Context ctx = new Tree_Connect_Context();
+            ctx.ContextType = Context_Type.REMOTED_IDENTITY_TREE_CONNECT_CONTEXT_ID;
+            ctx.Reserved = 0;
+
+            ushort dataLength = 0;
+            ctx.data = CreateRemotedIdentity(out dataLength);
+            ctx.DataLength = dataLength;
+            return ctx;
+        }
+
+        private REMOTED_IDENTITY_TREE_CONNECT_Context CreateRemotedIdentity(out ushort dataLength)
+        {
+            REMOTED_IDENTITY_TREE_CONNECT_Context remotedIdentity = new REMOTED_IDENTITY_TREE_CONNECT_Context();
+            ushort _dataLength = 0;
+            remotedIdentity.TicketType = 0x0001;
+            _dataLength += 2;
+
+            dataLength = _dataLength;
+            return remotedIdentity;
+        }
+        #endregion
+
         #endregion
 
     }

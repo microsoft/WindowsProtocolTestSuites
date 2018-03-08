@@ -119,16 +119,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
                 client.EnableSessionSigningAndEncryption(enableSigning: false, enableEncryption: false);
                 // Trigger Server Disconnect event
                 client.TreeConnect(
-                Packet_Header_Flags_Values.NONE,
-                uncSharepath,
-                out treeId,
-                checker: (Packet_Header header, TREE_CONNECT_Response response) =>
-                {
-                    BaseTestSite.Assert.AreNotEqual(
-                        Smb2Status.STATUS_SUCCESS,
-                        header.Status,
-                        "TREE_CONNECT should NOT succeed.");
-                });
+                    Packet_Header_Flags_Values.NONE,
+                    uncSharepath,
+                    out treeId,
+                    checker: (Packet_Header header, TREE_CONNECT_Response response) =>
+                    {
+                        BaseTestSite.Assert.AreNotEqual(
+                            Smb2Status.STATUS_SUCCESS,
+                            header.Status,
+                            "TREE_CONNECT should NOT succeed.");
+                    });
 
                 // Check if server is still responding
                 client.Echo(treeId);
@@ -172,5 +172,44 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
                 TreeConnect_Flags.SMB2_SHAREFLAG_CLUSTER_RECONNECT);
             client.TreeDisconnect(treeId);
         }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Tree)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("This test case is designed to test server can handle a TreeConnect request with flag SMB2_SHAREFLAG_EXTENSION_PRESENT successfully.")]
+        public void TreeMgmt_SMB311_EXTENSION_PRESENT()
+        {
+            #region Check Applicability
+            TestConfig.CheckDialect(DialectRevision.Smb311);
+            #endregion
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client by sending the following requests: NEGOTIATE; SESSION_SETUP");
+            client.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            client.SessionSetup(
+                TestConfig.DefaultSecurityPackage,
+                TestConfig.SutComputerName,
+                TestConfig.AccountCredential,
+                TestConfig.UseServerGssToken);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends TREE_CONNECT request with flag SMB2_SHAREFLAG_EXTENSION_PRESENT and expects STATUS_SUCCESS.");
+            uint treeId;
+            client.TreeConnect(
+                sharePath,
+                out treeId,
+                (header, response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        Smb2Status.STATUS_SUCCESS,
+                        header.Status,
+                       "{0} should be successful, actually server returns {1}.", header.Command, Smb2Status.GetStatusCode(header.Status));
+                    BaseTestSite.Assert.IsTrue(
+                        response.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_IDENTITY_REMOTING),
+                        "The share should support identity remoting, actually server returns {0}.", response.ShareFlags.ToString());
+                },
+                TreeConnect_Flags.SMB2_SHAREFLAG_EXTENSION_PRESENT);
+            client.TreeDisconnect(treeId);
+        }
+
     }
 }
