@@ -19,7 +19,7 @@ namespace Microsoft.Protocols.TestManager.CLI {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class StringResources {
@@ -64,15 +64,15 @@ namespace Microsoft.Protocols.TestManager.CLI {
         ///   Looks up a localized string similar to Protocol Test Manager Command Line Interface
         ///Description:
         ///ptmcli.exe &lt;-p|-profile profileName&gt; [-s|-selected] [-r|-report reportfile]
-        ///           [-outcome pass,fail,inconclusive,notrun] [-sortby name|outcome]
-        ///           [-separator comma|space]
+        ///           [-categories categories] [-outcome pass,fail,inconclusive,notrun]
+        ///		   [-sortby name|outcome] [-separator comma|space]
         ///
         ///Options:
         ///-p | -profile profileName   Specifies the file name of profile of the test 
         ///                            suite to run.
         ///
         ///-s | -selected              Turn this switch on to run only the test cases
-        ///                            selected in the Run Page [rest of string was truncated]&quot;;.
+        ///                            selec [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string HelpText {
             get {

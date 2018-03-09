@@ -4,15 +4,15 @@
 @echo off
 
 if not defined vspath (
-	if defined VS110COMNTOOLS (
-		set vspath="%VS110COMNTOOLS%"
-	) else if defined VS120COMNTOOLS (
-		set vspath="%VS120COMNTOOLS%"
+	if defined VS150COMNTOOLS (
+		set vspath="%VS150COMNTOOLS%"
 	) else if defined VS140COMNTOOLS (
 		set vspath="%VS140COMNTOOLS%"
+	) else if defined VS120COMNTOOLS (
+		set vspath="%VS120COMNTOOLS%"
 	) else (
-		echo Visual Studio or Visual Studio test agent should be installed, version 2012 or higher
-		goto :eof
+		echo Visual Studio or Visual Studio test agent should be installed, version 2013 or higher
+		exit /b 1
 	)
 )
 

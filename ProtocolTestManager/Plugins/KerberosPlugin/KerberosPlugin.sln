@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProtoSDK", "ProtoSDK", "{F97CF9CB-C02B-4B1F-9CB8-1D71582CD63A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyValueDetector", "..\..\PropertyValueDetector\PropertyValueDetector.csproj", "{7982ACF0-F1A4-4996-A339-641CAFA093CE}"
@@ -68,8 +70,8 @@ Global
 		{AB191B32-B12D-42CB-976D-CEA2C5BAD8BE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{75544419-3F4E-4308-A676-165F45C1462E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{75544419-3F4E-4308-A676-165F45C1462E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{75544419-3F4E-4308-A676-165F45C1462E}.Fxcop|Any CPU.ActiveCfg = Fxcop|Any CPU
-		{75544419-3F4E-4308-A676-165F45C1462E}.Fxcop|Any CPU.Build.0 = Fxcop|Any CPU
+		{75544419-3F4E-4308-A676-165F45C1462E}.Fxcop|Any CPU.ActiveCfg = Release|Any CPU
+		{75544419-3F4E-4308-A676-165F45C1462E}.Fxcop|Any CPU.Build.0 = Release|Any CPU
 		{75544419-3F4E-4308-A676-165F45C1462E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75544419-3F4E-4308-A676-165F45C1462E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5E53E71E-52D1-4BF0-99C0-608437EC446C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -130,5 +132,8 @@ Global
 		{967D976A-C792-4893-9235-14615AE1FF58} = {F97CF9CB-C02B-4B1F-9CB8-1D71582CD63A}
 		{2FA90F03-31CD-4495-86BF-8DA9CC14E210} = {F97CF9CB-C02B-4B1F-9CB8-1D71582CD63A}
 		{3F0B2460-33F7-4A58-9CB5-BB38914C7845} = {F97CF9CB-C02B-4B1F-9CB8-1D71582CD63A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F4CF460D-1F0D-46DF-ABC6-BD9DBE1BAA1F}
 	EndGlobalSection
 EndGlobal
