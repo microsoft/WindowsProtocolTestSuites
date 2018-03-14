@@ -106,7 +106,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                     if (address != null && address.Trim().Length > 0)
                     {
                         int separator = address.IndexOf(':');
-                        string add = address.Substring(0, separator).Trim();
+                        //Consider SUTControl.AgentAddress may be SUT hostname, or SUT IP address
+                        string add = CommonUtility.GetHostIP( address.Substring(0, separator).Trim()).ToString(); 
                         string port = address.Substring(separator + 1).Trim();
                         IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(add), int.Parse(port));
                         AgentList.Add(endpoint);

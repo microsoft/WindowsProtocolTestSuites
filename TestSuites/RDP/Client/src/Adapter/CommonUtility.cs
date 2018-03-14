@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Microsoft.Protocols.TestTools;
 using System.Reflection;
 using System.Diagnostics;
+using System.Net;
 
 namespace Microsoft.Protocols.TestSuites
 {
@@ -167,6 +168,26 @@ namespace Microsoft.Protocols.TestSuites
             catch { }
 
             return helpMessage;
+        }
+
+        public static IPAddress GetHostIP(string hostname)
+        {
+            try
+            {
+                IPHostEntry host = Dns.GetHostEntry(hostname);
+                foreach (IPAddress ip in host.AddressList)
+                {
+                    if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {                       
+                        return ip;
+                    }
+                }
+            }
+            catch (Exception e)
+            {                
+            }
+            return null;
+
         }
     }
 }
