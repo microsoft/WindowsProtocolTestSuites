@@ -6,7 +6,7 @@
     <OutputType>Library</OutputType>
     <ProjectGuid>{F3CA3AD9-94A6-4FE1-BA05-0C798E477673}</ProjectGuid>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.CommonStack</RootNamespace>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

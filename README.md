@@ -34,7 +34,7 @@ You should install the following list of software in order to build Test Suites 
 You can use the script in **InstallPrerequisites** folder to automatically download and install these software.
 
 * .NET Framework 3.5
-* .Net framework 4.0 or higher
+* .Net framework 4.7.1 or higher
 * [Wix toolset](http://wixtoolset.org/) v3.10 or higher
 * Visual Studio or Visual Studio Agent, version 2012 or higher
 * [Protocol Test Framework](https://github.com/microsoft/protocoltestframework). You can use a released MSI file or build it from source code.
