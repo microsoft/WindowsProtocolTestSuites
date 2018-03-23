@@ -192,10 +192,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
                 TestConfig.AccountCredential,
                 TestConfig.UseServerGssToken);
 
+            string infraSharePath = "\\\\cl1sofs\\volume1";
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends TREE_CONNECT request with flag SMB2_SHAREFLAG_EXTENSION_PRESENT and expects STATUS_SUCCESS.");
             uint treeId;
             client.TreeConnect(
-                sharePath,
+                infraSharePath,
+                out treeId,
+                (header, response) =>
+                {
+                    if (header.Status == Smb2Status.STATUS_BAD_NETWORK_NAME)
+                    {
+                        Site.Assert.Inconclusive(
+                            "Infrastructure share {0} is not existed.",
+                            infraSharePath);
+                    }
+                    if (!response.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_IDENTITY_REMOTING))
+                    {
+                        Site.Assert.Inconclusive(
+                            "The share should support identity remoting, actually server returns {0}.",
+                            response.ShareFlags.ToString());
+                    }
+                },
+                TreeConnect_Flags.SMB2_SHAREFLAG_NONE);
+            client.TreeConnect(
+                infraSharePath,
                 out treeId,
                 (header, response) =>
                 {

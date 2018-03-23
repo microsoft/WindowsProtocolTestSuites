@@ -903,10 +903,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             uint status;
             if (flags.HasFlag(TreeConnect_Flags.SMB2_SHAREFLAG_EXTENSION_PRESENT))
             {
-                TREE_CONNECT_Request_Extension extension = CreateTreeConnectRequestExt(uncSharePath);
-                byte[] buffer = TypeMarshal.ToBytes<TREE_CONNECT_Request_Extension>(extension);
-                Smb2Utility.Align8(0, ref buffer);
-
+                byte[] buffer = CreateTreeConnectRequestExt(uncSharePath);
                 status = client.TreeConnect(
                     creditCharge,
                     generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
@@ -3002,38 +2999,140 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         }
 
         #region SMB2 TREE_CONNECT Request Extension
-        private TREE_CONNECT_Request_Extension CreateTreeConnectRequestExt(string sharePath)
+        private byte[] CreateTreeConnectRequestExt(string sharePath)
         {
-            TREE_CONNECT_Request_Extension ext = new TREE_CONNECT_Request_Extension();
-            ext.TreeConnectContextCount = 1;
-            ext.Reserved = new byte[10];
-            ext.PathName = Encoding.Unicode.GetBytes(sharePath);
-            Tree_Connect_Context ctx = CreateTreeConnectContext();
-            ext.TreeConnectContexts = new Tree_Connect_Context[1] { ctx };
-            return ext;
+            ushort treeConnectContextCount = 1;
+            byte[] pathName = Encoding.Unicode.GetBytes(sharePath);
+            uint treeConnectContextOffset = (uint)(64 + // SMB2 header
+                                                   2 +  // StructureSize
+                                                   2 +  // Flags
+                                                   2 +  // PathOffset
+                                                   2 +  // PathLength
+                                                   4 +  // TreeConnectContextOffset
+                                                   2 +  // TreeConnectContextCount
+                                                   10 + // Reserved
+                                                   pathName.Length);
+            Smb2Utility.Align8(ref treeConnectContextOffset);
+
+            byte[] buffer = TypeMarshal.ToBytes<uint>(treeConnectContextOffset);
+            buffer = buffer.Concat(TypeMarshal.ToBytes<ushort>(treeConnectContextCount)).ToArray();
+            buffer = buffer.Concat(new byte[10]).ToArray();
+            buffer = buffer.Concat(pathName).ToArray();
+            Smb2Utility.Align8(0, ref buffer);
+
+            byte[] ctxBuf = CreateTreeConnectContext();
+            Smb2Utility.Align8(0, ref ctxBuf);
+            buffer = buffer.Concat(ctxBuf).ToArray();
+            return buffer;
         }
 
-        private Tree_Connect_Context CreateTreeConnectContext()
+        private byte[] CreateTreeConnectContext()
         {
+            byte[] buffer;
             Tree_Connect_Context ctx = new Tree_Connect_Context();
             ctx.ContextType = Context_Type.REMOTED_IDENTITY_TREE_CONNECT_CONTEXT_ID;
             ctx.Reserved = 0;
-
-            ushort dataLength = 0;
-            ctx.data = CreateRemotedIdentity(out dataLength);
-            ctx.DataLength = dataLength;
-            return ctx;
+            byte[] remotedIdentityBuf = CreateRemotedIdentity(out ctx.DataLength);
+            buffer = TypeMarshal.ToBytes<Context_Type>(ctx.ContextType);
+            buffer = buffer.Concat(TypeMarshal.ToBytes<ushort>(ctx.DataLength)).ToArray();
+            buffer = buffer.Concat(TypeMarshal.ToBytes<uint>(ctx.Reserved)).ToArray();
+            buffer = buffer.Concat(remotedIdentityBuf).ToArray();
+            return buffer;
         }
 
-        private REMOTED_IDENTITY_TREE_CONNECT_Context CreateRemotedIdentity(out ushort dataLength)
+        private byte[] CreateRemotedIdentity(out ushort dataLength)
         {
             REMOTED_IDENTITY_TREE_CONNECT_Context remotedIdentity = new REMOTED_IDENTITY_TREE_CONNECT_Context();
             ushort _dataLength = 0;
             remotedIdentity.TicketType = 0x0001;
-            _dataLength += 2;
+            _dataLength += 2 * 14;  // All members in REMOTED_IDENTITY_TREE_CONNECT_Context except TicketInfo
 
+            WindowsIdentity identity = WindowsIdentity.GetCurrent();
+
+            // User: SID_ATTR_DATA
+            remotedIdentity.User = _dataLength;
+            byte[] userBinary = new byte[identity.User.BinaryLength];
+            identity.User.GetBinaryForm(userBinary, 0);
+            remotedIdentity.TicketInfo.User = new SID_ATTR_DATA();
+            remotedIdentity.TicketInfo.User.SidData = new BLOB_DATA();
+            remotedIdentity.TicketInfo.User.SidData.BlobData = userBinary;
+            remotedIdentity.TicketInfo.User.SidData.BlobSize = (ushort)identity.User.BinaryLength;
+            remotedIdentity.TicketInfo.User.Attr = (SID_ATTR)0;
+            _dataLength += (ushort)(2 + remotedIdentity.TicketInfo.User.SidData.BlobSize + 4);
+
+            // UserName
+            remotedIdentity.UserName = _dataLength;
+            remotedIdentity.TicketInfo.UserName = Encoding.Unicode.GetBytes(testConfig.UserName + '\x0');
+            ushort userNameLen = (ushort)remotedIdentity.TicketInfo.UserName.Length;
+            _dataLength += (ushort)(remotedIdentity.TicketInfo.UserName.Length + 2);
+
+            // Domain
+            remotedIdentity.Domain = _dataLength;
+            remotedIdentity.TicketInfo.Domain = Encoding.Unicode.GetBytes(testConfig.DomainName + '\x0');
+            //remotedIdentity.TicketInfo.Domain = Encoding.Unicode.GetBytes("contoso" + '\x0');
+            ushort domainLen = (ushort)remotedIdentity.TicketInfo.Domain.Length;
+            _dataLength += (ushort)(remotedIdentity.TicketInfo.Domain.Length + 2);
+
+            // Groups: SID_ARRAY_DATA
+            //remotedIdentity.Groups = _dataLength;
+            remotedIdentity.TicketInfo.Groups = new SID_ARRAY_DATA();
+            remotedIdentity.TicketInfo.Groups.SidAttrCount = (ushort)identity.Groups.Count;
+            SID_ATTR_DATA[] groups = new SID_ATTR_DATA[identity.Groups.Count];
+            for (int i = 0; i < identity.Groups.Count; i++)
+            {
+                SecurityIdentifier curGroupSid = (SecurityIdentifier)identity.Groups[i];
+                byte[] curGroupBinary = new byte[curGroupSid.BinaryLength];
+                curGroupSid.GetBinaryForm(curGroupBinary, 0);
+                groups[i].SidData.BlobSize = (ushort)curGroupSid.BinaryLength;
+                groups[i].SidData.BlobData = curGroupBinary;
+                groups[i].Attr = SID_ATTR.SE_GROUP_ENABLED;
+                //_dataLength += (ushort)(2 + groups[i].SidData.BlobSize + 4);
+            }
+            //_dataLength += 2;
+
+            // Owner: BLOB_DATA
+            remotedIdentity.Owner = _dataLength;
+            remotedIdentity.TicketInfo.Owner = new BLOB_DATA();
+            byte[] ownerBinary = new byte[identity.Owner.BinaryLength];
+            identity.Owner.GetBinaryForm(ownerBinary, 0);
+            remotedIdentity.TicketInfo.Owner.BlobData = ownerBinary;
+            remotedIdentity.TicketInfo.Owner.BlobSize = (ushort)identity.Owner.BinaryLength;
+            _dataLength += (ushort)(2 + remotedIdentity.TicketInfo.Owner.BlobSize);
+
+            // UserClaims: BLOB_DATA
+
+            remotedIdentity.TicketSize = _dataLength;
             dataLength = _dataLength;
-            return remotedIdentity;
+
+            byte[] ctxBuf = TypeMarshal.ToBytes<ushort>(remotedIdentity.TicketType);
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.TicketSize)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.User)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.UserName)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.Domain)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.Groups)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.RestrictedGroups)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.Privileges)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.PrimaryGroup)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.Owner)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.DefaultDacl)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.DeviceGroups)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.UserClaims)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.DeviceClaims)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<SID_ATTR_DATA>(remotedIdentity.TicketInfo.User)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(userNameLen)).ToArray();
+            ctxBuf = ctxBuf.Concat(remotedIdentity.TicketInfo.UserName).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(domainLen)).ToArray();
+            ctxBuf = ctxBuf.Concat(remotedIdentity.TicketInfo.Domain).ToArray();
+
+            //ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.TicketInfo.Groups.SidAttrCount)).ToArray();
+            for (int i = 0; i < identity.Groups.Count; i++)
+            {
+                //ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(groups[i].SidData.BlobSize)).ToArray();
+                //ctxBuf = ctxBuf.Concat(groups[i].SidData.BlobData).ToArray();
+                //ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<SID_ATTR>(groups[i].Attr)).ToArray();
+            }
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<BLOB_DATA>(remotedIdentity.TicketInfo.Owner)).ToArray();
+            return ctxBuf;
         }
         #endregion
 
