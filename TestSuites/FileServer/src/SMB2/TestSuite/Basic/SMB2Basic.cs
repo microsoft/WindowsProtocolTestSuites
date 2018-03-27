@@ -2198,7 +2198,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             {
                 // MS-SMB2 section 3.3.5.18 Receiving an SMB2 QUERY_DIRECTORY Request
                 BaseTestSite.Log.Add(LogEntryKind.TestStep,
-                    "If the open is not an open to a directory, the server MUST process the request as follows: If SMB2_REOPEN is set in the Flags field of the SMB2 QUERY_DIRECTORY request, the request MUST process the request as follows:");
+                    "If the open is not an open to a directory, the server MUST process the request as follows:\n");
 
                 if (testConfig.Platform == Platform.WindowsServer2008 ||
                     testConfig.Platform == Platform.WindowsServer2008R2 ||
@@ -2209,16 +2209,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                         Smb2Status.STATUS_NOT_SUPPORTED,
                         status,
                         "If SMB2_REOPEN is set in the Flags field of the SMB2 QUERY_DIRECTORY request, the request MUST be failed with an inplementation-specific error code:\n" +
-                        "Windows Server 2008, Windows Server 2008R2, Windows Server 2012 " +
-                        "and Windows Server 2012 R2 fail the request with STATUS_NOT_SUPPORTED, " +
-                        "actually server returns {0}.", Smb2Status.GetStatusCode(status));
+                        "Windows Server 2008, Windows Server 2008R2, Windows Server 2012 and Windows Server 2012 R2 fail the request with STATUS_NOT_SUPPORTED. " +
+                        "Actually server returns {0}.", Smb2Status.GetStatusCode(status));
                 }
                 else
                 {
                     BaseTestSite.Assert.AreEqual(
                         Smb2Status.STATUS_INVALID_PARAMETER,
                         status,
-                        "Otherwise, the request MUST be failed with STATUS_INVALID_PARAMETER, actually server returns {0}.", Smb2Status.GetStatusCode(status));
+                        "Otherwise, the request MUST be failed with STATUS_INVALID_PARAMETER." +
+                        "Actually server returns {0}.", Smb2Status.GetStatusCode(status));
                 }
             }
             else // FileType.DirectoryFile
