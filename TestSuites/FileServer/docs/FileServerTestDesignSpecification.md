@@ -23,19 +23,19 @@
 		* [ CopyOffLoad](#3.1.8)
 		* [ FileLevelTrim](#3.1.9)
 		* [ IntegrityInfo](#3.1.10)
-		* [DirectoryLeasing](#3.1.11)
-		* [Encryption](#3.1.12)
+		* [ DirectoryLeasing](#3.1.11)
+		* [ Encryption](#3.1.12)
 		* [ AppInstanceId](#3.1.13)
 		* [ AppInstanceVersion](#3.1.14)
-		* [DurableHandle](#3.1.15)
+		* [ DurableHandle](#3.1.15)
 		* [ Oplock](#3.1.16)
-		* [FileLeasing](#3.1.17)
-		* [Replay](#3.1.18)
+		* [ FileLeasing](#3.1.17)
+		* [ Replay](#3.1.18)
 		* [ ResilientHandle](#3.1.19)
-		* [Signing](#3.1.20)
+		* [ Signing](#3.1.20)
 		* [ TreeMgmt](#3.1.21)
-		* [SessionMgmt](#3.1.22)
-		* [CreateClose](#3.1.23)
+		* [ SessionMgmt](#3.1.22)
+		* [ CreateClose](#3.1.23)
 		* [ Compound](#3.1.24)
 		* [ ValidateNegotiateInfo](#3.1.25)
 		* [ EnumerateSnapShots ](#3.1.26)
@@ -65,6 +65,8 @@
 		* [ HVRS\SMBDialect](#3.1.50)
 		* [ HVRS\PersistentHandles](#3.1.51)
 		* [ HVRS\Resiliency](#3.1.52)
+		* [ QueryDir\_Reopen\_OnDir](#3.1.53)
+		* [ QueryDir\_Reopen\_OnFile](#3.1.54)
 	* [SMB2 Feature Test](#3.2)
 		* [AppInstanceId](#3.2.1)
 		* [AppInstanceVersion](#3.2.2)
@@ -209,7 +211,7 @@ Test scenarios are categorized as below table and will be described in following
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
 | SMB2 BVT                 | 53         | SMB2 common scenarios.                                                                                            |
-| SMB2 Feature Test        | 2548       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
+| SMB2 Feature Test        | 2550       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 9          | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 38         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
@@ -2791,6 +2793,66 @@ This is used to test SMB2 common user scenarios.
 |                          | TREE\_CONNECT|
 |                          | CREATE (File)|
 |                          | IOCtl with FSCTL_LMR_REQUEST_RESILIENCY |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
+
+####<a name="3.1.53"> QueryDir\_Reopen\_OnDir
+
+#####<a name="3.1.53.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify QUERY\_DIRECTORY with flag SMB2\_REOPEN to a directory is handled correctly |
+| **Message Sequence**          | 1.  Start a client to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                               | 2.  Client sends QUERY\_DIRECTORY request with flag SMB2\_REOPEN to query directory information. |
+|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cluster Involved Scenario** | **NO** |
+
+#####<a name="3.1.53.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT\_SMB2Basic\_QueryDir\_Reopen\_OnDir |
+| **Description** | Verify QUERY\_DIRECTORY with flag SMB2\_REOPEN to a directory is handled correctly. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (Directory)|
+|                          | QUERY\_DIRECTORY(flags: SMB2\_REOPEN) |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
+
+####<a name="3.1.54"> QueryDir\_Reopen\_OnFile
+
+#####<a name="3.1.54.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify QUERY\_DIRECTORY with flag SMB2\_REOPEN to a file is handled correctly |
+| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                               | 2.  Client sends QUERY\_DIRECTORY request with flag SMB2\_REOPEN to query directory information. |
+|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cluster Involved Scenario** | **NO** |
+
+#####<a name="3.1.54.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT\_SMB2Basic\_QueryDir\_Reopen\_OnFile |
+| **Description** | Verify QUERY\_DIRECTORY with flag SMB2\_REOPEN to a file is handled correctly. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (Directory)|
+|                          | QUERY\_DIRECTORY(flags: SMB2\_REOPEN) |
 |                          | CLOSE |
 |                          | TREE\_DISCONNECT |
 |                          | LOGOFF |

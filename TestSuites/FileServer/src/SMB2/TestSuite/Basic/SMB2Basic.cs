@@ -2162,7 +2162,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             FILEID fileId;
             Smb2CreateContextResponse[] serverCreateContexts;
-            string fileName = "BVT_SMB2Basic_QueryDir_Reopen" + Guid.NewGuid();
+            string fileName = "BVT_SMB2Basic_QueryDir_Reopen_" + Guid.NewGuid();
             if (fileType == FileType.DataFile)
             {
                 status = client1.Create(
@@ -2182,7 +2182,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     out serverCreateContexts);
             }
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client1 sends QUERY_DIRECTORY request to query directory information.");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends QUERY_DIRECTORY request with flag SMB2_REOPEN to query directory information.");
             byte[] outputBuffer;
             status = client1.QueryDirectory(
                 treeId,
