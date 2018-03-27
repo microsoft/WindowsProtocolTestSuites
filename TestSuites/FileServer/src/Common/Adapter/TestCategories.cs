@@ -79,6 +79,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         public const string ChangeNotify = "ChangeNotify";
         public const string QueryAndSetFileInfo = "QueryAndSetFileInfo";
         public const string LockUnlock = "LockUnlock";
+        public const string QueryDir = "QueryDir";
 
         // For some advanced test cases which cover more than 1 feature and require cluster environment.
         public const string CombinedFeature = "CombinedFeature";
