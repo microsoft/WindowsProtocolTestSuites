@@ -26,6 +26,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
         /// Convert dialect from DialectRevision to ModelDialectRevision.
         /// </summary>
         /// <param name="dialect">DialectRevision</param>
+        /// <param name="treat311as302">Whether treat 311 as 302. We treat 311 as 302 in most SMB2 model cases witch have the same behavior in 311 and 302 to reduce the case number</param>
         /// <returns>ModelDialectRevision</returns>
         public static ModelDialectRevision GetModelDialectRevision(DialectRevision dialect, bool treat311as302 = true)
         {

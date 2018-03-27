@@ -408,7 +408,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Encryption
             if (Smb2Utility.IsSmb3xFamily(negotiateDialect)
                 && Session_EncryptData == SessionEncryptDataType.SessionEncryptDataSet
                 && (modelRequestType == ModelRequestType.UnEncryptedRequest)
-                && (config.MaxSmbVersionSupported == ModelDialectRevision.Smb311 || config.IsGlobalRejectUnencryptedAccessEnabled))
+                && (config.MaxSmbVersionSupported == ModelDialectRevision.Smb311 || 
+                ((config.MaxSmbVersionSupported == ModelDialectRevision.Smb30 || config.MaxSmbVersionSupported == ModelDialectRevision.Smb302) && 
+                config.IsGlobalRejectUnencryptedAccessEnabled)))
             {
                 ModelHelper.Log(LogType.Requirement,
                     "If Connection.Dialect belongs to the SMB 3.x dialect family, and Session.EncryptData is TRUE, " +
@@ -448,15 +450,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Encryption
                 ModelHelper.Log(LogType.Requirement,
                     "If the Connection.Dialect belongs to the SMB 3.x dialect family, the server MUST fail the request with STATUS_ACCESS_DENIED in the following cases");
                 ModelHelper.Log(LogType.TestInfo, "The Connection.Dialect is {0}.", negotiateDialect);
-                if (Encryption_TreeId == EncryptionTreeId.TreeIdToEncryptShare
-                    && Connection_ServerCapabilities_SMB2_GLOBAL_CAP_ENCRYPTION
-                    && (config.MaxSmbVersionSupported == ModelDialectRevision.Smb311 || config.IsGlobalRejectUnencryptedAccessEnabled)
+                // Actually the "EncryptDat is true" is redundant since it would failed in verify session step
+                if (Connection_ServerCapabilities_SMB2_GLOBAL_CAP_ENCRYPTION
+                    && ((config.MaxSmbVersionSupported == ModelDialectRevision.Smb311 && Encryption_TreeId == EncryptionTreeId.TreeIdToEncryptShare) || 
+                    ((config.MaxSmbVersionSupported == ModelDialectRevision.Smb30 || config.MaxSmbVersionSupported == ModelDialectRevision.Smb302) && 
+                    (Encryption_TreeId == EncryptionTreeId.TreeIdToEncryptShare || config.IsGlobalEncryptDataEnabled) && config.IsGlobalRejectUnencryptedAccessEnabled))
                     && modelRequestType == ModelRequestType.UnEncryptedRequest)
                 {
                     ModelHelper.Log(LogType.Requirement,
                        "\tServer supports the 3.1.1 dialect, TreeConnect.Share.EncryptData is TRUE, " +
                        "Connection.ServerCapabilities includes SMB2_GLOBAL_CAP_ENCRYPTION, and Request.IsEncrypted is FALSE\n" +
-                       "\tServer does not support the 3.1.1 dialect, EncryptData or TreeConnect.Share.EncryptData is TRUE, " +
+                       "\tServer supports the 3.0 or 3.0.2 dialect, EncryptData or TreeConnect.Share.EncryptData is TRUE, " +
                        "Connection.ServerCapabilities includes SMB2_GLOBAL_CAP_ENCRYPTION, RejectUnencryptedAccess is TRUE, " +
                        "and Request.IsEncrypted is FALSE");
                     ModelHelper.Log(LogType.TestInfo, "Server supports {0}, RejectUnencryptedAccess is {1}",

@@ -1047,7 +1047,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 {
                     this.cipherId = response.NegotiateContext_ENCRYPTION.Value.Ciphers[0];
                 }
-                if (addDefaultEncryption && response.NegotiateContext_ENCRYPTION == null) // For model encryption case, send encrypted message event if client says it does not support encryption
+
+                // In SMB 311, client use SMB2_ENCRYPTION_CAPABILITIES context to indicate whether it 
+                // support Encryption rather than SMB2_GLOBAL_CAP_ENCRYPTION as SMB 30/302
+                // For those client with dialect 311 but not support encryption cases (typically in encryption model cases), 
+                // we shouldn't set the default encryption algorithm so that the SMB2_ENCRYPTION_CAPABILITIES won't be added.
+                if (addDefaultEncryption && response.NegotiateContext_ENCRYPTION == null)
                 {
                     this.cipherId = EncryptionAlgorithm.ENCRYPTION_AES128_CCM;
                 }
