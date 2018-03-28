@@ -2289,6 +2289,49 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             return status;
         }
 
+        public uint QueryFileQuotaInfo(
+            uint treeId,
+            //byte fileInfoClass,
+            QUERY_INFO_Request_Flags_Values queryInfoFlags,
+            FILEID fileId,
+            byte[] inputBuffer,
+            out byte[] outputBuffer,
+            ResponseChecker<QUERY_INFO_Response> checker = null)
+        {
+            uint maxOutputBufferLength = 1024;
+            Packet_Header header;
+            QUERY_INFO_Response queryInfoResponse;
+
+            ulong messageId = generateMessageId(sequenceWindow);
+            ushort creditCharge = generateCreditCharge(1);
+
+            // Need to consume credit from sequence window first according to TD
+            ConsumeCredit(messageId, creditCharge);
+
+            uint status = client.QueryInfo(
+                creditCharge,
+                generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
+                testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                messageId,
+                sessionId,
+                treeId,
+                InfoType_Values.SMB2_0_INFO_QUOTA,
+                (byte)FileInformationClasses.FileQuotaInformation,
+                maxOutputBufferLength,
+                AdditionalInformation_Values.NONE,
+                queryInfoFlags,
+                fileId,
+                inputBuffer,
+                out outputBuffer,
+                out header,
+                out queryInfoResponse,
+                sessionChannelSequence);
+
+            ProduceCredit(messageId, header);
+            InnerResponseChecker(checker, header, queryInfoResponse);
+            return status;
+        }
+
         /// <summary>
         /// Query the Security Descriptor of the file/directory specified by fileId.
         /// </summary>

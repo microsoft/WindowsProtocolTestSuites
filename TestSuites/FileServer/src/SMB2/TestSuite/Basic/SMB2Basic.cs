@@ -12,6 +12,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Text;
 using System.Threading;
+using System.Linq;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 {
@@ -42,6 +43,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             /// Creation Time of file in FileBasicInformation
             /// </summary>
             FileBasicInfoCreationTime
+        }
+
+        /// <summary>
+        /// Specify the type of element in SidBuffer
+        /// </summary>
+        private enum Smb2QueryQuotaInfoType
+        {
+            /// <summary>
+            /// Format 1 of SidBuffer
+            /// SidBuffer contains a lisit of FILE_GET_QUOTA_INFORMATION
+            /// </summary>
+            FILE_GET_QUOTA_INFORMATION,
+
+            /// <summary>
+            /// Format 2 of SidBuffer
+            /// SidBuffer contains a SID.
+            /// <69> Windows-based clients never send a request using the SidBuffer format 2.
+            /// </summary>
+            SID
         }
 
         #region Variables
@@ -289,6 +309,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client1.Close(treeId1, fileId1);
             client1.TreeDisconnect(treeId1);
             client1.LogOff();
+        }
+
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.QueryInfo)]
+        [Description("This test case is designed to verify the behavior of querying quota information with FILE_GET_QUOTA_INFO in SidBuffer.")]
+        public void BVT_SMB2Basic_Query_Info_Quota_FILE_GET_QUOTA_INFO()
+        {
+            QueryQuotaInfo(Smb2QueryQuotaInfoType.FILE_GET_QUOTA_INFORMATION);
         }
 
         [TestMethod]
@@ -2119,6 +2150,100 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             if (request == null)
                 return;
             request.PayLoad.StructureSize += 1;
+        }
+
+        private void QueryQuotaInfo(Smb2QueryQuotaInfoType type)
+        {
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client to create a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            uint status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client1.SessionSetup(
+                TestConfig.DefaultSecurityPackage,
+                TestConfig.SutComputerName,
+                TestConfig.AccountCredential,
+                TestConfig.UseServerGssToken);
+            uint treeId;
+            status = client1.TreeConnect(uncSharePath, out treeId);
+            Smb2CreateContextResponse[] serverCreateContexts;
+            FILEID fileId;
+            string fileName = "BVT_SMB2Basic_Query_Quota_Info_" + Guid.NewGuid();
+            status = client1.Create(
+                treeId,
+                fileName,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
+                out fileId,
+                out serverCreateContexts);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client queries quota information by sending QUERY_INFO request");
+            byte[] inputBuffer = CreateSidBuffer(type);
+            byte[] outputBuffer;
+            status = client1.QueryFileQuotaInfo(
+                treeId,
+                QUERY_INFO_Request_Flags_Values.SL_RESTART_SCAN,
+                fileId,
+                inputBuffer,
+                out outputBuffer
+                );
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_SUCCESS,
+                status,
+                "QUERY_INFO is expected to success, actually server returns {0}.", Smb2Status.GetStatusCode(status));
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeId, fileId);
+            client1.TreeDisconnect(treeId);
+            client1.LogOff();
+        }
+
+        /// <summary>
+        /// MS-SMB2 2.2.37.1
+        /// Create SidBuffer with either a list of FILE_GET_QUOTA_INFORMATION or a SID
+        /// </summary>
+        /// <param name="type">Indicate the type of element in SidBuffer</param>
+        /// <returns></returns>
+        private byte[] CreateSidBuffer(Smb2QueryQuotaInfoType type)
+        {
+            QUERY_QUOTA_INFO quotaInfo = new QUERY_QUOTA_INFO();
+            byte[] sidBuffer;
+            if (type == Smb2QueryQuotaInfoType.FILE_GET_QUOTA_INFORMATION)
+            {
+                // If the application provides a SidList,
+                // via one or more FILE_GET_QUOTA_INFORMATION structures linked by NextEntryOffset,
+                // they MUST be copied to the beginning of the SidBuffer,
+                // SidListLength MUST be set to their length in bytes,
+                // StartSidLength SHOULD be set to 0,
+                // and StartSidOffset SHOULD be set to 0.
+
+                FileGetQuotaInformation fileGetQuotaInfo = new FileGetQuotaInformation();
+                _SID curSid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, testConfig.UserName);
+                fileGetQuotaInfo.Sid = curSid;
+                fileGetQuotaInfo.SidLength = (uint)TypeMarshal.ToBytes<_SID>(curSid).Length;
+                sidBuffer = TypeMarshal.ToBytes<FileGetQuotaInformation>(fileGetQuotaInfo);
+                quotaInfo.SidListLength = (uint)sidBuffer.Length;
+            }
+            else // Smb2QueryQuotaInfoType.SID
+            {
+                // Otherwise, if the application provides a StartSid,
+                // the SidBuffer field contains a SID as defined in [MS-DTYP] section 2.4.2.2.
+                // The SidListLength field MUST be set to zero,
+                // StartSidLength MUST be set to length, in bytes, of the StartSid.
+                // The StartSidOffset field SHOULD be set to offset, in bytes, from the beginning of SidBuffer.
+
+                _SID curSid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, testConfig.UserName);
+                sidBuffer = TypeMarshal.ToBytes<_SID>(curSid);
+                quotaInfo.StartSidLength = (uint)sidBuffer.Length;
+            }
+            byte[] buffer = TypeMarshal.ToBytes<byte>(quotaInfo.ReturnSingle);
+            buffer = buffer.Concat(TypeMarshal.ToBytes<byte>(quotaInfo.RestartScan)).ToArray();
+            buffer = buffer.Concat(TypeMarshal.ToBytes<QUERY_QUOTA_INFO_Reserved_Values>(quotaInfo.Reserved)).ToArray();
+            buffer = buffer.Concat(TypeMarshal.ToBytes<uint>(quotaInfo.SidListLength)).ToArray();
+            buffer = buffer.Concat(TypeMarshal.ToBytes<uint>(quotaInfo.StartSidLength)).ToArray();
+            buffer = buffer.Concat(TypeMarshal.ToBytes<uint>(quotaInfo.StartSidOffset)).ToArray();
+            buffer = buffer.Concat(sidBuffer).ToArray();
+            return buffer;
         }
     }
 }
