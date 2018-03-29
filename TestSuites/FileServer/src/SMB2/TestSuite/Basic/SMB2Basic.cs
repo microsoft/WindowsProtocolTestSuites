@@ -312,7 +312,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client1.LogOff();
         }
 
-
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Smb2002)]
@@ -2224,17 +2223,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             _SID curSid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, testConfig.UserName);
             fileGetQuotaInfo.Sid = curSid;
             fileGetQuotaInfo.SidLength = (uint)TypeMarshal.ToBytes<_SID>(curSid).Length;
-            byte[] sidBuffer = TypeMarshal.ToBytes<FileGetQuotaInformation>(fileGetQuotaInfo);
-            quotaInfo.SidListLength = (uint)sidBuffer.Length;
-
-            byte[] buffer = TypeMarshal.ToBytes<byte>(quotaInfo.ReturnSingle);
-            buffer = buffer.Concat(TypeMarshal.ToBytes<byte>(quotaInfo.RestartScan)).ToArray();
-            buffer = buffer.Concat(TypeMarshal.ToBytes<QUERY_QUOTA_INFO_Reserved_Values>(quotaInfo.Reserved)).ToArray();
-            buffer = buffer.Concat(TypeMarshal.ToBytes<uint>(quotaInfo.SidListLength)).ToArray();
-            buffer = buffer.Concat(TypeMarshal.ToBytes<uint>(quotaInfo.StartSidLength)).ToArray();
-            buffer = buffer.Concat(TypeMarshal.ToBytes<uint>(quotaInfo.StartSidOffset)).ToArray();
-            buffer = buffer.Concat(sidBuffer).ToArray();
-            return buffer;
+            quotaInfo.Buffer = TypeMarshal.ToBytes<FileGetQuotaInformation>(fileGetQuotaInfo);
+            quotaInfo.SidListLength = (uint)quotaInfo.Buffer.Length;
+            return TypeMarshal.ToBytes<QUERY_QUOTA_INFO>(quotaInfo);
         }
     }
 }
