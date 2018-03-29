@@ -182,6 +182,71 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
         #endregion
 
+        #region Failover_SMB311_TREE_CONNECT_EXTENSION_PRESENT
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Failover)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("This test case is designed to test server can handle a TreeConnect request with flag SMB2_SHAREFLAG_EXTENSION_PRESENT successfully.")]
+        public void Failover_SMB311_TREE_CONNECT_EXTENSION_PRESENT()
+        {
+            #region Check Applicability
+            TestConfig.CheckDialect(DialectRevision.Smb311);
+            #endregion
+
+            Smb2FunctionalClient client = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client by sending the following requests: CONNECT; NEGOTIATE; SESSION_SETUP");
+            client.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            client.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            client.SessionSetup(
+                TestConfig.DefaultSecurityPackage,
+                TestConfig.SutComputerName,
+                TestConfig.AccountCredential,
+                TestConfig.UseServerGssToken);
+
+            string infraSharePath = string.Format(@"\\{0}\{1}", TestConfig.ClusteredInfrastructureFileServerName, TestConfig.InfrastructureRootShare);
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends TREE_CONNECT request with flag SMB2_SHAREFLAG_EXTENSION_PRESENT and expects STATUS_SUCCESS.");
+            uint treeId;
+            client.TreeConnect(
+                infraSharePath,
+                out treeId,
+                (header, response) =>
+                {
+                    if (header.Status == Smb2Status.STATUS_BAD_NETWORK_NAME)
+                    {
+                        Site.Assert.Inconclusive(
+                            "Infrastructure share {0} is not existed.",
+                            infraSharePath);
+                    }
+                    if (!response.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_IDENTITY_REMOTING))
+                    {
+                        Site.Assert.Inconclusive(
+                            "The share should support identity remoting, actually server returns {0}.",
+                            response.ShareFlags.ToString());
+                    }
+                },
+                TreeConnect_Flags.SMB2_SHAREFLAG_NONE);
+            client.TreeDisconnect(treeId);
+            client.TreeConnect(
+                infraSharePath,
+                out treeId,
+                (header, response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        Smb2Status.STATUS_SUCCESS,
+                        header.Status,
+                       "{0} should be successful, actually server returns {1}.", header.Command, Smb2Status.GetStatusCode(header.Status));
+                    BaseTestSite.Assert.IsTrue(
+                        response.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_IDENTITY_REMOTING),
+                        "The share should support identity remoting, actually server returns {0}.", response.ShareFlags.ToString());
+                },
+                TreeConnect_Flags.SMB2_SHAREFLAG_EXTENSION_PRESENT);
+            client.TreeDisconnect(treeId);
+            client.LogOff();
+        }
+        #endregion
+
         #region Test Utility
 
         private void FileServerFailoverTest(string server, FileServerType fsType, bool reconnectWithoutFailover = false)
