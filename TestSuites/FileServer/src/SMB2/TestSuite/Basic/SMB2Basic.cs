@@ -318,7 +318,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestCategory(TestCategories.Smb2002)]
         [TestCategory(TestCategories.QueryInfo)]
         [Description("This test case is designed to verify the behavior of querying quota information with FILE_GET_QUOTA_INFO in SidBuffer.")]
-        public void BVT_SMB2Basic_Query_Info_Quota_FILE_GET_QUOTA_INFO()
+        public void BVT_SMB2Basic_Query_Quota_Info()
         {
             QueryQuotaInfo(SidBufferFormat.FILE_GET_QUOTA_INFORMATION);
         }
@@ -2182,7 +2182,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 out fileId,
                 out serverCreateContexts);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client queries quota information by sending QUERY_INFO request");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client queries quota information by sending QUERY_INFO request.");
             byte[] inputBuffer = CreateSidBuffer(type);
             byte[] outputBuffer;
             status = client1.QueryFileQuotaInfo(
@@ -2198,7 +2198,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 status,
                 "QUERY_INFO is expected to success, actually server returns {0}.", Smb2Status.GetStatusCode(status));
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF.");
             client1.Close(treeId, fileId);
             client1.TreeDisconnect(treeId);
             client1.LogOff();
