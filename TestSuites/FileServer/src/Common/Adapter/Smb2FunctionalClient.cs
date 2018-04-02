@@ -2156,7 +2156,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// <param name="inputBuffer">A buffer containing the input buffer for QueryInfo request.</param>
         /// <param name="outputBuffer">A buffer containing the information returned in the response.</param>
         /// <param name="checker">An optional checker to check the QueryInfo response.</param>
-        /// <returns>The status code of QueryInfo response.</returns>
+        /// <returns>The status code of querying file information.</returns>
         public uint QueryFileAttributes(
             uint treeId,
             byte fileInfoClass,
@@ -2210,7 +2210,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// <param name="securityAttributesToQuery">The security info type to query.</param>
         /// <param name="sd">When this method returns, contains the Security Descriptor of the specified type.</param>
         /// <param name="checker">An optional checker to check the QueryInfo response.</param>
-        /// <returns>The status code of QueryInfo response.</returns>
+        /// <returns>The status code of querying security descriptor.</returns>
         public uint QuerySecurityDescriptor(
             uint treeId,
             FILEID fileId,
@@ -2263,7 +2263,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// <param name="fileId">File id associate with the file to query.</param>
         /// <param name="outputBuffer">A buffer containing the information returned in the response.</param>
         /// <param name="checker">An optional checker to check the QueryInfo response.</param>
-        /// <returns>The status code of QueryInfo response.</returns>
+        /// <returns>The status code of querying object store information.</returns>
         public uint QueryFSAttributes(
             uint treeId,
             byte fileInfoClass,
@@ -2318,7 +2318,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// <param name="inputBuffer">A buffer containing the input buffer for QueryInfo request.</param>
         /// <param name="outputBuffer">A buffer containing the information returned in the response.</param>
         /// <param name="checker">An optional checker to check the QueryInfo response.</param>
-        /// <returns>The status code of QueryInfo response.</returns>
+        /// <returns>The status code of querying file quota information.</returns>
         public uint QueryFileQuotaInfo(
             uint treeId,
             QUERY_INFO_Request_Flags_Values queryInfoFlags,
