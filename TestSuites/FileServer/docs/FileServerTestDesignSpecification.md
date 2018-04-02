@@ -2822,7 +2822,7 @@ This is used to test SMB2 common user scenarios.
 |                          | SESSION\_SETUP |
 |                          | TREE\_CONNECT|
 |                          | CREATE (Directory)|
-|                          | QUERY\_DIRECTORY(flags: SMB2\_REOPEN) |
+|                          | QUERY\_DIRECTORY(flags: SMB2\_REOPEN, target: directory) |
 |                          | CLOSE |
 |                          | TREE\_DISCONNECT |
 |                          | LOGOFF |
@@ -2852,7 +2852,7 @@ This is used to test SMB2 common user scenarios.
 |                          | SESSION\_SETUP |
 |                          | TREE\_CONNECT|
 |                          | CREATE (File)|
-|                          | QUERY\_DIRECTORY(flags: SMB2\_REOPEN) |
+|                          | QUERY\_DIRECTORY(flags: SMB2\_REOPEN, target: File) |
 |                          | CLOSE |
 |                          | TREE\_DISCONNECT |
 |                          | LOGOFF |
