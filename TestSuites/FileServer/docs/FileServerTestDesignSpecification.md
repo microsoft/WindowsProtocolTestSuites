@@ -2806,7 +2806,7 @@ This is used to test SMB2 common user scenarios.
 |---|---|
 | **Description**               | Verify QUERY\_DIRECTORY with flag SMB2\_REOPEN to a directory is handled correctly |
 | **Message Sequence**          | 1.  Start a client to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
-|                               | 2.  Client sends QUERY\_DIRECTORY request with flag SMB2\_REOPEN to query directory information. |
+|                               | 2.  Client sends QUERY\_DIRECTORY request with flag SMB2\_REOPEN to query directory information on a directory. |
 |                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
 | **Cluster Involved Scenario** | **NO** |
 
@@ -2836,7 +2836,7 @@ This is used to test SMB2 common user scenarios.
 |---|---|
 | **Description**               | Verify QUERY\_DIRECTORY with flag SMB2\_REOPEN to a file is handled correctly |
 | **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
-|                               | 2.  Client sends QUERY\_DIRECTORY request with flag SMB2\_REOPEN to query directory information. |
+|                               | 2.  Client sends QUERY\_DIRECTORY request with flag SMB2\_REOPEN to query directory information on a file. |
 |                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
 | **Cluster Involved Scenario** | **NO** |
 
@@ -2851,7 +2851,7 @@ This is used to test SMB2 common user scenarios.
 |                          | NEGOTIATE |
 |                          | SESSION\_SETUP |
 |                          | TREE\_CONNECT|
-|                          | CREATE (Directory)|
+|                          | CREATE (File)|
 |                          | QUERY\_DIRECTORY(flags: SMB2\_REOPEN) |
 |                          | CLOSE |
 |                          | TREE\_DISCONNECT |
