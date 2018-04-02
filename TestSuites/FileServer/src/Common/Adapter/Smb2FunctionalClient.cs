@@ -2146,6 +2146,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         #endregion
 
         #region Query and Set Info
+        /// <summary>
+        /// Query File Information of the file/directory specified by fileId.
+        /// </summary>
+        /// <param name="treeId">Tree id used in QueryInfo request.</param>
+        /// <param name="fileInfoClass">File information class</param>
+        /// <param name="queryInfoFlags">Flags used in QueryInfo request</param>
+        /// <param name="fileId">File id associate with the file to query.</param>
+        /// <param name="inputBuffer">A buffer containing the input buffer for QueryInfo request.</param>
+        /// <param name="outputBuffer">A buffer containing the information returned in the response.</param>
+        /// <param name="checker">An optional checker to check the QueryInfo response.</param>
+        /// <returns>The status code of QueryInfo response.</returns>
         public uint QueryFileAttributes(
             uint treeId,
             byte fileInfoClass,
@@ -2244,6 +2255,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             return status;
         }
 
+        /// <summary>
+        /// Query the Object Store Information of the file/directory specified by fileId.
+        /// </summary>
+        /// <param name="treeId">Tree id used in QueryInfo request.</param>
+        /// <param name="fileInfoClass">File information class</param>
+        /// <param name="fileId">File id associate with the file to query.</param>
+        /// <param name="outputBuffer">A buffer containing the information returned in the response.</param>
+        /// <param name="checker">An optional checker to check the QueryInfo response.</param>
+        /// <returns>The status code of QueryInfo response.</returns>
         public uint QueryFSAttributes(
             uint treeId,
             byte fileInfoClass,
@@ -2289,9 +2309,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             return status;
         }
 
+        /// <summary>
+        /// Query File Quota Information of the file/directory specified by fileId.
+        /// </summary>
+        /// <param name="treeId">Tree id used in QueryInfo request.</param>
+        /// <param name="queryInfoFlags">Flags used in QueryInfo request</param>
+        /// <param name="fileId">File id associate with the file to query.</param>
+        /// <param name="inputBuffer">A buffer containing the input buffer for QueryInfo request.</param>
+        /// <param name="outputBuffer">A buffer containing the information returned in the response.</param>
+        /// <param name="checker">An optional checker to check the QueryInfo response.</param>
+        /// <returns>The status code of QueryInfo response.</returns>
         public uint QueryFileQuotaInfo(
             uint treeId,
-            //byte fileInfoClass,
             QUERY_INFO_Request_Flags_Values queryInfoFlags,
             FILEID fileId,
             byte[] inputBuffer,
