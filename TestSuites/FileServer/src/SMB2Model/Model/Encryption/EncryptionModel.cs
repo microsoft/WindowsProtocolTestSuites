@@ -450,7 +450,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Encryption
                 ModelHelper.Log(LogType.Requirement,
                     "If the Connection.Dialect belongs to the SMB 3.x dialect family, the server MUST fail the request with STATUS_ACCESS_DENIED in the following cases");
                 ModelHelper.Log(LogType.TestInfo, "The Connection.Dialect is {0}.", negotiateDialect);
-                // Actually the "EncryptDat is true" is redundant since it would failed in verify session step
+                // Actually the "EncryptData is true" is redundant since it would failed in verify session step
                 if (Connection_ServerCapabilities_SMB2_GLOBAL_CAP_ENCRYPTION
                     && ((config.MaxSmbVersionSupported == ModelDialectRevision.Smb311 && Encryption_TreeId == EncryptionTreeId.TreeIdToEncryptShare) || 
                     ((config.MaxSmbVersionSupported == ModelDialectRevision.Smb30 || config.MaxSmbVersionSupported == ModelDialectRevision.Smb302) && 
