@@ -200,7 +200,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 string[] strings = message.Split('.');
                 string testCaseName = strings[strings.Length - 1];
 
-                if(message.IndexOf(StringResource.InprogressTag) != -1)
+                if (String.IsNullOrEmpty(testCaseName))
+                {
+                    return;
+                }
+
+                if (message.IndexOf(StringResource.InprogressTag) != -1)
                 {
                     logger.GroupByOutcome.ChangeStatus(testCaseName, TestCaseStatus.Running);
                 }

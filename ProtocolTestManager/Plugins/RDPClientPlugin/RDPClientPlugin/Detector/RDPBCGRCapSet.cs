@@ -8,7 +8,7 @@ using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using System.Collections.Generic;
 
 
-namespace Microsoft.Protocols.TestManager.RDPPlugin
+namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 {
     public class RdpbcgrCapSet
     {

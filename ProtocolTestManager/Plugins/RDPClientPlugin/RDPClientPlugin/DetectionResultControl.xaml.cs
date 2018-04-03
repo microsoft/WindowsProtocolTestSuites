@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Microsoft.Protocols.TestManager.RDPPlugin
+namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 {
 
     public partial class DetectionResultControl : UserControl
@@ -48,15 +48,15 @@ namespace Microsoft.Protocols.TestManager.RDPPlugin
             switch (result)
             {
                 case true:
-                    imagePath = "/RDPPlugin;component/Icons/supported.png"; ;
+                    imagePath = "/RDPClientPlugin;component/Icons/supported.png"; ;
                     detectResult = DetectResult.Supported;
                     break;
                 case false:
-                    imagePath = "/RDPPlugin;component/Icons/unsupported.png";
+                    imagePath = "/RDPClientPlugin;component/Icons/unsupported.png";
                     detectResult = DetectResult.UnSupported;
                     break;
                 case null:
-                    imagePath = "/RDPPlugin;component/Icons/undetected.png";
+                    imagePath = "/RDPClientPlugin;component/Icons/undetected.png";
                     detectResult = DetectResult.DetectFail;
                     break;
                 default:

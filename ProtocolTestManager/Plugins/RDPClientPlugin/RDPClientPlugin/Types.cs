@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Protocols.TestManager.Detector;
 
-namespace Microsoft.Protocols.TestManager.RDPPlugin
+namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 {
     public enum TriggerMethod
     {
