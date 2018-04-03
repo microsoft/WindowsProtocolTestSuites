@@ -7,84 +7,15 @@ echo ======================================
 echo          Start to build MS-ADOD
 echo ======================================
 
-if not defined buildtool (
-	for /f %%i in ('dir /b /ad /on "%windir%\Microsoft.NET\Framework\v4*"') do (@if exist "%windir%\Microsoft.NET\Framework\%%i\msbuild".exe set buildtool=%windir%\Microsoft.NET\Framework\%%i\msbuild.exe)
-)
-
-:: Use Visual Studio 2017 if existed
-if exist "%programfiles(x86)%\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\MSBuild.exe" (
-    set buildtool="%programfiles(x86)%\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\msbuild.exe"
-) else if exist "%programfiles(x86)%\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe" (
-    set buildtool="%programfiles(x86)%\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe"
-) else if exist "%programfiles(x86)%\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\MSBuild.exe" (
-    set buildtool="%programfiles(x86)%\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\MSBuild.exe"
-)
-
-if not defined buildtool (
-	echo Error: No msbuild.exe was found, install .Net Framework version 4.6.1 or higher
-	exit /b 1
-)
-
-if not defined WIX (
-	echo Error: WiX Toolset version 3.11 or higher should be installed
-	exit /b 1
-)
-
-if not exist "%programfiles(x86)%\Spec Explorer 2010\SpecExplorer.exe" (
-    if not exist "%programfiles%\Spec Explorer 2010\SpecExplorer.exe" (
-		echo Error: Spec Explorer 2010 v3.5.3146.0 should be installed
-		exit /b 1
-	)
-)
-
-:: Check if visual studio or test agent is installed, since HtmlTestLogger depends on that.
-if not defined vspath (
-	if defined VS150COMNTOOLS (
-		set vspath="%VS150COMNTOOLS%"
-	) else if defined VS140COMNTOOLS (
-		set vspath="%VS140COMNTOOLS%"
-	) else if defined VS120COMNTOOLS (
-		set vspath="%VS120COMNTOOLS%"
-	) else (
-		echo Visual Studio or Visual Studio test agent should be installed, version 2013 or higher
-		exit /b 1
-	)
-)
-
-:: Set path of Reg.exe
-set REGEXE="%SystemRoot%\System32\REG.exe"
-
-:: Try get PTF_VERSION from registry under Wow6432Node, this is for 64-bit OS
-%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework /v PTFVersion
-if ErrorLevel 1 (
-	:: If not found, try searching the other path, this is for 32-bit OS
-	%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ProtocolTestFramework /v PTFVersion
-	if ErrorLevel 1 (
-	    :: If not found in two paths
-		echo Error: Protocol Test Framework should be installed
-		exit /b 1		
-	) else (
-	    :: If found in 32-bit OS
-		FOR /F "usebackq tokens=3" %%A IN (`%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ProtocolTestFramework /v PTFVersion`) DO (
-			set PTF_VERSION=%%A
-		)
-	)	
-) else (
-    :: If found in 64-bit OS
-	FOR /F "usebackq tokens=3" %%A IN (`%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework /v PTFVersion`) DO (
-		set PTF_VERSION=%%A
-	)
-)
-
 set CurrentPath=%~dp0
 set TestSuiteRoot=%CurrentPath%..\..\..\
 
-::Get build version from AssemblyInfo
-set path=%TestSuiteRoot%AssemblyInfo\SharedAssemblyInfo.cs
-set FindExe="%SystemRoot%\system32\findstr.exe"
-set versionStr="[assembly: AssemblyVersion("1.0.0.0")]"
-for /f "delims=" %%i in ('""%FindExe%" "AssemblyVersion" "%path%""') do set versionStr=%%i
-set TESTSUITE_VERSION=%versionStr:~28,-3%
+call "%CurrentPath%..\..\..\common\setBuildTool.cmd"
+call "%CurrentPath%..\..\..\common\setVsPath.cmd"
+call "%CurrentPath%..\..\..\common\checkWix.cmd"
+call "%CurrentPath%..\..\..\common\checkSpecExplorer.cmd"
+call "%CurrentPath%..\..\..\common\setPtfVer.cmd"
+call "%CurrentPath%..\..\..\common\setTestSuiteVer.cmd"
 
 set KeyFile=%1
 if not defined KeyFile (

@@ -6,20 +6,17 @@ echo ==============================================================
 echo          Start to Build Test Category Generation Tool
 echo ==============================================================
 
-if not defined buildtool (
-    for /f %%i in ('dir /b /ad /on "%windir%\Microsoft.NET\Framework\v4*"') do (@if exist "%windir%\Microsoft.NET\Framework\%%i\msbuild".exe set buildtool=%windir%\Microsoft.NET\Framework\%%i\msbuild.exe)
-)
-
-if not defined buildtool (
-    echo Error: No msbuild.exe was found, install .Net Framework version 4.0 or higher
-    goto :eof
-)
-
 set CurrentPath=%~dp0
 set TestSuiteRoot=%CurrentPath%
 
+call "%CurrentPath%..\..\common\setBuildTool.cmd"
+
 %buildtool% "%TestSuiteRoot%\TestCategoryGenerationTool.csproj" /t:clean;rebuild
+if ErrorLevel 1 (
+	echo Error: Failed to build TestCategoryGenerationTool
+	exit /b 1
+)
 
 if exist TestCategoryGenerationTool.exe (
-    xcopy /Y TestCategoryGenerationTool.exe ..\FileServerPlugin\FileServerPlugin\
+    copy /Y TestCategoryGenerationTool.exe ..\FileServerPlugin\FileServerPlugin\
 )
