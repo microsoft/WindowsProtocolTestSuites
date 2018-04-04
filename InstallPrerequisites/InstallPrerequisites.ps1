@@ -37,22 +37,8 @@ if(-not $ConfigPath)
 	$ConfigPath = ".\PrerequisitesConfig.xml"
 }
 
-# Check if NetFx3 is enabled on current machine.
-# To understand why .NetFramework 3.5 is needed, please check https://github.com/wixtoolset/issues/issues/3872.  
-Function CheckIfNetFx3Enabled{
-    $result = Dism /online /Get-FeatureInfo /FeatureName:NetFx3
-    $state = $result | Where-Object {$_.ToString().Contains("State")}
-
-    if($state -and $state.Contains("Enabled")){
-        return $true;
-    }
-    else{
-        return $false
-    }
-}
-
 # Check if the required .NET framework version is installed on current machine
-Function CheckIfNet4IsInstalled{
+Function CheckIfNet47IsInstalled{
     $isInstalled = $false
 
     if(-not (Test-Path ‘HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full’))
@@ -71,6 +57,14 @@ Function CheckIfNet4IsInstalled{
                 if($subVersion -ge 4)
                 {
                     $isInstalled = $true
+                }
+                elseif ($majorVersion -eq 4)
+                {
+                    $minorVersion = [int]$NetVersion.Substring(2,3)
+                    if ($minorVersion -ge 7)
+                    {
+                        $isInstalled = $true
+                    }
                 }
             }
         }
@@ -302,32 +296,16 @@ $IsNeedRestart = $false;
 
 $psVer = [int](Get-Host).Version.ToString().Substring(0,1)
 
-# Check if .NET Framework 3.5 feature is enabled.
-Write-Host "Check if .NET Framework 3.5 feature is enabled"
-$net35Enabled = CheckIfNetFx3Enabled
-
-if(-not $net35Enabled)
-{
-    Write-Host ".NET Framework 3.5 feature is not enabled" -ForegroundColor Yellow
-    Write-Host "Starting enable .NET Framework 3.5"
-    DISM /Online /Enable-Feature /FeatureName:NetFx3 /All
-}
-else
-{
-    Write-Host ".NET Framework 3.5 feature is enabled" -ForegroundColor Green
-}
-
 foreach($item in $downloadList)
 {
     $isInstalled = $false;
 
-    if($item.Name.ToLower().Equals("net40"))
+    if($item.Name.ToLower().Equals("net471"))
     {
-        $isInstalled = CheckIfNet4IsInstalled
-
+        $isInstalled = CheckIfNet47IsInstalled
         if(-not $isInstalled)
         {
-            $content = ".NET Framework 4.0 is not installed"
+            $content = ".NET Framework 4.7.1 is not installed"
         }
     }
     else
@@ -392,14 +370,7 @@ else{
     $downloadList = @();
 }
 
-# Check if .NET Framework 3.5 is enabled after installation.
-if(-not $net35Enabled)
-{
-    # check if .NET 3.5 is installed.
-    $net35Enabled = CheckIfNetFx3Enabled
-}
-
-if(($failedList.Length -eq 0) -and ($net35Enabled)) #No failure occurs and .NETFramework 3.5 is enabled.
+if($failedList.Length -eq 0) #No failure occurs
 {
     if(Test-Path $tempFolder)
     {
@@ -414,11 +385,6 @@ if(($failedList.Length -eq 0) -and ($net35Enabled)) #No failure occurs and .NETF
 }
 else
 {
-    if(-not $net35Enabled)
-    {
-        Write-Host "Installation of .NET Framework 3.5 failed. Please enable it manually." -ForegroundColor Red
-    }
-
     if($failedList.Length -gt 0)
     {
         Write-Host "The following prerequisite tools are not installed. Please install them manually."
