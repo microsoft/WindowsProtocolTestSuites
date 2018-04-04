@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.1
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProtoSDK", "ProtoSDK", "{F97CF9CB-C02B-4B1F-9CB8-1D71582CD63A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyValueDetector", "..\..\PropertyValueDetector\PropertyValueDetector.csproj", "{7982ACF0-F1A4-4996-A339-641CAFA093CE}"
