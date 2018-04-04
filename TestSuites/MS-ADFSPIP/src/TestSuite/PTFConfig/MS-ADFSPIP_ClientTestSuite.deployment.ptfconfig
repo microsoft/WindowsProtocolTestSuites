@@ -7,16 +7,16 @@
     <Group name="Domain">
       <Property name="DomainName"        value="contoso.com"/>
       <Property name="Username"          value="contoso\Administrator" />
-      <Property name="Password"          value="Password01!2" />
+      <Property name="Password"          value="Password01!" />
     </Group>
 
     <Group name="SUT">
-      <Property name="SutIPAddress"      value="30.10.1.50"/>
+      <Property name="SutIPAddress"      value="192.168.1.50"/>
       <Property name="SutDns"            value="proxy.contoso.com"/>
       <Property name="MaxDelaySeconds"   value="600"/>
       <Property name="IsWindows"         value="true" />
       <Property name="Username"          value="proxy\Administrator" />
-      <Property name="Password"          value="Password01!2" />
+      <Property name="Password"          value="Password01!" />
     </Group>
 
     <Group name="ADFS">
@@ -41,7 +41,7 @@
       <Property name="App2Url"           value="https://webapp.contoso.com/fed2/"/>
       <Property name="AppUserUpn"        value="adfsuser@contoso.com"/>
       <Property name="AppUserName"       value="contoso\adfsuser"/>
-      <Property name="AppUserPassword"   value="Password01!2"/>
+      <Property name="AppUserPassword"   value="Password01!"/>
       <Property name="WebAppCert"        value="WebApp.PFX" />
       <Property name="ClientCert"        value="CARoot.PFX" />
     </Group>
@@ -49,10 +49,10 @@
     <Group name="Common">
       <Property name="PfxPassword"       value="123" />
       <Property name="DataStorePath"     value="C:\DataStore.xml" />
-      <Property name="DriverShareFolder" value="\\30.10.1.100\temp\"/>
-      <Property name="SutShareFolder"    value="\\30.10.1.50\temp\"/>
+      <Property name="DriverShareFolder" value="\\192.168.1.100\temp\"/>
+      <Property name="SutShareFolder"    value="\\192.168.1.50\temp\"/>
       <Property name="ProxyCert"         value="C:\Proxy.PFX"/>
-      <Property name="RealADFSIP"        value="30.10.1.100"/>
+      <Property name="RealADFSIP"        value="192.168.1.100"/>
     </Group>
   </Properties>
 
