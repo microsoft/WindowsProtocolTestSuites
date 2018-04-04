@@ -9,6 +9,8 @@ set KEY_NAME="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\VisualStudio\SxS
 set VALUE_NAME=15.0
 set REG_QUERY_VS_2017_PATH=%REGEXE% QUERY %KEY_NAME% /v %VALUE_NAME%
 
+set vs2017path=
+
 %REG_QUERY_VS_2017_PATH%
 if ErrorLevel 1 (
     echo Visual Studio 2017 is not installed.
@@ -19,3 +21,11 @@ if ErrorLevel 1 (
         set vs2017path=%%C
     )
 )
+
+if exist "%vs2017path%" (
+    if not exist "%vs2017path%\MSBuild\Microsoft\WiX\v3.x\Wix.targets" (
+        echo Error: "%vs2017path%\MSBuild\Microsoft\WiX\v3.x\Wix.targets" cannot be found. Please install Wix Toolset Visual Studio 2017 Extension from https://marketplace.visualstudio.com/items?itemName=RobMensching.WixToolsetVisualStudio2017Extension
+        exit /b 1
+    )
+)
+

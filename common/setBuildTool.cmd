@@ -7,13 +7,18 @@
 set _currentPath=%~dp0
 call "%_currentPath%setVs2017Path.cmd"
 
+set VisualStudioVer=
+
 :: Set buildtool
 if exist "%vs2017path%\MSBuild\15.0\Bin\MSBuild.exe" (
     set buildtool="%vs2017path%\MSBuild\15.0\Bin\MSBuild.exe"
+    set VisualStudioVer=15.0
 ) else if exist "%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" (
     set buildtool="%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe"
+    set VisualStudioVer=14.0
 ) else (
     for /f %%i in ('dir /b /ad /on "%windir%\Microsoft.NET\Framework\v4*"') do (@if exist "%windir%\Microsoft.NET\Framework\%%i\msbuild".exe set buildtool=%windir%\Microsoft.NET\Framework\%%i\msbuild.exe)
+    set VisualStudioVer=11.0
 )
 
 if not defined buildtool (

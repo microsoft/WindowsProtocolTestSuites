@@ -19,9 +19,9 @@ call "%CurrentPath%..\..\..\common\setTestSuiteVer.cmd"
 
 set KeyFile=%1
 if not defined KeyFile (
-	%buildtool% "%TestSuiteRoot%TestSuites\ADFamily\src\AD_Server.sln" /t:clean;rebuild /p:ProtocolName="ADFamily" /p:VisualStudioVersion=11.0
+	%buildtool% "%TestSuiteRoot%TestSuites\ADFamily\src\AD_Server.sln" /t:clean;rebuild /p:ProtocolName="ADFamily" /p:VisualStudioVersion=%VisualStudioVer%
 ) else (
-	%buildtool% "%TestSuiteRoot%TestSuites\ADFamily\src\AD_Server.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true /p:ProtocolName="ADFamily" /p:VisualStudioVersion=11.0
+	%buildtool% "%TestSuiteRoot%TestSuites\ADFamily\src\AD_Server.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true /p:ProtocolName="ADFamily" /p:VisualStudioVersion=%VisualStudioVer%
 )
 
 if ErrorLevel 1 (
@@ -33,7 +33,7 @@ if exist "%TestSuiteRoot%drop\TestSuites\ADFamily" (
 	rd /s /q "%TestSuiteRoot%drop\TestSuites\ADFamily"
 )
 
-%buildtool% "%TestSuiteRoot%TestSuites\ADFamily\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:Platform="x64" /p:ProtocolName="ADFamily" /p:VisualStudioVersion=11.0
+%buildtool% "%TestSuiteRoot%TestSuites\ADFamily\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:Platform="x64" /p:ProtocolName="ADFamily" /p:VisualStudioVersion=%VisualStudioVer%
 
 if ErrorLevel 1 (
 	echo Error: Failed to generate the msi installer
