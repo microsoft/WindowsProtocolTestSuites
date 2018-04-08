@@ -7,3 +7,5 @@ if not defined WIX (
 	echo Error: WiX Toolset version 3.11 or higher should be installed
 	exit /b 1
 )
+
+exit /b 0

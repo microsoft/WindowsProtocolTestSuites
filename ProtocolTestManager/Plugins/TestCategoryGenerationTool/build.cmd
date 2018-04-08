@@ -9,7 +9,10 @@ echo ==============================================================
 set CurrentPath=%~dp0
 set TestSuiteRoot=%CurrentPath%
 
-call "%CurrentPath%..\..\common\setBuildTool.cmd"
+call "%CurrentPath%..\..\..\common\setBuildTool.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
 
 %buildtool% "%TestSuiteRoot%\TestCategoryGenerationTool.csproj" /t:clean;rebuild
 if ErrorLevel 1 (

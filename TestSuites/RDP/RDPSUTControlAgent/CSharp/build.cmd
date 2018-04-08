@@ -11,10 +11,16 @@ set CurrentPath=%~dp0
 set TestSuiteRoot=%CurrentPath%..\..\..\..\
 
 call "%CurrentPath%..\..\..\..\common\setBuildTool.cmd"
+if ErrorLevel 1 (
+    exit /b 1
+)
+
 call "%CurrentPath%..\..\..\..\common\setVsPath.cmd"
+if ErrorLevel 1 (
+    exit /b 1
+)
 
 %buildtool% "%TestSuiteRoot%TestSuites\RDP\RDPSUTControlAgent\CSharp\RDPSUTControlAgent.sln" /t:clean;rebuild 
-
 if ErrorLevel 1 (
 	echo Error: Failed to build RDP Server test suite
 	exit /b 1

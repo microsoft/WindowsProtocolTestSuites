@@ -4,17 +4,36 @@
 @echo off
 
 echo =============================================
-echo          Start to build RDP Client Test Suite
+echo     Start to build RDP Client Test Suite
 echo =============================================
 
 set CurrentPath=%~dp0
 set TestSuiteRoot=%CurrentPath%..\..\..\..\
 
 call "%CurrentPath%..\..\..\..\common\setBuildTool.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
 call "%CurrentPath%..\..\..\..\common\setVsPath.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
 call "%CurrentPath%..\..\..\..\common\checkWix.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
 call "%CurrentPath%..\..\..\..\common\setPtfVer.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
 call "%CurrentPath%..\..\..\..\common\setTestSuiteVer.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
 
 set KeyFile=%1
 if not defined KeyFile (
@@ -40,5 +59,5 @@ if ErrorLevel 1 (
 )
 
 echo ==============================================
-echo          Build RDP Client test suite successfully
+echo    Build RDP Client test suite successfully
 echo ==============================================

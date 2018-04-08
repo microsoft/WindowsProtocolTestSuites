@@ -27,3 +27,5 @@ if ErrorLevel 1 (
 		set PTF_VERSION=%%A
 	)
 )
+
+exit /b 0

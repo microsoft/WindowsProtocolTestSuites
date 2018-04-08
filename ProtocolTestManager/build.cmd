@@ -12,9 +12,24 @@ set CurrentPath=%~dp0
 set TestSuiteRoot=%CurrentPath%..\
 
 call "%CurrentPath%..\common\setBuildTool.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
 call "%CurrentPath%..\common\setVsPath.cmd"
-call "%CurrentPath%..\common\checkWixVer.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
+call "%CurrentPath%..\common\checkWix.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
 call "%CurrentPath%..\common\setTestSuiteVer.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
 
 if /i "%~1"=="debug" (
 :: build debug version

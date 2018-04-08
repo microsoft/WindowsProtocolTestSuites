@@ -13,11 +13,34 @@ if not defined TestSuiteRoot (
 )
 
 call "%CurrentPath%..\..\..\common\setBuildTool.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
 call "%CurrentPath%..\..\..\common\setVsPath.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
 call "%CurrentPath%..\..\..\common\checkWix.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
 call "%CurrentPath%..\..\..\common\checkSpecExplorer.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
 call "%CurrentPath%..\..\..\common\setPtfVer.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
 call "%CurrentPath%..\..\..\common\setTestSuiteVer.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
 
 if not exist "%TestSuiteRoot%ProtoSDK\RDMA\include\ndspi.h" (
 	echo Error: WindowsProtocolTestSuites\ProtoSDK\RDMA\include\ndspi.h does not exist, it can be extracted from NetworkDirect_DDK.zip in HPC Pack 2008 R2 SDK @ http://www.microsoft.com/en-us/download/details.aspx?id=12218

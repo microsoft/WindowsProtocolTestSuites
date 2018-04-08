@@ -13,10 +13,29 @@ if not defined TestSuiteRoot (
 )
 
 call "%CurrentPath%..\..\..\common\setBuildTool.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
 call "%CurrentPath%..\..\..\common\setVsPath.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
 call "%CurrentPath%..\..\..\common\checkWix.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
 call "%CurrentPath%..\..\..\common\setPtfVer.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
 call "%CurrentPath%..\..\..\common\setTestSuiteVer.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
 
 set KeyFile=%1 
 if not defined KeyFile ( 

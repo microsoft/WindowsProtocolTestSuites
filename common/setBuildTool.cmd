@@ -6,6 +6,9 @@
 :: Find installed path of Visual Studio 2017
 set _currentPath=%~dp0
 call "%_currentPath%setVs2017Path.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
 
 set VisualStudioVer=
 
@@ -13,15 +16,14 @@ set VisualStudioVer=
 if exist "%vs2017path%\MSBuild\15.0\Bin\MSBuild.exe" (
     set buildtool="%vs2017path%\MSBuild\15.0\Bin\MSBuild.exe"
     set VisualStudioVer=15.0
-) else if exist "%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" (
-    set buildtool="%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe"
-    set VisualStudioVer=14.0
 ) else (
-    for /f %%i in ('dir /b /ad /on "%windir%\Microsoft.NET\Framework\v4*"') do (@if exist "%windir%\Microsoft.NET\Framework\%%i\msbuild".exe set buildtool=%windir%\Microsoft.NET\Framework\%%i\msbuild.exe)
-    set VisualStudioVer=11.0
+    if exist "%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" (
+        set buildtool="%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe"
+        set VisualStudioVer=14.0
+    ) else (
+        echo Error: Microsoft Build Tools 2015 is not found. Please install Microsoft Build Tools 2015 from https://www.microsoft.com/en-us/download/details.aspx?id=48159
+        exit /b 1
+    )
 )
 
-if not defined buildtool (
-    echo No msbuild.exe was found, install .Net Framework version 4.7.1 or higher
-    exit /b 1
-)
+exit /b 0

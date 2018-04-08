@@ -9,3 +9,5 @@ set FindExe="%SystemRoot%\system32\findstr.exe"
 set versionStr="[assembly: AssemblyVersion("1.0.0.0")]"
 for /f "delims=" %%i in ('""%FindExe%" "AssemblyVersion" "%path%""') do set versionStr=%%i
 set TESTSUITE_VERSION=%versionStr:~28,-3%
+
+exit /b 0

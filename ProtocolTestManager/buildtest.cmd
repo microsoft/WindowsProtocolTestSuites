@@ -7,7 +7,14 @@ set CurrentPath=%~dp0
 set TestSuiteRoot=%CurrentPath%..\
 
 call "%CurrentPath%..\common\setBuildTool.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
 call "%CurrentPath%..\common\setVsPath.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
 
 %buildtool% KernelTest\KernelTest.csproj /t:clean;rebuild /p:NoWarn=1591
 if ErrorLevel 1 (

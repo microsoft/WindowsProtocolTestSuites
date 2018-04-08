@@ -9,3 +9,5 @@ if not exist "%programfiles(x86)%\Spec Explorer 2010\SpecExplorer.exe" (
 		exit /b 1
 	)
 )
+
+exit /b 0
