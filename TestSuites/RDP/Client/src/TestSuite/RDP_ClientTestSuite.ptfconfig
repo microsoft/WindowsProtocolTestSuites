@@ -16,7 +16,7 @@
     </Property>
   
     <!--Property used for protocol-based SUT control adapter-->
-    <!-- Address for SUT control Agent-->
+    <!--IP addresses or host name of SUT control Agent, seperated by ";"-->    
     <Property name="SUTControl.AgentAddress" value="192.168.0.1:4488;192.168.0.1:4489" >
       <Description>Address for SUT control Agent.</Description>
     </Property>

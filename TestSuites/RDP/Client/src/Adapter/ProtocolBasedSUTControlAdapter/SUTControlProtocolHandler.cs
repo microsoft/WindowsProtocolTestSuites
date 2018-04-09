@@ -106,17 +106,19 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                     if (address != null && address.Trim().Length > 0)
                     {
                         int separator = address.IndexOf(':');
-                        //Consider SUTControl.AgentAddress may be SUT hostname, or SUT IP address
-                        string add = CommonUtility.GetHostIP( address.Substring(0, separator).Trim()).ToString(); 
+                        //Consider SUTControl.AgentAddress may be SUT hostname, or IP addresses
+                        List<IPAddress> addList = CommonUtility.GetHostIPs(this.Site, address.Substring(0, separator)); 
                         string port = address.Substring(separator + 1).Trim();
-                        IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(add), int.Parse(port));
-                        AgentList.Add(endpoint);
+                        foreach(IPAddress add in addList)
+                        {
+                            IPEndPoint endpoint = new IPEndPoint(add, int.Parse(port));
+                            AgentList.Add(endpoint);
+                        }                        
                     }
-
                 }
                 catch (Exception e)
                 {
-                    this.Site.Log.Add(LogEntryKind.Comment, "RDP SUT Control Protocol Adapter: Illegal address string :" + e.Message);
+                    this.Site.Log.Add(LogEntryKind.Comment, "RDP SUT Control Protocol Adapter: Invalid Agent IP address/host name string or port number:" + e.Message);
                 }
             }
         }
@@ -196,7 +198,6 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 {
                     this.Site.Log.Add(LogEntryKind.Comment, "RDP SUT Control Protocol Adapter: CommandId is {0}: Cannot connect to the agent: {1}.", requestMessage.commandId, agentEndpoint.ToString());
                 }
-
             }
             if (alwaysNeedResponse || ResponseNeeded)
             {
