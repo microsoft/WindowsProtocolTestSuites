@@ -71,6 +71,16 @@ set versionStr="[assembly: AssemblyVersion("1.0.0.0")]"
 for /f "delims=" %%i in ('""%FindExe%" "AssemblyVersion" "%path%""') do set versionStr=%%i
 set TESTSUITE_VERSION=%versionStr:~28,-3%
 
+if not exist "%TestSuiteRoot%ProtoSDK\RDMA\include\ndspi.h" (
+	echo Error: WindowsProtocolTestSuites\ProtoSDK\RDMA\include\ndspi.h does not exist, it can be extracted from NetworkDirect_DDK.zip in HPC Pack 2008 R2 SDK with Service Pack 2  @ https://www.microsoft.com/en-us/download/details.aspx?id=26645
+	exit /b 1
+) 
+
+if not exist "%TestSuiteRoot%ProtoSDK\RDMA\include\ndstatus.h" (
+	echo Warning: WindowsProtocolTestSuites\ProtoSDK\RDMA\include\ndstatus.h does not exist, it can be extracted from NetworkDirect_DDK.zip in HPC Pack 2008 R2 SDK with Service Pack 2  @ https://www.microsoft.com/en-us/download/details.aspx?id=26645
+	exit /b 1
+) 
+
 set KeyFile=%1
 if not defined KeyFile (
 	%buildtool% "%TestSuiteRoot%TestSuites\MS-ADFSPIP\src\MS-ADFSPIP_Client.sln" /t:clean;rebuild
