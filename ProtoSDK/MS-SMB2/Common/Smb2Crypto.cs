@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
 
@@ -86,7 +87,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
 
         public static byte[] Decrypt(byte[] bytes, Dictionary<ulong, Smb2CryptoInfo> cryptoInfoTable, Smb2Role role)
         {
+            // If the size of the message received from the server is not greater than the size of SMB2 TRANSFORM_HEADER as specified, the client MUST discard the message.
+            if (bytes.Length < Marshal.SizeOf(typeof(Transform_Header)))
+            {
+                throw new InvalidOperationException("Too less data for encrypted response.");
+            }
+
             Transform_Header transformHeader = Smb2Utility.UnmarshalStructure<Transform_Header>(bytes);
+
+            // If the Flags/EncryptionAlgorithm in the SMB2 TRANSFORM_HEADER is not 0x0001, the client MUST discard the message.
+            if (transformHeader.Flags != TransformHeaderFlags.Encrypted)
+            {
+                throw new InvalidOperationException("Flags/EncryptionAlgorithm field is invalid for encrypted response.");
+            }
 
             if (transformHeader.SessionId == 0 || !cryptoInfoTable.ContainsKey(transformHeader.SessionId))
                 throw new InvalidOperationException("Invalid SessionId in TRANSFORM_HEADER.");
