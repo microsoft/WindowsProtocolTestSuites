@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?define SRCDIR=$(env.TestSuiteRoot)\drop\ProtocolTestManager?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <DirectoryRef Id="SMBDDOCFOLDER">
+      <Component Id="cmp3579D54243B3AD2DFDD1918CC0241238" Guid="{51505329-29DA-4255-9BBA-1D80CBE7841F}">
+        <File Id="fil4A61D38C622D11B4213B6E28CC7BB9DD" KeyPath="yes" Source="..\Plugins\SMBDPlugin\SMBDPlugin\Docs\index.html" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+  <Fragment>
+    <DirectoryRef Id="LIBFOLDER">
+      <?if $(env.DEBUGVER) = 1?>
+      <Component Id="SMBDPlugin.pdb" Guid="{3BBF23DE-32DE-4D5E-8F15-07815D38C8E1}">
+        <File Id="SMBDPlugin.pdb" Source="$(var.SRCDIR)\lib\SMBDPlugin.pdb" />
+      </Component>
+      <?endif ?>
+      <Component Id="SMBDPlugin.dll" Guid="{7601C940-54C3-4658-AC08-0ED03DB774CD}">
+        <File Id="SMBDPlugin.dll" Source="$(var.SRCDIR)\lib\SMBDPlugin.dll" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+  <Fragment>
+    <DirectoryRef Id="SMBDCONFIG">
+      <Component Id="SMBDConfigFile" Guid="{79716CEC-F44E-43A4-B51D-27662D70FFE7}">
+        <File Id="SMBDConfigFile" Source="..\Plugins\SMBDPlugin\SMBDPlugin\config.xml" />
+      </Component>
+      <Component Id="SMBDTestCategoryFile" Guid="{0B4C948F-8BBC-442A-A6A1-1F20F350D6EB}">
+        <File Id="SMBDTestCategoryFile" Source="..\Plugins\SMBDPlugin\SMBDPlugin\TestCategories.xml" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="SMBD_PLUGIN">
+      <ComponentRef Id="cmp3579D54243B3AD2DFDD1918CC0241238" />
+      <ComponentRef Id="SMBDPlugin.dll" />
+      <ComponentRef Id="SMBDConfigFile" />
+      <ComponentRef Id="SMBDTestCategoryFile" />
+      <?if $(env.DEBUGVER) = 1?>
+      <ComponentRef Id="SMBDPlugin.pdb" />
+      <?endif ?>
+    </ComponentGroup>
+  </Fragment>
+</Wix>
