@@ -782,13 +782,40 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0072
     ULONG ulMoreFlags;
     } 	DRS_MSG_GETCHGREQ_V10;
 
+typedef struct {
+	ULONG ulVersion;
+	ULONG cbByteBuffer;
+	ULONGLONG ullPadding;
+	/* [size_is(cbByteBuffer)] */ BYTE rgbBuffer[];
+} VAR_SIZE_BUFFER_WITH_VERSION;
+
+typedef struct {
+	UUID uuidDsaObjDest;
+	UUID uuidInvocIdSrc;
+	/* [ref] */ DSNAME *pNC;
+	USN_VECTOR usnvecFrom;
+	/* [unique] */ UPTODATE_VECTOR_V1_EXT *pUpToDateVecDest;
+	ULONG ulFlags;
+	ULONG cMaxObjects;
+	ULONG cMaxBytes;
+	ULONG ulExtendedOp;
+	ULARGE_INTEGER liFsmoInfo;
+	/* [unique] */ PARTIAL_ATTR_VECTOR_V1_EXT *pPartialAttrSet;
+	/* [unique] */ PARTIAL_ATTR_VECTOR_V1_EXT *pPartialAttrSetEx;
+	SCHEMA_PREFIX_TABLE PrefixTableDest;
+	ULONG ulMoreFlags;
+	GUID correlationID;
+	/* [unique] */ VAR_SIZE_BUFFER_WITH_VERSION *pReservedBuffer;
+} DRS_MSG_GETCHGREQ_V11;
+
 typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0073
     {
-    /* [case()] */ DRS_MSG_GETCHGREQ_V4 V4;
-    /* [case()] */ DRS_MSG_GETCHGREQ_V5 V5;
-    /* [case()] */ DRS_MSG_GETCHGREQ_V7 V7;
-    /* [case()] */ DRS_MSG_GETCHGREQ_V8 V8;
-    /* [case()] */ DRS_MSG_GETCHGREQ_V10 V10;
+    /* [case(4)] */  DRS_MSG_GETCHGREQ_V4 V4;
+    /* [case(5)] */  DRS_MSG_GETCHGREQ_V5 V5;
+    /* [case(7)] */  DRS_MSG_GETCHGREQ_V7 V7;
+    /* [case(8)] */  DRS_MSG_GETCHGREQ_V8 V8;
+    /* [case(10)] */ DRS_MSG_GETCHGREQ_V10 V10;
+	/* [case(11)] */ DRS_MSG_GETCHGREQ_V11 V11;
     } 	DRS_MSG_GETCHGREQ;
 
 typedef /* [public][public][public] */ struct __MIDL_drsuapi_0074
@@ -829,10 +856,20 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0078
     ULONG ulOptions;
     } 	DRS_MSG_REPSYNC_V1;
 
+typedef struct {
+	/* [ref] */ DSNAME *pNC;
+	UUID uuidDsaSrc;
+	/* [string][unique] */ char *pszDsaSrc;
+	ULONG ulOptions;
+	GUID correlationID;
+	/* [unique] */ VAR_SIZE_BUFFER_WITH_VERSION *pReservedBuffer;
+} DRS_MSG_REPSYNC_V2;
+
 typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0079
     {
-    /* [case()] */ DRS_MSG_REPSYNC_V1 V1;
-    } 	DRS_MSG_REPSYNC;
+    /* [case(1)] */ DRS_MSG_REPSYNC_V1 V1;
+	/* [case(2)] */ DRS_MSG_REPSYNC_V2 V2;
+} 	DRS_MSG_REPSYNC;
 
 typedef /* [public][public][public] */ struct __MIDL_drsuapi_0080
     {
@@ -840,12 +877,23 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0080
     /* [string][ref] */ unsigned char *pszDsaDest;
     UUID uuidDsaObjDest;
     ULONG ulOptions;
-    } 	DRS_MSG_UPDREFS_V1;
+} 	DRS_MSG_UPDREFS_V1;
+
+typedef struct {
+	/* [ref] */ DSNAME *pNC;
+	/* [string][ref] */ char *pszDsaSrcpszDsaDest;
+	UUID uuidDsaObjDest;
+	ULONG ulOptions;
+	GUID correlationID;
+	/* [unique] */ VAR_SIZE_BUFFER_WITH_VERSION* pReservedBuffer;
+
+} DRS_MSG_UPDREFS_V2;
 
 typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0081
     {
-    /* [case()] */ DRS_MSG_UPDREFS_V1 V1;
-    } 	DRS_MSG_UPDREFS;
+    /* [case(1)] */ DRS_MSG_UPDREFS_V1 V1;
+	/* [case(2)] */ DRS_MSG_UPDREFS_V2 V2;
+} 	DRS_MSG_UPDREFS;
 
 typedef /* [public][public][public] */ struct __MIDL_drsuapi_0082
     {
@@ -853,7 +901,7 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0082
     /* [string][ref] */ unsigned char *pszDsaSrc;
     REPLTIMES rtSchedule;
     ULONG ulOptions;
-    } 	DRS_MSG_REPADD_V1;
+} 	DRS_MSG_REPADD_V1;
 
 typedef /* [public][public][public] */ struct __MIDL_drsuapi_0083
     {
@@ -863,13 +911,25 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0083
     /* [string][ref] */ unsigned char *pszSourceDsaAddress;
     REPLTIMES rtSchedule;
     ULONG ulOptions;
-    } 	DRS_MSG_REPADD_V2;
+} 	DRS_MSG_REPADD_V2;
+
+typedef struct {
+	/* [ref] */ DSNAME *pNC;
+	/* [unique] */ DSNAME *pSourceDsaDN;
+	/* [unique] */ DSNAME *pTransportDN;
+	/* [string][ref] */ unsigned char *pszSourceDsaAddress;
+	REPLTIMES rtSchedule;
+	ULONG ulOptions;
+	GUID correlationID;
+	/* [unique] */ VAR_SIZE_BUFFER_WITH_VERSION* pReservedBuffer;
+} DRS_MSG_REPADD_V3;
 
 typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0084
     {
-    /* [case()] */ DRS_MSG_REPADD_V1 V1;
-    /* [case()] */ DRS_MSG_REPADD_V2 V2;
-    } 	DRS_MSG_REPADD;
+    /* [case(1)] */ DRS_MSG_REPADD_V1 V1;
+    /* [case(2)] */ DRS_MSG_REPADD_V2 V2;
+	/* [case(3)] */ DRS_MSG_REPADD_V3 V3;
+} 	DRS_MSG_REPADD;
 
 typedef /* [public][public][public] */ struct __MIDL_drsuapi_0085
     {
