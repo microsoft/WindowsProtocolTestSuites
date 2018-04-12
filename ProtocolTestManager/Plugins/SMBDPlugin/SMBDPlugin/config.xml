@@ -1,0 +1,67 @@
+<Config>
+  <ConfigFilePath>
+    <PtfFileName>Bin\MS-SMBD_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>Bin\MS-SMBD_ServerTestSuite.ptfconfig</PtfFileName>
+  </ConfigFilePath>
+  <Adapters>
+    <Adapter  displayname="An SUT control adapter" name="ISutProtocolControlAdapter">
+      <Adapter type="powershell" name="ISutProtocolControlAdapter" scriptdir=".\"/>
+      <Adapter type="interactive" name="ISutProtocolControlAdapter"/>
+    </Adapter>
+  </Adapters>
+  <PtfFileNames>
+    <PtfFileName>MS-SMBD_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>MS-SMBD_ServerTestSuite.ptfconfig</PtfFileName>
+  </PtfFileNames>
+  <DllFileNames>
+    <DllFileName>Bin\MS-SMBD_ServerTestSuite.dll</DllFileName>
+  </DllFileNames>
+  <AutoDetectionDllName>SMBDPlugin.dll</AutoDetectionDllName>
+  <ConfigCaseRule>
+    <Group name = "Priority">
+      <Rule name = "BVT">
+        <Category name = "BVT"/>
+      </Rule>
+      <Rule name = "Non-BVT">
+        <Category name = "!BVT"/>
+      </Rule>
+    </Group>
+
+    <Group name ="Feature">
+      <Rule name = "Smb2OverRdmaChannel">
+        <Category name = "Smb2OverRdmaChannel"/>
+      </Rule>
+      <Rule name = "Smb2MultipleChannel">
+        <Category name = "Smb2MultipleChannel"/>
+      </Rule>
+      <Rule name = "SmbdNegotiate">
+        <Category name = "SmbdNegotiate"/>
+      </Rule>
+      <Rule name = "SmbdCreditMgmt">
+        <Category name = "SmbdCreditMgmt"/>
+      </Rule>
+      <Rule name = "SmbdDataTransfer">
+        <Category name = "SmbdDataTransfer"/>
+      </Rule>
+    </Group>
+
+    <Group name = "Specific SMB Dialect" type="Remover">
+      <Rule name = "SMB 3.0">
+        <Category name = "SMB300"/>
+      </Rule>
+      <Rule name = "SMB 3.0.2">
+        <Category name = "SMB302"/>
+      </Rule>
+    </Group>
+
+    <Group name="Other" type="Remover">
+      <Rule name = "SMB2_CHANNEL_RDMA_V1_INVALIDATE">
+        <Category name = "SMB2_CHANNEL_RDMA_V1_INVALIDATE"/>
+      </Rule>
+    </Group>
+
+  </ConfigCaseRule>
+
+  <TestCategories>TestCategories.xml</TestCategories>
+  <TestSetting>Bin\ServerLocalTestRun.testrunconfig</TestSetting>
+</Config>
