@@ -7,6 +7,7 @@ using System.Linq;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using Microsoft.Protocols.TestSuites.FileSharing.Common;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
 {
@@ -114,7 +115,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
         {
             get
             {
-                return IPAddress.Parse(GetProperty("ScaleOutFileServerIP1"));
+                return GetProperty("ScaleOutFileServerIP1").ParseIPAddress();
             }
         }
 
@@ -122,7 +123,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
         {
             get
             {
-                return IPAddress.Parse(GetProperty("ScaleOutFileServerIP2"));
+                return GetProperty("ScaleOutFileServerIP2").ParseIPAddress();
             }
         }
         #endregion

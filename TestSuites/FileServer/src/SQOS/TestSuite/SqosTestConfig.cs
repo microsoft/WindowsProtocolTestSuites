@@ -10,6 +10,7 @@ using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos;
 using Microsoft.Protocols.TestTools;
+using Microsoft.Protocols.TestSuites.FileSharing.Common;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
 {
@@ -35,16 +36,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
         {
             get
             {
-                IPAddress fileServerIPContainingSharedVHD;
-                // If FileServerName in full path of SQOS vhd file is an IP address, use that one directly.
-                if (IPAddress.TryParse(FileServerNameContainingSharedVHD, out fileServerIPContainingSharedVHD))
-                {
-                    return fileServerIPContainingSharedVHD;
-                }
-                else
-                {
-                    return Dns.GetHostEntry(FileServerNameContainingSharedVHD).AddressList[0];
-                }
+                IPAddress fileServerIPContainingSharedVHD = FileServerNameContainingSharedVHD.ParseIPAddress();
+                return fileServerIPContainingSharedVHD;
             }
         }
 

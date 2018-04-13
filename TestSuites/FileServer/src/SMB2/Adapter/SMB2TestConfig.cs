@@ -12,6 +12,7 @@ using Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using System.Globalization;
+using Microsoft.Protocols.TestSuites.FileSharing.Common;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter
 {
@@ -45,7 +46,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter
                 {
                     return IPAddress.None;
                 }
-                return IPAddress.Parse(ipaddress);
+                return ipaddress.ParseIPAddress();
             }
         }
 
@@ -139,22 +140,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter
             {
                 if (shareServerIP == null)
                 {
-                    if (IPAddress.TryParse(ShareServerName, out shareServerIP))
-                    {
-                        return shareServerIP;
-                    }
-                    else
-                    {
-                        try
-                        {
-                            shareServerIP = Dns.GetHostEntry(ShareServerName).AddressList[0];
-                        }
-                        catch
-                        {
-                            throw new Exception(string.Format("Cannot resolve IP address of CAShareServerName ({0}) from DNS.", ShareServerName));
-                        }
-
-                    }
+                    shareServerIP = ShareServerName.ParseIPAddress();
                 }
                 return shareServerIP;
             }

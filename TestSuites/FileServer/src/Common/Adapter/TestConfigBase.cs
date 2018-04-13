@@ -202,14 +202,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         {
             get
             {
-                return IPAddress.Parse(GetProperty("ClientNic1IPAddress"));
+                return GetProperty("ClientNic1IPAddress").ParseIPAddress();
             }
         }
         public IPAddress ClientNic2IPAddress
         {
             get
             {
-                return IPAddress.Parse(GetProperty("ClientNic2IPAddress"));
+                return GetProperty("ClientNic2IPAddress").ParseIPAddress();
             }
         }
         #endregion
@@ -297,7 +297,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 {
                     return IPAddress.None;
                 }
-                return IPAddress.Parse(ipaddress);
+                return ipaddress.ParseIPAddress();
             }
         }
 
@@ -378,23 +378,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         {
             get
             {
-                IPAddress caShareServerIP;
-                if (IPAddress.TryParse(CAShareServerName, out caShareServerIP))
-                {
-                    return caShareServerIP;
-                }
-                else
-                {
-                    try
-                    {
-                        caShareServerIP = Dns.GetHostEntry(CAShareServerName).AddressList[0];
-                    }
-                    catch
-                    {
-                        throw new Exception(string.Format("Cannot resolve IP address of CAShareServerName ({0}) from DNS.", CAShareServerName));
-                    }
-                    return caShareServerIP;
-                }
+                return CAShareServerName.ParseIPAddress();
             }
         }
 
