@@ -28,21 +28,22 @@
     </Group>
 
     <Group name ="Feature">
-      <Rule name = "Smb2OverRdmaChannel">
-        <Category name = "Smb2OverRdmaChannel"/>
-      </Rule>
-      <Rule name = "Smb2MultipleChannel">
-        <Category name = "Smb2MultipleChannel"/>
-      </Rule>
-      <Rule name = "SmbdNegotiate">
+      <Rule name = "SMBD Negotiate">
         <Category name = "SmbdNegotiate"/>
       </Rule>
-      <Rule name = "SmbdCreditMgmt">
+      <Rule name = "SMBD Credits Management">
         <Category name = "SmbdCreditMgmt"/>
       </Rule>
-      <Rule name = "SmbdDataTransfer">
+      <Rule name = "SMBD Data Transfer">
         <Category name = "SmbdDataTransfer"/>
       </Rule>
+      <Rule name = "SMB2 Over Rdma Channel">
+        <Category name = "Smb2OverRdmaChannel"/>
+      </Rule>
+      <Rule name = "SMB2 Over Multiple Channels">
+        <Category name = "Smb2MultipleChannel"/>
+      </Rule>
+
     </Group>
 
     <Group name = "Specific SMB Dialect" type="Remover">
@@ -63,5 +64,5 @@
   </ConfigCaseRule>
 
   <TestCategories>TestCategories.xml</TestCategories>
-  <TestSetting>Bin\ServerLocalTestRun.testrunconfig</TestSetting>
+  <TestSetting>Bin\ServerLocal.TestSettings</TestSetting>
 </Config>
