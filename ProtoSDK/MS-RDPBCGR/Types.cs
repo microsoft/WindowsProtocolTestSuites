@@ -7869,7 +7869,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// RDP 10.4 servers
         /// </summary>
-        V7 = 0x00080009
+        V7 = 0x00080009,
+
+        /// <summary>
+        /// RDP 10.5 servers
+        /// </summary>
+        V8 = 0x0008000A
     }
 
     /// <summary>
