@@ -29,8 +29,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk
             bool isIp = IPAddress.TryParse(hostNameOrIpAddress, out ipAddress);
             if (!isIp)
             {
-                IPAddress[] ipAddresses = Dns.GetHostAddresses(hostNameOrIpAddress);
-                ipAddress = ipAddresses.Where(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).First();
+                try
+                {
+                    IPAddress[] ipAddresses = Dns.GetHostAddresses(hostNameOrIpAddress);
+                    ipAddress = ipAddresses.Where(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).First();
+                }
+                catch
+                {
+                    throw new System.Exception(string.Format("Cannot resolve IP address of ({0}) from DNS.", hostNameOrIpAddress));
+                }
             }
 
             return ipAddress;
