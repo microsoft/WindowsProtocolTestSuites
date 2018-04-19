@@ -55,10 +55,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Encryptio
 
             c = new EncryptionConfig
             {
-                MaxSmbVersionSupported = ModelUtility.GetModelDialectRevision(testConfig.MaxSmbVersionSupported),
+                MaxSmbVersionSupported = ModelUtility.GetModelDialectRevision(testConfig.MaxSmbVersionSupported, false),
                 IsGlobalEncryptDataEnabled = testConfig.IsGlobalEncryptDataEnabled,
                 IsGlobalRejectUnencryptedAccessEnabled = testConfig.IsGlobalRejectUnencryptedAccessEnabled,
-                Platform = testConfig.Platform == Platform.WindowsServer2016 ? Platform.WindowsServer2012R2 : testConfig.Platform
+                Platform = testConfig.Platform
             };
 
             encryptionConfig = c;
@@ -94,15 +94,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Encryptio
                     negotiateResponse = response;
                 },
                 ifHandleRejectUnencryptedAccessSeparately: true,
-                ifAddGLOBAL_CAP_ENCRYPTION: false
+                ifAddGLOBAL_CAP_ENCRYPTION: false,
+                addDefaultEncryption: true
             );
 
             selectedDialect = negotiateResponse.Value.DialectRevision;
 
-            if (Smb2Utility.IsSmb3xFamily(selectedDialect) && clientSupportsEncryptionType == ClientSupportsEncryptionType.ClientSupportsEncryption)
+            if ((selectedDialect == DialectRevision.Smb30 || selectedDialect == DialectRevision.Smb302) && clientSupportsEncryptionType == ClientSupportsEncryptionType.ClientSupportsEncryption)
             {
                 /// TD section 3.3.5.4
-                /// SMB2_GLOBAL_CAP_ENCRYPTION if Connection.Dialect belongs to the SMB 3.x dialect, the server supports encryption,
+                /// SMB2_GLOBAL_CAP_ENCRYPTION if Connection.Dialect is "3.0" or "3.0.2", the server supports encryption, 
                 /// and SMB2_GLOBAL_CAP_ENCRYPTION is set in the Capabilities field of the request
                 Site.Assert.IsTrue(
                             negotiateResponse.Value.Capabilities.HasFlag(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_ENCRYPTION),

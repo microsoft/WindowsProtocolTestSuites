@@ -470,7 +470,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             Guid? clientGuid = null,
             ResponseChecker<NEGOTIATE_Response> checker = null,
             bool ifHandleRejectUnencryptedAccessSeparately = false,
-            bool ifAddGLOBAL_CAP_ENCRYPTION = true)
+            bool ifAddGLOBAL_CAP_ENCRYPTION = true,
+            bool addDefaultEncryption = false)
         {
             if (isSmb1NegotiateEnabled)
             {
@@ -545,7 +546,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     clientGuid,
                     checker: checker,
                     ifHandleRejectUnencryptedAccessSeparately: ifHandleRejectUnencryptedAccessSeparately,
-                    ifAddGLOBAL_CAP_ENCRYPTION: ifAddGLOBAL_CAP_ENCRYPTION);
+                    ifAddGLOBAL_CAP_ENCRYPTION: ifAddGLOBAL_CAP_ENCRYPTION,
+                    addDefaultEncryption: addDefaultEncryption);
         }
 
         public uint Negotiate(
@@ -556,7 +558,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             Guid? clientGuid = null,
             ResponseChecker<NEGOTIATE_Response> checker = null,
             bool ifHandleRejectUnencryptedAccessSeparately = false,
-            bool ifAddGLOBAL_CAP_ENCRYPTION = true)
+            bool ifAddGLOBAL_CAP_ENCRYPTION = true,
+            bool addDefaultEncryption = false)
         {
             PreauthIntegrityHashID[] preauthHashAlgs = null;
             EncryptionAlgorithm[] encryptionAlgs = null;
@@ -565,9 +568,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             if (Array.IndexOf(dialects, DialectRevision.Smb311) >= 0)
             {
                 preauthHashAlgs = new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 };
-                encryptionAlgs = new EncryptionAlgorithm[] { 
-                EncryptionAlgorithm.ENCRYPTION_AES128_GCM, 
-                EncryptionAlgorithm.ENCRYPTION_AES128_CCM };
+                encryptionAlgs = (capabilityValue & Capabilities_Values.GLOBAL_CAP_ENCRYPTION) > 0 ? 
+                    new EncryptionAlgorithm[] 
+                    { 
+                        EncryptionAlgorithm.ENCRYPTION_AES128_GCM, 
+                        EncryptionAlgorithm.ENCRYPTION_AES128_CCM 
+                    }
+                    : null;
             }
 
             return NegotiateWithContexts
@@ -581,7 +588,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 encryptionAlgs,
                 checker,
                 ifHandleRejectUnencryptedAccessSeparately,
-                ifAddGLOBAL_CAP_ENCRYPTION
+                ifAddGLOBAL_CAP_ENCRYPTION,
+                addDefaultEncryption
             );
         }
 
@@ -595,7 +603,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             EncryptionAlgorithm[] encryptionAlgs = null,
             ResponseChecker<NEGOTIATE_Response> checker = null,
             bool ifHandleRejectUnencryptedAccessSeparately = false,
-            bool ifAddGLOBAL_CAP_ENCRYPTION = true)
+            bool ifAddGLOBAL_CAP_ENCRYPTION = true,
+            bool addDefaultEncryption = false)
         {
             Packet_Header header;
             NEGOTIATE_Response negotiateResponse;
@@ -610,7 +619,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             // Otherwise, this field MUST be set to 0.
             if (null == capabilityValue)
             {
-                if (Array.IndexOf(dialects, DialectRevision.Smb30) >= 0)
+                if (Array.IndexOf(dialects, DialectRevision.Smb30) >= 0 || Array.IndexOf(dialects, DialectRevision.Smb302) >= 0 || Array.IndexOf(dialects, DialectRevision.Smb311) >= 0)
                 {
                     capabilityValue = Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU | Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL | Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_ENCRYPTION;
                 }
@@ -641,7 +650,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 out header,
                 out negotiateResponse,
                 preauthHashAlgs: preauthHashAlgs,
-                encryptionAlgs: encryptionAlgs);
+                encryptionAlgs: encryptionAlgs,
+                addDefaultEncryption: addDefaultEncryption);
             if (!ifHandleRejectUnencryptedAccessSeparately)
             {
                 if (testConfig.IsGlobalEncryptDataEnabled && selectedDialect < DialectRevision.Smb30 && testConfig.IsGlobalRejectUnencryptedAccessEnabled)
