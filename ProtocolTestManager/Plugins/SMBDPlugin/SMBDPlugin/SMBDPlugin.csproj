@@ -40,6 +40,9 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -60,21 +63,14 @@
     <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ConfigItemDependency.cs" />
-    <Compile Include="Detector\CreateContextDetector.cs" />
     <Compile Include="DetectionResultControl.xaml.cs">
       <DependentUpon>DetectionResultControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Detector\FSDetector.cs" />
-    <Compile Include="Detector\RsvdDetector.cs" />
-    <Compile Include="Detector\SqosDetector.cs" />
+    <Compile Include="Detector\DetectionInfo.cs" />
+    <Compile Include="Detector\SMBDDetector.cs" />
     <Compile Include="SMBDValueDetector.cs" />
-    <Compile Include="ImpersonationHelper.cs" />
-    <Compile Include="Information.cs" />
-    <Compile Include="Detector\IoctlCodeDetector.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="ResultItemMap.cs" />
-    <Compile Include="ServerHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="DetectionResultControl.xaml">
@@ -164,6 +160,9 @@
       <Project>{7982acf0-f1a4-4996-a339-641cafa093ce}</Project>
       <Name>PropertyValueDetector</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Detector\CheckRemoteCredential.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">

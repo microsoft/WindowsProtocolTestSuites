@@ -1,22 +1,11 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos;
-using System;
+using Microsoft.Protocols.TestManager.SMBDPlugin.Detector;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin
 {
@@ -84,55 +73,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin
             resultItemMap.ResultItemList.Add(item);
         }
 
-        private void AddRSVD(DetectionInfo info)
-        {
-            if (info.RsvdSupport == DetectResult.Supported)
-            {
-                if (info.RsvdVersion == RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1)
-                {
-                    AddResultItem(ref this.rsvdItems, "RSVD Protocol version 1", DetectResult.Supported);
-                    AddResultItem(ref this.rsvdItems, "RSVD Protocol version 2", DetectResult.UnSupported);
-                }
-                else
-                {
-                    AddResultItem(ref this.rsvdItems, "RSVD Protocol version 1", DetectResult.Supported);
-                    AddResultItem(ref this.rsvdItems, "RSVD Protocol version 2", DetectResult.Supported);
-                }
-            }
-            else if (info.RsvdSupport == DetectResult.UnSupported)
-            {
-                AddResultItem(ref this.rsvdItems, "The server doesn't support RSVD", info.RsvdSupport);
-            }
-            else
-            {
-                AddResultItem(ref this.rsvdItems, "Detection failed", this.info.RsvdSupport);
-            }
-        }
-
-        private void AddSQOS(DetectionInfo info)
-        {
-            if (info.SqosSupport == DetectResult.Supported)
-            {
-                if (info.SqosVersion == SQOS_PROTOCOL_VERSION.Sqos10)
-                {
-                    AddResultItem(ref this.sqosItems, "SQOS dialect 1.0", DetectResult.Supported);
-                    AddResultItem(ref this.sqosItems, "SQOS dialect 1.1", DetectResult.UnSupported);
-                }
-                else
-                {
-                    AddResultItem(ref this.sqosItems, "SQOS dialect 1.0", DetectResult.Supported);
-                    AddResultItem(ref this.sqosItems, "SQOS dialect 1.1", DetectResult.Supported);
-                }
-            }
-            else if (info.SqosSupport == DetectResult.UnSupported)
-            {
-                AddResultItem(ref this.sqosItems, "The server doesn't support SQOS", info.SqosSupport);
-            }
-            else
-            {
-                AddResultItem(ref this.sqosItems, "Detection failed", this.info.SqosSupport);
-            }
-        }
+       
         #endregion
 
         #region Private events
@@ -160,16 +101,16 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin
                     this.ItemDescription.Text = tempItem.Name + " is found not supported after detection";
                     return;
                 }
-                if (!info.detectExceptions.ContainsKey(tempItem.Name))
-                {
-                    this.ItemDescription.Text = tempItem.Name + " is found supported after detection";
-                    return;
-                }
-                string log = info.detectExceptions[tempItem.Name];
-                if (!string.IsNullOrEmpty(log))
-                {
-                    this.ItemDescription.Text = log;
-                }
+                //if (!info.detectExceptions.ContainsKey(tempItem.Name))
+                //{
+                //    this.ItemDescription.Text = tempItem.Name + " is found supported after detection";
+                //    return;
+                //}
+                //string log = info.detectExceptions[tempItem.Name];
+                //if (!string.IsNullOrEmpty(log))
+                //{
+                //    this.ItemDescription.Text = log;
+                //}
             }
         }
 
