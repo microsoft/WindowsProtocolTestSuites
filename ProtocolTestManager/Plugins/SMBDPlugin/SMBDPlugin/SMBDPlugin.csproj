@@ -163,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Detector\CheckRemoteCredential.ps1" />
+    <None Include="Detector\GetLocalNetworkAdapters.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
