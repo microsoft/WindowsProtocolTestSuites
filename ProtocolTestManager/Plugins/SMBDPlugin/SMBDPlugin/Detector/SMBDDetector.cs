@@ -9,6 +9,8 @@ using System.Text;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Management.Automation.Runspaces;
+using System.Management.Automation;
+using System.Dynamic;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
@@ -86,7 +88,79 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             var output = ExecutePowerShellCommand(@"..\etc\MS-SMBD\CheckRemoteCredential.ps1", out error);
 
-            if (output.Length == 1 && output[0].ToString() == "0")
+            if (error != null)
+            {
+                foreach (var item in error)
+                {
+                    DetectorUtil.WriteLog(item.ToString());
+                }
+            }
+
+            bool result = false;
+
+            if (output.Length == 1)
+            {
+                try
+                {
+                    int ret = (int)output[0];
+                    if (ret == 0)
+                    {
+                        result = true;
+                    }
+                }
+                catch
+                {
+                    DetectorUtil.WriteLog("The format of return value is invalid!");
+                }
+            }
+            else
+            {
+                DetectorUtil.WriteLog("The format of return value is invalid!");
+            }
+
+            if (result)
+            {
+                DetectorUtil.WriteLog("Finished", false, LogStyle.StepPassed);
+                return true;
+            }
+            else
+            {
+                DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
+                return false;
+            }
+
+        }
+
+        public bool GetLocalAdapters()
+        {
+            DetectorUtil.WriteLog("Check the local adapters...");
+
+            string[] error;
+
+            var output = ExecutePowerShellCommand(@"..\etc\MS-SMBD\GetLocalNetworkAdapters.ps1", out error);
+
+
+            bool result = false;
+
+            if (output.Length != 0)
+            {
+                foreach (var item in output)
+                {
+                    var networkInterface = ParseLocalNetworkInterfaceInformation(item);
+
+                    DetectorUtil.WriteLog(networkInterface.Name + " " + networkInterface.IpAddress);
+
+                    result = true;
+                }
+            }
+            else
+            {
+
+            }
+
+
+
+            if (result)
             {
                 DetectorUtil.WriteLog("Finished", false, LogStyle.StepPassed);
                 return true;
@@ -103,10 +177,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
                 return false;
             }
-
         }
-
-        public bool get
 
 
 
@@ -155,9 +226,37 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 }
             }
 
-
-
         }
 
+        private object ParsePSObject(PSObject psObject)
+        {
+            if (psObject.BaseObject != null)
+            {
+                return psObject.BaseObject;
+            }
+
+            var result = new ExpandoObject();
+            foreach (var property in psObject.Properties)
+            {
+                (result as IDictionary<string, Object>).Add(property.Name, property.Value);
+            }
+            return result;
+        }
+
+        private LocalNetworkInterfaceInformation ParseLocalNetworkInterfaceInformation(dynamic inputObject)
+        {
+            try
+            {
+                return new LocalNetworkInterfaceInformation
+                {
+                    Name = inputObject.Name,
+                    IpAddress = inputObject.IpAddress
+                };
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

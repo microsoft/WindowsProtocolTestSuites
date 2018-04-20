@@ -80,4 +80,17 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         /// </summary>
         public bool IsWindowsImplementation { get; set; }
     }
+
+    public class LocalNetworkInterfaceInformation
+    {
+        /// <summary>
+        /// Name of network interface.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// IP Address of network interface.
+        /// </summary>
+        public string IpAddress { get; set; }
+    }
 }
