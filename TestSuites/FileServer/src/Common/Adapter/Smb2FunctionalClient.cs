@@ -515,6 +515,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                             respHeader = header;
                             respNegotiate = response;
                             maxTransactSize = response.MaxTransactSize;
+
+                            baseTestSite.Assert.IsTrue(
+                                header.CreditRequestResponse == 1,
+                                "Credit field in NEGOTIATE response should be 1, actually server returns {0}", header.CreditRequestResponse);
                         }
                     },
                     ifHandleRejectUnencryptedAccessSeparately,
@@ -664,6 +668,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 negotiateResponse.MaxReadSize : negotiateResponse.MaxWriteSize;
 
             maxTransactSize = negotiateResponse.MaxTransactSize;
+
+            baseTestSite.Assert.IsTrue(
+                header.CreditRequestResponse == 1,
+                "Credit field in NEGOTIATE response should be 1, actually server returns {0}", header.CreditRequestResponse);
+
             SetCreditGoal();
 
             ProduceCredit(messageId, header);
