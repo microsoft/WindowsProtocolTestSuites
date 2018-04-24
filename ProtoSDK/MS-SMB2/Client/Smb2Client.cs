@@ -969,7 +969,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             out NEGOTIATE_Response responsePayload,
             ushort channelSequence = 0,
             PreauthIntegrityHashID[] preauthHashAlgs = null,
-            EncryptionAlgorithm[] encryptionAlgs = null)
+            EncryptionAlgorithm[] encryptionAlgs = null,
+            bool addDefaultEncryption = false)
         {
             var request = new Smb2NegotiateRequestPacket();
 
@@ -1045,6 +1046,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 if (response.NegotiateContext_ENCRYPTION != null)
                 {
                     this.cipherId = response.NegotiateContext_ENCRYPTION.Value.Ciphers[0];
+                }
+
+                // In SMB 311, client use SMB2_ENCRYPTION_CAPABILITIES context to indicate whether it 
+                // support Encryption rather than SMB2_GLOBAL_CAP_ENCRYPTION as SMB 30/302
+                // For those client with dialect 311 but not support encryption cases (typically in encryption model cases), 
+                // we shouldn't set the default encryption algorithm so that the SMB2_ENCRYPTION_CAPABILITIES won't be added.
+                if (addDefaultEncryption && response.NegotiateContext_ENCRYPTION == null)
+                {
+                    this.cipherId = EncryptionAlgorithm.ENCRYPTION_AES128_CCM;
                 }
 
                 preauthContext = new PreauthIntegrityContext(hashId);

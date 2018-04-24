@@ -67,6 +67,7 @@
 		* [ HVRS\Resiliency](#3.1.52)
 		* [ QueryDir\_Reopen\_OnDir](#3.1.53)
 		* [ QueryDir\_Reopen\_OnFile](#3.1.54)
+		* [ Query\_Quota\_Info](#3.1.55)
 	* [SMB2 Feature Test](#3.2)
 		* [AppInstanceId](#3.2.1)
 		* [AppInstanceVersion](#3.2.2)
@@ -2853,6 +2854,36 @@ This is used to test SMB2 common user scenarios.
 |                          | TREE\_CONNECT|
 |                          | CREATE (File)|
 |                          | QUERY\_DIRECTORY(flags: SMB2\_REOPEN, target: File) |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
+
+####<a name="3.1.55"> Query\_Quota\_Info
+
+#####<a name="3.1.55.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify the behavior of querying quota information with FILE\_GET\_QUOTA\_INFO in SidBuffer. |
+| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                               | 2.  Client queries quota information by sending QUERY_INFO request. |
+|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF. |
+| **Cluster Involved Scenario** | **NO** |
+
+#####<a name="3.1.55.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT\_SMB2Basic\_Query\_Quota\_Info |
+| **Description** | Verify the behavior of querying quota information with FILE\_GET\_QUOTA\_INFO in SidBuffer. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | QUERY_INFO(SMB2\_0\_INFO\_QUOTA) |
 |                          | CLOSE |
 |                          | TREE\_DISCONNECT |
 |                          | LOGOFF |
