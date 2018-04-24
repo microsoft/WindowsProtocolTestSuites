@@ -20,7 +20,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileInformation)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Query FileNormalizedNameInformation for a file.")]
+        [Description("Query FileNormalizedNameInformation for file.")]
         public void FileInfo_Query_FileNormalizedNameInfo_File()
         {
             FileInfo_Query_FileNormalizedNameInfo(FileType.DataFile);
@@ -31,7 +31,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileInformation)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Query FileNormalizedNameInformation for a directory.")]
+        [Description("Query FileNormalizedNameInformation for directory.")]
         public void FileInfo_Query_FileNormalizedNameInfo_Dir()
         {
             FileInfo_Query_FileNormalizedNameInfo(FileType.DirectoryFile);
@@ -70,7 +70,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             //Step 2: Query FileNormalizedNameInformation
             long byteCount;
-            // FileNameInformation: 4 length + 64 Unicode characters which is long enough to hold random file name
+            // FileNameInformation: length + 64 Unicode characters which is long enough to hold random file name
             uint outputBufferSize = 4 + 64 * 2;
             byte[] outputBuffer = new byte[outputBufferSize];
 
