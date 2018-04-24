@@ -58,9 +58,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
 
         [TestMethod]
         [TestCategory("BVT")]
-        [TestCategory("SMB302")]
-        [TestCategory("Smb2OverRdmaChannel")]
-        [TestCategory("SMB2_CHANNEL_RDMA_V1_INVALIDATE")]
+        [TestCategory("Smb2OverRdmaChannelInvalidate")]
         public void BVT_Smb2OverRdma_Smb302_Write_SMB2_CHANNEL_RDMA_V1_INVALIDATE()
         {
             EstablishConnectionAndOpenFile(fileName, DialectRevision.Smb302);
@@ -107,9 +105,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
 
         [TestMethod]
         [TestCategory("BVT")]
-        [TestCategory("SMB302")]
-        [TestCategory("Smb2OverRdmaChannel")]
-        [TestCategory("SMB2_CHANNEL_RDMA_V1_INVALIDATE")]
+        [TestCategory("Smb2OverRdmaChannelInvalidate")]
         public void BVT_Smb2OverRdma_Smb302_Read_SMB2_CHANNEL_RDMA_V1_INVALIDATE()
         {
             EstablishConnectionAndOpenFile(fileName, DialectRevision.Smb302);
@@ -189,7 +185,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         }
 
         [TestMethod]
-        [TestCategory("SMB302")]
         [TestCategory("Smb2OverRdmaChannel")]
         public void Smb2OverRdma_Smb302_Write_SMB2_CHANNEL_RDMA_V1()
         {
@@ -234,7 +229,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         }
 
         [TestMethod]
-        [TestCategory("SMB302")]
         [TestCategory("Smb2OverRdmaChannel")]
         public void Smb2OverRdma_Smb302_Read_SMB2_CHANNEL_RDMA_V1()
         {
@@ -320,9 +314,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         }
 
         [TestMethod]
-        [TestCategory("SMB300")]
-        [TestCategory("Smb2OverRdmaChannel")]
-        [TestCategory("SMB2_CHANNEL_RDMA_V1_INVALIDATE")]
+        [TestCategory("Smb2OverRdmaChannelInvalidate")]
         public void Smb2OverRdma_Smb300_Write_SMB2_CHANNEL_RDMA_V1_INVALIDATE()
         {
             EstablishConnectionAndOpenFile(fileName, DialectRevision.Smb30);
@@ -351,9 +343,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         }
 
         [TestMethod]
-        [TestCategory("SMB300")]
-        [TestCategory("Smb2OverRdmaChannel")]
-        [TestCategory("SMB2_CHANNEL_RDMA_V1_INVALIDATE")]
+        [TestCategory("Smb2OverRdmaChannelInvalidate")]
         public void Smb2OverRdma_Smb300_Read_SMB2_CHANNEL_RDMA_V1_INVALIDATE()
         {
             EstablishConnectionAndOpenFile(fileName, DialectRevision.Smb30);
