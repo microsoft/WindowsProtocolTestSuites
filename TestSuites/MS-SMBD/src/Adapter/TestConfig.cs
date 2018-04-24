@@ -85,7 +85,7 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
             OutboundEntries = uint.Parse(site.Properties["OutboundEntries"]);
             InboundReadLimit = uint.Parse(site.Properties["InboundReadLimit"]);
             string endianness = site.Properties["EndianOfBufferDescriptor"];
-            if(endianness.ToLower().Equals(LITTLE_ENDIAN))
+            if (endianness.ToLower().Equals(LITTLE_ENDIAN))
             {
                 ReversedBufferDescriptor = false;
             }
@@ -129,28 +129,33 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
     public enum Platform
     {
         /// <summary>
-        /// Non Windows implementation
+        /// Non-Windows implementation
         /// </summary>
         NonWindows = 0x00000000,
 
         /// <summary>
-        /// Windows 8
+        /// Windows Server 2012 operating system
         /// </summary>
-        Windows8 = 0x10000005,
+        WindowsServer2012 = 0x10000001,
 
         /// <summary>
-        /// Windows Server 2012
+        /// Windows Server 2012 R2 operating system
         /// </summary>
-        WindowsServer2012 = 0x10000006,
+        WindowsServer2012R2 = 0x10000002,
 
         /// <summary>
-        /// Windows 8.1
+        /// Windows 10 v1511 Enterprise operating system (client role only)
         /// </summary>
-        Windows81 = 0x10000007,
+        Windows10Enterprise = 0x10000003,
 
         /// <summary>
-        /// Windows Server 2012 R2
+        /// Windows 10 v1607 Educational operating system (client role only) 
         /// </summary>
-        WindowsServer2012R2 = 0x10000008,
+        Windows10Educational = 0x10000008,
+
+        /// <summary>
+        /// Windows Server 2016 operating system
+        /// </summary>
+        WindowsServer2016 = 0x10000009
     }
 }
