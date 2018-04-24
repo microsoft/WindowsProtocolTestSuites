@@ -43,6 +43,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
         private void FileInfo_Query_FileNormalizedNameInfo(FileType fileType)
         {
+            if (fsaAdapter.Transport != Transport.SMB3)
+            {
+                TestSite.Assert.Inconclusive("FSA Transport must be set to SMB3 in order to test query FileNormalizedNameInformation.");
+            }
+
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
             MessageStatus status;
 
