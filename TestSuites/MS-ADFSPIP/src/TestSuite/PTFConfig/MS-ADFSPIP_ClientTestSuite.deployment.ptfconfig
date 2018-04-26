@@ -7,30 +7,30 @@
     <Group name="Domain">
       <Property name="DomainName"        value="contoso.com"/>
       <Property name="Username"          value="contoso\Administrator" />
-      <Property name="Password"          value="Password01!2" />
+      <Property name="Password"          value="Password01!" />
     </Group>
 
     <Group name="SUT">
-      <Property name="SutIPAddress"      value="30.10.1.50"/>
-      <Property name="SutDns"            value="PROXY01.contoso.com"/>
+      <Property name="SutIPAddress"      value="192.168.1.50"/>
+      <Property name="SutDns"            value="proxy.contoso.com"/>
       <Property name="MaxDelaySeconds"   value="600"/>
       <Property name="IsWindows"         value="true" />
-      <Property name="Username"          value="PROXY01\Administrator" />
-      <Property name="Password"          value="Password01!2" />
+      <Property name="Username"          value="proxy\Administrator" />
+      <Property name="Password"          value="Password01!" />
     </Group>
 
     <Group name="ADFS">
       <Property name="IsWin2016"         value="true" />
       <Property name="AdfsName"          value="adfs"/>
       <Property name="AdfsDns"           value="adfs.contoso.com"/>
-      <Property name="AdfsUrl"           value="https://adfs.contoso.com"/>
+      <Property name="AdfsUrl"           value="https://adfs.contoso.com/"/>
       <Property name="AdfsCert"          value="Adfs.PFX"/>
       <Property name="SignCert"          value="Sign.PFX" />
       <Property name="EncryptCert"       value="Encrypt.PFX" />
-      <Property name="StoreEntryKey_2012R2"    value="442c0fbd-7f9d-453a-b38c"/>
-      <Property name="StoreEntryKey_2016"      value="3c5b6c89-0344-4289-a0af-974a3a62bb86"/>
-      <Property name="MetadataTemplate_2012R2" value="MetadataTemplate_2012.xml" />
-      <Property name="MetadataTemplate_2016"   value="MetadataTemplate_2016.xml" />
+      <Property name="StoreEntryKey_2012R2"     value="442c0fbd-7f9d-453a-b38c"/>
+      <Property name="StoreEntryKey_2016"     value="3c5b6c89-0344-4289-a0af-974a3a62bb86"/>
+      <Property name="MetadataTemplate_2012R2"  value="MetadataTemplate_2012.xml" />
+      <Property name="MetadataTemplate_2016"  value="MetadataTemplate_2016.xml" />
     </Group>
 
     <Group name="WebApp">
@@ -49,10 +49,10 @@
     <Group name="Common">
       <Property name="PfxPassword"       value="123" />
       <Property name="DataStorePath"     value="C:\DataStore.xml" />
-      <Property name="DriverShareFolder" value="\\30.10.1.100\temp\"/>
-      <Property name="SutShareFolder"    value="\\30.10.1.50\temp\"/>
+      <Property name="DriverShareFolder" value="\\192.168.1.100\temp\"/>
+      <Property name="SutShareFolder"    value="\\192.168.1.50\temp\"/>
       <Property name="ProxyCert"         value="C:\Proxy.PFX"/>
-      <Property name="RealADFSIP"        value="30.10.1.100"/>
+      <Property name="RealADFSIP"        value="192.168.1.100"/>
     </Group>
   </Properties>
 
