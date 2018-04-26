@@ -1,0 +1,126 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using Microsoft.Protocols.TestManager.Detector;
+using Microsoft.Protocols.TestManager.FileServerPlugin.Detector;
+using System.Linq;
+
+namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
+{
+    partial class SMBDDetector
+    {
+
+        public bool GetLocalAdapters()
+        {
+            DetectorUtil.WriteLog("Check the local adapters...");
+
+            string[] error;
+
+            var output = ExecutePowerShellCommand(@"..\etc\MS-SMBD\GetLocalNetworkAdapters.ps1", out error);
+
+
+            bool result = true;
+
+            if (output.Length != 0)
+            {
+                result = FilterNetworkInterfaces(output);
+            }
+            else
+            {
+                DetectorUtil.WriteLog("Failed to detect any network interface!");
+                result = false;
+            }
+
+
+
+            if (result)
+            {
+                DetectorUtil.WriteLog("Finished", false, LogStyle.StepPassed);
+                return true;
+            }
+            else
+            {
+                if (error != null)
+                {
+                    foreach (var item in error)
+                    {
+                        DetectorUtil.WriteLog(item.ToString());
+                    }
+                }
+                DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
+                return false;
+            }
+        }
+
+        private bool FilterNetworkInterfaces(object[] output)
+        {
+            var networkInterfaces = output.Select(item => ParseLocalNetworkInterfaceInformation(item));
+
+            var nonRdmaNetworkInterfaces = networkInterfaces.Where(networkInterface => !networkInterface.RDMACapable);
+
+            var rdmaNetworkInterfaces = networkInterfaces.Where(networkInterface => networkInterface.RDMACapable);
+
+            int nonRdmaNetworkInterfaceCount = nonRdmaNetworkInterfaces.Count();
+            if (nonRdmaNetworkInterfaceCount == 0)
+            {
+                DetectorUtil.WriteLog("Failed to detect any non-RDMA network interface!");
+                return false;
+            }
+            else if (nonRdmaNetworkInterfaceCount == 1)
+            {
+                DetectionInfo.NonRdmaNICIPAddress = nonRdmaNetworkInterfaces.First().IpAddress;
+            }
+            else
+            {
+                var dialog = new NetworkInterfaceSelector(nonRdmaNetworkInterfaces.ToArray());
+                var selected = dialog.ShowDialog();
+                if (selected != null)
+                {
+                    DetectionInfo.NonRdmaNICIPAddress = selected.IpAddress;
+                }
+            }
+
+
+
+            if (rdmaNetworkInterfaces.Count() == 0)
+            {
+                DetectorUtil.WriteLog("Failed to detect any RDMA network interface!");
+                return false;
+            }
+
+
+
+
+            if (rdmaNetworkInterfaces.Count() == 1)
+            {
+                DetectionInfo.RdmaNICIPAddress = rdmaNetworkInterfaces.First().IpAddress;
+            }
+            else
+            {
+
+            }
+
+
+            return true;
+
+        }
+
+
+        private LocalNetworkInterfaceInformation ParseLocalNetworkInterfaceInformation(dynamic inputObject)
+        {
+            try
+            {
+                return new LocalNetworkInterfaceInformation
+                {
+                    Name = inputObject.Name,
+                    IpAddress = inputObject.IpAddress,
+                    Description = inputObject.Description,
+                    RDMACapable = inputObject.RDMACapable
+                };
+            }
+            catch
+            {
+                return null;
+            }
+        }
+    }
+}

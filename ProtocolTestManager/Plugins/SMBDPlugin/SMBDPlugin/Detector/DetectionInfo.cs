@@ -79,6 +79,16 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         /// Is Windows implementation.
         /// </summary>
         public bool IsWindowsImplementation { get; set; }
+        
+        /// <summary>
+        /// The IP address of RDMA network interface.
+        /// </summary>
+        public string RdmaNICIPAddress { get; set; }
+
+        /// <summary>
+        /// The IP address of non-RDMA network interface.
+        /// </summary>
+        public string NonRdmaNICIPAddress { get; set; }
     }
 
     public class LocalNetworkInterfaceInformation
@@ -92,5 +102,15 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         /// IP Address of network interface.
         /// </summary>
         public string IpAddress { get; set; }
+
+        /// <summary>
+        /// Description of network interface.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Indicating whether this network interface is RDMA-capable.
+        /// </summary>
+        public bool RDMACapable { get; set; }
     }
 }
