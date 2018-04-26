@@ -39,20 +39,36 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
                 foreach (Type type in types)
                 {
-                    //search for class, ont interfaces and other type
+                    //search for class, interfaces and other type
                     if (type.IsClass)
                     {
                         MethodInfo[] methods = type.GetMethods();
                         foreach (MethodInfo method in methods)
                         {
-                            //methods loop, serch for methods with TestMethodAttribute
+                            //methods loop, search for methods with TestMethodAttribute
                             object[] objs = method.GetCustomAttributes(false);
                             bool isTestMethod = false;
                             bool isIgnored = false;
                             foreach (object attribute in method.GetCustomAttributes(false))
                             {
-                                if (attribute.GetType().Name == "TestMethodAttribute") isTestMethod = true;
-                                if (attribute.GetType().Name == "IgnoreAttribute") isIgnored = true;
+                                string name = attribute.GetType().Name;
+                                if (name == "TestMethodAttribute") isTestMethod = true;
+                                if (name == "IgnoreAttribute") isIgnored = true;
+
+                                // Ignore test case with TestCategory "Disabled"
+                                if (!isIgnored && name == "TestCategoryAttribute")
+                                {
+                                    PropertyInfo property = attribute.GetType().GetProperty("TestCategories");
+                                    object category = property.GetValue(attribute, null);
+                                    foreach (string str in (System.Collections.ObjectModel.ReadOnlyCollection<string>)category)
+                                    {
+                                        if (str == "Disabled")
+                                        {
+                                            isIgnored = true;
+                                            break;
+                                        }
+                                    }
+                                }
                             }
                             if (isTestMethod && !isIgnored)
                             {
