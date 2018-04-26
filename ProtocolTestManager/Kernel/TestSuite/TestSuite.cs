@@ -39,24 +39,35 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
                 foreach (Type type in types)
                 {
-                    //search for class, interfaces and other type
+                    // Search for class, interfaces and other type
                     if (type.IsClass)
                     {
                         MethodInfo[] methods = type.GetMethods();
                         foreach (MethodInfo method in methods)
                         {
-                            //methods loop, search for methods with TestMethodAttribute
-                            object[] objs = method.GetCustomAttributes(false);
+                            // Search for methods with TestMethodAttribute
+                            object[] attributes = method.GetCustomAttributes(false);
                             bool isTestMethod = false;
                             bool isIgnored = false;
-                            foreach (object attribute in method.GetCustomAttributes(false))
+                            foreach (object attribute in attributes)
                             {
                                 string name = attribute.GetType().Name;
-                                if (name == "TestMethodAttribute") isTestMethod = true;
-                                if (name == "IgnoreAttribute") isIgnored = true;
+                                // Break the loop when "IgnoreAttribute" is found
+                                if (name == "IgnoreAttribute")
+                                {
+                                    isIgnored = true;
+                                    break;
+                                }
+
+                                // Do not break the loop when "TestMethodAttribute" is found
+                                // It's possible to have "IgnoreAttribute" after "TestMethodAttribute"
+                                if (name == "TestMethodAttribute")
+                                {
+                                    isTestMethod = true;
+                                }
 
                                 // Ignore test case with TestCategory "Disabled"
-                                if (!isIgnored && name == "TestCategoryAttribute")
+                                if (name == "TestCategoryAttribute")
                                 {
                                     PropertyInfo property = attribute.GetType().GetProperty("TestCategories");
                                     object category = property.GetValue(attribute, null);
@@ -72,12 +83,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
                             }
                             if (isTestMethod && !isIgnored)
                             {
-                                //GetCategory
+                                // GetCategory
                                 List<string> categories = new List<string>();
                                 string caseFullName = method.DeclaringType.FullName + "." + method.Name;
-                                foreach (object attribute in objs)
+                                foreach (object attribute in attributes)
                                 {
-                                    //record TestCategories
+                                    // Record TestCategories
                                     if (attribute.GetType().Name == "TestCategoryAttribute")
                                     {
                                         PropertyInfo property = attribute.GetType().GetProperty("TestCategories");
