@@ -35,9 +35,10 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin.Detector
         }
 
 
-        public new LocalNetworkInterfaceInformation ShowDialog()
+        public LocalNetworkInterfaceInformation ShowDialog(string title)
         {
-            var ret = base.ShowDialog();
+            Title = title;
+            var ret = ShowDialog();
             if (ret.HasValue && ret.Value)
             {
                 return selectedItem as LocalNetworkInterfaceInformation;

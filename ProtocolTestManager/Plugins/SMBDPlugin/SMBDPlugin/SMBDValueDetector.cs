@@ -34,9 +34,18 @@ namespace Microsoft.Protocols.TestManager.Detector
         {
         }
 
+        /// <summary>
+        /// Get the detect result.
+        /// </summary>
+        /// <param name="name">Property name</param>
+        /// <param name="value">Property value</param>
+        /// <returns>Return true if the property value is successfully got.</returns>
         public bool GetDetectedProperty(out Dictionary<string, List<string>> propertiesDic)
         {
-            throw new NotImplementedException();
+            propertiesDic = new Dictionary<string, List<string>>();
+            propertiesDic["ServerNonRNicIp"] = new List<string> { detectionInfo.ServerNonRdmaNICIPAddress };
+            propertiesDic["ServerRNicIp"] = new List<string> { detectionInfo.ServerRdmaNICIPAddress };
+            return true;
         }
 
         /// <summary>

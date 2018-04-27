@@ -3,6 +3,7 @@
 using Microsoft.Protocols.TestManager.Detector;
 using Microsoft.Protocols.TestManager.FileServerPlugin.Detector;
 using System.Linq;
+using System.Windows;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
@@ -67,36 +68,42 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
             else if (nonRdmaNetworkInterfaceCount == 1)
             {
-                DetectionInfo.NonRdmaNICIPAddress = nonRdmaNetworkInterfaces.First().IpAddress;
+                DetectionInfo.ServerNonRdmaNICIPAddress = nonRdmaNetworkInterfaces.First().IpAddress;
             }
             else
             {
-                var dialog = new NetworkInterfaceSelector(nonRdmaNetworkInterfaces.ToArray());
-                var selected = dialog.ShowDialog();
-                if (selected != null)
+                Application.Current.Dispatcher.Invoke(() =>
                 {
-                    DetectionInfo.NonRdmaNICIPAddress = selected.IpAddress;
-                }
+                    var dialog = new NetworkInterfaceSelector(nonRdmaNetworkInterfaces.ToArray());
+                    var selected = dialog.ShowDialog("Please select the non-RDMA network interface");
+                    if (selected != null)
+                    {
+                        DetectionInfo.ServerNonRdmaNICIPAddress = selected.IpAddress;
+                    }
+                });
             }
 
-
-
-            if (rdmaNetworkInterfaces.Count() == 0)
+            int rdmaNetworkInterfaceCount = rdmaNetworkInterfaces.Count();
+            if (rdmaNetworkInterfaceCount == 0)
             {
                 DetectorUtil.WriteLog("Failed to detect any RDMA network interface!");
                 return false;
             }
-
-
-
-
-            if (rdmaNetworkInterfaces.Count() == 1)
+            else if (rdmaNetworkInterfaceCount == 1)
             {
-                DetectionInfo.RdmaNICIPAddress = rdmaNetworkInterfaces.First().IpAddress;
+                DetectionInfo.ServerRdmaNICIPAddress = rdmaNetworkInterfaces.First().IpAddress;
             }
             else
             {
-
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var dialog = new NetworkInterfaceSelector(rdmaNetworkInterfaces.ToArray());
+                    var selected = dialog.ShowDialog("Please select the RDMA network interface");
+                    if (selected != null)
+                    {
+                        DetectionInfo.ServerRdmaNICIPAddress = selected.IpAddress;
+                    }
+                });
             }
 
 

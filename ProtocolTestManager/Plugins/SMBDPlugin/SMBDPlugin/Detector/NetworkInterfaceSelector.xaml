@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Microsoft.Protocols.TestManager.FileServerPlugin.Detector"
         mc:Ignorable="d"
-        Title="NetworkInterfaceSelector" Height="320" Width="500" WindowStyle="ToolWindow" ResizeMode="NoResize">
+        Title="NetworkInterfaceSelector" Height="320" Width="500" WindowStyle="SingleBorderWindow" ResizeMode="NoResize">
 
 
 

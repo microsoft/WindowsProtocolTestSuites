@@ -83,12 +83,12 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         /// <summary>
         /// The IP address of RDMA network interface.
         /// </summary>
-        public string RdmaNICIPAddress { get; set; }
+        public string ServerRdmaNICIPAddress { get; set; }
 
         /// <summary>
         /// The IP address of non-RDMA network interface.
         /// </summary>
-        public string NonRdmaNICIPAddress { get; set; }
+        public string ServerNonRdmaNICIPAddress { get; set; }
     }
 
     public class LocalNetworkInterfaceInformation
