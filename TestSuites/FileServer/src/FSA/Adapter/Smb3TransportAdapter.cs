@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Net;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
@@ -319,6 +320,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             {
                 capabilityValue |= Capabilities_Values.GLOBAL_CAP_ENCRYPTION;
             }
+
+            PreauthIntegrityHashID[] preauthHashAlgs = null;
+            EncryptionAlgorithm[] encryptionAlgs = null;
+            if (this.requestDialects.Contains(DialectRevision.Smb311))
+            {
+                // initial negotiation context for SMB 3.1.1 dialect
+                preauthHashAlgs = new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 };
+                encryptionAlgs = new EncryptionAlgorithm[] { EncryptionAlgorithm.ENCRYPTION_AES128_CCM, EncryptionAlgorithm.ENCRYPTION_AES128_GCM };
+            }
+
             status = this.smb2Client.Negotiate(
                 1,
                 1,
@@ -331,7 +342,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 out selectedDialect,
                 out this.gssToken,
                 out packetHeader,
-                out negotiateResponse);
+                out negotiateResponse,
+                0,
+                preauthHashAlgs,
+                encryptionAlgs
+                );
 
             if (testConfig.IsGlobalEncryptDataEnabled && testConfig.IsGlobalRejectUnencryptedAccessEnabled)
             {
