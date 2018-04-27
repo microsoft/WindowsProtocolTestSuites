@@ -70,7 +70,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             //Step 2: Query FileNormalizedNameInformation
             long byteCount;
-            // FileNameInformation: length + 64 Unicode characters which is long enough to hold random file name
+            // FileNameInformation([MS-FSCC] 2.1.7): length + 64 Unicode characters which is long enough to hold random file name
             uint outputBufferSize = 4 + 64 * 2;
             byte[] outputBuffer = new byte[outputBufferSize];
 
