@@ -136,26 +136,16 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
         /// <summary>
         /// Windows Server 2012 operating system
         /// </summary>
-        WindowsServer2012 = 0x10000001,
+        WindowsServer2012 = 0x10000006,
 
         /// <summary>
         /// Windows Server 2012 R2 operating system
         /// </summary>
-        WindowsServer2012R2 = 0x10000002,
-
-        /// <summary>
-        /// Windows 10 v1511 Enterprise operating system (client role only)
-        /// </summary>
-        Windows10Enterprise = 0x10000003,
-
-        /// <summary>
-        /// Windows 10 v1607 Educational operating system (client role only) 
-        /// </summary>
-        Windows10Educational = 0x10000008,
+        WindowsServer2012R2 = 0x10000007,
 
         /// <summary>
         /// Windows Server 2016 operating system
         /// </summary>
-        WindowsServer2016 = 0x10000009
+        WindowsServer2016 = 0x10000008
     }
 }
