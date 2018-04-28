@@ -5796,8 +5796,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <summary>
         ///  The server MUST restart the enumeration from the beginning,
         ///  and the search pattern MUST be changed to the provided
-        ///  value. This often involves silently closing and reopening
-        ///  the directory on the server side.
+        ///  value.
         /// </summary>
         REOPEN = 0x10,
     }
