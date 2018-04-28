@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,6 +57,11 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
     public class DetectionInfo
     {
         /// <summary>
+        /// Authentication type for SUT credential.
+        /// </summary>
+        public SecurityPackageType Authentication;
+
+        /// <summary>
         /// SUT host name.
         /// </summary>
         public string SUTName { get; set; }
@@ -79,7 +85,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         /// Is Windows implementation.
         /// </summary>
         public bool IsWindowsImplementation { get; set; }
-        
+
         /// <summary>
         /// The IP address of RDMA network interface.
         /// </summary>

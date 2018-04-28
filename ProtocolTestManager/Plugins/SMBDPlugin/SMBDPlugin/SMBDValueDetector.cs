@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using Microsoft.Protocols.TestManager.SMBDPlugin;
 using Microsoft.Protocols.TestManager.SMBDPlugin.Detector;
+using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using System;
 using System.Collections.Generic;
 
@@ -14,6 +15,7 @@ namespace Microsoft.Protocols.TestManager.Detector
         private const string SUTUSERNAME = "SUT User Name";
         private const string SUTPASSWORD = "SUT Password";
         private const string ISWINDOWSIMPLEMENTATION = "Is Windows Implementation";
+        private const string AUTHENTICATION = "Authentication";
         private DetectionInfo detectionInfo = new DetectionInfo();
 
         /// <summary>
@@ -101,6 +103,8 @@ namespace Microsoft.Protocols.TestManager.Detector
             string sutPassword = DetectorUtil.GetPropertyValue("SutPassword");
             prerequisites.Properties.Add(SUTPASSWORD, new List<string> { sutPassword });
 
+            prerequisites.Properties.Add(AUTHENTICATION, new List<string>() { "Negotiate", "Kerberos", "Ntlm" });
+
             string shareFolder = DetectorUtil.GetPropertyValue("ShareFolder");
             prerequisites.Properties.Add("SUT Shared Folder", new List<string> { shareFolder });
 
@@ -147,6 +151,7 @@ namespace Microsoft.Protocols.TestManager.Detector
 
         public bool SetPrerequisiteProperties(Dictionary<string, string> properties)
         {
+            detectionInfo.Authentication = (SecurityPackageType)Enum.Parse(typeof(SecurityPackageType), properties[AUTHENTICATION]);
             detectionInfo.SUTName = properties[SUTNAME];
             detectionInfo.DomainName = properties[DOMAINNAME];
             detectionInfo.UserName = properties[SUTUSERNAME];

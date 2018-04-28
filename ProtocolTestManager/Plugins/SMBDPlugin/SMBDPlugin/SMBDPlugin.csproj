@@ -72,6 +72,7 @@
     <Compile Include="Detector\DetectionInfo.cs" />
     <Compile Include="Detector\ExecutePowerShellCommand.cs" />
     <Compile Include="Detector\GetLocalAdapters.cs" />
+    <Compile Include="Detector\GetRemoteAdapters.cs" />
     <Compile Include="Detector\NetworkInterfaceSelector.xaml.cs">
       <DependentUpon>NetworkInterfaceSelector.xaml</DependentUpon>
     </Compile>
@@ -105,6 +106,14 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj">
+      <Project>{c7f08825-d3c9-4ddd-9ba3-06733b1abe36}</Project>
+      <Name>Smb2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Sspi\Sspi.csproj">
+      <Project>{d0cb354b-2cd3-49c1-8eca-2f6ebadbccee}</Project>
+      <Name>Sspi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\PropertyValueDetector\PropertyValueDetector.csproj">
       <Project>{7982acf0-f1a4-4996-a339-641cafa093ce}</Project>
       <Name>PropertyValueDetector</Name>
