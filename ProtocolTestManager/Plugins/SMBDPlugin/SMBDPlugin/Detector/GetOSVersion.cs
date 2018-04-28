@@ -18,11 +18,11 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 return true;
             }
 
-            DetectorUtil.WriteLog("Check the Credential...");
+            DetectorUtil.WriteLog("Check the OS version...");
 
             string[] error;
 
-            var output = ExecutePowerShellCommand(@"..\etc\MS-SMBD\CheckRemoteCredential.ps1", out error);
+            var output = ExecutePowerShellCommand(@"..\etc\MS-SMBD\GetRemoteOSVersion.ps1", out error);
 
             if (error != null)
             {

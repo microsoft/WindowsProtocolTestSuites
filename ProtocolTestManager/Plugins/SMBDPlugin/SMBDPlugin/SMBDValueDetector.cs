@@ -8,14 +8,24 @@ using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestManager.Detector
 {
+    static class PropertyDictionaryConstant
+    {
+        public const string SUTNAME = "SUT Name";
+        public const string DOMAINNAME = "Domain Name";
+        public const string SUTUSERNAME = "SUT User Name";
+        public const string SUTPASSWORD = "SUT Password";
+        public const string ISWINDOWSIMPLEMENTATION = "Is Windows Implementation";
+        public const string AUTHENTICATION = "Authentication";
+    }
+
+    static class PtfConfigConstant
+    {
+        public const string CLIENTNONRNICIP = "ClientNonRNicIp";
+        public const string CLIENTRNICIP = "ClientRNicIp";
+    }
+
     public class SMBDValueDetector : IValueDetector
     {
-        private const string SUTNAME = "SUT Name";
-        private const string DOMAINNAME = "Domain Name";
-        private const string SUTUSERNAME = "SUT User Name";
-        private const string SUTPASSWORD = "SUT Password";
-        private const string ISWINDOWSIMPLEMENTATION = "Is Windows Implementation";
-        private const string AUTHENTICATION = "Authentication";
         private DetectionInfo detectionInfo = new DetectionInfo();
 
         /// <summary>
@@ -45,8 +55,8 @@ namespace Microsoft.Protocols.TestManager.Detector
         public bool GetDetectedProperty(out Dictionary<string, List<string>> propertiesDic)
         {
             propertiesDic = new Dictionary<string, List<string>>();
-            propertiesDic["ServerNonRNicIp"] = new List<string> { detectionInfo.ServerNonRdmaNICIPAddress };
-            propertiesDic["ServerRNicIp"] = new List<string> { detectionInfo.ServerRdmaNICIPAddress };
+            propertiesDic[PtfConfigConstant.CLIENTNONRNICIP] = new List<string> { detectionInfo.ServerNonRdmaNICIPAddress };
+            propertiesDic[PtfConfigConstant.CLIENTRNICIP] = new List<string> { detectionInfo.ServerRdmaNICIPAddress };
             return true;
         }
 
@@ -57,7 +67,8 @@ namespace Microsoft.Protocols.TestManager.Detector
         {
             List<DetectingItem> DetectingItems = new List<DetectingItem>();
             DetectingItems.Add(new DetectingItem("Ping target SUT", DetectingStatus.Pending, LogStyle.Default));
-            DetectingItems.Add(new DetectingItem("Check credential", DetectingStatus.Pending, LogStyle.Default));
+            DetectingItems.Add(new DetectingItem("Check OS version", DetectingStatus.Pending, LogStyle.Default));
+            DetectingItems.Add(new DetectingItem("Check SMB dialect", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check NICs of local computer", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check NICs of target SUT", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Get OS version", DetectingStatus.Pending, LogStyle.Default));
@@ -92,23 +103,27 @@ namespace Microsoft.Protocols.TestManager.Detector
             prerequisites.Properties = new Dictionary<string, List<string>>();
 
             string sutName = DetectorUtil.GetPropertyValue("SutComputerName");
-            prerequisites.Properties.Add(SUTNAME, new List<string> { sutName });
+            prerequisites.Properties.Add(PropertyDictionaryConstant.SUTNAME, new List<string> { sutName });
 
             string domainName = DetectorUtil.GetPropertyValue("DomainName");
-            prerequisites.Properties.Add(DOMAINNAME, new List<string> { domainName });
+            prerequisites.Properties.Add(PropertyDictionaryConstant.DOMAINNAME, new List<string> { domainName });
 
             string sutUserName = DetectorUtil.GetPropertyValue("SutUserName");
-            prerequisites.Properties.Add(SUTUSERNAME, new List<string> { sutUserName });
+            prerequisites.Properties.Add(PropertyDictionaryConstant.SUTUSERNAME, new List<string> { sutUserName });
 
             string sutPassword = DetectorUtil.GetPropertyValue("SutPassword");
-            prerequisites.Properties.Add(SUTPASSWORD, new List<string> { sutPassword });
+            prerequisites.Properties.Add(PropertyDictionaryConstant.SUTPASSWORD, new List<string> { sutPassword });
 
-            prerequisites.Properties.Add(AUTHENTICATION, new List<string>() { "Negotiate", "Kerberos", "Ntlm" });
+            prerequisites.Properties.Add(PropertyDictionaryConstant.AUTHENTICATION, new List<string>() {
+                SecurityPackageType.Negotiate.ToString(),
+                SecurityPackageType.Kerberos.ToString(),
+                SecurityPackageType.Ntlm.ToString()
+            });
 
             string shareFolder = DetectorUtil.GetPropertyValue("ShareFolder");
             prerequisites.Properties.Add("SUT Shared Folder", new List<string> { shareFolder });
 
-            prerequisites.Properties.Add(ISWINDOWSIMPLEMENTATION, new List<string> { "True", "False" });
+            prerequisites.Properties.Add(PropertyDictionaryConstant.ISWINDOWSIMPLEMENTATION, new List<string> { "True", "False" });
 
             return prerequisites;
         }
@@ -151,12 +166,12 @@ namespace Microsoft.Protocols.TestManager.Detector
 
         public bool SetPrerequisiteProperties(Dictionary<string, string> properties)
         {
-            detectionInfo.Authentication = (SecurityPackageType)Enum.Parse(typeof(SecurityPackageType), properties[AUTHENTICATION]);
-            detectionInfo.SUTName = properties[SUTNAME];
-            detectionInfo.DomainName = properties[DOMAINNAME];
-            detectionInfo.UserName = properties[SUTUSERNAME];
-            detectionInfo.Password = properties[SUTPASSWORD];
-            detectionInfo.IsWindowsImplementation = Boolean.Parse(properties[ISWINDOWSIMPLEMENTATION]);
+            detectionInfo.Authentication = (SecurityPackageType)Enum.Parse(typeof(SecurityPackageType), properties[PropertyDictionaryConstant.AUTHENTICATION]);
+            detectionInfo.SUTName = properties[PropertyDictionaryConstant.SUTNAME];
+            detectionInfo.DomainName = properties[PropertyDictionaryConstant.DOMAINNAME];
+            detectionInfo.UserName = properties[PropertyDictionaryConstant.SUTUSERNAME];
+            detectionInfo.Password = properties[PropertyDictionaryConstant.SUTPASSWORD];
+            detectionInfo.IsWindowsImplementation = Boolean.Parse(properties[PropertyDictionaryConstant.ISWINDOWSIMPLEMENTATION]);
             return true;
         }
     }

@@ -72,15 +72,16 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
             else
             {
-                Application.Current.Dispatcher.Invoke(() =>
+                var selected = Application.Current.Dispatcher.Invoke(() =>
                 {
                     var dialog = new NetworkInterfaceSelector(nonRdmaNetworkInterfaces.ToArray());
-                    var selected = dialog.ShowDialog("Please select the non-RDMA network interface");
-                    if (selected != null)
-                    {
-                        DetectionInfo.ServerNonRdmaNICIPAddress = selected.IpAddress;
-                    }
+                    return dialog.ShowDialog("Please select the non-RDMA network interface");
+
                 });
+                if (selected != null)
+                {
+                    DetectionInfo.ServerNonRdmaNICIPAddress = selected.IpAddress;
+                }
             }
 
             int rdmaNetworkInterfaceCount = rdmaNetworkInterfaces.Count();
@@ -95,15 +96,22 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
             else
             {
-                Application.Current.Dispatcher.Invoke(() =>
+                var selected = Application.Current.Dispatcher.Invoke(() =>
                 {
                     var dialog = new NetworkInterfaceSelector(rdmaNetworkInterfaces.ToArray());
-                    var selected = dialog.ShowDialog("Please select the RDMA network interface");
-                    if (selected != null)
-                    {
-                        DetectionInfo.ServerRdmaNICIPAddress = selected.IpAddress;
-                    }
+                    return dialog.ShowDialog("Please select the RDMA network interface");
+
                 });
+                if (selected != null)
+                {
+                    DetectionInfo.ServerRdmaNICIPAddress = selected.IpAddress;
+                }
+            }
+
+            if (DetectionInfo.ServerNonRdmaNICIPAddress == null || DetectionInfo.ServerRdmaNICIPAddress == null)
+            {
+                // if user do not select any network interface by closing dialog
+                return false;
             }
 
 

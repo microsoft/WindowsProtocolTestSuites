@@ -68,7 +68,7 @@
     <Compile Include="DetectionResultControl.xaml.cs">
       <DependentUpon>DetectionResultControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Detector\CheckUsernamePassword.cs" />
+    <Compile Include="Detector\GetOSVersion.cs" />
     <Compile Include="Detector\DetectionInfo.cs" />
     <Compile Include="Detector\ExecutePowerShellCommand.cs" />
     <Compile Include="Detector\GetLocalAdapters.cs" />
@@ -120,7 +120,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Detector\CheckRemoteCredential.ps1" />
+    <None Include="Detector\GetRemoteOSVersion.ps1" />
     <None Include="Detector\GetLocalNetworkAdapters.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
