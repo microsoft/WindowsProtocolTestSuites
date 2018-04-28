@@ -5942,8 +5942,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <summary>
         ///  The server MUST restart the enumeration from the beginning,
         ///  and the search pattern MUST be changed to the provided
-        ///  value. This often involves silently closing and reopening
-        ///  the directory on the server side.
+        ///  value.
         /// </summary>
         REOPEN = 0x10,
     }
@@ -6498,7 +6497,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  maximum output size that is indicated in the request.
         /// </summary>
         [StaticSize(1)]
-        public bool ReturnSingle;
+        public byte ReturnSingle;
 
         /// <summary>
         ///  A Boolean value.  If set, the quota information MUST
@@ -6507,7 +6506,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  that was executed on this open.
         /// </summary>
         [StaticSize(1)]
-        public bool RestartScan;
+        public byte RestartScan;
 
         /// <summary>
         ///  Unused at present and MUST be treated as reserved. 

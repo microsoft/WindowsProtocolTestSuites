@@ -30,7 +30,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
         /// <summary>
         /// SMB 3.02 dialect revision number
         /// </summary>
-        Smb302 = 0x0302
+        Smb302 = 0x0302,
+
+        /// <summary>
+        /// SMB 3.11 dialect revision number
+        /// </summary>
+        Smb311 = 0x0311,
 
     }
 

@@ -65,6 +65,9 @@
 		* [ HVRS\SMBDialect](#3.1.50)
 		* [ HVRS\PersistentHandles](#3.1.51)
 		* [ HVRS\Resiliency](#3.1.52)
+		* [ QueryDir\_Reopen\_OnDir](#3.1.53)
+		* [ QueryDir\_Reopen\_OnFile](#3.1.54)
+		* [ Query\_Quota\_Info](#3.1.55)
 	* [SMB2 Feature Test](#3.2)
 		* [ AppInstanceId](#3.2.1)
 		* [ AppInstanceVersion](#3.2.2)
@@ -1948,10 +1951,10 @@ This is used to test SMB2 common user scenarios.
 |---|---|
 | **Description**               | Verify ChangeNotify for CompletionFilter FILE\_NOTIFY\_CHANGE\_SIZE is handled correctly.|
 | **Message Sequence**          | 1.  Start a client1 to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
-|                               | 2.  Client1 starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_SIZE and flag WATCH\_TREE. |
-|                               | 3.  Client1 starts to create a file under directory by sending CREATE request. |
+|                               | 2.  Client1 starts to create a file under directory by sending CREATE request and write data to it by sending WRITE request. |
+|                               | 3.  Client1 starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_SIZE and flag WATCH\_TREE. |
 |                               | 4.  Start a client2 to open a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
-|                               | 5.  Client2 starts to write to the file by sending WRITE request. |
+|                               | 5.  Client2 sets new EoF position for the file by sending SET\_INFO request. |
 |                               | 6.  Tear down the client2 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 |                               | 7.  Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
@@ -1968,14 +1971,15 @@ This is used to test SMB2 common user scenarios.
 |                          | SESSION\_SETUP |
 |                          | TREE\_CONNECT|
 |                          | CREATE (Directory)|
-|                          | CHANGE\_NOTIFY (FILE\_NOTIFY\_CHANGE\_SIZE for CompletionFilter and WATCH\_TREE for flag) |
 |                          | CREATE (File) |
+|                          | WRITE (File) |
+|                          | CHANGE\_NOTIFY (FILE\_NOTIFY\_CHANGE\_SIZE for CompletionFilter and WATCH\_TREE for flag) |
 |                          | Create Client2 |
 |                          | NEGOTIATE |
 |                          | SESSION\_SETUP |
 |                          | TREE\_CONNECT|
 |                          | CREATE (Open File) |
-|                          | WRITE |
+|                          | SET\_INFO (FileEndOfFileInformation by a new EoF position) |
 |                          | Expect STATUS\_SUCCESS in CHANGE\_NOTIFY response |
 |                          | Close Client2 |
 |                          | CLOSE |
@@ -2142,7 +2146,7 @@ This is used to test SMB2 common user scenarios.
 | **Message Sequence**          | 1.  Start a client to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
 |                               | 2.  Client starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_EA and flag WATCH\_TREE. |
 |                               | 3.  Client starts to create a file under directory by sending CREATE request. |
-|                               | 4.  Client sets extended attribute information for the file by sending SET_INFO request. |
+|                               | 4.  Client sets extended attribute information for the file by sending SET\_INFO request. |
 |                               | 5.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
@@ -2179,7 +2183,7 @@ This is used to test SMB2 common user scenarios.
 | **Message Sequence**          | 1.  Start a client to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
 |                               | 2.  Client starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_SECURITY and flag WATCH\_TREE. |
 |                               | 3.  Client starts to create a file under directory by sending CREATE request. |
-|                               | 4.  Client sets SACL\_SECURITY\_INFORMATION for the file by sending SET_INFO request. |
+|                               | 4.  Client sets SACL\_SECURITY\_INFORMATION for the file by sending SET\_INFO request. |
 |                               | 5.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
@@ -2792,6 +2796,96 @@ This is used to test SMB2 common user scenarios.
 |                          | TREE\_CONNECT|
 |                          | CREATE (File)|
 |                          | IOCtl with FSCTL_LMR_REQUEST_RESILIENCY |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
+
+####<a name="3.1.53"> QueryDir\_Reopen\_OnDir
+
+#####<a name="3.1.53.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify QUERY\_DIRECTORY with flag SMB2\_REOPEN to a directory is handled correctly |
+| **Message Sequence**          | 1.  Start a client to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                               | 2.  Client sends QUERY\_DIRECTORY request with flag SMB2\_REOPEN to query directory information on a directory. |
+|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cluster Involved Scenario** | **NO** |
+
+#####<a name="3.1.53.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT\_SMB2Basic\_QueryDir\_Reopen\_OnDir |
+| **Description** | Verify QUERY\_DIRECTORY with flag SMB2\_REOPEN to a directory is handled correctly. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (Directory)|
+|                          | QUERY\_DIRECTORY(flags: SMB2\_REOPEN, target: directory) |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
+
+####<a name="3.1.54"> QueryDir\_Reopen\_OnFile
+
+#####<a name="3.1.54.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify QUERY\_DIRECTORY with flag SMB2\_REOPEN to a file is handled correctly |
+| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                               | 2.  Client sends QUERY\_DIRECTORY request with flag SMB2\_REOPEN to query directory information on a file. |
+|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cluster Involved Scenario** | **NO** |
+
+#####<a name="3.1.54.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT\_SMB2Basic\_QueryDir\_Reopen\_OnFile |
+| **Description** | Verify QUERY\_DIRECTORY with flag SMB2\_REOPEN to a file is handled correctly. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | QUERY\_DIRECTORY(flags: SMB2\_REOPEN, target: File) |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
+
+####<a name="3.1.55"> Query\_Quota\_Info
+
+#####<a name="3.1.55.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify the behavior of querying quota information with FILE\_GET\_QUOTA\_INFO in SidBuffer. |
+| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                               | 2.  Client queries quota information by sending QUERY_INFO request. |
+|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF. |
+| **Cluster Involved Scenario** | **NO** |
+
+#####<a name="3.1.55.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT\_SMB2Basic\_Query\_Quota\_Info |
+| **Description** | Verify the behavior of querying quota information with FILE\_GET\_QUOTA\_INFO in SidBuffer. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | QUERY_INFO(SMB2\_0\_INFO\_QUOTA) |
 |                          | CLOSE |
 |                          | TREE\_DISCONNECT |
 |                          | LOGOFF |
@@ -5077,7 +5171,7 @@ This model has 6 scenarios.
 
 |||
 |---|---|
-|**Description**|It's a scenario to test how the server handles a READ/WRITE/IOCTL/SET_INFO request with/without replay flag and valid/invalid channel sequence.|
+|**Description**|It's a scenario to test how the server handles a READ/WRITE/IOCTL/SET\_INFO request with/without replay flag and valid/invalid channel sequence.|
 |**Machine**|        ReadConfig;|
 ||        PrepareFileOperation({ModelDialectRevision.Smb30, ModelDialectRevision.Smb302}, requestCommand)?;|
 ||        FileOperationRequest(_, _, requestCommand, _, _, _);|

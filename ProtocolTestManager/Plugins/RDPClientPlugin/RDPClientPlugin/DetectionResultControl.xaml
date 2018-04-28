@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="Microsoft.Protocols.TestManager.RDPClientPlugin.DetectionResultControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="700">
+
+    <Control.Resources>
+        <DataTemplate x:Key="GroupListTemplate">
+            <Expander x:Name="ResultMapHeader" Header="{Binding Header}" IsExpanded="False" FontSize="16" FontWeight="SemiBold" BorderThickness="0"
+                      Collapsed="ResultMapHeader_Collapsed" MouseEnter="ResultMapHeader_MouseEnter" MouseLeave="ResultMapHeader_MouseLeave" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Stretch">
+                <ListBox x:Name="ResultItemList" ItemTemplate="{DynamicResource ItemListTemplate}" ItemsSource="{Binding ResultItemList}"
+                         HorizontalAlignment="Stretch" Width="500" Margin="5,2,0,2" BorderThickness="0"
+                         SelectionChanged="ItemSelectedChanged"/>
+            </Expander>
+        </DataTemplate>
+        <HierarchicalDataTemplate x:Key="ItemListTemplate" ItemsSource="{Binding ResultItemList}">
+            <StackPanel Orientation="Horizontal" Margin="0,1">
+                <Image Height="16" Width="16" Source="{Binding ImageUrl}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBlock x:Name="ItemName" Text="{Binding Name}" FontSize="14" FontWeight="Normal" HorizontalAlignment="Stretch"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
+    </Control.Resources>
+ 
+    <Grid>
+            <Border HorizontalAlignment="Stretch" Margin="0,0,0,50" BorderBrush="Gray" BorderThickness="1">
+                <ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible"
+                              PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" >
+                    <ListBox x:Name="ResultMapList" HorizontalAlignment="Stretch" VerticalAlignment="Top" BorderThickness="0"
+                             ItemTemplate="{StaticResource GroupListTemplate}" SelectionChanged="MapSelectedChanged" MouseUp="ResultMapList_MouseUp"/>
+                </ScrollViewer>
+            </Border>
+            <TextBox x:Name="ItemDescription" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="50" Margin="0,10,0,0" BorderThickness="0"
+                     TextWrapping="Wrap" IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
+            <TextBox x:Name="MapDescription" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="50" Margin="0,10,0,0" BorderThickness="0"
+                     TextWrapping="Wrap" IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Collapsed"/>
+    </Grid>
+</UserControl>
