@@ -68,7 +68,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
             else if (nonRdmaNetworkInterfaceCount == 1)
             {
-                DetectionInfo.ServerNonRdmaNICIPAddress = nonRdmaNetworkInterfaces.First().IpAddress;
+                DetectionInfo.DriverNonRdmaNICIPAddress = nonRdmaNetworkInterfaces.First().IpAddress;
             }
             else
             {
@@ -80,7 +80,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 });
                 if (selected != null)
                 {
-                    DetectionInfo.ServerNonRdmaNICIPAddress = selected.IpAddress;
+                    DetectionInfo.DriverNonRdmaNICIPAddress = selected.IpAddress;
                 }
             }
 
@@ -92,7 +92,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
             else if (rdmaNetworkInterfaceCount == 1)
             {
-                DetectionInfo.ServerRdmaNICIPAddress = rdmaNetworkInterfaces.First().IpAddress;
+                DetectionInfo.DriverRdmaNICIPAddress = rdmaNetworkInterfaces.First().IpAddress;
             }
             else
             {
@@ -104,11 +104,11 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 });
                 if (selected != null)
                 {
-                    DetectionInfo.ServerRdmaNICIPAddress = selected.IpAddress;
+                    DetectionInfo.DriverRdmaNICIPAddress = selected.IpAddress;
                 }
             }
 
-            if (DetectionInfo.ServerNonRdmaNICIPAddress == null || DetectionInfo.ServerRdmaNICIPAddress == null)
+            if (DetectionInfo.DriverNonRdmaNICIPAddress == null || DetectionInfo.DriverRdmaNICIPAddress == null)
             {
                 // if user do not select any network interface by closing dialog
                 return false;

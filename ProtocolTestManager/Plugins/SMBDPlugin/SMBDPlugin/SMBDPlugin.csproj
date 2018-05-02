@@ -77,6 +77,7 @@
       <DependentUpon>NetworkInterfaceSelector.xaml</DependentUpon>
     </Compile>
     <Compile Include="Detector\PingSUT.cs" />
+    <Compile Include="Detector\Smb3Client.cs" />
     <Compile Include="Detector\SMBDDetector.cs" />
     <Compile Include="SMBDValueDetector.cs" />
     <Compile Include="Logger.cs" />

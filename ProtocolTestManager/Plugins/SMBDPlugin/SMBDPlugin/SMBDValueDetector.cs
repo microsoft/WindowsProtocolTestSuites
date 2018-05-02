@@ -20,6 +20,7 @@ namespace Microsoft.Protocols.TestManager.Detector
 
     static class PtfConfigConstant
     {
+        public const string SUTCOMPUTERNAME = "SutComputerName";
         public const string CLIENTNONRNICIP = "ClientNonRNicIp";
         public const string CLIENTRNICIP = "ClientRNicIp";
     }
@@ -55,8 +56,9 @@ namespace Microsoft.Protocols.TestManager.Detector
         public bool GetDetectedProperty(out Dictionary<string, List<string>> propertiesDic)
         {
             propertiesDic = new Dictionary<string, List<string>>();
-            propertiesDic[PtfConfigConstant.CLIENTNONRNICIP] = new List<string> { detectionInfo.ServerNonRdmaNICIPAddress };
-            propertiesDic[PtfConfigConstant.CLIENTRNICIP] = new List<string> { detectionInfo.ServerRdmaNICIPAddress };
+            propertiesDic[PtfConfigConstant.SUTCOMPUTERNAME] = new List<string> { detectionInfo.SUTName };
+            propertiesDic[PtfConfigConstant.CLIENTNONRNICIP] = new List<string> { detectionInfo.DriverNonRdmaNICIPAddress };
+            propertiesDic[PtfConfigConstant.CLIENTRNICIP] = new List<string> { detectionInfo.DriverRdmaNICIPAddress };
             return true;
         }
 
@@ -154,7 +156,11 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             detector.PingSUT();
 
-            detector.CheckUsernamePassword();
+            detector.GetLocalAdapters();
+
+            detector.GetOSVersion();
+
+            detector.GetRemoteAdapters();
 
             return true;
         }

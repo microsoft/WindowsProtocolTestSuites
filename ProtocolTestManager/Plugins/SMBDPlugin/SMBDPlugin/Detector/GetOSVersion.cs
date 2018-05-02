@@ -10,7 +10,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         /// Check whether the credential of SUT is valid.
         /// </summary>
         /// <returns>true/false indicating valid/invalid.</returns>
-        public bool CheckUsernamePassword()
+        public bool GetOSVersion()
         {
             if (!DetectionInfo.IsWindowsImplementation)
             {

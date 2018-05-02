@@ -54,84 +54,17 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         {
             try
             {
-                var smb2Client = new Smb2Client(new TimeSpan(0, 0, 10));
+                var client = new Smb3Client();
 
-                smb2Client.ConnectOverTCP(ip, IPAddress.Parse(DetectionInfo.ServerNonRdmaNICIPAddress));
+                client.Connect(ip);
 
-                ulong messageId = 0;
+                client.Negotiate(new DialectRevision[] { DialectRevision.Smb30, DialectRevision.Smb302, DialectRevision.Smb311 });
 
-                var clientId = Guid.NewGuid();
+                client.SessionSetup(DetectionInfo.Authentication, DetectionInfo.DomainName, DetectionInfo.SUTName, DetectionInfo.UserName, DetectionInfo.Password);
 
-                DialectRevision selectedDialect;
+                uint treeId;
 
-                byte[] gssToken;
-
-                Packet_Header packetHeader;
-
-                NEGOTIATE_Response resonse;
-
-                uint status;
-
-                status = smb2Client.Negotiate(
-                    1,
-                    1,
-                    Packet_Header_Flags_Values.NONE,
-                    messageId,
-                    new DialectRevision[] { DialectRevision.Smb30 },
-                    SecurityMode_Values.NONE,
-                    Capabilities_Values.NONE,
-                    clientId,
-                    out selectedDialect,
-                    out gssToken,
-                    out packetHeader,
-                    out resonse
-                    );
-
-                if (status != Smb2Status.STATUS_SUCCESS)
-                {
-                    return false;
-                }
-
-                messageId++;
-
-                var sspiClientGss = new SspiClientSecurityContext(
-                    DetectionInfo.Authentication,
-                    new AccountCredential(DetectionInfo.DomainName, DetectionInfo.UserName, DetectionInfo.Password),
-                    Smb2Utility.GetCifsServicePrincipalName(DetectionInfo.SUTName),
-                    ClientSecurityContextAttribute.None,
-                    SecurityTargetDataRepresentation.SecurityNativeDrep
-                    );
-
-
-                if (DetectionInfo.Authentication == SecurityPackageType.Negotiate)
-                {
-                    sspiClientGss.Initialize(gssToken);
-                }
-                else
-                {
-                    sspiClientGss.Initialize(null);
-                }
-
-                ulong sessionId = 0;
-
-                SESSION_SETUP_Response sessionSetupResponse;
-
-                status = smb2Client.SessionSetup(
-                    1,
-                    1,
-                    Packet_Header_Flags_Values.NONE,
-                    messageId,
-                    sessionId,
-                    SESSION_SETUP_Request_Flags.NONE,
-                    SESSION_SETUP_Request_SecurityMode_Values.NONE,
-                    SESSION_SETUP_Request_Capabilities_Values.NONE,
-                    0,
-                    sspiClientGss.Token,
-                    out sessionId,
-                    out gssToken,
-                    out packetHeader,
-                    out sessionSetupResponse
-                    );
+                client.TreeConnect("", out treeId);
 
                 return true;
             }
