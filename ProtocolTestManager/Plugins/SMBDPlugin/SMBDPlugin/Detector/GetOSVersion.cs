@@ -38,10 +38,13 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             {
                 try
                 {
-                    int ret = (int)output[0];
-                    if (ret == 0)
+                    var ret = ParseOSVersion(output[0]);
+                    if (ret != null)
                     {
-                        result = true;
+                        if (MapOSVersion(ret))
+                        {
+                            result = true;
+                        }
                     }
                 }
                 catch
@@ -67,7 +70,57 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
         }
 
+        private bool MapOSVersion(OSVersion os)
+        {
+            bool found = false;
+            if (os.Caption.Contains("Server"))
+            {
+                if (os.Version.StartsWith("10.0."))
+                {
+                    DetectionInfo.Platform = Platform.WindowsServer2016;
+                    found = true;
+                }
+                else if (os.Version.StartsWith("6.3."))
+                {
+                    DetectionInfo.Platform = Platform.WindowsServer2012R2;
+                    found = true;
+                }
+                else if (os.Version.StartsWith("6.2."))
+                {
+                    DetectionInfo.Platform = Platform.WindowsServer2012;
+                    found = true;
+                }
+                else if (os.Version.StartsWith("6.1."))
+                {
+                    DetectionInfo.Platform = Platform.WindowsServer2008R2;
+                    found = true;
+                }
+                else if (os.Version.StartsWith("6.0."))
+                {
+                    DetectionInfo.Platform = Platform.WindowsServer2008;
+                    found = true;
+                }
+            }
 
+            return found;
+        }
+
+        public OSVersion ParseOSVersion(dynamic inputObject)
+        {
+            try
+            {
+                var result = new OSVersion
+                {
+                    Caption = inputObject.Caption,
+                    Version = inputObject.Version
+                };
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
 
     }

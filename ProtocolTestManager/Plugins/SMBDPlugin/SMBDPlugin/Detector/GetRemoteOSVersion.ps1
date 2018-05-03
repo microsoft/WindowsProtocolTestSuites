@@ -9,8 +9,11 @@ $cred = New-Object System.Management.Automation.PSCredential "$ptfpropDomainName
 
 $scriptblock = {
 	try {
-	$osInfo = Get-WmiObject -Class Win32_OperatingSystem
-	return $osInfo.Version
+		$osInfo = Get-WmiObject -Class Win32_OperatingSystem
+		$result = "" | Select-Object -Property Caption, Version
+		$result.Caption = $osInfo.Caption
+		$result.Version = $osInfo.Version
+		return $result
 	}
 	catch {
 		return $null

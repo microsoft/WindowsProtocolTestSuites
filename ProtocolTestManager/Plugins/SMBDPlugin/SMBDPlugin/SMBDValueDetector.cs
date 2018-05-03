@@ -23,6 +23,7 @@ namespace Microsoft.Protocols.TestManager.Detector
         public const string SUTCOMPUTERNAME = "SutComputerName";
         public const string CLIENTNONRNICIP = "ClientNonRNicIp";
         public const string CLIENTRNICIP = "ClientRNicIp";
+        public const string PLATFORM = "Platform";
     }
 
     public class SMBDValueDetector : IValueDetector
@@ -59,6 +60,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             propertiesDic[PtfConfigConstant.SUTCOMPUTERNAME] = new List<string> { detectionInfo.SUTName };
             propertiesDic[PtfConfigConstant.CLIENTNONRNICIP] = new List<string> { detectionInfo.DriverNonRdmaNICIPAddress };
             propertiesDic[PtfConfigConstant.CLIENTRNICIP] = new List<string> { detectionInfo.DriverRdmaNICIPAddress };
+            propertiesDic[PtfConfigConstant.PLATFORM] = new List<string> { detectionInfo.Platform.ToString() };
             return true;
         }
 
@@ -73,7 +75,6 @@ namespace Microsoft.Protocols.TestManager.Detector
             DetectingItems.Add(new DetectingItem("Check SMB dialect", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check NICs of local computer", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check NICs of target SUT", DetectingStatus.Pending, LogStyle.Default));
-            DetectingItems.Add(new DetectingItem("Get OS version", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Connect to share(Non-RDMA)", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Connect to share(RDMA)", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check RDMA capability", DetectingStatus.Pending, LogStyle.Default));
@@ -156,9 +157,11 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             detector.PingSUT();
 
-            detector.GetLocalAdapters();
-
             detector.GetOSVersion();
+
+            DetectorUtil.WriteLog("", true, LogStyle.StepPassed);
+
+            detector.GetLocalAdapters();
 
             detector.GetRemoteAdapters();
 

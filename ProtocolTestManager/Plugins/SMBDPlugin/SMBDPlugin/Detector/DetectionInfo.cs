@@ -57,9 +57,14 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
     public class DetectionInfo
     {
         /// <summary>
+        /// Platform of SUT.
+        /// </summary>
+        public Platform Platform { get; set; }
+
+        /// <summary>
         /// Authentication type for SUT credential.
         /// </summary>
-        public SecurityPackageType Authentication;
+        public SecurityPackageType Authentication { get; set; }
 
         /// <summary>
         /// SUT host name.
@@ -118,5 +123,18 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         /// Indicating whether this network interface is RDMA-capable.
         /// </summary>
         public bool RDMACapable { get; set; }
+    }
+
+    public class OSVersion
+    {
+        /// <summary>
+        /// OS caption.
+        /// </summary>
+        public string Caption { get; set; }
+
+        /// <summary>
+        /// OS version.
+        /// </summary>
+        public string Version { get; set; }
     }
 }

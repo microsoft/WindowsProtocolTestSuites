@@ -8,18 +8,21 @@ using System.Net;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
-    class Smb3Client
+    class Smb3Client : IDisposable
     {
         private Smb2Client client;
         private ulong messageId;
         private Guid clientGuid;
+        private DialectRevision selectedDialect;
         private ulong sessionId;
-        private byte[] clientGssToken;
         private byte[] serverGssToken;
+        private int creditAvailable;
+        bool signingRequired;
+        bool encryptionEnabled;
 
         public Smb3Client()
         {
-            client = new Smb2Client(new TimeSpan(0, 0, 10));
+            client = new Smb2Client(new TimeSpan(0, 0, 20));
 
 
             messageId = 0;
@@ -28,9 +31,44 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             sessionId = 0;
 
-            clientGssToken = null;
             serverGssToken = null;
+
+            creditAvailable = 0;
+
         }
+
+
+
+        private ushort RequestAndConsumeCredit()
+        {
+            if (creditAvailable < 0)
+            {
+                throw new InvalidOperationException("Not enough credit!");
+            }
+
+            if (creditAvailable == 0)
+            {
+                creditAvailable--;
+                return 1;
+            }
+            else
+            {
+                creditAvailable--;
+                return 0;
+            }
+        }
+
+        private void UpdateCredit(Packet_Header header)
+        {
+            creditAvailable += header.CreditRequestResponse;
+
+            if (creditAvailable < 0)
+            {
+                throw new InvalidOperationException("Not enough credit!");
+            }
+        }
+
+
 
         public void Connect(IPAddress serverIp, IPAddress clientIp)
         {
@@ -51,11 +89,9 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
         public void Negotiate(DialectRevision[] requestDialects)
         {
-            DialectRevision selectedDialect;
-
             Packet_Header packetHeader;
 
-            NEGOTIATE_Response resonse;
+            NEGOTIATE_Response response;
 
             PreauthIntegrityHashID[] preauthHashAlgs = null;
             EncryptionAlgorithm[] encryptionAlgs = null;
@@ -67,27 +103,31 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
 
             uint status = client.Negotiate(
-                1,
-                1,
+                0,
+                RequestAndConsumeCredit(),
                 Packet_Header_Flags_Values.NONE,
                 GetMessageId(),
                 requestDialects,
-                SecurityMode_Values.NONE,
-                Capabilities_Values.NONE,
+                SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
+                Capabilities_Values.GLOBAL_CAP_ENCRYPTION,
                 clientGuid,
                 out selectedDialect,
-                out clientGssToken,
+                out serverGssToken,
                 out packetHeader,
-                out resonse,
+                out response,
                 0,
                 preauthHashAlgs,
                 encryptionAlgs
                 );
 
+            UpdateCredit(packetHeader);
+
             if (status != Smb2Status.STATUS_SUCCESS)
             {
                 throw new InvalidOperationException(String.Format("Negotiate failed with {0:X08}.", status));
             }
+
+            signingRequired = response.SecurityMode.HasFlag(NEGOTIATE_Response_SecurityMode_Values.NEGOTIATE_SIGNING_REQUIRED);
         }
 
         public void SessionSetup(SecurityPackageType authentication, string domain, string serverName, string userName, string password)
@@ -103,7 +143,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             if (authentication == SecurityPackageType.Negotiate)
             {
-                sspiClientGss.Initialize(clientGssToken);
+                sspiClientGss.Initialize(serverGssToken);
             }
             else
             {
@@ -119,15 +159,15 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             while (true)
             {
                 status = client.SessionSetup(
-                    1,
-                    1,
+                    0,
+                    RequestAndConsumeCredit(),
                     Packet_Header_Flags_Values.NONE,
                     GetMessageId(),
-                    0,
+                    sessionId,
                     SESSION_SETUP_Request_Flags.NONE,
-                    SESSION_SETUP_Request_SecurityMode_Values.NONE,
+                    SESSION_SETUP_Request_SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
                     SESSION_SETUP_Request_Capabilities_Values.NONE,
-                    0,
+                    sessionId,
                     sspiClientGss.Token,
                     out sessionId,
                     out serverGssToken,
@@ -135,18 +175,39 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                     out sessionSetupResponse
                     );
 
+                UpdateCredit(packetHeader);
+
+                if ((status == Smb2Status.STATUS_MORE_PROCESSING_REQUIRED || status == Smb2Status.STATUS_SUCCESS) && serverGssToken != null && serverGssToken.Length > 0)
+                {
+                    sspiClientGss.Initialize(serverGssToken);
+                }
+
                 if (status != Smb2Status.STATUS_MORE_PROCESSING_REQUIRED)
                 {
                     break;
                 }
-
-                sspiClientGss.Initialize(clientGssToken);
             }
 
             if (status != Smb2Status.STATUS_SUCCESS)
             {
                 throw new InvalidOperationException(String.Format("SessionSetup failed with {0:X08}.", status));
             }
+
+            encryptionEnabled = sessionSetupResponse.SessionFlags.HasFlag(SessionFlags_Values.SESSION_FLAG_ENCRYPT_DATA);
+
+            if (!encryptionEnabled)
+            {
+                signingRequired = true;
+            }
+
+            client.EnableSessionSigningAndEncryption(sessionId, signingRequired, encryptionEnabled);
+
+            client.GenerateCryptoKeys(
+                sessionId,
+                sspiClientGss.SessionKey,
+                signingRequired,
+                encryptionEnabled
+                );
 
         }
 
@@ -157,10 +218,11 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             TREE_CONNECT_Response response;
 
+
             uint status = client.TreeConnect(
-                1,
-                1,
-                Packet_Header_Flags_Values.NONE,
+                0,
+                RequestAndConsumeCredit(),
+                signingRequired ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
                 GetMessageId(),
                 sessionId,
                 path,
@@ -169,11 +231,54 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 out response
                 );
 
+            UpdateCredit(packetHeader);
+
 
             if (status != Smb2Status.STATUS_SUCCESS)
             {
                 throw new InvalidOperationException(String.Format("TreeConnect failed with {0:X08}.", status));
             }
+        }
+
+        public void IoCtl(uint treeId, CtlCode_Values ctlCode, FILEID fileId, IOCTL_Request_Flags_Values flag)
+        {
+            Packet_Header packetHeader;
+            IOCTL_Response response;
+
+            byte[] input;
+            byte[] output;
+
+            uint status = client.IoCtl(
+                0,
+                RequestAndConsumeCredit(),
+                signingRequired ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                GetMessageId(),
+                sessionId,
+                treeId,
+                ctlCode,
+                fileId,
+                0,
+                null,
+                4096,
+                flag,
+                out input,
+                out output,
+                out packetHeader,
+                out response
+                );
+
+            UpdateCredit(packetHeader);
+
+
+            if (status != Smb2Status.STATUS_SUCCESS)
+            {
+                throw new InvalidOperationException(String.Format("IoCtl failed with {0:X08}.", status));
+            }
+        }
+
+        public void Dispose()
+        {
+            client.Dispose();
         }
     }
 }

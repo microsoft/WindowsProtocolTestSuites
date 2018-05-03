@@ -107,6 +107,14 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Common\Common.csproj">
+      <Project>{fe653643-6342-4300-871e-683c7ba31494}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\FileAccessService\FileAccessService.csproj">
+      <Project>{ab191b32-b12d-42cb-976d-cea2c5bad8be}</Project>
+      <Name>FileAccessService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj">
       <Project>{c7f08825-d3c9-4ddd-9ba3-06733b1abe36}</Project>
       <Name>Smb2</Name>
