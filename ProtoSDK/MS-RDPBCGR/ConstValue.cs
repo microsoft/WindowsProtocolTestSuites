@@ -639,10 +639,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// The sourceDescriptor field of 2.2.1.13.2.1 Confirm Active PDU Data (TS_CONFIRM_ACTIVE_PDU).
         /// </summary>
         internal static readonly byte[] CONFIRM_SOURCE_DESCRIPTOR =
-            new byte[] { 0x4D, 0x53, 0x54, 0x53, 0x43, 0x00 };//'M', 'S', 'T', 'S', 'C'
+            new byte[] { 0x4D, 0x53, 0x54, 0x53, 0x43, 0x00 };//'M', 'S', 'T', 'S', 'C', '\0'
 
         internal static readonly byte[] DEMAND_SOURCE_DESCRIPTOR =
-            new byte[] { 0x52, 0x44, 0x50, 0x00 }; //'R', 'D', 'P' '\0 
+            new byte[] { 0x52, 0x44, 0x50, 0x00 }; //'R', 'D', 'P', '\0' 
 
         #endregion Confirm Active PDU
 
