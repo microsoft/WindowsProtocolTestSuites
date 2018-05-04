@@ -11,10 +11,29 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         {
             DetectionInfo = detectionInfo;
         }
-        
-        
 
-        
-        
+
+        public bool Detect()
+        {
+
+            PingSUT();
+
+            GetOSVersion();
+
+
+            GetLocalAdapters();
+
+            CheckSmbDialect();
+
+            GetRemoteAdapters();
+
+            ConnectToShareNonRDMA();
+
+            ConnectToShareRDMA();
+
+            return true;
+        }
+
+
     }
 }

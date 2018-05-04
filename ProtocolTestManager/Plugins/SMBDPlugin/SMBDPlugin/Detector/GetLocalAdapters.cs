@@ -54,7 +54,9 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
         private bool FilterNetworkInterfaces(object[] output)
         {
-            var networkInterfaces = output.Select(item => ParseLocalNetworkInterfaceInformation(item));
+            var networkInterfaces = output
+                                        .Select(item => ParseLocalNetworkInterfaceInformation(item))
+                                        .Where(item => item != null);
 
             var nonRdmaNetworkInterfaces = networkInterfaces.Where(networkInterface => !networkInterface.RDMACapable);
 
@@ -63,54 +65,65 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             int nonRdmaNetworkInterfaceCount = nonRdmaNetworkInterfaces.Count();
             if (nonRdmaNetworkInterfaceCount == 0)
             {
-                DetectorUtil.WriteLog("Failed to detect any non-RDMA network interface!");
+                DetectorUtil.WriteLog("Failed to detect any non-RDMA network interface of driver computer!");
                 return false;
             }
             else if (nonRdmaNetworkInterfaceCount == 1)
             {
                 DetectionInfo.DriverNonRdmaNICIPAddress = nonRdmaNetworkInterfaces.First().IpAddress;
+                DetectorUtil.WriteLog(string.Format("Choose {0} as non-RDMA IP address of driver computer.", DetectionInfo.DriverNonRdmaNICIPAddress));
             }
             else
             {
                 var selected = Application.Current.Dispatcher.Invoke(() =>
                 {
-                    var dialog = new NetworkInterfaceSelector(nonRdmaNetworkInterfaces.ToArray());
-                    return dialog.ShowDialog("Please select the non-RDMA network interface");
+                    var dialog = new LocalNetworkInterfaceSelector(nonRdmaNetworkInterfaces.ToArray());
+                    return dialog.ShowDialog("Please select the non-RDMA network interface of driver computer");
 
                 });
                 if (selected != null)
                 {
                     DetectionInfo.DriverNonRdmaNICIPAddress = selected.IpAddress;
+                    DetectorUtil.WriteLog(string.Format("User chose {0} as non-RDMA IP address of driver computer.", DetectionInfo.DriverNonRdmaNICIPAddress));
+                }
+                else
+                {
+                    DetectorUtil.WriteLog("User skipped choosing non-RDMA network interface of driver computer.");
                 }
             }
 
             int rdmaNetworkInterfaceCount = rdmaNetworkInterfaces.Count();
             if (rdmaNetworkInterfaceCount == 0)
             {
-                DetectorUtil.WriteLog("Failed to detect any RDMA network interface!");
+                DetectorUtil.WriteLog("Failed to detect any RDMA network interface of driver computer!");
                 return false;
             }
             else if (rdmaNetworkInterfaceCount == 1)
             {
                 DetectionInfo.DriverRdmaNICIPAddress = rdmaNetworkInterfaces.First().IpAddress;
+                DetectorUtil.WriteLog(string.Format("Choose {0} as RDMA IP address of driver computer.", DetectionInfo.DriverRdmaNICIPAddress));
             }
             else
             {
                 var selected = Application.Current.Dispatcher.Invoke(() =>
                 {
-                    var dialog = new NetworkInterfaceSelector(rdmaNetworkInterfaces.ToArray());
-                    return dialog.ShowDialog("Please select the RDMA network interface");
-
+                    var dialog = new LocalNetworkInterfaceSelector(rdmaNetworkInterfaces.ToArray());
+                    return dialog.ShowDialog("Please select the RDMA network interface of driver computer");
                 });
                 if (selected != null)
                 {
                     DetectionInfo.DriverRdmaNICIPAddress = selected.IpAddress;
+                    DetectorUtil.WriteLog(string.Format("User chose {0} as RDMA IP address of driver computer.", DetectionInfo.DriverRdmaNICIPAddress));
+                }
+                else
+                {
+                    DetectorUtil.WriteLog("User skipped choosing RDMA network interface of driver computer.");
                 }
             }
 
             if (DetectionInfo.DriverNonRdmaNICIPAddress == null || DetectionInfo.DriverRdmaNICIPAddress == null)
             {
-                // if user do not select any network interface by closing dialog
+                // if user do not select any network interface
                 return false;
             }
 

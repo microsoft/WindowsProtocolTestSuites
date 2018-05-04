@@ -8,7 +8,7 @@ using System.Net;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
-    class Smb3Client : IDisposable
+    class SMB3Client : IDisposable
     {
         private Smb2Client client;
         private ulong messageId;
@@ -20,7 +20,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         bool signingRequired;
         bool encryptionEnabled;
 
-        public Smb3Client()
+        public SMB3Client()
         {
             client = new Smb2Client(new TimeSpan(0, 0, 20));
 
@@ -75,10 +75,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             client.ConnectOverTCP(serverIp, clientIp);
         }
 
-        public void Connect(IPAddress serverIp)
-        {
-            client.ConnectOverTCP(serverIp);
-        }
 
         private ulong GetMessageId()
         {
@@ -195,12 +191,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             encryptionEnabled = sessionSetupResponse.SessionFlags.HasFlag(SessionFlags_Values.SESSION_FLAG_ENCRYPT_DATA);
 
-            if (!encryptionEnabled)
-            {
-                signingRequired = true;
-            }
-
-            client.EnableSessionSigningAndEncryption(sessionId, signingRequired, encryptionEnabled);
 
             client.GenerateCryptoKeys(
                 sessionId,
@@ -208,6 +198,13 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 signingRequired,
                 encryptionEnabled
                 );
+
+            if (!encryptionEnabled)
+            {
+                signingRequired = true;
+            }
+
+            client.EnableSessionSigningAndEncryption(sessionId, signingRequired, encryptionEnabled);
 
         }
 
@@ -240,13 +237,52 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
         }
 
-        public void IoCtl(uint treeId, CtlCode_Values ctlCode, FILEID fileId, IOCTL_Request_Flags_Values flag)
+
+        public void CreateRandomFile(uint treeId, out FILEID fileId)
+        {
+            Packet_Header packetHeader;
+
+            CREATE_Response response;
+
+            string fileName = string.Format("{0}.txt", Guid.NewGuid());
+
+            Smb2CreateContextResponse[] createContextResponse;
+
+            uint status = client.Create(
+                0,
+                RequestAndConsumeCredit(),
+                signingRequired ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                GetMessageId(),
+                sessionId,
+                treeId,
+                fileName,
+                AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE,
+                ShareAccess_Values.NONE,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                CreateDisposition_Values.FILE_CREATE,
+                File_Attributes.FILE_ATTRIBUTE_NORMAL,
+                ImpersonationLevel_Values.Impersonation,
+                SecurityFlags_Values.NONE,
+                RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE,
+                null,
+                out fileId,
+                out createContextResponse,
+                out packetHeader,
+                out response
+                );
+
+            UpdateCredit(packetHeader);
+
+            if (status != Smb2Status.STATUS_SUCCESS)
+            {
+                throw new InvalidOperationException(String.Format("Create failed with {0:X08}.", status));
+            }
+        }
+
+        public void IoCtl(uint treeId, CtlCode_Values ctlCode, FILEID fileId, IOCTL_Request_Flags_Values flag, out byte[] input, out byte[] output)
         {
             Packet_Header packetHeader;
             IOCTL_Response response;
-
-            byte[] input;
-            byte[] output;
 
             uint status = client.IoCtl(
                 0,
@@ -269,10 +305,71 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             UpdateCredit(packetHeader);
 
-
             if (status != Smb2Status.STATUS_SUCCESS)
             {
                 throw new InvalidOperationException(String.Format("IoCtl failed with {0:X08}.", status));
+            }
+        }
+
+        public void Read(uint treeId, FILEID fileId, ulong offset, uint length, out byte[] output)
+        {
+            Packet_Header packetHeader;
+            READ_Response response;
+
+            uint status = client.Read(
+                0,
+                RequestAndConsumeCredit(),
+                signingRequired ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                GetMessageId(),
+                sessionId,
+                treeId,
+                length,
+                offset,
+                fileId,
+                length,
+                Channel_Values.CHANNEL_NONE,
+                0,
+                new byte[0],
+                out output,
+                out packetHeader,
+                out response
+                );
+
+            UpdateCredit(packetHeader);
+
+            if (status != Smb2Status.STATUS_SUCCESS)
+            {
+                throw new InvalidOperationException(String.Format("Read failed with {0:X08}.", status));
+            }
+        }
+
+        public void Write(uint treeId, FILEID fileId, ulong offset, byte[] input)
+        {
+            Packet_Header packetHeader;
+            WRITE_Response response;
+
+            uint status = client.Write(
+                0,
+                RequestAndConsumeCredit(),
+                signingRequired ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                GetMessageId(),
+                sessionId,
+                treeId,
+                offset,
+                fileId,
+                Channel_Values.CHANNEL_NONE,
+                WRITE_Request_Flags_Values.None,
+                new byte[0],
+                 input,
+                out packetHeader,
+                out response
+                );
+
+            UpdateCredit(packetHeader);
+
+            if (status != Smb2Status.STATUS_SUCCESS)
+            {
+                throw new InvalidOperationException(String.Format("Write failed with {0:X08}.", status));
             }
         }
 

@@ -1,11 +1,11 @@
-﻿<Window x:Class="Microsoft.Protocols.TestManager.FileServerPlugin.Detector.NetworkInterfaceSelector"
+﻿<Window x:Class="Microsoft.Protocols.TestManager.FileServerPlugin.Detector.LocalNetworkInterfaceSelector"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Microsoft.Protocols.TestManager.FileServerPlugin.Detector"
         mc:Ignorable="d"
-        Title="NetworkInterfaceSelector" Height="320" Width="500" WindowStyle="SingleBorderWindow" ResizeMode="NoResize">
+        Height="320" Width="500" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" Closed="Window_Closed">
 
 
 
@@ -29,8 +29,8 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Name" CellTemplate="{StaticResource NameColumn}" />
-                    <GridViewColumn Header="IP Address" DisplayMemberBinding="{Binding Path=IpAddress}" />
-                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Path=Description}" />
+                    <GridViewColumn Header="IP Address" CellTemplate="{StaticResource IpAddressColumn}" />
+                    <GridViewColumn Header="Description" CellTemplate="{StaticResource DescriptionColumn}" />
                 </GridView>
             </ListView.View>
         </ListView>

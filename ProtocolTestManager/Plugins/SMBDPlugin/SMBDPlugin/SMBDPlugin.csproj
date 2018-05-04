@@ -68,16 +68,21 @@
     <Compile Include="DetectionResultControl.xaml.cs">
       <DependentUpon>DetectionResultControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Detector\CheckSmbDialect.cs" />
+    <Compile Include="Detector\ConnectToShare.cs" />
     <Compile Include="Detector\GetOSVersion.cs" />
     <Compile Include="Detector\DetectionInfo.cs" />
     <Compile Include="Detector\ExecutePowerShellCommand.cs" />
     <Compile Include="Detector\GetLocalAdapters.cs" />
     <Compile Include="Detector\GetRemoteAdapters.cs" />
-    <Compile Include="Detector\NetworkInterfaceSelector.xaml.cs">
-      <DependentUpon>NetworkInterfaceSelector.xaml</DependentUpon>
+    <Compile Include="Detector\LocalNetworkInterfaceSelector.xaml.cs">
+      <DependentUpon>LocalNetworkInterfaceSelector.xaml</DependentUpon>
     </Compile>
     <Compile Include="Detector\PingSUT.cs" />
-    <Compile Include="Detector\Smb3Client.cs" />
+    <Compile Include="Detector\RemoteNetworkInterfaceSelector.xaml.cs">
+      <DependentUpon>RemoteNetworkInterfaceSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Detector\SMB3Client.cs" />
     <Compile Include="Detector\SMBDDetector.cs" />
     <Compile Include="SMBDValueDetector.cs" />
     <Compile Include="Logger.cs" />
@@ -88,7 +93,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Detector\NetworkInterfaceSelector.xaml">
+    <Page Include="Detector\LocalNetworkInterfaceSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Detector\RemoteNetworkInterfaceSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -14,6 +14,7 @@ namespace Microsoft.Protocols.TestManager.Detector
         public const string DOMAINNAME = "Domain Name";
         public const string SUTUSERNAME = "SUT User Name";
         public const string SUTPASSWORD = "SUT Password";
+        public const string SHAREFOLDER = "SUT Shared Folder";
         public const string ISWINDOWSIMPLEMENTATION = "Is Windows Implementation";
         public const string AUTHENTICATION = "Authentication";
     }
@@ -21,9 +22,15 @@ namespace Microsoft.Protocols.TestManager.Detector
     static class PtfConfigConstant
     {
         public const string SUTCOMPUTERNAME = "SutComputerName";
+        public const string DOMAINNAME = "DomainName";
+        public const string SUTUSERNAME = "SutUserName";
+        public const string SUTPASSWORD = "SutPassword";
+        public const string SERVERNONRNICIP = "ServerNonRNicIp";
+        public const string SERVERRNICIP = "ServerRNicIp";
         public const string CLIENTNONRNICIP = "ClientNonRNicIp";
         public const string CLIENTRNICIP = "ClientRNicIp";
         public const string PLATFORM = "Platform";
+        public const string SHAREFOLDER = "ShareFolder";
     }
 
     public class SMBDValueDetector : IValueDetector
@@ -46,6 +53,7 @@ namespace Microsoft.Protocols.TestManager.Detector
         /// </summary>
         public void Dispose()
         {
+
         }
 
         /// <summary>
@@ -58,9 +66,15 @@ namespace Microsoft.Protocols.TestManager.Detector
         {
             propertiesDic = new Dictionary<string, List<string>>();
             propertiesDic[PtfConfigConstant.SUTCOMPUTERNAME] = new List<string> { detectionInfo.SUTName };
+            propertiesDic[PtfConfigConstant.SERVERNONRNICIP] = new List<string> { detectionInfo.SUTNonRdmaNICIPAddress };
+            propertiesDic[PtfConfigConstant.SERVERRNICIP] = new List<string> { detectionInfo.SUTRdmaNICIPAddress };
             propertiesDic[PtfConfigConstant.CLIENTNONRNICIP] = new List<string> { detectionInfo.DriverNonRdmaNICIPAddress };
             propertiesDic[PtfConfigConstant.CLIENTRNICIP] = new List<string> { detectionInfo.DriverRdmaNICIPAddress };
             propertiesDic[PtfConfigConstant.PLATFORM] = new List<string> { detectionInfo.Platform.ToString() };
+            propertiesDic[PtfConfigConstant.SHAREFOLDER] = new List<string> { detectionInfo.ShareFolder };
+            propertiesDic[PtfConfigConstant.SUTUSERNAME] = new List<string> { detectionInfo.UserName };
+            propertiesDic[PtfConfigConstant.SUTPASSWORD] = new List<string> { detectionInfo.Password };
+            propertiesDic[PtfConfigConstant.DOMAINNAME] = new List<string> { detectionInfo.DomainName };
             return true;
         }
 
@@ -72,8 +86,8 @@ namespace Microsoft.Protocols.TestManager.Detector
             List<DetectingItem> DetectingItems = new List<DetectingItem>();
             DetectingItems.Add(new DetectingItem("Ping target SUT", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check OS version", DetectingStatus.Pending, LogStyle.Default));
-            DetectingItems.Add(new DetectingItem("Check SMB dialect", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check NICs of local computer", DetectingStatus.Pending, LogStyle.Default));
+            DetectingItems.Add(new DetectingItem("Check SMB dialect", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check NICs of target SUT", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Connect to share(Non-RDMA)", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Connect to share(RDMA)", DetectingStatus.Pending, LogStyle.Default));
@@ -105,16 +119,16 @@ namespace Microsoft.Protocols.TestManager.Detector
             // Properties
             prerequisites.Properties = new Dictionary<string, List<string>>();
 
-            string sutName = DetectorUtil.GetPropertyValue("SutComputerName");
+            string sutName = DetectorUtil.GetPropertyValue(PtfConfigConstant.SUTCOMPUTERNAME);
             prerequisites.Properties.Add(PropertyDictionaryConstant.SUTNAME, new List<string> { sutName });
 
-            string domainName = DetectorUtil.GetPropertyValue("DomainName");
+            string domainName = DetectorUtil.GetPropertyValue(PtfConfigConstant.DOMAINNAME);
             prerequisites.Properties.Add(PropertyDictionaryConstant.DOMAINNAME, new List<string> { domainName });
 
-            string sutUserName = DetectorUtil.GetPropertyValue("SutUserName");
+            string sutUserName = DetectorUtil.GetPropertyValue(PtfConfigConstant.SUTUSERNAME);
             prerequisites.Properties.Add(PropertyDictionaryConstant.SUTUSERNAME, new List<string> { sutUserName });
 
-            string sutPassword = DetectorUtil.GetPropertyValue("SutPassword");
+            string sutPassword = DetectorUtil.GetPropertyValue(PtfConfigConstant.SUTPASSWORD);
             prerequisites.Properties.Add(PropertyDictionaryConstant.SUTPASSWORD, new List<string> { sutPassword });
 
             prerequisites.Properties.Add(PropertyDictionaryConstant.AUTHENTICATION, new List<string>() {
@@ -123,8 +137,8 @@ namespace Microsoft.Protocols.TestManager.Detector
                 SecurityPackageType.Ntlm.ToString()
             });
 
-            string shareFolder = DetectorUtil.GetPropertyValue("ShareFolder");
-            prerequisites.Properties.Add("SUT Shared Folder", new List<string> { shareFolder });
+            string shareFolder = DetectorUtil.GetPropertyValue(PtfConfigConstant.SHAREFOLDER);
+            prerequisites.Properties.Add(PropertyDictionaryConstant.SHAREFOLDER, new List<string> { shareFolder });
 
             prerequisites.Properties.Add(PropertyDictionaryConstant.ISWINDOWSIMPLEMENTATION, new List<string> { "True", "False" });
 
@@ -155,17 +169,9 @@ namespace Microsoft.Protocols.TestManager.Detector
         {
             var detector = new SMBDDetector(detectionInfo);
 
-            detector.PingSUT();
+            bool result = detector.Detect();
 
-            detector.GetOSVersion();
-
-            DetectorUtil.WriteLog("", true, LogStyle.StepPassed);
-
-            detector.GetLocalAdapters();
-
-            detector.GetRemoteAdapters();
-
-            return true;
+            return result;
         }
 
         public void SelectEnvironment(string NetworkEnvironment)
@@ -181,6 +187,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             detectionInfo.UserName = properties[PropertyDictionaryConstant.SUTUSERNAME];
             detectionInfo.Password = properties[PropertyDictionaryConstant.SUTPASSWORD];
             detectionInfo.IsWindowsImplementation = Boolean.Parse(properties[PropertyDictionaryConstant.ISWINDOWSIMPLEMENTATION]);
+            detectionInfo.ShareFolder = properties[PropertyDictionaryConstant.SHAREFOLDER];
             return true;
         }
     }

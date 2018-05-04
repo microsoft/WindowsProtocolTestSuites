@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using System;
 using System.Collections.Generic;
@@ -92,14 +93,34 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         public bool IsWindowsImplementation { get; set; }
 
         /// <summary>
-        /// The IP address of RDMA network interface.
+        /// The IP address of RDMA network interface on driver computer.
         /// </summary>
         public string DriverRdmaNICIPAddress { get; set; }
 
         /// <summary>
-        /// The IP address of non-RDMA network interface.
+        /// The IP address of non-RDMA network interface on driver computer.
         /// </summary>
         public string DriverNonRdmaNICIPAddress { get; set; }
+
+        /// <summary>
+        /// The IP address of RDMA network interface on SUT.
+        /// </summary>
+        public string SUTRdmaNICIPAddress { get; set; }
+
+        /// <summary>
+        /// The IP address of non-RDMA network interface on SUT.
+        /// </summary>
+        public string SUTNonRdmaNICIPAddress { get; set; }
+
+        /// <summary>
+        /// Share folder on SUT.
+        /// </summary>
+        public string ShareFolder { get; set; }
+
+        /// <summary>
+        /// SMB dialects supported by SUT.
+        /// </summary>
+        public DialectRevision[] SupportedSmbDialects { get; set; }
     }
 
     public class LocalNetworkInterfaceInformation
@@ -118,6 +139,29 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         /// Description of network interface.
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Indicating whether this network interface is RDMA-capable.
+        /// </summary>
+        public bool RDMACapable { get; set; }
+    }
+
+    public class RemoteNetworkInterfaceInformation
+    {
+        /// <summary>
+        /// Index of network interface.
+        /// </summary>
+        public uint IfIndex { get; set; }
+
+        /// <summary>
+        /// IP Address of network interface.
+        /// </summary>
+        public string IpAddress { get; set; }
+
+        /// <summary>
+        /// The speed of network interface.
+        /// </summary>
+        public string LinkSpeed { get; set; }
 
         /// <summary>
         /// Indicating whether this network interface is RDMA-capable.
