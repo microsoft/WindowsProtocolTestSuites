@@ -134,7 +134,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
             //"$INDEX_ALLOCATION", the operation MUST be failed with STATUS_ACCESS_DENIED.
             if (streamTypeNameToOPen == StreamTypeNameToOpen.Other)
             {
-                Helper.CaptureRequirement(420, @"[In Creation of a New File,Pseudocode for the operation is as follows:]If StreamTypeNameToOpen is non-empty and has a value other than \""$DATA"",the operation MUST be failed with STATUS_ACCESS_DENIED.");
+                Helper.CaptureRequirement(420, @"[In Creation of a New File,Pseudocode for the operation is as follows:]If StreamTypeNameToOpen is non-empty and has a value other than \""$DATA"",the operation MUST be failed with STATUS_OBJECT_NAME_INVALID.");
                 return MessageStatus.OBJECT_NAME_INVALID;
             }
 
