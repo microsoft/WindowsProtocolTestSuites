@@ -299,16 +299,28 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             try
             {
                 BaseTestSite.Log.Add(LogEntryKind.Checkpoint, "Try to delete replication destination from repsTo for later testing. It MAY fails if there is no such record to delete");
-                drsTestClient.DrsUpdateRefs(EnvironmentConfig.Machine.WritableDC1, (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2], DRS_OPTIONS.DRS_DEL_REF);
+                drsTestClient.DrsUpdateRefs(
+                    EnvironmentConfig.Machine.WritableDC1,
+                    DrsUpdateRefs_Versions.V1,
+                    (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2],
+                    DRS_OPTIONS.DRS_DEL_REF);
             }
             catch
             {
                 BaseTestSite.Log.Add(LogEntryKind.Checkpoint, "No similar record to delete in repsTo. It's OK to continue");
             }
 
-            drsTestClient.DrsUpdateRefs(EnvironmentConfig.Machine.WritableDC1, (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2], DRS_OPTIONS.DRS_ADD_REF);
+            drsTestClient.DrsUpdateRefs(
+                EnvironmentConfig.Machine.WritableDC1,
+                DrsUpdateRefs_Versions.V1,
+                (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2],
+                DRS_OPTIONS.DRS_ADD_REF);
 
-            drsTestClient.DrsUpdateRefs(EnvironmentConfig.Machine.WritableDC1, (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2], DRS_OPTIONS.DRS_DEL_REF);
+            drsTestClient.DrsUpdateRefs(
+                EnvironmentConfig.Machine.WritableDC1,
+                DrsUpdateRefs_Versions.V1,
+                (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2],
+                DRS_OPTIONS.DRS_DEL_REF);
         }
 
 

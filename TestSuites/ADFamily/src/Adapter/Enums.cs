@@ -65,9 +65,14 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Common
         DS_BEHAVIOR_WIN2012R2 = 6,
 
         /// <summary>
+        /// Windows Server v1803
+        /// </summary>
+        DS_BEHAVIOR_WINv1803 = 7,
+
+        /// <summary>
         /// Windows Threshold
         /// </summary>
-        DS_BEHAVIOR_WINTHRESHOLD = 7
+        DS_BEHAVIOR_WINTHRESHOLD = 8
     }
 
     /// <summary>

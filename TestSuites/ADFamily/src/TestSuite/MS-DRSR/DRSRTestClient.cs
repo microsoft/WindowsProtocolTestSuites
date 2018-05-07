@@ -405,9 +405,51 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         }
 
         /// <summary>
+        /// To create a request message of DRS_MSG_REPSYNC.
+        /// </summary>
+        /// <param name="pNC">The DSName of the specified NC.</param>
+        /// <param name="reqVer">The version of request</param>
+        /// <param name="sourceDsaGuid">The source DSA GUID.</param>
+        /// <param name="sourceDsaName">The transport-specific NetworkAddress of the source DC.</param>
+        /// <param name="options">The DRS_OPTIONS flags.</param>
+        /// <returns> the created RPC input parameter.</returns>
+        public DRS_MSG_REPSYNC CreateReplicaSyncRequest(
+            DrsReplicaSync_Versions reqVer,
+            DSNAME? pNC,
+            Guid sourceDsaGuid,
+            string sourceDsaName,
+            DRS_OPTIONS options)
+        {
+            DRS_MSG_REPSYNC request = new DRS_MSG_REPSYNC();
+            switch (reqVer)
+            {
+                case DrsReplicaSync_Versions.V1:
+                    request.V1 = drsClient.CreateReplicaSyncRequestV1(
+                        pNC,
+                        sourceDsaGuid,
+                        sourceDsaName,
+                        options);
+                    break;
+                case DrsReplicaSync_Versions.V2:
+                    DRS_MSG_REPSYNC_V1 v1 = drsClient.CreateReplicaSyncRequestV1(
+                        pNC,
+                        sourceDsaGuid,
+                        sourceDsaName,
+                        options);
+
+                    request.V2 = drsClient.CreateReplicaSyncRequestV2(v1);
+                    break;
+                default:
+                    testSite.Assert.Fail("The version {0} is not supported.", inVer);
+                    break;
+            }
+            return request;
+        }
+
+        /// <summary>
         /// Calling  IDL_DRSReplicaSync method to trigger replication from another DC, and verify the server response.
         /// </summary>
-        ///  <param name="svr">the bind DC response to the request</param>
+        /// <param name="svr">the bind DC response to the request</param>
         /// <param name="reqVer">The version of request.</param>
         /// <param name="sourceDC">The source DC where to replicated from. None if replicate from all partners.</param>
         /// <param name="options">The operation options.</param>
@@ -442,7 +484,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             DRS_MSG_REPSYNC? inMessage = null;
             if (options.HasFlag(DRS_OPTIONS.DRS_SYNC_ALL))
             {
-                inMessage = drsClient.CreateReplicaSyncRequest(
+                inMessage = CreateReplicaSyncRequest(
+                        reqVer,
                         pNC,
                         srcServer.NtdsDsaObjectGuid, //Potential TDI, the Dsa Object Guid should be filled when DRS_SYNC_ALL is set.
                         null,
@@ -453,7 +496,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
                 if (bUseDsaGuid)
                 {
-                    inMessage = drsClient.CreateReplicaSyncRequest(
+                    inMessage = CreateReplicaSyncRequest(
+                        reqVer,
                         pNC,
                         srcServer.NtdsDsaObjectGuid,
                         null,
@@ -462,7 +506,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                 else
                 {
                     options |= DRS_OPTIONS.DRS_SYNC_BYNAME;
-                    inMessage = drsClient.CreateReplicaSyncRequest(
+                    inMessage = CreateReplicaSyncRequest(
+                        reqVer,
                         pNC,
                         Guid.Empty,
                         srcServer.DsaNetworkAddress,
@@ -664,6 +709,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             //create request message
             DRS_MSG_GETCHGREQ? inMessage = null;
             DRS_MSG_GETCHGREQ_V5 V5;
+            DRS_MSG_GETCHGREQ_V8 V8;
             inMessage = drsClient.CreateDRSGetNCChangesRequestV5(
                         ((DsServer)EnvironmentConfig.MachineStore[destDCType]).NtdsDsaObjectGuid,
                         sourceServer.InvocationId,
@@ -704,12 +750,17 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                 case DrsGetNCChanges_Versions.V8:
                     V5 = inMessage.Value.V5;
                     inMessage = drsClient.CreateDRSGetNCChangesRequestV8(V5, cPAS, null, perfixTable);
-
                     break;
                 case DrsGetNCChanges_Versions.V10:
                     V5 = inMessage.Value.V5;
-                    DRS_MSG_GETCHGREQ_V8 V8 = drsClient.CreateDRSGetNCChangesRequestV8(V5, cPAS, null, perfixTable).V8;
+                    V8 = drsClient.CreateDRSGetNCChangesRequestV8(V5, cPAS, null, perfixTable).V8;
                     inMessage = drsClient.CreateDRSGetNCChangesRequestV10(V8, 0);
+                    break;
+                case DrsGetNCChanges_Versions.V11:
+                    V5 = inMessage.Value.V5;
+                    V8 = drsClient.CreateDRSGetNCChangesRequestV8(V5, cPAS, null, perfixTable).V8;
+                    DRS_MSG_GETCHGREQ_V10 V10 = drsClient.CreateDRSGetNCChangesRequestV10(V8, 0).V10;
+                    inMessage = drsClient.CreateDRSGetNCChangesRequestV11(V10, 0);
                     break;
                 default:
                     testSite.Assert.Fail("the version {0} is not supported", reqVer);
@@ -724,6 +775,64 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                 verifier.VerifyDrsGetNCChanges(ret, (uint)reqVer, inMessage, outVersion, outMessage);
 
             return ret;
+        }
+
+        /// <summary>
+        /// To create a request message of DRS_MSG_UPDREFS.
+        /// </summary>
+        /// <param name="ncReplicaDistinguishedName">the object's distinguishedName attribute of the root of an NC
+        /// replica on the server.</param>
+        /// <param name="reqVer">The version of the request.</param>
+        /// <param name="ncReplicaObjectGuid">the object's objectGUID attribute of the root of an NC replica on the
+        /// server.</param>
+        /// <param name="ncReplicaObjectSid">the object's objectSid attribute of the root of an NC replica on the
+        /// server.</param>
+        /// <param name="destDsaName">The transport-specific NetworkAddress of the dest DC.</param>
+        /// <param name="destDsaGuid">The dest DSA GUID.</param>
+        /// <param name="options">The DRS_OPTIONS flags.</param>
+        /// <returns> the created RPC input parameter.
+        /// Marshal.StringToHGlobalAnsi is used to allocate the unmanaged memory required for the pszDsaDest of the 
+        /// returned struct. So the caller is responsible for free the memory by calling FreeHGlobal when the returned
+        /// struct is no longer needed. </returns>
+        //[CLSCompliant(false)]
+        public DRS_MSG_UPDREFS CreateUpdateRefsRequest(
+            DrsUpdateRefs_Versions reqVer,
+            string ncReplicaDistinguishedName,
+            Guid ncReplicaObjectGuid,
+            string ncReplicaObjectSid,
+            string destDsaName,
+            Guid destDsaGuid,
+            DRS_OPTIONS options)
+        {
+            DRS_MSG_UPDREFS request = new DRS_MSG_UPDREFS();
+            switch (reqVer)
+            {
+                case DrsUpdateRefs_Versions.V1:
+                    request.V1 = drsClient.CreateUpdateRefsRequestV1(
+                        ncReplicaDistinguishedName,
+                        ncReplicaObjectGuid,
+                        ncReplicaObjectSid,
+                        destDsaName,
+                        destDsaGuid,
+                        options
+                    );
+                    break;
+                case DrsUpdateRefs_Versions.V2:
+                    DRS_MSG_UPDREFS_V1 v1 = drsClient.CreateUpdateRefsRequestV1(
+                        ncReplicaDistinguishedName,
+                        ncReplicaObjectGuid,
+                        ncReplicaObjectSid,
+                        destDsaName,
+                        destDsaGuid,
+                        options
+                    );
+                    request.V2 = drsClient.CreateUpdateRefsRequestV2(v1);
+                    break;
+                default:
+                    testSite.Assert.Fail("The version {0} is not supported.", reqVer);
+                    break;
+            }
+            return request;
         }
 
         /// <summary>
@@ -955,6 +1064,21 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                         s,
                         options);
                     break;
+                case DRS_MSG_REPADD_Versions.V3:
+                    req = drsClient.CreateReplicaAddV3Request(
+                        LdapUtility.ConvertUshortArrayToString(n.StringName),
+                        n.Guid,
+                        sid,
+                        src.NtdsDsaObjectName,
+                        src.NtdsDsaObjectGuid,
+                        null,
+                        LdapUtility.ConvertUshortArrayToString(EnvironmentConfig.TransportObject.StringName).Replace("\0", ""),
+                        EnvironmentConfig.TransportObject.Guid,
+                        null,
+                        src.DsaNetworkAddress,
+                        s,
+                        options);
+                    break;
                 default:
                     testSite.Assert.Fail("Invalid request version for DRS_MSG_REPADD: " + (uint)inVer);
                     break;
@@ -1072,7 +1196,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         /// <param name="dest">replication destination</param>
         /// <param name="options">options</param>
         /// <returns>return value</returns>
-        public uint DrsUpdateRefs(EnvironmentConfig.Machine machine, DsServer dest, DRS_OPTIONS options, NamingContext nc)
+        public uint DrsUpdateRefs(
+            EnvironmentConfig.Machine machine,
+            DrsUpdateRefs_Versions reqVer,
+            DsServer dest,
+            DRS_OPTIONS options,
+            NamingContext nc)
         {
             string nc_name = null;
             Guid nc_guid = Guid.Empty;
@@ -1082,7 +1211,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             nc_guid = nc_obj.Guid;
             nc_sid = convertSidToString(nc_obj.Sid);
 
-            DRS_MSG_UPDREFS? req = drsClient.CreateUpdateRefsRequest(
+            DRS_MSG_UPDREFS? req = CreateUpdateRefsRequest(
+                reqVer,
                 nc_name,
                 nc_guid,
                 nc_sid,

@@ -125,6 +125,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         // </summary>
         public DRS_MSG_UPDREFS CreateRequestForDrsUpdateRef(
                     EnvironmentConfig.Machine machine,
+                    DrsUpdateRefs_Versions reqVer,
                     DsServer dest,
                     DRS_OPTIONS options,
                     NamingContext nc = NamingContext.ConfigNC)
@@ -165,7 +166,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             nc_guid = nc_obj.Guid;
             nc_sid = convertSidToString(nc_obj.Sid);
 
-            DRS_MSG_UPDREFS? req = DRSClient.CreateUpdateRefsRequest(
+            DRS_MSG_UPDREFS? req = CreateUpdateRefsRequest(
+                reqVer,
                 nc_name,
                 nc_guid,
                 nc_sid,

@@ -480,6 +480,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
                 req = drsTestClient.CreateRequestForDrsUpdateRef(
                                         machine,
+                                        DrsUpdateRefs_Versions.V1,
                                         dest,
                                         options
                                         );
@@ -493,6 +494,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             options = DRS_OPTIONS.DRS_ADD_REF;
             req = drsTestClient.CreateRequestForDrsUpdateRef(
                         machine,
+                        DrsUpdateRefs_Versions.V1,
                         dest,
                         options
                         );
@@ -502,6 +504,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             options = DRS_OPTIONS.DRS_DEL_REF;
             req = drsTestClient.CreateRequestForDrsUpdateRef(
                         machine,
+                        DrsUpdateRefs_Versions.V1,
                         dest,
                         options
                         );
@@ -537,6 +540,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
                 req = drsTestClient.CreateRequestForDrsUpdateRef(
                                         machine,
+                                        DrsUpdateRefs_Versions.V1,
                                         dest,
                                         options
                                         );
@@ -550,6 +554,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             options = DRS_OPTIONS.DRS_ADD_REF;
             req = drsTestClient.CreateRequestForDrsUpdateRef(
                         machine,
+                        DrsUpdateRefs_Versions.V1,
                         dest,
                         options
                         );
@@ -559,6 +564,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             options = DRS_OPTIONS.DRS_DEL_REF;
             req = drsTestClient.CreateRequestForDrsUpdateRef(
                         machine,
+                        DrsUpdateRefs_Versions.V1,
                         dest,
                         options
                         );
@@ -594,6 +600,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
                 req = drsTestClient.CreateRequestForDrsUpdateRef(
                                         machine,
+                                        DrsUpdateRefs_Versions.V1,
                                         dest,
                                         options
                                         );
@@ -607,6 +614,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             options = DRS_OPTIONS.NONE; //invalid value
             req = drsTestClient.CreateRequestForDrsUpdateRef(
                         machine,
+                        DrsUpdateRefs_Versions.V1,
                         dest,
                         options
                         );
@@ -615,6 +623,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             options = DRS_OPTIONS.DRS_DEL_REF;
             req = drsTestClient.CreateRequestForDrsUpdateRef(
                         machine,
+                        DrsUpdateRefs_Versions.V1,
                         dest,
                         options
                         );
@@ -650,6 +659,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
                 req = drsTestClient.CreateRequestForDrsUpdateRef(
                                         machine,
+                                        DrsUpdateRefs_Versions.V1,
                                         dest,
                                         options
                                         );
@@ -664,6 +674,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             options = DRS_OPTIONS.DRS_ADD_REF;
             req = drsTestClient.CreateRequestForDrsUpdateRef(
                         machine,
+                        DrsUpdateRefs_Versions.V1,
                         dest,
                         options,
                         NamingContext.None // invalid value
@@ -674,6 +685,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             options = DRS_OPTIONS.DRS_DEL_REF;
             req = drsTestClient.CreateRequestForDrsUpdateRef(
                         machine,
+                        DrsUpdateRefs_Versions.V1,
                         dest,
                         options
                         );

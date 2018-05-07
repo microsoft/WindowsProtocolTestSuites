@@ -6,7 +6,7 @@
       <Property name="AllowBreakEnvironment" value="false">
         <Description>Type:string! Usage: true to enable running of environment-breaking cases, false to disable.</Description>
       </Property>
-      <Property name="DomainFunctionLevel" value="7">
+      <Property name="DomainFunctionLevel" value="8">
         <Description>
           Type:string!
           Usage: forest domain function level.
@@ -18,7 +18,8 @@
           DS_BEHAVIOR_WIN2008R2 = 4
           DS_BEHAVIOR_WIN2012 = 5
           DS_BEHAVIOR_WIN2012R2 = 6
-          DS_BEHAVIOR_WINTHRESHOLD = 7
+          DS_BEHAVIOR_WINv1803 = 7
+          DS_BEHAVIOR_WINTHRESHOLD = 8
         </Description>
       </Property>
       <Property name="DomainAdminGroup" value="Domain Admins">
