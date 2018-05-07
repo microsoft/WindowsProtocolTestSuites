@@ -72,7 +72,8 @@ cmd /c netsh.exe advfirewall set allprofiles state off
 Write-Host "Turn on file and printer sharing..."
 .\Config-FileSharing on
 
-Write-Info "Check FS-SMB installed" Client
+Write-Info "Check FS-SMB installed"
+
 $SMBState = Get-WindowsFeature FS-SMB1
 if ($SMBState.Installstate -ne "Installed")
 {
