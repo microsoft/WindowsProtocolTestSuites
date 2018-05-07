@@ -72,6 +72,13 @@ cmd /c netsh.exe advfirewall set allprofiles state off
 Write-Host "Turn on file and printer sharing..."
 .\Config-FileSharing on
 
+Write-Info "Check FS-SMB installed" Client
+$SMBState = Get-WindowsFeature FS-SMB1
+if ($SMBState.Installstate -ne "Installed")
+{
+    Add-WindowsFeature FS-SMB1 -IncludeAllSubFeature -IncludeManagementTools 
+}
+
 Write-Host "Install DFS Components and config DFS namespace ..." Client
 $serverName = "$ENV:ComputerName"    
 Write-Host "Start to install FS-DFS"
