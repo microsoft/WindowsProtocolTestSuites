@@ -99,13 +99,14 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         public void ChangeStatus(string testCaseName, TestCaseStatus status)
         {
-            TestCaseGroup from = testcasemap[testCaseName];
-            TestCaseGroup to = OtherTestCases;
-            if (from == null) return;
-            TestCase testcase = from.TestCaseList.FirstOrDefault(c => c.Name == testCaseName);
-            // If changed to Running/Waiting status, no need to change group.
             lock (locker)
             {
+                TestCaseGroup from = testcasemap[testCaseName];
+                TestCaseGroup to = OtherTestCases;
+                if (from == null) return;
+                TestCase testcase = from.TestCaseList.FirstOrDefault(c => c.Name == testCaseName);
+                // If changed to Running/Waiting status, no need to change group.
+
                 if (status == TestCaseStatus.Running)
                 {
                     if (RunningTestCase != null)
