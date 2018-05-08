@@ -330,9 +330,14 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad
         PolicyLocalAccountDomainInformation = 14,
 
         /// <summary>
+        /// Machine account information.
+        /// </summary>
+        PolicyMachineAccountInformation = 15,
+
+        /// <summary>
         /// Not used in this protocol. Present to mark the end of the enumeration.
         /// </summary>
-        PolicyLastEntry = 15,
+        PolicyLastEntry = 16,
 
         /// <summary>
         /// Invalid InformationClass.
