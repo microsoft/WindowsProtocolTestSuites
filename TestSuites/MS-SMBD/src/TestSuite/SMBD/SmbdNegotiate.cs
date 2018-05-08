@@ -150,10 +150,10 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             uint preferredSendSize;
             SmbdNegotiateResponse response;
 
-            if (smbdAdapter.TestConfig.Platform == Platform.WindowsServer2012R2)
+            if (smbdAdapter.TestConfig.Platform == Platform.WindowsServer2012R2 || smbdAdapter.TestConfig.Platform == Platform.WindowsServer2016)
             {
-                // for WS2012R2, server will check preferredSendSize does not exceed 8136   
-                // [MS-SMBD]: <5> Section 3.1.5.6:  Windows Server 2012 R2 fails the request with STATUS_INSUFFICIENT_RESOURCES if the PreferredSendSize field is greater than 8136.
+                // Windows Server 2012 R2, Windows Server 2016, and Windows Server operating system fail the request 
+                // with STATUS_INSUFFICIENT_RESOURCES if the PreferredSendSize field is greater than 8136.
                 preferredSendSize = 8136;
             }
             else
@@ -655,7 +655,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             // try to negotiate on SMB2
             string fileName = SmbdUtilities.CreateRandomFileName();
 
-            // "<3> Section 3.1.5.6:  Windows Server 2012 fails the Negotiate Request Message with STATUS_NOT_SUPPORTED if MinVersion or MaxVersion is not 0x0100"
+            // Windows Server 2012 fails the Negotiate Request Message with STATUS_NOT_SUPPORTED if MinVersion or MaxVersion is not 0x0100.
             if (smbdAdapter.TestConfig.Platform == Platform.WindowsServer2012)
             {
                 if (minVer == SmbdVersion.V1
