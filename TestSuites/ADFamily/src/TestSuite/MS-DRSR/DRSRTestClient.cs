@@ -440,7 +440,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                     request.V2 = drsClient.CreateReplicaSyncRequestV2(v1);
                     break;
                 default:
-                    testSite.Assert.Fail("The version {0} is not supported.", inVer);
+                    testSite.Assert.Fail("The version {0} is not supported.", reqVer);
                     break;
             }
             return request;
