@@ -223,6 +223,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         // Disable signature verification by default.
         private bool disableVerifySignature = true;
 
+        private Smb2ErrorResponsePacket error;
+
         #endregion
 
         #region Properties
@@ -304,6 +306,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 {
                     cryptoInfo.Value.DisableVerifySignature = value;
                 }
+            }
+        }
+
+        public Smb2ErrorResponsePacket Error
+        {
+            get
+            {
+                return error;
             }
         }
         #endregion
@@ -1210,6 +1220,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
             responseHeader = response.Header;
             responsePayload = response.PayLoad;
+            error = response.Error;
 
             return response.Header.Status;
         }

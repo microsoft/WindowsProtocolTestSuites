@@ -16,7 +16,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
     [TestClass]
     public class Smb2OverSmbdTestBase : TestClassBase
     {
-        #region Fileds
+        #region Fields
         protected SmbdAdapter smbdAdapter;
         #endregion
 
@@ -56,8 +56,8 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         /// 3. Establish SMB2 session and open file with specific dialect
         /// </summary>
         /// <param name="fileName">File name to open</param>
-        /// <param name="negotiatedDialect">Optional to set the SMB2 dialect used for SMB2 connection</param>
-        protected virtual void EstablishConnectionAndOpenFile(string fileName, DialectRevision negotiatedDialect = DialectRevision.Smb30)
+        /// <param name="negotiatedDialects">Optional to set the SMB2 dialects used for SMB2 connection</param>
+        protected virtual void EstablishConnectionAndOpenFile(string fileName, DialectRevision[] negotiatedDialects = null)
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Establish SMB2 connection over RDMA and open file " + fileName);
 
@@ -67,9 +67,13 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
 
             // SMBD Negotiate
             status = smbdAdapter.SmbdNegotiate();
+            if (status == NtStatus.STATUS_NOT_SUPPORTED)
+            {
+                BaseTestSite.Assert.Inconclusive("Requested SMB dialects are not supported.");
+            }
             BaseTestSite.Assert.AreEqual<NtStatus>(NtStatus.STATUS_SUCCESS, status, "Status of SMBD negotiate is {0}", status);
-            
-            status = smbdAdapter.Smb2EstablishSessionAndOpenFile(fileName, negotiatedDialect);
+
+            status = smbdAdapter.Smb2EstablishSessionAndOpenFile(fileName, negotiatedDialects);
             BaseTestSite.Assert.AreEqual<NtStatus>(NtStatus.STATUS_SUCCESS, status, "Status of SMB2 establish session and open file is {0}", status);
         }
 
