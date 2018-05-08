@@ -120,6 +120,16 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             req.V1.uuidDsaSrc = Guid.Empty;
             return req;
         }
+
+        public DRS_MSG_REPSYNC CreateDrsReplicaSyncV2Request()
+        {
+            DRS_MSG_REPSYNC req = new DRS_MSG_REPSYNC();
+            req.V2 = new DRS_MSG_REPSYNC_V2();
+            req.V2.pNC = DrsuapiClient.CreateDsName(null, Guid.Empty, null);
+            req.V2.uuidDsaSrc = Guid.Empty;
+            return req;
+        }
+
         // <summary>
         // the function is used to create a DrsUpdateRef request
         // </summary>
