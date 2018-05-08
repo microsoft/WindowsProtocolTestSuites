@@ -160,8 +160,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [Description("test DRS replica add with invalid pNC")]
         [TestCategory("SDC")]
         [TestCategory("PDC")]
-        [TestCategory("DomainWin2008R2")]
-        [TestCategory("ForestWin2008R2")]
+        [TestCategory("DomainWinV1803")]
         [TestCategory("MS-DRSR")]
         [TestMethod]
         public void DRSR_DRSReplicaAdd_Failed_V3_InvalidNC()
@@ -241,8 +240,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [Description("test DRS replica add with empty pszSourceDsaAddress")]
         [TestCategory("SDC")]
         [TestCategory("PDC")]
-        [TestCategory("DomainWin2008R2")]
-        [TestCategory("ForestWin2008R2")]
+        [TestCategory("DomainWinV1803")]
         [TestCategory("MS-DRSR")]
         [TestMethod]
         public void DRSR_DRSReplicaAdd_Failed_V3_EmptyDsaSrc()
@@ -327,8 +325,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [Description("test DRS replica add with duplicated source")]
         [TestCategory("SDC")]
         [TestCategory("PDC")]
-        [TestCategory("DomainWin2008R2")]
-        [TestCategory("ForestWin2008R2")]
+        [TestCategory("DomainWinV1803")]
         [TestCategory("MS-DRSR")]
         [TestMethod]
         public void DRSR_DRSReplicaAdd_Failed_V3_DuplicatedSource()
@@ -402,8 +399,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [Description("test DRS Replica Add denied due to normal user account")]
         [TestCategory("SDC")]
         [TestCategory("PDC")]
-        [TestCategory("DomainWin2008R2")]
-        [TestCategory("ForestWin2008R2")]
+        [TestCategory("DomainWinV1803")]
         [TestCategory("MS-DRSR")]
         [TestMethod]
         public void DRSR_DRSReplicaAdd_Failed_V3_WithNormalUser()
@@ -579,8 +575,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [Description("Modify a replication source with pszDsaDest = null and server will response ERROR_DS_DRA_INVALID_PARAMETER")]
         [TestCategory("SDC")]
         [TestCategory("PDC")]
-        [TestCategory("DomainWin2008R2")]
-        [TestCategory("ForestWin2008R2")]
+        [TestCategory("DomainWinV1803")]
         [TestCategory("MS-DRSR")]
         [TestMethod]
         public void DRSR_DRSUpdateRefs_V2_pszDsaDest_NULL()
@@ -611,8 +606,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [Description("Modify a replication source with uuidDsaObjDest = null and server will response ERROR_DS_DRA_INVALID_PARAMETER")]
         [TestCategory("SDC")]
         [TestCategory("PDC")]
-        [TestCategory("DomainWin2008R2")]
-        [TestCategory("ForestWin2008R2")]
+        [TestCategory("DomainWinV1803")]
         [TestCategory("MS-DRSR")]
         [TestMethod]
         public void DRSR_DRSUpdateRefs_V2_uuidDsaObjDest_NULL()
@@ -643,8 +637,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [Description("Modify a replication source with options does not contain DRS_ADD_REF and DRS_DEL_REF and server will response ERROR_DS_DRA_INVALID_PARAMETER")]
         [TestCategory("SDC")]
         [TestCategory("PDC")]
-        [TestCategory("DomainWin2008R2")]
-        [TestCategory("ForestWin2008R2")]
+        [TestCategory("DomainWinV1803")]
         [TestCategory("MS-DRSR")]
         [TestMethod]
         public void DRSR_DRSUpdateRefs_V2_WithoutOptions()
@@ -675,8 +668,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [Description("Modify a replication source with nc!instanceType(pNC) is IT_WRITE, options has DRS_WRIT_REP, the server returns ERROR_DS_DRA_BAD_NC")]
         [TestCategory("SDC")]
         [TestCategory("PDC")]
-        [TestCategory("DomainWin2008R2")]
-        [TestCategory("ForestWin2008R2")]
+        [TestCategory("DomainWinV1803")]
         [TestCategory("MS-DRSR")]
         [TestMethod]
         public void DRSR_DRSUpdateRefs_V2_NONExist_NC()
