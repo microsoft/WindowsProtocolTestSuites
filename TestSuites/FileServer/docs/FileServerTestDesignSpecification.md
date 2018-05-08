@@ -69,26 +69,26 @@
 		* [ QueryDir\_Reopen\_OnFile](#3.1.54)
 		* [ Query\_Quota\_Info](#3.1.55)
 	* [SMB2 Feature Test](#3.2)
-		* [AppInstanceId](#3.2.1)
-		* [AppInstanceVersion](#3.2.2)
+		* [ AppInstanceId](#3.2.1)
+		* [ AppInstanceVersion](#3.2.2)
 		* [ CreateClose](#3.2.3)
-		* [CreditMgmt](#3.2.4)
-		* [DirectoryLeasing](#3.2.5)
-		* [Encryption](#3.2.6)
+		* [ CreditMgmt](#3.2.4)
+		* [ DirectoryLeasing](#3.2.5)
+		* [ Encryption](#3.2.6)
 		* [ Handle](#3.2.7)
-		* [Leasing](#3.2.8)
-		* [Negotiate](#3.2.9)
-		* [Oplock](#3.2.10)
-		* [Replay](#3.2.11)
-		* [ResilientHandle](#3.2.12)
-		* [SessionMgmt](#3.2.13)
+		* [ Leasing](#3.2.8)
+		* [ Negotiate](#3.2.9)
+		* [ Oplock](#3.2.10)
+		* [ Replay](#3.2.11)
+		* [ ResilientHandle](#3.2.12)
+		* [ SessionMgmt](#3.2.13)
 		* [ MultipleChannel](#3.2.14)
-		* [Signing](#3.2.15)
-		* [TreeMgmt](#3.2.16)
-		* [ValidateNegotiateInfo](#3.2.17)
+		* [ Signing](#3.2.15)
+		* [ TreeMgmt](#3.2.16)
+		* [ ValidateNegotiateInfo](#3.2.17)
 		* [ FileLevelTrim](#3.2.18)
 		* [ CopyOfflaod](#3.2.19)
-		* [OperateOneFileFromTwoNodes](#3.2.20)
+		* [ OperateOneFileFromTwoNodes](#3.2.20)
 		* [ MixedOplockLease](#3.2.21)
 	* [SMB2 Feature Combination](#3.3)
 		* [ MultipleChannelWithReplay](#3.3.1)
@@ -103,12 +103,13 @@
 		* [ SWNGetInterfaceList](#3.4.1)
 		* [ SWNRegistration](#3.4.2)
 		* [ SWNAsyncNotification](#3.4.3)
-		* [AsmmetricShare](#3.4.4)
+		* [ AsmmetricShare](#3.4.4)
 		* [ FileServerFailover](#3.4.5)
-		* [FileServerFailover\_Encryption](#3.4.6)
+		* [ FileServerFailover\_Encryption](#3.4.6)
 		* [ FileServerFailover\_Lease](#3.4.7)
 		* [ FileServerFailover\_Lock](#3.4.8)
 		* [ FileServerFailover\_DurableHandleV2](#3.4.9)
+		* [ FileServerFailover\_SMB311\_Redirect\_To\_Owner\_SOFS](#3.4.10)
 	* [FSRVP Test](#3.5)
 		* [ VSSOperateShadowCopySet](#3.5.1)
 		* [ VSSSetContext](#3.5.2)
@@ -116,9 +117,9 @@
 	* [RSVD Test](#3.6)
 		* [ OpenCloseSharedVHD](#3.6.1)
 		* [ TunnelOperationToSharedVHD](#3.6.2)
-		* [ReadWriteSharedVHD](#3.6.3)
+		* [ ReadWriteSharedVHD](#3.6.3)
 		* [ QuerySharedVirtualDiskSupport](#3.6.4)
-		* [TwoClientsAccessSameSharedVHD](#3.6.5)
+		* [ TwoClientsAccessSameSharedVHD](#3.6.5)
 		* [ QueryVHDSetFileInfo ](#3.6.7)
 		* [ ConvertVHDtoVHDSet ](#3.6.8)
 		* [ Checkpoint ](#3.6.9)
@@ -211,13 +212,14 @@ Test scenarios are categorized as below table and will be described in following
 
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
-| SMB2 BVT                 | 53         | SMB2 common scenarios.                                                                                            |
-| SMB2 Feature Test        | 2550       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
+| SMB2 BVT                 | 78         | SMB2 common scenarios.                                                                                            |
+| SMB2 Feature Test        | 2591       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
-| FSRVP Test               | 9          | Test for MS-FSRVP                                                                                                 |
-| Server Failover Test     | 38         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
-| RSVD Test                | 25         | Test for MS-RSVD                                                                                                  |
+| FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
+| Server Failover Test     | 48         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
+| RSVD Test                | 29         | Test for MS-RSVD                                                                                                  |
 | DFSC Test                | 43         | Test for MS-DFSC                                                                                                  |
+| HVRS Test                | 8          | Test for MS-HVRS                                                                                                  |
 
 ###<a name="3.1">SMB2 BVT
 
@@ -7638,7 +7640,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 |||
 |---|---|
-|**Test ID**|FileServerFailover_FileLeasing|
+|**Test ID**|FileServerFailover\_FileLeasing|
 |**Description**|Operate file with lease and durable handle before server failover and expect lease break notification|
 |**Prerequisites**||
 |**Test Execution Steps**|**From client1 **|
@@ -7677,9 +7679,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 |||
 |---|---|
-|**Test case**|FileServer_Filover_Lock|
+|**Test case**|FileServer\_Failover\_Lock|
 |**Description**|Operate files with lock during failover and expect the lock is maintained after failover|
-|**Message Sequence**|**From client1 open a  file and lock a specific range**|
+|**Message Sequence**|**From client1 open a file and lock a specific range**|
 ||NEGOTIATE|
 ||SESSION_SETUP|
 ||TREE_CONNECT|
@@ -7718,7 +7720,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 |||
 |---|---|
-|**Test ID**|FileServerFailover_Lock|
+|**Test ID**|FileServerFailover\_Lock|
 |**Description**|Operate files with lock during failover and expect the lock is maintained after failover|
 |**Prerequisites**||
 |**Test Execution Steps**|**From client1 open a  file and lock a specific range**|
@@ -7727,7 +7729,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||TREE_CONNECT|
 ||CREATE (File, with durable handle request)|
 ||WRITE|
-||LOCK (with SMB2_LOCKFLAG_SHARED_LOCK in SMB2_LOCK_ELEMENT)|
+||LOCK (with SMB2\_LOCKFLAG\_SHARED\_LOCK in SMB2\_LOCK\_ELEMENT)|
 ||Disable current node of the Cluster which owns the connection|
 ||**From client2**|
 ||NEGOTIATE|
@@ -7767,7 +7769,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||NEGOTIATE|
 ||SESSION_SETUP|
 ||TREE_CONNECT|
-||CREATE(with CREATE_DURABLE_HANDLE_REQUEST_V2 create context)|
+||CREATE(with CREATE\_DURABLE\_HANDLE\_REQUEST\_V2 create context)|
 ||**Disable Node1to simulate failover**|
 ||**From different client try to open the same file**|
 ||Repeat step 1 to 3|
@@ -7804,6 +7806,33 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||Server sends TREE_DISCONNECT response|
 ||Client sends LOGOFF request|
 ||Server sends LOGOFF response|
+|**Cleanup**||
+
+####<a name="3.4.10"> FileServerFailover\_SMB311\_Redirect\_To\_Owner\_SOFS
+
+#####<a name="3.4.10.1"> Scenario
+
+|||
+|---|---|
+|**Description**        |Test server can handle a TreeConnect request with flag SMB2\_SHAREFLAG\_REDIRECT\_TO\_OWNER when SMB dialect is 3.1.1 and share type includes STYPE\_CLUSTER\_SOFS.|
+| **Message Sequence**  | 1.  Start a client by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; |
+|                       | 2.  Client sends TREE\_CONNECT request with TREE\_CONNECT flag SMB2\_SHAREFLAG\_REDIRECT\_TO\_OWNER. |
+|                       | 3.  Tear down the client by sending LOG\_OFF |
+|**Cluster Involved Scenario**|**YES**|
+
+
+#####<a name="3.4.10.2"> Test Case
+
+|||
+|---|---|
+|**Test ID**|FileServerFailover\_SMB311\_Redirect\_To\_Owner\_SOFS|
+|**Description**|Test server can handle a TreeConnect request with flag SMB2\_SHAREFLAG\_REDIRECT\_TO\_OWNER when SMB dialect is 3.1.1 and share type includes STYPE\_CLUSTER\_SOFS.|
+|**Prerequisites**||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT (with SMB2\_SHAREFLAG\_REDIRECT\_TO\_OWNER) |
+|                          | LOGOFF |
 |**Cleanup**||
 
 
