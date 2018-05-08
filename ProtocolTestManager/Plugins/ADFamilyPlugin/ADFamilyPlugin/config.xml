@@ -82,6 +82,9 @@
       <Rule name="Windows Server 2012 R2">
         <Category name = "DomainWin2012R2"/>
       </Rule>
+      <Rule name="Windows Server v1803">
+        <Category name = "DomainWinV1803"/>
+      </Rule>
       <Rule name="Windows Threshold">
         <Category name = "DomainWinThreshold"/>
       </Rule>

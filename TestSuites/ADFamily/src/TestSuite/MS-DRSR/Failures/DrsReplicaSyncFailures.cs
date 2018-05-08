@@ -61,8 +61,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [Priority(0)]
         [Description("")]
         [TestCategory("PDC")]
-        [TestCategory("DomainWin2008R2")]
-        [TestCategory("ForestWin2008R2")]
+        [TestCategory("DomainWinV1803")]
         [TestCategory("MS-DRSR")]
         [TestMethod]
         public void DRSR_DRSReplicaSyncV2_Invalid_Input_1()
@@ -91,8 +90,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [Priority(0)]
         [Description("")]
         [TestCategory("PDC")]
-        [TestCategory("DomainWin2008R2")]
-        [TestCategory("ForestWin2008R2")]
+        [TestCategory("DomainWinV1803")]
         [TestCategory("MS-DRSR")]
         [TestMethod]
         public void DRSR_DRSReplicaSyncV2_Invalid_Input_2()
@@ -121,8 +119,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [Priority(0)]
         [Description("")]
         [TestCategory("PDC")]
-        [TestCategory("DomainWin2008R2")]
-        [TestCategory("ForestWin2008R2")]
+        [TestCategory("DomainWinV1803")]
         [TestCategory("MS-DRSR")]
         [TestMethod]
         public void DRSR_DRSReplicaSyncV2_Invalid_Input_3()
@@ -151,8 +148,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [Priority(0)]
         [Description("")]
         [TestCategory("PDC")]
-        [TestCategory("DomainWin2008R2")]
-        [TestCategory("ForestWin2008R2")]
+        [TestCategory("DomainWinV1803")]
         [TestCategory("MS-DRSR")]
         [TestMethod]
         public void DRSR_DRSReplicaSyncV2_Invalid_Input_4()
@@ -181,8 +177,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [Priority(0)]
         [Description("")]
         [TestCategory("PDC")]
-        [TestCategory("DomainWin2008R2")]
-        [TestCategory("ForestWin2008R2")]
+        [TestCategory("DomainWinV1803")]
         [TestCategory("MS-DRSR")]
         [TestMethod]
         public void DRSR_DRSReplicaSyncV2_Access_Denied()
@@ -211,8 +206,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [Priority(0)]
         [Description("")]
         [TestCategory("PDC")]
-        [TestCategory("DomainWin2008R2")]
-        [TestCategory("ForestWin2008R2")]
+        [TestCategory("DomainWinV1803")]
         [TestCategory("MS-DRSR")]
         [TestMethod]
         public void DRSR_DRSReplicaSyncV2_No_Replica()

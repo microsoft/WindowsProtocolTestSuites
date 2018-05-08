@@ -125,8 +125,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [Description("Delete a replication source and add it back with Async flag")]
         [TestCategory("SDC")]
         [TestCategory("PDC")]
-        [TestCategory("DomainWin2008R2")]
-        [TestCategory("ForestWin2008R2")]
+        [TestCategory("DomainWinV1803")]
         [TestCategory("MS-DRSR")]
         [TestMethod]
         public void DRSR_DRSReplicaAdd_V3_Success_WithAsyncFlag()
@@ -195,7 +194,16 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaDel_V1_With0x1000Flag()
         {
-            DRSR_DRSReplicaAdd_Success_With0x10Flag(DRS_MSG_REPADD_Versions.V1);
+            DrsrTestChecker.Check();
+            NeedRepSourceUpdate need = new NeedRepSourceUpdate(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.Machine.WritableDC2, NamingContext.ConfigNC);
+
+            UpdatesStorage.GetInstance().PushUpdate(need);
+
+            drsTestClient.SyncDCs(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.Machine.WritableDC2);
+
+            uint ret = drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
+
+            drsTestClient.DrsReplicaDel(EnvironmentConfig.Machine.WritableDC1, (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2], DRS_OPTIONS.DRS_LOCAL_ONLY);
         }
 
         [BVT]
@@ -223,8 +231,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [Description("Delete a replication source and add it back with DRS_WRIT_REP flag")]
         [TestCategory("SDC")]
         [TestCategory("PDC")]
-        [TestCategory("DomainWin2008R2")]
-        [TestCategory("ForestWin2008R2")]
+        [TestCategory("DomainWinV1803")]
         [TestCategory("MS-DRSR")]
         [TestMethod]
         public void DRSR_DRSReplicaAdd_V3_Success_With0x10Flag()
@@ -306,8 +313,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [Description("Modify a replication source")]
         [TestCategory("SDC")]
         [TestCategory("PDC")]
-        [TestCategory("DomainWin2008R2")]
-        [TestCategory("ForestWin2008R2")]
+        [TestCategory("DomainWinV1803")]
         [TestCategory("MS-DRSR")]
         [TestMethod]
         public void DRSR_DRSUpdateRefs_V2_Success_AddThenDel()

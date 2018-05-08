@@ -24,6 +24,7 @@ echo    DM                               Test cases which need DM
 echo    DomainWin2008R2                  Test cases which need domain function level equal or higher than 2008R2
 echo    DomainWin2012                    Test cases which need domain function level equal or higher than 2012
 echo    DomainWin2012R2                  Test cases which need domain function level equal or higher than 2012R2
+echo    DomainWinV1803                   Test cases which need domain function level equal or higher than v1803
 echo:
 echo To combine multiple categories, please use logical operators "|", "!" and "&":
 echo Examples:
