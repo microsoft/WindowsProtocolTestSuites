@@ -132,7 +132,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             DetectingItems.Add(new DetectingItem("Check NICs of target SUT", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Connect to share(Non-RDMA)", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Connect to share(RDMA)", DetectingStatus.Pending, LogStyle.Default));
-            DetectingItems.Add(new DetectingItem("Check RDMA capability", DetectingStatus.Pending, LogStyle.Default));
+            DetectingItems.Add(new DetectingItem("Check SMB2 over SMBD feature", DetectingStatus.Pending, LogStyle.Default));
             return DetectingItems;
         }
 
