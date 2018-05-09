@@ -52,10 +52,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSync_Invalid_Input_1()
         {
+            DrsrTestChecker.Check();
             DRSReplicaSync_Invalid_Input_1(DrsReplicaSync_Versions.V1);
         }
 
-        [TestCategory("Win2003")]
+        [TestCategory("Winv1803")]
         [ServerType(DcServerTypes.Any)]
         [SupportedADType(ADInstanceType.Both)]
         [Priority(0)]
@@ -66,6 +67,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSyncV2_Invalid_Input_1()
         {
+            DrsrTestChecker.Check();
             DRSReplicaSync_Invalid_Input_1(DrsReplicaSync_Versions.V2);
         }
 
@@ -81,10 +83,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSync_Invalid_Input_2()
         {
+            DrsrTestChecker.Check();
             DRSReplicaSync_Invalid_Input_2(DrsReplicaSync_Versions.V1);
         }
 
-        [TestCategory("Win2003")]
+        [TestCategory("Winv1803")]
         [ServerType(DcServerTypes.Any)]
         [SupportedADType(ADInstanceType.Both)]
         [Priority(0)]
@@ -95,6 +98,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSyncV2_Invalid_Input_2()
         {
+            DrsrTestChecker.Check();
             DRSReplicaSync_Invalid_Input_2(DrsReplicaSync_Versions.V2);
         }
 
@@ -110,10 +114,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSync_Invalid_Input_3()
         {
+            DrsrTestChecker.Check();
             DRSReplicaSync_Invalid_Input_3(DrsReplicaSync_Versions.V1);
         }
 
-        [TestCategory("Win2003")]
+        [TestCategory("Winv1803")]
         [ServerType(DcServerTypes.Any)]
         [SupportedADType(ADInstanceType.Both)]
         [Priority(0)]
@@ -124,6 +129,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSyncV2_Invalid_Input_3()
         {
+            DrsrTestChecker.Check();
             DRSReplicaSync_Invalid_Input_3(DrsReplicaSync_Versions.V2);
         }
 
@@ -139,10 +145,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSync_Invalid_Input_4()
         {
+            DrsrTestChecker.Check();
             DRSReplicaSync_Invalid_Input_4(DrsReplicaSync_Versions.V1);
         }
 
-        [TestCategory("Win2003")]
+        [TestCategory("Winv1803")]
         [ServerType(DcServerTypes.Any)]
         [SupportedADType(ADInstanceType.Both)]
         [Priority(0)]
@@ -153,6 +160,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSyncV2_Invalid_Input_4()
         {
+            DrsrTestChecker.Check();
             DRSReplicaSync_Invalid_Input_4(DrsReplicaSync_Versions.V2);
         }
 
@@ -168,10 +176,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSync_Access_Denied()
         {
+            DrsrTestChecker.Check();
             DRSReplicaSync_Access_Denied(DrsReplicaSync_Versions.V1);
         }
 
-        [TestCategory("Win2003")]
+        [TestCategory("Winv1803")]
         [ServerType(DcServerTypes.Any)]
         [SupportedADType(ADInstanceType.DS)]
         [Priority(0)]
@@ -182,6 +191,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSyncV2_Access_Denied()
         {
+            DrsrTestChecker.Check();
             DRSReplicaSync_Access_Denied(DrsReplicaSync_Versions.V2);
         }
 
@@ -197,10 +207,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSync_No_Replica()
         {
+            DrsrTestChecker.Check();
             DRSReplicaSync_No_Replica(DrsReplicaSync_Versions.V1);
         }
 
-        [TestCategory("Win2003")]
+        [TestCategory("Winv1803")]
         [ServerType(DcServerTypes.Any)]
         [SupportedADType(ADInstanceType.DS)]
         [Priority(0)]
@@ -211,6 +222,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSyncV2_No_Replica()
         {
+            DrsrTestChecker.Check();
             DRSReplicaSync_No_Replica(DrsReplicaSync_Versions.V2);
         }
         #endregion
@@ -218,7 +230,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         #region Private Methods
         private void DRSReplicaSync_Invalid_Input_1(DrsReplicaSync_Versions dwInVersion)
         {
-            DrsrTestChecker.Check();
             uint ret = drsTestClient.DrsBind(
                 EnvironmentConfig.Machine.WritableDC1,
                 EnvironmentConfig.User.ParentDomainAdmin,
@@ -265,7 +276,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
         private void DRSReplicaSync_Invalid_Input_2(DrsReplicaSync_Versions dwInVersion)
         {
-            DrsrTestChecker.Check();
             uint ret = drsTestClient.DrsBind(
                 EnvironmentConfig.Machine.WritableDC1,
                 EnvironmentConfig.User.ParentDomainAdmin,
@@ -328,7 +338,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
         private void DRSReplicaSync_Invalid_Input_3(DrsReplicaSync_Versions dwInVersion)
         {
-            DrsrTestChecker.Check();
             uint ret = drsTestClient.DrsBind(
                 EnvironmentConfig.Machine.WritableDC1,
                 EnvironmentConfig.User.ParentDomainAdmin,
@@ -385,7 +394,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
         private void DRSReplicaSync_Invalid_Input_4(DrsReplicaSync_Versions dwInVersion)
         {
-            DrsrTestChecker.Check();
             uint ret = drsTestClient.DrsBind(
                 EnvironmentConfig.Machine.WritableDC1,
                 EnvironmentConfig.User.ParentDomainAdmin,
@@ -442,7 +450,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
         private void DRSReplicaSync_Access_Denied(DrsReplicaSync_Versions dwInVersion)
         {
-            DrsrTestChecker.Check();
             uint ret = drsTestClient.DrsBind(
                 EnvironmentConfig.Machine.WritableDC1,
                 EnvironmentConfig.User.ParentDomainUser,
@@ -501,7 +508,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
         private void DRSReplicaSync_No_Replica(DrsReplicaSync_Versions dwInVersion)
         {
-            DrsrTestChecker.Check();
             uint ret = drsTestClient.DrsBind(
                 EnvironmentConfig.Machine.WritableDC1,
                 EnvironmentConfig.User.ParentDomainAdmin,

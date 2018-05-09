@@ -565,10 +565,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSUpdateRefs_V1_pszDsaDest_NULL()
         {
+            DrsrTestChecker.Check();
             DRSUpdateRefs_pszDsaDest_NULL(DrsUpdateRefs_Versions.V1);
         }
 
-        [TestCategory("Win2003")]
+        [TestCategory("Winv1803")]
         [ServerType(DcServerTypes.Any)]
         [SupportedADType(ADInstanceType.Both)]
         [Priority(2)]
@@ -580,6 +581,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSUpdateRefs_V2_pszDsaDest_NULL()
         {
+            DrsrTestChecker.Check();
             DRSUpdateRefs_pszDsaDest_NULL(DrsUpdateRefs_Versions.V2);
         }
 
@@ -596,10 +598,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSUpdateRefs_V1_uuidDsaObjDest_NULL()
         {
+            DrsrTestChecker.Check();
             DRSUpdateRefs_uuidDsaObjDest_NULL(DrsUpdateRefs_Versions.V1);
         }
 
-        [TestCategory("Win2003")]
+        [TestCategory("Winv1803")]
         [ServerType(DcServerTypes.Any)]
         [SupportedADType(ADInstanceType.Both)]
         [Priority(2)]
@@ -611,6 +614,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSUpdateRefs_V2_uuidDsaObjDest_NULL()
         {
+            DrsrTestChecker.Check();
             DRSUpdateRefs_uuidDsaObjDest_NULL(DrsUpdateRefs_Versions.V2);
         }
 
@@ -627,10 +631,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSUpdateRefs_V1_WithoutOptions()
         {
+            DrsrTestChecker.Check();
             DRSUpdateRefs_WithoutOptions(DrsUpdateRefs_Versions.V1);
         }
 
-        [TestCategory("Win2003")]
+        [TestCategory("Winv1803")]
         [ServerType(DcServerTypes.Any)]
         [SupportedADType(ADInstanceType.Both)]
         [Priority(2)]
@@ -642,6 +647,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSUpdateRefs_V2_WithoutOptions()
         {
+            DrsrTestChecker.Check();
             DRSUpdateRefs_WithoutOptions(DrsUpdateRefs_Versions.V2);
         }
 
@@ -658,10 +664,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSUpdateRefs_V1_NONExist_NC()
         {
+            DrsrTestChecker.Check();
             DRSUpdateRefs_NONExist_NC(DrsUpdateRefs_Versions.V1);
         }
 
-        [TestCategory("Win2003")]
+        [TestCategory("Winv1803")]
         [ServerType(DcServerTypes.Any)]
         [SupportedADType(ADInstanceType.Both)]
         [Priority(2)]
@@ -673,6 +680,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSUpdateRefs_V2_NONExist_NC()
         {
+            DrsrTestChecker.Check();
             DRSUpdateRefs_NONExist_NC(DrsUpdateRefs_Versions.V2);
         }
         #endregion
@@ -680,7 +688,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         #region Private Method
         private void DRSUpdateRefs_pszDsaDest_NULL(DrsUpdateRefs_Versions ver)
         {
-            DrsrTestChecker.Check();
             uint ret = drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
 
             DRS_MSG_UPDREFS req;
@@ -729,7 +736,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
         private void DRSUpdateRefs_uuidDsaObjDest_NULL(DrsUpdateRefs_Versions ver)
         {
-            DrsrTestChecker.Check();
             uint ret = drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
 
             DRS_MSG_UPDREFS req;
@@ -778,7 +784,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
         private void DRSUpdateRefs_WithoutOptions(DrsUpdateRefs_Versions ver)
         {
-            DrsrTestChecker.Check();
             uint ret = drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
 
             DRS_MSG_UPDREFS req;
@@ -826,7 +831,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
         private void DRSUpdateRefs_NONExist_NC(DrsUpdateRefs_Versions ver)
         {
-            DrsrTestChecker.Check();
             uint ret = drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
 
             DRS_MSG_UPDREFS req;

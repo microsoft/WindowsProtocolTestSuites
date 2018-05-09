@@ -97,6 +97,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaAdd_V1_Success_WithAsyncFlag()
         {
+            DrsrTestChecker.Check();
             DRSReplicaAdd_Success_WithAsyncFlag(DRS_MSG_REPADD_Versions.V1);
         }
 
@@ -114,11 +115,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaAdd_V2_Success_WithAsyncFlag()
         {
+            DrsrTestChecker.Check();
             DRSReplicaAdd_Success_WithAsyncFlag(DRS_MSG_REPADD_Versions.V2);
         }
 
         [BVT]
-        [TestCategory("Win2003")]
+        [TestCategory("Winv1803")]
         [ServerType(DcServerTypes.Any)]
         [SupportedADType(ADInstanceType.Both)]
         [Priority(0)]
@@ -130,6 +132,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaAdd_V3_Success_WithAsyncFlag()
         {
+            DrsrTestChecker.Check();
             DRSReplicaAdd_Success_WithAsyncFlag(DRS_MSG_REPADD_Versions.V3);
         }
 
@@ -220,11 +223,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaAdd_V2_Success_With0x10Flag()
         {
+            DrsrTestChecker.Check();
             DRSR_DRSReplicaAdd_Success_With0x10Flag(DRS_MSG_REPADD_Versions.V2);
         }
 
         [BVT]
-        [TestCategory("Win2003")]
+        [TestCategory("Winv1803")]
         [ServerType(DcServerTypes.Any)]
         [SupportedADType(ADInstanceType.Both)]
         [Priority(0)]
@@ -236,6 +240,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaAdd_V3_Success_With0x10Flag()
         {
+            DrsrTestChecker.Check();
             DRSR_DRSReplicaAdd_Success_With0x10Flag(DRS_MSG_REPADD_Versions.V3);
         }
 
@@ -302,11 +307,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSUpdateRefs_V1_Success_AddThenDel()
         {
+            DrsrTestChecker.Check();
             DRSUpdateRefs_Success_AddThenDel(DrsUpdateRefs_Versions.V1);
         }
 
         [BVT]
-        [TestCategory("Win2003")]
+        [TestCategory("Winv1803")]
         [ServerType(DcServerTypes.Any)]
         [SupportedADType(ADInstanceType.Both)]
         [Priority(0)]
@@ -318,6 +324,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSUpdateRefs_V2_Success_AddThenDel()
         {
+            DrsrTestChecker.Check();
             DRSUpdateRefs_Success_AddThenDel(DrsUpdateRefs_Versions.V2);
         }
 
@@ -358,7 +365,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         #region Private Methods
         private void DRSReplicaAdd_Success_WithAsyncFlag(DRS_MSG_REPADD_Versions ver)
         {
-            DrsrTestChecker.Check();
             DelReplicaSource delUpdate = new DelReplicaSource(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.Machine.WritableDC2, DRS_OPTIONS.DRS_WRIT_REP, EnvironmentConfig.User.ParentDomainAdmin);
 
             BaseTestSite.Assert.IsTrue(UpdatesStorage.GetInstance().PushUpdate(delUpdate), "Need to delete a replication source firstly");
@@ -375,7 +381,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
         private void DRSR_DRSReplicaAdd_Success_With0x10Flag(DRS_MSG_REPADD_Versions ver)
         {
-            DrsrTestChecker.Check();
             DelReplicaSource delUpdate = new DelReplicaSource(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.Machine.WritableDC2, DRS_OPTIONS.DRS_WRIT_REP, EnvironmentConfig.User.ParentDomainAdmin);
 
             BaseTestSite.Assert.IsTrue(UpdatesStorage.GetInstance().PushUpdate(delUpdate), "Need to delete a replication source firstly");
@@ -392,7 +397,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
         private void DRSUpdateRefs_Success_AddThenDel(DrsUpdateRefs_Versions ver)
         {
-            DrsrTestChecker.Check();
             uint ret = drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
 
             try

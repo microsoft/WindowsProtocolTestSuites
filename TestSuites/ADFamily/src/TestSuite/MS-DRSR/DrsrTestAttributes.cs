@@ -359,11 +359,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                 case "Win2012R2":
                     fl = new FunctionLevelAttribute(DrsrDomainFunctionLevel.DS_BEHAVIOR_WIN2012R2);
                     break;
-                case "Winv1803":
-                    fl = new FunctionLevelAttribute(DrsrDomainFunctionLevel.DS_BEHAVIOR_WINv1803);
-                    break;
                 case "WinThreshold":
                     fl = new FunctionLevelAttribute(DrsrDomainFunctionLevel.DS_BEHAVIOR_WINTHRESHOLD);
+                    break;
+                case "Winv1803":
+                    fl = new FunctionLevelAttribute(DrsrDomainFunctionLevel.DS_BEHAVIOR_WINv1803);
                     break;
                 default:
                     throw new Exception("Unknown domain functional level category: " + level);
