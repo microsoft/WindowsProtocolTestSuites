@@ -153,7 +153,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         /// <summary>
         /// test DRS replica add with invalid pNC
         /// </summary>
-        [TestCategory("Win2003")]
+        [TestCategory("Winv1803")]
         [ServerType(DcServerTypes.Any)]
         [SupportedADType(ADInstanceType.Both)]
         [Priority(0)]
@@ -233,7 +233,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         /// <summary>
         /// test DRS replica add with empty pszSourceDsaAddress
         /// </summary>
-        [TestCategory("Win2003")]
+        [TestCategory("Winv1803")]
         [ServerType(DcServerTypes.Any)]
         [SupportedADType(ADInstanceType.Both)]
         [Priority(0)]
@@ -318,7 +318,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         /// <summary>
         /// test DRS replica add with duplicated source
         /// </summary>
-        [TestCategory("Win2003")]
+        [TestCategory("Winv1803")]
         [ServerType(DcServerTypes.Any)]
         [SupportedADType(ADInstanceType.DS)]
         [Priority(0)]
@@ -392,7 +392,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         /// <summary>
         /// test DRS Replica Add denied due to normal user account
         /// </summary>
-        [TestCategory("Win2003")]
+        [TestCategory("Winv1803")]
         [ServerType(DcServerTypes.Any)]
         [SupportedADType(ADInstanceType.Both)]
         [Priority(0)]
