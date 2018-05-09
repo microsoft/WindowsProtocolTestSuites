@@ -121,6 +121,16 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         /// SMB dialects supported by SUT.
         /// </summary>
         public DialectRevision[] SupportedSmbDialects { get; set; }
+
+        /// <summary>
+        /// SMBD port.
+        /// </summary>
+        public ushort SMBDPort { get; set; }
+
+        /// <summary>
+        /// SMBD capability of client.
+        /// </summary>
+        public SMBDClientCapability SMBDClientCapability { get; set; }
     }
 
     public class LocalNetworkInterfaceInformation
@@ -180,5 +190,14 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         /// OS version.
         /// </summary>
         public string Version { get; set; }
+    }
+
+    public class SMBDClientCapability
+    {
+        public ushort CreditsRequested { get; set; }
+        public ushort ReceiveCreditMax { get; set; }
+        public uint PreferredSendSize { get; set; }
+        public uint MaxReceiveSize { get; set; }
+        public uint MaxFragmentedSize { get; set; }
     }
 }

@@ -1,13 +1,11 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using Microsoft.Protocols.TestManager.Detector;
-using Microsoft.Protocols.TestManager.FileServerPlugin.Detector;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using System;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Windows;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
@@ -60,11 +58,11 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         {
             try
             {
-                using (var client = new SMB3Client())
+                using (var client = new SMBDClient(new TimeSpan(0, 0, 20)))
                 {
                     client.Connect(ip, IPAddress.Parse(DetectionInfo.DriverNonRdmaNICIPAddress));
 
-                    client.Negotiate(new DialectRevision[] { dialect });
+                    client.Smb2Negotiate(new DialectRevision[] { dialect });
 
                     return true;
                 }

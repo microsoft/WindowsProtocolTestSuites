@@ -31,6 +31,8 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             ConnectToShareRDMA();
 
+            CheckSMBDCapability();
+
             return true;
         }
 

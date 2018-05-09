@@ -17,9 +17,10 @@ namespace Microsoft.Protocols.TestManager.Detector
         public const string SHAREFOLDER = "SUT Shared Folder";
         public const string ISWINDOWSIMPLEMENTATION = "Is Windows Implementation";
         public const string AUTHENTICATION = "Authentication";
+        public const string SMBDPORT = "SMBD Port";
     }
 
-    static class PtfConfigConstant
+    static class DeploymentPtfConfigConstant
     {
         public const string SUTCOMPUTERNAME = "SutComputerName";
         public const string DOMAINNAME = "DomainName";
@@ -33,9 +34,24 @@ namespace Microsoft.Protocols.TestManager.Detector
         public const string SHAREFOLDER = "ShareFolder";
     }
 
+    static class PtfConfigConstant
+    {
+        public const string SMBDTCPPORT = "SmbdTcpPort";
+        public const string RECEIVECREDITMAX = "ReceiveCreditMax";
+        public const string SENDCREDITTARGET = "SendCreditTarget";
+        public const string MAXSENDSIZE = "MaxSendSize";
+        public const string MAXFRAGMENTEDSIZE = "MaxFragmentedSize";
+        public const string MAXRECEIVESIZE = "MaxReceiveSize";
+    }
+
     public class SMBDValueDetector : IValueDetector
     {
-        private DetectionInfo detectionInfo = new DetectionInfo();
+        private DetectionInfo detectionInfo;
+
+        public SMBDValueDetector()
+        {
+            detectionInfo = new DetectionInfo();
+        }
 
         /// <summary>
         /// return false if check failed and set failed property in dictionary
@@ -65,16 +81,16 @@ namespace Microsoft.Protocols.TestManager.Detector
         public bool GetDetectedProperty(out Dictionary<string, List<string>> propertiesDic)
         {
             propertiesDic = new Dictionary<string, List<string>>();
-            propertiesDic[PtfConfigConstant.SUTCOMPUTERNAME] = new List<string> { detectionInfo.SUTName };
-            propertiesDic[PtfConfigConstant.SERVERNONRNICIP] = new List<string> { detectionInfo.SUTNonRdmaNICIPAddress };
-            propertiesDic[PtfConfigConstant.SERVERRNICIP] = new List<string> { detectionInfo.SUTRdmaNICIPAddress };
-            propertiesDic[PtfConfigConstant.CLIENTNONRNICIP] = new List<string> { detectionInfo.DriverNonRdmaNICIPAddress };
-            propertiesDic[PtfConfigConstant.CLIENTRNICIP] = new List<string> { detectionInfo.DriverRdmaNICIPAddress };
-            propertiesDic[PtfConfigConstant.PLATFORM] = new List<string> { detectionInfo.Platform.ToString() };
-            propertiesDic[PtfConfigConstant.SHAREFOLDER] = new List<string> { detectionInfo.ShareFolder };
-            propertiesDic[PtfConfigConstant.SUTUSERNAME] = new List<string> { detectionInfo.UserName };
-            propertiesDic[PtfConfigConstant.SUTPASSWORD] = new List<string> { detectionInfo.Password };
-            propertiesDic[PtfConfigConstant.DOMAINNAME] = new List<string> { detectionInfo.DomainName };
+            propertiesDic[DeploymentPtfConfigConstant.SUTCOMPUTERNAME] = new List<string> { detectionInfo.SUTName };
+            propertiesDic[DeploymentPtfConfigConstant.SERVERNONRNICIP] = new List<string> { detectionInfo.SUTNonRdmaNICIPAddress };
+            propertiesDic[DeploymentPtfConfigConstant.SERVERRNICIP] = new List<string> { detectionInfo.SUTRdmaNICIPAddress };
+            propertiesDic[DeploymentPtfConfigConstant.CLIENTNONRNICIP] = new List<string> { detectionInfo.DriverNonRdmaNICIPAddress };
+            propertiesDic[DeploymentPtfConfigConstant.CLIENTRNICIP] = new List<string> { detectionInfo.DriverRdmaNICIPAddress };
+            propertiesDic[DeploymentPtfConfigConstant.PLATFORM] = new List<string> { detectionInfo.Platform.ToString() };
+            propertiesDic[DeploymentPtfConfigConstant.SHAREFOLDER] = new List<string> { detectionInfo.ShareFolder };
+            propertiesDic[DeploymentPtfConfigConstant.SUTUSERNAME] = new List<string> { detectionInfo.UserName };
+            propertiesDic[DeploymentPtfConfigConstant.SUTPASSWORD] = new List<string> { detectionInfo.Password };
+            propertiesDic[DeploymentPtfConfigConstant.DOMAINNAME] = new List<string> { detectionInfo.DomainName };
             return true;
         }
 
@@ -119,16 +135,16 @@ namespace Microsoft.Protocols.TestManager.Detector
             // Properties
             prerequisites.Properties = new Dictionary<string, List<string>>();
 
-            string sutName = DetectorUtil.GetPropertyValue(PtfConfigConstant.SUTCOMPUTERNAME);
+            string sutName = DetectorUtil.GetPropertyValue(DeploymentPtfConfigConstant.SUTCOMPUTERNAME);
             prerequisites.Properties.Add(PropertyDictionaryConstant.SUTNAME, new List<string> { sutName });
 
-            string domainName = DetectorUtil.GetPropertyValue(PtfConfigConstant.DOMAINNAME);
+            string domainName = DetectorUtil.GetPropertyValue(DeploymentPtfConfigConstant.DOMAINNAME);
             prerequisites.Properties.Add(PropertyDictionaryConstant.DOMAINNAME, new List<string> { domainName });
 
-            string sutUserName = DetectorUtil.GetPropertyValue(PtfConfigConstant.SUTUSERNAME);
+            string sutUserName = DetectorUtil.GetPropertyValue(DeploymentPtfConfigConstant.SUTUSERNAME);
             prerequisites.Properties.Add(PropertyDictionaryConstant.SUTUSERNAME, new List<string> { sutUserName });
 
-            string sutPassword = DetectorUtil.GetPropertyValue(PtfConfigConstant.SUTPASSWORD);
+            string sutPassword = DetectorUtil.GetPropertyValue(DeploymentPtfConfigConstant.SUTPASSWORD);
             prerequisites.Properties.Add(PropertyDictionaryConstant.SUTPASSWORD, new List<string> { sutPassword });
 
             prerequisites.Properties.Add(PropertyDictionaryConstant.AUTHENTICATION, new List<string>() {
@@ -137,10 +153,13 @@ namespace Microsoft.Protocols.TestManager.Detector
                 SecurityPackageType.Ntlm.ToString()
             });
 
-            string shareFolder = DetectorUtil.GetPropertyValue(PtfConfigConstant.SHAREFOLDER);
+            string shareFolder = DetectorUtil.GetPropertyValue(DeploymentPtfConfigConstant.SHAREFOLDER);
             prerequisites.Properties.Add(PropertyDictionaryConstant.SHAREFOLDER, new List<string> { shareFolder });
 
             prerequisites.Properties.Add(PropertyDictionaryConstant.ISWINDOWSIMPLEMENTATION, new List<string> { "True", "False" });
+
+            string smbdPort = DetectorUtil.GetPropertyValue(PtfConfigConstant.SMBDTCPPORT);
+            prerequisites.Properties.Add(PropertyDictionaryConstant.SMBDPORT, new List<string> { smbdPort });
 
             return prerequisites;
         }
@@ -188,6 +207,16 @@ namespace Microsoft.Protocols.TestManager.Detector
             detectionInfo.Password = properties[PropertyDictionaryConstant.SUTPASSWORD];
             detectionInfo.IsWindowsImplementation = Boolean.Parse(properties[PropertyDictionaryConstant.ISWINDOWSIMPLEMENTATION]);
             detectionInfo.ShareFolder = properties[PropertyDictionaryConstant.SHAREFOLDER];
+            detectionInfo.SMBDPort = UInt16.Parse(properties[PropertyDictionaryConstant.SMBDPORT]);
+
+            detectionInfo.SMBDClientCapability = new SMBDClientCapability()
+            {
+                CreditsRequested = UInt16.Parse(DetectorUtil.GetPropertyValue(PtfConfigConstant.SENDCREDITTARGET)),
+                ReceiveCreditMax = UInt16.Parse(DetectorUtil.GetPropertyValue(PtfConfigConstant.RECEIVECREDITMAX)),
+                PreferredSendSize = UInt32.Parse(DetectorUtil.GetPropertyValue(PtfConfigConstant.MAXSENDSIZE)),
+                MaxReceiveSize = UInt32.Parse(DetectorUtil.GetPropertyValue(PtfConfigConstant.MAXRECEIVESIZE)),
+                MaxFragmentedSize = UInt32.Parse(DetectorUtil.GetPropertyValue(PtfConfigConstant.MAXFRAGMENTEDSIZE))
+            };
             return true;
         }
     }

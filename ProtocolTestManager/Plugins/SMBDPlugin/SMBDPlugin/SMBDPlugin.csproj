@@ -39,6 +39,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma">
+      <HintPath>..\..\..\..\ProtoSDK\RDMA\x64\Debug\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Management" />
@@ -68,6 +71,7 @@
     <Compile Include="DetectionResultControl.xaml.cs">
       <DependentUpon>DetectionResultControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Detector\CheckSMBDFeature.cs" />
     <Compile Include="Detector\CheckSmbDialect.cs" />
     <Compile Include="Detector\ConnectToShare.cs" />
     <Compile Include="Detector\GetOSVersion.cs" />
@@ -82,7 +86,7 @@
     <Compile Include="Detector\RemoteNetworkInterfaceSelector.xaml.cs">
       <DependentUpon>RemoteNetworkInterfaceSelector.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Detector\SMB3Client.cs" />
+    <Compile Include="Detector\SMBDClient.cs" />
     <Compile Include="Detector\SMBDDetector.cs" />
     <Compile Include="SMBDValueDetector.cs" />
     <Compile Include="Logger.cs" />
@@ -127,6 +131,10 @@
     <ProjectReference Include="..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj">
       <Project>{c7f08825-d3c9-4ddd-9ba3-06733b1abe36}</Project>
       <Name>Smb2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-SMBD\Smbd.csproj">
+      <Project>{C07058FA-1891-46E6-B4AF-7F38DD6BD7AD}</Project>
+      <Name>Smbd</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\ProtoSDK\Sspi\Sspi.csproj">
       <Project>{d0cb354b-2cd3-49c1-8eca-2f6ebadbccee}</Project>

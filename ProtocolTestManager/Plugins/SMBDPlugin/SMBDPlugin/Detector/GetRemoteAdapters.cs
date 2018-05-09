@@ -61,20 +61,20 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         {
             try
             {
-                using (var client = new SMB3Client())
+                using (var client = new SMBDClient(new TimeSpan(0, 0, 20)))
                 {
 
                     client.Connect(ip, IPAddress.Parse(DetectionInfo.DriverNonRdmaNICIPAddress));
 
-                    client.Negotiate(new DialectRevision[] { DialectRevision.Smb30, DialectRevision.Smb302, DialectRevision.Smb311 });
+                    client.Smb2Negotiate(new DialectRevision[] { DialectRevision.Smb30, DialectRevision.Smb302, DialectRevision.Smb311 });
 
-                    client.SessionSetup(DetectionInfo.Authentication, DetectionInfo.DomainName, DetectionInfo.SUTName, DetectionInfo.UserName, DetectionInfo.Password);
+                    client.Smb2SessionSetup(DetectionInfo.Authentication, DetectionInfo.DomainName, DetectionInfo.SUTName, DetectionInfo.UserName, DetectionInfo.Password);
 
                     uint treeId;
 
                     string ipcPath = Smb2Utility.GetIPCPath(DetectionInfo.SUTName);
 
-                    client.TreeConnect(ipcPath, out treeId);
+                    client.Smb2TreeConnect(ipcPath, out treeId);
 
                     byte[] input;
                     byte[] output;

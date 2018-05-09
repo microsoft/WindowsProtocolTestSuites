@@ -1,14 +1,10 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using Microsoft.Protocols.TestManager.Detector;
-using Microsoft.Protocols.TestManager.FileServerPlugin.Detector;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Sockets;
-using System.Windows;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
@@ -61,33 +57,33 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         {
             try
             {
-                using (var client = new SMB3Client())
+                using (var client = new SMBDClient(new TimeSpan(0, 0, 20)))
                 {
                     client.Connect(IPAddress.Parse(serverIp), IPAddress.Parse(clientIp));
 
-                    client.Negotiate(DetectionInfo.SupportedSmbDialects);
+                    client.Smb2Negotiate(DetectionInfo.SupportedSmbDialects);
 
-                    client.SessionSetup(DetectionInfo.Authentication, DetectionInfo.DomainName, DetectionInfo.SUTName, DetectionInfo.UserName, DetectionInfo.Password);
+                    client.Smb2SessionSetup(DetectionInfo.Authentication, DetectionInfo.DomainName, DetectionInfo.SUTName, DetectionInfo.UserName, DetectionInfo.Password);
 
                     string path = Smb2Utility.GetUncPath(DetectionInfo.SUTName, DetectionInfo.ShareFolder);
 
                     uint treeId;
 
-                    client.TreeConnect(path, out treeId);
+                    client.Smb2TreeConnect(path, out treeId);
 
                     FILEID fileId;
 
                     client.CreateRandomFile(treeId, out fileId);
 
-                    uint fileLength = 64;
+                    uint fileLength = client.CalculateSmb2MaxReadWriteSize();
 
                     var buffer = Smb2Utility.CreateRandomByteArray((int)fileLength);
 
-                    client.Write(treeId, fileId, 0, buffer);
+                    client.Smb2Write(treeId, fileId, 0, buffer);
 
                     byte[] output;
 
-                    client.Read(treeId, fileId, 0, fileLength, out output);
+                    client.Smb2Read(treeId, fileId, 0, fileLength, out output);
 
                     bool result = Enumerable.SequenceEqual(buffer, output);
 
