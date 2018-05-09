@@ -52,7 +52,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSync_Invalid_Input_1()
         {
-            DRSReplicaSync_Invalid_Input_1(1);
+            DRSReplicaSync_Invalid_Input_1(DrsReplicaSync_Versions.V1);
         }
 
         [TestCategory("Win2003")]
@@ -66,7 +66,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSyncV2_Invalid_Input_1()
         {
-            DRSReplicaSync_Invalid_Input_1(2);
+            DRSReplicaSync_Invalid_Input_1(DrsReplicaSync_Versions.V2);
         }
 
         [TestCategory("Win2003")]
@@ -81,7 +81,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSync_Invalid_Input_2()
         {
-            DRSReplicaSync_Invalid_Input_2(1);
+            DRSReplicaSync_Invalid_Input_2(DrsReplicaSync_Versions.V1);
         }
 
         [TestCategory("Win2003")]
@@ -95,7 +95,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSyncV2_Invalid_Input_2()
         {
-            DRSReplicaSync_Invalid_Input_2(2);
+            DRSReplicaSync_Invalid_Input_2(DrsReplicaSync_Versions.V2);
         }
 
         [TestCategory("Win2003")]
@@ -110,7 +110,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSync_Invalid_Input_3()
         {
-            DRSReplicaSync_Invalid_Input_3(1);
+            DRSReplicaSync_Invalid_Input_3(DrsReplicaSync_Versions.V1);
         }
 
         [TestCategory("Win2003")]
@@ -124,7 +124,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSyncV2_Invalid_Input_3()
         {
-            DRSReplicaSync_Invalid_Input_3(2);
+            DRSReplicaSync_Invalid_Input_3(DrsReplicaSync_Versions.V2);
         }
 
         [TestCategory("Win2003")]
@@ -139,7 +139,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSync_Invalid_Input_4()
         {
-            DRSReplicaSync_Invalid_Input_4(1);
+            DRSReplicaSync_Invalid_Input_4(DrsReplicaSync_Versions.V1);
         }
 
         [TestCategory("Win2003")]
@@ -153,7 +153,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSyncV2_Invalid_Input_4()
         {
-            DRSReplicaSync_Invalid_Input_4(2);
+            DRSReplicaSync_Invalid_Input_4(DrsReplicaSync_Versions.V2);
         }
 
         [TestCategory("Win2003")]
@@ -168,7 +168,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSync_Access_Denied()
         {
-            DRSReplicaSync_Access_Denied(1);
+            DRSReplicaSync_Access_Denied(DrsReplicaSync_Versions.V1);
         }
 
         [TestCategory("Win2003")]
@@ -182,7 +182,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSyncV2_Access_Denied()
         {
-            DRSReplicaSync_Access_Denied(2);
+            DRSReplicaSync_Access_Denied(DrsReplicaSync_Versions.V2);
         }
 
         [TestCategory("Win2003")]
@@ -197,7 +197,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSync_No_Replica()
         {
-            DRSReplicaSync_No_Replica(1);
+            DRSReplicaSync_No_Replica(DrsReplicaSync_Versions.V1);
         }
 
         [TestCategory("Win2003")]
@@ -211,12 +211,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [TestMethod]
         public void DRSR_DRSReplicaSyncV2_No_Replica()
         {
-            DRSReplicaSync_No_Replica(2);
+            DRSReplicaSync_No_Replica(DrsReplicaSync_Versions.V2);
         }
         #endregion
 
         #region Private Methods
-        private void DRSReplicaSync_Invalid_Input_1(uint dwInVersion)
+        private void DRSReplicaSync_Invalid_Input_1(DrsReplicaSync_Versions dwInVersion)
         {
             DrsrTestChecker.Check();
             uint ret = drsTestClient.DrsBind(
@@ -238,12 +238,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             DRS_MSG_REPSYNC msgIn = new DRS_MSG_REPSYNC();
             switch (dwInVersion)
             {
-                case 1:
+                case DrsReplicaSync_Versions.V1:
                     msgIn = drsTestClient.CreateDrsReplicaSyncV1Request();
                     /* Setting param #1 */
                     //msgIn.V1.pNC = null;
                     break;
-                case 2:
+                case DrsReplicaSync_Versions.V2:
                     msgIn = drsTestClient.CreateDrsReplicaSyncV2Request();
                     break;
                 default:
@@ -254,7 +254,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             /* Issue the request */
             ret = drsTestClient.DRSClient.DrsReplicaSync(
                 EnvironmentConfig.DrsContextStore[EnvironmentConfig.Machine.WritableDC1],
-                dwInVersion,
+                (uint)dwInVersion,
                 msgIn);
             BaseTestSite.Assert.AreEqual<uint>(
                 (uint)Win32ErrorCode_32.ERROR_DS_DRA_INVALID_PARAMETER,
@@ -263,7 +263,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
              );
         }
 
-        private void DRSReplicaSync_Invalid_Input_2(uint dwInVersion)
+        private void DRSReplicaSync_Invalid_Input_2(DrsReplicaSync_Versions dwInVersion)
         {
             DrsrTestChecker.Check();
             uint ret = drsTestClient.DrsBind(
@@ -289,7 +289,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             DSNAME ncDsname = LdapUtility.CreateDSNameForObject(srv, rootDse.configurationNamingContext);
             switch (dwInVersion)
             {
-                case 1:
+                case DrsReplicaSync_Versions.V1:
                     msgIn = drsTestClient.CreateDrsReplicaSyncV1Request();
                     /* Setting param #1 */
                     msgIn.V1.ulOptions = 0;
@@ -299,7 +299,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                     msgIn.V1.pszDsaSrc = null;
                     msgIn.V1.pNC = ncDsname;
                     break;
-                case 2:
+                case DrsReplicaSync_Versions.V2:
                     msgIn = drsTestClient.CreateDrsReplicaSyncV2Request();
                     /* Setting param #1 */
                     msgIn.V2.ulOptions = 0;
@@ -317,7 +317,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             /* Issue the request */
             ret = drsTestClient.DRSClient.DrsReplicaSync(
                 EnvironmentConfig.DrsContextStore[EnvironmentConfig.Machine.WritableDC1],
-                dwInVersion,
+                (uint)dwInVersion,
                 msgIn);
             BaseTestSite.Assert.AreEqual<uint>(
                 (uint)Win32ErrorCode_32.ERROR_DS_DRA_INVALID_PARAMETER,
@@ -326,7 +326,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
              );
         }
 
-        private void DRSReplicaSync_Invalid_Input_3(uint dwInVersion)
+        private void DRSReplicaSync_Invalid_Input_3(DrsReplicaSync_Versions dwInVersion)
         {
             DrsrTestChecker.Check();
             uint ret = drsTestClient.DrsBind(
@@ -350,7 +350,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             DSNAME ncDsname = LdapUtility.CreateDSNameForObject(srv, rootDse.configurationNamingContext);
             switch (dwInVersion)
             {
-                case 1:
+                case DrsReplicaSync_Versions.V1:
                     msgIn = drsTestClient.CreateDrsReplicaSyncV1Request();
                     /* Setting param #1 */
                     msgIn.V1.ulOptions = (uint)DRS_OPTIONS.DRS_SYNC_BYNAME;
@@ -358,7 +358,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                     msgIn.V1.pszDsaSrc = null;
                     msgIn.V1.pNC = ncDsname;
                     break;
-                case 2:
+                case DrsReplicaSync_Versions.V2:
                     msgIn = drsTestClient.CreateDrsReplicaSyncV2Request();
                     /* Setting param #1 */
                     msgIn.V2.ulOptions = (uint)DRS_OPTIONS.DRS_SYNC_BYNAME;
@@ -374,7 +374,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             /* Issue the request */
             ret = drsTestClient.DRSClient.DrsReplicaSync(
                 EnvironmentConfig.DrsContextStore[EnvironmentConfig.Machine.WritableDC1],
-                dwInVersion,
+                (uint)dwInVersion,
                 msgIn);
             BaseTestSite.Assert.AreEqual<uint>(
                 (uint)Win32ErrorCode_32.ERROR_DS_DRA_INVALID_PARAMETER,
@@ -383,7 +383,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
              );
         }
 
-        private void DRSReplicaSync_Invalid_Input_4(uint dwInVersion)
+        private void DRSReplicaSync_Invalid_Input_4(DrsReplicaSync_Versions dwInVersion)
         {
             DrsrTestChecker.Check();
             uint ret = drsTestClient.DrsBind(
@@ -407,7 +407,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             DSNAME ncDsname = LdapUtility.CreateDSNameForObject(srv, rootDse.configurationNamingContext);
             switch (dwInVersion)
             {
-                case 1:
+                case DrsReplicaSync_Versions.V1:
                     msgIn = drsTestClient.CreateDrsReplicaSyncV1Request();
                     /* Setting param #1 */
                     msgIn.V1.ulOptions = 0;
@@ -415,7 +415,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                     msgIn.V1.uuidDsaSrc = Guid.Empty;
                     msgIn.V1.pNC = ncDsname;
                     break;
-                case 2:
+                case DrsReplicaSync_Versions.V2:
                     msgIn = drsTestClient.CreateDrsReplicaSyncV2Request();
                     /* Setting param #1 */
                     msgIn.V2.ulOptions = 0;
@@ -431,7 +431,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             /* Issue the request */
             ret = drsTestClient.DRSClient.DrsReplicaSync(
                 EnvironmentConfig.DrsContextStore[EnvironmentConfig.Machine.WritableDC1],
-                dwInVersion,
+                (uint)dwInVersion,
                 msgIn);
             BaseTestSite.Assert.AreEqual<uint>(
                 (uint)Win32ErrorCode_32.ERROR_DS_DRA_INVALID_PARAMETER,
@@ -440,7 +440,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
              );
         }
 
-        private void DRSReplicaSync_Access_Denied(uint dwInVersion)
+        private void DRSReplicaSync_Access_Denied(DrsReplicaSync_Versions dwInVersion)
         {
             DrsrTestChecker.Check();
             uint ret = drsTestClient.DrsBind(
@@ -468,14 +468,14 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             DSNAME ncDsname = LdapUtility.CreateDSNameForObject(srv, rootDse.defaultNamingContext);
             switch (dwInVersion)
             {
-                case 1:
+                case DrsReplicaSync_Versions.V1:
                     msgIn = drsTestClient.CreateDrsReplicaSyncV1Request();
                     msgIn.V1.pNC = ncDsname;
                     // This API will check the uuidDsaSrc first to validate the input, so
                     // to go thru that we set the uuidDsaSrc to any guid.
                     msgIn.V1.uuidDsaSrc = DRSConstants.DrsRpcInterfaceGuid;
                     break;
-                case 2:
+                case DrsReplicaSync_Versions.V2:
                     msgIn = drsTestClient.CreateDrsReplicaSyncV2Request();
                     msgIn.V2.pNC = ncDsname;
                     // This API will check the uuidDsaSrc first to validate the input, so
@@ -490,7 +490,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             /* Issue the request */
             ret = drsTestClient.DRSClient.DrsReplicaSync(
                 EnvironmentConfig.DrsContextStore[EnvironmentConfig.Machine.WritableDC1],
-                dwInVersion,
+                (uint)dwInVersion,
                 msgIn);
             BaseTestSite.Assert.AreEqual<uint>(
                 (uint)Win32ErrorCode_32.ERROR_DS_DRA_ACCESS_DENIED,
@@ -499,7 +499,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
              );
         }
 
-        private void DRSReplicaSync_No_Replica(uint dwInVersion)
+        private void DRSReplicaSync_No_Replica(DrsReplicaSync_Versions dwInVersion)
         {
             DrsrTestChecker.Check();
             uint ret = drsTestClient.DrsBind(
@@ -527,7 +527,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             DSNAME ncDsname = LdapUtility.CreateDSNameForObject(srv, rootDse.defaultNamingContext);
             switch (dwInVersion)
             {
-                case 1:
+                case DrsReplicaSync_Versions.V1:
                     msgIn = drsTestClient.CreateDrsReplicaSyncV1Request();
                     /* Setting param #1 */
                     msgIn.V1.pszDsaSrc = "InvalidDsaSrc";
@@ -535,7 +535,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                     msgIn.V1.ulOptions = (uint)DRS_OPTIONS.DRS_SYNC_BYNAME;
                     msgIn.V1.pNC = ncDsname;
                     break;
-                case 2:
+                case DrsReplicaSync_Versions.V2:
                     msgIn = drsTestClient.CreateDrsReplicaSyncV2Request();
                     /* Setting param #1 */
                     msgIn.V2.pszDsaSrc = "InvalidDsaSrc";
@@ -551,7 +551,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             /* Issue the request */
             ret = drsTestClient.DRSClient.DrsReplicaSync(
                 EnvironmentConfig.DrsContextStore[EnvironmentConfig.Machine.WritableDC1],
-                dwInVersion,
+                (uint)dwInVersion,
                 msgIn);
             BaseTestSite.Assert.AreEqual<uint>(
                 (uint)Win32ErrorCode_32.ERROR_DS_DRA_NO_REPLICA,
