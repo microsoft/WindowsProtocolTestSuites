@@ -876,6 +876,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad
         /// Windows Server 2k12r2, which is the SUT in our test scope.
         /// </summary>
         Windows2k12r2,
+
+        /// <summary>
+        /// Windows Server v1803, which is the SUT in our test scope.
+        /// </summary>
+        WindowsV1803,
         /// <summary>
         /// NonWindows Platform.
         /// </summary>
