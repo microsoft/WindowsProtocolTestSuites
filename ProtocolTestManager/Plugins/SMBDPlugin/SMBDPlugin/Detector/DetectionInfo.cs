@@ -55,8 +55,23 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         WindowsServer2016 = 0x10000008,
     }
 
+    public enum RDMAEndian
+    {
+        LittleEndian,
+        BigEndian
+    }
+
     public class DetectionInfo
     {
+        public DetectionInfo()
+        {
+            OSDetected = false;
+            NonRDMATransportSupported = false;
+            RDMATransportSupported = false;
+            RDMAChannelV1Supported = false;
+            RDMAChannelV1InvalidateSupported = false;
+        }
+
         /// <summary>
         /// Platform of SUT.
         /// </summary>
@@ -131,6 +146,24 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         /// SMBD capability of client.
         /// </summary>
         public SMBDClientCapability SMBDClientCapability { get; set; }
+
+        /// <summary>
+        /// Connection timeout.
+        /// </summary>
+        public TimeSpan ConnectionTimeout { get; set; }
+
+        /// <summary>
+        /// Endian of RDMA transport.
+        /// </summary>
+        public RDMAEndian Endian { get; set; }
+
+        #region detection result related properties
+        public bool OSDetected { get; set; }
+        public bool NonRDMATransportSupported { get; set; }
+        public bool RDMATransportSupported { get; set; }
+        public bool RDMAChannelV1Supported { get; set; }
+        public bool RDMAChannelV1InvalidateSupported { get; set; }
+        #endregion
     }
 
     public class LocalNetworkInterfaceInformation

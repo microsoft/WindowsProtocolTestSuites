@@ -6,6 +6,7 @@ using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -33,7 +34,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         private bool smbdNegotiated;
         private uint maxSMBDSendSize;
         private uint maxSMBDReceiveSize;
-
+        private Dictionary<RDMAEndian, bool> endianMap;
         #endregion
 
 
@@ -57,6 +58,10 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             creditAvailable = 0;
 
             negotiated = false;
+
+            endianMap = new Dictionary<RDMAEndian, bool>();
+            endianMap.Add(RDMAEndian.BigEndian, true);
+            endianMap.Add(RDMAEndian.LittleEndian, false);
         }
 
 
@@ -513,16 +518,73 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 throw new InvalidOperationException("Not SMBD negotiated!");
             }
 
-            // The max payload size is 65536 so that buffer should be less than 65536 minus the header size and RDMA buffer descriptor size
-            // 100 is large enough to hold READ and RDMA buffer descriptor
-            uint maxBufferSize = 65536 - 100;
-
-            var list = new uint[] { maxReadSize, maxWriteSize, maxSMBDReceiveSize, maxSMBDSendSize, maxBufferSize };
+            var list = new uint[] { maxReadSize, maxWriteSize, maxSMBDReceiveSize, maxSMBDSendSize };
             uint result = list.Aggregate(Math.Min);
             return result;
         }
 
-        public void SMBDWrite(uint treeId, FILEID fileId, Channel_Values channel, byte[] buffer)
+        public void SMBDRead(uint treeId, FILEID fileId, Channel_Values channel, out byte[] buffer, uint offset, uint length, RDMAEndian endian)
+        {
+            NtStatus status;
+            SmbdBufferDescriptorV1 descriptor;
+
+
+            status = smbdClient.RegisterBuffer(
+                                 (uint)length,
+                                 SmbdBufferReadWrite.RDMA_WRITE_PERMISSION_FOR_READ_FILE,
+                                 endianMap[endian],
+                                 out descriptor
+                                 );
+
+            if (status != NtStatus.STATUS_SUCCESS)
+            {
+                throw new InvalidOperationException("SMBD register buffer failed!");
+            }
+
+
+            byte[] channelInfo = TypeMarshal.ToBytes(descriptor);
+
+            Packet_Header packetHeader;
+            READ_Response response;
+
+            status = (NtStatus)Read(
+                                0,
+                                RequestAndConsumeCredit(),
+                                signingRequired ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                                GetMessageId(),
+                                sessionId,
+                                treeId,
+                                length,
+                                offset,
+                                fileId,
+                                length,
+                                channel,
+                                0,
+                                channelInfo,
+                                out buffer,
+                                out packetHeader,
+                                out response
+                                );
+
+            UpdateCredit(packetHeader);
+
+            if (status != NtStatus.STATUS_SUCCESS)
+            {
+                throw new InvalidOperationException("Read through SMBD failed!");
+            }
+
+            buffer = new byte[length];
+
+            status = smbdClient.ReadRegisteredBuffer(buffer, descriptor);
+
+            if (status != NtStatus.STATUS_SUCCESS)
+            {
+                throw new InvalidOperationException("SMBD write buffer failed!");
+            }
+
+        }
+
+        public void SMBDWrite(uint treeId, FILEID fileId, Channel_Values channel, byte[] buffer, uint offset, RDMAEndian endian)
         {
             NtStatus status;
             SmbdBufferDescriptorV1 descriptor;
@@ -530,7 +592,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             status = smbdClient.RegisterBuffer(
                                  (uint)buffer.Length,
                                  SmbdBufferReadWrite.RDMA_READ_PERMISSION_FOR_WRITE_FILE,
-                                 true,
+                                 endianMap[endian],
                                  out descriptor
                                  );
 
@@ -550,7 +612,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             Packet_Header packetHeader;
             WRITE_Response response;
 
-            // Pack WRITE request manually since the DataOffset and  need to be fixed.
+            // Pack WRITE request manually since the DataOffset and RemainingBytes need to be fixed.
             var request = new Smb2WriteRequestPacket();
 
             request.Header.CreditCharge = 0;
@@ -576,6 +638,8 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             SendPacket(request);
 
             status = (NtStatus)WriteResponse(messageId, out packetHeader, out response);
+
+            UpdateCredit(packetHeader);
 
             if (status != NtStatus.STATUS_SUCCESS)
             {

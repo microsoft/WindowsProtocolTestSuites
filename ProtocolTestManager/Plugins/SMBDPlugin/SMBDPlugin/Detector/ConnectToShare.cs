@@ -13,6 +13,11 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
         public bool ConnectToShareNonRDMA()
         {
+            if (DetectionInfo.SUTNonRdmaNICIPAddress == null || DetectionInfo.DriverNonRdmaNICIPAddress == null)
+            {
+                DetectorUtil.WriteLog("Connect to share through non-RDMA transport skipped since not available.", true, LogStyle.StepSkipped);
+                return false;
+            }
 
             DetectorUtil.WriteLog("Connect to share through non-RDMA transport...");
 
@@ -57,7 +62,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         {
             try
             {
-                using (var client = new SMBDClient(new TimeSpan(0, 0, 20)))
+                using (var client = new SMBDClient(DetectionInfo.ConnectionTimeout))
                 {
                     client.Connect(IPAddress.Parse(serverIp), IPAddress.Parse(clientIp));
 
@@ -95,8 +100,9 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                     return result;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                DetectorUtil.WriteLog(String.Format("ConnectToShare threw exception: {0}", ex));
                 return false;
             }
         }

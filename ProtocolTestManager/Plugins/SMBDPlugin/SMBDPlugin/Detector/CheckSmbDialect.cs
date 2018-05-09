@@ -58,7 +58,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         {
             try
             {
-                using (var client = new SMBDClient(new TimeSpan(0, 0, 20)))
+                using (var client = new SMBDClient(DetectionInfo.ConnectionTimeout))
                 {
                     client.Connect(ip, IPAddress.Parse(DetectionInfo.DriverNonRdmaNICIPAddress));
 
@@ -67,8 +67,9 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                     return true;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                DetectorUtil.WriteLog(String.Format("TryNegotiateDialect threw exception: {0}", ex));
                 return false;
             }
         }

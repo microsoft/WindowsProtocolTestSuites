@@ -15,6 +15,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             if (!DetectionInfo.IsWindowsImplementation)
             {
                 DetectorUtil.WriteLog("Skip for non-Windows", false, LogStyle.StepSkipped);
+                DetectionInfo.Platform = Platform.NonWindows;
                 return true;
             }
 
@@ -54,6 +55,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
             else
             {
+                DetectorUtil.WriteLog(string.Format("Set platform to {0}.", DetectionInfo.Platform));
                 DetectorUtil.WriteLog("The format of return value is invalid!");
             }
 

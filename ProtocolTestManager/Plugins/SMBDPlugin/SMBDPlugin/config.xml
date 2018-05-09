@@ -27,40 +27,35 @@
       </Rule>
     </Group>
 
-    <Group name ="Feature">
-      <Rule name = "SMBD Negotiate">
-        <Category name = "SmbdNegotiate"/>
-      </Rule>
-      <Rule name = "SMBD Credits Management">
-        <Category name = "SmbdCreditMgmt"/>
-      </Rule>
-      <Rule name = "SMBD Data Transfer">
-        <Category name = "SmbdDataTransfer"/>
-      </Rule>
-      <Rule name = "SMB2 Over Rdma Channel">
-        <Category name = "Smb2OverRdmaChannel"/>
-      </Rule>
-      <Rule name = "SMB2 Over Multiple Channels">
-        <Category name = "Smb2MultipleChannel"/>
+    <Group name="Feature">
+      <Rule name ="SMBD">
+        <Rule name = "SMBD Negotiate">
+          <Category name = "SmbdNegotiate"/>
+        </Rule>
+        <Rule name = "SMBD Credits Management">
+          <Category name = "SmbdCreditMgmt"/>
+        </Rule>
+        <Rule name = "SMBD Data Transfer">
+          <Category name = "SmbdDataTransfer"/>
+        </Rule>
       </Rule>
 
-    </Group>
-
-    <Group name = "Specific SMB Dialect" type="Remover">
-      <Rule name = "SMB 3.0">
-        <Category name = "SMB300"/>
-      </Rule>
-      <Rule name = "SMB 3.0.2">
-        <Category name = "SMB302"/>
-      </Rule>
-    </Group>
-
-    <Group name="Other" type="Remover">
-      <Rule name = "SMB2_CHANNEL_RDMA_V1_INVALIDATE">
-        <Category name = "SMB2_CHANNEL_RDMA_V1_INVALIDATE"/>
+      <Rule name = "SMB2 over SMBD">
+        <Rule name = "SMB 3.0 or Later">
+          <Rule name = "RDMA Channel">
+            <Category name = "Smb2OverRdmaChannel"/>
+          </Rule>
+          <Rule name = "Multiple Channels">
+            <Category name = "Smb2MultipleChannel"/>
+          </Rule>
+        </Rule>
+        <Rule name = "SMB 3.0.2 or Later">
+          <Rule name = "RDMA Channel Remote Invalidation">
+            <Category name = "SMB2_CHANNEL_RDMA_V1_INVALIDATE"/>
+          </Rule>
+        </Rule>
       </Rule>
     </Group>
-
   </ConfigCaseRule>
 
   <TestCategories>TestCategories.xml</TestCategories>

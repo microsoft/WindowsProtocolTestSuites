@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
+
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
     public partial class SMBDDetector
@@ -15,27 +17,91 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
         public bool Detect()
         {
+            bool result;
 
-            PingSUT();
+            result = PingSUT();
+            if (!result)
+            {
+                // target unreachable and stop
+                return false;
+            }
 
-            GetOSVersion();
+            result = GetOSVersion();
+            if (!result)
+            {
+                DetectionInfo.OSDetected = false;
+            }
+            else
+            {
+                DetectionInfo.OSDetected = true;
+            }
 
 
-            GetLocalAdapters();
+            result = GetLocalAdapters();
+            if (!result)
+            {
+                if (DetectionInfo.DriverRdmaNICIPAddress == null)
+                {
+                    // stop if RDMA card not detected
+                    return false;
+                }
+            }
 
-            CheckSmbDialect();
+            result = CheckSmbDialect();
+            if (!result)
+            {
+                // stop if none support dialect
+                return false;
+            }
 
-            GetRemoteAdapters();
+            result = GetRemoteAdapters();
+            if (!result)
+            {
+                if (DetectionInfo.SUTRdmaNICIPAddress == null)
+                {
+                    // stop if RDMA card not detected
+                    return false;
+                }
+            }
 
-            ConnectToShareNonRDMA();
+            result = ConnectToShareNonRDMA();
+            if (!result)
+            {
+                DetectionInfo.NonRDMATransportSupported = false;
+            }
+            else
+            {
+                DetectionInfo.NonRDMATransportSupported = true;
+            }
 
-            ConnectToShareRDMA();
+            result = ConnectToShareRDMA();
+            if (!result)
+            {
+                // stop if RDMA transport failed
+                DetectionInfo.RDMATransportSupported = false;
+                return false;
+            }
+            else
+            {
+                DetectionInfo.RDMATransportSupported = true;
+            }
 
-            CheckSMBDCapability();
+            bool rdmaChannelV1Supported;
+            bool rdmaChannelV1InvalidateSupported;
+            result = CheckSMBDCapability(out rdmaChannelV1Supported, out rdmaChannelV1InvalidateSupported);
+            DetectionInfo.RDMAChannelV1Supported = rdmaChannelV1Supported;
+            DetectionInfo.RDMAChannelV1InvalidateSupported = rdmaChannelV1InvalidateSupported;
+            if (!result)
+            {
+                // stop if RDMA channel V1 check failed
+                if (!rdmaChannelV1Supported)
+                {
+                    return false;
+                }
+            }
 
             return true;
         }
-
-
+        
     }
 }

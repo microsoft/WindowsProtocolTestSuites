@@ -61,7 +61,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         {
             try
             {
-                using (var client = new SMBDClient(new TimeSpan(0, 0, 20)))
+                using (var client = new SMBDClient(DetectionInfo.ConnectionTimeout))
                 {
 
                     client.Connect(ip, IPAddress.Parse(DetectionInfo.DriverNonRdmaNICIPAddress));

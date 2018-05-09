@@ -18,6 +18,7 @@ namespace Microsoft.Protocols.TestManager.Detector
         public const string ISWINDOWSIMPLEMENTATION = "Is Windows Implementation";
         public const string AUTHENTICATION = "Authentication";
         public const string SMBDPORT = "SMBD Port";
+        public const string CONNECTIONTIMEOUT = "Connection timeout";
     }
 
     static class DeploymentPtfConfigConstant
@@ -42,6 +43,8 @@ namespace Microsoft.Protocols.TestManager.Detector
         public const string MAXSENDSIZE = "MaxSendSize";
         public const string MAXFRAGMENTEDSIZE = "MaxFragmentedSize";
         public const string MAXRECEIVESIZE = "MaxReceiveSize";
+        public const string SMB2CONNECTIONTIMEOUTINSECONDS = "Smb2ConnectionTimeoutInSeconds";
+        public const string ENDIANOFBUFFERDESCRIPTOR = "EndianOfBufferDescriptor";
     }
 
     public class SMBDValueDetector : IValueDetector
@@ -91,6 +94,10 @@ namespace Microsoft.Protocols.TestManager.Detector
             propertiesDic[DeploymentPtfConfigConstant.SUTUSERNAME] = new List<string> { detectionInfo.UserName };
             propertiesDic[DeploymentPtfConfigConstant.SUTPASSWORD] = new List<string> { detectionInfo.Password };
             propertiesDic[DeploymentPtfConfigConstant.DOMAINNAME] = new List<string> { detectionInfo.DomainName };
+            propertiesDic[PtfConfigConstant.SMBDTCPPORT] = new List<string> { detectionInfo.SMBDPort.ToString() };
+            propertiesDic[PtfConfigConstant.SMB2CONNECTIONTIMEOUTINSECONDS] = new List<string> { detectionInfo.ConnectionTimeout.ToString() };
+            propertiesDic[PtfConfigConstant.ENDIANOFBUFFERDESCRIPTOR] = new List<string> { detectionInfo.Endian.ToString() };
+
             return true;
         }
 
@@ -161,6 +168,9 @@ namespace Microsoft.Protocols.TestManager.Detector
             string smbdPort = DetectorUtil.GetPropertyValue(PtfConfigConstant.SMBDTCPPORT);
             prerequisites.Properties.Add(PropertyDictionaryConstant.SMBDPORT, new List<string> { smbdPort });
 
+            string connectionTimeout = DetectorUtil.GetPropertyValue(PtfConfigConstant.SMB2CONNECTIONTIMEOUTINSECONDS);
+            prerequisites.Properties.Add(PropertyDictionaryConstant.CONNECTIONTIMEOUT, new List<string> { connectionTimeout });
+
             return prerequisites;
         }
 
@@ -209,6 +219,8 @@ namespace Microsoft.Protocols.TestManager.Detector
             detectionInfo.ShareFolder = properties[PropertyDictionaryConstant.SHAREFOLDER];
             detectionInfo.SMBDPort = UInt16.Parse(properties[PropertyDictionaryConstant.SMBDPORT]);
 
+            detectionInfo.ConnectionTimeout = TimeSpan.FromSeconds(UInt32.Parse(properties[PropertyDictionaryConstant.CONNECTIONTIMEOUT]));
+            detectionInfo.Endian = (RDMAEndian)Enum.Parse(typeof(RDMAEndian), DetectorUtil.GetPropertyValue(PtfConfigConstant.ENDIANOFBUFFERDESCRIPTOR));
             detectionInfo.SMBDClientCapability = new SMBDClientCapability()
             {
                 CreditsRequested = UInt16.Parse(DetectorUtil.GetPropertyValue(PtfConfigConstant.SENDCREDITTARGET)),

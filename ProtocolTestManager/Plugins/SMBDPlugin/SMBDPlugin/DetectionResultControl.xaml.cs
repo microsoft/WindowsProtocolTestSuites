@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using Microsoft.Protocols.TestManager.SMBDPlugin.Detector;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,7 +21,13 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin
 
         public void LoadDetectionInfo(DetectionInfo detectionInfo)
         {
-            this.info = detectionInfo;
+            info = detectionInfo;
+
+            AddDialect();
+            AddSmb2TransportSupport();
+
+            resultItemMapList.Add(dialectsItems);
+            resultItemMapList.Add(smbdItems);
 
             ResultMapList.ItemsSource = resultItemMapList;
         }
@@ -28,30 +36,88 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin
 
         private DetectionInfo info = null;
 
-        private const string dialectsDescription = "\"Max Supported Dialect\" is the selected one in the Negotiate Response by server when a Negotiate Request is sent to SUT with Dialects Smb2.002, Smb2.1, Smb3.0 and Smb3.02.";
-        private const string capabilitiesDescription = "\"Capabilities\" are found supported or not supported by analyzing the flags set in Negotiate Response when a Negotiate Request is sent to SUT with all defined flags in TD set in Capabilities field.";
-        private const string ioctlCodesDescription = "\"IoCtl Codes\" are found supported or not supported by analyzing IOCTL Responses when the following IOCTL Requests are sent to SUT.";
-        private const string createContextsDescription = "\"Creat Contexts\" are found supported or not supported by analyzing Create Responses when the Create Requests with the following create contexts are sent to SUT.";
-        private const string rsvdDescription = "\"RSVD Implementation\" is detected by sending Create Request with SVHDX_OPEN_DEVICE_CONTEXT\\SVHDX_OPEN_DEVICE_CONTEXT_V2.";
-        private const string sqosDescription = "\"SQOS Implementation\" is detected by sending SQOS get status request.";
+        private const string dialectsDescription = @"""SMB Version Supported"" lists the SMB dialects supported by SUT SMB2 over SMBD implementation and at least SMB dialect 3.0 is required.";
+        private const string smbdDescription = @"""SMB2 over SMBD Feature Supported"" lists the feature supported by SUT SMB2 over SMBD implementation";
 
 
-        private ResultItemMap dialectsItems = new ResultItemMap() { Header = "Max Smb Version Supported", Description = dialectsDescription };
-        private ResultItemMap capabilitiesItems = new ResultItemMap() { Header = "Capabilities", Description = capabilitiesDescription };
-        private ResultItemMap ioctlCodesItems = new ResultItemMap() { Header = "IoCtl Codes", Description = ioctlCodesDescription };
-        private ResultItemMap createContextsItems = new ResultItemMap() { Header = "Create Contexts", Description = createContextsDescription };
-
-        private ResultItemMap rsvdItems = new ResultItemMap() { Header = "Remote Shared Virtual Disk (RSVD)", Description = rsvdDescription };
-        private ResultItemMap sqosItems = new ResultItemMap() { Header = "Storage Quality of Service (SQOS)", Description = sqosDescription };
+        private ResultItemMap dialectsItems = new ResultItemMap() { Header = "SMB Version Supported", Description = dialectsDescription };
+        private ResultItemMap smbdItems = new ResultItemMap() { Header = "SMB2 over SMBD Feature Supported", Description = smbdDescription };
 
         private List<ResultItemMap> resultItemMapList = new List<ResultItemMap>();
 
         #endregion
 
         #region Private functions
+        private void AddDialect()
+        {
+            foreach (var dialect in info.SupportedSmbDialects)
+            {
+                string dialectName = null;
+                switch (dialect)
+                {
+                    case DialectRevision.Smb30:
+                        dialectName = "SMB 3.0";
+                        break;
+                    case DialectRevision.Smb302:
+                        dialectName = "SMB 3.0.2";
+                        break;
+                    case DialectRevision.Smb311:
+                        dialectName = "SMB 3.1.1";
+                        break;
+                    default:
+                        throw new InvalidOperationException("Unexpected dialect!");
+                }
+                AddResultItem(dialectsItems, dialectName, DetectResult.Supported);
+            }
+        }
 
-  
-        private void AddResultItem(ref ResultItemMap resultItemMap, string value, DetectResult result)
+        private void AddSmb2TransportSupport()
+        {
+            if (info.DriverNonRdmaNICIPAddress == null || info.SUTNonRdmaNICIPAddress == null)
+            {
+                AddResultItem(smbdItems, "Multiple Channels", DetectResult.DetectFail);
+            }
+            else
+            {
+                if (info.NonRDMATransportSupported && info.RDMATransportSupported)
+                {
+                    AddResultItem(smbdItems, "Multiple Channels", DetectResult.Supported);
+                }
+                else
+                {
+                    AddResultItem(smbdItems, "Multiple Channels", DetectResult.UnSupported);
+                }
+            }
+
+            if (info.DriverRdmaNICIPAddress == null || info.SUTRdmaNICIPAddress == null)
+            {
+                AddResultItem(smbdItems, "RDMA Channel V1", DetectResult.DetectFail);
+                AddResultItem(smbdItems, "RDMA Channel V1 Remote Invalidate", DetectResult.DetectFail);
+            }
+            else
+            {
+                if (info.RDMAChannelV1Supported)
+                {
+                    AddResultItem(smbdItems, "RDMA Channel V1", DetectResult.Supported);
+                }
+                else
+                {
+                    AddResultItem(smbdItems, "RDMA Channel V1", DetectResult.UnSupported);
+                }
+
+                if (info.RDMAChannelV1InvalidateSupported)
+                {
+                    AddResultItem(smbdItems, "RDMA Channel V1 Remote Invalidate", DetectResult.Supported);
+                }
+                else
+                {
+                    AddResultItem(smbdItems, "RDMA Channel V1 Remote Invalidate", DetectResult.UnSupported);
+                }
+            }
+
+        }
+
+        private void AddResultItem(ResultItemMap resultItemMap, string value, DetectResult result)
         {
             string imagePath = string.Empty;
             switch (result)
@@ -73,7 +139,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin
             resultItemMap.ResultItemList.Add(item);
         }
 
-       
+
         #endregion
 
         #region Private events
@@ -96,21 +162,19 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin
 
                 ResultItem tempItem = (ResultItem)selectedList.SelectedItem;
 
-                if (tempItem.DetectedResult == DetectResult.UnSupported)
+                switch (tempItem.DetectedResult)
                 {
-                    this.ItemDescription.Text = tempItem.Name + " is found not supported after detection";
-                    return;
+                    case DetectResult.UnSupported:
+                        ItemDescription.Text = String.Format("{0} is found not supported after detection", tempItem.Name);
+                        break;
+                    case DetectResult.Supported:
+                        ItemDescription.Text = String.Format("{0} is found supported after detection", tempItem.Name);
+                        break;
+                    case DetectResult.DetectFail:
+                        ItemDescription.Text = String.Format("Failed to detect {0}", tempItem.Name);
+                        break;
                 }
-                //if (!info.detectExceptions.ContainsKey(tempItem.Name))
-                //{
-                //    this.ItemDescription.Text = tempItem.Name + " is found supported after detection";
-                //    return;
-                //}
-                //string log = info.detectExceptions[tempItem.Name];
-                //if (!string.IsNullOrEmpty(log))
-                //{
-                //    this.ItemDescription.Text = log;
-                //}
+
             }
         }
 
@@ -129,7 +193,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin
                     DataTemplate tempDataTemplate = tempContentPresenter.ContentTemplate;
                     Expander mapHeader = tempDataTemplate.FindName("ResultMapHeader", tempContentPresenter) as Expander;
                     ListBox itemList = tempDataTemplate.FindName("ResultItemList", tempContentPresenter) as ListBox;
-                    
+
                     //Keep the current selection
                     if (!itemList.Items.Contains(selectedItem))
                         itemList.UnselectAll();
