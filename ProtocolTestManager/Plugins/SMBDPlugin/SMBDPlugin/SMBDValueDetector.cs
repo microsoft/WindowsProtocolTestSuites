@@ -84,19 +84,37 @@ namespace Microsoft.Protocols.TestManager.Detector
         public bool GetDetectedProperty(out Dictionary<string, List<string>> propertiesDic)
         {
             propertiesDic = new Dictionary<string, List<string>>();
+
             propertiesDic[DeploymentPtfConfigConstant.SUTCOMPUTERNAME] = new List<string> { detectionInfo.SUTName };
-            propertiesDic[DeploymentPtfConfigConstant.SERVERNONRNICIP] = new List<string> { detectionInfo.SUTNonRdmaNICIPAddress };
-            propertiesDic[DeploymentPtfConfigConstant.SERVERRNICIP] = new List<string> { detectionInfo.SUTRdmaNICIPAddress };
-            propertiesDic[DeploymentPtfConfigConstant.CLIENTNONRNICIP] = new List<string> { detectionInfo.DriverNonRdmaNICIPAddress };
-            propertiesDic[DeploymentPtfConfigConstant.CLIENTRNICIP] = new List<string> { detectionInfo.DriverRdmaNICIPAddress };
-            propertiesDic[DeploymentPtfConfigConstant.PLATFORM] = new List<string> { detectionInfo.Platform.ToString() };
+
+            if (detectionInfo.SUTNonRdmaNICIPAddress != null)
+            {
+                propertiesDic[DeploymentPtfConfigConstant.SERVERNONRNICIP] = new List<string> { detectionInfo.SUTNonRdmaNICIPAddress };
+            }
+            if (detectionInfo.SUTRdmaNICIPAddress != null)
+            {
+                propertiesDic[DeploymentPtfConfigConstant.SERVERRNICIP] = new List<string> { detectionInfo.SUTRdmaNICIPAddress };
+            }
+            if (detectionInfo.DriverNonRdmaNICIPAddress != null)
+            {
+                propertiesDic[DeploymentPtfConfigConstant.CLIENTNONRNICIP] = new List<string> { detectionInfo.DriverNonRdmaNICIPAddress };
+            }
+            if (detectionInfo.DriverRdmaNICIPAddress != null)
+            {
+                propertiesDic[DeploymentPtfConfigConstant.CLIENTRNICIP] = new List<string> { detectionInfo.DriverRdmaNICIPAddress };
+            }
+
+            if (detectionInfo.OSDetected)
+            {
+                propertiesDic[DeploymentPtfConfigConstant.PLATFORM] = new List<string> { detectionInfo.Platform.ToString() };
+            }
+
             propertiesDic[DeploymentPtfConfigConstant.SHAREFOLDER] = new List<string> { detectionInfo.ShareFolder };
             propertiesDic[DeploymentPtfConfigConstant.SUTUSERNAME] = new List<string> { detectionInfo.UserName };
             propertiesDic[DeploymentPtfConfigConstant.SUTPASSWORD] = new List<string> { detectionInfo.Password };
             propertiesDic[DeploymentPtfConfigConstant.DOMAINNAME] = new List<string> { detectionInfo.DomainName };
             propertiesDic[PtfConfigConstant.SMBDTCPPORT] = new List<string> { detectionInfo.SMBDPort.ToString() };
-            propertiesDic[PtfConfigConstant.SMB2CONNECTIONTIMEOUTINSECONDS] = new List<string> { detectionInfo.ConnectionTimeout.ToString() };
-            propertiesDic[PtfConfigConstant.ENDIANOFBUFFERDESCRIPTOR] = new List<string> { detectionInfo.Endian.ToString() };
+            propertiesDic[PtfConfigConstant.SMB2CONNECTIONTIMEOUTINSECONDS] = new List<string> { detectionInfo.ConnectionTimeout.TotalSeconds.ToString() };
 
             return true;
         }
