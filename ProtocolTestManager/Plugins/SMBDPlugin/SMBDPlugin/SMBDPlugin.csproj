@@ -89,7 +89,6 @@
     <Compile Include="Detector\SMBDClient.cs" />
     <Compile Include="Detector\SMBDDetector.cs" />
     <Compile Include="SMBDValueDetector.cs" />
-    <Compile Include="Logger.cs" />
     <Compile Include="ResultItemMap.cs" />
   </ItemGroup>
   <ItemGroup>
