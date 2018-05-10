@@ -515,6 +515,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                             respHeader = header;
                             respNegotiate = response;
                             maxTransactSize = response.MaxTransactSize;
+
+                            baseTestSite.Assert.IsTrue(
+                                header.CreditRequestResponse >= 1,
+                                "The server SHOULD<168> grant the client a non-zero value of credits in response to any non-zero value requested, within administratively configured limits. The server MUST grant the client at least 1 credit when responding to SMB2 NEGOTIATE, actually server returns {0}", header.CreditRequestResponse);
                         }
                     },
                     ifHandleRejectUnencryptedAccessSeparately,
@@ -664,6 +668,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 negotiateResponse.MaxReadSize : negotiateResponse.MaxWriteSize;
 
             maxTransactSize = negotiateResponse.MaxTransactSize;
+
+            baseTestSite.Assert.IsTrue(
+                header.CreditRequestResponse >= 1,
+                "The server SHOULD<168> grant the client a non-zero value of credits in response to any non-zero value requested, within administratively configured limits. The server MUST grant the client at least 1 credit when responding to SMB2 NEGOTIATE, actually server returns {0}", header.CreditRequestResponse);
+
             SetCreditGoal();
 
             ProduceCredit(messageId, header);
@@ -2156,6 +2165,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         #endregion
 
         #region Query and Set Info
+        /// <summary>
+        /// Query File Information of the file/directory specified by fileId.
+        /// </summary>
+        /// <param name="treeId">Tree id used in QueryInfo request.</param>
+        /// <param name="fileInfoClass">File information class</param>
+        /// <param name="queryInfoFlags">Flags used in QueryInfo request</param>
+        /// <param name="fileId">File id associate with the file to query.</param>
+        /// <param name="inputBuffer">A buffer containing the input buffer for QueryInfo request.</param>
+        /// <param name="outputBuffer">A buffer containing the information returned in the response.</param>
+        /// <param name="checker">An optional checker to check the QueryInfo response.</param>
+        /// <returns>The status code of querying file information.</returns>
         public uint QueryFileAttributes(
             uint treeId,
             byte fileInfoClass,
@@ -2209,7 +2229,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// <param name="securityAttributesToQuery">The security info type to query.</param>
         /// <param name="sd">When this method returns, contains the Security Descriptor of the specified type.</param>
         /// <param name="checker">An optional checker to check the QueryInfo response.</param>
-        /// <returns>The status code of QueryInfo response.</returns>
+        /// <returns>The status code of querying security descriptor.</returns>
         public uint QuerySecurityDescriptor(
             uint treeId,
             FILEID fileId,
@@ -2254,6 +2274,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             return status;
         }
 
+        /// <summary>
+        /// Query the Object Store Information of the file/directory specified by fileId.
+        /// </summary>
+        /// <param name="treeId">Tree id used in QueryInfo request.</param>
+        /// <param name="fileInfoClass">File information class</param>
+        /// <param name="fileId">File id associate with the file to query.</param>
+        /// <param name="outputBuffer">A buffer containing the information returned in the response.</param>
+        /// <param name="checker">An optional checker to check the QueryInfo response.</param>
+        /// <returns>The status code of querying object store information.</returns>
         public uint QueryFSAttributes(
             uint treeId,
             byte fileInfoClass,
@@ -2296,6 +2325,58 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
             InnerResponseChecker(checker, header, queryInfoResponse);
 
+            return status;
+        }
+
+        /// <summary>
+        /// Query File Quota Information of the file/directory specified by fileId.
+        /// </summary>
+        /// <param name="treeId">Tree id used in QueryInfo request.</param>
+        /// <param name="queryInfoFlags">Flags used in QueryInfo request</param>
+        /// <param name="fileId">File id associate with the file to query.</param>
+        /// <param name="inputBuffer">A buffer containing the input buffer for QueryInfo request.</param>
+        /// <param name="outputBuffer">A buffer containing the information returned in the response.</param>
+        /// <param name="checker">An optional checker to check the QueryInfo response.</param>
+        /// <returns>The status code of querying file quota information.</returns>
+        public uint QueryFileQuotaInfo(
+            uint treeId,
+            QUERY_INFO_Request_Flags_Values queryInfoFlags,
+            FILEID fileId,
+            byte[] inputBuffer,
+            out byte[] outputBuffer,
+            ResponseChecker<QUERY_INFO_Response> checker = null)
+        {
+            uint maxOutputBufferLength = 1024;
+            Packet_Header header;
+            QUERY_INFO_Response queryInfoResponse;
+
+            ulong messageId = generateMessageId(sequenceWindow);
+            ushort creditCharge = generateCreditCharge(1);
+
+            // Need to consume credit from sequence window first according to TD
+            ConsumeCredit(messageId, creditCharge);
+
+            uint status = client.QueryInfo(
+                creditCharge,
+                generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
+                testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                messageId,
+                sessionId,
+                treeId,
+                InfoType_Values.SMB2_0_INFO_QUOTA,
+                (byte)FileInformationClasses.FileQuotaInformation,
+                maxOutputBufferLength,
+                AdditionalInformation_Values.NONE,
+                queryInfoFlags,
+                fileId,
+                inputBuffer,
+                out outputBuffer,
+                out header,
+                out queryInfoResponse,
+                sessionChannelSequence);
+
+            ProduceCredit(messageId, header);
+            InnerResponseChecker(checker, header, queryInfoResponse);
             return status;
         }
 
