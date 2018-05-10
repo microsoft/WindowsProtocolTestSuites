@@ -515,6 +515,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                             respHeader = header;
                             respNegotiate = response;
                             maxTransactSize = response.MaxTransactSize;
+
+                            baseTestSite.Assert.IsTrue(
+                                header.CreditRequestResponse >= 1,
+                                "The server SHOULD<168> grant the client a non-zero value of credits in response to any non-zero value requested, within administratively configured limits. The server MUST grant the client at least 1 credit when responding to SMB2 NEGOTIATE, actually server returns {0}", header.CreditRequestResponse);
                         }
                     },
                     ifHandleRejectUnencryptedAccessSeparately,
@@ -664,6 +668,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 negotiateResponse.MaxReadSize : negotiateResponse.MaxWriteSize;
 
             maxTransactSize = negotiateResponse.MaxTransactSize;
+
+            baseTestSite.Assert.IsTrue(
+                header.CreditRequestResponse >= 1,
+                "The server SHOULD<168> grant the client a non-zero value of credits in response to any non-zero value requested, within administratively configured limits. The server MUST grant the client at least 1 credit when responding to SMB2 NEGOTIATE, actually server returns {0}", header.CreditRequestResponse);
+
             SetCreditGoal();
 
             ProduceCredit(messageId, header);
