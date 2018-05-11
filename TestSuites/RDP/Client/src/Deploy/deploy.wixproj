@@ -41,6 +41,7 @@
     <Compile Include="TestSuiteDataFiles.wxs" />
     <Compile Include="TestSuiteImportMergeModules.wxs" />
     <Compile Include="TestSuiteMiscFiles.wxs" />
+    <Compile Include="TestSuitePtfconfigFiles.wxs" />
     <Compile Include="TestSuitePrivacyStatementDlg.wxs" />
     <Compile Include="TestSuitePrivacyStatementLowMsiVersionDlg.wxs" />
     <Compile Include="TestSuiteProduct.wxs" />
