@@ -251,7 +251,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     //verify signature of a single packet
                     Smb2SinglePacket singlePacket = decodedPacket as Smb2SinglePacket;
 
-                    TryVerifySignature(singlePacket, singlePacket.Header.SessionId, messageBytes);
+                    TryVerifySignatureExceptSessionSetupResponse(singlePacket, singlePacket.Header.SessionId, messageBytes);
                 }
                 else if (decodedPacket is Smb2CompoundPacket)//For Compound packet signature verification
                 {
@@ -570,6 +570,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     break;
                 case Smb2Command.SESSION_SETUP:
                     packet = new Smb2SessionSetupResponsePacket();
+                    ((Smb2SessionSetupResponsePacket)packet).MessageBytes = messageBytes;
                     break;
                 case Smb2Command.SET_INFO:
                     packet = new Smb2SetInfoResponsePacket();
@@ -738,11 +739,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             }
         }
 
-        /// <summary>
-        /// Try to verify the signature of a singlePacket
-        /// </summary>
-        /// <param name="singlePacket">The singlepacket to verified</param>
-        /// <param name="sessionId">The sessionId to retrieve the cryptoinfo of the session.</param>
         private void TryVerifySignature(Smb2SinglePacket singlePacket, ulong sessionId, byte[] messageBytes)
         {
             // [MS-SMB2] 3.2.5.1.3             
@@ -761,13 +757,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 //After the session setup success, the cryptoInfoTable will be updated with new signingkey
                 //The new signingkey is not in the cryptoInfoTable now. Cannot verify the signature before the table is updated.   
 
-                if (singlePacket.Header.Command == Smb2Command.SESSION_SETUP
-                    && singlePacket.Header.Status == Smb2Status.STATUS_SUCCESS)
-                {
-                    //skip
-                    return;
-                }
-
                 if (cryptoInfoTable.TryGetValue(sessionId, out cryptoInfo))
                 {
                     if (!VerifySignature(singlePacket, cryptoInfo, messageBytes))
@@ -777,11 +766,36 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                         //Throw exception here.                        
                         throw new InvalidOperationException("Incorrect signed packet: " + singlePacket.ToString());
                     }
-                }                
-            }           
-
-            return;
+                }
+            }
         }
+
+        /// <summary>
+        /// Try to verify the signature of a singlePacket which is not a Session Setup Response.
+        /// </summary>
+        private void TryVerifySignatureExceptSessionSetupResponse(Smb2SinglePacket singlePacket, ulong sessionId, byte[] messageBytes)
+        {
+            if (singlePacket.Header.Command == Smb2Command.SESSION_SETUP)
+            {
+                return;
+            }
+
+            TryVerifySignature(singlePacket, sessionId, messageBytes);
+        }
+
+        /// <summary>
+        /// Try to verify the signature of a singlePacket which is a Session Setup Response.
+        /// </summary>
+        public void TryVerifySessionSetupResponseSignature(Smb2SinglePacket singlePacket, ulong sessionId, byte[] messageBytes)
+        {
+            if (singlePacket.Header.Command != Smb2Command.SESSION_SETUP)
+            {
+                return;
+            }
+
+            TryVerifySignature(singlePacket, sessionId, messageBytes);
+        }
+
 
         /// <summary>
         /// Verify the signature of a Smb2CompoundPacket
@@ -791,7 +805,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         {
             try
             {
-
                 ulong firstSessionId = packet.Packets[0].Header.SessionId;
 
                 uint offset = 0;
