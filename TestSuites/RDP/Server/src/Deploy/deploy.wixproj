@@ -34,6 +34,7 @@
     <Compile Include="DOCS_FILES.wxs" />
     <Compile Include="RDP-TestSuite-ServerEP.wxs" />
     <Compile Include="TestSuiteMiscFiles.wxs" />
+    <Compile Include="TestSuitePtfconfigFiles.wxs" />
     <Compile Include="TestSuitePrivacyStatementDlg.wxs" />
     <Compile Include="TestSuitePrivacyStatementLowMsiVersionDlg.wxs" />
     <Compile Include="TestSuiteProduct.wxs" />

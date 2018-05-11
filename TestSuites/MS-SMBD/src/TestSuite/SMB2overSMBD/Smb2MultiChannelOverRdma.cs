@@ -278,7 +278,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
                 "Status of SmbdNegotiate is {0}", status);
 
             // SMB2 Negotiate
-            DialectRevision[] negotiatedDialects = new DialectRevision[] { DialectRevision.Smb30, DialectRevision.Smb2002, DialectRevision.Smb21 };
+            DialectRevision[] negotiatedDialects = new DialectRevision[] { DialectRevision.Smb30 };
             DialectRevision selectedDialect;
             status = (NtStatus)alternativeChannelClient.Smb2Negotiate(negotiatedDialects, out selectedDialect);
             BaseTestSite.Assert.AreEqual<NtStatus>(NtStatus.STATUS_SUCCESS, status, "Status of SMB2 Negotiate is {0}", status);

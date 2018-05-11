@@ -343,6 +343,7 @@
         <ComponentRef Id="TestSuiteShortcuts" />
         <ComponentRef Id="DesktopShortcuts" />
         <ComponentGroupRef Id="TESTSUITE_MISC_FILES"/>
+				<ComponentGroupRef Id="TESTSUITE_PTFCONFIG_FILES"/>
         <ComponentGroupRef Id="BIN_FILES" />
         <ComponentGroupRef Id="BATCH_FILES" />
       </Feature>

@@ -341,6 +341,7 @@
         <ComponentGroupRef Id="TESTSUITE_DATA_FILES" />
         <ComponentGroupRef Id="TESTSUITE_SCRIPTS_FILES" />
         <ComponentGroupRef Id="TESTSUITE_MISC_FILES"/>
+				<ComponentGroupRef Id="TESTSUITE_PTFCONFIG_FILES"/>
         
       </Feature>
 

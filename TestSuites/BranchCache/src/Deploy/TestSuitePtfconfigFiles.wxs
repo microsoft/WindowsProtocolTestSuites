@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?define TESTSUITE_PTFCONFIG_DIR=$(env.TestSuiteRoot)\drop\TestSuites\BranchCache\Bin?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <Fragment>
+    <!-- Files to be installed to test suite. -->
+    <!-- Source code and files in drop folder are automatically installed. -->
+    <ComponentGroup Id="TESTSUITE_PTFCONFIG_FILES">
+      <!-- First add Component in DirectoryRef secion, then add related ComponentRef here. -->
+      <ComponentRef Id="CMP_BranchCache_TestSuite.deployment.ptfconfig"/>
+      <ComponentRef Id="CMP_BranchCache_TestSuite.ptfconfig"/>
+      <ComponentRef Id="CMP_LocalTestRun.testsettings"/>
+    </ComponentGroup>
+
+    <DirectoryRef Id="TESTSUITE_BIN_DIR">
+      <!-- Test Suite ptfconfig files. -->
+      <Component Id="CMP_BranchCache_TestSuite.deployment.ptfconfig" Guid="{E70300CC-27DA-4EAE-9668-752309835868}">
+        <File Id="FILE_BranchCache_TestSuite.deployment.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\BranchCache_TestSuite.deployment.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_BranchCache_TestSuite.ptfconfig" Guid="{8798ECCB-9943-4C6D-BE30-47528776DA26}">
+        <File Id="FILE_BranchCache_TestSuite.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\BranchCache_TestSuite.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_LocalTestRun.testsettings" Guid="{7468AB80-8F32-4C3A-9BB3-73F8E6654AD9}">
+        <File Id="FILE_LocalTestRun.testsettings" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\LocalTestRun.testsettings">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>
