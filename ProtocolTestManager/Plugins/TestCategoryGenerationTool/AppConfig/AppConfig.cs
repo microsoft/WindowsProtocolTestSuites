@@ -246,7 +246,7 @@ namespace Microsoft.Protocols.TestManager.TestCategoryGenerationTool
                              .FirstOrDefault();
             Match endpointMatch = Regex.Match(registryKeyName, "(Server)|(Client)");
             string testSuiteEndPoint = endpointMatch.Value;
-            Match versionMatch = Regex.Match(registryKeyName, "\\d\\.\\d\\.\\d{1,4}\\.\\d");
+            Match versionMatch = Regex.Match(registryKeyName, "\\d+\\.\\d+\\.\\d+\\.\\d+");
             string testSuiteVersion = versionMatch.Value;
             return GetTestSuiteFolder(type, testSuiteEndPoint, testSuiteVersion);
         }

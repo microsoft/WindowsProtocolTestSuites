@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?define TESTSUITE_PTFCONFIG_DIR=$(env.TestSuiteRoot)\drop\TestSuites\Kerberos\Bin?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <Fragment>
+    <!-- Files to be installed to test suite. -->
+    <!-- Source code and files in drop folder are automatically installed. -->
+    <ComponentGroup Id="TESTSUITE_PTFCONFIG_FILES">
+      <!-- First add Component in DirectoryRef secion, then add related ComponentRef here. -->
+      <ComponentRef Id="CMP_Kerberos_ServerTestSuite.deployment.ptfconfig"/>
+      <ComponentRef Id="CMP_Kerberos_ServerTestSuite.ptfconfig"/>
+      <ComponentRef Id="CMP_ServerLocalTestRun.testrunconfig"/>
+    </ComponentGroup>
+
+    <DirectoryRef Id="TESTSUITE_BIN_DIR">
+      <!-- Test Suite ptfconfig files. -->
+      <Component Id="CMP_Kerberos_ServerTestSuite.deployment.ptfconfig" Guid="{C18D3CD6-BCD9-499A-94BE-59AEC8E1C477}">
+        <File Id="FILE_Kerberos_ServerTestSuite.deployment.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\Kerberos_ServerTestSuite.deployment.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_Kerberos_ServerTestSuite.ptfconfig" Guid="{A55B6C1C-DE1F-45FB-A8A4-04CD21B58AF4}">
+        <File Id="FILE_Kerberos_ServerTestSuite.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\Kerberos_ServerTestSuite.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_ServerLocalTestRun.testrunconfig" Guid="{59CA3B5F-B258-47CC-A9A8-567BF79CED7F}">
+        <File Id="FILE_ServerLocalTestRun.testrunconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\ServerLocalTestRun.testrunconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?define TESTSUITE_PTFCONFIG_DIR=$(env.TestSuiteRoot)\drop\TestSuites\MS-ADOD\Bin?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <Fragment>
+    <!-- Files to be installed to test suite. -->
+    <!-- Source code and files in drop folder are automatically installed. -->
+    <ComponentGroup Id="TESTSUITE_PTFCONFIG_FILES">
+      <!-- First add Component in DirectoryRef secion, then add related ComponentRef here. -->
+      <ComponentRef Id="CMP_MS_ADOD_ODTestSuite.deployment.ptfconfig"/>
+      <ComponentRef Id="CMP_MS_ADOD_ODTestSuite.ptfconfig"/>
+      <ComponentRef Id="CMP_ODLocalTestRun.testrunconfig"/>
+    </ComponentGroup>
+
+    <DirectoryRef Id="TESTSUITE_BIN_DIR">
+      <!-- Test Suite ptfconfig files. -->
+      <Component Id="CMP_MS_ADOD_ODTestSuite.deployment.ptfconfig" Guid="{741F0D0F-7479-4BD3-A61B-7F178F178149}">
+        <File Id="FILE_MS_ADOD_ODTestSuite.deployment.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-ADOD_ODTestSuite.deployment.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_MS_ADOD_ODTestSuite.ptfconfig" Guid="{C77C6F03-EE36-4CC2-80CC-D24A68C643D0}">
+        <File Id="FILE_MS_ADOD_ODTestSuite.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-ADOD_ODTestSuite.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_ODLocalTestRun.testrunconfig" Guid="{458E785B-F970-4221-BF5D-220376461608}">
+        <File Id="FILE_ODLocalTestRun.testrunconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\ODLocalTestRun.testrunconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>

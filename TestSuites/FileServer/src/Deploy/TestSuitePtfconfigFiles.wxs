@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?define TESTSUITE_PTFCONFIG_DIR=$(env.TestSuiteRoot)\drop\TestSuites\FileServer\Bin?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <Fragment>
+    <!-- Files to be installed to test suite. -->
+    <!-- Source code and files in drop folder are automatically installed. -->
+    <ComponentGroup Id="TESTSUITE_PTFCONFIG_FILES">
+      <!-- First add Component in DirectoryRef secion, then add related ComponentRef here. -->
+      <ComponentRef Id="CMP_Auth_ServerTestSuite.deployment.ptfconfig"/>
+      <ComponentRef Id="CMP_Auth_ServerTestSuite.ptfconfig"/>
+      <ComponentRef Id="CMP_CommonTestSuite.deployment.ptfconfig"/>
+      <ComponentRef Id="CMP_CommonTestSuite.ptfconfig"/>
+      <ComponentRef Id="CMP_MS_DFSC_ServerTestSuite.deployment.ptfconfig"/>
+      <ComponentRef Id="CMP_MS_DFSC_ServerTestSuite.ptfconfig"/>
+      <ComponentRef Id="CMP_MS_FSA_ServerTestSuite.deployment.ptfconfig"/>
+      <ComponentRef Id="CMP_MS_FSA_ServerTestSuite.ptfconfig"/>
+      <ComponentRef Id="CMP_MS_FSRVP_ServerTestSuite.deployment.ptfconfig"/>
+      <ComponentRef Id="CMP_MS_FSRVP_ServerTestSuite.ptfconfig"/>
+      <ComponentRef Id="CMP_MS_RSVD_ServerTestSuite.deployment.ptfconfig"/>
+      <ComponentRef Id="CMP_MS_RSVD_ServerTestSuite.ptfconfig"/>
+      <ComponentRef Id="CMP_ServerFailoverTestSuite.deployment.ptfconfig"/>
+      <ComponentRef Id="CMP_ServerFailoverTestSuite.ptfconfig"/>
+      <ComponentRef Id="CMP_MS_SMB2_ServerTestSuite.deployment.ptfconfig"/>
+      <ComponentRef Id="CMP_MS_SMB2_ServerTestSuite.ptfconfig"/>
+      <ComponentRef Id="CMP_MS_SMB2Model_ServerTestSuite.deployment.ptfconfig"/>
+      <ComponentRef Id="CMP_MS_SMB2Model_ServerTestSuite.ptfconfig"/>
+      <ComponentRef Id="CMP_MS_SQOS_ServerTestSuite.deployment.ptfconfig"/>
+      <ComponentRef Id="CMP_MS_SQOS_ServerTestSuite.ptfconfig"/>
+      <ComponentRef Id="CMP_ServerLocalTestRun.testrunconfig"/>
+    </ComponentGroup>
+
+    <DirectoryRef Id="TESTSUITE_BIN_DIR">
+      <!-- Test Suite ptfconfig files. -->
+      <Component Id="CMP_Auth_ServerTestSuite.deployment.ptfconfig" Guid="{D7E85992-4D82-4D2F-BFDF-DE147F86AD61}">
+        <File Id="FILE_Auth_ServerTestSuite.deployment.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\Auth_ServerTestSuite.deployment.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_Auth_ServerTestSuite.ptfconfig" Guid="{07E1F000-7F37-4DE1-B788-93B2E51791BF}">
+        <File Id="FILE_Auth_ServerTestSuite.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\Auth_ServerTestSuite.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_CommonTestSuite.deployment.ptfconfig" Guid="{2FF862D0-122E-40ED-83D6-42196DCD966A}">
+        <File Id="FILE_CommonTestSuite.deployment.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\CommonTestSuite.deployment.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_CommonTestSuite.ptfconfig" Guid="{8B3CF80A-9CA8-4793-8AEB-FC64829A11F6}">
+        <File Id="FILE_CommonTestSuite.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\CommonTestSuite.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_MS_DFSC_ServerTestSuite.deployment.ptfconfig" Guid="{39DC3243-77EA-436A-8250-000D669830CB}">
+        <File Id="FILE_MS_DFSC_ServerTestSuite.deployment.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-DFSC_ServerTestSuite.deployment.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_MS_DFSC_ServerTestSuite.ptfconfig" Guid="{72417934-972B-4BA1-A78B-47F74D469E6B}">
+        <File Id="FILE_MS_DFSC_ServerTestSuite.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-DFSC_ServerTestSuite.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_MS_FSA_ServerTestSuite.deployment.ptfconfig" Guid="{263A8E98-0E2D-42B3-A970-7E5C93C41918}">
+        <File Id="FILE_MS_FSA_ServerTestSuite.deployment.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-FSA_ServerTestSuite.deployment.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_MS_FSA_ServerTestSuite.ptfconfig" Guid="{17E25956-282A-4E06-9EB8-2EEA7E44CB6B}">
+        <File Id="FILE_MS_FSA_ServerTestSuite.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-FSA_ServerTestSuite.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_MS_FSRVP_ServerTestSuite.deployment.ptfconfig" Guid="{304103F4-BA59-4C48-81CE-2384C9BB4CB7}">
+        <File Id="FILE_MS_FSRVP_ServerTestSuite.deployment.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-FSRVP_ServerTestSuite.deployment.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_MS_FSRVP_ServerTestSuite.ptfconfig" Guid="{02934D1D-1AC9-4A94-8AFA-B6E818FAD265}">
+        <File Id="FILE_MS_FSRVP_ServerTestSuite.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-FSRVP_ServerTestSuite.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_MS_RSVD_ServerTestSuite.deployment.ptfconfig" Guid="{E913A85C-5FD3-4761-9EBD-A2C765922A94}">
+        <File Id="FILE_MS_RSVD_ServerTestSuite.deployment.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-RSVD_ServerTestSuite.deployment.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_MS_RSVD_ServerTestSuite.ptfconfig" Guid="{5347C69C-73F5-4883-A0C4-905432674713}">
+        <File Id="FILE_MS_RSVD_ServerTestSuite.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-RSVD_ServerTestSuite.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_ServerFailoverTestSuite.deployment.ptfconfig" Guid="{13BDDC09-32D7-4C46-AFBC-F327AC0CC2C5}">
+        <File Id="FILE_ServerFailoverTestSuite.deployment.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\ServerFailoverTestSuite.deployment.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_ServerFailoverTestSuite.ptfconfig" Guid="{B83213CD-C6B4-4D4F-8611-FEB98F55A83B}">
+        <File Id="FILE_ServerFailoverTestSuite.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\ServerFailoverTestSuite.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_MS_SMB2_ServerTestSuite.deployment.ptfconfig" Guid="{7F13DEA6-B7B1-42FB-A842-9450AE32EF62}">
+        <File Id="FILE_MS_SMB2_ServerTestSuite.deployment.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-SMB2_ServerTestSuite.deployment.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_MS_SMB2_ServerTestSuite.ptfconfig" Guid="{89EF9369-FA67-4355-95D3-922A896B5A95}">
+        <File Id="FILE_MS_SMB2_ServerTestSuite.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-SMB2_ServerTestSuite.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_MS_SMB2Model_ServerTestSuite.deployment.ptfconfig" Guid="{DEAAA5FA-F805-4BE4-A49C-48FE51F807AF}">
+        <File Id="FILE_MS_SMB2Model_ServerTestSuite.deployment.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-SMB2Model_ServerTestSuite.deployment.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_MS_SMB2Model_ServerTestSuite.ptfconfig" Guid="{DFA18850-006B-476C-89BE-B4E40D713B13}">
+        <File Id="FILE_MS_SMB2Model_ServerTestSuite.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-SMB2Model_ServerTestSuite.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_MS_SQOS_ServerTestSuite.deployment.ptfconfig" Guid="{98632242-0F7B-48E2-AAB3-2A5D960B1DED}">
+        <File Id="FILE_MS_SQOS_ServerTestSuite.deployment.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-SQOS_ServerTestSuite.deployment.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_MS_SQOS_ServerTestSuite.ptfconfig" Guid="{79B8ECD4-600E-4FD9-AEBE-A76E29EC4CCB}">
+        <File Id="FILE_MS_SQOS_ServerTestSuite.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-SQOS_ServerTestSuite.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_ServerLocalTestRun.testrunconfig" Guid="{5EEB89EB-B3C7-45FA-8D3A-949D96845C2F}">
+        <File Id="FILE_ServerLocalTestRun.testrunconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\ServerLocalTestRun.testrunconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>

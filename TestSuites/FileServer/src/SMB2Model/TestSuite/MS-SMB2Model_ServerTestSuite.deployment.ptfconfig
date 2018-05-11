@@ -105,7 +105,7 @@
       <Property name="ScaleOutFileServerIP1" value="192.168.1.11">
         <Description>
           Used by Conflict model
-          One IP address of a server that belongs to the scale out file server
+          One IP address or host name of a server that belongs to the scale out file server
           If it is not applicable, leave it blank
         </Description>
       </Property>
@@ -113,7 +113,7 @@
       <Property name="ScaleOutFileServerIP2" value="192.168.2.11">
         <Description>
           Used by Conflict model
-          One IP address of another server that belongs to the scale out file server
+          One IP address or host name of another server that belongs to the scale out file server
           If it is not applicable, leave it blank
         </Description>
       </Property>

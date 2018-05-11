@@ -68,25 +68,24 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
                         if (address.Equals(unicastIPAddressInformation.Address))
                         {
                             netmask = unicastIPAddressInformation.IPv4Mask;
-                            goto CalculateAddress;
+
+                            byte[] addr = address.GetAddressBytes();
+                            byte[] mask = netmask.GetAddressBytes();
+                            int n = 0;
+                            for (int i = 0; i < addr.Length; i++)
+                            {
+                                addr[i] &= mask[i];
+                                for (int j = 0; j < 8; j++)
+                                {
+                                    n += (mask[i] >> j) & 0x1;
+                                }
+                            }
+                            return new IPAddress(addr).ToString() + "/" + n.ToString();
                         }
                     }
                 }
             }
             throw new ArgumentException(string.Format("Can't find subnetmask for IP address '{0}'", address));
-        CalculateAddress:
-            byte[] addr = address.GetAddressBytes();
-            byte[] mask = netmask.GetAddressBytes();
-            int n = 0;
-            for (int i = 0; i < addr.Length; i++)
-            {
-                addr[i] &= mask[i];
-                for (int j = 0; j < 8; j++)
-                {
-                    n += (mask[i] >> j) & 0x1;
-                }
-            }
-            return new IPAddress(addr).ToString() + "/" + n.ToString();
         }
 
 
@@ -348,7 +347,7 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
                                                  .Where((s) => s.Contains("ADFamily"))
                                                  .FirstOrDefault();
 
-            Match versionMatch = Regex.Match(registryKeyName, @"\d\.\d\.\d\.\d");
+            Match versionMatch = Regex.Match(registryKeyName, @"\d+\.\d+\.\d+\.\d+");
             return versionMatch.Value;
         }
 

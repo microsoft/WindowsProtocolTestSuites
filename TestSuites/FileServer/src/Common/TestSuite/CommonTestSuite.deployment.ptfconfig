@@ -67,7 +67,7 @@
 
       <Property name="SutIPAddress" value="192.168.1.11" >
         <Description>
-          IP address of SUT to establish connections
+          IP address or Host Name of SUT to establish connections
         </Description>
       </Property>
 
@@ -244,13 +244,13 @@
 
       <Property name="ClientNic1IPAddress" value="192.168.1.111">
         <Description>
-          One IP address on local test drive computer to establish connections to SUT
+          One IP address or host name on local test drive computer to establish connections to SUT
         </Description>
       </Property>
 
       <Property name="ClientNic2IPAddress" value="192.168.2.111">
         <Description>
-          Another IP address on local test drive computer to establish connections to SUT
+          Another IP address or host name on local test drive computer to establish connections to SUT
           If test drive computer only has one IP address, set it to the same value of ClientNic1IPAddress
         </Description>
       </Property>
