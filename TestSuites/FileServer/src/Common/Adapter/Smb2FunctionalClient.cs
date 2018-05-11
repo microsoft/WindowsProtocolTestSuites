@@ -3013,6 +3013,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 }
             }
 
+            // The signature of Session Setup Response can only be verified after the crypto key is generated.
+            client.TryVerifySessionSetupResponseSignature(sessionId);
+
             InnerResponseChecker(checker, header, sessionSetupResponse);
 
             return status;
