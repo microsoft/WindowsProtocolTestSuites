@@ -36,7 +36,6 @@ if ErrorLevel 1 (
 	%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MessageAnalyzer
 	if ErrorLevel 1 (
 		echo Error: Microsoft Message Analyzer should be installed
-		exit /b 1
 	)
 )
 
