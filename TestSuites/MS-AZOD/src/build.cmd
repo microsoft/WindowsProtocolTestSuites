@@ -28,6 +28,18 @@ if not exist "%programfiles(x86)%\Spec Explorer 2010\SpecExplorer.exe" (
 	)
 )
 
+:: Set path of Reg.exe
+set REGEXE="%SystemRoot%\System32\REG.exe"
+
+%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\MessageAnalyzer
+if ErrorLevel 1 (
+	%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MessageAnalyzer
+	if ErrorLevel 1 (
+		echo Error: Microsoft Message Analyzer should be installed
+		exit /b 1
+	)
+)
+
 if not defined vspath (
 	if defined VS110COMNTOOLS (
 		set vspath="%VS110COMNTOOLS%"
@@ -40,9 +52,6 @@ if not defined vspath (
 		exit /b 1
 	)
 )
-
-:: Set path of Reg.exe
-set REGEXE="%SystemRoot%\System32\REG.exe"
 
 :: Try get PTF_VERSION from registry under Wow6432Node, this is for 64-bit OS
 %REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework /v PTFVersion

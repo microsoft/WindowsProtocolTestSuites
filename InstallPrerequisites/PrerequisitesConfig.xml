@@ -81,6 +81,7 @@
 		<tool>Wix310</tool>
 		<tool>TestAgent2012</tool>
 		<tool>PTF</tool>
+		<tool>MMA_x64</tool>
 	</AZOD>
 	<ADFSPIP>
 		<tool>NET40</tool>
@@ -96,5 +97,6 @@
 		<tool>Wix310</tool>
 		<tool>TestAgent2012</tool>
 		<tool>PTF</tool>
+		<tool>MMA_x64</tool>
 	</ADOD>
 </Dependency>

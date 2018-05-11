@@ -222,6 +222,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         // Disable signature verification by default.
         private bool disableVerifySignature = true;
+        private Smb2SessionSetupResponsePacket sessionSetupResponse;
+
+        private Smb2ErrorResponsePacket error;
 
         #endregion
 
@@ -304,6 +307,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 {
                     cryptoInfo.Value.DisableVerifySignature = value;
                 }
+            }
+        }
+
+        public Smb2ErrorResponsePacket Error
+        {
+            get
+            {
+                return error;
             }
         }
         #endregion
@@ -1123,6 +1134,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             request.PayLoad.SecurityBufferLength = (ushort)request.Buffer.Length;
 
             var response = SendPacketAndExpectResponse<Smb2SessionSetupResponsePacket>(request);
+            this.sessionSetupResponse = response;
 
             serverSessionId = response.Header.SessionId;
             serverGssToken = response.Buffer.Skip(response.PayLoad.SecurityBufferOffset - response.BufferOffset).Take(response.PayLoad.SecurityBufferLength).ToArray();
@@ -1136,10 +1148,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 preauthContext.UpdateSessionState(responseSessionId, request);
                 preauthContext.UpdateSessionState(responseSessionId, response);
             }
-
+                        
             return response.Header.Status;
         }
 
+        #endregion
+
+        #region Verify Signature of Session Setup Response
+        public void TryVerifySessionSetupResponseSignature(ulong sessionId)
+        {
+            decoder.TryVerifySessionSetupResponseSignature(sessionSetupResponse, sessionId, sessionSetupResponse.MessageBytes);
+        }
         #endregion
 
         #region LogOff
@@ -1210,6 +1229,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
             responseHeader = response.Header;
             responsePayload = response.PayLoad;
+            error = response.Error;
 
             return response.Header.Status;
         }
