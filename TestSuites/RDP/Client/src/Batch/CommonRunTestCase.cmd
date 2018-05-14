@@ -49,6 +49,10 @@ IF "%RDPVersion%" == "10.4" (
 SET TestCategorys="(%CommonCategorys:~1,-1%)"
 )
 
+IF "%RDPVersion%" == "10.5" (
+SET TestCategorys="(%CommonCategorys:~1,-1%)"
+)
+
 if not defined vspath (
 	if defined VS110COMNTOOLS (
 		set vspath="%VS110COMNTOOLS%"
