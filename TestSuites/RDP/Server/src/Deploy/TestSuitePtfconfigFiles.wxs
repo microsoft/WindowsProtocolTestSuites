@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?define TESTSUITE_PTFCONFIG_DIR=$(env.TestSuiteRoot)\drop\TestSuites\RDP\Server\Bin?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <Fragment>
+    <!-- Files to be installed to test suite. -->
+    <!-- Source code and files in drop folder are automatically installed. -->
+    <ComponentGroup Id="TESTSUITE_PTFCONFIG_FILES">
+      <!-- First add Component in DirectoryRef secion, then add related ComponentRef here. -->
+      <ComponentRef Id="CMP_RDP_ServerTestSuite.deployment.ptfconfig"/>
+      <ComponentRef Id="CMP_RDP_ServerTestSuite.ptfconfig"/>
+      <ComponentRef Id="CMP_ServerLocal.testsettings"/>
+    </ComponentGroup>
+
+    <DirectoryRef Id="TESTSUITE_BIN_DIR">
+      <!-- Test Suite ptfconfig files. -->
+      <Component Id="CMP_RDP_ServerTestSuite.deployment.ptfconfig" Guid="{86922217-855A-48D4-820F-790C5A9AFFAE}">
+        <File Id="FILE_RDP_ServerTestSuite.deployment.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\RDP_ServerTestSuite.deployment.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_RDP_ServerTestSuite.ptfconfig" Guid="{811EBF07-4478-4CD9-A7A7-0A8941C09E86}">
+        <File Id="FILE_RDP_ServerTestSuite.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\RDP_ServerTestSuite.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_ServerLocal.testsettings" Guid="{F97E083A-40CF-47CF-975C-CA8E0E4DB760}">
+        <File Id="FILE_ServerLocal.testsettings" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\ServerLocal.testsettings">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>

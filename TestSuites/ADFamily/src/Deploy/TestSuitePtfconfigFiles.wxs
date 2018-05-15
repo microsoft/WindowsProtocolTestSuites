@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?define TESTSUITE_PTFCONFIG_DIR=$(env.TestSuiteRoot)\drop\TestSuites\ADFamily\Bin?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <Fragment>
+    <!-- Files to be installed to test suite. -->
+    <!-- Source code and files in drop folder are automatically installed. -->
+    <ComponentGroup Id="TESTSUITE_PTFCONFIG_FILES">
+      <!-- First add Component in DirectoryRef secion, then add related ComponentRef here. -->
+      <ComponentRef Id="CMP_AD_ServerTestSuite.deployment.ptfconfig"/>
+      <ComponentRef Id="CMP_AD_ServerTestSuite.ptfconfig"/>
+      <ComponentRef Id="CMP_ServerLocalTestRun.testrunconfig"/>
+    </ComponentGroup>
+
+    <DirectoryRef Id="TESTSUITE_BIN_DIR">
+      <!-- Test Suite ptfconfig files. -->
+      <Component Id="CMP_AD_ServerTestSuite.deployment.ptfconfig" Guid="{14A7AB55-09D0-4A90-B71F-98DF2DF92FB5}">
+        <File Id="FILE_AD_ServerTestSuite.deployment.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\AD_ServerTestSuite.deployment.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_AD_ServerTestSuite.ptfconfig" Guid="{11160264-E17E-47E5-8EDF-694EF1490D5B}">
+        <File Id="FILE_AD_ServerTestSuite.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\AD_ServerTestSuite.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_ServerLocalTestRun.testrunconfig" Guid="{8ABEB9D6-05D8-4CE5-AC2C-AEB9EF8702FD}">
+        <File Id="FILE_ServerLocalTestRun.testrunconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\ServerLocalTestRun.testrunconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>

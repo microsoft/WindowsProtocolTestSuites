@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?define TESTSUITE_PTFCONFIG_DIR=$(env.TestSuiteRoot)\drop\TestSuites\MS-SMB\Bin?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <Fragment>
+    <!-- Files to be installed to test suite. -->
+    <!-- Source code and files in drop folder are automatically installed. -->
+    <ComponentGroup Id="TESTSUITE_PTFCONFIG_FILES">
+      <!-- First add Component in DirectoryRef secion, then add related ComponentRef here. -->
+      <ComponentRef Id="CMP_MS_SMB_ServerTestSuite.deployment.ptfconfig"/>
+      <ComponentRef Id="CMP_MS_SMB_ServerTestSuite.ptfconfig"/>
+      <ComponentRef Id="CMP_ServerLocalTestRun.testrunconfig"/>
+    </ComponentGroup>
+
+    <DirectoryRef Id="TESTSUITE_BIN_DIR">
+      <!-- Test Suite ptfconfig files. -->
+      <Component Id="CMP_MS_SMB_ServerTestSuite.deployment.ptfconfig" Guid="{A5A924C1-403F-4941-A362-35A166C73EAE}">
+        <File Id="FILE_MS_SMB_ServerTestSuite.deployment.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-SMB_ServerTestSuite.deployment.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_MS_SMB_ServerTestSuite.ptfconfig" Guid="{AC6318CC-0223-4999-A457-8A597C7A774E}">
+        <File Id="FILE_MS_SMB_ServerTestSuite.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-SMB_ServerTestSuite.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_ServerLocalTestRun.testrunconfig" Guid="{8F4D723D-C04F-4814-8C03-B1BED4D6F762}">
+        <File Id="FILE_ServerLocalTestRun.testrunconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\ServerLocalTestRun.testrunconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>
