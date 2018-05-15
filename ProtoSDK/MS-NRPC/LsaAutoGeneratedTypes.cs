@@ -1195,6 +1195,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         PolicyLocalAccountDomainInformation,
 
         /// <summary>
+        /// Machine account information.
+        /// </summary>
+        PolicyMachineAccountInformation,
+
+        /// <summary>
         ///  Not used in this protocol. Present to mark the end of
         ///  the enumeration.
         /// </summary>
@@ -2227,6 +2232,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
     }
 
     /// <summary>
+    /// The LSAPR_POLICY_MACHINE_ACCT_INFO structure is used to identify
+    /// the machine account whose security policy is to be queried or set.
+    /// </summary>
+    public partial struct _LSAPR_POLICY_MACHINE_ACCT_INFO
+    {
+
+        /// <summary>
+        ///  The RID of the machine account.
+        /// </summary>
+        public uint Rid;
+
+        /// <summary>
+        ///  The SID of the machine account.
+        /// </summary>
+        [StaticSize(1, StaticSizeMode.Elements)]
+        public _RPC_SID[] Sid;
+    }
+
+    /// <summary>
     ///  The POLICY_MODIFICATION_INFO structure is obsolete and
     ///  exists for backward compatibility purposes only. Callers
     ///  of this protocol MUST NOT be able to set or retrieve
@@ -2963,6 +2987,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
         /// </summary>
         [Case("14")]
         public _LSAPR_POLICY_ACCOUNT_DOM_INFO PolicyLocalAccountDomainInfo;
+
+        /// <summary>
+        ///  PolicyMachineAccountInfo member.
+        /// </summary>
+        [Case("15")]
+        public _LSAPR_POLICY_MACHINE_ACCT_INFO PolicyMachineAccountInfo;
     }
 
     /// <summary>
