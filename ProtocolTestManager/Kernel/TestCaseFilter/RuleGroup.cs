@@ -26,6 +26,11 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public RuleType RuleGroupType { set; get; }
 
         /// <summary>
+        /// Set to true when loading profile.
+        /// </summary>
+        public bool isLoadingProfile { set; get; }
+
+        /// <summary>
         /// A feature mapping table
         /// </summary>
         public Dictionary<string, List<Rule>> featureMappingTable = null;
@@ -40,7 +45,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// </summary>
         private void RefreshFeatureMapping()
         {
-            if (featureMappingTable != null)
+            // Not to refresh feature mapping when loading profile
+            if (!isLoadingProfile && featureMappingTable != null)
             {
                 List<string> categories = GetCategories(RuleGroupType == RuleType.Selector);
 
@@ -60,6 +66,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     }
                 }
             }
+            isLoadingProfile = false;
         }
 
         private RuleSelectStatus selectStatus;

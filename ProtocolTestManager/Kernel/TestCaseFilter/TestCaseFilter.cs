@@ -91,7 +91,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     {
                         string ruleName = ruleNode.Attributes["name"].Value;
                         Rule rule = FindRuleByName(ruleName);
-                        if (rule != null) rule.SelectStatus = RuleSelectStatus.Selected;
+                        if (rule != null)
+                        {
+                            // When loading profile, do not refresh feature mapping table
+                            UpdateLoadingProfileFlag(rule.Name);
+                            rule.SelectStatus = RuleSelectStatus.Selected;
+                        }
                     }
                 }
             }
@@ -103,6 +108,26 @@ namespace Microsoft.Protocols.TestManager.Kernel
             //Apply rules
             return true;
         }
+
+        private void UpdateLoadingProfileFlag(string ruleName)
+        {
+            foreach (RuleGroup ruleGroup in this)
+            {
+                Stack<Rule> ruleStack = new Stack<Rule>();
+                foreach (Rule r in ruleGroup) ruleStack.Push(r);
+                while (ruleStack.Count > 0)
+                {
+                    Rule r = ruleStack.Pop();
+                    if (r.Name.Contains(ruleName))
+                    {
+                        ruleGroup.isLoadingProfile = true;
+                        return;
+                    }
+                    foreach (Rule childRule in r) ruleStack.Push(childRule);
+                }
+            }
+        }
+
         public void UnselectAllRules()
         {
             foreach (RuleGroup ruleGroup in this)
