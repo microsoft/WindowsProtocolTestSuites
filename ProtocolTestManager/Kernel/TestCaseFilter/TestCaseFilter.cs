@@ -54,8 +54,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     string parent = path.Pop();
                     if (topRule.SelectStatus != RuleSelectStatus.NotSelected && topRule.Count == 0)
                     {
+                        // Normalize rule name by removing dot since FindRuleByName will use dot as split delimiter
                         writer.WriteStartElement("Rule");
-                        writer.WriteAttributeString("name", parent + "." + topRule.Name);
+                        writer.WriteAttributeString("name", parent + "." + topRule.Name.Replace(".", string.Empty));
                         writer.WriteEndElement();
                     }
                     foreach (Rule childRule in topRule)
