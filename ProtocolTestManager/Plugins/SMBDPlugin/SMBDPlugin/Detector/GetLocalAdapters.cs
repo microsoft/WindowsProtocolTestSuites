@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using Microsoft.Protocols.TestManager.Detector;
-using Microsoft.Protocols.TestManager.FileServerPlugin.Detector;
+using Microsoft.Protocols.TestManager.SMBDPlugin.Detector;
 using System.Linq;
 using System.Windows;
 
@@ -23,7 +23,8 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             if (output.Length != 0)
             {
-                result = FilterNetworkInterfaces(output);
+                FilterNetworkInterfaces(output);
+                result = true;
             }
             else
             {
@@ -52,7 +53,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
         }
 
-        private bool FilterNetworkInterfaces(object[] output)
+        private void FilterNetworkInterfaces(object[] output)
         {
             var networkInterfaces = output
                                         .Select(item => ParseLocalNetworkInterfaceInformation(item))
@@ -66,7 +67,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             if (nonRdmaNetworkInterfaceCount == 0)
             {
                 DetectorUtil.WriteLog("Failed to detect any non-RDMA network interface of driver computer!");
-                return false;
             }
             else if (nonRdmaNetworkInterfaceCount == 1)
             {
@@ -96,7 +96,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             if (rdmaNetworkInterfaceCount == 0)
             {
                 DetectorUtil.WriteLog("Failed to detect any RDMA network interface of driver computer!");
-                return false;
             }
             else if (rdmaNetworkInterfaceCount == 1)
             {
@@ -120,16 +119,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                     DetectorUtil.WriteLog("User skipped choosing RDMA network interface of driver computer.");
                 }
             }
-
-            if (DetectionInfo.DriverNonRdmaNICIPAddress == null || DetectionInfo.DriverRdmaNICIPAddress == null)
-            {
-                // if user do not select any network interface
-                return false;
-            }
-
-
-            return true;
-
         }
 
 

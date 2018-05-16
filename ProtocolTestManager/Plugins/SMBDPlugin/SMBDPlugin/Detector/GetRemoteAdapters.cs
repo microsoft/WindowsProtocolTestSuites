@@ -1,9 +1,10 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using Microsoft.Protocols.TestManager.Detector;
-using Microsoft.Protocols.TestManager.FileServerPlugin.Detector;
+using Microsoft.Protocols.TestManager.SMBDPlugin.Detector;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -20,7 +21,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             bool result = false;
 
-            var ipList = Dns.GetHostAddresses(DetectionInfo.SUTName).Where(ipAddress => ipAddress.AddressFamily == AddressFamily.InterNetwork);
+            var ipList = GetIPAdressOfSut();
 
             // try all reachable SUT IP address
             foreach (var ip in ipList)
@@ -41,19 +42,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             {
                 DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
                 return false;
-            }
-        }
-
-        private IPAddress[] GetIPAdressOfSut()
-        {
-            try
-            {
-                return Dns.GetHostAddresses(DetectionInfo.SUTName);
-            }
-            catch (Exception ex)
-            {
-                DetectorUtil.WriteLog(String.Format("Cannot get SUT IP addresses: {0}.", ex));
-                return new IPAddress[0];
             }
         }
 
@@ -85,7 +73,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
                     var remoteInterfaces = ParseRemoteNetworkInterfaceInformation(networkInterfaces);
 
-                    bool result = FilterNetworkInterfaces(remoteInterfaces);
+                    FilterNetworkInterfaces(remoteInterfaces);
 
                     return true;
                 }
@@ -97,80 +85,86 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
         }
 
-        private bool FilterNetworkInterfaces(RemoteNetworkInterfaceInformation[] networkInterfaces)
+        private void FilterNetworkInterfaces(RemoteNetworkInterfaceInformation[] networkInterfaces)
         {
-            var nonRdmaNetworkInterfaces = networkInterfaces.Where(networkInterface => !networkInterface.RDMACapable);
-
-            var rdmaNetworkInterfaces = networkInterfaces.Where(networkInterface => networkInterface.RDMACapable);
-
-            int nonRdmaNetworkInterfaceCount = nonRdmaNetworkInterfaces.Count();
-            if (nonRdmaNetworkInterfaceCount == 0)
+            if (DetectionInfo.DriverNonRdmaNICIPAddress == null)
             {
-                DetectorUtil.WriteLog("Failed to detect any non-RDMA network interface!");
-                return false;
-            }
-            else if (nonRdmaNetworkInterfaceCount == 1)
-            {
-                DetectionInfo.SUTNonRdmaNICIPAddress = nonRdmaNetworkInterfaces.First().IpAddress;
-                DetectorUtil.WriteLog(string.Format("Choose {0} as non-RDMA IP address.", DetectionInfo.SUTNonRdmaNICIPAddress));
+                DetectorUtil.WriteLog("Skip detecting any non-RDMA network interface of SUT since no corresponding selected for driver computer!");
+                DetectionInfo.SUTNonRdmaNICIPAddress = null;
             }
             else
             {
-                var selected = Application.Current.Dispatcher.Invoke(() =>
-                {
-                    var dialog = new RemoteNetworkInterfaceSelector(nonRdmaNetworkInterfaces.ToArray());
-                    return dialog.ShowDialog("Please select the non-RDMA network interface of SUT");
+                var nonRdmaNetworkInterfaces = networkInterfaces.Where(networkInterface => !networkInterface.RDMACapable);
 
-                });
-                if (selected != null)
+                int nonRdmaNetworkInterfaceCount = nonRdmaNetworkInterfaces.Count();
+                if (nonRdmaNetworkInterfaceCount == 0)
                 {
-                    DetectionInfo.SUTNonRdmaNICIPAddress = selected.IpAddress;
-                    DetectorUtil.WriteLog(string.Format("User chose {0} as non-RDMA IP address of SUT.", DetectionInfo.SUTNonRdmaNICIPAddress));
+                    DetectorUtil.WriteLog("Failed to detect any non-RDMA network interface of SUT!");
+                }
+                else if (nonRdmaNetworkInterfaceCount == 1)
+                {
+                    DetectionInfo.SUTNonRdmaNICIPAddress = nonRdmaNetworkInterfaces.First().IpAddress;
+                    DetectorUtil.WriteLog(string.Format("Choose {0} as non-RDMA IP address.", DetectionInfo.SUTNonRdmaNICIPAddress));
                 }
                 else
                 {
-                    DetectorUtil.WriteLog("User skipped choosing non-RDMA network interface of SUT.");
+                    var selected = Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        var dialog = new RemoteNetworkInterfaceSelector(nonRdmaNetworkInterfaces.ToArray());
+                        string prompt = String.Format("The IP address selected as non-RDMA network interface of driver computer is {0}", DetectionInfo.DriverNonRdmaNICIPAddress);
+                        return dialog.ShowDialog("Please select the non-RDMA network interface of SUT", prompt);
+                    });
+                    if (selected != null)
+                    {
+                        DetectionInfo.SUTNonRdmaNICIPAddress = selected.IpAddress;
+                        DetectorUtil.WriteLog(string.Format("User chose {0} as non-RDMA IP address of SUT.", DetectionInfo.SUTNonRdmaNICIPAddress));
+                    }
+                    else
+                    {
+                        DetectorUtil.WriteLog("User skipped choosing non-RDMA network interface of SUT.");
+                    }
                 }
             }
 
-            int rdmaNetworkInterfaceCount = rdmaNetworkInterfaces.Count();
-            if (rdmaNetworkInterfaceCount == 0)
+            if (DetectionInfo.DriverRdmaNICIPAddress == null)
             {
-                DetectorUtil.WriteLog("Failed to detect any RDMA network interface of SUT!");
-                return false;
-            }
-            else if (rdmaNetworkInterfaceCount == 1)
-            {
-                DetectionInfo.SUTRdmaNICIPAddress = rdmaNetworkInterfaces.First().IpAddress;
-                DetectorUtil.WriteLog(string.Format("Choose {0} as RDMA IP address of SUT.", DetectionInfo.SUTRdmaNICIPAddress));
+                DetectorUtil.WriteLog("Skip detecting any RDMA network interface of SUT since no corresponding selected for driver computer!");
+                DetectionInfo.SUTRdmaNICIPAddress = null;
             }
             else
             {
-                var selected = Application.Current.Dispatcher.Invoke(() =>
+                var rdmaNetworkInterfaces = networkInterfaces.Where(networkInterface => networkInterface.RDMACapable);
+
+                int rdmaNetworkInterfaceCount = rdmaNetworkInterfaces.Count();
+                if (rdmaNetworkInterfaceCount == 0)
                 {
-                    var dialog = new RemoteNetworkInterfaceSelector(rdmaNetworkInterfaces.ToArray());
-                    return dialog.ShowDialog("Please select the RDMA network interface of SUT");
-                });
-                if (selected != null)
+                    DetectorUtil.WriteLog("Failed to detect any RDMA network interface of SUT!");
+                }
+                else if (rdmaNetworkInterfaceCount == 1)
                 {
-                    DetectionInfo.SUTRdmaNICIPAddress = selected.IpAddress;
-                    DetectorUtil.WriteLog(string.Format("User chose {0} as RDMA IP address of SUT.", DetectionInfo.SUTRdmaNICIPAddress));
+                    DetectionInfo.SUTRdmaNICIPAddress = rdmaNetworkInterfaces.First().IpAddress;
+                    DetectorUtil.WriteLog(string.Format("Choose {0} as RDMA IP address of SUT.", DetectionInfo.SUTRdmaNICIPAddress));
                 }
                 else
                 {
-                    DetectorUtil.WriteLog("User skipped choosing RDMA network interface of SUT.");
+                    var selected = Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        var dialog = new RemoteNetworkInterfaceSelector(rdmaNetworkInterfaces.ToArray());
+                        string prompt = String.Format("The IP address selected as RDMA network interface of driver computer is {0}", DetectionInfo.DriverRdmaNICIPAddress);
+                        return dialog.ShowDialog("Please select the RDMA network interface of SUT", prompt);
+                    });
+                    if (selected != null)
+                    {
+                        DetectionInfo.SUTRdmaNICIPAddress = selected.IpAddress;
+                        DetectorUtil.WriteLog(string.Format("User chose {0} as RDMA IP address of SUT.", DetectionInfo.SUTRdmaNICIPAddress));
+                    }
+                    else
+                    {
+                        DetectorUtil.WriteLog("User skipped choosing RDMA network interface of SUT.");
+                    }
                 }
+
             }
-
-            if (DetectionInfo.SUTNonRdmaNICIPAddress == null || DetectionInfo.SUTRdmaNICIPAddress == null)
-            {
-                // if user do not select any network interface
-                return false;
-            }
-
-
-            return true;
-
         }
 
         private RemoteNetworkInterfaceInformation[] ParseRemoteNetworkInterfaceInformation(NETWORK_INTERFACE_INFO_Response[] networkInterfaceInfo)

@@ -14,12 +14,18 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
         public bool CheckSMBDCapability(out bool rdmaChannelV1Supported, out bool rdmaChannelV1InvalidateSupported)
         {
+            rdmaChannelV1Supported = false;
+            rdmaChannelV1InvalidateSupported = false;
+
+            if (DetectionInfo.SUTRdmaNICIPAddress == null || DetectionInfo.DriverRdmaNICIPAddress == null)
+            {
+                DetectorUtil.WriteLog("Check the supported SMBD capabilities of SUT skipped since not available.", true, LogStyle.StepSkipped);
+                return false;
+            }
+
             DetectorUtil.WriteLog("Check the supported SMBD capabilities of SUT...");
 
             bool result = false;
-
-            rdmaChannelV1Supported = false;
-            rdmaChannelV1InvalidateSupported = false;
 
             if (CheckSMBDNegotiate())
             {
@@ -34,7 +40,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 }
             }
 
-            
+
             if (result)
             {
                 DetectorUtil.WriteLog("Finished", false, LogStyle.StepPassed);

@@ -18,7 +18,7 @@ namespace Microsoft.Protocols.TestManager.Detector
         public const string ISWINDOWSIMPLEMENTATION = "Is Windows Implementation";
         public const string AUTHENTICATION = "Authentication";
         public const string SMBDPORT = "SMBD Port";
-        public const string CONNECTIONTIMEOUT = "Connection timeout";
+        public const string CONNECTIONTIMEOUT = "Connection Timeout";
     }
 
     static class DeploymentPtfConfigConstant

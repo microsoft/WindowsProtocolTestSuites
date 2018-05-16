@@ -1,8 +1,12 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using Microsoft.Protocols.TestManager.Detector;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Text;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
@@ -34,12 +38,11 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 }
 
             }
-            catch
+            catch (Exception ex)
             {
-                DetectorUtil.WriteLog("Error", false, LogStyle.Error);
+                DetectorUtil.WriteLog(String.Format("Error: {0}", ex), false, LogStyle.Error);
 
-                //return false;
-                throw;
+                return false;
             }
             foreach (var reply in replys)
             {
@@ -54,11 +57,25 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             else
             {
                 DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
-                DetectorUtil.WriteLog("Target SUT don't respond.");
+                DetectorUtil.WriteLog("Target SUT doesn't respond.");
                 return false;
             }
 
         }
 
+
+        private IEnumerable<IPAddress> GetIPAdressOfSut()
+        {
+            try
+            {
+                var result = Dns.GetHostAddresses(DetectionInfo.SUTName).Where(ipAddress => ipAddress.AddressFamily == AddressFamily.InterNetwork);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                DetectorUtil.WriteLog(String.Format("Cannot get SUT IP addresses: {0}.", ex));
+                return new IPAddress[0];
+            }
+        }
     }
 }

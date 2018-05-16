@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 
-namespace Microsoft.Protocols.TestManager.FileServerPlugin.Detector
+namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
     /// <summary>
     /// Interaction logic for LocalNetworkInterfaceSelector.xaml

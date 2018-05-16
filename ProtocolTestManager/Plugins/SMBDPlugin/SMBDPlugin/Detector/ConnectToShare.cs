@@ -38,6 +38,11 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
         public bool ConnectToShareRDMA()
         {
+            if (DetectionInfo.SUTRdmaNICIPAddress == null || DetectionInfo.DriverRdmaNICIPAddress == null)
+            {
+                DetectorUtil.WriteLog("Connect to share through RDMA transport skipped since not available.", true, LogStyle.StepSkipped);
+                return false;
+            }
 
             DetectorUtil.WriteLog("Connect to share through RDMA transport...");
 

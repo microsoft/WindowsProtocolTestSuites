@@ -20,7 +20,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             var dialects = new DialectRevision[] { DialectRevision.Smb30, DialectRevision.Smb302, DialectRevision.Smb311 };
 
-            var ipList = Dns.GetHostAddresses(DetectionInfo.SUTName).Where(ipAddress => ipAddress.AddressFamily == AddressFamily.InterNetwork);
+            var ipList = GetIPAdressOfSut();
 
             // try all reachable SUT IP address
             foreach (var ip in ipList)

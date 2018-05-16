@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 
-namespace Microsoft.Protocols.TestManager.FileServerPlugin.Detector
+namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
     /// <summary>
     /// Interaction logic for RemoteNetworkInterfaceSelector.xaml
@@ -31,13 +31,14 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin.Detector
         }
 
 
-        public RemoteNetworkInterfaceInformation ShowDialog(string title, uint showSeconds = 30)
+        public RemoteNetworkInterfaceInformation ShowDialog(string title, string prompt, uint showSeconds = 30)
         {
             timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.Tick += Timer_Tick;
             ticks = showSeconds;
             titleHint = title;
+            Prompt.Text = prompt;
             UpdateTitle();
             timer.Start();
 

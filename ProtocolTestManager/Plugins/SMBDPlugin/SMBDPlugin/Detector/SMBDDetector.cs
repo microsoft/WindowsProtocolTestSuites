@@ -40,11 +40,8 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             result = GetLocalAdapters();
             if (!result)
             {
-                if (DetectionInfo.DriverRdmaNICIPAddress == null)
-                {
-                    // stop if RDMA card not detected
-                    return false;
-                }
+                // stop if local card not detected
+                return false;
             }
 
             result = CheckSmbDialect();
@@ -57,11 +54,8 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             result = GetRemoteAdapters();
             if (!result)
             {
-                if (DetectionInfo.SUTRdmaNICIPAddress == null)
-                {
-                    // stop if RDMA card not detected
-                    return false;
-                }
+                // stop if remote card not detected
+                return false;
             }
 
             result = ConnectToShareNonRDMA();
@@ -79,7 +73,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             {
                 // stop if RDMA transport failed
                 DetectionInfo.RDMATransportSupported = false;
-                return false;
             }
             else
             {
@@ -91,17 +84,9 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             result = CheckSMBDCapability(out rdmaChannelV1Supported, out rdmaChannelV1InvalidateSupported);
             DetectionInfo.RDMAChannelV1Supported = rdmaChannelV1Supported;
             DetectionInfo.RDMAChannelV1InvalidateSupported = rdmaChannelV1InvalidateSupported;
-            if (!result)
-            {
-                // stop if RDMA channel V1 check failed
-                if (!rdmaChannelV1Supported)
-                {
-                    return false;
-                }
-            }
 
-            return true;
+            return result;
         }
-        
+
     }
 }
