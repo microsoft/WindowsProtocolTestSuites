@@ -1707,7 +1707,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                 this.Manager.Checkpoint("MS-FSA_R420");
                 this.Manager.Checkpoint("[In Creation of a New File,Pseudocode for the operation is as follows:]If StreamT" +
                         "ypeNameToOpen is non-empty and has a value other than \\\"$DATA\",the operation MUS" +
-                        "T be failed with STATUS_ACCESS_DENIED.");
+                        "T be failed with STATUS_OBJECT_NAME_INVALID.");
                 this.Manager.Comment("reaching state \'S252\'");
                 this.Manager.Comment("checking step \'return CreateFile/OBJECT_NAME_INVALID\'");
                 TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.OBJECT_NAME_INVALID, temp91, "return of CreateFile, state S252");
@@ -1745,7 +1745,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                 this.Manager.Checkpoint("MS-FSA_R420");
                 this.Manager.Checkpoint("[In Creation of a New File,Pseudocode for the operation is as follows:]If StreamT" +
                         "ypeNameToOpen is non-empty and has a value other than \\\"$DATA\",the operation MUS" +
-                        "T be failed with STATUS_ACCESS_DENIED.");
+                        "T be failed with STATUS_OBJECT_NAME_INVALID.");
                 this.Manager.Comment("reaching state \'S253\'");
                 this.Manager.Comment("checking step \'return CreateFile/OBJECT_NAME_INVALID\'");
                 TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.OBJECT_NAME_INVALID, temp94, "return of CreateFile, state S253");

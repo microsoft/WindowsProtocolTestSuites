@@ -116,7 +116,7 @@
       <Property name="WhichFileSystemSupport_ObjectID" value="NTFS" />
       <Property name="WhichFileSystemSupport_Offload" value="NTFS" />
       <Property name="WhichFileSystemSupport_Compression" value="NTFS" />
-      <Property name="WhichFileSystemSupport_Encryption" value="NTFS" />
+      <Property name="WhichFileSystemSupport_Encryption" value="NTFS;FAT32" />
       <Property name="WhichFileSystemSupport_ExtendedAttribute" value="NTFS" />
       <Property name="WhichFileSystemSupport_SparseFile" value="NTFS;REFS" />
       <Property name="WhichFileSystemSupport_QueryAllocatedRanges" value="NTFS;REFS" />

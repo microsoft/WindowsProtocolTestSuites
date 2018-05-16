@@ -585,9 +585,10 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         {
             // define data for test case, get the server's capability
             uint MAX_SEND_SIZE;
-            if (smbdAdapter.TestConfig.Platform == Platform.WindowsServer2012R2)
+            if (smbdAdapter.TestConfig.Platform == Platform.WindowsServer2012R2 || smbdAdapter.TestConfig.Platform == Platform.WindowsServer2016)
             {
-                // <5> Section 3.1.5.6:  Windows Server 2012 R2 fails the request with STATUS_INSUFFICIENT_RESOURCES if the PreferredSendSize field is greater than 8136
+                // Windows Server 2012 R2, Windows Server 2016, and Windows Server operating system fail the request 
+                // with STATUS_INSUFFICIENT_RESOURCES if the PreferredSendSize field is greater than 8136.
                 MAX_SEND_SIZE = 8136;
             }
             else
@@ -685,9 +686,10 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         {
             // define data for test case, get the server's capability
             uint MAX_SEND_SIZE;
-            if (smbdAdapter.TestConfig.Platform == Platform.WindowsServer2012R2)
+            if (smbdAdapter.TestConfig.Platform == Platform.WindowsServer2012R2 || smbdAdapter.TestConfig.Platform == Platform.WindowsServer2016)
             {
-                // <5> Section 3.1.5.6:  Windows Server 2012 R2 fails the request with STATUS_INSUFFICIENT_RESOURCES if the PreferredSendSize field is greater than 8136
+                // Windows Server 2012 R2, Windows Server 2016, and Windows Server operating system fail the request 
+                // with STATUS_INSUFFICIENT_RESOURCES if the PreferredSendSize field is greater than 8136.
                 MAX_SEND_SIZE = 8136;
             }
             else

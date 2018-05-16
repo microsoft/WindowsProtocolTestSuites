@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Security;
+using Microsoft.Protocols.TestTools.StackSdk;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 {
@@ -202,14 +203,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         {
             get
             {
-                return IPAddress.Parse(GetProperty("ClientNic1IPAddress"));
+                return GetProperty("ClientNic1IPAddress").ParseIPAddress();
             }
         }
         public IPAddress ClientNic2IPAddress
         {
             get
             {
-                return IPAddress.Parse(GetProperty("ClientNic2IPAddress"));
+                return GetProperty("ClientNic2IPAddress").ParseIPAddress();
             }
         }
         #endregion
@@ -292,12 +293,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         {
             get
             {
-                string ipaddress = GetProperty("SutIPAddress", false);
-                if (string.IsNullOrEmpty(ipaddress))
-                {
-                    return IPAddress.None;
-                }
-                return IPAddress.Parse(ipaddress);
+                return GetProperty("SutIPAddress", false).ParseIPAddress();
             }
         }
 
@@ -378,23 +374,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         {
             get
             {
-                IPAddress caShareServerIP;
-                if (IPAddress.TryParse(CAShareServerName, out caShareServerIP))
-                {
-                    return caShareServerIP;
-                }
-                else
-                {
-                    try
-                    {
-                        caShareServerIP = Dns.GetHostEntry(CAShareServerName).AddressList[0];
-                    }
-                    catch
-                    {
-                        throw new Exception(string.Format("Cannot resolve IP address of CAShareServerName ({0}) from DNS.", CAShareServerName));
-                    }
-                    return caShareServerIP;
-                }
+                return CAShareServerName.ParseIPAddress();
             }
         }
 

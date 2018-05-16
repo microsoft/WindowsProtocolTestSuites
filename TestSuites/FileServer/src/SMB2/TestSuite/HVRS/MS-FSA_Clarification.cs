@@ -48,6 +48,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Hvrs)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("This test case is designed to test whether the server supports the FSCTL_OFFLOAD_READ and FSCTL_OFFLOAD_WRITE.")]
         public void BVT_OffloadReadWrite()
         {
@@ -196,6 +197,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Hvrs)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("This test case is designed to test whether the server supports the FSCTL_SET_ZERO_DATA.")]
         public void BVT_SetZeroData()
         {
@@ -381,6 +383,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Hvrs)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("This test case is designed to test whether the server supports FSCTL_DUPLICATE_EXTENTS_TO_FILE")]
         public void BVT_DuplicateExtentsToFile()
         {

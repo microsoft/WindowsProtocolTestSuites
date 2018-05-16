@@ -30,7 +30,8 @@
         Platform type of the SUT
         NonWindows = 0x00000000,
         WindowsServer2012 = 0x10000006,
-        WindowsServer2012R2 = 0x10000008,
+        WindowsServer2012R2 = 0x10000007,
+        WindowsServer2016 = 0x10000008
     -->
     <Property name="Platform" value="WindowsServer2012R2"/>
 

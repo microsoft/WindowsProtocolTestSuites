@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Microsoft.Protocols.TestTools;
 using System.Reflection;
 using System.Diagnostics;
+using System.Net;
 
 namespace Microsoft.Protocols.TestSuites
 {
@@ -167,6 +168,32 @@ namespace Microsoft.Protocols.TestSuites
             catch { }
 
             return helpMessage;
+        }
+        /// <summary>
+        /// Get all IP addresses by one host name or one IP
+        /// </summary>
+        /// <param name="hostnameOrIP"></param>
+        /// <returns>An IP address list specified by hostname or IP</returns>
+        public static List<IPAddress> GetHostIPs(ITestSite site, string hostnameOrIP)
+        {
+            try
+            {
+                IPHostEntry host = Dns.GetHostEntry(hostnameOrIP);
+                List<IPAddress> ipList = new List<IPAddress>(); 
+                foreach (IPAddress ip in host.AddressList)
+                {
+                    if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        ipList.Add(ip);
+                    }
+                }
+                return ipList;
+            }
+            catch (Exception e)
+            {
+                site.Assume.Fail(String.Format("GetHostIPs failed with exception: {0}.", e.Message));
+            }
+            return null;
         }
     }
 }
