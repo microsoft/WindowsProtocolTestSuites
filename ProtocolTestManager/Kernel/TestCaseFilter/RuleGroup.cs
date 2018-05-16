@@ -45,7 +45,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// </summary>
         private void RefreshFeatureMapping()
         {
-            // Not to refresh feature mapping when loading profile
+            // Not to refresh feature mapping when loading profile or the result of filtering cases will be changed
             if (!isLoadingProfile && featureMappingTable != null)
             {
                 List<string> categories = GetCategories(RuleGroupType == RuleType.Selector);
