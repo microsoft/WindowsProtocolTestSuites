@@ -605,7 +605,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
                         capsFlag = BitConverter.ToUInt32(adv.capsSets[index].capsData, 0);
                         validFlag = (capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_DEFAULT ||
-                                            capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED
+                                            capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED ||
+                                            capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_AVC_THINCLIENT
                                             );
                         Site.Assert.IsTrue(validFlag, "Unknown capability flags {0} (Section 2.2.3.6).", capsFlag);
                         break;
@@ -618,6 +619,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                         validFlag = (capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_DEFAULT ||
                                             capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE ||
                                             capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED ||
+                                            capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_AVC_THINCLIENT ||
+                                            capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC_THINCLIENT) ||
                                             capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED)
                                             );
                         Site.Assert.IsTrue(validFlag, "Unknown capability flags {0} (Section 2.2.3.7).", capsFlag);
@@ -631,7 +634,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                         validFlag = (capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_DEFAULT ||
                                             capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE ||
                                             capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED ||
-                                            capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_AVC_THINCLIENT)
+                                            capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_AVC_THINCLIENT ||
+                                            capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC_THINCLIENT) ||
+                                            capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED)
                                             );
                         Site.Assert.IsTrue(validFlag, "Unknown capability flags {0} (Section 2.2.1.6).", capsFlag);
                         break;
