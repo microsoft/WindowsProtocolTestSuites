@@ -6,7 +6,7 @@
     <ProjectGuid>{20855E41-DDBD-4886-AB6B-135005475CFF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.Protocols.TestManager.FileServerPlugin</RootNamespace>
+    <RootNamespace>Microsoft.Protocols.TestManager.SMBDPlugin</RootNamespace>
     <AssemblyName>SMBDPlugin</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -37,6 +37,42 @@
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma">
@@ -109,6 +145,10 @@
     <Resource Include="Icons\supported.png" />
     <Resource Include="Icons\undetected.png" />
     <Resource Include="Icons\unsupported.png" />
+    <Resource Include="Docs\arrow_right.png" />
+    <Content Include="Docs\setup.html" />
+    <Content Include="Docs\deployment.html" />
+    <Resource Include="Docs\deployment.png" />
     <Content Include="Docs\index.html" />
     <Content Include="config.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -154,11 +194,11 @@
     <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\lib\" />
   </Target>
   <!--Below section is for debug purpose, debug steps:
-  1. Uncoment below ItemGroup and Target, save.
-  2. Build FileServerPlugin.csproj.
+  1. Uncomment below ItemGroup and Target, save.
+  2. Build SMBDPlugin.csproj.
   3. Open Protocol Test Manager Solution in Visual Studio.
      ProtocolTestManager\ProtocolTestManager.sln
-  4. Right-click UI.csproj, select “Properites”, in Build tab, set Output path to “objd\i386\”.
+  4. Right-click UI.csproj, select “Properties”, in Build tab, set Output path to “objd\i386\”.
   5. Right-click UI.csproj, select “Set as startUp Project”.
   6. Start Debugging from UI.csproj.
      Set breakpoint in PTM or plugin source code, in Protocol Test Manager Solution, press F5 to start debugging. 
@@ -172,9 +212,9 @@
 
   <Target Name="AfterBuild">
     <Copy SourceFiles="@(DebugFiles)" DestinationFolder="ProtocolTestManager\UI\objd\lib" />
-    <Copy SourceFiles="@(Content)" DestinationFolder="ProtocolTestManager\UI\objd\doc\fileserver" />
-    <Copy SourceFiles="@(Resource)" DestinationFolder="ProtocolTestManager\UI\objd\doc\fileserver" />
-    <Copy SourceFiles="@(ConfigFile)" DestinationFolder="ProtocolTestManager\UI\objd\etc\fileserver" />
-    <Copy SourceFiles="@(CategoryFile)" DestinationFolder="ProtocolTestManager\UI\objd\etc\fileserver" />
+    <Copy SourceFiles="@(Content)" DestinationFolder="ProtocolTestManager\UI\objd\doc\MS-SMBD" />
+    <Copy SourceFiles="@(Resource)" DestinationFolder="ProtocolTestManager\UI\objd\doc\MS-SMBD" />
+    <Copy SourceFiles="@(ConfigFile)" DestinationFolder="ProtocolTestManager\UI\objd\etc\MS-SMBD" />
+    <Copy SourceFiles="@(CategoryFile)" DestinationFolder="ProtocolTestManager\UI\objd\etc\MS-SMBD" />
   </Target>-->
 </Project>
