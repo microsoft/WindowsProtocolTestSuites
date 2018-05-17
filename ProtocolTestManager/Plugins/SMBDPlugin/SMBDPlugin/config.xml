@@ -51,7 +51,7 @@
         </Rule>
         <Rule name = "SMB 3.0.2 or Later">
           <Rule name = "RDMA Channel Remote Invalidation">
-            <Category name = "SMB2_CHANNEL_RDMA_V1_INVALIDATE"/>
+            <Category name = "Smb2OverRdmaChannelInvalidate"/>
           </Rule>
         </Rule>
       </Rule>
