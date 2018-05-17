@@ -627,7 +627,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                         break;
                     case CapsVersions.RDPGFX_CAPVERSION_105:
                         Site.Assert.AreEqual((uint)4, adv.capsSets[index].capsDataLength,
-                            "Data Length of RDPEGFX capability set MUST be set to {0} (Section 2.2.1.6), Received capsDataLength: {1} in capset[{2}]!",
+                            "Data Length of RDPEGFX capability set MUST be set to {0} (Section 2.2.3.8), Received capsDataLength: {1} in capset[{2}]!",
                             4, adv.capsSets[index].capsDataLength, index);
 
                         capsFlag = BitConverter.ToUInt32(adv.capsSets[index].capsData, 0);
@@ -638,7 +638,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                                             capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC_THINCLIENT) ||
                                             capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED)
                                             );
-                        Site.Assert.IsTrue(validFlag, "Unknown capability flags {0} (Section 2.2.1.6).", capsFlag);
+                        Site.Assert.IsTrue(validFlag, "Unknown capability flags {0} (Section 2.2.3.8).", capsFlag);
                         break;
                     default:
                         Site.Assert.Fail("The version of RDPEGFX capability set MUST be set to : {0}, {1}, {2}, {3}, {4}, {5}, {6} or {7}. Received version: {8} in capset[{9}]",
