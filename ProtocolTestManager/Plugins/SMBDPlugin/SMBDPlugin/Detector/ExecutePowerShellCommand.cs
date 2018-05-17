@@ -19,42 +19,48 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         /// <returns>An object array to receive return value of script.</returns>
         private object[] ExecutePowerShellCommand(string scriptPath, out string[] error)
         {
-
-            using (var runspace = RunspaceFactory.CreateRunspace())
+            try
             {
-
-                runspace.Open();
-
-                runspace.SessionStateProxy.SetVariable("PtfPropSUTName", DetectionInfo.SUTName);
-                runspace.SessionStateProxy.SetVariable("PtfPropDomainName", DetectionInfo.DomainName);
-                runspace.SessionStateProxy.SetVariable("PtfPropSUTUserName", DetectionInfo.UserName);
-                runspace.SessionStateProxy.SetVariable("PtfPropSUTUserPassword", DetectionInfo.Password);
-
-                using (var pipeline = runspace.CreatePipeline())
+                using (var runspace = RunspaceFactory.CreateRunspace())
                 {
-                    pipeline.Commands.Add(scriptPath);
 
-                    var output = pipeline.Invoke();
+                    runspace.Open();
 
-                    var result = output.Select(element => ParsePSObject(element));
+                    runspace.SessionStateProxy.SetVariable("PtfPropSUTName", DetectionInfo.SUTName);
+                    runspace.SessionStateProxy.SetVariable("PtfPropDomainName", DetectionInfo.DomainName);
+                    runspace.SessionStateProxy.SetVariable("PtfPropSUTUserName", DetectionInfo.UserName);
+                    runspace.SessionStateProxy.SetVariable("PtfPropSUTUserPassword", DetectionInfo.Password);
 
-
-                    // output error
-                    if (pipeline.HadErrors)
+                    using (var pipeline = runspace.CreatePipeline())
                     {
-                        var errors = pipeline.Error.ReadToEnd();
+                        pipeline.Commands.Add(scriptPath);
 
-                        error = errors.Select(element => element.ToString()).ToArray();
-                    }
-                    else
-                    {
-                        error = null;
-                    }
+                        var output = pipeline.Invoke();
 
-                    return result.ToArray();
+                        var result = output.Select(element => ParsePSObject(element));
+
+
+                        // output error
+                        if (pipeline.HadErrors)
+                        {
+                            var errors = pipeline.Error.ReadToEnd();
+
+                            error = errors.Select(element => element.ToString()).ToArray();
+                        }
+                        else
+                        {
+                            error = null;
+                        }
+
+                        return result.ToArray();
+                    }
                 }
             }
-
+            catch (Exception ex)
+            {
+                error = new string[] { ex.ToString() };
+                return new object[0];
+            }
         }
 
         private object ParsePSObject(PSObject psObject)
