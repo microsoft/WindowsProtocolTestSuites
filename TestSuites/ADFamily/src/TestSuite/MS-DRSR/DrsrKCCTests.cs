@@ -228,23 +228,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         }
 
         [BVT]
-        [TestCategory("Winv1803")]
-        [ServerType(DcServerTypes.Any)]
-        [SupportedADType(ADInstanceType.Both)]
-        [Priority(0)]
-        [Description("Delete a replication source and add it back with DRS_WRIT_REP flag")]
-        [TestCategory("SDC")]
-        [TestCategory("PDC")]
-        [TestCategory("DomainWinV1803")]
-        [TestCategory("MS-DRSR")]
-        [TestMethod]
-        public void DRSR_DRSReplicaAdd_V3_Success_With0x10Flag()
-        {
-            DrsrTestChecker.Check();
-            DRSR_DRSReplicaAdd_Success_With0x10Flag(DRS_MSG_REPADD_Versions.V3);
-        }
-
-        [BVT]
         [TestCategory("Win2003")]
         [ServerType(DcServerTypes.Any)]
         [SupportedADType(ADInstanceType.Both)]
@@ -373,7 +356,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
             drsTestClient.DrsReplicaAdd(
                 EnvironmentConfig.Machine.WritableDC1,
-                ver,
+                DRS_MSG_REPADD_Versions.V2,
                 (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2],
                 DRS_OPTIONS.DRS_ASYNC_OP
                 );

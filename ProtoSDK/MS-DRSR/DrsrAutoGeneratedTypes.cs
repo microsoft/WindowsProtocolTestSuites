@@ -8,6 +8,7 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
 using Microsoft.Protocols.TestTools.StackSdk.Messages;
 using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 {
@@ -6424,20 +6425,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     //  <remarks>
     //   .\TD\MS-DRSR\2ad0252a-d028-412b-89c9-2fcb7123817e.xml
     //  </remarks>
-    [Union("System.Int32")]
+    [StructLayout(LayoutKind.Explicit)]
     public partial struct DRS_MSG_UPDREFS
     {
 
         /// <summary>
         ///  The version 1 request.
         /// </summary>
-        [Case("1")]
+        [FieldOffset(0)]
         public DRS_MSG_UPDREFS_V1 V1;
 
         /// <summary>
         ///  The version 2 request.
         /// </summary>
-        [Case("2")]
+        [FieldOffset(0)]
         public DRS_MSG_UPDREFS_V2 V2;
     }
 
@@ -7462,20 +7463,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     //  <remarks>
     //   .\TD\MS-DRSR\d1ed3b4e-6964-468e-9ef1-f9a6f25cde0e.xml
     //  </remarks>
-    [Union("System.Int32")]
+    [StructLayout(LayoutKind.Explicit)]
     public partial struct DRS_MSG_REPSYNC
     {
 
         /// <summary>
         ///  The version 1 request.
         /// </summary>
-        [Case("1")]
+        [FieldOffset(0)]
         public DRS_MSG_REPSYNC_V1 V1;
 
         /// <summary>
         ///  The version 2 request.
         /// </summary>
-        [Case("2")]
+        [FieldOffset(0)]
         public DRS_MSG_REPSYNC_V2 V2;
     }
 

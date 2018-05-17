@@ -431,13 +431,13 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                         options);
                     break;
                 case DrsReplicaSync_Versions.V2:
-                    DRS_MSG_REPSYNC_V1 v1 = drsClient.CreateReplicaSyncRequestV1(
+                    request.V1 = drsClient.CreateReplicaSyncRequestV1(
                         pNC,
                         sourceDsaGuid,
                         sourceDsaName,
                         options);
 
-                    request.V2 = drsClient.CreateReplicaSyncRequestV2(v1);
+                    request.V2 = drsClient.CreateReplicaSyncRequestV2(request.V1);
                     break;
                 default:
                     testSite.Assert.Fail("The version {0} is not supported.", reqVer);
@@ -818,7 +818,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                     );
                     break;
                 case DrsUpdateRefs_Versions.V2:
-                    DRS_MSG_UPDREFS_V1 v1 = drsClient.CreateUpdateRefsRequestV1(
+                    request.V1 = drsClient.CreateUpdateRefsRequestV1(
                         ncReplicaDistinguishedName,
                         ncReplicaObjectGuid,
                         ncReplicaObjectSid,
@@ -826,7 +826,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                         destDsaGuid,
                         options
                     );
-                    request.V2 = drsClient.CreateUpdateRefsRequestV2(v1);
+                    request.V2 = drsClient.CreateUpdateRefsRequestV2(request.V1);
                     break;
                 default:
                     testSite.Assert.Fail("The version {0} is not supported.", reqVer);
@@ -1221,7 +1221,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                 options);
 
             testSite.Log.Add(LogEntryKind.Checkpoint, "Begin to call IDL_DRSUpdateRefs");
-            uint ret = drsClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], 1, req);
+            uint ret = drsClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], (uint)DrsUpdateRefs_Versions.V1, req);
 
             testSite.Log.Add(LogEntryKind.Checkpoint, "End call IDL_DRSUpdateRefs with return value " + ret);
             if (EnvironmentConfig.ExpectSuccess)

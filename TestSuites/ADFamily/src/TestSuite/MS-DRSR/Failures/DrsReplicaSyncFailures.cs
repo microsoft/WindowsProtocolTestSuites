@@ -265,7 +265,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             /* Issue the request */
             ret = drsTestClient.DRSClient.DrsReplicaSync(
                 EnvironmentConfig.DrsContextStore[EnvironmentConfig.Machine.WritableDC1],
-                (uint)dwInVersion,
+                (uint)DrsReplicaSync_Versions.V1,
                 msgIn);
             BaseTestSite.Assert.AreEqual<uint>(
                 (uint)Win32ErrorCode_32.ERROR_DS_DRA_INVALID_PARAMETER,
@@ -327,7 +327,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             /* Issue the request */
             ret = drsTestClient.DRSClient.DrsReplicaSync(
                 EnvironmentConfig.DrsContextStore[EnvironmentConfig.Machine.WritableDC1],
-                (uint)dwInVersion,
+                (uint)DrsReplicaSync_Versions.V1,
                 msgIn);
             BaseTestSite.Assert.AreEqual<uint>(
                 (uint)Win32ErrorCode_32.ERROR_DS_DRA_INVALID_PARAMETER,
@@ -383,7 +383,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             /* Issue the request */
             ret = drsTestClient.DRSClient.DrsReplicaSync(
                 EnvironmentConfig.DrsContextStore[EnvironmentConfig.Machine.WritableDC1],
-                (uint)dwInVersion,
+                (uint)DrsReplicaSync_Versions.V1,
                 msgIn);
             BaseTestSite.Assert.AreEqual<uint>(
                 (uint)Win32ErrorCode_32.ERROR_DS_DRA_INVALID_PARAMETER,
@@ -439,7 +439,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             /* Issue the request */
             ret = drsTestClient.DRSClient.DrsReplicaSync(
                 EnvironmentConfig.DrsContextStore[EnvironmentConfig.Machine.WritableDC1],
-                (uint)dwInVersion,
+                (uint)DrsReplicaSync_Versions.V1,
                 msgIn);
             BaseTestSite.Assert.AreEqual<uint>(
                 (uint)Win32ErrorCode_32.ERROR_DS_DRA_INVALID_PARAMETER,
@@ -497,7 +497,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             /* Issue the request */
             ret = drsTestClient.DRSClient.DrsReplicaSync(
                 EnvironmentConfig.DrsContextStore[EnvironmentConfig.Machine.WritableDC1],
-                (uint)dwInVersion,
+                (uint)DrsReplicaSync_Versions.V1,
                 msgIn);
             BaseTestSite.Assert.AreEqual<uint>(
                 (uint)Win32ErrorCode_32.ERROR_DS_DRA_ACCESS_DENIED,
@@ -557,7 +557,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             /* Issue the request */
             ret = drsTestClient.DRSClient.DrsReplicaSync(
                 EnvironmentConfig.DrsContextStore[EnvironmentConfig.Machine.WritableDC1],
-                (uint)dwInVersion,
+                (uint)DrsReplicaSync_Versions.V1,
                 msgIn);
             BaseTestSite.Assert.AreEqual<uint>(
                 (uint)Win32ErrorCode_32.ERROR_DS_DRA_NO_REPLICA,
