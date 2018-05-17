@@ -23,7 +23,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             string[] error;
 
-            var output = ExecutePowerShellCommand(@"..\etc\MS-SMBD\GetRemoteOSVersion.ps1", out error);
+            var output = ExecutePowerShellCommand(@"..\etc\MS-SMBD\Scripts\GetRemoteOSVersion.ps1", out error);
 
             if (error != null)
             {

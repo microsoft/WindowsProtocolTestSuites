@@ -16,7 +16,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             string[] error;
 
-            var output = ExecutePowerShellCommand(@"..\etc\MS-SMBD\GetLocalNetworkAdapters.ps1", out error);
+            var output = ExecutePowerShellCommand(@"..\etc\MS-SMBD\Scripts\GetLocalNetworkAdapters.ps1", out error);
 
 
             bool result = true;
