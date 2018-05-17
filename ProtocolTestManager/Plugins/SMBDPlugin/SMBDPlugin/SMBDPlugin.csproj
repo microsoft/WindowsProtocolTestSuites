@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{20855E41-DDBD-4886-AB6B-135005475CFF}</ProjectGuid>
+    <ProjectGuid>{F7FD54EB-2B86-496F-8FF4-58565A301993}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.Protocols.TestManager.SMBDPlugin</RootNamespace>
