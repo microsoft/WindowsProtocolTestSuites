@@ -44,7 +44,6 @@
 
     <PropertyRef Id="VS2012_ROOT_FOLDER"/>
     <PropertyRef Id="VS2013_ROOT_FOLDER"/>
-    <PropertyRef Id="VS2015_ROOT_FOLDER"/>
 
     <Property Id="VSInstalled">0</Property>
 
@@ -118,7 +117,7 @@
       <Directory Id="ProgramMenuFolder" >
         <Directory Id="ApplicationProgramsMenuFolder" Name="Protocol Test Manager" />
       </Directory>
-      <Directory Id="ProgramFilesFolder">
+      <Directory Id="ProgramFiles64Folder">
         <Directory Id="INSTALLFOLDER" Name="Protocol Test Manager" >
           <Directory Id="BINFOLDER" Name="bin" />
           <Directory Id="ETCFOLDER" Name="etc" >
