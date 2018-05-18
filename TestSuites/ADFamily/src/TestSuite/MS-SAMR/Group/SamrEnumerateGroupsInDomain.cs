@@ -41,7 +41,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         [TestCategory("ForestWin2008R2")]
         [TestCategory("PDC")]
         [TestCategory("SAMR-Group")]
-        [Description("This is to test SamrEnumerateUsersInDomain.")]
+        [Description("This is to test SamrEnumerateGroupsInDomain.")]
         public void SamrEnumerateGroupsInDomain_AddDeleteGroup()
         {
             ConnectAndOpenDomain(_samrProtocolAdapter.pdcFqdn, _samrProtocolAdapter.PrimaryDomainDnsName, out _serverHandle, out _domainHandle);
