@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 8.00.0595 */
-/* at Fri Nov 04 11:26:24 2016
+/* at Tue May 15 11:07:02 2018
  */
 /* Compiler settings for ms-drsr.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.00.0595 
@@ -59,12 +59,12 @@ typedef LONGLONG DSTIME;
 
 typedef /* [context_handle] */ void *DRS_HANDLE;
 
-typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL_drsuapi_0001
+typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL_drsuapi_0001
     {
     unsigned char Data[ 28 ];
     } 	NT4SID;
 
-typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL_drsuapi_0002
+typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL_drsuapi_0002
     {
     unsigned long structLen;
     unsigned long SidLen;
@@ -76,7 +76,7 @@ typedef /* [public][public][public][public][public][public][public][public][publ
 
 typedef LONGLONG USN;
 
-typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL_drsuapi_0003
+typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL_drsuapi_0003
     {
     USN usnHighObjUpdate;
     USN usnReserved;
@@ -89,7 +89,7 @@ typedef /* [public][public][public][public][public][public][public][public][publ
     USN usnHighPropUpdate;
     } 	UPTODATE_CURSOR_V1;
 
-typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL_drsuapi_0005
+typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL_drsuapi_0005
     {
     DWORD dwVersion;
     DWORD dwReserved1;
@@ -110,7 +110,7 @@ typedef /* [public][public][public][public][public][public][public][public][publ
     OID_t prefix;
     } 	PrefixTableEntry;
 
-typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL_drsuapi_0008
+typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL_drsuapi_0008
     {
     /* [range] */ DWORD PrefixCount;
     /* [size_is] */ PrefixTableEntry *pPrefixEntry;
@@ -118,7 +118,7 @@ typedef /* [public][public][public][public][public][public][public][public][publ
 
 typedef ULONG ATTRTYP;
 
-typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL_drsuapi_0009
+typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL_drsuapi_0009
     {
     DWORD dwVersion;
     DWORD dwReserved1;
@@ -236,7 +236,7 @@ typedef /* [public][public][public][public] */ struct __MIDL_drsuapi_0023
     VALUE_META_DATA_EXT_V3 MetaData;
     } 	REPLVALINF_V3;
 
-typedef /* [public][public][public][public][public][public][public][public][public][public] */ struct __MIDL_drsuapi_0024
+typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL_drsuapi_0024
     {
     UCHAR rgTimes[ 84 ];
     } 	REPLTIMES;
@@ -782,22 +782,51 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0072
     ULONG ulMoreFlags;
     } 	DRS_MSG_GETCHGREQ_V10;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0073
+typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL_drsuapi_0073
+    {
+    ULONG ulVersion;
+    ULONG cbByteBuffer;
+    ULONGLONG ullPadding;
+    /* [size_is] */ BYTE rgbBuffer[ 1 ];
+    } 	VAR_SIZE_BUFFER_WITH_VERSION;
+
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0074
+    {
+    UUID uuidDsaObjDest;
+    UUID uuidInvocIdSrc;
+    /* [ref] */ DSNAME *pNC;
+    USN_VECTOR usnvecFrom;
+    /* [unique] */ UPTODATE_VECTOR_V1_EXT *pUpToDateVecDest;
+    ULONG ulFlags;
+    ULONG cMaxObjects;
+    ULONG cMaxBytes;
+    ULONG ulExtendedOp;
+    ULARGE_INTEGER liFsmoInfo;
+    /* [unique] */ PARTIAL_ATTR_VECTOR_V1_EXT *pPartialAttrSet;
+    /* [unique] */ PARTIAL_ATTR_VECTOR_V1_EXT *pPartialAttrSetEx;
+    SCHEMA_PREFIX_TABLE PrefixTableDest;
+    ULONG ulMoreFlags;
+    GUID correlationID;
+    /* [unique] */ VAR_SIZE_BUFFER_WITH_VERSION *pReservedBuffer;
+    } 	DRS_MSG_GETCHGREQ_V11;
+
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0075
     {
     /* [case()] */ DRS_MSG_GETCHGREQ_V4 V4;
     /* [case()] */ DRS_MSG_GETCHGREQ_V5 V5;
     /* [case()] */ DRS_MSG_GETCHGREQ_V7 V7;
     /* [case()] */ DRS_MSG_GETCHGREQ_V8 V8;
     /* [case()] */ DRS_MSG_GETCHGREQ_V10 V10;
+    /* [case()] */ DRS_MSG_GETCHGREQ_V11 V11;
     } 	DRS_MSG_GETCHGREQ;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0074
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0076
     {
     DRS_COMPRESSED_BLOB CompressedV1;
     } 	DRS_MSG_GETCHGREPLY_V2;
 
 typedef /* [public][public][public][public] */ 
-enum __MIDL_drsuapi_0075
+enum __MIDL_drsuapi_0077
     {
         DRS_COMP_ALG_NONE	= 0,
         DRS_COMP_ALG_UNUSED	= 1,
@@ -805,14 +834,14 @@ enum __MIDL_drsuapi_0075
         DRS_COMP_ALG_WIN2K3	= 3
     } 	DRS_COMP_ALG_TYPE;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0076
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0078
     {
     DWORD dwCompressedVersion;
     DRS_COMP_ALG_TYPE CompressionAlg;
     DRS_COMPRESSED_BLOB CompressedAny;
     } 	DRS_MSG_GETCHGREPLY_V7;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0077
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0079
     {
     /* [case()] */ DRS_MSG_GETCHGREPLY_V1 V1;
     /* [case()] */ DRS_MSG_GETCHGREPLY_V2 V2;
@@ -821,7 +850,7 @@ typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0077
     /* [case()] */ DRS_MSG_GETCHGREPLY_V9 V9;
     } 	DRS_MSG_GETCHGREPLY;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0078
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0080
     {
     /* [ref] */ DSNAME *pNC;
     UUID uuidDsaSrc;
@@ -829,12 +858,23 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0078
     ULONG ulOptions;
     } 	DRS_MSG_REPSYNC_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0079
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0081
+    {
+    /* [ref] */ DSNAME *pNC;
+    UUID uuidDsaSrc;
+    /* [string][unique] */ unsigned char *pszDsaSrc;
+    ULONG ulOptions;
+    GUID correlationID;
+    /* [unique] */ VAR_SIZE_BUFFER_WITH_VERSION *pReservedBuffer;
+    } 	DRS_MSG_REPSYNC_V2;
+
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0082
     {
     /* [case()] */ DRS_MSG_REPSYNC_V1 V1;
+    /* [case()] */ DRS_MSG_REPSYNC_V2 V2;
     } 	DRS_MSG_REPSYNC;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0080
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0083
     {
     /* [ref] */ DSNAME *pNC;
     /* [string][ref] */ unsigned char *pszDsaDest;
@@ -842,12 +882,23 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0080
     ULONG ulOptions;
     } 	DRS_MSG_UPDREFS_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0081
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0084
+    {
+    /* [ref] */ DSNAME *pNC;
+    /* [string][ref] */ unsigned char *pszDsaSrcpszDsaDest;
+    UUID uuidDsaObjDest;
+    ULONG ulOptions;
+    GUID correlationID;
+    /* [unique] */ VAR_SIZE_BUFFER_WITH_VERSION *pReservedBuffer;
+    } 	DRS_MSG_UPDREFS_V2;
+
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0085
     {
     /* [case()] */ DRS_MSG_UPDREFS_V1 V1;
+    /* [case()] */ DRS_MSG_UPDREFS_V2 V2;
     } 	DRS_MSG_UPDREFS;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0082
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0086
     {
     /* [ref] */ DSNAME *pNC;
     /* [string][ref] */ unsigned char *pszDsaSrc;
@@ -855,7 +906,7 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0082
     ULONG ulOptions;
     } 	DRS_MSG_REPADD_V1;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0083
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0087
     {
     /* [ref] */ DSNAME *pNC;
     /* [unique] */ DSNAME *pSourceDsaDN;
@@ -865,25 +916,38 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0083
     ULONG ulOptions;
     } 	DRS_MSG_REPADD_V2;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0084
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0088
+    {
+    /* [ref] */ DSNAME *pNC;
+    /* [unique] */ DSNAME *pSourceDsaDN;
+    /* [unique] */ DSNAME *pTransportDN;
+    /* [string][ref] */ unsigned char *pszSourceDsaAddress;
+    REPLTIMES rtSchedule;
+    ULONG ulOptions;
+    GUID correlationID;
+    /* [unique] */ VAR_SIZE_BUFFER_WITH_VERSION *pReservedBuffer;
+    } 	DRS_MSG_REPADD_V3;
+
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0089
     {
     /* [case()] */ DRS_MSG_REPADD_V1 V1;
     /* [case()] */ DRS_MSG_REPADD_V2 V2;
+    /* [case()] */ DRS_MSG_REPADD_V3 V3;
     } 	DRS_MSG_REPADD;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0085
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0090
     {
     /* [ref] */ DSNAME *pNC;
     /* [string] */ unsigned char *pszDsaSrc;
     ULONG ulOptions;
     } 	DRS_MSG_REPDEL_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0086
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0091
     {
     /* [case()] */ DRS_MSG_REPDEL_V1 V1;
     } 	DRS_MSG_REPDEL;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0087
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0092
     {
     /* [ref] */ DSNAME *pNC;
     UUID uuidSourceDRA;
@@ -894,12 +958,12 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0087
     ULONG ulOptions;
     } 	DRS_MSG_REPMOD_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0088
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0093
     {
     /* [case()] */ DRS_MSG_REPMOD_V1 V1;
     } 	DRS_MSG_REPMOD;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0089
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0094
     {
     DWORD dwFlags;
     /* [range] */ DWORD cNames;
@@ -908,12 +972,12 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0089
     SCHEMA_PREFIX_TABLE PrefixTable;
     } 	DRS_MSG_VERIFYREQ_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0090
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0095
     {
     /* [case()] */ DRS_MSG_VERIFYREQ_V1 V1;
     } 	DRS_MSG_VERIFYREQ;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0091
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0096
     {
     DWORD error;
     /* [range] */ DWORD cNames;
@@ -921,13 +985,13 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0091
     SCHEMA_PREFIX_TABLE PrefixTable;
     } 	DRS_MSG_VERIFYREPLY_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0092
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0097
     {
     /* [case()] */ DRS_MSG_VERIFYREPLY_V1 V1;
     } 	DRS_MSG_VERIFYREPLY;
 
 typedef /* [public][public] */ 
-enum __MIDL_drsuapi_0093
+enum __MIDL_drsuapi_0098
     {
         RevMembGetGroupsForUser	= 1,
         RevMembGetAliasMembership	= ( RevMembGetGroupsForUser + 1 ) ,
@@ -938,7 +1002,7 @@ enum __MIDL_drsuapi_0093
         RevMembGlobalGroupsNonTransitive	= ( GroupMembersTransitive + 1 ) 
     } 	REVERSE_MEMBERSHIP_OPERATION_TYPE;
 
-typedef /* [public][public][public][public][public][public] */ struct __MIDL_drsuapi_0094
+typedef /* [public][public][public][public][public][public] */ struct __MIDL_drsuapi_0099
     {
     /* [range] */ ULONG cDsNames;
     /* [size_is][size_is] */ DSNAME **ppDsNames;
@@ -947,12 +1011,12 @@ typedef /* [public][public][public][public][public][public] */ struct __MIDL_drs
     DSNAME *pLimitingDomain;
     } 	DRS_MSG_REVMEMB_REQ_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0095
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0100
     {
     /* [case()] */ DRS_MSG_REVMEMB_REQ_V1 V1;
     } 	DRS_MSG_REVMEMB_REQ;
 
-typedef /* [public][public][public][public][public][public] */ struct __MIDL_drsuapi_0096
+typedef /* [public][public][public][public][public][public] */ struct __MIDL_drsuapi_0101
     {
     ULONG errCode;
     /* [range] */ ULONG cDsNames;
@@ -962,12 +1026,12 @@ typedef /* [public][public][public][public][public][public] */ struct __MIDL_drs
     /* [size_is][size_is] */ NT4SID **ppSidHistory;
     } 	DRS_MSG_REVMEMB_REPLY_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0097
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0102
     {
     /* [case()] */ DRS_MSG_REVMEMB_REPLY_V1 V1;
     } 	DRS_MSG_REVMEMB_REPLY;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0098
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0103
     {
     unsigned char *pSourceDSA;
     ENTINF *pObject;
@@ -976,21 +1040,21 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0098
     ULONG ulFlags;
     } 	DRS_MSG_MOVEREQ_V1;
 
-typedef /* [public][public][public][public] */ struct __MIDL_drsuapi_0099
+typedef /* [public][public][public][public] */ struct __MIDL_drsuapi_0104
     {
     /* [range] */ unsigned long cbBuffer;
     unsigned long BufferType;
     /* [size_is] */ BYTE *pvBuffer;
     } 	DRS_SecBuffer;
 
-typedef /* [public][public][public][public][public][public][public] */ struct __MIDL_drsuapi_0100
+typedef /* [public][public][public][public][public][public][public] */ struct __MIDL_drsuapi_0105
     {
     unsigned long ulVersion;
     /* [range] */ unsigned long cBuffers;
     /* [size_is] */ DRS_SecBuffer *Buffers;
     } 	DRS_SecBufferDesc;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0101
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0106
     {
     DSNAME *pSrcDSA;
     ENTINF *pSrcObject;
@@ -1001,32 +1065,32 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0101
     ULONG ulFlags;
     } 	DRS_MSG_MOVEREQ_V2;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0102
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0107
     {
     /* [case()] */ DRS_MSG_MOVEREQ_V1 V1;
     /* [case()] */ DRS_MSG_MOVEREQ_V2 V2;
     } 	DRS_MSG_MOVEREQ;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0103
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0108
     {
     ENTINF **ppResult;
     SCHEMA_PREFIX_TABLE PrefixTable;
     ULONG *pError;
     } 	DRS_MSG_MOVEREPLY_V1;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0104
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0109
     {
     ULONG win32Error;
     /* [unique] */ DSNAME *pAddedName;
     } 	DRS_MSG_MOVEREPLY_V2;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0105
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0110
     {
     /* [case()] */ DRS_MSG_MOVEREPLY_V1 V1;
     /* [case()] */ DRS_MSG_MOVEREPLY_V2 V2;
     } 	DRS_MSG_MOVEREPLY;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0106
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0111
     {
     ULONG CodePage;
     ULONG LocaleId;
@@ -1037,22 +1101,22 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0106
     /* [size_is][string] */ WCHAR **rpNames;
     } 	DRS_MSG_CRACKREQ_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0107
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0112
     {
     /* [case()] */ DRS_MSG_CRACKREQ_V1 V1;
     } 	DRS_MSG_CRACKREQ;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0108
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0113
     {
     DS_NAME_RESULTW *pResult;
     } 	DRS_MSG_CRACKREPLY_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0109
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0114
     {
     /* [case()] */ DRS_MSG_CRACKREPLY_V1 V1;
     } 	DRS_MSG_CRACKREPLY;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0110
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0115
     {
     DWORD dwFlags;
     DWORD PreferredMaximumLength;
@@ -1060,12 +1124,12 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0110
     /* [size_is] */ BYTE *pRestart;
     } 	DRS_MSG_NT4_CHGLOG_REQ_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0111
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0116
     {
     /* [case()] */ DRS_MSG_NT4_CHGLOG_REQ_V1 V1;
     } 	DRS_MSG_NT4_CHGLOG_REQ;
 
-typedef /* [public][public][public][public] */ struct __MIDL_drsuapi_0112
+typedef /* [public][public][public][public] */ struct __MIDL_drsuapi_0117
     {
     LARGE_INTEGER SamSerialNumber;
     LARGE_INTEGER SamCreationTime;
@@ -1075,7 +1139,7 @@ typedef /* [public][public][public][public] */ struct __MIDL_drsuapi_0112
     LARGE_INTEGER LsaCreationTime;
     } 	NT4_REPLICATION_STATE;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0113
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0118
     {
     /* [range] */ DWORD cbRestart;
     /* [range] */ DWORD cbLog;
@@ -1085,12 +1149,12 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0113
     /* [size_is] */ BYTE *pLog;
     } 	DRS_MSG_NT4_CHGLOG_REPLY_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0114
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0119
     {
     /* [case()] */ DRS_MSG_NT4_CHGLOG_REPLY_V1 V1;
     } 	DRS_MSG_NT4_CHGLOG_REPLY;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0115
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0120
     {
     DWORD operation;
     DWORD flags;
@@ -1099,101 +1163,101 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0115
     /* [size_is][string] */ const WCHAR **rpwszSPN;
     } 	DRS_MSG_SPNREQ_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0116
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0121
     {
     /* [case()] */ DRS_MSG_SPNREQ_V1 V1;
     } 	DRS_MSG_SPNREQ;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0117
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0122
     {
     DWORD retVal;
     } 	DRS_MSG_SPNREPLY_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0118
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0123
     {
     /* [case()] */ DRS_MSG_SPNREPLY_V1 V1;
     } 	DRS_MSG_SPNREPLY;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0119
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0124
     {
     /* [string] */ LPWSTR ServerDN;
     /* [string] */ LPWSTR DomainDN;
     BOOL fCommit;
     } 	DRS_MSG_RMSVRREQ_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0120
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0125
     {
     /* [case()] */ DRS_MSG_RMSVRREQ_V1 V1;
     } 	DRS_MSG_RMSVRREQ;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0121
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0126
     {
     BOOL fLastDcInDomain;
     } 	DRS_MSG_RMSVRREPLY_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0122
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0127
     {
     /* [case()] */ DRS_MSG_RMSVRREPLY_V1 V1;
     } 	DRS_MSG_RMSVRREPLY;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0123
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0128
     {
     /* [string] */ LPWSTR DomainDN;
     } 	DRS_MSG_RMDMNREQ_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0124
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0129
     {
     /* [case()] */ DRS_MSG_RMDMNREQ_V1 V1;
     } 	DRS_MSG_RMDMNREQ;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0125
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0130
     {
     DWORD Reserved;
     } 	DRS_MSG_RMDMNREPLY_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0126
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0131
     {
     /* [case()] */ DRS_MSG_RMDMNREPLY_V1 V1;
     } 	DRS_MSG_RMDMNREPLY;
 
-typedef /* [public][public][public][public] */ struct __MIDL_drsuapi_0127
+typedef /* [public][public][public][public] */ struct __MIDL_drsuapi_0132
     {
     /* [string] */ WCHAR *Domain;
     DWORD InfoLevel;
     } 	DRS_MSG_DCINFOREQ_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0128
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0133
     {
     /* [case()] */ DRS_MSG_DCINFOREQ_V1 V1;
     } 	DRS_MSG_DCINFOREQ;
 
-typedef /* [switch_type] */ union __MIDL_drsuapi_0128 *PDRS_MSG_DCINFOREQ;
+typedef /* [switch_type] */ union __MIDL_drsuapi_0133 *PDRS_MSG_DCINFOREQ;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0129
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0134
     {
     /* [range] */ DWORD cItems;
     /* [size_is] */ DS_DOMAIN_CONTROLLER_INFO_1W *rItems;
     } 	DRS_MSG_DCINFOREPLY_V1;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0130
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0135
     {
     /* [range] */ DWORD cItems;
     /* [size_is] */ DS_DOMAIN_CONTROLLER_INFO_2W *rItems;
     } 	DRS_MSG_DCINFOREPLY_V2;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0131
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0136
     {
     /* [range] */ DWORD cItems;
     /* [size_is] */ DS_DOMAIN_CONTROLLER_INFO_3W *rItems;
     } 	DRS_MSG_DCINFOREPLY_V3;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0132
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0137
     {
     /* [range] */ DWORD cItems;
     /* [size_is] */ DS_DOMAIN_CONTROLLER_INFO_FFFFFFFFW *rItems;
     } 	DRS_MSG_DCINFOREPLY_VFFFFFFFF;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0133
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0138
     {
     /* [case()] */ DRS_MSG_DCINFOREPLY_V1 V1;
     /* [case()] */ DRS_MSG_DCINFOREPLY_V2 V2;
@@ -1201,31 +1265,31 @@ typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0133
     /* [case()] */ DRS_MSG_DCINFOREPLY_VFFFFFFFF VFFFFFFFF;
     } 	DRS_MSG_DCINFOREPLY;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0134
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0139
     {
     /* [ref] */ DSNAME *pObject;
     ATTRBLOCK AttrBlock;
     } 	DRS_MSG_ADDENTRYREQ_V1;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0135
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0140
     {
     ENTINFLIST EntInfList;
     } 	DRS_MSG_ADDENTRYREQ_V2;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0136
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0141
     {
     ENTINFLIST EntInfList;
     DRS_SecBufferDesc *pClientCreds;
     } 	DRS_MSG_ADDENTRYREQ_V3;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0137
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0142
     {
     /* [case()] */ DRS_MSG_ADDENTRYREQ_V1 V1;
     /* [case()] */ DRS_MSG_ADDENTRYREQ_V2 V2;
     /* [case()] */ DRS_MSG_ADDENTRYREQ_V3 V3;
     } 	DRS_MSG_ADDENTRYREQ;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0138
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0143
     {
     GUID Guid;
     NT4SID Sid;
@@ -1236,13 +1300,13 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0138
     USHORT problem;
     } 	DRS_MSG_ADDENTRYREPLY_V1;
 
-typedef /* [public][public][public][public][public][public][public] */ struct __MIDL_drsuapi_0139
+typedef /* [public][public][public][public][public][public][public] */ struct __MIDL_drsuapi_0144
     {
     GUID objGuid;
     NT4SID objSid;
     } 	ADDENTRY_REPLY_INFO;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0140
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0145
     {
     /* [unique] */ DSNAME *pErrorObject;
     DWORD errCode;
@@ -1254,19 +1318,19 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0140
     /* [size_is] */ ADDENTRY_REPLY_INFO *infoList;
     } 	DRS_MSG_ADDENTRYREPLY_V2;
 
-typedef /* [public][public][public][public][public] */ struct __MIDL_drsuapi_0141
+typedef /* [public][public][public][public][public] */ struct __MIDL_drsuapi_0146
     {
     DWORD dwRepError;
     DWORD errCode;
     /* [switch_is] */ DIRERR_DRS_WIRE_V1 *pErrInfo;
     } 	DRS_ERROR_DATA_V1;
 
-typedef /* [public][public][public][public][switch_type] */ union __MIDL_drsuapi_0142
+typedef /* [public][public][public][public][switch_type] */ union __MIDL_drsuapi_0147
     {
     /* [case()] */ DRS_ERROR_DATA_V1 V1;
     } 	DRS_ERROR_DATA;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0143
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0148
     {
     DSNAME *pdsErrObject;
     DWORD dwErrVer;
@@ -1275,25 +1339,25 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0143
     /* [size_is] */ ADDENTRY_REPLY_INFO *infoList;
     } 	DRS_MSG_ADDENTRYREPLY_V3;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0144
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0149
     {
     /* [case()] */ DRS_MSG_ADDENTRYREPLY_V1 V1;
     /* [case()] */ DRS_MSG_ADDENTRYREPLY_V2 V2;
     /* [case()] */ DRS_MSG_ADDENTRYREPLY_V3 V3;
     } 	DRS_MSG_ADDENTRYREPLY;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0145
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0150
     {
     DWORD dwTaskID;
     DWORD dwFlags;
     } 	DRS_MSG_KCC_EXECUTE_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0146
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0151
     {
     /* [case()] */ DRS_MSG_KCC_EXECUTE_V1 V1;
     } 	DRS_MSG_KCC_EXECUTE;
 
-typedef /* [public][public][public][public] */ struct __MIDL_drsuapi_0147
+typedef /* [public][public][public][public] */ struct __MIDL_drsuapi_0152
     {
     ULONGLONG hCtx;
     LONG lReferenceCount;
@@ -1304,14 +1368,14 @@ typedef /* [public][public][public][public] */ struct __MIDL_drsuapi_0147
     int pid;
     } 	DS_REPL_CLIENT_CONTEXT;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0148
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0153
     {
     /* [range] */ DWORD cNumContexts;
     DWORD dwReserved;
     /* [size_is] */ DS_REPL_CLIENT_CONTEXT rgContext[ 1 ];
     } 	DS_REPL_CLIENT_CONTEXTS;
 
-typedef /* [public][public][public][public] */ struct __MIDL_drsuapi_0149
+typedef /* [public][public][public][public] */ struct __MIDL_drsuapi_0154
     {
     /* [string] */ LPWSTR pszServerName;
     BOOL fIsHandleBound;
@@ -1323,21 +1387,21 @@ typedef /* [public][public][public][public] */ struct __MIDL_drsuapi_0149
     DWORD dwCallType;
     } 	DS_REPL_SERVER_OUTGOING_CALL;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0150
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0155
     {
     /* [range] */ DWORD cNumCalls;
     DWORD dwReserved;
     /* [size_is] */ DS_REPL_SERVER_OUTGOING_CALL rgCall[ 1 ];
     } 	DS_REPL_SERVER_OUTGOING_CALLS;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0151
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0156
     {
     DWORD InfoType;
     /* [string] */ LPWSTR pszObjectDN;
     UUID uuidSourceDsaObjGuid;
     } 	DRS_MSG_GETREPLINFO_REQ_V1;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0152
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0157
     {
     DWORD InfoType;
     /* [string] */ LPWSTR pszObjectDN;
@@ -1348,13 +1412,13 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0152
     DWORD dwEnumerationContext;
     } 	DRS_MSG_GETREPLINFO_REQ_V2;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0153
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0158
     {
     /* [case()] */ DRS_MSG_GETREPLINFO_REQ_V1 V1;
     /* [case()] */ DRS_MSG_GETREPLINFO_REQ_V2 V2;
     } 	DRS_MSG_GETREPLINFO_REQ;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0154
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0159
     {
     /* [case()] */ DS_REPL_NEIGHBORSW *pNeighbors;
     /* [case()] */ DS_REPL_CURSORS *pCursors;
@@ -1373,7 +1437,7 @@ typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0154
     /* [case()] */ DS_REPL_NEIGHBORSW *pRepsTo;
     } 	DRS_MSG_GETREPLINFO_REPLY;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0155
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0160
     {
     DWORD Flags;
     /* [string] */ WCHAR *SrcDomain;
@@ -1389,56 +1453,56 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0155
     /* [string] */ WCHAR *DstPrincipal;
     } 	DRS_MSG_ADDSIDREQ_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0156
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0161
     {
     /* [case()] */ DRS_MSG_ADDSIDREQ_V1 V1;
     } 	DRS_MSG_ADDSIDREQ;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0157
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0162
     {
     DWORD dwWin32Error;
     } 	DRS_MSG_ADDSIDREPLY_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0158
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0163
     {
     /* [case()] */ DRS_MSG_ADDSIDREPLY_V1 V1;
     } 	DRS_MSG_ADDSIDREPLY;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0159
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0164
     {
     /* [range] */ ULONG Count;
     /* [size_is] */ DRS_MSG_REVMEMB_REQ_V1 *Requests;
     } 	DRS_MSG_GETMEMBERSHIPS2_REQ_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0160
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0165
     {
     /* [case()] */ DRS_MSG_GETMEMBERSHIPS2_REQ_V1 V1;
     } 	DRS_MSG_GETMEMBERSHIPS2_REQ;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0161
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0166
     {
     /* [range] */ ULONG Count;
     /* [size_is] */ DRS_MSG_REVMEMB_REPLY_V1 *Replies;
     } 	DRS_MSG_GETMEMBERSHIPS2_REPLY_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0162
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0167
     {
     /* [case()] */ DRS_MSG_GETMEMBERSHIPS2_REPLY_V1 V1;
     } 	DRS_MSG_GETMEMBERSHIPS2_REPLY;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0163
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0168
     {
     /* [ref] */ DSNAME *pNC;
     UUID uuidDsaSrc;
     ULONG ulOptions;
     } 	DRS_MSG_REPVERIFYOBJ_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0164
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0169
     {
     /* [case()] */ DRS_MSG_REPVERIFYOBJ_V1 V1;
     } 	DRS_MSG_REPVERIFYOBJ;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0165
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0170
     {
     UUID guidStart;
     DWORD cGuids;
@@ -1447,24 +1511,24 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0165
     UCHAR Md5Digest[ 16 ];
     } 	DRS_MSG_EXISTREQ_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0166
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0171
     {
     /* [case()] */ DRS_MSG_EXISTREQ_V1 V1;
     } 	DRS_MSG_EXISTREQ;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0167
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0172
     {
     DWORD dwStatusFlags;
     /* [range] */ DWORD cNumGuids;
     /* [size_is] */ UUID *rgGuids;
     } 	DRS_MSG_EXISTREPLY_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0168
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0173
     {
     /* [case()] */ DRS_MSG_EXISTREPLY_V1 V1;
     } 	DRS_MSG_EXISTREPLY;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0169
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0174
     {
     /* [string] */ const WCHAR *pwszFromSite;
     /* [range] */ DWORD cToSites;
@@ -1472,107 +1536,107 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0169
     DWORD dwFlags;
     } 	DRS_MSG_QUERYSITESREQ_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0170
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0175
     {
     /* [case()] */ DRS_MSG_QUERYSITESREQ_V1 V1;
     } 	DRS_MSG_QUERYSITESREQ;
 
-typedef /* [public][public][public][public] */ struct __MIDL_drsuapi_0171
+typedef /* [public][public][public][public] */ struct __MIDL_drsuapi_0176
     {
     DWORD dwErrorCode;
     DWORD dwCost;
     } 	DRS_MSG_QUERYSITESREPLYELEMENT_V1;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0172
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0177
     {
     /* [range] */ DWORD cToSites;
     /* [size_is] */ DRS_MSG_QUERYSITESREPLYELEMENT_V1 *rgCostInfo;
     DWORD dwFlags;
     } 	DRS_MSG_QUERYSITESREPLY_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0173
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0178
     {
     /* [case()] */ DRS_MSG_QUERYSITESREPLY_V1 V1;
     } 	DRS_MSG_QUERYSITESREPLY;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0174
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0179
     {
     DWORD dwReserved;
     } 	DRS_MSG_INIT_DEMOTIONREQ_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0175
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0180
     {
     /* [case()] */ DRS_MSG_INIT_DEMOTIONREQ_V1 V1;
     } 	DRS_MSG_INIT_DEMOTIONREQ;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0176
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0181
     {
     DWORD dwOpError;
     } 	DRS_MSG_INIT_DEMOTIONREPLY_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0177
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0182
     {
     /* [case()] */ DRS_MSG_INIT_DEMOTIONREPLY_V1 V1;
     } 	DRS_MSG_INIT_DEMOTIONREPLY;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0178
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0183
     {
     DWORD dwFlags;
     UUID uuidHelperDest;
     /* [ref] */ DSNAME *pNC;
     } 	DRS_MSG_REPLICA_DEMOTIONREQ_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0179
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0184
     {
     /* [case()] */ DRS_MSG_REPLICA_DEMOTIONREQ_V1 V1;
     } 	DRS_MSG_REPLICA_DEMOTIONREQ;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0180
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0185
     {
     DWORD dwOpError;
     } 	DRS_MSG_REPLICA_DEMOTIONREPLY_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0181
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0186
     {
     /* [case()] */ DRS_MSG_REPLICA_DEMOTIONREPLY_V1 V1;
     } 	DRS_MSG_REPLICA_DEMOTIONREPLY;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0182
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0187
     {
     DWORD dwOperations;
     UUID uuidHelperDest;
     /* [string] */ LPWSTR szScriptBase;
     } 	DRS_MSG_FINISH_DEMOTIONREQ_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0183
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0188
     {
     /* [case()] */ DRS_MSG_FINISH_DEMOTIONREQ_V1 V1;
     } 	DRS_MSG_FINISH_DEMOTIONREQ;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0184
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0189
     {
     DWORD dwOperationsDone;
     DWORD dwOpFailed;
     DWORD dwOpError;
     } 	DRS_MSG_FINISH_DEMOTIONREPLY_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0185
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0190
     {
     /* [case()] */ DRS_MSG_FINISH_DEMOTIONREPLY_V1 V1;
     } 	DRS_MSG_FINISH_DEMOTIONREPLY;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0186
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0191
     {
     /* [string] */ const WCHAR *pwszCloneDCName;
     /* [string] */ const WCHAR *pwszSite;
     } 	DRS_MSG_ADDCLONEDCREQ_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0187
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0192
     {
     /* [case()] */ DRS_MSG_ADDCLONEDCREQ_V1 V1;
     } 	DRS_MSG_ADDCLONEDCREQ;
 
-typedef /* [public][public][public] */ struct __MIDL_drsuapi_0188
+typedef /* [public][public][public] */ struct __MIDL_drsuapi_0193
     {
     /* [string] */ WCHAR *pwszCloneDCName;
     /* [string] */ WCHAR *pwszSite;
@@ -1580,7 +1644,7 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0188
     /* [size_is] */ WCHAR *pwsNewDCAccountPassword;
     } 	DRS_MSG_ADDCLONEDCREPLY_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0189
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0194
     {
     /* [case()] */ DRS_MSG_ADDCLONEDCREPLY_V1 V1;
     } 	DRS_MSG_ADDCLONEDCREPLY;
@@ -1592,7 +1656,7 @@ typedef struct _DRS_MSG_WRITENGCKEYREQ_V1
     /* [size_is] */ UCHAR *pNgcKey;
     } 	DRS_MSG_WRITENGCKEYREQ_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0190
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0195
     {
     /* [case()] */ DRS_MSG_WRITENGCKEYREQ_V1 V1;
     } 	DRS_MSG_WRITENGCKEYREQ;
@@ -1602,7 +1666,7 @@ typedef struct _DRS_MSG_WRITENGCKEYREPLY_V1
     DWORD retVal;
     } 	DRS_MSG_WRITENGCKEYREPLY_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0191
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0196
     {
     /* [case()] */ DRS_MSG_WRITENGCKEYREPLY_V1 V1;
     } 	DRS_MSG_WRITENGCKEYREPLY;
@@ -1612,7 +1676,7 @@ typedef struct _DRS_MSG_READNGCKEYREQ_V1
     /* [string] */ const WCHAR *pwszAccount;
     } 	DRS_MSG_READNGCKEYREQ_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0192
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0197
     {
     /* [case()] */ DRS_MSG_READNGCKEYREQ_V1 V1;
     } 	DRS_MSG_READNGCKEYREQ;
@@ -1624,7 +1688,7 @@ typedef struct _DRS_MSG_READNGCKEYREPLY_V1
     /* [size_is] */ UCHAR *pNgcKey;
     } 	DRS_MSG_READNGCKEYREPLY_V1;
 
-typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0193
+typedef /* [public][public][switch_type] */ union __MIDL_drsuapi_0198
     {
     /* [case()] */ DRS_MSG_READNGCKEYREPLY_V1 V1;
     } 	DRS_MSG_READNGCKEYREPLY;

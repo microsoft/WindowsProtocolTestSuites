@@ -85,6 +85,9 @@
       <Rule name="Windows Threshold">
         <Category name = "DomainWinThreshold"/>
       </Rule>
+      <Rule name="Windows Server v1803">
+        <Category name = "DomainWinV1803"/>
+      </Rule>
     </Group>
 	</ConfigCaseRule>
 	<TestSetting>Bin\ServerLocalTestRun.testrunconfig</TestSetting>
