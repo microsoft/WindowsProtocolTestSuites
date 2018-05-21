@@ -651,6 +651,31 @@ typedef struct {
     ULONG ulMoreFlags;
 } DRS_MSG_GETCHGREQ_V10;
 
+typedef struct {
+    ULONG ulVersion;
+    ULONG cbByteBuffer;
+    ULONGLONG ullPadding;
+    [size_is(cbByteBuffer)] BYTE rgbBuffer[];
+} VAR_SIZE_BUFFER_WITH_VERSION;
+
+typedef struct {
+    UUID uuidDsaObjDest;
+    UUID uuidInvocIdSrc;
+    [ref] DSNAME *pNC;
+    USN_VECTOR usnvecFrom;
+    [unique] UPTODATE_VECTOR_V1_EXT *pUpToDateVecDest;
+    ULONG ulFlags;
+    ULONG cMaxObjects;
+    ULONG cMaxBytes;
+    ULONG ulExtendedOp;
+    ULARGE_INTEGER liFsmoInfo;
+    [unique] PARTIAL_ATTR_VECTOR_V1_EXT *pPartialAttrSet;
+    [unique] PARTIAL_ATTR_VECTOR_V1_EXT *pPartialAttrSetEx;
+    SCHEMA_PREFIX_TABLE PrefixTableDest;
+    ULONG ulMoreFlags;
+    GUID correlationID;
+    [unique] VAR_SIZE_BUFFER_WITH_VERSION *pReservedBuffer;
+} DRS_MSG_GETCHGREQ_V11;
 
 typedef [switch_type(DWORD)] union {
     [case(4)] DRS_MSG_GETCHGREQ_V4 V4;
@@ -658,6 +683,7 @@ typedef [switch_type(DWORD)] union {
     [case(7)] DRS_MSG_GETCHGREQ_V7 V7;
     [case(8)] DRS_MSG_GETCHGREQ_V8 V8;
     [case(10)] DRS_MSG_GETCHGREQ_V10 V10;
+    [case(11)] DRS_MSG_GETCHGREQ_V11 V11;
 } DRS_MSG_GETCHGREQ;
 
 typedef struct {
@@ -692,9 +718,19 @@ typedef struct {
     ULONG ulOptions;
 } DRS_MSG_REPSYNC_V1;
 
+typedef struct {
+    [ref] DSNAME *pNC;
+    UUID uuidDsaSrc;
+    [unique] [string] char *pszDsaSrc;
+    ULONG ulOptions;
+    GUID correlationID;
+    [unique] VAR_SIZE_BUFFER_WITH_VERSION *pReservedBuffer;
+} DRS_MSG_REPSYNC_V2;
+
 typedef [switch_type(DWORD)] union
 {
     [case(1)] DRS_MSG_REPSYNC_V1 V1;
+    [case(2)] DRS_MSG_REPSYNC_V2 V2;
 } DRS_MSG_REPSYNC;
 
 typedef struct {
@@ -704,8 +740,18 @@ typedef struct {
     ULONG ulOptions;
 } DRS_MSG_UPDREFS_V1;
 
+typedef struct {
+    [ref] DSNAME *pNC;
+    [ref] [string] char *pszDsaSrcpszDsaDest;
+    UUID uuidDsaObjDest;
+    ULONG ulOptions;
+    GUID correlationID;
+    [unique] VAR_SIZE_BUFFER_WITH_VERSION* pReservedBuffer;
+} DRS_MSG_UPDREFS_V2;
+
 typedef [switch_type(DWORD)] union {
     [case(1)] DRS_MSG_UPDREFS_V1 V1;
+    [case(2)] DRS_MSG_UPDREFS_V2 V2;
 } DRS_MSG_UPDREFS;
 
 typedef struct {
@@ -724,9 +770,21 @@ typedef struct {
     ULONG ulOptions;
 } DRS_MSG_REPADD_V2;
 
+typedef struct {
+    [ref] DSNAME *pNC;
+    [unique] DSNAME *pSourceDsaDN;
+    [unique] DSNAME *pTransportDN;
+    [ref] [string] char *pszSourceDsaAddress;
+    REPLTIMES rtSchedule;
+    ULONG ulOptions;
+    GUID correlationID;
+    [unique] VAR_SIZE_BUFFER_WITH_VERSION* pReservedBuffer;
+} DRS_MSG_REPADD_V3;
+
 typedef  [switch_type(DWORD)] union {
     [case(1)] DRS_MSG_REPADD_V1 V1;
     [case(2)] DRS_MSG_REPADD_V2 V2;
+    [case(3)] DRS_MSG_REPADD_V3 V3;
 } DRS_MSG_REPADD;
 
 typedef struct {
