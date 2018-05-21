@@ -275,7 +275,7 @@ The typical scenario sequence is the following:
 
 * SMBD negotiate with peer.
 
-* Establish SMB2 session and open file on SMB 3.02 dialect.
+* Establish SMB2 session and open file on SMB 3.02 or later dialect.
 
 * Register buffer and bind to a memory window for RDMA Read.
 
@@ -573,11 +573,11 @@ In this test suite, there is no requirement captured. So “Requirements covered
 |  **RemoteInvalidation**| | 
 |  **Test ID**|  **BVT_SMB2OverRdma_SMB302_Write_RemoteInvalidation**| 
 |  **Priority**| P0| 
-|  **Description** | Verify server responds with additional descriptor over RDMA to invalidate client’s memory window when receives SMB2 WRITE request with SMB2_CHANNEL_RDMA_V1_INVALIDATE on connection negotiated SMB3.02 dialect.| 
+|  **Description** | Verify server responds with additional descriptor over RDMA to invalidate client’s memory window when receives SMB2 WRITE request with SMB2_CHANNEL_RDMA_V1_INVALIDATE on connection negotiated SMB3.02 or later dialect.| 
 |  **Prerequisites**| N/A| 
 |  **Test Execution Steps**| Connect to server over RDMA.| 
 | | SMBD negotiate with peer.| 
-| | Establish SMB2 session and open file on **SMB 3.02** dialect.| 
+| | Establish SMB2 session and open file on **SMB 3.02** or later dialect.| 
 | | Register buffer and bind to a memory window for RDMA Read.| 
 | | Write file content into registered buffer.| 
 | | Send SMB2 WRITE request using descriptor describes the registered buffer to server with Channel field set to **SMB2_CHANNEL_RDMA_V1_INVALIDATE**.| 
@@ -596,12 +596,12 @@ In this test suite, there is no requirement captured. So “Requirements covered
 |  **RemoteInvalidation**| | 
 |  **Test ID**|  **BVT_SMB2OverRdma_SMB302_Read_RemoteInvalidation**| 
 |  **Priority**| P0| 
-|  **Description** | Verify server responds with additional descriptor over RDMA to invalidate client’s memory window when receives SMB2 READ request with SMB2_CHANNEL_RDMA_V1_INVALIDATE on connection negotiated SMB3.02 dialect.| 
+|  **Description** | Verify server responds with additional descriptor over RDMA to invalidate client’s memory window when receives SMB2 READ request with SMB2_CHANNEL_RDMA_V1_INVALIDATE on connection negotiated SMB3.02 or later dialect.| 
 |  **Prerequisites**| N/A| 
 |  **Test Execution Steps**| Create a file on server with random content for read| 
 | | Connect to server over RDMA.| 
 | | SMBD negotiate with peer.| 
-| | Establish SMB2 session and open file on **SMB 3.02** dialect.| 
+| | Establish SMB2 session and open file on **SMB 3.02** or later dialect.| 
 | | Register buffer and bind to a memory window for RDMA Write.| 
 | | Send SMB2 READ request to server using descriptor describes the registered buffer with Channel field set to **SMB2_CHANNEL_RDMA_V1_INVALIDATE**.| 
 | | Verify the SMB2 READ success.| 
@@ -1680,11 +1680,11 @@ In this test suite, there is no requirement captured. So “Requirements covered
 |  **RemoteInvalidation**| | 
 |  **Test ID**|  **SMB2OverRdma_SMB302_Write_NoRemoteInvalidation**| 
 |  **Priority**| P0| 
-|  **Description** | Verify server still responds correctly when receives SMB2 WRITE request with SMB2_CHANNEL_RDMA_V1 on connection negotiated SMB3.02 dialect.| 
+|  **Description** | Verify server still responds correctly when receives SMB2 WRITE request with SMB2_CHANNEL_RDMA_V1 on connection negotiated SMB3.02 or later dialect.| 
 |  **Prerequisites**| N/A| 
 |  **Test Execution Steps**| Connect to server over RDMA.| 
 | | SMBD negotiate with peer.| 
-| | Establish SMB2 session and open file on **SMB 3.02** dialect.| 
+| | Establish SMB2 session and open file on **SMB 3.02** or later dialect.| 
 | | Register buffer and bind to a memory window for RDMA Read.| 
 | | Write file content into registered buffer.| 
 | | Send SMB2 WRITE request to server using descriptor describes the registered buffer with Channel field set to **SMB2_CHANNEL_RDMA_V1**.| 
@@ -1700,12 +1700,12 @@ In this test suite, there is no requirement captured. So “Requirements covered
 |  **RemoteInvalidation**| | 
 |  **Test ID**|  **SMB2OverRdma_SMB302_Read_NoRemoteInvalidation**| 
 |  **Priority**| P0| 
-|  **Description** | Verify server still responds correctly when receives SMB2 READ request with SMB2_CHANNEL_RDMA_V1 on connection negotiated SMB3.02 dialect.| 
+|  **Description** | Verify server still responds correctly when receives SMB2 READ request with SMB2_CHANNEL_RDMA_V1 on connection negotiated SMB3.02 or later dialect.| 
 |  **Prerequisites**| N/A| 
 |  **Test Execution Steps**|  _Create a file on server with random content for read_| 
 | | Connect to server over RDMA.| 
 | | SMBD negotiate with peer.| 
-| | Establish SMB2 session and open file on **SMB 3.02** dialect.| 
+| | Establish SMB2 session and open file on **SMB 3.02** or later dialect.| 
 | | Register buffer and bind to a memory window for RDMA Write.| 
 | | Send SMB2 READ request to server using descriptor describes the registered buffer with Channel field set to **SMB2_CHANNEL_RDMA_V1**.| 
 | | Verify the SMB2 READ success.| 
@@ -1720,11 +1720,11 @@ In this test suite, there is no requirement captured. So “Requirements covered
 |  **RemoteInvalidation**| | 
 |  **Test ID**|  **SMB2OverRdma_SMB300_Write_RemoteInvalidation**| 
 |  **Priority**| P0| 
-|  **Description** | Verify server responds without additional descriptor to invalidate client’s memory window when receives SMB2 WRITE request with SMB2_CHANNEL_RDMA_V1_INVALIDATE on connection negotiated SMB3.00 dialect.| 
+|  **Description** | Verify server responds without additional descriptor to invalidate client’s memory window when receives SMB2 WRITE request with SMB2_CHANNEL_RDMA_V1_INVALIDATE on connection negotiated SMB3.0 or later dialect.| 
 |  **Prerequisites**| N/A| 
 |  **Test Execution Steps**| Connect to server over RDMA.| 
 | | SMBD negotiate with peer.| 
-| | Establish SMB2 session and open file on **SMB 3.00** dialect.| 
+| | Establish SMB2 session and open file on **SMB 3.0** or later dialect.| 
 | | Register buffer and bind to a memory window for RDMA Read.| 
 | | Write file content into registered buffer.| 
 | | Send SMB2 WRITE request to server using descriptor describes the registered buffer with Channel field set to **SMB2_CHANNEL_RDMA_V1_INVALIDATE**.| 
@@ -1745,12 +1745,12 @@ In this test suite, there is no requirement captured. So “Requirements covered
 |  **RemoteInvalidation**| | 
 |  **Test ID**|  **SMB2OverRdma_SMB300_Read_RemoteInvalidation**| 
 |  **Priority**| P0| 
-|  **Description** | Verify server responds without additional descriptor to invalidate client’s memory window when receives SMB2 READ request with SMB2_CHANNEL_RDMA_V1_INVALIDATE on connection negotiated SMB3.00 dialect.| 
+|  **Description** | Verify server responds without additional descriptor to invalidate client’s memory window when receives SMB2 READ request with SMB2_CHANNEL_RDMA_V1_INVALIDATE on connection negotiated SMB3.0 or later dialect.| 
 |  **Prerequisites**| N/A| 
 |  **Test Execution Steps**|  _Create a file on server with random content for read_| 
 | | Connect to server over RDMA.| 
 | | SMBD negotiate with peer.| 
-| | Establish SMB2 session and open file on **SMB 3.00** dialect.| 
+| | Establish SMB2 session and open file on **SMB 3.0** or later dialect.| 
 | | Register buffer and bind to a memory window for RDMA Write.| 
 | | Send SMB2 READ request to server using descriptor describes the registered buffer with Channel field set to **SMB2_CHANNEL_RDMA_V1_INVALIDATE**.| 
 | | Verify the SMB2 READ success.| 
