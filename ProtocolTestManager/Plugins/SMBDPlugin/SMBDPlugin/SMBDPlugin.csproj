@@ -36,9 +36,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma">
-      <HintPath>..\..\..\..\ProtoSDK\RDMA\x64\Debug\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Management" />
@@ -135,6 +132,10 @@
     <ProjectReference Include="..\..\..\..\ProtoSDK\MS-SMBD\Smbd.csproj">
       <Project>{C07058FA-1891-46E6-B4AF-7F38DD6BD7AD}</Project>
       <Name>Smbd</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\RDMA\Rdma.vcxproj">
+      <Project>{94267900-7f95-48db-aac4-adff00492bf5}</Project>
+      <Name>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\ProtoSDK\Sspi\Sspi.csproj">
       <Project>{d0cb354b-2cd3-49c1-8eca-2f6ebadbccee}</Project>
