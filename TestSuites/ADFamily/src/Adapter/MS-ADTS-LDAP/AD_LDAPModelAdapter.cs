@@ -4190,9 +4190,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     switch (currentWorkingDC.OSVersion)
                     {
                         case ServerVersion.NonWin:
-                        case ServerVersion.Winv1803:
-                            partitionsEntry.Properties["msDS-Behavior-Version"].Value = 8;
-                            break;
                         case ServerVersion.Win2016:
                             partitionsEntry.Properties["msDS-Behavior-Version"].Value = 7;
                             break;
@@ -4809,9 +4806,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             switch (currentWorkingDC.OSVersion)
             {
                 case ServerVersion.NonWin:
-                case ServerVersion.Winv1803:
-                    partitionsEntry.Properties["msDS-Behavior-Version"].Value = 8;
-                    break;
                 case ServerVersion.Win2016:
                     partitionsEntry.Properties["msDS-Behavior-Version"].Value = 7;
                     break;
