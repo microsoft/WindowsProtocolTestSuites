@@ -46,6 +46,10 @@ SET TestCategorys="((TestCategory=RDP7.0|TestCategory=RDP7.1|TestCategory=RDP8.0
 )
 
 IF "%RDPVersion%" == "10.4" (
+SET TestCategorys="((TestCategory=RDP7.0|TestCategory=RDP7.1|TestCategory=RDP8.0|TestCategory=RDP8.1|TestCategory=RDP10.0|TestCategory=RDP10.1|TestCategory=RDP10.2|TestCategory=RDP10.3|TestCategory=RDP10.4)&(%CommonCategorys:~1,-1%))"
+)
+
+IF "%RDPVersion%" == "10.5" (
 SET TestCategorys="(%CommonCategorys:~1,-1%)"
 )
 
