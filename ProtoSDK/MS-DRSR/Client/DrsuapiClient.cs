@@ -321,7 +321,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 
         /// <summary>
-        /// To create a request message of DRS_MSG_REPSYNC.
+        /// To create a request message of DRS_MSG_REPSYNC V1.
         /// </summary>
         /// <param name="pNC">The DSName of the specified NC.</param>
         /// <param name="sourceDsaGuid">The source DSA GUID.</param>
@@ -329,7 +329,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
         /// <param name="options">The DRS_OPTIONS flags.</param>
         /// <returns> the created RPC input parameter.</returns>
         [CLSCompliant(false)]
-        public DRS_MSG_REPSYNC CreateReplicaSyncRequest(
+        public DRS_MSG_REPSYNC_V1 CreateReplicaSyncRequestV1(
             DSNAME? pNC,
             Guid sourceDsaGuid,
             string sourceDsaName,
@@ -340,11 +340,24 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
             message.uuidDsaSrc = sourceDsaGuid;
             message.pszDsaSrc = sourceDsaName;
             message.ulOptions = (uint)options;
+            return message;
+        }
 
-            DRS_MSG_REPSYNC request = new DRS_MSG_REPSYNC();
-            request.V1 = message;
-
-            return request;
+        /// <summary>
+        /// To create a request message of DRS_MSG_REPSYNC V2.
+        /// </summary>
+        /// <param name="v1">The request message of DRS_MSG_REPSYNC V1.</param>
+        /// <returns> the created RPC input parameter.</returns>
+        public DRS_MSG_REPSYNC_V2 CreateReplicaSyncRequestV2(
+            DRS_MSG_REPSYNC_V1 v1
+            )
+        {
+            DRS_MSG_REPSYNC_V2 message = new DRS_MSG_REPSYNC_V2();
+            message.pNC = v1.pNC;
+            message.uuidDsaSrc = v1.uuidDsaSrc;
+            message.pszDsaSrc = v1.pszDsaSrc;
+            message.ulOptions = v1.ulOptions;
+            return message;
         }
 
         /// <summary>
@@ -710,15 +723,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
         /// <summary>
         /// GetNCChangesRequest on Windows Server 2008 R2 RPC replication
         /// </summary>
-        /// <param name="V5">superset of the message</param>
-        /// <param name="rgPartialAttr_pPartialAttrSet">attribtues of pPartialAttrSet
-        /// A set of one or more attributes whose values are to be replicated to the 
-        /// client's partial replica, or null if the client has a full replica</param>
-        /// <param name="rgPartialAttr_pPartialAttrSetEx">attribtues of pPartialAttrSetEx
-        /// A set of one or more attributes whose values are to be added to the
-        /// client's existing partial replica, or null</param>
-        /// <param name="pPrefixEntry">Prefix table with which to convert 
-        /// the ATTRTYP values in pPartialAttrSet and pPartialAttrSetEx to OIDs</param>
+        /// <param name="V8">superset of the message</param>
         /// <param name="ulMoreFlags">A DRS_MORE_GETCHGREQ_OPTIONS bit field </param>
         /// <returns>DRS_MSG_GETCHGREQ ChangesRequest message on Windows Server 2008 R2 RPC replication</returns>
         [CLSCompliant(false)]
@@ -751,10 +756,44 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
             return request;
         }
 
+        /// <summary>
+        /// GetNCChangesRequest on Windows Server 2008 R2 RPC replication
+        /// </summary>
+        /// <param name="V10">superset of the message</param>
+        /// <param name="ulMoreFlags">A DRS_MORE_GETCHGREQ_OPTIONS bit field </param>
+        /// <returns>DRS_MSG_GETCHGREQ ChangesRequest message on Windows Server v1803 operating system RPC replication</returns>
+        [CLSCompliant(false)]
+        public DRS_MSG_GETCHGREQ CreateDRSGetNCChangesRequestV11(
+            DRS_MSG_GETCHGREQ_V10 V10,
+            uint ulMoreFlags
+        )
+        {
+            DRS_MSG_GETCHGREQ_V11 message = new DRS_MSG_GETCHGREQ_V11();
+            message.uuidDsaObjDest = V10.uuidDsaObjDest;
+            message.uuidInvocIdSrc = V10.uuidInvocIdSrc;
+            message.pNC = V10.pNC;
+            message.usnvecFrom = V10.usnvecFrom;
+            message.pUpToDateVecDest = V10.pUpToDateVecDest;
+            message.ulFlags = V10.ulFlags;
+            message.cMaxObjects = V10.cMaxObjects;
+            message.cMaxBytes = V10.cMaxBytes;
+            message.ulExtendedOp = V10.ulExtendedOp;
+            message.liFsmoInfo = V10.liFsmoInfo;
 
+            message.pPartialAttrSet = V10.pPartialAttrSet;
+            message.pPartialAttrSetEx = V10.pPartialAttrSetEx;
+            message.PrefixTableDest = V10.PrefixTableDest;
+
+            message.ulMoreFlags = ulMoreFlags;
+
+            DRS_MSG_GETCHGREQ request = new DRS_MSG_GETCHGREQ();
+            request.V11 = message;
+
+            return request;
+        }
 
         /// <summary>
-        /// To create a request message of DRS_MSG_UPDREFS.
+        /// To create a request message of DRS_MSG_UPDREFS V1.
         /// </summary>
         /// <param name="ncReplicaDistinguishedName">the object's distinguishedName attribute of the root of an NC
         /// replica on the server.</param>
@@ -770,7 +809,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
         /// returned struct. So the caller is responsible for free the memory by calling FreeHGlobal when the returned
         /// struct is no longer needed. </returns>
         [CLSCompliant(false)]
-        public DRS_MSG_UPDREFS CreateUpdateRefsRequest(
+        public DRS_MSG_UPDREFS_V1 CreateUpdateRefsRequestV1(
             string ncReplicaDistinguishedName,
             Guid ncReplicaObjectGuid,
             string ncReplicaObjectSid,
@@ -784,12 +823,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
             message.uuidDsaObjDest = destDsaGuid;
             message.ulOptions = (uint)options;
 
-            DRS_MSG_UPDREFS request = new DRS_MSG_UPDREFS();
-            request.V1 = message;
-
-            return request;
+            return message;
         }
 
+        /// <summary>
+        /// To create a request message of DRS_MSG_UPDREFS V2.
+        /// </summary>
+        /// <returns> the created RPC input parameter.
+        /// Marshal.StringToHGlobalAnsi is used to allocate the unmanaged memory required for the pszDsaDest of the 
+        /// returned struct. So the caller is responsible for free the memory by calling FreeHGlobal when the returned
+        /// struct is no longer needed. </returns>
+        [CLSCompliant(false)]
+        public DRS_MSG_UPDREFS_V2 CreateUpdateRefsRequestV2(
+            DRS_MSG_UPDREFS_V1 v1)
+        {
+            DRS_MSG_UPDREFS_V2 message = new DRS_MSG_UPDREFS_V2();
+            message.pNC = v1.pNC;
+            message.pszDsaDest = v1.pszDsaDest;
+            message.uuidDsaObjDest = v1.uuidDsaObjDest;
+            message.ulOptions = (uint)v1.ulOptions;
+            return message;
+        }
 
         /// <summary>
         /// To create a V1 request message of DRS_MSG_REPADD.
@@ -890,6 +944,36 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
         }
 
 
+        [CLSCompliant(false)]
+        public DRS_MSG_REPADD CreateReplicaAddV3Request(
+            string ncReplicaDistinguishedName,
+            Guid ncReplicaObjectGuid,
+            string ncReplicaObjectSid,
+            string sourceDsaDistinguishedName,
+            Guid sourceDsaObjectGuid,
+            string sourceDsaObjectSid,
+            string transportDistinguishedName,
+            Guid transportObjectGuid,
+            string transportObjectSid,
+            string sourceDsaName,
+            REPLTIMES schedule,
+            DRS_OPTIONS options)
+        {
+            DRS_MSG_REPADD_V3 message = new DRS_MSG_REPADD_V3();
+            message.pNC = CreateDsName(ncReplicaDistinguishedName, ncReplicaObjectGuid, ncReplicaObjectSid);
+            message.pSourceDsaDN = CreateDsName(
+                sourceDsaDistinguishedName, sourceDsaObjectGuid, sourceDsaObjectSid);
+            message.pTransportDN = CreateDsName(
+                transportDistinguishedName, transportObjectGuid, transportObjectSid);
+            message.pszSourceDsaAddress = sourceDsaName;
+            message.rtSchedule = schedule;
+            message.ulOptions = (uint)options;
+
+            DRS_MSG_REPADD request = new DRS_MSG_REPADD();
+            request.V3 = message;
+
+            return request;
+        }
         /// <summary>
         /// To create a request message of DRS_MSG_REPDEL.
         /// </summary>
@@ -2722,7 +2806,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
             ///V5:  Version 5 request (Windows 2000 RPC replication).
             ///V7:  Version 7 request (Windows Server 2003 SMTP replication [MS-SRPL]).
             ///V8:  Version 8 request (Windows Server 2003 RPC replication).
-            ///V10:  Version 10 request (Windows Server 2008 R2 RPC replication).
+            ///V10: Version 10 request (Windows Server 2008 R2 RPC replication).
+            ///V11: Version 11 request (Windows Server v1803 operating system RPC replication).
             ///</summary>
 
 
