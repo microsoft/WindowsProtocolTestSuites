@@ -19,7 +19,6 @@
           DS_BEHAVIOR_WIN2012 = 5
           DS_BEHAVIOR_WIN2012R2 = 6
           DS_BEHAVIOR_WINTHRESHOLD = 7
-          DS_BEHAVIOR_WINv1803 = 8
         </Description>
       </Property>
       <Property name="DomainAdminGroup" value="Domain Admins">
@@ -114,7 +113,7 @@
         <Description>Type:string! Usage: The IP address of read-only DC.</Description>
       </Property>
       <Property name="RODC.OSVersion" value="Win2016">
-        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2, Win2016, NonWin</Description>
+        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2, Win2016, Winv1803, NonWin</Description>
       </Property>
       <!-- END - RODC -->
       <!-- START - CDC -->
@@ -135,7 +134,7 @@
         <Description>Type:string! Usage: The IP address of child DC.</Description>
       </Property>
       <Property name="CDC.OSVersion" value="Win2016">
-        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2, Win2016, NonWin</Description>
+        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2, Win2016, Winv1803, NonWin</Description>
       </Property>
       <!-- END - CDC -->
       <!-- START - TDC -->
@@ -156,7 +155,7 @@
         <Description>Type:string! Usage: The IP address of trusted DC.</Description>
       </Property>
       <Property name="TDC.OSVersion" value="Win2016">
-        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2, Win2016, NonWin</Description>
+        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2, Win2016, Winv1803, NonWin</Description>
       </Property>
       <!-- END - TDC -->
       <!-- START - DM -->

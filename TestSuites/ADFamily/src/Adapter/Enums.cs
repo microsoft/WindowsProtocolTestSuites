@@ -68,11 +68,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Common
         /// Windows Threshold
         /// </summary>
         DS_BEHAVIOR_WINTHRESHOLD = 7,
-
-        /// <summary>
-        /// Windows Server v1803
-        /// </summary>
-        DS_BEHAVIOR_WINv1803 = 8,
     }
 
     /// <summary>
