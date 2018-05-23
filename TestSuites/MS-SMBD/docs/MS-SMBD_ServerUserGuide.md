@@ -145,9 +145,9 @@ All of the following software must be installed on the driver computer before in
 
 |  **Required Software** | 
 | ------------- |
-|  **Microsoft® Visual Studio® 2013** | 
+|  **Microsoft® Visual Studio® 2012** | 
 |      ![image3.png](./image/MS-SMBD_ServerUserGuide/image3.png)Note| 
-|            Download Visual Studio Ultimate 2013| 
+|            Download Visual Studio Ultimate 2012| 
 | **Microsoft Protocol Test Framework**| 
 | Microsoft Protocol Test Framework is a common framework to support protocol test suite. | 
 | ![image2.png](./image/MS-SMBD_ServerUserGuide/image2.png)Note| 
@@ -438,6 +438,7 @@ Here we list the RDMA adapter we tested.
 | &#32;| &#32;| &#32; |
 | -------------| -------------| ------------- |
 | Manufacturer| Model| Driver| 
-| Mellanox| ConnectX-2 IPoIB| [WinOF v4.70](http://www.mellanox.com/page/products_dyn?product_family=32&mtag=windows_sw_drivers)| 
+| Chelsio | T580-LP-CR| [Unified Wire v6.0.19.0](https://service.chelsio.com/downloads/Microsoft/)|
+| Mellanox| ConnectX-2 IPoIB| [WinOF v5.35](http://www.mellanox.com/page/products_dyn?product_family=32&mtag=windows_sw_drivers)| 
 |  |  |  | 
 
