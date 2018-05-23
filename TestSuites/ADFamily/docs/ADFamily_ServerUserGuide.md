@@ -886,7 +886,7 @@ Run the following command in PowerShell window:
 
 #### <a name="_Toc426644941"/>Set DFS Replication Debug Log Level to 5 (MAX)
 Run the following command in PowerShell window:
-**wmic /namespace:\\root\microsoftdfs path dfsrmachineconfig set debuglogseverity=5** 
+**wmic /namespace:\\\\root\microsoftdfs path dfsrmachineconfig set debuglogseverity=5** 
 
 #### <a name="_Toc426644942"/>Install IIS
 Run the following command in PowerShell window:
