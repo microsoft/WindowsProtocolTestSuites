@@ -20,4 +20,4 @@ if not defined vspath (
 	)
 )
 
-%vspath%"..\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" "..\bin\AD_ServerTestSuite.dll" /Settings:..\bin\Serverlocaltestrun.testrunconfig /TestCaseFilter:"TestCategory!=Winv1803&FullyQualifiedName~Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr" /Logger:trx
+%vspath%"..\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" "..\bin\AD_ServerTestSuite.dll" /Settings:..\bin\Serverlocaltestrun.testrunconfig /Tests:"Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr" /Logger:trx

@@ -68,11 +68,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Common
         /// Windows Threshold
         /// </summary>
         DS_BEHAVIOR_WINTHRESHOLD = 7,
-
-        /// <summary>
-        /// Windows Server v1803
-        /// </summary>
-        DS_BEHAVIOR_WINv1803 = 8,
     }
 
     /// <summary>
@@ -87,6 +82,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Common
         Win2012 = 8,
         Win2012R2 = 9,
         Win2016 = 10,
+        Winv1803 = 11,
         NonWin = 100, // suppose non-windows support all windows features
     }
 
