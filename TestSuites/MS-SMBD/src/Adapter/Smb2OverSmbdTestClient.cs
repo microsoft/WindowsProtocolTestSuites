@@ -8,6 +8,7 @@ using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
 
 
@@ -281,6 +282,16 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
             uint status;
             NEGOTIATE_Response negotiateResponse;
             clientGuid = Guid.NewGuid();
+
+            PreauthIntegrityHashID[] preauthHashAlgs = null;
+            EncryptionAlgorithm[] encryptionAlgs = null;
+            if (requestDialects.Contains(DialectRevision.Smb311))
+            {
+                // initial negotiation context for SMB 3.1.1 dialect
+                preauthHashAlgs = new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 };
+                encryptionAlgs = new EncryptionAlgorithm[] { EncryptionAlgorithm.ENCRYPTION_AES128_CCM, EncryptionAlgorithm.ENCRYPTION_AES128_GCM };
+            }
+
             status = this.Negotiate(
                 1,
                 1,
@@ -293,7 +304,10 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
                 out selectedDialect,
                 out this.gssToken,
                 out packetHeader,
-                out negotiateResponse
+                out negotiateResponse,
+                0,
+                preauthHashAlgs,
+                encryptionAlgs
                 );
 
             this.Smb2MaxReadSize = negotiateResponse.MaxReadSize;

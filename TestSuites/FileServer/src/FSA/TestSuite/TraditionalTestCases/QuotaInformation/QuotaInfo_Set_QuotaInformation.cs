@@ -17,6 +17,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetQuotaInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Try to set QuotaInformation to the Quota file and check if Quota is supported.")]
         public void QuotaInfo_Set_QuotaInformation_IsQuotaInfoSupported()
         {

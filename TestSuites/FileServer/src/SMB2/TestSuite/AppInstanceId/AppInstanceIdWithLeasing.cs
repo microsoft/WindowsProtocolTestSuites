@@ -22,7 +22,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         #region Test Case
         [TestMethod]
         [TestCategory(TestCategories.Smb30)]
-        [TestCategory(TestCategories.CombinedFeature)]
+        [TestCategory(TestCategories.CombinedFeatureNonClusterRequired)]
         [TestCategory(TestCategories.Positive)]
         [Description("Operate file with lease before client failover and expect no lease state is maintained after client failover.")]
         public void AppInstanceId_FileLeasing_NoLeaseInReOpen()
@@ -43,7 +43,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Smb30)]
-        [TestCategory(TestCategories.CombinedFeature)]
+        [TestCategory(TestCategories.CombinedFeatureNonClusterRequired)]
         [TestCategory(TestCategories.Positive)]
         [Description("Operate file with lease before client failover and expect no lease state is maintained after client failover.")]
         public void AppInstanceId_DirectoryLeasing_NoLeaseInReOpen()

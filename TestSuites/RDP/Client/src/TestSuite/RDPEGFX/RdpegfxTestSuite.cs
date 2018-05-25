@@ -61,9 +61,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening with transport protocol: {0}", transportProtocol.ToString());
             this.rdpbcgrAdapter.StartRDPListening(transportProtocol);
 
-            
         }
-       
+
         protected override void TestCleanup()
         {
             // TestCleanup() may be not main thread
@@ -129,7 +128,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             }
             this.rdpbcgrAdapter.EstablishRDPConnection(selectedProtocol, enMethod, enLevel, true, false, rdpServerVersion, flags, true, isSoftSync);
 
-            if(isSoftSync)
+            if (isSoftSync)
             {
                 Site.Assert.IsTrue(this.rdpbcgrAdapter.SessionContext.MultitransportTypeFlagsInMCSConnectIntialPdu.HasFlag(MULTITRANSPORT_TYPE_FLAGS.SOFTSYNC_TCP_TO_UDP),
                    "Client Should support Soft-Sync, flags: {0}",
@@ -144,7 +143,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpedycServer = new RdpedycServer(this.rdpbcgrAdapter.ServerStack, this.rdpbcgrAdapter.SessionContext);
             rdpegfxAdapter.AttachRdpbcgrAdapter(this.rdpbcgrAdapter);
             rdpedycServer.ExchangeCapabilities(waitTime);
-            
+
         }
 
         /// <summary>
@@ -174,7 +173,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             }
 
             try
-            {   
+            {
                 testData.ClearCodecImage = (Bitmap)Image.FromFile(RdpegfxClearCodecImagePath);
             }
             catch (System.IO.FileNotFoundException)
@@ -195,8 +194,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             catch (System.IO.FileNotFoundException)
             {
                 testData.RfxProgCodecImage = RdpegfxTestUtility.captureFromScreen(0, 0, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
-            } 
-              
+            }
+
         }
 
         /// <summary>
@@ -207,7 +206,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         private RdpegfxH264TestDatas GetH264TestData(string H264TestDataPath)
         {
             RdpegfxH264TestDatas H264TestData = null;
-            
+
             XmlSerializer serializer = new XmlSerializer(typeof(RdpegfxH264TestDatas));
             FileStream fs = new FileStream(H264TestDataPath, FileMode.Open);
             XmlTextReader reader = new XmlTextReader(fs);
@@ -217,7 +216,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             fs.Close();
 
             return H264TestData;
-            
+
         }
 
         /// <summary>
@@ -230,7 +229,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             StartRDPConnection(isSoftSync);
 
             this.TestSite.Log.Add(LogEntryKind.Debug, "Creating dynamic virtual channels for MS-RDPEGFX ...");
-            bool bProtocolSupported = isSoftSync? InitializeForSoftSync(transportType) : this.rdpegfxAdapter.ProtocolInitialize(this.rdpedycServer, transportType);
+            bool bProtocolSupported = isSoftSync ? InitializeForSoftSync(transportType) : this.rdpegfxAdapter.ProtocolInitialize(this.rdpedycServer, transportType);
             TestSite.Assert.IsTrue(bProtocolSupported, "Client should support this protocol.");
 
             this.TestSite.Log.Add(LogEntryKind.Debug, "Expecting capability advertise from client.");
@@ -256,7 +255,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                         capFlag = flag;
                     }
 
-                    if (capSet.version == CapsVersions.RDPGFX_CAPVERSION_81 
+                    if (capSet.version == CapsVersions.RDPGFX_CAPVERSION_81
                         && (flag & CapsFlags.RDPGFX_CAPS_FLAG_AVC420_ENABLED) == CapsFlags.RDPGFX_CAPS_FLAG_AVC420_ENABLED)
                     {
                         this.isH264AVC420Supported = true;
@@ -445,7 +444,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
     /// Utility class used for RDPEGFX test. The fields defined here are only used internally.
     /// </summary>
     public class RdpegfxTestUtility
-    {        
+    {
         // Fields
         public static uint desktopWidth = 1024;
         public static uint desktopHeight = 768;
@@ -510,7 +509,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
         public Bitmap ClearCodecImage;
         public Bitmap RfxProgCodecImage;
-       
+
 
         /// <summary>
         /// Transform a C# color into RDPGRX_COLOR32 structure

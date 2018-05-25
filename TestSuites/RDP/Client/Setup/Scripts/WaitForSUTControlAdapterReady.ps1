@@ -33,13 +33,13 @@ if($tryTime -ge 10){
 
 sleep 30
 
-# Run a case repeatly to ensure SUT control adapter ready
+# Run a case repeatedly to ensure SUT control adapter ready
 cd $batchPath
 
+$maxRetryTimes = 20
 $tryTime = 0
-while($tryTime -lt 50){
-    (Get-Content BVT_ConnectionTest_ConnectionInitiation_PositiveTest.cmd) | Foreach-Object {$_ -replace "pause", ""} | Set-Content testSUTAdapter.cmd
-    cmd /c testSUTAdapter.cmd
+while($tryTime -lt $maxRetryTimes){
+    cmd /c CommonRunSingleCase.cmd BVT_ConnectionTest_ConnectionInitiation_PositiveTest
     sleep 15
     $filenames = Get-ChildItem .\TestResults
     foreach($filename in $filenames){
@@ -50,7 +50,6 @@ while($tryTime -lt 50){
     }
     $result = Select-String '<ResultSummary outcome="Completed">' $trxFile
     Remove-Item .\TestResults -Recurse -Force
-    Remove-Item .\testSUTAdapter.cmd -Force
     if($result.count -gt 0){
         Write-Host "$sutComputerIP task scheduler ready." -foregroundcolor Green
         cmd /C ECHO SUTADAPTER FINISHED > $env:HOMEDRIVE\SUTAdapter.finished.signal
@@ -61,7 +60,7 @@ while($tryTime -lt 50){
     sleep 120
 }
 
-if($tryTime -ge 50){
+if($tryTime -ge $maxRetryTimes){
     Write-Host "$sutComputerIP task scheduler Failed." -foregroundcolor Red
     cmd /C ECHO SUTADAPTER ERROR > $env:HOMEDRIVE\SUTAdapter.error.signal
 }

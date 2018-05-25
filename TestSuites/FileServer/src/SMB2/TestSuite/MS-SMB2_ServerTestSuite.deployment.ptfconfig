@@ -18,7 +18,7 @@
 
       <Property name="SutAlternativeIPAddress" value="192.168.2.11">
         <Description>
-          Alternative IP address of SUT to establish connection
+          Alternative IP or host name address of SUT to establish connection
           If SUT only has one IP, set it to same value of SutIPAddress
         </Description>
       </Property>
@@ -51,5 +51,33 @@
       </Property>      
 
     </Group>
+      <Group name="HVRS">
+          <Property name="SharePath" value="\\node01\SMBBasic">
+              <!--File_level_trim passed on smbbasic-->
+              <!--Property name="SharePath" value="\\node01\SMBBasic"-->
+              <!--Property name="SharePath" value="\\node01\SMBReFSShare"-->
+              <Description>
+                  The share path which contains the shared virtual disk files, should start with "\\"
+                  If no such share, leave it blank
+              </Description>
+          </Property>
+          <Property name="IsOffLoadImplemented" value="false">
+              <Choice>True, False</Choice>
+              <Description>
+                  Platform implements Off_Load Operations.
+              </Description>
+          </Property>
+          <Property name="IsSetZeroDataImplemented" value="true">
+              <Choice>True, False</Choice>
+              <Description>
+                  Platform implements FSCTL_SET_ZERO_DATA Operations.
+              </Description>
+          </Property>
+          <Property name="VolumnClusterSize" value="64">
+              <Description>
+                  The allocation unit size of the share volume. You can get this value when you try to format a disk.
+              </Description>
+          </Property>
+      </Group>
   </Properties>
 </TestSite>

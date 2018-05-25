@@ -39,6 +39,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         }
         #endregion
 
+        #region Test Cases
         /// <summary>
         /// test ExecuteKCC
         /// </summary>
@@ -97,13 +98,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         public void DRSR_DRSReplicaAdd_V1_Success_WithAsyncFlag()
         {
             DrsrTestChecker.Check();
-            DelReplicaSource delUpdate = new DelReplicaSource(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.Machine.WritableDC2, DRS_OPTIONS.DRS_WRIT_REP, EnvironmentConfig.User.ParentDomainAdmin);
-
-            BaseTestSite.Assert.IsTrue(UpdatesStorage.GetInstance().PushUpdate(delUpdate), "Need to delete a replication source firstly");
-
-            uint ret = drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
-
-            drsTestClient.DrsReplicaAdd(EnvironmentConfig.Machine.WritableDC1, DRS_MSG_REPADD_Versions.V1, (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2], DRS_OPTIONS.DRS_ASYNC_OP);
+            DRSReplicaAdd_Success_WithAsyncFlag(DRS_MSG_REPADD_Versions.V1);
         }
 
         [BVT]
@@ -121,13 +116,24 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         public void DRSR_DRSReplicaAdd_V2_Success_WithAsyncFlag()
         {
             DrsrTestChecker.Check();
-            DelReplicaSource delUpdate = new DelReplicaSource(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.Machine.WritableDC2, DRS_OPTIONS.DRS_WRIT_REP, EnvironmentConfig.User.ParentDomainAdmin);
+            DRSReplicaAdd_Success_WithAsyncFlag(DRS_MSG_REPADD_Versions.V2);
+        }
 
-            BaseTestSite.Assert.IsTrue(UpdatesStorage.GetInstance().PushUpdate(delUpdate), "Need to delete a replication source firstly");
-
-            uint ret = drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
-
-            drsTestClient.DrsReplicaAdd(EnvironmentConfig.Machine.WritableDC1, DRS_MSG_REPADD_Versions.V2, (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2], DRS_OPTIONS.DRS_ASYNC_OP);
+        [BVT]
+        [TestCategory("Winv1803")]
+        [ServerType(DcServerTypes.Any)]
+        [SupportedADType(ADInstanceType.Both)]
+        [Priority(0)]
+        [Description("Delete a replication source and add it back with Async flag")]
+        [TestCategory("SDC")]
+        [TestCategory("PDC")]
+        [TestCategory("DomainWinV1803")]
+        [TestCategory("MS-DRSR")]
+        [TestMethod]
+        public void DRSR_DRSReplicaAdd_V3_Success_WithAsyncFlag()
+        {
+            DrsrTestChecker.Check();
+            DRSReplicaAdd_Success_WithAsyncFlag(DRS_MSG_REPADD_Versions.V3);
         }
 
         [BVT]
@@ -218,17 +224,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         public void DRSR_DRSReplicaAdd_V2_Success_With0x10Flag()
         {
             DrsrTestChecker.Check();
-            DelReplicaSource delUpdate = new DelReplicaSource(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.Machine.WritableDC2, DRS_OPTIONS.DRS_WRIT_REP, EnvironmentConfig.User.ParentDomainAdmin);
-
-            BaseTestSite.Assert.IsTrue(UpdatesStorage.GetInstance().PushUpdate(delUpdate), "Need to delete a replication source firstly");
-
-            uint ret = drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
-
-            drsTestClient.DrsReplicaAdd(EnvironmentConfig.Machine.WritableDC1, DRS_MSG_REPADD_Versions.V2, (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2], DRS_OPTIONS.DRS_WRIT_REP
-                );
+            DRSR_DRSReplicaAdd_Success_With0x10Flag(DRS_MSG_REPADD_Versions.V2);
         }
-
-
 
         [BVT]
         [TestCategory("Win2003")]
@@ -294,23 +291,25 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         public void DRSR_DRSUpdateRefs_V1_Success_AddThenDel()
         {
             DrsrTestChecker.Check();
-            uint ret = drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
-
-            try
-            {
-                BaseTestSite.Log.Add(LogEntryKind.Checkpoint, "Try to delete replication destination from repsTo for later testing. It MAY fails if there is no such record to delete");
-                drsTestClient.DrsUpdateRefs(EnvironmentConfig.Machine.WritableDC1, (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2], DRS_OPTIONS.DRS_DEL_REF);
-            }
-            catch
-            {
-                BaseTestSite.Log.Add(LogEntryKind.Checkpoint, "No similar record to delete in repsTo. It's OK to continue");
-            }
-
-            drsTestClient.DrsUpdateRefs(EnvironmentConfig.Machine.WritableDC1, (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2], DRS_OPTIONS.DRS_ADD_REF);
-
-            drsTestClient.DrsUpdateRefs(EnvironmentConfig.Machine.WritableDC1, (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2], DRS_OPTIONS.DRS_DEL_REF);
+            DRSUpdateRefs_Success_AddThenDel(DrsUpdateRefs_Versions.V1);
         }
 
+        [BVT]
+        [TestCategory("Winv1803")]
+        [ServerType(DcServerTypes.Any)]
+        [SupportedADType(ADInstanceType.Both)]
+        [Priority(0)]
+        [Description("Modify a replication source")]
+        [TestCategory("SDC")]
+        [TestCategory("PDC")]
+        [TestCategory("DomainWinV1803")]
+        [TestCategory("MS-DRSR")]
+        [TestMethod]
+        public void DRSR_DRSUpdateRefs_V2_Success_AddThenDel()
+        {
+            DrsrTestChecker.Check();
+            DRSUpdateRefs_Success_AddThenDel(DrsUpdateRefs_Versions.V2);
+        }
 
         [TestCategory("Win2003,BreakEnvironment")]
         [ServerType(DcServerTypes.Any)]
@@ -344,10 +343,71 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             Site.Log.Add(LogEntryKind.Checkpoint, "Fully remove replication on DC1 for AppNC with NO_SOURCE flag");
             drsTestClient.DrsReplicaDel(EnvironmentConfig.Machine.WritableDC1, (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2], DRS_OPTIONS.DRS_NO_SOURCE, NamingContext.AppNC);
         }
+        #endregion
 
+        #region Private Methods
+        private void DRSReplicaAdd_Success_WithAsyncFlag(DRS_MSG_REPADD_Versions ver)
+        {
+            DelReplicaSource delUpdate = new DelReplicaSource(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.Machine.WritableDC2, DRS_OPTIONS.DRS_WRIT_REP, EnvironmentConfig.User.ParentDomainAdmin);
 
+            BaseTestSite.Assert.IsTrue(UpdatesStorage.GetInstance().PushUpdate(delUpdate), "Need to delete a replication source firstly");
 
+            uint ret = drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
+
+            drsTestClient.DrsReplicaAdd(
+                EnvironmentConfig.Machine.WritableDC1,
+                DRS_MSG_REPADD_Versions.V2,
+                (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2],
+                DRS_OPTIONS.DRS_ASYNC_OP
+                );
+        }
+
+        private void DRSR_DRSReplicaAdd_Success_With0x10Flag(DRS_MSG_REPADD_Versions ver)
+        {
+            DelReplicaSource delUpdate = new DelReplicaSource(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.Machine.WritableDC2, DRS_OPTIONS.DRS_WRIT_REP, EnvironmentConfig.User.ParentDomainAdmin);
+
+            BaseTestSite.Assert.IsTrue(UpdatesStorage.GetInstance().PushUpdate(delUpdate), "Need to delete a replication source firstly");
+
+            uint ret = drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
+
+            drsTestClient.DrsReplicaAdd(
+                EnvironmentConfig.Machine.WritableDC1,
+                ver,
+                (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2],
+                DRS_OPTIONS.DRS_WRIT_REP
+                );
+        }
+
+        private void DRSUpdateRefs_Success_AddThenDel(DrsUpdateRefs_Versions ver)
+        {
+            uint ret = drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
+
+            try
+            {
+                BaseTestSite.Log.Add(LogEntryKind.Checkpoint, "Try to delete replication destination from repsTo for later testing. It MAY fails if there is no such record to delete");
+                drsTestClient.DrsUpdateRefs(
+                    EnvironmentConfig.Machine.WritableDC1,
+                    ver,
+                    (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2],
+                    DRS_OPTIONS.DRS_DEL_REF);
+            }
+            catch
+            {
+                BaseTestSite.Log.Add(LogEntryKind.Checkpoint, "No similar record to delete in repsTo. It's OK to continue");
+            }
+
+            drsTestClient.DrsUpdateRefs(
+                EnvironmentConfig.Machine.WritableDC1,
+                ver,
+                (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2],
+                DRS_OPTIONS.DRS_ADD_REF);
+
+            drsTestClient.DrsUpdateRefs(
+                EnvironmentConfig.Machine.WritableDC1,
+                ver,
+                (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2],
+                DRS_OPTIONS.DRS_DEL_REF);
+        }
+        #endregion
     }
-
-
 }

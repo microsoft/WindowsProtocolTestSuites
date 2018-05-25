@@ -1314,8 +1314,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             pdu.lengthCombinedCapabilities = ParseUInt16(data, ref currentIndex, false);
 
             // TS_DEMAND_ACTIVE_PDU: sourceDescriptor
-            pdu.sourceDescriptor = GetBytes(data, ref currentIndex,
-                ConstValue.TS_DEMAND_ACTIVE_PDU_SOURCE_DESCRIPTOR_LENGTH);
+            pdu.sourceDescriptor = GetBytes(data, ref currentIndex, pdu.lengthSourceDescriptor);
 
             // TS_DEMAND_ACTIVE_PDU: numberCapabilities
             pdu.numberCapabilities = ParseUInt16(data, ref currentIndex, false);

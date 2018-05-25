@@ -72,6 +72,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.FolderAccessCheck)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("This test case is designed to test whether a user can access a share when " +
             "ACCESS_ALLOWED_ACE with user SID exists in folder Security Descriptor.")]
         public void BVT_FolderPermission_AccessAllow_UserSid()
@@ -89,6 +90,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.FolderAccessCheck)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether a user can access a share when " +
             "ACCESS_ALLOWED_ACE with user's group SID exists in folder Security Descriptor.")]
@@ -107,6 +109,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.FolderAccessCheck)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether a user is denied to access a share when " +
             "ACCESS_DENIED_ACE with user SID exists in folder Security Descriptor.")]
@@ -125,6 +128,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.FolderAccessCheck)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether a user is denied to access a share when " +
             "ACCESS_DENIED_ACE with user's group SID exists in folder Security Descriptor.")]
@@ -143,6 +147,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.FolderAccessCheck)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether a user is denied to access a share when " +
             "user SID does not exist in folder Security Descriptor.")]
@@ -158,6 +163,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.FolderAccessCheck)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether a user is denied to access a share when " +
             "ACCESS_ALLOWED_ACE associated with the user does not have READ permission in folder Security Descriptor.")]

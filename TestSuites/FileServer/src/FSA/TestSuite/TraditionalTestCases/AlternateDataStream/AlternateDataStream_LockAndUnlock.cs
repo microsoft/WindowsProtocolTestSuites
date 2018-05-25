@@ -16,6 +16,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.AlternateDataStream)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Byte-Range Lock and Unlock on an Alternate Data Stream on a DataFile.")]
         public void BVT_AlternateDataStream_LockAndUnlock_File()
         {
@@ -28,6 +29,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.AlternateDataStream)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Byte-Range Lock and Unlock on an Alternate Data Stream on a DirectoryFile.")]
         public void BVT_AlternateDataStream_LockAndUnlock_Dir()
         {

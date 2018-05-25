@@ -19,6 +19,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.AlternateDataStream)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("FSCTL_QUERY_ALLOCATED_RANGES from an Alternate Data Stream on a DataFile.")]
         public void AlternateDataStream_FsCtl_Query_AllocatedRanges_File()
         {
@@ -31,6 +33,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.AlternateDataStream)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("FSCTL_QUERY_ALLOCATED_RANGES from an Alternate Data Stream on a DirectoryFile.")]
         public void AlternateDataStream_FsCtl_Query_AllocatedRanges_Dir()
         {

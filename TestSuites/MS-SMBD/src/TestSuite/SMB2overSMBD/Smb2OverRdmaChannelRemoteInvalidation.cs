@@ -17,6 +17,8 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         #region Fields
         private ISutProtocolControlAdapter sutProtocolControlAdapter;
         private string fileName;
+        private DialectRevision[] Smb302AboveDialects = new DialectRevision[] { DialectRevision.Smb302, DialectRevision.Smb311 };
+        private DialectRevision[] Smb300OnlyDialects = new DialectRevision[] { DialectRevision.Smb30 };
         #endregion
 
         #region Class Initialization and Cleanup
@@ -58,15 +60,13 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
 
         [TestMethod]
         [TestCategory("BVT")]
-        [TestCategory("SMB302")]
-        [TestCategory("Smb2OverRdmaChannel")]
-        [TestCategory("SMB2_CHANNEL_RDMA_V1_INVALIDATE")]
+        [TestCategory("Smb2OverRdmaChannelInvalidate")]
         public void BVT_Smb2OverRdma_Smb302_Write_SMB2_CHANNEL_RDMA_V1_INVALIDATE()
         {
-            EstablishConnectionAndOpenFile(fileName, DialectRevision.Smb302);
+            EstablishConnectionAndOpenFile(fileName, Smb302AboveDialects);
 
             uint writeSize = smbdAdapter.Smb2MaxWriteSize;
-            byte[] fileContent = Smb2Utility.CreateRandomByteArray((int) writeSize);
+            byte[] fileContent = Smb2Utility.CreateRandomByteArray((int)writeSize);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Register memory and get buffer descriptor for SMB2 WRITE");
             SmbdBufferDescriptorV1 descp;
@@ -107,17 +107,15 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
 
         [TestMethod]
         [TestCategory("BVT")]
-        [TestCategory("SMB302")]
-        [TestCategory("Smb2OverRdmaChannel")]
-        [TestCategory("SMB2_CHANNEL_RDMA_V1_INVALIDATE")]
+        [TestCategory("Smb2OverRdmaChannelInvalidate")]
         public void BVT_Smb2OverRdma_Smb302_Read_SMB2_CHANNEL_RDMA_V1_INVALIDATE()
         {
-            EstablishConnectionAndOpenFile(fileName, DialectRevision.Smb302);
+            EstablishConnectionAndOpenFile(fileName, Smb302AboveDialects);
 
             uint fileSize = smbdAdapter.Smb2MaxReadSize;
             byte[] fileContent = Smb2Utility.CreateRandomByteArray((int)fileSize);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Register memory and get buffer descriptor for SMB2 WRITE");            
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Register memory and get buffer descriptor for SMB2 WRITE");
             SmbdBufferDescriptorV1 descp;
             NtStatus status = smbdAdapter.SmbdRegisterBuffer(
                 fileSize,
@@ -128,14 +126,14 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
                 status,
                 "Register buffer should succeed.");
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Write content to file over RDMA."); 
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Write content to file over RDMA.");
             status = Smb2WriteOverRdma(fileName, fileContent, Channel_Values.CHANNEL_RDMA_V1_INVALIDATE, descp);
             BaseTestSite.Assert.AreEqual<NtStatus>(
                 NtStatus.STATUS_SUCCESS,
                 status,
                 "SMB2 WRITE over RDMA should succeed.");
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Register memory and get buffer descriptor for SMB2 READ.");            
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Register memory and get buffer descriptor for SMB2 READ.");
             status = smbdAdapter.SmbdRegisterBuffer(
                 fileSize,
                 SmbdBufferReadWrite.RDMA_WRITE_PERMISSION_FOR_READ_FILE,
@@ -189,11 +187,10 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         }
 
         [TestMethod]
-        [TestCategory("SMB302")]
         [TestCategory("Smb2OverRdmaChannel")]
-        public void Smb2OverRdma_Smb302_Write_SMB2_CHANNEL_RDMA_V1()
+        public void Smb2OverRdma_Write_SMB2_CHANNEL_RDMA_V1()
         {
-            EstablishConnectionAndOpenFile(fileName, DialectRevision.Smb302);
+            EstablishConnectionAndOpenFile(fileName);
 
             uint writeSize = smbdAdapter.Smb2MaxWriteSize;
             byte[] fileContent = Smb2Utility.CreateRandomByteArray((int)writeSize);
@@ -220,7 +217,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             ValidateFileContent(fileContent);
 
             fileContent = Encoding.ASCII.GetBytes(Smb2Utility.CreateRandomStringInByte((int)writeSize));
-            
+
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Send Smb2 WRITE request using same descriptor.");
             status = Smb2WriteOverRdma(fileName, fileContent, Channel_Values.CHANNEL_RDMA_V1, descp);
 
@@ -234,11 +231,10 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         }
 
         [TestMethod]
-        [TestCategory("SMB302")]
         [TestCategory("Smb2OverRdmaChannel")]
-        public void Smb2OverRdma_Smb302_Read_SMB2_CHANNEL_RDMA_V1()
+        public void Smb2OverRdma_Read_SMB2_CHANNEL_RDMA_V1()
         {
-            EstablishConnectionAndOpenFile(fileName, DialectRevision.Smb302);
+            EstablishConnectionAndOpenFile(fileName);
 
             uint fileSize = smbdAdapter.Smb2MaxReadSize;
             byte[] fileContent = Smb2Utility.CreateRandomByteArray((int)fileSize);
@@ -296,7 +292,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             BaseTestSite.Assert.IsTrue(
                 SmbdUtilities.CompareByteArray(fileContent, readContent),
                 "Content read should be identical with original on server.");
-            
+
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Send SMB2 READ using same descriptor.");
             status = (NtStatus)smbdAdapter.Smb2ReadOverRdmaChannel(
                 0,
@@ -320,12 +316,11 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         }
 
         [TestMethod]
-        [TestCategory("SMB300")]
-        [TestCategory("Smb2OverRdmaChannel")]
-        [TestCategory("SMB2_CHANNEL_RDMA_V1_INVALIDATE")]
+        [TestCategory("Negative")]
+        [TestCategory("Smb2OverRdmaChannelInvalidate")]
         public void Smb2OverRdma_Smb300_Write_SMB2_CHANNEL_RDMA_V1_INVALIDATE()
         {
-            EstablishConnectionAndOpenFile(fileName, DialectRevision.Smb30);
+            EstablishConnectionAndOpenFile(fileName, Smb300OnlyDialects);
 
             uint writeSize = smbdAdapter.Smb2MaxWriteSize;
             byte[] fileContent = Smb2Utility.CreateRandomByteArray((int)writeSize);
@@ -351,12 +346,11 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         }
 
         [TestMethod]
-        [TestCategory("SMB300")]
-        [TestCategory("Smb2OverRdmaChannel")]
-        [TestCategory("SMB2_CHANNEL_RDMA_V1_INVALIDATE")]
+        [TestCategory("Negative")]
+        [TestCategory("Smb2OverRdmaChannelInvalidate")]
         public void Smb2OverRdma_Smb300_Read_SMB2_CHANNEL_RDMA_V1_INVALIDATE()
         {
-            EstablishConnectionAndOpenFile(fileName, DialectRevision.Smb30);
+            EstablishConnectionAndOpenFile(fileName, Smb300OnlyDialects);
 
             uint fileSize = smbdAdapter.Smb2MaxReadSize;
             byte[] fileContent = Smb2Utility.CreateRandomByteArray((int)fileSize);

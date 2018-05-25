@@ -17,6 +17,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Send FSCTL_OFFLOAD_WRITE request to a file and check if copy offload is supported.")]
         public void FsCtl_Offload_Write_File_IsOffloadSupported()
         {

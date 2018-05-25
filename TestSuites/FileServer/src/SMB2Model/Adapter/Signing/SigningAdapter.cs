@@ -52,7 +52,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Signing
                 MaxSmbVersionSupported = ModelUtility.GetModelDialectRevision(testConfig.MaxSmbVersionSupported),
                 IsServerSigningRequired = testConfig.IsServerSigningRequired,
             };
-
+            if (testConfig.IsGlobalEncryptDataEnabled && c.MaxSmbVersionSupported >= ModelDialectRevision.Smb30)
+            {
+                Site.Assert.Inconclusive("This test case is not applicable due to IsGlobalEncryptDataEnabled is True");
+            }
             signingConfig = c;
             Site.Log.Add(LogEntryKind.Debug, signingConfig.ToString());
         }

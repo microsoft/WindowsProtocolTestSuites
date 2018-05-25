@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?define SRCDIR=$(env.TestSuiteRoot)\drop\ProtocolTestManager?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <DirectoryRef Id="SMBDDOCFOLDER">
+      <Component Id="cmp249DC3EE072672485DB16E60A86817A2" Guid="{5982290F-0551-420C-9363-77D2574FE38D}">
+        <File Id="fil62366F17BBAB70D50EEBF907AB4E43FC" Source="..\Plugins\SMBDPlugin\SMBDPlugin\Docs\index.html" />
+      </Component>
+      <Component Id="cmp2AEF73E43E3D6FD1C25C48CCF26C2C5E" Guid="{049F95C3-9219-4246-958D-CEDD4DCA8FE4}">
+        <File Id="fil60145EE059D52ED8AF8E180EB50EF473" Source="..\Plugins\SMBDPlugin\SMBDPlugin\Docs\arrow_right.png" />
+      </Component>
+      <Component Id="cmp48FD18744E30EF232B1BFCDFA175E93D" Guid="{9414B835-1907-4C42-A3C6-9EAAF32A9F21}">
+        <File Id="filC8BAEE76C764344129879083B2ED80EB" Source="..\Plugins\SMBDPlugin\SMBDPlugin\Docs\setup.html" />
+      </Component>
+      <Component Id="cmp8A30F17C6ED8307BE975818160479111" Guid="{74EEB6E6-490B-4178-8DB4-2B8F819615C0}">
+        <File Id="filAF9825B0724B49C5E85B4C1155BC4A9A" Source="..\Plugins\SMBDPlugin\SMBDPlugin\Docs\deployment.png" />
+      </Component>
+      <Component Id="cmpC39FDCFB6F06BFE5A8B59D1E8376314F" Guid="{2B7AA1E5-CF1E-44A1-93D7-5AA08037C3A6}">
+        <File Id="fil25E6DDCA590269E37110FB8977612266" Source="..\Plugins\SMBDPlugin\SMBDPlugin\Docs\deployment.html" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+  <Fragment>
+    <DirectoryRef Id="LIBFOLDER">
+      <?if $(env.DEBUGVER) = 1?>
+      <Component Id="SMBDPlugin.pdb" Guid="{3BBF23DE-32DE-4D5E-8F15-07815D38C8E1}">
+        <File Id="SMBDPlugin.pdb" Source="$(var.SRCDIR)\lib\SMBDPlugin.pdb" />
+      </Component>
+      <?endif ?>
+      <Component Id="SMBDPlugin.dll" Guid="{7601C940-54C3-4658-AC08-0ED03DB774CD}">
+        <File Id="SMBDPlugin.dll" Source="$(var.SRCDIR)\lib\SMBDPlugin.dll" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+  <Fragment>
+    <DirectoryRef Id="SMBDCONFIG">
+      <Component Id="SMBDConfigFile" Guid="{79716CEC-F44E-43A4-B51D-27662D70FFE7}">
+        <File Id="SMBDConfigFile" Source="..\Plugins\SMBDPlugin\SMBDPlugin\config.xml" />
+      </Component>
+      <Component Id="SMBDTestCategoryFile" Guid="{0B4C948F-8BBC-442A-A6A1-1F20F350D6EB}">
+        <File Id="SMBDTestCategoryFile" Source="..\Plugins\SMBDPlugin\SMBDPlugin\TestCategories.xml" />
+      </Component>
+      <Directory Id="dir8A36605749BBB1E99044040389DF8DAF" Name="Scripts">
+        <Component Id="cmp2B7E2E1BC54BBF71F3942BF23B58B7EC" Guid="{37FADCB0-698F-44A8-AD9D-3D35A0696576}">
+          <File Id="fil7B87AEEE6A106EF118068B6AB4D9817F" Source="..\Plugins\SMBDPlugin\SMBDPlugin\Detector\GetLocalNetworkAdapters.ps1" />
+        </Component>
+        <Component Id="cmp9319B497AC9D376766E7C3F4257AA37C" Guid="{519F910A-4F01-4044-AAEB-EB9B2661776E}">
+          <File Id="filC0300A5F1AAB04F60A6AFAD1BE2CF7AC" Source="..\Plugins\SMBDPlugin\SMBDPlugin\Detector\GetRemoteOSVersion.ps1" />
+        </Component>
+      </Directory>
+    </DirectoryRef>
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="SMBD_PLUGIN">
+      <ComponentRef Id="cmp249DC3EE072672485DB16E60A86817A2" />
+      <ComponentRef Id="cmp2AEF73E43E3D6FD1C25C48CCF26C2C5E" />
+      <ComponentRef Id="cmp48FD18744E30EF232B1BFCDFA175E93D" />
+      <ComponentRef Id="cmp8A30F17C6ED8307BE975818160479111" />
+      <ComponentRef Id="cmpC39FDCFB6F06BFE5A8B59D1E8376314F" />
+      <ComponentRef Id="SMBDPlugin.dll" />
+      <ComponentRef Id="SMBDConfigFile" />
+      <ComponentRef Id="SMBDTestCategoryFile" />
+      <ComponentRef Id="cmp2B7E2E1BC54BBF71F3942BF23B58B7EC" />
+      <ComponentRef Id="cmp9319B497AC9D376766E7C3F4257AA37C" />
+      <?if $(env.DEBUGVER) = 1?>
+      <ComponentRef Id="SMBDPlugin.pdb" />
+      <?endif ?>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

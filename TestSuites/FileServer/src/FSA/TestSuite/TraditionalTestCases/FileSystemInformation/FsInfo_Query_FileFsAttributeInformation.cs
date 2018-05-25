@@ -18,6 +18,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Query FileFsAttributeInformation from a file and check if Compression is supported.")]
         public void FsInfo_Query_FileFsAttributeInformation_File_IsCompressionSupported()
         {
@@ -27,6 +28,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Query FileFsAttributeInformation from a directory and check if Compression is supported.")]
         public void FsInfo_Query_FileFsAttributeInformation_Dir_IsCompressionSupported()
         {
@@ -41,6 +44,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Query FileFsAttributeInformation from a file and check if Encryption is supported.")]
         public void FsInfo_Query_FileFsAttributeInformation_File_IsEncryptionSupported()
         {
@@ -50,6 +54,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Query FileFsAttributeInformation from a directory and check if Encryption is supported.")]
         public void FsInfo_Query_FileFsAttributeInformation_Dir_IsEncryptionSupported()
         {
@@ -64,6 +70,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Query FileFsAttributeInformation from a file and check if Integrity is supported.")]
         public void FsInfo_Query_FileFsAttributeInformation_File_IsIntegritySupported()
         {
@@ -73,6 +80,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Query FileFsAttributeInformation from a directory and check if Integrity is supported.")]
         public void FsInfo_Query_FileFsAttributeInformation_Dir_IsIntegritySupported()
         {
@@ -86,6 +95,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Query FileFsAttributeInformation from a file and check if ObjectIDs are supported.")]
         public void FsInfo_Query_FileFsAttributeInformation_File_IsObjectIDsSupported()
         {
@@ -95,6 +105,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Query FileFsAttributeInformation from a directory and check if ObjectIDs are supported.")]
         public void FsInfo_Query_FileFsAttributeInformation_Dir_IsObjectIDsSupported()
         {
@@ -132,12 +144,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Verify if FileSystemAttributes flag is correctly set.");
             string feature = fileSystemAttribute.ToString();
             string attribute = string.Format("FileSystemAttributes.{0}", fileSystemAttribute.ToString());
-
-            if (this.fsaAdapter.FileSystem == FileSystem.FAT32 &&
-                fileSystemAttribute == FileSystemAttributes_Values.FILE_SUPPORTS_ENCRYPTION) 
-            {
-                isSupported = true;
-            }
 
             if (isSupported)
             {

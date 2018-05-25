@@ -9707,6 +9707,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 adLdapClient.DeleteTreeControl("cn=testcontainer,cn=users,dc=child," + rootDomainNC);
                 adLdapClient.DeleteTreeControl("cn=testcontainer1,dc=child," + rootDomainNC);
                 adLdapClient.DeleteTreeControl("dc=newappnc,dc=child," + rootDomainNC);
+                adLdapClient.DeleteTreeControl(string.Format("cn={0},cn=computers,{1}", testComputer1Name, rootDomainNC));
 
                 adLdapClient.Unbind();
                 isConnected = false;

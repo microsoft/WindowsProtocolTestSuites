@@ -20,6 +20,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileInformation)]
         [TestCategory(TestCategories.AlternateDataStream)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Set FileShortNameInformation to an Alternate Data Stream on a DataFile.")]
         public void AlternateDataStream_Set_FileShortNameInformation_File()
         {
@@ -32,6 +34,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileInformation)]
         [TestCategory(TestCategories.AlternateDataStream)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Set FileShortNameInformation to an Alternate Data Stream on a DirectoryFile.")]
         public void AlternateDataStream_Set_FileShortNameInformation_Dir()
         {

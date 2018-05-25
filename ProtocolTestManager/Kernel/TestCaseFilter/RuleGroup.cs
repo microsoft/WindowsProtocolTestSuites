@@ -25,6 +25,50 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         public RuleType RuleGroupType { set; get; }
 
+        /// <summary>
+        /// Set to true when loading profile.
+        /// </summary>
+        public bool isLoadingProfile { set; get; }
+
+        /// <summary>
+        /// A feature mapping table
+        /// </summary>
+        public Dictionary<string, List<Rule>> featureMappingTable = null;
+
+        /// <summary>
+        /// A RuleGroup defined as a mapping filter
+        /// </summary>
+        public RuleGroup mappingRuleGroup = null;
+
+        /// <summary>
+        /// Refresh feature mapping from target filter ruleGroup to mapping filter ruleGroup
+        /// </summary>
+        private void RefreshFeatureMapping()
+        {
+            // Not to refresh feature mapping when loading profile or the result of filtering cases will be changed
+            if (!isLoadingProfile && featureMappingTable != null)
+            {
+                List<string> categories = GetCategories(RuleGroupType == RuleType.Selector);
+
+                // Unselect all features in mappingFilter
+                mappingRuleGroup.SelectStatus = RuleSelectStatus.NotSelected;
+
+                // Select mapping features in mappingFilter based on featureMappingTable
+                foreach (string category in categories)
+                {
+                    if (featureMappingTable.ContainsKey(category))
+                    {
+                        List<Rule> ruleList = featureMappingTable[category];
+                        foreach (Rule rule in ruleList)
+                        {
+                            rule.SelectStatus = RuleSelectStatus.Selected;
+                        }
+                    }
+                }
+            }
+            isLoadingProfile = false;
+        }
+
         private RuleSelectStatus selectStatus;
         public RuleSelectStatus SelectStatus
         {
@@ -33,7 +77,11 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 if (selectStatus != value)
                 {
                     ChangeSelectStatus(value);
-                    if (ContentModified != null) ContentModified();
+                    if (ContentModified != null)
+                    {
+                        RefreshFeatureMapping();
+                        ContentModified();
+                    }
                 }
             }
             get
@@ -95,7 +143,11 @@ namespace Microsoft.Protocols.TestManager.Kernel
             };
             rule.ContentModified += () =>
             {
-                if (ContentModified != null) ContentModified();
+                if (ContentModified != null)
+                {
+                    RefreshFeatureMapping();
+                    ContentModified();
+                }
             };
             base.Add(rule);
             UpdateSelectStatus();

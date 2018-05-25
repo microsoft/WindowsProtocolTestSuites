@@ -222,6 +222,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         // Disable signature verification by default.
         private bool disableVerifySignature = true;
+        private Smb2SessionSetupResponsePacket sessionSetupResponse;
+
+        private Smb2ErrorResponsePacket error;
 
         #endregion
 
@@ -304,6 +307,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 {
                     cryptoInfo.Value.DisableVerifySignature = value;
                 }
+            }
+        }
+
+        public Smb2ErrorResponsePacket Error
+        {
+            get
+            {
+                return error;
             }
         }
         #endregion
@@ -969,7 +980,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             out NEGOTIATE_Response responsePayload,
             ushort channelSequence = 0,
             PreauthIntegrityHashID[] preauthHashAlgs = null,
-            EncryptionAlgorithm[] encryptionAlgs = null)
+            EncryptionAlgorithm[] encryptionAlgs = null,
+            bool addDefaultEncryption = false)
         {
             var request = new Smb2NegotiateRequestPacket();
 
@@ -1047,6 +1059,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     this.cipherId = response.NegotiateContext_ENCRYPTION.Value.Ciphers[0];
                 }
 
+                // In SMB 311, client use SMB2_ENCRYPTION_CAPABILITIES context to indicate whether it 
+                // support Encryption rather than SMB2_GLOBAL_CAP_ENCRYPTION as SMB 30/302
+                // For those client with dialect 311 but not support encryption cases (typically in encryption model cases), 
+                // we shouldn't set the default encryption algorithm so that the SMB2_ENCRYPTION_CAPABILITIES won't be added.
+                if (addDefaultEncryption && response.NegotiateContext_ENCRYPTION == null)
+                {
+                    this.cipherId = EncryptionAlgorithm.ENCRYPTION_AES128_CCM;
+                }
+
                 preauthContext = new PreauthIntegrityContext(hashId);
                 preauthContext.UpdateConnectionState(request);
                 preauthContext.UpdateConnectionState(response);
@@ -1113,6 +1134,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             request.PayLoad.SecurityBufferLength = (ushort)request.Buffer.Length;
 
             var response = SendPacketAndExpectResponse<Smb2SessionSetupResponsePacket>(request);
+            this.sessionSetupResponse = response;
 
             serverSessionId = response.Header.SessionId;
             serverGssToken = response.Buffer.Skip(response.PayLoad.SecurityBufferOffset - response.BufferOffset).Take(response.PayLoad.SecurityBufferLength).ToArray();
@@ -1126,10 +1148,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 preauthContext.UpdateSessionState(responseSessionId, request);
                 preauthContext.UpdateSessionState(responseSessionId, response);
             }
-
+                        
             return response.Header.Status;
         }
 
+        #endregion
+
+        #region Verify Signature of Session Setup Response
+        public void TryVerifySessionSetupResponseSignature(ulong sessionId)
+        {
+            decoder.TryVerifySessionSetupResponseSignature(sessionSetupResponse, sessionId, sessionSetupResponse.MessageBytes);
+        }
         #endregion
 
         #region LogOff
@@ -1200,6 +1229,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
             responseHeader = response.Header;
             responsePayload = response.PayLoad;
+            error = response.Error;
 
             return response.Header.Status;
         }

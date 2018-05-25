@@ -1422,6 +1422,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         FILE_FULL_DIR_INFORMATIO = 2,
 
         /// <summary>
+        /// as listed in MS-FSCC 2.4
+        /// </summary>
+        FileNormalizedNameInformation = 48,
+
+        /// <summary>
         /// If FileInformationClass is not defined in [MS-FSCC] section 2.4
         /// </summary>
         NOT_DEFINED_IN_FSCC

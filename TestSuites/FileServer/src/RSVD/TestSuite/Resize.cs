@@ -38,6 +38,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion2)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if server supports handling tunnel operation to resize a VHDSet file.")]
         public void BVT_Resize()
         {

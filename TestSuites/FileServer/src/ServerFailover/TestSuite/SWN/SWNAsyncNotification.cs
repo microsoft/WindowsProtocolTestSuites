@@ -102,6 +102,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Swn)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Register with WitnessrRegister and Get CLIENT_MOVE_NOTIFICATION on scaleout cluster server.")]
         public void BVT_WitnessrRegister_SWNAsyncNotification_ClientMove()
         {
@@ -111,6 +112,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Swn)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Register with WitnessrRegisterEx and Get CLIENT_MOVE_NOTIFICATION on scaleout cluster server.")]
         public void BVT_WitnessrRegisterEx_SWNAsyncNotification_ClientMove()
         {
@@ -120,6 +122,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Swn)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Get IP_CHANGE_NOTIFICATION on scaleout cluster server.")]
         public void BVT_WitnessrRegisterEx_SWNAsyncNotification_IPChange()
         {

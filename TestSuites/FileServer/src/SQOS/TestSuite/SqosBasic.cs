@@ -33,6 +33,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Sqos)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("This test case is to test if server can handle an SQOS request to set policy to a logical flow")]
         public void BVT_Sqos_SetPolicy()
         {
@@ -54,6 +55,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Sqos)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("This test case is to test if server can handle an SQOS request to probe policy to a logical flow")]
         public void BVT_Sqos_ProbePolicy()
         {
@@ -74,6 +76,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Sqos)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("This test case is to test if server can handle an SQOS request to update counters to a logical flow")]
         public void BVT_Sqos_UpdateCounters()
         {

@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Security;
+using Microsoft.Protocols.TestTools.StackSdk;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 {
@@ -202,14 +203,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         {
             get
             {
-                return IPAddress.Parse(GetProperty("ClientNic1IPAddress"));
+                return GetProperty("ClientNic1IPAddress").ParseIPAddress();
             }
         }
         public IPAddress ClientNic2IPAddress
         {
             get
             {
-                return IPAddress.Parse(GetProperty("ClientNic2IPAddress"));
+                return GetProperty("ClientNic2IPAddress").ParseIPAddress();
             }
         }
         #endregion
@@ -292,12 +293,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         {
             get
             {
-                string ipaddress = GetProperty("SutIPAddress", false);
-                if (string.IsNullOrEmpty(ipaddress))
-                {
-                    return IPAddress.None;
-                }
-                return IPAddress.Parse(ipaddress);
+                return GetProperty("SutIPAddress", false).ParseIPAddress();
             }
         }
 
@@ -378,23 +374,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         {
             get
             {
-                IPAddress caShareServerIP;
-                if (IPAddress.TryParse(CAShareServerName, out caShareServerIP))
-                {
-                    return caShareServerIP;
-                }
-                else
-                {
-                    try
-                    {
-                        caShareServerIP = Dns.GetHostEntry(CAShareServerName).AddressList[0];
-                    }
-                    catch
-                    {
-                        throw new Exception(string.Format("Cannot resolve IP address of CAShareServerName ({0}) from DNS.", CAShareServerName));
-                    }
-                    return caShareServerIP;
-                }
+                return CAShareServerName.ParseIPAddress();
             }
         }
 
@@ -637,6 +617,33 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             if (!SendSignedRequest)
             {
                 Site.Assert.Inconclusive("Test case is applicable for signed request.");
+            }
+        }
+
+        /// <summary>
+        /// Check values of IsGlobalEncryptDataEnabled and IsGlobalRejectUnencryptedAccessEnabled for those part encryption required test cases
+        /// Such as encrypt on one channel, encrypt at first and unencrypt later
+        /// </summary>
+        /// <param name="selectedDialect"></param>
+        public void CheckServerEncrypt(DialectRevision selectedDialect = DialectRevision.Smb2Unknown)
+        {
+            if (this.IsGlobalEncryptDataEnabled)
+            {
+                if (selectedDialect == DialectRevision.Smb2Unknown)
+                {
+                    selectedDialect = MaxSmbVersionSupported < MaxSmbVersionClientSupported ? MaxSmbVersionSupported : MaxSmbVersionClientSupported;
+                }
+                if (selectedDialect < DialectRevision.Smb30)
+                {
+                    if (this.IsGlobalRejectUnencryptedAccessEnabled)
+                    {
+                        Site.Assert.Inconclusive("Test case is not applicable when dialect is less than SMB 3.0, both IsGlobalEncryptDataEnabled and IsGlobalRejectUnencryptedAccessEnabled set to true.");
+                    }
+                }
+                else
+                {
+                    Site.Assert.Inconclusive("Test case is not applicable when dialect is SMB 3.0 or later and IsGlobalEncryptDataEnabled set to true.");
+                }
             }
         }
 

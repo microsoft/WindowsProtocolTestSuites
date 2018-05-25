@@ -1,0 +1,39 @@
+﻿<Window x:Class="Microsoft.Protocols.TestManager.SMBDPlugin.Detector.LocalNetworkInterfaceSelector"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Microsoft.Protocols.TestManager.SMBDPlugin.Detector"
+        mc:Ignorable="d"
+        Height="320" Width="500" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" Closed="Window_Closed">
+
+
+
+    <Window.Resources>
+        <Style TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+        <DataTemplate x:Key="NameColumn">
+            <TextBlock HorizontalAlignment="Stretch" TextAlignment="Left" Text="{Binding Name}"></TextBlock>
+        </DataTemplate>
+        <DataTemplate x:Key="IpAddressColumn">
+            <TextBlock HorizontalAlignment="Left" TextAlignment="Left" Text="{Binding IpAddress}"></TextBlock>
+        </DataTemplate>
+        <DataTemplate x:Key="DescriptionColumn">
+            <TextBlock HorizontalAlignment="Left" TextAlignment="Left" Text="{Binding Description}"></TextBlock>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid Margin="0">
+        <ListView Name="Viewer" Margin="15,15,15,50" SelectionMode="Single" SelectionChanged="Viewer_SelectionChanged">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" CellTemplate="{StaticResource NameColumn}" />
+                    <GridViewColumn Header="IP Address" CellTemplate="{StaticResource IpAddressColumn}" />
+                    <GridViewColumn Header="Description" CellTemplate="{StaticResource DescriptionColumn}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button Name="OkButton" Content="OK" HorizontalAlignment="Right" Margin="133,0,50,10" VerticalAlignment="Bottom" Width="75" Click="OkButton_Click"/>
+    </Grid>
+</Window>

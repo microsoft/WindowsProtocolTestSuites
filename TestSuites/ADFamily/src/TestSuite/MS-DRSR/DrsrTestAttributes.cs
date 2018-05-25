@@ -362,6 +362,16 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                 case "WinThreshold":
                     fl = new FunctionLevelAttribute(DrsrDomainFunctionLevel.DS_BEHAVIOR_WINTHRESHOLD);
                     break;
+                case "Winv1803":
+                    ADCommonServerAdapter adapter = new ADCommonServerAdapter();
+                    adapter.Initialize(DrsrTestAttribute.Site);
+                    ServerVersion curVersion = adapter.PDCOSVersion;
+                    if (curVersion < ServerVersion.Winv1803)
+                    {
+                        DrsrTestAttribute.Site.Assert.Inconclusive("Test case expects PDCOSVersion {0} should be Equal or Greater than Winv1803", curVersion);
+                    }
+                    fl = new FunctionLevelAttribute(DrsrDomainFunctionLevel.DS_BEHAVIOR_WINTHRESHOLD);
+                    break;
                 default:
                     throw new Exception("Unknown domain functional level category: " + level);
             }
