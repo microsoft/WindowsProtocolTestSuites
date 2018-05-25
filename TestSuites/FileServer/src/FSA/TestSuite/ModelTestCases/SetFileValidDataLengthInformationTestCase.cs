@@ -70,6 +70,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.SetFileInformation)]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.NonSmb)]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void SetFileValidDataLengthInformationTestCaseS0() {
             this.Manager.BeginTest("SetFileValidDataLengthInformationTestCaseS0");
             this.Manager.Comment("reaching state \'S0\'");
@@ -173,6 +175,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.SetFileInformation)]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.NonSmb)]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void SetFileValidDataLengthInformationTestCaseS2() {
             this.Manager.BeginTest("SetFileValidDataLengthInformationTestCaseS2");
             this.Manager.Comment("reaching state \'S2\'");

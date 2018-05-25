@@ -15,6 +15,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Send FSCTL_GET_REPARSE_POINT request to a ReparsePoint file and check if ReparsePoint is supported.")]
         public void FsCtl_Get_ReparsePoint_IsReparsePointSupported()
         {

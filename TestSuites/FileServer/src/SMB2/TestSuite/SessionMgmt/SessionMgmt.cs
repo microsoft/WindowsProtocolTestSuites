@@ -157,6 +157,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.SessionMgmt
         [TestMethod]
         [TestCategory(TestCategories.Smb21)]
         [TestCategory(TestCategories.Session)]
+        [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether server can handle reconnect with different dialect.")]
         public void SessionMgmt_ReconnectWithDifferentDialect()
         {
@@ -217,7 +218,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.SessionMgmt
                         BaseTestSite.Assert.AreNotEqual(
                             Smb2Status.STATUS_SUCCESS,
                             header.Status,
-                            "Reconnect with different SMB2 dialect SHOULD NOT succeed.");
+                            "[MS-SMB2] 3.3.5.5.3 The server MUST look up all existing connections from the client in the global ConnectionList where Connection.ClientGuid matches Session.Connection.ClientGuid. " +
+                            "For any matching Connection, if Connection.Dialect is not the same as Session.Connection.Dialect, the server SHOULD<235> close the newly created Session, " +
+                            "as specified in section 3.3.4.12, by providing Session.SessionGlobalId as the input parameter, and fail the session setup request with STATUS_USER_SESSION_DELETED.");
                     }
                 });
             #endregion

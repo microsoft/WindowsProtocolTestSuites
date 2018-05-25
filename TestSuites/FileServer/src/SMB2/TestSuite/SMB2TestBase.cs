@@ -9,6 +9,7 @@ using Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite;
 using Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 {
@@ -81,5 +82,32 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 }
             }
         }
+
+        #region HRVS
+
+        /// <summary>
+        /// Suffix of the .vhdx file name
+        /// </summary>
+        protected const string fileNameSuffix = ":SharedVirtualDisk";
+        protected Smb2FunctionalClient smb2Functionalclient;
+
+        protected override void TestCleanup()
+        {
+            if (smb2Functionalclient != null)
+            {
+                try
+                {
+                    smb2Functionalclient.Disconnect();
+                }
+                catch (Exception ex)
+                {
+                    BaseTestSite.Log.Add(
+                        LogEntryKind.Debug,
+                        "Unexpected exception when disconnect client: {0}", ex.ToString());
+                }
+            }
+            base.TestCleanup();
+        }
+        #endregion
     }
 }

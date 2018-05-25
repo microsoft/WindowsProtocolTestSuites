@@ -13,7 +13,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         #region Test Cases
         [TestMethod]
         [TestCategory(TestCategories.Smb30)]
-        [TestCategory(TestCategories.CombinedFeature)]
+        [TestCategory(TestCategories.CombinedFeatureNonClusterRequired)]
         [TestCategory(TestCategories.Positive)]
         [Description("Operate files with encrypted message before and after client failover.")]
         public void AppInstanceId_Encryption()
@@ -23,7 +23,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Smb30)]
-        [TestCategory(TestCategories.CombinedFeature)]
+        [TestCategory(TestCategories.CombinedFeatureNonClusterRequired)]
         [TestCategory(TestCategories.Compatibility)]
         [Description("Operate files with encrypted message before failover but with unencrypted message after failover.")]
         public void AppInstanceId_Negative_EncryptionInInitialOpen_NoEncryptionInReOpen()
@@ -36,7 +36,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Smb30)]
-        [TestCategory(TestCategories.CombinedFeature)]
+        [TestCategory(TestCategories.CombinedFeatureNonClusterRequired)]
         [TestCategory(TestCategories.Compatibility)]
         [Description("Operate files with encrypted message before client failover but with unencrypted message after failover.")]
         public void AppInstanceId_Negative_NoEncryptionInInitialOpen_EncryptionInReOpen()

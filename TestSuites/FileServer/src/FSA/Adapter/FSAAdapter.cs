@@ -88,6 +88,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             get { return testConfig; }
         }
 
+        public string FileName {
+            get { return fileName;  }
+        }
+
         public FileSystem FileSystem
         {
             get { return fileSystem; }
@@ -257,7 +261,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     break;
 
                 case Transport.SMB3:
-                    this.transAdapter = new Smb2TransportAdapter(new Smb2.DialectRevision[] { Smb2.DialectRevision.Smb30, Smb2.DialectRevision.Smb302 }, testConfig);
+                    this.transAdapter = new Smb2TransportAdapter(new Smb2.DialectRevision[] { Smb2.DialectRevision.Smb30, Smb2.DialectRevision.Smb302, Smb2.DialectRevision.Smb311 }, testConfig);
                     break;
 
                 default:
@@ -532,7 +536,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 }
                 else if (streamTypeNameToOpen == StreamTypeNameToOpen.INDEX_ALLOCATION
                     && !randomFile.Contains("$INDEX_ALLOCATION"))
-                {   
+                {
                     if ((desiredFileAttribute & FileAttribute.READONLY) == FileAttribute.READONLY &&
                         (createOption & CreateOptions.DELETE_ON_CLOSE) == CreateOptions.DELETE_ON_CLOSE &&
                         (fileSystem != Adapter.FileSystem.NTFS && fileSystem != Adapter.FileSystem.REFS))
@@ -601,7 +605,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                      *     CreateFileTestCaseS12
                      */
                     return returnedStatus;
-                }                
+                }
                 else if (openFileType == FileType.DataFile && symbolicLinkType == SymbolicLinkType.IsSymbolicLink)
                 {
                     /*
@@ -955,7 +959,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                  * Make assertion in the adapter, then convert the return code according to the test case.
                  */
                 if (this.fileSystem != Adapter.FileSystem.NTFS && this.fileSystem != Adapter.FileSystem.REFS)
-                {   
+                {
                     if ((createDisposition & CreateDisposition.OPEN_IF) == CreateDisposition.OPEN_IF)
                     {
                         /*
@@ -1038,7 +1042,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
              * Make assertion in the adapter, then convert the return code according to the test case.
              */
             if (this.fileSystem != Adapter.FileSystem.NTFS && this.fileSystem != Adapter.FileSystem.REFS)
-            {   
+            {
                 if (randomFile.Contains("$STANDARD_INFORMATION")
                         || randomFile.Contains("$ATTRIBUTE_LIST")
                         || randomFile.Contains("$FILE_NAME")
@@ -3295,7 +3299,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             {
                 returnedStatus = SMB_TDIWorkaround.WorkAroundFsCtlSetZeroData(fileSystem, bufferSize, inputBuffer, isIsDeletedTrue, isConflictDetected, returnedStatus, site);
             }
-            
+
             return returnedStatus;
         }
 
@@ -3330,7 +3334,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// </summary>
         /// <param name="bufferSize">Indicate buffer size</param>
         /// <param name="inputBuffer">InputBufferFSCTL_SIS_COPYFILE</param>
-        /// <param name="isIsEncryptedTrue">Ture if encrypted</param>
+        /// <param name="isIsEncryptedTrue">True if encrypted</param>
         /// <param name="isCOPYFILE_SIS_LINKTrue">True: if InputBuffer.Flags.COPYFILE_SIS_LINK is TRUE</param>
         /// <returns>An NTSTATUS code that specifies the result</returns>
         public MessageStatus FsctlSisCopyFile(
@@ -4774,7 +4778,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             isReturnStatus = true;
             this.VerifyServerSetFsInfo(isReturnStatus);
 
-            if (fileSystem == Adapter.FileSystem.FAT32) {
+            if (fileSystem == Adapter.FileSystem.FAT32)
+            {
                 returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(3203, MessageStatus.PRIVILEGE_NOT_HELD, returnedStatus, site);
             }
 

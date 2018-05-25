@@ -223,6 +223,9 @@ Function Phase2
     }      
     switch -Exact ($osVersion)
     {
+        "Winv1803" {
+            $forestFunctionLv = "7"
+            }
         "Win2016" {
             $forestFunctionLv = "7"
             }

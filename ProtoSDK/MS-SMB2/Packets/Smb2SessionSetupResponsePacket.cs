@@ -10,6 +10,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
     /// </summary>
     public class Smb2SessionSetupResponsePacket : Smb2StandardPacket<SESSION_SETUP_Response>, IPacketBuffer
     {
+        public byte[] MessageBytes;
+
         /// <summary>
         /// The offset of buffer starting from the begining of the packet.
         /// </summary>

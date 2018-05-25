@@ -170,6 +170,10 @@
     <value>Failed to load the PTFConfig files:
 {0}</value>
   </data>
+  <data name="LoadFeatureMappingError" xml:space="preserve">
+    <value>Failed to load the feature mapping from the config.xml:
+{0}</value>
+  </data>
   <data name="EndpointRegex" xml:space="preserve">
     <value>(Server)|(Client)</value>
   </data>

@@ -62,6 +62,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb30)]
         [TestCategory(TestCategories.FsctlEnumerateSnapShots)]
         [Description("This test case is designed to test basic functionality of FSCTL_SRV_ENUMERATE_SNAPSHOTS.")]
         public void BVT_EnumerateSnapShots()

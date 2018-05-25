@@ -208,6 +208,16 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to load the feature mapping from the config.xml:
+        ///{0}.
+        /// </summary>
+        internal static string LoadFeatureMappingError {
+            get {
+                return ResourceManager.GetString("LoadFeatureMappingError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to load the filter definitions from the config.xml:
         ///{0}.
         /// </summary>

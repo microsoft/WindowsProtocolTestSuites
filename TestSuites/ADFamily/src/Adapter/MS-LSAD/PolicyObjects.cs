@@ -955,6 +955,21 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad
 
                     break;
 
+                case InformationClass.PolicyMachineAccountInformation:
+                    policyInformationClass2 = InformationClass.PolicyMachineAccountInformation;
+                    policyInfoinServer.PolicyMachineAccountInfo = new _LSAPR_POLICY_MACHINE_ACCT_INFO();
+                    policyInfoinServer.PolicyMachineAccountInfo.Rid = 0;
+                    policyInfoinServer.PolicyMachineAccountInfo.Sid = utilities.GetSid(DomainSid.Valid, GetLocalAccountDomainSid);
+                    if ((this.uintAccessMask & ACCESS_MASK.POLICY_SERVER_ADMIN) != ACCESS_MASK.POLICY_SERVER_ADMIN)
+                    {
+                        intCheckInfoClass = LsadUtilities.ReturnAccessDenied;
+                    }
+                    else
+                    {
+                        intCheckInfoClass = LsadUtilities.ReturnSuccess;
+                    }
+                    break;
+
                 default:
 
                     #region invalidenumcheck
@@ -1780,6 +1795,21 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad
 
                     break;
 
+                case InformationClass.PolicyMachineAccountInformation:
+                    policyInformationClass2 = InformationClass.PolicyMachineAccountInformation;
+                    policyInfoinServer.PolicyMachineAccountInfo = new _LSAPR_POLICY_MACHINE_ACCT_INFO();
+                    policyInfoinServer.PolicyMachineAccountInfo.Rid = 0;
+                    policyInfoinServer.PolicyMachineAccountInfo.Sid = utilities.GetSid(DomainSid.Valid, GetLocalAccountDomainSid);
+                    if ((this.uintAccessMask & ACCESS_MASK.POLICY_SERVER_ADMIN) != ACCESS_MASK.POLICY_SERVER_ADMIN)
+                    {
+                        intCheckInfoClass = LsadUtilities.ReturnAccessDenied;
+                    }
+                    else
+                    {
+                        intCheckInfoClass = LsadUtilities.ReturnSuccess;
+                    }
+                    break;
+
                 default:
 
                     #region invalidenumcheck
@@ -2493,6 +2523,18 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad
                         intCheckInfoClass = LsadUtilities.ReturnSuccess;
                     }
 
+                    break;
+
+                case InformationClass.PolicyMachineAccountInformation:
+                    policyInformationClass2 = InformationClass.PolicyMachineAccountInformation;
+                    if ((this.uintAccessMask & ACCESS_MASK.POLICY_VIEW_AUDIT_INFORMATION) != ACCESS_MASK.POLICY_VIEW_AUDIT_INFORMATION)
+                    {
+                        intCheckInfoClass = LsadUtilities.ReturnAccessDenied;
+                    }
+                    else
+                    {
+                        intCheckInfoClass = LsadUtilities.ReturnSuccess;
+                    }
                     break;
 
                 default:
@@ -3374,6 +3416,18 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad
                         intCheckInfoClass = LsadUtilities.ReturnSuccess;
                     }
 
+                    break;
+
+                case InformationClass.PolicyMachineAccountInformation:
+                    policyInformationClass2 = InformationClass.PolicyMachineAccountInformation;
+                    if ((this.uintAccessMask & ACCESS_MASK.POLICY_VIEW_AUDIT_INFORMATION) != ACCESS_MASK.POLICY_VIEW_AUDIT_INFORMATION)
+                    {
+                        intCheckInfoClass = LsadUtilities.ReturnAccessDenied;
+                    }
+                    else
+                    {
+                        intCheckInfoClass = LsadUtilities.ReturnSuccess;
+                    }
                     break;
 
                 default:

@@ -14,7 +14,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
     {
         #region Test Cases
         [TestMethod]
-        [TestCategory(TestCategories.Cluster)]
+        [TestCategory(TestCategories.Failover)]
         [TestCategory(TestCategories.Smb30)]
         [TestCategory(TestCategories.Positive)]
         [Description("Operate files with encryption before server failover and after failover.")]
@@ -24,7 +24,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         }
 
         [TestMethod]
-        [TestCategory(TestCategories.Cluster)]
+        [TestCategory(TestCategories.Failover)]
         [TestCategory(TestCategories.Smb30)]
         [TestCategory(TestCategories.Compatibility)]
         [Description("Operate files with encryption before server failover but without encryption after failover")]
@@ -34,7 +34,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         }
 
         [TestMethod]
-        [TestCategory(TestCategories.Cluster)]
+        [TestCategory(TestCategories.Failover)]
         [TestCategory(TestCategories.Smb30)]
         [TestCategory(TestCategories.Compatibility)]
         [Description("Operate files without encryption before failover but with encryption after failover.")]

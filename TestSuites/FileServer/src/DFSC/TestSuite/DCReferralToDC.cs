@@ -34,6 +34,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Client sends a version 3 DC referral request with a valid domain name(FQDN) to DC and expects positive response.")]
         public void BVT_DCReferralV3ToDC()
         {
@@ -48,6 +49,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Client sends a v4 DC referral request EX with a valid domain name(NETBIOS) to DC and expects positive response.")]
         public void DCReferralV4EXNetBiosToDC()
@@ -65,6 +67,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Client sends a v4 DC referral request EX with a site name to DC and expects positive response.")]
         public void DCReferralV4EXSiteToDC()
@@ -82,6 +85,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Compatibility)]
         [Description("Client sends a v4 DC referral request with an invalid domain name(NETBIOS) to DC and expects negative response.")]
         public void InvalidDCReferralToDC()
@@ -97,6 +101,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Compatibility)]
         [Description("Client sends a v1 DC referral request to DC and expects negative response.")]
         public void DCReferralV1ToDC()
@@ -112,6 +117,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Compatibility)]
         [Description("Client sends a v2 DC referral request to DC and expects negative response.")]
         public void DCReferralV2ToDC()

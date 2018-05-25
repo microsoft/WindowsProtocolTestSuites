@@ -23,19 +23,19 @@
 		* [ CopyOffLoad](#3.1.8)
 		* [ FileLevelTrim](#3.1.9)
 		* [ IntegrityInfo](#3.1.10)
-		* [DirectoryLeasing](#3.1.11)
-		* [Encryption](#3.1.12)
+		* [ DirectoryLeasing](#3.1.11)
+		* [ Encryption](#3.1.12)
 		* [ AppInstanceId](#3.1.13)
 		* [ AppInstanceVersion](#3.1.14)
-		* [DurableHandle](#3.1.15)
+		* [ DurableHandle](#3.1.15)
 		* [ Oplock](#3.1.16)
-		* [FileLeasing](#3.1.17)
-		* [Replay](#3.1.18)
+		* [ FileLeasing](#3.1.17)
+		* [ Replay](#3.1.18)
 		* [ ResilientHandle](#3.1.19)
-		* [Signing](#3.1.20)
+		* [ Signing](#3.1.20)
 		* [ TreeMgmt](#3.1.21)
-		* [SessionMgmt](#3.1.22)
-		* [CreateClose](#3.1.23)
+		* [ SessionMgmt](#3.1.22)
+		* [ CreateClose](#3.1.23)
 		* [ Compound](#3.1.24)
 		* [ ValidateNegotiateInfo](#3.1.25)
 		* [ EnumerateSnapShots ](#3.1.26)
@@ -58,27 +58,37 @@
 		* [ SMB2Basic\_ChangeNotify\_MaxTransactSizeCheck\_Smb30](#3.1.43)
 		* [ SMB2Basic\_ChangeNotify\_MaxTransactSizeCheck\_Smb302](#3.1.44)
 		* [ SMB2Basic\_ChangeNotify\_MaxTransactSizeCheck\_Smb311](#3.1.45)
+		* [ HVRS\OffloadReadWrite](#3.1.46)
+		* [ HVRS\SetZeroData](#3.1.47)
+		* [ HVRS\FileLevelTrim](#3.1.48)
+		* [ HVRS\DuplicateExtentsToFile](#3.1.49)
+		* [ HVRS\SMBDialect](#3.1.50)
+		* [ HVRS\PersistentHandles](#3.1.51)
+		* [ HVRS\Resiliency](#3.1.52)
+		* [ QueryDir\_Reopen\_OnDir](#3.1.53)
+		* [ QueryDir\_Reopen\_OnFile](#3.1.54)
+		* [ Query\_Quota\_Info](#3.1.55)
 	* [SMB2 Feature Test](#3.2)
-		* [AppInstanceId](#3.2.1)
-		* [AppInstanceVersion](#3.2.2)
+		* [ AppInstanceId](#3.2.1)
+		* [ AppInstanceVersion](#3.2.2)
 		* [ CreateClose](#3.2.3)
-		* [CreditMgmt](#3.2.4)
-		* [DirectoryLeasing](#3.2.5)
-		* [Encryption](#3.2.6)
+		* [ CreditMgmt](#3.2.4)
+		* [ DirectoryLeasing](#3.2.5)
+		* [ Encryption](#3.2.6)
 		* [ Handle](#3.2.7)
-		* [Leasing](#3.2.8)
-		* [Negotiate](#3.2.9)
-		* [Oplock](#3.2.10)
-		* [Replay](#3.2.11)
-		* [ResilientHandle](#3.2.12)
-		* [SessionMgmt](#3.2.13)
+		* [ Leasing](#3.2.8)
+		* [ Negotiate](#3.2.9)
+		* [ Oplock](#3.2.10)
+		* [ Replay](#3.2.11)
+		* [ ResilientHandle](#3.2.12)
+		* [ SessionMgmt](#3.2.13)
 		* [ MultipleChannel](#3.2.14)
-		* [Signing](#3.2.15)
-		* [TreeMgmt](#3.2.16)
-		* [ValidateNegotiateInfo](#3.2.17)
+		* [ Signing](#3.2.15)
+		* [ TreeMgmt](#3.2.16)
+		* [ ValidateNegotiateInfo](#3.2.17)
 		* [ FileLevelTrim](#3.2.18)
 		* [ CopyOfflaod](#3.2.19)
-		* [OperateOneFileFromTwoNodes](#3.2.20)
+		* [ OperateOneFileFromTwoNodes](#3.2.20)
 		* [ MixedOplockLease](#3.2.21)
 	* [SMB2 Feature Combination](#3.3)
 		* [ MultipleChannelWithReplay](#3.3.1)
@@ -93,12 +103,13 @@
 		* [ SWNGetInterfaceList](#3.4.1)
 		* [ SWNRegistration](#3.4.2)
 		* [ SWNAsyncNotification](#3.4.3)
-		* [AsmmetricShare](#3.4.4)
+		* [ AsmmetricShare](#3.4.4)
 		* [ FileServerFailover](#3.4.5)
-		* [FileServerFailover\_Encryption](#3.4.6)
+		* [ FileServerFailover\_Encryption](#3.4.6)
 		* [ FileServerFailover\_Lease](#3.4.7)
 		* [ FileServerFailover\_Lock](#3.4.8)
 		* [ FileServerFailover\_DurableHandleV2](#3.4.9)
+		* [ FileServerFailover\_SMB311\_Redirect\_To\_Owner\_SOFS](#3.4.10)
 	* [FSRVP Test](#3.5)
 		* [ VSSOperateShadowCopySet](#3.5.1)
 		* [ VSSSetContext](#3.5.2)
@@ -106,9 +117,9 @@
 	* [RSVD Test](#3.6)
 		* [ OpenCloseSharedVHD](#3.6.1)
 		* [ TunnelOperationToSharedVHD](#3.6.2)
-		* [ReadWriteSharedVHD](#3.6.3)
+		* [ ReadWriteSharedVHD](#3.6.3)
 		* [ QuerySharedVirtualDiskSupport](#3.6.4)
-		* [TwoClientsAccessSameSharedVHD](#3.6.5)
+		* [ TwoClientsAccessSameSharedVHD](#3.6.5)
 		* [ QueryVHDSetFileInfo ](#3.6.7)
 		* [ ConvertVHDtoVHDSet ](#3.6.8)
 		* [ Checkpoint ](#3.6.9)
@@ -181,6 +192,8 @@ This test suite includes test cases of following File Sharing protocols:
 
 5.  MS-DFSC
 
+6.  MS-HVRS
+
 ###<a name="2.3">Restrictions
 
 1.  Named pipes and printer files are not tested.
@@ -199,13 +212,14 @@ Test scenarios are categorized as below table and will be described in following
 
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
-| SMB2 BVT                 | 53         | SMB2 common scenarios.                                                                                            |
-| SMB2 Feature Test        | 2548       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
+| SMB2 BVT                 | 78         | SMB2 common scenarios.                                                                                            |
+| SMB2 Feature Test        | 2591       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
-| FSRVP Test               | 9          | Test for MS-FSRVP                                                                                                 |
-| Server Failover Test     | 38         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
-| RSVD Test                | 25         | Test for MS-RSVD                                                                                                  |
+| FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
+| Server Failover Test     | 48         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
+| RSVD Test                | 29         | Test for MS-RSVD                                                                                                  |
 | DFSC Test                | 43         | Test for MS-DFSC                                                                                                  |
+| HVRS Test                | 8          | Test for MS-HVRS                                                                                                  |
 
 ###<a name="3.1">SMB2 BVT
 
@@ -1937,10 +1951,10 @@ This is used to test SMB2 common user scenarios.
 |---|---|
 | **Description**               | Verify ChangeNotify for CompletionFilter FILE\_NOTIFY\_CHANGE\_SIZE is handled correctly.|
 | **Message Sequence**          | 1.  Start a client1 to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
-|                               | 2.  Client1 starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_SIZE and flag WATCH\_TREE. |
-|                               | 3.  Client1 starts to create a file under directory by sending CREATE request. |
+|                               | 2.  Client1 starts to create a file under directory by sending CREATE request and write data to it by sending WRITE request. |
+|                               | 3.  Client1 starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_SIZE and flag WATCH\_TREE. |
 |                               | 4.  Start a client2 to open a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
-|                               | 5.  Client2 starts to write to the file by sending WRITE request. |
+|                               | 5.  Client2 sets new EoF position for the file by sending SET\_INFO request. |
 |                               | 6.  Tear down the client2 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 |                               | 7.  Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
@@ -1957,14 +1971,15 @@ This is used to test SMB2 common user scenarios.
 |                          | SESSION\_SETUP |
 |                          | TREE\_CONNECT|
 |                          | CREATE (Directory)|
-|                          | CHANGE\_NOTIFY (FILE\_NOTIFY\_CHANGE\_SIZE for CompletionFilter and WATCH\_TREE for flag) |
 |                          | CREATE (File) |
+|                          | WRITE (File) |
+|                          | CHANGE\_NOTIFY (FILE\_NOTIFY\_CHANGE\_SIZE for CompletionFilter and WATCH\_TREE for flag) |
 |                          | Create Client2 |
 |                          | NEGOTIATE |
 |                          | SESSION\_SETUP |
 |                          | TREE\_CONNECT|
 |                          | CREATE (Open File) |
-|                          | WRITE |
+|                          | SET\_INFO (FileEndOfFileInformation by a new EoF position) |
 |                          | Expect STATUS\_SUCCESS in CHANGE\_NOTIFY response |
 |                          | Close Client2 |
 |                          | CLOSE |
@@ -2131,7 +2146,7 @@ This is used to test SMB2 common user scenarios.
 | **Message Sequence**          | 1.  Start a client to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
 |                               | 2.  Client starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_EA and flag WATCH\_TREE. |
 |                               | 3.  Client starts to create a file under directory by sending CREATE request. |
-|                               | 4.  Client sets extended attribute information for the file by sending SET_INFO request. |
+|                               | 4.  Client sets extended attribute information for the file by sending SET\_INFO request. |
 |                               | 5.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
@@ -2168,7 +2183,7 @@ This is used to test SMB2 common user scenarios.
 | **Message Sequence**          | 1.  Start a client to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
 |                               | 2.  Client starts to register CHANGE\_NOTIFY on directory with CompletionFilter FILE\_NOTIFY\_CHANGE\_SECURITY and flag WATCH\_TREE. |
 |                               | 3.  Client starts to create a file under directory by sending CREATE request. |
-|                               | 4.  Client sets SACL\_SECURITY\_INFORMATION for the file by sending SET_INFO request. |
+|                               | 4.  Client sets SACL\_SECURITY\_INFORMATION for the file by sending SET\_INFO request. |
 |                               | 5.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
@@ -2570,6 +2585,311 @@ This is used to test SMB2 common user scenarios.
 |                          | LOGOFF |
 | **Cleanup**              ||
 
+####<a name="3.1.46"> HVRS\OffloadReadWrite
+
+#####<a name="3.1.46.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify the FSCTL_OFFLOAD_READ and FSCTL_OFFLOAD_WRITE |
+| **Message Sequence**          | 1.  Start a client to create and write to a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE; 5. WRITE; 6. FLUSH. |
+|                               | 2.  Client sends IOCTL request with FSCTL_OFFLOAD_READ. |
+|                               | 3.  Client create another file as the destination of offload copy. |
+|                               | 4.  Client sends IOCTL request with FSCTL_OFFLOAD_WRITE. |
+|                               | 5.  Read the content in destination of offload copy. |
+|                               | 6.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
+| **Cluster Involved Scenario** | **NO** |
+
+#####<a name="3.1.46.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT_OffloadReadWrite |
+| **Description** | Test whether the server supports the FSCTL_OFFLOAD_READ and FSCTL_OFFLOAD_WRITE. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | WRITE |
+|                          | FLUSH |
+|                          | IOCtl with FSCTL\_OFFLOAD\_READ |
+|                          | CREATE (File)|
+|                          | IOCtl with FSCTL\_OFFLOAD\_WRITE |
+|                          | READ |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
+
+####<a name="3.1.47"> HVRS\SetZeroData
+
+#####<a name="3.1.47.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify the FSCTL_SET_ZERO_DATA |
+| **Message Sequence**          | 1.  Start a client to create and write to a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE; 5. WRITE; 6. FLUSH. |
+|                               | 2.  Client sends IOCTL request with FSCTL_SET_ZERO_DATA. |
+| **Cluster Involved Scenario** | **NO** |
+
+#####<a name="3.1.47.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT_SetZeroData |
+| **Description** | Test whether the server supports the FSCTL_SET_ZERO_DATA. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | WRITE |
+|                          | FLUSH |
+|                          | IOCtl with FSCTL_SET_ZERO_DATA |
+| **Cleanup**              ||
+
+####<a name="3.1.48"> HVRS\FileLevelTrim
+
+#####<a name="3.1.48.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify the FFSCTL_FILE_LEVEL_TRIM |
+| **Message Sequence**          | 1.  Start a client to create and write to a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE; 5. WRITE. |
+|                               | 2.  Client sends FSCTL_FILE_LEVEL_TRIM. |
+|                               | 3.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
+| **Cluster Involved Scenario** | **NO** |
+
+#####<a name="3.1.48.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT_FileLevelTrim |
+| **Description** | Test whether the server supports the FSCTL_FILE_LEVEL_TRIM. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | WRITE |
+|                          | CLOSE |
+|                          | CREATE (File)|
+|                          | IOCtl with FSCTL_FILE_LEVEL_TRIM (with key field zero) |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
+
+|||
+|---|---|
+| **Test ID** | FileLevelTrim_Negative_NonZeroKeyInRequest |
+| **Description** | Test the server response when non-zero value is set to the Key field of FSCTL_FILE_LEVEL_TRIM request. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | WRITE |
+|                          | CLOSE |
+|                          | CREATE (File)|
+|                          | IOCtl with FSCTL_FILE_LEVEL_TRIM (with key field a non-zero value) |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
+
+####<a name="3.1.49"> HVRS\DuplicateExtentsToFile
+
+#####<a name="3.1.49.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify the FSCTL_DUPLICATE_EXTENTS_TO_FILE |
+| **Message Sequence**          | 1.  Start a client to create and write to a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE; 5. WRITE; 6. FLUSH. |
+|                               | 2.  Client sends FSCTL_DUPLICATE_EXTENTS_TO_FILE. |
+| **Cluster Involved Scenario** | **No** |
+
+#####<a name="3.1.49.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT_DuplicateExtentsToFile |
+| **Description** | Test whether the server supports the FSCTL_DUPLICATE_EXTENTS_TO_FILE. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | WRITE |
+|                          | FLUSH |
+|                          | IOCtl with FSCTL_DUPLICATE_EXTENTS_TO_FILE|
+| **Cleanup**              ||
+
+####<a name="3.1.50"> HVRS\SMBDialect
+
+#####<a name="3.1.50.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Test whether the server supports the SMB 3.0 or higher dialect |
+| **Message Sequence**          | 1.  NEGOTIATE. |
+| **Cluster Involved Scenario** | **NO** |
+
+#####<a name="3.1.50.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT_SMBDialect |
+| **Description** | Test whether the server supports the SMB 3.0 or higher dialect. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+| **Cleanup**              ||
+
+####<a name="3.1.51"> HVRS\PersistentHandles
+
+#####<a name="3.1.51.1"> Scenario
+
+|||
+|---|---|
+| **Description**               |Test whether the server supports persistent handles |
+| **Message Sequence**          | 1.  NEGOTIATE. |
+| **Cluster Involved Scenario** | **NO** |
+
+#####<a name="3.1.51.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT_PersistentHandles |
+| **Description** |Test whether the server supports persistent handles.|
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+| **Cleanup**              ||
+
+####<a name="3.1.52"> HVRS\Resiliency
+
+#####<a name="3.1.52.1"> Scenario
+
+|||
+|---|---|
+| **Description**               |Test whether the server supports the FSCTL_LMR_REQUEST_RESILIENCY |
+| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                               | 2.  Client sends FSCTL_LMR_REQUEST_RESILIENCY. |
+| **Cluster Involved Scenario** | **NO** |
+
+#####<a name="3.1.52.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT_Resiliency |
+| **Description** | Test whether the server supports the FSCTL_LMR_REQUEST_RESILIENCY.|
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | IOCtl with FSCTL_LMR_REQUEST_RESILIENCY |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
+
+####<a name="3.1.53"> QueryDir\_Reopen\_OnDir
+
+#####<a name="3.1.53.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify QUERY\_DIRECTORY with flag SMB2\_REOPEN to a directory is handled correctly |
+| **Message Sequence**          | 1.  Start a client to create a directory by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                               | 2.  Client sends QUERY\_DIRECTORY request with flag SMB2\_REOPEN to query directory information on a directory. |
+|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cluster Involved Scenario** | **NO** |
+
+#####<a name="3.1.53.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT\_SMB2Basic\_QueryDir\_Reopen\_OnDir |
+| **Description** | Verify QUERY\_DIRECTORY with flag SMB2\_REOPEN to a directory is handled correctly. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (Directory)|
+|                          | QUERY\_DIRECTORY(flags: SMB2\_REOPEN, target: directory) |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
+
+####<a name="3.1.54"> QueryDir\_Reopen\_OnFile
+
+#####<a name="3.1.54.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify QUERY\_DIRECTORY with flag SMB2\_REOPEN to a file is handled correctly |
+| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                               | 2.  Client sends QUERY\_DIRECTORY request with flag SMB2\_REOPEN to query directory information on a file. |
+|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cluster Involved Scenario** | **NO** |
+
+#####<a name="3.1.54.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT\_SMB2Basic\_QueryDir\_Reopen\_OnFile |
+| **Description** | Verify QUERY\_DIRECTORY with flag SMB2\_REOPEN to a file is handled correctly. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | QUERY\_DIRECTORY(flags: SMB2\_REOPEN, target: File) |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
+
+####<a name="3.1.55"> Query\_Quota\_Info
+
+#####<a name="3.1.55.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify the behavior of querying quota information with FILE\_GET\_QUOTA\_INFO in SidBuffer. |
+| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                               | 2.  Client queries quota information by sending QUERY_INFO request. |
+|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF. |
+| **Cluster Involved Scenario** | **NO** |
+
+#####<a name="3.1.55.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT\_SMB2Basic\_Query\_Quota\_Info |
+| **Description** | Verify the behavior of querying quota information with FILE\_GET\_QUOTA\_INFO in SidBuffer. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | QUERY_INFO(SMB2\_0\_INFO\_QUOTA) |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
 
 ###<a name="3.2">SMB2 Feature Test
 
@@ -4851,7 +5171,7 @@ This model has 6 scenarios.
 
 |||
 |---|---|
-|**Description**|It's a scenario to test how the server handles a READ/WRITE/IOCTL/SET_INFO request with/without replay flag and valid/invalid channel sequence.|
+|**Description**|It's a scenario to test how the server handles a READ/WRITE/IOCTL/SET\_INFO request with/without replay flag and valid/invalid channel sequence.|
 |**Machine**|        ReadConfig;|
 ||        PrepareFileOperation({ModelDialectRevision.Smb30, ModelDialectRevision.Smb302}, requestCommand)?;|
 ||        FileOperationRequest(_, _, requestCommand, _, _, _);|
@@ -7320,7 +7640,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 |||
 |---|---|
-|**Test ID**|FileServerFailover_FileLeasing|
+|**Test ID**|FileServerFailover\_FileLeasing|
 |**Description**|Operate file with lease and durable handle before server failover and expect lease break notification|
 |**Prerequisites**||
 |**Test Execution Steps**|**From client1 **|
@@ -7359,9 +7679,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 |||
 |---|---|
-|**Test case**|FileServer_Filover_Lock|
+|**Test case**|FileServer\_Failover\_Lock|
 |**Description**|Operate files with lock during failover and expect the lock is maintained after failover|
-|**Message Sequence**|**From client1 open a  file and lock a specific range**|
+|**Message Sequence**|**From client1 open a file and lock a specific range**|
 ||NEGOTIATE|
 ||SESSION_SETUP|
 ||TREE_CONNECT|
@@ -7400,7 +7720,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 
 |||
 |---|---|
-|**Test ID**|FileServerFailover_Lock|
+|**Test ID**|FileServerFailover\_Lock|
 |**Description**|Operate files with lock during failover and expect the lock is maintained after failover|
 |**Prerequisites**||
 |**Test Execution Steps**|**From client1 open a  file and lock a specific range**|
@@ -7409,7 +7729,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||TREE_CONNECT|
 ||CREATE (File, with durable handle request)|
 ||WRITE|
-||LOCK (with SMB2_LOCKFLAG_SHARED_LOCK in SMB2_LOCK_ELEMENT)|
+||LOCK (with SMB2\_LOCKFLAG\_SHARED\_LOCK in SMB2\_LOCK\_ELEMENT)|
 ||Disable current node of the Cluster which owns the connection|
 ||**From client2**|
 ||NEGOTIATE|
@@ -7449,7 +7769,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||NEGOTIATE|
 ||SESSION_SETUP|
 ||TREE_CONNECT|
-||CREATE(with CREATE_DURABLE_HANDLE_REQUEST_V2 create context)|
+||CREATE(with CREATE\_DURABLE\_HANDLE\_REQUEST\_V2 create context)|
 ||**Disable Node1to simulate failover**|
 ||**From different client try to open the same file**|
 ||Repeat step 1 to 3|
@@ -7486,6 +7806,33 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||Server sends TREE_DISCONNECT response|
 ||Client sends LOGOFF request|
 ||Server sends LOGOFF response|
+|**Cleanup**||
+
+####<a name="3.4.10"> FileServerFailover\_SMB311\_Redirect\_To\_Owner\_SOFS
+
+#####<a name="3.4.10.1"> Scenario
+
+|||
+|---|---|
+|**Description**        |Test server can handle a TreeConnect request with flag SMB2\_SHAREFLAG\_REDIRECT\_TO\_OWNER when SMB dialect is 3.1.1 and share type includes STYPE\_CLUSTER\_SOFS.|
+| **Message Sequence**  | 1.  Start a client by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; |
+|                       | 2.  Client sends TREE\_CONNECT request with TREE\_CONNECT flag SMB2\_SHAREFLAG\_REDIRECT\_TO\_OWNER. |
+|                       | 3.  Tear down the client by sending LOG\_OFF |
+|**Cluster Involved Scenario**|**YES**|
+
+
+#####<a name="3.4.10.2"> Test Case
+
+|||
+|---|---|
+|**Test ID**|FileServerFailover\_SMB311\_Redirect\_To\_Owner\_SOFS|
+|**Description**|Test server can handle a TreeConnect request with flag SMB2\_SHAREFLAG\_REDIRECT\_TO\_OWNER when SMB dialect is 3.1.1 and share type includes STYPE\_CLUSTER\_SOFS.|
+|**Prerequisites**||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT (with SMB2\_SHAREFLAG\_REDIRECT\_TO\_OWNER) |
+|                          | LOGOFF |
 |**Cleanup**||
 
 
