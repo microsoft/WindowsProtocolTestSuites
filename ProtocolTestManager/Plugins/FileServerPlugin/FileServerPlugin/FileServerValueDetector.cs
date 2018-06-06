@@ -584,7 +584,8 @@ namespace Microsoft.Protocols.TestManager.Detector
                 string ruleName = rule.Name;
 
                 // SMB2 and FSA have many rules, put them in the beginning to reduce IF statement checker.
-                if (ruleName.StartsWith("Feature.SMB2") && rule.Status == RuleStatus.Selected)
+                if ((ruleName.StartsWith("Feature.Others.SMB2") || ruleName.StartsWith("Feature.Cluster Required.SMB2")) &&
+                    rule.Status == RuleStatus.Selected)
                 {
                     smb2Rules.Add(rule);
                     if (rule.Status == RuleStatus.Selected)
@@ -593,18 +594,19 @@ namespace Microsoft.Protocols.TestManager.Detector
                     }
 
                 }
-                else if (ruleName.StartsWith("Feature.FSA (File System Algorithms)") && rule.Status == RuleStatus.Selected)
+                else if (ruleName.StartsWith("Feature.Others.FSA (File System Algorithms)") && rule.Status == RuleStatus.Selected)
                 {
                     isFsaSelected = true;
                 }
-                else if ((ruleName == "Feature.File Server Failover"
-                    || ruleName == "Feature.SWN (Service Witness)"
-                    || ruleName == "Feature.FSRVP (File Server Remote VSS)")
+                else if ((ruleName == "Feature.Cluster Required.File Server Failover"
+                    || ruleName == "Feature.Cluster Required.SWN (Service Witness)"
+                    || ruleName == "Feature.Cluster Required.FSRVP (File Server Remote VSS)"
+                    || ruleName == "Feature.Others.FSRVP (File Server Remote VSS)")
                     && rule.Status == RuleStatus.Selected)
                 {
                     isClusterSwnFsrvpSelected = true;
                 }
-                else if (ruleName == "Feature.DFSC (Distributed File System Referral)")
+                else if (ruleName == "Feature.Others.DFSC (Distributed File System Referral)")
                 {
                     if (rule.Status == RuleStatus.Selected)
                     {
@@ -615,14 +617,14 @@ namespace Microsoft.Protocols.TestManager.Detector
                         hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("MS-DFSC_ServerTestSuite.deployment.ptfconfig"));
                     }
                 }
-                else if (ruleName.StartsWith("Feature.RSVD"))
+                else if (ruleName.StartsWith("Feature.Cluster Required.RSVD"))
                 {
                     if (rule.Status == RuleStatus.Selected)
                     {
                         isRsvdSelected = true;
                     }
                 }
-                else if (ruleName == "Feature.SQOS (Storage Quality of Service)")
+                else if (ruleName == "Feature.Cluster Required.SQOS (Storage Quality of Service)")
                 {
                     if (rule.Status == RuleStatus.Selected)
                     {
@@ -633,7 +635,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                         hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("MS-SQOS_ServerTestSuite.deployment.ptfconfig"));
                     }
                 }
-                else if (ruleName.StartsWith("Feature.Auth") && rule.Status == RuleStatus.Selected)
+                else if (ruleName.StartsWith("Feature.Others.Auth") && rule.Status == RuleStatus.Selected)
                 {
                     isAuthSelected = true;
                 }
