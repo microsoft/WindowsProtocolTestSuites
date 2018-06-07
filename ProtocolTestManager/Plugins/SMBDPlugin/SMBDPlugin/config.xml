@@ -41,7 +41,7 @@
       </Rule>
 
       <Rule name = "SMB2 over SMBD">
-        <Rule name = "SMB 3.0 or Later">
+        <Rule name = "SMB 30">
           <Rule name = "RDMA Channel">
             <Category name = "Smb2OverRdmaChannel"/>
           </Rule>
@@ -49,7 +49,7 @@
             <Category name = "Smb2MultipleChannel"/>
           </Rule>
         </Rule>
-        <Rule name = "SMB 3.0.2 or Later">
+        <Rule name = "SMB 302">
           <Rule name = "RDMA Channel Remote Invalidation">
             <Category name = "Smb2OverRdmaChannelInvalidate"/>
           </Rule>
