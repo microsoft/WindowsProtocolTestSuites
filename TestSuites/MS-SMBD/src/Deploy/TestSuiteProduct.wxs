@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?define VS13=1 ?><!-- If need check Visual Studio 2013 or Visual Studio 2013 Test Agent" -->
+<?define VS12=1 ?><!-- If need check Visual Studio 2012 or Visual Studio 2012 Test Agent" -->
 <?define PTF=1 ?><!-- If need check Protocol Test Framework version" -->
 <?define SE=1 ?><!-- If need check Spec Explorer 2010" -->
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
@@ -67,8 +67,8 @@
     </UI>
 	
 	<!-- Dependency List -->
-	<SetProperty Id="VS2013_VSTA2013" After="AppSearch" Value=" • Microsoft Visual Studio 2013 or Visual Studio 2013 Test Agent.&#xA;">
-        <![CDATA[$(var.VS13)]]>
+	<SetProperty Id="VS2012_VSTA2012" After="AppSearch" Value=" • Microsoft Visual Studio 2012 or Visual Studio 2012 Test Agent.&#xA;">
+        <![CDATA[$(var.VS12)]]>
     </SetProperty>
 	<SetProperty Id="SPEC_EXPLORER" After="AppSearch" Value=" • Microsoft Spec Explorer 2010.&#xA;">
         <![CDATA[$(var.SE)]]>
@@ -78,10 +78,10 @@
     </SetProperty>
 	
 	<!-- Visual Studio 2012 Test Agent dependency check-->
-	<PropertyRef Id="VS2013_IDE_VCSHARP_PROJECTSYSTEM_INSTALLED"/>
+	<PropertyRef Id="VS2012_IDE_VCSHARP_PROJECTSYSTEM_INSTALLED"/>
 	
-	<Property Id="VSTA2013">
-      <DirectorySearch Id="TestAgentSearch2013" Path="[ProgramFilesFolder]Microsoft Visual Studio 12.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow" Depth="1">
+	<Property Id="VSTA2012">
+      <DirectorySearch Id="TestAgentSearch2012" Path="[ProgramFilesFolder]Microsoft Visual Studio 11.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow" Depth="1">
         <FileSearch Name="vstest.console.exe"
                     Languages="0" />
       </DirectorySearch>
@@ -94,16 +94,16 @@
       </DirectorySearch>
     </Property>
 	
-	<!-- Check if VS13 or VSTest Agent 2013 -->
+	<!-- Check if VS12 or VSTest Agent 2012 -->
 	<InstallUISequence>
-      <Custom Action="SET_VSTEST_AGENT_OR_VS_NOT_INSTALLED_WARNING_TEXT_2013" After="AppSearch">
-        <![CDATA[$(var.VS13) AND NOT (VS2013_IDE_VCSHARP_PROJECTSYSTEM_INSTALLED OR VSTA2013)]]>
+      <Custom Action="SET_VSTEST_AGENT_OR_VS_NOT_INSTALLED_WARNING_TEXT_2012" After="AppSearch">
+        <![CDATA[$(var.VS12) AND NOT (VS2012_IDE_VCSHARP_PROJECTSYSTEM_INSTALLED OR VSTA2012)]]>
       </Custom>
     </InstallUISequence>
 	
-    <CustomAction Id="SET_VSTEST_AGENT_OR_VS_NOT_INSTALLED_WARNING_TEXT_2013"
+    <CustomAction Id="SET_VSTEST_AGENT_OR_VS_NOT_INSTALLED_WARNING_TEXT_2012"
                   Property="VSTEST_AGENT_NOT_INSTALLED_WARNING_TEXT"
-                  Value=" • Microsoft Visual Studio 2013 or Visual Studio 2013 Test Agent.&#xA;" />
+                  Value=" • Microsoft Visual Studio 2012 or Visual Studio 2012 Test Agent.&#xA;" />
 	
 	<!-- SET Spec Explorer Warning Message-->
     <CustomAction Id="SET_SE_NOT_INSTALLED_WARNING_TEXT"
@@ -142,7 +142,7 @@
     </Property>
 	
 	<SetProperty Id="VSInstalled" After="AppSearch" Value="1">
-        <![CDATA[($(var.VS13) AND NOT (VSTA2013 OR VS2013_IDE_VCSHARP_PROJECTSYSTEM_INSTALLED))]]>
+        <![CDATA[($(var.VS12) AND NOT (VSTA2012 OR VS2012_IDE_VCSHARP_PROJECTSYSTEM_INSTALLED))]]>
     </SetProperty>
 	
     <!-- Directory structure -->
@@ -343,6 +343,7 @@
         <ComponentRef Id="TestSuiteShortcuts" />
         <ComponentRef Id="DesktopShortcuts" />
         <ComponentGroupRef Id="TESTSUITE_MISC_FILES"/>
+				<ComponentGroupRef Id="TESTSUITE_PTFCONFIG_FILES"/>
         <ComponentGroupRef Id="BIN_FILES" />
         <ComponentGroupRef Id="BATCH_FILES" />
       </Feature>

@@ -412,6 +412,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         WinSvr2008R2 = 4,
         WinSvr2012   = 5,
         WinSvr2012R2 = 6,
-        Win2016 = 7
+        Win2016 = 7,
+        Winv1803 = 8,
     };
 }

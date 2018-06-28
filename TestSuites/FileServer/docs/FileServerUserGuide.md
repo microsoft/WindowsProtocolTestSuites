@@ -1748,8 +1748,7 @@ Take the share named **SMBBasic** as an example:
 >	![](./image/FileServerUserGuide/image1.png)Note
 
 >	&emsp;&emsp;Prior to creating the cluster, the shared storage needs to be created and added to the failover cluster nodes. For more information about how to do this, please see [5.3.11. Setup SAN Storage Server](#5.3.11)
-
-	![](./image/FileServerUserGuide/image117.png)
+        ![](./image/FileServerUserGuide/image117.png)
 
 4.	Type the computer name of failover cluster nodes.
 

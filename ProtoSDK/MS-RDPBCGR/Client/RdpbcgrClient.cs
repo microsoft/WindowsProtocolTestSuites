@@ -1190,7 +1190,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             encryptedProtocol = protocol;
 #if !UT
-            tcpClient = new TcpClient(serverName, serverPort); //Initialize and synchronous connect
+            tcpClient = new TcpClient(serverName.ParseIPAddress().ToString(), serverPort); //Initialize and synchronous connect
             clientStream = tcpClient.GetStream();
 #endif
             // create a type of transport

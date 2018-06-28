@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd;
+using Microsoft.Protocols.TestTools.StackSdk;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
 {
@@ -49,7 +50,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         {
             get
             {
-                return IPAddress.Parse(GetProperty("FileServerIPContainingSharedVHD"));
+                return GetProperty("FileServerIPContainingSharedVHD").ParseIPAddress();
             }
         }
 

@@ -33,13 +33,13 @@ namespace Microsoft.Protocols.TestManager.ADFSPIPPlugin
                                                  .Where((s) => s.Contains("ADFSPIP"))
                                                  .FirstOrDefault();
 
-            Match versionMatch = Regex.Match(registryKeyName, @"\d\.\d\.\d{4}\.\d");
+            Match versionMatch = Regex.Match(registryKeyName, @"\d+\.\d+\.\d+\.\d+");
             return versionMatch.Value;
         }
 
         public static string FilePath(string filename)
         {
-            return string.Format(@"C:\MicrosoftProtocolTests\MS-ADFSPIP\Client-Endpoint\TestSuite\{0}\Bin\Certificates\{1}", GetInstalledTestSuiteVersion(), filename);
+            return string.Format(@"C:\MicrosoftProtocolTests\MS-ADFSPIP\Client-Endpoint\{0}\Bin\Certificates\{1}", GetInstalledTestSuiteVersion(), filename);
         }
 
         public static bool VerifyCertExist(string filename, string stepname)

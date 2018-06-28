@@ -154,6 +154,7 @@
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileEaInformation.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileFullEaInformation.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileNetworkOpenInformation.cs" />
+    <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileNormalizedNameInformation.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Set_FileLinkInformation.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Set_FileEaInformation.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Set_FileFullEaInformation.cs" />

@@ -138,6 +138,9 @@
           <Rule name = "OperateOneFileFromTwoNodes">
             <Category name = "OperateOneFileFromTwoNodes"/>
           </Rule>
+          <Rule name = "HVRS (Hyper-V Remote Storage)">
+            <Category name = "HVRS"/>
+          </Rule>
         </Rule>
         <Rule name = "FSRVP (File Server Remote VSS)">
           <Category name = "FSRVP"/>
