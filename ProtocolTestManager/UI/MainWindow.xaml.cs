@@ -562,7 +562,6 @@ namespace Microsoft.Protocols.TestManager.UI
         private void Item_DetectedSUT_Selected(object sender, RoutedEventArgs e)
         {
             detectionRunning = false;
-            detectionFinished = false;
             ContentFrame.Navigate(Pages.SUTInfoPage);
             PageInfoTextBlock.Text = StringResources.DetectionResult;
             SetButtonsVisibility(true, true);
