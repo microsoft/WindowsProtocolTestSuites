@@ -478,6 +478,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
         private void LoadFeatureMappingFromXml(XmlNode featureMappingNode)
         {
             if (featureMappingNode == null) {
+                targetFilterIndex = -1;
+                mappingFilterIndex = -1;
                 return;
             }
 
