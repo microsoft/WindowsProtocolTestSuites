@@ -15,7 +15,11 @@
              InstallScope="perMachine"
              Description="Protocol Test Manager v$(env.TESTSUITE_VERSION)"/>
 
-    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <CustomAction Id="PreventDowngrading" Error="A newer version of [ProductName] is already installed." />
+    <InstallExecuteSequence>
+      <RemoveExistingProducts After="InstallInitialize" />
+    </InstallExecuteSequence>
+
 
     <Media Id="1" Cabinet="ProtocolTestManager.cab" EmbedCab="yes" />
 
