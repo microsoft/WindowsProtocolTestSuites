@@ -15,6 +15,12 @@
              InstallScope="perMachine"
              Description="Protocol Test Manager v$(env.TESTSUITE_VERSION)"/>
 
+    <Upgrade Id="4ee979ed-648b-478b-aca0-08718499a95e">
+      <UpgradeVersion OnlyDetect="no" Property="PREVIOUSFOUND"
+        Minimum="1.0.0.0"  IncludeMinimum="yes"
+        Maximum="99.99.99.99" IncludeMaximum="no" />
+    </Upgrade>
+
     <CustomAction Id="PreventDowngrading" Error="A newer version of [ProductName] is already installed." />
     <InstallExecuteSequence>
       <RemoveExistingProducts After="InstallInitialize" />
