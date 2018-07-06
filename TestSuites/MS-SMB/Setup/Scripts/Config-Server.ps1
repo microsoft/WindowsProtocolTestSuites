@@ -7,29 +7,116 @@
 ## Supported OS:   Windows Server 2008, Windows Server 2008 R2, and Windows 8 Server
 ##
 ##############################################################################
-$ScriptsSignalFile = "$ENV:HOMEDRIVE\config.finished.signal"
+$ScriptsSignalFile = "$env:HOMEDRIVE\config.finished.signal"
+$protocolName = "MS-SMB"
+
 if (Test-Path -Path $ScriptsSignalFile)
 {
 	Write-Host "The script execution is complete." -foregroundcolor Red
 	exit 0
 }
-[String]$existH = "false"
-[string]$scriptsPath = Get-Location
+
+$endPointPath = "$env:SystemDrive\MicrosoftProtocolTests\$protocolName\Server-Endpoint"
+$version = Get-ChildItem $endPointPath | where {$_.Attributes -eq "Directory" -and $_.Name -match "\d+.\d+.\d+.\d+"} | Sort-Object Name -descending | Select-Object -first 1
+$tsInstallationPath = "$endPointPath\$version"
+$scriptsPath  = $tsInstallationPath + "\scripts"
+
+# Create REFS Volume 
+function CreateREFSVolume()
+{
+    Write-Info.ps1 "Create Volume for SMBREFSShare"
+    $volume = gwmi -Class Win32_volume | where {$_.FileSystem -eq "FAT32" -and $_.Label -eq "FAT32"}
+    if ($volume -eq $null)
+    {
+        Write-Info.ps1 "Create Volume for SMBREFSShare"
+        # Get disk and partition
+        $disk = Get-WmiObject -Class Win32_DiskDrive | sort DeviceID | Select-Object -first 1
+        $diskNum = $disk.Index
+        $partitionId = $disk.Partitions | Select-Object -Last 1
+        
+        #----------------------------------------------------------------------------
+        # A walkaround to a windows bug, the partitionId in Windows Server 2016 RS1 is wrong.
+        #----------------------------------------------------------------------------
+        $OSVersion = [System.Environment]::OSVersion.Version
+    
+        if($OSVersion.Major -eq 10 -and $OSVersion.Build -eq 14393)
+        {
+            $partitionId = 1
+        }
+        #----------------------------------------------------------------------------
+        # A walkaround to a windows bug, the partitionId in Windows Server 2016 RS1 is wrong.
+        #----------------------------------------------------------------------------        
+
+        $newPartitionId = $partitionId + 1
+        
+        $diskPartCmd = @()
+        $diskPartCmd += "select disk $diskNum"
+        $diskPartCmd += "SELECT PART $partitionId"
+        $diskPartCmd += "sHRINK MINIMUM=2001"
+        $diskPartCmd += "CREATE PART EXTEND SIZE=2000"
+
+        # assign the left 2000MB for FAT32
+        $diskPartCmd += "CREATE PART LOGI"
+        $diskPartCmd += "SELECT PART $newPartitionId"
+        $diskPartCmd += "FORMAT FS=ReFS QUICK LABEL=SMBTEST"
+        $diskPartCmd += "ASSIGN LETTER=H"
+        $diskPartCmd | diskpart.exe
+    }
+} 
+# Create FAT32 Volume 
+function CreateFAT32Volume()
+{
+    Write-Info.ps1 "Create Volume for SMBFAT32Share"
+    $volume = gwmi -Class Win32_volume | where {$_.FileSystem -eq "FAT32" -and $_.Label -eq "FAT32"}
+    if ($volume -eq $null)
+    {
+        Write-Info.ps1 "Create Volume for SMBFAT32Share"
+        # Get disk and partition
+        $disk = Get-WmiObject -Class Win32_DiskDrive | sort DeviceID | Select-Object -first 1
+        $diskNum = $disk.Index
+        $partitionId = $disk.Partitions | Select-Object -Last 1
+        
+        #----------------------------------------------------------------------------
+        # A walkaround to a windows bug, the partitionId in Windows Server 2016 RS1 is wrong.
+        #----------------------------------------------------------------------------
+        $OSVersion = [System.Environment]::OSVersion.Version
+    
+        if($OSVersion.Major -eq 10 -and $OSVersion.Build -eq 14393)
+        {
+            $partitionId = 1
+        }
+        #----------------------------------------------------------------------------
+        # A walkaround to a windows bug, the partitionId in Windows Server 2016 RS1 is wrong.
+        #----------------------------------------------------------------------------        
+
+        $newPartitionId = $partitionId + 1
+        
+        $diskPartCmd = @()
+        $diskPartCmd += "SELECT DISK $diskNum"
+        $diskPartCmd += "SELECT PART $partitionId"
+        $diskPartCmd += "sHRINK MINIMUM=101"
+        $diskPartCmd += "CREATE PART EXTEND SIZE=100"
+
+        # assign the left 2000MB for FAT32
+        $diskPartCmd += "CREATE PART LOGI"
+        $diskPartCmd += "SELECT PART $newPartitionId"
+        $diskPartCmd += "FORMAT FS=FAT32 QUICK LABEL=SMBTEST"
+        $diskPartCmd += "ASSIGN LETTER=H"
+        $diskPartCmd | diskpart.exe
+    }
+}
 pushd $scriptsPath
+
+[String]$existH = "false"
 $configFile  = "$scriptsPath\ParamConfig.xml"
 if(Test-Path -Path $configFile)
 {
 	$toolsPath       = .\Get-Parameter.ps1 $configFile toolsPath
-	$logPath         = .\Get-Parameter.ps1 $configFile logPath
-	$IPVersion       = .\Get-Parameter.ps1 $configFile IPVersion
-	$workgroupDomain = .\Get-Parameter.ps1 $configFile workgroupDomain	
-	$userNameInVM    = .\Get-Parameter.ps1 $configFile userNameInVM
-	$userPwdInVM     = .\Get-Parameter.ps1 $configFile userPwdInVM
+	$logPath         = .\Get-Parameter.ps1 $configFile logPath		
     $runonREFS       = .\Get-Parameter.ps1 $configFile runonREFS
-	$domainInVM      = .\Get-Parameter.ps1 $configFile domainInVM
+	
 }
 $logFile         = $logPath+"\Config-Server.ps1.log"
-$dataPath        = "..\Data"
 $myToolsPath     = "..\ToolsPath"
 Write-Host "Begin to config server ..." -foregroundcolor yellow
 
@@ -50,16 +137,12 @@ if(!(Test-Path -Path $testResultsPath))
 	New-Item -Type Directory -Path $testResultsPath -Force
 }
 .\Set-Parameter.ps1 $configFile logFile $logFile
-.\Set-Parameter.ps1 $configFile dataPath $dataPath
 .\Set-Parameter.ps1 $configFile myToolsPath $myToolsPath
 .\Write-Log.ps1 "Put current dir as $scriptsPath." Debug $logFile
 .\Write-Log.ps1 "`$configFile         = $configFile"  Client
 .\Write-Log.ps1 "`$logFile            = $logFile"    Client
 .\Write-Log.ps1 "`$ScriptsPath        = $ScriptsPath" Client
 .\Write-Log.ps1 "`$logPath            = $logPath"     Client
-.\Write-Log.ps1 "`$dataPath           = $dataPath" Client
-.\Write-Log.ps1 "`$IPVersion          = $IPVersion" Client
-.\Write-Log.ps1 "`$workgroupDomain    = $workgroupDomain" Client
 
 #-----------------------------------------------------
 # Begin to config server
@@ -71,6 +154,15 @@ cmd /c netsh.exe advfirewall set allprofiles state off
     
 Write-Host "Turn on file and printer sharing..."
 .\Config-FileSharing on
+
+# Check SMB installed
+.\Write-Log.ps1 "Check FS-SMB installed"
+if ((Get-WindowsFeature FS-SMB1).InstallState -ne "Installed")
+{
+    .\Write-Log.ps1 "FS-SMB is not installed. Install it now"     
+    Add-WindowsFeature FS-SMB1 -IncludeAllSubFeature -IncludeManagementTools
+}
+.\Write-Log.ps1 "FS-SMB has been installed"
 
 Write-Host "Install DFS Components and config DFS namespace ..." Client
 $serverName = "$ENV:ComputerName"    
@@ -96,6 +188,8 @@ cmd /C sc start dfs
 #-----------------------------------------------------
 # Create disk H with FAT/FAT32/ReFS file system
 #-----------------------------------------------------
+
+
 if(([double]$serverOsVersion -ge [double]$os2012) -and ($runonREFS -eq $true))
 {
     .\Write-Log.ps1 "Create a ReFS disk" Client
@@ -122,22 +216,18 @@ if($disk1.Partitions -gt 1)
     $Cid=2
 }
 $Hid=$disk1.Partitions+1
-if($existH -eq "false")
+if(([double]$serverOsVersion -ge [double]$os2012) -and ($existH -eq "false"))
 {
-    $source="SELECT DISK 0`r`nSELECT PART $Cid`r`nsHRINK MINIMUM=101`r`nCREATE PART EXTEND SIZE=100`r`nCREATE PART LOGI`r`nSELECT PART $Hid`r`nFORMAT FS=FAT32 QUICK LABEL=`"SMBTEST`"`r`nASSIGN LETTER=H"
-
-    if(([double]$serverOsVersion -ge [double]$os2012) -and ($runonREFS -eq $true))
-	{
-		$source="SELECT DISK 0`r`nSELECT PART $Cid`r`nsHRINK MINIMUM=2001`r`nCREATE PART EXTEND SIZE=2000`r`nCREATE PART LOGI`r`nSELECT PART $Hid`r`nFORMAT FS=ReFS QUICK LABEL=`"SMBTEST`"`r`nASSIGN LETTER=H"
+    if($runonREFS -eq $true)
+    {
+        CreateREFSVolume
     }
-    out-file -filepath $scriptsPath\diskpart_script2k8.txt -inputobject $source -encoding ASCII
-    diskpart.exe /s $scriptsPath\diskpart_script2k8.txt
-    
-    if(([double]$serverOsVersion -ge [double]$os2012) -and ($runonREFS -eq $true))
-	{
-       cmd /C fsutil USN createjournal m=5242880 a=1048576 H:
+    else
+    {
+        CreateFAT32Volume
     }
 }
+
 		
 #-----------------------------------------------------
 # Create Share folders ...

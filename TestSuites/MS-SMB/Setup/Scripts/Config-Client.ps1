@@ -8,14 +8,21 @@
 ##
 ##############################################################################
 $ScriptsSignalFile = "$env:HOMEDRIVE\config.finished.signal"
+$protocolName = "MS-SMB"
+
 if (Test-Path -Path $ScriptsSignalFile)
 {
 	Write-Host "The script execution is complete." -foregroundcolor Red
 	exit 0
 }
 
-[string]$scriptsPath = Get-location
+$endPointPath = "$env:SystemDrive\MicrosoftProtocolTests\$protocolName\Server-Endpoint"
+$version = Get-ChildItem $endPointPath | where {$_.Attributes -eq "Directory" -and $_.Name -match "\d+.\d+.\d+.\d+"} | Sort-Object Name -descending | Select-Object -first 1
+$tsInstallationPath = "$endPointPath\$version"
+$scriptsPath  = $tsInstallationPath + "\scripts"
+ 
 pushd $scriptsPath
+
 [string]$binPath = $scriptsPath+ "\..\bin\"
 $settingFile  = "$scriptsPath\ParamConfig.xml"
 if(Test-Path -Path $settingFile)
@@ -23,11 +30,17 @@ if(Test-Path -Path $settingFile)
 	$toolsPath       = .\Get-Parameter.ps1 $settingFile toolsPath
 	$logPath         = .\Get-Parameter.ps1 $settingFile logPath
 	$IPVersion       = .\Get-Parameter.ps1 $settingFile IPVersion
-	$workgroupDomain = .\Get-Parameter.ps1 $settingFile workgroupDomain
+
+    $workgroupDomain = "domain"
+    if([string]::IsNullOrEmpty($env:UserDNSDomain))
+    {
+        $workgroupDomain = "workgroup"
+    }
+	
 	$servername      = .\Get-Parameter.ps1 $settingFile serverComputerName	
 	$userNameInVM    = .\Get-Parameter.ps1 $settingFile userNameInVM
 	$userPwdInVM     = .\Get-Parameter.ps1 $settingFile userPwdInVM
-	$domainInVM      = .\Get-Parameter.ps1 $settingFile domainInVM
+	$domainInVM      = $env:UserDNSDomain
 }
 
 $osMajor = [System.Environment]::OSVersion.Version.Major
@@ -220,7 +233,7 @@ else
 
 .\Modify-ConfigFileNode.ps1 $cfgfile "SutMachineName"         $servername
 .\Modify-ConfigFileNode.ps1 $cfgfile "SutLoginAdminUserName"  $userNameInVM
-if($workgroupDomain -eq "Domain")
+if($workgroupDomain.ToLower() -eq "domain")
 {
 	$userFullPathName = $domainInVM + "\" + $userNameInVM
 }

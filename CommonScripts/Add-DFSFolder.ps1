@@ -1,22 +1,23 @@
 #############################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
 ##
 ## Microsoft Windows Powershell Scripting
-## Purpose: Turn off readonly attribute for a file.
+## File:           Add-DFSFolder.ps1
+## Purpose:        Add a DFS folder.
+## Version:        1.1 (26 Jun, 2008)
 ##
 ##############################################################################
 
-
 param(
-[string]$filePath
+[string]$nsPath,
+[string]$folderPath
 )
 
 #----------------------------------------------------------------------------
 # Print execution information
 #----------------------------------------------------------------------------
-Write-Host "EXECUTING [TurnOff-FileReadonly.ps1] ..." -foregroundcolor cyan
-Write-Host "`$filePath = $filePath"
+Write-Host "EXECUTING [Add-DFSFolder.ps1] ..." -foregroundcolor cyan
+Write-Host "`$nsPath = $nsPath"
+Write-Host "`$folderPath = $folderPath"
 
 #----------------------------------------------------------------------------
 # Function: Show-ScriptUsage
@@ -25,9 +26,11 @@ Write-Host "`$filePath = $filePath"
 function Show-ScriptUsage
 {    
     Write-host 
-    Write-host "Usage: Turn off file readonly."
+    Write-host "Usage: Add a DFS folder. "
+    Write-host "Parm1: The NS path. (Required)"
+    Write-host "Parm2: The folder path. (Required)"
     Write-host
-    Write-host "Example: TurnOff-FileReadonly.ps1 `"C:\MyFile.txt`""
+    Write-host "Example: .\Add-DFSFolder.ps1 \\pt3test014\test\a \\pt3wtt004\test"
     Write-host
 }
 
@@ -43,23 +46,22 @@ if ($args[0] -match '-(\?|(h|(help)))')
 #----------------------------------------------------------------------------
 # Verify required parameters
 #----------------------------------------------------------------------------
-if ($filePath -eq $null -or $filePath -eq "")
+if ($nsPath -eq $null -or $nsPath -eq "")
 {
-    Throw "Parameter `$filePath is required."
+    Throw "Parameter `$nsPath is required."
+}
+if ($folderPath -eq $null -or $folderPath -eq "")
+{
+    Throw "Parameter `$folderPath is required."
 }
 
 #----------------------------------------------------------------------------
-# Turn off file readonly
+# Add DFS folder
 #----------------------------------------------------------------------------
-if ((Test-Path $filePath) -eq $false)
-{
-    Throw "Error: Cannot get file `"$filePath`""
-}
-$fileObj = gci $filePath
-$fileObj.IsReadOnly=$False
+cmd.exe /c dfscmd /map $nsPath $folderPath /restore 2>&1 | Write-Host
 
 #----------------------------------------------------------------------------
 # Print exit information
 #----------------------------------------------------------------------------
-Write-Host "EXECUTE [TurnOff-FileReadonly.ps1] SUCCEED." -foregroundcolor Green
-
+Write-Host "Verifying [Add-DFSFolder.ps1] ..." -foregroundcolor Yellow
+Write-Host "EXECUTE [Add-DFSFolder.ps1] FINISHED (NOT VERIFIED)." -foregroundcolor Yellow
