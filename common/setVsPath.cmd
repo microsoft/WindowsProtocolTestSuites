@@ -23,11 +23,14 @@ if not defined vspath (
     ) else if defined VS140COMNTOOLS (
         set vspath="%VS140COMNTOOLS%"
         goto end
+    ) else if defined VS120COMNTOOLS (
+        set vspath="%VS120COMNTOOLS%"
+        goto end
     ) else if defined VS110COMNTOOLS (
         set vspath="%VS110COMNTOOLS%"
         goto end
     ) else (
-        echo Error: Visual Studio or Visual Studio test agent should be installed (version 2012, 2015 or 2017)
+        echo Error: Visual Studio or Visual Studio test agent should be installed (version 2012, 2013, 2015 or 2017)
         exit /b 1
     )
 )
