@@ -1273,7 +1273,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             out byte[] smb2WriteRequestPacket,
             bool isUseMaxSendSize = false)
         {
-            fileName = SmbdUtilities.CreateRandomFileName();
+            string fileName = CreateRandomFileName();
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Initial SMBD connection and open file " + fileName);
 
             // Connect to server over RDMA

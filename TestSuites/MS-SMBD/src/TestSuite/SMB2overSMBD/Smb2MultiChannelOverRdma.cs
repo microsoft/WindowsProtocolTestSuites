@@ -69,7 +69,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             uint treeId;
             FILEID fileId;
             byte[] fileContent;
-            fileName = SmbdUtilities.CreateRandomFileName();
+            string fileName = CreateRandomFileName();
 
             WriteFromMainChannel(
                 IPAddress.Parse(testConfig.ServerNonRNicIp),
@@ -96,7 +96,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             uint treeId;
             FILEID fileId;
             byte[] fileContent;
-            fileName = SmbdUtilities.CreateRandomFileName();
+            string fileName = CreateRandomFileName();
 
             WriteFromMainChannel(
                 IPAddress.Parse(testConfig.ServerRNicIp),

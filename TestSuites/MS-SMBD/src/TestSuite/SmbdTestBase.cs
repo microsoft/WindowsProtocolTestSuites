@@ -5,7 +5,7 @@ using Microsoft.Protocol.TestSuites.Smbd.Adapter;
 using Microsoft.Protocols.TestSuites.Smbd.Adapter;
 using Microsoft.Protocols.TestTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+using System.Collections.Generic;
 
 namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
 {
@@ -15,7 +15,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         #region Variables
         private ISutProtocolControlAdapter sutProtocolControlAdapter;
         protected SmbdAdapter smbdAdapter;
-        protected string fileName;
+        protected List<string> fileNameList;
         #endregion
 
         #region Test Initialization and Cleanup
@@ -24,13 +24,13 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             base.TestInitialize();
             sutProtocolControlAdapter = BaseTestSite.GetAdapter<ISutProtocolControlAdapter>();
             this.smbdAdapter = new SmbdAdapter(BaseTestSite, LogSmbdEndpointEvent);
-            fileName = null;
+            fileNameList = new List<string>();
             SmbdUtilities.LogTestCaseDescription(BaseTestSite);
         }
 
         protected override void TestCleanup()
         {
-            if (!String.IsNullOrEmpty(fileName))
+            foreach (string fileName in fileNameList)
             {
                 try
                 {
@@ -58,6 +58,13 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         #endregion
 
         #region Protected Method
+        protected string CreateRandomFileName()
+        {
+            string fileName = SmbdUtilities.CreateRandomFileName();
+            fileNameList.Add(fileName);
+            return fileName;
+        }
+
         protected void LogSmbdEndpointEvent(string log)
         {
             BaseTestSite.Log.Add(

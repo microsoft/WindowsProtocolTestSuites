@@ -470,7 +470,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         /// <param name="operationCount">count of SMB2 WRITE operation</param>
         public void WriteOverRdma(uint operationCount = 1)
         {
-            fileName = SmbdUtilities.CreateRandomFileName();
+            string fileName = CreateRandomFileName();
 
             InitSmbdConnectionForTestCases(fileName);
 

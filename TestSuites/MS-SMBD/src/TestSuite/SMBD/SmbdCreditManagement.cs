@@ -229,7 +229,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
 
             uint size = smbdAdapter.TestConfig.ModerateFileSizeInByte;
 
-            fileName = SmbdUtilities.CreateRandomFileName();
+            string fileName = CreateRandomFileName();
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Connect to server over RDMA.");            
             NtStatus status = smbdAdapter.ConnectToServerOverRDMA();

@@ -16,6 +16,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         #region Fields
         private DialectRevision[] Smb302AboveDialects = new DialectRevision[] { DialectRevision.Smb302, DialectRevision.Smb311 };
         private DialectRevision[] Smb300OnlyDialects = new DialectRevision[] { DialectRevision.Smb30 };
+        private string fileName;
         #endregion
 
         #region Class Initialization and Cleanup
@@ -36,7 +37,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         protected override void TestInitialize()
         {
             base.TestInitialize();
-            fileName = SmbdUtilities.CreateRandomFileName();
+            fileName = CreateRandomFileName();
         }
         #endregion
 

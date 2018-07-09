@@ -634,7 +634,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
                 );
 
             // try to negotiate on SMB2
-            fileName = SmbdUtilities.CreateRandomFileName();
+            string fileName = CreateRandomFileName();
 
             // Windows Server 2012 fails the Negotiate Request Message with STATUS_NOT_SUPPORTED if MinVersion or MaxVersion is not 0x0100.
             if (smbdAdapter.TestConfig.Platform == Platform.WindowsServer2012)
