@@ -13,12 +13,8 @@ using System.Threading;
 namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
 {
     [TestClass]
-    public class SmbdCreditManagement : TestClassBase
+    public class SmbdCreditManagement : SmbdTestBase
     {
-        #region Variables
-        private SmbdAdapter smbdAdapter;
-        #endregion
-
         #region Class Initialization and Cleanup
         [ClassInitializeAttribute()]
         public static void ClassInitialize(TestContext context)
@@ -30,21 +26,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         public static void ClassCleanup()
         {
             TestClassBase.Cleanup();
-        }
-        #endregion
-
-        #region Test Initialization and Cleanup
-        protected override void TestInitialize()
-        {
-            this.smbdAdapter = new SmbdAdapter(BaseTestSite, LogSmbdEndpointEvent);
-            SmbdUtilities.LogTestCaseDescription(BaseTestSite);
-        }
-
-        protected override void TestCleanup()
-        {
-            this.smbdAdapter.DisconnectRdma();
-
-            base.TestCleanup();
         }
         #endregion
 
@@ -248,7 +229,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
 
             uint size = smbdAdapter.TestConfig.ModerateFileSizeInByte;
 
-            string fileName = SmbdUtilities.CreateRandomFileName();
+            fileName = SmbdUtilities.CreateRandomFileName();
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Connect to server over RDMA.");            
             NtStatus status = smbdAdapter.ConnectToServerOverRDMA();
@@ -480,12 +461,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             #endregion
         }
 
-        public void LogSmbdEndpointEvent(string log)
-        {
-            BaseTestSite.Log.Add(
-                LogEntryKind.Debug,
-                log);
-        }
         #endregion
     }
 }

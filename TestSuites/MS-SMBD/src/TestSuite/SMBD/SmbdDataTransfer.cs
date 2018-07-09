@@ -16,12 +16,8 @@ using System.Threading;
 namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
 {
     [TestClass]
-    public class SmbdDataTransfer : TestClassBase
+    public class SmbdDataTransfer : SmbdTestBase
     {
-        #region Variables
-        private SmbdAdapter smbdAdapter;
-        #endregion
-
         #region Class Initialization and Cleanup
         [ClassInitializeAttribute()]
         public static void ClassInitialize(TestContext context)
@@ -33,21 +29,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         public static void ClassCleanup()
         {
             TestClassBase.Cleanup();
-        }
-        #endregion
-
-        #region Test Initialization and Cleanup
-        protected override void TestInitialize()
-        {
-            this.smbdAdapter = new SmbdAdapter(BaseTestSite, LogSmbdEndpointEvent);
-            SmbdUtilities.LogTestCaseDescription(BaseTestSite);
-        }
-
-        protected override void TestCleanup()
-        {
-            smbdAdapter.DisconnectRdma();
-
-            base.TestCleanup();
         }
         #endregion
 
@@ -1292,7 +1273,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             out byte[] smb2WriteRequestPacket,
             bool isUseMaxSendSize = false)
         {
-            string fileName = SmbdUtilities.CreateRandomFileName();
+            fileName = SmbdUtilities.CreateRandomFileName();
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Initial SMBD connection and open file " + fileName);
 
             // Connect to server over RDMA

@@ -15,13 +15,12 @@ using System.Text;
 namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
 {
     [TestClass]
-    public class Smb2MultiChannelOverRdma : TestClassBase
+    public class Smb2MultiChannelOverRdma : Smb2OverSmbdTestBase
     {
         #region Variables
         private Smb2OverSmbdTestClient mainChannelClient;
         private Smb2OverSmbdTestClient alternativeChannelClient;
         private TestConfig testConfig;
-
         #endregion
 
         #region Class Initialization and Cleanup
@@ -41,19 +40,21 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         #region Test Initialization and Cleanup
         protected override void TestInitialize()
         {
+            base.TestInitialize();
             this.testConfig = new TestConfig(BaseTestSite);
             this.mainChannelClient = new Smb2OverSmbdTestClient(
                 testConfig.Smb2ConnectionTimeout);
             this.alternativeChannelClient = new Smb2OverSmbdTestClient(
                 testConfig.Smb2ConnectionTimeout);
-            SmbdUtilities.LogTestCaseDescription(BaseTestSite);
         }
 
         protected override void TestCleanup()
         {
-            base.TestCleanup();
-
             this.mainChannelClient.Disconnect();
+
+            this.alternativeChannelClient.DisconnectRdma();
+
+            base.TestCleanup();
         }
         #endregion
 
@@ -68,7 +69,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             uint treeId;
             FILEID fileId;
             byte[] fileContent;
-            string fileName = SmbdUtilities.CreateRandomFileName();
+            fileName = SmbdUtilities.CreateRandomFileName();
 
             WriteFromMainChannel(
                 IPAddress.Parse(testConfig.ServerNonRNicIp),
@@ -95,7 +96,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             uint treeId;
             FILEID fileId;
             byte[] fileContent;
-            string fileName = SmbdUtilities.CreateRandomFileName();
+            fileName = SmbdUtilities.CreateRandomFileName();
 
             WriteFromMainChannel(
                 IPAddress.Parse(testConfig.ServerRNicIp),

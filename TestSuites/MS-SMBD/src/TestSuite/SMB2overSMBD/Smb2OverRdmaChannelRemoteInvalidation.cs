@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Protocol.TestSuites.Smbd.Adapter;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
@@ -15,8 +14,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
     public class Smb2OverRdmaChannelRemoteInvalidation : Smb2OverSmbdTestBase
     {
         #region Fields
-        private ISutProtocolControlAdapter sutProtocolControlAdapter;
-        private string fileName;
         private DialectRevision[] Smb302AboveDialects = new DialectRevision[] { DialectRevision.Smb302, DialectRevision.Smb311 };
         private DialectRevision[] Smb300OnlyDialects = new DialectRevision[] { DialectRevision.Smb30 };
         #endregion
@@ -40,21 +37,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         {
             base.TestInitialize();
             fileName = SmbdUtilities.CreateRandomFileName();
-            sutProtocolControlAdapter = BaseTestSite.GetAdapter<ISutProtocolControlAdapter>();
-            SmbdUtilities.LogTestCaseDescription(BaseTestSite);
-        }
-
-        protected override void TestCleanup()
-        {
-            try
-            {
-                sutProtocolControlAdapter.DeleteFile(fileName);
-            }
-            catch
-            {
-            }
-
-            base.TestCleanup();
         }
         #endregion
 
