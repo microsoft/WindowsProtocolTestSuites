@@ -13,7 +13,7 @@ using System.Text;
 namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
 {
     [TestClass]
-    public class Smb2OverRdmaChannel : TestClassBase
+    public class Smb2OverRdmaChannel : Smb2OverSmbdTestBase
     {
         #region Class Initialization and Cleanup
         [ClassInitializeAttribute()]
