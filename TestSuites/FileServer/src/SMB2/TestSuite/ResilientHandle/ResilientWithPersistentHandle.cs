@@ -133,6 +133,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.ResilientHan
                 {
                     BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_FILE_NOT_AVAILABLE, header.Status, "The server MUST fail the request with STATUS_FILE_NOT_AVAILABLE.");
                 });
+
+            sutProtocolController.DeleteFile(Smb2Utility.GetUncPath(testConfig.CAShareServerName, testConfig.CAShareName), fileName);
         }
 
         #endregion
@@ -156,7 +158,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.ResilientHan
                 out treeId);
             BaseTestSite.Log.Add(
                 LogEntryKind.Debug,
-                "Connect to share '{0}' on scaleout server '{1}'", testConfig.BasicFileShare, testConfig.SutComputerName);
+                "Connect to share '{0}' on scaleout server '{1}'", testConfig.CAShareName, testConfig.CAShareServerName);
 
             #region Construct Create Context
             List<Smb2CreateContextRequest> createContextList = new List<Smb2CreateContextRequest>();

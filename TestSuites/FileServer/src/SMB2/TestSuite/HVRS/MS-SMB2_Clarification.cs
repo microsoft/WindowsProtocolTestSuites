@@ -130,7 +130,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             Guid clientGuid = Guid.NewGuid();
             //Guid createGuid = Guid.NewGuid();
-            string fileName = "ResilientWithPersistentHandle_" + Guid.NewGuid() + ".txt";
+            string fileName = "BVT_Resiliency_" + Guid.NewGuid() + ".txt";
             FILEID fileId;
             uint treeId;
 
@@ -164,6 +164,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             smb2Functionalclient.Close(treeId, fileId);
             smb2Functionalclient.TreeDisconnect(treeId);
             smb2Functionalclient.LogOff();
+
+            sutProtocolController.DeleteFile(Smb2Utility.GetUncPath(TestConfig.ShareServerName, TestConfig.ShareName), fileName);
         }
 
         private void OpenFile(Smb2FunctionalClient smbClient, Guid clientGuid, string fileName, out uint treeId, out FILEID fileId)

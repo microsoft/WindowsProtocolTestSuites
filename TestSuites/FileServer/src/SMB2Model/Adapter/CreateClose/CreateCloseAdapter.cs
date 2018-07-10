@@ -19,6 +19,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClo
         private Smb2FunctionalClient testClient;
         private uint treeId;
         private FILEID fileID;
+        private string fileName;
         private CreateContextType Create_ContextType;
         public const int mask = 0x0ce0fe00;
 
@@ -43,6 +44,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClo
                 testClient = null;
             }
 
+            if (fileName != null)
+            {
+                this.sutProtocolController.DeleteFile(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare), fileName);
+                fileName = null;
+            }
             base.Reset();
         }
         #endregion
@@ -94,7 +100,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClo
             #endregion
 
             #region File Name
-            string fileName = GetFileName(fileNameType);
+            SetFileName(fileNameType);
             #endregion
 
             #region CreateOptions
@@ -185,13 +191,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClo
         #endregion
 
         #region helper functions
-        private string GetFileName(CreateFileNameType fileNameType)
+        private void SetFileName(CreateFileNameType fileNameType)
         {
-            string fileName;
             switch (fileNameType)
             {
                 case CreateFileNameType.StartWithPathSeparator:
-                    fileName = testConfig.PathSeparator + "CreateClose" + Guid.NewGuid();
+                    fileName = testConfig.PathSeparator + "CreateCloseMBT" + Guid.NewGuid();
                     break;
                 case CreateFileNameType.OtherInvalidFileName:
                     // [MS-FSCC] Section 2.1.5.2   Filename
@@ -199,16 +204,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClo
                     // The characters
                     // " \ / : | < > * ?
                     // Control characters, ranging from 0x00 through 0x1F.
-                    fileName = "*" + "CreateClose" + Guid.NewGuid();
+                    fileName = "*" + "CreateCloseMBT" + Guid.NewGuid();
                     break;
                 case CreateFileNameType.ValidFileName:
-                    fileName = "CreateClose" + Guid.NewGuid();
+                    fileName = "CreateCloseMBT" + Guid.NewGuid();
                     break;
                 default:
                     throw new ArgumentException("fileNameType");
             }
-
-            return fileName;
         }
 
         private void ReplacePacketByInvalidCreateContext(Smb2Packet packet)

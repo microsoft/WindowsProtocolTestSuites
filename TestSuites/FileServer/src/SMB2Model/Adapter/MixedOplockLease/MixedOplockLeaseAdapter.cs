@@ -56,7 +56,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.MixedOplo
                 leaseClient = null;
             }
 
-            fileName = null;
+            if (fileName != null)
+            {
+                sutProtocolController.DeleteFile(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare), fileName);
+                fileName = null;
+            }
+
             breakType = ModelBreakType.NoBreak;
             treeIdOplock = 0;
             treeIdLease = 0;

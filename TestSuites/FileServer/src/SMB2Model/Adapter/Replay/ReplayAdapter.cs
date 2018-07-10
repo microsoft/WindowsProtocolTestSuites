@@ -504,7 +504,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay
             smb2ClientMainChannel.Create(
                 treeIdMainChannel,
                 fileNameMainChannel,
-                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                 out fileIdMainChannel,
                 out serverCreateContexts,
                 oplockLevel,
@@ -603,7 +603,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay
             client.CreateRequest(
                     treeIdMainChannel,
                     fileName == ReplayModelFileName.DefaultFileName ? fileNameMainChannel : Guid.NewGuid().ToString(),
-                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                     (isSetReplayFlag == ReplayModelSetReplayFlag.WithReplayFlag ? Packet_Header_Flags_Values.FLAGS_REPLAY_OPERATION : Packet_Header_Flags_Values.NONE) | (testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE),
                     out createRequestId,
                     oplockLevel,
@@ -654,7 +654,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay
             status = smb2ClientMainChannel.Create(
                 treeIdMainChannel,
                 fileNameMainChannel,
-                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                 out fileIdMainChannel,
                 out serverCreateContexts,
                 RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE,
@@ -762,7 +762,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay
                         status = smb2ClientMainChannel.Create(
                             treeIdMainChannel,
                             fileNameMainChannel,
-                            CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                            CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                             out fileIdMainChannel,
                             out serverCreateContexts,
                             RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE,

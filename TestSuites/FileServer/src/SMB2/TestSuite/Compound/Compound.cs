@@ -140,6 +140,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Compound
             client.TreeDisconnect(treeId);
             client.LogOff();
             client.Disconnect();
+
+            sutProtocolController.DeleteFile(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare), fileName);
         }
 
         private void Compound_UnrelatedRequests(string firstFileName, string secondFileName, bool isEncrypted)
@@ -187,6 +189,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Compound
             client.TreeDisconnect(treeId);
             client.LogOff();
             client.Disconnect();
+
+            sutProtocolController.DeleteFile(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare), firstFileName);
+            sutProtocolController.DeleteFile(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare), secondFileName);
         }
 
         /// <summary>

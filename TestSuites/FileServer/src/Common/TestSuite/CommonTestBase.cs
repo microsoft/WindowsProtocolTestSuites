@@ -45,9 +45,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite
             if (testDirectories.ContainsKey(CurrentTestCaseName))
             {
                 string testDirectoryFullPath = testDirectories[CurrentTestCaseName];
-                DoUntilSucceed(() => sutProtocolController.DeleteDirectory(Smb2Utility.GetShareName(testDirectoryFullPath), Smb2Utility.GetFileName(testDirectoryFullPath)),
-                    testConfig.Timeout,
-                "Retry to call DeleteDirectory until succeed within timeout span.");
+                sutProtocolController.DeleteDirectory(Smb2Utility.GetShareName(testDirectoryFullPath), Smb2Utility.GetFileName(testDirectoryFullPath));
                 testDirectories.Remove(CurrentTestCaseName);
             }
 

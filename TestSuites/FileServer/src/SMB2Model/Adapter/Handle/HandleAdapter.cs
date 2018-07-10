@@ -57,6 +57,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle
 
             fileIdBeforDisconnection = FILEID.Zero;
 
+            if (fileName != null)
+            {
+                sutProtocolController.DeleteFile(sharePath, fileName);
+                fileName = null;
+            }
+
             base.Reset();
         }
 

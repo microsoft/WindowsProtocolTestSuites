@@ -153,6 +153,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client.TreeDisconnect(treeId);
             client.LogOff();
             client.Disconnect();
+
+            sutProtocolController.DeleteFile(uncSharePath, fileName);
         }
     }
 }

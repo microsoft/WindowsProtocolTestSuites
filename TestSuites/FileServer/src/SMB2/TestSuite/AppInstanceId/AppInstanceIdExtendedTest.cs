@@ -85,6 +85,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 }
             }
 
+            if (fileName != null)
+            {
+                sutProtocolController.DeleteFile(uncSharePath, fileName);
+                fileName = null;
+            }
+
             base.TestCleanup();
         }
         #endregion

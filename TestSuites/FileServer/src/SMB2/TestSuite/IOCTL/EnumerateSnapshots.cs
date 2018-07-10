@@ -173,7 +173,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client.Create(
                 treeId,
                 string.Format("BVT_EnumerateSnapShots_{0}.txt", Guid.NewGuid()),
-                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                 out fileId,
                 out serverCreateContexts);
         }
