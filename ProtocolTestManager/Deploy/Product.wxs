@@ -10,9 +10,9 @@
            Version="$(env.TESTSUITE_VERSION)"
            Manufacturer="Microsoft Corporation"
            UpgradeCode="4ee979ed-648b-478b-aca0-08718499a95e">
-    <Package InstallerVersion="200" 
+    <Package InstallerVersion="200"
              Compressed="yes"
-             InstallScope="perMachine" 
+             InstallScope="perMachine"
              Description="Protocol Test Manager v$(env.TESTSUITE_VERSION)"/>
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
@@ -27,29 +27,29 @@
       <ComponentGroupRef Id="ProductComponents_etc" />
       <ComponentGroupRef Id="ProductComponents_ProtoSDK" />
       <ComponentGroupRef Id="fileserver_PLUGIN"/>
+      <ComponentGroupRef Id="SMBD_PLUGIN"/>
       <ComponentGroupRef Id="KERBEROS_PLUGIN"/>
       <ComponentGroupRef Id="ADFAMILY_PLUGIN"/>
-	  <ComponentGroupRef Id="BRANCHCACHE_PLUGIN"/>
+      <ComponentGroupRef Id="BRANCHCACHE_PLUGIN"/>
       <ComponentGroupRef Id="RDPCLIENT_PLUGIN"/>
-	  <ComponentGroupRef Id="RDPSERVER_PLUGIN"/>
-	  <ComponentGroupRef Id="AZOD_PLUGIN" />
-	  <ComponentGroupRef Id="ADOD_PLUGIN" />
-	  <ComponentGroupRef Id="ADFSPIP_PLUGIN" />
+      <ComponentGroupRef Id="RDPSERVER_PLUGIN"/>
+      <ComponentGroupRef Id="AZOD_PLUGIN" />
+      <ComponentGroupRef Id="ADOD_PLUGIN" />
+      <ComponentGroupRef Id="ADFSPIP_PLUGIN" />
       <ComponentRef Id="ApplicationShortcut"/>
       <ComponentRef Id="DesktopShortcuts"/>
     </Feature>
 
     <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
-	
-	<PropertyRef Id="VS2012_ROOT_FOLDER"/>
-	<PropertyRef Id="VS2013_ROOT_FOLDER"/>
-	<PropertyRef Id="VS2015_ROOT_FOLDER"/>
-	
-	<Property Id="VSInstalled">0</Property>
-	
-	<SetProperty Id="VSInstalled" After="AppSearch" Value="1">
-		<![CDATA[(VS2012_ROOT_FOLDER >< $(var.CheckVSPath)) OR (VS2013_ROOT_FOLDER >< $(var.CheckVSPath)) OR (VS2015_ROOT_FOLDER >< $(var.CheckVSPath))]]>
-	</SetProperty>
+
+    <PropertyRef Id="VS2012_ROOT_FOLDER"/>
+    <PropertyRef Id="VS2013_ROOT_FOLDER"/>
+
+    <Property Id="VSInstalled">0</Property>
+
+    <SetProperty Id="VSInstalled" After="AppSearch" Value="1">
+      <![CDATA[(VS2012_ROOT_FOLDER >< $(var.CheckVSPath)) OR (VS2013_ROOT_FOLDER >< $(var.CheckVSPath)) OR (VS2015_ROOT_FOLDER >< $(var.CheckVSPath))]]>
+    </SetProperty>
 
     <!-- Progress Texts for UI -->
     <UIRef Id="WixUI_ErrorProgressText" />
@@ -85,10 +85,10 @@
       <Publish Dialog="CustomizeDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="1">Installed</Publish>
       <Publish Dialog="CustomizeDlg" Control="Back" Event="NewDialog" Value="PrivacyDlg" Order="2">NOT Installed</Publish>
       <Publish Dialog="CustomizeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
-	  
+
       <Publish Dialog="CustomizeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="1"><![CDATA[VSInstalled = "1"]]></Publish>
       <Publish Dialog="CustomizeDlg" Control="Next" Event="NewDialog" Value="DependencyCheckWarningDlg" Order="2">
-			<![CDATA[VSInstalled = "0"]]>
+        <![CDATA[VSInstalled = "0"]]>
       </Publish>
       <Publish Dialog="DependencyCheckWarningDlg" Control="Back" Event="NewDialog" Value="CustomizeDlg">1</Publish>
       <Publish Dialog="DependencyCheckWarningDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
@@ -117,35 +117,37 @@
       <Directory Id="ProgramMenuFolder" >
         <Directory Id="ApplicationProgramsMenuFolder" Name="Protocol Test Manager" />
       </Directory>
-      <Directory Id="ProgramFilesFolder">
+      <Directory Id="ProgramFiles64Folder">
         <Directory Id="INSTALLFOLDER" Name="Protocol Test Manager" >
           <Directory Id="BINFOLDER" Name="bin" />
           <Directory Id="ETCFOLDER" Name="etc" >
             <Directory Id="FILESERVERCONFIG" Name="fileserver" />
+            <Directory Id="SMBDCONFIG" Name="MS-SMBD" />
             <Directory Id="RDPCLIENTCONFIG" Name="RDP-Client" />
-			<Directory Id="RDPSERVERCONFIG" Name="RDP-Server" />
+            <Directory Id="RDPSERVERCONFIG" Name="RDP-Server" />
             <Directory Id="KERBEROSCONFIGFOLDER" Name="kerberos" />
-			<Directory Id="AZODCONFIGFOLDER" Name="MS-AZOD" />
-			<Directory Id="ADODCONFIGFOLDER" Name="MS-ADOD" />
-			<Directory Id="ADFSPIPCONFIGFOLDER" Name="MS-ADFSPIP" />
-			<Directory Id="ADFAMILYCONFIGFOLDER" Name="adfamily" />
-			<Directory Id="BRANCHCACHECONFIGFOLDER" Name="BranchCache" />
+            <Directory Id="AZODCONFIGFOLDER" Name="MS-AZOD" />
+            <Directory Id="ADODCONFIGFOLDER" Name="MS-ADOD" />
+            <Directory Id="ADFSPIPCONFIGFOLDER" Name="MS-ADFSPIP" />
+            <Directory Id="ADFAMILYCONFIGFOLDER" Name="adfamily" />
+            <Directory Id="BRANCHCACHECONFIGFOLDER" Name="BranchCache" />
           </Directory>
           <Directory Id="LIBFOLDER" Name="lib" />
           <Directory Id="DOCFOLDER" Name="doc" >
             <Directory Id="FILESERVERDOCFOLDER" Name="fileserver" />
+            <Directory Id="SMBDDOCFOLDER" Name="MS-SMBD" />
             <Directory Id="RDPCLIENTDOCFOLDER" Name="RDP-Client" />
-			<Directory Id="RDPSERVERDOCFOLDER" Name="RDP-Server" />
+            <Directory Id="RDPSERVERDOCFOLDER" Name="RDP-Server" />
             <Directory Id="KERBEROSDOCFOLDER" Name="kerberos" />
-			<Directory Id="AZODDOCFOLDER" Name="MS-AZOD" />
-			<Directory Id="ADODDOCFOLDER" Name="MS-ADOD" />
-			<Directory Id="ADFSPIPDOCFOLDER" Name="MS-ADFSPIP" />
-			<Directory Id="ADFAMILYDOCFOLDER" Name="adfamily" />
-			<Directory Id="BRANCHCACHEDOCFOLDER" Name="BranchCache" />
+            <Directory Id="AZODDOCFOLDER" Name="MS-AZOD" />
+            <Directory Id="ADODDOCFOLDER" Name="MS-ADOD" />
+            <Directory Id="ADFSPIPDOCFOLDER" Name="MS-ADFSPIP" />
+            <Directory Id="ADFAMILYDOCFOLDER" Name="adfamily" />
+            <Directory Id="BRANCHCACHEDOCFOLDER" Name="BranchCache" />
           </Directory>
-		  <Directory Id="DATAFOLDER" Name="data" >
-			<Directory Id="FILESERVERDATAFOLDER" Name="fileserver" />
-		  </Directory>
+          <Directory Id="DATAFOLDER" Name="data" >
+            <Directory Id="FILESERVERDATAFOLDER" Name="fileserver" />
+          </Directory>
         </Directory>
       </Directory>
       <Directory Id="DesktopFolder" />
@@ -199,22 +201,22 @@
   <Fragment>
     <ComponentGroup Id="ProductComponents_bin" Directory="BINFOLDER">
       <?if $(env.DEBUGVER) = 1?>
-        <Component Id="Microsoft.Protocols.TestManager.Detector.pdb" Guid="*" Feature="PTM_Feature">
-          <File Id="Microsoft.Protocols.TestManager.Detector.pdb"
-               Source="$(var.SRCDIR)\bin\Microsoft.Protocols.TestManager.Detector.pdb" />
-        </Component>
-        <Component Id="Microsoft.Protocols.TestManager.Kernel.pdb" Guid="*" Feature="PTM_Feature">
-          <File Id="Microsoft.Protocols.TestManager.Kernel.pdb"
-               Source="$(var.SRCDIR)\bin\Microsoft.Protocols.TestManager.Kernel.pdb" />
-        </Component>
-        <Component Id="ProtocolTestManager.pdb" Guid="*" Feature="PTM_Feature">
-          <File Id="ProtocolTestManager.pdb"
-               Source="$(var.SRCDIR)\bin\ProtocolTestManager.pdb" />
-        </Component>
-        <Component Id="PtmCli.pdb" Guid="*" Feature="PTM_Feature">
-          <File Id="PtmCli.pdb"
-                Source="$(var.SRCDIR)\bin\PtmCli.pdb" />
-        </Component>
+      <Component Id="Microsoft.Protocols.TestManager.Detector.pdb" Guid="*" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestManager.Detector.pdb"
+             Source="$(var.SRCDIR)\bin\Microsoft.Protocols.TestManager.Detector.pdb" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestManager.Kernel.pdb" Guid="*" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestManager.Kernel.pdb"
+             Source="$(var.SRCDIR)\bin\Microsoft.Protocols.TestManager.Kernel.pdb" />
+      </Component>
+      <Component Id="ProtocolTestManager.pdb" Guid="*" Feature="PTM_Feature">
+        <File Id="ProtocolTestManager.pdb"
+             Source="$(var.SRCDIR)\bin\ProtocolTestManager.pdb" />
+      </Component>
+      <Component Id="PtmCli.pdb" Guid="*" Feature="PTM_Feature">
+        <File Id="PtmCli.pdb"
+              Source="$(var.SRCDIR)\bin\PtmCli.pdb" />
+      </Component>
       <?endif ?>
       <Component Id="ProtocolTestManager.exe" Guid="{D57A5D09-1B75-433D-890F-829E5C350276}" Feature="PTM_Feature">
         <File Id="ProtocolTestManager.exe"
@@ -239,7 +241,7 @@
       <Component Id="Microsoft.Protocols.TestManager.Kernel.XML" Guid="{A792E1AF-4BD2-415C-AE99-9271547793A4}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestManager.Kernel.XML"
               Source="$(var.SRCDIR)\bin\Microsoft.Protocols.TestManager.Kernel.XML" />
-      </Component> 
+      </Component>
     </ComponentGroup>
     <ComponentGroup Id="ProductComponents_etc" Directory="ETCFOLDER">
 

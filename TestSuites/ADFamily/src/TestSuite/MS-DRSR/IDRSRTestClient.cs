@@ -245,10 +245,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         /// IDL_DRSUpdateRefs
         /// </summary>
         /// <param name="machine">SUT</param>
+        /// <param name="reqVer">request version of DrsUpdateRefs</param>
         /// <param name="dest">replication destination</param>
         /// <param name="options">options</param>
         /// <returns>return value</returns>
-        uint DrsUpdateRefs(EnvironmentConfig.Machine machine, DsServer dest, DRS_OPTIONS options, NamingContext nc = NamingContext.ConfigNC);
+        uint DrsUpdateRefs(EnvironmentConfig.Machine machine, DrsUpdateRefs_Versions reqVer, DsServer dest, DRS_OPTIONS options, NamingContext nc = NamingContext.ConfigNC);
         #endregion
 
         #region Administration Tool Support

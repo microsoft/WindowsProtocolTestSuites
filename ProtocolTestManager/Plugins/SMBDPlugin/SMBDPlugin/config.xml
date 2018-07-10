@@ -1,0 +1,63 @@
+<Config>
+  <ConfigFilePath>
+    <PtfFileName>Bin\MS-SMBD_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>Bin\MS-SMBD_ServerTestSuite.ptfconfig</PtfFileName>
+  </ConfigFilePath>
+  <Adapters>
+    <Adapter  displayname="An SUT control adapter" name="ISutProtocolControlAdapter">
+      <Adapter type="powershell" name="ISutProtocolControlAdapter" scriptdir=".\"/>
+      <Adapter type="interactive" name="ISutProtocolControlAdapter"/>
+    </Adapter>
+  </Adapters>
+  <PtfFileNames>
+    <PtfFileName>MS-SMBD_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>MS-SMBD_ServerTestSuite.ptfconfig</PtfFileName>
+  </PtfFileNames>
+  <DllFileNames>
+    <DllFileName>Bin\MS-SMBD_ServerTestSuite.dll</DllFileName>
+  </DllFileNames>
+  <AutoDetectionDllName>SMBDPlugin.dll</AutoDetectionDllName>
+  <ConfigCaseRule>
+    <Group name = "Priority">
+      <Rule name = "BVT">
+        <Category name = "BVT"/>
+      </Rule>
+      <Rule name = "Non-BVT">
+        <Category name = "!BVT"/>
+      </Rule>
+    </Group>
+
+    <Group name="Feature">
+      <Rule name ="SMBD">
+        <Rule name = "SMBD Negotiate">
+          <Category name = "SmbdNegotiate"/>
+        </Rule>
+        <Rule name = "SMBD Credits Management">
+          <Category name = "SmbdCreditMgmt"/>
+        </Rule>
+        <Rule name = "SMBD Data Transfer">
+          <Category name = "SmbdDataTransfer"/>
+        </Rule>
+      </Rule>
+
+      <Rule name = "SMB2 over SMBD">
+        <Rule name = "SMB 30">
+          <Rule name = "RDMA Channel">
+            <Category name = "Smb2OverRdmaChannel"/>
+          </Rule>
+          <Rule name = "Multiple Channels">
+            <Category name = "Smb2MultipleChannel"/>
+          </Rule>
+        </Rule>
+        <Rule name = "SMB 302">
+          <Rule name = "RDMA Channel Remote Invalidation">
+            <Category name = "Smb2OverRdmaChannelInvalidate"/>
+          </Rule>
+        </Rule>
+      </Rule>
+    </Group>
+  </ConfigCaseRule>
+
+  <TestCategories>TestCategories.xml</TestCategories>
+  <TestSetting>Bin\ServerLocal.TestSettings</TestSetting>
+</Config>

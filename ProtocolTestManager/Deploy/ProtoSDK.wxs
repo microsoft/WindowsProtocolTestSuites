@@ -248,6 +248,14 @@
         <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx.dll"
               Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx.dll" />
       </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd.dll" Guid="{142A59A2-925F-4B9A-BC5B-0818B5B28E89}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma.dll" Guid="{A2CFB6F7-41DC-4669-B22F-44FF8C6DF7E8}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma.dll" />
+      </Component>
     </ComponentGroup>
 
   </Fragment>

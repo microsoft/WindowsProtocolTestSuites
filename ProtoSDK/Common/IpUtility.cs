@@ -31,8 +31,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk
             {
                 try
                 {
-                    IPAddress[] ipAddresses = Dns.GetHostAddresses(hostNameOrIpAddress);
-                    ipAddress = ipAddresses.Where(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).First();
+                    var entry = Dns.Resolve(hostNameOrIpAddress);
+                    ipAddress = entry.AddressList.Where(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).First();
                 }
                 catch
                 {
@@ -56,7 +56,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk
             }
 
             List<IPAddress> ipList = new List<IPAddress>();
-            foreach(string nameOrIp in hostNameOrIpAddress.Split(new char[] {',',';' }))
+            foreach (string nameOrIp in hostNameOrIpAddress.Split(new char[] { ',', ';' }))
             {
                 ipList.Add(nameOrIp.ParseIPAddress());
             }

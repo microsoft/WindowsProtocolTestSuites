@@ -85,7 +85,7 @@
         <Description>Type:string! Usage: The IP address of writable DC1.</Description>
       </Property>
       <Property name="WritableDC1.OSVersion" value="Win2016">
-        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2, Win2016, NonWin</Description>
+        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2, Win2016, Winv1803, NonWin</Description>
       </Property>
       <!-- END - WRITABLE DC 1 -->
       <!-- START - WRITABLE DC 2 -->
@@ -99,7 +99,7 @@
         <Description>Type:string! Usage: The IP address of writable DC2.</Description>
       </Property>
       <Property name="WritableDC2.OSVersion" value="Win2016">
-        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2, Win2016, NonWin</Description>
+        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2, Win2016, Winv1803, NonWin</Description>
       </Property>
       <!-- END - WRITABLE DC 2 -->
       <!-- START - RODC -->
@@ -113,7 +113,7 @@
         <Description>Type:string! Usage: The IP address of read-only DC.</Description>
       </Property>
       <Property name="RODC.OSVersion" value="Win2016">
-        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2, Win2016, NonWin</Description>
+        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2, Win2016, Winv1803, NonWin</Description>
       </Property>
       <!-- END - RODC -->
       <!-- START - CDC -->
@@ -134,7 +134,7 @@
         <Description>Type:string! Usage: The IP address of child DC.</Description>
       </Property>
       <Property name="CDC.OSVersion" value="Win2016">
-        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2, Win2016, NonWin</Description>
+        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2, Win2016, Winv1803, NonWin</Description>
       </Property>
       <!-- END - CDC -->
       <!-- START - TDC -->
@@ -155,7 +155,7 @@
         <Description>Type:string! Usage: The IP address of trusted DC.</Description>
       </Property>
       <Property name="TDC.OSVersion" value="Win2016">
-        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2, Win2016, NonWin</Description>
+        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2, Win2016, Winv1803, NonWin</Description>
       </Property>
       <!-- END - TDC -->
       <!-- START - DM -->

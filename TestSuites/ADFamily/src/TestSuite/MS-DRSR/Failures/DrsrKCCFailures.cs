@@ -150,6 +150,31 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             BaseTestSite.Assert.AreEqual<uint>((uint)Win32ErrorCode_32.ERROR_DS_DRA_BAD_NC, ret, "server should return ERROR_DS_DRA_BAD_NC to V2 request if pNC is invalid but not null");
         }
 
+        /// <summary>
+        /// test DRS replica add with invalid pNC
+        /// </summary>
+        [TestCategory("Winv1803")]
+        [ServerType(DcServerTypes.Any)]
+        [SupportedADType(ADInstanceType.Both)]
+        [Priority(0)]
+        [Description("test DRS replica add with invalid pNC")]
+        [TestCategory("SDC")]
+        [TestCategory("PDC")]
+        [TestCategory("DomainWinV1803")]
+        [TestCategory("MS-DRSR")]
+        [TestMethod]
+        public void DRSR_DRSReplicaAdd_Failed_V3_InvalidNC()
+        {
+            DrsrTestChecker.Check();
+
+            drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
+            DRS_MSG_REPADD req = GenerateReplicaAddReq(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.Machine.WritableDC2, DRS_MSG_REPADD_Versions.V3);
+            BaseTestSite.Log.Add(LogEntryKind.Checkpoint, "Make the pNC a default empty DSNAME");
+            req.V3.pNC = DrsuapiClient.CreateDsName(null, Guid.Empty, null);
+            uint ret = drsTestClient.DRSClient.DrsReplicaAdd(EnvironmentConfig.DrsContextStore[EnvironmentConfig.Machine.WritableDC1], 3, req);
+            BaseTestSite.Assert.AreEqual<uint>((uint)Win32ErrorCode_32.ERROR_DS_DRA_BAD_NC, ret, "server should return ERROR_DS_DRA_BAD_NC to V3 request if pNC is invalid but not null");
+        }
+
 
         /// <summary>
         /// test DRS replica add with empty psaDsaSrc
@@ -203,6 +228,32 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             req.V2.pszSourceDsaAddress = string.Empty;
             uint ret = drsTestClient.DRSClient.DrsReplicaAdd(EnvironmentConfig.DrsContextStore[EnvironmentConfig.Machine.WritableDC1], 2, req);
             BaseTestSite.Assert.AreEqual<uint>((uint)Win32ErrorCode_32.ERROR_DS_DRA_INVALID_PARAMETER, ret, "server should return ERROR_DS_DRA_INVALID_PARAMETER to V2 request if pszSourceDsaAddress is empty");
+        }
+
+        /// <summary>
+        /// test DRS replica add with empty pszSourceDsaAddress
+        /// </summary>
+        [TestCategory("Winv1803")]
+        [ServerType(DcServerTypes.Any)]
+        [SupportedADType(ADInstanceType.Both)]
+        [Priority(0)]
+        [Description("test DRS replica add with empty pszSourceDsaAddress")]
+        [TestCategory("SDC")]
+        [TestCategory("PDC")]
+        [TestCategory("DomainWinV1803")]
+        [TestCategory("MS-DRSR")]
+        [TestMethod]
+        public void DRSR_DRSReplicaAdd_Failed_V3_EmptyDsaSrc()
+        {
+            DrsrTestChecker.Check();
+
+            drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
+
+            DRS_MSG_REPADD req = GenerateReplicaAddReq(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.Machine.WritableDC2, DRS_MSG_REPADD_Versions.V3);
+            BaseTestSite.Log.Add(LogEntryKind.Checkpoint, "Make the pszDsaSrc an empty string");
+            req.V3.pszSourceDsaAddress = string.Empty;
+            uint ret = drsTestClient.DRSClient.DrsReplicaAdd(EnvironmentConfig.DrsContextStore[EnvironmentConfig.Machine.WritableDC1], 3, req);
+            BaseTestSite.Assert.AreEqual<uint>((uint)Win32ErrorCode_32.ERROR_DS_DRA_INVALID_PARAMETER, ret, "server should return ERROR_DS_DRA_INVALID_PARAMETER to V3 request if pszSourceDsaAddress is empty");
         }
 
         /// <summary>
@@ -265,6 +316,34 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         }
 
         /// <summary>
+        /// test DRS replica add with duplicated source
+        /// </summary>
+        [TestCategory("Winv1803")]
+        [ServerType(DcServerTypes.Any)]
+        [SupportedADType(ADInstanceType.DS)]
+        [Priority(0)]
+        [Description("test DRS replica add with duplicated source")]
+        [TestCategory("SDC")]
+        [TestCategory("PDC")]
+        [TestCategory("DomainWinV1803")]
+        [TestCategory("MS-DRSR")]
+        [TestMethod]
+        public void DRSR_DRSReplicaAdd_Failed_V3_DuplicatedSource()
+        {
+            DrsrTestChecker.Check();
+            drsTestClient.SyncDCs(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.Machine.WritableDC2);
+
+            drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
+
+            uint ret = drsTestClient.DrsReplicaAdd(EnvironmentConfig.Machine.WritableDC1, DRS_MSG_REPADD_Versions.V3, (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2], DRS_OPTIONS.DRS_WRIT_REP, NamingContext.ConfigNC);
+            if (ret == 0)
+                //possible that dc didn't add the source back
+                ret = drsTestClient.DrsReplicaAdd(EnvironmentConfig.Machine.WritableDC1, DRS_MSG_REPADD_Versions.V1, (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2], DRS_OPTIONS.DRS_WRIT_REP, NamingContext.ConfigNC);
+
+            BaseTestSite.Assert.AreEqual<uint>((uint)Win32ErrorCode_32.ERROR_DS_DRA_DN_EXISTS, ret, "server should return ERROR_DS_DRA_DN_EXISTS to V1 request if source is already in repsFrom");
+        }
+
+        /// <summary>
         /// test DRS Replica Add denied due to normal user account
         /// </summary>
         [TestCategory("Win2003")]
@@ -307,7 +386,29 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainUser, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
 
             uint ret = drsTestClient.DrsReplicaAdd(EnvironmentConfig.Machine.WritableDC1, DRS_MSG_REPADD_Versions.V2, (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2], DRS_OPTIONS.DRS_WRIT_REP, NamingContext.ConfigNC);
-            BaseTestSite.Assert.AreEqual<uint>((uint)Win32ErrorCode_32.ERROR_DS_DRA_ACCESS_DENIED, ret, "server should return ERROR_DS_DRA_ACCESS_DENIED to V1 request if credential in DRSBind is not admin user");
+            BaseTestSite.Assert.AreEqual<uint>((uint)Win32ErrorCode_32.ERROR_DS_DRA_ACCESS_DENIED, ret, "server should return ERROR_DS_DRA_ACCESS_DENIED to V2 request if credential in DRSBind is not admin user");
+        }
+
+        /// <summary>
+        /// test DRS Replica Add denied due to normal user account
+        /// </summary>
+        [TestCategory("Winv1803")]
+        [ServerType(DcServerTypes.Any)]
+        [SupportedADType(ADInstanceType.Both)]
+        [Priority(0)]
+        [Description("test DRS Replica Add denied due to normal user account")]
+        [TestCategory("SDC")]
+        [TestCategory("PDC")]
+        [TestCategory("DomainWinV1803")]
+        [TestCategory("MS-DRSR")]
+        [TestMethod]
+        public void DRSR_DRSReplicaAdd_Failed_V3_WithNormalUser()
+        {
+            DrsrTestChecker.Check();
+            drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainUser, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
+
+            uint ret = drsTestClient.DrsReplicaAdd(EnvironmentConfig.Machine.WritableDC1, DRS_MSG_REPADD_Versions.V3, (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2], DRS_OPTIONS.DRS_WRIT_REP, NamingContext.ConfigNC);
+            BaseTestSite.Assert.AreEqual<uint>((uint)Win32ErrorCode_32.ERROR_DS_DRA_ACCESS_DENIED, ret, "server should return ERROR_DS_DRA_ACCESS_DENIED to V3 request if credential in DRSBind is not admin user");
         }
 
         [TestCategory("Win2003")]
@@ -465,47 +566,23 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         public void DRSR_DRSUpdateRefs_V1_pszDsaDest_NULL()
         {
             DrsrTestChecker.Check();
-            uint ret = drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
+            DRSUpdateRefs_pszDsaDest_NULL(DrsUpdateRefs_Versions.V1);
+        }
 
-            DRS_MSG_UPDREFS req;
-
-            EnvironmentConfig.Machine machine = EnvironmentConfig.Machine.WritableDC1;
-            DsServer dest = (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2];
-            DRS_OPTIONS options;
-            try
-            {
-                BaseTestSite.Log.Add(LogEntryKind.Checkpoint, "Try to delete replication destination from repsTo for later testing. It MAY fails if there is no such record to delete");
-
-                options = DRS_OPTIONS.DRS_DEL_REF;
-
-                req = drsTestClient.CreateRequestForDrsUpdateRef(
-                                        machine,
-                                        dest,
-                                        options
-                                        );
-                ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], 1, req);
-            }
-            catch
-            {
-                BaseTestSite.Log.Add(LogEntryKind.Checkpoint, "No similar record to delete in repsTo. It's OK to continue");
-            }
-
-            options = DRS_OPTIONS.DRS_ADD_REF;
-            req = drsTestClient.CreateRequestForDrsUpdateRef(
-                        machine,
-                        dest,
-                        options
-                        );
-            req.V1.pszDsaDest = "";// Invalid value
-            ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], 1, req);
-            BaseTestSite.Assert.AreEqual<uint>((uint)Win32ErrorCode_32.ERROR_DS_DRA_INVALID_PARAMETER, ret, "the server should return ERROR_DS_DRA_INVALID_PARAMETER");
-            options = DRS_OPTIONS.DRS_DEL_REF;
-            req = drsTestClient.CreateRequestForDrsUpdateRef(
-                        machine,
-                        dest,
-                        options
-                        );
-            ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], 1, req);
+        [TestCategory("Winv1803")]
+        [ServerType(DcServerTypes.Any)]
+        [SupportedADType(ADInstanceType.Both)]
+        [Priority(2)]
+        [Description("Modify a replication source with pszDsaDest = null and server will response ERROR_DS_DRA_INVALID_PARAMETER")]
+        [TestCategory("SDC")]
+        [TestCategory("PDC")]
+        [TestCategory("DomainWinV1803")]
+        [TestCategory("MS-DRSR")]
+        [TestMethod]
+        public void DRSR_DRSUpdateRefs_V2_pszDsaDest_NULL()
+        {
+            DrsrTestChecker.Check();
+            DRSUpdateRefs_pszDsaDest_NULL(DrsUpdateRefs_Versions.V2);
         }
 
         [TestCategory("Win2003")]
@@ -522,47 +599,23 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         public void DRSR_DRSUpdateRefs_V1_uuidDsaObjDest_NULL()
         {
             DrsrTestChecker.Check();
-            uint ret = drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
+            DRSUpdateRefs_uuidDsaObjDest_NULL(DrsUpdateRefs_Versions.V1);
+        }
 
-            DRS_MSG_UPDREFS req;
-
-            EnvironmentConfig.Machine machine = EnvironmentConfig.Machine.WritableDC1;
-            DsServer dest = (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2];
-            DRS_OPTIONS options;
-            try
-            {
-                BaseTestSite.Log.Add(LogEntryKind.Checkpoint, "Try to delete replication destination from repsTo for later testing. It MAY fails if there is no such record to delete");
-
-                options = DRS_OPTIONS.DRS_DEL_REF;
-
-                req = drsTestClient.CreateRequestForDrsUpdateRef(
-                                        machine,
-                                        dest,
-                                        options
-                                        );
-                ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], 1, req);
-            }
-            catch
-            {
-                BaseTestSite.Log.Add(LogEntryKind.Checkpoint, "No similar record to delete in repsTo. It's OK to continue");
-            }
-
-            options = DRS_OPTIONS.DRS_ADD_REF;
-            req = drsTestClient.CreateRequestForDrsUpdateRef(
-                        machine,
-                        dest,
-                        options
-                        );
-            req.V1.uuidDsaObjDest = Guid.Empty; // Invalid value
-            ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], 1, req);
-            BaseTestSite.Assert.AreEqual<uint>((uint)Win32ErrorCode_32.ERROR_DS_DRA_INVALID_PARAMETER, ret, "the server should return ERROR_DS_DRA_INVALID_PARAMETER");
-            options = DRS_OPTIONS.DRS_DEL_REF;
-            req = drsTestClient.CreateRequestForDrsUpdateRef(
-                        machine,
-                        dest,
-                        options
-                        );
-            ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], 1, req);
+        [TestCategory("Winv1803")]
+        [ServerType(DcServerTypes.Any)]
+        [SupportedADType(ADInstanceType.Both)]
+        [Priority(2)]
+        [Description("Modify a replication source with uuidDsaObjDest = null and server will response ERROR_DS_DRA_INVALID_PARAMETER")]
+        [TestCategory("SDC")]
+        [TestCategory("PDC")]
+        [TestCategory("DomainWinV1803")]
+        [TestCategory("MS-DRSR")]
+        [TestMethod]
+        public void DRSR_DRSUpdateRefs_V2_uuidDsaObjDest_NULL()
+        {
+            DrsrTestChecker.Check();
+            DRSUpdateRefs_uuidDsaObjDest_NULL(DrsUpdateRefs_Versions.V2);
         }
 
         [TestCategory("Win2003")]
@@ -579,46 +632,23 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         public void DRSR_DRSUpdateRefs_V1_WithoutOptions()
         {
             DrsrTestChecker.Check();
-            uint ret = drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
+            DRSUpdateRefs_WithoutOptions(DrsUpdateRefs_Versions.V1);
+        }
 
-            DRS_MSG_UPDREFS req;
-
-            EnvironmentConfig.Machine machine = EnvironmentConfig.Machine.WritableDC1;
-            DsServer dest = (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2];
-            DRS_OPTIONS options;
-            try
-            {
-                BaseTestSite.Log.Add(LogEntryKind.Checkpoint, "Try to delete replication destination from repsTo for later testing. It MAY fails if there is no such record to delete");
-
-                options = DRS_OPTIONS.DRS_DEL_REF;
-
-                req = drsTestClient.CreateRequestForDrsUpdateRef(
-                                        machine,
-                                        dest,
-                                        options
-                                        );
-                ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], 1, req);
-            }
-            catch
-            {
-                BaseTestSite.Log.Add(LogEntryKind.Checkpoint, "No similar record to delete in repsTo. It's OK to continue");
-            }
-
-            options = DRS_OPTIONS.NONE; //invalid value
-            req = drsTestClient.CreateRequestForDrsUpdateRef(
-                        machine,
-                        dest,
-                        options
-                        );
-            ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], 1, req);
-            BaseTestSite.Assert.AreEqual<uint>((uint)Win32ErrorCode_32.ERROR_DS_DRA_INVALID_PARAMETER, ret, "the server should return ERROR_DS_DRA_INVALID_PARAMETER");
-            options = DRS_OPTIONS.DRS_DEL_REF;
-            req = drsTestClient.CreateRequestForDrsUpdateRef(
-                        machine,
-                        dest,
-                        options
-                        );
-            ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], 1, req);
+        [TestCategory("Winv1803")]
+        [ServerType(DcServerTypes.Any)]
+        [SupportedADType(ADInstanceType.Both)]
+        [Priority(2)]
+        [Description("Modify a replication source with options does not contain DRS_ADD_REF and DRS_DEL_REF and server will response ERROR_DS_DRA_INVALID_PARAMETER")]
+        [TestCategory("SDC")]
+        [TestCategory("PDC")]
+        [TestCategory("DomainWinV1803")]
+        [TestCategory("MS-DRSR")]
+        [TestMethod]
+        public void DRSR_DRSUpdateRefs_V2_WithoutOptions()
+        {
+            DrsrTestChecker.Check();
+            DRSUpdateRefs_WithoutOptions(DrsUpdateRefs_Versions.V2);
         }
 
         [TestCategory("Win2003")]
@@ -635,6 +665,29 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         public void DRSR_DRSUpdateRefs_V1_NONExist_NC()
         {
             DrsrTestChecker.Check();
+            DRSUpdateRefs_NONExist_NC(DrsUpdateRefs_Versions.V1);
+        }
+
+        [TestCategory("Winv1803")]
+        [ServerType(DcServerTypes.Any)]
+        [SupportedADType(ADInstanceType.Both)]
+        [Priority(2)]
+        [Description("Modify a replication source with nc!instanceType(pNC) is IT_WRITE, options has DRS_WRIT_REP, the server returns ERROR_DS_DRA_BAD_NC")]
+        [TestCategory("SDC")]
+        [TestCategory("PDC")]
+        [TestCategory("DomainWinV1803")]
+        [TestCategory("MS-DRSR")]
+        [TestMethod]
+        public void DRSR_DRSUpdateRefs_V2_NONExist_NC()
+        {
+            DrsrTestChecker.Check();
+            DRSUpdateRefs_NONExist_NC(DrsUpdateRefs_Versions.V2);
+        }
+        #endregion
+
+        #region Private Method
+        private void DRSUpdateRefs_pszDsaDest_NULL(DrsUpdateRefs_Versions ver)
+        {
             uint ret = drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
 
             DRS_MSG_UPDREFS req;
@@ -650,10 +703,154 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
                 req = drsTestClient.CreateRequestForDrsUpdateRef(
                                         machine,
+                                        ver,
                                         dest,
                                         options
                                         );
-                ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], 1, req);
+                ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], (uint)ver, req);
+            }
+            catch
+            {
+                BaseTestSite.Log.Add(LogEntryKind.Checkpoint, "No similar record to delete in repsTo. It's OK to continue");
+            }
+
+            options = DRS_OPTIONS.DRS_ADD_REF;
+            req = drsTestClient.CreateRequestForDrsUpdateRef(
+                        machine,
+                        ver,
+                        dest,
+                        options
+                        );
+            req.V1.pszDsaDest = "";// Invalid value
+            ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], (uint)ver, req);
+            BaseTestSite.Assert.AreEqual<uint>((uint)Win32ErrorCode_32.ERROR_DS_DRA_INVALID_PARAMETER, ret, "the server should return ERROR_DS_DRA_INVALID_PARAMETER");
+            options = DRS_OPTIONS.DRS_DEL_REF;
+            req = drsTestClient.CreateRequestForDrsUpdateRef(
+                        machine,
+                        ver,
+                        dest,
+                        options
+                        );
+            ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], (uint)ver, req);
+        }
+
+        private void DRSUpdateRefs_uuidDsaObjDest_NULL(DrsUpdateRefs_Versions ver)
+        {
+            uint ret = drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
+
+            DRS_MSG_UPDREFS req;
+
+            EnvironmentConfig.Machine machine = EnvironmentConfig.Machine.WritableDC1;
+            DsServer dest = (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2];
+            DRS_OPTIONS options;
+            try
+            {
+                BaseTestSite.Log.Add(LogEntryKind.Checkpoint, "Try to delete replication destination from repsTo for later testing. It MAY fails if there is no such record to delete");
+
+                options = DRS_OPTIONS.DRS_DEL_REF;
+
+                req = drsTestClient.CreateRequestForDrsUpdateRef(
+                                        machine,
+                                        ver,
+                                        dest,
+                                        options
+                                        );
+                ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], (uint)ver, req);
+            }
+            catch
+            {
+                BaseTestSite.Log.Add(LogEntryKind.Checkpoint, "No similar record to delete in repsTo. It's OK to continue");
+            }
+
+            options = DRS_OPTIONS.DRS_ADD_REF;
+            req = drsTestClient.CreateRequestForDrsUpdateRef(
+                        machine,
+                        ver,
+                        dest,
+                        options
+                        );
+            req.V1.uuidDsaObjDest = Guid.Empty; // Invalid value
+            ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], (uint)ver, req);
+            BaseTestSite.Assert.AreEqual<uint>((uint)Win32ErrorCode_32.ERROR_DS_DRA_INVALID_PARAMETER, ret, "the server should return ERROR_DS_DRA_INVALID_PARAMETER");
+            options = DRS_OPTIONS.DRS_DEL_REF;
+            req = drsTestClient.CreateRequestForDrsUpdateRef(
+                        machine,
+                        ver,
+                        dest,
+                        options
+                        );
+            ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], (uint)ver, req);
+        }
+
+        private void DRSUpdateRefs_WithoutOptions(DrsUpdateRefs_Versions ver)
+        {
+            uint ret = drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
+
+            DRS_MSG_UPDREFS req;
+
+            EnvironmentConfig.Machine machine = EnvironmentConfig.Machine.WritableDC1;
+            DsServer dest = (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2];
+            DRS_OPTIONS options;
+            try
+            {
+                BaseTestSite.Log.Add(LogEntryKind.Checkpoint, "Try to delete replication destination from repsTo for later testing. It MAY fails if there is no such record to delete");
+
+                options = DRS_OPTIONS.DRS_DEL_REF;
+
+                req = drsTestClient.CreateRequestForDrsUpdateRef(
+                                        machine,
+                                        ver,
+                                        dest,
+                                        options
+                                        );
+                ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], (uint)ver, req);
+            }
+            catch
+            {
+                BaseTestSite.Log.Add(LogEntryKind.Checkpoint, "No similar record to delete in repsTo. It's OK to continue");
+            }
+
+            options = DRS_OPTIONS.NONE; //invalid value
+            req = drsTestClient.CreateRequestForDrsUpdateRef(
+                        machine,
+                        ver,
+                        dest,
+                        options
+                        );
+            ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], (uint)ver, req);
+            BaseTestSite.Assert.AreEqual<uint>((uint)Win32ErrorCode_32.ERROR_DS_DRA_INVALID_PARAMETER, ret, "the server should return ERROR_DS_DRA_INVALID_PARAMETER");
+            options = DRS_OPTIONS.DRS_DEL_REF;
+            req = drsTestClient.CreateRequestForDrsUpdateRef(
+                        machine,
+                        ver,
+                        dest,
+                        options
+                        );
+            ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], (uint)ver, req);
+        }
+
+        private void DRSUpdateRefs_NONExist_NC(DrsUpdateRefs_Versions ver)
+        {
+            uint ret = drsTestClient.DrsBind(EnvironmentConfig.Machine.WritableDC1, EnvironmentConfig.User.ParentDomainAdmin, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE);
+
+            DRS_MSG_UPDREFS req;
+
+            EnvironmentConfig.Machine machine = EnvironmentConfig.Machine.WritableDC1;
+            DsServer dest = (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2];
+            DRS_OPTIONS options;
+            try
+            {
+                BaseTestSite.Log.Add(LogEntryKind.Checkpoint, "Try to delete replication destination from repsTo for later testing. It MAY fails if there is no such record to delete");
+
+                options = DRS_OPTIONS.DRS_DEL_REF;
+
+                req = drsTestClient.CreateRequestForDrsUpdateRef(
+                                        machine,
+                                        ver,
+                                        dest,
+                                        options
+                                        );
+                ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], (uint)ver, req);
             }
             catch
             {
@@ -664,20 +861,22 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             options = DRS_OPTIONS.DRS_ADD_REF;
             req = drsTestClient.CreateRequestForDrsUpdateRef(
                         machine,
+                        ver,
                         dest,
                         options,
                         NamingContext.None // invalid value
                         );
-            ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], 1, req);
+            ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], (uint)ver, req);
             BaseTestSite.Assert.AreEqual<uint>((uint)Win32ErrorCode_32.ERROR_DS_DRA_BAD_NC, ret, "the server should return ERROR_DS_DRA_BAD_NC");
 
             options = DRS_OPTIONS.DRS_DEL_REF;
             req = drsTestClient.CreateRequestForDrsUpdateRef(
                         machine,
+                        ver,
                         dest,
                         options
                         );
-            ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], 1, req);
+            ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], (uint)ver, req);
         }
         #endregion
     }

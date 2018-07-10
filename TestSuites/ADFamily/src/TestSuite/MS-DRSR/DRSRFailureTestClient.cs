@@ -120,11 +120,22 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             req.V1.uuidDsaSrc = Guid.Empty;
             return req;
         }
+
+        public DRS_MSG_REPSYNC CreateDrsReplicaSyncV2Request()
+        {
+            DRS_MSG_REPSYNC req = new DRS_MSG_REPSYNC();
+            req.V2 = new DRS_MSG_REPSYNC_V2();
+            req.V2.pNC = DrsuapiClient.CreateDsName(null, Guid.Empty, null);
+            req.V2.uuidDsaSrc = Guid.Empty;
+            return req;
+        }
+
         // <summary>
         // the function is used to create a DrsUpdateRef request
         // </summary>
         public DRS_MSG_UPDREFS CreateRequestForDrsUpdateRef(
                     EnvironmentConfig.Machine machine,
+                    DrsUpdateRefs_Versions reqVer,
                     DsServer dest,
                     DRS_OPTIONS options,
                     NamingContext nc = NamingContext.ConfigNC)
@@ -165,7 +176,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             nc_guid = nc_obj.Guid;
             nc_sid = convertSidToString(nc_obj.Sid);
 
-            DRS_MSG_UPDREFS? req = DRSClient.CreateUpdateRefsRequest(
+            DRS_MSG_UPDREFS? req = CreateUpdateRefsRequest(
+                reqVer,
                 nc_name,
                 nc_guid,
                 nc_sid,

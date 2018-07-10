@@ -150,7 +150,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <summary>
         /// Specifies the version of the capability, which is supported in RDP 10.4
         /// </summary>
-        RDPGFX_CAPVERSION_104 = 0x000A0400
+        RDPGFX_CAPVERSION_104 = 0x000A0400,
+
+        /// <summary>
+        /// Specifies the version of the capability, which is supported in RDP 10.5
+        /// </summary>
+        RDPGFX_CAPVERSION_105 = 0x000A0502
     }
 
     public enum MaxCacheSlotNumber : int
@@ -191,7 +196,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// Indicates that usage of the MPEG-4 AVC/H.264 Codec in either YUV420p or YUV444 modes 
         /// is not supported in the RDPGFX_WIRE_TO_SURFACE_PDU_1 (section 2.2.2.1) message.
         /// </summary>
-        RDPGFX_CAPS_FLAG_AVC_DISABLED = 0x00000020
+        RDPGFX_CAPS_FLAG_AVC_DISABLED = 0x00000020,
+
+        /// <summary>
+        /// Indicates that the client prefers the MPEG-4 AVC/H.264 Codec in YUV444 mode. 
+        /// If this flag is set, the RDPGFX_CAPS_FLAG_AVC_DISABLED flag MUST NOT be set.
+        /// </summary>
+        RDPGFX_CAPS_FLAG_AVC_THINCLIENT = 0x00000040
 
     }
 

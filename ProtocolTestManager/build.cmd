@@ -25,6 +25,15 @@ if not defined WIX (
 set CurrentPath=%~dp0
 set TestSuiteRoot=%CurrentPath%..\
 
+if not exist "%TestSuiteRoot%ProtoSDK\RDMA\include\ndspi.h" (
+	echo Error: WindowsProtocolTestSuites\ProtoSDK\RDMA\include\ndspi.h does not exist, it can be extracted from NetworkDirect_DDK.zip in HPC Pack 2008 R2 SDK with Service Pack 2  @ https://www.microsoft.com/en-us/download/details.aspx?id=26645
+	exit /b 1
+) 
+
+if not exist "%TestSuiteRoot%ProtoSDK\RDMA\include\ndstatus.h" (
+	echo Warning: WindowsProtocolTestSuites\ProtoSDK\RDMA\include\ndstatus.h does not exist, it can be extracted from NetworkDirect_DDK.zip in HPC Pack 2008 R2 SDK with Service Pack 2  @ https://www.microsoft.com/en-us/download/details.aspx?id=26645
+	exit /b 1
+) 
 
 ::Get build version from AssemblyInfo
 set path=%TestSuiteRoot%AssemblyInfo\SharedAssemblyInfo.cs
@@ -45,4 +54,4 @@ if exist "%TestSuiteRoot%drop\ProtocolTestManager" (
  rd /s /q "%TestSuiteRoot%drop\ProtocolTestManager"
 )
 
-%buildtool% "%TestSuiteRoot%ProtocolTestManager\deploy\ProtocolTestManagerInstaller.wixproj" /t:clean;Rebuild /p:NoWarn=1591 /p:FORDEBUG=%DEBUGVER%
+%buildtool% "%TestSuiteRoot%ProtocolTestManager\deploy\ProtocolTestManagerInstaller.wixproj" /p:Platform="x64" /p:Configuration="Release" /p:VisualStudioVersion=11.0 /t:clean;Rebuild /p:NoWarn=1591 /p:FORDEBUG=%DEBUGVER%
