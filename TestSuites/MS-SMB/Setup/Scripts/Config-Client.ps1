@@ -174,7 +174,7 @@ elseif ([double]$clientOsVersion -ge [double]$os2008R2)
 
 
 $UserName = "$servername\administrator"
-$Password = ConvertTo-SecureString -String "Password01!" -AsPlainText -Force
+$Password = ConvertTo-SecureString -String $userPwdInVM -AsPlainText -Force
 
 $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $UserName , $Password
 
@@ -199,39 +199,6 @@ else
 {
    .\Modify-ConfigFileNode.ps1 $cfgfile "SutPlatformOS"   "Win2K8"
 }
-
-if($IPVersion -eq "IPv6")
-{
-   FileStringReplace $binPath\factory.xml 192.168.0.1 2008::1 
-}
-
-if ([double]$clientOsVersion -eq [double]$os2008)
-{
-   if([double]$SUTOsVersion -ge [double]$os2008R2)
-   {
-       set-content $env:systemdrive\testlist.txt "WinVista_Win2K8R2"
-   }  
-   else
-   {
-       set-content $env:systemdrive\testlist.txt "WinVista_Win2K8"
-   }
-}
-elseif ([double]$clientOsVersion  -ge [double]$os2008R2)
-{
-   if([double]$SUTOsVersion -ge [double]$os2008R2)
-   {
-       set-content $env:systemdrive\testlist.txt "Win7_Win2K8R2"
-   }   
-   else
-   {
-       set-content $env:systemdrive\testlist.txt "Win7_Win2K8"
-   }
-}
-else
-{
-       set-content $env:systemdrive\testlist.txt "Win7_Win2K8"
-}
-
 
 .\Modify-ConfigFileNode.ps1 $cfgfile "SutMachineName"         $servername
 .\Modify-ConfigFileNode.ps1 $cfgfile "SutLoginAdminUserName"  $userNameInVM

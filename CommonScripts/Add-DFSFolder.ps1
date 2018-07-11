@@ -10,7 +10,9 @@
 ##############################################################################
 
 param(
+[Parameter(Mandatory=$true)]
 [string]$nsPath,
+[Parameter(Mandatory=$true)]
 [string]$folderPath
 )
 
@@ -43,18 +45,6 @@ if ($args[0] -match '-(\?|(h|(help)))')
 {
     Show-ScriptUsage 
     return
-}
-
-#----------------------------------------------------------------------------
-# Verify required parameters
-#----------------------------------------------------------------------------
-if ($nsPath -eq $null -or $nsPath -eq "")
-{
-    Throw "Parameter `$nsPath is required."
-}
-if ($folderPath -eq $null -or $folderPath -eq "")
-{
-    Throw "Parameter `$folderPath is required."
 }
 
 #----------------------------------------------------------------------------

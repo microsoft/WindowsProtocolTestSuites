@@ -139,7 +139,6 @@ if(!(Test-Path -Path $testResultsPath))
 	New-Item -Type Directory -Path $testResultsPath -Force
 }
 .\Set-Parameter.ps1 $configFile logFile $logFile
-.\Set-Parameter.ps1 $configFile myToolsPath $myToolsPath
 .\Write-Log.ps1 "Put current dir as $scriptsPath." Debug $logFile
 .\Write-Log.ps1 "`$configFile         = $configFile"  Client
 .\Write-Log.ps1 "`$logFile            = $logFile"    Client
@@ -208,7 +207,7 @@ for( $i=0; $i -lt $disk2.length;$i++)
     if($disk2[$i].name -eq "H:")
     {
         $existH="true"
-        Write-Host "The disk H: has exist ..."
+        Write-Host "The disk H: has existed ..."
         break
     }
 }
