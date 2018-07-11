@@ -210,7 +210,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         {
             get
             {
-                return GetProperty("ClientNic2IPAddress").ParseIPAddress();
+                return GetProperty("ClientNic2IPAddress", false).ParseSecondaryIPAddress();
             }
         }
         #endregion
@@ -448,7 +448,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 }
                 else
                 {
-                    Site.Assert.Inconclusive("The value of {0} is empty.", propertyName);                
+                    Site.Assert.Inconclusive("The value of {0} is empty.", propertyName);
                 }
             }
 
@@ -470,7 +470,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         {
             List<T> list = new List<T>();
             string propertyValue = GetProperty(property, false);
-            if(string.IsNullOrEmpty(propertyValue)) return list;
+            if (string.IsNullOrEmpty(propertyValue)) return list;
 
             string[] values = propertyValue.Split(';');
             foreach (var value in values)
@@ -574,10 +574,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// Validate IOCTL and Dialect compatibility 
         /// </summary>        
         /// <param name="IOCTL">The IOCTL to check against dialect</param>        
-        public void CheckDialectIOCTLCompatibility( CtlCode_Values IOCTL)
+        public void CheckDialectIOCTLCompatibility(CtlCode_Values IOCTL)
         {
             switch (IOCTL)
-            {      
+            {
                 case CtlCode_Values.FSCTL_VALIDATE_NEGOTIATE_INFO:
                     // FSCTL_VALIDATE_NEGOTIATE_INFO is not supported by SMB311 any more
                     if (MaxSmbVersionSupported >= DialectRevision.Smb311 && MaxSmbVersionClientSupported >= DialectRevision.Smb311)
@@ -585,8 +585,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                         Site.Assert.Inconclusive("The VALIDATE_NEGOTIATE_INFO request is valid for the client and servers which implement the SMB 3.0 and SMB 3.0.2 dialects");
                     }
                     break;
-                // Add other IOCTL and Dialect compatibility validation if any.
-            }            
+                    // Add other IOCTL and Dialect compatibility validation if any.
+            }
         }
         public void CheckCapabilities(NEGOTIATE_Response_Capabilities_Values capabilities)
         {

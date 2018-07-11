@@ -317,12 +317,9 @@ namespace Microsoft.Protocols.TestManager.Detector
             {
                 propertiesDic.Add("Common.ClientNic2IPAddress", new List<string>() { detectionInfo.networkInfo.LocalIpList[1].ToString() });
             }
-            else if (detectionInfo.networkInfo.LocalIpList.Count == 1)
-            {
-                propertiesDic.Add("Common.ClientNic2IPAddress", new List<string>() { detectionInfo.networkInfo.LocalIpList[0].ToString() });
-            }
             else
             {
+                // leave ClientNic2IPAddress blank
                 propertiesDic.Add("Common.ClientNic2IPAddress", new List<string>() { string.Empty });
             }
 
@@ -360,9 +357,14 @@ namespace Microsoft.Protocols.TestManager.Detector
             #region SMB2 Traditional
 
             if (detectionInfo.networkInfo.SUTIpList.Count > 1)
+            {
                 propertiesDic.Add("SMB2.SutAlternativeIPAddress", new List<string>() { detectionInfo.networkInfo.SUTIpList[1].ToString() });
+            }
             else
-                propertiesDic.Add("SMB2.SutAlternativeIPAddress", new List<string>() { detectionInfo.networkInfo.SUTIpList[0].ToString() });
+            {
+                // leave SutAlternativeIPAddress blank
+                propertiesDic.Add("SMB2.SutAlternativeIPAddress", new List<string>() { String.Empty });
+            }
 
             propertiesDic.Add("SMB2.FileShareSupportingIntegrityInfo", CreateShareList(detectionInfo.shareSupportingIntegrityInfo));
             #endregion
@@ -501,9 +503,9 @@ namespace Microsoft.Protocols.TestManager.Detector
             else
             {
                 // Check all Oplock categories
-                selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock"));                
+                selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock"));
             }
-            
+
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.OperateOneFileFromTwoNodes"));
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.Compound"));
             selectedRuleList.Add(CreateRule("Feature.SMB2&3.ChangeNotify"));
@@ -536,8 +538,8 @@ namespace Microsoft.Protocols.TestManager.Detector
                 detectionInfo.F_CopyOffload[0] == DetectResult.Supported || detectionInfo.F_CopyOffload[1] == DetectResult.Supported));
 
             selectedRuleList.Add(CreateRule(
-                "Feature.RSVD (Remote Shared Virtual Disk).RSVDVersion1", 
-                (detectionInfo.RsvdSupport == DetectResult.Supported) && 
+                "Feature.RSVD (Remote Shared Virtual Disk).RSVDVersion1",
+                (detectionInfo.RsvdSupport == DetectResult.Supported) &&
                 (detectionInfo.RsvdVersion == RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1 || detectionInfo.RsvdVersion == RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_2)));
             selectedRuleList.Add(CreateRule(
                 "Feature.RSVD (Remote Shared Virtual Disk).RSVDVersion2",

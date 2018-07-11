@@ -41,7 +41,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter
         {
             get
             {
-                return GetProperty("SutAlternativeIPAddress", false).ParseIPAddress();
+                return GetProperty("SutAlternativeIPAddress").ParseSecondaryIPAddress();
             }
         }
 
@@ -185,7 +185,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter
         #endregion 
 
         #endregion
-        public SMB2TestConfig(ITestSite site):base(site)
+        public SMB2TestConfig(ITestSite site) : base(site)
         {
         }
     }
