@@ -41,7 +41,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter
         {
             get
             {
-                return GetProperty("SutAlternativeIPAddress").ParseSecondaryIPAddress();
+                var result = GetProperty("SutAlternativeIPAddress").ParseSecondaryIPAddress();
+                Site.Assume.IsTrue(result != IPAddress.None, "SutAlternativeIPAddress should be a valid IP address or a resolvable host name with at least two IP addresses!");
             }
         }
 
@@ -136,6 +137,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter
                 if (shareServerIP == null)
                 {
                     shareServerIP = ShareServerName.ParseIPAddress();
+                    Site.Assume.IsTrue(shareServerIP != IPAddress.None, "ShareServerName should be a valid IP address or a resolvable host name!");
                 }
                 return shareServerIP;
             }

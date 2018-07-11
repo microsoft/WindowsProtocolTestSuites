@@ -44,9 +44,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         }
 
         /// <summary>
-        /// Parse hostname or ip string to optional secondary IPAddress
+        /// Parse host name or IP string to optional secondary IPAddress
         /// </summary>
-        /// <param name="hostNameOrIpAddress">HostName or Ip String</param>
+        /// <param name="hostNameOrIpAddress">HostName or IP String</param>
         /// <returns>Secondary IPV4 Address</returns>
         public static IPAddress ParseSecondaryIPAddress(this string hostNameOrIpAddress)
         {

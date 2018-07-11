@@ -203,14 +203,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         {
             get
             {
-                return GetProperty("ClientNic1IPAddress").ParseIPAddress();
+                var result = GetProperty("ClientNic1IPAddress").ParseIPAddress();
+                Site.Assume.IsTrue(result != IPAddress.None, "ClientNic1IPAddress should be a valid IP address or a resolvable host name!");
+                return result;
             }
         }
         public IPAddress ClientNic2IPAddress
         {
             get
             {
-                return GetProperty("ClientNic2IPAddress", false).ParseSecondaryIPAddress();
+                var result = GetProperty("ClientNic2IPAddress", false).ParseSecondaryIPAddress();
+                Site.Assume.IsTrue(result != IPAddress.None, "ClientNic2IPAddress should be a valid IP address or a resolvable host name with at least two IP addresses!");
+                return result;
             }
         }
         #endregion
@@ -293,7 +297,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         {
             get
             {
-                return GetProperty("SutIPAddress", false).ParseIPAddress();
+                var result = GetProperty("SutIPAddress").ParseIPAddress();
+                Site.Assume.IsTrue(result != IPAddress.None, "SutIPAddress should be a valid IP address or a resolvable host name!");
+                return result;
             }
         }
 
@@ -374,7 +380,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         {
             get
             {
-                return CAShareServerName.ParseIPAddress();
+                var result = CAShareServerName.ParseIPAddress();
+                Site.Assume.IsTrue(result != IPAddress.None, "CAShareServerIP should be a valid IP address or a resolvable host name!");
+                return result;
             }
         }
 
