@@ -43,6 +43,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter
             {
                 var result = GetProperty("SutAlternativeIPAddress").ParseSecondaryIPAddress();
                 Site.Assume.IsTrue(result != IPAddress.None, "SutAlternativeIPAddress should be a valid IP address or a resolvable host name with at least two IP addresses!");
+                return result;
             }
         }
 
