@@ -173,7 +173,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client.Create(
                 treeId,
                 GetTestFileName(Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare)),
-                CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileId,
                 out serverCreateContexts);
         }

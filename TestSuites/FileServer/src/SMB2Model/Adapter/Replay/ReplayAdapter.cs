@@ -504,7 +504,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay
             smb2ClientMainChannel.Create(
                 treeIdMainChannel,
                 fileNameMainChannel,
-                CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileIdMainChannel,
                 out serverCreateContexts,
                 oplockLevel,
@@ -770,7 +770,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay
                         status = smb2ClientMainChannel.Create(
                             treeIdMainChannel,
                             fileNameMainChannel,
-                            CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
+                            CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                             out fileIdMainChannel,
                             out serverCreateContexts,
                             RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE,

@@ -23,7 +23,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
         private DialectRevision negotiatedDialect;
         private uint treeId;
         private FILEID fileId;
-        private string fileName;
         private OplockLevel_Values oplockLevelOnOpen;
         private FileOperationDelegate fileOperationInvoker;
 
@@ -172,7 +171,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
             out OplockConfig c)
         {
             Smb2CreateContextResponse[] serverCreateContexts;
-            fileName = GetTestFileName(uncSharePath);
+            string fileName = GetTestFileName(uncSharePath);
 
             OplockLevel_Values grantedTmp = OplockLevel_Values.OPLOCK_LEVEL_NONE;
             testClient.Create(

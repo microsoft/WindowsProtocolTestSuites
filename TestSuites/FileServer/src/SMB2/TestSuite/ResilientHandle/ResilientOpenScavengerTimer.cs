@@ -18,8 +18,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.ResilientHan
     {
         public const uint DEFAULT_RESILIENT_TIMEOUT_IN_SECONDS = 120;
 
-        private string fileName;
-
         #region Test Initialize and Cleanup
         [ClassInitialize()]
         public static void ClassInitialize(TestContext testContext)
@@ -76,7 +74,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.ResilientHan
 
             uint timeoutInSecond = testConfig.MaxResiliencyTimeoutInSecond / 2;
             Guid clientGuid = Guid.NewGuid();
-            fileName = GetTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare));
+            string fileName = GetTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare));
             FILEID fileId;
 
             // Open file & Resiliency request
@@ -138,7 +136,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.ResilientHan
 
             uint timeoutInSecond = testConfig.MaxResiliencyTimeoutInSecond / 2;
             Guid clientGuid = Guid.NewGuid();
-            fileName = GetTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare));
+            string fileName = GetTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare));
             FILEID fileId;
 
             // Open file & Resiliency request

@@ -56,6 +56,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.MixedOplo
                 leaseClient = null;
             }
 
+            fileName = null;
             breakType = ModelBreakType.NoBreak;
             treeIdOplock = 0;
             treeIdLease = 0;

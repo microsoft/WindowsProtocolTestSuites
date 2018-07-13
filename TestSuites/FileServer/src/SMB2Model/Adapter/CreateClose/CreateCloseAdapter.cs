@@ -19,7 +19,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClo
         private Smb2FunctionalClient testClient;
         private uint treeId;
         private FILEID fileID;
-        private string fileName;
         private CreateContextType Create_ContextType;
         public const int mask = 0x0ce0fe00;
 
@@ -52,10 +51,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClo
         public void ReadConfig(out CreateCloseConfig c)
         {
             c = new CreateCloseConfig
-                {
-                    MaxSmbVersionServerSupported = ModelUtility.GetModelDialectRevision(testConfig.MaxSmbVersionSupported),
-                    Platform = testConfig.Platform
-                };
+            {
+                MaxSmbVersionServerSupported = ModelUtility.GetModelDialectRevision(testConfig.MaxSmbVersionSupported),
+                Platform = testConfig.Platform
+            };
 
             createCloseConfig = c;
 
@@ -95,8 +94,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClo
             #endregion
 
             #region File Name
-            SetFileName(fileNameType);
-            AddTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare), fileName);
+            string fileName = GetFileName(fileNameType);
             #endregion
 
             #region CreateOptions
@@ -156,6 +154,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClo
                 checker: (header, response) => { },
                 impersonationLevel: impersonation);
 
+            AddTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare), fileName);
             CreateResponse((ModelSmb2Status)status, createCloseConfig);
         }
 
@@ -187,12 +186,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClo
         #endregion
 
         #region helper functions
-        private void SetFileName(CreateFileNameType fileNameType)
+        private string GetFileName(CreateFileNameType fileNameType)
         {
+            string fileName;
             switch (fileNameType)
             {
                 case CreateFileNameType.StartWithPathSeparator:
-                    fileName = testConfig.PathSeparator + "CreateCloseMBT" + Guid.NewGuid();
+                    fileName = testConfig.PathSeparator + this.CurrentTestCaseName + "_" + Guid.NewGuid();
                     break;
                 case CreateFileNameType.OtherInvalidFileName:
                     // [MS-FSCC] Section 2.1.5.2   Filename
@@ -200,14 +200,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClo
                     // The characters
                     // " \ / : | < > * ?
                     // Control characters, ranging from 0x00 through 0x1F.
-                    fileName = "*" + "CreateCloseMBT" + Guid.NewGuid();
+                    fileName = "*" + "CreateClose" + this.CurrentTestCaseName + "_" + Guid.NewGuid();
                     break;
                 case CreateFileNameType.ValidFileName:
-                    fileName = "CreateCloseMBT" + Guid.NewGuid();
+                    fileName = this.CurrentTestCaseName + "_" + Guid.NewGuid();
                     break;
                 default:
                     throw new ArgumentException("fileNameType");
             }
+
+            return fileName;
         }
 
         private void ReplacePacketByInvalidCreateContext(Smb2Packet packet)

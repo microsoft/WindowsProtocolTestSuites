@@ -57,6 +57,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle
 
             fileIdBeforDisconnection = FILEID.Zero;
 
+            // Add test file to collection, to delete it in Reset() of base;
             AddTestFileName(sharePath, fileName);
 
             base.Reset();
