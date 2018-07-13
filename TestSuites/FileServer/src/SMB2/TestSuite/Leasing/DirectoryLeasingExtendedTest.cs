@@ -535,8 +535,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             #region Prepare test directory
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create test directory.");
             uncSharePath = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
-            string parentDirectory = "ParentDirectory_" + Guid.NewGuid().ToString();
-            sutProtocolController.CreateDirectory(uncSharePath, parentDirectory);
+            string parentDirectory = CreateTestDirectory(uncSharePath);
             testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare + "\\" + parentDirectory);
             #endregion
 
@@ -625,6 +624,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             #endregion
 
             #endregion
+
+            ClientTearDown(clientRequestingLease, treeIdClientRequestingLease, fileIdClientRequestingLease);
+            ClientTearDown(clientTriggeringBreak, treeIdClientTriggeringBreak, fileIdClientTriggeringBreak);
         }
 
         [TestMethod]
@@ -637,8 +639,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             #region Prepare test directory
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create test directory.");
             uncSharePath = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
-            string parentDirectory = "ParentDirectory_" + Guid.NewGuid().ToString();
-            sutProtocolController.CreateDirectory(uncSharePath, parentDirectory);
+            string parentDirectory = CreateTestDirectory(uncSharePath);
             testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare + "\\" + parentDirectory);
             #endregion
 
@@ -748,7 +749,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             ClientTearDown(clientRequestingLease, treeIdClientRequestingLease, fileIdClientRequestingLease);
             ClientTearDown(clientTriggeringBreak, treeIdClientTriggeringBreak, fileIdClientTriggeringBreak);
-            sutProtocolController.DeleteDirectory(uncSharePath, parentDirectory);
         }
 
         [TestMethod]
@@ -1051,7 +1051,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         private void VerifyGrantedLeaseState(LeaseStateValues requestedLeaseState, LeaseStateValues expectedGrantedLeaseState)
         {
             Guid clientGuid = Guid.NewGuid();
-            string testDirectory = "DirectoryLeasing_GrantedLeaseState_" + clientGuid.ToString();
 
             #region Connect to share
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Connect to share {0}.", uncSharePath);
@@ -1112,7 +1111,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             FILEID fileId;
             status = client.Create(
                 treeId,
-                testDirectory,
+                GetTestDirectoryName(uncSharePath),
                 CreateOptions_Values.FILE_DIRECTORY_FILE,
                 out fileId,
                 out serverCreateContexts,
@@ -1158,7 +1157,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             #endregion
 
             ClientTearDown(client, treeId, fileId);
-            sutProtocolController.DeleteDirectory(uncSharePath, testDirectory);
         }
 
         #endregion

@@ -51,12 +51,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
                 testClient = null;
             }
 
-            if (fileName != null)
-            {
-                sutProtocolController.DeleteFile(uncSharePath, fileName);
-                fileName = null;
-            }
-
             base.Reset();
         }
 
@@ -178,7 +172,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
             out OplockConfig c)
         {
             Smb2CreateContextResponse[] serverCreateContexts;
-            fileName = "OplockMBT_" + Guid.NewGuid().ToString();
+            fileName = GetTestFileName(uncSharePath);
 
             OplockLevel_Values grantedTmp = OplockLevel_Values.OPLOCK_LEVEL_NONE;
             testClient.Create(

@@ -60,7 +60,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             
             clientGuid = Guid.NewGuid();
             uncSharePath = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
-            fileName = string.Format("{0}_{1}.txt", CurrentTestCaseName, Guid.NewGuid());
+            fileName = GetTestFileName(uncSharePath);
             testDirectory = CreateTestDirectory(uncSharePath);
             contentWrite = Smb2Utility.CreateRandomString(TestConfig.WriteBufferLengthInKb);
         }
@@ -95,7 +95,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 }
             }
 
-            sutProtocolController.DeleteFile(uncSharePath, fileName);
             base.TestCleanup();
         }
         #endregion

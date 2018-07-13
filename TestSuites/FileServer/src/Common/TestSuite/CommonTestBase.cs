@@ -20,7 +20,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite
 
         protected ISutProtocolControlAdapter sutProtocolController;
 
-        protected Dictionary<string, string> testDirectories = new Dictionary<string, string>();
+        protected List<string> testDirectories = new List<string>();
+
+        protected List<string> testFiles = new List<string>();
+
 
         protected string CurrentTestCaseName
         {
@@ -42,14 +45,41 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite
 
         protected override void TestCleanup()
         {
-            if (testDirectories.ContainsKey(CurrentTestCaseName))
+            foreach (var directory in testDirectories)
             {
-                string testDirectoryFullPath = testDirectories[CurrentTestCaseName];
-                sutProtocolController.DeleteDirectory(Smb2Utility.GetShareName(testDirectoryFullPath), Smb2Utility.GetFileName(testDirectoryFullPath));
-                testDirectories.Remove(CurrentTestCaseName);
+                try
+                {
+                    sutProtocolController.DeleteDirectory(Smb2Utility.GetShareName(directory), Smb2Utility.GetFileName(directory));
+                }
+                catch
+                {
+                }
+            }
+
+            foreach (var fileName in testFiles)
+            {
+                try
+                {
+                    sutProtocolController.DeleteFile(Smb2Utility.GetShareName(fileName), Smb2Utility.GetFileName(fileName));
+                }
+                catch
+                {
+                }
             }
 
             base.TestCleanup();
+        }
+
+        protected string GetTestFileName(string share)
+        {
+            string fileName = CurrentTestCaseName + "_" + Guid.NewGuid().ToString();
+            testFiles.Add(Path.Combine(share, fileName));
+            return fileName;
+        }
+
+        protected void AddTestFileName(string share, string fileName)
+        {
+            testFiles.Add(Path.Combine(share, fileName));
         }
 
         protected string CreateTestDirectory(string server, string share)
@@ -61,13 +91,23 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite
         {
             string testDirectory = CurrentTestCaseName + "_" + Guid.NewGuid().ToString();
             string testDirectoryFullPath = Path.Combine(share, testDirectory);
-            testDirectories.Add(CurrentTestCaseName, testDirectoryFullPath);
-            DoUntilSucceed(() => sutProtocolController.CreateDirectory(share, testDirectory),
-                testConfig.Timeout,
-                "Retry to call CreateDirectory until succeed within timeout span.");
+            testDirectories.Add(testDirectoryFullPath);
+            sutProtocolController.CreateDirectory(share, testDirectory);
             BaseTestSite.Log.Add(LogEntryKind.Debug, "Create a directory {0} in the share {1}.",
                 testDirectory, share);
             return testDirectory;
+        }
+
+        protected string GetTestDirectoryName(string share)
+        {
+            string directoryName = CurrentTestCaseName + "_" + Guid.NewGuid().ToString();
+            testDirectories.Add(Path.Combine(share, directoryName));
+            return directoryName;
+        }
+
+        protected void AddTestDirectoryName(string share, string directoryName)
+        {
+            testDirectories.Add(Path.Combine(share, directoryName));
         }
 
         protected uint DoUntilSucceed(Func<uint> func, TimeSpan timeout, string format, params object[] args)

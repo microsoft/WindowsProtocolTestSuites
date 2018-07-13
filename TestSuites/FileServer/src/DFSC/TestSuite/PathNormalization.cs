@@ -123,9 +123,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
             // [MS-SMB2] 2.2.13   SMB2 CREATE Request
             // If SMB2_FLAGS_DFS_OPERATIONS is set in the Flags field of the SMB2 header, 
             // the file name can be prefixed with DFS link information that will be removed during DFS name normalization as specified in section 3.3.5.9. 
-            string filaName = dfsRootShare + @"\";
-            filaName += containDFSLink ? (TestConfig.DFSLink + @"\") : "";
-            filaName += "PathNormalization_" + Guid.NewGuid();
+            string fileName = dfsRootShare + @"\";
+            fileName += containDFSLink ? (TestConfig.DFSLink + @"\") : "";
+            fileName += "PathNormalization_" + Guid.NewGuid();
+
+            this.AddTestFileName(dfsRootShare, fileName);
 
             if (containDFSLink)
             {
@@ -138,7 +140,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
             uint status = smb2client.Create(
                 treeId,
-                filaName, 
+                fileName, 
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 Packet_Header_Flags_Values.FLAGS_DFS_OPERATIONS | Packet_Header_Flags_Values.FLAGS_SIGNED,
                 out fileId,

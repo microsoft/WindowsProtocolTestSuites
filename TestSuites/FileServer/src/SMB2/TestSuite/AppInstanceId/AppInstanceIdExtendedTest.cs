@@ -52,7 +52,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             contentWrite = Smb2Utility.CreateRandomString(TestConfig.WriteBufferLengthInKb);
 
             uncSharePath = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
-            fileName = string.Format("{0}_{1}.txt", CurrentTestCaseName, Guid.NewGuid());
+            fileName = GetTestFileName(uncSharePath);
         }
 
         protected override void TestCleanup()
@@ -83,12 +83,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                         LogEntryKind.Debug,
                         "Unexpected exception when disconnect clientAfterFailover: {0}", ex.ToString());
                 }
-            }
-
-            if (fileName != null)
-            {
-                sutProtocolController.DeleteFile(uncSharePath, fileName);
-                fileName = null;
             }
 
             base.TestCleanup();

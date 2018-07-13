@@ -44,11 +44,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClo
                 testClient = null;
             }
 
-            if (fileName != null)
-            {
-                this.sutProtocolController.DeleteFile(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare), fileName);
-                fileName = null;
-            }
             base.Reset();
         }
         #endregion
@@ -101,6 +96,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClo
 
             #region File Name
             SetFileName(fileNameType);
+            AddTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare), fileName);
             #endregion
 
             #region CreateOptions

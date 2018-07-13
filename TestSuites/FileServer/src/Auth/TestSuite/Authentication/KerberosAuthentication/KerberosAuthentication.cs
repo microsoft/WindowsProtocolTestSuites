@@ -814,7 +814,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             FILEID fileId;
             smb2Client.Create(
                 treeId,
-                Guid.NewGuid() + ".txt",
+                GetTestFileName(path),
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileId,
                 out serverCreateContexts);

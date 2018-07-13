@@ -56,12 +56,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.MixedOplo
                 leaseClient = null;
             }
 
-            if (fileName != null)
-            {
-                sutProtocolController.DeleteFile(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare), fileName);
-                fileName = null;
-            }
-
             breakType = ModelBreakType.NoBreak;
             treeIdOplock = 0;
             treeIdLease = 0;
@@ -83,7 +77,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.MixedOplo
             oplockClient.Smb2Client.OplockBreakNotificationReceived += new Action<Packet_Header, OPLOCK_BREAK_Notification_Packet>(OnLeaseBreakNotificationReceived);
             leaseClient = InitializeClient(testConfig.SutIPAddress, out treeIdLease);
             leaseClient.Smb2Client.LeaseBreakNotificationReceived += new Action<Packet_Header, LEASE_BREAK_Notification_Packet>(OnLeaseBreakNotificationReceived);
-            fileName = "MixedOplockLeaseModel_" + Guid.NewGuid() + ".txt";
+            fileName = GetTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare));
         }
 
         /// <summary>

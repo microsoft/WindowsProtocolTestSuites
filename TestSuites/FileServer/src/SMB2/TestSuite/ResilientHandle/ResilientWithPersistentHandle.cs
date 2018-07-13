@@ -77,7 +77,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.ResilientHan
             Guid clientGuid = Guid.NewGuid();
             Guid createGuid = Guid.NewGuid();
             Guid leaseKey = Guid.NewGuid();
-            string fileName = "ResilientWithPersistentHandle_" + Guid.NewGuid() + ".txt";
+            string fileName = GetTestFileName(Smb2Utility.GetUncPath(TestConfig.CAShareServerName, TestConfig.CAShareName));
             FILEID fileId;
             uint treeId;
 
@@ -133,8 +133,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.ResilientHan
                 {
                     BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_FILE_NOT_AVAILABLE, header.Status, "The server MUST fail the request with STATUS_FILE_NOT_AVAILABLE.");
                 });
-
-            sutProtocolController.DeleteFile(Smb2Utility.GetUncPath(testConfig.CAShareServerName, testConfig.CAShareName), fileName);
         }
 
         #endregion
