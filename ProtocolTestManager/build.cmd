@@ -53,7 +53,7 @@ if exist "%TestSuiteRoot%drop\ProtocolTestManager" (
  rd /s /q "%TestSuiteRoot%drop\ProtocolTestManager"
 )
 
-%buildtool% "%TestSuiteRoot%ProtocolTestManager\deploy\ProtocolTestManagerInstaller.wixproj" /p:Platform="x64" /p:Configuration="Release" /p:VisualStudioVersion=11.0 /t:clean;Rebuild /p:NoWarn=1591 /p:FORDEBUG=%DEBUGVER%
+%buildtool% "%TestSuiteRoot%ProtocolTestManager\deploy\ProtocolTestManagerInstaller.wixproj" /p:Platform="x64" /p:Configuration="Release" /t:clean;Rebuild /p:NoWarn=1591 /p:FORDEBUG=%DEBUGVER%
 if ErrorLevel 1 (
 	echo Error: Failed to build Protocol Test Manager
 	exit /b 1

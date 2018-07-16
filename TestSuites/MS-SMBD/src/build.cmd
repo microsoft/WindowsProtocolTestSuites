@@ -54,9 +54,9 @@ if not exist "%TestSuiteRoot%ProtoSDK\RDMA\include\ndstatus.h" (
 
 set KeyFile=%1
 if not defined KeyFile (
-	%buildtool% "%TestSuiteRoot%TestSuites\MS-SMBD\src\MS-SMBD_Server.sln" /t:clean;rebuild /p:VisualStudioVersion=%VisualStudioVer%
+	%buildtool% "%TestSuiteRoot%TestSuites\MS-SMBD\src\MS-SMBD_Server.sln" /t:clean;rebuild /p:Configuration="Release"
 ) else (
-	%buildtool% "%TestSuiteRoot%TestSuites\MS-SMBD\src\MS-SMBD_Server.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true /p:VisualStudioVersion=%VisualStudioVer%
+	%buildtool% "%TestSuiteRoot%TestSuites\MS-SMBD\src\MS-SMBD_Server.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true /p:Configuration="Release"
 )
 
 if ErrorLevel 1 (
@@ -68,7 +68,7 @@ if exist "%TestSuiteRoot%drop\TestSuites\MS-SMBD" (
 	rd /s /q "%TestSuiteRoot%drop\TestSuites\MS-SMBD"
 )
 
-%buildtool% "%TestSuiteRoot%TestSuites\MS-SMBD\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:Platform="x64" /p:Configuration="Release" /p:VisualStudioVersion=%VisualStudioVer%
+%buildtool% "%TestSuiteRoot%TestSuites\MS-SMBD\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:Configuration="Release" /p:Platform="x64"
 
 if ErrorLevel 1 (
 	echo Error: Failed to generate the msi installer
