@@ -91,6 +91,12 @@ goto choosetestcase
 :runtestcase
 @echo on
 
-"%VS110COMNTOOLS%..\IDE\mstest" /testcontainer:..\bin\BranchCache_TestSuite.dll /category:"%category%" /runconfig:..\bin\LocalTestRun.testsettings
+set CurrentPath=%~dp0
+call "%CurrentPath%..\..\..\..\common\setMSTestPath.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
+%mstest% /testcontainer:..\bin\BranchCache_TestSuite.dll /category:"%category%" /runconfig:..\bin\LocalTestRun.testsettings
 
 pause
