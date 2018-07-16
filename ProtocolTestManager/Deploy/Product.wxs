@@ -105,7 +105,7 @@
 
     </UI>
 
-    <!-- Properties for "Add or Reomve Program Entries" -->
+    <!-- Properties for "Add or Remove Program Entries" -->
     <Property Id="ARPCOMMENTS">Protocol Test Manager</Property>
     <Property Id="ARPCONTACT">Microsoft Interop &amp; Testing Team</Property>
 
