@@ -99,7 +99,7 @@ echo.
 
 REM Run test suite
 set CurrentPath=%~dp0
-call "%CurrentPath%..\..\..\..\common\setVsTestPath.cmd"
+call "%CurrentPath%setVsTestPath.cmd"
 if ErrorLevel 1 (
 	exit /b 1
 )

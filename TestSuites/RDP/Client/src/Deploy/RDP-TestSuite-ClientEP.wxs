@@ -43,6 +43,10 @@
     <WixVariable Id="CONFIG_DOMAIN_SCRIPT" Value="Config-Domain.cmd" />
     <!-- The script should exist in drop\TestSuites\RDP\Client\batch directory. -->
     <WixVariable Id="RUN_TESTS_COMMAND" Value="RunAllTestCases.cmd" />
+
+    <WixVariable Id="SET_VS_TEST_PATH" Value="setVsTestPath.cmd" />
+    <WixVariable Id="SET_VS_PATH"      Value="setVsPath.cmd" />
+    <WixVariable Id="SET_VS_2017_PATH" Value="setVs2017Path.cmd" />
     <!--WixVariable Id="RUN_BVT_COMMAND" Value="RunBVTTestCases.cmd" />
     <WixVariable Id="RUN_RDPBCGR_BVT_COMMAND" Value="Rdpbcgr_RunBVTTestCases.cmd" />
     <WixVariable Id="RUN_RDPBCGR_TESTS_COMMAND" Value="Rdpbcgr_RunAllTestCases.cmd" />

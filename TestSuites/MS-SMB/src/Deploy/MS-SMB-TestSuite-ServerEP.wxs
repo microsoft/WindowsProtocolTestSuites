@@ -45,7 +45,11 @@
     <!-- <WixVariable Id="CONFIG_DOMAIN_SCRIPT" Value="Config-Domain.cmd" /> -->
     <!-- The script should exist in drop\TestSuite\MS-SMB\Server\batch directory. -->
     <WixVariable Id="RUN_TESTS_COMMAND" Value="RunAllTestCases.cmd" />
-    <WixVariable Id="RUN_BY_CATEGORY_COMMAND" Value="RunTestCasesByCategory.cmd" /> 
+    <WixVariable Id="RUN_BY_CATEGORY_COMMAND" Value="RunTestCasesByCategory.cmd" />
+
+    <WixVariable Id="SET_MS_TEST_PATH" Value="setMSTestPath.cmd" />
+    <WixVariable Id="SET_VS_PATH"      Value="setVsPath.cmd" />
+    <WixVariable Id="SET_VS_2017_PATH" Value="setVs2017Path.cmd" />
     
     <DirectoryRef Id="TESTSUITE_ROOT_DIR">
 

@@ -44,6 +44,10 @@
     <WixVariable Id="WORKGROUP_RUN_ALLTCS_COMMAND" Value="Workgroup_RunAllTestCases.cmd" />
     <WixVariable Id="WORKGROUP_RUN_BVT_COMMAND" Value="Workgroup_RunBVTTestCases.cmd" />
     <WixVariable Id="RUN_TCS_BY_CATEGORY_COMMAND" Value="Domain_RunTestCasesByCategory.cmd" />
+
+    <WixVariable Id="SET_VS_TEST_PATH" Value="setVsTestPath.cmd" />
+    <WixVariable Id="SET_VS_PATH"      Value="setVsPath.cmd" />
+    <WixVariable Id="SET_VS_2017_PATH" Value="setVs2017Path.cmd" />
     
     <WixVariable Id="QUICK_START_GUIDE" Value="Kerberos_ServerUserGuide.docx" />
 
