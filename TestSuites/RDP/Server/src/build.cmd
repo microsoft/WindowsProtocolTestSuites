@@ -37,9 +37,9 @@ if ErrorLevel 1 (
 
 set KeyFile=%1
 if not defined KeyFile (
-	%buildtool% "%TestSuiteRoot%TestSuites\RDP\Server\src\RDP_Server.sln" /t:clean;rebuild 
+	%buildtool% "%TestSuiteRoot%TestSuites\RDP\Server\src\RDP_Server.sln" /t:clean;rebuild /p:Configuration="Release"
 ) else (
-	%buildtool% "%TestSuiteRoot%TestSuites\RDP\Server\src\RDP_Server.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true	
+	%buildtool% "%TestSuiteRoot%TestSuites\RDP\Server\src\RDP_Server.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true /p:Configuration="Release"
 )
 
 if ErrorLevel 1 (
@@ -51,7 +51,7 @@ if exist "%TestSuiteRoot%drop\TestSuites\RDP\Server" (
 	rd /s /q "%TestSuiteRoot%drop\TestSuites\RDP\Server"
 )
 
-%buildtool% "%TestSuiteRoot%TestSuites\RDP\Server\src\deploy\deploy.wixproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%TestSuites\RDP\Server\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:Configuration="Release"
 
 if ErrorLevel 1 (
 	echo Error: Failed to generate the msi installer
