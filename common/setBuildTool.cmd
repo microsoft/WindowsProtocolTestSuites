@@ -11,28 +11,13 @@ if ErrorLevel 1 (
 )
 
 :: Set buildtool
-if not defined buildtool (
-    if exist "%vs2017path%\MSBuild\15.0\Bin\MSBuild.exe" (
-        set buildtool="%vs2017path%\MSBuild\15.0\Bin\MSBuild.exe"
-        set VisualStudioVer=15.0
-    ) else (
-        if exist "%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" (
-            set buildtool="%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe"
-            set VisualStudioVer=14.0
-        ) else (
-            if exist "%ProgramFiles(x86)%\MSBuild\12.0\Bin\MSBuild.exe" (
-                set buildtool="%ProgramFiles(x86)%\MSBuild\12.0\Bin\MSBuild.exe"
-                set VisualStudioVer=12.0
-            ) else (
-                for /f %%i in ('dir /b /ad /on "%windir%\Microsoft.NET\Framework\v4*"') do (@if exist "%windir%\Microsoft.NET\Framework\%%i\msbuild".exe set buildtool=%windir%\Microsoft.NET\Framework\%%i\msbuild.exe)
-                set VisualStudioVer=11.0
-            )
-        )
-    )
+if exist "%vs2017path%\MSBuild\15.0\Bin\MSBuild.exe" (
+    set buildtool="%vs2017path%\MSBuild\15.0\Bin\MSBuild.exe"
+    set VisualStudioVer=15.0
 )
 
 if not defined buildtool (
-    echo No msbuild.exe was found. Please install visual studio 2012, 2013, 2015 or 2017.
+    echo No msbuild.exe was found. Please install visual studio 2017.
     exit /b 1
 )
 
