@@ -237,7 +237,7 @@ Function DownloadAndInstallApplication
         $AppItem,
         [string]$OutputPath
     )
-    
+
     # Check if Powershell version greate than 3.0, if not then use WebClient to download file, otherwise use Invoke-WebRequest.
     if($psVersion -ge 3)
     {
