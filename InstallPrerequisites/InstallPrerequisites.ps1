@@ -222,7 +222,7 @@ Function GetDownloadTools{
 Function CreateTemporaryFolder{
     #create temporary folder for downloading tools
     $tempPath = (get-location).ToString() + "\" + [system.guid]::newguid().ToString()
-    Write-Host "Create temporary folder for downloading files"`
+    Write-Host "Create temporary folder for downloading files"``
     $outFile = New-Item -ItemType Directory -Path $tempPath
     Write-Host "Temporary folder $outFile is created"
 
