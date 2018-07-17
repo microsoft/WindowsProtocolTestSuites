@@ -5,8 +5,8 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Fragment>
 
-    <!-- Properties for "Add or Reomve Program Entries" -->
-	<SetProperty Id="PTF_BUILDVERSION" Value="$(env.PTF_VERSION)" Before="AppSearch" />
+    <!-- Properties for "Add or Remove Program Entries" -->
+    <SetProperty Id="PTF_BUILDVERSION" Value="$(env.PTF_VERSION)" Before="AppSearch" />
     <SetProperty Id="ARPCOMMENTS" Value="[ProductName] v[ProductVersion]" Before="AppSearch" />
     <Property Id="ARPCONTACT">Microsoft Winterop Engineering Team</Property>
     <!--Disables the Modify button in MaintenanceTypeDlg-->
@@ -48,7 +48,7 @@
       <Publish Dialog="EndpointDlg" Control="Back" Event="NewDialog" Value="TestSuitePrivacyStatementDlg"><![CDATA[VersionMsi >= "5.00"]]></Publish>
       <Publish Dialog="EndpointDlg" Control="Back" Event="NewDialog" Value="TestSuitePrivacyStatementLowMsiVersionDlg"><![CDATA[VersionMsi < "5.00"]]></Publish>
       <Publish Dialog="EndpointDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="1">1</Publish>
-	  
+
       <!-- Perform dependency check when installing on test suite machine and clicking Next button. -->
       <Publish Dialog="EndpointDlg" Control="Next" Event="NewDialog" Value="DependencyCheckWarningDlg" Order="2">
         <![CDATA[TARGET_ENDPOINT="TESTSUITE" AND (($(var.PTF) AND NOT (PTFVERSION AND PTFVERSION << PTF_BUILDVERSION)) OR ($(var.SE) AND NOT SPEC_EXPLORER_INSTALLED) OR NOT VSInstalled)]]>
@@ -56,7 +56,7 @@
       <!-- Optional Warning Dialog. -->
       <Publish Dialog="DependencyCheckWarningDlg" Control="Back" Event="NewDialog" Value="EndpointDlg">1</Publish>
       <Publish Dialog="DependencyCheckWarningDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
-	  
+
       <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="TestSuitePrivacyStatementDlg"><![CDATA[VersionMsi >= "5.00"]]></Publish>
       <Publish Dialog="TestSuitePrivacyStatementDlg" Control="Next" Event="NewDialog" Value="EndpointDlg">1</Publish>
       <Publish Dialog="TestSuitePrivacyStatementDlg" Control="Back" Event="NewDialog" Value="LicenseAgreementDlg" Order="2">Not Installed</Publish>

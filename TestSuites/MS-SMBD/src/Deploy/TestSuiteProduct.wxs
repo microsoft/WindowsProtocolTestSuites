@@ -5,7 +5,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Fragment>
 
-    <!-- Properties for "Add or Reomve Program Entries" -->
+    <!-- Properties for "Add or Remove Program Entries" -->
     <SetProperty Id="PTF_BUILDVERSION" Value="$(env.PTF_VERSION)" Before="AppSearch" />
     <SetProperty Id="ARPCOMMENTS" Value="[ProductName] v[ProductVersion]" Before="AppSearch" />
     <Property Id="ARPCONTACT">Microsoft Winterop Engineering Team</Property>
@@ -14,7 +14,11 @@
 
     <!-- Search for saved TARGET_ENDPOINT, and assign to the actual property if uninstall/repair. -->
     <Property Id="SAVED_TARGET_ENDPOINT">
-      <RegistrySearch Id="LoadTargetEndpoint" Root="HKLM" Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)" Name="TargetEndpoint" Type="raw" />
+      <RegistrySearch Id="LoadTargetEndpoint"
+                      Root="HKLM"
+                      Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"
+                      Name="TargetEndpoint"
+                      Type="raw" />
     </Property>
 
     <SetProperty Id="TARGET_ENDPOINT" After="AppSearch" Value="[SAVED_TARGET_ENDPOINT]">
@@ -22,7 +26,12 @@
     </SetProperty>
 
     <Component Id="SaveTargetEndpoint" Guid="*" Directory="TESTSUITE_ROOT_DIR">
-      <RegistryValue Id="SaveTargetEndpoint" Root="HKLM" Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)" Name="TargetEndpoint" Type="string" Value="TESTSUITE" />
+      <RegistryValue Id="SaveTargetEndpoint"
+                     Root="HKLM"
+                     Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"
+                     Name="TargetEndpoint"
+                     Type="string"
+                     Value="TESTSUITE" />
     </Component>
 
 
@@ -140,7 +149,7 @@
     </Property>
 
     <SetProperty Id="VSInstalled" After="AppSearch" Value="1">
-        <![CDATA[VSTA2017ENTE OR VSTA2017PROF OR VSTA2017COMM]]>
+        <![CDATA[($(var.VS17) AND NOT (VSTA2017ENTE OR VSTA2017PROF OR VSTA2017COMM))]]>
     </SetProperty>
 
     <!-- Directory structure -->
