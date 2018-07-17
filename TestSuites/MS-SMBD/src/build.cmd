@@ -7,6 +7,8 @@ echo ==========================================
 echo          Start to build MS-SMBD test suite
 echo ==========================================
 
+setlocal
+
 if not defined buildtool (
 	for /f %%i in ('dir /b /ad /on "%windir%\Microsoft.NET\Framework\v4*"') do (@if exist "%windir%\Microsoft.NET\Framework\%%i\msbuild".exe set buildtool=%windir%\Microsoft.NET\Framework\%%i\msbuild.exe)
 )
@@ -82,10 +84,10 @@ if not exist "%TestSuiteRoot%ProtoSDK\RDMA\include\ndstatus.h" (
 ) 
 
 ::Get build version from AssemblyInfo
-set path=%TestSuiteRoot%AssemblyInfo\SharedAssemblyInfo.cs
+set AssemblyInfo=%TestSuiteRoot%AssemblyInfo\SharedAssemblyInfo.cs
 set FindExe="%SystemRoot%\system32\findstr.exe"
 set versionStr="[assembly: AssemblyVersion("1.0.0.0")]"
-for /f "delims=" %%i in ('""%FindExe%" "AssemblyVersion" "%path%""') do set versionStr=%%i
+for /f "delims=" %%i in ('""%FindExe%" "AssemblyVersion" "%AssemblyInfo%""') do set versionStr=%%i
 set TESTSUITE_VERSION=%versionStr:~28,-3%
 
 set KeyFile=%1
