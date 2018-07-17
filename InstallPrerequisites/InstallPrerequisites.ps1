@@ -222,7 +222,7 @@ Function GetDownloadTools{
 Function CreateTemporaryFolder{
     #create temporary folder for downloading tools
     $tempPath = (get-location).ToString() + "\" + [system.guid]::newguid().ToString()
-    Write-Host "Create temporary folder for downloading files"
+    Write-Host "Create temporary folder for downloading files"``
     $outFile = New-Item -ItemType Directory -Path $tempPath
     Write-Host "Temporary folder $outFile is created"
 
@@ -237,12 +237,18 @@ Function DownloadAndInstallApplication
         $AppItem,
         [string]$OutputPath
     )
+
     # Check if Powershell version greate than 3.0, if not then use WebClient to download file, otherwise use Invoke-WebRequest.
     if($psVersion -ge 3)
     {
         Invoke-WebRequest -Uri $AppItem.URL -OutFile $OutputPath
+        [System.Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]'Tls,Tls11,Tls12'
+
     }else
     {
+        [System.Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::SSL3
+
+        // Fix me: throw exception in Win 7 PS version 2
         (New-Object System.Net.WebClient).DownloadFile($AppItem.URL, $OutputPath)
     }
             
