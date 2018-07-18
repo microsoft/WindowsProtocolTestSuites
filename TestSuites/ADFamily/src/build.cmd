@@ -57,7 +57,7 @@ if exist "%TestSuiteRoot%drop\TestSuites\ADFamily" (
 	rd /s /q "%TestSuiteRoot%drop\TestSuites\ADFamily"
 )
 
-%buildtool% "%TestSuiteRoot%TestSuites\ADFamily\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:ProtocolName="ADFamily"
+%buildtool% "%TestSuiteRoot%TestSuites\ADFamily\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:ProtocolName="ADFamily" /p:Platform="x64"
 
 if ErrorLevel 1 (
 	echo Error: Failed to generate the msi installer
