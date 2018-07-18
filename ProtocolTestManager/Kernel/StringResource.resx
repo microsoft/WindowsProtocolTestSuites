@@ -185,7 +185,7 @@
   </data>
   <data name="VSTestLocation" xml:space="preserve">
     <value>Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe</value>
-    <comment>Relative path to the tools folder in common</comment>
+    <comment>Relative path to the VS installation folder</comment>
   </data>
   <data name="VSTestNotInstalled" xml:space="preserve">
     <value>Cannot find the test engine vstest.console.exe.</value>

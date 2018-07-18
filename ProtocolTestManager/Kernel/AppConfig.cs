@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.Win32;
 using System.Xml;
 using System.IO;
+using Microsoft.Win32;
 
 namespace Microsoft.Protocols.TestManager.Kernel
 {
@@ -104,7 +105,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <summary>
         /// PTMConfig files in bin folder
         /// </summary>
-        public List<string> PtfConfigFiles{get; private set;}
+        public List<string> PtfConfigFiles { get; private set; }
 
         /// <summary>
         /// The PTMConfig files used as the default values
@@ -240,7 +241,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 config.PropertyGroupOrder = new Dictionary<string, int>();
                 foreach (XmlNode xn in groupOrder.SelectNodes("PropertyGroup"))
-                {                    
+                {
                     string name = xn.Attributes["name"].Value;
                     int order = int.Parse(xn.Attributes["order"].Value);
                     config.PropertyGroupOrder.Add(name, order);
@@ -488,7 +489,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             doc.Load(xmlReader);
 
             AppConfigTestCategory testCategory = new AppConfigTestCategory();
-            var testCaseNodes = doc.DocumentElement.SelectNodes("TestCase");            
+            var testCaseNodes = doc.DocumentElement.SelectNodes("TestCase");
 
             foreach (XmlNode testCaseNode in testCaseNodes)
             {

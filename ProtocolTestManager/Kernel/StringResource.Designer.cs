@@ -312,7 +312,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to \IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe.
+        ///   Looks up a localized string similar to Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe.
         /// </summary>
         internal static string VSTestLocation {
             get {
