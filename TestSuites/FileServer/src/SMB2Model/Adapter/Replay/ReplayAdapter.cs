@@ -58,6 +58,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay
         {
             if (smb2ClientMainChannel != null)
             {
+                smb2ClientMainChannel.Close(treeIdMainChannel, fileIdMainChannel);
                 smb2ClientMainChannel.Disconnect();
                 smb2ClientMainChannel = null;
             }
@@ -88,7 +89,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay
             setIntegrityInfo.Reserved = FSCTL_SET_INTEGRITY_INFO_INPUT_RESERVED.V1;
 
             endOfFileInformation.EndOfFile = 2048;
-            fileNameMainChannel = Guid.NewGuid().ToString();
+            fileNameMainChannel = this.CurrentTestCaseName + "_" + Guid.NewGuid().ToString();
             leaseKeyMainChannel = Guid.NewGuid();
             clientGuidMainChannel = Guid.NewGuid();
             createGuidMainChannel = Guid.NewGuid();
