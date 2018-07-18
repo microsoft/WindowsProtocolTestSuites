@@ -184,7 +184,7 @@
     <value>Directory {0} is not found.</value>
   </data>
   <data name="VSTestLocation" xml:space="preserve">
-    <value>..\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe</value>
+    <value>Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe</value>
     <comment>Relative path to the tools folder in common</comment>
   </data>
   <data name="VSTestNotInstalled" xml:space="preserve">
@@ -215,5 +215,11 @@ The test suite is {2} {3}.</value>
   </data>
   <data name="PassedTag" xml:space="preserve">
     <value>[TestPassed]</value>
+  </data>
+  <data name="Vs2017RegPath32" xml:space="preserve">
+    <value>SOFTWARE\Microsoft\VisualStudio\\SxS\VS7</value>
+  </data>
+  <data name="Vs2017RegPath64" xml:space="preserve">
+    <value>SOFTWARE\WOW6432Node\Microsoft\VisualStudio\SxS\VS7</value>
   </data>
 </root>

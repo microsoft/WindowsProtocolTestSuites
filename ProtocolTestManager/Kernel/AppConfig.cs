@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Win32;
 using System.Xml;
 using System.IO;
 
@@ -263,26 +264,47 @@ namespace Microsoft.Protocols.TestManager.Kernel
             config.TestSetting = doc.DocumentElement.SelectSingleNode("TestSetting").InnerText.Trim();
 
             //Config Test Engine
-            string vspath;
-            if (Environment.GetEnvironmentVariable("VS110COMNTOOLS") != null &&
-                File.Exists(vspath = Path.Combine(Environment.GetEnvironmentVariable("VS110COMNTOOLS"), StringResource.VSTestLocation)))
+            RegistryKey HKLM = Registry.LocalMachine;
+            RegistryKey[] vsRegPathList;
+            if (Environment.Is64BitProcess)
             {
-                config.VSTestPath = vspath;
-            }
-            else if (Environment.GetEnvironmentVariable("VS120COMNTOOLS") != null &&
-                File.Exists(vspath = Path.Combine(Environment.GetEnvironmentVariable("VS120COMNTOOLS"), StringResource.VSTestLocation)))
-            {
-                config.VSTestPath = vspath;
-            }
-            else if (Environment.GetEnvironmentVariable("VS140COMNTOOLS") != null &&
-                File.Exists(vspath = Path.Combine(Environment.GetEnvironmentVariable("VS140COMNTOOLS"), StringResource.VSTestLocation)))
-            {
-                config.VSTestPath = vspath;
+                // 32-bit and 64-bit
+                vsRegPathList = new RegistryKey[]
+                {
+                    HKLM.OpenSubKey(StringResource.Vs2017RegPath32),
+                    HKLM.OpenSubKey(StringResource.Vs2017RegPath64)
+                };
             }
             else
             {
-                throw new Exception(StringResource.VSTestNotInstalled);
+                // 32-bit only
+                vsRegPathList = new RegistryKey[]
+                {
+                    HKLM.OpenSubKey(StringResource.Vs2017RegPath32),
+                };
             }
+            foreach (var vsRegPath in vsRegPathList)
+            {
+                if (vsRegPath != null)
+                {
+                    string registryKeyName = vsRegPath.GetValue("15.0").ToString();
+                    if (String.IsNullOrEmpty(registryKeyName))
+                    {
+                        // no match entry
+                        continue;
+                    }
+                    string vspath;
+                    if (File.Exists(vspath = Path.Combine(registryKeyName, StringResource.VSTestLocation)))
+                    {
+                        config.VSTestPath = vspath;
+                    }
+                    else
+                    {
+                        throw new Exception(StringResource.VSTestNotInstalled);
+                    }
+                }
+            }
+            
             config.VSTestArguments = "";
             foreach (string singleDllpath in config.TestSuiteAssembly)
             {

@@ -312,7 +312,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ..\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe.
+        ///   Looks up a localized string similar to \IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe.
         /// </summary>
         internal static string VSTestLocation {
             get {
@@ -326,6 +326,24 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         internal static string VSTestNotInstalled {
             get {
                 return ResourceManager.GetString("VSTestNotInstalled", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to \IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe.
+        /// </summary>
+        internal static string Vs2017RegPath32 {
+            get {
+                return ResourceManager.GetString("Vs2017RegPath32", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to \IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe.
+        /// </summary>
+        internal static string Vs2017RegPath64 {
+            get {
+                return ResourceManager.GetString("Vs2017RegPath64", resourceCulture);
             }
         }
         
