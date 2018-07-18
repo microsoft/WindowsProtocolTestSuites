@@ -328,6 +328,24 @@ namespace Microsoft.Protocols.TestManager.Kernel {
                 return ResourceManager.GetString("VSTestNotInstalled", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to \IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe.
+        /// </summary>
+        internal static string Vs2017RegPath32 {
+            get {
+                return ResourceManager.GetString("Vs2017RegPath32", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to \IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe.
+        /// </summary>
+        internal static string Vs2017RegPath64 {
+            get {
+                return ResourceManager.GetString("Vs2017RegPath64", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to http://www.w3.org/2001/XMLSchema-instance.

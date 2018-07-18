@@ -8,7 +8,7 @@ echo          Start to run ADFSPIP test cases
 echo ==============================================
 
 set CurrentPath=%~dp0
-call "%CurrentPath%..\..\..\..\common\setMSTestPath.cmd"
+call "%CurrentPath%setMSTestPath.cmd"
 if ErrorLevel 1 (
 	exit /b 1
 )

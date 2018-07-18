@@ -216,4 +216,10 @@ The test suite is {2} {3}.</value>
   <data name="PassedTag" xml:space="preserve">
     <value>[TestPassed]</value>
   </data>
+  <data name="Vs2017RegPath32" xml:space="preserve">
+    <value>SOFTWARE\Microsoft\VisualStudio\\SxS\VS7</value>
+  </data>
+  <data name="Vs2017RegPath64" xml:space="preserve">
+    <value>SOFTWARE\WOW6432Node\Microsoft\VisualStudio\SxS\VS7</value>
+  </data>
 </root>

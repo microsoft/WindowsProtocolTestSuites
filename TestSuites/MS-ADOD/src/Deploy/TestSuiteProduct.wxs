@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?define VS12H=1 ?><!-- If need check Visual Studio 2012 or Visual Studio 2012 Test Agent Or Higher version" -->
+<?define VS17H=1 ?>
+<!-- If need check Visual Studio 2017 or Visual Studio 2017 Test Agent Or Higher version" -->
 <?define PTF=1 ?><!-- If need check Protocol Test Framework version" -->
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Fragment>
 
-	<!-- Properties for "Add or Reomve Program Entries" -->
-	<SetProperty Id="PTF_BUILDVERSION" Value="$(env.PTF_VERSION)" Before="AppSearch" />
+	<!-- Properties for "Add or Remove Program Entries" -->
+    <SetProperty Id="PTF_BUILDVERSION" Value="$(env.PTF_VERSION)" Before="AppSearch" />
     <SetProperty Id="ARPCOMMENTS" Value="[ProductName] v[ProductVersion]" Before="AppSearch" />
     <Property Id="ARPCONTACT">Microsoft Winterop Engineering Team</Property>
     <!--Disables the Modify button in MaintenanceTypeDlg-->
@@ -63,46 +64,43 @@
     </UI>
 	
 	<!-- Dependency List -->
-	<SetProperty Id="VS2012_VSTA2012_Higher" After="AppSearch" Value=" • Microsoft Visual Studio or Visual Studio Test Agent, version 2012 or higher.&#xA;">
-        <![CDATA[$(var.VS12H)]]>
+	<SetProperty Id="VS2017_VSTA2017_Higher" After="AppSearch" Value=" • Microsoft Visual Studio or Visual Studio Test Agent, version 2017 or higher.&#xA;">
+        <![CDATA[$(var.VS17H)]]>
     </SetProperty>
 	<SetProperty Id="PTF_BuildVersion" After="AppSearch" Value=" • Microsoft Protocol Test Framework [PTF_BUILDVERSION].&#xA;">
         <![CDATA[$(var.PTF)]]>
     </SetProperty>
 	
-	<!-- Visual Studio 2012 Test Agent dependency check-->	
-    <Property Id="VSTA2012">
-      <DirectorySearch Id="TestAgentSearch2012" Path="[ProgramFilesFolder]Microsoft Visual Studio 11.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow" Depth="1">
+  <!-- Visual Studio 2017 Test Agent dependency check-->  
+    <Property Id="VSTA2017COMM">
+      <DirectorySearch Id="TestAgentSearch2017Community" Path="[ProgramFilesFolder]Microsoft Visual Studio\2017\Community\Common7\IDE\CommonExtensions\Microsoft\TestWindow" Depth="1">
         <FileSearch Name="vstest.console.exe"
                     Languages="0" />
       </DirectorySearch>
     </Property>
-	
-	<Property Id="VSTA2013">
-      <DirectorySearch Id="TestAgentSearch2013" Path="[ProgramFilesFolder]Microsoft Visual Studio 12.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow" Depth="1">
+    <Property Id="VSTA2017PROF">
+      <DirectorySearch Id="TestAgentSearch2017Professional" Path="[ProgramFilesFolder]Microsoft Visual Studio\2017\Professional\Common7\IDE\CommonExtensions\Microsoft\TestWindow" Depth="1">
         <FileSearch Name="vstest.console.exe"
                     Languages="0" />
       </DirectorySearch>
     </Property>
-	
-	<Property Id="VSTA2015">
-      <DirectorySearch Id="TestAgentSearch2015" Path="[ProgramFilesFolder]Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow" Depth="1">
+    <Property Id="VSTA2017ENTE">
+      <DirectorySearch Id="TestAgentSearch2017Enterprise" Path="[ProgramFilesFolder]Microsoft Visual Studio\2017\Enterprise\Common7\IDE\CommonExtensions\Microsoft\TestWindow" Depth="1">
         <FileSearch Name="vstest.console.exe"
                     Languages="0" />
       </DirectorySearch>
     </Property>
-	
-	<!-- Check if VS12 or VSTest Agent 2012 or higher version-->
-	<InstallUISequence>
-      <Custom Action="SET_VSTEST_AGENT_OR_VS_NOT_INSTALLED_WARNING_TEXT_2012ORHigher" After="AppSearch">
-        <![CDATA[$(var.VS12H) AND NOT (VSTA2012 OR VSTA2013 OR VSTA2015)]]>
+  <!-- Check if VS17 or VSTest Agent 2017 or higher version-->
+  <InstallUISequence>
+      <Custom Action="SET_VSTEST_AGENT_OR_VS_NOT_INSTALLED_WARNING_TEXT_2017ORHigher" After="AppSearch">
+        <![CDATA[$(var.VS17H) AND NOT (VSTA2017ENTE OR VSTA2017PROF OR VSTA2017COMM)]]>
       </Custom>
-    </InstallUISequence>
-	
-    <CustomAction Id="SET_VSTEST_AGENT_OR_VS_NOT_INSTALLED_WARNING_TEXT_2012ORHigher"
+  </InstallUISequence>
+
+  <CustomAction Id="SET_VSTEST_AGENT_OR_VS_NOT_INSTALLED_WARNING_TEXT_2017ORHigher"
                   Property="VSTEST_AGENT_NOT_INSTALLED_WARNING_TEXT"
-                  Value=" • Microsoft Visual Studio or Visual Studio Test Agent, version 2012 or higher.&#xA;" />
-	
+                  Value=" • Microsoft Visual Studio or Visual Studio Test Agent, version 2017 or higher.&#xA;" />
+
 	<!-- SET PTF Version Warning Message-->
 	<Property Id="PTFVERSION">
       <RegistrySearch Id="PTFVersion64Search" Root="HKLM" Win64="yes" Key="SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework" Name="PTFVersion" Type="raw">
@@ -120,8 +118,8 @@
       </Custom>
     </InstallUISequence>
 	
-	<SetProperty Id="VSInstalled" After="AppSearch" Value="1">
-        <![CDATA[VSTA2012 OR VSTA2013 OR VSTA2015]]>
+    <SetProperty Id="VSInstalled" After="AppSearch" Value="1">
+        <![CDATA[VSTA2017ENTE OR VSTA2017PROF OR VSTA2017COMM]]>
     </SetProperty>
 	
     <!-- Directory structure -->

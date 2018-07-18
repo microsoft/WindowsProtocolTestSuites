@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Win32;
 using System.Xml;
 using System.IO;
 using Microsoft.Win32;
@@ -264,50 +265,47 @@ namespace Microsoft.Protocols.TestManager.Kernel
             config.TestSetting = doc.DocumentElement.SelectSingleNode("TestSetting").InnerText.Trim();
 
             //Config Test Engine
-            string vspath;
-            string regPath = @"SOFTWARE\Microsoft\VisualStudio\SxS\VS7";
-            string regPath64 = @"SOFTWARE\WOW6432Node\Microsoft\VisualStudio\SxS\VS7";
-            string keyName = "15.0";
-
-            RegistryKey[] vsRegList;
-
+            RegistryKey HKLM = Registry.LocalMachine;
+            RegistryKey[] vsRegPathList;
             if (Environment.Is64BitProcess)
             {
                 // 32-bit and 64-bit
-                vsRegList = new RegistryKey[]
+                vsRegPathList = new RegistryKey[]
                 {
-                    Registry.LocalMachine.OpenSubKey(regPath),
-                    Registry.LocalMachine.OpenSubKey(regPath64)
+                    HKLM.OpenSubKey(StringResource.Vs2017RegPath32),
+                    HKLM.OpenSubKey(StringResource.Vs2017RegPath64)
                 };
             }
             else
             {
                 // 32-bit only
-                vsRegList = new RegistryKey[]
+                vsRegPathList = new RegistryKey[]
                 {
-                    Registry.LocalMachine.OpenSubKey(regPath)
+                    HKLM.OpenSubKey(StringResource.Vs2017RegPath32),
                 };
             }
-
-
-            // Check if all registry paths exist and get value
-            string testSuitesRegPathList = vsRegList
-                                            .Where(key => key != null)
-                                            .Where(key => key.GetValue(keyName) != null)
-                                            .Where(key => key.GetValueKind(keyName) == RegistryValueKind.String)
-                                            .Select(key => (string)key.GetValue(keyName))
-                                            .FirstOrDefault();
-
-
-            if (!String.IsNullOrEmpty(testSuitesRegPathList))
+            foreach (var vsRegPath in vsRegPathList)
             {
-                vspath = Path.Combine(testSuitesRegPathList, StringResource.VSTestLocation);
-                config.VSTestPath = vspath;
+                if (vsRegPath != null)
+                {
+                    string registryKeyName = vsRegPath.GetValue("15.0").ToString();
+                    if (String.IsNullOrEmpty(registryKeyName))
+                    {
+                        // no match entry
+                        continue;
+                    }
+                    string vspath;
+                    if (File.Exists(vspath = Path.Combine(registryKeyName, StringResource.VSTestLocation)))
+                    {
+                        config.VSTestPath = vspath;
+                    }
+                    else
+                    {
+                        throw new Exception(StringResource.VSTestNotInstalled);
+                    }
+                }
             }
-            else
-            {
-                throw new Exception(StringResource.VSTestNotInstalled);
-            }
+            
             config.VSTestArguments = "";
             foreach (string singleDllpath in config.TestSuiteAssembly)
             {

@@ -6,68 +6,51 @@
 		<tool name="NetworkMonitor_x64" FileName="NM34_x64.exe" AppName="Microsoft Network Monitor 3.4" version="3.4" url="https://download.microsoft.com/download/7/1/0/7105C7FF-768E-4472-AFD5-F29108D1E383/NM34_x64.exe" arguments="/q"/>
 		<tool name="NetworkMontiorParsers_x64" FileName="NetworkMonitor_Parsers64" AppName="Microsoft Network Monitor: NetworkMonitor Parsers 3.4" version="3.4" url="http://download.connect.microsoft.com/pr/NetworkMonitor_Parsers_03_04_2978_x64.msi?t=b558570e-30f1-48f7-afc3-4168239af654&amp;e=1471922851&amp;h=4c97af49dcb46a0fc2d6a786a01d6495" arguments="/q"/>
 		<tool name="NetworkMontiorParsers_x86" FileName="NetworkMonitor_Parsers86" AppName="Microsoft Network Monitor: NetworkMonitor Parsers 3.4" version="3.4" url="http://download.connect.microsoft.com/pr/NetworkMonitor_Parsers_03_04_2978_x86.msi?t=1a84728d-cf65-4281-b415-5fc8a070a856&amp;e=1471922864&amp;h=1dfc9176e7b1f4cfb9dc3fccb282418d" arguments="/q"/>
-		<tool name="VCRedist_x64" FileName="vcredistx64.exe" AppName="Redistributable (x64)" version="12.0.30501.0" url="https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x64.exe" arguments="/q"/>
-		<tool name="VCRedist_x86" FileName="vcredist.exe" AppName="Redistributable (x86)" version="12.0.30501.0" url="https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x86.exe" arguments="/q"/>
 		<tool name="SE" FileName="SpecExplorer.msi" AppName="Spec Explorer 2010" version="3.5.3146.0" url="https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/file/36449/3/SpecExplorer.msi" arguments="/q"/>
 		<tool name="PTF_ForModel" FileName="ProtocolTestFrameworkInstallerForModel.msi" AppName="Microsoft Protocol Test Framework" version="1.0.5500.0" BackwardCompatible="false" url="https://github.com/Microsoft/ProtocolTestFramework/releases/download/1.0.5500.0/ProtocolTestFrameworkInstallerForModel.msi" arguments="/q"/>
 		<tool name="PTF" FileName="ProtocolTestFrameworkInstallerForModel.msi" AppName="Microsoft Protocol Test Framework" version="1.0.5500.0" BackwardCompatible="false" url="https://github.com/Microsoft/ProtocolTestFramework/releases/download/1.0.5500.0/ProtocolTestFrameworkInstaller.msi" arguments="/q"/>
-		<tool name="TestAgent2012" FileName="TestAgent2012.iso" InstallFileName="vstf_testagent.exe" NeedRestart="true" AppName="Microsoft Agents for Visual Studio 2012" version="11.0.61030.0" url="https://download.microsoft.com/download/0/0/1/0019CE26-F153-4A6C-95B3-FAE1BAE83066/VSU4/VS2012.4%20Agents%20ENU.iso" arguments="/q"/>
 		<tool name="NET471" FileName="NET471.exe" AppName=".NET Framework 4.7.1" version="4.7.2558.0" url="https://download.microsoft.com/download/9/0/1/901B684B-659E-4CBD-BEC8-B3F06967C2E7/NDP471-DevPack-ENU.exe" arguments="/q"/>
 		<tool name="Wix311" FileName="Wix311.exe" AppName="WiX Toolset v3.11" version="3.11.1" url="https://github.com/wixtoolset/wix3/releases/download/wix3111rtm/wix311.exe" arguments="/q"/>
 		<tool name="OpenXMLSDK" FileName="OpenXMLSDK.msi" AppName="Open XML SDK 2.5" version="2.5.5631" url="https://download.microsoft.com/download/5/5/3/553C731E-9333-40FB-ADE3-E02DC9643B31/OpenXMLSDKV25.msi" arguments="/q"/>
 	</tools>
 	<FileServer>
 		<tool>NET471</tool>
-		<tool>VCRedist_x86</tool>
 		<tool>SE</tool>
 		<tool>Wix311</tool>
-		<tool>TestAgent2012</tool>
 		<tool>PTF_ForModel</tool>
 	</FileServer>
 	<Kerberos>
 		<tool>NET471</tool>
-		<tool>VCRedist_x86</tool>
 		<tool>SE</tool>
 		<tool>Wix311</tool>
-		<tool>TestAgent2012</tool>
 		<tool>PTF_ForModel</tool>
 	</Kerberos>
 	<SMB>
 		<tool>NET471</tool>
-		<tool>VCRedist_x86</tool>
 		<tool>SE</tool>
 		<tool>Wix311</tool>
-		<tool>TestAgent2012</tool>
 		<tool>PTF_ForModel</tool>
 	</SMB>
 	<SMBD>
 		<tool>NET471</tool>
-		<tool>VCRedist_x86</tool>
 		<tool>SE</tool>
 		<tool>Wix311</tool>
-		<tool>TestAgent2012</tool>
 		<tool>PTF_ForModel</tool>
 	</SMBD>
 	<RDP>
 		<tool>NET471</tool>
-		<tool>VCRedist_x86</tool>
 		<tool>Wix311</tool>
-		<tool>TestAgent2012</tool>
 		<tool>PTF</tool>
 	</RDP>
 	<BranchCache>
 		<tool>NET471</tool>
-		<tool>VCRedist_x86</tool>
 		<tool>SE</tool>
 		<tool>Wix311</tool>
-		<tool>TestAgent2012</tool>
 		<tool>PTF</tool>
 	</BranchCache>
 	<ADFamily>
 		<tool>NET471</tool>
-		<tool>VCRedist_x86</tool>
 		<tool>Wix311</tool>
-		<tool>TestAgent2012</tool>
 		<tool>PTF_ForModel</tool>
 		<tool>SE</tool>
 		<tool>MMA_x64</tool>
@@ -75,26 +58,20 @@
 	</ADFamily>
 	<AZOD>
 		<tool>NET471</tool>
-		<tool>VCRedist_x86</tool>
 		<tool>SE</tool>
 		<tool>Wix311</tool>
-		<tool>TestAgent2012</tool>
 		<tool>PTF</tool>
 		<tool>MMA_x64</tool>
 	</AZOD>
 	<ADFSPIP>
 		<tool>NET471</tool>
-		<tool>VCRedist_x86</tool>
 		<tool>Wix311</tool>
-		<tool>TestAgent2012</tool>
 		<tool>PTF</tool>
 	</ADFSPIP>
 	<ADOD>
 		<tool>NET471</tool>
-		<tool>VCRedist_x86</tool>
 		<tool>SE</tool>
 		<tool>Wix311</tool>
-		<tool>TestAgent2012</tool>
 		<tool>PTF</tool>
 		<tool>MMA_x64</tool>
 	</ADOD>
