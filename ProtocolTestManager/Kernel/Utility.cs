@@ -110,6 +110,17 @@ namespace Microsoft.Protocols.TestManager.Kernel
             LastRuleSelectionFilename = testSuiteInfo.LastProfile;
         }
 
+        private Assembly UnitTestFrameworkResolveHandler(object sender, ResolveEventArgs args)
+        {
+            if (args.Name.Contains("Microsoft.VisualStudio.QualityTools.UnitTestFramework"))
+            {
+                var vstestPaht = Path.GetDirectoryName(appConfig.VSTestPath);
+                var assembly = Assembly.LoadFrom(Path.Combine(vstestPaht, "Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll"));
+                return assembly;
+            }
+            return null;
+        }
+
         /// <summary>
         /// Loads test suite assembly.
         /// </summary>
@@ -146,7 +157,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
             testSuite = new TestSuite();
             try
             {
+                AppDomain.CurrentDomain.AssemblyResolve += UnitTestFrameworkResolveHandler;
                 testSuite.LoadFrom(appConfig.TestSuiteAssembly);
+                AppDomain.CurrentDomain.AssemblyResolve -= UnitTestFrameworkResolveHandler;
             }
             catch (Exception e)
             {
@@ -164,7 +177,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 }
             }
 
-            if (filter != null) {
+            if (filter != null)
+            {
                 Dictionary<string, List<Rule>> featureMappingTable = CreateFeatureMappingTable();
                 if (featureMappingTable != null)
                 {
@@ -299,7 +313,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                             stepIndex++;
                             item.DetectingStatus = Microsoft.Protocols.TestManager.Detector.DetectingStatus.Skipped;
                             break;
-                        case Microsoft.Protocols.TestManager.Detector.LogStyle.StepNotFound: 
+                        case Microsoft.Protocols.TestManager.Detector.LogStyle.StepNotFound:
                             stepIndex++;
                             item.DetectingStatus = Microsoft.Protocols.TestManager.Detector.DetectingStatus.NotFound;
                             break;
@@ -477,7 +491,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <param name="featureMappingNode"></param>
         private void LoadFeatureMappingFromXml(XmlNode featureMappingNode)
         {
-            if (featureMappingNode == null) {
+            if (featureMappingNode == null)
+            {
                 return;
             }
 
@@ -830,7 +845,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public event TestFinishedEvent TestFinished
         {
             add { if (testEngine != null) testEngine.TestFinished += value; }
-            remove { if (testEngine != null)testEngine.TestFinished -= value; }
+            remove { if (testEngine != null) testEngine.TestFinished -= value; }
         }
 
         /// <summary>
@@ -988,7 +1003,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             TestCaseGroup.HoldUpdatingHeader();
             foreach (var testcase in selectedCases)
             {
-                if(!caselistCache.Contains(testcase.Name) && !testcase.IsChecked)
+                if (!caselistCache.Contains(testcase.Name) && !testcase.IsChecked)
                     testcase.IsChecked = false;
             }
             TestCaseGroup.ResumeUpdatingHeader();
@@ -998,7 +1013,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 var testcase = selectedCases.FirstOrDefault((v) => v.FullName == name);
                 if (testcase != null)
                 {
-                    if(!testcase.IsChecked)
+                    if (!testcase.IsChecked)
                     {
                         testcase.IsChecked = true;
                     }
