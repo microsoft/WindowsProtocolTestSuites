@@ -56,7 +56,7 @@ if exist "%TestSuiteRoot%drop\TestSuites\MS-ADOD" (
 	rd /s /q "%TestSuiteRoot%drop\TestSuites\MS-ADOD"
 )
 
-%buildtool% "%TestSuiteRoot%TestSuites\MS-ADOD\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:ProtocolName="MS-ADOD" /p:Configuration="Release"
+%buildtool% "%TestSuiteRoot%TestSuites\MS-ADOD\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:ProtocolName="MS-ADOD"
 
 if ErrorLevel 1 (
 	echo Error: Failed to generate the msi installer
