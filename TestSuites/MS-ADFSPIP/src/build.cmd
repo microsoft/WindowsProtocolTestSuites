@@ -39,9 +39,9 @@ if ErrorLevel 1 (
 
 set KeyFile=%1
 if not defined KeyFile (
-	%buildtool% "%TestSuiteRoot%TestSuites\MS-ADFSPIP\src\MS-ADFSPIP_Client.sln" /t:clean;rebuild
+	%buildtool% "%TestSuiteRoot%TestSuites\MS-ADFSPIP\src\MS-ADFSPIP_Client.sln" /t:clean;rebuild /p:Configuration="Release"
 ) else (
-	%buildtool% "%TestSuiteRoot%TestSuites\MS-ADFSPIP\src\MS-ADFSPIP_Client.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true
+	%buildtool% "%TestSuiteRoot%TestSuites\MS-ADFSPIP\src\MS-ADFSPIP_Client.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true /p:Configuration="Release"
 )
 
 if ErrorLevel 1 (
@@ -53,7 +53,7 @@ if exist "%TestSuiteRoot%drop\TestSuites\MS-ADFSPIP" (
 	rd /s /q "%TestSuiteRoot%drop\TestSuites\MS-ADFSPIP"
 )
 
-%buildtool% "%TestSuiteRoot%TestSuites\MS-ADFSPIP\src\deploy\deploy.wixproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%TestSuites\MS-ADFSPIP\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:Configuration="Release"
 
 if ErrorLevel 1 (
 	echo Error: Failed to generate the msi installer

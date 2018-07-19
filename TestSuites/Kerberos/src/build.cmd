@@ -42,9 +42,9 @@ if ErrorLevel 1 (
 
 set KeyFile=%1
 if not defined KeyFile (
-	%buildtool% "%TestSuiteRoot%TestSuites\Kerberos\src\Kerberos_Server.sln" /t:clean;rebuild 
+	%buildtool% "%TestSuiteRoot%TestSuites\Kerberos\src\Kerberos_Server.sln" /t:clean;rebuild /p:Configuration="Release"
 ) else (
-	%buildtool% "%TestSuiteRoot%TestSuites\Kerberos\src\Kerberos_Server.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true	
+	%buildtool% "%TestSuiteRoot%TestSuites\Kerberos\src\Kerberos_Server.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true	/p:Configuration="Release"
 )
 
 if ErrorLevel 1 (
@@ -56,7 +56,7 @@ if exist "%TestSuiteRoot%drop\TestSuites\Kerberos" (
 	rd /s /q "%TestSuiteRoot%drop\TestSuites\Kerberos"
 )
 
-%buildtool% "%TestSuiteRoot%TestSuites\Kerberos\src\deploy\deploy.wixproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%TestSuites\Kerberos\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:Configuration="Release"
 
 if ErrorLevel 1 (
 	echo Error: Failed to generate the msi installer
