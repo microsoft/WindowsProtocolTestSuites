@@ -285,24 +285,33 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 if (vsRegPath != null)
                 {
-                    string registryKeyName = vsRegPath.GetValue("15.0").ToString();
-                    if (String.IsNullOrEmpty(registryKeyName))
+                    var vs2017Path = vsRegPath.GetValue("15.0");
+                    if (vs2017Path != null)
                     {
-                        // no match entry
-                        continue;
-                    }
-                    string vspath;
-                    if (File.Exists(vspath = Path.Combine(registryKeyName, StringResource.VSTestLocation)))
-                    {
-                        config.VSTestPath = vspath;
-                    }
-                    else
-                    {
-                        throw new Exception(StringResource.VSTestNotInstalled);
+                        string registryKeyName = vs2017Path.ToString();
+                        if (String.IsNullOrEmpty(registryKeyName))
+                        {
+                            // no match entry
+                            continue;
+                        }
+                        string vspath;
+                        if (File.Exists(vspath = Path.Combine(registryKeyName, StringResource.VSTestLocation)))
+                        {
+                            config.VSTestPath = vspath;
+                        }
+                        else
+                        {
+                            throw new Exception(StringResource.VSTestNotInstalled);
+                        }
                     }
                 }
             }
-            
+
+            if (config.VSTestPath == null)
+            {
+                throw new Exception(StringResource.VSTestNotInstalled);
+            }
+
             config.VSTestArguments = "";
             foreach (string singleDllpath in config.TestSuiteAssembly)
             {
