@@ -13,12 +13,20 @@ if ErrorLevel 1 (
 :: Set buildtool
 if exist "%vs2017path%\MSBuild\15.0\Bin\MSBuild.exe" (
     set buildtool="%vs2017path%\MSBuild\15.0\Bin\MSBuild.exe"
-    set VisualStudioVer=15.0
 )
 
 if not defined buildtool (
     echo No msbuild.exe was found. Please install visual studio 2017.
     exit /b 1
+)
+
+if exist "%vs2017path%" (
+    if not exist "%vs2017path%\MSBuild\Microsoft\WiX\v3.x\Wix.targets" (
+        echo Error: "%vs2017path%\MSBuild\Microsoft\WiX\v3.x\Wix.targets" cannot be found. Please install Wix Toolset Visual Studio 2017 Extension from https://marketplace.visualstudio.com/items?itemName=RobMensching.WixToolsetVisualStudio2017Extension
+        exit /b 1
+    ) else (
+        exit /b 0
+    )
 )
 
 exit /b 0

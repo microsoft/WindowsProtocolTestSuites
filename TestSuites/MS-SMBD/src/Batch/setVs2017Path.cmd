@@ -34,12 +34,3 @@ if ErrorLevel 1 (
         set vs2017path=%%C
     )
 )
-
-if exist "%vs2017path%" (
-    if not exist "%vs2017path%\MSBuild\Microsoft\WiX\v3.x\Wix.targets" (
-        echo Error: "%vs2017path%\MSBuild\Microsoft\WiX\v3.x\Wix.targets" cannot be found. Please install Wix Toolset Visual Studio 2017 Extension from https://marketplace.visualstudio.com/items?itemName=RobMensching.WixToolsetVisualStudio2017Extension
-        exit /b 1
-    ) else (
-        exit /b 0
-    )
-)
