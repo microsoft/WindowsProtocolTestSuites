@@ -306,7 +306,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             try
             {
-                client.ValidateNegotiateInfo(treeId, inputBuffer, out outputBuffer, maxOutputResponse, (header, response) => { });
+                client.ValidateNegotiateInfo(treeId, inputBuffer, out outputBuffer, maxOutputResponse, checker: (header, response) => { });
 
                 client.TreeDisconnect(treeId);
                 client.LogOff();
