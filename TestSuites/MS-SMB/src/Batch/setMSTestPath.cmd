@@ -16,7 +16,12 @@ if not defined mstest (
 )
 
 if not defined mstest (
-    echo Error: Visual Studio or Visual Studio test agent should be installed (version 2017)
-    exit /b 1
+    if exist "%vs2017path%Common7\IDE\MSTest.exe" (
+        set mstest="%vs2017path%Common7\IDE\MSTest.exe"
+        exit /b 0
+    ) else (
+        echo Error: Visual Studio or Visual Studio test agent should be installed (version 2017)
+        exit /b 1
+    )
 )
 exit /b 0
