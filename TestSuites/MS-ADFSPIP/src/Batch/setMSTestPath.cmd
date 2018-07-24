@@ -10,12 +10,6 @@ if ErrorLevel 1 (
 )
 
 if not defined mstest (
-    if exist "%vs2017path%\Common7\IDE\MSTest.exe" (
-        set mstest="%vs2017path%\Common7\IDE\MSTest.exe"
-    )
-)
-
-if not defined mstest (
     if exist "%vs2017path%Common7\IDE\MSTest.exe" (
         set mstest="%vs2017path%Common7\IDE\MSTest.exe"
         exit /b 0

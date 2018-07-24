@@ -10,12 +10,6 @@ if ErrorLevel 1 (
 )
 
 if not defined vstest (
-    if exist "%vs2017path%\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" (
-        set vstest="%vs2017path%\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe"
-    )
-)
-
-if not defined vstest (
     if exist "%vs2017path%Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" (
         set vstest="%vs2017path%Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe"
         exit /b 0
