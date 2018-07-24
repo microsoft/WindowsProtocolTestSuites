@@ -254,8 +254,8 @@ All of the following software must be installed on the driver computer. They hav
 | ------------- |
 |  | 
 |  **Required Software**| 
-| Microsoft® Visual Studio® 2012 or Test Agent | 
-| Execution of test cases requires vstest.console.exe utility which is included in either Visual Studio or Test Agent for Visual Studio.  | 
+| Microsoft® Visual Studio® 2017 | 
+| Execution of test cases requires vstest.console.exe utility which is included in Visual Studio.  | 
 | Visual Studio provides additional debugging and test case authoring ability for you to understand and update the test better.  | 
 |      ![image4.png](./image/BranchCache_UserGuide/image4.png)Note| 
 |            Download Visual Studio Ultimate 2012| 

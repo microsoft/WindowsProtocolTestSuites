@@ -268,13 +268,11 @@ The minimum requirements for the SAN storage server computer are as follows.
 
 All of the following software must be installed on the [**Driver Computer**](#3.2) before the test suite can be executed. There are some dependencies between each other, so it is truely recommended to install them sequentially in the order below.
 
-1.  Install **Microsoft® Visual Studio®** or **Test Agent for Visual Studio®**.
+1.  Install **Microsoft® Visual Studio®**.
 
 	-	The test execution requires the `vstest.console.exe` utility which is installed along with either Visual Studio or Test Agent.
 
-	-	**Microsoft® Visual Studio®** provides you the capability to run test cases. Additionally it provides you the capability to update, build, debug and contribute to the test cases. You can download Visual Studio Ultimate 2012, Visual Studio 2012 Update 4, or later versions of the Visual Studio. The optional components of Visual Studio are not required to be installed.
-
-	-	**Test Agent for Visual Studio®** provides you the capability to run test cases without having to install the whole pack of Visual Studio. You can download Agents for Visual Studio 2012 Update 4 or later versions of the Test Agent. This is recommended to be used when you only want to do some test against your own implementations and have no intention to make changes.
+	-	**Microsoft® Visual Studio®** provides you the capability to run test cases. Additionally it provides you the capability to update, build, debug and contribute to the test cases. You can download Visual Studio 2017 Community. The optional components of Visual Studio are not required to be installed.
 
 2.	Install **Spec Explorer** [3.5.3146.0](<http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/>) or later versions.
 
@@ -2124,7 +2122,7 @@ This section explains how to configure the test suite and how to run test cases.
 
 There are two ways to configure your test suite: by **Protocol Test Manager** and **Manually**.
 
-There are three ways to run your test cases: by **Protocol Test Manager**, **Batch Script** and **Visual Studio or Test Agent**. 
+There are three ways to run your test cases: by **Protocol Test Manager**, **Batch Script** and **Visual Studio**. 
 
 ###<a name="7.1"/> 7.1 Configure and Run Test Cases Using Protocol Test Manager
 

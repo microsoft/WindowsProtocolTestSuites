@@ -14,7 +14,7 @@ if not defined vstest (
         set vstest="%vs2017path%Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe"
         exit /b 0
     ) else (
-        echo Error: Visual Studio or Visual Studio test agent should be installed (version 2017)
+        echo Error: Visual Studio 2017 hould be installed
         exit /b 1
     )
 )
