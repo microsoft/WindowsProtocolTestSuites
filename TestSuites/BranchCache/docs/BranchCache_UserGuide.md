@@ -257,10 +257,6 @@ All of the following software must be installed on the driver computer. They hav
 | Microsoft® Visual Studio® 2017 | 
 | Execution of test cases requires vstest.console.exe utility which is included in Visual Studio.  | 
 | Visual Studio provides additional debugging and test case authoring ability for you to understand and update the test better.  | 
-|      ![image4.png](./image/BranchCache_UserGuide/image4.png)Note| 
-|            Download Visual Studio Ultimate 2012| 
-|            Download Visual Studio 2012 Update 4 or later| 
-|            By installing Visual Studio agent, you could run the cases by Protocol Test Manager or batch scripts without installing Visual Studio. <http://www.microsoft.com/en-us/download/details.aspx?id=38186>  | 
 | **Microsoft Protocol Test Framework**| 
 | Microsoft Protocol Test Framework is a common framework to support protocol test suite. | 
 |      ![image4.png](./image/BranchCache_UserGuide/image4.png)Note| 
@@ -552,7 +548,7 @@ _Set-ExecutionPolicy Unrestricted_
 
 _If the OS is 64 bits, launch the 32 bits PowerShell with administrator privileges      from %SystemRoot%\SysWOW64\WindowsPowerShell\v1.0\PowerShell.exe and run the above command again._
 
-* Generate a self-signed certificate on the HostedCacheServer use MakeCert.exe. (This tool can be found under _C:\Program Files(x86)\Microsoft SDKs\Windows\v7.0A\Bin_ after Visual Studio installed (If Visual Studio 2012 is installed, Update 3 is needed at least). (This path may vary based on your installation location))
+* Generate a self-signed certificate on the HostedCacheServer use MakeCert.exe. (This tool can be found under _C:\Program Files(x86)\Microsoft SDKs\Windows\v7.0A\Bin_ after Visual Studio installed (This path may vary based on your installation location))
 
 Start PowerShell window with administrator privileges and run the following command:
 
@@ -858,7 +854,7 @@ This section describes how to troubleshoot common issues in running test cases.
 | -------------| ------------- |
 | PROBLEM| Unable to load the test container or one of its dependencies.| 
 | CAUSE| Protocol Test Framework is not installed.| 
-| RESOLUTION| Install Protocol Test Framework with 1.0.2220.0, refer to [section 5.11](#_Toc395793799) for more details.| 
+| RESOLUTION| Install Protocol Test Framework with 1.0.6000.0, refer to [section 5.11](#_Toc395793799) for more details.| 
 
 ![image34.png](./image/BranchCache_UserGuide/image34.png)
 

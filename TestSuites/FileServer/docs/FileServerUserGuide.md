@@ -270,7 +270,7 @@ All of the following software must be installed on the [**Driver Computer**](#3.
 
 1.  Install **Microsoft® Visual Studio®**.
 
-	-	The test execution requires the `vstest.console.exe` utility which is installed along with either Visual Studio or Test Agent.
+	-	The test execution requires the `vstest.console.exe` utility which is installed along with Visual Studio.
 
 	-	**Microsoft® Visual Studio®** provides you the capability to run test cases. Additionally it provides you the capability to update, build, debug and contribute to the test cases. You can download Visual Studio 2017 Community. The optional components of Visual Studio are not required to be installed.
 
@@ -278,11 +278,11 @@ All of the following software must be installed on the [**Driver Computer**](#3.
 
 	-	Spec Explorer is a model based testing tool used by the test suite to design models and generate test cases. It has some dependencies on [VC++ 9.0 redistributable package](https://www.microsoft.com/en-us/download/details.aspx?id=5582) which should also be installed.
 
-3. 	Install **Protocol Test Framework** [1.0](https://github.com/Microsoft/ProtocolTestFramework/releases/download/1.0/ProtocolTestFrameworkInstallerForModel.msi) or clone the [repository](https://github.com/Microsoft/ProtocolTestFramework.git) to build one msi package by yourself.
+3. 	Install **Protocol Test Framework** [1.0.6000.0](https://github.com/Microsoft/ProtocolTestFramework/releases/download/1.0.6000.0/ProtocolTestFrameworkInstallerForModel.msi) or clone the [repository](https://github.com/Microsoft/ProtocolTestFramework.git) to build one msi package by yourself.
 
-4.	Install **File Server Test Suite** [1.0](https://github.com/Microsoft/WindowsProtocolTestSuites/releases/download/1.0/FileServer-TestSuite-ServerEP.msi) or clone the [repository](https://github.com/Microsoft/WindowsProtocolTestSuites.git) and build one msi package by yourself.
+4.	Install **File Server Test Suite** [3.18.9.0](https://github.com/Microsoft/WindowsProtocolTestSuites/releases/download/3.18.9.0/FileServer-TestSuite-ServerEP.msi) or clone the [repository](https://github.com/Microsoft/WindowsProtocolTestSuites.git) and build one msi package by yourself.
 
-5.	(Optional) Install **Protocol Test Manager** [1.0](https://github.com/Microsoft/WindowsProtocolTestSuites/releases/download/1.0/ProtocolTestManager.msi) or clone the [repository](https://github.com/Microsoft/WindowsProtocolTestSuites.git) and build one msi package by yourself.
+5.	(Optional) Install **Protocol Test Manager** [3.18.9.0](https://github.com/Microsoft/WindowsProtocolTestSuites/releases/download/3.18.9.0//ProtocolTestManager.msi) or clone the [repository](https://github.com/Microsoft/WindowsProtocolTestSuites.git) and build one msi package by yourself.
 
     -	**Protocol Test Manager** provides a graphical UI to facilitate your configuration and execution of the Microsoft® Windows Protocol Test Suites.
 
@@ -2367,7 +2367,7 @@ You can use the Visual Studio solution (.sln) file included with this test suite
 
 >	![](./image/FileServerUserGuide/image1.png)Note
 
->	&emsp;&emsp;While using Microsoft® Visual Studio® 2012 or above to run test cases, test suite may throw exception with message of **Cannot get test site**. To solve this issue, navigate to **Test** -#&gt; **Test Settings** -#&gt; **Select Test Settings File**, and select a test settings file that you want to use.
+>	&emsp;&emsp;While using Microsoft® Visual Studio® 2017 or above to run test cases, test suite may throw exception with message of **Cannot get test site**. To solve this issue, navigate to **Test** -#&gt; **Test Settings** -#&gt; **Select Test Settings File**, and select a test settings file that you want to use.
 
 To debug a test case:
 
