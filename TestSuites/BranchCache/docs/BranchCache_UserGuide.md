@@ -548,7 +548,7 @@ _Set-ExecutionPolicy Unrestricted_
 
 _If the OS is 64 bits, launch the 32 bits PowerShell with administrator privileges      from %SystemRoot%\SysWOW64\WindowsPowerShell\v1.0\PowerShell.exe and run the above command again._
 
-* Generate a self-signed certificate on the HostedCacheServer use MakeCert.exe. (This tool can be found under _C:\Program Files(x86)\Microsoft SDKs\Windows\v7.0A\Bin_ after Visual Studio installed (This path may vary based on your installation location))
+* Generate a self-signed certificate on the HostedCacheServer use MakeCert.exe. (This tool can be found under _C:\Program Files (x86)\Windows Kits\10\bin\10.0.16299.0\x64_ after Visual Studio installed (This path may vary based on your installation location))
 
 Start PowerShell window with administrator privileges and run the following command:
 
