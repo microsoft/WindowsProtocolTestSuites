@@ -119,6 +119,7 @@
     <Compile Include="SMBD\SmbdCreditManagement.cs" />
     <Compile Include="SMBD\SmbdDataTransfer.cs" />
     <Compile Include="SMBD\SmbdNegotiate.cs" />
+    <Compile Include="SmbdTestBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Protocols.TestSuites.Smbd.Adapter;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
@@ -14,12 +13,8 @@ using System.Text;
 namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
 {
     [TestClass]
-    public class Smb2OverRdmaChannel : TestClassBase
+    public class Smb2OverRdmaChannel : Smb2OverSmbdTestBase
     {
-        #region Variables
-        private SmbdAdapter smbdAdapter;
-        #endregion
-
         #region Class Initialization and Cleanup
         [ClassInitializeAttribute()]
         public static void ClassInitialize(TestContext context)
@@ -31,21 +26,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         public static void ClassCleanup()
         {
             TestClassBase.Cleanup();
-        }
-        #endregion
-
-        #region Test Initialization and Cleanup
-        protected override void TestInitialize()
-        {
-            this.smbdAdapter = new SmbdAdapter(BaseTestSite, LogSmbdEndpointEvent);
-            SmbdUtilities.LogTestCaseDescription(BaseTestSite);
-        }
-
-        protected override void TestCleanup()
-        {
-            base.TestCleanup();
-
-            this.smbdAdapter.DisconnectRdma();
         }
         #endregion
 
@@ -417,12 +397,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         #endregion
 
         #region Common Methods
-        public void LogSmbdEndpointEvent(string log)
-        {
-            BaseTestSite.Log.Add(
-                LogEntryKind.Debug,
-                log);
-        }
 
         /// <summary>
         /// Read file content over RDMA. The file content will be read with specific number of operations. 
@@ -496,7 +470,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         /// <param name="operationCount">count of SMB2 WRITE operation</param>
         public void WriteOverRdma(uint operationCount = 1)
         {
-            string fileName = SmbdUtilities.CreateRandomFileName();
+            string fileName = CreateRandomFileName();
 
             InitSmbdConnectionForTestCases(fileName);
 
