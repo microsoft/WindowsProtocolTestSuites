@@ -16,6 +16,11 @@
     * SMB
     * SMBD
     * RDP
+    * BranchCache
+    * ADFamily
+    * AZOD
+    * ADFSPIP
+    * ADOD
 .PARAMETER ConfigPath
     The ConfigPath is used to specify prerequisites configure file path, default value is ".\PrerequisitesConfig.xml".
 
@@ -321,6 +326,11 @@ foreach($item in $downloadList)
         {
             $content = "Application: " +$item.AppName + " is not installed"
         }
+    }
+
+    if ($item.Name.ToLower().Equals("vs2017community"))
+    {
+        cmd.exe /C "InstallVs2017Community.cmd"
     }
 
     if(-not $IsInstalled)

@@ -35,7 +35,8 @@
     <WixVariable Id="TESTSUITE_BIN_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\Bin" />
     <WixVariable Id="TESTSUITE_BATCH_DIR" Value="..\Batch" />
     <WixVariable Id="PROTOSDK_DROP_DIR" Value="$(env.TestSuiteRoot)\drop\ProtoSDK\Bin" />
-	<WixVariable Id="SCRIPT_FILES_DIR" Value="..\Scripts" />
+    <WixVariable Id="SCRIPT_FILES_DIR" Value="..\Scripts" />
+    <WixVariable Id="TESTSUITE_COMMON_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\common" />
 	
     <WixVariable Id="DOMAIN_RUN_ALLTCS_COMMAND" Value="RunAllTestCases.cmd" />
     <WixVariable Id="DOMAIN_RUN_2012R2_COMMAND" Value="Run2012R2TestCases.cmd" />

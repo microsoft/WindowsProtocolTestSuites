@@ -16,7 +16,7 @@ if exist "%vs2017path%\MSBuild\15.0\Bin\MSBuild.exe" (
 )
 
 if not defined buildtool (
-    echo No msbuild.exe was found. Please install visual studio 2017.
+    echo msbuild.exe cannot be found. Please install visual studio 2017.
     exit /b 1
 )
 

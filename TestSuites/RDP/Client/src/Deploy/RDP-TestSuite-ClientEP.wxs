@@ -22,7 +22,7 @@
              InstallerVersion="300"
              Compressed="yes" />
     
-		<Media Id="1" Cabinet="TestSuite_AllInOne.cab" EmbedCab="yes" />
+    <Media Id="1" Cabinet="TestSuite_AllInOne.cab" EmbedCab="yes" />
 
     <MajorUpgrade DowngradeErrorMessage ="A later version of [ProductName] is already installed. Setup will now exit." />
 
@@ -33,9 +33,10 @@
     <WixVariable Id="TESTSUITE_VERSION" Value="$(env.TESTSUITE_VERSION)" Overridable="no" />
    
     <WixVariable Id="TESTSUITE_BATCH_DIR" Value="$(env.TestSuiteRoot)\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\src\Batch" />
-	  <WixVariable Id="TESTSUITE_BIN_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\Bin" />
+    <WixVariable Id="TESTSUITE_BIN_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\Bin" />
     <WixVariable Id="TESTSUITE_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\Setup\Scripts" />
     <WixVariable Id="TESTSUITE_DATA_DIR" Value="$(env.TestSuiteRoot)\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\Setup\Data" />
+    <WixVariable Id="TESTSUITE_COMMON_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\common" />
     <!-- The scripts are supposed to be cmd scripts, no parameter. -->
     <!-- The scripts exist in drop\TestSuites\RDP\Client\scripts directory. -->
     <WixVariable Id="CONFIG_TESTSUITE_SCRIPT" Value="Config-TestSuite.cmd" />
