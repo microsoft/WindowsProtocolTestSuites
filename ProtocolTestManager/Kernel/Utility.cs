@@ -493,6 +493,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             if (featureMappingNode == null)
             {
+                targetFilterIndex = -1;
+                mappingFilterIndex = -1;
                 return;
             }
 
