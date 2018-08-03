@@ -8,5 +8,10 @@ if ErrorLevel 1 (
 	exit /b 1
 )
 
+call "%CurrentPath%CheckAdminPrivilege.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
 %vstest% "..\Bin\MS-SMBD_ServerTestSuite.dll" /Settings:..\Bin\ServerLocal.TestSettings /Logger:trx
 pause
