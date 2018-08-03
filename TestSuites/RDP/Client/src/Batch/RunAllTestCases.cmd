@@ -8,5 +8,3 @@ call CommonRunTestCase.cmd "TestCategory!=RDPEUSB&TestCategory!=RDPEI"
 echo %RunRDPTestSuite%
 
 %RunRDPTestSuite%
-pause
-

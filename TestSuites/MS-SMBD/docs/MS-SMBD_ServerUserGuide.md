@@ -145,9 +145,7 @@ All of the following software must be installed on the driver computer before in
 
 |  **Required Software** | 
 | ------------- |
-|  **Microsoft® Visual Studio® 2012** | 
-|      ![image3.png](./image/MS-SMBD_ServerUserGuide/image3.png)Note| 
-|            Download Visual Studio Ultimate 2012| 
+|  **Microsoft® Visual Studio® 2017** | 
 | **Microsoft Protocol Test Framework**| 
 | Microsoft Protocol Test Framework is a common framework to support protocol test suite. | 
 | ![image2.png](./image/MS-SMBD_ServerUserGuide/image2.png)Note| 
@@ -229,7 +227,7 @@ This section describes how to set up the driver computer.
 ![image5.png](./image/MS-SMBD_ServerUserGuide/image5.png)
 Important 
 
->Microsoft Visual Studio 2013 and Protocol Test Framework must be installed on the driver computer before you run the test suite installer.
+>Microsoft Visual Studio 2017 and Protocol Test Framework must be installed on the driver computer before you run the test suite installer.
 
 To set up the driver computer
 

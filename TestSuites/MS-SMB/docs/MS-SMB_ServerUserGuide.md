@@ -129,12 +129,7 @@ The minimum requirements for the driver computer are as follows.
  
 #### Required Software
 
-* __Microsoft Visual Studio 2012__
- 
-    Download Visual Studio Ultimate 2012
-  
-  
-    Download Visual Studio 2012 Update 4 or later
+* __Microsoft Visual Studio 2017__
 
 * __Spec Explorer (build 3.5.3146.0 or later)__
 
@@ -242,7 +237,7 @@ This section describes how to set up the driver computer.
 
 ![](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/master/TestSuites/MS-SMB/docs/images/important.png) Important
 
-	Microsoft Visual Studio 2012, Protocol Test Framework, and Spec Explorer must be installed on the driver 
+	Microsoft Visual Studio 2017, Protocol Test Framework, and Spec Explorer must be installed on the driver 
 	computer before you run the test suite installer.
 		
 __To set up the driver computer__
@@ -469,13 +464,13 @@ You can use the Visual Studio solution (.sln) file included with this test suite
 ![](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/master/TestSuites/MS-SMB/docs/images/note.png) Note
 
 * Copy MS-SMB_ServerTestSuite.deployment.ptfconfig from C:\MicrosoftProtocolTests\MS-SMB\Server-Endpoint\<version#>\\Bin to C:\MicrosoftProtocolTests\MS-SMB\Server-Endpoint\<version#>\\Source\Server\TestCode\TestSuite and replace the original file
-* While using Microsoft Visual Studio 2012 or above to run test cases, test suite may throw exception with message of "Cannot get test site". To solve this issue, please select the test settings file under test settings menu.
+* While using Microsoft Visual Studio 2017 or above to run test cases, test suite may throw exception with message of "Cannot get test site". To solve this issue, please select the test settings file under test settings menu.
 
 	![](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/master/TestSuites/MS-SMB/docs/images/testsite.png) 
 
 __To debug a test case__
 
-1.	On the driver computer, use Microsoft? Visual Studio? 2012 or above to open the following solution file:
+1.	On the driver computer, use Microsoft? Visual Studio? 2017 or above to open the following solution file:
 	C:\MicrosoftProtocolTests\MS-SMB\Server-Endpoint\<version#>\Source\Server\TestCode\MS-SMB_Server.sln
 2.	In Visual Studio, in the Solution Explorer window, right-click the Solution 'MS-SMB_Server', and select Build Solution.
 3.	When you build the test project, the tests appear in Test Explorer. If Test Explorer is not visible, choose Test on the Visual Studio menu, choose Windows, and then choose Test Explorer.

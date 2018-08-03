@@ -34,10 +34,15 @@
     <WixVariable Id="TESTSUITE_BATCH_DIR" Value="..\Batch" />
     <WixVariable Id="TESTSUITE_BIN_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\MS-SMBD\Bin" />
     <WixVariable Id="TESTSUITE_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\MS-SMBD\Scripts" />
+    <WixVariable Id="TESTSUITE_COMMON_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\common" />
 
     <!-- The script should exist in drop\TestSuite\Server\MS-SMBD\Batch directory. -->
     <WixVariable Id="RUN_ALLTCS_COMMAND" Value="RunAllTestCases.cmd" />
     <WixVariable Id="RUN_BVT_COMMAND" Value="RunBVTTestCases.cmd" />
+
+    <WixVariable Id="SET_VS_TEST_PATH" Value="setVsTestPath.cmd" />
+    <WixVariable Id="SET_VS_PATH"      Value="setVsPath.cmd" />
+    <WixVariable Id="SET_VS_2017_PATH" Value="setVs2017Path.cmd" />
 
     <WixVariable Id="QUICK_START_GUIDE" Value="MS-SMBD_ServerUserGuide.docx" />
 
