@@ -42,48 +42,9 @@ if(-not $ConfigPath)
 	$ConfigPath = ".\PrerequisitesConfig.xml"
 }
 
-# Check if the required .NET framework version is installed on current machine
-Function CheckIfNet47IsInstalled{
-    $isInstalled = $false
-
-    if(-not (Test-Path ‘HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full’))
-    {
-        return $false
-    }
-    else
-    {
-        try
-        {
-            $NetVersion = (Get-ItemProperty ‘HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full’ -Name Version).Version
-
-            if($NetVersion)
-            {
-                $subVersion = [int]$NetVersion.Substring(0,1)
-                if($subVersion -ge 4)
-                {
-                    $isInstalled = $true
-                }
-                elseif ($majorVersion -eq 4)
-                {
-                    $minorVersion = [int]$NetVersion.Substring(2,3)
-                    if ($minorVersion -ge 7)
-                    {
-                        $isInstalled = $true
-                    }
-                }
-            }
-        }
-        catch
-        {
-            $isInstalled = $false
-        }
-    }
-    
-    return $isInstalled;
-}
-
 # Check if application is installed on current machine.
-Function CheckIfAppInstalled{
+Function CheckIfAppInstalled
+{
     Param (
 		[string]$AppName,	# Application Name
 		[string]$Version,	# Application Version
@@ -103,14 +64,21 @@ Function CheckIfAppInstalled{
 	
     $app = Get-ItemProperty $regpath | .{process{if($_.DisplayName -and $_.UninstallString) { $_ } }} | Where-Object {$_.DisplayName -match $AppName} | Select DisplayName, DisplayVersion -First 1
     
-    if($app){
-		if($Compatible){
+    if($app)
+    {
+		if($Compatible)
+        {
             return ([System.Version]$app.DisplayVersion -ge [System.Version]$Version);
-		}else{
+		}
+        else
+        {
 			return ([System.Version]$app.DisplayVersion -eq [System.Version]$Version);
 		}
-    }else{
-		if($AppName -match "Microsoft Agents for Visual Studio"){
+    }
+    else
+    {
+		if($AppName -match "Microsoft Agents for Visual Studio")
+        {
 			#If Test Agent was not installed we also need check if Visual Studio installed.
 			$app = Get-ItemProperty $regpath | .{process{if($_.DisplayName -and $_.UninstallString) { $_ } }} | Where-Object {$_.DisplayName -match "Microsoft Visual Studio \d{4} Devenv"} | Sort-Object -Property DisplayVersion -Descending | Select DisplayName, Version, DisplayVersion -First 1
 			if($app){
@@ -122,7 +90,8 @@ Function CheckIfAppInstalled{
 }
 
 # Mount ISO and return application path searched from ISO
-Function MountISOAndGetAppPath{
+Function MountISOAndGetAppPath
+{
     Param (
         [string]$AppName,
         [string]$ISOPath
@@ -140,14 +109,16 @@ Function MountISOAndGetAppPath{
         $content = $AppName + "cannot be found in ISO"
         Write-Host $content -ForegroundColor Red
         retun "";
-    }else
+    }
+    else
     {
         return $appPath.FullName;
     }
 }
 
 # Reject app Disk
-Function UnmountDisk{
+Function UnmountDisk
+{
     Param (
         [string]$AppPath
        )
@@ -218,7 +189,8 @@ Function GetDownloadTools{
 }
 
 # Create a tempoary folder under current folder, which is used to store downloaded files.
-Function CreateTemporaryFolder{
+Function CreateTemporaryFolder
+{
     #create temporary folder for downloading tools
     $tempPath = (get-location).ToString() + "\" + [system.guid]::newguid().ToString()
     Write-Host "Create temporary folder for downloading files"``
@@ -243,7 +215,8 @@ Function DownloadAndInstallApplication
         Invoke-WebRequest -Uri $AppItem.URL -OutFile $OutputPath
         [System.Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]'Tls,Tls11,Tls12'
 
-    }else
+    }
+    else
     {
         [System.Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::SSL3
 
@@ -310,71 +283,70 @@ $psVer = [int](Get-Host).Version.ToString().Substring(0,1)
 foreach($item in $downloadList)
 {
     $isInstalled = $false;
-
-    if($item.Name.ToLower().Equals("net471"))
+    $isInstalled = CheckIfAppInstalled -AppName $item.AppName -Version $item.version -Compatible $item.BackwardCompatible
+    if(-not $isInstalled)
     {
-        $isInstalled = CheckIfNet47IsInstalled
-        if(-not $isInstalled)
-        {
-            $content = ".NET Framework 4.7.1 is not installed"
-        }
-    }
-    else
-    {
-        $isInstalled = CheckIfAppInstalled -AppName $item.AppName -Version $item.version -Compatible $item.BackwardCompatible
-        if(-not $isInstalled)
-        {
-            $content = "Application: " +$item.AppName + " is not installed"
-        }
+        $content = "Application: " +$item.AppName + " is not installed"
     }
 
     if ($item.Name.ToLower().Equals("vs2017community"))
     {
         cmd.exe /C "InstallVs2017Community.cmd"
     }
-
-    if(-not $IsInstalled)
+    else
     {
-        Write-Host $content -ForegroundColor Yellow
-        
-        $content = "Downloading file " + $item.Name + ". Please wait..."
-        Write-Host $content
-        $outputPath = $tempFolder + "\" + $item.FileName
+        if(-not $IsInstalled)
+        {
+            Write-Host $content -ForegroundColor Yellow
+            
+            $content = "Downloading file " + $item.Name + ". Please wait..."
+            Write-Host $content
+            $outputPath = $tempFolder + "\" + $item.FileName
 
-        try
-        {
-            DownloadAndInstallApplication -PSVersion $psVer -AppItem $item -OutputPath $outputPath
-        }
-        catch
-        {
-            $failedList += $item.Name
-            $IsInstalled = $false;
-            $ErrorMessage = $_.Exception.Message
-            Write-Host $ErrorMessage -ForegroundColor Red
-            Break;
-        }
+            try
+            {
+                DownloadAndInstallApplication -PSVersion $psVer -AppItem $item -OutputPath $outputPath
+            }
+            catch
+            {
+                $failedList += $item.Name
+                $IsInstalled = $false;
+                $ErrorMessage = $_.Exception.Message
+                Write-Host $ErrorMessage -ForegroundColor Red
+                Break;
+            }
 
-        if($item.NeedRestart)
-        {
-            $IsNeedRestart = $true;
+            if($item.NeedRestart)
+            {
+                $IsNeedRestart = $true;
+            }
         }
-    }
-    else{
-		if($item.AppName -match "Microsoft Agents for Visual Studio"){
-			if($item.BackwardCompatible){
-				$content = $item.AppName + " or later version or Microsoft Visual Studio is already installed"
-			}else{
-				$content = $item.AppName + " or Microsoft Visual Studio is already installed"
-			}
-		}else{
-			if($item.BackwardCompatible){
-				$content = $item.AppName + " or later version is already installed"
-			}else{
-				$content = $item.AppName + " is already installed"
-			}
-		}
-        
-        Write-Host $content -ForegroundColor Green
+        else
+        {
+            if($item.AppName -match "Microsoft Agents for Visual Studio")
+            {
+                if($item.BackwardCompatible)
+                {
+                    $content = $item.AppName + " or later version or Microsoft Visual Studio is already installed"
+                }
+                else
+                {
+                    $content = $item.AppName + " or Microsoft Visual Studio is already installed"
+                }
+            }
+            else
+            {
+                if($item.BackwardCompatible)
+                {
+                    $content = $item.AppName + " or later version is already installed"
+                }
+                else
+                {
+                    $content = $item.AppName + " is already installed"
+                }
+            }
+            Write-Host $content -ForegroundColor Green
+        }
     }
 }
 
@@ -382,7 +354,8 @@ if($psVersion -ge 3)
 {
     $downloadList.Clear();
 }
-else{
+else
+{
     $downloadList = @();
 }
 
