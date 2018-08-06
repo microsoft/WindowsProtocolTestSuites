@@ -33,6 +33,7 @@
     <WixVariable Id="TESTSUITE_BIN_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
     <WixVariable Id="TESTSUITE_BATCH_DIR" Value="..\Batch" />
     <WixVariable Id="PROTOSDK_DROP_DIR" Value="$(env.TestSuiteRoot)\drop\ProtoSDK\Bin" />
+    <WixVariable Id="TESTSUITE_COMMON_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\common" />
     
     <WixVariable Id="CONFIG_TESTSUITE_SCRIPT" Value="Config-TestSuite.cmd" />
     <WixVariable Id="CONFIG_SUT_SCRIPT" Value="Config-SUT.cmd" />
@@ -43,6 +44,10 @@
     <WixVariable Id="WORKGROUP_RUN_ALLTCS_COMMAND" Value="Workgroup_RunAllTestCases.cmd" />
     <WixVariable Id="WORKGROUP_RUN_BVT_COMMAND" Value="Workgroup_RunBVTTestCases.cmd" />
     <WixVariable Id="RUN_TCS_BY_CATEGORY_COMMAND" Value="RunTestCasesByCategory.cmd" />
+
+    <WixVariable Id="SET_VS_TEST_PATH" Value="setVsTestPath.cmd" />
+    <WixVariable Id="SET_VS_PATH"      Value="setVsPath.cmd" />
+    <WixVariable Id="SET_VS_2017_PATH" Value="setVs2017Path.cmd" />
     
     <DirectoryRef Id="TESTSUITE_ROOT_DIR">
       <Component Id="LICENSE.rtf" Guid="{3CC4885E-A281-42BF-B71C-5BB316458549}">

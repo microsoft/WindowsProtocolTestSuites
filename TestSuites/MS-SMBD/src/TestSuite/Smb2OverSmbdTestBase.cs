@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Protocols.TestSuites.Smbd.Adapter;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
@@ -9,46 +8,12 @@ using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
-using System.Threading;
 
 namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
 {
     [TestClass]
-    public class Smb2OverSmbdTestBase : TestClassBase
+    public class Smb2OverSmbdTestBase : SmbdTestBase
     {
-        #region Fields
-        protected SmbdAdapter smbdAdapter;
-        #endregion
-
-        #region Test Initialization and Cleanup
-        protected override void TestInitialize()
-        {
-            base.TestInitialize();
-
-            this.smbdAdapter = new SmbdAdapter(BaseTestSite, LogSmbdEndpointEvent);
-        }
-
-        protected override void TestCleanup()
-        {
-            try
-            {
-                smbdAdapter.DisconnectRdma();
-            }
-            catch
-            {
-            }
-
-            smbdAdapter = null;
-
-            base.TestCleanup();
-        }
-        #endregion
-
-        protected virtual void LogSmbdEndpointEvent(string log)
-        {
-            BaseTestSite.Log.Add(LogEntryKind.Debug, string.Format("Thread 0x{0:X} - {1}", Thread.CurrentThread.ManagedThreadId, log));
-        }
-
         /// <summary>
         /// Establish SMB2 connection over RDMA and open file
         /// 1. Connect to server over RDMA
