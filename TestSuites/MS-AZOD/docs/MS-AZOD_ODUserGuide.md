@@ -209,11 +209,8 @@ All of the following software must be installed on the driver computer _before_ 
 
 |  **Required Software** | 
 | ------------- |
-| Microsoft® Visual Studio® 2012 | 
-|      ![image3.png](./image/MS-AZOD_ODUserGuide/image3.png)Note| 
-|            Download Visual Studio Ultimate 2012|
-|            Download Visual Studio 2012 Update 4 or later| 
-| Microsoft® Protocol Test Framework 1.0.5000.0| 
+| Microsoft® Visual Studio® 2017 | 
+| Microsoft® Protocol Test Framework 1.0.6000.0| 
 | Microsoft® Message Analyzer| 
 | Message Analyzer is required for this test suite to analyze the network traces and validate the message sequences, structures and fields per scenario. |
 |        ![image3.png](./image/MS-AZOD_ODUserGuide/image3.png)Note| 

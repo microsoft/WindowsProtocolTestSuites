@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2036
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fsrvp", "Fsrvp.csproj", "{15162940-F895-48A8-A0F2-49E3A65B632F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A5814E1E-D79C-49A9-A8EA-BA8ED6E0EB39} = {A5814E1E-D79C-49A9-A8EA-BA8ED6E0EB39}

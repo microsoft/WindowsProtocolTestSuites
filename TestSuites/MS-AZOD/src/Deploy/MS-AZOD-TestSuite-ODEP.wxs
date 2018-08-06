@@ -35,10 +35,15 @@
     <WixVariable Id="TESTSUITE_BIN_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\MS-AZOD\Bin" />
     <WixVariable Id="TESTSUITE_BATCH_DIR" Value="..\Batch" />
     <WixVariable Id="PROTOSDK_DROP_DIR" Value="$(env.TestSuiteRoot)\drop\ProtoSDK\Bin" />
-	<WixVariable Id="TESTSUITE_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\TestSuites\MS-AZOD\Setup\Scripts" />
+    <WixVariable Id="TESTSUITE_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\TestSuites\MS-AZOD\Setup\Scripts" />
+    <WixVariable Id="TESTSUITE_COMMON_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\common" />
 	
     <WixVariable Id="RUN_TESTS_COMMAND" Value="RunAllTestCases.cmd" />
     <WixVariable Id="RUN_BVT_COMMAND" Value="RunBVTTestCases.cmd" />
+
+    <WixVariable Id="SET_VS_TEST_PATH" Value="setVsTestPath.cmd" />
+    <WixVariable Id="SET_VS_PATH"      Value="setVsPath.cmd" />
+    <WixVariable Id="SET_VS_2017_PATH" Value="setVs2017Path.cmd" />
     
     <WixVariable Id="QUICK_START_GUIDE" Value="MS-AZOD_ODUserGuide.docx" />
     <!-- Required PTF version should be the same as required Protocol Stack SDK version. -->    

@@ -4,76 +4,42 @@
 @echo off
 
 echo =============================================
-echo          Start to build RDP Client Test Suite
+echo     Start to build RDP Client Test Suite
 echo =============================================
-
-if not defined buildtool (
-	for /f %%i in ('dir /b /ad /on "%windir%\Microsoft.NET\Framework\v4*"') do (@if exist "%windir%\Microsoft.NET\Framework\%%i\msbuild".exe set buildtool=%windir%\Microsoft.NET\Framework\%%i\msbuild.exe)
-)
-
-if not defined buildtool (
-	echo Error: No msbuild.exe was found, install .Net Framework version 4.0 or higher
-	exit /b 1
-)
-
-if not defined WIX (
-	echo Error: WiX Toolset version 3.7 or higher should be installed
-	exit /b 1
-)
-
-if not defined vspath (
-	if defined VS110COMNTOOLS (
-		set vspath="%VS110COMNTOOLS%"
-	) else if defined VS120COMNTOOLS (
-		set vspath="%VS120COMNTOOLS%"
-	) else if defined VS140COMNTOOLS (
-		set vspath="%VS140COMNTOOLS%"
-	) else (
-		echo Error: Visual Studio or Visual Studio test agent should be installed, version 2012 or higher
-		exit /b 1
-	)
-)
-
-:: Set path of Reg.exe
-set REGEXE="%SystemRoot%\System32\REG.exe"
-
-:: Try get PTF_VERSION from registry under Wow6432Node, this is for 64-bit OS
-%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework /v PTFVersion
-if ErrorLevel 1 (
-	:: If not found, try searching the other path, this is for 32-bit OS
-	%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ProtocolTestFramework /v PTFVersion
-	if ErrorLevel 1 (
-	    :: If not found in two paths
-		echo Error: Protocol Test Framework should be installed
-		exit /b 1		
-	) else (
-	    :: If found in 32-bit OS
-		FOR /F "usebackq tokens=3" %%A IN (`%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ProtocolTestFramework /v PTFVersion`) DO (
-			set PTF_VERSION=%%A
-		)
-	)	
-) else (
-    :: If found in 64-bit OS
-	FOR /F "usebackq tokens=3" %%A IN (`%REGEXE% QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework /v PTFVersion`) DO (
-		set PTF_VERSION=%%A
-	)
-)
 
 set CurrentPath=%~dp0
 set TestSuiteRoot=%CurrentPath%..\..\..\..\
 
-::Get build version from AssemblyInfo
-set path=%TestSuiteRoot%AssemblyInfo\SharedAssemblyInfo.cs
-set FindExe="%SystemRoot%\system32\findstr.exe"
-set versionStr="[assembly: AssemblyVersion("1.0.0.0")]"
-for /f "delims=" %%i in ('""%FindExe%" "AssemblyVersion" "%path%""') do set versionStr=%%i
-set TESTSUITE_VERSION=%versionStr:~28,-3%
+call "%CurrentPath%..\..\..\..\common\setBuildTool.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
+call "%CurrentPath%..\..\..\..\common\setVsPath.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
+call "%CurrentPath%..\..\..\..\common\checkWix.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
+call "%CurrentPath%..\..\..\..\common\setPtfVer.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
+call "%CurrentPath%..\..\..\..\common\setTestSuiteVer.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
 
 set KeyFile=%1
 if not defined KeyFile (
-	%buildtool% "%TestSuiteRoot%TestSuites\RDP\Client\src\RDP_Client.sln" /t:clean;rebuild 
+	%buildtool% "%TestSuiteRoot%TestSuites\RDP\Client\src\RDP_Client.sln" /t:clean;rebuild /p:Configuration="Release"
 ) else (
-	%buildtool% "%TestSuiteRoot%TestSuites\RDP\Client\src\RDP_Client.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true	
+	%buildtool% "%TestSuiteRoot%TestSuites\RDP\Client\src\RDP_Client.sln" /t:clean;rebuild /p:AssemblyOriginatorKeyFile=%KeyFile% /p:DelaySign=true /p:SignAssembly=true /p:Configuration="Release"
 )
 
 if ErrorLevel 1 (
@@ -85,7 +51,7 @@ if exist "%TestSuiteRoot%drop\TestSuites\RDP\Client" (
 	rd /s /q "%TestSuiteRoot%drop\TestSuites\RDP\Client"
 )
 
-%buildtool% "%TestSuiteRoot%TestSuites\RDP\Client\src\deploy\deploy.wixproj" /t:Clean;Rebuild
+%buildtool% "%TestSuiteRoot%TestSuites\RDP\Client\src\deploy\deploy.wixproj" /t:Clean;Rebuild /p:Configuration="Release"
 
 if ErrorLevel 1 (
 	echo Error: Failed to generate the msi installer
@@ -93,5 +59,5 @@ if ErrorLevel 1 (
 )
 
 echo ==============================================
-echo          Build RDP Client test suite successfully
+echo    Build RDP Client test suite successfully
 echo ==============================================

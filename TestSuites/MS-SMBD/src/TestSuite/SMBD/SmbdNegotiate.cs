@@ -13,12 +13,8 @@ using System.Threading;
 namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
 {
     [TestClass]
-    public class SmbdNegotiate : TestClassBase
+    public class SmbdNegotiate : SmbdTestBase
     {
-        #region Variables
-        private SmbdAdapter smbdAdapter;
-        #endregion
-
         #region Class Initialization and Cleanup
         [ClassInitializeAttribute()]
         public static void ClassInitialize(TestContext context)
@@ -30,21 +26,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         public static void ClassCleanup()
         {
             TestClassBase.Cleanup();
-        }
-        #endregion
-
-        #region Test Initialization and Cleanup
-        protected override void TestInitialize()
-        {
-            this.smbdAdapter = new SmbdAdapter(BaseTestSite, LogSmbdEndpointEvent);
-            SmbdUtilities.LogTestCaseDescription(BaseTestSite);
-        }
-
-        protected override void TestCleanup()
-        {
-            base.TestCleanup();
-
-            smbdAdapter.DisconnectRdma();
         }
         #endregion
 
@@ -653,7 +634,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
                 );
 
             // try to negotiate on SMB2
-            string fileName = SmbdUtilities.CreateRandomFileName();
+            string fileName = CreateRandomFileName();
 
             // Windows Server 2012 fails the Negotiate Request Message with STATUS_NOT_SUPPORTED if MinVersion or MaxVersion is not 0x0100.
             if (smbdAdapter.TestConfig.Platform == Platform.WindowsServer2012)
@@ -788,13 +769,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             BaseTestSite.Assert.IsTrue(
                 response.MaxFragmentedSize >= SmbdConnection.FLOOR_MAX_FRAGMENTED_SIZE,
                 "MaxFragmentedSize in negotiate response is {0}", response.MaxFragmentedSize);
-        }
-
-        public void LogSmbdEndpointEvent(string log)
-        {
-            BaseTestSite.Log.Add(
-                LogEntryKind.Debug,
-                log);
         }
 
         #endregion
