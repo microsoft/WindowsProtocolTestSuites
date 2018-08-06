@@ -18,5 +18,11 @@ if ("%category%") == ("") (
 )
 echo Test Category is "%category%"
 
-"%VS110COMNTOOLS%..\IDE\mstest" /category:"%category%" /testcontainer:..\Bin\MS-SMB_ServerTestSuite.dll /runconfig:..\Bin\ServerLocalTestRun.testrunconfig 
+set CurrentPath=%~dp0
+call "%CurrentPath%setMSTestPath.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
+%mstest% /category:"%category%" /testcontainer:..\Bin\MS-SMB_ServerTestSuite.dll /runconfig:..\Bin\ServerLocalTestRun.testrunconfig 
 pause

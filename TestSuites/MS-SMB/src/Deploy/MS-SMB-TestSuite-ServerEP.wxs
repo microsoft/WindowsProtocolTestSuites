@@ -37,6 +37,8 @@
     <WixVariable Id="TESTSUITE_BATCH_DIR" Value="..\Batch" />
     <WixVariable Id="TESTSUITE_BIN_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\MS-SMB\Bin" />
     <WixVariable Id="TESTSUITE_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\MS-SMB\Scripts" />
+    <WixVariable Id="TESTSUITE_COMMON_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\common" />
+
     <!-- The scripts are supposed to be cmd scripts, no parameter. -->
     <!-- The scripts exist in drop\TestSuite\MS-SMB\Server\scripts directory. -->
     <WixVariable Id="CONFIG_TESTSUITE_SCRIPT" Value="Config-TestSuite.cmd" />
@@ -45,16 +47,17 @@
     <!-- <WixVariable Id="CONFIG_DOMAIN_SCRIPT" Value="Config-Domain.cmd" /> -->
     <!-- The script should exist in drop\TestSuite\MS-SMB\Server\batch directory. -->
     <WixVariable Id="RUN_TESTS_COMMAND" Value="RunAllTestCases.cmd" />
-    <WixVariable Id="RUN_BY_CATEGORY_COMMAND" Value="RunTestCasesByCategory.cmd" /> 
+    <WixVariable Id="RUN_BY_CATEGORY_COMMAND" Value="RunTestCasesByCategory.cmd" />
+
+    <WixVariable Id="SET_MS_TEST_PATH" Value="setMSTestPath.cmd" />
+    <WixVariable Id="SET_VS_PATH"      Value="setVsPath.cmd" />
+    <WixVariable Id="SET_VS_2017_PATH" Value="setVs2017Path.cmd" />
     
     <DirectoryRef Id="TESTSUITE_ROOT_DIR">
-
       <Component Id="LICENSE.rtf" Guid="{C64FDD1E-01ED-4158-B481-5AEDCC83C7CC}">
         <File Id="LICENSE.rtf" Source="LICENSE.rtf" />
       </Component>
-
     </DirectoryRef>
-
 
     <!-- TODO: If needs to import merge modules, uncomment or add related lines in TestSuiteImportMergeModules.wxs -->
 

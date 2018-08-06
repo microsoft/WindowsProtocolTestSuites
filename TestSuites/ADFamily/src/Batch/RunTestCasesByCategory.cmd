@@ -98,7 +98,13 @@ echo TestCaseFilter is %TestCaseFilter%
 echo.
 
 REM Run test suite
-"%VS110COMNTOOLS%..\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" "..\bin\AD_ServerTestSuite.dll" /Settings:..\bin\Serverlocaltestrun.testrunconfig /Logger:trx /TestCaseFilter:%TestCaseFilter%
+set CurrentPath=%~dp0
+call "%CurrentPath%setVsTestPath.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
+%vstest% "..\bin\AD_ServerTestSuite.dll" /Settings:..\bin\Serverlocaltestrun.testrunconfig /Logger:trx /TestCaseFilter:%TestCaseFilter%
 
 endlocal
 pause
