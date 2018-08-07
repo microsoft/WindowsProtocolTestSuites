@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?define SRCDIR=$(env.TestSuiteRoot)\drop\ProtocolTestManager?>
-<!-- IF VS installed, wix will set VS2012_ROOT_FOLDER/VS2013_ROOT_FOLDER/VS2015_ROOT_FOLDER with correct path, otherwise it will use home drive instead, Wix compare function not support special character, so only use "Studio" here -->
+<!-- IF VS installed, wix will set VS2017_ROOT_FOLDER with correct path, otherwise it will use home drive instead, Wix compare function not support special character, so only use "Studio" here -->
 <?define CheckVSPath="Studio" ?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
@@ -42,13 +42,12 @@
 
     <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
 
-    <PropertyRef Id="VS2012_ROOT_FOLDER"/>
-    <PropertyRef Id="VS2013_ROOT_FOLDER"/>
+    <PropertyRef Id="VS2017_ROOT_FOLDER"/>
 
     <Property Id="VSInstalled">0</Property>
 
     <SetProperty Id="VSInstalled" After="AppSearch" Value="1">
-      <![CDATA[(VS2012_ROOT_FOLDER >< $(var.CheckVSPath)) OR (VS2013_ROOT_FOLDER >< $(var.CheckVSPath)) OR (VS2015_ROOT_FOLDER >< $(var.CheckVSPath))]]>
+      <![CDATA[ (VS2017_ROOT_FOLDER >< $(var.CheckVSPath)) ]]>
     </SetProperty>
 
     <!-- Progress Texts for UI -->
@@ -106,7 +105,7 @@
 
     </UI>
 
-    <!-- Properties for "Add or Reomve Program Entries" -->
+    <!-- Properties for "Add or Remove Program Entries" -->
     <Property Id="ARPCOMMENTS">Protocol Test Manager</Property>
     <Property Id="ARPCONTACT">Microsoft Interop &amp; Testing Team</Property>
 

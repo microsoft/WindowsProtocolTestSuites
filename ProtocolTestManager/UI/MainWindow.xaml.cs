@@ -463,6 +463,8 @@ namespace Microsoft.Protocols.TestManager.UI
                                     detectionRunning = false;
                                     SetButtonsStatus(true, true);
                                     this.ButtonNext.Content = StringResources.DetectButton;
+                                    //Set control enabled
+                                    Pages.AutoDetectionPage.PropertyListBox.IsEnabled = true;
                                 }));
                             });
                         });

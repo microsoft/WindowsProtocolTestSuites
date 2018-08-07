@@ -747,7 +747,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 client.IoCtl(
                     1,
                     1,
-                    info.smb2Info.IsRequireMessageSigning ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                    Packet_Header_Flags_Values.FLAGS_SIGNED, // Server will terminate connection if Validate Negotiate Info Request is not signed.
                     messageId++,
                     sessionId,
                     treeId,
