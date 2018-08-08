@@ -18,7 +18,7 @@
     <ClInclude Include="Rdma.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="..\..\AssemblyInfo\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

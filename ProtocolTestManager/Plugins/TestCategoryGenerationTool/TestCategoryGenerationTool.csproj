@@ -49,7 +49,7 @@
     <Compile Include="AppConfig\AppConfig.cs" />
     <Compile Include="Common\TestCase.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\..\..\AssemblyInfo\SharedAssemblyInfo.cs" />
     <Compile Include="TestSuite\TestSuite.cs" />
   </ItemGroup>
   <ItemGroup>
