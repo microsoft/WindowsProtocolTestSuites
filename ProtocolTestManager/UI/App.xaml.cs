@@ -82,7 +82,12 @@ namespace Microsoft.Protocols.TestManager.UI
         void LogExceptionDetail(Exception e)
         {
             string logName = string.Format("Exception_{0}.log", DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss-fff"));
-            string errorLog = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Protocol Test Manager", logName);
+            string logFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Protocol Test Manager");
+            if (!Directory.Exists(logFolder))
+            {
+                Directory.CreateDirectory(logFolder);
+            }
+            string errorLog = Path.Combine(logFolder, logName);
 
             using (StreamWriter errorWriter = new StreamWriter(errorLog))
             {
