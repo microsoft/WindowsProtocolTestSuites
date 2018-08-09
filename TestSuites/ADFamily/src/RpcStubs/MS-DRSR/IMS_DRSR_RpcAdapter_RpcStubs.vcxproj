@@ -141,7 +141,7 @@
   <ItemGroup>
     <ClInclude Include="ms-drsr.h" />
     <ClInclude Include="ms-dtyp.h" />
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="..\..\..\..\..\AssemblyInfo\resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="drsr.c" />
