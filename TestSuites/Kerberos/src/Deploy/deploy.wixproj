@@ -106,7 +106,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\ProtoSDK\KerberosLib\KerberosLib.csproj">
       <Name>KerberosLib</Name>
-      <Project>{3f0b2460-33f7-4a58-9cb5-bb38914c7845}</Project>
+      <Project>{F1EDA208-50B6-4501-A9D8-D18D3434D587}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
