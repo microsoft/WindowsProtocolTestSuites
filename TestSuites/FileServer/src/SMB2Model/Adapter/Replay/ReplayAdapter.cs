@@ -58,7 +58,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay
         {
             if (smb2ClientMainChannel != null)
             {
-                smb2ClientMainChannel.Close(treeIdMainChannel, fileIdMainChannel);
                 smb2ClientMainChannel.Disconnect();
                 smb2ClientMainChannel = null;
             }

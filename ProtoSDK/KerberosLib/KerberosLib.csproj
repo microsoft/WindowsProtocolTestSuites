@@ -2,7 +2,7 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <ProjectGuid>{3F0B2460-33F7-4A58-9CB5-BB38914C7845}</ProjectGuid>
+    <ProjectGuid>{F1EDA208-50B6-4501-A9D8-D18D3434D587}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib</RootNamespace>
