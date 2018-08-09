@@ -873,5 +873,5 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 
 ### <a name="_Toc396468178"/>Reference
 
-* Technical Document: [.\[MS-RDPBCGR].pdf](file:///C:/Users/dilarsen/AppData/Local/Temp/Temp1_RDP_docs_for_review (3).zip/RDP_docs_for_review/[MS-RDPBCGR].pdf)
+* Technical Document: MS-RDPBCGR.pdf
 
