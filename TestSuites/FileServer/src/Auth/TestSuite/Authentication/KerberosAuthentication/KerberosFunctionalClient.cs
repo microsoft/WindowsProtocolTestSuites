@@ -355,6 +355,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             this.testSite.Assert.IsInstanceOfType(responsePdu, typeof(KerberosKrbError), "Response type mismatch");
 
             KerberosKrbError krbError = responsePdu as KerberosKrbError;
+            this.testSite.Log.Add(LogEntryKind.Debug, 
+                @"[RFC 4120] section 3.1.3: If pre-authentication is required,
+                but was not present in the request, an error message with
+                the code KDC_ERR_PREAUTH_REQUIRED is returned, and a METHOD - DATA
+                object will be stored in the e - data field of the KRB - ERROR message to
+                specify which pre - authentication mechanisms are acceptable.");
             this.testSite.Assert.AreEqual(KRB_ERROR_CODE.KDC_ERR_PREAUTH_REQUIRED, krbError.ErrorCode, "The Error code should be KDC_ERR_PREAUTH_REQUIRED");
             this.testSite.Log.Add(LogEntryKind.Debug, "Receive preauthentication required error.");
 
