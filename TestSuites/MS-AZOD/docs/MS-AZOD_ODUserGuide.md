@@ -211,6 +211,9 @@ All of the following software must be installed on the driver computer _before_ 
 | ------------- |
 | Microsoft® Visual Studio® 2017 | 
 | Microsoft® Protocol Test Framework 1.0.6000.0| 
+| Spec Explorer (build 3.5.3146.0 or later)| 
+|              You can download Spec Explorer from below website| 
+|              [http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/](http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)| 
 | Microsoft® Message Analyzer| 
 | Message Analyzer is required for this test suite to analyze the network traces and validate the message sequences, structures and fields per scenario. |
 |        ![image3.png](./image/MS-AZOD_ODUserGuide/image3.png)Note| 

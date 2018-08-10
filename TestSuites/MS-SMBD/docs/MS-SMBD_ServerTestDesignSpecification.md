@@ -74,7 +74,7 @@ The following protocol uses SMB2 RDMA Transport Protocol as a transport and prov
 
 Additional Related Protocols
 
-* The functionality provided by the SMB2 RDMA Transport Protocol, when accompanied by an RDMA transport, provides similar transport service to that of standard TCP/IP. Protocols such as SMB2 which define an existing layer over [TCP](file:///C:/Users/jash/AppData/Local/CodeFlow/DpkCache/0B7E6832B01C417C8796A1E7A46E20A1/0/Mod/[MS-GLOS].pdf) can employ either or both to implement communications between peers.
+* The functionality provided by the SMB2 RDMA Transport Protocol, when accompanied by an RDMA transport, provides similar transport service to that of standard TCP/IP. Protocols such as SMB2 which define an existing layer over TCP can employ either or both to implement communications between peers.
 
 The following block diagram represents the preceding relationships, with optional protocol relationships represented by dashed outlines, subject to appropriate standards to define a mapping.
 
