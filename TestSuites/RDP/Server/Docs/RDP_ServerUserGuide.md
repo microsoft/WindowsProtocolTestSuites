@@ -117,7 +117,7 @@ Note
 
 Run this test suite in a Domain environment that contains the following computers, physical or virtual: 
 
-* A driver computer running any version of Windows which is compatible with Visual Studio 2012.
+* A driver computer running any version of Windows which is compatible with Visual Studio 2017.
 
 * A computer configured as the SUT (System Under Test). It can be any version of Windows or a SUT implementation that is not based on the Windows operating system.
 
@@ -125,7 +125,7 @@ Run this test suite in a Domain environment that contains the following computer
 
 Run this test suite in a Workgroup environment that contains the following computers, physical or virtual: 
 
-* A driver computer running any version of Windows which is compatible with Visual Studio 2012.
+* A driver computer running any version of Windows which is compatible with Visual Studio 2017.
 
 * A computer configured as the SUT (System Under Test). It  can be any version of Windows or a SUT implementation that is not based on the Windows operating system.
 
@@ -135,7 +135,7 @@ The minimum requirements for the driver computer are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Any version of Windows which is compatible with Visual Studio 2012.| 
+| Operating system| Any version of Windows which is compatible with Visual Studio 2017.| 
 | Memory| 2 GB RAM| 
 | Disk space| 60 GB | 
 
@@ -170,8 +170,11 @@ All of the following software must be installed on the driver computer _before_ 
 
 |  **Required Software**| 
 | ------------- |
-| Microsoft® Visual Studio® 2012 Update 4| 
-| Protocol Test Framework (build 1.0.5500.0)| 
+| Microsoft® Visual Studio® 2017| 
+| Protocol Test Framework (build 1.0.6000.0)| 
+| Spec Explorer (build 3.5.3146.0 or later)| 
+|              You can download Spec Explorer from below website| 
+|              [http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/](http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)| 
 |  **Optional Software** | 
 |       Message Analyzer| 
 | ![image3.png](./image/RDP_ServerUserGuide/image3.png)Note| 
@@ -181,12 +184,7 @@ All of the following software must be installed on the driver computer _before_ 
 ![image2.png](./image/RDP_ServerUserGuide/image2.png)
 Note
 
-Visual Studio 2012 Professional is the minimum requirement.
-
-![image2.png](./image/RDP_ServerUserGuide/image2.png)
-Note 
-
-Visual Studio need update to Update 4.
+Visual Studio 2017 Community is the minimum requirement.
 
 ## <a name="_Toc396908230"/>Network Setup
 
@@ -277,7 +275,7 @@ This section describes how to set up the driver computer.
 ![image6.png](./image/RDP_ServerUserGuide/image6.png)
 Important 
 
->Microsoft Visual Studio 2012 Update 4 and Protocol Test Framework (build 1.0.5500.0) must be installed on the driver computer before you run the test suite installer.
+>Microsoft Visual Studio 2017 and Protocol Test Framework (build 1.0.6000.0) must be installed on the driver computer before you run the test suite installer.
 
 To set up the driver computer
 

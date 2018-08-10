@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="Batch.wxs" />
     <Compile Include="Bin.wxs" />
+    <Compile Include="CommonBatch.wxs" />
     <Compile Include="DependencyCheckWarningDlg.wxs" />
     <Compile Include="EndpointDlg.wxs" />
     <Compile Include="FileServer-TestSuite-ServerEP.wxs" />
@@ -104,7 +105,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\ProtoSDK\KerberosLib\KerberosLib.csproj">
       <Name>KerberosLib</Name>
-      <Project>{3f0b2460-33f7-4a58-9cb5-bb38914c7845}</Project>
+      <Project>{F1EDA208-50B6-4501-A9D8-D18D3434D587}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
@@ -386,6 +387,7 @@
   <Target Name="GenDeployWxsFile" DependsOnTargets="ResolveWixExtensionReferences" BeforeTargets="Compile">
     <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" -out Bin.wxs -template fragment -gg -cg BIN_FILES -dr TESTSUITE_BIN_DIR -var wix.TESTSUITE_BIN_DIR -sreg -sfrag -srd' />
     <Exec Command='"$(WIX)\bin\heat.exe" dir "..\Batch" -out Batch.wxs -template fragment -gg -cg BATCH_FILES -dr TESTSUITE_BATCH_DIR -var wix.TESTSUITE_BATCH_DIR -sreg -sfrag -srd' />
+    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\common&quot; -out CommonBatch.wxs -template fragment -gg -cg COMMON_BATCH_FILES -dr TESTSUITE_COMMON_SCRIPTS_DIR -var wix.TESTSUITE_COMMON_SCRIPTS_DIR -sreg -sfrag -srd" />
   </Target>
   <Import Project="$(WixTargetsPath)" />
   

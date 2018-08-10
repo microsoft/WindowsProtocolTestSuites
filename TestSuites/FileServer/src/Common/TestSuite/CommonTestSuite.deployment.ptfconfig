@@ -43,7 +43,7 @@
         <Description>
           The longer timeout in seconds for the connection against SUT
         </Description>
-      </Property>      
+      </Property>
 
       <Property name="RetryInterval" value="10">
         <Description>
@@ -117,7 +117,7 @@
         </Description>
       </Property>
 
-      <Property name="MaxSmbVersionSupported" value="Smb302">
+      <Property name="MaxSmbVersionSupported" value="Smb311">
         <Choice>Smb2002, Smb21, Smb30, Smb302, Smb311</Choice>
         <Description>
           Max version which the server supports: Smb2002, Smb21, Smb30, Smb302, Smb311
@@ -255,7 +255,7 @@
         </Description>
       </Property>
 
-      <Property name="Platform" value="WindowsServer2012R2">
+      <Property name="Platform" value="WindowsServer2016">
         <Choice>NonWindows,WindowsServer2008,WindowsServer2008R2,WindowsServer2012,WindowsServer2012R2,WindowsServer2016</Choice>
         <Description>
           Platform type of the SUT

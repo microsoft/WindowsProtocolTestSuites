@@ -2,5 +2,18 @@
 :: Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 @echo off
-"%VS110COMNTOOLS%..\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" "..\Bin\MS-SMBD_ServerTestSuite.dll" /Settings:..\Bin\ServerLocal.TestSettings /Logger:trx /TestCaseFilter:"TestCategory=BVT"
+set CurrentPath=%~dp0
+call "%CurrentPath%setVsTestPath.cmd"
+if ErrorLevel 1 (
+	@pause
+	exit /b 1
+)
+
+call "%CurrentPath%CheckAdminPrivilege.cmd"
+if ErrorLevel 1 (
+	@pause
+	exit /b 1
+)
+
+%vstest% "%CurrentPath%..\Bin\MS-SMBD_ServerTestSuite.dll" /Settings:"%CurrentPath%..\Bin\ServerLocal.TestSettings" /Logger:trx /TestCaseFilter:"TestCategory=BVT"
 pause
