@@ -147,7 +147,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends encrypted CREATE request and expects success.");
             client.Create(
                 treeId,
-                CurrentTestCaseName + "_" + Guid.NewGuid() + ".txt",
+                GetTestFileName(uncSharepath),
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                 out fileId,
                 out serverCreateContexts,

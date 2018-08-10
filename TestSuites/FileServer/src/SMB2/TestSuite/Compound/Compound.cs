@@ -49,7 +49,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Compound
         public void BVT_Compound_RelatedRequests()
         {
             Compound_RelatedRequests(
-                fileName: string.Format("BVT_Compound_RelatedRequests_{0}.txt", Guid.NewGuid()), 
+                fileName: GetTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare)), 
                 isEncrypted: false);
         }
 
@@ -61,8 +61,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Compound
         public void BVT_Compound_UnRelatedRequests()
         {
             Compound_UnrelatedRequests(
-                firstFileName: string.Format("BVT_Compound_UnrelatedRequests_1_{0}.txt", Guid.NewGuid()), 
-                secondFileName: string.Format("BVT_Compound_UnrelatedRequests_2_{0}.txt", Guid.NewGuid()), 
+                firstFileName: GetTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare)), 
+                secondFileName: GetTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare)), 
                 isEncrypted: false);
         }
 
@@ -74,7 +74,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Compound
         public void Compound_Encrypt_RelatedRequests()
         {
             Compound_RelatedRequests(
-                fileName: string.Format("Compound_Encrypt_RelatedRequests_{0}.txt", Guid.NewGuid()), 
+                fileName: GetTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare)), 
                 isEncrypted: true);
         }
 
@@ -86,8 +86,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Compound
         public void Compound_Encrypt_UnrelatedRequests()
         {
             Compound_UnrelatedRequests(
-                firstFileName: string.Format("BVT_Compound_UnrelatedRequests_1_{0}.txt", Guid.NewGuid()),
-                secondFileName: string.Format("BVT_Compound_UnrelatedRequests_2_{0}.txt", Guid.NewGuid()),
+                firstFileName: GetTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare)),
+                secondFileName: GetTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare)),
                 isEncrypted: true);
         }
 

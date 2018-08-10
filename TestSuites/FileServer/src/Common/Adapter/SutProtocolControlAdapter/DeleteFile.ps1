@@ -19,7 +19,6 @@ else
     $account = "$NetBiosName\$UserName"
 }
 
-$result = $FALSE
 Try
 {
 	CMD /C "net.exe use $share $password /user:$account"

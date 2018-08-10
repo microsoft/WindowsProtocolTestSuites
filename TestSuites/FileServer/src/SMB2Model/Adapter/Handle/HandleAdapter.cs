@@ -57,6 +57,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle
 
             fileIdBeforDisconnection = FILEID.Zero;
 
+            // Add test file to collection, to delete it in Reset() of base;
+            AddTestFileName(sharePath, fileName);
+
             base.Reset();
         }
 
@@ -125,7 +128,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle
                 targetIPAddress = testConfig.CAShareServerIP;
                 targetServer = testConfig.CAShareServerName;
             }
-
 
             testClientBeforeDisconnection = new Smb2FunctionalClient(testConfig.Timeout, testConfig, this.Site);
             testClientBeforeDisconnection.CreditGoal = 20;

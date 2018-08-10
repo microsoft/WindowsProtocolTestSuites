@@ -45,15 +45,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Resilient
                 reconnectClient.Disconnect();
             }
 
-            // delete created file
-            try
-            {
-                sutProtocolController.DeleteFile(string.Format("\\\\{0}\\{1}", testConfig.SutComputerName, testConfig.BasicFileShare), fileName);
-            }
-            catch
-            {
-            }
-
             base.Reset();
         }
 
@@ -109,7 +100,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Resilient
                 "DialectRevision {0} is expected", ModelUtility.GetDialectRevision(clientMaxDialect));
 
             // SMB2 Create
-            fileName = "ResilientHandlePrepareOpen_" + Guid.NewGuid() + ".txt";
             RequestedOplockLevel_Values opLockLevel = RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE;
             Smb2CreateContextRequest[] createContextRequests = new Smb2CreateContextRequest[0];
             createGuid = Guid.Empty;
@@ -134,7 +124,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Resilient
             Smb2CreateContextResponse[] createContextResponse;
             prepareOpenClient.Create(
                 treeId,
-                fileName,
+                GetTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare)),
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileId,
                 out createContextResponse,

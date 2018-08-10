@@ -73,7 +73,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             accessIpList = Dns.GetHostEntry(TestConfig.ClusteredFileServerName).AddressList;
             uncSharePath = Smb2Utility.GetUncPath(TestConfig.ClusteredFileServerName, TestConfig.ClusteredFileShare);
             contentWrite = Smb2Utility.CreateRandomString(TestConfig.WriteBufferLengthInKb);
-            fileName = string.Format("{0}_{1}.txt", CurrentTestCaseName, Guid.NewGuid());
+            fileName = GetTestFileName(uncSharePath);
         }
 
         protected override void TestCleanup()

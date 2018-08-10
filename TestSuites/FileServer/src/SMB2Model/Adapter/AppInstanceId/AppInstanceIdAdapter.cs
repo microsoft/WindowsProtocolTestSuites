@@ -22,9 +22,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstan
         private Guid leaseKey;
         private ModelDialectRevision clientDialect; 
 
-        // used to clean up files
-        private bool cleanFileWithDifferentName;
-        private bool cleanFileInDifferentShare;
         #endregion
 
         #region Event
@@ -44,25 +41,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstan
                 prepareClient.Disconnect();
                 prepareClient = null;
             }
-
-            try
-            {
-                sutProtocolController.DeleteFile(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare), fileName);
-                if (cleanFileWithDifferentName)
-                {
-                    sutProtocolController.DeleteFile(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare), fileName + different);
-                }
-                if (cleanFileInDifferentShare)
-                {
-                    sutProtocolController.DeleteFile(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.DifferentFromSMBBasic), fileName);
-                }
-            }
-            catch
-            {
-            }
-
-            cleanFileWithDifferentName = false;
-            cleanFileInDifferentShare = false;
 
             base.Reset();
         }
@@ -90,7 +68,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstan
             ConnectToShare(clientDialect, prepareClient, connection_ClientGuid, testConfig.BasicFileShare, out treeConnect_TreeId);
 
             // Create
-            this.fileName = "AppInstanceIdModel_" + Guid.NewGuid();
+            this.fileName = GetTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare));
             Smb2CreateContextResponse[] createContextResponse;
 
             prepareClient.Create(
@@ -128,7 +106,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstan
                     break;
                 case ShareType.DifferentShareDifferentLocal:
                     share = testConfig.DifferentFromSMBBasic;
-                    cleanFileInDifferentShare = true;
                     break;
                 default:
                     throw new ArgumentException("shareType");                    
@@ -152,7 +129,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstan
             else
             {
                 fileNameInOpen = fileName + different;
-                cleanFileWithDifferentName = true;
+                AddTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, share), fileNameInOpen);
             }
 
             status = testClient.Create(
@@ -164,13 +141,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstan
                 createContexts: CreateContexts(appInstanceIdType, createType, false),
                 shareAccess: ShareAccess_Values.NONE,
                 checker: (header, response) => { });
-
-            // The file is not created, no need to delete.
-            if (status != Smb2Status.STATUS_SUCCESS)
-            {
-                cleanFileInDifferentShare = false;
-                cleanFileWithDifferentName = false;
-            }
 
             testClient.Disconnect();
             testClient = null;
