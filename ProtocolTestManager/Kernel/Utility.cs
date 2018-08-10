@@ -33,7 +33,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         public Utility()
         {
-            installDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, ".."));
+            string exePath = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            installDir = Path.GetFullPath(Path.Combine(exePath, ".."));
         }
 
         /// <summary>

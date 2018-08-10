@@ -2590,11 +2590,11 @@ When FAST padata is included, the PA-FX-COOKIE padata as defined in section 5.2 
 | | If domainControllerFunctionality returns a value  &#62; = 6 ([MS-ADTS] section 3.1.1.3.2.25), the KDC MUST check whether the account is a member of PROTECTED_USERS ([MS-DTYP] section 2.4.2.4). If it is a member of PROTECTED_USERS, then: &#60; 50 &#62; | 
 | |  If pre-authentication used DES or RC4, the KDC MUST return KDC_ERR_POLICY.| 
 | | 3.3.5.6 as exchange| 
-| | If domainControllerFunctionality returns a value  &#62; = 3: the KDC SHOULD, in the encrypted pre-auth data part ([[Referrals-11]](http://go.microsoft.com/fwlink/?LinkId=139781), Appendix A) of the AS-REP message, include PA-DATA with the padata-type set to PA-SUPPORTED-ENCTYPES (165), and the padata-value set to 0x1F (section [2.2.6](#z6cfc7b5011ed4b4d846d6f08f0812919)).| 
+| | If domainControllerFunctionality returns a value  &#62; = 3: the KDC SHOULD, in the encrypted pre-auth data part ([[Referrals-11]](http://go.microsoft.com/fwlink/?LinkId=139781), Appendix A) of the AS-REP message, include PA-DATA with the padata-type set to PA-SUPPORTED-ENCTYPES (165), and the padata-value set to 0x1F.| 
 | | isKIle 3| 
-| | MaxRenewAge (section [3.3.1](#z3B478BCF362D4D4098FB74CF5D290957)) for the TGT is 4 hours unless specified by policy.| 
-| | MaxTicketAge (section [3.3.1](#z3B478BCF362D4D4098FB74CF5D290957)) for the TGT is 4 hours unless specified by policy.| 
-| | If domainControllerFunctionality returns a value  &#62; = 6, the KDC MUST determine whether an Authentication Policy is applied to the account (section [3.3.5.5](#z80f6b0ad18a44dadae7fa2b5da0c7e49)). If Enforced is TRUE, then: &#60; 51 &#62; | 
+| | MaxRenewAge for the TGT is 4 hours unless specified by policy.| 
+| | MaxTicketAge for the TGT is 4 hours unless specified by policy.| 
+| | If domainControllerFunctionality returns a value  &#62; = 6, the KDC MUST determine whether an Authentication Policy is applied to the account. If Enforced is TRUE, then: &#60; 51 &#62; | 
 | | If TGTLifetime is not 0: MaxRenewAge for the TGT is TGTLifetime.| 
 | | If TGTLifetime is not 0: MaxTicketAge for the TGT is TGTLifetime.| 
 |  **Cleanup**|  | 
@@ -2647,9 +2647,9 @@ When FAST padata is included, the PA-FX-COOKIE padata as defined in section 5.2 
 | | If domainControllerFunctionality returns a value  &#62; = 6 ([MS-ADTS] section 3.1.1.3.2.25), the KDC MUST check whether the account is a member of PROTECTED_USERS ([MS-DTYP] section 2.4.2.4). If it is a member of PROTECTED_USERS, then: &#60; 50 &#62; | 
 | |  If pre-authentication used DES or RC4, the KDC MUST return KDC_ERR_POLICY.| 
 | | 3.3.5.6 as exchange| 
-| | If domainControllerFunctionality returns a value  &#62; = 3: the KDC SHOULD, in the encrypted pre-auth data part ([[Referrals-11]](http://go.microsoft.com/fwlink/?LinkId=139781), Appendix A) of the AS-REP message, include PA-DATA with the padata-type set to PA-SUPPORTED-ENCTYPES (165), and the padata-value set to 0x1F (section [2.2.6](#z6cfc7b5011ed4b4d846d6f08f0812919)).| 
+| | If domainControllerFunctionality returns a value  &#62; = 3: the KDC SHOULD, in the encrypted pre-auth data part ([[Referrals-11]](http://go.microsoft.com/fwlink/?LinkId=139781), Appendix A) of the AS-REP message, include PA-DATA with the padata-type set to PA-SUPPORTED-ENCTYPES (165), and the padata-value set to 0x1F.| 
 | | isKIle 3| 
-| | If domainControllerFunctionality returns a value  &#62; = 6 ([[MS-ADTS]](file:///E:/Enlist/ts_release/TestSuitesByFamily/Kerberos/Server/Docs/[MS-ADTS].pdf) section 3.1.1.3.2.25), the KDC MUST determine whether an Authentication Policy is applied to the server or service (section [3.3.5.5](#z80f6b0ad18a44dadae7fa2b5da0c7e49)); if Enforced is TRUE then: &#60; 61 &#62; | 
+| | If domainControllerFunctionality returns a value  &#62; = 6 ([MS-ADTS] section 3.1.1.3.2.25), the KDC MUST determine whether an Authentication Policy is applied to the server or service; if Enforced is TRUE then: &#60; 61 &#62; | 
 | | If AllowedToAuthenticateTo is not NULL, the PAC of the user and the PAC of the armor TGT MUST be used to perform an access check for the ACTRL_DS_CONTROL_ACCESS right with additional rights GUID against the AllowedToAuthenticateTo. If the access check fails, the KDC MUST return KDC_ERR_POLICY.| 
 |  **Cleanup**|  | 
 
@@ -2704,19 +2704,19 @@ When FAST padata is included, the PA-FX-COOKIE padata as defined in section 5.2 
 | | If domainControllerFunctionality returns a value  &#62; = 6 ([MS-ADTS] section 3.1.1.3.2.25), the KDC MUST check whether the account is a member of PROTECTED_USERS ([MS-DTYP] section 2.4.2.4). If it is a member of PROTECTED_USERS, then: &#60; 50 &#62; | 
 | |  If pre-authentication used DES or RC4, the KDC MUST return KDC_ERR_POLICY.| 
 | | 3.3.5.6 as exchange| 
-| | If domainControllerFunctionality returns a value  &#62; = 3: the KDC SHOULD, in the encrypted pre-auth data part ([[Referrals-11]](http://go.microsoft.com/fwlink/?LinkId=139781), Appendix A) of the AS-REP message, include PA-DATA with the padata-type set to PA-SUPPORTED-ENCTYPES (165), and the padata-value set to 0x1F (section [2.2.6](#z6cfc7b5011ed4b4d846d6f08f0812919)).| 
+| | If domainControllerFunctionality returns a value  &#62; = 3: the KDC SHOULD, in the encrypted pre-auth data part ([[Referrals-11]](http://go.microsoft.com/fwlink/?LinkId=139781), Appendix A) of the AS-REP message, include PA-DATA with the padata-type set to PA-SUPPORTED-ENCTYPES (165), and the padata-value set to 0x1F.| 
 | | isKIle 3| 
-| | MaxRenewAge (section [3.3.1](#z3B478BCF362D4D4098FB74CF5D290957)) for the TGT is 4 hours unless specified by policy.| 
-| | MaxTicketAge (section [3.3.1](#z3B478BCF362D4D4098FB74CF5D290957)) for the TGT is 4 hours unless specified by policy.| 
-| | If domainControllerFunctionality returns a value  &#62; = 6, the KDC MUST determine whether an Authentication Policy is applied to the account (section [3.3.5.5](#z80f6b0ad18a44dadae7fa2b5da0c7e49)). If Enforced is TRUE, then:[ &#60; 51 &#62; ](#z159)| 
+| | MaxRenewAge for the TGT is 4 hours unless specified by policy.| 
+| | MaxTicketAge for the TGT is 4 hours unless specified by policy.| 
+| | If domainControllerFunctionality returns a value  &#62; = 6, the KDC MUST determine whether an Authentication Policy is applied to the account. If Enforced is TRUE, then:[ &#60; 51 &#62; ](#z159)| 
 | | If TGTLifetime is not 0: MaxRenewAge for the TGT is TGTLifetime.| 
 | | If TGTLifetime is not 0: MaxTicketAge for the TGT is TGTLifetime.| 
 | | isKILE 4| 
-| | If domainControllerFunctionality returns a value  &#62; = 6 ([[MS-ADTS]](file:///E:/Enlist/ts_release/TestSuitesByFamily/Kerberos/Server/Docs/[MS-ADTS].pdf) section 3.1.1.3.2.25), the KDC MUST determine whether an Authentication Policy is applied to the server or service (section [3.3.5.5](#z80f6b0ad18a44dadae7fa2b5da0c7e49)); if Enforced is TRUE then:[ &#60; 61 &#62; ](#z179)| 
+| | If domainControllerFunctionality returns a value  &#62; = 6 ([MS-ADTS] section 3.1.1.3.2.25), the KDC MUST determine whether an Authentication Policy is applied to the server or service; if Enforced is TRUE then:[ &#60; 61 &#62; ](#z179)| 
 | | If AllowedToAuthenticateTo is not NULL, the PAC of the user and the PAC of the armor TGT MUST be used to perform an access check for the ACTRL_DS_CONTROL_ACCESS right with additional rights GUID against the AllowedToAuthenticateTo. If the access check fails, the KDC MUST return KDC_ERR_POLICY.| 
-| | If there are no claims in the PAC and the PA-PAC-OPTIONS [167] (section [2.2.9](#z99721a01c85948d18310ec1bab9b2838)) PA-DATA type does not have the Claims bit set, then the KDC SHOULD NOT call the [TransformClaimsOnTrustTraversal](file:///E:/Enlist/ts_release/TestSuitesByFamily/Kerberos/Server/Docs/[MS-ADTS].pdf) procedure ([[MS-ADTS]](file:///E:/Enlist/ts_release/TestSuitesByFamily/Kerberos/Server/Docs/[MS-ADTS].pdf) section 3.1.1.11.2.11). Otherwise the KDC SHOULD call this procedure. &#60; 62 &#62; | 
-| | When KERB-LOCAL data is present, the KDC SHOULD copy the authorization data field ([[RFC4120]](http://go.microsoft.com/fwlink/?LinkId=90458) section 5.2.6) with ad-type KERB-LOCAL (142) and ad-data containing KERB-LOCAL structure (section [2.2.3](#z2a01b297c47f45479268cf589aedd063)) as an AD-IF-RELEVANT to the end of authorization data in the service ticket. &#60; 63 &#62; | 
-| | The KILE KDC MUST copy the populated fields from the PAC in the TGT to the newly created PAC and, after processing all fields it supports, the KILE KDC MUST generate a new [Server Signature (section ](#z962edb93fa3c48eaa0a6062f760eb69c)[3.3.5.6.3.3](#z962edb93fa3c48eaa0a6062f760eb69c)[)](#z962edb93fa3c48eaa0a6062f760eb69c) and [KDC Signature (section ](#z37bf87b91d56475ab2b2e3948b29194d)[3.3.5.6.3.4](#z37bf87b91d56475ab2b2e3948b29194d)[)](#z37bf87b91d56475ab2b2e3948b29194d) which replace the existing signature fields in the PAC. The KDC MUST ensure that the PAC structure specified in [[MS-PAC]](file:///E:/Enlist/ts_release/TestSuitesByFamily/Kerberos/Server/Docs/[MS-PAC].pdf) does not end with a zero-length buffer.| 
+| | If there are no claims in the PAC and the PA-PAC-OPTIONS [167] PA-DATA type does not have the Claims bit set, then the KDC SHOULD NOT call the TransformClaimsOnTrustTraversal procedure ([MS-ADTS] section 3.1.1.11.2.11). Otherwise the KDC SHOULD call this procedure. &#60; 62 &#62; | 
+| | When KERB-LOCAL data is present, the KDC SHOULD copy the authorization data field ([[RFC4120]](http://go.microsoft.com/fwlink/?LinkId=90458) section 5.2.6) with ad-type KERB-LOCAL (142) and ad-data containing KERB-LOCAL structure as an AD-IF-RELEVANT to the end of authorization data in the service ticket. &#60; 63 &#62; | 
+| | The KILE KDC MUST copy the populated fields from the PAC in the TGT to the newly created PAC and, after processing all fields it supports, the KILE KDC MUST generate a new Server Signature and KDC Signature which replace the existing signature fields in the PAC. The KDC MUST ensure that the PAC structure specified in [MS-PAC] does not end with a zero-length buffer.| 
 |  **Cleanup**|  | 
 
 #####Interactive logon failed with computer A2A2
