@@ -306,6 +306,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
 
             //Create and send AS request
             const KdcOptions options = KdcOptions.FORWARDABLE | KdcOptions.CANONICALIZE | KdcOptions.RENEWABLE;
+            BaseTestSite.Log.Add(LogEntryKind.Debug,
+               @"[RFC 4120] section 3.1.1.  Generation of KRB_AS_REQ Message
+                The client may specify a number of options in the initial request.");
             kerberosClient.SendAsRequest(options, null);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Kerberos Functional Client expects Kerberos Error from KDC");
@@ -324,10 +327,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             PaPacRequest paPacRequest = new PaPacRequest(true);
             Asn1SequenceOf<PA_DATA> seqOfPaData = new Asn1SequenceOf<PA_DATA>(new[] { paEncTimeStamp.Data, paPacRequest.Data });
             //Create and send AS request
+            BaseTestSite.Log.Add(LogEntryKind.Debug,
+                @"[RFC 4120] section 3.1.1.  Generation of KRB_AS_REQ Message
+                The client may specify a number of options in the initial request.");
             kerberosClient.SendAsRequest(options, seqOfPaData);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Kerberos Functional Client expects AS response from KDC");
             KerberosAsResponse asResponse = kerberosClient.ExpectAsResponse();
+            BaseTestSite.Log.Add(LogEntryKind.Debug,
+                @" [RFC 4120] section 3.1.2.  Receipt of KRB_AS_REQ Message
+               If all goes well, processing the KRB_AS_REQ message will result in
+               the creation of a ticket for the client to present to the server.
+               The format for the ticket is described in Section 5.3.
+                ");
             BaseTestSite.Assert.IsNotNull(asResponse.Response.ticket, "AS response should contain a TGT.");
 
             //Create and send TGS request
@@ -337,19 +349,47 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Kerberos Functional Client expects TGS response from KDC");
             KerberosTgsResponse tgsResponse = kerberosClient.ExpectTgsResponse();
 
+            BaseTestSite.Log.Add(LogEntryKind.Debug,
+               @" [RFC 4120] section 3.3.4.  Receipt of KRB_TGS_REP Message
+                The server name returned in the reply is the true principal name of the service.
+                ");
             BaseTestSite.Assert.AreEqual(servicePrincipalName,
                 KerberosUtility.PrincipalName2String(tgsResponse.Response.ticket.sname),
                 "Service principal name in service ticket should match expected.");
             #endregion
 
             #region Create AP request
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create AP Request");
+
             Ticket serviceTicket = kerberosClient.Context.Ticket.Ticket;
             Realm crealm = serviceTicket.realm;
             EncryptionKey subkey = KerberosUtility.GenerateKey(kerberosClient.Context.SessionKey);
             PrincipalName cname = kerberosClient.Context.CName.Name;
+
+            BaseTestSite.Log.Add(LogEntryKind.Debug,
+             @" [RFC 4120] section 3.1.3.  Generation of a KRB_AP_REQ Message
+               The client constructs a new Authenticator from the system
+               time and its name, and optionally from an application-specific
+               checksum, an initial sequence number to be used in KRB_SAFE or
+               KRB_PRIV messages, and/ or a session subkey to be used in negotiations
+               for a session key unique to this particular session."
+            );
+
             Authenticator authenticator = CreateAuthenticator(cname, crealm, subkey);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create AP Request");
+            BaseTestSite.Log.Add(LogEntryKind.Debug,
+             @" [RFC 4120] section 3.1.3.  Generation of a KRB_AP_REQ Message
+                The client MAY indicate a requirement of mutual authentication or the
+                use of a session - key based ticket(for user - to - user authentication,
+                see section 3.7) by setting the appropriate flag(s) in the ap-options
+                field of the message.
+
+                The Authenticator is encrypted in the session key and combined with
+                the ticket to form the KRB_AP_REQ message, which is then sent to the
+                end server along with any additional application - specific
+                information."
+            );
+
             KerberosApRequest request = new KerberosApRequest(
                 kerberosClient.Context.Pvno,
                 new APOptions(KerberosUtility.ConvertInt2Flags((int)ApOptions.MutualRequired)),
@@ -366,11 +406,23 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             Smb2FunctionalClientForKerbAuth smb2Client = new Smb2FunctionalClientForKerbAuth(TestConfig.Timeout, TestConfig, BaseTestSite);
             smb2Client.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             byte[] repToken;
-            uint status = DoSessionSetupWithGssToken(smb2Client, token, out repToken);
 
+            uint status = DoSessionSetupWithGssToken(smb2Client, token, out repToken);
+            
             KerberosApResponse apRep = kerberosClient.GetApResponseFromToken(repToken, GssToken);
             // Get subkey from AP response, which used for signing in smb2
+            BaseTestSite.Log.Add(LogEntryKind.Debug,
+           @" [RFC 4120] 3.2.5.Receipt of KRB_AP_REP Message
+               If a KRB_AP_REP message is returned, the client uses the session key
+               from the credentials obtained for the server to decrypt the message
+               and verifies that the timestamp and microsecond fields match those in
+               the Authenticator it sent to the server.If they match, then the
+               client is assured that the server is genuine.The sequence number
+               and subkey(if present) are retained for later use.  (Note that for
+               encrypting the KRB_AP_REP message, the sub - session key is not used,
+               even if it is present in the Authentication.)");
             apRep.Decrypt(kerberosClient.Context.Ticket.SessionKey.keyvalue.ByteArrayValue);
+
             smb2Client.SetSessionSigningAndEncryption(true, false, apRep.ApEncPart.subkey.keyvalue.ByteArrayValue);
             #endregion
 
@@ -380,7 +432,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             smb2Client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = DoSessionSetupWithGssToken(smb2Client2, token, out repToken);
 
-            BaseTestSite.Assert.AreNotEqual(Smb2Status.STATUS_SUCCESS, status,
+            BaseTestSite.Log.Add(LogEntryKind.Debug,
+            @" [RFC 4120] 3.2.2.  Generation of a KRB_AP_REQ Message
+            Authenticators MUST NOT be re - used and SHOULD be rejected if replayed to a server.");
+
+             BaseTestSite.Assert.AreNotEqual(Smb2Status.STATUS_SUCCESS, status,
                 "Session Setup should fail because it uses a Replay of KRB_AP_REQ");
 
             if (TestConfig.IsWindowsPlatform)
@@ -525,6 +581,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                 cname = kerberosClient.Context.CName.Name;
             }
 
+            BaseTestSite.Log.Add(LogEntryKind.Debug,
+            @" [RFC 4120] section 3.1.3.  Generation of a KRB_AP_REQ Message
+                   The client constructs a new Authenticator from the system
+                   time and its name, and optionally from an application-specific
+                   checksum, an initial sequence number to be used in KRB_SAFE or
+                   KRB_PRIV messages, and/ or a session subkey to be used in negotiations
+                   for a session key unique to this particular session."
+            );
+
             Authenticator authenticator = CreateAuthenticator(cname, crealm, subkey);
             if (variant.HasFlag(CaseVariant.AUTHENTICATOR_CREALM_NOT_MATCH))
             {
@@ -570,6 +635,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                 BaseTestSite.Log.Add(LogEntryKind.TestStep, "Use wrong key to encrypt the Authenticator");
                 kerberosClient.Context.Ticket.SessionKey = KerberosUtility.GenerateKey(kerberosClient.Context.Ticket.SessionKey);
             }
+
+            BaseTestSite.Log.Add(LogEntryKind.Debug,
+            @" [RFC 4120] section 3.1.3.  Generation of a KRB_AP_REQ Message
+                    The client MAY indicate a requirement of mutual authentication or the
+                    use of a session - key based ticket(for user - to - user authentication,
+                    see section 3.7) by setting the appropriate flag(s) in the ap-options
+                    field of the message.
+
+                    The Authenticator is encrypted in the session key and combined with
+                    the ticket to form the KRB_AP_REQ message, which is then sent to the
+                    end server along with any additional application - specific
+                    information."
+            );
             KerberosApRequest request = new KerberosApRequest(
                 kerberosClient.Context.Pvno,
                 new APOptions(KerberosUtility.ConvertInt2Flags((int)ApOptions.MutualRequired)),
@@ -589,9 +667,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
 
             byte[] repToken;
             uint status = DoSessionSetupWithGssToken(smb2Client, token, out repToken);
-
+           
             if (variant.HasFlag(CaseVariant.AUTHENTICATOR_CNAME_NOT_MATCH) || variant.HasFlag(CaseVariant.AUTHENTICATOR_CREALM_NOT_MATCH))
             {
+                BaseTestSite.Log.Add(LogEntryKind.Debug,
+                @" [RFC 4120] Section 3.2.3.Receipt of KRB_AP_REQ Message
+                The name and realm of the client from the ticket are compared against the same fields in
+                the authenticator.  If they don't match, the KRB_AP_ERR_BADMATCH
+                error is returned; normally this is caused by a client error or an
+                attempted attack.");
+
                 BaseTestSite.Assert.AreNotEqual(Smb2Status.STATUS_SUCCESS, status,
                     "Session Setup should fail because the cname or crealm in the authenticator does not match the same field in the Ticket");
                 if (TestConfig.IsWindowsPlatform)
@@ -605,6 +690,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             }
             if (variant.HasFlag(CaseVariant.AUTHENTICATOR_WRONG_ENC_KEY) || variant.HasFlag(CaseVariant.TICKET_WRONG_ENC_KEY))
             {
+                BaseTestSite.Log.Add(LogEntryKind.Debug,
+                @" [MS-KILE] Section 3.4.5 Message Processing Events and Sequencing Rules
+                If the decryption routines detect a modification of the ticket, the KRB_AP_ERR_MODIFIED error message is returned.
+                If decryption shows that the authenticator has been modified, the KRB_AP_ERR_MODIFIED error message is returned.");
+
                 BaseTestSite.Assert.AreNotEqual(Smb2Status.STATUS_SUCCESS, status,
                     "Session Setup should fail because Ticket or Authenticator cannot be correctly decrypted");
                 if (TestConfig.IsWindowsPlatform)
@@ -618,7 +708,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             }
             if (variant.HasFlag(CaseVariant.AUTHENTICATOR_EXCEED_TIME_SKEW))
             {
-                BaseTestSite.Assert.AreNotEqual(Smb2Status.STATUS_SUCCESS, status,
+                BaseTestSite.Log.Add(LogEntryKind.Debug,
+                @" [RFC 4120] Section 3.2.3.Receipt of KRB_AP_REQ Message
+                If the local(server) time and
+                the client time in the authenticator differ by more than the
+                allowable clock skew(e.g., 5 minutes), the KRB_AP_ERR_SKEW error is
+                returned.");
+
+               BaseTestSite.Assert.AreNotEqual(Smb2Status.STATUS_SUCCESS, status,
                     "Session Setup should fail because the server time and the client time " +
                     "in the Authenticator differ by (1 hour) more than the allowable clock skew");
                 if (TestConfig.IsWindowsPlatform)
@@ -638,6 +735,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             }
             if (variant.HasFlag(CaseVariant.TICKET_NOT_VALID))
             {
+                BaseTestSite.Log.Add(LogEntryKind.Debug,
+               @" [RFC 4120] Section 3.2.3.Receipt of KRB_AP_REQ Message
+                  The server computes the age of the ticket: local (server) time minus
+                  the starttime inside the Ticket.  If the starttime is later than the
+                  current time by more than the allowable clock skew, or if the INVALID
+                  flag is set in the ticket, the KRB_AP_ERR_TKT_NYV error is returned.");
+
                 BaseTestSite.Assert.AreNotEqual(Smb2Status.STATUS_SUCCESS, status,
                     "Session Setup should fail because the starttime (tomorrow) in the Ticket " +
                     "is later than the current time by more than the allowable clock skew");
@@ -652,6 +756,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             }
             if (variant.HasFlag(CaseVariant.TICKET_EXPIRED))
             {
+                BaseTestSite.Log.Add(LogEntryKind.Debug,
+              @" [RFC 4120] Section 3.2.3.Receipt of KRB_AP_REQ Message
+                If the current time is later than end time by more than
+                the allowable clock skew, the KRB_AP_ERR_TKT_EXPIRED error is returned.");
+
                 BaseTestSite.Assert.AreNotEqual(Smb2Status.STATUS_SUCCESS, status,
                     "Session Setup should fail because the current time is later than the endtime (yesterday)" +
                     " in the Ticket by more than the allowable clock skew");
@@ -685,6 +794,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
 
             KerberosApResponse apRep = kerberosClient.GetApResponseFromToken(repToken, GssToken);
             // Get subkey from AP response, which used for signing in smb2
+            BaseTestSite.Log.Add(LogEntryKind.Debug,
+            @" [RFC 4120] 3.2.5.Receipt of KRB_AP_REP Message
+               If a KRB_AP_REP message is returned, the client uses the session key
+               from the credentials obtained for the server to decrypt the message
+               and verifies that the timestamp and microsecond fields match those in
+               the Authenticator it sent to the server.If they match, then the
+               client is assured that the server is genuine.The sequence number
+               and subkey(if present) are retained for later use.  (Note that for
+               encrypting the KRB_AP_REP message, the sub - session key is not used,
+               even if it is present in the Authentication.)");
             apRep.Decrypt(kerberosClient.Context.Ticket.SessionKey.keyvalue.ByteArrayValue);
             smb2Client.SetSessionSigningAndEncryption(true, false, apRep.ApEncPart.subkey.keyvalue.ByteArrayValue);
 
