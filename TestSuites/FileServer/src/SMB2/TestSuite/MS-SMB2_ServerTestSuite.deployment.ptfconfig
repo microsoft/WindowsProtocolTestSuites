@@ -19,7 +19,7 @@
       <Property name="SutAlternativeIPAddress" value="192.168.2.11">
         <Description>
           Alternative IP or host name address of SUT to establish connection
-          If SUT only has one IP, set it to same value of SutIPAddress
+          If SUT only has one IP, leave it blank
         </Description>
       </Property>
 
