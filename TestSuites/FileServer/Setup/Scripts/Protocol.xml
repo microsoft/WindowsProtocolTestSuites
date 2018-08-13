@@ -168,7 +168,6 @@
       <minimumram>2048</minimumram>
       <maximumram>4096</maximumram>
       <installscript>InstallMSIAndTools.ps1;domainjoin.ps1</installscript>
-      <postiso>VS2012.iso</postiso>
       <postscript>Disable_Firewall.ps1;SetPasswordNeverExpires.ps1;Install_vs2012.ps1;Config-ForceLevel2.ps1</postscript>
       <tools>
         <tool name="MMA" MSIName="MessageAnalyzer64.msi" version="4.0.8112.0" CPUArchitecture="x64" />
