@@ -7,15 +7,28 @@
 param($workingDir = "$env:SystemDrive\Temp", $protocolConfigFile = "$workingDir\Protocol.xml")
 
 #----------------------------------------------------------------------------
-# if working dir is not exists. it will use scripts path as working path
-#----------------------------------------------------------------------------
-Create-WorkingDir.ps1 $workingDir $protocolConfigFile
-
-#----------------------------------------------------------------------------
 # Global variables
 #----------------------------------------------------------------------------
 $scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
 $env:Path += ";$scriptPath;$scriptPath\Scripts"
+
+#----------------------------------------------------------------------------
+# if working dir is not exists. it will use scripts path as working path
+#----------------------------------------------------------------------------
+if(!(Test-Path "$workingDir"))
+{
+    $workingDir = $scriptPath
+}
+
+if(!(Test-Path "$protocolConfigFile"))
+{
+    $protocolConfigFile = "$workingDir\Protocol.xml"
+    if(!(Test-Path "$protocolConfigFile")) 
+    {
+        Write-Error.ps1 "No protocol.xml found."
+        exit ExitCode
+    }
+}
 
 #----------------------------------------------------------------------------
 # Start loging using start-transcript cmdlet
