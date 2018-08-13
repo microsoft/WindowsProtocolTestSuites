@@ -2,74 +2,75 @@
 	<tools>
 		<tool name="MMA_x64" FileName="MessageAnalyzer64.msi" AppName="Microsoft Message Analyzer" version="4.0.8108.0" url="https://download.microsoft.com/download/2/8/3/283DE38A-5164-49DB-9883-9D1CC432174D/MessageAnalyzer64.msi" arguments="/q"/>
 		<tool name="MMA_x86" FileName="MessageAnalyzer.msi" AppName="Microsoft Message Analyzer" version="4.0.8108.0" url="https://download.microsoft.com/download/2/8/3/283DE38A-5164-49DB-9883-9D1CC432174D/MessageAnalyzer.msi" arguments="/q"/>
-		<tool name="SE" FileName="SpecExplorer.msi" AppName="Spec Explorer 2010" version="3.5.3146.0" url="https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/file/36449/3/SpecExplorer.msi" arguments="/q"/>
-		<tool name="PTF" FileName="ProtocolTestFrameworkInstaller.msi" AppName="Microsoft Protocol Test Framework" version="1.0.5500.0" BackwardCompatible="false" url="https://github.com/Microsoft/ProtocolTestFramework/releases/download/1.0.5500.0/ProtocolTestFrameworkInstaller.msi" arguments="/q"/>
+		<tool name="SE" FileName="SpecExplorer.msi" AppName="Spec Explorer 2010" version="3.5.3146.0" url="https://specexplorerteam.gallerycdn.vsassets.io/extensions/specexplorerteam/specexplorer2010visualstudiopowertool-5089/3.5.3146.0/1482139098514/36449/3/SpecExplorer.msi" arguments="/q"/>		
+		<tool name="PTF" FileName="ProtocolTestFramework.msi" AppName="Microsoft Protocol Test Framework" version="1.0.6000.0" BackwardCompatible="false" url="https://github.com/Microsoft/ProtocolTestFramework/releases/download/1.0.6000.0/ProtocolTestFrameworkInstaller.msi" arguments="/q"/>
 		<tool name="Wix311" FileName="Wix311.exe" AppName="WiX Toolset v3.11" version="3.11.1" url="https://github.com/wixtoolset/wix3/releases/download/wix3111rtm/wix311.exe" arguments="/q"/>
 		<tool name="OpenXMLSDK" FileName="OpenXMLSDK.msi" AppName="Open XML SDK 2.5" version="2.5.5631" url="https://download.microsoft.com/download/5/5/3/553C731E-9333-40FB-ADE3-E02DC9643B31/OpenXMLSDKV25.msi" arguments="/q"/>
-		<tool name="VS2017Community" FileName="vs_community.exe" AppName="Visual Studio 2017 Community" version="15.7.27703.2042" url="https://aka.ms/vs/15/release/vs_community.exe" arguments="/q /">
+		<tool name="VS2017Community" FileName="vs_community.exe" AppName="Visual Studio Community 2017" version="15.7.27703.2047" url="https://aka.ms/vs/15/release/vs_community.exe" arguments="" />        
 	</tools>
 	<FileServer>
-		<tool>VS2017Community</tool>
-		<tool>SE</tool>
-		<tool>Wix311</tool>
+        <tool>SE</tool>
 		<tool>PTF</tool>
+        <tool>Wix311</tool>
+        <tool>MMA_x64</tool>
+        <tool>VS2017Community</tool>		
 	</FileServer>
-	<Kerberos>
-		<tool>VS2017Community</tool>
+	<Kerberos>		
 		<tool>SE</tool>
 		<tool>Wix311</tool>
 		<tool>PTF</tool>
+        <tool>VS2017Community</tool>
 	</Kerberos>
-	<SMB>
-		<tool>VS2017Community</tool>
+	<SMB>		
 		<tool>SE</tool>
 		<tool>Wix311</tool>
 		<tool>PTF</tool>
+        <tool>VS2017Community</tool>
 	</SMB>
-	<SMBD>
-		<tool>VS2017Community</tool>
+	<SMBD>		
 		<tool>SE</tool>
 		<tool>Wix311</tool>
 		<tool>PTF</tool>
+        <tool>VS2017Community</tool>
 	</SMBD>
-	<RDP>
-		<tool>VS2017Community</tool>
+	<RDP>		
 		<tool>Wix311</tool>
-		<tool>SE</tool>
 		<tool>PTF</tool>
+        <tool>SE</tool>
+        <tool>VS2017Community</tool>
 	</RDP>
-	<BranchCache>
-		<tool>VS2017Community</tool>
+	<BranchCache>		
 		<tool>SE</tool>
 		<tool>Wix311</tool>
 		<tool>PTF</tool>
+        <tool>VS2017Community</tool>
 	</BranchCache>
-	<ADFamily>
-		<tool>VS2017Community</tool>
+	<ADFamily>		
 		<tool>Wix311</tool>
 		<tool>PTF</tool>
 		<tool>SE</tool>
 		<tool>MMA_x64</tool>
 		<tool>OpenXMLSDK</tool>
+        <tool>VS2017Community</tool>
 	</ADFamily>
-	<AZOD>
-		<tool>VS2017Community</tool>
+	<AZOD>		
 		<tool>SE</tool>
 		<tool>Wix311</tool>
 		<tool>PTF</tool>
 		<tool>MMA_x64</tool>
+        <tool>VS2017Community</tool>
 	</AZOD>
-	<ADFSPIP>
-		<tool>VS2017Community</tool>
+	<ADFSPIP>		
 		<tool>Wix311</tool>
-		<tool>SE</tool>
 		<tool>PTF</tool>
+        <tool>SE</tool>
+        <tool>VS2017Community</tool>
 	</ADFSPIP>
-	<ADOD>
-		<tool>VS2017Community</tool>
+	<ADOD>		
 		<tool>SE</tool>
 		<tool>Wix311</tool>
 		<tool>PTF</tool>
 		<tool>MMA_x64</tool>
+        <tool>VS2017Community</tool>
 	</ADOD>
 </Dependency>
