@@ -10,11 +10,15 @@ $scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
 
 if(!(Test-Path "$workingDir"))
 {
-    New-Item -ItemType directory -Path $workingDir
+    $workingDir = $scriptPath
 }
 
 if(!(Test-Path "$protocolConfigFile"))
 {
-    $protocolConfigFile = "$scriptPath\Protocol.xml"
-    Copy-Item $protocolConfigFile -destination $workingDir
+    $protocolConfigFile = "$workingDir\Protocol.xml"
+    if(!(Test-Path "$protocolConfigFile")) 
+    {
+        Write-Error.ps1 "No protocol.xml found."
+        exit ExitCode
+    }
 }
