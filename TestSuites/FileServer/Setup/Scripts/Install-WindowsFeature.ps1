@@ -48,26 +48,29 @@ elseif([double]$osVersion -ge [double]"6.2")
         Write-Info.ps1 "OS is Windows Server 2012 or later."
         Import-Module Servermanager
 
+        $type = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion").InstallationType
+
         Write-Info.ps1 "Install features for FileServer"
         Add-WindowsFeature File-Services
 		Add-WindowsFeature FS-BranchCache
 		Add-WindowsFeature FS-VSS-Agent
 		Add-WindowsFeature BranchCache
-		Add-WindowsFeature RSAT-File-Services
+        if ($type -ne "Server Core") {
+		    Add-WindowsFeature RSAT-File-Services
+        }
         
         Write-Info.ps1 "Install DFS feature"
         Add-WindowsFeature FS-DFS-Namespace
-        Add-WindowsFeature RSAT-DFS-Mgmt-Con
+        if ($type -ne "Server Core") {
+            Add-WindowsFeature RSAT-DFS-Mgmt-Con
+        }
         
         Write-Info.ps1 "Install features for cluster"
         Add-WindowsFeature Failover-Clustering -IncludeAllSubFeature -IncludeManagementTools
 
-        if($env:ComputerName -match "NODE01")
-        {
-            Write-Info.ps1 "Install Hyper-V tools to create vhd set file"
-            Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All -NoRestart
-            Add-WindowsFeature RSAT-Hyper-V-Tools -IncludeAllSubFeature
-        }
+        Write-Info.ps1 "Install Hyper-V tools to create vhd set file"
+        Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All -NoRestart
+        Add-WindowsFeature RSAT-Hyper-V-Tools -IncludeAllSubFeature
 
         $RSATState = Get-WindowsFeature RSAT-Feature-Tools
         if ($RSATState.Installstate -ne "Installed")

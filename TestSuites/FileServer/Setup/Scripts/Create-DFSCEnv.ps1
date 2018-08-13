@@ -84,7 +84,11 @@ if ([double]$osVersion -ge [double]"6.2")
 {
 	Write-Info.ps1 "OS is Windows Server 2012 or later version."
     Add-WindowsFeature FS-DFS-Namespace
-    Add-WindowsFeature RSAT-DFS-Mgmt-Con
+
+    $type = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion").InstallationType
+    if ($type -ne "Server Core") {
+        Add-WindowsFeature RSAT-DFS-Mgmt-Con
+    }
 }
 else
 {

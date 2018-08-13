@@ -101,7 +101,7 @@ $domainAdmin = "$domain\Administrator"
 $systemDrive = $env:SystemDrive
 
 $clusterName = $config.lab.ha.cluster.name
-$clusterNodes = @() 
+$clusterNodes = @()
 $clusterIps = @()
 $generalFsIps = @()
 
@@ -197,9 +197,29 @@ if($cluster -eq $null)
         # Failed to create cluster in Threshold if let New-Cluster cmdlet auto add cluster disks
         # So create a cluster without cluster disks, then add cluster disks separately.
         
-        Write-Info.ps1 "Create cluster without storage"
-        New-Cluster -Name $clusterName -Node $clusterNodes -StaticAddress $clusterIps -NoStorage
+        Write-Info.ps1 "Create cluster with current node without storage"
+        New-Cluster -Name $clusterName -Node $env:COMPUTERNAME -StaticAddress $clusterIps -NoStorage
         Start-Sleep 20
+
+        Write-Info.ps1 "Check if cluster create succeed"
+        $cluster = Get-cluster | where {$_.Name -eq $clusterName}
+        if($cluster -eq $null)
+        {
+            Write-Info.ps1 "Create Cluster failed."
+            Write-ConfigFailureSignal
+            exit ExitCode
+        }
+
+        Write-Info.ps1 "Add ClusterNode for nodes other than current node"
+        $_clusterNodes = @()
+        foreach ($_clusterNode in $clusterNodeList)
+        {
+            # Only add nodes other than current node into ClusterNodes
+            if ($_clusterNode.name -ne $env:COMPUTERNAME) {
+                $_clusterNodes += $_clusterNode.name
+            }
+        }
+        Get-Cluster -Name $clusterName | Add-ClusterNode -Name $_clusterNodes
 
         Write-Info.ps1 "Get available storages."
         $disks = Get-ClusterAvailableDisk
@@ -217,16 +237,16 @@ if($cluster -eq $null)
         Write-Info.ps1 "Create cluster"
         New-Cluster -Name $clusterName -Node $clusterNodes -StaticAddress $clusterIps
         Start-Sleep 20
+
+        Write-Info.ps1 "Check if cluster create succeed"
+        $cluster = Get-cluster | where {$_.Name -eq $clusterName}
+        if($cluster -eq $null)
+        {
+            Write-Info.ps1 "Create Cluster failed."
+            Write-ConfigFailureSignal
+            exit ExitCode
+        }
     }    
-	
-    Write-Info.ps1 "Check if cluster create succeed"
-    $cluster = Get-cluster | where {$_.Name -eq $clusterName}
-    if($cluster -eq $null)
-    {
-        Write-Info.ps1 "Create Cluster failed."
-        Write-ConfigFailureSignal
-        exit ExitCode
-    }
 }
 
 #----------------------------------------------------------------------------

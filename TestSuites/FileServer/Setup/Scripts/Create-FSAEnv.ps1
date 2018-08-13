@@ -34,21 +34,13 @@ function CreateFAT32VolumeForFSA()
         # Get disk and partition
         $disk = Get-WmiObject -Class Win32_DiskDrive | sort DeviceID | Select-Object -first 1
         $diskNum = $disk.Index
-        $partitionId = $disk.Partitions | Select-Object -Last 1
-        
-        #----------------------------------------------------------------------------
-        # A workaround to a Windows bug, the partitionId in Windows Server 2016 RS1 is wrong.
-        #----------------------------------------------------------------------------
-        $OSVersion = [System.Environment]::OSVersion.Version
-    
-        if($OSVersion.Major -eq 10 -and $OSVersion.Build -eq 14393)
-        {
-            $partitionId = 2
+        For ($i = 1; $i -le 20; $i++) {
+            $partition = Get-Partition -DiskNumber $diskNum -PartitionNumber $i
+            if ($partition -eq $null) {
+                $partitionId = $i - 1
+                break
+            }
         }
-        #----------------------------------------------------------------------------
-        # A workaround to a Windows bug, the partitionId in Windows Server 2016 RS1 is wrong.
-        #----------------------------------------------------------------------------        
-
         $newPartitionId = $partitionId + 1
 
         Write-Info.ps1 "Create partition using diskpart.exe"

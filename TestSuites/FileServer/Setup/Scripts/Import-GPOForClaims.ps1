@@ -19,12 +19,7 @@ Start-Transcript -Path "$logFile" -Append -Force
 # Extract GPOBackup files
 #----------------------------------------------------------------------------
 Write-Info.ps1 "Extract GPOBackup files"
-$ZipFile = "$scriptPath\GPOBackup.zip"
-if(!(Test-Path "$ZipFile"))
-{
-   $ZipFile = "$scriptPath\Scripts\GPOBackup.zip"
-}
-
+$ZipFile = "$scriptPath\Scripts\GPOBackup.zip"
 $gpoBackupFolder = "$scriptPath\GPOBackup"
 Expand-Archive $ZipFile $gpoBackupFolder
 
