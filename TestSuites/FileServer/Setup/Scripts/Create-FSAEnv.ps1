@@ -5,7 +5,6 @@
 ## Purpose:        Create ShareFolder and relevant files in SUT for MS-FSA test suite
 ## Requirements:   Windows Powershell 2.0
 ## Supported OS:   Windows Server 2012, Windows Server 2012 R2
-## Copyright (c) Microsoft Corporation. All rights reserved.
 ## 
 #########################################################################################
 
