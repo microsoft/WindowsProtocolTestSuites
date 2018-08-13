@@ -7,6 +7,11 @@
 param($workingDir = "$env:SystemDrive\Temp", $protocolConfigFile = "$workingDir\Protocol.xml")
 
 #----------------------------------------------------------------------------
+# Create Working Dir and put Protocol.xml into it
+#----------------------------------------------------------------------------
+Create-WorkingDir.ps1 $workingDir $protocolConfigFile
+
+#----------------------------------------------------------------------------
 # Global variables
 #----------------------------------------------------------------------------
 $scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
