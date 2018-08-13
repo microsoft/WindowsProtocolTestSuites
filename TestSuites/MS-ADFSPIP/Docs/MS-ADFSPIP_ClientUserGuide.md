@@ -189,6 +189,9 @@ All of the following software must be installed on the driver computer _before_ 
 |  | 
 |  **Required Software that is Not Included with test suite**| 
 | Microsoft® Visual Studio® 2017 Community, Professional or Enterprise.| 
+| Spec Explorer (build 3.5.3146.0 or later)| 
+|    You can download Spec Explorer from below website| 
+|    [http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/](http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)| 
 
 ## <a name="_Toc374100974"/>Network Setup
 

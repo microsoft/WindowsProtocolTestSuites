@@ -30,7 +30,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Rdma.h" />
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="..\..\AssemblyInfo\resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RdmaAdapter.cpp" />

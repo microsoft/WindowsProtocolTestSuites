@@ -17,6 +17,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Encryptio
         private Smb2FunctionalClient testClient;
         private EncryptionConfig encryptionConfig;
         private uint treeId;
+        private string uncSharePath;
         #endregion
 
         #region Initialization
@@ -138,7 +139,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Encryptio
 
         public void TreeConnectRequest(ConnectToShareType connectToShareType, ModelRequestType modelRequestType)
         {
-            string sharePath = (connectToShareType == ConnectToShareType.ConnectToEncryptedShare) ?
+            uncSharePath = (connectToShareType == ConnectToShareType.ConnectToEncryptedShare) ?
                 Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.EncryptedFileShare) : Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare);
 
             if (modelRequestType == ModelRequestType.EncryptedRequest)
@@ -155,7 +156,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Encryptio
                 uint status = 0;
                 TREE_CONNECT_Response? treeConnectResponse = null;
                 status = testClient.TreeConnect(
-                    sharePath,
+                    uncSharePath,
                     out treeId,
                     checker: (header, response) =>
                     {
@@ -193,7 +194,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Encryptio
                 testClient.Smb2Client.DisableVerifySignature = true;
                 status = testClient.Create(
                     treeId,
-                    Guid.NewGuid().ToString(),
+                    GetTestFileName(uncSharePath),
                     CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                     out fileId,
                     out serverCreateContexts,

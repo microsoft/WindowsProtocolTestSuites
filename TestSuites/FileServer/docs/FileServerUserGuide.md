@@ -278,7 +278,7 @@ All of the following software must be installed on the [**Driver Computer**](#3.
 
 	-	Spec Explorer is a model based testing tool used by the test suite to design models and generate test cases. It has some dependencies on [VC++ 9.0 redistributable package](https://www.microsoft.com/en-us/download/details.aspx?id=5582) which should also be installed.
 
-3. 	Install **Protocol Test Framework** [1.0.6000.0](https://github.com/Microsoft/ProtocolTestFramework/releases/download/1.0.6000.0/ProtocolTestFrameworkInstallerForModel.msi) or clone the [repository](https://github.com/Microsoft/ProtocolTestFramework.git) to build one msi package by yourself.
+3. 	Install **Protocol Test Framework** [1.0.6000.0](https://github.com/Microsoft/ProtocolTestFramework/releases/download/1.0.6000.0/ProtocolTestFrameworkInstaller.msi) or clone the [repository](https://github.com/Microsoft/ProtocolTestFramework.git) to build one msi package by yourself.
 
 4.	Install **File Server Test Suite** [3.18.9.0](https://github.com/Microsoft/WindowsProtocolTestSuites/releases/download/3.18.9.0/FileServer-TestSuite-ServerEP.msi) or clone the [repository](https://github.com/Microsoft/WindowsProtocolTestSuites.git) and build one msi package by yourself.
 

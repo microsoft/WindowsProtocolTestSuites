@@ -161,7 +161,7 @@
     <ClInclude Include="ms-frs2.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="..\..\..\..\..\AssemblyInfo\resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="IMS_FRS2_RpcAdapter_RpcStubs.rc" />
