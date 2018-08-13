@@ -8,6 +8,9 @@ param($workingDir = "$env:SystemDrive\Temp", $protocolConfigFile = "$workingDir\
 
 $scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
 
+#----------------------------------------------------------------------------
+# if working dir is not exists. it will use scripts path as working path
+#----------------------------------------------------------------------------
 if(!(Test-Path "$workingDir"))
 {
     $workingDir = $scriptPath

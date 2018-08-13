@@ -7,7 +7,7 @@
 param($workingDir = "$env:SystemDrive\Temp", $protocolConfigFile = "$workingDir\Protocol.xml")
 
 #----------------------------------------------------------------------------
-# Create Working Dir and put Protocol.xml into it
+# if working dir is not exists. it will use scripts path as working path
 #----------------------------------------------------------------------------
 Create-WorkingDir.ps1 $workingDir $protocolConfigFile
 
