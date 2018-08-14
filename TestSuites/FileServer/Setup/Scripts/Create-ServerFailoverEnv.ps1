@@ -88,21 +88,6 @@ function CheckConnectivity($computerName)
 }
 
 #----------------------------------------------------------------------------
-# Check input parameters
-#----------------------------------------------------------------------------
-if(!(Test-Path "$workingDir"))
-{
-    Write-Error.ps1 "WorkingDir $workingDir does not exist."
-    exit ExitCode
-}
-
-if(!(Test-Path "$protocolConfigFile"))
-{
-    Write-Error.ps1 "protocolConfigFile $protocolConfigFile does not exist."
-    exit ExitCode
-}
-
-#----------------------------------------------------------------------------
 # Get content from protocol config file
 #----------------------------------------------------------------------------
 [xml]$config = Get-Content "$protocolConfigFile"
