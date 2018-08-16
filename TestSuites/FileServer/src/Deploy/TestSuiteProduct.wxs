@@ -164,6 +164,7 @@
               <Directory Id="TESTSUITE_ROOT_DIR" Name="!(wix.TESTSUITE_VERSION)">
                 <Directory Id="TESTSUITE_BATCH_DIR" Name="Batch" />
                 <Directory Id="TESTSUITE_COMMON_SCRIPTS_DIR" Name="Batch" />
+                <Directory Id="TESTSUITE_SCRIPTS_DIR" Name="Scripts" />
                 <Directory Id="TESTSUITE_BIN_DIR" Name="Bin" >
                   <Directory Id="PROTOCOLSDK_BIN_DIR" Name="." />
                   <Directory Id="TESTSUITE_OTHER_BIN" Name="." />
@@ -388,6 +389,7 @@
         <ComponentGroupRef Id="BATCH_FILES" />
         <ComponentGroupRef Id="BIN_FILES" />
         <ComponentGroupRef Id="COMMON_BATCH_FILES" />
+        <ComponentGroupRef Id="TESTSUITE_SCRIPTS_FILES" />
 
       </Feature>
 
