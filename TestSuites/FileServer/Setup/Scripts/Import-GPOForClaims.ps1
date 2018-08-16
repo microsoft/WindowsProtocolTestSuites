@@ -19,11 +19,25 @@ Start-Transcript -Path "$logFile" -Append -Force
 #----------------------------------------------------------------------------
 # Extract GPOBackup files
 #----------------------------------------------------------------------------
-Write-Info.ps1 "Extract GPOBackup files"
-$ZipFile = "$scriptPath\Scripts\GPOBackup.zip"
-$gpoBackupFolder = "$scriptPath\GPOBackup"
-Expand-Archive $ZipFile $gpoBackupFolder
 
+## Expand-Archive is only supported in Powerhshell 5.0 or later
+if ($psversiontable.PSVersion.Major -ge 5)
+{
+    Write-Info.ps1 "Extract GPOBackup files"
+    $ZipFile = "$scriptPath\Scripts\GPOBackup.zip"
+    $gpoBackupFolder = "$scriptPath\GPOBackup"
+    Expand-Archive $ZipFile $gpoBackupFolder
+}
+else
+{
+    $shell = New-Object -com shell.application
+    $zip = $shell.NameSpace($ZipFile)
+    if(!(Test-Path -Path $gpoBackupFolder))
+    {
+        New-Item -ItemType directory -Path $gpoBackupFolder
+    }
+    $shell.Namespace($gpoBackupFolder).CopyHere($zip.items(), 0x14)
+}
 #----------------------------------------------------------------------------
 # Configure Group Policy for Claims
 #----------------------------------------------------------------------------
