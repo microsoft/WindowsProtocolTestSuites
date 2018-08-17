@@ -19,13 +19,13 @@ Start-Transcript -Path "$logFile" -Append -Force
 #----------------------------------------------------------------------------
 # Extract GPOBackup files
 #----------------------------------------------------------------------------
+$ZipFile = "$scriptPath\Scripts\GPOBackup.zip"
+$gpoBackupFolder = "$scriptPath\GPOBackup"
 
 ## Expand-Archive is only supported in Powerhshell 5.0 or later
 if ($psversiontable.PSVersion.Major -ge 5)
 {
     Write-Info.ps1 "Extract GPOBackup files"
-    $ZipFile = "$scriptPath\Scripts\GPOBackup.zip"
-    $gpoBackupFolder = "$scriptPath\GPOBackup"
     Expand-Archive $ZipFile $gpoBackupFolder
 }
 else
