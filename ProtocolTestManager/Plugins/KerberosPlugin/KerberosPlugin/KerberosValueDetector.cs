@@ -27,24 +27,24 @@ namespace Microsoft.Protocols.TestManager.Detector
             SingleRealm,
             CrossRealm,
         }
-                
+
         private DetectionInfo detectionInfo = new DetectionInfo();
         private EnvironmentType env = EnvironmentType.CrossRealm;
 
         // TODO:    Update the file path and file name later
         private Logger logWriter = new Logger("KerberosPlugin_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss-fff") + ".log");
 
-     
+
         #region Flags
         bool hasLocalSmbAP = false;
         bool hasLocalWebAP = false;
-        
+
         bool hasTrustSmbAP = false;
         bool hasTrustWebAP = false;
 
 
         #endregion
-    
+
 
         void System.IDisposable.Dispose()
         {
@@ -61,7 +61,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             DetectingItems.Add(new DetectingItem("Detect KDC", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Detect Application Server", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Detect users", DetectingStatus.Pending, LogStyle.Default));
-            
+
             return DetectingItems;
         }
         /// <summary>
@@ -70,9 +70,9 @@ namespace Microsoft.Protocols.TestManager.Detector
         /// <returns>A instance of Prerequisites class.</returns>
         public Prerequisites GetPrerequisites()
         {
-            
+
             hasLocalSmbAP = false;
-            hasLocalWebAP = false;           
+            hasLocalWebAP = false;
             hasTrustSmbAP = false;
             hasTrustWebAP = false;
 
@@ -80,16 +80,16 @@ namespace Microsoft.Protocols.TestManager.Detector
             reqs.Title = "Pre-Detect Configure";
             reqs.Summary = "Please set the following values:";
             reqs.Properties = new Dictionary<string, List<string>>();
-           
+
             List<string> TrustType = new List<string>();
 
             TrustType.Add("Forest");
             TrustType.Add("Realm");
-            TrustType.Add("NoTrust");          
+            TrustType.Add("NoTrust");
 
             reqs.Properties.Add("TrustType", TrustType);
-            
-            //KkdcpInfo 
+
+            //KkdcpInfo
 
             List<string> IsKkdcpSupported = new List<string>();
 
@@ -111,12 +111,12 @@ namespace Microsoft.Protocols.TestManager.Detector
             reqs.Properties.Add("Local Domain Admin Pwd", ServerHelper.ConstructValueListUsingPtfConfig("LocalRealm.Users.Admin.Password"));
             reqs.Properties.Add("Local DC is LDAP Server", ServerHelper.ConstructValueList("true","false"));
             reqs.Properties.Add("Local AP Server Name", ServerHelper.ConstructValueListUsingPtfConfig("LocalRealm.FileServer01.FQDN"));
-            reqs.Properties.Add("Local AP is File Server", ServerHelper.ConstructValueList("true", "false"));            
+            reqs.Properties.Add("Local AP is File Server", ServerHelper.ConstructValueList("true", "false"));
             reqs.Properties.Add("Local AP is HTTP Server", ServerHelper.ConstructValueList("true", "false"));
 
             List<string> LocalHttpUri = new List<string>();
             LocalHttpUri.Add("Http://ap01.contoso.com");
-            reqs.Properties.Add("Local HTTP Server Uri", LocalHttpUri); 
+            reqs.Properties.Add("Local HTTP Server Uri", LocalHttpUri);
 
             #endregion
 
@@ -136,14 +136,14 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             List<string> ForestTrustPwd = new List<string>();
             ForestTrustPwd.Add("Password01!");
-            reqs.Properties.Add("Trust Password", ForestTrustPwd);      
+            reqs.Properties.Add("Trust Password", ForestTrustPwd);
 
             List<string> IsTrustLdapAPSUT = new List<string>();
             IsTrustLdapAPSUT.Add("true");
             IsTrustLdapAPSUT.Add("false");
             reqs.Properties.Add("Trust DC is LDAP Server", IsTrustLdapAPSUT);
             reqs.Properties.Add("Trust AP Server Name", ServerHelper.ConstructValueListUsingPtfConfig("TrustedRealm.FileServer01.FQDN"));
-           
+
             List<string> IsTrustSmbAPSUT = new List<string>();
             IsTrustSmbAPSUT.Add("true");
             IsTrustSmbAPSUT.Add("false");
@@ -158,7 +158,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             TrustHttpUri.Add("http://ap02.kerb.com");
             reqs.Properties.Add("Trust Http Server Uri", TrustHttpUri);
 
-            #endregion            
+            #endregion
             return reqs;
         }
 
@@ -167,8 +167,8 @@ namespace Microsoft.Protocols.TestManager.Detector
         /// </summary>
         /// <param name="properties">Property name and values.</param>
         /// <returns>
-        /// Return true if no other property needed. Return false means there are 
-        /// other property required. PTF Tool will invoke GetPrerequisites and 
+        /// Return true if no other property needed. Return false means there are
+        /// other property required. PTF Tool will invoke GetPrerequisites and
         /// pop up a dialog to set the value of the properties.
         /// </returns>
         public bool SetPrerequisiteProperties(Dictionary<string, string> properties)
@@ -179,7 +179,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             this.detectionInfo.localDC.IPv4 = ServerHelper.GetDCIP(this.detectionInfo.localDomain.Name);
 
 
-            //common properties           
+            //common properties
             string trusttype;
 
             try
@@ -189,7 +189,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                 {
                     return false;
                 }
-                
+
                 detectionInfo.trustType = (KerberosTrustType)Enum.Parse(typeof(KerberosTrustType), trusttype);
             }
             catch
@@ -221,7 +221,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             {
                 return false;
             }
-            
+
 
             //local domain
             #region
@@ -242,7 +242,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                 {
                     return false;
                 }
-                
+
                 //build up the detectioninfo with the local domain configurations
                 detectionInfo.localDomain.Name = localDomainName;
                 detectionInfo.localDomain.Admin = localDomainAdminUsername;
@@ -298,7 +298,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                     {
                         this.hasLocalSmbAP = true;
 
-                        //build up the detectioninfo with the local AP computer configurations    
+                        //build up the detectioninfo with the local AP computer configurations
                         detectionInfo.localAP.FQDN = localSmbServerName;
                     }
                     detectionInfo.HasSmbServer = true;
@@ -496,7 +496,7 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             try
             {
-                dc.NetBIOS = ServerHelper.GetDCAttribute(dc.ComputerName, "sAMAccountName", domain.Name, domain.Admin, domain.AdminPassword);//DC01$: NetBIOS name                                       
+                dc.NetBIOS = ServerHelper.GetDCAttribute(dc.ComputerName, "sAMAccountName", domain.Name, domain.Admin, domain.AdminPassword);//DC01$: NetBIOS name
                 dc.DefaultServiceName = "krbtgt/" + domain.Name.ToUpper();
                 dc.ServiceSalt = domain.Name.ToUpper() + "host"+ dc.FQDN.ToLower();
                 dc.ldapService.LdapServiceName = "ldap/" + dc.FQDN.ToLower();
@@ -555,7 +555,7 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             try
             {
-                client.NetBIOS = ServerHelper.GetAccountAttribute(client.ComputerName, "Computers", "sAMAccountName", domain.Name, domain.Admin, domain.AdminPassword);//DC01$: NetBIOS name                                       
+                client.NetBIOS = ServerHelper.GetAccountAttribute(client.ComputerName, "Computers", "sAMAccountName", domain.Name, domain.Admin, domain.AdminPassword);//DC01$: NetBIOS name
                 client.DefaultServiceName = "host/" + client.FQDN.ToLower();
                 client.ServiceSalt = domain.Name.ToUpper() + "host" + client.FQDN.ToLower();
                 client.IsWindows = true; //client is always windows.
@@ -609,7 +609,7 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             try
             {
-                ap.NetBIOS = ServerHelper.GetAccountAttribute(ap.ComputerName, "Computers", "sAMAccountName", domain.Name, domain.Admin, domain.AdminPassword);//DC01$: NetBIOS name                                       
+                ap.NetBIOS = ServerHelper.GetAccountAttribute(ap.ComputerName, "Computers", "sAMAccountName", domain.Name, domain.Admin, domain.AdminPassword);//DC01$: NetBIOS name
                 ap.DefaultServiceName = "host/" + ap.FQDN.ToLower();
                 ap.ServiceSalt = domain.Name.ToUpper() + "host" + ap.FQDN.ToLower();
                 ap.smb2Service.SMB2ServiceName = "cifs/" + ap.FQDN.ToLower();
@@ -625,7 +625,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             {
                 if (detectionInfo.HasSmbServer)
                 {
-                    //get smb dialect 
+                    //get smb dialect
                     Smb2Client clientForInitialOpen = new Smb2Client(new TimeSpan(0, 0, 15));
                     byte[] gssToken;
                     Packet_Header header;
@@ -697,7 +697,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                 }
                 if (detectionInfo.HasHttpServer)
                 {
-                    //detect http server                             
+                    //detect http server
                     ap.httpService.HttpServiceName = "http/" + ap.FQDN.ToLower();
 
                     try
@@ -730,30 +730,30 @@ namespace Microsoft.Protocols.TestManager.Detector
         private bool DetectUsers(ref Dictionary<string, User> users, DomainInfo domain)
         {
             logWriter.AddLog(string.Format("===== Detect Users in Domain {0} =====", domain.Name), LogLevel.Normal);
-            
+
             string userName = string.Empty;
             string password = string.Empty;
             string salt = string.Empty;
             string serviceName = string.Empty;
             string userDomain = string.Empty;
-           
+
             try
             {
                 foreach (string key in users.Keys)
                 {
                     try
                     {
-                        User user = users[key];                        
+                        User user = users[key];
                         ServerHelper.GetAccountAttribute(user.Name, "Users", "sAMAccountName", domain.Name, domain.Admin, domain.AdminPassword);
                     }
                     catch
                     {
-                        //remove the unsupported items.                        
+                        //remove the unsupported items.
                         //users.Remove(key);
                     }
 
                 }
-               
+
                 return true;
             }
             catch
@@ -763,7 +763,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                 return false;
             }
 
-               
+
         }
         /// <summary>
         /// Run property autodetection.
@@ -826,7 +826,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             return true;
         }
 
-     
+
         /// <summary>
         /// Get the detect result.
         /// </summary>
@@ -838,15 +838,22 @@ namespace Microsoft.Protocols.TestManager.Detector
             Dictionary<string, List<string>> temp = new Dictionary<string, List<string>>();
 
             #region Common
-           
-            temp.Add("IpVersion", new List<string>() { this.detectionInfo.ipVersion.ToString()});        
-            temp.Add("TrustType", new List<string>() { this.detectionInfo.trustType.ToString()});        
-           
+
+            temp.Add("IpVersion", new List<string>() { this.detectionInfo.ipVersion.ToString()});
+            temp.Add("TrustType", new List<string>() { this.detectionInfo.trustType.ToString()});
+
+            #endregion
+
+            #region KKDCP
+
+            temp.Add("UseProxy", new List<string>() { this.detectionInfo.UseKKdcp ? "true" : "false" });
+            temp.Add("KKDCPServerUrl", new List<string>() { this.detectionInfo.kkdcpInfo.KKDCPServerUrl });
+
             #endregion
 
             #region Local Realm
 
-            temp.Add("LocalRealm.RealmName", new List<string>() { this.detectionInfo.localDomain.Name });            
+            temp.Add("LocalRealm.RealmName", new List<string>() { this.detectionInfo.localDomain.Name });
             temp.Add("LocalRealm.DomainControllerFunctionality", new List<string>() { this.detectionInfo.localDomain.FunctionalLevel });
             temp.Add("LocalRealm.Users.Admin.Username", new List<string>() { this.detectionInfo.localDomain.Admin });
             temp.Add("LocalRealm.Users.Admin.Password", new List<string>() { this.detectionInfo.localDomain.AdminPassword });
@@ -862,11 +869,11 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             if (this.detectionInfo.ipVersion == IPVersion.IPv4)
             {
-                temp.Add("LocalRealm.KDC01.IPv4Address", new List<string>() { this.detectionInfo.localDC.IPv4 });     
+                temp.Add("LocalRealm.KDC01.IPv4Address", new List<string>() { this.detectionInfo.localDC.IPv4 });
             }
             else
             {
-                temp.Add("LocalRealm.KDC01.IPv6Address", new List<string>() { this.detectionInfo.localDC.IPv6 });     
+                temp.Add("LocalRealm.KDC01.IPv6Address", new List<string>() { this.detectionInfo.localDC.IPv6 });
             }
 
             #endregion
@@ -895,7 +902,7 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             temp.Add("LocalRealm.FileServer01.FQDN", new List<string>() { this.detectionInfo.localAP.FQDN });
             temp.Add("LocalRealm.FileServer01.NetBiosName", new List<string>() {this.detectionInfo.localAP.NetBIOS});
-            temp.Add("LocalRealm.FileServer01.Password", new List<string>() { this.detectionInfo.localAP.Password });            
+            temp.Add("LocalRealm.FileServer01.Password", new List<string>() { this.detectionInfo.localAP.Password });
 
             if (this.detectionInfo.ipVersion == IPVersion.IPv4)
             {
@@ -912,14 +919,14 @@ namespace Microsoft.Protocols.TestManager.Detector
             temp.Add("LocalRealm.FileServer01.Smb2Dialect", new List<string>() { this.detectionInfo.localAP.smb2Service.SMB2Dialect });
             temp.Add("LocalRealm.FileServer01.DACShareFolder", new List<string>() { this.detectionInfo.localAP.smb2Service.DACShare });
             temp.Add("LocalRealm.FileServer01.CBACShareFolder", new List<string>() { this.detectionInfo.localAP.smb2Service.CBACShare });
-           
+
             #endregion
 
             #region Local Realm Ldap server
 
             temp.Add("LocalRealm.LdapServer01.FQDN", new List<string>() { this.detectionInfo.localDC.FQDN });
             temp.Add("LocalRealm.LdapServer01.NetBiosName", new List<string>() { this.detectionInfo.localDC.NetBIOS });
-            temp.Add("LocalRealm.LdapServer01.Password", new List<string>() { this.detectionInfo.localDC.Password });            
+            temp.Add("LocalRealm.LdapServer01.Password", new List<string>() { this.detectionInfo.localDC.Password });
 
             if (this.detectionInfo.ipVersion == IPVersion.IPv4)
             {
@@ -941,7 +948,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             #region Local Realm web server
             temp.Add("LocalRealm.WebServer01.FQDN", new List<string>() { this.detectionInfo.localAP.FQDN });
             temp.Add("LocalRealm.WebServer01.NetBiosName", new List<string>() { this.detectionInfo.localAP.NetBIOS });
-            temp.Add("LocalRealm.WebServer01.Password", new List<string>() { this.detectionInfo.localAP.Password });            
+            temp.Add("LocalRealm.WebServer01.Password", new List<string>() { this.detectionInfo.localAP.Password });
 
             if (this.detectionInfo.ipVersion == IPVersion.IPv4)
             {
@@ -956,7 +963,7 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             temp.Add("LocalRealm.WebServer01.HttpServiceName", new List<string>() { this.detectionInfo.localAP.httpService.HttpServiceName});
             temp.Add("LocalRealm.WebServer01.HttpUri", new List<string>() { this.detectionInfo.localAP.httpService.Uri});
-            
+
 
             #endregion
 
@@ -993,7 +1000,7 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             temp.Add("LocalRealm.resourceGroups.resourceGroupCount", new List<string>() { "2" });
             temp.Add("LocalRealm.resourceGroups.resourceGroup01.GroupName", new List<string>() { "resourceGroup" });
-            temp.Add("LocalRealm.resourceGroups.resourceGroup02.GroupName", new List<string>() { "resourceGroup2" });           
+            temp.Add("LocalRealm.resourceGroups.resourceGroup02.GroupName", new List<string>() { "resourceGroup2" });
 
             #endregion
 
@@ -1062,12 +1069,12 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             temp.Add("LocalRealm.Users.User22.Username", new List<string>() { this.detectionInfo.localUsers["User22"].Name });
             temp.Add("LocalRealm.Users.User22.Password", new List<string>() { this.detectionInfo.localUsers["User22"].Password });
-            
+
             #endregion
 
             #region Trust Realm
-            temp.Add("TrustedRealm.TrustPassword", new List<string>() { this.detectionInfo.TrustPwd });            
-            temp.Add("TrustedRealm.RealmName", new List<string>() { this.detectionInfo.trustDomain.Name });            
+            temp.Add("TrustedRealm.TrustPassword", new List<string>() { this.detectionInfo.TrustPwd });
+            temp.Add("TrustedRealm.RealmName", new List<string>() { this.detectionInfo.trustDomain.Name });
             temp.Add("TrustedRealm.DomainControllerFunctionality", new List<string>() { this.detectionInfo.trustDomain.FunctionalLevel });
             #endregion
 
@@ -1080,11 +1087,11 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             if (this.detectionInfo.ipVersion == IPVersion.IPv4)
             {
-                temp.Add("TrustedRealm.KDC01.IPv4Address", new List<string>() { this.detectionInfo.trustDC.IPv4 });     
+                temp.Add("TrustedRealm.KDC01.IPv4Address", new List<string>() { this.detectionInfo.trustDC.IPv4 });
             }
             else
             {
-                temp.Add("TrustedRealm.KDC01.IPv6Address", new List<string>() { this.detectionInfo.trustDC.IPv6 });     
+                temp.Add("TrustedRealm.KDC01.IPv6Address", new List<string>() { this.detectionInfo.trustDC.IPv6 });
             }
             temp.Add("TrustedRealm.KDC01.DefaultServiceName", new List<string>() { this.detectionInfo.trustDC.DefaultServiceName });
             #endregion
@@ -1117,7 +1124,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             temp.Add("TrustedRealm.LdapServer01.FQDN", new List<string>() { this.detectionInfo.trustDC.FQDN });
             temp.Add("TrustedRealm.LdapServer01.NetBiosName", new List<string>() { this.detectionInfo.trustDC.NetBIOS });
             temp.Add("TrustedRealm.LdapServer01.Password", new List<string>() { this.detectionInfo.trustDC.Password });
-           
+
             if (this.detectionInfo.ipVersion == IPVersion.IPv4)
             {
                 temp.Add("TrustedRealm.LdapServer01.IPv4Address", new List<string>() { this.detectionInfo.trustDC.IPv4 });
@@ -1138,7 +1145,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             #region Trust Realm web server
             temp.Add("TrustedRealm.WebServer01.FQDN", new List<string>() { this.detectionInfo.trustAP.FQDN });
             temp.Add("TrustedRealm.WebServer01.NetBiosName", new List<string>() { this.detectionInfo.trustAP.NetBIOS });
-            temp.Add("TrustedRealm.WebServer01.Password", new List<string>() { this.detectionInfo.trustAP.Password });            
+            temp.Add("TrustedRealm.WebServer01.Password", new List<string>() { this.detectionInfo.trustAP.Password });
 
             if (this.detectionInfo.ipVersion == IPVersion.IPv4)
             {
@@ -1152,12 +1159,12 @@ namespace Microsoft.Protocols.TestManager.Detector
             temp.Add("TrustedRealm.WebServer01.ServiceSalt", new List<string>() { this.detectionInfo.trustAP.ServiceSalt });
 
             temp.Add("TrustedRealm.WebServer01.HttpServiceName", new List<string>() { this.detectionInfo.trustAP.httpService.HttpServiceName });
-            temp.Add("TrustedRealm.WebServer01.HttpUri", new List<string>() { this.detectionInfo.trustAP.httpService.Uri });          
+            temp.Add("TrustedRealm.WebServer01.HttpUri", new List<string>() { this.detectionInfo.trustAP.httpService.Uri });
 
-            
+
             #endregion
 
-            #region Trust Realm Users            
+            #region Trust Realm Users
             temp.Add("TrustedRealm.Users.krbtgt.Username", new List<string>() { this.detectionInfo.trustUsers["krbtgt"].Name });
             temp.Add("TrustedRealm.Users.krbtgt.Password", new List<string>() { this.detectionInfo.trustUsers["krbtgt"].Password });
 
@@ -1202,7 +1209,7 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             caselist.Add(new CaseSelectRule()
             {
-                Name = "NetworkTopology.Single Realm",                
+                Name = "NetworkTopology.Single Realm",
                 Status = RuleStatus.Selected
             });
 
@@ -1212,16 +1219,16 @@ namespace Microsoft.Protocols.TestManager.Detector
                 Status = RuleStatus.Selected
             });
 
-            if (this.detectionInfo.trustType != KerberosTrustType.NoTrust 
+            if (this.detectionInfo.trustType != KerberosTrustType.NoTrust
                 && this.detectionInfo.trustDomain != null
                 && this.detectionInfo.trustDC != null
                 && !string.IsNullOrEmpty(this.detectionInfo.trustDC.DefaultServiceName)
                 && !string.IsNullOrEmpty(this.detectionInfo.trustDC.ComputerName)
-                && !string.IsNullOrEmpty(this.detectionInfo.trustDC.FQDN)                
+                && !string.IsNullOrEmpty(this.detectionInfo.trustDC.FQDN)
                 && !string.IsNullOrEmpty(this.detectionInfo.trustDC.NetBIOS)
                 )
             {
-                
+
                 status = RuleStatus.Selected;
             }
             else
@@ -1255,7 +1262,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                 });
             }
             else
-            {   
+            {
                 if (int.Parse(this.detectionInfo.localDomain.FunctionalLevel) == 4)
                 {
                     caselist.Add(new CaseSelectRule()
@@ -1310,6 +1317,24 @@ namespace Microsoft.Protocols.TestManager.Detector
                         Status = RuleStatus.Selected
                     });
                 }
+                else if (int.Parse(this.detectionInfo.localDomain.FunctionalLevel) == 7)
+                {
+                    caselist.Add(new CaseSelectRule()
+                    {
+                        Name = "DomainFunctionalityLevel.2K8R2",
+                        Status = RuleStatus.Selected
+                    });
+                    caselist.Add(new CaseSelectRule()
+                    {
+                        Name = "DomainFunctionalityLevel.2K12",
+                        Status = RuleStatus.Selected
+                    });
+                    caselist.Add(new CaseSelectRule()
+                    {
+                        Name = "DomainFunctionalityLevel.2K12R2",
+                        Status = RuleStatus.Selected
+                    });
+                }
                 else
                 {
                     caselist.Add(new CaseSelectRule()
@@ -1326,16 +1351,16 @@ namespace Microsoft.Protocols.TestManager.Detector
                     {
                         Name = "DomainFunctionalityLevel.2K12R2",
                         Status = RuleStatus.NotSupported
-                    });                    
+                    });
                 }
-                
+
             }
-           
+
 
             if(
-                (this.detectionInfo.localAP != null 
-                && this.detectionInfo.localAP.smb2Service != null 
-                && !string.IsNullOrEmpty(this.detectionInfo.localAP.smb2Service.SMB2ServiceName) 
+                (this.detectionInfo.localAP != null
+                && this.detectionInfo.localAP.smb2Service != null
+                && !string.IsNullOrEmpty(this.detectionInfo.localAP.smb2Service.SMB2ServiceName)
                 && !string.IsNullOrEmpty(this.detectionInfo.localAP.smb2Service.SMB2Dialect))
                 ||
                  (this.detectionInfo.trustAP != null
@@ -1392,13 +1417,13 @@ namespace Microsoft.Protocols.TestManager.Detector
                && this.detectionInfo.localDC.ldapService != null
                && !string.IsNullOrEmpty(this.detectionInfo.localDC.ldapService.LdapServiceName)
                && !string.IsNullOrEmpty(this.detectionInfo.localDC.ldapService.Port)
-               && !string.IsNullOrEmpty(this.detectionInfo.localDC.ldapService.GssToken)) 
+               && !string.IsNullOrEmpty(this.detectionInfo.localDC.ldapService.GssToken))
                 ||
                 (this.detectionInfo.trustDC != null
                && this.detectionInfo.trustDC.ldapService != null
                && !string.IsNullOrEmpty(this.detectionInfo.trustDC.ldapService.LdapServiceName)
                && !string.IsNullOrEmpty(this.detectionInfo.trustDC.ldapService.Port)
-               && !string.IsNullOrEmpty(this.detectionInfo.trustDC.ldapService.GssToken)) 
+               && !string.IsNullOrEmpty(this.detectionInfo.trustDC.ldapService.GssToken))
                 )
             {
                 caselist.Add(new CaseSelectRule()
@@ -1456,7 +1481,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                 this.detectionInfo.IsClaimSupported = true;
             }
 
-            if (this.detectionInfo.IsClaimSupported)            
+            if (this.detectionInfo.IsClaimSupported)
             {
                 caselist.Add(new CaseSelectRule()
                 {
@@ -1505,6 +1530,20 @@ namespace Microsoft.Protocols.TestManager.Detector
                 });
             }
 
+            if (this.detectionInfo.UseKKdcp)
+            {
+                caselist.Add(new CaseSelectRule()
+                {
+                    Name = "SUT.Kerberos Proxy Service",
+                    Status = RuleStatus.Selected
+                });
+                caselist.Add(new CaseSelectRule()
+                {
+                    Name = "Feature.KKDCP",
+                    Status = RuleStatus.Selected
+                });
+            }
+
             return caselist;
         }
 
@@ -1520,7 +1559,7 @@ namespace Microsoft.Protocols.TestManager.Detector
         {
             Enum.TryParse(NetworkEnvironmet, out env);
         }
-      
+
         /// <summary>
         /// return false if check failed and set failed property in dictionary
         /// </summary>
@@ -1530,5 +1569,5 @@ namespace Microsoft.Protocols.TestManager.Detector
         {
             return true;
         }
-    }   
+    }
 }
