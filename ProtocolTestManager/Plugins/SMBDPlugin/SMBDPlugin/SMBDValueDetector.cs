@@ -220,12 +220,12 @@ namespace Microsoft.Protocols.TestManager.Detector
             selectedRules.Add(GenerateRule("Priority.Non-BVT", true));
 
             // select SMBD related cases if RDMA cards of both nodes are detected
-            bool isSMBDsupported = detectionInfo.DriverRdmaNICIPAddress != null && detectionInfo.SUTRdmaNICIPAddress != null;
-            selectedRules.Add(GenerateRule("Feature.SMBD.SMBD Negotiate", isSMBDsupported));
-            selectedRules.Add(GenerateRule("Feature.SMBD.SMBD Credits Management", isSMBDsupported));
-            selectedRules.Add(GenerateRule("Feature.SMBD.SMBD Data Transfer", isSMBDsupported));
+            bool bothRdmaNicsdetected = detectionInfo.DriverRdmaNICIPAddress != null && detectionInfo.SUTRdmaNICIPAddress != null;
+            selectedRules.Add(GenerateRule("Feature.SMBD.SMBD Negotiate", bothRdmaNicsdetected));
+            selectedRules.Add(GenerateRule("Feature.SMBD.SMBD Credits Management", bothRdmaNicsdetected));
+            selectedRules.Add(GenerateRule("Feature.SMBD.SMBD Data Transfer", bothRdmaNicsdetected));
 
-            if (isSMBDsupported)
+            if (bothRdmaNicsdetected)
             {
                 // select RDMA Channel if RDMA transport is supported
                 selectedRules.Add(GenerateRule("Feature.SMB2 over SMBD.SMB 30.RDMA Channel", detectionInfo.RDMATransportSupported));
