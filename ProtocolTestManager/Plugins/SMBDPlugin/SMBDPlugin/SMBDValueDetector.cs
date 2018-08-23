@@ -192,9 +192,52 @@ namespace Microsoft.Protocols.TestManager.Detector
             return prerequisites;
         }
 
+        private CaseSelectRule GenerateRule(string ruleName, bool isSupported)
+        {
+            var rule = new CaseSelectRule();
+            rule.Name = ruleName;
+            if (isSupported)
+            {
+                rule.Status = RuleStatus.Selected;
+            }
+            else
+            {
+                rule.Status = RuleStatus.NotSupported;
+            }
+            return rule;
+        }
+
+        /// <summary>
+        /// Gets selected rules
+        /// </summary>
+        /// <returns>Selected rules</returns>
         public List<CaseSelectRule> GetSelectedRules()
         {
-            throw new NotImplementedException();
+            var selectedRules = new List<CaseSelectRule>();
+
+            // select BVT and Non-BVT cases
+            selectedRules.Add(GenerateRule("Priority.BVT", true));
+            selectedRules.Add(GenerateRule("Priority.Non-BVT", true));
+
+            // select SMBD related cases if RDMA cards of both nodes are detected
+            bool isSMBDsupported = detectionInfo.DriverRdmaNICIPAddress != null && detectionInfo.SUTRdmaNICIPAddress != null;
+            selectedRules.Add(GenerateRule("Feature.SMBD.SMBD Negotiate", isSMBDsupported));
+            selectedRules.Add(GenerateRule("Feature.SMBD.SMBD Credits Management", isSMBDsupported));
+            selectedRules.Add(GenerateRule("Feature.SMBD.SMBD Data Transfer", isSMBDsupported));
+
+            if (isSMBDsupported)
+            {
+                // select RDMA Channel if RDMA transport is supported
+                selectedRules.Add(GenerateRule("Feature.SMB2 over SMBD.SMB 30.RDMA Channel", detectionInfo.RDMATransportSupported));
+
+                // select Multiple Channels if both RDMA and Non-RDMA transports are supported
+                selectedRules.Add(GenerateRule("Feature.SMB2 over SMBD.SMB 30.Multiple Channels", detectionInfo.RDMATransportSupported && detectionInfo.NonRDMATransportSupported));
+
+                // select RDMA Channel Remote Invalidation if RDMAChannelV1Invalidate is supported
+                selectedRules.Add(GenerateRule("Feature.SMB2 over SMBD.SMB 302.RDMA Channel Remote Invalidation", detectionInfo.RDMAChannelV1InvalidateSupported));
+            }
+
+            return selectedRules;
         }
 
         /// <summary>
