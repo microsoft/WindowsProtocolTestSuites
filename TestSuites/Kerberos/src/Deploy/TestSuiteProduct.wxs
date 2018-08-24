@@ -220,12 +220,6 @@
                   Arguments="."
                   WorkingDirectory="TESTSUITE_ROOT_DIR"/>
         
-        <Shortcut Id="QuickStartGuideShortcut_ProgramsMenu"
-                  Name="Open User Guide"
-                  Description="User Guide for !(wix.TESTSUITE_NAME)"
-                  Target="[TESTSUITE_DOCS_DIR]!(wix.QUICK_START_GUIDE)"
-                  WorkingDirectory="TESTSUITE_DOCS_DIR" />
-        
         <Shortcut Id="DomainRunAllTestCasesShortcut_ProgramsMenu"
                   Name="Domain_RunAllTestCases"
                   Description="Run all test cases in domain environment."
@@ -314,19 +308,7 @@
                   Description="Run test cases by specific category."
                   Target="[TESTSUITE_BATCH_DIR]!(wix.RUN_TCS_BY_CATEGORY_COMMAND)"
                   WorkingDirectory="TESTSUITE_BATCH_DIR" />
-
-        <Shortcut Id="QuickStartGuideShortcut_Desktop"
-                  Name="Open !(wix.TESTSUITE_NAME) !(wix.TESTSUITE_ENDPOINT)-EP User Guide"
-                  Description="User Guide for !(wix.TESTSUITE_NAME)"
-                  Target="[TESTSUITE_DOCS_DIR]!(wix.QUICK_START_GUIDE)"
-                  WorkingDirectory="TESTSUITE_DOCS_DIR" />
-        
-        <Shortcut Id="TestSuiteSolutionShortcut_Desktop"
-              Name="Launch !(wix.TESTSUITE_NAME) !(wix.TESTSUITE_ENDPOINT)-EP solution"
-              Description="Test solution for !(wix.TESTSUITE_NAME)"
-              Target="[TESTSUITE_SOURCE_KERBEROS_TESTCODE]Kerberos_Server.sln"
-              WorkingDirectory="TESTSUITE_SOURCE_KERBEROS_TESTCODE" />    
-        
+      
         <RegistryValue Id="TestSuiteShortcutsKeyPath_Desktop"
                         Root="HKCU"
                         Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)-Desktop"
