@@ -265,6 +265,9 @@ All of the following software must be installed on the driver computer _before_ 
 | Protocol Test Framework (build 1.0.6000.0)| 
 |              You can download the Protocol Test Framework from below website. | 
 |                [https://github.com/Microsoft/ProtocolTestFramework/releases](https://github.com/Microsoft/ProtocolTestFramework/releases)| 
+| Spec Explorer (build 3.5.3146.0 or later)| 
+|              You can download Spec Explorer from below website| 
+|                [http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/](http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)| 
 |  **Optional Software** | 
 |       Microsoft Message Analyzer Version 1.4 (Build 4.0.8112.0)| 
 | ![image3.png](./image/RDP_ClientUserGuide/image3.png)Note| 

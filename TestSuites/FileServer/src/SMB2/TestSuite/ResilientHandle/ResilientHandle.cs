@@ -40,8 +40,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.ResilientHan
         protected override void TestInitialize()
         {
             base.TestInitialize();
-            fileName = "ResilientHandle_" + Guid.NewGuid() + ".txt";
             sharePath = Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare);
+            fileName = GetTestFileName(sharePath);
+
             clientBeforeDisconnection = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             clientAfterDisconnection = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             clientBeforeDisconnection.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
@@ -58,7 +59,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.ResilientHan
             {
                 clientAfterDisconnection.Disconnect();
             }
-            sutProtocolController.DeleteFile(sharePath, fileName);
+
             base.TestCleanup();
         }
         #endregion

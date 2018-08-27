@@ -14,7 +14,7 @@ using Microsoft.Protocols.TestTools.StackSdk;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
 {
-    public class SqosTestConfig: TestConfigBase
+    public class SqosTestConfig : TestConfigBase
     {
         #region Fields
         private string fileServerNameContainingSharedVHD;
@@ -36,7 +36,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
         {
             get
             {
-                return FileServerNameContainingSharedVHD.ParseIPAddress();
+                var result = FileServerNameContainingSharedVHD.ParseIPAddress();
+                Site.Assume.IsTrue(result != IPAddress.None, "FileServerNameContainingSharedVHD should be a resolvable host name!");
+                return result;
             }
         }
 
@@ -67,7 +69,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
         public string NameOfSharedVHD
         {
             get
-            {   
+            {
                 return "test.vhdx";
             }
         }
@@ -158,7 +160,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
             shareContainingSharedVHD = fullPath.Substring(fileServerNameContainingSharedVHD.Length + 1);
         }
 
-        public SqosTestConfig(ITestSite site):base(site)
+        public SqosTestConfig(ITestSite site) : base(site)
         {
         }
     }

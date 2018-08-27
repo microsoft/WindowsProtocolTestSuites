@@ -330,7 +330,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to \IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe.
+        ///   Looks up a localized string similar to \SOFTWARE\Microsoft\VisualStudio\\SxS\VS7.
         /// </summary>
         internal static string Vs2017RegPath32 {
             get {
@@ -339,7 +339,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to \IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe.
+        ///   Looks up a localized string similar to \SOFTWARE\WOW6432Node\Microsoft\VisualStudio\SxS\VS7.
         /// </summary>
         internal static string Vs2017RegPath64 {
             get {
