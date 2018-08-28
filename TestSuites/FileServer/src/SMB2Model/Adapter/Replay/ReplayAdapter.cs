@@ -88,7 +88,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay
             setIntegrityInfo.Reserved = FSCTL_SET_INTEGRITY_INFO_INPUT_RESERVED.V1;
 
             endOfFileInformation.EndOfFile = 2048;
-            fileNameMainChannel = Guid.NewGuid().ToString();
+            fileNameMainChannel = this.CurrentTestCaseName + "_" + Guid.NewGuid().ToString();
             leaseKeyMainChannel = Guid.NewGuid();
             clientGuidMainChannel = Guid.NewGuid();
             createGuidMainChannel = Guid.NewGuid();
@@ -511,6 +511,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay
                 contexts
             );
 
+            AddTestFileName(this.sharePathMainChannel, fileNameMainChannel);
+
             ReplayModelDurableHandle preparedHandle = ConvertHandle(serverCreateContexts);
             Site.Assert.IsTrue(modelDurableHandle == preparedHandle, "Prepared handle should be {0}, actual is {1}", modelDurableHandle, preparedHandle);
 
@@ -599,10 +601,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay
             FillChannelSequence(client, channelSequence);
 
             Smb2CreateContextResponse[] serverCreateContexts;
+
+            string realFileName = fileName == ReplayModelFileName.DefaultFileName ?
+                fileNameMainChannel : this.CurrentTestCaseName + "_" + Guid.NewGuid().ToString();
             ulong createRequestId;
             client.CreateRequest(
                     treeIdMainChannel,
-                    fileName == ReplayModelFileName.DefaultFileName ? fileNameMainChannel : Guid.NewGuid().ToString(),
+                    realFileName,
                     CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                     (isSetReplayFlag == ReplayModelSetReplayFlag.WithReplayFlag ? Packet_Header_Flags_Values.FLAGS_REPLAY_OPERATION : Packet_Header_Flags_Values.NONE) | (testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE),
                     out createRequestId,
@@ -611,7 +616,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay
                     createDisposition: createDisposition == ReplayModelCreateDisposition.DefaultCreateDisposition ? CreateDisposition_Values.FILE_OPEN_IF : CreateDisposition_Values.FILE_OVERWRITE_IF,
                     fileAttributes: fileAttributes == ReplayModelFileAttributes.DefaultFileAttributes ? File_Attributes.NONE : File_Attributes.FILE_ATTRIBUTE_TEMPORARY
                  );
-            
+
+            AddTestFileName(sharePathMainChannel, realFileName);
+
             uint status = client.CreateResponse(
                     createRequestId,
                     out fileIdMainChannel,
@@ -659,6 +666,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay
                 out serverCreateContexts,
                 RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE,
                 null);
+            AddTestFileName(sharePathMainChannel, fileNameMainChannel);
             #endregion
 
             if (requestCommand == ReplayModelRequestCommand.Write)
@@ -768,6 +776,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay
                             RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE,
                             null,
                             shareAccess: ShareAccess_Values.NONE);
+                        AddTestFileName(this.sharePathMainChannel, fileNameMainChannel);
+
                         #endregion
                     }
                     client = smb2ClientMainChannel;

@@ -17,7 +17,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         #region Variables
         private Smb2FunctionalClient client;
         private uint status;
-        private string fileName;
         #endregion
 
         #region Test Initialize and Cleanup
@@ -39,8 +38,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         {
             base.TestInitialize();
             client = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
-
-            fileName = "SetGetIntegrityInof_" + Guid.NewGuid() + ".txt";
         }
 
         protected override void TestCleanup()
@@ -56,17 +53,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     BaseTestSite.Log.Add(
                         LogEntryKind.Debug,
                         "Unexpected exception when disconnect client: {0}", ex.ToString());
-                }
-            }
-
-            if (fileName != null)
-            {
-                try
-                {
-                    sutProtocolController.DeleteFile(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare), fileName);
-                }
-                catch (Exception)
-                {
                 }
             }
 
@@ -116,7 +102,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             Smb2CreateContextResponse[] serverCreateContexts;
             status = client.Create(
                 treeId,
-                fileName,
+                GetTestFileName(uncSharePath),
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileId,
                 out serverCreateContexts);

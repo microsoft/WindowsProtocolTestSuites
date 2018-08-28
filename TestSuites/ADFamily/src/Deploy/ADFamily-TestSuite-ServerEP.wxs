@@ -29,14 +29,14 @@
     <WixVariable Id="TESTSUITE_ENDPOINT" Value="$(var.TESTSUITE_ENDPOINT)" Overridable="no" />
     <WixVariable Id="TESTSUITE_VERSION" Value="$(env.TESTSUITE_VERSION)" Overridable="no" />
 
-	<WixVariable Id="TESTSUITE_BIN_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\ADFamily\Bin" />
-	<WixVariable Id="TESTSUITE_BATCH_DIR" Value="..\Batch" />
-	<WixVariable Id="PROTOSDK_DROP_DIR" Value="$(env.TestSuiteRoot)\drop\ProtoSDK\Bin" />
+    <WixVariable Id="TESTSUITE_BIN_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\ADFamily\Bin" />
+    <WixVariable Id="TESTSUITE_BATCH_DIR" Value="..\Batch" />
+    <WixVariable Id="PROTOSDK_DROP_DIR" Value="$(env.TestSuiteRoot)\drop\ProtoSDK\Bin" />
     
-	<WixVariable Id="TESTSUITE_PlayLists_DIR" Value="..\PlayLists" />
-	<WixVariable Id="SCRIPT_FILES_DIR" Value="..\Scripts" />
-	<WixVariable Id="DOCS_FILES_DIR" Value="$(env.TestSuiteRoot)\TestSuites\ADFamily\docs" />
-	
+    <WixVariable Id="TESTSUITE_PlayLists_DIR" Value="..\PlayLists" />
+    <WixVariable Id="SCRIPT_FILES_DIR" Value="..\Scripts" />
+    <WixVariable Id="TESTSUITE_COMMON_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\common" />
+
     <WixVariable Id="CONFIG_TESTSUITE_SCRIPT" Value="Config-TestSuite.cmd" />
     <WixVariable Id="CONFIG_SUT_SCRIPT" Value="Config-SUT.cmd" />
     <WixVariable Id="CONFIG_DOMAIN_SCRIPT" Value="Config-Domain.cmd" />
@@ -44,6 +44,11 @@
     <WixVariable Id="RUN_ALLTCS_COMMAND" Value="RunAllTestCases.cmd" />
     <WixVariable Id="RUN_TCS_BY_CATEGORY_COMMAND" Value="RunTestCasesByCategory.cmd" />
     
+    <WixVariable Id="SET_MS_TEST_PATH" Value="setMSTestPath.cmd" />
+    <WixVariable Id="SET_VS_TEST_PATH" Value="setVsTestPath.cmd" />
+    <WixVariable Id="SET_VS_PATH"      Value="setVsPath.cmd" />
+    <WixVariable Id="SET_VS_2017_PATH" Value="setVs2017Path.cmd" />
+
     <DirectoryRef Id="TESTSUITE_ROOT_DIR">
       <Component Id="LICENSE.rtf" Guid="{3CC4885E-A281-42BF-B71C-5BB316458549}">
         <File Id="LICENSE.rtf" Source="LICENSE.rtf" />

@@ -39,11 +39,11 @@
   <ItemGroup>
     <!-- Auto generated -->
     <Compile Include="Batch.wxs" />
-	<Compile Include="PlayLists.wxs" />
-	<Compile Include="SCRIPT_FILES.wxs" />
+    <Compile Include="CommonBatch.wxs" />
+    <Compile Include="PlayLists.wxs" />
+    <Compile Include="SCRIPT_FILES.wxs" />
     <Compile Include="Bin.wxs" />
-	<Compile Include="DOCS_FILES.wxs" />
-	
+
     <Compile Include="DependencyCheckWarningDlg.wxs" />
     <Compile Include="EndpointDlg.wxs" />
     <Compile Include="ADFamily-TestSuite-ServerEP.wxs" />
@@ -338,7 +338,7 @@
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;..\Batch&quot; -out Batch.wxs -template fragment -gg -cg BATCH_FILES -dr TESTSUITE_BATCH_DIR -var wix.TESTSUITE_BATCH_DIR -sreg -sfrag -srd" />
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;..\PlayLists&quot; -out PlayLists.wxs -template fragment -gg -cg PlayLists_FILES -dr TESTSUITE_PlayLists_DIR -var wix.TESTSUITE_PlayLists_DIR -sreg -sfrag -srd" />
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;..\Scripts&quot; -out SCRIPT_FILES.wxs -template fragment -gg -cg SCRIPT_FILES -dr SCRIPT_FILES_DIR -var wix.SCRIPT_FILES_DIR -sreg -sfrag -srd" />
-    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\ADFamily\docs&quot; -out DOCS_FILES.wxs -template fragment -gg -cg DOCS_FILES -dr DOCS_FILES_DIR -var wix.DOCS_FILES_DIR -sreg -sfrag -srd" />
+    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\common&quot; -out CommonBatch.wxs -template fragment -gg -cg COMMON_BATCH_FILES -dr TESTSUITE_COMMON_SCRIPTS_DIR -var wix.TESTSUITE_COMMON_SCRIPTS_DIR -sreg -sfrag -srd" />
   </Target>
   <ItemGroup>
     <APDSAdapterScriptFiles Include="..\Adapter\MS-APDS\SUTControlAdapter\*.ps1" />

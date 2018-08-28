@@ -40,8 +40,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         {
             base.TestInitialize();
 
-            fileName = string.Format("{0}_{1}.txt", CurrentTestCaseName, Guid.NewGuid());
             sharePath = Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare);
+            fileName = GetTestFileName(sharePath);
         }
 
         protected override void TestCleanup()
@@ -70,7 +70,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 }
             }
 
-            sutProtocolController.DeleteFile(sharePath, fileName);
             base.TestCleanup();
         }
         #endregion

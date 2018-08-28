@@ -390,7 +390,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Conflict
             Smb2FunctionalClient client = InitializeClient(testConfig.ScaleOutFileServerIP1, out treeId);
 
             // Initialize file name
-            fileName = "ConflictModel_" + Guid.NewGuid() + ".txt";
+            fileName = GetTestFileName(Smb2Utility.GetUncPath(testConfig.ScaleOutFileServerName, testConfig.CAShareName));
             FILEID fileId;
             Smb2CreateContextResponse[] contexts;
             client.Create(

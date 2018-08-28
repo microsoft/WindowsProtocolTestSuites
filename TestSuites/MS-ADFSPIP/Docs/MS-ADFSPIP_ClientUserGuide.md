@@ -185,10 +185,13 @@ All of the following software must be installed on the driver computer _before_ 
 
 |  **Required Software that is Included with test suite**| 
 | ------------- |
-| Protocol Test Framework (build 1.0.2220.0 or later)| 
+| Protocol Test Framework (build 1.0.6000.0 or later)| 
 |  | 
 |  **Required Software that is Not Included with test suite**| 
-| Microsoft® Visual Studio® 2012 Ultimate, Premium, or Professional.| 
+| Microsoft® Visual Studio® 2017 Community, Professional or Enterprise.| 
+| Spec Explorer (build 3.5.3146.0 or later)| 
+|    You can download Spec Explorer from below website| 
+|    [http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/](http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)| 
 
 ## <a name="_Toc374100974"/>Network Setup
 
@@ -287,7 +290,7 @@ This section describes how to set up the driver computer.
 ![image4.png](./image/MS-ADFSPIP_ClientUserGuide/image4.png)
 Important 
 
->Microsoft Visual Studio 2012 and Protocol Test Framework must be installed on the driver computer before you run the test suite installer.
+>Microsoft Visual Studio 2017 and Protocol Test Framework must be installed on the driver computer before you run the test suite installer.
 
 To set up the driver computer:
 

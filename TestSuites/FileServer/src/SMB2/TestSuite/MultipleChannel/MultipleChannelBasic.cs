@@ -20,7 +20,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         private Smb2FunctionalClient mainChannelClient;
         private Smb2FunctionalClient alternativeChannelClient;
         private uint status;
-        private string fileName;
         private Guid clientGuid;
         private List<IPAddress> clientIps;
         private List<IPAddress> serverIps;
@@ -50,7 +49,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             mainChannelClient = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             alternativeChannelClient = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
 
-            fileName = string.Format("{0}_{1}.txt", CurrentTestCaseName, Guid.NewGuid());
             ReadIpAddressesFromTestConfig(out clientIps, out serverIps);
         }
 
@@ -454,7 +452,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             Smb2CreateContextResponse[] serverCreateContexts;
             mainChannelClient.Create(
                 treeId,
-                fileName,
+                GetTestFileName(uncSharePath),
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                 out fileId,
                 out serverCreateContexts);

@@ -43,8 +43,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
         protected override void TestInitialize()
         {
             base.TestInitialize();
-            fileName = "FileLeasing_" + Guid.NewGuid() + ".txt";
             sharePath = Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare);
+            fileName = GetTestFileName(sharePath);
             client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
@@ -61,7 +61,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
             {
                 client2.Disconnect();
             }
-            sutProtocolController.DeleteFile(sharePath, fileName);
             base.TestCleanup();
         }
         #endregion

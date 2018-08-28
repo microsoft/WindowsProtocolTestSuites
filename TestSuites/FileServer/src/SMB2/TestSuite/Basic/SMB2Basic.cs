@@ -214,7 +214,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends CREATE request with desired access set to GENERIC_READ and GENERIC_WRITE to create a file.");
             Smb2CreateContextResponse[] serverCreateContexts;
             CREATE_Response? createResponse = null;
-            string fileName = Guid.NewGuid().ToString() + ".txt";
+            string fileName = GetTestFileName(uncSharePath);
             FILEID fileId1;
             client1.Create(
                 treeId1,
@@ -351,7 +351,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             status = client1.TreeConnect(uncSharePath, out treeId1);
             Smb2CreateContextResponse[] serverCreateContexts;
             FILEID fileId1;
-            string fileName = Guid.NewGuid().ToString() + ".txt";
+            string fileName = GetTestFileName(uncSharePath);
             status = client1.Create(
                 treeId1,
                 fileName,
@@ -542,7 +542,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             uint treeId;
             status = client1.TreeConnect(uncSharePath, out treeId);
-            string fileName = "BVT_SMB2Basic_InvalidCreateRequestStructureSize" + Guid.NewGuid();
+            string fileName = GetTestFileName(uncSharePath);
 
             FILEID fileID;
             Smb2CreateContextResponse[] serverCreateContexts;
@@ -577,9 +577,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to verify QUERY_DIRECTORY with flag SMB2_REOPEN to a directory is handled correctly.")]
         public void BVT_SMB2Basic_QueryDir_Reopen_OnDir()
         {
-            QueryDir_Reopen(
-                FileType.DirectoryFile,
-                "BVT_SMB2Basic_QueryDir_Reopen_OnDir_" + Guid.NewGuid().ToString());
+            QueryDir_Reopen(FileType.DirectoryFile);
         }
 
         [TestMethod]
@@ -589,9 +587,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to verify QUERY_DIRECTORY with flag SMB2_REOPEN to a file is handled correctly.")]
         public void BVT_SMB2Basic_QueryDir_Reopen_OnFile()
         {
-            QueryDir_Reopen(
-                FileType.DataFile,
-                "BVT_SMB2Basic_QueryDir_Reopen_OnFile_" + Guid.NewGuid().ToString());
+            QueryDir_Reopen(FileType.DataFile);
         }
 
         [TestMethod]
@@ -2175,7 +2171,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             request.PayLoad.StructureSize += 1;
         }
 
-        private void QueryDir_Reopen(FileType fileType, string fileName)
+        private void QueryDir_Reopen(FileType fileType)
         {
             string target = (fileType == FileType.DataFile) ? "file" : "directory";
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client to create a {0} by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", target);
@@ -2199,6 +2195,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             Smb2CreateContextResponse[] serverCreateContexts;
             CreateOptions_Values createOptions = (fileType == FileType.DataFile) ? CreateOptions_Values.FILE_NON_DIRECTORY_FILE : CreateOptions_Values.FILE_DIRECTORY_FILE;
 
+            string fileName = GetTestFileName(uncSharePath);
             status = client1.Create(
                 treeId,
                 fileName,
@@ -2281,7 +2278,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             status = client1.TreeConnect(uncSharePath, out treeId);
             Smb2CreateContextResponse[] serverCreateContexts;
             FILEID fileId;
-            string fileName = "BVT_SMB2Basic_Query_Quota_Info_" + Guid.NewGuid();
+            string fileName = GetTestFileName(uncSharePath);
             status = client1.Create(
                 treeId,
                 fileName,

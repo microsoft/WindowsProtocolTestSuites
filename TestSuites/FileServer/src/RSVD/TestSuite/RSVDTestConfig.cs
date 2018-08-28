@@ -50,7 +50,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         {
             get
             {
-                return GetProperty("FileServerIPContainingSharedVHD").ParseIPAddress();
+                var result = GetProperty("FileServerIPContainingSharedVHD").ParseIPAddress();
+                Site.Assume.IsTrue(result != IPAddress.None, "FileServerIPContainingSharedVHD should be a valid IP address or a resolvable host name!");
+                return result;
             }
         }
 

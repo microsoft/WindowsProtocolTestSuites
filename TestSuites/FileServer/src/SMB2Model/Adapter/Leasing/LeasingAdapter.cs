@@ -352,11 +352,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
             try
             {
                 originalClient.Cleanup();
-
-                if (originalClient.ParentDirectory != null)
-                {
-                    sutProtocolController.DeleteDirectory(uncSharePath, originalClient.ParentDirectory);
-                }
             }
             catch
             {
@@ -607,12 +602,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
 
         public void SetupConnection(ModelDialectRevision dialect, ClientSupportDirectoryLeasingType clientSupportDirectoryLeasingType)
         {
-            string parentDirectory = "LeasingDir_" + Guid.NewGuid().ToString();
+            string parentDirectory = GetTestDirectoryName(uncSharePath);
             CreateFile(dialect, parentDirectory, true);
 
             originalClient = new LeasingClientInfo(testConfig.Timeout, testConfig, Site);
             originalClient.ParentDirectory = parentDirectory;
             originalClient.File = parentDirectory + "\\" + Guid.NewGuid().ToString();
+            AddTestFileName(uncSharePath, originalClient.File);
 
             bool isClientSupportDirectoryLeasing = clientSupportDirectoryLeasingType == ClientSupportDirectoryLeasingType.ClientSupportDirectoryLeasing;
             InitializeClient(originalClient, dialect, isClientSupportDirectoryLeasing);
@@ -1206,6 +1202,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
                 }
                 
                 string newFileName = originalClient.ParentDirectory + "\\" + Guid.NewGuid().ToString();
+                AddTestFileName(uncSharePath, newFileName);
+
                 FileRenameInformation info = new FileRenameInformation();
                 info.ReplaceIfExists = 1;
                 info.FileName = ConvertStringToByteArray(newFileName);
@@ -1259,6 +1257,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing
                 }
 
                 string newFileName = "LeasingDir_" + Guid.NewGuid().ToString();
+                AddTestDirectoryName(uncSharePath, newFileName);
+
                 FileRenameInformation info = new FileRenameInformation();
                 info.ReplaceIfExists = 0;
                 info.FileName = ConvertStringToByteArray(newFileName);
