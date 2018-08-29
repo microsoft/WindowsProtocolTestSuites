@@ -346,6 +346,7 @@
     <DRSRAdapterScriptFiles Include="..\Adapter\MS-DRSR\SUTControlAdapter\*.ps1" />
     <LSADAdapterScriptFiles Include="..\Adapter\MS-LSAD\SUTControlAdapter\*.ps1" />
     <NRPCAdapterScriptFiles Include="..\Adapter\MS-NRPC\SUTControlAdapter\*.ps1" />
+    <SetupScriptFiles Include="..\..\Setup\Scripts\*" />
   </ItemGroup>
   <Target Name="CopyFilesToBin" BeforeTargets="GenDeployWxsFile">
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Add-AdRemoteUserToLocalGroup.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
@@ -408,7 +409,8 @@
     <Copy SourceFiles="@(APDSAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Bin\Adapter\MS-APDS\SUTControlAdapter" />	
     <Copy SourceFiles="@(DRSRAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Bin\Adapter\MS-DRSR\SUTControlAdapter" />	
     <Copy SourceFiles="@(LSADAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Bin\Adapter\MS-LSAD\SUTControlAdapter" />	
-    <Copy SourceFiles="@(NRPCAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Bin\Adapter\MS-NRPC\SUTControlAdapter" />	
+    <Copy SourceFiles="@(NRPCAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Bin\Adapter\MS-NRPC\SUTControlAdapter" />
+    <Copy SourceFiles="@(SetupScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />	
     <Copy SourceFiles="..\ServerLocalTestRun.testrunconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Bin" />
     <Copy SourceFiles="..\TestSuite\AD_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Bin" />
     <Copy SourceFiles="..\TestSuite\AD_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Bin" />
