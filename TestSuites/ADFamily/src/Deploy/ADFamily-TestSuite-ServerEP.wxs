@@ -34,7 +34,7 @@
     <WixVariable Id="PROTOSDK_DROP_DIR" Value="$(env.TestSuiteRoot)\drop\ProtoSDK\Bin" />
     
     <WixVariable Id="TESTSUITE_PlayLists_DIR" Value="..\PlayLists" />
-    <WixVariable Id="SCRIPT_FILES_DIR" Value="..\Scripts" />
+    <WixVariable Id="SCRIPT_FILES_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
     <WixVariable Id="TESTSUITE_COMMON_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\common" />
 
     <WixVariable Id="CONFIG_TESTSUITE_SCRIPT" Value="Config-TestSuite.cmd" />
