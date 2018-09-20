@@ -54,14 +54,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreditMgm
                 }
             }
 
-            try
-            {
-                sutProtocolController.DeleteFile(uncSharePath, fileName);
-            }
-            catch
-            {
-            }
-
             base.Reset();
         }
 
@@ -155,7 +147,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreditMgm
                 out treeId);
 
             Smb2CreateContextResponse[] serverCreateContexts;
-            fileName = Guid.NewGuid().ToString();
+            fileName = GetTestFileName(uncSharePath);
             status = testClient.Create(
                 treeId,
                 fileName,

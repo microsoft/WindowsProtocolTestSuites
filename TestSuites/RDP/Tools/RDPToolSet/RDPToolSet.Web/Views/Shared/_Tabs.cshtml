@@ -1,0 +1,35 @@
+﻿@model IEnumerable<TabViewModel>
+
+@{ 
+    var tabs = Model.ToArray(); 
+}
+
+<div class="tabs">
+    <ul class="nav nav-tabs">
+        @for (var index = 0; index < tabs.Length; index++) {
+            var tab = tabs[index];
+            <li class="@(index == 0 ? Html.Raw("active") : Html.Raw(""))">
+                <a href="#@tab.Id" data-toggle="tab">@tab.Title</a>
+            </li>
+
+        }
+    </ul>
+
+    <div class="tab-content">
+        @for (var index = 0; index < tabs.Length; index++) {
+            var tab = tabs[index];
+            <div class="tab-data-content tab-pane @(index == 0 ? Html.Raw("active") : Html.Raw(""))" id="@tab.Id">
+                @if (tab.Editable) 
+                {
+                    // TODO: make it height automatically adjust
+                    <textarea class="form-control" style="max-height: 350px; min-height: 350px; overflow: scroll; font-family: monospace; margin-bottom: 20px" wrap="off">@(tab.Content ?? "")</textarea>
+                } 
+                else 
+                {
+                    <div class="well" style="max-height: 350px; min-height: 350px; overflow: scroll; font-family: monospace;
+                         white-space: pre; text-align: left;">@(tab.Content ?? "No data available.")</div>
+                }
+            </div>
+        }
+    </div>
+</div>

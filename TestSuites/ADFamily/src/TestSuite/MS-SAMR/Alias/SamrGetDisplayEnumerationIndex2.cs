@@ -23,7 +23,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
             aliasTestPrerequisite();
             createAlias();
 
-            Site.Log.Add(LogEntryKind.TestStep, "SamrGetDisplayEnumerationIndex2: obtains an index into an ascending account-name¨Csorted list of accounts.");
+            Site.Log.Add(LogEntryKind.TestStep, "SamrGetDisplayEnumerationIndex2: obtains an index into an ascending account-name-sorted list of accounts.");
             uint index;
             string prefix = "Domain";
             HRESULT result = _samrProtocolAdapter.SamrGetDisplayEnumerationIndex2(_domainHandle, _DOMAIN_DISPLAY_INFORMATION.DomainDisplayGroup, prefix, out index);

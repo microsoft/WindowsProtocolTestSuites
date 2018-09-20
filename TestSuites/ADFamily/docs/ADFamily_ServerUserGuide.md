@@ -165,10 +165,7 @@ All of the following software must be installed on the driver computer ***before
 
 |  **Required Software** | 
 | ------------- |
-| **Microsoft® Visual Studio® 2012**| 
-|      ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)Note| 
-|            Download Visual Studio Ultimate 2012| 
-|            Download Visual Studio 2012 Update 4 or later| 
+| **Microsoft® Visual Studio® 2017**| 
 | **Spec Explorer** (build 3.5.3146.0 or later)| 
 | Spec Explorer is a model based testing tool used by test suite to design model and generate test cases.| 
 |      ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)Note| 
@@ -886,7 +883,7 @@ Run the following command in PowerShell window:
 
 #### <a name="_Toc426644941"/>Set DFS Replication Debug Log Level to 5 (MAX)
 Run the following command in PowerShell window:
-**wmic /namespace:\\root\microsoftdfs path dfsrmachineconfig set debuglogseverity=5** 
+**wmic /namespace:\\\\root\microsoftdfs path dfsrmachineconfig set debuglogseverity=5** 
 
 #### <a name="_Toc426644942"/>Install IIS
 Run the following command in PowerShell window:
@@ -1110,7 +1107,7 @@ You can use the Visual Studio solution (.sln) file included with this test suite
 ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)
 Note
 
-While using Microsoft® Visual Studio® 2012 or above to run test cases, test suite may throw exception with message of “Cannot get test site”. To solve this issue, please select the test settings file under test settings menu.
+While using Microsoft® Visual Studio® 2017 or above to run test cases, test suite may throw exception with message of “Cannot get test site”. To solve this issue, please select the test settings file under test settings menu.
 
 >
 

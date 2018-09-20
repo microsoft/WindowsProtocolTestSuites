@@ -237,7 +237,14 @@ switch -Wildcard ($osObj.Version)
         }
         else
         {
-            $result = "Win2016"
+            if ($buildNum -ge 17134)
+            {
+                $result = "Winv1803"
+            }
+            else
+            {
+                $result = "Win2016"
+            }
         }
      }
 }

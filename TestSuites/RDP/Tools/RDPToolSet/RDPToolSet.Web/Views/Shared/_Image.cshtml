@@ -1,0 +1,13 @@
+﻿@model String
+
+@if (Model != null)
+{
+    <div>
+        <img src="@Url.Content(Model)" />
+    </div>
+}
+
+<div>
+    <!-- use this to mark this as partial view should be refreshed -->
+    <input type="hidden" name="has-layers" value="1">
+</div>

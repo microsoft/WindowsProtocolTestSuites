@@ -317,12 +317,9 @@ namespace Microsoft.Protocols.TestManager.Detector
             {
                 propertiesDic.Add("Common.ClientNic2IPAddress", new List<string>() { detectionInfo.networkInfo.LocalIpList[1].ToString() });
             }
-            else if (detectionInfo.networkInfo.LocalIpList.Count == 1)
-            {
-                propertiesDic.Add("Common.ClientNic2IPAddress", new List<string>() { detectionInfo.networkInfo.LocalIpList[0].ToString() });
-            }
             else
             {
+                // leave ClientNic2IPAddress blank
                 propertiesDic.Add("Common.ClientNic2IPAddress", new List<string>() { string.Empty });
             }
 
@@ -360,9 +357,14 @@ namespace Microsoft.Protocols.TestManager.Detector
             #region SMB2 Traditional
 
             if (detectionInfo.networkInfo.SUTIpList.Count > 1)
+            {
                 propertiesDic.Add("SMB2.SutAlternativeIPAddress", new List<string>() { detectionInfo.networkInfo.SUTIpList[1].ToString() });
+            }
             else
-                propertiesDic.Add("SMB2.SutAlternativeIPAddress", new List<string>() { detectionInfo.networkInfo.SUTIpList[0].ToString() });
+            {
+                // leave SutAlternativeIPAddress blank
+                propertiesDic.Add("SMB2.SutAlternativeIPAddress", new List<string>() { String.Empty });
+            }
 
             propertiesDic.Add("SMB2.FileShareSupportingIntegrityInfo", CreateShareList(detectionInfo.shareSupportingIntegrityInfo));
             #endregion
@@ -465,85 +467,104 @@ namespace Microsoft.Protocols.TestManager.Detector
             selectedRuleList.Add(new CaseSelectRule() { Name = "Priority.BVT", Status = RuleStatus.Selected });
             selectedRuleList.Add(new CaseSelectRule() { Name = "Priority.Non-BVT", Status = RuleStatus.Selected });
 
-            selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.File Server Failover", Status = RuleStatus.Unknown });
-            selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.DFSC (Distributed File System Referral)", Status = RuleStatus.Unknown });
-            selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.FSRVP (File Server Remote VSS)", Status = RuleStatus.Unknown });
-            selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.SWN (Service Witness)", Status = RuleStatus.Unknown });
-            selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Auth (Authentication and Authorization)", Status = RuleStatus.Unknown });
+            selectedRuleList.Add(CreateRule("SMB Dialect (Please select all supported dialects).SMB Dialects.SMB 202"));
+            if (detectionInfo.smb2Info.MaxSupportedDialectRevision > DialectRevision.Smb2002)
+            {
+                selectedRuleList.Add(CreateRule("SMB Dialect (Please select all supported dialects).SMB Dialects.SMB 21"));
+                if (detectionInfo.smb2Info.MaxSupportedDialectRevision > DialectRevision.Smb21)
+                {
+                    selectedRuleList.Add(CreateRule("SMB Dialect (Please select all supported dialects).SMB Dialects.SMB 30"));
+                    if (detectionInfo.smb2Info.MaxSupportedDialectRevision > DialectRevision.Smb30)
+                    {
+                        selectedRuleList.Add(CreateRule("SMB Dialect (Please select all supported dialects).SMB Dialects.SMB 302"));
+                        if (detectionInfo.smb2Info.MaxSupportedDialectRevision > DialectRevision.Smb302)
+                        {
+                            selectedRuleList.Add(CreateRule("SMB Dialect (Please select all supported dialects).SMB Dialects.SMB 311"));
+                        }
+                    }
+                }
+            }
+            selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Cluster Required.File Server Failover", Status = RuleStatus.Unknown });
+            selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Cluster Required.FSRVP (File Server Remote VSS)", Status = RuleStatus.Unknown });
+            selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Cluster Required.SWN (Service Witness)", Status = RuleStatus.Unknown });
+            selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Others.DFSC (Distributed File System Referral)", Status = RuleStatus.Unknown });
+            selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Others.Auth (Authentication and Authorization)", Status = RuleStatus.Unknown });
 
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.Negotiate"));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.Credit", detectionInfo.smb2Info.SupportedCapabilities.HasFlag(Capabilities_Values.GLOBAL_CAP_LARGE_MTU)));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.Signing"));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.Negotiate"));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.Credit", detectionInfo.smb2Info.SupportedCapabilities.HasFlag(Capabilities_Values.GLOBAL_CAP_LARGE_MTU)));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.Signing"));
             if (detectionInfo.CheckHigherDialect(detectionInfo.smb2Info.MaxSupportedDialectRevision, DialectRevision.Smb311))
             {
-                selectedRuleList.Add(CreateRule("Feature.SMB2&3.Encryption", detectionInfo.smb2Info.SelectedCipherID > EncryptionAlgorithm.ENCRYPTION_NONE));
+                selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.Encryption", detectionInfo.smb2Info.SelectedCipherID > EncryptionAlgorithm.ENCRYPTION_NONE));
             }
             else
             {
-                selectedRuleList.Add(CreateRule("Feature.SMB2&3.Encryption", detectionInfo.smb2Info.SupportedCapabilities.HasFlag(Capabilities_Values.GLOBAL_CAP_ENCRYPTION)));
+                selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.Encryption", detectionInfo.smb2Info.SupportedCapabilities.HasFlag(Capabilities_Values.GLOBAL_CAP_ENCRYPTION)));
             }
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.DirectoryLeasing", detectionInfo.smb2Info.SupportedCapabilities.HasFlag(Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING)));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.LeaseV1", null, detectionInfo.F_Leasing_V1));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.MixedOplockLease", null, detectionInfo.F_Leasing_V1));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.LeaseV2", null, detectionInfo.F_Leasing_V2));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.MultipleChannel", detectionInfo.smb2Info.SupportedCapabilities.HasFlag(Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL)));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.Session"));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.Tree"));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.CreateClose"));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.DirectoryLeasing", detectionInfo.smb2Info.SupportedCapabilities.HasFlag(Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING)));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.LeaseV1", null, detectionInfo.F_Leasing_V1));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.MixedOplockLease", null, detectionInfo.F_Leasing_V1));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.LeaseV2", null, detectionInfo.F_Leasing_V2));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.MultipleChannel", detectionInfo.smb2Info.SupportedCapabilities.HasFlag(Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL)));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.Session"));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.Tree"));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.CreateClose"));
 
             if (detectionInfo.platform == Platform.NonWindows)
             {
-                selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock.OplockOnShareWithForceLevel2AndSOFS", detectionInfo.shareListWithForceLevel2AndSOFS.Count != 0));
-                selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock.OplockOnShareWithForceLevel2WithoutSOFS", detectionInfo.shareListWithForceLevel2WithoutSOFS.Count != 0));
-                selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock.OplockOnShareWithoutForceLevel2WithSOFS", detectionInfo.shareListWithoutForceLevel2WithSOFS.Count != 0));
-                selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock.OplockOnShareWithoutForceLevel2OrSOFS", detectionInfo.shareListWithoutForceLevel2OrSOFS.Count != 0));
+                selectedRuleList.Add(CreateRule("Feature.Cluster Required.SMB2&3.Oplock.OplockOnShareWithForceLevel2AndSOFS", detectionInfo.shareListWithForceLevel2AndSOFS.Count != 0));
+                selectedRuleList.Add(CreateRule("Feature.Cluster Required.SMB2&3.Oplock.OplockOnShareWithoutForceLevel2WithSOFS", detectionInfo.shareListWithoutForceLevel2WithSOFS.Count != 0));
+                selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.Oplock.OplockOnShareWithForceLevel2WithoutSOFS", detectionInfo.shareListWithForceLevel2WithoutSOFS.Count != 0));
+                selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.Oplock.OplockOnShareWithoutForceLevel2OrSOFS", detectionInfo.shareListWithoutForceLevel2OrSOFS.Count != 0));
             }
             else
             {
                 // Check all Oplock categories
-                selectedRuleList.Add(CreateRule("Feature.SMB2&3.Oplock"));                
+                selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.Oplock"));
+                selectedRuleList.Add(CreateRule("Feature.Cluster Required.SMB2&3.Oplock"));
             }
-            
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.OperateOneFileFromTwoNodes"));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.Compound"));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.ChangeNotify"));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.LockUnlock"));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.QueryAndSetFileInfo"));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.DurableHandle.PersistentHandle", detectionInfo.smb2Info.SupportedCapabilities.HasFlag(Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES)));
 
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.DurableHandle.DurableHandleV1BatchOplock", null, detectionInfo.F_HandleV1_BatchOplock));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.DurableHandle.DurableHandleV1LeaseV1", null, detectionInfo.F_HandleV1_LeaseV1));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.DurableHandle.DurableHandleV2BatchOplock", null, detectionInfo.F_HandleV2_BatchOplock));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.DurableHandle.DurableHandleV2LeaseV1", null, detectionInfo.F_HandleV2_LeaseV1));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.DurableHandle.DurableHandleV2LeaseV2", null, detectionInfo.F_HandleV2_LeaseV2));
+            selectedRuleList.Add(CreateRule("Feature.Cluster Required.SMB2&3.OperateOneFileFromTwoNodes"));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.Compound"));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.ChangeNotify"));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.LockUnlock"));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.QueryAndSetFileInfo"));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.DurableHandle.PersistentHandle", detectionInfo.smb2Info.SupportedCapabilities.HasFlag(Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES)));
+            selectedRuleList.Add(CreateRule("Feature.Cluster Required.SMB2&3.DurableHandle.PersistentHandle", detectionInfo.smb2Info.SupportedCapabilities.HasFlag(Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES)));
 
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.AppInstanceId", null, detectionInfo.F_AppInstanceId));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.DurableHandle.DurableHandleV1BatchOplock", null, detectionInfo.F_HandleV1_BatchOplock));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.DurableHandle.DurableHandleV1LeaseV1", null, detectionInfo.F_HandleV1_LeaseV1));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.DurableHandle.DurableHandleV2BatchOplock", null, detectionInfo.F_HandleV2_BatchOplock));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.DurableHandle.DurableHandleV2LeaseV1", null, detectionInfo.F_HandleV2_LeaseV1));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.DurableHandle.DurableHandleV2LeaseV2", null, detectionInfo.F_HandleV2_LeaseV2));
+
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.AppInstanceId", null, detectionInfo.F_AppInstanceId));
             if (detectionInfo.CheckHigherDialect(detectionInfo.smb2Info.MaxSupportedDialectRevision, DialectRevision.Smb311))
             {
                 // If dialect is later than 3.11 and it supports AppInstanceId, then it should support AppInstanceVersion as well.
-                selectedRuleList.Add(CreateRule("Feature.SMB2&3.AppInstanceVersion", null, detectionInfo.F_AppInstanceId));
+                selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.AppInstanceVersion", null, detectionInfo.F_AppInstanceId));
             }
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.Replay", detectionInfo.smb2Info.SupportedCapabilities.HasFlag(Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL)));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.Replay", detectionInfo.smb2Info.SupportedCapabilities.HasFlag(Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL)));
 
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.FSCTL/IOCTL.FsctlLmrRequestResiliency", null, detectionInfo.F_ResilientHandle));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.FSCTL/IOCTL.FsctlFileLevelTrim", null, detectionInfo.F_FileLevelTrim));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.FSCTL/IOCTL.FsctlValidateNegotiateInfo", null, detectionInfo.F_ValidateNegotiateInfo));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.FSCTL/IOCTL.FsctlEnumerateSnapShots", null, detectionInfo.F_EnumerateSnapShots));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.FSCTL/IOCTL.FsctlLmrRequestResiliency", null, detectionInfo.F_ResilientHandle));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.FSCTL/IOCTL.FsctlFileLevelTrim", null, detectionInfo.F_FileLevelTrim));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.FSCTL/IOCTL.FsctlValidateNegotiateInfo", null, detectionInfo.F_ValidateNegotiateInfo));
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.FSCTL/IOCTL.FsctlEnumerateSnapShots", null, detectionInfo.F_EnumerateSnapShots));
 
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.FSCTL/IOCTL.FsctlSetGetIntegrityInformation",
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.FSCTL/IOCTL.FsctlSetGetIntegrityInformation",
                 detectionInfo.F_IntegrityInfo[0] == DetectResult.Supported || detectionInfo.F_IntegrityInfo[1] == DetectResult.Supported));
-            selectedRuleList.Add(CreateRule("Feature.SMB2&3.FSCTL/IOCTL.FsctlOffloadReadWrite",
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.FSCTL/IOCTL.FsctlOffloadReadWrite",
                 detectionInfo.F_CopyOffload[0] == DetectResult.Supported || detectionInfo.F_CopyOffload[1] == DetectResult.Supported));
 
             selectedRuleList.Add(CreateRule(
-                "Feature.RSVD (Remote Shared Virtual Disk).RSVDVersion1", 
+                "Feature.Cluster Required.RSVD (Remote Shared Virtual Disk).RSVDVersion1", 
                 (detectionInfo.RsvdSupport == DetectResult.Supported) && 
                 (detectionInfo.RsvdVersion == RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1 || detectionInfo.RsvdVersion == RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_2)));
             selectedRuleList.Add(CreateRule(
-                "Feature.RSVD (Remote Shared Virtual Disk).RSVDVersion2",
+                "Feature.Cluster Required.RSVD (Remote Shared Virtual Disk).RSVDVersion2",
                 (detectionInfo.RsvdSupport == DetectResult.Supported) && (detectionInfo.RsvdVersion == RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_2)));
 
-            selectedRuleList.Add(CreateRule("Feature.SQOS (Storage Quality of Service)", null, detectionInfo.SqosSupport));
+            selectedRuleList.Add(CreateRule("Feature.Cluster Required.SQOS (Storage Quality of Service)", null, detectionInfo.SqosSupport));
             return selectedRuleList;
         }
 
@@ -584,7 +605,8 @@ namespace Microsoft.Protocols.TestManager.Detector
                 string ruleName = rule.Name;
 
                 // SMB2 and FSA have many rules, put them in the beginning to reduce IF statement checker.
-                if (ruleName.StartsWith("Feature.SMB2") && rule.Status == RuleStatus.Selected)
+                if ((ruleName.StartsWith("Feature.Others.SMB2") || ruleName.StartsWith("Feature.Cluster Required.SMB2")) &&
+                    rule.Status == RuleStatus.Selected)
                 {
                     smb2Rules.Add(rule);
                     if (rule.Status == RuleStatus.Selected)
@@ -593,18 +615,19 @@ namespace Microsoft.Protocols.TestManager.Detector
                     }
 
                 }
-                else if (ruleName.StartsWith("Feature.FSA (File System Algorithms)") && rule.Status == RuleStatus.Selected)
+                else if (ruleName.StartsWith("Feature.Others.FSA (File System Algorithms)") && rule.Status == RuleStatus.Selected)
                 {
                     isFsaSelected = true;
                 }
-                else if ((ruleName == "Feature.File Server Failover"
-                    || ruleName == "Feature.SWN (Service Witness)"
-                    || ruleName == "Feature.FSRVP (File Server Remote VSS)")
+                else if ((ruleName == "Feature.Cluster Required.File Server Failover"
+                    || ruleName == "Feature.Cluster Required.SWN (Service Witness)"
+                    || ruleName == "Feature.Cluster Required.FSRVP (File Server Remote VSS)"
+                    || ruleName == "Feature.Others.FSRVP (File Server Remote VSS)")
                     && rule.Status == RuleStatus.Selected)
                 {
                     isClusterSwnFsrvpSelected = true;
                 }
-                else if (ruleName == "Feature.DFSC (Distributed File System Referral)")
+                else if (ruleName == "Feature.Others.DFSC (Distributed File System Referral)")
                 {
                     if (rule.Status == RuleStatus.Selected)
                     {
@@ -615,14 +638,14 @@ namespace Microsoft.Protocols.TestManager.Detector
                         hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("MS-DFSC_ServerTestSuite.deployment.ptfconfig"));
                     }
                 }
-                else if (ruleName.StartsWith("Feature.RSVD"))
+                else if (ruleName.StartsWith("Feature.Cluster Required.RSVD"))
                 {
                     if (rule.Status == RuleStatus.Selected)
                     {
                         isRsvdSelected = true;
                     }
                 }
-                else if (ruleName == "Feature.SQOS (Storage Quality of Service)")
+                else if (ruleName == "Feature.Cluster Required.SQOS (Storage Quality of Service)")
                 {
                     if (rule.Status == RuleStatus.Selected)
                     {
@@ -633,7 +656,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                         hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("MS-SQOS_ServerTestSuite.deployment.ptfconfig"));
                     }
                 }
-                else if (ruleName.StartsWith("Feature.Auth") && rule.Status == RuleStatus.Selected)
+                else if (ruleName.StartsWith("Feature.Others.Auth") && rule.Status == RuleStatus.Selected)
                 {
                     isAuthSelected = true;
                 }

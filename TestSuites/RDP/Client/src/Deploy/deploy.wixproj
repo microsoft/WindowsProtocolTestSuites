@@ -41,10 +41,12 @@
     <Compile Include="TestSuiteDataFiles.wxs" />
     <Compile Include="TestSuiteImportMergeModules.wxs" />
     <Compile Include="TestSuiteMiscFiles.wxs" />
+    <Compile Include="TestSuitePtfconfigFiles.wxs" />
     <Compile Include="TestSuitePrivacyStatementDlg.wxs" />
     <Compile Include="TestSuitePrivacyStatementLowMsiVersionDlg.wxs" />
     <Compile Include="TestSuiteProduct.wxs" />
     <Compile Include="TestSuiteScripts.wxs" />
+    <Compile Include="CommonBatch.wxs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="UiText.wxl" />
@@ -191,6 +193,7 @@
     <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" -out TestSuiteBinFiles.wxs -template fragment -gg -cg TESTSUITE_BIN_FILES -dr TESTSUITE_BIN_DIR -var wix.TESTSUITE_BIN_DIR -sreg -sfrag -srd' />
     <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\TestSuites\RDP\Client\Setup\Scripts" -out TestSuiteScripts.wxs -template fragment -gg -cg TESTSUITE_SCRIPTS_FILES -dr TESTSUITE_SCRIPTS_DIR -var wix.TESTSUITE_SCRIPTS_DIR -sreg -sfrag -srd' />
     <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\TestSuites\RDP\Client\Setup\Data" -out TestSuiteDataFiles.wxs -template fragment -gg -cg TESTSUITE_DATA_FILES -dr TESTSUITE_DATA_DIR -var wix.TESTSUITE_DATA_DIR -sreg -sfrag -srd' />
+    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\common&quot; -out CommonBatch.wxs -template fragment -gg -cg COMMON_BATCH_FILES -dr TESTSUITE_COMMON_SCRIPTS_DIR -var wix.TESTSUITE_COMMON_SCRIPTS_DIR -sreg -sfrag -srd" />
   </Target>
   
   <Target Name="AfterBuild">

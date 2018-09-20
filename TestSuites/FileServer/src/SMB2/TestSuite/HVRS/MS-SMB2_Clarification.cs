@@ -129,15 +129,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             #endregion 
 
             Guid clientGuid = Guid.NewGuid();
-            //Guid createGuid = Guid.NewGuid();
-            string fileName = "ResilientWithPersistentHandle_" + Guid.NewGuid() + ".txt";
             FILEID fileId;
             uint treeId;
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client opens a file.");
             //ConnectToShare(smb2Functionalclient, clientGuid, out treeId);
 
-            OpenFile(smb2Functionalclient, clientGuid, fileName, out treeId, out fileId);
+            OpenFile(smb2Functionalclient, clientGuid, out treeId, out fileId);
 
             Packet_Header ioCtlHeader;
             IOCTL_Response ioCtlReponse;
@@ -166,11 +164,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             smb2Functionalclient.LogOff();
         }
 
-        private void OpenFile(Smb2FunctionalClient smbClient, Guid clientGuid, string fileName, out uint treeId, out FILEID fileId)
+        private void OpenFile(Smb2FunctionalClient smbClient, Guid clientGuid, out uint treeId, out FILEID fileId)
         {
             ConnectToShare(smbClient, clientGuid, out treeId);
             BaseTestSite.Log.Add(LogEntryKind.Debug, "Connect to share '{0}' on server '{1}'", TestConfig.ShareName, TestConfig.ShareServerName);
 
+            string fileName = GetTestFileName(TestConfig.SharePath);
             Smb2CreateContextResponse[] createContextResponse;
             smbClient.Create(
                 treeId,

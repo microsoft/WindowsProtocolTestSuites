@@ -235,7 +235,16 @@ namespace Microsoft.Protocols.TestManager.UI
 
         private void UpdateCaseFilter()
         {
-            if (detectionFinished && isAutoDetected) util.ApplyDetectedRules();
+            if (detectionFinished && isAutoDetected)
+            {
+                // Reset select status before applying detected rules
+                foreach (var group in util.GetFilter())
+                {
+                    group.IsSelected = false;
+                }
+                util.ApplyDetectedRules();
+                detectionFinished = false;
+            }
             Pages.RulePage.SetFilter(util.GetFilter());
             util.GetFilter().ContentModified = null;
             util.GetFilter().ContentModified += () =>
@@ -463,6 +472,8 @@ namespace Microsoft.Protocols.TestManager.UI
                                     detectionRunning = false;
                                     SetButtonsStatus(true, true);
                                     this.ButtonNext.Content = StringResources.DetectButton;
+                                    //Set control enabled
+                                    Pages.AutoDetectionPage.PropertyListBox.IsEnabled = true;
                                 }));
                             });
                         });
@@ -562,7 +573,6 @@ namespace Microsoft.Protocols.TestManager.UI
         private void Item_DetectedSUT_Selected(object sender, RoutedEventArgs e)
         {
             detectionRunning = false;
-            detectionFinished = false;
             ContentFrame.Navigate(Pages.SUTInfoPage);
             PageInfoTextBlock.Text = StringResources.DetectionResult;
             SetButtonsVisibility(true, true);

@@ -235,10 +235,7 @@ All of the following software must be installed on the driver computer _before_ 
 
 |  **Required Software** | 
 | ------------- |
-| **Microsoft® Visual Studio® 2012**| 
-|      ![notice.png](./image/notice.png)Note| 
-|            Download Visual Studio Ultimate 2012| 
-|            Download Visual Studio 2012 Update 4 or later| 
+| **Microsoft® Visual Studio® 2017**| 
 | **Spec Explorer 3.5.3146.0 or later**|
 |            You can download Spec Explorer from below website|
 |            [http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/](http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)| 
@@ -394,7 +391,7 @@ This section provides information about how to set up the Windows-based Driver C
 ![important.png](./image/important.png)
 Important 
 
->Microsoft Visual Studio 2012, and the Protocol Test Framework must be installed on the driver computer before running the Kerberos-TestSuite-ServerEP.msi installer.
+>Microsoft Visual Studio 2017, and the Protocol Test Framework must be installed on the driver computer before running the Kerberos-TestSuite-ServerEP.msi installer.
 
 To set up the driver computer:
 

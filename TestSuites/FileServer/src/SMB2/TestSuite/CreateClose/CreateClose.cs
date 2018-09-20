@@ -238,6 +238,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.CreateClose
                     CheckCreateResponse(isNonAdmin, createOption, accessMask, header, response, fileNameType);
                 });
 
+            AddTestFileName(sharePath, fileName);
+
             if (status == Smb2Status.STATUS_SUCCESS)
             {
                 BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF.");

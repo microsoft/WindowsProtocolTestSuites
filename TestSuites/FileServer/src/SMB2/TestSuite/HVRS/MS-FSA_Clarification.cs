@@ -48,6 +48,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Hvrs)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("This test case is designed to test whether the server supports the FSCTL_OFFLOAD_READ and FSCTL_OFFLOAD_WRITE.")]
         public void BVT_OffloadReadWrite()
         {
@@ -60,10 +61,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create a file wiht specified length {0} as for offload copy.", TestConfig.WriteBufferLengthInKb * 1024);
             string content = Smb2Utility.CreateRandomString(TestConfig.WriteBufferLengthInKb);
-            string fileName = Guid.NewGuid().ToString();
             uint treeId;
             FILEID fileIdSrc;
-            NewTestFile(smb2Functionalclient, fileName, content, out treeId, out fileIdSrc);
+            NewTestFile(smb2Functionalclient, content, out treeId, out fileIdSrc);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends IOCTL request with FSCTL_OFFLOAD_READ");
             STORAGE_OFFLOAD_TOKEN token;
@@ -121,7 +121,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             Smb2CreateContextResponse[] serverCreateContexts;
             smb2Functionalclient.Create(
                 treeId,
-                Guid.NewGuid().ToString(),
+                GetTestFileName(TestConfig.SharePath),
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileIdDest,
                 out serverCreateContexts);
@@ -196,6 +196,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Hvrs)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("This test case is designed to test whether the server supports the FSCTL_SET_ZERO_DATA.")]
         public void BVT_SetZeroData()
         {
@@ -331,8 +332,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             TestConfig.CheckIOCTL(CtlCode_Values.FSCTL_FILE_LEVEL_TRIM);
             #endregion
 
-            string fileName = "FileLevelTrim_" + Guid.NewGuid() + ".txt";
             string uncSharePath = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            string fileName = GetTestFileName(uncSharePath);
             string contentWrite = Smb2Utility.CreateRandomString(TestConfig.WriteBufferLengthInKb);
 
             smb2Functionalclient.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
@@ -381,6 +382,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Hvrs)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("This test case is designed to test whether the server supports FSCTL_DUPLICATE_EXTENTS_TO_FILE")]
         public void BVT_DuplicateExtentsToFile()
         {
@@ -389,10 +391,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             // Create a file
             uint treeId;
             FILEID srcFileId;
-            string fileName = "DuplicateExtentsToFile_" + Guid.NewGuid() + ".txt";
             int clusterSize = TestConfig.VolumnClusterSize;
             string content = Smb2Utility.CreateRandomString(clusterSize * 2);
-            NewTestFile(smb2Functionalclient, fileName, content, out treeId, out srcFileId);
+            NewTestFile(smb2Functionalclient, content, out treeId, out srcFileId);
             long sourceFileOffset = 0;
             long targetFileOffset = clusterSize * 1024;
             long byteCount = clusterSize * 1024;
@@ -436,7 +437,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         }
 
 
-        private void NewTestFile(Smb2FunctionalClient client, string fileName, string content, out uint treeId, out FILEID fileId)
+        private void NewTestFile(Smb2FunctionalClient client, string content, out uint treeId, out FILEID fileId)
         {
             client.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.ShareServerName, TestConfig.ShareServerIP);
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start the client by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT");
@@ -456,20 +457,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client.SessionSetup(
                 TestConfig.DefaultSecurityPackage,
                 TestConfig.ShareServerName,
-                //TestConfig.SutComputerName,
                 TestConfig.AccountCredential,
                 TestConfig.UseServerGssToken);
 
-            //string uncSharePath = Smb2Utility.GetUncPath(TestConfig.HvrsSutComputerName, TestConfig.ShareName);
             client.TreeConnect(TestConfig.SharePath, out treeId);
-            //string uncSharePath = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
-            //client.TreeConnect(uncSharePath, out treeId);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client writes to the file.");
             Smb2CreateContextResponse[] serverCreateContexts;
             client.Create(
                 treeId,
-                fileName,
+                GetTestFileName(TestConfig.SharePath),
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileId,
                 out serverCreateContexts);
@@ -485,10 +482,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create {0}", fileType.ToString());
             string content = string.Empty;
-            string fileName = Guid.NewGuid().ToString();
             uint treeId;
             FILEID fileId;
-            NewTestFile(smb2Functionalclient, fileName, content, out treeId, out fileId);
+            NewTestFile(smb2Functionalclient, content, out treeId, out fileId);
 
             // FSCTL request with FSCTL_SET_ZERO_DATA
             ulong fileOffset = 0;

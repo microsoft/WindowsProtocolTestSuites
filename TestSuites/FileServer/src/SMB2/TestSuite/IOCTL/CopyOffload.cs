@@ -70,10 +70,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "1. Create a file with specified length {0} as the source of offload copy.",
                 TestConfig.WriteBufferLengthInKb*1024);
             string content = Smb2Utility.CreateRandomString(TestConfig.WriteBufferLengthInKb);
-            string fileName = Guid.NewGuid().ToString();
             uint treeId;
             FILEID fileIdSrc;
-            PrepareTestFile(fileName, content, out treeId, out fileIdSrc);
+            PrepareTestFile(content, out treeId, out fileIdSrc);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep,
                 "2. Client sends IOCTL request with FSCTL_OFFLOAD_READ to ask server to generate the token of the content for offload copy.");
@@ -99,7 +98,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             Smb2CreateContextResponse[] serverCreateContexts;
             client.Create(
                 treeId,
-                Guid.NewGuid().ToString(),
+                GetTestFileName(Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare)),
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileIdDest,
                 out serverCreateContexts);
@@ -155,10 +154,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "1. Create a file with specified length {0} as for offload copy.",
                 TestConfig.WriteBufferLengthInKb * 1024);
             string content = Smb2Utility.CreateRandomString(TestConfig.WriteBufferLengthInKb);
-            string fileName = Guid.NewGuid().ToString();
             uint treeId;
             FILEID fileId;
-            PrepareTestFile(fileName, content, out treeId, out fileId);
+            PrepareTestFile(content, out treeId, out fileId);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep,
                 "2. Client sends IOCTL request with FSCTL_OFFLOAD_READ to ask server to generate the token of the 1st half of file content in the file for offload copy.");
@@ -214,7 +212,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         #endregion
 
-        private void PrepareTestFile(string fileName, string content, out uint treeId, out FILEID fileId)
+        private void PrepareTestFile(string content, out uint treeId, out FILEID fileId)
         {
             client.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
 
@@ -245,7 +243,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             Smb2CreateContextResponse[] serverCreateContexts;
             client.Create(
                 treeId,
-                fileName,
+                GetTestFileName(uncSharePath),
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileId,
                 out serverCreateContexts);

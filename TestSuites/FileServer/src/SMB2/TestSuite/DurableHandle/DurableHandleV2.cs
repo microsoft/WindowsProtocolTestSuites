@@ -14,7 +14,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
     {
         #region Variables
         private uint status;
-        private string fileName;
         private Smb2FunctionalClient clientBeforeDisconnection;
         private Smb2FunctionalClient clientAfterDisconnection;
         #endregion
@@ -56,18 +55,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 }
             }
 
-            if (fileName != null)
-            {
-                try
-                {
-                    sutProtocolController.DeleteFile(durableHandleUncSharePath, fileName);
-                }
-                catch (Exception ex)
-                {
-                    BaseTestSite.Log.Add(LogEntryKind.Debug, "Unexpected exception when delete file: {0}", ex.ToString());
-                }
-            }
-
             base.TestCleanup();
         }
         #endregion
@@ -93,7 +80,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             string content = Smb2Utility.CreateRandomString(testConfig.WriteBufferLengthInKb);
             Guid clientGuid = Guid.NewGuid();
             durableHandleUncSharePath = Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare);
-            fileName = "DurableHandleV2_Reconnect_WithoutPersistence" + Guid.NewGuid() + ".txt";
+            string fileName = GetTestFileName(durableHandleUncSharePath);
 
             #region client connect to server
             BaseTestSite.Log.Add(
@@ -202,7 +189,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             #endregion
 
             durableHandleUncSharePath = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
-            fileName = "DurableHandleV2_NoPersistenceGrantedOnNonCAShare" + Guid.NewGuid() + ".txt";
+            string fileName = GetTestFileName(durableHandleUncSharePath);
             Guid clientGuid = Guid.NewGuid();
 
             BaseTestSite.Log.Add(
@@ -270,7 +257,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             string content = Smb2Utility.CreateRandomString(testConfig.WriteBufferLengthInKb);
             Guid clientGuid = Guid.NewGuid();
             durableHandleUncSharePath = Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare);
-            fileName = "DurableHandleV2_Reconnect_WithDifferentDurableOwner" + Guid.NewGuid() + ".txt";
+            string fileName = GetTestFileName(durableHandleUncSharePath);
 
             #region client connect to server
             BaseTestSite.Log.Add(
@@ -386,7 +373,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             string content = Smb2Utility.CreateRandomString(testConfig.WriteBufferLengthInKb);
             Guid clientGuid = Guid.NewGuid();
             durableHandleUncSharePath = Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare);
-            fileName = "BVT_DurableHandleV2_Reconnect_WithBatchOplock" + Guid.NewGuid() + ".txt";
+            string fileName = GetTestFileName(durableHandleUncSharePath);
 
             #region client connect to server
             BaseTestSite.Log.Add(
@@ -513,7 +500,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             string content = Smb2Utility.CreateRandomString(testConfig.WriteBufferLengthInKb);
             Guid clientGuid = Guid.NewGuid();
             durableHandleUncSharePath = Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare);
-            fileName = "DurableHandleV2_WithLeaseV2_WithoutHandleCaching" + Guid.NewGuid() + ".txt";
+            string fileName = GetTestFileName(durableHandleUncSharePath);
 
             #region client connect to server
             BaseTestSite.Log.Add(
@@ -592,7 +579,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             string content = Smb2Utility.CreateRandomString(testConfig.WriteBufferLengthInKb);
             Guid clientGuid = Guid.NewGuid();
             durableHandleUncSharePath = Smb2Utility.GetUncPath(testConfig.CAShareServerName, testConfig.CAShareName);
-            fileName = "BVT_PersistentHandle_Reconnect_" + Guid.NewGuid() + ".txt";
+            string fileName = GetTestFileName(durableHandleUncSharePath);
 
             #region client connect to server
             BaseTestSite.Log.Add(
@@ -691,7 +678,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             Guid clientGuid = Guid.NewGuid();
             durableHandleUncSharePath = 
                 persistent ? Smb2Utility.GetUncPath(testConfig.CAShareServerName, testConfig.CAShareName) : Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare);
-            fileName = (persistent ? "PersistentHandle" : "DurableHandleV2") + "_Reconnect_WithLeaseV1" + Guid.NewGuid() + ".txt";
+            string fileName = GetTestFileName(durableHandleUncSharePath);
 
             #region client connect to server
             BaseTestSite.Log.Add(
@@ -770,9 +757,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             FILEID fileIdAfterDisconnection;
             status = clientAfterDisconnection.Create(
                 treeIdAfterDisconnection,
-                sameFileName ? 
-                    fileName : (persistent ? 
-                                "PersistentHandle" : "DurableHandleV2" + "_Reconnect_WithLeaseV1_WithDifferentFileName" + Guid.NewGuid() + ".txt"),
+                sameFileName ? fileName : GetTestFileName(durableHandleUncSharePath),
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileIdAfterDisconnection,
                 out serverCreateContexts,

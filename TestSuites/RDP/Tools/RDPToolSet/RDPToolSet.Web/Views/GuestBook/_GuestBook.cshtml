@@ -1,0 +1,21 @@
+﻿<div>
+    <h2>Guest Book</h2>
+    <p>Please leave a message to contact us here. Make sure to leave a valid Email address so that we can contact you promptly.</p>
+    <div id="guestbook-form">
+        <form role="form" style="padding-top: 30px; padding-left: 5px; padding-right: 5px;">
+            <div class="form-group">
+                <label for="input-email">Email Address</label>
+                <input type="email" class="form-control" id="input-email" placeholder="Enter Email" />
+            </div>
+            <div class="form-group">
+                <label for="input-message">Message</label>
+                <textarea class="form-control" id="input-message" rows="6" placeholder="Enter Message"></textarea>
+            </div>
+        </form>
+        <div class="text-center" style="padding-bottom: 30px;">
+            @Html.ButtonFor(name: "Submit", id: "guestbook-submit")
+            @Html.ButtonFor(name: "Reset", id: "guestbook-reset")
+        </div>
+    </div>
+    <div id="status" style="padding-top: 15px;"></div>
+</div>

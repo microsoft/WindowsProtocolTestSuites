@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?define TESTSUITE_PTFCONFIG_DIR=$(env.TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\Bin?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <Fragment>
+    <!-- Files to be installed to test suite. -->
+    <!-- Source code and files in drop folder are automatically installed. -->
+    <ComponentGroup Id="TESTSUITE_PTFCONFIG_FILES">
+      <!-- First add Component in DirectoryRef secion, then add related ComponentRef here. -->
+      <ComponentRef Id="CMP_MS_ADFSPIP_ClientTestSuite.deployment.ptfconfig"/>
+      <ComponentRef Id="CMP_MS_ADFSPIP_ClientTestSuite.ptfconfig"/>
+      <ComponentRef Id="CMP_ClientLocal.TestSettings"/>
+    </ComponentGroup>
+
+    <DirectoryRef Id="TESTSUITE_BIN_DIR">
+      <!-- Test Suite ptfconfig files. -->
+      <Component Id="CMP_MS_ADFSPIP_ClientTestSuite.deployment.ptfconfig" Guid="{E7C973A8-C151-4878-9CFB-BFDB3152B4EC}">
+        <File Id="FILE_MS_ADFSPIP_ClientTestSuite.deployment.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-ADFSPIP_ClientTestSuite.deployment.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_MS_ADFSPIP_ClientTestSuite.ptfconfig" Guid="{40127B4F-66CA-4090-852B-FF901CD44428}">
+        <File Id="FILE_MS_ADFSPIP_ClientTestSuite.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-ADFSPIP_ClientTestSuite.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_ClientLocal.TestSettings" Guid="{C9A8138E-B7D7-4420-9C70-FCE60A470C98}">
+        <File Id="FILE_ClientLocal.TestSettings" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\ClientLocal.TestSettings">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>

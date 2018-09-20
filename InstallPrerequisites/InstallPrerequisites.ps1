@@ -16,6 +16,11 @@
     * SMB
     * SMBD
     * RDP
+    * BranchCache
+    * ADFamily
+    * AZOD
+    * ADFSPIP
+    * ADOD
 .PARAMETER ConfigPath
     The ConfigPath is used to specify prerequisites configure file path, default value is ".\PrerequisitesConfig.xml".
 
@@ -23,6 +28,7 @@
     C:\PS>.\InstallPrerequisites.ps1 -Category 'FileServer' -ConfigPath ".\PrerequisitesConfig.xml"
     The PS script will get all tools defined under FileServer node in PrerequisitesConfig.xml, then download and install these tools.
 #>
+
 Param
 (
     [parameter(Mandatory=$true, ValueFromPipeline=$true, HelpMessage="The Category is used to specify which set of tools need to be downloaded and installed, based on different test suite names, such as FileServer")]
@@ -31,60 +37,33 @@ Param
     [String]$ConfigPath
 )
 
+
 if(-not $ConfigPath)
 {
 	Write-Host "Use the default value '.\PrerequisitesConfig.xml' as ConfigPath is not set"
 	$ConfigPath = ".\PrerequisitesConfig.xml"
 }
 
-# Check if NetFx3 is enabled on current machine.
-# To understand why .NetFramework 3.5 is needed, please check https://github.com/wixtoolset/issues/issues/3872.  
-Function CheckIfNetFx3Enabled{
-    $result = Dism /online /Get-FeatureInfo /FeatureName:NetFx3
-    $state = $result | Where-Object {$_.ToString().Contains("State")}
+$psVer = [int](Get-Host).Version.ToString().Substring(0,1)
 
-    if($state -and $state.Contains("Enabled")){
-        return $true;
-    }
-    else{
-        return $false
-    }
+if($psVer -lt 4)
+{
+    Write-Host "Powershell 4 or later is required for Github downloading." -ForegroundColor Red
+    Write-Host "Please install WMF 4.0 from https://www.microsoft.com/en-us/download/details.aspx?id=40855 before running this script."
+    exit
 }
 
-# Check if the required .NET framework version is installed on current machine
-Function CheckIfNet4IsInstalled{
-    $isInstalled = $false
+[double] $OsVer = [System.Environment]::OSVersion.Version.Build
 
-    if(-not (Test-Path ‘HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full’))
-    {
-        return $false
-    }
-    else
-    {
-        try
-        {
-            $NetVersion = (Get-ItemProperty ‘HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full’ -Name Version).Version
-
-            if($NetVersion)
-            {
-                $subVersion = [int]$NetVersion.Substring(0,1)
-                if($subVersion -ge 4)
-                {
-                    $isInstalled = $true
-                }
-            }
-        }
-        catch
-        {
-            $isInstalled = $false
-        }
-    }
-    
-    return $isInstalled;
+if($OsVer -lt "7601")
+{
+    Write-Host "Windows 7 SP1 and later is required for running this script." -ForegroundColor Red
+    exit
 }
 
 # Check if application is installed on current machine.
-Function CheckIfAppInstalled{
+Function CheckIfAppInstalled
+{
     Param (
 		[string]$AppName,	# Application Name
 		[string]$Version,	# Application Version
@@ -104,14 +83,21 @@ Function CheckIfAppInstalled{
 	
     $app = Get-ItemProperty $regpath | .{process{if($_.DisplayName -and $_.UninstallString) { $_ } }} | Where-Object {$_.DisplayName -match $AppName} | Select DisplayName, DisplayVersion -First 1
     
-    if($app){
-		if($Compatible){
+    if($app)
+    {
+		if($Compatible)
+        {
             return ([System.Version]$app.DisplayVersion -ge [System.Version]$Version);
-		}else{
+		}
+        else
+        {
 			return ([System.Version]$app.DisplayVersion -eq [System.Version]$Version);
 		}
-    }else{
-		if($AppName -match "Microsoft Agents for Visual Studio"){
+    }
+    else
+    {
+		if($AppName -match "Microsoft Agents for Visual Studio")
+        {
 			#If Test Agent was not installed we also need check if Visual Studio installed.
 			$app = Get-ItemProperty $regpath | .{process{if($_.DisplayName -and $_.UninstallString) { $_ } }} | Where-Object {$_.DisplayName -match "Microsoft Visual Studio \d{4} Devenv"} | Sort-Object -Property DisplayVersion -Descending | Select DisplayName, Version, DisplayVersion -First 1
 			if($app){
@@ -123,7 +109,8 @@ Function CheckIfAppInstalled{
 }
 
 # Mount ISO and return application path searched from ISO
-Function MountISOAndGetAppPath{
+Function MountISOAndGetAppPath
+{
     Param (
         [string]$AppName,
         [string]$ISOPath
@@ -141,14 +128,16 @@ Function MountISOAndGetAppPath{
         $content = $AppName + "cannot be found in ISO"
         Write-Host $content -ForegroundColor Red
         retun "";
-    }else
+    }
+    else
     {
         return $appPath.FullName;
     }
 }
 
 # Reject app Disk
-Function UnmountDisk{
+Function UnmountDisk
+{
     Param (
         [string]$AppPath
        )
@@ -219,7 +208,8 @@ Function GetDownloadTools{
 }
 
 # Create a tempoary folder under current folder, which is used to store downloaded files.
-Function CreateTemporaryFolder{
+Function CreateTemporaryFolder
+{
     #create temporary folder for downloading tools
     $tempPath = (get-location).ToString() + "\" + [system.guid]::newguid().ToString()
     Write-Host "Create temporary folder for downloading files"``
@@ -232,23 +222,27 @@ Function CreateTemporaryFolder{
 # Download and install prerequisite tool
 Function DownloadAndInstallApplication
 {
-    param(
-        [int]$PSVersion,
+    param(        
         $AppItem,
         [string]$OutputPath
     )
-    
-    # Check if Powershell version greate than 3.0, if not then use WebClient to download file, otherwise use Invoke-WebRequest.
-    if($psVersion -ge 3)
-    {
-        Invoke-WebRequest -Uri $AppItem.URL -OutFile $OutputPath
-        [System.Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]'Tls,Tls11,Tls12'
 
-    }else
+    try       
     {
-        [System.Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::SSL3
-        (New-Object System.Net.WebClient).DownloadFile($AppItem.URL, $OutputPath)
+        Invoke-WebRequest -Uri $item.URL -OutFile $OutputPath                     
     }
+    catch
+    {
+        try
+        {                   
+            (New-Object System.Net.WebClient).DownloadFile($item.URL, $OutputPath)
+        }
+        catch
+        {          
+            Write-host "Download $item.Name failed with exception: $_.Exception.Message"   
+            Return                    
+        }                              
+    }       
             
     $content = "Downloading " + $AppItem.Name + " completed. Path:" + $OutputPath
     Write-Host $content
@@ -256,45 +250,54 @@ Function DownloadAndInstallApplication
     # Check if the downloaded file is ISO
     if($AppItem.FileName.ToLower().EndsWith("iso"))
     {
-        if($psVersion -ge 3)
-        {
-            Write-Host "Mounting ISO image";
-            $OutputPath = MountISOAndGetAppPath -AppName $AppItem.InstallFileName -ISOPath $OutputPath
-            Write-Host $OutputPath
-        }
-        else
-        {
-            $content = "Your system does not support Mount-DiskImage command. Please install " + $AppItem.AppName;
-
-            Write-Host "Your system does not support Mount-DiskImage command. Please mount and install manually";
-        }
+        Write-Host "Mounting ISO image";
+        $OutputPath = MountISOAndGetAppPath -AppName $AppItem.InstallFileName -ISOPath $OutputPath
+        Write-Host $OutputPath        
     }
+    
             
     # start to Install file
+    
     $content = "Installing " + $AppItem.Name + ". Please wait..."
     Write-Host $content
 
-    $FLAGS  = $AppItem.Arguments
-
-    $ExitCode = (Start-Process -FILEPATH $OutputPath $FLAGS -Wait -PassThru).ExitCode
-    if ($ExitCode -EQ 0)
-    {
-        $content = "Application " + $AppItem.Name +" is successfully installed on current machine"
-        Write-Host $content -ForegroundColor Green
-    }
+    if ($item.Name.ToLower().Equals("vs2017community"))
+    {        
+        cmd.exe /C "InstallVs2017Community.cmd $OutputPath"
+    }    
     else
     {
-        $failedList += $AppItem.Name
-        $content = "Installing " + $AppItem.Name +" failed, Error Code:" + $ExitCode
-        Write-Host "ERROR $ExitCode"; 
-    }
+        $FLAGS  = $AppItem.Arguments
+        $ExitCode = 0
+        if ($AppItem.Arguments.Trim().Length -lt 1 )
+        {
+            $ExitCode = (Start-Process -FILEPATH $OutputPath -Wait -PassThru).ExitCode
+        }
+        else
+        {        
+            $ExitCode = (Start-Process -FILEPATH $OutputPath $FLAGS -Wait -PassThru).ExitCode
+        }
+        
+        if ($ExitCode -EQ 0)
+        {
+            $content = "Application " + $AppItem.Name +" is successfully installed on current machine"
+            Write-Host $content -ForegroundColor Green
+        }
+        else
+        {
+            $failedList += $AppItem.Name
+            $content = "Installing " + $AppItem.Name +" failed, Error Code:" + $ExitCode
+            Write-Host "ERROR $ExitCode"; 
+        }
 
-    # If the file is ISO, unmount it.
-    if($AppItem.FileName.ToLower().EndsWith("iso"))
-    {
-        UnmountDisk -AppPath $OutputPath
+        # If the file is ISO, unmount it.
+        if($AppItem.FileName.ToLower().EndsWith("iso"))
+        {
+            UnmountDisk -AppPath $OutputPath
+        }
     }
 }
+$AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'[System.Net.ServicePointManager]::SecurityProtocol = $AllProtocols
 
 # Start get all needed tools from configure file.
 $downloadList = GetDownloadTools -DpConfigPath $ConfigPath -ToolCategory $Category
@@ -302,47 +305,16 @@ $tempFolder = CreateTemporaryFolder
 $failedList = @();
 $IsNeedRestart = $false;
 
-# Check PowerShell version
-
-$psVer = [int](Get-Host).Version.ToString().Substring(0,1)
-
-# Check if .NET Framework 3.5 feature is enabled.
-Write-Host "Check if .NET Framework 3.5 feature is enabled"
-$net35Enabled = CheckIfNetFx3Enabled
-
-if(-not $net35Enabled)
-{
-    Write-Host ".NET Framework 3.5 feature is not enabled" -ForegroundColor Yellow
-    Write-Host "Starting enable .NET Framework 3.5"
-    DISM /Online /Enable-Feature /FeatureName:NetFx3 /All
-}
-else
-{
-    Write-Host ".NET Framework 3.5 feature is enabled" -ForegroundColor Green
-}
 
 foreach($item in $downloadList)
 {
     $isInstalled = $false;
-
-    if($item.Name.ToLower().Equals("net40"))
+    $isInstalled = CheckIfAppInstalled -AppName $item.AppName -Version $item.version -Compatible $item.BackwardCompatible
+    if(-not $isInstalled)
     {
-        $isInstalled = CheckIfNet4IsInstalled
-
-        if(-not $isInstalled)
-        {
-            $content = ".NET Framework 4.0 is not installed"
-        }
+        $content = "Application: " +$item.AppName + " is not installed"
     }
-    else
-    {
-        $isInstalled = CheckIfAppInstalled -AppName $item.AppName -Version $item.version -Compatible $item.BackwardCompatible
-        if(-not $isInstalled)
-        {
-            $content = "Application: " +$item.AppName + " is not installed"
-        }
-    }
-
+    
     if(-not $IsInstalled)
     {
         Write-Host $content -ForegroundColor Yellow
@@ -353,7 +325,7 @@ foreach($item in $downloadList)
 
         try
         {
-            DownloadAndInstallApplication -PSVersion $psVer -AppItem $item -OutputPath $outputPath
+            DownloadAndInstallApplication -AppItem $item -OutputPath $outputPath
         }
         catch
         {
@@ -369,41 +341,38 @@ foreach($item in $downloadList)
             $IsNeedRestart = $true;
         }
     }
-    else{
-		if($item.AppName -match "Microsoft Agents for Visual Studio"){
-			if($item.BackwardCompatible){
-				$content = $item.AppName + " or later version or Microsoft Visual Studio is already installed"
-			}else{
-				$content = $item.AppName + " or Microsoft Visual Studio is already installed"
-			}
-		}else{
-			if($item.BackwardCompatible){
-				$content = $item.AppName + " or later version is already installed"
-			}else{
-				$content = $item.AppName + " is already installed"
-			}
-		}
-        
+    else
+    {
+        if($item.AppName -match "Microsoft Agents for Visual Studio")
+        {
+            if($item.BackwardCompatible)
+            {
+                $content = $item.AppName + " or later version or Microsoft Visual Studio is already installed"
+            }
+            else
+            {
+                $content = $item.AppName + " or Microsoft Visual Studio is already installed"
+            }
+        }
+        else
+        {
+            if($item.BackwardCompatible)
+            {
+                $content = $item.AppName + " or later version is already installed"
+            }
+            else
+            {
+                $content = $item.AppName + " is already installed"
+            }
+        }
         Write-Host $content -ForegroundColor Green
     }
+    
 }
 
-if($psVersion -ge 3)
-{
-    $downloadList.Clear();
-}
-else{
-    $downloadList = @();
-}
+$downloadList.Clear();
 
-# Check if .NET Framework 3.5 is enabled after installation.
-if(-not $net35Enabled)
-{
-    # check if .NET 3.5 is installed.
-    $net35Enabled = CheckIfNetFx3Enabled
-}
-
-if(($failedList.Length -eq 0) -and ($net35Enabled)) #No failure occurs and .NETFramework 3.5 is enabled.
+if($failedList.Length -eq 0) #No failure occurs
 {
     if(Test-Path $tempFolder)
     {
@@ -418,11 +387,6 @@ if(($failedList.Length -eq 0) -and ($net35Enabled)) #No failure occurs and .NETF
 }
 else
 {
-    if(-not $net35Enabled)
-    {
-        Write-Host "Installation of .NET Framework 3.5 failed. Please enable it manually." -ForegroundColor Red
-    }
-
     if($failedList.Length -gt 0)
     {
         Write-Host "The following prerequisite tools are not installed. Please install them manually."

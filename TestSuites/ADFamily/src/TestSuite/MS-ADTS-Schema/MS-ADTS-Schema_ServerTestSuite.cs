@@ -71,6 +71,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             else if (serverVersion == ServerVersion.Win2012) serverOS = OSVersion.WinSvr2012;
             else if (serverVersion == ServerVersion.Win2012R2) serverOS = OSVersion.WinSvr2012R2;
             else if (serverVersion == ServerVersion.Win2016) serverOS = OSVersion.Win2016;
+            else if (serverVersion == ServerVersion.Winv1803) serverOS = OSVersion.Winv1803;
             else serverOS = OSVersion.OtherOS;
 
             //Storing the XML paths.

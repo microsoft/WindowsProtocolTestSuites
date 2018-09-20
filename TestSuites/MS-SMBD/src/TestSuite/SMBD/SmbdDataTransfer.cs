@@ -16,12 +16,8 @@ using System.Threading;
 namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
 {
     [TestClass]
-    public class SmbdDataTransfer : TestClassBase
+    public class SmbdDataTransfer : SmbdTestBase
     {
-        #region Variables
-        private SmbdAdapter smbdAdapter;
-        #endregion
-
         #region Class Initialization and Cleanup
         [ClassInitializeAttribute()]
         public static void ClassInitialize(TestContext context)
@@ -33,21 +29,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         public static void ClassCleanup()
         {
             TestClassBase.Cleanup();
-        }
-        #endregion
-
-        #region Test Initialization and Cleanup
-        protected override void TestInitialize()
-        {
-            this.smbdAdapter = new SmbdAdapter(BaseTestSite, LogSmbdEndpointEvent);
-            SmbdUtilities.LogTestCaseDescription(BaseTestSite);
-        }
-
-        protected override void TestCleanup()
-        {
-            smbdAdapter.DisconnectRdma();
-
-            base.TestCleanup();
         }
         #endregion
 
@@ -585,9 +566,10 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         {
             // define data for test case, get the server's capability
             uint MAX_SEND_SIZE;
-            if (smbdAdapter.TestConfig.Platform == Platform.WindowsServer2012R2)
+            if (smbdAdapter.TestConfig.Platform == Platform.WindowsServer2012R2 || smbdAdapter.TestConfig.Platform == Platform.WindowsServer2016)
             {
-                // <5> Section 3.1.5.6:  Windows Server 2012 R2 fails the request with STATUS_INSUFFICIENT_RESOURCES if the PreferredSendSize field is greater than 8136
+                // Windows Server 2012 R2, Windows Server 2016, and Windows Server operating system fail the request 
+                // with STATUS_INSUFFICIENT_RESOURCES if the PreferredSendSize field is greater than 8136.
                 MAX_SEND_SIZE = 8136;
             }
             else
@@ -685,9 +667,10 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         {
             // define data for test case, get the server's capability
             uint MAX_SEND_SIZE;
-            if (smbdAdapter.TestConfig.Platform == Platform.WindowsServer2012R2)
+            if (smbdAdapter.TestConfig.Platform == Platform.WindowsServer2012R2 || smbdAdapter.TestConfig.Platform == Platform.WindowsServer2016)
             {
-                // <5> Section 3.1.5.6:  Windows Server 2012 R2 fails the request with STATUS_INSUFFICIENT_RESOURCES if the PreferredSendSize field is greater than 8136
+                // Windows Server 2012 R2, Windows Server 2016, and Windows Server operating system fail the request 
+                // with STATUS_INSUFFICIENT_RESOURCES if the PreferredSendSize field is greater than 8136.
                 MAX_SEND_SIZE = 8136;
             }
             else
@@ -1290,7 +1273,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             out byte[] smb2WriteRequestPacket,
             bool isUseMaxSendSize = false)
         {
-            string fileName = SmbdUtilities.CreateRandomFileName();
+            string fileName = CreateRandomFileName();
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Initial SMBD connection and open file " + fileName);
 
             // Connect to server over RDMA
