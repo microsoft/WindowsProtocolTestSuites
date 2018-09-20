@@ -1,0 +1,42 @@
+﻿<div id="formula" class="text-left">
+    <h2>Reference</h2>
+    <p>
+        The similarity measuring the SSIM index between signals <strong>x</strong> and <strong>y</strong> is:
+    </p>
+    <div class="text-center" style="padding: 5px;">
+        <img src="~/Images/Resource/SSIM/ssim_eq1.png" />
+        <br>
+        <img src="~/Images/Resource/SSIM/ssim_eq2.png" />
+        <br>
+        <img src="~/Images/Resource/SSIM/ssim_eq3.png" />
+        <br>
+        <img src="~/Images/Resource/SSIM/ssim_eq4.png" />
+        <br>
+    </div>
+    <div>
+        Where <strong>&mu;<sub>x</sub></strong> and <strong>&mu;<sub>y</sub></strong> are the mean intensity of the signal. for <strong>x</strong>,
+        it is
+        <div class="text-center" style="padding: 5px;">
+            <img src="~/Images/Resource/SSIM/ssim_eq5.png" />
+        </div>
+        <strong>&sigma;<sub>x</sub></strong> and <strong>&sigma;<sub>y</sub></strong> are the standard deviation of the signal. for <strong>x</strong>,
+        it is
+        <div class="text-center" style="padding: 5px;">
+            <img src="~/Images/Resource/SSIM/ssim_eq6.png" />
+        </div>
+        <strong>&sigma;<sub>xy</sub></strong> is the covariance of the signal.
+        it is
+        <div class="text-center" style="padding: 5px;">
+            <img src="~/Images/Resource/SSIM/ssim_eq7.png" />
+        </div>
+        and <strong>C<sub>1</sub></strong>, <strong>C<sub>2</sub></strong> and <strong>C<sub>3</sub></strong> are small constants given by
+        <div class="text-center" style="padding: 5px;">
+            <img src="~/Images/Resource/SSIM/ssim_eq8.png" />
+        </div>
+        <strong>L</strong> is the dynamic range of the pixel value (255 for 24-bit color images)
+        <strong>K<sub>1</sub></strong> = 0.01, <strong>K<sub>2</sub></strong> = 0.03 <strong>&alpha;</strong>, <strong>&beta;</strong>,
+         <strong>&gamma;</strong> are weight of the three components. Usually we set <strong>&alpha;</strong> = <strong>&beta;</strong>
+         = <strong>&gamma;</strong> = 1. Details please refer to this paper 
+        <a href="http://www.cns.nyu.edu/pub/eero/wang03-reprint.pdf"><i>Image Quality Assessment: From Error Visibility to Structural Similarity</i></a>.
+    </div>
+</div>

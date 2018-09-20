@@ -1,0 +1,47 @@
+﻿<div class="container">
+    <div id="intro">@Html.Partial("_Intro") </div>
+
+    @Html.Partial("_ImageCompare")
+
+    <div class="text-center">
+        <div class="row" style="padding: 15px 30px;">
+            <div class="col-xs-3">
+                <div class="input-group">
+                    <span class="input-group-addon">K<sub>1</sub></span>
+                    <input type="text" name="k1" class="form-control ssim-param" value="0.01">
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="input-group">
+                    <span class="input-group-addon">K<sub>2</sub></span>
+                    <input type="text" name="k2" class="form-control ssim-param" value="0.03">
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div class="input-group">
+                    <span class="input-group-addon">&alpha;</span>
+                    <input type="text" name="alpha" class="form-control ssim-param" value="1">
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div class="input-group">
+                    <span class="input-group-addon">&beta;</span>
+                    <input type="text" name="beta" class="form-control ssim-param" value="1">
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div class="input-group">
+                    <span class="input-group-addon">&gamma;</span>
+                    <input type="text" name="gamma" class="form-control ssim-param" value="1">
+                </div>
+            </div>
+        </div>
+
+        @Html.ButtonFor(name: "Compare", id: "ssimImageCompare")
+    </div>
+
+    <div class="compare-status text-left" style="padding-top: 15px;"></div>
+
+    @Html.Partial("_formula")
+
+</div>

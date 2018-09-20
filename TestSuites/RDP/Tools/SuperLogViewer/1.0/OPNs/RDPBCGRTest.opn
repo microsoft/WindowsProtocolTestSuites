@@ -1,0 +1,412 @@
+protocol RDPBCGRTest;
+
+using Etw;
+using EtwEvent;
+using WindowsReference;
+using Utility;
+using RDPBCGR;
+using RDPEDYC;
+using ISOTS;
+using RDPRFX;
+using TLS;
+using Protocol_Test_Suite;
+
+
+annotation string Summary;
+annotation string Source;
+annotation string Destination;
+
+message RDPBCGR_Encrypted_Part
+{
+	public override string ToString()
+    {
+        if( this#Summary != nothing && this#Summary != null) return this#Summary as string;
+		else return "Message";
+    }
+}
+
+message ClientSecurityExchangePdu_ENCPART : RDPBCGR_Encrypted_Part
+{
+    binary ClientRandom;
+}
+
+message ClientInfoPdu_ENCPART : RDPBCGR_Encrypted_Part
+{
+    TSInfoPacket InfoPacket;
+}
+
+message ClientConfirmActivePdu_ENCPART : RDPBCGR_Encrypted_Part
+{
+    TSConfirmActivePdu ConfirmActivePduData; 
+}
+
+message ClientSynchronizePdu_ENCPART : RDPBCGR_Encrypted_Part
+{
+    TSSynchronizePdu SynchronizePduData;
+}
+
+message ClientControlPduCoOperate_ENCPART : RDPBCGR_Encrypted_Part
+{
+    TSControlPdu ControlPduData;
+}
+
+message ClientControlPduRequestControl_ENCPART : RDPBCGR_Encrypted_Part
+{
+    TSControlPdu ControlPduData;
+}
+
+message ClientPersistentKeyListPdu_ENCPART : RDPBCGR_Encrypted_Part
+{
+    TSBitmapCachePersistentListPdu PersistentKeyListPduData;
+}
+
+message ClientFontListPdu_ENCPART : RDPBCGR_Encrypted_Part
+{
+    TSFontListPdu FontListPduData;
+}
+
+message TSFPInputEventPdu_ENCPART : RDPBCGR_Encrypted_Part
+{
+    byte NumberEvents;
+    array<TSFPInputEvent> FpInputEvents;
+}
+
+message ClientRefreshRectPdu_ENCPART : RDPBCGR_Encrypted_Part
+{
+    TSRefreshRectPdu RefreshRectPduData;
+}
+
+message TS_FRAME_ACKNOWLEDGE_PDU_ENCPART : RDPBCGR_Encrypted_Part
+{
+    TSShareDataHeader shareDataHeader;
+    uint frameID;
+}
+
+message TSInputPDU_ENCPART : RDPBCGR_Encrypted_Part
+{
+    TSInputPDUData ClientInputEventData;
+}
+
+message ClientInitiateMultitransportError_ENCPART : RDPBCGR_Encrypted_Part
+{
+    uint RequestId;
+    HrResponseType HrResponse where ValidationCheckValue(value == HrResponseType.E_ABORT, null, false, ReferenceType.Message, "RDPBCGR", "HrResponse", "ClientInitiateMultitransportError", "0x80004004", value);
+}
+
+message ClientAutoDetectResponsePdu_ENCPART : RDPBCGR_Encrypted_Part
+{
+    (RdpRttResponse | RdpBWResults | RdpNetcharSync) AutoDetectResPduData;
+}
+
+message ServerLicenseErrorPduValidClient_ENCPART : RDPBCGR_Encrypted_Part
+{
+    LicenseValidClientData ValidClientLicenseData;
+}
+
+message ServerDemandActivePdu_ENCPART : RDPBCGR_Encrypted_Part
+{
+    TSDemandActivePdu DemandActivePduData;
+}
+
+message ServerSynchronizePdu_ENCPART : RDPBCGR_Encrypted_Part
+{
+    TSSynchronizePdu SynchronizePduData;
+}
+
+message ServerControlPduCoOperate_ENCPART : RDPBCGR_Encrypted_Part
+{
+    TSControlPdu ControlPduData;
+}
+
+message ServerControlPduGrantedControl_ENCPART : RDPBCGR_Encrypted_Part
+{
+    TSControlPdu ControlPduData;
+}
+
+message ServerFontMapPdu_ENCPART: RDPBCGR_Encrypted_Part
+{
+    TSFontMapPdu FontMapPduData;
+}
+
+message ServerSaveSessionInfoPdu_ENCPART : RDPBCGR_Encrypted_Part
+{
+    TSSaveSessionInfoPduData SaveSessionInfoPduData;
+}
+
+message ServerInitiateMultitransportRequest_ENCPART : RDPBCGR_Encrypted_Part
+{
+    uint RequestId;
+
+    RequestedProtocolType RequestedProtocol where ValidationCheckEnumValue(InRange<RequestedProtocolType>(value), null, false, ReferenceType.Message, "RDPBCGR", "RequestedProtocol", "ServerInitiateMultitransportRequest", "0x0001, 0x0002", value);
+
+    ushort Reserved where ValidationCheckReservedZero(value == 0, null, true, ReferenceType.Message, "RDPBCGR", "Reserved", "ServerInitiateMultitransportRequest", value);
+
+    array<byte> SecurityCookie with BinaryEncoding{Length = 16};
+
+}
+
+message ServerDeactivateAllPdu_ENCPART : RDPBCGR_Encrypted_Part
+{
+    TSDeactivateAllPdu DeactivateAllPduData;
+}
+
+message TSFPUpdatePdu_ENCPART : RDPBCGR_Encrypted_Part
+{
+    array<TSFPUpdate> FPOutputUpdates;
+}
+
+message ServerAutoReconnectStatusPdu_ENCPART : RDPBCGR_Encrypted_Part
+{
+    TSAutoReconnectStatusPdu ArcStatusPduData;
+}
+
+message ServerAutoDetectRequestPdu_ENCPART : RDPBCGR_Encrypted_Part
+{
+    (RdpRttRequest | RdpBWStart | RdpBWPayload | RdpBWStop | RdpNetcharResult) AutoDetectReqPduData;
+}
+
+
+endpoint ep_RDPBCGR_Test_Suite accepts RDPBCGR_Encrypted_Part issues RDPBCGR_Encrypted_Part;
+
+public autostart actor RDPBCGREncActor (Protocol_Test_Suite.ep_Protocol_Test_Suite node)
+{
+    bool ReceivedEncryptedFlag = false;
+    bool SentEncryptedFlag = false;
+	process node accepts
+		m:Event_2 where (Contains(m.MessageName, "RDPBCGR:"))
+		{
+		    ISOTS.Server ISOTSEndpoint = endpoint ISOTS.Server;
+            RDPBCGR.Server RDPBCGREndpoint = endpoint RDPBCGR.Server;
+            ep_RDPBCGR_Test_Suite RDPBCGRTestEndpoint = endpoint ep_RDPBCGR_Test_Suite;
+            
+            uint encryptionLevel = 0;
+            uint encryptionMethod = 0;
+            
+            if(m.DumpLevel == 0)
+            {
+             	switch(m.MessageName)
+               	{ 
+                   	case "RDPBCGR:ReceivedSlowPathPDU" =>
+                        TPKT msg = BinaryDecoder<TPKT>(m.Payload) as TPKT;
+                        msg#DestinationPort = 3389;
+                        msg#SourcePort = 3389;
+                        msg#Source = "Client";
+                        msg#Destination = "Server";
+                        dispatch ISOTSEndpoint accepts msg;
+                    case "RDPBCGR:SentSlowPathPDU" =>
+                        TPKT msg = BinaryDecoder<TPKT>(m.Payload) as TPKT;
+                        msg#DestinationPort = 3389;
+                        msg#SourcePort = 3389;
+                        msg#Source = "Server";
+                        msg#Destination = "Client";
+                    dispatch ISOTSEndpoint issues msg;
+                    case "RDPBCGR:ReceivedFastPathPDU" =>
+                        TSFPInputEventPdu msg = BinaryDecoder<TSFPInputEventPdu>(m.Payload) as TSFPInputEventPdu;
+                        msg#Source = "Client";
+                        msg#Destination = "Server";
+                        dispatch RDPBCGREndpoint accepts msg;
+                    case "RDPBCGR:SentFastPathPDU" =>
+                        TSFPUpdatePdu msg = BinaryDecoder<TSFPUpdatePdu>(m.Payload) as TSFPUpdatePdu;
+                        msg#Source = "Server";
+                        msg#Destination = "Client";
+                        dispatch RDPBCGREndpoint issues msg;
+                }
+            }else if(m.DumpLevel == 3)
+            {
+                switch(m.MessageName)
+                {
+                    case "RDPBCGR:Client_Security_Exchange_Pdu" =>
+                        ClientSecurityExchangePdu_ENCPART msg = BinaryDecoder<ClientSecurityExchangePdu_ENCPART>(m.Payload) as ClientSecurityExchangePdu_ENCPART;
+                        msg#Summary = "Client Security Exchange PDU - Decrypted ClientRandom";
+                        msg#Source = "Client";
+                        msg#Destination = "Server";
+                        dispatch RDPBCGRTestEndpoint accepts msg;
+                    case "RDPBCGR:Client_Info_Pdu" =>
+                        ClientInfoPdu_ENCPART msg = BinaryDecoder<ClientInfoPdu_ENCPART>(m.Payload) as ClientInfoPdu_ENCPART;
+                        msg#Summary = "Client Info PDU - Decrypted InfoPacket";
+                        msg#Source = "Client";
+                        msg#Destination = "Server";
+                        dispatch RDPBCGRTestEndpoint accepts msg;
+                    case "RDPBCGR:Client_Confirm_Active_Pdu" =>
+                        ClientConfirmActivePdu_ENCPART msg = BinaryDecoder<ClientConfirmActivePdu_ENCPART>(m.Payload) as ClientConfirmActivePdu_ENCPART;
+                        msg#Summary = "Client Confirm Active PDU - Decrypted ConfirmActivePduData";
+                        msg#Source = "Client";
+                        msg#Destination = "Server";
+                        dispatch RDPBCGRTestEndpoint accepts msg;
+                    case "RDPBCGR:Client_Synchronize_Pdu" =>
+                        ClientSynchronizePdu_ENCPART msg = BinaryDecoder<ClientSynchronizePdu_ENCPART>(m.Payload) as ClientSynchronizePdu_ENCPART;
+                        msg#Summary = "Client Synchronize PDU - Decrypted SynchronizePduData";
+                        msg#Source = "Client";
+                        msg#Destination = "Server";
+                        dispatch RDPBCGRTestEndpoint accepts msg;
+                    case "RDPBCGR:Client_Control_Pdu_Cooperate" =>
+                        ClientControlPduCoOperate_ENCPART msg = BinaryDecoder<ClientControlPduCoOperate_ENCPART>(m.Payload) as ClientControlPduCoOperate_ENCPART;
+                        msg#Summary = "Client Control PDU (Cooperate) - Decrypted ControlPduData";
+                        msg#Source = "Client";
+                        msg#Destination = "Server";
+                        dispatch RDPBCGRTestEndpoint accepts msg;
+                    case "RDPBCGR:Client_Control_Pdu_Request_Control" =>
+                        ClientControlPduRequestControl_ENCPART msg = BinaryDecoder<ClientControlPduRequestControl_ENCPART>(m.Payload) as ClientControlPduRequestControl_ENCPART;
+                        msg#Summary = "Client Control PDU (Request Control) - Decrypted ControlPduData";
+                        msg#Source = "Client";
+                        msg#Destination = "Server";
+                        dispatch RDPBCGRTestEndpoint accepts msg;
+                    case "RDPBCGR:Client_Persistent_Key_List_Pdu" =>
+                        ClientPersistentKeyListPdu_ENCPART msg = BinaryDecoder<ClientPersistentKeyListPdu_ENCPART>(m.Payload) as ClientPersistentKeyListPdu_ENCPART;
+                        msg#Summary = "Client Persistent Key List PDU - Decrypted PersistentKeyListPduData";
+                        msg#Source = "Client";
+                        msg#Destination = "Server";
+                        dispatch RDPBCGRTestEndpoint accepts msg;
+                    case "RDPBCGR:Client_Font_List_Pdu" =>
+                        ClientFontListPdu_ENCPART msg = BinaryDecoder<ClientFontListPdu_ENCPART>(m.Payload) as ClientFontListPdu_ENCPART;
+                        msg#Summary = "Client Font List PDU - Decrypted FontListPduData";
+                        msg#Source = "Client";
+                        msg#Destination = "Server";
+                        dispatch RDPBCGRTestEndpoint accepts msg;
+                    case "RDPBCGR:TS_FP_INPUT_PDU" =>
+                        TSFPInputEventPdu_ENCPART msg = BinaryDecoder<TSFPInputEventPdu_ENCPART>(m.Payload) as TSFPInputEventPdu_ENCPART;
+                        msg#Summary = "Client Font List PDU - Decrypted fpInputEvents";
+                        msg#Source = "Client";
+                        msg#Destination = "Server";
+                        dispatch RDPBCGRTestEndpoint accepts msg;
+                    case "RDPBCGR:Client_Refresh_Rect_Pdu" =>
+                        ClientRefreshRectPdu_ENCPART msg = BinaryDecoder<ClientRefreshRectPdu_ENCPART>(m.Payload) as ClientRefreshRectPdu_ENCPART;
+                        msg#Summary = "Client Refresh Rect PDU - Decrypted RefreshRectPduData";
+                        msg#Source = "Client";
+                        msg#Destination = "Server";
+                        dispatch RDPBCGRTestEndpoint accepts msg;
+                    case "RDPBCGR:TS_FRAME_ACKNOWLEDGE_PDU" =>
+                        TS_FRAME_ACKNOWLEDGE_PDU_ENCPART msg = BinaryDecoder<TS_FRAME_ACKNOWLEDGE_PDU_ENCPART>(m.Payload) as TS_FRAME_ACKNOWLEDGE_PDU_ENCPART;
+                        msg#Summary = "TS_FRAME_ACKNOWLEDGE_PDU - Decrypted TS_FRAME_ACKNOWLEDGE_PDU";
+                        msg#Source = "Client";
+                        msg#Destination = "Server";
+                        dispatch RDPBCGRTestEndpoint accepts msg;
+                    case "RDPBCGR:TS_INPUT_PDU" =>
+                        TSInputPDU_ENCPART msg = BinaryDecoder<TSInputPDU_ENCPART>(m.Payload) as TSInputPDU_ENCPART;
+                        msg#Summary = "Client Input Event PDU - Decrypted ClientInputEventData";
+                        msg#Source = "Client";
+                        msg#Destination = "Server";
+                        dispatch RDPBCGRTestEndpoint accepts msg;
+                    case "RDPBCGR:Client_Initiate_Multitransport_Error_PDU" =>
+                        ClientInitiateMultitransportError_ENCPART msg = BinaryDecoder<ClientInitiateMultitransportError_ENCPART>(m.Payload) as ClientInitiateMultitransportError_ENCPART;
+                        msg#Summary = "Client Initiate Multitransport Error - Decrypted PDU";
+                        msg#Source = "Client";
+                        msg#Destination = "Server";
+                        dispatch RDPBCGRTestEndpoint accepts msg;
+                    case "RDPBCGR:Client_Auto_Detect_Response_PDU" =>
+                        ClientAutoDetectResponsePdu_ENCPART msg = BinaryDecoder<ClientAutoDetectResponsePdu_ENCPART>(m.Payload) as ClientAutoDetectResponsePdu_ENCPART;
+                        msg#Summary = "Client Auto Detect Response PDU - Decrypted AutoDetectResPduData";
+                        msg#Source = "Client";
+                        msg#Destination = "Server";
+                        dispatch RDPBCGRTestEndpoint accepts msg;
+                    case "RDPBCGR:Server_License_Error_Pdu_Valid_Client" =>
+                        ServerLicenseErrorPduValidClient_ENCPART msg = BinaryDecoder<ServerLicenseErrorPduValidClient_ENCPART>(m.Payload) as ServerLicenseErrorPduValidClient_ENCPART;
+                        msg#Summary = "Server License Error PDU Valid Client - Decrypted ValidClientLicenseData";
+                        msg#Source = "Server";
+                        msg#Destination = "Client";
+                        dispatch RDPBCGRTestEndpoint issues msg;
+                    case "RDPBCGR:Server_Demand_Active_Pdu" =>
+                        ServerDemandActivePdu_ENCPART msg = BinaryDecoder<ServerDemandActivePdu_ENCPART>(m.Payload) as ServerDemandActivePdu_ENCPART;
+                        msg#Summary = "Server Demand Active PDU - Decrypted DemandActivePduData";
+                        msg#Source = "Server";
+                        msg#Destination = "Client";
+                        dispatch RDPBCGRTestEndpoint issues msg;
+                    case "RDPBCGR:Server_Synchronize_Pdu" =>
+                        ServerSynchronizePdu_ENCPART msg = BinaryDecoder<ServerSynchronizePdu_ENCPART>(m.Payload) as ServerSynchronizePdu_ENCPART;
+                        msg#Summary = "Server Synchronize PDU - Decrypted SynchronizePduData";
+                        msg#Source = "Server";
+                        msg#Destination = "Client";
+                        dispatch RDPBCGRTestEndpoint issues msg;
+                    case "RDPBCGR:Server_Control_Pdu" =>
+                        TSControlPdu controlPDUData = BinaryDecoder<TSControlPdu>(m.Payload) as TSControlPdu;
+                        switch(controlPDUData.Action)
+                        {
+                            case TSControlPduAction.CtrlActionCooperate =>
+                                ServerControlPduCoOperate_ENCPART msg = BinaryDecoder<ServerControlPduCoOperate_ENCPART>(m.Payload) as ServerControlPduCoOperate_ENCPART;
+                                msg#Summary = "Server Control PDU (Cooperate) - Decrypted ControlPduData";
+                                msg#Source = "Server";
+                                msg#Destination = "Client";
+                                dispatch RDPBCGRTestEndpoint issues msg;
+                            case TSControlPduAction.CtrlActionGrantedControl =>
+                                ServerControlPduGrantedControl_ENCPART msg = BinaryDecoder<ServerControlPduGrantedControl_ENCPART>(m.Payload) as ServerControlPduGrantedControl_ENCPART;
+                                msg#Summary = "Server Control PDU (Granted Control) - Decrypted ControlPduData";
+                                msg#Source = "Server";
+                                msg#Destination = "Client";
+                                dispatch RDPBCGRTestEndpoint issues msg;
+                        }
+                    case "RDPBCGR:Server_Font_Map_Pdu" =>
+                        ServerFontMapPdu_ENCPART msg = BinaryDecoder<ServerFontMapPdu_ENCPART>(m.Payload) as ServerFontMapPdu_ENCPART;
+                        msg#Summary = "Server Font Map PDU - Decrypted FontMapPduData";
+                        msg#Source = "Server";
+                        msg#Destination = "Client";
+                        dispatch RDPBCGRTestEndpoint issues msg;   
+                    case "RDPBCGR:Server_Save_Session_Info_Pdu" =>
+                        ServerSaveSessionInfoPdu_ENCPART msg = BinaryDecoder<ServerSaveSessionInfoPdu_ENCPART>(m.Payload) as ServerSaveSessionInfoPdu_ENCPART;
+                        msg#Summary = "Server Save Session Info PDU - Decrypted SaveSessionInfoPduData";
+                        msg#Source = "Server";
+                        msg#Destination = "Client";
+                        dispatch RDPBCGRTestEndpoint issues msg;      
+                            case "RDPBCGR:Server_Initiate_Multitransport_Request_PDU" =>
+                        ServerInitiateMultitransportRequest_ENCPART msg = BinaryDecoder<ServerInitiateMultitransportRequest_ENCPART>(m.Payload) as ServerInitiateMultitransportRequest_ENCPART;
+                        msg#Summary = "Server Initiate Multitransport Request - Decrypted PDU";
+                        msg#Source = "Server";
+                        msg#Destination = "Client";
+                        dispatch RDPBCGRTestEndpoint issues msg;                          
+                    case "RDPBCGR:Server_Deactivate_All_Pdu" =>
+                        ServerDeactivateAllPdu_ENCPART msg = BinaryDecoder<ServerDeactivateAllPdu_ENCPART>(m.Payload) as ServerDeactivateAllPdu_ENCPART;
+                        msg#Summary = "Server Deactivate All PDU - Decrypted DeactivateAllPduData";
+                        msg#Source = "Server";
+                        msg#Destination = "Client";
+                        dispatch RDPBCGRTestEndpoint issues msg;                  
+                    case "RDPBCGR:TS_FP_UPDATE_PDU" =>
+                        TSFPUpdatePdu_ENCPART msg = BinaryDecoder<TSFPUpdatePdu_ENCPART>(m.Payload) as TSFPUpdatePdu_ENCPART;
+                        msg#Summary = "TS_FP_Update PDU - Decrypted FPOutputUpdates";
+                        msg#Source = "Server";
+                        msg#Destination = "Client";
+                        dispatch RDPBCGRTestEndpoint issues msg;
+                    case "RDPBCGR:Server_Auto_Reconnect_Status_Pdu" =>
+                        ServerAutoReconnectStatusPdu_ENCPART msg = BinaryDecoder<ServerAutoReconnectStatusPdu_ENCPART>(m.Payload) as ServerAutoReconnectStatusPdu_ENCPART;
+                        msg#Summary = "Server Auto Reconnect Status PDU - Decrypted ArcStatusPduData";
+                        msg#Source = "Server";
+                        msg#Destination = "Client";
+                        dispatch RDPBCGRTestEndpoint issues msg;
+                    case "RDPBCGR:Server_Auto_Detect_Request_PDU" =>
+                        ServerAutoDetectRequestPdu_ENCPART msg = BinaryDecoder<ServerAutoDetectRequestPdu_ENCPART>(m.Payload) as ServerAutoDetectRequestPdu_ENCPART;
+                        msg#Summary = "Server Auto Detect Request PDU - Decrypted AutoDetectReqPduData";
+                        msg#Source = "Server";
+                        msg#Destination = "Client";
+                        dispatch RDPBCGRTestEndpoint issues msg;
+                }
+            }else if(m.DumpLevel == 10)
+            {               
+                switch(m.MessageName)
+                {    
+                    case "RDPBCGR:TLSReceived" =>  
+                        binary dataBuffer = $[];
+                        dataBuffer += m.Payload as binary;
+                        array<RecordLayer> records = TLSDecoder(dataBuffer, ref ReceivedEncryptedFlag);
+                        if (records.Count == 0)
+                        {
+                            ThrowDecodingException("TLS", "RecordLayers");
+                        }
+                        RecordLayers rlsMsg = new RecordLayers{records = records};
+                        rlsMsg.SourceData = dataBuffer;
+                        dataBuffer = $[];  
+                        dispatch endpoint TLS.Server accepts rlsMsg; 
+                    case "RDPBCGR:TLSSent" =>
+                        binary dataBuffer = $[];
+                        dataBuffer += m.Payload as binary;
+                        array<RecordLayer> records = TLSDecoder(dataBuffer, ref SentEncryptedFlag);
+                        if (records.Count == 0)
+                        {
+                            ThrowDecodingException("TLS", "RecordLayers");
+                        }
+                        RecordLayers rlsMsg = new RecordLayers{records = records};
+                        rlsMsg.SourceData = dataBuffer;
+                        dataBuffer = $[];  
+                        dispatch endpoint TLS.Server issues rlsMsg; 
+                }
+            }
+		}
+}
+

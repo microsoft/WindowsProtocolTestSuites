@@ -1,0 +1,54 @@
+﻿@model RFXPDecodeViewModel
+
+@{
+    List<string[]> inputsList = ViewBag.Inputs;
+}
+
+<div class="container">
+
+    <div id="intro">@Html.Partial("_Intro") </div>
+
+    <div id="main">
+
+        <div class="text-left">
+            <h2>Decoding Steps</h2>
+        </div>
+
+        <div class="tabs">
+            <ul id="rfxpdecode-layer-tabs" class="nav nav-pills">
+                <li class="active"><a href="#tab-layer0" data-toggle="tab">Layer 0</a></li>
+                @if (inputsList != null)
+                {
+                    for (int i = 0; i < inputsList.Count; i++)
+                    {
+                    <li><a href="#tab-layer@(i + 1)" data-toggle="tab">Layer @(i + 1)</a></li>
+                    }
+                }
+                <!-- TODO: more beatifull -->
+                <li id="rfxpdecode-layer-add"><a><span class="glyphicon glyphicon-plus" /></a></li>
+            </ul>
+            <div id="tab-layers" class="tab-content">
+                @Html.Partial("_PDecodeTab", Model)
+                @if (inputsList != null)
+                {
+                    for (int i = 0; i < inputsList.Count; i++)
+                    {
+                        Model.SetLayer(i + 1);
+                        Model.ProvidePanelInputs(i + 1, inputsList[i]);
+                        @Html.Partial("_PDecodeTab", Model)
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    <div id="dialogs">
+        @Html.Partial("_Input")
+        @Html.Partial("_Compare")
+        @Html.Partial("_ProgQuantsModal", Model.Params)
+        @Html.Partial("_QuantsModal", Model.Params)
+    </div>
+
+    <div id="help">@Html.Partial("_Help") </div>
+
+</div>

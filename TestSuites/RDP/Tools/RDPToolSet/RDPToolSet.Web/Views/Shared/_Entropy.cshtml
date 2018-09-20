@@ -1,0 +1,19 @@
+﻿@model IEnumerable<ICodecParam>
+
+@{
+    // if an EntropyAlgorithm instance is not found, an exception will be thrown 
+    var entropy = (EntropyAlgorithm)Model.First(param => param is EntropyAlgorithm);
+}
+
+<div style="display: inline-block; margin-right: 12px;">
+    <label style="float: left; padding-top: 5px; padding-bottom: 5px; padding-right: 5px;">Entropy Algorithm: </label>
+    <div style="float: left">
+        <select class="form-control input-sm entropy-alg">
+            @foreach (var item in entropy.Algorithm.GetType().GetEnumNames()) {
+                <option @(item == entropy.Algorithm.ToString() ? Html.Raw("selected=\"selected\"") : Html.Raw(""))>
+                    @item
+                </option>
+            }
+        </select>
+    </div>
+</div>

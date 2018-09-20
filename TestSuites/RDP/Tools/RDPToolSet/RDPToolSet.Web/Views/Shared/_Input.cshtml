@@ -1,0 +1,21 @@
+﻿@{ var dataSets = new[] { "X", "Y", "Z" }; }
+<!-- Modal dialog for codec input for each step. -->
+<div class="modal fade input-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <!-- prompt message -->
+                <p class="input-prompt text-left" style="display:none"></p>
+                <!-- for user to input their data -->
+                <div class="input-data">
+                    @Html.Partial("_Tabs", dataSets.Select(x => new TabViewModel {
+                        Title = x, Id = x.ToLower(), Editable = true }))
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top:-20px">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary dlg-btn-input">Upload</button>
+            </div>
+        </div>
+    </div>
+</div>

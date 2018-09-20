@@ -1,0 +1,57 @@
+protocol RDPEUDPTest;
+
+using Etw;
+using EtwEvent;
+using WindowsReference;
+using Utility;
+using RDPEUDP;
+using Protocol_Test_Suite;
+
+
+public autostart actor RDPEUDPEncActor (Protocol_Test_Suite.ep_Protocol_Test_Suite node)
+{
+   	process node accepts
+  		m:Event_2 where (Contains(m.MessageName, "RDPEUDP:"))
+    {
+        switch(m.MessageName)
+        {
+            case "RDPEUDP:ReceivedPDU" =>
+            switch(m.Payload)
+            {
+                case d:SYNDatagram from BinaryDecoder<SYNDatagram> =>
+                    dispatch endpoint RDPEUDP.Server accepts d;
+                case d:ACKDatagram from BinaryDecoder<ACKDatagram> =>
+                    if (RDPEUDP.IsCongestionNotification(d))
+                    {
+                        ErrorCodeIf(true, d, DiagnosisLevel.Information, "RDPEUDP: Congestion Notification");
+                    }
+                    if (RDPEUDP.IsCongestionWindowReset(d))
+                    {
+                        ErrorCodeIf(true, d, DiagnosisLevel.Information, "RDPEUDP: Congestion Window Reset");
+                    }
+                    dispatch endpoint RDPEUDP.Server accepts d;
+                default =>
+                    ThrowDecodingException("RDPEUDP");
+            }
+            case "RDPEUDP:SentPDU" =>
+            switch(m.Payload)
+            {
+                case d:SYNDatagram from BinaryDecoder<SYNDatagram> =>
+                    dispatch endpoint RDPEUDP.Server issues d;
+                case d:ACKDatagram from BinaryDecoder<ACKDatagram> =>
+                    if (RDPEUDP.IsCongestionNotification(d))
+                    {
+                        ErrorCodeIf(true, d, DiagnosisLevel.Information, "RDPEUDP: Congestion Notification");
+                    }
+                    if (RDPEUDP.IsCongestionWindowReset(d))
+                    {
+                        ErrorCodeIf(true, d, DiagnosisLevel.Information, "RDPEUDP: Congestion Window Reset");
+                    }
+                    dispatch endpoint RDPEUDP.Server issues d;
+                default =>
+                    ThrowDecodingException("RDPEUDP");
+            }
+        }
+    }
+}
+
