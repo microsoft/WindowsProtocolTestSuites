@@ -33,10 +33,14 @@ The Test Suites are developed and must be installed on a Windows platform.
 You should install the following list of software in order to build Test Suites from source code.
 You can use the script in **InstallPrerequisites** folder to automatically download and install these software.
 
+* [Visual Studio 2017](https://visualstudio.microsoft.com/downloads/) and the features below:
+  * Workload ".NET desktop development" and the component ".NET Framework 4.7.1 development tools". 
+    * Note: .Net Framework 4.7.1 is supported in Windows 7 SP1, Windows 8.1, Windows 10 Anniversary Update, Windows 10 Creators Update, Windows Server 2008 R2 SP1, Windows Server 2012, Windows Server 2012 R2 and Windows Server 2016.
+  * Individual component "Testing tools core features".
+  * Individual component "MSBuild".
+  * Workload "Desktop development with C++" and the components "VC++ 2017 version 15.8 v14.15 latest v141 tools", "Windows 10 SDK (10.0.16299.0) for Desktop C++ [x86 and x64]".
+    * They are required if you want to build test suites (ADFamily, MS-SMBD) or Protocol Test Manager which have C++ code.  
 * [Protocol Test Framework](https://github.com/microsoft/protocoltestframework). You can use a released MSI file or build it from source code.
-* [Visual Studio 2017](https://visualstudio.microsoft.com/downloads/)
-  * [.NET Framework](https://download.microsoft.com/download/9/0/1/901B684B-659E-4CBD-BEC8-B3F06967C2E7/NDP471-DevPack-ENU.exe) 4.7.1 or higher.
-  * Microsoft Windows SDK 10.0.16299.0 is required if you want to build test suites which have c++ codes (ADFamily, MS-SMBD or Protocol Test Manager).
 * [Wix toolset](https://github.com/wixtoolset/wix3/releases/) v3.11 or higher.
 * [Spec Explorer](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/). It is only required for the test suites that contain Model-Based Test cases. If you want to regenerate Model-Based Test cases, you must install Visual Studio 2012.
 
