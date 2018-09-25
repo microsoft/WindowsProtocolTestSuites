@@ -271,11 +271,19 @@ Function DownloadAndInstallApplication
         $ExitCode = 0
         if ($AppItem.Arguments.Trim().Length -lt 1 )
         {
-            $ExitCode = (Start-Process -FILEPATH $OutputPath -Wait -PassThru).ExitCode
+            $ExitCode = (Start-Process -FILEPATH "$env:systemroot\system32\msiexec.exe" -ArgumentList "/i $OutputPath /passive" -Wait -PassThru).ExitCode
+            if ($ExitCode -NE 0)
+            {
+                $ExitCode = (Start-Process -FILEPATH $OutputPath -Wait -PassThru).ExitCode
+            }
         }
         else
         {        
-            $ExitCode = (Start-Process -FILEPATH $OutputPath $FLAGS -Wait -PassThru).ExitCode
+            $ExitCode = (Start-Process -FILEPATH "$env:systemroot\system32\msiexec.exe" -ArgumentList "/i $OutputPath $FLAGS /passive" -Wait -PassThru).ExitCode
+            if ($ExitCode -NE 0)
+            {
+                $ExitCode = (Start-Process -FILEPATH $OutputPath $FLAGS -Wait -PassThru).ExitCode
+            }
         }
         
         if ($ExitCode -EQ 0)
@@ -297,7 +305,9 @@ Function DownloadAndInstallApplication
         }
     }
 }
-$AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'[System.Net.ServicePointManager]::SecurityProtocol = $AllProtocols
+
+$AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'
+[System.Net.ServicePointManager]::SecurityProtocol = $AllProtocols
 
 # Start get all needed tools from configure file.
 $downloadList = GetDownloadTools -DpConfigPath $ConfigPath -ToolCategory $Category
