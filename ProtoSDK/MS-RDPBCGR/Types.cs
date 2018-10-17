@@ -6955,7 +6955,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         ///  RDP 10.6 clients
         /// </summary>
-        V9 = 0x000A0601
+        V9 = 0x0008000b
     }
 
     /// <summary>
@@ -7889,7 +7889,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// RDP 10.6 servers
         /// </summary>
-        V9 = 0x000A0601
+        V9 = 0x0008000b
     }
 
     /// <summary>
