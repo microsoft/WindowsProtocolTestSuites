@@ -857,8 +857,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 || core.version == version_Values.V8
                 || core.version == version_Values.V9,
                 98,
-                VersionDescribeFormat()
-                );
+                VersionDescribeFormat());
             Site.CaptureRequirementIfIsTrue(core.desktopWidth >= 0,
                 100,
                 "In Client Core Data, desktopWidth must be positive.");
