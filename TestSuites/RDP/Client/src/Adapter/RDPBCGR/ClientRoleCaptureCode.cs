@@ -3,6 +3,7 @@
 using System;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
+using System.Text;
 
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 {
@@ -856,16 +857,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 || core.version == version_Values.V8
                 || core.version == version_Values.V9,
                 98,
-                string.Format("In Client Core Data, RDP client version number should be one of {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}.",
-                VersionFormat(version_Values.V1),
-                VersionFormat(version_Values.V2),
-                VersionFormat(version_Values.V3),
-                VersionFormat(version_Values.V4),
-                VersionFormat(version_Values.V5),
-                VersionFormat(version_Values.V6),
-                VersionFormat(version_Values.V7),
-                VersionFormat(version_Values.V8),
-                VersionFormat(version_Values.V9))
+                VersionDescribeFormat()
                 );
             Site.CaptureRequirementIfIsTrue(core.desktopWidth >= 0,
                 100,
@@ -925,13 +917,19 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         }
 
 
-        public String VersionFormat(version_Values ver)
+        public String VersionDescribeFormat()
         {
-            String verFormat = ((uint)ver).ToString("X8");
-            return verFormat;
+            StringBuilder versionDescribe = new StringBuilder("In Client Core Data, RDP client version number should be one of: ");
+            foreach (uint versionValue in Enum.GetValues(typeof(version_Values)))
+            {
+                versionDescribe.Append($"{((uint)versionValue).ToString("X08")}, ");
+            }
+            versionDescribe.Remove(versionDescribe.Length - 2, 2);
+            versionDescribe.Append(".");
+            return versionDescribe.ToString();
         }
 
-
+        
         public void VerifyStructure(TS_UD_CS_SEC sec)
         {
             Site.CaptureRequirementIfAreEqual<TS_UD_HEADER_type_Values>(sec.header.type, TS_UD_HEADER_type_Values.CS_SECURITY, 209,
