@@ -857,15 +857,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 || core.version == version_Values.V9,
                 98,
                 string.Format("In Client Core Data, RDP client version number should be one of {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}.",
-                version_Values.V1.ToString(),
-                version_Values.V2.ToString(),
-                version_Values.V3.ToString(),
-                version_Values.V4.ToString(),
-                version_Values.V5.ToString(),
-                version_Values.V6.ToString(),
-                version_Values.V7.ToString(),
-                version_Values.V8.ToString(),
-                version_Values.V9.ToString())
+                VersionFormat(version_Values.V1),
+                VersionFormat(version_Values.V2),
+                VersionFormat(version_Values.V3),
+                VersionFormat(version_Values.V4),
+                VersionFormat(version_Values.V5),
+                VersionFormat(version_Values.V6),
+                VersionFormat(version_Values.V7),
+                VersionFormat(version_Values.V8),
+                VersionFormat(version_Values.V9))
                 );
             Site.CaptureRequirementIfIsTrue(core.desktopWidth >= 0,
                 100,
@@ -922,6 +922,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     + @" 0x0020, RNS_UD_CS_SUPPORT_MONITOR_LAYOUT_PDU 0x0040");
 
 
+        }
+
+
+        public String VersionFormat(version_Values ver)
+        {
+            String verFormat = ((uint)ver).ToString("X8");
+            return verFormat;
         }
 
 
