@@ -3,6 +3,7 @@
 using System;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
+using System.Text;
 
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 {
@@ -853,18 +854,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 || core.version == version_Values.V5
                 || core.version == version_Values.V6
                 || core.version == version_Values.V7
-                || core.version == version_Values.V8,
+                || core.version == version_Values.V8
+                || core.version == version_Values.V9,
                 98,
-                string.Format("In Client Core Data, RDP client version number should be one of {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}.",
-                version_Values.V1.ToString(),
-                version_Values.V2.ToString(),
-                version_Values.V3.ToString(),
-                version_Values.V4.ToString(),
-                version_Values.V5.ToString(),
-                version_Values.V6.ToString(),
-                version_Values.V7.ToString(),
-                version_Values.V8.ToString())
-                );
+                VersionDescribeFormat());
             Site.CaptureRequirementIfIsTrue(core.desktopWidth >= 0,
                 100,
                 "In Client Core Data, desktopWidth must be positive.");
@@ -923,6 +916,19 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         }
 
 
+        public String VersionDescribeFormat()
+        {
+            StringBuilder versionDescribe = new StringBuilder("In Client Core Data, RDP client version number should be one of: ");
+            foreach (uint versionValue in Enum.GetValues(typeof(version_Values)))
+            {
+                versionDescribe.Append($"{((uint)versionValue).ToString("X08")}, ");
+            }
+            versionDescribe.Remove(versionDescribe.Length - 2, 2);
+            versionDescribe.Append(".");
+            return versionDescribe.ToString();
+        }
+
+        
         public void VerifyStructure(TS_UD_CS_SEC sec)
         {
             Site.CaptureRequirementIfAreEqual<TS_UD_HEADER_type_Values>(sec.header.type, TS_UD_HEADER_type_Values.CS_SECURITY, 209,
