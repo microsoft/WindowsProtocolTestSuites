@@ -357,7 +357,7 @@ Function Config-Phase4()
     $PdcOsVersion = Get-Content -Path "$PdcShare\osversion.txt" -ErrorAction Stop
     .\Modify-PtfConfigFiles.ps1 -Files $PtfFiles -ProperyName "WritableDC1.OSVersion" -ProperyValue $PdcOsVersion
     .\Modify-PtfConfigFiles.ps1 -Files $PtfFiles -ProperyName "SUT.Server.Computer.Name" -ProperyValue $Parameters["primarydc"].ToString().Split('.')[0].ToUpper()
-    .\Modify-PtfConfigFiles.ps1 -Files $PtfFiles -ProperyName "SUT.SubnetNames.IP.V4" -ProperyValue $Parameters["ipv4subnet"]
+    .\Modify-PtfConfigFiles.ps1 -Files $PtfFiles -ProperyName "SUT.SubnetNames.IP.V4" -ProperyValue $Parameters["subnet"]
 
     #######################################################################
     # Modify PtfConfig file according to information retrieved from <SDC> #

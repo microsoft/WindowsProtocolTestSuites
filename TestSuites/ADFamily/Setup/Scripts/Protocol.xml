@@ -240,7 +240,6 @@
       <trustdcip>192.168.111.5</trustdcip>
       <dm>DM.contoso.com</dm>
       <dmip>192.168.111.6</dmip>
-      <ipv4subnet>255.255.255.0</ipv4subnet>
       <clientuser>userADTSSecurity</clientuser>
       <userpassword>Password01!</userpassword>
       <temppassword>Password02@</temppassword>
