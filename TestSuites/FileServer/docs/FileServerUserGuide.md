@@ -126,13 +126,13 @@
     * [7.3.3. Check Test Results](#7.3)
 * [8. Debugging Test Cases](#8)
 
-##<a name="1"/> 1. Introduction
+## <a name="1"/> 1. Introduction
 
 This test suite is designed to test the implementations of file server protocol family including [**[MS-SMB2]**](https://msdn.microsoft.com/en-us/library/cc246482.aspx) (Server Message Block (SMB) Protocol Version 2 and 3), [**[MS-FSRVP]**](https://msdn.microsoft.com/en-us/library/hh554852.aspx) (File Server Remote VSS Protocol), [**[MS-SWN]**](https://msdn.microsoft.com/en-us/library/hh536748.aspx) (Service Witness Protocol), [**[MS-DFSC]**](https://msdn.microsoft.com/en-us/library/cc226982.aspx) Distributed File System (DFS): Namespace Referral Protocol, [**[MS-FSA]**](https://msdn.microsoft.com/en-us/library/ff469524.aspx) (File System Algorithms), [**[MS-SQOS]**](https://msdn.microsoft.com/en-us/library/mt226249.aspx) (Storage Quality of Service Protocol) and [**[MS-RSVD]**](https://msdn.microsoft.com/en-us/library/dn393384.aspx) (Remote Shared Virtual Disk Protocol) as specified in the Microsoft® [Windows Protocols](https://msdn.microsoft.com/en-us/library/jj712081.aspx). This guide provides you detailed information about how to use this test suite on both Microsoft® Windows® operating systems and non-Windows based operating systems.
 
 This suite tests only the protocol implementation behaviors that are observed over the wire. For detailed information about the design of this test suite, please see more in [File Server Protocol Family Test Design Specification](./FileServerTestDesignSpecification.md), [Authentication Protocol Server Test Design Specification](./Auth_ServerTestDesignSpecification.md), [MS-FSA Protocol Server Test Design Specification](./MS-FSA_ServerTestDesignSpecification.md), and [MS-SQOS Protocol Server Test Design Specification](./MS-SQOS_ServerTestDesignSpecification.md).
 
-##<a name="2"/> 2. Quickstart Checklist
+## <a name="2"/> 2. Quickstart Checklist
 
 The following checklist summarizes the tasks you will need to complete in order to get the test suite up and running. It also links you to the right sections that is providing you more details on how to complete the task.
 
