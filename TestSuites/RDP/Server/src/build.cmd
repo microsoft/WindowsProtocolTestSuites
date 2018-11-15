@@ -62,7 +62,7 @@ if ErrorLevel 1 (
 	echo Error: Failed to generate the msi installer
 	exit /b 1
 )
-
+   
 echo ==============================================
 echo          Build RDP Server test suite successfully
 echo ==============================================
