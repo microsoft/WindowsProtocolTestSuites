@@ -187,6 +187,6 @@
     <Copy SourceFiles="..\TestSuite\RDP_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Bin" />
     <Copy SourceFiles="..\TestSuite\RDP_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Bin" />    
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Disable_Firewall.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Scripts" />
-    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\SetPasswordNeverExpires.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Enable-WinRM.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Scripts" />
   </Target>
 </Project>

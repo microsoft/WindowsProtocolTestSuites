@@ -31,7 +31,7 @@
       <dns>Empty</dns>
       <memory>4096</memory>
       <skipwaitingforpostscript>true</skipwaitingforpostscript>
-      <postscript>Disable_Firewall.ps1;SetPasswordNeverExpires.ps1;PostConfig-SUT.ps1</postscript>
+      <postscript>Disable_Firewall.ps1;PostConfig-SUT.ps1</postscript>
     </vm>
     <vm>
       <sku>client</sku>
@@ -46,7 +46,7 @@
       <gateway>Empty</gateway>
       <dns>Empty</dns>
       <memory>4096</memory>
-      <postscript>Disable_Firewall.ps1;SetPasswordNeverExpires.ps1;InstallMSIAndTools.ps1;Enable-WinRM.ps1;PostConfig-Driver.ps1</postscript>
+      <postscript>Disable_Firewall.ps1;Enable-WinRM.ps1;PostConfig-Driver.ps1</postscript>
       <tools>
         <tool name="SE" MSIName="SpecExplorer.msi" version="3.5.3146.0" CPUArchitecture="x86" />
         <tool name="PTF" MSIName="ProtocolTestFrameworkInstaller.msi" version="1.0.6000.0" CPUArchitecture="x86" />

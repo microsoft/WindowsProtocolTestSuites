@@ -25,8 +25,8 @@ $SignalFileFullPath      = "$WorkingPath\post.finished.signal"
 [string]$configPath	 	 = "$WorkingPath\protocol.xml"
 
 [xml]$Content = Get-Content $configPath
-$driverComputerSettting = $Content.lab.servers.vm | where {$_.role -eq "DriverComputer"}
-$coreSettting = $Content.lab.core
+$driverComputerSetting = $Content.lab.servers.vm | where {$_.role -eq "DriverComputer"}
+$coreSetting = $Content.lab.core
 
 #------------------------------------------------------------------------------------------
 # Function: Start-ConfigLog
