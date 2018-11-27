@@ -93,9 +93,9 @@ Function Init-Environment()
 Function Config-Environment
 {
     # Start configure
-	[string] $domain = $driverComputerSettting.domain
-	[string] $userName = $coreSettting.username
-	[string] $userPwd = $coreSettting.password
+	[string] $domain = $driverComputerSetting.domain
+	[string] $userName = $coreSetting.username
+	[string] $userPwd = $coreSetting.password
 	
     Write-ConfigLog "Setting autologon..." -ForegroundColor Yellow
     Set-AutoLogon -Domain $domain -Username $userName -Password $userPwd -Count 999
