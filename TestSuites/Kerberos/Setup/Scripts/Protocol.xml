@@ -181,7 +181,7 @@
       <trustapserver>AP02.kerb.com</trustapserver>
       <trustdcuser>KERB\Administrator</trustdcuser>
       <trustdcpwd>Password01#</trustdcpwd>
-      <postscript>InstallMSIAndTools.ps1;Kerberos-ENDPOINT01-Postscript.ps1</postscript>
+      <postscript>Kerberos-ENDPOINT01-Postscript.ps1</postscript>
 	    <configscript>Configure-ENDPOINT.ps1</configscript>
       <restartinpostscript>true</restartinpostscript>
       <skipwaitingforpostscript>false</skipwaitingforpostscript>
