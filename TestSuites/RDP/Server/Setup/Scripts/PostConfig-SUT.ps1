@@ -25,8 +25,8 @@ $SignalFileFullPath      = "$WorkingPath\post.finished.signal"
 $configPath				 = "$WorkingPath\protocol.xml"
 
 [xml]$Content = Get-Content $configPath
-$sutSettting = $Content.lab.servers.vm | where {$_.role -eq "SUT"}
-$coreSettting = $Content.lab.core
+$sutSetting = $Content.lab.servers.vm | where {$_.role -eq "SUT"}
+$coreSetting = $Content.lab.core
 
 #------------------------------------------------------------------------------------------
 # Function: Start-ConfigLog
@@ -92,9 +92,9 @@ Function Init-Environment()
 #------------------------------------------------------------------------------------------
 Function Config-Environment
 {
-	[string] $domain = $sutSettting.domain
-	[string] $userName = $coreSettting.username
-	[string] $userPwd = $coreSettting.password
+	[string] $domain = $sutSetting.domain
+	[string] $userName = $coreSetting.username
+	[string] $userPwd = $coreSetting.password
 	
     # Start configure
     Write-ConfigLog "Setting autologon..." -ForegroundColor Yellow
