@@ -45,7 +45,7 @@ namespace Microsoft.Protocols.TestManager.UI
 
         protected override void OnExit(ExitEventArgs e)
         {
-            if(mutex != null)
+            if (mutex != null)
             {
                 mutex.ReleaseMutex();
             }
@@ -81,19 +81,7 @@ namespace Microsoft.Protocols.TestManager.UI
 
         void LogExceptionDetail(Exception e)
         {
-            string logName = string.Format("Exception_{0}.log", DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss-fff"));
-            string logFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Protocol Test Manager");
-            if (!Directory.Exists(logFolder))
-            {
-                Directory.CreateDirectory(logFolder);
-            }
-            string errorLog = Path.Combine(logFolder, logName);
-
-            using (StreamWriter errorWriter = new StreamWriter(errorLog))
-            {
-                errorWriter.WriteLine("Error Message: " + e.Message);
-                errorWriter.WriteLine("Stack Trace: " + e.StackTrace);
-            }
+            Utility.LogException(new List<Exception> { e });
         }
     }
 }
