@@ -34,7 +34,7 @@
    
     <WixVariable Id="TESTSUITE_BATCH_DIR" Value="$(env.TestSuiteRoot)\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\src\Batch" />
     <WixVariable Id="TESTSUITE_BIN_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\Bin" />
-    <WixVariable Id="TESTSUITE_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\Setup\Scripts" />
+    <WixVariable Id="TESTSUITE_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\Scripts" />
     <WixVariable Id="TESTSUITE_DATA_DIR" Value="$(env.TestSuiteRoot)\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\Setup\Data" />
     <WixVariable Id="TESTSUITE_COMMON_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\common" />
     <!-- The scripts are supposed to be cmd scripts, no parameter. -->
