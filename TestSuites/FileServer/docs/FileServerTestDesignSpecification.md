@@ -1703,9 +1703,9 @@ This is used to test SMB2 common user scenarios.
 ||LOGOFF|
 
 
-####<a name="3.1.24"> Compound
+#### <a name="3.1.24"> Compound
 
-#####<a name="3.1.24.1"> Test Case
+##### <a name="3.1.24.1"> Test Case
 
 |||
 |---|---|
@@ -6641,9 +6641,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 |**Cleanup**||
 
 
-####<a name="3.3.8"> CompoundWithEncryption
+#### <a name="3.3.8"> CompoundWithEncryption
 
-#####<a name="3.3.8.1"> Scenario
+##### <a name="3.3.8.1"> Scenario
 
 |||
 |---|---|
@@ -6658,7 +6658,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 |**Cluster Involved Scenario**|**NO**|
 
 
-#####<a name="3.3.8.2"> Test Case
+##### <a name="3.3.8.2"> Test Case
 
 |||
 |---|---|

@@ -89,7 +89,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 messageBytes,
                 decodeRole,
                 transportType,
-                false,
                 out consumedLength,
                 out expectedLength);
 
@@ -109,8 +108,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <param name="messageBytes">The received packet</param>
         /// <param name="role">The role of this decoder, client or server</param>
         /// <param name="transportType">The underlying transport type</param>
-        /// <param name="ignoreCompoundFlag">indicate whether decode the packet as a single packet or a compound packet
-        /// when compound flag is set</param>
         /// <param name="consumedLength">[OUT]The consumed length of the message</param>
         /// <param name="expectedLength">[OUT]The expected length</param>
         /// <returns>A Smb2Packet</returns>
@@ -122,7 +119,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             byte[] messageBytes,
             Smb2Role role,
             Smb2TransportType transportType,
-            bool ignoreCompoundFlag,
             out int consumedLength,
             out int expectedLength
             )
@@ -155,7 +151,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 Smb2Packet packet = DecodeCompletePacket(
                     smb2Message,
                     role,
-                    ignoreCompoundFlag,
                     0,
                     0,
                     out consumedLength,
@@ -172,7 +167,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 Smb2Packet packet = DecodeCompletePacket(
                     messageBytes,
                     role,
-                    ignoreCompoundFlag,
                     0,
                     0,
                     out consumedLength,
@@ -191,8 +185,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// </summary>
         /// <param name="messageBytes">The received packet</param>
         /// <param name="role">The role of this decoder, client or server</param>
-        /// <param name="ignoreCompoundFlag">indicate whether decode the packet as a single packet or a compound packet
-        /// when compound flag is set</param>
         /// <param name="realSessionId">The real sessionId for this packet</param>
         /// <param name="realTreeId">The real treeId for this packet</param>
         /// <param name="consumedLength">[OUT]The consumed length of the message</param>
@@ -201,7 +193,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         public Smb2Packet DecodeCompletePacket(
             byte[] messageBytes,
             Smb2Role role,
-            bool ignoreCompoundFlag,
             ulong realSessionId,
             uint realTreeId,
             out int consumedLength,
@@ -225,7 +216,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 return DecodeEncryptedSmb2Packet(
                     messageBytes,
                     role,
-                    ignoreCompoundFlag,
                     realSessionId,
                     realTreeId,
                     out consumedLength,
@@ -238,11 +228,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 Smb2Packet decodedPacket = DecodeSmb2Packet(
                     messageBytes,
                     role,
-                    ignoreCompoundFlag,
                     realSessionId,
                     realTreeId,
                     out consumedLength,
-                    out expectedLength
+                    out expectedLength,
+                    null
                     );
 
                 //For single packet signature verification               
@@ -290,21 +280,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         private Smb2Packet DecodeEncryptedSmb2Packet(
             byte[] messageBytes,
             Smb2Role role,
-            bool ignoreCompoundFlag,
             ulong realSessionId,
             uint realTreeId,
             out int consumedLength,
             out int expectedLength
             )
         {
+            Transform_Header transformHeader;
+            var decryptedBytes = Smb2Crypto.Decrypt(messageBytes, cryptoInfoTable, decodeRole, out transformHeader);
             return DecodeSmb2Packet(
-                    Smb2Crypto.Decrypt(messageBytes, cryptoInfoTable, decodeRole),
+                    decryptedBytes,
                     role,
-                    ignoreCompoundFlag,
                     realSessionId,
                     realTreeId,
                     out consumedLength,
-                    out expectedLength);
+                    out expectedLength,
+                    transformHeader
+                    );
         }
 
         /// <summary>
@@ -312,37 +304,47 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// </summary>
         /// <param name="messageBytes">The received packet</param>
         /// <param name="role">The role of this decoder, client or server</param>
-        /// <param name="ignoreCompoundFlag">indicate whether decode the packet as a single packet or a compound packet
-        /// when compound flag is set</param>
         /// <param name="realSessionId">The real sessionId for this packet</param>
         /// <param name="realTreeId">The real treeId for this packet</param>
         /// <param name="consumedLength">[OUT]The consumed length of the message</param>
         /// <param name="expectedLength">[OUT]The expected length</param>
+        /// <param name="transformHeader">The optional transform header</param>
         /// <returns>A Smb2Packet</returns>
         private Smb2Packet DecodeSmb2Packet(
             byte[] messageBytes,
             Smb2Role role,
-            bool ignoreCompoundFlag,
             ulong realSessionId,
             uint realTreeId,
             out int consumedLength,
-            out int expectedLength
+            out int expectedLength,
+            Transform_Header? transformHeader
             )
         {
             Packet_Header smb2Header;
 
             smb2Header = TypeMarshal.ToStruct<Packet_Header>(messageBytes);
 
-            if ((smb2Header.NextCommand != 0) && !ignoreCompoundFlag)
+            if (smb2Header.NextCommand != 0)
             {
-                return DecodeCompoundPacket(messageBytes, role, out consumedLength, out expectedLength);
+                return DecodeCompoundPacket(messageBytes, role, out consumedLength, out expectedLength, transformHeader);
             }
             else
             {
+                if (transformHeader != null)
+                {
+                    // For client: If the NextCommand field in the first SMB2 header of the message is equal to 0 
+                    // and SessionId of the first SMB2 header is not equal to the SessionId field in SMB2 TRANSFORM_HEADER of response, the client MUST discard the message.
+                    //
+                    // For server: For a singleton request if the SessionId field in the SMB2 header of the request is not equal to Request.TransformSessionId, 
+                    // the server MUST disconnect the connection.
+                    if (smb2Header.SessionId != transformHeader.Value.SessionId)
+                    {
+                        throw new InvalidOperationException("SessionId is inconsistent for encrypted response.");
+                    }
+                }
                 return DecodeSinglePacket(
                     messageBytes,
                     role,
-                    ignoreCompoundFlag,
                     realSessionId,
                     realTreeId,
                     out consumedLength,
@@ -359,12 +361,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <param name="role">The role of this decoder, client or server</param>
         /// <param name="consumedLength">[OUT]The consumed length of the message</param>
         /// <param name="expectedLength">[OUT]The expected length</param>
+        /// <param name="transformHeader">The optional transform header</param>
         /// <returns>A Smb2Packet</returns>
         public Smb2Packet DecodeCompoundPacket(
             byte[] messageBytes,
             Smb2Role role,
             out int consumedLength,
-            out int expectedLength
+            out int expectedLength,
+            Transform_Header? transformHeader
             )
         {
             Smb2CompoundPacket compoundPacket = new Smb2CompoundPacket();
@@ -372,7 +376,77 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
             compoundPacket.FromBytes(messageBytes, out consumedLength, out expectedLength);
 
+            VerifyCompoundPacket(compoundPacket, role, transformHeader);
+
             return compoundPacket;
+        }
+
+        private void VerifyCompoundPacket(Smb2CompoundPacket compoundPacket, Smb2Role role, Transform_Header? transformHeader)
+        {
+            for (int i = 0; i < compoundPacket.Packets.Count; i++)
+            {
+                var packet = compoundPacket.Packets[i];
+
+                if (packet.Header.NextCommand % 8 != 0)
+                {
+                    throw new InvalidOperationException("NextCommand is not a 8-byte aligned offset!");
+                }
+
+                switch (role)
+                {
+                    case Smb2Role.Client:
+                        {
+                            if (transformHeader != null)
+                            {
+                                // For each response in a compounded response, if the SessionId field of SMB2 header is not equal to the SessionId field in the SMB2 TRANSFORM_HEADER, 
+                                // the client SHOULD<139> discard the entire compounded response and stop processing.
+                                if (packet.Header.SessionId != transformHeader.Value.SessionId)
+                                {
+                                    throw new InvalidOperationException("SessionId is inconsistent for encrypted compounded response.");
+                                }
+                            }
+                        }
+                        break;
+
+                    case Smb2Role.Server:
+                        {
+                            // The server MUST verify if any of the following conditions returns TRUE and, if so, the server MUST disconnect the connection:
+                            // For the first operation of a compounded request, 
+                            // - SMB2_FLAGS_RELATED_OPERATIONS is set in the Flags field of the SMB2 header of the request 
+                            // - The SessionId field in the SMB2 header of the request is not equal to Request.TransformSessionId.
+                            // In a compounded request, for each operation in the compounded chain except the first one, 
+                            // - SMB2_FLAGS_RELATED_OPERATIONS is not set in the Flags field of the SMB2 header of the operation and SessionId in the SMB2 header of the operation is not equal to Request.TransformSessionId.
+                            if (i == 0)
+                            {
+                                if (packet.Header.Flags.HasFlag(Packet_Header_Flags_Values.FLAGS_RELATED_OPERATIONS))
+                                {
+                                    throw new InvalidOperationException("FLAGS_RELATED_OPERATIONS should not be set for the first compounded request.");
+                                }
+                                if (transformHeader != null)
+                                {
+                                    if (packet.Header.SessionId != transformHeader.Value.SessionId)
+                                    {
+                                        throw new InvalidOperationException("SessionId is inconsistent for encrypted compounded request.");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (transformHeader != null)
+                                {
+                                    if (!packet.Header.Flags.HasFlag(Packet_Header_Flags_Values.FLAGS_RELATED_OPERATIONS))
+                                    {
+                                        if (packet.Header.SessionId != transformHeader.Value.SessionId)
+                                        {
+                                            throw new InvalidOperationException("SessionId is inconsistent for encrypted compounded request.");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                }
+            }
         }
 
 
@@ -381,8 +455,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// </summary>
         /// <param name="messageBytes">The received packet</param>
         /// <param name="role">The role of this decoder, client or server</param>
-        /// <param name="ignoreCompoundFlag">indicate whether decode the packet as a single packet or a compound packet
-        /// when compound flag is set</param>
         /// <param name="realSessionId">The real sessionId for this packet</param>
         /// <param name="realTreeId">The real treeId for this packet</param>
         /// <param name="consumedLength">[OUT]The consumed length of the message</param>
@@ -391,7 +463,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         public Smb2Packet DecodeSinglePacket(
             byte[] messageBytes,
             Smb2Role role,
-            bool ignoreCompoundFlag,
             ulong realSessionId,
             uint realTreeId,
             out int consumedLength,
@@ -402,7 +473,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             {
                 return DecodeSingleResponsePacket(
                     messageBytes,
-                    ignoreCompoundFlag,
                     realSessionId,
                     realTreeId,
                     out consumedLength,
@@ -443,10 +513,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
             switch (smb2Header.Command)
             {
-               
+
                 case Smb2Command.NEGOTIATE:
                     packet = new Smb2NegotiateRequestPacket();
-                    break;                
+                    break;
                 default:
                     throw new InvalidOperationException("Received an unknown packet! the type of the packet is "
                         + smb2Header.Command.ToString());
@@ -462,8 +532,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// Decode the message as smb2 single response packet
         /// </summary>
         /// <param name="messageBytes">The received packet</param>
-        /// <param name="ignoreCompoundFlag">indicate whether decode the packet as a single packet or a compound packet
-        /// when compound flag is set</param>
         /// <param name="realSessionId">The real sessionId for this packet</param>
         /// <param name="realTreeId">The real treeId for this packet</param>
         /// <param name="consumedLength">[OUT]The consumed length of the message</param>
@@ -473,7 +541,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
         private Smb2Packet DecodeSingleResponsePacket(
             byte[] messageBytes,
-            bool ignoreCompoundFlag,
             ulong realSessionId,
             uint realTreeId,
             out int consumedLength,
@@ -602,16 +669,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 packet.FromBytes(messageBytes, out consumedLength, out expectedLength);
             }
 
-            //if ignoreCompoundFlag is false, means the process of decoding this packet
-            //is not part of the process of decoding a compound packet. We will update
-            //context here.
-            if (!ignoreCompoundFlag)
-            {
-            }
-
             return packet;
         }
-   
+
         /// <summary>
         /// Get version information
         /// </summary>
@@ -698,7 +758,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 {
                     packet = packet.Error;
                 }
-                
+
                 byte[] bytesToCompute = messageBytes;
                 // Zero out the 16-byte signature field in the SMB2 Header of the incoming message.
                 Array.Clear(bytesToCompute, System.Runtime.InteropServices.Marshal.SizeOf(packet.Header) - Smb2Consts.SignatureSize, Smb2Consts.SignatureSize);
