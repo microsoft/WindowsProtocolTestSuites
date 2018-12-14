@@ -16123,15 +16123,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
 
         /// <summary>
         /// If the file already exists it SHOULD be opened and truncated.
-        /// If the file does not already exist, the operation MUST fail. 
-        /// The client MUST open the file with at least GENERIC_WRITE access for the command to succeed.
+        /// If the file does not already exist, the operation MUST fail.
         /// </summary>
         FILE_OVERWRITE = 0x00000004,
 
         /// <summary>
         /// If the file already exists it SHOULD be opened and truncated.
         /// If the file does not already exist, then it SHOULD be created.
-        /// The client MUST open the file with at least GENERIC_WRITE access.
         /// </summary>
         FILE_OVERWRITE_IF = 0x00000005
     }
