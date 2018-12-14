@@ -125,6 +125,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             client.PacketSending += new Action<Smb2Packet>(client_PacketSent);
             client.PendingResponseReceived += new Action<Smb2SinglePacket>(client_PendingResponseReceived);
 
+            client.NotificationThreadExceptionHappened += new Action<Exception>(client_NotificationThreadExceptionHappened);
+
             sessionChannelSequence = 0;
 
             creditGoal = 1;
@@ -2794,7 +2796,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
 
             client.SendPacket(compoundRequest);
-            
+
             // response can come either compounded or not
             var responsePackets = new List<Smb2SinglePacket>();
 
@@ -3094,6 +3096,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             // Produce credit from interim response as
             // server will set the CreditResponse field to the number of credits the server chooses to grant for this request
             ProduceCredit(pendingResponse.Header.MessageId, pendingResponse.Header);
+        }
+
+        private void client_NotificationThreadExceptionHappened(Exception exception)
+        {
+            // Print the exception happened in notification thread.
+            baseTestSite.Log.Add(LogEntryKind.Debug, "Exception happened in notification thread: {0}.", exception);
         }
 
         private void SetCreditGoal()
