@@ -70,8 +70,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
                 sqosRequest,
                 out sqosResponse);
             BaseTestSite.Assert.AreEqual(
-                (uint)NtStatus.STATUS_REVISION_MISMATCH, 
-                status, 
+                (uint)NtStatus.STATUS_REVISION_MISMATCH,
+                status,
                 "3.2.5.1: If Request.ProtocolVersion does not equal 0x0100, the server MUST fail the request with error STATUS_REVISION_MISMATCH.");
         }
 
@@ -84,7 +84,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
         {
             ConnectToVHD();
             BaseTestSite.Log.Add(
-                LogEntryKind.TestStep, 
+                LogEntryKind.TestStep,
                 "Client sends an SQOS request with an invalid option (0) and expects STATUS_INVALID_PARAMETER");
             SqosResponsePacket sqosResponse;
             SqosRequestPacket sqosRequest = new SqosRequestPacket(TestConfig.SqosClientDialect == SQOS_PROTOCOL_VERSION.Sqos10 ? SqosRequestType.V10 : SqosRequestType.V11,
@@ -100,18 +100,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
                 sqosRequest,
                 out sqosResponse);
 
-            if (TestConfig.Platform == Platform.WindowsServer2016 && status != Smb2Status.STATUS_INVALID_PARAMETER)
-            {
-
-            }
-            else
-            {
-                BaseTestSite.Assert.AreEqual(
-                    (uint)Smb2Status.STATUS_INVALID_PARAMETER,
-                    status,
-                    "3.2.5.1: If Request.Options does not include at least one of the flags defined in section 2.2.2.2, " +
-                    "the server MUST fail the request with error STATUS_INVALID_PARAMETER.");
-            }
+            BaseTestSite.Assert.AreEqual(
+                (uint)Smb2Status.STATUS_INVALID_PARAMETER,
+                status,
+                "3.2.5.1: If Request.Options does not include at least one of the flags defined in section 2.2.2.2, " +
+                "the server MUST fail the request with error STATUS_INVALID_PARAMETER.");
         }
 
         [TestMethod]
@@ -145,7 +138,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
                 sqosRequest,
                 out sqosResponse);
             BaseTestSite.Assert.AreEqual(
-                Smb2Status.STATUS_INVALID_PARAMETER, 
+                Smb2Status.STATUS_INVALID_PARAMETER,
                 status,
                 "Server should return STATUS_INVALID_PARAMETER when Request.Limit is greater than 0 and Request.PolicyID is invalid and not equal to a NULL GUID");
         }
@@ -159,7 +152,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
         {
             ConnectToVHD();
             BaseTestSite.Log.Add(
-                LogEntryKind.TestStep, 
+                LogEntryKind.TestStep,
                 "Client sends an SQOS request when Request.Reservation is greater than Request.Limit and expects STATUS_INVALID_PARAMETER");
             SqosResponsePacket sqosResponse;
             // Section 3.2.5.1.2
@@ -184,7 +177,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
                 sqosRequest,
                 out sqosResponse);
             BaseTestSite.Assert.AreEqual(
-                Smb2Status.STATUS_INVALID_PARAMETER, 
+                Smb2Status.STATUS_INVALID_PARAMETER,
                 status,
                 "Server should return STATUS_INVALID_PARAMETER when Request.Limit is greater than 0 and Request.Reservation is greater than Request.Limit");
         }
@@ -252,7 +245,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
                 sqosRequest,
                 out sqosResponse);
             BaseTestSite.Assert.AreEqual(
-                Smb2Status.STATUS_NOT_FOUND, 
+                Smb2Status.STATUS_NOT_FOUND,
                 status,
                 "3.2.5.1.2: If Request.Options includes the STORAGE_QOS_CONTROL_FLAG_SET_POLICY and the Open is not associated to a logical flow, " +
                 "the server MUST fail the request with error STATUS_NOT_FOUND");

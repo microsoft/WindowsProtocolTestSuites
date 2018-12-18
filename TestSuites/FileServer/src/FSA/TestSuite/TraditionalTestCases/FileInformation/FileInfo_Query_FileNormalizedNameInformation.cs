@@ -48,6 +48,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                 TestSite.Assert.Inconclusive("FSA Transport must be set to SMB3 in order to test query FileNormalizedNameInformation.");
             }
 
+            if (fsaAdapter.TestConfig.Platform != Platform.NonWindows && fsaAdapter.TestConfig.Platform <= Platform.WindowsServerV1709)
+            {
+                TestSite.Assert.Inconclusive("Windows Server v1709 operating system and prior do not support the FileNormalizedNameInformation information class.");
+            }
+
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
             MessageStatus status;
 
