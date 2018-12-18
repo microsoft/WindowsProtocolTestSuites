@@ -124,9 +124,16 @@
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Modify-TestRunConfig.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\PromoteDomainController.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\EnableRemoteAccess.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\RestartAndRun.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\RestartAndRunFinish.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\GetVMNameByComputerName.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-NetworkLocation.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-NetworkConfiguration.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Disable-ICMPRedirect.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Disable-IPv6.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-InstalledScriptPath.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\SetStartupScript.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\GetVmParameters.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
   </Target>
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)en-us\$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\deploy\" />
