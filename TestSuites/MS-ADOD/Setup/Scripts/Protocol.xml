@@ -21,7 +21,7 @@
       <role>DriverComputer</role>
       <installorder>1</installorder>
       <hypervname>MS-ADOD-PDC</hypervname>
-      <name>ADOD01-PDC</name>
+      <name>ADOD-PDC</name>
       <domain>ADOD01Local.COM</domain>
       <isdc>true</isdc>
       <username>Administrator</username>
@@ -52,7 +52,7 @@
       <role>Client</role>
       <installorder>2</installorder>
       <hypervname>MS-ADOD-Client</hypervname>
-      <name>ADOD01-CLIENT</name>
+      <name>ADOD-CLIENT</name>
       <domain>Workgroup</domain>
       <isdc>false</isdc>
       <username>Administrator</username>
