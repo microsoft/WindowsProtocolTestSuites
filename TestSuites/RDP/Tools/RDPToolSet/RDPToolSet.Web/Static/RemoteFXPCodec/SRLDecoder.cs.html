@@ -1,0 +1,216 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>SRLDecoder.cs</title>
+    <link href="../../Content/csharp.css" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- code formatted by http://manoli.net/csharpformat/ -->
+<div class="csharpcode">
+<pre><span class="lnum">   1:  </span><span class="rem">//------------------------------------------------------------------------------</span></pre>
+<pre><span class="lnum">   2:  </span><span class="rem">// Copyright (c) Microsoft Corporation. All rights reserved.</span></pre>
+<pre><span class="lnum">   3:  </span><span class="rem">//------------------------------------------------------------------------------</span></pre>
+<pre><span class="lnum">   4:  </span>&nbsp;</pre>
+<pre><span class="lnum">   5:  </span><span class="kwrd">using</span> System;</pre>
+<pre><span class="lnum">   6:  </span><span class="kwrd">using</span> System.Collections.Generic;</pre>
+<pre><span class="lnum">   7:  </span>&nbsp;</pre>
+<pre><span class="lnum">   8:  </span><span class="kwrd">namespace</span> Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx</pre>
+<pre><span class="lnum">   9:  </span>{</pre>
+<pre><span class="lnum">  10:  </span>    <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  11:  </span>    <span class="rem">/// Simplified Run-Length (SRL) Decoder </span></pre>
+<pre><span class="lnum">  12:  </span>    <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  13:  </span>    <span class="kwrd">public</span> <span class="kwrd">class</span> SRLDecoder</pre>
+<pre><span class="lnum">  14:  </span>    {</pre>
+<pre><span class="lnum">  15:  </span>        <span class="rem">// Constants used within the RLGR1/RLGR3 algorithm</span></pre>
+<pre><span class="lnum">  16:  </span>        <span class="kwrd">const</span> <span class="kwrd">int</span> KPMAX = 80;  <span class="rem">// max value for kp or krp</span></pre>
+<pre><span class="lnum">  17:  </span>        <span class="kwrd">const</span> <span class="kwrd">int</span> LSGR = 3;  <span class="rem">// shift count to convert kp to k</span></pre>
+<pre><span class="lnum">  18:  </span>        <span class="kwrd">const</span> <span class="kwrd">int</span> UP_GR = 4;  <span class="rem">// increase in kp after a zero run in RL mode</span></pre>
+<pre><span class="lnum">  19:  </span>        <span class="kwrd">const</span> <span class="kwrd">int</span> DN_GR = 6;  <span class="rem">// decrease in kp after a nonzero symbol in RL mode</span></pre>
+<pre><span class="lnum">  20:  </span>        <span class="kwrd">const</span> <span class="kwrd">int</span> UQ_GR = 3;   <span class="rem">// increase in kp after nonzero symbol in GR mode</span></pre>
+<pre><span class="lnum">  21:  </span>        <span class="kwrd">const</span> <span class="kwrd">int</span> DQ_GR = 3;   <span class="rem">// decrease in kp after zero symbol in GR mode</span></pre>
+<pre><span class="lnum">  22:  </span>&nbsp;</pre>
+<pre><span class="lnum">  23:  </span>        List&lt;<span class="kwrd">short</span>&gt; decodedList;</pre>
+<pre><span class="lnum">  24:  </span>        <span class="kwrd">byte</span>[] encodedBytes = <span class="kwrd">null</span>;</pre>
+<pre><span class="lnum">  25:  </span>        <span class="rem">//BitArray bitsToDecode = null;</span></pre>
+<pre><span class="lnum">  26:  </span>        <span class="kwrd">int</span> dataOffset = 0;</pre>
+<pre><span class="lnum">  27:  </span>&nbsp;</pre>
+<pre><span class="lnum">  28:  </span>        <span class="kwrd">int</span> k = 1;</pre>
+<pre><span class="lnum">  29:  </span>        <span class="kwrd">int</span> kp = 8; <span class="rem">// k &lt;&lt; LSGR;</span></pre>
+<pre><span class="lnum">  30:  </span>        <span class="kwrd">int</span> termsToDecode = RdpegfxTileUtils.ComponentElementCount;</pre>
+<pre><span class="lnum">  31:  </span>        <span class="kwrd">bool</span> zeroRLTerminated;</pre>
+<pre><span class="lnum">  32:  </span>&nbsp;</pre>
+<pre><span class="lnum">  33:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  34:  </span>        <span class="rem">/// SRL decode the input data.</span></pre>
+<pre><span class="lnum">  35:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  36:  </span>        <span class="rem">/// &lt;param name="encodedData"&gt;The input data to be decoded.&lt;/param&gt;</span></pre>
+<pre id="SRLDecoder"><span class="lnum">  37:  </span>        <span class="kwrd">public</span> SRLDecoder(<span class="kwrd">byte</span>[] encodedData)</pre>
+<pre><span class="lnum">  38:  </span>        {</pre>
+<pre><span class="lnum">  39:  </span>            encodedBytes = encodedData;</pre>
+<pre><span class="lnum">  40:  </span>            <span class="rem">//bitsToDecode = new BitArray(encodedData);</span></pre>
+<pre><span class="lnum">  41:  </span>            decodedList = <span class="kwrd">new</span> List&lt;<span class="kwrd">short</span>&gt;();</pre>
+<pre><span class="lnum">  42:  </span>            dataOffset = 0;</pre>
+<pre><span class="lnum">  43:  </span>            zeroRLTerminated = <span class="kwrd">false</span>;</pre>
+<pre><span class="lnum">  44:  </span>        }</pre>
+<pre><span class="lnum">  45:  </span>&nbsp;</pre>
+<pre><span class="lnum">  46:  </span>        <span class="rem">//</span></pre>
+<pre><span class="lnum">  47:  </span>        <span class="rem">// Gets (returns) the next nBits from the bitstream</span></pre>
+<pre><span class="lnum">  48:  </span>        <span class="rem">// The layout of N bits in the bitstream with regard to a byte array is: </span></pre>
+<pre><span class="lnum">  49:  </span>        <span class="rem">//     [0..N] -&gt; [0..7](MSB..LSB),[8..15](MSB..LSB) ...,</span></pre>
+<pre><span class="lnum">  50:  </span>        <span class="rem">// where (MSB..LSB) denotes a byte.  </span></pre>
+<pre><span class="lnum">  51:  </span>        <span class="rem">//</span></pre>
+<pre id="GetBits"><span class="lnum">  52:  </span>        <span class="kwrd">uint</span> GetBits(<span class="kwrd">uint</span> nBits)</pre>
+<pre><span class="lnum">  53:  </span>        {</pre>
+<pre><span class="lnum">  54:  </span>            <span class="kwrd">uint</span> output = 0;</pre>
+<pre><span class="lnum">  55:  </span>            <span class="kwrd">int</span> outOffset = (<span class="kwrd">int</span>)nBits - 1;</pre>
+<pre><span class="lnum">  56:  </span>            while (outOffset &gt;= 0)</pre>
+<pre><span class="lnum">  57:  </span>            {</pre>
+<pre><span class="lnum">  58:  </span>                <span class="kwrd">int</span> bitOffset = dataOffset &amp; 7;</pre>
+<pre><span class="lnum">  59:  </span>                <span class="kwrd">int</span> byteOffset = dataOffset &gt;&gt; 3;</pre>
+<pre><span class="lnum">  60:  </span>                <span class="rem">//uint outBit = (uint)(bitsToDecode.Get(bitOffset++) ? 1:0);</span></pre>
+<pre><span class="lnum">  61:  </span>                <span class="kwrd">uint</span> outBit = (<span class="kwrd">uint</span>)((encodedBytes[byteOffset] &amp; (<span class="kwrd">byte</span>)(1 &lt;&lt; (7 - bitOffset))) == 0 ? 0 : 1);</pre>
+<pre><span class="lnum">  62:  </span>                output |= (outBit &lt;&lt; outOffset--);</pre>
+<pre><span class="lnum">  63:  </span>                dataOffset++;</pre>
+<pre><span class="lnum">  64:  </span>            }</pre>
+<pre><span class="lnum">  65:  </span>            <span class="kwrd">return</span> output;</pre>
+<pre><span class="lnum">  66:  </span>        }</pre>
+<pre><span class="lnum">  67:  </span>&nbsp;</pre>
+<pre id="hasMoreBits"><span class="lnum">  68:  </span>        <span class="kwrd">bool</span> hasMoreBits(<span class="kwrd">int</span> bitCount)</pre>
+<pre><span class="lnum">  69:  </span>        {</pre>
+<pre><span class="lnum">  70:  </span>            <span class="kwrd">int</span> targetOffset = dataOffset + bitCount;</pre>
+<pre><span class="lnum">  71:  </span>&nbsp;</pre>
+<pre><span class="lnum">  72:  </span>            <span class="kwrd">int</span> bitOffset = targetOffset &amp; 7;</pre>
+<pre><span class="lnum">  73:  </span>            <span class="kwrd">int</span> byteOffset = targetOffset &gt;&gt; 3;</pre>
+<pre><span class="lnum">  74:  </span>            <span class="kwrd">if</span> (byteOffset &lt; encodedBytes.Length) <span class="kwrd">return</span> <span class="kwrd">true</span>;</pre>
+<pre><span class="lnum">  75:  </span>            <span class="kwrd">return</span> <span class="kwrd">false</span>;</pre>
+<pre><span class="lnum">  76:  </span>        }</pre>
+<pre><span class="lnum">  77:  </span>&nbsp;</pre>
+<pre><span class="lnum">  78:  </span>        <span class="rem">//</span></pre>
+<pre><span class="lnum">  79:  </span>        <span class="rem">// From current output pointer, write "value", check and update *termsToDecode</span></pre>
+<pre><span class="lnum">  80:  </span>        <span class="rem">// </span></pre>
+<pre id="WriteValue"><span class="lnum">  81:  </span>        <span class="kwrd">void</span> WriteValue(</pre>
+<pre><span class="lnum">  82:  </span>            <span class="kwrd">int</span> value,</pre>
+<pre><span class="lnum">  83:  </span>            <span class="kwrd">ref</span> <span class="kwrd">int</span> termsToDecode</pre>
+<pre><span class="lnum">  84:  </span>            )</pre>
+<pre><span class="lnum">  85:  </span>        {</pre>
+<pre><span class="lnum">  86:  </span>            <span class="kwrd">if</span> (termsToDecode &gt; 0)</pre>
+<pre><span class="lnum">  87:  </span>            {</pre>
+<pre><span class="lnum">  88:  </span>                <span class="kwrd">this</span>.decodedList.Add((<span class="kwrd">short</span>)value);</pre>
+<pre><span class="lnum">  89:  </span>                termsToDecode--;</pre>
+<pre><span class="lnum">  90:  </span>            }</pre>
+<pre><span class="lnum">  91:  </span>        }</pre>
+<pre><span class="lnum">  92:  </span>&nbsp;</pre>
+<pre><span class="lnum">  93:  </span>&nbsp;</pre>
+<pre><span class="lnum">  94:  </span>        <span class="rem">//</span></pre>
+<pre><span class="lnum">  95:  </span>        <span class="rem">// From current output pointer, write next nZeroes terms with value 0; </span></pre>
+<pre><span class="lnum">  96:  </span>        <span class="rem">// check and update *termsToDecode</span></pre>
+<pre><span class="lnum">  97:  </span>        <span class="rem">//</span></pre>
+<pre id="WriteZeroes"><span class="lnum">  98:  </span>        <span class="kwrd">void</span> WriteZeroes(</pre>
+<pre><span class="lnum">  99:  </span>            <span class="kwrd">uint</span> nZeroes,</pre>
+<pre><span class="lnum"> 100:  </span>            <span class="kwrd">ref</span> <span class="kwrd">int</span> termsToDecode</pre>
+<pre><span class="lnum"> 101:  </span>            )</pre>
+<pre><span class="lnum"> 102:  </span>        {</pre>
+<pre><span class="lnum"> 103:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> i = 0; i &lt; nZeroes &amp;&amp; termsToDecode &gt; 0; i++)</pre>
+<pre><span class="lnum"> 104:  </span>            {</pre>
+<pre><span class="lnum"> 105:  </span>                <a class="func-ref" href="#WriteValue">WriteValue</a>(0, <span class="kwrd">ref</span> termsToDecode);</pre>
+<pre><span class="lnum"> 106:  </span>            }</pre>
+<pre><span class="lnum"> 107:  </span>        }</pre>
+<pre><span class="lnum"> 108:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 109:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 110:  </span>        <span class="rem">//</span></pre>
+<pre><span class="lnum"> 111:  </span>        <span class="rem">// Update the passed parameter and clamp it to the range [0,KPMAX]</span></pre>
+<pre><span class="lnum"> 112:  </span>        <span class="rem">// Return the value of parameter right-shifted by LSGR</span></pre>
+<pre><span class="lnum"> 113:  </span>        <span class="rem">//</span></pre>
+<pre id="UpdateParam"><span class="lnum"> 114:  </span>        <span class="kwrd">int</span> UpdateParam(</pre>
+<pre><span class="lnum"> 115:  </span>            <span class="kwrd">ref</span> <span class="kwrd">int</span> param,    <span class="rem">// parameter to update</span></pre>
+<pre><span class="lnum"> 116:  </span>            <span class="kwrd">int</span> deltaP    <span class="rem">// update delta</span></pre>
+<pre><span class="lnum"> 117:  </span>            )</pre>
+<pre><span class="lnum"> 118:  </span>        {</pre>
+<pre><span class="lnum"> 119:  </span>            param += deltaP;<span class="rem">// adjust parameter</span></pre>
+<pre><span class="lnum"> 120:  </span>            <span class="kwrd">if</span> (param &gt; KPMAX) param = KPMAX;<span class="rem">// max clamp</span></pre>
+<pre><span class="lnum"> 121:  </span>            <span class="kwrd">if</span> (param &lt; 0) param = 0;<span class="rem">// min clamp</span></pre>
+<pre><span class="lnum"> 122:  </span>            <span class="kwrd">return</span> (param &gt;&gt; LSGR);</pre>
+<pre><span class="lnum"> 123:  </span>        }</pre>
+<pre><span class="lnum"> 124:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 125:  </span>        </pre>
+<pre><span class="lnum"> 126:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum"> 127:  </span>        <span class="rem">/// Decode one element from the given data</span></pre>
+<pre><span class="lnum"> 128:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum"> 129:  </span>        <span class="rem">/// &lt;param name="bitCount"&gt;The count of bits to be decoded.&lt;/param&gt;</span></pre>
+<pre><span class="lnum"> 130:  </span>        <span class="rem">/// &lt;returns&gt;The decoded element.&lt;/returns&gt;</span></pre>
+<pre id="DecodeOne"><span class="lnum"> 131:  </span>        <span class="kwrd">public</span> <span class="kwrd">short</span>? DecodeOne(<span class="kwrd">int</span> bitCount)</pre>
+<pre><span class="lnum"> 132:  </span>        {</pre>
+<pre><span class="lnum"> 133:  </span>            <span class="kwrd">short</span>? decodedValue = <span class="kwrd">null</span>;</pre>
+<pre><span class="lnum"> 134:  </span>            <span class="kwrd">if</span> (<span class="kwrd">this</span>.decodedList.Count &gt; 0)</pre>
+<pre><span class="lnum"> 135:  </span>            {</pre>
+<pre><span class="lnum"> 136:  </span>                decodedValue = <span class="kwrd">this</span>.decodedList[0];</pre>
+<pre><span class="lnum"> 137:  </span>                <span class="kwrd">this</span>.decodedList.RemoveAt(0);</pre>
+<pre><span class="lnum"> 138:  </span>                <span class="kwrd">return</span> decodedValue;</pre>
+<pre><span class="lnum"> 139:  </span>            }</pre>
+<pre><span class="lnum"> 140:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 141:  </span>            <span class="kwrd">if</span> (<a class="func-ref" href="#hasMoreBits">hasMoreBits</a>(1))</pre>
+<pre><span class="lnum"> 142:  </span>            {</pre>
+<pre><span class="lnum"> 143:  </span>                <span class="kwrd">if</span> (!zeroRLTerminated)</pre>
+<pre><span class="lnum"> 144:  </span>                {</pre>
+<pre><span class="lnum"> 145:  </span>                    <span class="kwrd">int</span> run;</pre>
+<pre><span class="lnum"> 146:  </span>                    <span class="rem">// RL MODE</span></pre>
+<pre><span class="lnum"> 147:  </span>                    while (<a class="func-ref" href="#hasMoreBits">hasMoreBits</a>(1) &amp;&amp; <a class="func-ref" href="#GetBits">GetBits</a>(1) == 0)</pre>
+<pre><span class="lnum"> 148:  </span>                    {</pre>
+<pre><span class="lnum"> 149:  </span>                        <span class="rem">// we have an RL escape "0", which translates to a run (1&lt;&lt;k) of zeros</span></pre>
+<pre><span class="lnum"> 150:  </span>                        <a class="func-ref" href="#WriteZeroes">WriteZeroes</a>((<span class="kwrd">uint</span>)(1 &lt;&lt; k), <span class="kwrd">ref</span> termsToDecode);</pre>
+<pre><span class="lnum"> 151:  </span>                        k = <a class="func-ref" href="#UpdateParam">UpdateParam</a>(<span class="kwrd">ref</span> kp, UP_GR);  <span class="rem">// raise k and kp up because of zero run</span></pre>
+<pre><span class="lnum"> 152:  </span>                    }</pre>
+<pre><span class="lnum"> 153:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 154:  </span>                    <span class="kwrd">if</span> (<a class="func-ref" href="#hasMoreBits">hasMoreBits</a>(k))</pre>
+<pre><span class="lnum"> 155:  </span>                    {</pre>
+<pre><span class="lnum"> 156:  </span>                        <span class="rem">// next k bits will contain remaining run of zeros</span></pre>
+<pre><span class="lnum"> 157:  </span>                        run = (<span class="kwrd">int</span>)<a class="func-ref" href="#GetBits">GetBits</a>((<span class="kwrd">uint</span>)k);</pre>
+<pre><span class="lnum"> 158:  </span>                        <a class="func-ref" href="#WriteZeroes">WriteZeroes</a>((<span class="kwrd">uint</span>)run, <span class="kwrd">ref</span> termsToDecode);</pre>
+<pre><span class="lnum"> 159:  </span>                        k = <a class="func-ref" href="#UpdateParam">UpdateParam</a>(<span class="kwrd">ref</span> kp, -DN_GR);</pre>
+<pre><span class="lnum"> 160:  </span>                    }</pre>
+<pre><span class="lnum"> 161:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 162:  </span>                    zeroRLTerminated = <span class="kwrd">true</span>;</pre>
+<pre><span class="lnum"> 163:  </span>                }</pre>
+<pre><span class="lnum"> 164:  </span>                <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 165:  </span>                {</pre>
+<pre><span class="lnum"> 166:  </span>                    <span class="rem">// get nonzero value, starting with sign bit and </span></pre>
+<pre><span class="lnum"> 167:  </span>                    <span class="rem">// then Unary Code for magnitude - 1</span></pre>
+<pre><span class="lnum"> 168:  </span>                    <span class="kwrd">uint</span> sign = <a class="func-ref" href="#GetBits">GetBits</a>(1);</pre>
+<pre><span class="lnum"> 169:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 170:  </span>                    <span class="kwrd">int</span> mag = 0;</pre>
+<pre><span class="lnum"> 171:  </span>                    <span class="kwrd">int</span> maxReadBits = (1 &lt;&lt; bitCount) - 2;</pre>
+<pre><span class="lnum"> 172:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 173:  </span>                    while (<a class="func-ref" href="#hasMoreBits">hasMoreBits</a>(1) &amp;&amp; maxReadBits &gt; 0 &amp;&amp; <a class="func-ref" href="#GetBits">GetBits</a>(1) == 0)</pre>
+<pre><span class="lnum"> 174:  </span>                    {</pre>
+<pre><span class="lnum"> 175:  </span>                        maxReadBits--;</pre>
+<pre><span class="lnum"> 176:  </span>                        mag++;</pre>
+<pre><span class="lnum"> 177:  </span>                    }</pre>
+<pre><span class="lnum"> 178:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 179:  </span>                    mag += 1;</pre>
+<pre><span class="lnum"> 180:  </span>                    <a class="func-ref" href="#WriteValue">WriteValue</a>(sign != 0 ? -mag : mag, <span class="kwrd">ref</span> termsToDecode);</pre>
+<pre><span class="lnum"> 181:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 182:  </span>                    zeroRLTerminated = <span class="kwrd">false</span>;</pre>
+<pre><span class="lnum"> 183:  </span>                }</pre>
+<pre><span class="lnum"> 184:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 185:  </span>            }</pre>
+<pre><span class="lnum"> 186:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 187:  </span>            <span class="kwrd">if</span> (<span class="kwrd">this</span>.decodedList.Count &gt; 0)</pre>
+<pre><span class="lnum"> 188:  </span>            {</pre>
+<pre><span class="lnum"> 189:  </span>                decodedValue = <span class="kwrd">this</span>.decodedList[0];</pre>
+<pre><span class="lnum"> 190:  </span>                <span class="kwrd">this</span>.decodedList.RemoveAt(0);</pre>
+<pre><span class="lnum"> 191:  </span>            }</pre>
+<pre><span class="lnum"> 192:  </span>            <span class="kwrd">else</span> <span class="kwrd">if</span> (<a class="func-ref" href="#hasMoreBits">hasMoreBits</a>(1))</pre>
+<pre><span class="lnum"> 193:  </span>            {</pre>
+<pre><span class="lnum"> 194:  </span>                decodedValue = <a class="func-ref" href="#DecodeOne">DecodeOne</a>(bitCount);</pre>
+<pre><span class="lnum"> 195:  </span>            }</pre>
+<pre><span class="lnum"> 196:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 197:  </span>            <span class="kwrd">return</span> decodedValue;</pre>
+<pre><span class="lnum"> 198:  </span>        }</pre>
+<pre><span class="lnum"> 199:  </span>    }</pre>
+<pre><span class="lnum"> 200:  </span>}</pre>
+</div>
+
+
+
+</body>
+</html>

@@ -49,7 +49,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Compound
         public void BVT_Compound_RelatedRequests()
         {
             Compound_RelatedRequests(
-                fileName: string.Format("BVT_Compound_RelatedRequests_{0}.txt", Guid.NewGuid()), 
+                fileName: GetTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare)),
                 isEncrypted: false);
         }
 
@@ -61,8 +61,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Compound
         public void BVT_Compound_UnRelatedRequests()
         {
             Compound_UnrelatedRequests(
-                firstFileName: string.Format("BVT_Compound_UnrelatedRequests_1_{0}.txt", Guid.NewGuid()), 
-                secondFileName: string.Format("BVT_Compound_UnrelatedRequests_2_{0}.txt", Guid.NewGuid()), 
+                firstFileName: GetTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare)),
+                secondFileName: GetTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare)),
                 isEncrypted: false);
         }
 
@@ -74,7 +74,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Compound
         public void Compound_Encrypt_RelatedRequests()
         {
             Compound_RelatedRequests(
-                fileName: string.Format("Compound_Encrypt_RelatedRequests_{0}.txt", Guid.NewGuid()), 
+                fileName: GetTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare)),
                 isEncrypted: true);
         }
 
@@ -86,8 +86,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Compound
         public void Compound_Encrypt_UnrelatedRequests()
         {
             Compound_UnrelatedRequests(
-                firstFileName: string.Format("BVT_Compound_UnrelatedRequests_1_{0}.txt", Guid.NewGuid()),
-                secondFileName: string.Format("BVT_Compound_UnrelatedRequests_2_{0}.txt", Guid.NewGuid()),
+                firstFileName: GetTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare)),
+                secondFileName: GetTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare)),
                 isEncrypted: true);
         }
 
@@ -103,10 +103,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Compound
             Smb2CreateRequestPacket createPacket = ConstructCreatePacket(client.SessionId, treeId, fileName);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Construct Write packet, flag FLAGS_RELATED_OPERATIONS is set.");
-            Smb2WriteRequestPacket writePacket = ConstructRelatedWritePacket();
+            Smb2WriteRequestPacket writePacket = ConstructRelatedWritePacket(client.SessionId, treeId);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Construct Close packet, flag FLAGS_RELATED_OPERATIONS is set.");
-            Smb2CloseRequestPacket closePacket = ConstructRelatedClosePacket();
+            Smb2CloseRequestPacket closePacket = ConstructRelatedClosePacket(client.SessionId, treeId);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Send {0}compounded Create, Write and Close requests to SUT.", isEncrypted ? "encrypted " : "");
             List<Smb2SinglePacket> requestPackets = new List<Smb2SinglePacket>();
@@ -119,22 +119,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Compound
                 // Enable encryption
                 client.EnableSessionSigningAndEncryption(enableSigning: testConfig.SendSignedRequest, enableEncryption: true);
             }
-            List<Smb2SinglePacket> responsePackets = client.SendAndReceiveCompoundPacket(requestPackets);
+            List<Smb2SinglePacket> responsePackets = client.SendAndReceiveCompoundPacket(true, requestPackets);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Verify responses to the compounded request.");
             foreach (var responsePacket in responsePackets)
             {
-                if (TestConfig.Platform == Platform.WindowsServer2016 && responsePacket.Header.Status != Smb2Status.STATUS_SUCCESS)
-                {
-
-                }
-                else
-                {
-                    BaseTestSite.Assert.AreEqual(
-                        Smb2Status.STATUS_SUCCESS,
-                        responsePacket.Header.Status,
-                        "{0} should succeed, actual status is {1}", responsePacket.Header.Command, Smb2Status.GetStatusCode(responsePacket.Header.Status));
-                }
+                BaseTestSite.Assert.AreEqual(
+                    Smb2Status.STATUS_SUCCESS,
+                    responsePacket.Header.Status,
+                    "{0} should succeed, actual status is {1}", responsePacket.Header.Command, Smb2Status.GetStatusCode(responsePacket.Header.Status));
             }
 
             client.TreeDisconnect(treeId);
@@ -166,22 +159,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Compound
                 // Enable encryption
                 client.EnableSessionSigningAndEncryption(enableSigning: testConfig.SendSignedRequest, enableEncryption: true);
             }
-            List<Smb2SinglePacket> responsePackets = client.SendAndReceiveCompoundPacket(requestPackets);
+            List<Smb2SinglePacket> responsePackets = client.SendAndReceiveCompoundPacket(false, requestPackets);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Verify responses to the compounded request.");
             foreach (var responsePacket in responsePackets)
             {
-                if (TestConfig.Platform == Platform.WindowsServer2016 && responsePacket.Header.Status != Smb2Status.STATUS_SUCCESS)
-                {
-
-                }
-                else
-                {
-                    BaseTestSite.Assert.AreEqual(
-                        Smb2Status.STATUS_SUCCESS,
-                        responsePacket.Header.Status,
-                        "{0} should succeed, actual status is {1}", responsePacket.Header.Command, Smb2Status.GetStatusCode(responsePacket.Header.Status));
-                }
+                BaseTestSite.Assert.AreEqual(
+                    Smb2Status.STATUS_SUCCESS,
+                    responsePacket.Header.Status,
+                    "{0} should succeed, actual status is {1}", responsePacket.Header.Command, Smb2Status.GetStatusCode(responsePacket.Header.Status));
             }
 
             client.TreeDisconnect(treeId);
@@ -210,17 +196,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Compound
             return createPacket;
         }
 
-        private Smb2WriteRequestPacket ConstructRelatedWritePacket()
+        private Smb2WriteRequestPacket ConstructRelatedWritePacket(ulong sessionId, uint treeId)
         {
             var writePacket = new Smb2WriteRequestPacket();
             writePacket.Header.Command = Smb2Command.WRITE;
-            // For any subsequent requests the client MUST set SMB2_FLAGS_RELATED_OPERATIONS in the Flags field of the SMB2 header to indicate that 
-            // it is using the SessionId, TreeId, and FileId supplied in the previous request (or generated by the server in processing that request). 
-            // The client SHOULD<93> set SessionId to 0xFFFFFFFFFFFFFFFF and TreeId to 0xFFFFFFFF, 
-            // and SHOULD<94> set FileId to { 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF }.
+            // The client MUST construct the subsequent request as it would do normally.
+            // For any subsequent requests the client MUST set SMB2_FLAGS_RELATED_OPERATIONS in the Flags field of the SMB2 header to indicate that it is using the SessionId, 
+            // TreeId, and FileId supplied in the previous request(or generated by the server in processing that request).
+            // For an operation compounded with an SMB2 CREATE request, the FileId field SHOULD be set to { 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF }.
             writePacket.Header.Flags = Packet_Header_Flags_Values.FLAGS_RELATED_OPERATIONS;
-            writePacket.Header.SessionId = 0xFFFFFFFFFFFFFFFF;
-            writePacket.Header.TreeId = 0xFFFFFFFF;
+            writePacket.Header.SessionId = sessionId;
+            writePacket.Header.TreeId = treeId;
             byte[] content = Smb2Utility.CreateRandomByteArray(1); // Write 1 byte to the file.
             writePacket.PayLoad.Length = (uint)content.Length;
             writePacket.PayLoad.Offset = 0;
@@ -233,13 +219,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Compound
         /// <summary>
         /// Construct a related Close Packet in the chain
         /// </summary>
-        private Smb2CloseRequestPacket ConstructRelatedClosePacket()
+        private Smb2CloseRequestPacket ConstructRelatedClosePacket(ulong sessionId, uint treeId)
         {
             var closePacket = new Smb2CloseRequestPacket();
             closePacket.Header.Command = Smb2Command.CLOSE;
+            // The client MUST construct the subsequent request as it would do normally.
+            // For any subsequent requests the client MUST set SMB2_FLAGS_RELATED_OPERATIONS in the Flags field of the SMB2 header to indicate that it is using the SessionId, 
+            // TreeId, and FileId supplied in the previous request(or generated by the server in processing that request).
+            // For an operation compounded with an SMB2 CREATE request, the FileId field SHOULD be set to { 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF }.
             closePacket.Header.Flags = Packet_Header_Flags_Values.FLAGS_RELATED_OPERATIONS;
-            closePacket.Header.SessionId = 0xFFFFFFFFFFFFFFFF;
-            closePacket.Header.TreeId = 0xFFFFFFFF;
+            closePacket.Header.SessionId = sessionId;
+            closePacket.Header.TreeId = treeId;
             closePacket.PayLoad.FileId = FILEID.Invalid;
             return closePacket;
         }
@@ -248,11 +238,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Compound
         {
             client.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             client.Negotiate(
-                TestConfig.RequestDialects, 
+                TestConfig.RequestDialects,
                 TestConfig.IsSMB1NegotiateEnabled,
                 capabilityValue: Capabilities_Values.GLOBAL_CAP_ENCRYPTION); // To enable encryption later.
             client.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, false);
-            client.TreeConnect(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare), out treeId);      
+            client.TreeConnect(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare), out treeId);
         }
     }
 }

@@ -1,0 +1,17 @@
+﻿@*@model PanelViewModel
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#@Model.ID">
+                @Model.Name
+            </a>
+        </h4>
+    </div>
+
+    <div id="@Model.ID" class="panel-collapse collapse">
+        <div class="panel-body">
+            @Model.Body
+        </div> <!-- end of panel-body -->
+    </div> <!-- end of panel-collapse -->
+</div> <!-- end of panel -->*@

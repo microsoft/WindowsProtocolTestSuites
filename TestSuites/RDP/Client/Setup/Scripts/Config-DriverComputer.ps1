@@ -140,8 +140,8 @@ if (Test-Path -Path "$env:HOMEDRIVE\$certFileName.pfx")
     Remove-Item "$env:HOMEDRIVE\$certFileName.pfx" -Force
 }
 
-New-SelfSignedCertificate -KeyExportPolicy Exportable -Subject "CN=$certCN" -KeySpec KeyExchange -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.1") -Provider "Microsoft RSA SChannel Cryptographic Provider" -KeyLocation "$env:HOMEDRIVE\$certFileName.pvk"
-$cert = (Get-ChildItem -path cert:\localmachine\my)[-1]
+New-SelfSignedCertificate -DnsName $certCN -CertStoreLocation "cert:\LocalMachine\My"
+$cert = Get-ChildItem -path cert:\localmachine\my | Where-Object { $_.Subject -eq "CN=$certCN" } | Select-Object -First 1
 $securePwd = (ConvertTo-SecureString -string "$certPwd" -Force -AsPlainText)
 Export-PfxCertificate -Cert $cert -Force -Password $securePwd -FilePath "$env:HOMEDRIVE\$certFileName.pfx"
 Export-Certificate -Cert $cert -FilePath "$env:HOMEDRIVE\$certFileName.cer" -Type CERT

@@ -261,7 +261,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                         "Treeconnect.MaximalAccess does not include DELETE or GENERIC_ALL.");
                 });
 
-                string fileName = string.Format("SharePermission_CreateClose_InvalidMaximalAccess_{0}.txt", Guid.NewGuid());
+                string fileName = GetTestFileName(shareUncPath);
                 FILEID fileId;
                 Smb2CreateContextResponse[] createContexResponse;
                 BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create the file: {0}", fileName);

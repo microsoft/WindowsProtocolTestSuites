@@ -1,0 +1,64 @@
+﻿@model IEnumerable<ICodecParam>
+
+@{
+    // if a QuantizationFactors instance is not found, an exception will be thrown
+    var quantsArray = (QuantizationFactorsArray)Model.First(param => param is QuantizationFactorsArray);
+    // pass a layer parameter
+    bool isProg = ViewBag.isProg == null ? false : ViewBag.isProg;
+    // Y Cb & Cr
+    string[] components = new[] { "Y", "Cb", "Cr" };
+    var index = 0;
+}
+
+<div class="container" style="width: 500px">
+    @foreach (var quant in quantsArray.quants)
+    {
+        var items = quant.GetType().GetProperties();
+        <div class="panel panel-default">
+
+            <div class="panel-heading">Quantization Factors for <b>@(components[index])</b></div>
+            <div class="panel-body">
+                <div id="sliders" class="component-@(components[index])">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <p>
+                                @(items[0].Name)
+                                <input id="@(items[0].Name)" class="quant-factor-slider quant-@(items[0].Name)"
+                               data-slider-min="@(isProg ? 0 : 6)" 
+                               data-slider-max="@(isProg ? 8 : 15)" 
+                               data-slider-step="1"
+                               data-slider-value="@(items[0].GetValue(quant))" 
+                               data-slider-orientation="horizontal" 
+                               data-slider-selection="after"
+                               data-slider-tooltip="show" />
+                            </p>
+                        </div>
+                    </div>
+                    @for (int i = 0; i < 3; i++)
+                    {
+                        <div class="row">
+                            @for (int j = 1; j <= 3; j++)
+                            {
+                                <div class="col-xs-4">
+                                    <p>
+                                        @(items[i * 3 + j].Name)
+                                        <input id="@(items[i * 3 + j].Name)" class="quant-factor-slider quant-@(items[i * 3 + j].Name)" 
+                               data-slider-min="@(isProg ? 0 : 6)" 
+                               data-slider-max="@(isProg ? 8 : 15)" 
+                               data-slider-step="1"
+                               data-slider-value="@(items[i * 3 + j].GetValue(quant))" 
+                               data-slider-orientation="horizontal" 
+                               data-slider-selection="after"
+                               data-slider-tooltip="show" />
+                                    </p>
+                                </div>
+                        
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+                    index++;
+    }
+</div>

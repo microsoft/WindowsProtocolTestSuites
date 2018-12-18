@@ -155,7 +155,12 @@
 								</Directory>
 								<Directory Id="SCRIPT_FILES_DIR" Name="Scripts" />
 								<Directory Id="TESTSUITE_PlayLists_DIR" Name="PlayLists" />
-								<Directory Id="DOCS_FILES_DIR" Name="Docs" />
+								<Directory Id="DOCS_FILES_DIR" Name="Docs" >
+									<Directory Id="COMMON_TD_DIR" Name="Common-TD-XML" />
+									<Directory Id="WIN2016_TD_DIR" Name="Win2016-TD-XML" />
+									<Directory Id="WIN8_TD_DIR" Name="Win8-TD-XML" />
+									<Directory Id="WINBLUE_TD_DIR" Name="WinBlue-TD-XML" />
+								</Directory>
 							</Directory>
 						</Directory>
 					</Directory>
@@ -338,7 +343,10 @@
 				<ComponentGroupRef Id="BATCH_FILES" />
 				<ComponentGroupRef Id="BIN_FILES" />
 				<ComponentGroupRef Id="PlayLists_FILES" />
-				<ComponentGroupRef Id="DOCS_FILES" />
+				<ComponentGroupRef Id="COMMON_TD_FILES" />
+				<ComponentGroupRef Id="WINBLUE_TD_FILES" />
+				<ComponentGroupRef Id="WIN2016_TD_FILES" />
+				<ComponentGroupRef Id="WIN8_TD_FILES" />
                 <ComponentGroupRef Id="COMMON_BATCH_FILES" />
 			</Feature>
 

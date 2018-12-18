@@ -74,7 +74,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.ResilientHan
 
             uint timeoutInSecond = testConfig.MaxResiliencyTimeoutInSecond / 2;
             Guid clientGuid = Guid.NewGuid();
-            string fileName = "ResilientHandle_" + Guid.NewGuid() + ".txt";
+            string fileName = GetTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare));
             FILEID fileId;
 
             // Open file & Resiliency request
@@ -136,7 +136,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.ResilientHan
 
             uint timeoutInSecond = testConfig.MaxResiliencyTimeoutInSecond / 2;
             Guid clientGuid = Guid.NewGuid();
-            string fileName = "ResilientHandle_" + Guid.NewGuid() + ".txt";
+            string fileName = GetTestFileName(Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare));
             FILEID fileId;
 
             // Open file & Resiliency request

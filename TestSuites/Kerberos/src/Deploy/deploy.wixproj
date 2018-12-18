@@ -106,7 +106,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\ProtoSDK\KerberosLib\KerberosLib.csproj">
       <Name>KerberosLib</Name>
-      <Project>{3f0b2460-33f7-4a58-9cb5-bb38914c7845}</Project>
+      <Project>{F1EDA208-50B6-4501-A9D8-D18D3434D587}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
@@ -256,9 +256,25 @@
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\TurnOff-FileReadonly.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Write-Info.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-OSVersionNumber.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Change-DomainUserPassword.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-DomainControllerParameters.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\GetVMNameByComputerName.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\GetVmParameters.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\PromoteDomainController.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\RestartAndRun.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\RestartAndRunFinish.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-AutoLogon.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-ExecutionPolicy-Unrestricted.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-NetworkConfiguration.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Disable_Firewall.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Join-Domain.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Check-ReturnValue.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Install-ADDS.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Install-IIS.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Install-FSRM.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
     <Copy SourceFiles="@(KerberosDataFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
     <Copy SourceFiles="@(KerberosScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
-	<Copy SourceFiles="@(ClientControlScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Bin\Adapter\IClientControlAdapter" />	
+	  <Copy SourceFiles="@(ClientControlScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Bin\Adapter\IClientControlAdapter" />	
     <Copy SourceFiles="..\ServerLocalTestRun.testrunconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Bin" />
     <Copy SourceFiles="..\TestSuite\Kerberos_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Bin" />
     <Copy SourceFiles="..\TestSuite\Kerberos_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Bin" />

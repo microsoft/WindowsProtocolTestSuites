@@ -46,7 +46,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             {
                 BaseTestSite.Log.Add(LogEntryKind.Debug, "\tInterface {0}:", i);
                 BaseTestSite.Log.Add(LogEntryKind.Debug, "\t\tInterfaceGroupName: {0}", interfaceList.InterfaceInfo[i].InterfaceGroupName);
-                BaseTestSite.Log.Add(LogEntryKind.Debug, "\t\tVersion: {0:x8}", interfaceList.InterfaceInfo[i].Version);
+                BaseTestSite.Log.Add(LogEntryKind.Debug, "\t\tVersion: {0:X08}", interfaceList.InterfaceInfo[i].Version);
                 BaseTestSite.Log.Add(LogEntryKind.Debug, "\t\tNodeState: {0}", interfaceList.InterfaceInfo[i].NodeState);
                 BaseTestSite.Log.Add(LogEntryKind.Debug, "\t\tIPV4: {0}", (new IPAddress(interfaceList.InterfaceInfo[i].IPV4)).ToString());
                 BaseTestSite.Log.Add(LogEntryKind.Debug, "\t\tIPV6: {0}", ConvertIPV6(interfaceList.InterfaceInfo[i].IPV6).ToString());
@@ -195,7 +195,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         /// <param name="serverComputerName">ServerComputerName</param>
         /// <returns>Return true if success, otherwise return false</returns>
         public static bool BindServer(SwnClient swnClient, IPAddress networkAddress, string domainName, string userName, string password,
-            SecurityPackageType securityPackage, RpceAuthenticationLevel authLevel, TimeSpan timeout,string serverComputerName = null)
+            SecurityPackageType securityPackage, RpceAuthenticationLevel authLevel, TimeSpan timeout, string serverComputerName = null)
         {
             AccountCredential accountCredential = new AccountCredential(domainName, userName, password);
             string cifsServicePrincipalName = string.Empty;
@@ -335,70 +335,43 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 }
 
                 #region Check Version
-                if (platform == Platform.NonWindows)
+                switch ((SwnVersion)info.Version)
                 {
-                    switch ((SwnVersion)info.Version)
-                    {
-                        case SwnVersion.SWN_VERSION_1:
-                            BaseTestSite.Log.Add(LogEntryKind.Debug,
-                                "The Version of SWN service on {0} is 0x{1:x8}",
-                                info.InterfaceGroupName,
-                                (uint)SwnVersion.SWN_VERSION_1);
-                            break;
-                        case SwnVersion.SWN_VERSION_2:
-                            BaseTestSite.Log.Add(LogEntryKind.Debug,
-                                "The Version of SWN service on {0} is 0x{1:x8}",
-                                info.InterfaceGroupName,
-                                (uint)SwnVersion.SWN_VERSION_2);
-                            break;
-                        default:
-                            BaseTestSite.Assert.Fail(
-                                "The Version of SWN service on {0} is unknown 0x{1:x8}",
-                                info.InterfaceGroupName,
-                                info.Version);
-                            break;
-                    }
-                }
-                else
-                {
-                    if (platform == Platform.WindowsServer2012R2)
-                    {
-                        BaseTestSite.Assert.AreEqual<SwnVersion>(SwnVersion.SWN_VERSION_UNKNOWN,
-                            (SwnVersion)info.Version,
-                            "Expect the Version of SWN service on {0} is 0x{1:x8}",
-                            info.InterfaceGroupName,
-                            (uint)SwnVersion.SWN_VERSION_UNKNOWN);
-                    }
-                    else if (platform == Platform.WindowsServer2012)
-                    {
-                        BaseTestSite.Assert.AreEqual<SwnVersion>(SwnVersion.SWN_VERSION_1,
-                            (SwnVersion)info.Version,
-                            "Expect the Version of SWN service on {0} is 0x{1:x8}",
+                    case SwnVersion.SWN_VERSION_1:
+                        BaseTestSite.Log.Add(LogEntryKind.Debug,
+                            "The Version of SWN service on {0} is 0x{1:X08}",
                             info.InterfaceGroupName,
                             (uint)SwnVersion.SWN_VERSION_1);
-                    }
-                    else if (platform == Platform.WindowsServer2016)
-                    {
-                        if (info.Version == (uint)SwnVersion.SWN_VERSION_UNKNOWN)
+                        break;
+                    case SwnVersion.SWN_VERSION_2:
+                        BaseTestSite.Log.Add(LogEntryKind.Debug,
+                            "The Version of SWN service on {0} is 0x{1:X08}",
+                            info.InterfaceGroupName,
+                            (uint)SwnVersion.SWN_VERSION_2);
+                        break;
+                    case SwnVersion.SWN_VERSION_UNKNOWN:
+                        if (platform >= Platform.WindowsServer2012R2)
                         {
-
+                            // Windows Server 2012 R2, Windows Server 2016, Windows Server operating system, and Windows Server 2019 initialize the value of Version to 0xFFFFFFFF.
+                            BaseTestSite.Log.Add(LogEntryKind.Debug,
+                            "The Version of SWN service on {0} is 0x{1:X08}",
+                            info.InterfaceGroupName,
+                            (uint)SwnVersion.SWN_VERSION_UNKNOWN);
                         }
                         else
                         {
-                            BaseTestSite.Assert.AreEqual<SwnVersion>(SwnVersion.SWN_VERSION_2,
-                                (SwnVersion)info.Version,
-                                "Expect the Version of SWN service on {0} is 0x{1:x8}",
-                                info.InterfaceGroupName,
-                                (uint)SwnVersion.SWN_VERSION_2);
-                        }
-                    }
-                    else
-                    {
-                        BaseTestSite.Assert.Fail(
-                            "The Version of SWN service on {0} is unknown 0x{1:x8}",
+                            BaseTestSite.Assert.Fail(
+                            "The Version of SWN service on {0} is unknown 0x{1:X08}",
                             info.InterfaceGroupName,
                             info.Version);
-                    }
+                        }
+                        break;
+                    default:
+                        BaseTestSite.Assert.Fail(
+                            "The Version of SWN service on {0} is unknown 0x{1:X08}",
+                            info.InterfaceGroupName,
+                            info.Version);
+                        break;
                 }
                 #endregion
 
@@ -543,7 +516,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             if ((uint)actualVersion < (uint)expectedVersion)
             {
                 // If server's actual SWN version is less than the expected version to run this test case, set it as inconclusive.
-                BaseTestSite.Assert.Inconclusive("Test case is not applicable to servers that support SWN Version 0x{0:x8}.", (uint)actualVersion);
+                BaseTestSite.Assert.Inconclusive("Test case is not applicable to servers that support SWN Version 0x{0:X08}.", (uint)actualVersion);
             }
         }
     }

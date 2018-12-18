@@ -54,7 +54,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                 BaseTestSite.Assert.Inconclusive("Required share does not exist: {0}", FilePermissionTestShareUncPath);
             }
 
-            tempFileName = string.Format("{0}_{1}.txt", CurrentTestCaseName, Guid.NewGuid());
+            tempFileName = GetTestFileName(FilePermissionTestShareUncPath);
             CreateNewFile(FilePermissionTestShareUncPath, tempFileName);
             baseSD = QuerySecurityDescriptor(FilePermissionTestShareUncPath, tempFileName,
                 AdditionalInformation_Values.DACL_SECURITY_INFORMATION |

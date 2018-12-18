@@ -862,7 +862,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 || core.version == version_Values.V8
                 || core.version == version_Values.V9,
                 VersionDescribeFormat());
-            Site.Assert.IsTrue(core.desktopWidth >= 0,
+            Site.Assert.IsTrue(core.desktopWidth >= 0,               
                 "In Client Core Data, desktopWidth must be positive.");
             Site.Assert.IsTrue(core.desktopHeight >= 0,
                 "In Client Core Data, desktopHeight must be positive.");

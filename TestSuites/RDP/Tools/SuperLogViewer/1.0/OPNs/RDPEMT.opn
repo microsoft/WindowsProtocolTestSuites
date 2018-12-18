@@ -1,0 +1,159 @@
+protocol RDPEMT with
+    BinaryEncodingDefaults{Endian = Endian.Little},
+Documentation
+{
+    DocumentName = "MS-RDPEMT",
+    ProtocolName = "Remote Desktop Protocol: Input Virtual Channel Extension",
+    ProtocolType = "block",
+    ShortName    = "RDPEMT",
+    Description  = ""
+},
+OPNAuthoring
+{
+    Copyright  = "(c) Microsoft Corporation",
+    References = 
+        [
+            new Reference{Name = "MS-RDPEI", Version = "3.0", Date = "01/31/2013", ProgramName = ProgramName.MCPP}
+        ],
+    RevisionSummary =
+        [
+            new Revision{Class = RevisionClass.Major, Version = "355026", Date = "10/10/2013"}
+        ]
+};
+
+using Standard;
+using Utility;
+
+annotation string Source;
+annotation string Destination;
+
+type RDP_TUNNEL_HEADER
+{
+    byte Flags with BinaryEncoding{Width = 4};
+    RDP_TUNNEL_ACTOPN Action with BinaryEncoding{Width = 4};
+    ushort PayloadLength;
+    byte HeaderLength;
+    optional [|HeaderLength > 4|] array<RDP_TUNNEL_SUBHEADER> SubHeaders with BinaryEncoding{WidthForComposedType = (HeaderLength - 4) * 8};
+}
+
+pattern RDP_TUNNEL_ACTOPN = enum byte
+{
+    RDPTUNNEL_ACTION_CREATEREQUEST  = 0x0,
+    RDPTUNNEL_ACTION_CREATERESPONSE = 0x1,
+    RDPTUNNEL_ACTION_DATA           = 0x2,
+    ...
+};
+
+type RDP_TUNNEL_SUBHEADER
+{
+    byte SubHeaderLength;
+    RDP_TUNNEL_SUBHEADER_TYPE SubHeaderType;
+    ([|SubHeaderType == 0x00|] (RDP_BW_STOP | RDP_BW_START | RDP_NETCHAR_RESULT | RDP_RTT_REQUEST)
+    | [|SubHeaderType == 0x01|] (RDP_BW_RESULTS | RDP_RTT_RESPONSE) 
+    | binary) SubHeaderData with BinaryEncoding{Length = (SubHeaderLength - 2) as uint};
+}
+
+pattern RDP_TUNNEL_SUBHEADER_TYPE = enum byte
+{
+    TYPE_ID_AUTO_DETECT_REQUEST = 0x00,
+    TYPE_ID_AUTO_DETECT_RESPONSE = 0x01,
+    ...
+};
+
+message RDP_TUNNEL_CREATEREQUEST
+{
+    RDP_TUNNEL_HEADER TunnelHeader where value.Action == 0x0;
+    uint RequestID;
+    uint Reserved;
+    array<byte> SecurityCookie with BinaryEncoding{Length = 16};    
+}
+
+message RDP_TUNNEL_CREATERESPONSE
+{
+    RDP_TUNNEL_HEADER TunnelHeader where value.Action == 0x1;
+    uint HrResponse;
+}
+
+message RDP_TUNNEL_DATA
+{
+    RDP_TUNNEL_HEADER TunnelHeader where value.Action == 0x2;
+    binary HigherLayerData;
+}
+
+
+// Structures defined in RDPBCGR
+//  2.2.14.1.2   Bandwidth Measure Start (RDP_BW_START)
+pattern RdpBWStartRequestType = enum ushort
+{
+    RdpBWStartInSecurityHeaderOrReliableTunnalSubHeader = 0x0014,
+    RdpBWStartInLossyTunnalSubHeader = 0x0114,
+    RdpBWStartInAutoDetectRequestPdu = 0x1014,
+};
+
+type RDP_BW_START
+{
+    ushort SequenceNumber;           
+    RdpBWStartRequestType RequestType;
+}
+
+//  2.2.14.1.4   Bandwidth Measure Stop (RDP_BW_STOP)
+pattern RdpBWStopRequestType = enum ushort
+{
+    RdpBWStopInSecurityHeaderOrReliableTunnalSubHeader = 0x0429,
+    RdpBWStopInLossyTunnalSubHeader = 0x0629,
+    RdpBWStopInAutoDetectRequestPdu = 0x002B,
+};
+
+type RDP_BW_STOP
+{
+    ushort SequenceNumber;
+    RdpBWStopRequestType RequestType;
+    optional [|RequestType == RdpBWStopRequestType.RdpBWStopInAutoDetectRequestPdu|] ushort PayloadLength;
+    optional [|PayloadLength != nothing|] binary Payload with BinaryEncoding{Length = (PayloadLength as uint)};
+}
+
+// 2.2.14.1.5   Network Characteristics Result (RDP_NETCHAR_RESULT)
+pattern RdpNetcharResultRequestType = enum ushort
+{
+    BaseRTTAndAverageRTT   = 0x0840,
+    BandwidthAndAverageRTT  = 0x0880,
+    BaseRTTAndBandwidthAndAverageRTT = 0x08C0,
+};
+
+type RDP_NETCHAR_RESULT
+{
+    ushort SequenceNumber;
+    RdpNetcharResultRequestType RequestType;
+    optional [|(RequestType == RdpNetcharResultRequestType.BaseRTTAndAverageRTT|| RequestType == RdpNetcharResultRequestType.BaseRTTAndBandwidthAndAverageRTT)|] uint BaseRTT; 
+    optional [|(RequestType == RdpNetcharResultRequestType.BandwidthAndAverageRTT|| RequestType == RdpNetcharResultRequestType.BaseRTTAndBandwidthAndAverageRTT)|] uint Bandwidth; 
+    optional [|RequestType in {RdpNetcharResultRequestType.BaseRTTAndAverageRTT, RdpNetcharResultRequestType.BandwidthAndAverageRTT, RdpNetcharResultRequestType.BaseRTTAndBandwidthAndAverageRTT}|] uint AverageRTT;
+};
+
+//  2.2.14.2.2   Bandwidth Measure Results (RDP_BW_RESULTS)
+pattern RdpBWResultsResponseType = enum ushort
+{
+    RdpBWResultsInConnectionPhase    = 0x0003,
+    RdpBWResultsAfterConnectionPhase  = 0x000B,
+};
+
+type RDP_BW_RESULTS
+{
+    ushort SequenceNumber;
+    RdpBWResultsResponseType ResponseType;
+    uint TimeDelta;
+    uint ByteCount;
+}
+
+type RDP_RTT_REQUEST
+{
+    ushort SequenceNumber;
+    ushort RequestType;
+}
+
+type RDP_RTT_RESPONSE
+{
+    ushort SequenceNumber;
+    ushort ResponseType;
+}
+
+

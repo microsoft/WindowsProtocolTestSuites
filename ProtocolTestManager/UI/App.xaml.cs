@@ -45,7 +45,7 @@ namespace Microsoft.Protocols.TestManager.UI
 
         protected override void OnExit(ExitEventArgs e)
         {
-            if(mutex != null)
+            if (mutex != null)
             {
                 mutex.ReleaseMutex();
             }
@@ -81,13 +81,7 @@ namespace Microsoft.Protocols.TestManager.UI
 
         void LogExceptionDetail(Exception e)
         {
-            Utility util = new Utility();
-            string errorLog = Path.Combine(util.AppConfig.AppDataDirectory, "Exception_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss-fff") + ".log");
-            using (StreamWriter errorWriter = new StreamWriter(errorLog))
-            {
-                errorWriter.WriteLine("Error Message: " + e.Message);
-                errorWriter.WriteLine("Stack Trace: " + e.StackTrace);
-            }
+            Utility.LogException(new List<Exception> { e });
         }
     }
 }

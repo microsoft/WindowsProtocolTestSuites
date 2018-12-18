@@ -33,7 +33,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         public Utility()
         {
-            installDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, ".."));
+            string exePath = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            installDir = Path.GetFullPath(Path.Combine(exePath, ".."));
         }
 
         /// <summary>
@@ -1084,6 +1085,33 @@ namespace Microsoft.Protocols.TestManager.Kernel
             return sb.ToString();
         }
 
+        #endregion
+
+        #region Exception handling
+        /// <summary>
+        /// Log exception detail to Protocol Test Manager folder under Application Data.
+        /// </summary>
+        /// <param name="exception">An exception list.</param>
+        public static void LogException(List<Exception> exception)
+        {
+            string logName = string.Format("Exception_{0}.log", DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss-fff"));
+            string logFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Protocol Test Manager");
+            if (!Directory.Exists(logFolder))
+            {
+                Directory.CreateDirectory(logFolder);
+            }
+            string errorLog = Path.Combine(logFolder, logName);
+
+            using (StreamWriter errorWriter = new StreamWriter(errorLog))
+            {
+                for (int i = 0; i < exception.Count; i++)
+                {
+                    var e = exception[i];
+                    errorWriter.WriteLine("Exception #{0}: ", i);
+                    errorWriter.WriteLine("Error Detail: {0}", e.ToString());
+                }
+            }
+        }
         #endregion
 
         /// <summary>

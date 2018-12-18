@@ -169,20 +169,24 @@ All of the following software must be installed on the driver computer ***before
 | **Spec Explorer** (build 3.5.3146.0 or later)| 
 | Spec Explorer is a model based testing tool used by test suite to design model and generate test cases.| 
 |      ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)Note| 
-|            You can download Spec Explorer from below website| 
+|            You can download Spec Explorer from the website below| 
 |            [http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/](http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)| 
 | **Microsoft Protocol Test Framework**| 
 | Microsoft Protocol Test Framework is a common framework to support protocol test suite. | 
 |      ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)Note| 
-|            You can download Microsoft protocol Test Framework from below website| 
+|            You can download Microsoft protocol Test Framework from the website below| 
 |            [https://github.com/microsoft/protocoltestframework](https://github.com/microsoft/protocoltestframework) | 
 | **Windows PowerShell 3.0** is required.| 
 | **Protocol Test Manager**| 
 | Protocol Test Manager provides a graphical UI for easily configuring and running Microsoft Windows Protocol Test Suites.| 
 | **Microsoft Message Analyzer**| 
 |        ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)Note| 
-|              You can download the latest Message Analyzer (MA) from below website. We need to install MA so that our test cases will call MA library to do live capture and verification of the network trace. It’s all automatic process, so users will only need to install the latest version of MA first. | 
+|              You can download the latest Message Analyzer (MA) from the website below. We need to install MA so that our test cases will call MA library to do live capture and verification of the network trace. It’s all automatic process, so users will only need to install the latest version of MA first. | 
 |              [http://www.microsoft.com/en-us/download/details.aspx?id=44226](http://www.microsoft.com/en-us/download/details.aspx?id=44226)           | 
+| **Open XML SDK**|
+|        ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)Note| 
+|              You can download the latest Open XML SDK from the website below. It is used to load the schema definitions in XML format from technical documents. | 
+|[https://www.microsoft.com/en-us/download/details.aspx?id=30425](https://www.microsoft.com/en-us/download/details.aspx?id=30425)|
 |  **Optional Software** | 
 |  | 
 

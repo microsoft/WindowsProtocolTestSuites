@@ -14,7 +14,7 @@ $protocolName = "MS-SMB"
 
 if (Test-Path -Path $ScriptsSignalFile)
 {
-	Write-Host "The script execution is complete." -foregroundcolor Red
+	Write-Host "The script execution is complete." -foregroundcolor Red    
 	exit 0
 }
 
@@ -26,11 +26,11 @@ $scriptsPath  = $tsInstallationPath + "\scripts"
 # Create REFS Volume 
 function CreateREFSVolume()
 {
-    Write-Info.ps1 "Create Volume for SMBREFSShare"
+    .\Write-Log.ps1 "Create Volume for SMBREFSShare"
     $volume = gwmi -Class Win32_volume | where {$_.FileSystem -eq "FAT32" -and $_.Label -eq "FAT32"}
     if ($volume -eq $null)
     {
-        Write-Info.ps1 "Create Volume for SMBREFSShare"
+        .\Write-Log.ps1 "Create Volume for SMBREFSShare"
         # Get disk and partition
         $disk = Get-WmiObject -Class Win32_DiskDrive | sort DeviceID | Select-Object -first 1
         $diskNum = $disk.Index
@@ -68,11 +68,11 @@ function CreateREFSVolume()
 # Create FAT32 Volume 
 function CreateFAT32Volume()
 {
-    Write-Info.ps1 "Create Volume for SMBFAT32Share"
+    .\Write-Log.ps1 "Create Volume for SMBFAT32Share"
     $volume = gwmi -Class Win32_volume | where {$_.FileSystem -eq "FAT32" -and $_.Label -eq "FAT32"}
     if ($volume -eq $null)
     {
-        Write-Info.ps1 "Create Volume for SMBFAT32Share"
+        .\Write-Log.ps1 "Create Volume for SMBFAT32Share"
         # Get disk and partition
         $disk = Get-WmiObject -Class Win32_DiskDrive | sort DeviceID | Select-Object -first 1
         $diskNum = $disk.Index
@@ -151,9 +151,11 @@ if(!(Test-Path -Path $testResultsPath))
 .\Write-Log.ps1 "Begin to config server ..."
 	
 Write-Host "Turn off firewall"
+.\Write-Log.ps1 "Turn off firewall"
 cmd /c netsh.exe advfirewall set allprofiles state off
     
 Write-Host "Turn on file and printer sharing..."
+.\Write-Log.ps1 "Turn on file and printer sharing..."
 .\Config-FileSharing on
 
 # Check SMB installed
@@ -165,9 +167,11 @@ if ((Get-WindowsFeature FS-SMB1).InstallState -ne "Installed")
 }
 .\Write-Log.ps1 "FS-SMB has been installed"
 
-Write-Host "Install DFS Components and config DFS namespace ..." Client
+Write-Host "Install DFS Components and config DFS namespace ..." 
+.\Write-Log.ps1 "Install DFS Components and config DFS namespace ..." 
 $serverName = "$ENV:ComputerName"    
 Write-Host "Start to install FS-DFS"
+.\Write-Log.ps1 "Start to install FS-DFS"
 Import-Module Servermanager
 
 if([double]$serverOsVersion -ge [double]$os2012)
@@ -181,6 +185,7 @@ else
 }
 
 Write-Host "Start DFS service..." 
+.\Write-Log.ps1 "Start DFS service..." 
 cmd /C sc start dfs
 .\Create-Folder.ps1 $env:homedrive\DFSNameSpace
 .\Share-Folder.ps1 $env:homedrive\DFSNameSpace DFSNameSpace
@@ -207,7 +212,8 @@ for( $i=0; $i -lt $disk2.length;$i++)
     if($disk2[$i].name -eq "H:")
     {
         $existH="true"
-        Write-Host "The disk H: has existed ..."
+        Write-Host "The disk H: exists ..."
+        .\Write-Log.ps1 "The disk H: exists ..."
         break
     }
 }
@@ -269,14 +275,16 @@ for( $i=0; $i -lt $disk2.length;$i++)
     if($disk2[$i].name -eq "H:")
     {
     	$existH="true"
-        Write-Host "The disk H: has exist ..."
+        Write-Host "The disk H: exists ..."
+        .\Write-Log.ps1 "The disk H: exists ..."
         break
     }
 }
     
 if(($extendedDiskFileSystem -eq "ReFS") -and ($existH -eq "false"))
 {     
-     Write-Host "You did not create ReFS disk H manually.So ShareFoder1 and ShareFoder2 can not be created with scripts."      
+     Write-Host "You did not create ReFS disk H manually.So ShareFoder1 and ShareFoder2 can not be created with scripts."     
+     .\Write-Log.ps1 "You did not create ReFS disk H manually.So ShareFoder1 and ShareFoder2 can not be created with scripts."  
 }
 else
 {
@@ -311,6 +319,7 @@ else
 if($existH -eq "false")
 {
     Write-Host "You did not create $extendedDiskFileSystem disk H manually.So ShareFoder3 and ShareFolder4 can not be created with scripts."   
+    .\Write-Log.ps1 "You did not create $extendedDiskFileSystem disk H manually.So ShareFoder3 and ShareFolder4 can not be created with scripts."  
 }
 else
 {

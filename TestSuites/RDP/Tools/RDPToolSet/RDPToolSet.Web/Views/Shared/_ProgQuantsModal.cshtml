@@ -1,0 +1,50 @@
+﻿@model IEnumerable<ICodecParam>
+
+@{
+    // if a QuantizationFactors instance is not found, an exception will be thrown
+    var progQuant = (ProgressiveQuantizationFactors)Model.First(param => param is ProgressiveQuantizationFactors);
+
+    ViewBag.isProg = true;
+}
+
+<!-- Modal dialog for codec quantizations. -->
+<div class="modal fade input-modal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="progquant-modal-label" id="progquant-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="progquant-modal-label">Change Progressive Quantization Factors</h4>
+            </div>
+
+            <div class="modal-body">
+
+                <div id="progressive-quantization" class="container" style="width: 500px">
+
+                    <div class="tabs">
+                        <ul id="progquant-layer-tabs" class="nav nav-pills" style="padding: 15px">
+                            @for (int i = 0; i < progQuant.ProgQuants.Count; i++)
+                            {
+                                <li class="@(i == 0 ? Html.Raw("active") : Html.Raw(""))"><a href="#quant-tab-layer-@(i)" data-toggle="tab">Layer @(i)</a></li>
+                            }
+
+                            <!-- TODO: more beatifull -->
+                            <li id="progquant-layer-remove"><a><span class="glyphicon glyphicon-minus" /></a></li>
+                            <li id="progquant-layer-add"><a><span class="glyphicon glyphicon-plus" /></a></li>
+                        </ul>
+                        <div id="progquant-layer-tabs-contents" class="tab-content">
+                            @for (int i = 0; i < progQuant.ProgQuants.Count; i++)
+                            {
+                                <div class="tab-pane @(i == 0 ? Html.Raw("active") : Html.Raw(""))" id="quant-tab-layer-@(i)">
+                                    @Html.Partial("_Quants", new[] { progQuant.ProgQuants[i] })
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

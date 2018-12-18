@@ -172,7 +172,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             Smb2CreateContextResponse[] serverCreateContexts;
             client.Create(
                 treeId,
-                string.Format("BVT_EnumerateSnapShots_{0}.txt", Guid.NewGuid()),
+                GetTestFileName(Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare)),
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileId,
                 out serverCreateContexts);

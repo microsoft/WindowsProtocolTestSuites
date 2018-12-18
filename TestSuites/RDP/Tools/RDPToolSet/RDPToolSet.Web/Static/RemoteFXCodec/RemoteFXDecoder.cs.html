@@ -1,0 +1,381 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>RemoteFXDecoder.cs</title>
+    <link href="../../Content/csharp.css" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- code formatted by http://manoli.net/csharpformat/ -->
+<div class="csharpcode">
+<pre><span class="lnum">   1:  </span><span class="rem">// ------------------------------------------------------------------------------</span></pre>
+<pre><span class="lnum">   2:  </span><span class="rem">// Copyright (c) Microsoft Corporation. All rights reserved.</span></pre>
+<pre><span class="lnum">   3:  </span><span class="rem">// ------------------------------------------------------------------------------</span></pre>
+<pre><span class="lnum">   4:  </span>&nbsp;</pre>
+<pre><span class="lnum">   5:  </span><span class="kwrd">using</span> System;</pre>
+<pre><span class="lnum">   6:  </span><span class="kwrd">using</span> System.Collections;</pre>
+<pre><span class="lnum">   7:  </span><span class="kwrd">using</span> System.Collections.Generic;</pre>
+<pre><span class="lnum">   8:  </span>&nbsp;</pre>
+<pre><span class="lnum">   9:  </span><span class="kwrd">namespace</span> Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx</pre>
+<pre><span class="lnum">  10:  </span>{</pre>
+<pre><span class="lnum">  11:  </span>    <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  12:  </span>    <span class="rem">/// The RemoteeFX decoder.</span></pre>
+<pre><span class="lnum">  13:  </span>    <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  14:  </span>    <span class="kwrd">public</span> <span class="kwrd">class</span> RemoteFXDecoder</pre>
+<pre><span class="lnum">  15:  </span>    {</pre>
+<pre><span class="lnum">  16:  </span>        <span class="kwrd">protected</span> <span class="kwrd">const</span> <span class="kwrd">int</span> DWT_PREC = 4;</pre>
+<pre><span class="lnum">  17:  </span>        <span class="kwrd">protected</span> <span class="kwrd">const</span> <span class="kwrd">int</span> TileSize = 64;</pre>
+<pre><span class="lnum">  18:  </span>&nbsp;</pre>
+<pre><span class="lnum">  19:  </span>        <span class="preproc">#region</span> <span class="kwrd">public</span> methods</pre>
+<pre><span class="lnum">  20:  </span>&nbsp;</pre>
+<pre><span class="lnum">  21:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  22:  </span>        <span class="rem">/// Decode the tile data</span></pre>
+<pre><span class="lnum">  23:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  24:  </span>        <span class="rem">/// &lt;param name="codecContext"&gt;The decoding context&lt;/param&gt;</span></pre>
+<pre><span class="lnum">  25:  </span>        <span class="rem">/// &lt;param name="yData"&gt;The Y data to be decoded.&lt;/param&gt;</span></pre>
+<pre><span class="lnum">  26:  </span>        <span class="rem">/// &lt;param name="cbData"&gt;The Cb data to be decoded.&lt;/param&gt;</span></pre>
+<pre><span class="lnum">  27:  </span>        <span class="rem">/// &lt;param name="crData"&gt;The Cr data to be decoded.&lt;/param&gt;</span></pre>
+<pre id="DecodeTile"><span class="lnum">  28:  </span>        <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> DecodeTile(<a class="func-ref" href="RemoteFXCodecContext.cs.html#RemoteFXCodecContext">RemoteFXCodecContext</a> codecContext, <span class="kwrd">byte</span>[] yData, <span class="kwrd">byte</span>[] cbData, <span class="kwrd">byte</span>[] crData)</pre>
+<pre><span class="lnum">  29:  </span>        {</pre>
+<pre><span class="lnum">  30:  </span>            <span class="rem">//Load the encoded tile data</span></pre>
+<pre><span class="lnum">  31:  </span>            <a class="func-ref" href="#FileEncodedData">FileEncodedData</a>(codecContext, yData, cbData, crData);</pre>
+<pre><span class="lnum">  32:  </span>&nbsp;</pre>
+<pre><span class="lnum">  33:  </span>            <span class="rem">//Do ALGR decode</span></pre>
+<pre><span class="lnum">  34:  </span>            <a class="func-ref" href="#RLGRDecode">RLGRDecode</a>(codecContext);</pre>
+<pre><span class="lnum">  35:  </span>&nbsp;</pre>
+<pre><span class="lnum">  36:  </span>            <span class="rem">//Do reconstruction</span></pre>
+<pre><span class="lnum">  37:  </span>            <a class="func-ref" href="#SubBandReconstruction">SubBandReconstruction</a>(codecContext);</pre>
+<pre><span class="lnum">  38:  </span>&nbsp;</pre>
+<pre><span class="lnum">  39:  </span>            <span class="rem">//Dequantization</span></pre>
+<pre><span class="lnum">  40:  </span>            <a class="func-ref" href="#Dequantization">Dequantization</a>(codecContext);</pre>
+<pre><span class="lnum">  41:  </span>&nbsp;</pre>
+<pre><span class="lnum">  42:  </span>            <span class="rem">//Inverse DWT</span></pre>
+<pre><span class="lnum">  43:  </span>            <a class="func-ref" href="#InverseDWT">InverseDWT</a>(codecContext);</pre>
+<pre><span class="lnum">  44:  </span>&nbsp;</pre>
+<pre><span class="lnum">  45:  </span>            <span class="rem">//Color coversion</span></pre>
+<pre><span class="lnum">  46:  </span>            <a class="func-ref" href="#YCbCrToRGB1">YCbCrToRGB</a>(codecContext);</pre>
+<pre><span class="lnum">  47:  </span>        }</pre>
+<pre><span class="lnum">  48:  </span>&nbsp;</pre>
+<pre><span class="lnum">  49:  </span>&nbsp;</pre>
+<pre><span class="lnum">  50:  </span>        <span class="rem">//Load encoded data into decoding context</span></pre>
+<pre id="FileEncodedData"><span class="lnum">  51:  </span>        <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> FileEncodedData(<a class="func-ref" href="RemoteFXCodecContext.cs.html#RemoteFXCodecContext">RemoteFXCodecContext</a> codecContext, <span class="kwrd">byte</span>[] yData, <span class="kwrd">byte</span>[] cbData, <span class="kwrd">byte</span>[] crData)</pre>
+<pre><span class="lnum">  52:  </span>        {</pre>
+<pre><span class="lnum">  53:  </span>            codecContext.YData = <span class="kwrd">new</span> <span class="kwrd">byte</span>[yData.Length];</pre>
+<pre><span class="lnum">  54:  </span>            codecContext.CbData = <span class="kwrd">new</span> <span class="kwrd">byte</span>[cbData.Length];</pre>
+<pre><span class="lnum">  55:  </span>            codecContext.CrData = <span class="kwrd">new</span> <span class="kwrd">byte</span>[crData.Length];</pre>
+<pre><span class="lnum">  56:  </span>            Array.Copy(yData, codecContext.YData, yData.Length);</pre>
+<pre><span class="lnum">  57:  </span>            Array.Copy(cbData, codecContext.CbData, cbData.Length);</pre>
+<pre><span class="lnum">  58:  </span>            Array.Copy(crData, codecContext.CrData, crData.Length);</pre>
+<pre><span class="lnum">  59:  </span>        }</pre>
+<pre><span class="lnum">  60:  </span>&nbsp;</pre>
+<pre><span class="lnum">  61:  </span>        <span class="rem">//RLGR decode</span></pre>
+<pre id="RLGRDecode"><span class="lnum">  62:  </span>        <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> RLGRDecode(<a class="func-ref" href="RemoteFXCodecContext.cs.html#RemoteFXCodecContext">RemoteFXCodecContext</a> codecContext)</pre>
+<pre><span class="lnum">  63:  </span>        {</pre>
+<pre id="RLGRDecoder"><span class="lnum">  64:  </span>            RLGRDecoder decoder = <span class="kwrd">new</span> RLGRDecoder();</pre>
+<pre><span class="lnum">  65:  </span>            <span class="kwrd">int</span> comLen = TileSize * TileSize;</pre>
+<pre><span class="lnum">  66:  </span>            codecContext.YComponent = decoder.<a class="func-ref" href="RLGRDecoder.cs.html#Decode">Decode</a>(codecContext.YData, codecContext.Mode, comLen);</pre>
+<pre><span class="lnum">  67:  </span>            codecContext.CbComponent = decoder.<a class="func-ref" href="RLGRDecoder.cs.html#Decode">Decode</a>(codecContext.CbData, codecContext.Mode, comLen);</pre>
+<pre><span class="lnum">  68:  </span>            codecContext.CrComponent = decoder.<a class="func-ref" href="RLGRDecoder.cs.html#Decode">Decode</a>(codecContext.CrData, codecContext.Mode, comLen);</pre>
+<pre><span class="lnum">  69:  </span>        }</pre>
+<pre><span class="lnum">  70:  </span>&nbsp;</pre>
+<pre><span class="lnum">  71:  </span>        <span class="rem">//Sub-Band Reconstruction</span></pre>
+<pre id="SubBandReconstruction"><span class="lnum">  72:  </span>        <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> SubBandReconstruction(<a class="func-ref" href="RemoteFXCodecContext.cs.html#RemoteFXCodecContext">RemoteFXCodecContext</a> codecContext)</pre>
+<pre><span class="lnum">  73:  </span>        {</pre>
+<pre><span class="lnum">  74:  </span>            <a class="func-ref" href="#reconstruction_Component">reconstruction_Component</a>(codecContext.YComponent, <span class="kwrd">out</span> codecContext.YSet);</pre>
+<pre><span class="lnum">  75:  </span>            <a class="func-ref" href="#reconstruction_Component">reconstruction_Component</a>(codecContext.CbComponent, <span class="kwrd">out</span> codecContext.CbSet);</pre>
+<pre><span class="lnum">  76:  </span>            <a class="func-ref" href="#reconstruction_Component">reconstruction_Component</a>(codecContext.CrComponent, <span class="kwrd">out</span> codecContext.CrSet);</pre>
+<pre><span class="lnum">  77:  </span>        }</pre>
+<pre><span class="lnum">  78:  </span>&nbsp;</pre>
+<pre><span class="lnum">  79:  </span>        <span class="rem">//Dequantization</span></pre>
+<pre id="Dequantization"><span class="lnum">  80:  </span>        <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> Dequantization(<a class="func-ref" href="RemoteFXCodecContext.cs.html#RemoteFXCodecContext">RemoteFXCodecContext</a> codecContext)</pre>
+<pre><span class="lnum">  81:  </span>        {</pre>
+<pre><span class="lnum">  82:  </span>            <a class="func-ref" href="#dequantization_Component">dequantization_Component</a>(codecContext.YSet, codecContext.CodecQuantVals[codecContext.QuantIdxY]);</pre>
+<pre><span class="lnum">  83:  </span>            <a class="func-ref" href="#dequantization_Component">dequantization_Component</a>(codecContext.CbSet, codecContext.CodecQuantVals[codecContext.QuantIdxCb]);</pre>
+<pre><span class="lnum">  84:  </span>            <a class="func-ref" href="#dequantization_Component">dequantization_Component</a>(codecContext.CrSet, codecContext.CodecQuantVals[codecContext.QuantIdxCr]);</pre>
+<pre><span class="lnum">  85:  </span>        }</pre>
+<pre><span class="lnum">  86:  </span>&nbsp;</pre>
+<pre><span class="lnum">  87:  </span>        <span class="rem">//InverseDWT</span></pre>
+<pre id="InverseDWT"><span class="lnum">  88:  </span>        <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> InverseDWT(<a class="func-ref" href="RemoteFXCodecContext.cs.html#RemoteFXCodecContext">RemoteFXCodecContext</a> codecContext)</pre>
+<pre><span class="lnum">  89:  </span>        {</pre>
+<pre><span class="lnum">  90:  </span>            <a class="func-ref" href="#InverseDWT_Component">InverseDWT_Component</a>(codecContext.YSet);</pre>
+<pre><span class="lnum">  91:  </span>            <a class="func-ref" href="#InverseDWT_Component">InverseDWT_Component</a>(codecContext.CbSet);</pre>
+<pre><span class="lnum">  92:  </span>            <a class="func-ref" href="#InverseDWT_Component">InverseDWT_Component</a>(codecContext.CrSet);</pre>
+<pre><span class="lnum">  93:  </span>        }</pre>
+<pre><span class="lnum">  94:  </span>&nbsp;</pre>
+<pre><span class="lnum">  95:  </span>        <span class="rem">//YCbCrToRGB</span></pre>
+<pre id="YCbCrToRGB1"><span class="lnum">  96:  </span>        <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> YCbCrToRGB(<a class="func-ref" href="RemoteFXCodecContext.cs.html#RemoteFXCodecContext">RemoteFXCodecContext</a> codecContext)</pre>
+<pre><span class="lnum">  97:  </span>        {</pre>
+<pre><span class="lnum">  98:  </span>            <a class="func-ref" href="#YCbCrToRGB2">YCbCrToRGB</a>(codecContext.YSet, codecContext.CbSet, codecContext.CrSet, <span class="kwrd">out</span> codecContext.RSet, <span class="kwrd">out</span> codecContext.GSet, <span class="kwrd">out</span> codecContext.BSet);</pre>
+<pre><span class="lnum">  99:  </span>        }</pre>
+<pre><span class="lnum"> 100:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 101:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 102:  </span>        <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> getColFrom2DArr&lt;T&gt;(T[,] input2D, <span class="kwrd">out</span> T[] output1D, <span class="kwrd">int</span> xIdx, <span class="kwrd">int</span> len)</pre>
+<pre><span class="lnum"> 103:  </span>        {</pre>
+<pre><span class="lnum"> 104:  </span>            output1D = <span class="kwrd">new</span> T[len];</pre>
+<pre><span class="lnum"> 105:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> i = 0; i &lt; len; i++)</pre>
+<pre><span class="lnum"> 106:  </span>            {</pre>
+<pre><span class="lnum"> 107:  </span>                output1D[i] = input2D[xIdx, i];</pre>
+<pre><span class="lnum"> 108:  </span>            }</pre>
+<pre><span class="lnum"> 109:  </span>        }</pre>
+<pre><span class="lnum"> 110:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 111:  </span>        <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> getRowFrom2DArr&lt;T&gt;(T[,] input2D, <span class="kwrd">out</span> T[] output1D, <span class="kwrd">int</span> yIdx, <span class="kwrd">int</span> len)</pre>
+<pre><span class="lnum"> 112:  </span>        {</pre>
+<pre><span class="lnum"> 113:  </span>            output1D = <span class="kwrd">new</span> T[len];</pre>
+<pre><span class="lnum"> 114:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> i = 0; i &lt; len; i++)</pre>
+<pre><span class="lnum"> 115:  </span>            {</pre>
+<pre><span class="lnum"> 116:  </span>                output1D[i] = input2D[i, yIdx];</pre>
+<pre><span class="lnum"> 117:  </span>            }</pre>
+<pre><span class="lnum"> 118:  </span>        }</pre>
+<pre><span class="lnum"> 119:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 120:  </span>        <span class="preproc">#endregion</span> </pre>
+<pre><span class="lnum"> 121:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 122:  </span>        <span class="preproc">#region</span> Private Methods</pre>
+<pre><span class="lnum"> 123:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 124:  </span>&nbsp;</pre>
+<pre id="reconstruction_Component"><span class="lnum"> 125:  </span>        <span class="kwrd">protected</span> <span class="kwrd">static</span> <span class="kwrd">void</span> reconstruction_Component(<span class="kwrd">short</span>[] component1D, <span class="kwrd">out</span> <span class="kwrd">short</span>[,] compontent2D)</pre>
+<pre><span class="lnum"> 126:  </span>        {</pre>
+<pre><span class="lnum"> 127:  </span>            <span class="rem">//sequence: HL1, LH1, HH1, HL2, LH2, HH2, HL3, LH3, HH3, and LL3</span></pre>
+<pre><span class="lnum"> 128:  </span>            <span class="rem">//lineOutput = new short[TileSize * TileSize];</span></pre>
+<pre><span class="lnum"> 129:  </span>            compontent2D = <span class="kwrd">new</span> <span class="kwrd">short</span>[TileSize, TileSize];</pre>
+<pre><span class="lnum"> 130:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 131:  </span>            <span class="kwrd">int</span> top, left, right, bottom;</pre>
+<pre><span class="lnum"> 132:  </span>            <span class="kwrd">int</span> offset = 0;</pre>
+<pre><span class="lnum"> 133:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 134:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> i = 0; i &lt;= 2; i++)</pre>
+<pre><span class="lnum"> 135:  </span>            {</pre>
+<pre><span class="lnum"> 136:  </span>                <span class="kwrd">int</span> levelSize = TileSize &gt;&gt; i;</pre>
+<pre><span class="lnum"> 137:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 138:  </span>                <span class="rem">//HL</span></pre>
+<pre><span class="lnum"> 139:  </span>                top = 0;</pre>
+<pre><span class="lnum"> 140:  </span>                left = levelSize / 2;</pre>
+<pre><span class="lnum"> 141:  </span>                right = levelSize - 1;</pre>
+<pre><span class="lnum"> 142:  </span>                bottom = levelSize / 2 - 1;</pre>
+<pre><span class="lnum"> 143:  </span>                <a class="func-ref" href="#reconstruction_SubBand">reconstruction_SubBand</a>(compontent2D, left, top, right, bottom, component1D, <span class="kwrd">ref</span> offset);</pre>
+<pre><span class="lnum"> 144:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 145:  </span>                <span class="rem">//LH</span></pre>
+<pre><span class="lnum"> 146:  </span>                top = levelSize / 2;</pre>
+<pre><span class="lnum"> 147:  </span>                left = 0;</pre>
+<pre><span class="lnum"> 148:  </span>                right = levelSize / 2 - 1;</pre>
+<pre><span class="lnum"> 149:  </span>                bottom = levelSize - 1;</pre>
+<pre><span class="lnum"> 150:  </span>                <a class="func-ref" href="#reconstruction_SubBand">reconstruction_SubBand</a>(compontent2D, left, top, right, bottom, component1D, <span class="kwrd">ref</span> offset);</pre>
+<pre><span class="lnum"> 151:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 152:  </span>                <span class="rem">//HH</span></pre>
+<pre><span class="lnum"> 153:  </span>                top = levelSize / 2;</pre>
+<pre><span class="lnum"> 154:  </span>                left = levelSize / 2;</pre>
+<pre><span class="lnum"> 155:  </span>                right = levelSize - 1;</pre>
+<pre><span class="lnum"> 156:  </span>                bottom = levelSize - 1;</pre>
+<pre><span class="lnum"> 157:  </span>                <a class="func-ref" href="#reconstruction_SubBand">reconstruction_SubBand</a>(compontent2D, left, top, right, bottom, component1D, <span class="kwrd">ref</span> offset);</pre>
+<pre><span class="lnum"> 158:  </span>            }</pre>
+<pre><span class="lnum"> 159:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 160:  </span>            <span class="rem">//LL</span></pre>
+<pre><span class="lnum"> 161:  </span>            top = 0;</pre>
+<pre><span class="lnum"> 162:  </span>            left = 0;</pre>
+<pre><span class="lnum"> 163:  </span>            right = TileSize / 8 - 1;</pre>
+<pre><span class="lnum"> 164:  </span>            bottom = TileSize / 8 - 1;</pre>
+<pre><span class="lnum"> 165:  </span>            <span class="kwrd">int</span> llLen = (right - left + 1) * (bottom - top + 1);</pre>
+<pre><span class="lnum"> 166:  </span>            <span class="kwrd">short</span>[] llBand = <span class="kwrd">new</span> <span class="kwrd">short</span>[llLen];</pre>
+<pre><span class="lnum"> 167:  </span>            Array.Copy(component1D, offset, llBand, 0, llLen);</pre>
+<pre><span class="lnum"> 168:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> i = 1; i &lt; llLen; i++)</pre>
+<pre><span class="lnum"> 169:  </span>            {</pre>
+<pre><span class="lnum"> 170:  </span>                llBand[i] = (<span class="kwrd">short</span>)(llBand[i - 1] + llBand[i]);</pre>
+<pre><span class="lnum"> 171:  </span>            }</pre>
+<pre><span class="lnum"> 172:  </span>            <span class="kwrd">int</span> llOffset = 0;</pre>
+<pre><span class="lnum"> 173:  </span>            <a class="func-ref" href="#reconstruction_SubBand">reconstruction_SubBand</a>(compontent2D, left, top, right, bottom, llBand, <span class="kwrd">ref</span> llOffset);</pre>
+<pre><span class="lnum"> 174:  </span>        }</pre>
+<pre><span class="lnum"> 175:  </span>&nbsp;</pre>
+<pre id="reconstruction_SubBand"><span class="lnum"> 176:  </span>        <span class="kwrd">private</span> <span class="kwrd">static</span> <span class="kwrd">void</span> reconstruction_SubBand(<span class="kwrd">short</span>[,] input, <span class="kwrd">int</span> left, <span class="kwrd">int</span> top, <span class="kwrd">int</span> right, <span class="kwrd">int</span> bottom, <span class="kwrd">short</span>[] bandOutput, <span class="kwrd">ref</span> <span class="kwrd">int</span> offset)</pre>
+<pre><span class="lnum"> 177:  </span>        {</pre>
+<pre><span class="lnum"> 178:  </span>            <span class="rem">//int totalNum = (right - left + 1) * (bottom - top + 1);</span></pre>
+<pre><span class="lnum"> 179:  </span>            <span class="rem">//bandOutput = new short[totalNum];</span></pre>
+<pre><span class="lnum"> 180:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> y = top; y &lt;= bottom; y++)</pre>
+<pre><span class="lnum"> 181:  </span>            {</pre>
+<pre><span class="lnum"> 182:  </span>                <span class="kwrd">for</span> (<span class="kwrd">int</span> x = left; x &lt;= right; x++)</pre>
+<pre><span class="lnum"> 183:  </span>                {</pre>
+<pre><span class="lnum"> 184:  </span>                    input[x, y] = bandOutput[offset++];</pre>
+<pre><span class="lnum"> 185:  </span>                }</pre>
+<pre><span class="lnum"> 186:  </span>            }</pre>
+<pre><span class="lnum"> 187:  </span>        }</pre>
+<pre><span class="lnum"> 188:  </span>&nbsp;</pre>
+<pre id="dequantization_Component"><span class="lnum"> 189:  </span>        <span class="kwrd">protected</span> <span class="kwrd">static</span> <span class="kwrd">void</span> dequantization_Component(<span class="kwrd">short</span>[,] compontent, TS_RFX_CODEC_QUANT tsRfxCodecQuant)</pre>
+<pre><span class="lnum"> 190:  </span>        {</pre>
+<pre><span class="lnum"> 191:  </span>            <span class="rem">// Quantization factor: HL1, LH1, HH1, HL2, LH2, HH2, HL3, LH3, HH3, LL3            </span></pre>
+<pre id="Hashtable"><span class="lnum"> 192:  </span>            Hashtable scaleValueTable = <span class="kwrd">new</span> Hashtable();</pre>
+<pre><span class="lnum"> 193:  </span>            <span class="kwrd">int</span> HL1_Factor = tsRfxCodecQuant.HL1_HH1 &amp; 0x0f;</pre>
+<pre><span class="lnum"> 194:  </span>            <span class="kwrd">int</span> LH1_Factor = (tsRfxCodecQuant.HH2_LH1 &amp; 0xf0) &gt;&gt; 4;</pre>
+<pre><span class="lnum"> 195:  </span>            <span class="kwrd">int</span> HH1_Factor = (tsRfxCodecQuant.HL1_HH1 &amp; 0xf0) &gt;&gt; 4;</pre>
+<pre><span class="lnum"> 196:  </span>            <span class="kwrd">int</span> HL2_Factor = (tsRfxCodecQuant.LH2_HL2 &amp; 0xf0) &gt;&gt; 4;</pre>
+<pre><span class="lnum"> 197:  </span>            <span class="kwrd">int</span> LH2_Factor = tsRfxCodecQuant.LH2_HL2 &amp; 0x0f;</pre>
+<pre><span class="lnum"> 198:  </span>            <span class="kwrd">int</span> HH2_Factor = tsRfxCodecQuant.HH2_LH1 &amp; 0x0f;</pre>
+<pre><span class="lnum"> 199:  </span>            <span class="kwrd">int</span> HL3_Factor = tsRfxCodecQuant.HL3_HH3 &amp; 0x0f;</pre>
+<pre><span class="lnum"> 200:  </span>            <span class="kwrd">int</span> LH3_Factor = (tsRfxCodecQuant.LL3_LH3 &amp; 0xf0) &gt;&gt; 4;</pre>
+<pre><span class="lnum"> 201:  </span>            <span class="kwrd">int</span> HH3_Factor = (tsRfxCodecQuant.HL3_HH3 &amp; 0xf0) &gt;&gt; 4;</pre>
+<pre><span class="lnum"> 202:  </span>            <span class="kwrd">int</span> LL3_Factor = tsRfxCodecQuant.LL3_LH3 &amp; 0x0f;</pre>
+<pre><span class="lnum"> 203:  </span>            <span class="kwrd">int</span>[] HL_Factor = { HL1_Factor, HL2_Factor, HL3_Factor };</pre>
+<pre><span class="lnum"> 204:  </span>            <span class="kwrd">int</span>[] LH_Factor = { LH1_Factor, LH2_Factor, LH3_Factor };</pre>
+<pre><span class="lnum"> 205:  </span>            <span class="kwrd">int</span>[] HH_Factor = { HH1_Factor, HH2_Factor, HH3_Factor };</pre>
+<pre><span class="lnum"> 206:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 207:  </span>            <span class="kwrd">int</span> top, left, right, bottom;</pre>
+<pre><span class="lnum"> 208:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 209:  </span>            <span class="rem">//Level 1, 2, 3</span></pre>
+<pre><span class="lnum"> 210:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> i = 0; i &lt;= 2; i++)</pre>
+<pre><span class="lnum"> 211:  </span>            {</pre>
+<pre><span class="lnum"> 212:  </span>                <span class="kwrd">int</span> levelSize = TileSize &gt;&gt; i;</pre>
+<pre><span class="lnum"> 213:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 214:  </span>                <span class="rem">//HL1,2,3</span></pre>
+<pre><span class="lnum"> 215:  </span>                top = 0;</pre>
+<pre><span class="lnum"> 216:  </span>                left = levelSize / 2;</pre>
+<pre><span class="lnum"> 217:  </span>                right = levelSize - 1;</pre>
+<pre><span class="lnum"> 218:  </span>                bottom = levelSize / 2 - 1;</pre>
+<pre><span class="lnum"> 219:  </span>                <a class="func-ref" href="#doDequantization_Subband">doDequantization_Subband</a>(compontent, left, top, right, bottom, HL_Factor[i]);</pre>
+<pre><span class="lnum"> 220:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 221:  </span>                <span class="rem">//LH1,2,3</span></pre>
+<pre><span class="lnum"> 222:  </span>                top = levelSize / 2;</pre>
+<pre><span class="lnum"> 223:  </span>                left = 0;</pre>
+<pre><span class="lnum"> 224:  </span>                right = levelSize / 2 - 1;</pre>
+<pre><span class="lnum"> 225:  </span>                bottom = levelSize - 1;</pre>
+<pre><span class="lnum"> 226:  </span>                <a class="func-ref" href="#doDequantization_Subband">doDequantization_Subband</a>(compontent, left, top, right, bottom, LH_Factor[i]);</pre>
+<pre><span class="lnum"> 227:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 228:  </span>                <span class="rem">//HH1,2,3</span></pre>
+<pre><span class="lnum"> 229:  </span>                top = levelSize / 2;</pre>
+<pre><span class="lnum"> 230:  </span>                left = levelSize / 2;</pre>
+<pre><span class="lnum"> 231:  </span>                right = levelSize - 1;</pre>
+<pre><span class="lnum"> 232:  </span>                bottom = levelSize - 1;</pre>
+<pre><span class="lnum"> 233:  </span>                <a class="func-ref" href="#doDequantization_Subband">doDequantization_Subband</a>(compontent, left, top, right, bottom, HH_Factor[i]);</pre>
+<pre><span class="lnum"> 234:  </span>            }</pre>
+<pre><span class="lnum"> 235:  </span>            <span class="rem">//LL3</span></pre>
+<pre><span class="lnum"> 236:  </span>            top = 0;</pre>
+<pre><span class="lnum"> 237:  </span>            left = 0;</pre>
+<pre><span class="lnum"> 238:  </span>            right = TileSize / 8 - 1;</pre>
+<pre><span class="lnum"> 239:  </span>            bottom = TileSize / 8 - 1;</pre>
+<pre><span class="lnum"> 240:  </span>            <a class="func-ref" href="#doDequantization_Subband">doDequantization_Subband</a>(compontent, left, top, right, bottom, LL3_Factor);</pre>
+<pre><span class="lnum"> 241:  </span>        }</pre>
+<pre><span class="lnum"> 242:  </span>&nbsp;</pre>
+<pre id="doDequantization_Subband"><span class="lnum"> 243:  </span>        <span class="kwrd">private</span> <span class="kwrd">static</span> <span class="kwrd">void</span> doDequantization_Subband(<span class="kwrd">short</span>[,] input, <span class="kwrd">int</span> left, <span class="kwrd">int</span> top, <span class="kwrd">int</span> right, <span class="kwrd">int</span> bottom, <span class="kwrd">int</span> factor)</pre>
+<pre><span class="lnum"> 244:  </span>        {</pre>
+<pre><span class="lnum"> 245:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> x = left; x &lt;= right; x++)</pre>
+<pre><span class="lnum"> 246:  </span>            {</pre>
+<pre><span class="lnum"> 247:  </span>                <span class="kwrd">for</span> (<span class="kwrd">int</span> y = top; y &lt;= bottom; y++)</pre>
+<pre><span class="lnum"> 248:  </span>                {</pre>
+<pre><span class="lnum"> 249:  </span>                    input[x, y] = (<span class="kwrd">short</span>)(input[x, y] &lt;&lt; (factor - 6));<span class="rem">//&lt;&lt; DWT_PREC);</span></pre>
+<pre><span class="lnum"> 250:  </span>                }</pre>
+<pre><span class="lnum"> 251:  </span>            }</pre>
+<pre><span class="lnum"> 252:  </span>        }</pre>
+<pre><span class="lnum"> 253:  </span>&nbsp;</pre>
+<pre id="InverseDWT_Component"><span class="lnum"> 254:  </span>        <span class="kwrd">protected</span> <span class="kwrd">static</span> <span class="kwrd">void</span> InverseDWT_Component(<span class="kwrd">short</span>[,] component)</pre>
+<pre><span class="lnum"> 255:  </span>        {</pre>
+<pre><span class="lnum"> 256:  </span>            <span class="rem">//Level 3, 2, 1</span></pre>
+<pre><span class="lnum"> 257:  </span>            <a class="func-ref" href="#InverseDWT_2D">InverseDWT_2D</a>(component, 3);</pre>
+<pre><span class="lnum"> 258:  </span>            <a class="func-ref" href="#InverseDWT_2D">InverseDWT_2D</a>(component, 2);</pre>
+<pre><span class="lnum"> 259:  </span>            <a class="func-ref" href="#InverseDWT_2D">InverseDWT_2D</a>(component, 1);</pre>
+<pre><span class="lnum"> 260:  </span>        }</pre>
+<pre><span class="lnum"> 261:  </span>&nbsp;</pre>
+<pre id="InverseDWT_2D"><span class="lnum"> 262:  </span>        <span class="kwrd">private</span> <span class="kwrd">static</span> <span class="kwrd">void</span> InverseDWT_2D(<span class="kwrd">short</span>[,] data2D, <span class="kwrd">int</span> level)</pre>
+<pre><span class="lnum"> 263:  </span>        {</pre>
+<pre><span class="lnum"> 264:  </span>            <span class="rem">//level &gt; 0</span></pre>
+<pre><span class="lnum"> 265:  </span>            <span class="rem">//data2D.Length % (1&lt;&lt;(level - 1)) == 0</span></pre>
+<pre><span class="lnum"> 266:  </span>            <span class="kwrd">int</span> inScopelen = TileSize &gt;&gt; (level - 1);</pre>
+<pre><span class="lnum"> 267:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 268:  </span>            <span class="rem">//Horizontal DWT</span></pre>
+<pre><span class="lnum"> 269:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> y = 0; y &lt; inScopelen; y++)</pre>
+<pre><span class="lnum"> 270:  </span>            {</pre>
+<pre><span class="lnum"> 271:  </span>                <span class="kwrd">short</span>[] row;</pre>
+<pre><span class="lnum"> 272:  </span>                getRowFrom2DArr&lt;<span class="kwrd">short</span>&gt;(data2D, <span class="kwrd">out</span> row, y, inScopelen);</pre>
+<pre><span class="lnum"> 273:  </span>                row = <a class="func-ref" href="#InverseDWT_1D">InverseDWT_1D</a>(row);</pre>
+<pre><span class="lnum"> 274:  </span>                <span class="kwrd">for</span> (<span class="kwrd">int</span> x = 0; x &lt; inScopelen; x++)</pre>
+<pre><span class="lnum"> 275:  </span>                {</pre>
+<pre><span class="lnum"> 276:  </span>                    data2D[x, y] = row[x];</pre>
+<pre><span class="lnum"> 277:  </span>                }</pre>
+<pre><span class="lnum"> 278:  </span>            }</pre>
+<pre><span class="lnum"> 279:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 280:  </span>            <span class="rem">//Vertical DWT</span></pre>
+<pre><span class="lnum"> 281:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> x = 0; x &lt; inScopelen; x++)</pre>
+<pre><span class="lnum"> 282:  </span>            {</pre>
+<pre><span class="lnum"> 283:  </span>                <span class="kwrd">short</span>[] col;</pre>
+<pre><span class="lnum"> 284:  </span>                getColFrom2DArr&lt;<span class="kwrd">short</span>&gt;(data2D, <span class="kwrd">out</span> col, x, inScopelen);</pre>
+<pre><span class="lnum"> 285:  </span>                col = <a class="func-ref" href="#InverseDWT_1D">InverseDWT_1D</a>(col);</pre>
+<pre><span class="lnum"> 286:  </span>                <span class="kwrd">for</span> (<span class="kwrd">int</span> y = 0; y &lt; inScopelen; y++)</pre>
+<pre><span class="lnum"> 287:  </span>                {</pre>
+<pre><span class="lnum"> 288:  </span>                    data2D[x, y] = col[y];</pre>
+<pre><span class="lnum"> 289:  </span>                }</pre>
+<pre><span class="lnum"> 290:  </span>            }</pre>
+<pre><span class="lnum"> 291:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 292:  </span>        }</pre>
+<pre><span class="lnum"> 293:  </span>        </pre>
+<pre id="InverseDWT_1D"><span class="lnum"> 294:  </span>        <span class="kwrd">private</span> <span class="kwrd">static</span> <span class="kwrd">short</span>[] InverseDWT_1D(<span class="kwrd">short</span>[] encodedData)</pre>
+<pre><span class="lnum"> 295:  </span>        {</pre>
+<pre><span class="lnum"> 296:  </span>            <span class="kwrd">int</span> hOffset = encodedData.Length / 2;</pre>
+<pre><span class="lnum"> 297:  </span>            <span class="kwrd">short</span>[] decodedData = <span class="kwrd">new</span> <span class="kwrd">short</span>[encodedData.Length];</pre>
+<pre><span class="lnum"> 298:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> i = 1; 2 * i &lt; encodedData.Length; i++)</pre>
+<pre><span class="lnum"> 299:  </span>            {</pre>
+<pre><span class="lnum"> 300:  </span>                <span class="rem">//X[2n] = L[n] - (H[n-1] + H[n] + 1) / 2</span></pre>
+<pre><span class="lnum"> 301:  </span>                decodedData[2 * i] = (<span class="kwrd">short</span>)Math.Round(encodedData[i] - (encodedData[hOffset + i - 1] + encodedData[hOffset + i] + 1.0f) / 2);</pre>
+<pre><span class="lnum"> 302:  </span>            }</pre>
+<pre><span class="lnum"> 303:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 304:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> i = 1; 2 * i + 2 &lt; encodedData.Length; i++)</pre>
+<pre><span class="lnum"> 305:  </span>            {</pre>
+<pre><span class="lnum"> 306:  </span>                <span class="rem">//X[2n + 1] = 2*H[n] + (X[2n] + X[2n + 2])/2</span></pre>
+<pre><span class="lnum"> 307:  </span>                decodedData[2 * i + 1] = (<span class="kwrd">short</span>)Math.Round(2 * encodedData[hOffset + i] + (decodedData[2 * i] + decodedData[2 * i + 2] + 0.0f) / 2);</pre>
+<pre><span class="lnum"> 308:  </span>            }</pre>
+<pre><span class="lnum"> 309:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 310:  </span>            <span class="rem">//Handle X[0], [1], [len-1]</span></pre>
+<pre><span class="lnum"> 311:  </span>            <span class="rem">//H(-1) = H[0]</span></pre>
+<pre><span class="lnum"> 312:  </span>            decodedData[0] = (<span class="kwrd">short</span>)Math.Round(encodedData[0] - (encodedData[hOffset] + encodedData[hOffset] + 1.0f) / 2);</pre>
+<pre><span class="lnum"> 313:  </span>            decodedData[1] = (<span class="kwrd">short</span>)Math.Round(2 * encodedData[hOffset] + (decodedData[0] + decodedData[2] + 0.0f) / 2);</pre>
+<pre><span class="lnum"> 314:  </span>            decodedData[decodedData.Length - 1] = (<span class="kwrd">short</span>)(2 * encodedData[hOffset + hOffset - 1] + decodedData[decodedData.Length - 2]);</pre>
+<pre><span class="lnum"> 315:  </span>            <span class="kwrd">return</span> decodedData;</pre>
+<pre><span class="lnum"> 316:  </span>        }</pre>
+<pre><span class="lnum"> 317:  </span>&nbsp;</pre>
+<pre id="YCbCrToRGB2"><span class="lnum"> 318:  </span>        <span class="kwrd">protected</span> <span class="kwrd">static</span> <span class="kwrd">void</span> YCbCrToRGB(<span class="kwrd">short</span>[,] ySet, <span class="kwrd">short</span>[,] cbSet, <span class="kwrd">short</span>[,] crSet, <span class="kwrd">out</span> <span class="kwrd">byte</span>[,] rSet, <span class="kwrd">out</span> <span class="kwrd">byte</span>[,] gSet, <span class="kwrd">out</span> <span class="kwrd">byte</span>[,] bSet)</pre>
+<pre><span class="lnum"> 319:  </span>        {</pre>
+<pre><span class="lnum"> 320:  </span>            rSet = <span class="kwrd">new</span> <span class="kwrd">byte</span>[TileSize, TileSize];</pre>
+<pre><span class="lnum"> 321:  </span>            gSet = <span class="kwrd">new</span> <span class="kwrd">byte</span>[TileSize, TileSize];</pre>
+<pre><span class="lnum"> 322:  </span>            bSet = <span class="kwrd">new</span> <span class="kwrd">byte</span>[TileSize, TileSize];</pre>
+<pre><span class="lnum"> 323:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 324:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> x = 0; x &lt; TileSize; x++)</pre>
+<pre><span class="lnum"> 325:  </span>            {</pre>
+<pre><span class="lnum"> 326:  </span>                <span class="kwrd">for</span> (<span class="kwrd">int</span> y = 0; y &lt; TileSize; y++)</pre>
+<pre><span class="lnum"> 327:  </span>                {</pre>
+<pre><span class="lnum"> 328:  </span>                    <span class="kwrd">byte</span>[] rgb = <a class="func-ref" href="#yuvToRGB">yuvToRGB</a>(ySet[x, y], cbSet[x, y], crSet[x, y]);</pre>
+<pre><span class="lnum"> 329:  </span>                    rSet[x, y] = rgb[0];</pre>
+<pre><span class="lnum"> 330:  </span>                    gSet[x, y] = rgb[1];</pre>
+<pre><span class="lnum"> 331:  </span>                    bSet[x, y] = rgb[2];</pre>
+<pre><span class="lnum"> 332:  </span>                }</pre>
+<pre><span class="lnum"> 333:  </span>            }</pre>
+<pre><span class="lnum"> 334:  </span>        }</pre>
+<pre><span class="lnum"> 335:  </span>&nbsp;</pre>
+<pre id="yuvToRGB"><span class="lnum"> 336:  </span>        <span class="kwrd">private</span> <span class="kwrd">static</span> <span class="kwrd">byte</span>[] yuvToRGB(<span class="kwrd">short</span> y, <span class="kwrd">short</span> cb, <span class="kwrd">short</span> cr)</pre>
+<pre><span class="lnum"> 337:  </span>        {</pre>
+<pre><span class="lnum"> 338:  </span>            <span class="kwrd">byte</span>[] rgb = <span class="kwrd">new</span> <span class="kwrd">byte</span>[3];</pre>
+<pre><span class="lnum"> 339:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 340:  </span>            <span class="kwrd">double</span> yF = (y + 128.0f);</pre>
+<pre><span class="lnum"> 341:  </span>            <span class="kwrd">double</span> cbF = cb;</pre>
+<pre><span class="lnum"> 342:  </span>            <span class="kwrd">double</span> crF = cr;</pre>
+<pre><span class="lnum"> 343:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 344:  </span>            <span class="kwrd">short</span> r = (<span class="kwrd">short</span>)Math.Round((yF * 1.0 + cbF * 0 + crF * 1.403)); <span class="rem">//R</span></pre>
+<pre><span class="lnum"> 345:  </span>            <span class="kwrd">short</span> g = (<span class="kwrd">short</span>)Math.Round((yF * 1.0 + cbF * (-0.344) + crF * (-0.714)));</pre>
+<pre><span class="lnum"> 346:  </span>            <span class="kwrd">short</span> b = (<span class="kwrd">short</span>)Math.Round((yF * 1.0 + cbF * 1.77 + crF * 0.0));</pre>
+<pre><span class="lnum"> 347:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 348:  </span>            <span class="kwrd">if</span> (r &gt; 255) r = 255;</pre>
+<pre><span class="lnum"> 349:  </span>            <span class="kwrd">if</span> (r &lt; 0) r = 0;</pre>
+<pre><span class="lnum"> 350:  </span>            <span class="kwrd">if</span> (g &gt; 255) g = 255;</pre>
+<pre><span class="lnum"> 351:  </span>            <span class="kwrd">if</span> (g &lt; 0) g = 0;</pre>
+<pre><span class="lnum"> 352:  </span>            <span class="kwrd">if</span> (b &gt; 255) b = 255;</pre>
+<pre><span class="lnum"> 353:  </span>            <span class="kwrd">if</span> (b &lt; 0) b = 0;</pre>
+<pre><span class="lnum"> 354:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 355:  </span>            rgb[0] = (<span class="kwrd">byte</span>)r;</pre>
+<pre><span class="lnum"> 356:  </span>            rgb[1] = (<span class="kwrd">byte</span>)g;</pre>
+<pre><span class="lnum"> 357:  </span>            rgb[2] = (<span class="kwrd">byte</span>)b;</pre>
+<pre><span class="lnum"> 358:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 359:  </span>            <span class="kwrd">return</span> rgb;</pre>
+<pre><span class="lnum"> 360:  </span>        }</pre>
+<pre><span class="lnum"> 361:  </span>        </pre>
+<pre><span class="lnum"> 362:  </span>        <span class="preproc">#endregion</span></pre>
+<pre><span class="lnum"> 363:  </span>    </pre>
+<pre><span class="lnum"> 364:  </span>    }</pre>
+<pre><span class="lnum"> 365:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 366:  </span>}</pre>
+</div>
+
+
+</body>
+</html>

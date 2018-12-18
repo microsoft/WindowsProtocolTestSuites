@@ -28,6 +28,7 @@
     C:\PS>.\InstallPrerequisites.ps1 -Category 'FileServer' -ConfigPath ".\PrerequisitesConfig.xml"
     The PS script will get all tools defined under FileServer node in PrerequisitesConfig.xml, then download and install these tools.
 #>
+
 Param
 (
     [parameter(Mandatory=$true, ValueFromPipeline=$true, HelpMessage="The Category is used to specify which set of tools need to be downloaded and installed, based on different test suite names, such as FileServer")]
@@ -36,10 +37,28 @@ Param
     [String]$ConfigPath
 )
 
+
 if(-not $ConfigPath)
 {
 	Write-Host "Use the default value '.\PrerequisitesConfig.xml' as ConfigPath is not set"
 	$ConfigPath = ".\PrerequisitesConfig.xml"
+}
+
+$psVer = [int](Get-Host).Version.ToString().Substring(0,1)
+
+if($psVer -lt 4)
+{
+    Write-Host "Powershell 4 or later is required for Github downloading." -ForegroundColor Red
+    Write-Host "Please install WMF 4.0 from https://www.microsoft.com/en-us/download/details.aspx?id=40855 before running this script."
+    exit
+}
+
+[double] $OsVer = [System.Environment]::OSVersion.Version.Build
+
+if($OsVer -lt "7601")
+{
+    Write-Host "Windows 7 SP1 and later is required for running this script." -ForegroundColor Red
+    exit
 }
 
 # Check if application is installed on current machine.
@@ -203,26 +222,27 @@ Function CreateTemporaryFolder
 # Download and install prerequisite tool
 Function DownloadAndInstallApplication
 {
-    param(
-        [int]$PSVersion,
+    param(        
         $AppItem,
         [string]$OutputPath
     )
 
-    # Check if Powershell version greate than 3.0, if not then use WebClient to download file, otherwise use Invoke-WebRequest.
-    if($psVersion -ge 3)
+    try       
     {
-        Invoke-WebRequest -Uri $AppItem.URL -OutFile $OutputPath
-        [System.Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]'Tls,Tls11,Tls12'
-
+        Invoke-WebRequest -Uri $item.URL -OutFile $OutputPath                     
     }
-    else
+    catch
     {
-        [System.Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::SSL3
-
-        // Fix me: throw exception in Win 7 PS version 2
-        (New-Object System.Net.WebClient).DownloadFile($AppItem.URL, $OutputPath)
-    }
+        try
+        {                   
+            (New-Object System.Net.WebClient).DownloadFile($item.URL, $OutputPath)
+        }
+        catch
+        {          
+            Write-host "Download $item.Name failed with exception: $_.Exception.Message"   
+            Return                    
+        }                              
+    }       
             
     $content = "Downloading " + $AppItem.Name + " completed. Path:" + $OutputPath
     Write-Host $content
@@ -230,45 +250,52 @@ Function DownloadAndInstallApplication
     # Check if the downloaded file is ISO
     if($AppItem.FileName.ToLower().EndsWith("iso"))
     {
-        if($psVersion -ge 3)
-        {
-            Write-Host "Mounting ISO image";
-            $OutputPath = MountISOAndGetAppPath -AppName $AppItem.InstallFileName -ISOPath $OutputPath
-            Write-Host $OutputPath
-        }
-        else
-        {
-            $content = "Your system does not support Mount-DiskImage command. Please install " + $AppItem.AppName;
-
-            Write-Host "Your system does not support Mount-DiskImage command. Please mount and install manually";
-        }
+        Write-Host "Mounting ISO image";
+        $OutputPath = MountISOAndGetAppPath -AppName $AppItem.InstallFileName -ISOPath $OutputPath
+        Write-Host $OutputPath        
     }
+    
             
     # start to Install file
+    
     $content = "Installing " + $AppItem.Name + ". Please wait..."
     Write-Host $content
 
-    $FLAGS  = $AppItem.Arguments
-
-    $ExitCode = (Start-Process -FILEPATH $OutputPath $FLAGS -Wait -PassThru).ExitCode
-    if ($ExitCode -EQ 0)
-    {
-        $content = "Application " + $AppItem.Name +" is successfully installed on current machine"
-        Write-Host $content -ForegroundColor Green
-    }
+    if ($item.Name.ToLower().Equals("vs2017community"))
+    {        
+        cmd.exe /C "InstallVs2017Community.cmd $OutputPath"
+    }    
     else
     {
-        $failedList += $AppItem.Name
-        $content = "Installing " + $AppItem.Name +" failed, Error Code:" + $ExitCode
-        Write-Host "ERROR $ExitCode"; 
-    }
+        $FLAGS  = $AppItem.Arguments
+        $ExitCode = (Start-Process -FILEPATH "$env:systemroot\system32\msiexec.exe" -ArgumentList "/i $OutputPath $FLAGS /passive" -Wait -PassThru).ExitCode
+        if ($ExitCode -NE 0)
+        {
+            $ExitCode = (Start-Process -FILEPATH $OutputPath $FLAGS -Wait -PassThru).ExitCode
+        }
+        
+        if ($ExitCode -EQ 0)
+        {
+            $content = "Application " + $AppItem.Name +" is successfully installed on current machine"
+            Write-Host $content -ForegroundColor Green
+        }
+        else
+        {
+            $failedList += $AppItem.Name
+            $content = "Installing " + $AppItem.Name +" failed, Error Code:" + $ExitCode
+            Write-Host "ERROR $ExitCode"; 
+        }
 
-    # If the file is ISO, unmount it.
-    if($AppItem.FileName.ToLower().EndsWith("iso"))
-    {
-        UnmountDisk -AppPath $OutputPath
+        # If the file is ISO, unmount it.
+        if($AppItem.FileName.ToLower().EndsWith("iso"))
+        {
+            UnmountDisk -AppPath $OutputPath
+        }
     }
 }
+
+$AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'
+[System.Net.ServicePointManager]::SecurityProtocol = $AllProtocols
 
 # Start get all needed tools from configure file.
 $downloadList = GetDownloadTools -DpConfigPath $ConfigPath -ToolCategory $Category
@@ -276,9 +303,6 @@ $tempFolder = CreateTemporaryFolder
 $failedList = @();
 $IsNeedRestart = $false;
 
-# Check PowerShell version
-
-$psVer = [int](Get-Host).Version.ToString().Substring(0,1)
 
 foreach($item in $downloadList)
 {
@@ -288,76 +312,63 @@ foreach($item in $downloadList)
     {
         $content = "Application: " +$item.AppName + " is not installed"
     }
-
-    if ($item.Name.ToLower().Equals("vs2017community"))
+    
+    if(-not $IsInstalled)
     {
-        cmd.exe /C "InstallVs2017Community.cmd"
+        Write-Host $content -ForegroundColor Yellow
+        
+        $content = "Downloading file " + $item.Name + ". Please wait..."
+        Write-Host $content
+        $outputPath = $tempFolder + "\" + $item.FileName
+
+        try
+        {
+            DownloadAndInstallApplication -AppItem $item -OutputPath $outputPath
+        }
+        catch
+        {
+            $failedList += $item.Name
+            $IsInstalled = $false;
+            $ErrorMessage = $_.Exception.Message
+            Write-Host $ErrorMessage -ForegroundColor Red
+            Break;
+        }
+
+        if($item.NeedRestart)
+        {
+            $IsNeedRestart = $true;
+        }
     }
     else
     {
-        if(-not $IsInstalled)
+        if($item.AppName -match "Microsoft Agents for Visual Studio")
         {
-            Write-Host $content -ForegroundColor Yellow
-            
-            $content = "Downloading file " + $item.Name + ". Please wait..."
-            Write-Host $content
-            $outputPath = $tempFolder + "\" + $item.FileName
-
-            try
+            if($item.BackwardCompatible)
             {
-                DownloadAndInstallApplication -PSVersion $psVer -AppItem $item -OutputPath $outputPath
+                $content = $item.AppName + " or later version or Microsoft Visual Studio is already installed"
             }
-            catch
+            else
             {
-                $failedList += $item.Name
-                $IsInstalled = $false;
-                $ErrorMessage = $_.Exception.Message
-                Write-Host $ErrorMessage -ForegroundColor Red
-                Break;
-            }
-
-            if($item.NeedRestart)
-            {
-                $IsNeedRestart = $true;
+                $content = $item.AppName + " or Microsoft Visual Studio is already installed"
             }
         }
         else
         {
-            if($item.AppName -match "Microsoft Agents for Visual Studio")
+            if($item.BackwardCompatible)
             {
-                if($item.BackwardCompatible)
-                {
-                    $content = $item.AppName + " or later version or Microsoft Visual Studio is already installed"
-                }
-                else
-                {
-                    $content = $item.AppName + " or Microsoft Visual Studio is already installed"
-                }
+                $content = $item.AppName + " or later version is already installed"
             }
             else
             {
-                if($item.BackwardCompatible)
-                {
-                    $content = $item.AppName + " or later version is already installed"
-                }
-                else
-                {
-                    $content = $item.AppName + " is already installed"
-                }
+                $content = $item.AppName + " is already installed"
             }
-            Write-Host $content -ForegroundColor Green
         }
+        Write-Host $content -ForegroundColor Green
     }
+    
 }
 
-if($psVersion -ge 3)
-{
-    $downloadList.Clear();
-}
-else
-{
-    $downloadList = @();
-}
+$downloadList.Clear();
 
 if($failedList.Length -eq 0) #No failure occurs
 {

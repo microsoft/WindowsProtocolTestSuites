@@ -1,0 +1,81 @@
+﻿@{
+    ViewBag.alpha = new double[] { Double.NaN, 0, 0, 0, 0, 0.1333 };
+    ViewBag.beta = new double[] { Double.NaN, 0.0448, 0.2856, 0.3001, 0.2363, 0.1333 };
+    ViewBag.gamma = new double[] { Double.NaN, 0.0448, 0.2856, 0.3001, 0.2363, 0.1333 };
+}
+
+<div class="container">
+    <div id="intro">@Html.Partial("_Intro") </div>
+
+    @Html.Partial("_ImageCompare")
+
+    <div class="text-center">
+        <div class="row" style="padding: 15px 30px;">
+            <div class="col-xs-3">
+                <div class="input-group">
+                    <span class="input-group-addon">K<sub>1</sub></span>
+                    <input type="text" name="k1" class="form-control ssim-param" value="0.01">
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="input-group">
+                    <span class="input-group-addon">K<sub>2</sub></span>
+                    <input type="text" name="k2" class="form-control ssim-param" value="0.03">
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <label style="float: left; padding-top: 5px; padding-bottom: 5px; padding-right: 12px;">&alpha;, &beta;, &gamma; Factors: </label>
+                <div style="float: left">
+                    <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#param-modal">
+                        Change Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        @Html.ButtonFor(name: "Compare", id: "ssimImageCompare")
+    </div>
+
+    <div class="compare-status text-left" style="padding-top: 15px;"></div>
+
+    @Html.Partial("_ref")
+
+    <div class="modal fade input-modal" tabindex="-1" role="dialog" aria-hidden="true" id="param-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="quant-modal-label">Change &alpha;, &beta;, &gamma; Factors</h4>
+                </div>
+
+                <div class="modal-body">
+                    @for (int i = 1; i <= 5; i++)
+                    { 
+                        <div class="row" style="padding: 15px 30px;">
+                            <div class="col-xs-4">
+                                <div class="input-group">
+                                    <span class="input-group-addon">&alpha;<sub>@i</sub></span>
+                                    <input type="text" name="alpha@(i)" class="form-control ssim-param" value="@(ViewBag.alpha[i])">
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="input-group">
+                                    <span class="input-group-addon">&beta;<sub>@i</sub></span>
+                                    <input type="text" name="beta@(i)" class="form-control ssim-param" value="@(ViewBag.beta[i])">
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="input-group">
+                                    <span class="input-group-addon">&gamma;<sub>@i</sub></span>
+                                    <input type="text" name="gamma@(i)" class="form-control ssim-param" value="@(ViewBag.beta[i])">
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

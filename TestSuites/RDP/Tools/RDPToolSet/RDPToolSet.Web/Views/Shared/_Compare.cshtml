@@ -1,0 +1,22 @@
+﻿<!-- Modal dialog to compare codec stage output. -->
+<div class="modal fade diff-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">    
+            <div class="modal-body">
+                <!-- prompt message -->
+                <p class="diff-prompt text-left" ></p>                             
+                <!-- for user to input their data -->
+                <textarea class="diff-input form-control" rows="10"
+                          style="overflow: scroll;" wrap="off"></textarea>
+                <!-- for showing the diff result -->
+                <pre class="diff-result" style="white-space: pre; font-size: 14px; display: none;
+                        text-align: left; max-height: 400px; overflow: scroll;"></pre>
+            </div>
+            <div class="modal-footer" style="margin-top:0">
+                <div class="diff-status text-left"></div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary dlg-btn-compare">Compare</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -186,7 +186,7 @@ namespace Microsoft.Protocols.TestManager.UI
             SetButtonsStatus(false, true);
             this.ListBox_Step.IsEnabled = false;
             Pages.AutoDetectionPage.PropertyListBox.IsEnabled = false;
-            
+
             try
             {
                 if (util.SetPrerequisits() != true) throw new Exception(StringResources.InvalidValue);
@@ -235,7 +235,16 @@ namespace Microsoft.Protocols.TestManager.UI
 
         private void UpdateCaseFilter()
         {
-            if (detectionFinished && isAutoDetected) util.ApplyDetectedRules();
+            if (detectionFinished && isAutoDetected)
+            {
+                // Reset select status before applying detected rules
+                foreach (var group in util.GetFilter())
+                {
+                    group.IsSelected = false;
+                }
+                util.ApplyDetectedRules();
+                detectionFinished = false;
+            }
             Pages.RulePage.SetFilter(util.GetFilter());
             util.GetFilter().ContentModified = null;
             util.GetFilter().ContentModified += () =>
@@ -312,6 +321,11 @@ namespace Microsoft.Protocols.TestManager.UI
                     this.ListBox_Step.IsEnabled = true;
                     Pages.RunPage.EnableControls = true;
                     Pages.AutoDetectionPage.PropertyListBox.IsEnabled = true;
+                    if (e.Exception.Count > 0)
+                    {
+                        Utility.LogException(e.Exception);
+                        MessageBox.Show("Some exception happened during executing!", "Error", MessageBoxButton.OK);
+                    }
                 }));
             };
             Pages.RunPage.TotalResults.Visibility = System.Windows.Visibility.Hidden;
@@ -455,7 +469,8 @@ namespace Microsoft.Protocols.TestManager.UI
                         SetButtonsStatus(false, false);
                         detectionFinished = false;
 
-                        Task.Factory.StartNew(() => {
+                        Task.Factory.StartNew(() =>
+                        {
                             util.StopDetection(() =>
                             {
                                 this.Dispatcher.Invoke((Action)(() =>
@@ -564,7 +579,6 @@ namespace Microsoft.Protocols.TestManager.UI
         private void Item_DetectedSUT_Selected(object sender, RoutedEventArgs e)
         {
             detectionRunning = false;
-            detectionFinished = false;
             ContentFrame.Navigate(Pages.SUTInfoPage);
             PageInfoTextBlock.Text = StringResources.DetectionResult;
             SetButtonsVisibility(true, true);

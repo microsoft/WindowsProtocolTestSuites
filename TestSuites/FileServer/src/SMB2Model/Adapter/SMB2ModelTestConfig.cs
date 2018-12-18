@@ -115,7 +115,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
         {
             get
             {
-                return GetProperty("ScaleOutFileServerIP1").ParseIPAddress();
+                var result = GetProperty("ScaleOutFileServerIP1").ParseIPAddress();
+                Site.Assume.IsTrue(result != IPAddress.None, "ScaleOutFileServerIP1 should be a valid IP address or a resolvable host name!");
+                return result;
             }
         }
 
@@ -123,11 +125,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
         {
             get
             {
-                return GetProperty("ScaleOutFileServerIP2").ParseIPAddress();
+                var result = GetProperty("ScaleOutFileServerIP2").ParseSecondaryIPAddress();
+                Site.Assume.IsTrue(result != IPAddress.None, "ScaleOutFileServerIP2 should be a valid IP address or a resolvable host name with at least two IP addresses!");
+                return result;
             }
         }
         #endregion
-        public SMB2ModelTestConfig(ITestSite site):base(site)
+        public SMB2ModelTestConfig(ITestSite site) : base(site)
         {
         }
     }
