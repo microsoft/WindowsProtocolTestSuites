@@ -125,7 +125,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
         #region overrode methods from System.Object
 
         /// <summary>
-        /// Overrode method from System.Object.
+        /// Override method from System.Object.
         /// </summary>
         /// <param name="obj">The object to be compared.</param>
         /// <returns>True if obj has same data with this instance. False if not.</returns>
@@ -158,7 +158,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
             throw new NotImplementedException();
         }
 
-        #endregion overrode methods from System.Object
+        #endregion override methods from System.Object
 
         #region BER
 
