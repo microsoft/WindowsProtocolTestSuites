@@ -50,8 +50,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
 
             this.rdpevorAdapter.Reset();
             this.rdpegtAdapter.Reset();
-            this.rdpbcgrAdapter.TurnVerificationOff(true);
-
+           
             //Start RDP listening.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening with transport protocol: {0}", transportProtocol.ToString());
             this.rdpbcgrAdapter.StartRDPListening(transportProtocol);
