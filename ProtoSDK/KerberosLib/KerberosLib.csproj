@@ -132,6 +132,7 @@
     <Compile Include="Asn1Code\Rfc6113\PA_AUTHENTICATION_SET_ELEM.cs" />
     <Compile Include="Asn1Code\Rfc6113\PA_FX_FAST_REPLY.cs" />
     <Compile Include="Asn1Code\Rfc6113\PA_FX_FAST_REQUEST.cs" />
+    <Compile Include="Asn1Code\SFU\PA_FOR_USER.cs" />
     <Compile Include="Asn1Code\Spng\ContextFlags.cs" />
     <Compile Include="Asn1Code\Spng\InitialNegToken.cs" />
     <Compile Include="Asn1Code\Spng\InitialNegToken2.cs" />

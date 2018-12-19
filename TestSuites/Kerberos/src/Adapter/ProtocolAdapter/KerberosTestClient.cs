@@ -40,7 +40,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
                                     cName, domain);
             }
             EncryptionType[] encryptionTypes = new EncryptionType[]
-            { 
+            {
                 EncryptionType.AES256_CTS_HMAC_SHA1_96,
                 EncryptionType.AES128_CTS_HMAC_SHA1_96,
                 EncryptionType.RC4_HMAC,
@@ -86,7 +86,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
                                     cName, domain);
             }
             EncryptionType[] encryptionTypes = new EncryptionType[]
-            { 
+            {
                 EncryptionType.AES256_CTS_HMAC_SHA1_96,
                 EncryptionType.AES128_CTS_HMAC_SHA1_96,
                 EncryptionType.RC4_HMAC,
@@ -431,6 +431,12 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
                 KerberosUtility.String2SeqKerbString(sName.Split('/')));
 
             KDC_REQ_BODY kdcReqBody = CreateKdcRequestBody(kdcOptions, sname, dataInEncAuthData);
+
+            if (additionalTicket != null)
+            {
+                kdcReqBody.additional_tickets = new Asn1SequenceOf<Ticket>(new Ticket[] { additionalTicket });
+            }
+
             Asn1BerEncodingBuffer bodyBuffer = new Asn1BerEncodingBuffer();
             kdcReqBody.BerEncode(bodyBuffer);
 

@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig" 
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig
+          http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+  
+  <Properties>
+    <Property name="TestName" value="MS-SFU" />
+    <Property name="FeatureName" value="MS-SFU" />
+    <Property name="Version" value="1.0" />
+  </Properties>
+  
+  <Adapters>
+  </Adapters>
+  
+  <TestLog defaultprofile="Verbose">
+    
+    <Sinks>
+      <File id="Debug" directory="." file="MS-SFU_Debug.txt" format="text"/>
+      <File id="ReqLog" directory="..\..\Log" file="MS-SFU_Log.xml" format="xml"/>
+      <Sink id="BeaconLog" type="Microsoft.Protocols.TestTools.Logging.BeaconLogSink" />
+    </Sinks>
+    
+    <Profiles>
+      <Profile name="Verbose" extends="Error">
+        <!--Show for XML log-->
+        <Rule kind="CheckSucceeded" sink="ReqLog"/>
+        <Rule kind="Comment" sink="ReqLog"/>
+        <Rule kind="Checkpoint" sink="ReqLog"/>
+        <Rule kind="Debug" sink="ReqLog"/>
+        <Rule kind="EnterMethod" sink="ReqLog"/>
+        <Rule kind="ExitMethod" sink="ReqLog"/>
+        
+        <!-- Show for Console -->
+        <Rule kind="CheckSucceeded" sink="Console"/>
+        <Rule kind ="Comment" sink="Console"/>
+        <Rule kind="Checkpoint" sink="Console"/>
+        <Rule kind="Debug" sink="Console"/>
+
+        <!-- Show for debugging -->
+        <Rule kind="CheckSucceeded" sink="Debug"/>
+        <Rule kind ="Comment" sink="Debug"/>
+        <Rule kind="Debug" sink="Debug"/>
+        <Rule kind="Checkpoint" sink="Debug"/>
+        
+        <!-- Show for Beacon -->
+        <Rule kind="CheckSucceeded" sink="BeaconLog" />
+        <Rule kind="Comment" sink="BeaconLog"/>
+        <Rule kind="Checkpoint" sink="BeaconLog"/>
+        <Rule kind="Debug" sink="BeaconLog"/>
+        <Rule kind="EnterMethod" sink="BeaconLog"/>
+        <Rule kind="ExitMethod" sink="BeaconLog"/>
+        
+      </Profile>
+    </Profiles>
+  </TestLog>
+</TestSite>

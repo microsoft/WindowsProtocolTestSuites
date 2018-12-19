@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <Import Project="$(EnvironmentConfig)" Condition="$(BUILD_COREXT)==1" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D0E2CBD0-511A-44A3-BDD6-CA0AAB762B20}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Microsoft.Protocols.TestSuites.SFU</RootNamespace>
+    <AssemblyName>MS-SFU_ServerTestSuite</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <WarningLevel>4</WarningLevel>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>.\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+    <OutputPath>.\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Binplace Include="$(TargetDir)$(TargetFileName)">
+      <DestinationFolder>$(TestSuitesDrop)\MS-SFU\Server\Bin</DestinationFolder>
+      <Visible>false</Visible>
+    </Binplace>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Protocols.TestTools">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(PTFPATH_MS-SFU)\Microsoft.Protocols.TestTools.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Protocols.TestTools.Extension">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(PTFPATH_MS-SFU)\Microsoft.Protocols.TestTools.Extension.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Protocols.TestTools.Messages.Runtime">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(PTFPATH_MS-SFU)\Microsoft.Protocols.TestTools.Messages.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Protocols.TestTools.VSTS">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(PTFPATH_MS-SFU)\Microsoft.Protocols.TestTools.VSTS.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(PkgVisualStudio_UnitTest_Corext)\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SpecExplorer.Runtime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SEPATH_MS-SFU)\Microsoft.SpecExplorer.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrt.Runtime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SEPATH_MS-SFU)\Microsoft.Xrt.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MS-SFU_ServerTestSuite.deployment.ptfconfig" />
+    <Content Include="MS-SFU_ServerTestSuite.ptfconfig" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Asn1Base\Asn1Base.csproj">
+      <Project>{deda188c-c97e-4968-bc31-594925631e9f}</Project>
+      <Name>Asn1Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Common\Common.csproj">
+      <Project>{fe653643-6342-4300-871e-683c7ba31494}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\CryptoLib\CryptoLib.csproj">
+      <Project>{bf6afaf0-7592-467f-ad5c-18429d854057}</Project>
+      <Name>CryptoLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\KerberosLib\KerberosLib.csproj">
+      <Project>{F1EDA208-50B6-4501-A9D8-D18D3434D587}</Project>
+      <Name>KerberosLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-PAC\Pac.csproj">
+      <Project>{AEFAF10D-D1BF-44C4-BD9F-5CFF2AFA432F}</Project>
+      <Name>Pac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Kerberos\src\Adapter\Kerberos_ServerAdapter.csproj">
+      <Project>{d3cc3cb3-57fd-437f-aa54-e43ad97ba3b9}</Project>
+      <Name>Kerberos_ServerAdapter</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="SFU_BasicTestSuite.cs" />
+  </ItemGroup>
+  <Import Project="$(ExtendedTargetsPath)\Microsoft.CSharp.targets" Condition="$(BUILD_COREXT)==1" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" Condition="$(BUILD_COREXT)!=1" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-SFU\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-SFU\Bin\" />
+  </Target>
+</Project>

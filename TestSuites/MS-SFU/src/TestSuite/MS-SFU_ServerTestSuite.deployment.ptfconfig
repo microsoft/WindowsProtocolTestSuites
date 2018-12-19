@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig 
+          http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+
+  <Properties>
+    <!-- Host name of SUT -->
+    <Property name="SutHostName" value="SUT01" />
+    <!-- Transport type of SUT -->
+    <Property name="Transport" value="TCP" />
+    <!-- Port number of SUT -->
+    <Property name="RemoteMachinePort" value="88" />
+    <!-- Realm of service1 and service2 -->
+    <Property name="Realm1" value="BLAH.ORG" />
+    <!-- User to be delegated -->
+    <Property name="DelegatedUserName" value="user" />
+    <!-- Type of DelegatedUser -->
+    <Property name="DelegatedUserType" value="NT_ENTERPRISE" />
+    <!-- FQDN of service1 -->
+    <Property name="Service1FQDN" value="service1/SUT01@BLAH.ORG" />
+    <!-- User of service1 -->
+    <Property name="Service1UserName" value="service1user" />
+    <!-- Password for user of service1 -->
+    <Property name="Service1Password" value="Password01!" />
+    <!-- Salt of service1 -->
+    <Property name="Service1Salt" value="service1" />
+    <!-- FQDN of service2 -->
+    <Property name="Service2FQDN" value="service2/SUT01@BLAH.ORG" />
+    <!-- User of service2 -->
+    <Property name="Service2UserName" value="service2user" />
+    <!-- Password of service2 -->
+    <Property name="Service2Password" value="Password01@" />
+    <!-- Salt of service2 -->
+    <Property name="Service2Salt" value="service2" />
+  </Properties>
+</TestSite>

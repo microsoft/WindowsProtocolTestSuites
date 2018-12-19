@@ -1151,6 +1151,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// authentication, and that it must respond with a KRB_AP_REP message.
         /// </summary>
         ForwardToFullDc = 0x20000000,
+
+        ResourceBasedConstrainedDelegation = 0x10000000
     }
 
     /// <summary>
