@@ -22,7 +22,7 @@
       <installorder>1</installorder>
       <hypervname>MS-ADOD-PDC</hypervname>
       <name>ADOD-PDC</name>
-      <domain>ADOD01Local.COM</domain>
+      <domain>ADODLocal.COM</domain>
       <isdc>true</isdc>
       <username>Administrator</username>
       <password>Password01!1</password>
