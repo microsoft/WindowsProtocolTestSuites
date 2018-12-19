@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AssetCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Metadata>
+    <UniqueId>becdbf9d-76ab-44e5-9abb-64d2c0f0ea5c</UniqueId>
+    <GroupId>becdbf9d-76ab-44e5-9abb-64d2c0f0ea5c</GroupId>
+    <Name>RDP ETW Color Rule</Name>
+    <AssetType>ColorRuleAsset</AssetType>
+    <VersionNumber>0</VersionNumber>
+    <Author>FAREAST\zhaliu</Author>
+    <PublishedDate>0001-01-01T00:00:00</PublishedDate>
+    <ModifiedDate>2014-03-10T15:36:56.7194404+08:00</ModifiedDate>
+    <Revision>0</Revision>
+    <Description>RDP ETW Color Rule</Description>
+    <Rating>0</Rating>
+  </Metadata>
+  <Assets>
+    <Asset>
+      <Metadata>
+        <UniqueId>be2176fa-e274-4358-a84e-b4762f9e54e9</UniqueId>
+        <Name>RDP_comment</Name>
+        <Description>comments</Description>
+        <Category>Network</Category>
+        <Properties />
+      </Metadata>
+      <Content xsi:type="ColorRuleAsset">
+        <Expression>Protocol_Test_Suite.EntryKind == "Comment"</Expression>
+        <Lines>Normal</Lines>
+        <Weight>Normal</Weight>
+        <Style>Normal</Style>
+        <IsGradientBackground>false</IsGradientBackground>
+        <BackgroundColor>
+          <A>255</A>
+          <R>251</R>
+          <G>213</G>
+          <B>181</B>
+        </BackgroundColor>
+      </Content>
+      <Properties />
+    </Asset>
+    <Asset>
+      <Metadata>
+        <UniqueId>37e30239-f363-4000-9674-c2372b745365</UniqueId>
+        <Name>RDP_TestFail</Name>
+        <Description>Test Fail</Description>
+        <Category>Network</Category>
+        <Properties />
+      </Metadata>
+      <Content xsi:type="ColorRuleAsset">
+        <Expression>Protocol_Test_Suite.EntryKind == "TestFailed"</Expression>
+        <Lines>Normal</Lines>
+        <Weight>Normal</Weight>
+        <Style>Normal</Style>
+        <IsGradientBackground>false</IsGradientBackground>
+        <BackgroundColor>
+          <A>255</A>
+          <R>255</R>
+          <G>0</G>
+          <B>0</B>
+        </BackgroundColor>
+      </Content>
+      <Properties />
+    </Asset>
+    <Asset>
+      <Metadata>
+        <UniqueId>e9465b4c-9e97-417c-9e66-7c7a293e3969</UniqueId>
+        <Name>RDP_CheckFailed</Name>
+        <Description>RDP test Suite Check failed color rules</Description>
+        <Category>Network</Category>
+        <Properties />
+      </Metadata>
+      <Content xsi:type="ColorRuleAsset">
+        <Expression>Protocol_Test_Suite.EntryKind == "CheckFailed"</Expression>
+        <Lines>Normal</Lines>
+        <Weight>Normal</Weight>
+        <Style>Normal</Style>
+        <IsGradientBackground>false</IsGradientBackground>
+        <BackgroundColor>
+          <A>255</A>
+          <R>255</R>
+          <G>0</G>
+          <B>0</B>
+        </BackgroundColor>
+      </Content>
+      <Properties />
+    </Asset>
+    <Asset>
+      <Metadata>
+        <UniqueId>9f3bd4bf-cc94-4a25-beab-187fb25219f3</UniqueId>
+        <Name>RDP_TestPassed</Name>
+        <Description>Test Passed</Description>
+        <Category>Network</Category>
+        <Properties />
+      </Metadata>
+      <Content xsi:type="ColorRuleAsset">
+        <Expression>Protocol_Test_Suite.EntryKind == "TestPassed"</Expression>
+        <Lines>Normal</Lines>
+        <Weight>Normal</Weight>
+        <Style>Normal</Style>
+        <IsGradientBackground>false</IsGradientBackground>
+        <BackgroundColor>
+          <A>255</A>
+          <R>0</R>
+          <G>255</G>
+          <B>0</B>
+        </BackgroundColor>
+      </Content>
+      <Properties />
+    </Asset>
+    <Asset>
+      <Metadata>
+        <UniqueId>390c3944-6ced-45bd-a7ea-bf62f5b87ed6</UniqueId>
+        <Name>RDP_Decrypted</Name>
+        <Description>RDP Decrypted</Description>
+        <Category>Network</Category>
+        <Properties />
+      </Metadata>
+      <Content xsi:type="ColorRuleAsset">
+        <Expression>Protocol_Test_Suite.DumpLevel &gt;= 1 and Protocol_Test_Suite.MessageName != "RDPEGFX:DecompressedData"</Expression>
+        <Lines>Normal</Lines>
+        <Weight>Normal</Weight>
+        <Style>Normal</Style>
+        <ForegroundColor>
+          <A>255</A>
+          <R>0</R>
+          <G>176</G>
+          <B>80</B>
+        </ForegroundColor>
+        <IsGradientBackground>false</IsGradientBackground>
+      </Content>
+      <Properties />
+    </Asset>
+    <Asset>
+      <Metadata>
+        <UniqueId>e4bbe0b0-161f-43a2-ad4d-0fad671f6c39</UniqueId>
+        <Name>RDP_Decompressed</Name>
+        <Description>RDP Decompressed</Description>
+        <Category>Network</Category>
+        <Properties />
+      </Metadata>
+      <Content xsi:type="ColorRuleAsset">
+        <Expression>Protocol_Test_Suite.MessageName == "RDPEGFX:DecompressedData"</Expression>
+        <Lines>Normal</Lines>
+        <Weight>Normal</Weight>
+        <Style>Normal</Style>
+        <ForegroundColor>
+          <A>255</A>
+          <R>0</R>
+          <G>0</G>
+          <B>255</B>
+        </ForegroundColor>
+        <IsGradientBackground>false</IsGradientBackground>
+      </Content>
+      <Properties />
+    </Asset>
+    <Asset>
+      <Metadata>
+        <UniqueId>1644c035-92c5-4bdc-865a-173307f86e9a</UniqueId>
+        <Name>TLS_Decrypted</Name>
+        <Description>TLS Decrypted</Description>
+        <Category>Network</Category>
+        <Properties />
+      </Metadata>
+      <Content xsi:type="ColorRuleAsset">
+        <Expression>Protocol_Test_Suite.DumpLevel &gt;= 0 and Protocol_Test_Suite.DumpLevel &lt; 10 and Protocol_Test_Suite.MessageName != "RDPEGFX:DecompressedData"</Expression>
+        <Lines>Normal</Lines>
+        <Weight>Normal</Weight>
+        <Style>Normal</Style>
+        <ForegroundColor>
+          <A>255</A>
+          <R>0</R>
+          <G>176</G>
+          <B>80</B>
+        </ForegroundColor>
+        <IsGradientBackground>false</IsGradientBackground>
+      </Content>
+      <Properties />
+    </Asset>
+  </Assets>
+  <Properties />
+</AssetCollection>

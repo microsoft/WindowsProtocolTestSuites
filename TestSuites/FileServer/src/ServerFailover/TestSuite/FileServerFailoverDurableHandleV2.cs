@@ -15,7 +15,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         #region Test Case
 
         [TestMethod]
-        [TestCategory(TestCategories.Cluster)]
+        [TestCategory(TestCategories.Failover)]
         [TestCategory(TestCategories.Smb30)]
         [TestCategory(TestCategories.Compatibility)]
         [Description("Test the CREATE request from different client could succeed after failover when persistent handle is requested")]

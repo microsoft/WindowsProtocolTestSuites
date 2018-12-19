@@ -1,0 +1,22 @@
+﻿@model IEnumerable<ICodecParam>
+
+@{
+    ViewBag.isProg = false;
+}
+
+<!-- Modal dialog for codec quantizations. -->
+<div class="modal fade input-modal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="quant-modal-label" id="quant-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="quant-modal-label">Change Quantization Factors</h4>
+            </div>
+
+            <div class="modal-body">
+                @Html.Partial("_Quants", Model)
+            </div>
+
+        </div>
+    </div>
+</div>

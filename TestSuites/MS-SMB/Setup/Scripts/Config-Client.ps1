@@ -1,4 +1,6 @@
 #############################################################################
+## Copyright (c) Microsoft. All rights reserved.
+## Licensed under the MIT license. See LICENSE file in the project root for full license information.
 ##
 ## Microsoft Windows Powershell Scripting
 ## File:           Config-Client.ps1
@@ -8,14 +10,21 @@
 ##
 ##############################################################################
 $ScriptsSignalFile = "$env:HOMEDRIVE\config.finished.signal"
+$protocolName = "MS-SMB"
+
 if (Test-Path -Path $ScriptsSignalFile)
 {
 	Write-Host "The script execution is complete." -foregroundcolor Red
 	exit 0
 }
 
-[string]$scriptsPath = Get-location
+$endPointPath = "$env:SystemDrive\MicrosoftProtocolTests\$protocolName\Server-Endpoint"
+$version = Get-ChildItem $endPointPath | where {$_.Attributes -eq "Directory" -and $_.Name -match "\d+.\d+.\d+.\d+"} | Sort-Object Name -descending | Select-Object -first 1
+$tsInstallationPath = "$endPointPath\$version"
+$scriptsPath  = $tsInstallationPath + "\scripts"
+ 
 pushd $scriptsPath
+
 [string]$binPath = $scriptsPath+ "\..\bin\"
 $settingFile  = "$scriptsPath\ParamConfig.xml"
 if(Test-Path -Path $settingFile)
@@ -23,11 +32,17 @@ if(Test-Path -Path $settingFile)
 	$toolsPath       = .\Get-Parameter.ps1 $settingFile toolsPath
 	$logPath         = .\Get-Parameter.ps1 $settingFile logPath
 	$IPVersion       = .\Get-Parameter.ps1 $settingFile IPVersion
-	$workgroupDomain = .\Get-Parameter.ps1 $settingFile workgroupDomain
+
+    $workgroupDomain = "domain"
+    if([string]::IsNullOrEmpty($env:UserDNSDomain))
+    {
+        $workgroupDomain = "workgroup"
+    }
+	
 	$servername      = .\Get-Parameter.ps1 $settingFile serverComputerName	
 	$userNameInVM    = .\Get-Parameter.ps1 $settingFile userNameInVM
 	$userPwdInVM     = .\Get-Parameter.ps1 $settingFile userPwdInVM
-	$domainInVM      = .\Get-Parameter.ps1 $settingFile domainInVM
+	$domainInVM      = $env:UserDNSDomain
 }
 
 $osMajor = [System.Environment]::OSVersion.Version.Major
@@ -158,13 +173,13 @@ elseif ([double]$clientOsVersion -ge [double]$os2008R2)
 }
 
 
-$UserName = "SUT01\administrator"
-$Password = ConvertTo-SecureString -String "Password01!" -AsPlainText -Force
+$UserName = "$servername\administrator"
+$Password = ConvertTo-SecureString -String $userPwdInVM -AsPlainText -Force
 
 $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $UserName , $Password
 
 #SUTOsVersion is like 6.3.9600
-$SUTOsVersion =  (Get-WmiObject -comp "SUT01" -Credential $Credential -class Win32_OperatingSystem ).Version
+$SUTOsVersion =  (Get-WmiObject -comp "$servername" -Credential $Credential -class Win32_OperatingSystem ).Version
 $FirstDotIndex = $SUTOSVersion.IndexOf('.')
 $SecondDotIndex = $SUTOSVersion.IndexOf('.', $FirstDotIndex+1)
 if ($SecondDotIndex -eq -1)
@@ -185,42 +200,9 @@ else
    .\Modify-ConfigFileNode.ps1 $cfgfile "SutPlatformOS"   "Win2K8"
 }
 
-if($IPVersion -eq "IPv6")
-{
-   FileStringReplace $binPath\factory.xml 192.168.0.1 2008::1 
-}
-
-if ([double]$clientOsVersion -eq [double]$os2008)
-{
-   if([double]$SUTOsVersion -ge [double]$os2008R2)
-   {
-       set-content $env:systemdrive\testlist.txt "WinVista_Win2K8R2"
-   }  
-   else
-   {
-       set-content $env:systemdrive\testlist.txt "WinVista_Win2K8"
-   }
-}
-elseif ([double]$clientOsVersion  -ge [double]$os2008R2)
-{
-   if([double]$SUTOsVersion -ge [double]$os2008R2)
-   {
-       set-content $env:systemdrive\testlist.txt "Win7_Win2K8R2"
-   }   
-   else
-   {
-       set-content $env:systemdrive\testlist.txt "Win7_Win2K8"
-   }
-}
-else
-{
-       set-content $env:systemdrive\testlist.txt "Win7_Win2K8"
-}
-
-
 .\Modify-ConfigFileNode.ps1 $cfgfile "SutMachineName"         $servername
 .\Modify-ConfigFileNode.ps1 $cfgfile "SutLoginAdminUserName"  $userNameInVM
-if($workgroupDomain -eq "Domain")
+if($workgroupDomain.ToLower() -eq "domain")
 {
 	$userFullPathName = $domainInVM + "\" + $userNameInVM
 }

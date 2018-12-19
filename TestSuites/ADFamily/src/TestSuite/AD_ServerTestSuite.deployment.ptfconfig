@@ -78,12 +78,6 @@
           this DC should be a GC and holding all FSMO roles.
         </Description>
       </Property>
-      <Property name="WritableDC1.IsWindows" value="true">
-        <Description>
-          Type:string!
-          Usage: true if Writable DC1 is a Windows machine, false if a third-party implementation.
-        </Description>
-      </Property>
       <Property name="WritableDC1.Password" value="Password01!">
         <Description>Type:string! Usage: Writable DC1's computer password.</Description>
       </Property>
@@ -91,18 +85,12 @@
         <Description>Type:string! Usage: The IP address of writable DC1.</Description>
       </Property>
       <Property name="WritableDC1.OSVersion" value="Win2016">
-        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2</Description>
+        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2, Win2016, Winv1803, NonWin</Description>
       </Property>
       <!-- END - WRITABLE DC 1 -->
       <!-- START - WRITABLE DC 2 -->
       <Property name="WritableDC2.NetbiosName" value="SDC">
         <Description>Type:string! Usage: NetBIOS name of the writable DC2.</Description>
-      </Property>
-      <Property name="WritableDC2.IsWindows" value="true">
-        <Description>
-          Type:string!
-          Usage: true if Writable DC2 is a Windows machine, false if a third-party implementation.
-        </Description>
       </Property>
       <Property name="WritableDC2.Password" value="Password01!">
         <Description>Type:string! Usage:Writable DC2's computer password.</Description>
@@ -111,15 +99,12 @@
         <Description>Type:string! Usage: The IP address of writable DC2.</Description>
       </Property>
       <Property name="WritableDC2.OSVersion" value="Win2016">
-        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2</Description>
+        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2, Win2016, Winv1803, NonWin</Description>
       </Property>
       <!-- END - WRITABLE DC 2 -->
       <!-- START - RODC -->
       <Property name="RODC.NetbiosName" value="RODC">
         <Description>Type:string! Usage:Read-only DC's machine name.</Description>
-      </Property>
-      <Property name="RODC.IsWindows" value="true">
-        <Description>Type:string! Usage:true if Read-only DC is a Windows machine.</Description>
       </Property>
       <Property name="RODC.Password" value="Password01!">
         <Description>Type:string! Usage:Read-only DC's computer password.</Description>
@@ -128,7 +113,7 @@
         <Description>Type:string! Usage: The IP address of read-only DC.</Description>
       </Property>
       <Property name="RODC.OSVersion" value="Win2016">
-        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2</Description>
+        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2, Win2016, Winv1803, NonWin</Description>
       </Property>
       <!-- END - RODC -->
       <!-- START - CDC -->
@@ -149,7 +134,7 @@
         <Description>Type:string! Usage: The IP address of child DC.</Description>
       </Property>
       <Property name="CDC.OSVersion" value="Win2016">
-        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2</Description>
+        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2, Win2016, Winv1803, NonWin</Description>
       </Property>
       <!-- END - CDC -->
       <!-- START - TDC -->
@@ -170,7 +155,7 @@
         <Description>Type:string! Usage: The IP address of trusted DC.</Description>
       </Property>
       <Property name="TDC.OSVersion" value="Win2016">
-        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2</Description>
+        <Description>Type:string! Usage: Enum: Win2008, Win2008R2, Win2012, Win2012R2, Win2016, Winv1803, NonWin</Description>
       </Property>
       <!-- END - TDC -->
       <!-- START - DM -->
@@ -201,6 +186,18 @@
         <Description>Type:string! Usage: The IP address of driver machine (ENDPOINT).</Description>
       </Property>
       <!-- END - ENDPOINT -->
+    </Group>
+    <Group name="MS_APDS">
+      <Property name="ManagedServiceAccountName" value="msa01">
+        <Description>
+          Type:string! Usage: The name for Managed Service Account in the local domain.
+        </Description>
+      </Property>
+      <Property name="ManagedServiceAccountPassword" value="Password01!">
+        <Description>
+          Type:string! Usage: The password for Managed Service Account in the local domain.
+        </Description>
+      </Property>
     </Group>
     <Group name="MS_DRSR">
       <Property name="TestDS" value="true">

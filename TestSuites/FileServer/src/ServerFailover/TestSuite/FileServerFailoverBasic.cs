@@ -11,6 +11,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 {
@@ -104,7 +105,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         #region BVT_FileServerFailover_FileServer
 
         [TestMethod]
-        [TestCategory(TestCategories.Cluster)]
+        [TestCategory(TestCategories.Failover)]
         [TestCategory(TestCategories.Smb30)]
         [TestCategory(TestCategories.Swn)]
         [TestCategory(TestCategories.Positive)]
@@ -120,7 +121,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         #region BVT_FileServerFailover_ScaleOutFileServer
 
         [TestMethod]
-        [TestCategory(TestCategories.Cluster)]
+        [TestCategory(TestCategories.Failover)]
         [TestCategory(TestCategories.Smb30)]
         [TestCategory(TestCategories.Swn)]
         [TestCategory(TestCategories.Positive)]
@@ -136,7 +137,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         #region FileServerFailover_ScaleOutFileServer_ReconnectWithoutFailover
 
         [TestMethod]
-        [TestCategory(TestCategories.Cluster)]
+        [TestCategory(TestCategories.Failover)]
         [TestCategory(TestCategories.Smb30)]
         [TestCategory(TestCategories.Swn)]
         [TestCategory(TestCategories.Positive)]
@@ -179,7 +180,42 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             FileServerFailoverTest(TestConfig.ClusteredScaleOutFileServerName,
                 FileServerType.ScaleOutFileServer);
         }
+        #endregion
 
+        #region FileServerFailover_SMB311_Redirect_To_Owner_SOFS
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Failover)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("This test case is designed to test server can handle a TreeConnect request with flag SMB2_SHAREFLAG_REDIRECT_TO_OWNER when SMB dialect is 3.1.1 and share type includes STYPE_CLUSTER_SOFS.")]
+        public void FileServerFailover_SMB311_Redirect_To_Owner_SOFS()
+        {
+            #region Check Applicability
+            TestConfig.CheckDialect(DialectRevision.Smb311);
+            #endregion
+
+            if (testConfig.IsWindowsPlatform)
+            {
+                // Use GetClusterResourceOwner to get active host node
+                string sofsHostedNode = sutController.GetClusterResourceOwner(TestConfig.ClusteredScaleOutFileServerName).ToLower();
+                string hostedNode = TestConfig.ClusterNode01.ToLower().Contains(sofsHostedNode) ?
+                    TestConfig.ClusterNode01 : TestConfig.ClusterNode02;
+                string nonHostedNode = !TestConfig.ClusterNode01.ToLower().Contains(hostedNode) ?
+                    TestConfig.ClusterNode01 : TestConfig.ClusterNode02;
+
+                TestRedirectToOwner(hostedNode, nonHostedNode);
+            }
+            else
+            {
+                // For non-Windows platform,
+                // since we cannot find which host node is active, node01/node02 is treated as host node for testing respectively.
+                bool isRedirectToOwnerTested = TestRedirectToOwner(TestConfig.ClusterNode01, TestConfig.ClusterNode02);
+                if (isRedirectToOwnerTested == false)
+                {
+                    TestRedirectToOwner(TestConfig.ClusterNode02, TestConfig.ClusterNode01);
+                }
+            }
+        }
         #endregion
 
         #region Test Utility
@@ -193,14 +229,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             WITNESS_INTERFACE_LIST interfaceList = new WITNESS_INTERFACE_LIST();
 
             currentAccessIpAddr = SWNTestUtility.GetCurrentAccessIP(server);
-            BaseTestSite.Log.Add(LogEntryKind.Debug, "Get current file server IP: {0}.", currentAccessIpAddr);            
+            BaseTestSite.Log.Add(LogEntryKind.Debug, "Get current file server IP: {0}.", currentAccessIpAddr);
 
             #region Register SWN witness
             if (witnessType == WitnessType.SwnWitness)
             {
                 if (TestConfig.IsWindowsPlatform && fsType == FileServerType.ScaleOutFileServer)
                 {
-                    // Windows Server: when stopping a non-owner node of ScaleOutFS, no notication will be sent by SMB witness.
+                    // Windows Server: when stopping a non-owner node of ScaleOutFS, no notification will be sent by SMB witness.
                     // So get one IP of the owner node of ScaleOutFS to access.                    
                     string resourceOwnerNode = sutController.GetClusterResourceOwner(server);
                     IPAddress[] ownerIpList = Dns.GetHostEntry(resourceOwnerNode).AddressList;
@@ -428,8 +464,261 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                     TestConfig.FailoverTimeout,
                     "After failover, retry Read content until succeed within timeout span.");
             #endregion
-        }        
+        }
 
+        /// <summary>
+        /// Verify members in Error_Context
+        /// </summary>
+        /// <param name="ctx">Error_Context in Error Response</param>
+        /// <param name="uncSharePath">uncSharePath</param>
+        /// <param name="sofsHostedNode">ScaleOutFS hosted node</param>
+        private void verifyErrorContext(Error_Context ctx, string uncSharePath, string sofsHostedNode)
+        {
+            #region Verify Error_Context
+            BaseTestSite.Assert.AreEqual(
+                Error_Id.ERROR_ID_SHARE_REDIRECT,
+                ctx.ErrorId,
+                "The Error ID should be SMB2_ERROR_ID_SHARE_REDIRECT, actually server returns {0}", ctx.ErrorId);
+            BaseTestSite.Assert.IsTrue(
+                ctx.ErrorDataLength > 0,
+                "The length, in bytes, of the ErrorContextData field should be greater than 0. Actually server returns {0}.", ctx.ErrorDataLength);
+            #endregion
+
+            #region Verify Share_Reditect_Error_Context_Response
+            Share_Redirect_Error_Context_Response errCtx = ctx.ErrorData.ShareRedirectErrorContextResponse;
+            BaseTestSite.Assert.IsTrue(
+                errCtx.StructureSize > 0,
+                "This field (StructureSize) MUST be set to the size of the structure. Actually server returns {0}.", errCtx.StructureSize);
+            BaseTestSite.Assert.AreEqual(
+                (uint)3,
+                errCtx.NotificationType,
+                "This field (NotificationType) MUST be set to 3. Actually server returns {0}.", errCtx.NotificationType);
+            byte[] uncSharePathToByte = Encoding.Unicode.GetBytes(uncSharePath);
+            BaseTestSite.Assert.AreEqual(
+                (uint)uncSharePathToByte.Length,
+                errCtx.ResourceNameLength,
+                "The length of the share name provided in the ResourceName field, in bytes, should be the length of {0}. Actually server returns {1}.", uncSharePathToByte.Length, errCtx.ResourceNameLength);
+            BaseTestSite.Assert.AreEqual(
+                0,
+                errCtx.Flags,
+                "This field (Flags) MUST be set to zero. Actually server returns {0}.", errCtx.Flags);
+            BaseTestSite.Assert.AreEqual(
+                0,
+                errCtx.TargetType,
+                "This field (TargetType) MUST be set to zero. Actually server returns {0}.", errCtx.TargetType);
+            BaseTestSite.Assert.IsTrue(
+                errCtx.IPAddrCount > 0,
+                "The number of MOVE_DST_IPADDR structures in the IPAddrMoveList field should be greater than 0. Actually server returns {0}.", errCtx.IPAddrCount);
+            IPAddress[] ipv4AddressList = Dns.GetHostEntry(sofsHostedNode).AddressList;
+            System.Net.Sockets.AddressFamily addressFamily = ipv4AddressList[0].AddressFamily;
+
+            for (int i = 0; i < errCtx.IPAddrCount; i++)
+            {
+                Move_Dst_IpAddr dstMoveIpAddr = errCtx.IPAddrMoveList[i];
+                BaseTestSite.Assert.AreEqual(
+                    (uint)0,
+                    dstMoveIpAddr.Reserved,
+                    "The server SHOULD set this field to zero, and the client MUST ignore it on receipt. Actually server returns {0}", dstMoveIpAddr.Reserved);
+                if (addressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        Move_Dst_IpAddr_Type.MOVE_DST_IPADDR_V4,
+                        dstMoveIpAddr.Type,
+                        "Type of destination IP address should be MOVE_DST_IPADDR_V4, actually server returns {0}", dstMoveIpAddr.Type);
+                    // Check Reserved2 field (offset from 4 to 15) is 0
+                    for (int k = 4; k < 16; k++)
+                    {
+                        BaseTestSite.Assert.IsTrue(
+                            dstMoveIpAddr.IPv6Address[k] == 0,
+                            "The client MUST set this (Reserved2) to 0.");
+                    }
+                }
+                else if (addressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        Move_Dst_IpAddr_Type.MOVE_DST_IPADDR_V6,
+                        dstMoveIpAddr.Type,
+                        "Type of destination IP address should be MOVE_DST_IPADDR_V6, actually server returns {0}", dstMoveIpAddr.Type);
+                }
+            }
+
+            // Verify all IP addresses for this node are in IPAddrMoveList
+            if (addressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+            {
+                for (int i = 0; i < ipv4AddressList.Length; i++)
+                {
+                    IPAddress curAddr = ipv4AddressList[i];
+                    bool isIpAddrInList = false;
+                    for (int j = 0; j < errCtx.IPAddrMoveList.Length; j++)
+                    {
+                        Move_Dst_IpAddr dstMoveIpAddr = errCtx.IPAddrMoveList[j];
+                        uint ipAddr = BitConverter.ToUInt32(dstMoveIpAddr.IPv6Address, 0);
+                        if (ipAddr == (uint)curAddr.Address)
+                        {
+                            isIpAddrInList = true;
+                            break;
+                        }
+                    }
+                    BaseTestSite.Assert.IsTrue(isIpAddrInList, "IP address of sofsHostedNode {0} is not in IPAddrMoveList.", curAddr.ToString());
+                }
+            }
+
+            string resourceName = Encoding.Unicode.GetString(errCtx.ResourceName, 0, (int)errCtx.ResourceNameLength);
+            BaseTestSite.Assert.IsTrue(
+                uncSharePath.ToLower().Contains(resourceName.ToLower()),
+                "ResourceName should be the same as uncSharePath. Actually server returns {0}.", resourceName);
+            #endregion
+        }
+
+        /// <summary>
+        /// Verify behavior of redirect to owner specified in MS-SMB2 section 3.3.5.7
+        /// </summary>
+        /// <param name="sofsHostedNode">ScaleOutFS hosted node</param>
+        /// <param name="nonSofsHostedNode">Non ScaleOutFS hosted node</param>
+        /// <returns>Redirect to owner is tested or not</returns>
+        private bool TestRedirectToOwner(string sofsHostedNode, string nonSofsHostedNode)
+        {
+            bool isRedirectToOwnerTested = false;
+            #region Get IP address list from ScaleOutFS
+            string server = TestConfig.ClusteredScaleOutFileServerName;
+            IPAddress[] accessIpList = Dns.GetHostEntry(server).AddressList;
+            #endregion
+
+            #region Get IP address from nonSofsHostedNode
+            IPAddress currentAccessIpAddr = null;
+            IPAddress[] accessIpListNonSoftHosted = Dns.GetHostEntry(nonSofsHostedNode).AddressList;
+            for (int i = 0; i < accessIpList.Length; i++)
+            {
+                for (int j = 0; j < accessIpListNonSoftHosted.Length; j++)
+                {
+                    // Make sure to get IP address from nonSofsHostedNode
+                    if (accessIpList[i].Address.Equals(accessIpListNonSoftHosted[j].Address))
+                    {
+                        currentAccessIpAddr = accessIpList[i];
+                        break;
+                    }
+                }
+            }
+            BaseTestSite.Assert.IsNotNull(
+                currentAccessIpAddr,
+                "currentAccessIpAddr should be set as IP of nonSofsHostedNode {0}", nonSofsHostedNode);
+            #endregion
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client by sending the following requests: NEGOTIATE; SESSION_SETUP");
+            Smb2FunctionalClient client = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client.ConnectToServer(TestConfig.UnderlyingTransport, server, currentAccessIpAddr);
+            client.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            client.SessionSetup(TestConfig.DefaultSecurityPackage, server, TestConfig.AccountCredential, false);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends TREE_CONNECT request with flag SMB2_SHAREFLAG_REDIRECT_TO_OWNER.");
+            string uncSharePath = Smb2Utility.GetUncPath(server, testConfig.CAShareName);
+            uint treeId;
+            Share_Capabilities_Values shareCap = Share_Capabilities_Values.NONE;
+            uint status = client.TreeConnect(
+                uncSharePath,
+                out treeId,
+                (header, response) =>
+                {
+                    if (header.Status == Smb2Status.STATUS_SUCCESS)
+                    {
+                        shareCap = response.Capabilities;
+                    }
+                },
+                TreeConnect_Flags.SMB2_SHAREFLAG_REDIRECT_TO_OWNER);
+
+            if (status != Smb2Status.STATUS_SUCCESS &&
+                client.Smb2Client.Error != null)
+            {
+                ERROR_Response_packet error = client.Smb2Client.Error.PayLoad;
+                if (error.ErrorContextCount > 0)
+                {
+                    for (int i = 0; i < error.ErrorContextCount; i++)
+                    {
+                        Error_Context ctx = error.ErrorContextErrorData[i];
+                        if (ctx.ErrorId == Error_Id.ERROR_ID_SHARE_REDIRECT)
+                        {
+                            Share_Capabilities_Values shareCaps = GetShareCapabilities(sofsHostedNode, uncSharePath, TreeConnect_Flags.SMB2_SHAREFLAG_REDIRECT_TO_OWNER);
+                            if (!shareCaps.HasFlag(Share_Capabilities_Values.SHARE_CAP_REDIRECT_TO_OWNER))
+                            {
+                                BaseTestSite.Assert.Inconclusive(
+                                    "The share {0} does not have the capability SHARE_CAP_REDIRECT_TO_OWNER",
+                                    Smb2Utility.GetUncPath(TestConfig.ClusteredScaleOutFileServerName, testConfig.CAShareName)
+                                );
+                            }
+
+                            BaseTestSite.Assert.AreEqual(
+                                Smb2Status.STATUS_BAD_NETWORK_NAME,
+                                status,
+                                "If TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS," +
+                                "Connection.Dialect is \"3.1.1\" and" +
+                                "the SMB2_TREE_CONNECT_FLAG_REDIRECT_TO_OWNER bit is set" +
+                                "in the Flags field of the SMB2 TREE_CONNECT request," +
+                                "the server MUST query the underlying object store in an implementation-specific manner " +
+                                "to determine whether the share is hosted on this node." +
+                                "If not, the server MUST return error data as specified in section 2.2.2" +
+                                "with ErrorData set to SMB2 ERROR Context response formatted as ErrorId" +
+                                "set to SMB2_ERROR_ID_SHARE_REDIRECT, and ErrorContextData set to the Share Redirect error context data" +
+                                "as specified in section 2.2.2.2.2 with IPAddrMoveList set to" +
+                                "the list of IP addresses obtained in an implementation-specific manner." +
+                                "Actually server returns {0}.", Smb2Status.GetStatusCode(status)
+                            );
+                            verifyErrorContext(ctx, uncSharePath, sofsHostedNode);
+                            isRedirectToOwnerTested = true;
+                        }
+                    }
+                }
+            }
+
+            if (status == Smb2Status.STATUS_SUCCESS)
+            {
+                if (!shareCap.HasFlag(Share_Capabilities_Values.SHARE_CAP_REDIRECT_TO_OWNER))
+                {
+                    BaseTestSite.Assert.Inconclusive(
+                        "The share {0} does not have the capability SHARE_CAP_REDIRECT_TO_OWNER",
+                        Smb2Utility.GetUncPath(TestConfig.ClusteredScaleOutFileServerName, testConfig.CAShareName)
+                    );
+                }
+                client.TreeDisconnect(treeId);
+            }
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the client by sending the following requests: LOG_OFF; DISCONNECT.");
+            client.LogOff();
+            client.Disconnect();
+            return isRedirectToOwnerTested;
+        }
+
+        /// <summary>
+        /// Get share capabilities
+        /// </summary>
+        /// <param name="server">The host node</param>
+        /// <param name="sharePath">The path to the share</param>
+        /// <param name="flags">Tree Connect flag</param>
+        /// <returns>Share capabilities</returns>
+        private Share_Capabilities_Values GetShareCapabilities(string server, string sharePath, TreeConnect_Flags flags = TreeConnect_Flags.SMB2_SHAREFLAG_NONE)
+        {
+            IPAddress shareIpAddr = Dns.GetHostEntry(server).AddressList[0];
+
+            Smb2FunctionalClient client = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client.ConnectToServer(TestConfig.UnderlyingTransport, server, shareIpAddr);
+            client.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            client.SessionSetup(TestConfig.DefaultSecurityPackage, server, TestConfig.AccountCredential, false);
+            Share_Capabilities_Values shareCaps = Share_Capabilities_Values.NONE;
+            uint treeId;
+            uint status = client.TreeConnect(
+                sharePath,
+                out treeId,
+                (header, response) =>
+                {
+                    shareCaps = response.Capabilities;
+                },
+                flags);
+            if (status == Smb2Status.STATUS_SUCCESS)
+            {
+                client.TreeDisconnect(treeId);
+            }
+            client.LogOff();
+            client.Disconnect();
+            return shareCaps;
+        }
         #endregion
     }
 }

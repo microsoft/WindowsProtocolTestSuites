@@ -136,7 +136,7 @@ The minimum requirements for the driver computer are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft Windows 8.1, Enterprise Edition| 
+| Operating system| Microsoft Windows 8.1, Enterprise Edition or later versions| 
 | Memory| 2 GB RAM| 
 | Disk space| 60 GB | 
 
@@ -146,7 +146,7 @@ The minimum requirements for the DC are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| For Windows platform: Microsoft Windows Server 2012 R2, Standard Edition, or a DC implementation that is not based on the Windows operating system| 
+| Operating system| For Windows platform: Microsoft Windows Server 2012 R2, Standard Edition or later versions, or a DC implementation that is not based on the Windows operating system| 
 | Services| For Windows platform: Active Directory Domain Services (AD DS)| 
 | Memory| 1 GB RAM| 
 | Disk space| 60 GB| 
@@ -156,7 +156,7 @@ The minimum requirements for a domain member.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft Windows Server 2012 R2, Standard Edition, or a server that is not based on the Windows operating system| 
+| Operating system| Microsoft Windows Server 2012 R2, Standard Edition or later versions, or a server that is not based on the Windows operating system| 
 | Memory| 1 GB RAM| 
 | Disk space| 60 GB| 
 
@@ -165,29 +165,28 @@ All of the following software must be installed on the driver computer ***before
 
 |  **Required Software** | 
 | ------------- |
-| **Microsoft® Visual Studio® 2012**| 
-|      ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)Note| 
-|            You can download Visual Studio Ultimate 2012 Trial (30 days) from below website| 
-|            [http://www.microsoft.com/en-us/download/details.aspx?id=30678](http://www.microsoft.com/en-us/download/details.aspx?id=30678)| 
-|            You can download Visual Studio 2012 Update 4 or later from below website| 
-|            [http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305](http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305)| 
+| **Microsoft® Visual Studio® 2017**| 
 | **Spec Explorer** (build 3.5.3146.0 or later)| 
 | Spec Explorer is a model based testing tool used by test suite to design model and generate test cases.| 
 |      ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)Note| 
-|            You can download Spec Explorer from below website| 
+|            You can download Spec Explorer from the website below| 
 |            [http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/](http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)| 
 | **Microsoft Protocol Test Framework**| 
 | Microsoft Protocol Test Framework is a common framework to support protocol test suite. | 
 |      ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)Note| 
-|            You can download Microsoft protocol Test Framework from below website| 
+|            You can download Microsoft protocol Test Framework from the website below| 
 |            [https://github.com/microsoft/protocoltestframework](https://github.com/microsoft/protocoltestframework) | 
 | **Windows PowerShell 3.0** is required.| 
 | **Protocol Test Manager**| 
 | Protocol Test Manager provides a graphical UI for easily configuring and running Microsoft Windows Protocol Test Suites.| 
 | **Microsoft Message Analyzer**| 
 |        ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)Note| 
-|              You can download the latest Message Analyzer from below website. | 
+|              You can download the latest Message Analyzer (MA) from the website below. We need to install MA so that our test cases will call MA library to do live capture and verification of the network trace. It’s all automatic process, so users will only need to install the latest version of MA first. | 
 |              [http://www.microsoft.com/en-us/download/details.aspx?id=44226](http://www.microsoft.com/en-us/download/details.aspx?id=44226)           | 
+| **Open XML SDK**|
+|        ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)Note| 
+|              You can download the latest Open XML SDK from the website below. It is used to load the schema definitions in XML format from technical documents. | 
+|[https://www.microsoft.com/en-us/download/details.aspx?id=30425](https://www.microsoft.com/en-us/download/details.aspx?id=30425)|
 |  **Optional Software** | 
 |  | 
 
@@ -888,7 +887,7 @@ Run the following command in PowerShell window:
 
 #### <a name="_Toc426644941"/>Set DFS Replication Debug Log Level to 5 (MAX)
 Run the following command in PowerShell window:
-**wmic /namespace:\\root\microsoftdfs path dfsrmachineconfig set debuglogseverity=5** 
+**wmic /namespace:\\\\root\microsoftdfs path dfsrmachineconfig set debuglogseverity=5** 
 
 #### <a name="_Toc426644942"/>Install IIS
 Run the following command in PowerShell window:
@@ -1112,7 +1111,7 @@ You can use the Visual Studio solution (.sln) file included with this test suite
 ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)
 Note
 
-While using Microsoft® Visual Studio® 2012 or above to run test cases, test suite may throw exception with message of “Cannot get test site”. To solve this issue, please select the test settings file under test settings menu.
+While using Microsoft® Visual Studio® 2017 or above to run test cases, test suite may throw exception with message of “Cannot get test site”. To solve this issue, please select the test settings file under test settings menu.
 
 >
 

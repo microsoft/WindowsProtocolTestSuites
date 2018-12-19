@@ -47,7 +47,7 @@
 
 ### <a name="_Toc374100960"/>Introduction
 
-This guide provides information about how to install, configure, and run MS-ADFSPIP Test Suite and its environment. This suite of tools is designed to test the implementations of Device Registration Discovery Protocol, as specified in Microsoft document [MS-DVRD], and Device Registration Enrollment Protocol, as specified in Microsoft document [MS-DVRE].This guide provides information about using this test suite on the Microsoft® Windows® operating system.
+This guide provides information about how to install, configure, and run MS-ADFSPIP Test Suite and its environment. This suite of tools is designed to test the implementation of ADFS Proxy and Web Application Proxy integration, as described in [MS-ADFSPIP]. This guide provides information about using this test suite on the Microsoft® Windows® operating system.
 
 This suite of tools tests only the protocol implementation behaviors that are observed on the wire. For detailed information about the design of this test suite, see MS-ADFSPIP_ClientTestDesignSpecification.md. 
 
@@ -133,7 +133,7 @@ The minimum requirements for the DCCA are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft® Windows Server® 2012 R2, Enterprise Edition | 
+| Operating system| Microsoft® Windows Server® 2012 R2, Enterprise Edition or later versions | 
 | Services| Active Directory Domain Services (AD DS) | 
 | | Active Directory Certificate Service (AD CS)| 
 | Memory| 1 GB RAM| 
@@ -145,7 +145,7 @@ The minimum requirements for the ADFS are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft® Windows Server® 2012 R2, Enterprise Edition| 
+| Operating system| Microsoft® Windows Server® 2012 R2, Enterprise Edition or later versions| 
 | Services| Active Directory Federation Service (AD FS)| 
 | Memory| 1 GB RAM| 
 | Disk space| 60 GB| 
@@ -156,7 +156,7 @@ The minimum requirements for the SUT are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft® Windows Server® 2012 R2, Enterprise Edition| 
+| Operating system| Microsoft® Windows Server® 2012 R2, Enterprise Edition or later versions| 
 | Services| Web Application Proxy| 
 | Memory| 1 GB RAM| 
 | Disk space| 60 GB| 
@@ -176,7 +176,7 @@ The minimum requirements for the DRIVER computer are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft® Windows 8.1| 
+| Operating system| Microsoft® Windows 8.1 or later versions| 
 | Memory| 1 GB RAM| 
 | Disk space| 60 GB | 
 
@@ -185,10 +185,13 @@ All of the following software must be installed on the driver computer _before_ 
 
 |  **Required Software that is Included with test suite**| 
 | ------------- |
-| Protocol Test Framework (build 1.0.2220.0 or later)| 
+| Protocol Test Framework (build 1.0.6000.0 or later)| 
 |  | 
 |  **Required Software that is Not Included with test suite**| 
-| Microsoft® Visual Studio® 2012 Ultimate, Premium, or Professional.| 
+| Microsoft® Visual Studio® 2017 Community, Professional or Enterprise.| 
+| Spec Explorer (build 3.5.3146.0 or later)| 
+|    You can download Spec Explorer from below website| 
+|    [http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/](http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)| 
 
 ## <a name="_Toc374100974"/>Network Setup
 
@@ -287,7 +290,7 @@ This section describes how to set up the driver computer.
 ![image4.png](./image/MS-ADFSPIP_ClientUserGuide/image4.png)
 Important 
 
->Microsoft Visual Studio 2012 and Protocol Test Framework must be installed on the driver computer before you run the test suite installer.
+>Microsoft Visual Studio 2017 and Protocol Test Framework must be installed on the driver computer before you run the test suite installer.
 
 To set up the driver computer:
 

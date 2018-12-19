@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "_ImageCompare";
+}
+
+<div class="row" style="padding-top: 15px; padding-bottom: 15px;">
+    <div class="text-left col-xs-12" style="padding-bottom: 5px;">
+        Input two images to be compared:
+    </div>
+    <div class="col-xs-6">
+        <form action="@Url.Action("Upload")" class="dropzone dz-square" id="ImageCompareUploader1">
+            <input type="hidden" name="imageType" value="ImageCompare1" />
+            <div class="imageuploader1 dz-message"><span>Drop files here to upload</span></div>
+        </form>
+    </div>
+    <div class="col-xs-6">
+        <form action="@Url.Action("Upload")" class="dropzone dz-square" id="ImageCompareUploader2">
+            <input type="hidden" name="imageType" value="ImageCompare2" />
+            <div class="imageuploader2 dz-message"><span>Drop files here to upload</span></div>
+        </form>
+    </div>
+</div>
+

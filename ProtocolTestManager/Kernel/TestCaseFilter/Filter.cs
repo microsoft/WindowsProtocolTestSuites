@@ -10,7 +10,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
     /// <summary>
     /// This class defines the filter of test case.
     /// </summary>
-    class Filter
+    public class Filter
     {
         List<string> positiveCategories;
         List<string> negativeCategories;

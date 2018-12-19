@@ -1,0 +1,48 @@
+﻿@model List<RDPToolSet.Web.Models.PanelViewModel>
+
+@{
+    var parameters = (Dictionary<string, string>) ViewBag.Parameters;
+}
+
+@if(Model.Count > 1){
+        <div class="row">
+            <div class="col-xs-1 nav-layer" style="padding: 1px;">
+                <ul class="nav nav-tabs tabs-left vertical-text">
+                    @for(int index = 0; index < Model.Count; index++)
+                    {
+                        var layer = Model[index];
+                        <li class="@(index == 0 ? Html.Raw("active") : Html.Raw(""))">
+                            <a href="#@layer.Id" data-toggle="tab">@layer.Title</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="col-xs-11 content-layer" style="padding-left: 1px;">
+                <div class="tab-content layer-tabs">
+                    @for (int index = 0; index < Model.Count; index++)
+                    {
+                        var layer = Model[index];
+                        <div class="tab-pane layer-panes @(index == 0 ? Html.Raw("active") : Html.Raw(""))" id="@layer.Id">
+                            @Html.Partial("_Tabs", layer.Tabs)
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+}
+@if (Model.Count == 1)
+{
+    @Html.Partial("_Tabs", Model[0].Tabs)
+}
+
+
+<div>
+    <input type="hidden" name="has-layers" value="@Model.Count">
+
+    @if(parameters!=null){
+        foreach (var key in parameters.Keys)
+        {
+            <input type="hidden" name="@key" value="@parameters[key]">
+        }
+    }
+</div>

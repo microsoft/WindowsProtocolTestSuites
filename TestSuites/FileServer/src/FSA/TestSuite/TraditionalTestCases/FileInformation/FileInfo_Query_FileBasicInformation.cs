@@ -18,6 +18,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Query FileBasicInfo from a file and check if Integrity is supported.")]
         public void FileInfo_Query_FileBasicInfo_File_IsIntegritySupported()
         {
@@ -27,6 +28,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Query FileBasicInfo from a directory and check if Integrity is supported.")]
         public void FileInfo_Query_FileBasicInfo_Dir_IsIntegritySupported()
         {

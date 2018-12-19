@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2036
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rdpegfx", "Rdpegfx.csproj", "{C89AC3FB-7FFC-49D8-B99B-A76C9411AEC6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rdpedyc", "..\MS-RDPEDYC\Rdpedyc.csproj", "{CFBAFDE2-F509-4AC8-817A-0C26C1B27653}"

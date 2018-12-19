@@ -28,10 +28,13 @@ namespace Microsoft.Protocols.TestManager.Kernel
         private TestCaseFilter filter = null;
         private TestSuite testSuite = null;
         private TestEngine testEngine = null;
+        private int targetFilterIndex = -1;
+        private int mappingFilterIndex = -1;
 
         public Utility()
         {
-            installDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, ".."));
+            string exePath = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            installDir = Path.GetFullPath(Path.Combine(exePath, ".."));
         }
 
         /// <summary>
@@ -93,9 +96,30 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 throw new Exception(string.Format(StringResource.LoadFilterError, e.Message));
             }
+
+            try
+            {
+                LoadFeatureMappingFromXml(appConfig.FeatureMapping);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(string.Format(StringResource.LoadFeatureMappingError, e.Message));
+            }
+
             appConfig.InitDefaultConfigurations();
 
             LastRuleSelectionFilename = testSuiteInfo.LastProfile;
+        }
+
+        private Assembly UnitTestFrameworkResolveHandler(object sender, ResolveEventArgs args)
+        {
+            if (args.Name.Contains("Microsoft.VisualStudio.QualityTools.UnitTestFramework"))
+            {
+                string vstestPath = Path.GetDirectoryName(appConfig.VSTestPath);
+                var assembly = Assembly.LoadFrom(Path.Combine(vstestPath, "Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll"));
+                return assembly;
+            }
+            return null;
         }
 
         /// <summary>
@@ -134,7 +158,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
             testSuite = new TestSuite();
             try
             {
+                AppDomain.CurrentDomain.AssemblyResolve += UnitTestFrameworkResolveHandler;
                 testSuite.LoadFrom(appConfig.TestSuiteAssembly);
+                AppDomain.CurrentDomain.AssemblyResolve -= UnitTestFrameworkResolveHandler;
             }
             catch (Exception e)
             {
@@ -152,6 +178,17 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 }
             }
 
+            if (filter != null)
+            {
+                Dictionary<string, List<Rule>> featureMappingTable = CreateFeatureMappingTable();
+                if (featureMappingTable != null)
+                {
+                    RuleGroup targetFilterGroup = filter[targetFilterIndex];
+                    RuleGroup mappingFilterGroup = filter[mappingFilterIndex];
+                    targetFilterGroup.featureMappingTable = featureMappingTable;
+                    targetFilterGroup.mappingRuleGroup = mappingFilterGroup;
+                }
+            }
         }
 
         /// <summary>
@@ -277,7 +314,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                             stepIndex++;
                             item.DetectingStatus = Microsoft.Protocols.TestManager.Detector.DetectingStatus.Skipped;
                             break;
-                        case Microsoft.Protocols.TestManager.Detector.LogStyle.StepNotFound: 
+                        case Microsoft.Protocols.TestManager.Detector.LogStyle.StepNotFound:
                             stepIndex++;
                             item.DetectingStatus = Microsoft.Protocols.TestManager.Detector.DetectingStatus.NotFound;
                             break;
@@ -299,6 +336,24 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     logWriter.Close();
                     logWriter = null;
                 });
+        }
+
+        /// <summary>
+        /// Stop the auto-detection
+        /// </summary>
+        public void StopDetection(Action callback)
+        {
+            detector.DetectLogCallback = null;
+            detectSteps[stepIndex].DetectingStatus = TestManager.Detector.DetectingStatus.Canceling;
+            detector.StopDetection(callback);
+            if (stepIndex < detectSteps.Count) detectSteps[stepIndex].DetectingStatus = TestManager.Detector.DetectingStatus.Pending;
+            if (logWriter != null)
+            {
+                logWriter.Close();
+                logWriter.Dispose();
+                logWriter = null;
+            }
+            stepIndex = 0;
         }
 
         /// <summary>
@@ -396,6 +451,15 @@ namespace Microsoft.Protocols.TestManager.Kernel
         }
 
         /// <summary>
+        /// Gets current TestSuite object.
+        /// </summary>
+        /// <returns>A TestSuite object</returns>
+        public TestSuite GetTestSuite()
+        {
+            return testSuite;
+        }
+
+        /// <summary>
         /// The number of the selected test cases.
         /// </summary>
         public int SelectedCaseCount
@@ -403,6 +467,126 @@ namespace Microsoft.Protocols.TestManager.Kernel
             get { return selectedCases.Count; }
         }
 
+        #endregion
+
+        #region Feature Mapping
+        /// <summary>
+        /// Create a config table from a given xml node
+        /// </summary>
+        /// <param name="featureMappingConfig"></param>
+        /// <returns>A feature mapping config table</returns>
+        private Dictionary<string, int> GetFeatureMappingConfigFromXmlNode(XmlNode featureMappingConfig)
+        {
+            Dictionary<string, int> featureMappingConfigTable = new Dictionary<string, int>();
+            var configs = featureMappingConfig.SelectNodes("Config");
+            foreach (XmlNode config in configs)
+            {
+                featureMappingConfigTable.Add(config.Attributes[0].Value, Convert.ToInt32(config.Attributes[1].Value));
+            }
+            return featureMappingConfigTable;
+        }
+
+        /// <summary>
+        /// Load feature mapping config from given xml node
+        /// </summary>
+        /// <param name="featureMappingNode"></param>
+        private void LoadFeatureMappingFromXml(XmlNode featureMappingNode)
+        {
+            if (featureMappingNode == null)
+            {
+                targetFilterIndex = -1;
+                mappingFilterIndex = -1;
+                return;
+            }
+
+            // Parse Config section
+            var featureMappingConfig = featureMappingNode.SelectSingleNode("Config");
+            Dictionary<string, int> configTable = GetFeatureMappingConfigFromXmlNode(featureMappingConfig);
+            int _targetFilterIndex = configTable["targetFilterIndex"];
+            int _mappingFilterIndex = configTable["mappingFilterIndex"];
+            if ((_targetFilterIndex == _mappingFilterIndex) ||
+                (_targetFilterIndex >= filter.Count || _mappingFilterIndex >= filter.Count))
+            {
+                return;
+            }
+            targetFilterIndex = _targetFilterIndex;
+            mappingFilterIndex = _mappingFilterIndex;
+        }
+
+        /// <summary>
+        /// Create a feature mapping table
+        /// </summary>
+        /// <returns>A feature mapping table</returns>
+        private Dictionary<string, List<Rule>> CreateFeatureMappingTable()
+        {
+            if (targetFilterIndex == -1 ||
+                mappingFilterIndex == -1)
+            {
+                return null;
+            }
+            Dictionary<string, List<Rule>> featureMappingTable = new Dictionary<string, List<Rule>>();
+            RuleGroup targetFilterGroup = filter[targetFilterIndex];
+            RuleGroup mappingFilterGroup = filter[mappingFilterIndex];
+            Dictionary<string, Rule> mappingRuleTable = createRuleTableFromRuleGroup(mappingFilterGroup);
+            Dictionary<string, Rule> targetRuleTable = createRuleTableFromRuleGroup(targetFilterGroup);
+
+            List<TestCase> testCaseList = testSuite.TestCaseList;
+            foreach (TestCase testCase in testCaseList)
+            {
+                List<string> categories = testCase.Category;
+                foreach (string target in targetRuleTable.Keys)
+                {
+                    if (categories.Contains(target))
+                    {
+                        Rule currentRule;
+                        foreach (string category in categories)
+                        {
+                            if (!category.Equals(target))
+                            {
+                                mappingRuleTable.TryGetValue(category, out currentRule);
+                                if (currentRule == null)
+                                {
+                                    continue;
+                                }
+                                if (featureMappingTable.ContainsKey(target))
+                                {
+                                    featureMappingTable[target].Add(currentRule);
+                                }
+                                else
+                                {
+                                    featureMappingTable[target] = new List<Rule> { currentRule };
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            return featureMappingTable;
+        }
+
+        /// <summary>
+        /// Create a dictionary (key: rule name, value: rule) to store rules from a given ruleGroup to speedup rule lookup performance
+        /// </summary>
+        /// <param name="ruleGroup">A rule group</param>
+        /// <returns>A rule table</returns>
+        private Dictionary<string, Rule> createRuleTableFromRuleGroup(RuleGroup ruleGroup)
+        {
+            Dictionary<string, Rule> ruleTable = new Dictionary<string, Rule>();
+            Stack<Rule> ruleStack = new Stack<Rule>();
+            foreach (Rule r in ruleGroup) ruleStack.Push(r);
+            while (ruleStack.Count > 0)
+            {
+                Rule r = ruleStack.Pop();
+                if (r.CategoryList.Count != 0 &&
+                    !ruleTable.ContainsKey(r.CategoryList[0]))
+                {
+                    ruleTable.Add(r.CategoryList[0], r);
+                }
+                foreach (Rule childRule in r) ruleStack.Push(childRule);
+            }
+            return ruleTable;
+        }
         #endregion
 
         #region PTF Properties
@@ -664,7 +848,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public event TestFinishedEvent TestFinished
         {
             add { if (testEngine != null) testEngine.TestFinished += value; }
-            remove { if (testEngine != null)testEngine.TestFinished -= value; }
+            remove { if (testEngine != null) testEngine.TestFinished -= value; }
         }
 
         /// <summary>
@@ -822,7 +1006,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             TestCaseGroup.HoldUpdatingHeader();
             foreach (var testcase in selectedCases)
             {
-                if(!caselistCache.Contains(testcase.Name) && !testcase.IsChecked)
+                if (!caselistCache.Contains(testcase.Name) && !testcase.IsChecked)
                     testcase.IsChecked = false;
             }
             TestCaseGroup.ResumeUpdatingHeader();
@@ -832,7 +1016,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 var testcase = selectedCases.FirstOrDefault((v) => v.FullName == name);
                 if (testcase != null)
                 {
-                    if(!testcase.IsChecked)
+                    if (!testcase.IsChecked)
                     {
                         testcase.IsChecked = true;
                     }
@@ -901,6 +1085,33 @@ namespace Microsoft.Protocols.TestManager.Kernel
             return sb.ToString();
         }
 
+        #endregion
+
+        #region Exception handling
+        /// <summary>
+        /// Log exception detail to Protocol Test Manager folder under Application Data.
+        /// </summary>
+        /// <param name="exception">An exception list.</param>
+        public static void LogException(List<Exception> exception)
+        {
+            string logName = string.Format("Exception_{0}.log", DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss-fff"));
+            string logFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Protocol Test Manager");
+            if (!Directory.Exists(logFolder))
+            {
+                Directory.CreateDirectory(logFolder);
+            }
+            string errorLog = Path.Combine(logFolder, logName);
+
+            using (StreamWriter errorWriter = new StreamWriter(errorLog))
+            {
+                for (int i = 0; i < exception.Count; i++)
+                {
+                    var e = exception[i];
+                    errorWriter.WriteLine("Exception #{0}: ", i);
+                    errorWriter.WriteLine("Error Detail: {0}", e.ToString());
+                }
+            }
+        }
         #endregion
 
         /// <summary>

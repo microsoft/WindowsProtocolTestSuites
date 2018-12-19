@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{407A6664-47AB-44DA-9917-ECB50F879772}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Protocols.TestSuites.Rdp</RootNamespace>
+    <AssemblyName>RDP_ClientAdapter</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'fxcop|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\fxcop\</OutputPath>
+    <DefineConstants>FXCOP;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Protocols.TestTools">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Protocols.TestTools.ExtendedLogging">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="CommonConfigPropNames.cs" />
+    <Compile Include="CommonUtility.cs" />
+    <Compile Include="ImageQualityAccessment\Downscaler.cs" />
+    <Compile Include="ImageQualityAccessment\FRIQAIndexBase.cs" />
+    <Compile Include="ImageQualityAccessment\Gssim.cs" />
+    <Compile Include="ImageQualityAccessment\Msssim.cs" />
+    <Compile Include="ImageQualityAccessment\Ssim.cs" />
+    <Compile Include="IRdpSutControlAdapter.cs" />
+    <Compile Include="PtfPropUtility.cs" />
+    <Compile Include="RDPBCGR\IRdpbcgrAdapter.cs" />
+    <Compile Include="RDPBCGR\RdpbcgrAdapter.cs" />
+    <Compile Include="RDPBCGR\RdpbcgrAdapter_Sequences.cs" />
+    <Compile Include="RDPBCGR\RdpbcgrCapSet.cs" />
+    <Compile Include="RDPBCGR\ClientRoleCaptureCode.cs" />
+    <Compile Include="RDPBCGR\RdpbcgrServerConfig.cs" />
+    <Compile Include="RDPBCGR\RDPBCGRInput.cs" />
+    <Compile Include="RDPBCGR\RDPBCGROutput.cs" />
+    <Compile Include="RDPBCGR\RdpbcgrTypes.cs" />
+    <Compile Include="RDPBCGR\RdpefsTypes.cs" />
+    <Compile Include="RDPBCGR\RdpefsUtility.cs" />
+    <Compile Include="RdpedispSUTControlAdapter\IRdpedispSUTControlAdapter.cs" />
+    <Compile Include="RDPEDISP\IRdpedispAdapter.cs" />
+    <Compile Include="RDPEDISP\RdpedispAdapter.cs" />
+    <Compile Include="RDPEFS\IRdpefsAdapter.cs" />
+    <Compile Include="RDPEFS\RdpefsAdapter.cs" />
+    <Compile Include="RDPEGFX\RdpegfxAdapter.cs" />
+    <Compile Include="RDPEGFX\RdpegfxRfxProgCodecBlockManagerDecorator.cs" />
+    <Compile Include="RDPEGFX\IRdpegfxAdapter.cs" />
+    <Compile Include="RdpeiSUTControlAdapter\IRdpeiSUTControlAdapter.cs" />
+    <Compile Include="RdpeiSUTControlAdapter\RdpeiSUTControlAdapter.cs" />
+    <Compile Include="RdpeiSUTControlAdapter\RdpeiSUTControlData.cs" />
+    <Compile Include="RdpeiSUTControlAdapter\RdpeiUtility.cs" />
+    <Compile Include="RDPEUSB\ClientRoleCaptureCode.cs" />
+    <Compile Include="RDPEUSB\Config.cs" />
+    <Compile Include="RDPEUSB\IRdpeusbAdapter.cs" />
+    <Compile Include="RDPEUSB\RdpeusbAdapter.cs" />
+    <Compile Include="RDPEVOR\IRdpegtAdapter.cs" />
+    <Compile Include="RDPEVOR\IRdpevorAdapter.cs" />
+    <Compile Include="RDPEVOR\RdpegtAdapter.cs" />
+    <Compile Include="RDPEVOR\RdpevorAdapter.cs" />
+    <Compile Include="RDPRFX\IRdprfxAdapter.cs" />
+    <Compile Include="RDPRFX\RdprfxAdapter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RDPRFX\RdprfxClientRoleCaptureCode.cs" />
+    <Compile Include="ProtocolBasedSUTControlAdapter\ISUTControltransport.cs" />
+    <Compile Include="ProtocolBasedSUTControlAdapter\ProtocolBasedRdpedispSUTControlAdapter.cs" />
+    <Compile Include="ProtocolBasedSUTControlAdapter\ProtocolBasedRdpeiSUTControlAdapter.cs" />
+    <Compile Include="ProtocolBasedSUTControlAdapter\ProtocolBasedRdpSUTControlAdapter.cs" />
+    <Compile Include="ProtocolBasedSUTControlAdapter\SUTControlMessage.cs" />
+    <Compile Include="ProtocolBasedSUTControlAdapter\SUTControlMessageExRDP.cs" />
+    <Compile Include="ProtocolBasedSUTControlAdapter\SUTControlProtocolHandler.cs" />
+    <Compile Include="ProtocolBasedSUTControlAdapter\TCPSUTControlTransport.cs" />
+    <Compile Include="ProtocolBasedSUTControlAdapter\UDPSUTControlTransport.cs" />
+    <Compile Include="SimulatedScreen.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Common\Common.csproj">
+      <Project>{FE653643-6342-4300-871E-683C7BA31494}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Asn1Base\Asn1Base.csproj">
+      <Project>{DEDA188C-C97E-4968-BC31-594925631E9F}</Project>
+      <Name>Asn1Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Messages\Messages.csproj">
+      <Project>{75544419-3F4E-4308-A676-165F45C1462E}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPBCGR\Rdpbcgr.csproj">
+      <Project>{FA218CAB-320C-45E9-B641-04622418988E}</Project>
+      <Name>Rdpbcgr</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEDISP\Rdpedisp.csproj">
+      <Project>{37f00834-1559-42c8-a137-cc4e963d4b82}</Project>
+      <Name>Rdpedisp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEDYC\Rdpedyc.csproj">
+      <Project>{CFBAFDE2-F509-4AC8-817A-0C26C1B27653}</Project>
+      <Name>Rdpedyc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEFS\Rdpefs.csproj">
+      <Project>{e5a90e66-44b4-4f13-b2a6-f7990770a977}</Project>
+      <Name>Rdpefs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEGFX\Rdpegfx.csproj">
+      <Project>{c89ac3fb-7ffc-49d8-b99b-a76c9411aec6}</Project>
+      <Name>Rdpegfx</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEGT\Rdpegt.csproj">
+      <Project>{80264e7b-a9dd-4c8a-ab1e-86c1b80466d9}</Project>
+      <Name>Rdpegt</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEMT\Rdpemt.csproj">
+      <Project>{9E44ED93-D10D-42E3-A8BF-AD1923859857}</Project>
+      <Name>Rdpemt</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEUDP\Rdpeudp.csproj">
+      <Project>{B6F8EB97-B6A5-4092-9ED0-12C0487DA124}</Project>
+      <Name>Rdpeudp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEUSB\Rdpeusb.csproj">
+      <Project>{698f6802-be9f-4483-a5c7-b4bbfa51d47b}</Project>
+      <Name>Rdpeusb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEVOR\Rdpevor.csproj">
+      <Project>{2467a7e3-8e85-4f7b-80bb-effe8d48b3de}</Project>
+      <Name>Rdpevor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPRFX\Rdprfx.csproj">
+      <Project>{9dd86de1-3231-4713-9b45-493f4fe4199c}</Project>
+      <Name>Rdprfx</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="RdpedispSUTControlAdapter\TriggerResolutionChangeOnClient.ps1" />
+    <None Include="RdpedispSUTControlAdapter\TriggerOrientationChangeOnClient.ps1" />
+    <None Include="RdpedispSUTControlAdapter\TriggerInitializeDisplaySettings.ps1" />
+    <None Include="RdpedispSUTControlAdapter\TriggerMaximizeRDPClientWindow.ps1" />
+    <None Include="RdpeiSUTControlAdapter\TriggerContinuousTouchEventOnClient.ps1" />
+    <None Include="RdpeiSUTControlAdapter\TriggerDismissHoveringContactPduOnClient.ps1" />
+    <None Include="RdpeiSUTControlAdapter\TriggerMultiTouchEventOnClient.ps1" />
+    <None Include="RdpeiSUTControlAdapter\TriggerOneTouchEventOnClient.ps1" />
+    <None Include="RdpeiSUTControlAdapter\TriggerPositionSpecifiedTouchEventOnClient.ps1" />
+    <None Include="SUTControlAdapter\Check-PSRemoting.ps1" />
+    <None Include="SUTControlAdapter\RDPConnectWithDirectCredSSP.ps1" />
+    <None Include="SUTControlAdapter\RDPConnectWithDirectCredSSPFullScreen.ps1" />
+    <None Include="SUTControlAdapter\RDPConnectWithNegotiationApproach.ps1" />
+    <None Include="SUTControlAdapter\RDPConnectWithNegotiationApproachFullScreen.ps1" />
+    <None Include="SUTControlAdapter\Run-TaskWithPSRemoting.ps1" />
+    <None Include="SUTControlAdapter\TriggerClientAutoReconnect.ps1" />
+    <None Include="SUTControlAdapter\TriggerClientDisconnect.ps1" />
+    <None Include="SUTControlAdapter\TriggerClientDisconnectAll.ps1" />
+    <None Include="SUTControlAdapter\TriggerInputEvents.ps1" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin\" />
+  </Target>
+</Project>

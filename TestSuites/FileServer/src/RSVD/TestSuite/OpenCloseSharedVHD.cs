@@ -83,6 +83,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if the server supports opening/closing a shared virtual disk file with SVHDX_OPEN_DEVICE_CONTEXT.")]
         public void BVT_OpenCloseSharedVHD_V1()
         {
@@ -99,6 +100,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion2)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if the server supports opening/closing a shared virtual disk file with SVHDX_OPEN_DEVICE_CONTEXT_V2.")]
         public void BVT_OpenCloseSharedVHD_V2()
         {
@@ -113,6 +115,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.RsvdVersion1)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Check if the client can reconnect the persistent handle to the shared virtual disk file without carrying device context.")]
         public void ReconnectSharedVHDWithoutDeviceContext()
@@ -206,7 +209,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                 SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
                 Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES,
                 clientGuid);
-            client.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, false);
+            client.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.FileServerNameContainingSharedVHD, TestConfig.AccountCredential, false);
             client.TreeConnect(uncShareName, out treeId);
         }
 

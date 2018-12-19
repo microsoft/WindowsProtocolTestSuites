@@ -34,30 +34,34 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Common
         public string PDCNetbiosName;
         public string PDCPassword;
         public string PDCIPAddress;
-        public bool PDCIsWindows;
         public ServerVersion PDCOSVersion;
+        public bool PDCIsWindows;
         // Secondary DC
         public string SDCNetbiosName;
         public string SDCPassword;
         public string SDCIPAddress;
         public ServerVersion SDCOSVersion;
+        public bool SDCIsWindows;
         // Read-only DC
         public string RODCNetbiosName;
         public string RODCPassword;
         public string RODCIPAddress;
         public ServerVersion RODCOSVersion;
+        public bool RODCIsWindows;
         // Child DC
         public string ChildDomainNetBiosName;
         public string ChildDomainDnsName;
         public string CDCNetbiosName;
         public string CDCIPAddress;
         public ServerVersion CDCOSVersion;
+        public bool CDCIsWindows;
         // Trust DC
         public string TrustDomainNetBiosName;
         public string TrustDomainDnsName;
         public string TDCNetbiosName;
         public string TDCIPAddress;
         public ServerVersion TDCOSVersion;
+        public bool TDCIsWindows;
         // Domain Member
         public string DMNetbiosName;
         public string DMPassword;
@@ -138,26 +142,30 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Common
             PDCNetbiosName          = GetProperty(propertyGroup + "WritableDC1.NetbiosName", true);
             PDCPassword             = GetProperty(propertyGroup + "WritableDC1.Password", true);
             PDCIPAddress            = GetProperty(propertyGroup + "WritableDC1.IPAddress");
-            PDCIsWindows            = GetBoolProperty(propertyGroup + "WritableDC1.IsWindows");
             PDCOSVersion            = GetEnumProperty<ServerVersion>(propertyGroup + "WritableDC1.OSVersion");
+            PDCIsWindows            = (PDCOSVersion == ServerVersion.NonWin ? false : true);
             SDCNetbiosName          = GetProperty(propertyGroup + "WritableDC2.NetbiosName");
             SDCPassword             = GetProperty(propertyGroup + "WritableDC2.Password");
             SDCIPAddress            = GetProperty(propertyGroup + "WritableDC2.IPAddress");
             SDCOSVersion            = GetEnumProperty<ServerVersion>(propertyGroup + "WritableDC2.OSVersion");
+            SDCIsWindows            = (SDCOSVersion == ServerVersion.NonWin ? false : true);
             RODCNetbiosName         = GetProperty(propertyGroup + "RODC.NetbiosName");
             RODCPassword            = GetProperty(propertyGroup + "RODC.Password");
             RODCIPAddress           = GetProperty(propertyGroup + "RODC.IPAddress");
             RODCOSVersion           = GetEnumProperty<ServerVersion>(propertyGroup + "RODC.OSVersion");
+            RODCIsWindows           = (RODCOSVersion == ServerVersion.NonWin ? false : true);
             ChildDomainDnsName = GetProperty(propertyGroup + "ChildDomain.DNSName");
             ChildDomainNetBiosName = GetProperty(propertyGroup + "ChildDomain.NetBiosName") ?? (ChildDomainDnsName.Split('.'))[0].ToString();
             CDCNetbiosName          = GetProperty(propertyGroup + "CDC.NetbiosName");
             CDCIPAddress            = GetProperty(propertyGroup + "CDC.IPAddress");
             CDCOSVersion            = GetEnumProperty<ServerVersion>(propertyGroup + "CDC.OSVersion");
+            CDCIsWindows            = (CDCOSVersion == ServerVersion.NonWin ? false : true);
             TrustDomainDnsName = GetProperty(propertyGroup + "TrustDomain.DNSName");
             TrustDomainNetBiosName = GetProperty(propertyGroup + "TrustDomain.NetBiosName") ?? (TrustDomainDnsName.Split('.'))[0].ToString();
             TDCNetbiosName          = GetProperty(propertyGroup + "TDC.NetbiosName");
             TDCIPAddress            = GetProperty(propertyGroup + "TDC.IPAddress");
             TDCOSVersion            = GetEnumProperty<ServerVersion>(propertyGroup + "TDC.OSVersion");
+            TDCIsWindows            = (TDCOSVersion == ServerVersion.NonWin ? false : true);
             DMNetbiosName           = GetProperty(propertyGroup + "DM.NetbiosName");
             DMPassword              = GetProperty(propertyGroup + "DM.Password");
             DMOldPassword           = GetProperty(propertyGroup + "DM.OldPassword");

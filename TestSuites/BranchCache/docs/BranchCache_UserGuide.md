@@ -176,7 +176,7 @@ The minimum requirements for the Headquarters DC are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| For Windows platform: Microsoft Windows Server 2012 R2, Standard Edition, or a SUT implementation that is not based on the Windows operating system| 
+| Operating system| For Windows platform: Microsoft Windows Server 2012 R2, Standard Edition or later versions, or a SUT implementation that is not based on the Windows operating system| 
 | Services| For Windows platform:| 
 | | Active Directory Domain Services (AD DS)| 
 | | Routing of Remote Access Service| 
@@ -190,7 +190,7 @@ The minimum requirements for the content server computer are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| For Windows platform: Microsoft Windows Server 2012 R2, Standard Edition, or a SUT implementation that is not based on the Windows operating system| 
+| Operating system| For Windows platform: Microsoft Windows Server 2012 R2, Standard Edition or later versions, or a SUT implementation that is not based on the Windows operating system| 
 | Services| For Windows platform:| 
 | | File Server Service| 
 | | BranchCache for Network Files| 
@@ -206,7 +206,7 @@ The minimum requirements for the HostedCacheServer computer are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| For Windows platform: Microsoft Windows Server 2012 R2, Standard Edition, or a SUT implementation that is not based on the Windows operating system| 
+| Operating system| For Windows platform: Microsoft Windows Server 2012 R2, Standard Edition or later versions, or a SUT implementation that is not based on the Windows operating system| 
 | Services| For Windows platform:| 
 | | BranchCache Feature| 
 | Memory| 1 GB RAM| 
@@ -218,7 +218,7 @@ The minimum requirements for the Branch DC computer are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| For Windows platform: Microsoft Windows Server 2012 R2, Standard Edition, or a SUT implementation that is not based on the Windows operating system| 
+| Operating system| For Windows platform: Microsoft Windows Server 2012 R2, Standard Edition or later versions, or a SUT implementation that is not based on the Windows operating system| 
 | Services| For Windows platform:| 
 | | Read-Only Active Directory Domain Services (AD DS)| 
 | | DNS Service| 
@@ -231,7 +231,7 @@ The minimum requirements for the client1 computer are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft Windows 8.1, Enterprise Edition| 
+| Operating system| Microsoft Windows 8.1, Enterprise Edition or later versions| 
 | Memory| 2 GB RAM| 
 | Services| BranchCache Feature| 
 | Disk space| 60 GB | 
@@ -242,7 +242,7 @@ The minimum requirements for the second content client computer are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft Windows 8.1, Enterprise Edition| 
+| Operating system| Microsoft Windows 8.1, Enterprise Edition or later versions| 
 | Memory| 1GB RAM| 
 | Services| BranchCache Feature| 
 | Disk space| 60 GB | 
@@ -254,15 +254,9 @@ All of the following software must be installed on the driver computer. They hav
 | ------------- |
 |  | 
 |  **Required Software**| 
-| Microsoft® Visual Studio® 2012 or Test Agent | 
-| Execution of test cases requires vstest.console.exe utility which is included in either Visual Studio or Test Agent for Visual Studio.  | 
+| Microsoft® Visual Studio® 2017 | 
+| Execution of test cases requires vstest.console.exe utility which is included in Visual Studio.  | 
 | Visual Studio provides additional debugging and test case authoring ability for you to understand and update the test better.  | 
-|      ![image4.png](./image/BranchCache_UserGuide/image4.png)Note| 
-|            You can download Visual Studio Ultimate 2012 Trial (30 days) from below website| 
-|            [http://www.microsoft.com/en-us/download/details.aspx?id=30678](http://www.microsoft.com/en-us/download/details.aspx?id=30678)| 
-|            You can download Visual Studio 2012 Update 4 or later from below website| 
-|            [http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305](http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305)| 
-|            By installing Visual Studio agent, you could run the cases by Protocol Test Manager or batch scripts without installing Visual Studio. <http://www.microsoft.com/en-us/download/details.aspx?id=38186>  | 
 | **Microsoft Protocol Test Framework**| 
 | Microsoft Protocol Test Framework is a common framework to support protocol test suite. | 
 |      ![image4.png](./image/BranchCache_UserGuide/image4.png)Note| 
@@ -554,7 +548,7 @@ _Set-ExecutionPolicy Unrestricted_
 
 _If the OS is 64 bits, launch the 32 bits PowerShell with administrator privileges      from %SystemRoot%\SysWOW64\WindowsPowerShell\v1.0\PowerShell.exe and run the above command again._
 
-* Generate a self-signed certificate on the HostedCacheServer use MakeCert.exe. (This tool can be found under _C:\Program Files(x86)\Microsoft SDKs\Windows\v7.0A\Bin_ after Visual Studio installed (If Visual Studio 2012 is installed, Update 3 is needed at least). (This path may vary based on your installation location))
+* Generate a self-signed certificate on the HostedCacheServer use MakeCert.exe. (This tool can be found under _C:\Program Files (x86)\Windows Kits\10\bin\10.0.16299.0\x64_ after Visual Studio installed (This path may vary based on your installation location))
 
 Start PowerShell window with administrator privileges and run the following command:
 
@@ -860,7 +854,7 @@ This section describes how to troubleshoot common issues in running test cases.
 | -------------| ------------- |
 | PROBLEM| Unable to load the test container or one of its dependencies.| 
 | CAUSE| Protocol Test Framework is not installed.| 
-| RESOLUTION| Install Protocol Test Framework with 1.0.2220.0, refer to [section 5.11](#_Toc395793799) for more details.| 
+| RESOLUTION| Install Protocol Test Framework with 1.0.6000.0, refer to [section 5.11](#_Toc395793799) for more details.| 
 
 ![image34.png](./image/BranchCache_UserGuide/image34.png)
 

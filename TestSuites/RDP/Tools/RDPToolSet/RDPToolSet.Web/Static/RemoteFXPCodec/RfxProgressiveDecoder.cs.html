@@ -1,0 +1,603 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>RfxProgressiveEncoder.cs</title>
+    <link href="../../Content/csharp.css" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- code formatted by http://manoli.net/csharpformat/ -->
+<div class="csharpcode">
+<pre><span class="lnum">   1:  </span><span class="rem">//------------------------------------------------------------------------------</span></pre>
+<pre><span class="lnum">   2:  </span><span class="rem">// Copyright (c) Microsoft Corporation. All rights reserved.</span></pre>
+<pre><span class="lnum">   3:  </span><span class="rem">//------------------------------------------------------------------------------</span></pre>
+<pre><span class="lnum">   4:  </span>&nbsp;</pre>
+<pre><span class="lnum">   5:  </span><span class="kwrd">using</span> System;</pre>
+<pre><span class="lnum">   6:  </span><span class="kwrd">using</span> System.Collections.Generic;</pre>
+<pre><span class="lnum">   7:  </span><span class="kwrd">using</span> Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;</pre>
+<pre><span class="lnum">   8:  </span><span class="kwrd">using</span> System.Collections;</pre>
+<pre><span class="lnum">   9:  </span>&nbsp;</pre>
+<pre><span class="lnum">  10:  </span><span class="kwrd">namespace</span> Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx</pre>
+<pre><span class="lnum">  11:  </span>{</pre>
+<pre><span class="lnum">  12:  </span>    <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  13:  </span>    <span class="rem">/// The RemoteFX Progressive Decoder</span></pre>
+<pre><span class="lnum">  14:  </span>    <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  15:  </span>    <span class="kwrd">public</span> <span class="kwrd">class</span> RfxProgressiveDecoder</pre>
+<pre><span class="lnum">  16:  </span>    {</pre>
+<pre><span class="lnum">  17:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  18:  </span>        <span class="rem">/// Decode a encoded tile</span></pre>
+<pre><span class="lnum">  19:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  20:  </span>        <span class="rem">/// &lt;param name="enTile"&gt;Represents a encoded tile.&lt;/param&gt;</span></pre>
+<pre><span class="lnum">  21:  </span>        <span class="rem">/// &lt;param name="tState"&gt;The context state of the tile that going to be decoded.&lt;/param&gt;</span></pre>
+<pre id="DecodeTile"><span class="lnum">  22:  </span>        <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> DecodeTile(EncodedTile enTile, TileState tState)</pre>
+<pre><span class="lnum">  23:  </span>        {</pre>
+<pre><span class="lnum">  24:  </span>            <a class="func-ref" href="RfxProgressiveCodecContext.cs.html#RfxProgressiveCodecContext">RfxProgressiveCodecContext</a> codecContext = <span class="kwrd">new</span> <a class="func-ref" href="RfxProgressiveCodecContext.cs.html#RfxProgressiveCodecContext">RfxProgressiveCodecContext</a>(</pre>
+<pre><span class="lnum">  25:  </span>                enTile.CodecQuantVals,</pre>
+<pre><span class="lnum">  26:  </span>                enTile.QuantIdxY, </pre>
+<pre><span class="lnum">  27:  </span>                enTile.QuantIdxCb, </pre>
+<pre><span class="lnum">  28:  </span>                enTile.QuantIdxCr,</pre>
+<pre><span class="lnum">  29:  </span>                enTile.DataType == EncodedTileType.Simple ? <span class="kwrd">false</span> : <span class="kwrd">true</span>, </pre>
+<pre><span class="lnum">  30:  </span>                enTile.IsDifferenceTile, </pre>
+<pre><span class="lnum">  31:  </span>                enTile.UseReduceExtrapolate);</pre>
+<pre><span class="lnum">  32:  </span>&nbsp;</pre>
+<pre  id="step_SRLDecode"><span class="lnum">  33:  </span>            <span class="rem">//RLGR/SRL Decode</span></pre>
+<pre><span class="lnum">  34:  </span>            <span class="kwrd">if</span> (enTile.DataType == EncodedTileType.FirstPass || enTile.DataType == EncodedTileType.Simple)</pre>
+<pre><span class="lnum">  35:  </span>            {   <span class="rem">//first pass or simple</span></pre>
+<pre><span class="lnum">  36:  </span>                codecContext.YData = enTile.YEncodedData;</pre>
+<pre><span class="lnum">  37:  </span>                codecContext.CbData = enTile.CbEncodedData;</pre>
+<pre><span class="lnum">  38:  </span>                codecContext.CrData = enTile.CrEncodedData;</pre>
+<pre><span class="lnum">  39:  </span>                RemoteFXDecoder.<a class="func-ref" href="../RemoteFXCodec/RemoteFXDecoder.cs.html#RLGRDecode">RLGRDecode</a>(codecContext);</pre>
+<pre><span class="lnum">  40:  </span>                <a class="func-ref" href="#ComputeOriginalLL3FromDeltas">ComputeOriginalLL3FromDeltas</a>(codecContext);</pre>
+<pre><span class="lnum">  41:  </span>            }</pre>
+<pre><span class="lnum">  42:  </span>            <span class="kwrd">else</span></pre>
+<pre><span class="lnum">  43:  </span>            {</pre>
+<pre><span class="lnum">  44:  </span>                <a class="func-ref" href="#SRLDecode">SRLDecode</a>(codecContext, enTile, tState);</pre>
+<pre><span class="lnum">  45:  </span>            }</pre>
+<pre><span class="lnum">  46:  </span>&nbsp;</pre>
+<pre id="step_progDequantization"><span class="lnum">  47:  </span>            <span class="rem">//Progressive Dequantization</span></pre>
+<pre><span class="lnum">  48:  </span>            <span class="kwrd">if</span> (enTile.DataType != EncodedTileType.Simple)</pre>
+<pre><span class="lnum">  49:  </span>            {</pre>
+<pre><span class="lnum">  50:  </span>                <a class="func-ref" href="#ProgressiveDeQuantization">ProgressiveDeQuantization</a>(codecContext, enTile.ProgCodecQuant);</pre>
+<pre><span class="lnum">  51:  </span>            }</pre>
+<pre><span class="lnum">  52:  </span>&nbsp;</pre>
+<pre><span class="lnum">  53:  </span>            <span class="rem">// Create a DwtTile instance for tri-state</span></pre>
+<pre><span class="lnum">  54:  </span>            DwtTile triStateDwt = <span class="kwrd">new</span> DwtTile(codecContext.YComponent, codecContext.CbComponent, codecContext.CrComponent, </pre>
+<pre><span class="lnum">  55:  </span>                enTile.CodecQuantVals, enTile.QuantIdxY, enTile.QuantIdxCb, enTile.QuantIdxCr, enTile.UseReduceExtrapolate, enTile.ProgCodecQuant);</pre>
+<pre><span class="lnum">  56:  </span>                </pre>
+<pre><span class="lnum">  57:  </span>            <span class="rem">//Set Tri-State for progressive codec</span></pre>
+<pre><span class="lnum">  58:  </span>            <span class="kwrd">if</span> (enTile.DataType == EncodedTileType.FirstPass)</pre>
+<pre><span class="lnum">  59:  </span>            {</pre>
+<pre><span class="lnum">  60:  </span>                <span class="rem">//DwtTile tileTriStat = SetTriState(diffDwt, enTile.UseReduceExtrapolate);</span></pre>
+<pre><span class="lnum">  61:  </span>                tState.UpdateTriState(triStateDwt);</pre>
+<pre><span class="lnum">  62:  </span>            }</pre>
+<pre><span class="lnum">  63:  </span>            <span class="kwrd">else</span> <span class="kwrd">if</span> (enTile.DataType == EncodedTileType.UpgradePass)</pre>
+<pre><span class="lnum">  64:  </span>            {</pre>
+<pre><span class="lnum">  65:  </span>                DwtTile prvStat = tState.GetTriState();</pre>
+<pre><span class="lnum">  66:  </span>                prvStat.Add(triStateDwt);</pre>
+<pre><span class="lnum">  67:  </span>                <span class="rem">// update ProCodecQuant</span></pre>
+<pre><span class="lnum">  68:  </span>                prvStat.ProgCodecQuant = triStateDwt.ProgCodecQuant;</pre>
+<pre><span class="lnum">  69:  </span>                tState.UpdateTriState(prvStat);</pre>
+<pre><span class="lnum">  70:  </span>            }</pre>
+<pre><span class="lnum">  71:  </span>&nbsp;</pre>
+<pre><span class="lnum">  72:  </span>            <span class="rem">// Create another DwtTile instance for DWT Data.</span></pre>
+<pre><span class="lnum">  73:  </span>            <span class="rem">// The data in diffDwt is the same as triStateDwt, this will makesure the DWT data and tri-state not share the same DWT tile instance</span></pre>
+<pre><span class="lnum">  74:  </span>            DwtTile diffDwt = <span class="kwrd">new</span> DwtTile(codecContext.YComponent, codecContext.CbComponent, codecContext.CrComponent, </pre>
+<pre><span class="lnum">  75:  </span>                enTile.CodecQuantVals, enTile.QuantIdxY, enTile.QuantIdxCb, enTile.QuantIdxCr, enTile.UseReduceExtrapolate, enTile.ProgCodecQuant);</pre>
+<pre><span class="lnum">  76:  </span>&nbsp;</pre>
+<pre id="step_subbandDiffing"><span class="lnum">  77:  </span>            <span class="rem">//Sum difference</span></pre>
+<pre><span class="lnum">  78:  </span>            <span class="kwrd">if</span> ( enTile.IsDifferenceTile || enTile.DataType == EncodedTileType.UpgradePass)</pre>
+<pre><span class="lnum">  79:  </span>            {</pre>
+<pre><span class="lnum">  80:  </span>                tState.AddDwt(diffDwt);</pre>
+<pre><span class="lnum">  81:  </span>            }</pre>
+<pre><span class="lnum">  82:  </span>            <span class="kwrd">else</span></pre>
+<pre><span class="lnum">  83:  </span>            {</pre>
+<pre><span class="lnum">  84:  </span>                tState.UpdateDwt(diffDwt);</pre>
+<pre><span class="lnum">  85:  </span>            }</pre>
+<pre><span class="lnum">  86:  </span>        }</pre>
+<pre><span class="lnum">  87:  </span>&nbsp;</pre>
+<pre><span class="lnum">  88:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  89:  </span>        <span class="rem">/// Decode a tile from DWT</span></pre>
+<pre><span class="lnum">  90:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  91:  </span>        <span class="rem">/// &lt;param name="codecContext"&gt;The codec context which contians the DWT data of a tile.&lt;/param&gt;</span></pre>
+<pre id="DecodeTileFromDwtQ"><span class="lnum">  92:  </span>        <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> DecodeTileFromDwtQ(<a class="func-ref" href="RfxProgressiveCodecContext.cs.html#RfxProgressiveCodecContext">RfxProgressiveCodecContext</a> codecContext)</pre>
+<pre><span class="lnum">  93:  </span>        {</pre>
+<pre><span class="lnum">  94:  </span>            <span class="rem">//Sub Band Reconstruction</span></pre>
+<pre id="step_SubBandReconstruction"><span class="lnum">  95:  </span>            <a class="func-ref" href="#SubBandReconstruction">SubBandReconstruction</a>(codecContext);</pre>
+<pre><span class="lnum">  96:  </span>&nbsp;</pre>
+<pre><span class="lnum">  97:  </span>            <span class="rem">//De-quantization</span></pre>
+<pre id="step_Dequantization"><span class="lnum">  98:  </span>            <a class="func-ref" href="#Dequantization">Dequantization</a>(codecContext);</pre>
+<pre><span class="lnum">  99:  </span>&nbsp;</pre>
+<pre id="step_inverseDWT"><span class="lnum"> 100:  </span>            <span class="rem">//Inverse DWT</span></pre>
+<pre><span class="lnum"> 101:  </span>            <span class="kwrd">if</span> (codecContext.UseReduceExtrapolate)</pre>
+<pre><span class="lnum"> 102:  </span>            {</pre>
+<pre><span class="lnum"> 103:  </span>                <a class="func-ref" href="#InverseDWT">InverseDWT</a>(codecContext);</pre>
+<pre><span class="lnum"> 104:  </span>            }</pre>
+<pre><span class="lnum"> 105:  </span>            <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 106:  </span>            {</pre>
+<pre><span class="lnum"> 107:  </span>                RemoteFXDecoder.<a class="func-ref" href="../RemoteFXCodec/RemoteFXDecoder.cs.html#InverseDWT">InverseDWT</a>(codecContext);</pre>
+<pre><span class="lnum"> 108:  </span>            }</pre>
+<pre><span class="lnum"> 109:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 110:  </span>            <span class="rem">//(Y, U, V) to (R, G, B)</span></pre>
+<pre id="step_YCbCrToRGB"><span class="lnum"> 111:  </span>            RemoteFXDecoder.<a class="func-ref" href="../RemoteFXCodec/RemoteFXDecoder.cs.html#YCbCrToRGB1">YCbCrToRGB</a>(codecContext);</pre>
+<pre><span class="lnum"> 112:  </span>        }</pre>
+<pre><span class="lnum"> 113:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 114:  </span>        <span class="preproc">#region</span> SRL Decode</pre>
+<pre><span class="lnum"> 115:  </span>&nbsp;</pre>
+<pre id="SRLDecode"><span class="lnum"> 116:  </span>        <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> SRLDecode(<a class="func-ref" href="RfxProgressiveCodecContext.cs.html#RfxProgressiveCodecContext">RfxProgressiveCodecContext</a> codecContext, EncodedTile enTile, TileState tState)</pre>
+<pre><span class="lnum"> 117:  </span>        {</pre>
+<pre><span class="lnum"> 118:  </span>            SRLDecoder yDecoder = <span class="kwrd">null</span>;</pre>
+<pre><span class="lnum"> 119:  </span>            SRLDecoder cbDecoder = <span class="kwrd">null</span>;</pre>
+<pre><span class="lnum"> 120:  </span>            SRLDecoder crDecoder = <span class="kwrd">null</span>;</pre>
+<pre><span class="lnum"> 121:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 122:  </span>            List&lt;<span class="kwrd">short</span>&gt; yData = <span class="kwrd">new</span> List&lt;<span class="kwrd">short</span>&gt;();</pre>
+<pre><span class="lnum"> 123:  </span>            List&lt;<span class="kwrd">short</span>&gt; cbData = <span class="kwrd">new</span> List&lt;<span class="kwrd">short</span>&gt;();</pre>
+<pre><span class="lnum"> 124:  </span>            List&lt;<span class="kwrd">short</span>&gt; crData = <span class="kwrd">new</span> List&lt;<span class="kwrd">short</span>&gt;();</pre>
+<pre><span class="lnum"> 125:  </span>            DwtTile triState = tState.GetTriState();</pre>
+<pre><span class="lnum"> 126:  </span>            RFX_PROGRESSIVE_CODEC_QUANT prvProgQuant = tState.GetDwt().ProgCodecQuant;</pre>
+<pre><span class="lnum"> 127:  </span>            <span class="kwrd">int</span> nonLL3Len = RdpegfxTileUtils.ComponentElementCount - RdpegfxTileUtils.GetBandSize(BandType_Values.LL3, enTile.UseReduceExtrapolate);</pre>
+<pre><span class="lnum"> 128:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 129:  </span>            <span class="kwrd">if</span> (enTile.YEncodedData != <span class="kwrd">null</span>)</pre>
+<pre><span class="lnum"> 130:  </span>            {</pre>
+<pre><span class="lnum"> 131:  </span>                yDecoder = <span class="kwrd">new</span> SRLDecoder(enTile.YEncodedData);</pre>
+<pre><span class="lnum"> 132:  </span>            }</pre>
+<pre><span class="lnum"> 133:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 134:  </span>            <span class="kwrd">if</span> (enTile.CbEncodedData != <span class="kwrd">null</span>)</pre>
+<pre><span class="lnum"> 135:  </span>            {</pre>
+<pre><span class="lnum"> 136:  </span>                cbDecoder = <span class="kwrd">new</span> SRLDecoder(enTile.CbEncodedData);</pre>
+<pre><span class="lnum"> 137:  </span>            }</pre>
+<pre><span class="lnum"> 138:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 139:  </span>            <span class="kwrd">if</span> (enTile.CrEncodedData != <span class="kwrd">null</span>)</pre>
+<pre><span class="lnum"> 140:  </span>            {</pre>
+<pre><span class="lnum"> 141:  </span>                crDecoder = <span class="kwrd">new</span> SRLDecoder(enTile.CrEncodedData);</pre>
+<pre><span class="lnum"> 142:  </span>            }</pre>
+<pre><span class="lnum"> 143:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 144:  </span>            BitStream yRaw = BitStream.GetFromBytes(enTile.YRawData);</pre>
+<pre><span class="lnum"> 145:  </span>            BitStream cbRaw = BitStream.GetFromBytes(enTile.CbRawData);</pre>
+<pre><span class="lnum"> 146:  </span>            BitStream crRaw = BitStream.GetFromBytes(enTile.CrRawData);</pre>
+<pre><span class="lnum"> 147:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 148:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> i = 0; i &lt; RdpegfxTileUtils.ComponentElementCount; i++)</pre>
+<pre><span class="lnum"> 149:  </span>            {</pre>
+<pre><span class="lnum"> 150:  </span>                BandType_Values band = RdpegfxTileUtils.GetBandByIndex(i, enTile.UseReduceExtrapolate);</pre>
+<pre><span class="lnum"> 151:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 152:  </span>                <span class="rem">//Y</span></pre>
+<pre><span class="lnum"> 153:  </span>                <span class="kwrd">int</span> curBitPos = RdpegfxTileUtils.GetBitPosFromQuant(enTile.ProgCodecQuant.yQuantValues, band);</pre>
+<pre><span class="lnum"> 154:  </span>                <span class="kwrd">int</span> prvBitPos = RdpegfxTileUtils.GetBitPosFromQuant(prvProgQuant.yQuantValues, band);</pre>
+<pre><span class="lnum"> 155:  </span>                <span class="kwrd">int</span> bitCount = prvBitPos - curBitPos;</pre>
+<pre><span class="lnum"> 156:  </span>                <span class="kwrd">int</span> sign = triState.Y_DwtQ[i];</pre>
+<pre><span class="lnum"> 157:  </span>                <span class="kwrd">if</span> (bitCount &gt; 0)</pre>
+<pre><span class="lnum"> 158:  </span>                {</pre>
+<pre><span class="lnum"> 159:  </span>                    <span class="kwrd">if</span> (sign == 0 &amp;&amp; i &lt; nonLL3Len)</pre>
+<pre><span class="lnum"> 160:  </span>                    {</pre>
+<pre><span class="lnum"> 161:  </span>                        <span class="kwrd">if</span> (yDecoder != <span class="kwrd">null</span>)</pre>
+<pre><span class="lnum"> 162:  </span>                        {</pre>
+<pre><span class="lnum"> 163:  </span>                            <span class="kwrd">short</span>? decodedValue = yDecoder.<a class="func-ref" href="SRLDecoder.cs.html#DecodeOne">DecodeOne</a>(bitCount);</pre>
+<pre><span class="lnum"> 164:  </span>                            <span class="kwrd">if</span> (decodedValue.HasValue)</pre>
+<pre><span class="lnum"> 165:  </span>                            {</pre>
+<pre><span class="lnum"> 166:  </span>                                yData.Add(decodedValue.Value);</pre>
+<pre><span class="lnum"> 167:  </span>                            }</pre>
+<pre><span class="lnum"> 168:  </span>                            <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 169:  </span>                            {</pre>
+<pre><span class="lnum"> 170:  </span>                                yData.Add(0);</pre>
+<pre><span class="lnum"> 171:  </span>                            }</pre>
+<pre><span class="lnum"> 172:  </span>                        }</pre>
+<pre><span class="lnum"> 173:  </span>                        <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 174:  </span>                        {</pre>
+<pre><span class="lnum"> 175:  </span>                            yData.Add(0);</pre>
+<pre><span class="lnum"> 176:  </span>                        }</pre>
+<pre><span class="lnum"> 177:  </span>                    }</pre>
+<pre><span class="lnum"> 178:  </span>                    <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 179:  </span>                    {</pre>
+<pre><span class="lnum"> 180:  </span>                        <span class="kwrd">int</span> output;</pre>
+<pre><span class="lnum"> 181:  </span>                        <span class="kwrd">if</span> (yRaw.ReadInt32(bitCount, <span class="kwrd">out</span> output))</pre>
+<pre><span class="lnum"> 182:  </span>                        {</pre>
+<pre><span class="lnum"> 183:  </span>                            <span class="kwrd">if</span> (sign &lt; 0 &amp;&amp; i &lt; nonLL3Len) output = -output;</pre>
+<pre><span class="lnum"> 184:  </span>                            yData.Add((<span class="kwrd">short</span>)output);</pre>
+<pre><span class="lnum"> 185:  </span>                        }</pre>
+<pre><span class="lnum"> 186:  </span>                        <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 187:  </span>                        {</pre>
+<pre><span class="lnum"> 188:  </span>                            yData.Add(0);</pre>
+<pre><span class="lnum"> 189:  </span>                        }</pre>
+<pre><span class="lnum"> 190:  </span>                    }</pre>
+<pre><span class="lnum"> 191:  </span>                }</pre>
+<pre><span class="lnum"> 192:  </span>                <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 193:  </span>                {</pre>
+<pre><span class="lnum"> 194:  </span>                    yData.Add(0);</pre>
+<pre><span class="lnum"> 195:  </span>                }</pre>
+<pre><span class="lnum"> 196:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 197:  </span>                <span class="rem">//Cb</span></pre>
+<pre><span class="lnum"> 198:  </span>                curBitPos = RdpegfxTileUtils.GetBitPosFromQuant(enTile.ProgCodecQuant.cbQuantValues, band);</pre>
+<pre><span class="lnum"> 199:  </span>                prvBitPos = RdpegfxTileUtils.GetBitPosFromQuant(prvProgQuant.cbQuantValues, band);</pre>
+<pre><span class="lnum"> 200:  </span>                bitCount = prvBitPos - curBitPos;</pre>
+<pre><span class="lnum"> 201:  </span>                sign = triState.Cb_DwtQ[i];</pre>
+<pre><span class="lnum"> 202:  </span>                <span class="kwrd">if</span> (bitCount &gt; 0)</pre>
+<pre><span class="lnum"> 203:  </span>                {</pre>
+<pre><span class="lnum"> 204:  </span>                    <span class="kwrd">if</span> (sign == 0 &amp;&amp; i &lt; nonLL3Len)</pre>
+<pre><span class="lnum"> 205:  </span>                    {</pre>
+<pre><span class="lnum"> 206:  </span>                        <span class="kwrd">if</span> (cbDecoder != <span class="kwrd">null</span>)</pre>
+<pre><span class="lnum"> 207:  </span>                        {</pre>
+<pre><span class="lnum"> 208:  </span>                            <span class="kwrd">short</span>? decodedValue = cbDecoder.<a class="func-ref" href="SRLDecoder.cs.html#DecodeOne">DecodeOne</a>(bitCount);</pre>
+<pre><span class="lnum"> 209:  </span>                            <span class="kwrd">if</span> (decodedValue.HasValue)</pre>
+<pre><span class="lnum"> 210:  </span>                            {</pre>
+<pre><span class="lnum"> 211:  </span>                                cbData.Add(decodedValue.Value);</pre>
+<pre><span class="lnum"> 212:  </span>                            }</pre>
+<pre><span class="lnum"> 213:  </span>                            <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 214:  </span>                            {</pre>
+<pre><span class="lnum"> 215:  </span>                                cbData.Add(0);</pre>
+<pre><span class="lnum"> 216:  </span>                            }</pre>
+<pre><span class="lnum"> 217:  </span>                        }</pre>
+<pre><span class="lnum"> 218:  </span>                        <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 219:  </span>                        {</pre>
+<pre><span class="lnum"> 220:  </span>                            cbData.Add(0);</pre>
+<pre><span class="lnum"> 221:  </span>                        }</pre>
+<pre><span class="lnum"> 222:  </span>                    }</pre>
+<pre><span class="lnum"> 223:  </span>                    <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 224:  </span>                    {</pre>
+<pre><span class="lnum"> 225:  </span>                        <span class="kwrd">int</span> output;</pre>
+<pre><span class="lnum"> 226:  </span>                        <span class="kwrd">if</span> (cbRaw.ReadInt32(bitCount, <span class="kwrd">out</span> output))</pre>
+<pre><span class="lnum"> 227:  </span>                        {</pre>
+<pre><span class="lnum"> 228:  </span>                            <span class="kwrd">if</span> (sign &lt; 0 &amp;&amp; i &lt; nonLL3Len) output = -output;</pre>
+<pre><span class="lnum"> 229:  </span>                            cbData.Add((<span class="kwrd">short</span>)output);</pre>
+<pre><span class="lnum"> 230:  </span>                        }</pre>
+<pre><span class="lnum"> 231:  </span>                        <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 232:  </span>                        {</pre>
+<pre><span class="lnum"> 233:  </span>                            cbData.Add(0);</pre>
+<pre><span class="lnum"> 234:  </span>                        }</pre>
+<pre><span class="lnum"> 235:  </span>                    }</pre>
+<pre><span class="lnum"> 236:  </span>                }</pre>
+<pre><span class="lnum"> 237:  </span>                <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 238:  </span>                {</pre>
+<pre><span class="lnum"> 239:  </span>                    cbData.Add(0);</pre>
+<pre><span class="lnum"> 240:  </span>                }</pre>
+<pre><span class="lnum"> 241:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 242:  </span>                <span class="rem">//cr</span></pre>
+<pre><span class="lnum"> 243:  </span>                curBitPos = RdpegfxTileUtils.GetBitPosFromQuant(enTile.ProgCodecQuant.crQuantValues, band);</pre>
+<pre><span class="lnum"> 244:  </span>                prvBitPos = RdpegfxTileUtils.GetBitPosFromQuant(prvProgQuant.crQuantValues, band);</pre>
+<pre><span class="lnum"> 245:  </span>                bitCount = prvBitPos - curBitPos;</pre>
+<pre><span class="lnum"> 246:  </span>                sign = triState.Cr_DwtQ[i];</pre>
+<pre><span class="lnum"> 247:  </span>                <span class="kwrd">if</span> (bitCount &gt; 0)</pre>
+<pre><span class="lnum"> 248:  </span>                {</pre>
+<pre><span class="lnum"> 249:  </span>                    <span class="kwrd">if</span> (sign == 0 &amp;&amp; i &lt; nonLL3Len)</pre>
+<pre><span class="lnum"> 250:  </span>                    {</pre>
+<pre><span class="lnum"> 251:  </span>                        <span class="kwrd">if</span> (crDecoder != <span class="kwrd">null</span>)</pre>
+<pre><span class="lnum"> 252:  </span>                        {</pre>
+<pre><span class="lnum"> 253:  </span>                            <span class="kwrd">short</span>? decodedValue = crDecoder.<a class="func-ref" href="SRLDecoder.cs.html#DecodeOne">DecodeOne</a>(bitCount);</pre>
+<pre><span class="lnum"> 254:  </span>                            <span class="kwrd">if</span> (decodedValue.HasValue)</pre>
+<pre><span class="lnum"> 255:  </span>                            {</pre>
+<pre><span class="lnum"> 256:  </span>                                crData.Add(decodedValue.Value);</pre>
+<pre><span class="lnum"> 257:  </span>                            }</pre>
+<pre><span class="lnum"> 258:  </span>                            <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 259:  </span>                            {</pre>
+<pre><span class="lnum"> 260:  </span>                                crData.Add(0);</pre>
+<pre><span class="lnum"> 261:  </span>                            }</pre>
+<pre><span class="lnum"> 262:  </span>                        }</pre>
+<pre><span class="lnum"> 263:  </span>                        <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 264:  </span>                        {</pre>
+<pre><span class="lnum"> 265:  </span>                            crData.Add(0);</pre>
+<pre><span class="lnum"> 266:  </span>                        }</pre>
+<pre><span class="lnum"> 267:  </span>                    }</pre>
+<pre><span class="lnum"> 268:  </span>                    <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 269:  </span>                    {</pre>
+<pre><span class="lnum"> 270:  </span>                        <span class="kwrd">int</span> output;</pre>
+<pre><span class="lnum"> 271:  </span>                        <span class="kwrd">if</span> (crRaw.ReadInt32(bitCount, <span class="kwrd">out</span> output))</pre>
+<pre><span class="lnum"> 272:  </span>                        {</pre>
+<pre><span class="lnum"> 273:  </span>                            <span class="kwrd">if</span> (sign &lt; 0 &amp;&amp; i &lt; nonLL3Len) output = -output;</pre>
+<pre><span class="lnum"> 274:  </span>                            crData.Add((<span class="kwrd">short</span>)output);</pre>
+<pre><span class="lnum"> 275:  </span>                        }</pre>
+<pre><span class="lnum"> 276:  </span>                        <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 277:  </span>                        {</pre>
+<pre><span class="lnum"> 278:  </span>                            crData.Add(0);</pre>
+<pre><span class="lnum"> 279:  </span>                        }</pre>
+<pre><span class="lnum"> 280:  </span>                    }</pre>
+<pre><span class="lnum"> 281:  </span>                }</pre>
+<pre><span class="lnum"> 282:  </span>                <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 283:  </span>                {</pre>
+<pre><span class="lnum"> 284:  </span>                    crData.Add(0);</pre>
+<pre><span class="lnum"> 285:  </span>                }</pre>
+<pre><span class="lnum"> 286:  </span>            }</pre>
+<pre><span class="lnum"> 287:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 288:  </span>            codecContext.YComponent = yData.ToArray();</pre>
+<pre><span class="lnum"> 289:  </span>            codecContext.CbComponent = cbData.ToArray();</pre>
+<pre><span class="lnum"> 290:  </span>            codecContext.CrComponent = crData.ToArray();</pre>
+<pre><span class="lnum"> 291:  </span>        }</pre>
+<pre><span class="lnum"> 292:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 293:  </span>        <span class="preproc">#endregion</span></pre>
+<pre><span class="lnum"> 294:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 295:  </span>        <span class="preproc">#region</span> Sub-Band Reconstruction</pre>
+<pre id="SubBandReconstruction"><span class="lnum"> 296:  </span>        <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> SubBandReconstruction(<a class="func-ref" href="RfxProgressiveCodecContext.cs.html#RfxProgressiveCodecContext">RfxProgressiveCodecContext</a> codecContext)</pre>
+<pre><span class="lnum"> 297:  </span>        {</pre>
+<pre><span class="lnum"> 298:  </span>            <a class="func-ref" href="#reconstruction_Component">reconstruction_Component</a>(codecContext.YComponent, <span class="kwrd">out</span> codecContext.YSet, codecContext.UseReduceExtrapolate);</pre>
+<pre><span class="lnum"> 299:  </span>            <a class="func-ref" href="#reconstruction_Component">reconstruction_Component</a>(codecContext.CbComponent, <span class="kwrd">out</span> codecContext.CbSet, codecContext.UseReduceExtrapolate);</pre>
+<pre><span class="lnum"> 300:  </span>            <a class="func-ref" href="#reconstruction_Component">reconstruction_Component</a>(codecContext.CrComponent, <span class="kwrd">out</span> codecContext.CrSet, codecContext.UseReduceExtrapolate);</pre>
+<pre><span class="lnum"> 301:  </span>        }</pre>
+<pre><span class="lnum"> 302:  </span>&nbsp;</pre>
+<pre id="ComputeOriginalLL3FromDeltas"><span class="lnum"> 303:  </span>        <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> ComputeOriginalLL3FromDeltas(<a class="func-ref" href="RfxProgressiveCodecContext.cs.html#RfxProgressiveCodecContext">RfxProgressiveCodecContext</a> codecContext)</pre>
+<pre><span class="lnum"> 304:  </span>        {</pre>
+<pre><span class="lnum"> 305:  </span>            <span class="kwrd">int</span> ll3Len = RdpegfxTileUtils.GetBandSize(BandType_Values.LL3, codecContext.UseReduceExtrapolate);</pre>
+<pre><span class="lnum"> 306:  </span>            <span class="kwrd">int</span> ll3Idx = RdpegfxTileUtils.ComponentElementCount - ll3Len;</pre>
+<pre><span class="lnum"> 307:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 308:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> i = ll3Idx + 1; i &lt; RdpegfxTileUtils.ComponentElementCount; i++)</pre>
+<pre><span class="lnum"> 309:  </span>            {</pre>
+<pre><span class="lnum"> 310:  </span>                codecContext.YComponent[i] = (<span class="kwrd">short</span>)(codecContext.YComponent[i] + codecContext.YComponent[i - 1]);</pre>
+<pre><span class="lnum"> 311:  </span>                codecContext.CbComponent[i] = (<span class="kwrd">short</span>)(codecContext.CbComponent[i] + codecContext.CbComponent[i - 1]);</pre>
+<pre><span class="lnum"> 312:  </span>                codecContext.CrComponent[i] = (<span class="kwrd">short</span>)(codecContext.CrComponent[i] + codecContext.CrComponent[i - 1]);</pre>
+<pre><span class="lnum"> 313:  </span>            }</pre>
+<pre><span class="lnum"> 314:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 315:  </span>        }</pre>
+<pre><span class="lnum"> 316:  </span>&nbsp;</pre>
+<pre id="reconstruction_Component"><span class="lnum"> 317:  </span>        <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> reconstruction_Component(<span class="kwrd">short</span>[] component1D, <span class="kwrd">out</span> <span class="kwrd">short</span>[,] compontent2D, <span class="kwrd">bool</span> useReduceExtrapolate)</pre>
+<pre><span class="lnum"> 318:  </span>        {</pre>
+<pre><span class="lnum"> 319:  </span>            <span class="rem">//sequence: HL1, LH1, HH1, HL2, LH2, HH2, HL3, LH3, HH3, and LL3</span></pre>
+<pre><span class="lnum"> 320:  </span>            <span class="rem">//lineOutput = new short[TileSize * TileSize];</span></pre>
+<pre><span class="lnum"> 321:  </span>            compontent2D = <span class="kwrd">new</span> <span class="kwrd">short</span>[RdpegfxTileUtils.TileSize, RdpegfxTileUtils.TileSize];</pre>
+<pre><span class="lnum"> 322:  </span>            BandType_Values[] bandArr = <span class="kwrd">new</span> BandType_Values[] { BandType_Values.HL1, BandType_Values.LH1, BandType_Values.HH1, BandType_Values.HL2, BandType_Values.LH2, BandType_Values.HH2, BandType_Values.HL3, BandType_Values.LH3, BandType_Values.HH3, BandType_Values.LL3 };</pre>
+<pre><span class="lnum"> 323:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 324:  </span>            <span class="kwrd">int</span> offset = 0;</pre>
+<pre><span class="lnum"> 325:  </span>            BandRect curBand;</pre>
+<pre><span class="lnum"> 326:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 327:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> i = 0; i &lt; bandArr.Length; i++)</pre>
+<pre><span class="lnum"> 328:  </span>            {</pre>
+<pre><span class="lnum"> 329:  </span>                curBand = RdpegfxTileUtils.GetBandRect(bandArr[i], useReduceExtrapolate);</pre>
+<pre><span class="lnum"> 330:  </span>                <a class="func-ref" href="#reconstruction_SubBand">reconstruction_SubBand</a>(compontent2D, curBand.left, curBand.top, curBand.right, curBand.bottom, component1D, <span class="kwrd">ref</span> offset);</pre>
+<pre><span class="lnum"> 331:  </span>            }</pre>
+<pre><span class="lnum"> 332:  </span>        }</pre>
+<pre><span class="lnum"> 333:  </span>&nbsp;</pre>
+<pre id="reconstruction_SubBand"><span class="lnum"> 334:  </span>        <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> reconstruction_SubBand(<span class="kwrd">short</span>[,] input, <span class="kwrd">int</span> left, <span class="kwrd">int</span> top, <span class="kwrd">int</span> right, <span class="kwrd">int</span> bottom, <span class="kwrd">short</span>[] bandOutput, <span class="kwrd">ref</span> <span class="kwrd">int</span> offset)</pre>
+<pre><span class="lnum"> 335:  </span>        {</pre>
+<pre><span class="lnum"> 336:  </span>            <span class="rem">//int totalNum = (right - left + 1) * (bottom - top + 1);</span></pre>
+<pre><span class="lnum"> 337:  </span>            <span class="rem">//bandOutput = new short[totalNum];</span></pre>
+<pre><span class="lnum"> 338:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> y = top; y &lt;= bottom; y++)</pre>
+<pre><span class="lnum"> 339:  </span>            {</pre>
+<pre><span class="lnum"> 340:  </span>                <span class="kwrd">for</span> (<span class="kwrd">int</span> x = left; x &lt;= right; x++)</pre>
+<pre><span class="lnum"> 341:  </span>                {</pre>
+<pre><span class="lnum"> 342:  </span>                    input[x, y] = bandOutput[offset++];</pre>
+<pre><span class="lnum"> 343:  </span>                }</pre>
+<pre><span class="lnum"> 344:  </span>            }</pre>
+<pre><span class="lnum"> 345:  </span>        }</pre>
+<pre><span class="lnum"> 346:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 347:  </span>        <span class="preproc">#endregion</span></pre>
+<pre><span class="lnum"> 348:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 349:  </span>        <span class="preproc">#region</span> Inverse DWT</pre>
+<pre><span class="lnum"> 350:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 351:  </span>        <span class="rem">//InverseDWT</span></pre>
+<pre id="InverseDWT"><span class="lnum"> 352:  </span>        <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> InverseDWT(<a class="func-ref" href="RfxProgressiveCodecContext.cs.html#RfxProgressiveCodecContext">RfxProgressiveCodecContext</a> codecContext)</pre>
+<pre><span class="lnum"> 353:  </span>        {</pre>
+<pre><span class="lnum"> 354:  </span>            <a class="func-ref" href="#InverseDWT_Component">InverseDWT_Component</a>(codecContext.YSet);</pre>
+<pre><span class="lnum"> 355:  </span>            <a class="func-ref" href="#InverseDWT_Component">InverseDWT_Component</a>(codecContext.CbSet);</pre>
+<pre><span class="lnum"> 356:  </span>            <a class="func-ref" href="#InverseDWT_Component">InverseDWT_Component</a>(codecContext.CrSet);</pre>
+<pre><span class="lnum"> 357:  </span>        }</pre>
+<pre><span class="lnum"> 358:  </span>&nbsp;</pre>
+<pre id="InverseDWT_Component"><span class="lnum"> 359:  </span>        <span class="kwrd">protected</span> <span class="kwrd">static</span> <span class="kwrd">void</span> InverseDWT_Component(<span class="kwrd">short</span>[,] component)</pre>
+<pre><span class="lnum"> 360:  </span>        {</pre>
+<pre><span class="lnum"> 361:  </span>            <span class="rem">//Level 3, 2, 1</span></pre>
+<pre><span class="lnum"> 362:  </span>            <a class="func-ref" href="#InverseDWT_2D">InverseDWT_2D</a>(component, 3);</pre>
+<pre><span class="lnum"> 363:  </span>            <a class="func-ref" href="#InverseDWT_2D">InverseDWT_2D</a>(component, 2);</pre>
+<pre><span class="lnum"> 364:  </span>            <a class="func-ref" href="#InverseDWT_2D">InverseDWT_2D</a>(component, 1);</pre>
+<pre><span class="lnum"> 365:  </span>        }</pre>
+<pre><span class="lnum"> 366:  </span>&nbsp;</pre>
+<pre id="InverseDWT_2D"><span class="lnum"> 367:  </span>        <span class="kwrd">private</span> <span class="kwrd">static</span> <span class="kwrd">void</span> InverseDWT_2D(<span class="kwrd">short</span>[,] data2D, <span class="kwrd">int</span> pass)</pre>
+<pre><span class="lnum"> 368:  </span>        {</pre>
+<pre><span class="lnum"> 369:  </span>            <span class="rem">//level &gt; 0</span></pre>
+<pre><span class="lnum"> 370:  </span>            <span class="rem">//data2D.Length % (1&lt;&lt;(level - 1)) == 0</span></pre>
+<pre><span class="lnum"> 371:  </span>            <span class="kwrd">int</span> inScopelen;</pre>
+<pre><span class="lnum"> 372:  </span>            <span class="kwrd">switch</span> (pass)</pre>
+<pre><span class="lnum"> 373:  </span>            {</pre>
+<pre><span class="lnum"> 374:  </span>                <span class="kwrd">case</span> 1:</pre>
+<pre><span class="lnum"> 375:  </span>                    {</pre>
+<pre><span class="lnum"> 376:  </span>                        <span class="rem">// First pass</span></pre>
+<pre><span class="lnum"> 377:  </span>                        inScopelen = 64;</pre>
+<pre><span class="lnum"> 378:  </span>                        <span class="kwrd">break</span>;</pre>
+<pre><span class="lnum"> 379:  </span>                    }</pre>
+<pre><span class="lnum"> 380:  </span>                <span class="kwrd">case</span> 2:</pre>
+<pre><span class="lnum"> 381:  </span>                    {</pre>
+<pre><span class="lnum"> 382:  </span>                        <span class="rem">// Second pass</span></pre>
+<pre><span class="lnum"> 383:  </span>                        inScopelen = 33;</pre>
+<pre><span class="lnum"> 384:  </span>                        <span class="kwrd">break</span>;</pre>
+<pre><span class="lnum"> 385:  </span>                    }</pre>
+<pre><span class="lnum"> 386:  </span>                <span class="kwrd">case</span> 3:</pre>
+<pre><span class="lnum"> 387:  </span>                    {</pre>
+<pre><span class="lnum"> 388:  </span>                        <span class="rem">// Third pass</span></pre>
+<pre><span class="lnum"> 389:  </span>                        inScopelen = 17;</pre>
+<pre><span class="lnum"> 390:  </span>                        <span class="kwrd">break</span>;</pre>
+<pre><span class="lnum"> 391:  </span>                    }</pre>
+<pre><span class="lnum"> 392:  </span>                <span class="kwrd">default</span>:</pre>
+<pre><span class="lnum"> 393:  </span>                    {</pre>
+<pre><span class="lnum"> 394:  </span>                        <span class="kwrd">throw</span> <span class="kwrd">new</span> InvalidOperationException(<span class="str">"DWT_2D: the parameter level should only be 1, 2, or 3."</span>);</pre>
+<pre><span class="lnum"> 395:  </span>                    }</pre>
+<pre><span class="lnum"> 396:  </span>            }</pre>
+<pre><span class="lnum"> 397:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 398:  </span>            <span class="rem">//Horizontal DWT</span></pre>
+<pre><span class="lnum"> 399:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> y = 0; y &lt; inScopelen; y++)</pre>
+<pre><span class="lnum"> 400:  </span>            {</pre>
+<pre><span class="lnum"> 401:  </span>                <span class="kwrd">short</span>[] row;</pre>
+<pre><span class="lnum"> 402:  </span>               RemoteFXDecoder.getRowFrom2DArr&lt;<span class="kwrd">short</span>&gt;(data2D, <span class="kwrd">out</span> row, y, inScopelen);</pre>
+<pre><span class="lnum"> 403:  </span>                row = <a class="func-ref" href="#InverseDWT_1D">InverseDWT_1D</a>(row);</pre>
+<pre><span class="lnum"> 404:  </span>                <span class="kwrd">for</span> (<span class="kwrd">int</span> x = 0; x &lt; inScopelen; x++)</pre>
+<pre><span class="lnum"> 405:  </span>                {</pre>
+<pre><span class="lnum"> 406:  </span>                    data2D[x, y] = row[x];</pre>
+<pre><span class="lnum"> 407:  </span>                }</pre>
+<pre><span class="lnum"> 408:  </span>            }</pre>
+<pre><span class="lnum"> 409:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 410:  </span>            <span class="rem">//Vertical DWT</span></pre>
+<pre><span class="lnum"> 411:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> x = 0; x &lt; inScopelen; x++)</pre>
+<pre><span class="lnum"> 412:  </span>            {</pre>
+<pre><span class="lnum"> 413:  </span>                <span class="kwrd">short</span>[] col;</pre>
+<pre><span class="lnum"> 414:  </span>                RemoteFXDecoder.getColFrom2DArr&lt;<span class="kwrd">short</span>&gt;(data2D, <span class="kwrd">out</span> col, x, inScopelen);</pre>
+<pre><span class="lnum"> 415:  </span>                col = <a class="func-ref" href="#InverseDWT_1D">InverseDWT_1D</a>(col);</pre>
+<pre><span class="lnum"> 416:  </span>                <span class="kwrd">for</span> (<span class="kwrd">int</span> y = 0; y &lt; inScopelen; y++)</pre>
+<pre><span class="lnum"> 417:  </span>                {</pre>
+<pre><span class="lnum"> 418:  </span>                    data2D[x, y] = col[y];</pre>
+<pre><span class="lnum"> 419:  </span>                }</pre>
+<pre><span class="lnum"> 420:  </span>            }</pre>
+<pre><span class="lnum"> 421:  </span>        }</pre>
+<pre><span class="lnum"> 422:  </span>&nbsp;</pre>
+<pre id="InverseDWT_1D"><span class="lnum"> 423:  </span>        <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">short</span>[] InverseDWT_1D(<span class="kwrd">short</span>[] elements)</pre>
+<pre><span class="lnum"> 424:  </span>        {</pre>
+<pre><span class="lnum"> 425:  </span>            <span class="kwrd">int</span> hOffset = elements.Length / 2 + 1;</pre>
+<pre><span class="lnum"> 426:  </span>            <span class="kwrd">short</span>[] encodedData;</pre>
+<pre><span class="lnum"> 427:  </span>            <span class="kwrd">if</span> (elements.Length == RdpegfxTileUtils.TileSize)</pre>
+<pre><span class="lnum"> 428:  </span>            {</pre>
+<pre><span class="lnum"> 429:  </span>                <span class="rem">//first pass</span></pre>
+<pre><span class="lnum"> 430:  </span>                encodedData = <span class="kwrd">new</span> <span class="kwrd">short</span>[elements.Length + 1];</pre>
+<pre><span class="lnum"> 431:  </span>                Array.Copy(elements, encodedData, elements.Length);</pre>
+<pre><span class="lnum"> 432:  </span>                encodedData[elements.Length] = 0;</pre>
+<pre><span class="lnum"> 433:  </span>            }</pre>
+<pre><span class="lnum"> 434:  </span>            <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 435:  </span>            {</pre>
+<pre><span class="lnum"> 436:  </span>                encodedData = elements;</pre>
+<pre><span class="lnum"> 437:  </span>            }</pre>
+<pre><span class="lnum"> 438:  </span>            <span class="kwrd">int</span> hLen = encodedData.Length - hOffset;</pre>
+<pre><span class="lnum"> 439:  </span>            <span class="kwrd">short</span>[] decodedData = <span class="kwrd">new</span> <span class="kwrd">short</span>[encodedData.Length];</pre>
+<pre><span class="lnum"> 440:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> i = 1; 2 * i &lt; encodedData.Length - 1; i++)</pre>
+<pre><span class="lnum"> 441:  </span>            {</pre>
+<pre><span class="lnum"> 442:  </span>                <span class="rem">//X[2n] = L[n] - (H[n-1] + H[n] + 1) / 2</span></pre>
+<pre><span class="lnum"> 443:  </span>                <span class="rem">//decodedData[2 * i] = (short)Math.Round(encodedData[i] - (encodedData[hOffset + i - 1] + encodedData[hOffset + i] + 1.0f) / 2);</span></pre>
+<pre><span class="lnum"> 444:  </span>                decodedData[2 * i] = (<span class="kwrd">short</span>)(encodedData[i] - ((encodedData[hOffset + i - 1] + encodedData[hOffset + i] + 1) &gt;&gt; 1));</pre>
+<pre><span class="lnum"> 445:  </span>            }</pre>
+<pre><span class="lnum"> 446:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 447:  </span>            <span class="rem">//decodedData[decodedData.Length - 1] = (short)Math.Round(2 * decodedData[decodedData.Length - 2] - 4 * encodedData[hOffset + hLen - 1] - decodedData[decodedData.Length - 3] + 0.0f);</span></pre>
+<pre><span class="lnum"> 448:  </span>            decodedData[decodedData.Length - 1] = (<span class="kwrd">short</span>)Math.Round(encodedData[hOffset - 1] - encodedData[hOffset + hLen - 1] - 0.5f);</pre>
+<pre><span class="lnum"> 449:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> i = 1; 2 * i + 2 &lt; encodedData.Length; i++)</pre>
+<pre><span class="lnum"> 450:  </span>            {</pre>
+<pre><span class="lnum"> 451:  </span>                <span class="rem">//X[2n + 1] = 2*H[n] + (X[2n] + X[2n + 2])/2</span></pre>
+<pre><span class="lnum"> 452:  </span>                <span class="rem">//decodedData[2 * i + 1] = (short)Math.Round(2 * encodedData[hOffset + i] + (decodedData[2 * i] + decodedData[2 * i + 2] + 0.0f) / 2);</span></pre>
+<pre><span class="lnum"> 453:  </span>                decodedData[2 * i + 1] = (<span class="kwrd">short</span>)(2 * encodedData[hOffset + i] + ((decodedData[2 * i] + decodedData[2 * i + 2]) &gt;&gt; 1));</pre>
+<pre><span class="lnum"> 454:  </span>            }</pre>
+<pre><span class="lnum"> 455:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 456:  </span>            <span class="rem">//Handle X[0], [1], [len-1]</span></pre>
+<pre><span class="lnum"> 457:  </span>            <span class="rem">//H(-1) = H[0]</span></pre>
+<pre><span class="lnum"> 458:  </span>            decodedData[0] = (<span class="kwrd">short</span>)Math.Round(encodedData[0] - (encodedData[hOffset] + encodedData[hOffset] + 1.0f) / 2);</pre>
+<pre><span class="lnum"> 459:  </span>            decodedData[1] = (<span class="kwrd">short</span>)Math.Round(2 * encodedData[hOffset] + (decodedData[0] + decodedData[2] + 0.0f) / 2);</pre>
+<pre><span class="lnum"> 460:  </span>            <span class="rem">//decodedData[decodedData.Length - 1] = (short)(2 * encodedData[hOffset + hLen - 1] + decodedData[decodedData.Length - 2]);</span></pre>
+<pre><span class="lnum"> 461:  </span>            <span class="rem">//decodedData[decodedData.Length - 1] = (short)Math.Round(encodedData[hOffset - 1] - (2 * encodedData[hOffset + hLen - 1] + 1.0f) / 2);</span></pre>
+<pre><span class="lnum"> 462:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 463:  </span>            <span class="kwrd">short</span>[] reElements;</pre>
+<pre><span class="lnum"> 464:  </span>            <span class="kwrd">if</span> (decodedData.Length &gt; elements.Length)</pre>
+<pre><span class="lnum"> 465:  </span>            {</pre>
+<pre><span class="lnum"> 466:  </span>                reElements = <span class="kwrd">new</span> <span class="kwrd">short</span>[elements.Length];</pre>
+<pre><span class="lnum"> 467:  </span>                Array.Copy(decodedData, reElements, reElements.Length);</pre>
+<pre><span class="lnum"> 468:  </span>            }</pre>
+<pre><span class="lnum"> 469:  </span>            <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 470:  </span>            {</pre>
+<pre><span class="lnum"> 471:  </span>                reElements = decodedData;</pre>
+<pre><span class="lnum"> 472:  </span>            }</pre>
+<pre><span class="lnum"> 473:  </span>            <span class="kwrd">return</span> reElements;</pre>
+<pre><span class="lnum"> 474:  </span>        }</pre>
+<pre><span class="lnum"> 475:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 476:  </span>        <span class="preproc">#endregion</span></pre>
+<pre><span class="lnum"> 477:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 478:  </span>        <span class="preproc">#region</span> Dequantization</pre>
+<pre id="Dequantization"><span class="lnum"> 479:  </span>        <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> Dequantization(<a class="func-ref" href="RfxProgressiveCodecContext.cs.html#RfxProgressiveCodecContext">RfxProgressiveCodecContext</a> codecContext)</pre>
+<pre><span class="lnum"> 480:  </span>        {</pre>
+<pre><span class="lnum"> 481:  </span>            <a class="func-ref" href="#dequantization_Component">dequantization_Component</a>(codecContext.YSet, codecContext.CodecQuantVals[codecContext.QuantIdxY], codecContext.UseReduceExtrapolate);</pre>
+<pre><span class="lnum"> 482:  </span>            <a class="func-ref" href="#dequantization_Component">dequantization_Component</a>(codecContext.CbSet, codecContext.CodecQuantVals[codecContext.QuantIdxCb], codecContext.UseReduceExtrapolate);</pre>
+<pre><span class="lnum"> 483:  </span>            <a class="func-ref" href="#dequantization_Component">dequantization_Component</a>(codecContext.CrSet, codecContext.CodecQuantVals[codecContext.QuantIdxCr], codecContext.UseReduceExtrapolate);</pre>
+<pre><span class="lnum"> 484:  </span>        }</pre>
+<pre><span class="lnum"> 485:  </span>&nbsp;</pre>
+<pre id="dequantization_Component"><span class="lnum"> 486:  </span>        <span class="kwrd">protected</span> <span class="kwrd">static</span> <span class="kwrd">void</span> dequantization_Component(<span class="kwrd">short</span>[,] compontent, TS_RFX_CODEC_QUANT tsRfxCodecQuant, <span class="kwrd">bool</span> useReduceExtrapolate)</pre>
+<pre><span class="lnum"> 487:  </span>        {</pre>
+<pre><span class="lnum"> 488:  </span>            <span class="rem">// Quantization factor: HL1, LH1, HH1, HL2, LH2, HH2, HL3, LH3, HH3, LL3            </span></pre>
+<pre><span class="lnum"> 489:  </span>            Hashtable scaleValueTable = <span class="kwrd">new</span> Hashtable();</pre>
+<pre><span class="lnum"> 490:  </span>            <span class="kwrd">int</span> HL1_Factor = tsRfxCodecQuant.HL1_HH1 &amp; 0x0f;</pre>
+<pre><span class="lnum"> 491:  </span>            <span class="kwrd">int</span> LH1_Factor = (tsRfxCodecQuant.HH2_LH1 &amp; 0xf0) &gt;&gt; 4;</pre>
+<pre><span class="lnum"> 492:  </span>            <span class="kwrd">int</span> HH1_Factor = (tsRfxCodecQuant.HL1_HH1 &amp; 0xf0) &gt;&gt; 4;</pre>
+<pre><span class="lnum"> 493:  </span>            <span class="kwrd">int</span> HL2_Factor = (tsRfxCodecQuant.LH2_HL2 &amp; 0xf0) &gt;&gt; 4;</pre>
+<pre><span class="lnum"> 494:  </span>            <span class="kwrd">int</span> LH2_Factor = tsRfxCodecQuant.LH2_HL2 &amp; 0x0f;</pre>
+<pre><span class="lnum"> 495:  </span>            <span class="kwrd">int</span> HH2_Factor = tsRfxCodecQuant.HH2_LH1 &amp; 0x0f;</pre>
+<pre><span class="lnum"> 496:  </span>            <span class="kwrd">int</span> HL3_Factor = tsRfxCodecQuant.HL3_HH3 &amp; 0x0f;</pre>
+<pre><span class="lnum"> 497:  </span>            <span class="kwrd">int</span> LH3_Factor = (tsRfxCodecQuant.LL3_LH3 &amp; 0xf0) &gt;&gt; 4;</pre>
+<pre><span class="lnum"> 498:  </span>            <span class="kwrd">int</span> HH3_Factor = (tsRfxCodecQuant.HL3_HH3 &amp; 0xf0) &gt;&gt; 4;</pre>
+<pre><span class="lnum"> 499:  </span>            <span class="kwrd">int</span> LL3_Factor = tsRfxCodecQuant.LL3_LH3 &amp; 0x0f;</pre>
+<pre><span class="lnum"> 500:  </span>            <span class="kwrd">int</span>[] HL_Factor = { HL1_Factor, HL2_Factor, HL3_Factor };</pre>
+<pre><span class="lnum"> 501:  </span>            <span class="kwrd">int</span>[] LH_Factor = { LH1_Factor, LH2_Factor, LH3_Factor };</pre>
+<pre><span class="lnum"> 502:  </span>            <span class="kwrd">int</span>[] HH_Factor = { HH1_Factor, HH2_Factor, HH3_Factor };</pre>
+<pre><span class="lnum"> 503:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 504:  </span>            BandType_Values[] bandArr = <span class="kwrd">new</span> BandType_Values[] { BandType_Values.HL1, BandType_Values.LH1, BandType_Values.HH1, BandType_Values.HL2, BandType_Values.LH2, BandType_Values.HH2, BandType_Values.HL3, BandType_Values.LH3, BandType_Values.HH3, BandType_Values.LL3 };</pre>
+<pre><span class="lnum"> 505:  </span>            <span class="kwrd">int</span>[] bandFactor = <span class="kwrd">new</span> <span class="kwrd">int</span>[] { HL1_Factor, LH1_Factor, HH1_Factor, HL2_Factor, LH2_Factor, HH2_Factor, HL3_Factor, LH3_Factor, HH3_Factor, LL3_Factor };</pre>
+<pre><span class="lnum"> 506:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 507:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> i = 0; i &lt; bandArr.Length; i++)</pre>
+<pre><span class="lnum"> 508:  </span>            {</pre>
+<pre><span class="lnum"> 509:  </span>                BandRect br = RdpegfxTileUtils.GetBandRect(bandArr[i], useReduceExtrapolate);</pre>
+<pre><span class="lnum"> 510:  </span>                <a class="func-ref" href="#doDequantization_Subband">doDequantization_Subband</a>(compontent, br.left, br.top, br.right, br.bottom, bandFactor[i]);</pre>
+<pre><span class="lnum"> 511:  </span>            }</pre>
+<pre><span class="lnum"> 512:  </span>        }</pre>
+<pre><span class="lnum"> 513:  </span>&nbsp;</pre>
+<pre id="doDequantization_Subband"><span class="lnum"> 514:  </span>        <span class="kwrd">private</span> <span class="kwrd">static</span> <span class="kwrd">void</span> doDequantization_Subband(<span class="kwrd">short</span>[,] input, <span class="kwrd">int</span> left, <span class="kwrd">int</span> top, <span class="kwrd">int</span> right, <span class="kwrd">int</span> bottom, <span class="kwrd">int</span> factor)</pre>
+<pre><span class="lnum"> 515:  </span>        {</pre>
+<pre><span class="lnum"> 516:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> x = left; x &lt;= right; x++)</pre>
+<pre><span class="lnum"> 517:  </span>            {</pre>
+<pre><span class="lnum"> 518:  </span>                <span class="kwrd">for</span> (<span class="kwrd">int</span> y = top; y &lt;= bottom; y++)</pre>
+<pre><span class="lnum"> 519:  </span>                {</pre>
+<pre><span class="lnum"> 520:  </span>                    input[x, y] = (<span class="kwrd">short</span>)(input[x, y] &lt;&lt; (factor - 6));<span class="rem">//&lt;&lt; DWT_PREC);</span></pre>
+<pre><span class="lnum"> 521:  </span>                }</pre>
+<pre><span class="lnum"> 522:  </span>            }</pre>
+<pre><span class="lnum"> 523:  </span>        }</pre>
+<pre><span class="lnum"> 524:  </span>        <span class="preproc">#endregion</span></pre>
+<pre><span class="lnum"> 525:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 526:  </span>        <span class="preproc">#region</span> Progressive Dequantization</pre>
+<pre><span class="lnum"> 527:  </span>&nbsp;</pre>
+<pre id="ProgressiveDeQuantization"><span class="lnum"> 528:  </span>        <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> ProgressiveDeQuantization(<a class="func-ref" href="RfxProgressiveCodecContext.cs.html#RfxProgressiveCodecContext">RfxProgressiveCodecContext</a> codecContext, RFX_PROGRESSIVE_CODEC_QUANT progCodecQuant )</pre>
+<pre><span class="lnum"> 529:  </span>        {</pre>
+<pre><span class="lnum"> 530:  </span>            <a class="func-ref" href="#ProgressiveDeQuantization_Component">ProgressiveDeQuantization_Component</a>(codecContext.YComponent,  progCodecQuant.yQuantValues, codecContext.UseReduceExtrapolate);</pre>
+<pre><span class="lnum"> 531:  </span>            <a class="func-ref" href="#ProgressiveDeQuantization_Component">ProgressiveDeQuantization_Component</a>(codecContext.CbComponent,  progCodecQuant.cbQuantValues, codecContext.UseReduceExtrapolate);</pre>
+<pre><span class="lnum"> 532:  </span>            <a class="func-ref" href="#ProgressiveDeQuantization_Component">ProgressiveDeQuantization_Component</a>(codecContext.CrComponent, progCodecQuant.crQuantValues, codecContext.UseReduceExtrapolate);</pre>
+<pre><span class="lnum"> 533:  </span>        }</pre>
+<pre><span class="lnum"> 534:  </span>&nbsp;</pre>
+<pre id="ProgressiveDeQuantization_Component"><span class="lnum"> 535:  </span>        <span class="kwrd">protected</span> <span class="kwrd">static</span> <span class="kwrd">void</span> ProgressiveDeQuantization_Component(<span class="kwrd">short</span>[] data, RFX_COMPONMENT_CODEC_QUANT quant, <span class="kwrd">bool</span> useReduceExtrapolate)</pre>
+<pre><span class="lnum"> 536:  </span>        {</pre>
+<pre><span class="lnum"> 537:  </span>            <span class="kwrd">int</span> bitPos = 0;</pre>
+<pre><span class="lnum"> 538:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> i = 0; i &lt; RdpegfxTileUtils.ComponentElementCount; i++)</pre>
+<pre><span class="lnum"> 539:  </span>            {</pre>
+<pre><span class="lnum"> 540:  </span>                BandType_Values band = RdpegfxTileUtils.GetBandByIndex(i, useReduceExtrapolate);</pre>
+<pre><span class="lnum"> 541:  </span>                bitPos = RdpegfxTileUtils.GetBitPosFromQuant(quant, band);</pre>
+<pre><span class="lnum"> 542:  </span>                data[i] = <a class="func-ref" href="#FunProgDeQ">FunProgDeQ</a>(data[i], bitPos, band);</pre>
+<pre><span class="lnum"> 543:  </span>            }</pre>
+<pre><span class="lnum"> 544:  </span>        }</pre>
+<pre><span class="lnum"> 545:  </span>&nbsp;</pre>
+<pre id="FunProgDeQ"><span class="lnum"> 546:  </span>        <span class="kwrd">static</span> <span class="kwrd">short</span> FunProgDeQ(<span class="kwrd">short</span> v, <span class="kwrd">int</span> bitPos, BandType_Values band)</pre>
+<pre><span class="lnum"> 547:  </span>        {</pre>
+<pre><span class="lnum"> 548:  </span>            <span class="kwrd">if</span> (band != BandType_Values.LL3)</pre>
+<pre><span class="lnum"> 549:  </span>            {</pre>
+<pre><span class="lnum"> 550:  </span>                <span class="kwrd">if</span> (v &gt;= 0) <span class="kwrd">return</span> (<span class="kwrd">short</span>)(v &lt;&lt; bitPos);</pre>
+<pre><span class="lnum"> 551:  </span>                <span class="kwrd">return</span> (<span class="kwrd">short</span>)-((-v) &lt;&lt; bitPos);</pre>
+<pre><span class="lnum"> 552:  </span>            }</pre>
+<pre><span class="lnum"> 553:  </span>            <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 554:  </span>            {</pre>
+<pre><span class="lnum"> 555:  </span>                <span class="kwrd">return</span> (<span class="kwrd">short</span>)(v &lt;&lt; bitPos);</pre>
+<pre><span class="lnum"> 556:  </span>            }</pre>
+<pre><span class="lnum"> 557:  </span>        }</pre>
+<pre><span class="lnum"> 558:  </span>        <span class="preproc">#endregion</span></pre>
+<pre><span class="lnum"> 559:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 560:  </span>        <span class="kwrd">static</span> DwtTile SetTriState(DwtTile inputTile, <span class="kwrd">bool</span> useReduceExtrapolate)</pre>
+<pre><span class="lnum"> 561:  </span>        {</pre>
+<pre><span class="lnum"> 562:  </span>            <span class="kwrd">int</span> ll3Len = RdpegfxTileUtils.GetBandSize(BandType_Values.LL3, useReduceExtrapolate);</pre>
+<pre><span class="lnum"> 563:  </span>            <span class="kwrd">int</span> ll3Idx = RdpegfxTileUtils.ComponentElementCount - ll3Len;</pre>
+<pre><span class="lnum"> 564:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 565:  </span>            DwtTile stateTile = <span class="kwrd">new</span> DwtTile(</pre>
+<pre><span class="lnum"> 566:  </span>                <span class="kwrd">new</span> <span class="kwrd">short</span>[RdpegfxTileUtils.ComponentElementCount], <span class="rem">//y state</span></pre>
+<pre><span class="lnum"> 567:  </span>                <span class="kwrd">new</span> <span class="kwrd">short</span>[RdpegfxTileUtils.ComponentElementCount], <span class="rem">//cb state</span></pre>
+<pre><span class="lnum"> 568:  </span>                <span class="kwrd">new</span> <span class="kwrd">short</span>[RdpegfxTileUtils.ComponentElementCount]); <span class="rem">//cr state</span></pre>
+<pre><span class="lnum"> 569:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 570:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> i = 0; i &lt; RdpegfxTileUtils.ComponentElementCount; i++)</pre>
+<pre><span class="lnum"> 571:  </span>            {</pre>
+<pre><span class="lnum"> 572:  </span>                <span class="kwrd">if</span> (i &lt; ll3Idx)</pre>
+<pre><span class="lnum"> 573:  </span>                {</pre>
+<pre><span class="lnum"> 574:  </span>                    stateTile.Y_DwtQ[i] = (<span class="kwrd">short</span>)Math.Sign(inputTile.Y_DwtQ[i]);</pre>
+<pre><span class="lnum"> 575:  </span>                    stateTile.Cb_DwtQ[i] = (<span class="kwrd">short</span>)Math.Sign(inputTile.Cb_DwtQ[i]);</pre>
+<pre><span class="lnum"> 576:  </span>                    stateTile.Cr_DwtQ[i] = (<span class="kwrd">short</span>)Math.Sign(inputTile.Cr_DwtQ[i]);</pre>
+<pre><span class="lnum"> 577:  </span>                }</pre>
+<pre><span class="lnum"> 578:  </span>                <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 579:  </span>                {</pre>
+<pre><span class="lnum"> 580:  </span>                    stateTile.Y_DwtQ[i] = 1;</pre>
+<pre><span class="lnum"> 581:  </span>                    stateTile.Cb_DwtQ[i] = 1;</pre>
+<pre><span class="lnum"> 582:  </span>                    stateTile.Cr_DwtQ[i] = 1;</pre>
+<pre><span class="lnum"> 583:  </span>                }</pre>
+<pre><span class="lnum"> 584:  </span>            }</pre>
+<pre><span class="lnum"> 585:  </span>            <span class="kwrd">return</span> stateTile;</pre>
+<pre><span class="lnum"> 586:  </span>        }</pre>
+<pre><span class="lnum"> 587:  </span>    }</pre>
+<pre><span class="lnum"> 588:  </span>}</pre>
+</div>
+
+
+</body>
+</html>

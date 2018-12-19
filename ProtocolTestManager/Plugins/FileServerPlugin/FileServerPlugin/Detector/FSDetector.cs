@@ -61,7 +61,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         private const string defautBasicShare = "SMBBasic";
         private const string vhdName = "plugin.vhdx";
         private const string fileNameSuffix = ":SharedVirtualDisk";
-        private const int defaultTimeoutInSeconds = 20; 
+        private const int defaultTimeoutInSeconds = 20;
         private const string testSuiteName = "FileServer";
 
         // Get Service principal name may take a long time, so just get it once and save it.
@@ -74,7 +74,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             get
             {
                 IPAddress address;
-                if (!alreadyGotDnsName 
+                if (!alreadyGotDnsName
                     && !IPAddress.TryParse(sutName, out address)) // If the sutName is an IP address, no need to query DNS to get the entry
                 {
                     try
@@ -92,9 +92,9 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             }
         }
         public FSDetector
-            (Logger logger, 
-            string targetSUT, 
-            AccountCredential accountCredential, 
+            (Logger logger,
+            string targetSUT,
+            AccountCredential accountCredential,
             SecurityPackageType securityPackageType)
         {
             sutName = targetSUT;
@@ -186,6 +186,10 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
             foreach (NetworkInterface adapter in NetworkInterface.GetAllNetworkInterfaces())
             {
+                if (adapter.OperationalStatus != OperationalStatus.Up)
+                {
+                    continue;
+                }
                 if (adapter.NetworkInterfaceType == NetworkInterfaceType.Ethernet
                     || adapter.NetworkInterfaceType == NetworkInterfaceType.Wireless80211
                     || adapter.NetworkInterfaceType == NetworkInterfaceType.GigabitEthernet)
@@ -274,8 +278,8 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             if (Array.IndexOf(dialects, DialectRevision.Smb311) >= 0)
             {
                 preauthHashAlgs = new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 };
-                encryptionAlgs = new EncryptionAlgorithm[] { 
-                EncryptionAlgorithm.ENCRYPTION_AES128_GCM, 
+                encryptionAlgs = new EncryptionAlgorithm[] {
+                EncryptionAlgorithm.ENCRYPTION_AES128_GCM,
                 EncryptionAlgorithm.ENCRYPTION_AES128_CCM };
             }
 
@@ -291,9 +295,9 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 out selectedDialect,
                 out gssToken,
                 out responseHeader,
-                out responsePayload, 
-                0, 
-                preauthHashAlgs, 
+                out responsePayload,
+                0,
+                preauthHashAlgs,
                 encryptionAlgs);
 
             return status;
@@ -315,12 +319,12 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     Packet_Header header;
                     LOGOFF_Response logoffResponse;
                     client.LogOff(
-                        1, 
                         1,
-                        info.smb2Info.IsRequireMessageSigning ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE, 
-                        messageId++, 
-                        sessionId, 
-                        out header, 
+                        1,
+                        info.smb2Info.IsRequireMessageSigning ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                        messageId++,
+                        sessionId,
+                        out header,
                         out logoffResponse);
 
                     if (header.Status != Smb2Status.STATUS_SUCCESS)
@@ -337,11 +341,11 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         }
 
         public void UserLogon(
-            DetectionInfo info, 
-            Smb2Client client, 
-            out ulong messageId, 
-            out ulong sessionId, 
-            out Guid clientGuid, 
+            DetectionInfo info,
+            Smb2Client client,
+            out ulong messageId,
+            out ulong sessionId,
+            out Guid clientGuid,
             out NEGOTIATE_Response negotiateResp,
             out bool encryptionRequired)
         {
@@ -365,7 +369,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 messageId++,
                 info.requestDialect,
                 SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
-                Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU 
+                Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU
                 | Capabilities_Values.GLOBAL_CAP_LEASING | Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL | Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES | Capabilities_Values.GLOBAL_CAP_ENCRYPTION,
                 clientGuid,
                 out selectedDialect,
@@ -434,11 +438,11 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             sessionKey = sspiClientGss.SessionKey;
             encryptionRequired = sessionSetupResp.SessionFlags == SessionFlags_Values.SESSION_FLAG_ENCRYPT_DATA;
             client.GenerateCryptoKeys(
-                sessionId, 
-                sessionKey, 
+                sessionId,
+                sessionKey,
                 info.smb2Info.IsRequireMessageSigning, // Enable signing according to the configuration of SUT
-                encryptionRequired, 
-                null, 
+                encryptionRequired,
+                null,
                 false);
 
             #endregion
@@ -520,7 +524,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             }
             catch (Exception ex)
             {
-                logWriter.AddLog(LogLevel.Information, string.Format("EnumShares failed, reason: {0}", ex.Message));                
+                logWriter.AddLog(LogLevel.Information, string.Format("EnumShares failed, reason: {0}", ex.Message));
             }
 
             if (shareList == null)
@@ -561,7 +565,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     ulong messageId;
                     ulong sessionId;
                     Guid clientGuid;
-                    uncShare = string.Format(@"\\{0}\{1}", SUTName, share);                   
+                    uncShare = string.Format(@"\\{0}\{1}", SUTName, share);
                     try
                     {
                         NEGOTIATE_Response negotiateResp;
@@ -569,7 +573,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                         UserLogon(info, smb2Client, out messageId, out sessionId, out clientGuid, out negotiateResp, out encryptionRequired);
                         uint treeId;
                         TREE_CONNECT_Response treeConnectResp;
-                        
+
                         if (info.smb2Info.MaxSupportedDialectRevision == DialectRevision.Smb311) // When dialect is 3.11, TreeConnect must be signed or encrypted.
                         {
                             smb2Client.EnableSessionSigningAndEncryption(sessionId, true, encryptionRequired);
@@ -592,10 +596,10 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
                         // When dialect is 3.11, for the messages other than TreeConnect, signing is not required.
                         // Set it back to the configuration of the SUT.
-                        if (info.smb2Info.MaxSupportedDialectRevision == DialectRevision.Smb311) 
+                        if (info.smb2Info.MaxSupportedDialectRevision == DialectRevision.Smb311)
                         {
                             smb2Client.EnableSessionSigningAndEncryption(sessionId, info.smb2Info.IsRequireMessageSigning, encryptionRequired);
-                        }                
+                        }
 
                         ShareInfo shareInfo = new ShareInfo();
 
@@ -642,10 +646,10 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         /// <returns>Return true for success, false for failure</returns>
         private void ConnectToShare(
             string sharename,
-            DetectionInfo info, 
-            Smb2Client client, 
-            out ulong messageId, 
-            out ulong sessionId, 
+            DetectionInfo info,
+            Smb2Client client,
+            out ulong messageId,
+            out ulong sessionId,
             out uint treeId)
         {
             Packet_Header header;
@@ -680,7 +684,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             if (info.smb2Info.MaxSupportedDialectRevision == DialectRevision.Smb311)
             {
                 client.EnableSessionSigningAndEncryption(sessionId, info.smb2Info.IsRequireMessageSigning, encryptionRequired);
-            }         
+            }
 
             if (header.Status != Smb2Status.STATUS_SUCCESS)
             {
@@ -695,16 +699,40 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             ManagementObjectCollection resultCollection = QueryWmiObject(SUTName, "SELECT * FROM Win32_OperatingSystem");
             foreach (ManagementObject result in resultCollection)
             {
-                info.platform = ConvertPlatform(result["Version"].ToString());
+                info.platform = ConvertPlatform(result["Version"].ToString(), result["BuildNumber"].ToString());
                 logWriter.AddLog(LogLevel.Information, "Platform: " + info.platform);
                 break;
             }
         }
 
-        private Platform ConvertPlatform(string osVersion)
+        private Platform ConvertPlatform(string osVersion, string buildNumber)
         {
             if (osVersion.StartsWith("10.0."))
-                return Platform.WindowsServer2016;
+            {
+                int build;
+                if (!Int32.TryParse(buildNumber, out build))
+                {
+                    // build number is empty or not a number
+                    return Platform.WindowsServer2016;
+                }
+
+                if (build < 16299)
+                {
+                    return Platform.WindowsServer2016;
+                }
+                else if (build < 17134)
+                {
+                    return Platform.WindowsServerV1709;
+                }
+                else if (build < 17763)
+                {
+                    return Platform.WindowsServerV1803;
+                }
+                else
+                {
+                    return Platform.WindowsServer2019;
+                }
+            }
             else if (osVersion.StartsWith("6.3."))
                 return Platform.WindowsServer2012R2;
             else if (osVersion.StartsWith("6.2."))

@@ -1,0 +1,31 @@
+﻿<div id="ref" class="text-left">
+    <h2>Reference</h2>
+    <p>
+        Multi-scale method Structural Similarity provides a convenient way to incorporate image details at different resolutions.
+         Its system diagram is illustrated blow.
+    </p>
+    <div class="text-center" style="padding: 5px;">
+        <a href="~/Images/Resource/MSSSIM/workflow.png">
+            <img src="~/Images/Resource/MSSSIM/workflow-thumb.png" />
+        </a>
+    </div>
+    <p>
+        Taking the reference and distorted image signals as the input, the system iteratively applies a low-pass filter and downsamples
+         the filtered image by a factor of 2. We index the original image as Scale 1, and the highest scale as Scale <i>M</i>, which is
+         obtained after <i>M</i>-1 iterations.
+    </p>
+    <p>
+        At the <i>j</i>-th scale, the contrast comparison and the structure comparison are calculated and denoted as <i>c</i><sub>j</sub>(<b>x</b>,<b>y</b>)
+         and <i>s</i><sub>j</sub>(<b>x</b>,<b>y</b>) respectively just similar with SSIM. The luminance comparison is computed only at Scale <i>M</i> and is
+         denoted as <i>l</i><sub><i>M</i></sub>(<b>x</b>,<b>y</b>). The overall SSIM evaluation is obtained by combining the measurement at different scales
+         using
+    </p>
+    <div class="text-center" style="padding: 5px;">
+        <img src="~/Images/Resource/MSSSIM/formula.png" />
+    </div>
+    <p>
+        Similar to SSIM the exponents &alpha;<sub>M</sub>, &beta;<sub>j</sub> and &gamma;<sub>j</sub> are used to adjust the relative importance of
+         different components. Details please refer to the paper <a href="http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=1292216&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D1292216">
+             <i>Multiscale structural similarity for image quality assessment</i></a>.
+    </p>
+</div>

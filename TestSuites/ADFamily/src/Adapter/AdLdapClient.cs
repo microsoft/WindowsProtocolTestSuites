@@ -80,11 +80,18 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Common
 
             if (!string.IsNullOrEmpty(errorMessage))
             {
-                int errorCode = Convert.ToInt32(
-                    errorMessage.Split(':')[0].Substring(4),
-                    16);
+                try
+                {
+                    int errorCode = Convert.ToInt32(
+                        errorMessage.Split(':')[0].Substring(4),
+                        16);
 
-                result = Enum.GetName(typeof(WindowsErrorCode), errorCode);
+                    result = Enum.GetName(typeof(WindowsErrorCode), errorCode);
+                }
+                catch
+                {
+
+                }
             }
             if (null == result)
             {

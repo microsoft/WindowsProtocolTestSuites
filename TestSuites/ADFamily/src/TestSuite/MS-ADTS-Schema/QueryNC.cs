@@ -114,10 +114,15 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                 DataSchemaSite.Assert.AreEqual<string>("69", schemaEntry.Properties["objectVersion"].Value.ToString(),
                     "The objectVersion of {0} should be 69.", serverOS);
             }
-            else if (serverOS >= OSVersion.Win2016)
+            else if (serverOS == OSVersion.Win2016)
             {
                 DataSchemaSite.Assert.AreEqual<string>("87", schemaEntry.Properties["objectVersion"].Value.ToString(),
                     "The objectVersion of {0} should be 87.", serverOS);
+            }
+            else if (serverOS >= OSVersion.Winv1803)
+            {
+                DataSchemaSite.Assert.AreEqual<string>("88", schemaEntry.Properties["objectVersion"].Value.ToString(),
+                    "The objectVersion of {0} should be 88.", serverOS);
             }
 
             //MS-ADTS-Schema_R848

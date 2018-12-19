@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-	  <DefineSolutionProperties>false</DefineSolutionProperties>
+    <DefineSolutionProperties>false</DefineSolutionProperties>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
     <ProductVersion>3.0</ProductVersion>
     <ProjectGuid>{6ffa1a5b-ed4c-4954-9199-880c15c72866}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
@@ -12,30 +12,33 @@
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
     <WixVariables>
     </WixVariables>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <Import Project="$(WixTargetsPath)" />
   <ItemGroup>
-	<Compile Include="ADFSPIPPlugin.wxs" />
-    <Compile Include="RDPPlugin.wxs" />
-	<Compile Include="AZODPlugin.wxs" />
-	<Compile Include="ADODPlugin.wxs" />
+    <Compile Include="ADFSPIPPlugin.wxs" />
+    <Compile Include="BranchCachePlugin.wxs" />
+    <Compile Include="RDPClientPlugin.wxs" />
+    <Compile Include="RDPServerPlugin.wxs" />
+    <Compile Include="AZODPlugin.wxs" />
+    <Compile Include="ADODPlugin.wxs" />
     <Compile Include="KerberosPlugin.wxs" />
-	<Compile Include="ADFamily.wxs" />
+    <Compile Include="ADFamily.wxs" />
     <Compile Include="Product.wxs" />
     <Compile Include="PrivacyDlg.wxs" />
     <Compile Include="ProtoSDK.wxs" />
     <Compile Include="FileServerPlugin.wxs" />
-	<Compile Include="DependencyCheckWarningDlg.wxs" />
+    <Compile Include="DependencyCheckWarningDlg.wxs" />
+    <Compile Include="SMBDPlugin.wxs" />
     <EmbeddedResource Include="ProtocolTestManager.wxl" />
     <Content Include="License.rtf" />
   </ItemGroup>
@@ -98,6 +101,14 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLLOCATION</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\Plugins\SMBDPlugin\SMBDPlugin\SMBDPlugin.csproj">
+      <Name>SMBDPlugin</Name>
+      <Project>{E0D49562-5489-4807-B906-B841696716AE}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\Plugins\KerberosPlugin\KerberosPlugin\KerberosPlugin.csproj">
       <Name>KerberosPlugin</Name>
       <Project>{A18054D7-60B6-4D02-A95C-F752A61DC8DD}</Project>
@@ -114,9 +125,17 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLLOCATION</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\Plugins\RDPPlugin\RDPPlugin\RDPPlugin.csproj">
-      <Name>RDPPlugin</Name>
+    <ProjectReference Include="..\Plugins\RDPClientPlugin\RDPClientPlugin\RDPClientPlugin.csproj">
+      <Name>RDPClientPlugin</Name>
       <Project>{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Plugins\RDPServerPlugin\RDPServerPlugin\RDPServerPlugin.csproj">
+      <Name>RDPServerPlugin</Name>
+      <Project>{10425342-C543-487F-8D5B-F26F636F2D45}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
@@ -130,7 +149,7 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLLOCATION</RefTargetDir>
     </ProjectReference>
-	<ProjectReference Include="..\Plugins\ADODPlugin\ADODPlugin\ADODPlugin.csproj">
+    <ProjectReference Include="..\Plugins\ADODPlugin\ADODPlugin\ADODPlugin.csproj">
       <Name>ADODPlugin</Name>
       <Project>{4A226949-08A5-4D5A-8DBD-674C22377DF7}</Project>
       <Private>True</Private>
@@ -146,6 +165,14 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLLOCATION</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\Plugins\BranchCachePlugin\BranchCachePlugin\BranchCachePlugin.csproj">
+      <Name>BranchCachePlugin</Name>
+      <Project>{86BE87C6-846E-48FD-9676-BE6D1FC64C07}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
   </ItemGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
@@ -153,8 +180,8 @@
 	<Target Name="BeforeBuild">
 	</Target>
   	-->
-	<Target Name="AfterBuild">
+  <Target Name="AfterBuild">
     <Copy Condition="$(FORDEBUG)==1" SourceFiles="$(TargetDir)\en-us\$(TargetFileName)" DestinationFiles="$(TestSuiteRoot)\drop\ProtocolTestManager\installer\ProtocolTestManager_ForDebug.msi" />
     <Copy Condition="$(FORDEBUG)!=1" SourceFiles="$(TargetDir)\en-us\$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\installer\" />
-	</Target>
+  </Target>
 </Project>

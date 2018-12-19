@@ -1,0 +1,1597 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Workgroup Environment Network Setup</title>
+    <style>
+        table, th, td
+        {
+            border:1px solid black;
+            border-collapse:collapse;
+            font-size:small;
+        }
+        div.Title
+        {
+            font-family:Arial;
+            font-size:larger;
+            margin-bottom:10px;
+        }
+        div.Context
+        {
+            font-family:'Segoe UI';
+            font-size:medium;
+            margin-top:auto;
+        }
+        .icon
+        {
+            font-family:'Segoe UI';
+            font-size:larger;
+            font-weight:bold;
+            margin-top:80px;
+        }
+        .List
+        {
+            margin-top: 4px;
+        }
+        .img
+        {
+            vertical-align:text-top;
+        }
+        .hidden-detail 
+        {
+            color:#383838;
+            font-size:small;
+            display:none;
+        }
+    </style>
+    <script type="text/javascript">
+        <!--
+        function toggle_visibility(targetID) {
+            var target = document.getElementById(targetID);
+            if (target.style.display == 'block') {
+                target.style.display = 'none';
+            }
+            else {
+                target.style.display = 'block';
+            }
+        }
+        //-->
+    </script>
+</head>
+<body>
+    <div class="Context">            
+<div>
+    <h1>
+        Computer Setup
+    </h1>
+</div>
+<p>
+    This section explains how to set up the computers for the test environment.
+</p>
+<p>
+    For workgroup environments, skip tasks that are related to the setup and configuration of DC.
+</p>
+<h2>
+    Set Up the Driver Computer
+</h2>
+<p>
+    Important: Microsoft Visual Studio 2017 (or later) and Protocol Test Framework (build 1.0.6000.0) must be installed on the driver computer before you run the
+    test suite installer.
+</p>
+<p>
+    To set up the driver computer:
+</p>
+<p>
+    1. Copy the test suite package to the driver computer.
+</p>
+<p>
+    2. Extract the files of the test suite from the package.
+</p>
+<p>
+    3. Install the required and optional software described earlier.
+</p>
+<p>
+    4. Run <strong>RDP-TestSuite-ClientEP.msi</strong> on the driver computer.
+</p>
+<p>
+    5. On the <strong>Options</strong> dialog box, select <strong>Install Test Suite on Driver Computer</strong>.
+</p>
+<h2>
+    Set Up a Windows-Based SUT
+</h2>
+<p>
+    To set up a Windows-based SUT:
+</p>
+<p>
+    1. Copy the test suite package to the Windows-based SUT.
+</p>
+<p>
+    2. Extract the files of the test suite from the package.
+</p>
+<p>
+    3. Run <strong>RDP-TestSuite-ClientEP.msi</strong> on the Windows-based SUT.
+</p>
+<p>
+    4. On the <strong>Options</strong> dialog box, select <strong>Install Configuration Scripts on System Under Test (SUT)</strong>.
+</p>
+<p>
+To set up a SUT that is not based on the Windows operating system, see Configuring Computers that are Not Based on Windows.
+</p>
+<h2>
+    Set Up a Windows-Based Domain Controller (DC)
+</h2>
+<p>
+    DC is optional. Skip this step if the test environment is workgroup.
+</p>
+<p>
+    To set up a Windows-based DC:
+</p>
+<p>1. Install Active Directory Domain Services.</p>
+
+<p>
+To set up a DC that is not based on the Windows operating system, see Configuring Computers that are Not Based on Windows.
+</p>
+
+<div>
+    <h1>
+        Configuration
+    </h1>
+</div>
+<p>
+    This section explains how to configure the test environment.
+</p>
+<p>
+    For workgroup environments, skip tasks that are related to the setup and configuration of DC.
+</p>
+<h2>
+    Configuring Windows-based Computers
+</h2>
+<p>
+    This section explains how to configure computers for a Windows-based test environment. For general information about configuring computers that are not
+based on Windows, see Configuring Computers that are Not Based on Windows.
+</p>
+<p>
+    Note:
+</p>
+<p>
+    The property values of the .ptfconfig file are automatically set during the configuration process. For this reason, in a Windows-based test environment,
+    configure the SUT and any other servers before you configure the driver computer.
+</p>
+
+<p>To configure the SUT: </p>
+<p>
+    1. Log on to the SUT as <strong>Administrator</strong>. Enable the Administrator account if it is disabled. 
+    <a href="javascript:void(0)" onclick="toggle_visibility('enableadmin');">Detail</a>
+</p>
+<div id ="enableadmin" class="hidden-detail">
+    <p>
+        a. In <strong>Control Panel</strong>, open <strong>Administrative Tools</strong> and then open <strong>Computer Management</strong>.
+    </p>
+    <p>
+    b. In the left panel, open <strong>Local Users and</strong> <strong>Groups </strong>under <strong>System Tools,</strong> and then select    <strong>Users</strong>.
+    </p>
+    <p>
+        c. In the right panel, double click <strong>Administrator</strong> and then uncheck the <strong>Account is disabled</strong> box.
+    </p>
+</div>
+<p>
+    2. Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\<em>&lt;</em><em>v</em><em>ersion#&gt;</em>\Scripts, and open the ParamConfig.xml file.
+</p>
+<p>
+    3. Review the properties shown in the following table, updating the property values as necessary. 
+    <a href="javascript:void(0)" onclick="toggle_visibility('paramconfig');">Detail</a>
+</p>
+<div id="paramconfig" class="hidden-detail">
+<table border="1" cellspacing="0" cellpadding="0" width="538">
+    <thead>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>Property</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    <strong>Description</strong>
+                </p>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>LogPath</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The file path for storing the logs during configuration
+                </p>
+                <p>
+                    Default value: <strong>.\..\Logs</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>LogFile</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The name of log file.
+                </p>
+                <p>
+                    Default value: <strong>.\..\Logs\Config-DriverComputer.ps1.log</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>userNameInTC</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The local administrator account that is used to log on to the SUT.
+                </p>
+                <p>
+                    Required value: <strong>Administrator</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>userPwdInTC</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The password that is used to log on to the local administrator account of SUT.
+                </p>
+                <p>
+                    Default value: <strong>Password01!</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>domainName</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The domain name that is configured in DC.
+                </p>
+                <p>
+                    Default value: <strong>contoso.com</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>dcComputerName</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The machine name or IP address of DC.
+                </p>
+                <p>
+                    Default value: <strong>DC01</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>tcComputerName</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The machine name or IP address of SUT.
+                </p>
+                <p>
+                    Default value: <strong>SUT01</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>driverComputerName</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The machine name or IP address of driver computer.
+                </p>
+                <p>
+                    Default value: <strong>DriverComputer</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>RDPListeningPort</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The listening port of driver computer.
+                </p>
+                <p>
+                    Default value: <strong>3389</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>ipVersion</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The IP version that is used in test.
+                </p>
+                <p>
+                    Default value: <strong>IPv4</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>workgroupDomain</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The test environment. If it is in domain environment, set the value to <strong>Domain</strong>; if it is in workgroup environment, set the
+                    value to <strong>Workgroup</strong>.
+                </p>
+                <p>
+                    Default value:<strong> Workgroup</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>compressionInTC</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    Determine whether compression is used in terminal client. If compression is used, set the value to <strong>Yes</strong>; otherwise, set the
+                    value to <strong>No</strong>.
+                </p>
+                <p>
+                    Default value: <strong>No</strong>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
+<p>
+    4. Run <strong>Windows PowerShell</strong> as <strong>Administrator</strong>.
+</p>
+<p>
+    5. At the command prompt, type Set-ExecutionPolicy Unrestricted -F, and press <strong>Enter</strong>.
+</p>
+<p>
+    6. Type cd C:\MicrosoftProtocolTests\RDP \Client-Endpoint\<em>&lt;</em><em>v</em><em>ersion#&gt;</em>\Scripts, and press <strong>Enter</strong>.
+</p>
+<p>
+    7. Type .\Config-TerminalClient.ps1 and press <strong>Enter</strong>.
+</p>
+<p>
+    Steps <a href="javascript:void(0)" onclick="toggle_visibility('rdpeusb');">8, 9, 10 and 11</a> 
+    are only required for MS-RDPEUSB test cases.
+</p>
+<div id="rdpeusb" class="hidden-detail">
+<p>
+    8. Open <strong>Local Group Policy Editor</strong> by typing gpedit.msc and press <strong>Enter</strong>.
+</p>
+<p>
+    9. Enable the policy "<strong>Allow RDP redirection of other supported RemoteFX USB devices from this computer</strong>", which can be found under Local
+    Computer Policy\Computer Configuration\Administrative Templates\Windows Components\Remote Desktop Services\Remote Desktop Connection Client\RemoteFX USB
+    Device Redirection.
+</p>
+<p>
+    10. Reboot the SUT computer and plug in the OSR USB FX2 board.
+</p>
+<p>
+11. Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\<em>&lt;</em><em>v</em><em>ersion#&gt;</em>\Data, and edit <strong>Negotiate.RDP</strong>,    <strong>DirectTls.RDP </strong>and<strong> DirectCredSSP.RDP </strong>files respectively:
+</p>
+<p>
+    a. Right-click on the RDP file, and then click <strong>Edit</strong>.
+</p>
+<p>
+    b. Select the <strong>Local Resources</strong> tab, click <strong>More...</strong>, and then click to select the <strong>OSR USB-FX2 LK</strong> check box.
+</p>
+<p>
+    c. Select the <strong>General</strong> tab, and click <strong>Save</strong>.
+</p>
+</div>
+
+<p>To configure the driver computer: </p>
+<p>
+    1. Log on to the driver computer as Administrator.
+</p>
+<p>
+    2. Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\<em>&lt;version#&gt;</em>\Scripts, and open the ParamConfig.xml file.
+</p>
+<p>
+    3. Modify the parameters as you wish. 
+    <a href="javascript:void(0)" onclick="toggle_visibility('paramconfig2');">Detail</a>
+</p>
+<div id="paramconfig2" class="hidden-detail">
+<table border="1" cellspacing="0" cellpadding="0" width="538">
+    <thead>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>Property</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    <strong>Description</strong>
+                </p>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>LogPath</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The file path for storing the logs during configuration
+                </p>
+                <p>
+                    Default value: <strong>.\..\Logs</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>LogFile</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The name of log file.
+                </p>
+                <p>
+                    Default value: <strong>.\..\Logs\Config-DriverComputer.ps1.log</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>userNameInTC</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The local administrator account that is used to log on to the SUT.
+                </p>
+                <p>
+                    Required value: <strong>Administrator</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>userPwdInTC</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The password that is used to log on to the local administrator account of SUT.
+                </p>
+                <p>
+                    Default value: <strong>Password01!</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>CredSSPUser</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    User name used in CredSSP authentication.
+                </p>
+                <p>
+                    It should be a member of RDP User Group on Drive Computer.
+                </p>
+                <p>
+                    Default value: <strong>Administrator</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>CredSSPPwd</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The user password of CredSSPUser.
+                </p>
+                <p>
+                    Default value: <strong>Password01!</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>domainName</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The domain name that is configured in DC.
+                </p>
+                <p>
+                    Default value: <strong>contoso.com</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>dcComputerName</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The machine name or IP address of DC.
+                </p>
+                <p>
+                    Default value: <strong>DC01</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>tcComputerName</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The machine name or IP address of SUT.
+                </p>
+                <p>
+                    Default value: <strong>SUT01</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>driverComputerName</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The machine name or IP address of driver computer.
+                </p>
+                <p>
+                    Default value: <strong>DriverComputer</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>RDPListeningPort</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The listening port of driver computer.
+                </p>
+                <p>
+                    Default value: <strong>3389</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>ipVersion</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The IP version that is used in test.
+                </p>
+                <p>
+                    Default value: <strong>IPv4</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>osVersion</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The operating system of terminal client.
+                </p>
+                <p>
+                    It can be Win7, Win8, or NonWindows.
+                </p>
+                <p>
+                    Default value: <strong>Win8</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>workgroupDomain</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The test environment. If it is in domain environment, set the value to "Domain"; if it is in workgroup environment, set the value to
+                    "Workgroup".
+                </p>
+                <p>
+                    Default value: <strong>Workgroup</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="166" valign="top">
+                <p>
+                    <strong>tcSystemDrive</strong>
+                </p>
+            </td>
+            <td width="372" valign="top">
+                <p>
+                    The system drive letter of SUT machine.
+                </p>
+                <p>
+                    Only apply to Windows SUT.
+                </p>
+                <p>
+                    Default value: <strong>C</strong>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
+<p>
+    4. Run <strong>Windows PowerShell</strong> as <strong>Administrator</strong>.
+</p>
+<p>
+    5. At the command prompt, type Set-ExecutionPolicy Unrestricted -F, and press <strong>Enter</strong>.
+</p>
+<p>
+    6. Type cd C:\MicrosoftProtocolTests\RDP\Client-Endpoint\<em>&lt;</em><em>v</em><em>ersion#&gt;</em>\Scripts, and press <strong>Enter</strong>.
+</p>
+<p>
+    7. Type .\Config-DriverComputer.ps1, and press <strong>Enter</strong>.
+</p>
+<p>
+    Note: 
+</p>
+<p>
+    There will pop up a dialog when configuring the Driver Computer. The automation script will manipulate the dialog UI by sending keys to make a certificate
+    for testing purpose. Please don't interrupt this automation process.
+</p>
+<p>
+    Note: 
+</p>
+<p>
+    If the value of <strong>RDPListeningPort</strong> is set to 3389 and the Remote Desktop Service is running on the Driver Computer, the automation script
+    will change the port of Remote Desktop Service to 4488 and restart this service.
+</p>
+<p>
+    Note: 
+</p>
+<p>
+    After run Config-DriverComputer.ps1, three files are generated under C:\, as follows:
+</p>
+<ul>
+    <li>
+        <strong><em>ComputerName</em></strong>
+        .cer
+    </li>
+    <li>
+        <strong><em>ComputerName</em></strong>
+        .pfx
+    </li>
+    <li>
+        <strong><em>ComputerName</em></strong>
+        .pvk
+    </li>
+</ul>
+<p>
+    <strong><em>ComputerName</em></strong>
+    represents driver computer's name as you configured in ParamConfig.xml.
+</p>
+<p>
+    Note: 
+</p>
+<p>
+    The certificate, <strong>ComputerName</strong>.cer, is generated for testing purpose, not from a trusted certifying authority. So when you run test cases,
+    a dialog may be popped up with warning statements: "<strong>The identity of the remote computer cannot be verified. Do you want to connect anyway?</strong>
+    ", then you can selected the checkbox of "<strong>Don't ask me again for connections to this computer</strong>" before click <strong>Yes</strong> to avoid
+    this dialog popped up again.
+</p>
+<p>
+    Optionally, you can install this certificate on <strong>SUT</strong> as following to avoid warning dialog.
+    <a href="javascript:void(0)" onclick="toggle_visibility('importcert');">Detail</a>
+</p>
+<div id="importcert" class="hidden-detail">
+<p>
+    1. Copy <a name="OLE_LINK7"></a><a name="OLE_LINK1">the </a><strong><em>ComputerName</em></strong>.cer file to the <strong>SUT</strong>.
+</p>
+<p>
+    2. On the SUT, click <strong>Start</strong> and then click <strong>Run</strong>, in the command line, type <strong>MMC</strong> and then click OK.
+</p>
+<p>
+    3. In the <strong>Microsoft Management Console</strong>, on the <strong>File</strong> menu, <strong>click Add/Remove Snap-in.</strong>
+</p>
+<p>
+    4. In the <strong>Add or Remove Snap-ins dialog box</strong>, select Certificates and then click Add.
+</p>
+<p>
+    5. In the popped up <strong>Certificates snap-in</strong> dialog box, select the <strong>Computer account</strong> radio button, and then click Next.
+</p>
+<p>
+6. In the <strong>Select Computer</strong> dialog box, leave the default Local computer: (the computer this console is running on) selected and then click    <strong>Finish</strong>.
+</p>
+<p>
+    7. In the <strong>Add or Remove Snap-ins dialog box</strong>, click <strong>Ok</strong>.
+</p>
+<p>
+8. In the left pane of <strong>Microsoft Management Console</strong>, expand the <strong>Certificates (Local Computer)</strong> node, and then expand the    <strong>Trusted Root Certification Authorities</strong> folder.
+</p>
+<p>
+9. Under <strong>Trusted Root Certification Authorities</strong>, right-click the Certificates subfolder, click <strong>All Tasks</strong>, and then click    <strong>Import</strong>.
+</p>
+<p>
+    10. On the <strong>Certificate Import Wizard welcome screen</strong>, click Next.
+</p>
+<p>
+    11. On the <strong>File to Import screen</strong>, click Browse. Browse to the location of the the <strong><em>ComputerName</em></strong>.cer file copied
+    in Step 1, select the file, and then click <strong>Open</strong>.
+</p>
+<p>
+    12. On the <strong>File to Import screen</strong>, click Next.
+</p>
+<p>
+    13. On the <strong>Certificate Store screen</strong>, accept the default choice and then click <strong>Next</strong>.
+</p>
+<p>
+    14. On the <strong>Completing the Certificate Import Wizard screen</strong>, click <strong>Finish</strong>.
+</p>
+</div>
+<h2>
+    Configuring Computers that are Not Based on Windows
+</h2>
+<p>
+    This guide provides only basic information about configuring the test environment for computers that are not running Windows-based operating systems.
+</p>
+<li>
+    For domain environments, join all computers to the domain of the domain controller.
+</li>
+<li>
+    Disable active firewalls on all computers.
+</li>
+<p>
+    For detailed instructions about how to complete the tasks that this process requires, see the administration guide for your operating system.
+</p>
+<p>To configure the SUT: </p>
+<p>
+    1. Install and enable the client implementations of the protocols to be tested.
+</p>
+<ul>
+    <li>
+        Enable the USB devices redirection feature.
+    </li>
+    <li>
+        Plug in the OSR USB FX2 board.
+    </li>
+</ul>
+<p>
+    2. Install Certificate generated on the driver computer (Optional).
+</p>
+
+<p>To configure the DC: </p>
+<ul>
+    <li>
+        Install directory domain services.
+    </li>
+</ul>
+<h2>
+    Configuring the Test Suite
+</h2>
+<p>
+    This test suite is installed with default configuration settings. You may need to change these settings if you use a customized test environment or if you
+    customize your test runs.
+</p>
+<p>
+    Note:
+</p>
+<p>
+    The property values of the .ptfconfig file are automatically set during the configuration process.
+</p>
+<p>
+    You can define various options for the test suite, such as the following:
+</p>
+<li>
+    Define the settings of the test environment, including computer names and IP addresses.
+</li>
+<li>
+    Define the basic options used in the test suite, for example, the protocol version or the version of the target operating system.
+</li>
+<li>
+    Define the folders and formats used for output from test runs.
+</li>
+<li>
+    Define scripts to run before and after each test run.
+</li>
+<li>
+    Set time limits on discrete test tasks and for test runs.
+</li>
+<p>
+    To change configuration settings, edit the <strong>RDP_ClientTestSuite.deployment.ptfconfig</strong> file. You can find this file in the directory
+    C:\MicrosoftProtocolTests\RDP\Client-Endpoint\<em>&lt;</em><em>v</em><em>ersion#&gt;</em>\Bin.
+</p>
+<h3>
+    Configuration Settings
+</h3>
+<p>Click the following property categories to see the details. </p>
+<li>
+    <a href="javascript:void(0)" onclick="toggle_visibility('commonprop');">Common Required Properties</a>
+</li>
+<div id="commonprop" class="hidden-detail">
+<table border="1" cellspacing="0" cellpadding="0" width="590">
+    <thead>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>Property</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    <strong>Description</strong>
+                </p>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>RDP.SeverPort</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    The port number used to listen for RDP connection requests.
+                </p>
+                <p>
+                    The default value used in this test suite: <strong>3389</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>RDP.IPVersion</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    The IP version used in test environment.
+                </p>
+                <p>
+                    Default value: <strong>Ipv4</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>RDP.Version</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    The RDP version of the SUT.
+                </p>
+                <p>
+                    Default value: <strong>7.0</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>RDP.Security.Negotiation</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    Indicates if the test suite uses the "Negotiation Approach" to select the security mechanism.
+                </p>
+                <p>
+                    The possible values are <strong>True</strong> and <strong>False. </strong>If the value is set to <strong>False</strong>, it indicates that
+                    the "Direct Approach" will be used.
+                </p>
+                <p>
+                    Default value: <strong>True</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <a name="OLE_LINK19"></a>
+                    <a name="OLE_LINK18"><strong>RDP.Security.Protocol</strong></a>
+                    <strong></strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+The security protocol used to secure the RDP session. The possible values are <strong>TLS</strong>, <strong>CredSSP</strong> and                    <strong>RDP</strong>.
+                </p>
+                <p>
+                    Default value: <strong>TLS</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>RDP.Security.Encryption.Level</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+The encryption level of the RDP session. The possible values are <strong>None</strong>, <strong>Low</strong>, <strong>Client</strong>,                    <strong>High</strong>, and <strong>FIPS</strong>.<strong></strong>
+                </p>
+                <p>
+If the RDP.Security.Protocol value is set to<strong> TLS</strong> or <strong>CredSSP</strong>, this property must be set to                    <strong>None</strong>. Otherwise, the property must not be set to <strong>None</strong>.
+                </p>
+                <p>
+                    Default value: <strong>None</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>RDP.Security.Encryption.Method</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    The encryption method of the RDP session.
+                </p>
+                <p>
+The possible values are <strong>None</strong>, <strong>40bit</strong>, <strong>56bit</strong>, <strong>128bit</strong>,                    <strong>FIPS</strong>.
+                </p>
+                <p>
+                    If the <strong>RDP.Security.Protocol</strong> value is set to<strong> TLS</strong> or <strong>CredSSP</strong>, this property must be set
+                    to <strong>None</strong>. If the <strong>RDP.Security.Encryption.Level </strong>value<strong> </strong>is set to <strong>FIPS</strong>,
+                    this property must be set to <strong>FIPS</strong>.
+                </p>
+                <p>
+                    Default value: <strong>None</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>RDP.Security.IsClientToServerEncrypted</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    Indicates if the client-to-server traffic is encrypted. The possible values are <strong>True</strong> and <strong>False</strong>.
+                </p>
+                <p>
+                    Default value: <strong>True</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>IsWindowsImplementation</strong>
+                    <strong></strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    Indicates if the SUT is a Windows implementation. The possible values are <strong>True</strong> and <strong>False</strong>.
+                </p>
+                <p>
+                    Default value: <strong>True</strong>
+                </p>
+            </td>
+        </tr><tr>
+        <td width="184" valign="top">
+            <p>
+                <strong>DropConnectionForInvalidRequest</strong>
+                <strong></strong>
+            </p>
+        </td>
+        <td width="406" valign="top">
+            <p>
+                Indicates whether the SUT will drop the connection when invalid request is received. The possible values are <strong>True</strong> and <strong>False</strong>. 
+            </p>
+            <p>
+                The value is true when IsWindowsImplementation is true.
+            </p>
+            <p>
+                Default value: <strong>True</strong>
+            </p>
+        </td>
+    </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>WindowsOSVersionOfSUT</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    If the SUT is a Windows implementation, this property indicates the operating system version. The possible values are <strong>Win7</strong>
+                    and <strong>Win8</strong>.
+                </p>
+                <p>
+                    If the <strong>IsWindowsImplementation</strong> value is set to <strong>False</strong>, this property should be ignored.
+                </p>
+                <p>
+                    Default value: <strong>Win8</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>CertificatePath</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+The Personal Information Exchange (.pfx) certificate used to secure TLS or CrepSSP transports. If the                    <strong>RDP.Security.Protocol </strong>value is set to <strong>TLS</strong> or <strong>CrepSSP</strong>, this property must be set.
+                </p>
+                <p>
+                    Default value: <strong>C:\DriverComputer.pfx</strong><strong></strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>CertificatePassword</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    The password of the certificate identified in the <strong>CertificatePath</strong> value<strong>.</strong>
+                </p>
+                <p>
+                    Default value: <strong>Password01</strong>!
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>VerifyRdpbcgrMessage</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+Enables or disables message verification as defined in MS-RDPBCGR. Set to <strong>True</strong> to enable, otherwise set to                    <strong>False</strong>.
+                </p>
+                <p>
+                    Default value: <strong>True</strong>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
+<li>
+    <a href="javascript:void(0)" onclick="toggle_visibility('rdpbcgrprop');">Required Properties for RDPBCGR</a>
+</li>
+<div id="rdpbcgrprop" class="hidden-detail">
+<table border="1" cellspacing="0" cellpadding="0" width="590">
+    <thead>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>Property</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    <strong>Description</strong>
+                </p>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>RDP.Client.SupportFastPathInput</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    Indicates if the remote desktop client (SUT) supports Fast-Path Input.
+                </p>
+                <p>
+                    The possible values are <strong>True</strong> and <strong>False</strong>.
+                </p>
+                <p>
+                    Default value: <strong>True</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>RDP.Client.SupportAutoReconnect</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+Indicates if the remote desktop client (SUT) supports Auto-Reconnect. The possible values are <strong>True</strong> and                    <strong>False</strong>.
+                </p>
+                <p>
+                    Default value: <strong>True</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>RDP.Client.SupportRDPEFS</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+Indicates if the remote desktop client (SUT) supports File System Virtual Channel Extension (MS-RDPEFS). The possible values are                    <strong>True</strong> and <strong>False</strong>.
+                </p>
+                <p>
+                    Default value: <strong>True</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>RDP.Client.SupportServerRedirection</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+Indicates if the remote desktop client (SUT) supports Server Redirection. The possible values are <strong>True</strong> and                    <strong>False</strong>.
+                </p>
+                <p>
+                    Default value: <strong>True</strong>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
+<li>
+    <a href="javascript:void(0)" onclick="toggle_visibility('rdpeusbprop');">Required Properties for RDPEUSB</a>
+</li>
+<div id="rdpeusbprop" class="hidden-detail">
+<p>
+    There's no other required property for test cases of RDPEUSB.
+</p>
+</div>
+<li>
+    <a href="javascript:void(0)" onclick="toggle_visibility('rdpevorprop');">Required Properties for RDPEVOR</a>
+</li>
+<div id="rdpevorprop" class="hidden-detail">
+<p>
+    There's no other required property for test cases of RDPEVOR.
+</p>
+</div>
+<li>
+    <a href="javascript:void(0)" onclick="toggle_visibility('rdprfxprop');">Required Properties for RDPRFX</a>
+</li>
+<div id="rdprfxprop" class="hidden-detail">
+<table border="1" cellspacing="0" cellpadding="0" width="590">
+    <thead>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>Property</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    <strong>Description</strong>
+                </p>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>RDPRFX.Image</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    Determine how test suite get the image data, which is used by RDPRFX test cases to send image to the client. It should be Screen, or the
+                    path of a image file.
+                </p>
+                <p>
+                    Default value: <strong>Screen</strong>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
+<li>
+    <a href="javascript:void(0)" onclick="toggle_visibility('rdpeudpprop');">Required Properties for RDPEUDP</a>
+</li>
+<div id="rdpeudpprop" class="hidden-detail">
+<p>
+    There's no other required property for test cases of RDPEUDP.
+</p>
+<p>
+    Note: RDPEUDP test cases must be run under TLS or CredSSP security protocols.
+</p>
+</div>
+<li>
+    <a href="javascript:void(0)" onclick="toggle_visibility('rdpemtprop');">Required Properties for RDPEMT</a>
+</li>
+<div id="rdpemtprop" class="hidden-detail">
+<p>
+    There's no other required property for test cases of RDPEMT.
+</p>
+<p>
+    Note: RDPEMT test cases must be run under TLS or CredSSP security protocols.
+</p>
+</div>
+<li>
+    <a href="javascript:void(0)" onclick="toggle_visibility('rdpeiprop');">Required Properties for RDPEI</a>
+</li>
+<div id="rdpeiprop" class="hidden-detail">
+<p>
+    There's no other required property for test cases of RDPEI.
+</p>
+</div>
+<li>
+    <a href="javascript:void(0)" onclick="toggle_visibility('rdpegfxprop');">Required Properties for RDPEGFX</a>
+</li>
+<div id="rdpegfxprop" class="hidden-detail">
+<table border="1" cellspacing="0" cellpadding="0" width="590">
+    <thead>
+        <tr>
+            <td width="196" valign="top">
+                <p>
+                    <strong>Property</strong>
+                </p>
+            </td>
+            <td width="394" valign="top">
+                <p>
+                    <strong>Description</strong>
+                </p>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td width="196" valign="top">
+                <p>
+                    <strong>ClearCodecImage</strong>
+                </p>
+                <p>
+                    <strong></strong>
+                </p>
+            </td>
+            <td width="394" valign="top">
+                <p>
+                    <a name="OLE_LINK5"></a>
+                    <a name="OLE_LINK4">The path of an image file, which is used to do ClearCodec test.</a>
+                </p>
+                <p>
+                    The requirement for the image:
+                </p>
+                <p>
+                    - Size : 256 * 256 pixels
+                </p>
+                <p>
+                    - The top-left 64 * 64 rectangle should have some different color from background, like text, sign, etc.
+                </p>
+                <p>
+                    Default value: <strong>.\RdpegfxClearCodecTestImage.bmp</strong>. This image is included in the RDP test suite.
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="196" valign="top">
+                <p>
+                    <strong>RfxProgressiveCodecImage</strong>
+                </p>
+            </td>
+            <td width="394" valign="top">
+                <p>
+                    The path of an image file, which is used to do RemoteFx Progressive Codec test.
+                </p>
+                <p>
+                    The requirement for the image:
+                </p>
+                <p>
+                    - Size : 256 * 256 pixels
+                </p>
+                <p>
+                    Default value: <strong>.\RdpegfxRfxProgressiveCodecTestImage.bmp</strong>. This image is included in the RDP test suite.
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
+<li>
+    <a href="javascript:void(0)" onclick="toggle_visibility('rdpedispprop');">Required Properties for RDPEDISP</a>
+</li>
+<div id="rdpedispprop" class="hidden-detail">
+<table border="1" cellspacing="0" cellpadding="0" width="590">
+    <thead>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>Property</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    <strong>Description</strong>
+                </p>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>RdpedispTestImage</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    The path of an image file, which is used to do RDPEDISP test.
+                </p>
+                <p>
+                    There are no specific requirements for the image.
+                </p>
+                <p>
+                    Default value: <strong>.\RdpedispTestImage.bmp</strong>. This image is included in the RDP test suite.
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
+<li>
+    <a href="javascript:void(0)" onclick="toggle_visibility('optionalprop');">Optional Configuration Settings</a>
+</li>
+<div id="optionalprop" class="hidden-detail">
+<table border="1" cellspacing="0" cellpadding="0" width="590">
+    <thead>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>Property</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    <strong>Description</strong>
+                </p>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>RDP.ServerDomain</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    If using CredSSP security, use this setting to define the domain name of the driver computer. If the computer is not in a domain, then use
+                    the computer name.
+                </p>
+                <p>
+                    Default value: <strong>contoso.com</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>RDP.ServerUserName</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    If using CredSSP security, use this setting to define the security account user name.
+                </p>
+                <p>
+                    Default value: <strong>Administrator</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>RDP.ServerUserPassword</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    The password for the RDP.ServerUserName account.
+                </p>
+                <p>
+                    Default value: <strong>Password01!</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>SUTName</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    If the SUT is using a Windows operating system, specify the machine name or IP address of the SUT.
+                </p>
+                <p>
+                    Default value: <strong>SUT01</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>SUTUserName</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    If the SUT is using a Windows operating system, specify the local administrator account used to log on to the SUT.
+                </p>
+                <p>
+                    Required value:<strong> Administrator</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>SUTUserPassword</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    The password that is used to log on to the local administrator account of SUT.
+                </p>
+                <p>
+                    Default value: <strong>Password01!</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>SUTSystemDrive</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    If the SUT is using a Windows operating system, specify the system drive letter of SUT machine.
+                </p>
+                <p>
+                    Default value: <strong>C</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>WaitTime</strong>
+                </p>
+                <p>
+                    <strong></strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    The maximum time in seconds to wait for one SUT message.
+                </p>
+                <p>
+                    Default value: <strong>40</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>ASNIssueFixed</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+Indicates whether the workaround for the Asn1ObjectIdentifier encode issue is needed. The possible values are <strong>True</strong> and                    <strong>False</strong>.
+                </p>
+                <p>
+                    Default value: <strong>True</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="184" valign="top">
+                <p>
+                    <strong>isTDIXXXXFixed</strong>
+                </p>
+            </td>
+            <td width="406" valign="top">
+                <p>
+                    Ignore -- reserved for use by the test suite development team
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
+</div>
+</body>
+</html>

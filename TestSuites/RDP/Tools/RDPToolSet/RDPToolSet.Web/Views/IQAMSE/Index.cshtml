@@ -1,0 +1,10 @@
+﻿<div class="container">
+    <div id="intro">@Html.Partial("_Intro") </div>
+
+    @Html.Partial("_ImageCompare")
+
+    <div class="text-center">
+        @Html.ButtonFor(name: "Compare", id: "ImageCompare")
+    </div>
+    <div class="compare-status text-left" style="padding-top: 15px;"></div>
+</div>

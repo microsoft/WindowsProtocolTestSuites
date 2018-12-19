@@ -36,6 +36,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if server handles Read request to a shared virtual disk file correctly.")]
         public void BVT_ReadSharedVHD()
         {
@@ -58,6 +59,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if server handles Write request to a shared virtual disk file correctly.")]
         public void BVT_WriteSharedVHD()
         {

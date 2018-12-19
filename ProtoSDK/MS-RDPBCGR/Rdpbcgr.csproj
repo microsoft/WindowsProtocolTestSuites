@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr</RootNamespace>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -44,6 +44,7 @@
     <CodeAnalysisRules>
     </CodeAnalysisRules>
     <RunCodeAnalysis>false</RunCodeAnalysis>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -52,6 +53,25 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
@@ -125,13 +145,12 @@
     <Compile Include="Server\ServerStaticVirtualChannelManager.cs" />
     <Compile Include="StaticVirtualChannel.cs" />
     <Compile Include="StaticVirtualChannelManager.cs" />
-    <Compile Include="TypesExtension.cs" />
     <Compile Include="Client\RdpbcgrClient.cs" />
     <Compile Include="Client\RdpbcgrClientContext.cs" />
     <Compile Include="ConstValue.cs" />
     <Compile Include="CredSspStream.cs" />
     <Compile Include="EncryptionAlgorithm.cs" />
-    <Compile Include="RdpbcgrDecoder.cs" />
+    <Compile Include="Client\RdpbcgrClientDecoder.cs" />
     <Compile Include="RdpbcgrEncoder.cs" />
     <Compile Include="RleDecompressor.cs" />
     <Compile Include="Types.cs" />
@@ -147,15 +166,15 @@
       <Name>Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\CryptoLib\CryptoLib.csproj">
-      <Project>{BF6AFAF0-7592-467F-AD5C-18429D854057}</Project>
+      <Project>{bf6afaf0-7592-467f-ad5c-18429d854057}</Project>
       <Name>CryptoLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\Messages\Messages.csproj">
-      <Project>{75544419-3F4E-4308-A676-165F45C1462E}</Project>
+      <Project>{75544419-3f4e-4308-a676-165f45c1462e}</Project>
       <Name>Messages</Name>
     </ProjectReference>
     <ProjectReference Include="..\Sspi\Sspi.csproj">
-      <Project>{D0CB354B-2CD3-49C1-8ECA-2F6EBADBCCEE}</Project>
+      <Project>{d0cb354b-2cd3-49c1-8eca-2f6ebadbccee}</Project>
       <Name>Sspi</Name>
     </ProjectReference>
     <ProjectReference Include="..\TransportStack\TransportStack.csproj">

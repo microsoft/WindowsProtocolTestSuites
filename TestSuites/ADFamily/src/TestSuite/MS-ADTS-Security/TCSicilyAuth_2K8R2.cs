@@ -60,6 +60,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S0()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S0");
@@ -91,6 +92,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S10()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S10");
@@ -133,6 +135,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S100()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S100");
@@ -190,6 +193,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S104()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S104");
@@ -215,6 +219,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S106()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S106");
@@ -241,6 +246,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S108()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S108");
@@ -267,6 +273,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S110()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S110");
@@ -306,6 +313,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S112()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S112");
@@ -331,6 +339,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S114()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S114");
@@ -373,6 +382,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S116()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S116");
@@ -410,6 +420,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S118()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S118");
@@ -448,6 +459,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S12()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S12");
@@ -485,6 +497,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S120()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S120");
@@ -523,6 +536,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S122()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S122");
@@ -560,6 +574,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S124()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S124");
@@ -585,6 +600,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S126()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S126");
@@ -611,6 +627,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S128()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S128");
@@ -637,6 +654,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S130()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S130");
@@ -662,6 +680,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S132()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S132");
@@ -687,6 +706,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S134()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S134");
@@ -713,6 +733,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S136()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S136");
@@ -752,6 +773,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S138()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S138");
@@ -778,6 +800,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S14()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S14");
@@ -815,6 +838,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S140()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S140");
@@ -841,6 +865,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S142()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S142");
@@ -867,6 +892,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S144()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S144");
@@ -893,6 +919,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S146()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S146");
@@ -919,6 +946,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S148()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S148");
@@ -945,6 +973,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S150()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S150");
@@ -971,6 +1000,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S152()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S152");
@@ -997,6 +1027,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S154()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S154");
@@ -1022,6 +1053,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S156()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S156");
@@ -1048,6 +1080,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S158()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S158");
@@ -1074,6 +1107,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S16()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S16");
@@ -1111,6 +1145,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S160()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S160");
@@ -1137,6 +1172,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S162()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S162");
@@ -1163,6 +1199,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S164()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S164");
@@ -1189,6 +1226,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S166()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S166");
@@ -1215,6 +1253,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S168()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S168");
@@ -1240,6 +1279,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S170()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S170");
@@ -1266,6 +1306,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S172()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S172");
@@ -1292,6 +1333,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S174()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S174");
@@ -1318,6 +1360,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S18()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S18");
@@ -1355,6 +1398,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S2()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S2");
@@ -1392,6 +1436,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S20()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S20");
@@ -1429,6 +1474,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S22()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S22");
@@ -1462,6 +1508,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S24()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S24");
@@ -1496,6 +1543,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S26()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S26");
@@ -1533,6 +1581,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S28()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S28");
@@ -1570,6 +1619,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S30()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S30");
@@ -1607,6 +1657,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S32()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S32");
@@ -1644,6 +1695,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S34()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S34");
@@ -1681,6 +1733,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S36()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S36");
@@ -1718,6 +1771,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S38()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S38");
@@ -1755,6 +1809,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S4()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S4");
@@ -1792,6 +1847,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S40()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S40");
@@ -1829,6 +1885,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S42()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S42");
@@ -1866,6 +1923,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S44()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S44");
@@ -1903,6 +1961,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S46()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S46");
@@ -1936,6 +1995,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S48()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S48");
@@ -1970,6 +2030,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S50()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S50");
@@ -1995,6 +2056,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S52()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S52");
@@ -2032,6 +2094,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S54()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S54");
@@ -2069,6 +2132,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S56()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S56");
@@ -2107,6 +2171,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S58()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S58");
@@ -2145,6 +2210,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S6()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S6");
@@ -2182,6 +2248,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S60()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S60");
@@ -2219,6 +2286,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S62()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S62");
@@ -2244,6 +2312,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S64()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S64");
@@ -2270,6 +2339,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S66()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S66");
@@ -2296,6 +2366,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S68()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S68");
@@ -2321,6 +2392,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S70()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S70");
@@ -2346,6 +2418,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S72()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S72");
@@ -2372,6 +2445,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S74()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S74");
@@ -2398,6 +2472,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S76()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S76");
@@ -2424,6 +2499,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S78()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S78");
@@ -2450,6 +2526,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADLDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S8()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S8");
@@ -2487,6 +2564,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S80()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S80");
@@ -2513,6 +2591,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S82()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S82");
@@ -2539,6 +2618,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S84()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S84");
@@ -2565,6 +2645,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S86()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S86");
@@ -2591,6 +2672,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S88()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S88");
@@ -2617,6 +2699,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S90()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S90");
@@ -2642,6 +2725,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S92()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S92");
@@ -2668,6 +2752,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S94()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S94");
@@ -2694,6 +2779,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S96()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S96");
@@ -2720,6 +2806,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         [TestCategory("MS-ADTS-Security_ADDS")]
         [TestCategory("DomainWin2008R2")]
         [TestMethod]
+        [DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
         public void Security_TCSicilyAuth_2K8R2S98()
         {
             this.Manager.BeginTest("TCSicilyAuth_2K8R2S98");

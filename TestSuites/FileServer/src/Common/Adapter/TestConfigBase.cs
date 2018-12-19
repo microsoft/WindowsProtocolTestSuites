@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Security;
+using Microsoft.Protocols.TestTools.StackSdk;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 {
@@ -202,14 +203,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         {
             get
             {
-                return IPAddress.Parse(GetProperty("ClientNic1IPAddress"));
+                var result = GetProperty("ClientNic1IPAddress").ParseIPAddress();
+                Site.Assume.IsTrue(result != IPAddress.None, "ClientNic1IPAddress should be a valid IP address or a resolvable host name!");
+                return result;
             }
         }
         public IPAddress ClientNic2IPAddress
         {
             get
             {
-                return IPAddress.Parse(GetProperty("ClientNic2IPAddress"));
+                var result = GetProperty("ClientNic2IPAddress", false).ParseSecondaryIPAddress();
+                Site.Assume.IsTrue(result != IPAddress.None, "ClientNic2IPAddress should be a valid IP address or a resolvable host name with at least two IP addresses!");
+                return result;
             }
         }
         #endregion
@@ -292,12 +297,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         {
             get
             {
-                string ipaddress = GetProperty("SutIPAddress", false);
-                if (string.IsNullOrEmpty(ipaddress))
-                {
-                    return IPAddress.None;
-                }
-                return IPAddress.Parse(ipaddress);
+                var result = GetProperty("SutIPAddress").ParseIPAddress();
+                Site.Assume.IsTrue(result != IPAddress.None, "SutIPAddress should be a valid IP address or a resolvable host name!");
+                return result;
             }
         }
 
@@ -378,23 +380,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         {
             get
             {
-                IPAddress caShareServerIP;
-                if (IPAddress.TryParse(CAShareServerName, out caShareServerIP))
-                {
-                    return caShareServerIP;
-                }
-                else
-                {
-                    try
-                    {
-                        caShareServerIP = Dns.GetHostEntry(CAShareServerName).AddressList[0];
-                    }
-                    catch
-                    {
-                        throw new Exception(string.Format("Cannot resolve IP address of CAShareServerName ({0}) from DNS.", CAShareServerName));
-                    }
-                    return caShareServerIP;
-                }
+                var result = CAShareServerName.ParseIPAddress();
+                Site.Assume.IsTrue(result != IPAddress.None, "CAShareServerIP should be a valid IP address or a resolvable host name!");
+                return result;
             }
         }
 
@@ -468,7 +456,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 }
                 else
                 {
-                    Site.Assert.Inconclusive("The value of {0} is empty.", propertyName);                
+                    Site.Assert.Inconclusive("The value of {0} is empty.", propertyName);
                 }
             }
 
@@ -490,7 +478,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         {
             List<T> list = new List<T>();
             string propertyValue = GetProperty(property, false);
-            if(string.IsNullOrEmpty(propertyValue)) return list;
+            if (string.IsNullOrEmpty(propertyValue)) return list;
 
             string[] values = propertyValue.Split(';');
             foreach (var value in values)
@@ -594,10 +582,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// Validate IOCTL and Dialect compatibility 
         /// </summary>        
         /// <param name="IOCTL">The IOCTL to check against dialect</param>        
-        public void CheckDialectIOCTLCompatibility( CtlCode_Values IOCTL)
+        public void CheckDialectIOCTLCompatibility(CtlCode_Values IOCTL)
         {
             switch (IOCTL)
-            {      
+            {
                 case CtlCode_Values.FSCTL_VALIDATE_NEGOTIATE_INFO:
                     // FSCTL_VALIDATE_NEGOTIATE_INFO is not supported by SMB311 any more
                     if (MaxSmbVersionSupported >= DialectRevision.Smb311 && MaxSmbVersionClientSupported >= DialectRevision.Smb311)
@@ -605,8 +593,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                         Site.Assert.Inconclusive("The VALIDATE_NEGOTIATE_INFO request is valid for the client and servers which implement the SMB 3.0 and SMB 3.0.2 dialects");
                     }
                     break;
-                // Add other IOCTL and Dialect compatibility validation if any.
-            }            
+                    // Add other IOCTL and Dialect compatibility validation if any.
+            }
         }
         public void CheckCapabilities(NEGOTIATE_Response_Capabilities_Values capabilities)
         {
@@ -637,6 +625,33 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             if (!SendSignedRequest)
             {
                 Site.Assert.Inconclusive("Test case is applicable for signed request.");
+            }
+        }
+
+        /// <summary>
+        /// Check values of IsGlobalEncryptDataEnabled and IsGlobalRejectUnencryptedAccessEnabled for those part encryption required test cases
+        /// Such as encrypt on one channel, encrypt at first and unencrypt later
+        /// </summary>
+        /// <param name="selectedDialect"></param>
+        public void CheckServerEncrypt(DialectRevision selectedDialect = DialectRevision.Smb2Unknown)
+        {
+            if (this.IsGlobalEncryptDataEnabled)
+            {
+                if (selectedDialect == DialectRevision.Smb2Unknown)
+                {
+                    selectedDialect = MaxSmbVersionSupported < MaxSmbVersionClientSupported ? MaxSmbVersionSupported : MaxSmbVersionClientSupported;
+                }
+                if (selectedDialect < DialectRevision.Smb30)
+                {
+                    if (this.IsGlobalRejectUnencryptedAccessEnabled)
+                    {
+                        Site.Assert.Inconclusive("Test case is not applicable when dialect is less than SMB 3.0, both IsGlobalEncryptDataEnabled and IsGlobalRejectUnencryptedAccessEnabled set to true.");
+                    }
+                }
+                else
+                {
+                    Site.Assert.Inconclusive("Test case is not applicable when dialect is SMB 3.0 or later and IsGlobalEncryptDataEnabled set to true.");
+                }
             }
         }
 
@@ -681,5 +696,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// Windows Server 2016
         /// </summary>
         WindowsServer2016 = 0x10000008,
+
+        /// <summary>
+        /// Windows Server v1709
+        /// </summary>
+        WindowsServerV1709 = 0x10000009,
+
+        /// <summary>
+        /// Windows Server v1803
+        /// </summary>
+        WindowsServerV1803 = 0x1000000A,
+
+        /// <summary>
+        /// Windows Server 2019 
+        /// </summary>
+        WindowsServer2019 = 0x1000000B,
     }
 }

@@ -223,6 +223,9 @@ Function Phase2
     }      
     switch -Exact ($osVersion)
     {
+        "Winv1803" {
+            $forestFunctionLv = "7"
+            }
         "Win2016" {
             $forestFunctionLv = "7"
             }
@@ -431,6 +434,19 @@ Function Phase2
         } 
         sleep 15
     }
+
+    # Create Managed Service Account [MS-APDS]
+    Write-Log "Create Managed Service Account"
+    $ManagedServiceAccountName = $ParamArray["msaname"]
+    $ManagedServiceAccountPwd = $ParamArray["msapassword"]
+    Write-Log "Account name`: $ManagedServiceAccountName"
+    Write-Log "Account password`: $ManagedServiceAccountPwd"
+
+    Add-KdsRootKey -EffectiveTime ((Get-Date).AddHours(-10))
+    New-ADServiceAccount -Name $ManagedServiceAccountName -RestrictToSingleComputer -AccountPassword $(ConvertTo-SecureString -AsPlainText $ManagedServiceAccountPwd -Force) -Enabled $true
+    $ServiceAccount = Get-ADServiceAccount -Identity $ManagedServiceAccountName
+    $ComputerInstance = Get-ADComputer -Identity $ParamArray["clientname"]
+    Add-ADComputerServiceAccount -Identity $ComputerInstance -ServiceAccount $ServiceAccount
 }
 
 #-----------------------------------------------------------------------------

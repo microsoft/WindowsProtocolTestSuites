@@ -294,6 +294,78 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestCategory(TestCategories.Smb30)]
         [TestCategory(TestCategories.DirectoryLeasing)]
         [TestCategory(TestCategories.Positive)]
+        [Description("Test whether server can handle READ lease break notification triggered by adding child item on a directory.")]
+        public void DirectoryLeasing_BreakReadCachingByChildAdded()
+        {
+            #region Prepare test directory and test file
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create test directory and test file.");
+
+            uncSharePath = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            fileName = "DirectoryLeasing_BreakReadCachingByChildAdded_" + Guid.NewGuid().ToString() + ".txt";
+            testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            sutProtocolController.CreateFile(uncSharePath + "\\" + testDirectory, fileName, string.Empty);
+            #endregion
+
+            #region Initialize test clients
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Initialize test clients.");
+
+            Guid clientGuidRequestingLease = Guid.NewGuid();
+            Smb2FunctionalClient clientRequestingLease = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+
+            Guid clientGuidTriggeringBreak = Guid.NewGuid();
+            Smb2FunctionalClient clientTriggeringBreak = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+
+            clientRequestingLease.Smb2Client.LeaseBreakNotificationReceived +=
+                new Action<Packet_Header, LEASE_BREAK_Notification_Packet>(base.OnLeaseBreakNotificationReceived);
+
+            clientRequestingLease.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            clientTriggeringBreak.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            #endregion
+
+            #region CREATE an open to request lease
+            uint treeIdClientRequestingLease;
+            FILEID fileIdClientRequestingLease;
+            LeaseStateValues requestedLeaseState = LeaseStateValues.SMB2_LEASE_READ_CACHING;
+
+            // Add expected NewLeaseState
+            expectedNewLeaseStates.Add(clientGuidRequestingLease, LeaseStateValues.SMB2_LEASE_NONE);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Client attempts to request lease {0} on directory {1}", requestedLeaseState.ToString(), testDirectory);
+            status = CreateOpenFromClient(clientRequestingLease, clientGuidRequestingLease, testDirectory, true, requestedLeaseState, AccessMask.GENERIC_READ, out treeIdClientRequestingLease, out fileIdClientRequestingLease);
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_SUCCESS,
+                status,
+                "Create an open to {0} should succeed, actual status is {1}", testDirectory, Smb2Status.GetStatusCode(status));
+            #endregion
+
+            // Create a timer that signals the delegate to invoke CheckBreakNotification
+            Timer timer = new Timer(base.CheckBreakNotification, treeIdClientRequestingLease, 0, Timeout.Infinite);
+            base.clientToAckLeaseBreak = clientRequestingLease;
+
+            #region Attempt to trigger lease break by deleting child item
+            uint treeIdClientTriggeringBreak;
+            FILEID fileIdClientTriggeringBreak;
+            AccessMask accessMaskTrigger = AccessMask.FILE_ADD_FILE;
+            string targetName = testDirectory + "\\" + fileName;
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "A separate client attempts to access directory {0} to trigger lease break by adding inner file ", testDirectory);
+            status = CreateOpenFromClient(clientTriggeringBreak, clientGuidTriggeringBreak, targetName, false, LeaseStateValues.SMB2_LEASE_NONE, accessMaskTrigger, out treeIdClientTriggeringBreak, out fileIdClientTriggeringBreak);
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_SUCCESS,
+                status,
+                "Create an open to {0} should succeed, actual status is {1}", targetName, Smb2Status.GetStatusCode(status));
+
+            ClientTearDown(clientTriggeringBreak, treeIdClientTriggeringBreak, fileIdClientTriggeringBreak);
+            #endregion
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb30)]
+        [TestCategory(TestCategories.DirectoryLeasing)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Test whether server can handle READ lease break notification triggered by modifying child item on a directory.")]
         public void DirectoryLeasing_BreakReadCachingByChildModified()
         {
@@ -463,8 +535,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             #region Prepare test directory
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create test directory.");
             uncSharePath = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
-            string parentDirectory = "ParentDirectory_" + Guid.NewGuid().ToString();
-            sutProtocolController.CreateDirectory(uncSharePath, parentDirectory);
+            string parentDirectory = CreateTestDirectory(uncSharePath);
             testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare + "\\" + parentDirectory);
             #endregion
 
@@ -553,6 +624,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             #endregion
 
             #endregion
+
+            ClientTearDown(clientRequestingLease, treeIdClientRequestingLease, fileIdClientRequestingLease);
+            ClientTearDown(clientTriggeringBreak, treeIdClientTriggeringBreak, fileIdClientTriggeringBreak);
         }
 
         [TestMethod]
@@ -565,8 +639,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             #region Prepare test directory
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create test directory.");
             uncSharePath = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
-            string parentDirectory = "ParentDirectory_" + Guid.NewGuid().ToString();
-            sutProtocolController.CreateDirectory(uncSharePath, parentDirectory);
+            string parentDirectory = CreateTestDirectory(uncSharePath);
             testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare + "\\" + parentDirectory);
             #endregion
 
@@ -662,8 +735,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 out fileIdClientTriggeringBreak,
                 out serverCreateContexts,
                 RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                new Smb2CreateContextRequest[] 
-                { 
+                new Smb2CreateContextRequest[]
+                {
                     new Smb2CreateRequestLeaseV2
                     {
                         LeaseKey = clientGuidTriggeringBreak,
@@ -673,6 +746,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 accessMask: accessMaskTrigger);
             #endregion
             #endregion
+
+            ClientTearDown(clientRequestingLease, treeIdClientRequestingLease, fileIdClientRequestingLease);
+            ClientTearDown(clientTriggeringBreak, treeIdClientTriggeringBreak, fileIdClientTriggeringBreak);
         }
 
         [TestMethod]
@@ -742,6 +818,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 RequirementCategory.STATUS_SHARING_VIOLATION.Id,
                 RequirementCategory.STATUS_SHARING_VIOLATION.Description);
             #endregion
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Tear down Client1 by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            ClientTearDown(clientRequestingLease, treeIdClientRequestingLease, fileIdClientRequestingLease);
         }
 
         [TestMethod]
@@ -844,8 +925,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 out fileId,
                 out serverCreateContexts,
                 RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                new Smb2CreateContextRequest[] 
-                { 
+                new Smb2CreateContextRequest[]
+                {
                     new Smb2CreateRequestLeaseV2
                     {
                         LeaseKey = clientGuid,
@@ -970,7 +1051,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         private void VerifyGrantedLeaseState(LeaseStateValues requestedLeaseState, LeaseStateValues expectedGrantedLeaseState)
         {
             Guid clientGuid = Guid.NewGuid();
-            string testDirectory = "DirectoryLeasing_GrantedLeaseState_" + clientGuid.ToString();
 
             #region Connect to share
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Connect to share {0}.", uncSharePath);
@@ -1031,13 +1111,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             FILEID fileId;
             status = client.Create(
                 treeId,
-                testDirectory,
+                GetTestDirectoryName(uncSharePath),
                 CreateOptions_Values.FILE_DIRECTORY_FILE,
                 out fileId,
                 out serverCreateContexts,
                 RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                new Smb2CreateContextRequest[] 
-                { 
+                new Smb2CreateContextRequest[]
+                {
                     new Smb2CreateRequestLeaseV2
                     {
                         LeaseKey = clientGuid,
@@ -1075,6 +1155,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 }
             }
             #endregion
+
+            ClientTearDown(client, treeId, fileId);
         }
 
         #endregion

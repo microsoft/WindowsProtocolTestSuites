@@ -17,6 +17,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Send FSCTL_QUERY_ALLOCATED_RANGES request to a file and check if AllocatedRanges are supported.")]
         public void FsCtl_Query_AllocatedRanges_File_IsAllocatedRangesSupported()
         {
@@ -26,6 +28,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Send FSCTL_QUERY_ALLOCATED_RANGES request to a directory and check if AllocatedRanges are supported.")]
         public void FsCtl_Query_AllocatedRanges_Dir_IsAllocatedRangesSupported()
         {

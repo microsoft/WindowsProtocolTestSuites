@@ -38,6 +38,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.RsvdVersion1)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Check if server handles SHARED_VIRTUAL_DISK_SUPPORT request to a shared virtual disk file correctly.")]
         public void BVT_QuerySharedVirtualDiskSupport()
         {
@@ -50,7 +51,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
 
             SVHDX_SHARED_VIRTUAL_DISK_SUPPORT_RESPONSE? response;
             uint status = client.QuerySharedVirtualDiskSupport(out response);
-            uint sharedVirtualDiskSupport = TestConfig.ServerServiceVersion == (uint)ServerServiceVersion.ProtocolVersion1 ? (uint)SharedVirtualDiskSupported.SharedVirtualDiskSupported : (uint)SharedVirtualDiskSupported.SharedVirtualDiskCDPSnapshotsSupported;
+            uint sharedVirtualDiskSupport = TestConfig.ServerServiceVersion == (uint)ServerServiceVersion.ProtocolVersion1 ? (uint)SharedVirtualDiskSupported.SharedVirtualDiskSupported : (uint)SharedVirtualDiskSupported.SharedVirtualDiskSnapshotsSupported;
 
             BaseTestSite.Assert.AreEqual(
                 (uint)Smb2Status.STATUS_SUCCESS,

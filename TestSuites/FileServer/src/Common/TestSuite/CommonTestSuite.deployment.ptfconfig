@@ -43,7 +43,7 @@
         <Description>
           The longer timeout in seconds for the connection against SUT
         </Description>
-      </Property>      
+      </Property>
 
       <Property name="RetryInterval" value="10">
         <Description>
@@ -67,7 +67,7 @@
 
       <Property name="SutIPAddress" value="192.168.1.11" >
         <Description>
-          IP address of SUT to establish connections
+          IP address or Host Name of SUT to establish connections
         </Description>
       </Property>
 
@@ -117,7 +117,7 @@
         </Description>
       </Property>
 
-      <Property name="MaxSmbVersionSupported" value="Smb302">
+      <Property name="MaxSmbVersionSupported" value="Smb311">
         <Choice>Smb2002, Smb21, Smb30, Smb302, Smb311</Choice>
         <Description>
           Max version which the server supports: Smb2002, Smb21, Smb30, Smb302, Smb311
@@ -244,19 +244,21 @@
 
       <Property name="ClientNic1IPAddress" value="192.168.1.111">
         <Description>
-          One IP address on local test drive computer to establish connections to SUT
+          One IP address or host name on local test drive computer to establish connections to SUT
         </Description>
       </Property>
 
       <Property name="ClientNic2IPAddress" value="192.168.2.111">
         <Description>
-          Another IP address on local test drive computer to establish connections to SUT
-          If test drive computer only has one IP address, set it to the same value of ClientNic1IPAddress
+          Another IP address or host name on local test drive computer to establish connections to SUT
+          If test drive computer only has one IP address, leave it blank
         </Description>
       </Property>
 
-      <Property name="Platform" value="WindowsServer2012R2">
-        <Choice>NonWindows,WindowsServer2008,WindowsServer2008R2,WindowsServer2012,WindowsServer2012R2,WindowsServer2016</Choice>
+      <Property name="Platform" value="WindowsServer2016">
+        <Choice>
+          NonWindows,WindowsServer2008,WindowsServer2008R2,WindowsServer2012,WindowsServer2012R2,WindowsServer2016,WindowsServerV1709,WindowsServerV1803,WindowsServer2019
+        </Choice>
         <Description>
           Platform type of the SUT
         </Description>

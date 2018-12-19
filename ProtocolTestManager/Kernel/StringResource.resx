@@ -170,18 +170,22 @@
     <value>Failed to load the PTFConfig files:
 {0}</value>
   </data>
+  <data name="LoadFeatureMappingError" xml:space="preserve">
+    <value>Failed to load the feature mapping from the config.xml:
+{0}</value>
+  </data>
   <data name="EndpointRegex" xml:space="preserve">
     <value>(Server)|(Client)</value>
   </data>
   <data name="VersionRegex" xml:space="preserve">
-    <value>\d\.\d\.\d{1,4}\.\d</value>
+    <value>\d+\.\d+\.\d+\.\d+</value>
   </data>
   <data name="DirectoryNotFound" xml:space="preserve">
     <value>Directory {0} is not found.</value>
   </data>
   <data name="VSTestLocation" xml:space="preserve">
-    <value>..\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe</value>
-    <comment>Relative path to the tools folder in common</comment>
+    <value>Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe</value>
+    <comment>Relative path to the VS installation folder</comment>
   </data>
   <data name="VSTestNotInstalled" xml:space="preserve">
     <value>Cannot find the test engine vstest.console.exe.</value>
@@ -211,5 +215,11 @@ The test suite is {2} {3}.</value>
   </data>
   <data name="PassedTag" xml:space="preserve">
     <value>[TestPassed]</value>
+  </data>
+  <data name="Vs2017RegPath32" xml:space="preserve">
+    <value>SOFTWARE\Microsoft\VisualStudio\\SxS\VS7</value>
+  </data>
+  <data name="Vs2017RegPath64" xml:space="preserve">
+    <value>SOFTWARE\WOW6432Node\Microsoft\VisualStudio\SxS\VS7</value>
   </data>
 </root>

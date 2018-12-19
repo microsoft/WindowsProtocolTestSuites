@@ -67,6 +67,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.ShareAccessCheck)]
+        [TestCategory(TestCategories.NonSmb)]
         [Description("This test case is designed to test whether a user can access a share when " +
             "ACCESS_ALLOWED_ACE with user SID exists in share Security Descriptor.")]
         public void BVT_SharePermission_AccessAllow_UserSid()
@@ -91,6 +92,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.ShareAccessCheck)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether a user can access a share when " +
             "ACCESS_ALLOWED_ACE with user's group SID exists in share Security Descriptor.")]
@@ -118,6 +120,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.ShareAccessCheck)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether a user is denied to access a share when " +
             "ACCESS_DENIED_ACE with user SID exists in share Security Descriptor.")]
@@ -143,6 +146,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.ShareAccessCheck)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether a user is denied to access a share when " +
             "ACCESS_DENIED_ACE with user's group SID exists in share Security Descriptor.")]
@@ -170,6 +174,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.ShareAccessCheck)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether a user is denied to access a share when " +
             "user SID does not exist in share Security Descriptor.")]
@@ -195,6 +200,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.ShareAccessCheck)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether a user can access a share when " +
             "ACCESS_ALLOWED_ACE with user SID exists in share Security Descriptor.")]
@@ -222,6 +228,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.ShareAccessCheck)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This case is designed to test whether server can handle file deletion request when Treeconnect.MaximalAccess does not include DELETE or GENERIC_ALL.")]
         public void SharePermission_CreateClose_DeleteFile_MaximalAccessNotIncludeDeleteOrGenericAll()
@@ -254,7 +261,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                         "Treeconnect.MaximalAccess does not include DELETE or GENERIC_ALL.");
                 });
 
-                string fileName = string.Format("SharePermission_CreateClose_InvalidMaximalAccess_{0}.txt", Guid.NewGuid());
+                string fileName = GetTestFileName(shareUncPath);
                 FILEID fileId;
                 Smb2CreateContextResponse[] createContexResponse;
                 BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create the file: {0}", fileName);

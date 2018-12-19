@@ -43,9 +43,11 @@
     <Compile Include="EndpointDlg.wxs" />
     <Compile Include="Kerberos-TestSuite-ServerEP.wxs" />
     <Compile Include="TestSuiteMiscFiles.wxs" />
+    <Compile Include="TestSuitePtfconfigFiles.wxs" />
     <Compile Include="TestSuitePrivacyStatementDlg.wxs" />
     <Compile Include="TestSuitePrivacyStatementLowMsiVersionDlg.wxs" />
     <Compile Include="TestSuiteProduct.wxs" />
+    <Compile Include="CommonBatch.wxs" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixVSExtension">
@@ -104,7 +106,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\ProtoSDK\KerberosLib\KerberosLib.csproj">
       <Name>KerberosLib</Name>
-      <Project>{3f0b2460-33f7-4a58-9cb5-bb38914c7845}</Project>
+      <Project>{F1EDA208-50B6-4501-A9D8-D18D3434D587}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
@@ -236,6 +238,7 @@
     <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\Kerberos\Bin" -out TestSuiteBinFiles.wxs -template fragment -gg -cg BIN_FILES -dr TESTSUITE_BIN_DIR -var wix.TESTSUITE_BIN_DIR -sreg -sfrag -srd' />
     <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" -out TestSuiteScripts.wxs -template fragment -gg -cg TESTSUITE_SCRIPTS -dr TESTSUITE_SCRIPTS_DIR -var wix.TESTSUITE_SCRIPTS_DIR -sreg -sfrag -srd' />
     <Exec Command='"$(WIX)\bin\heat.exe" dir ..\Batch -out TestSuiteBatchFiles.wxs -template fragment -gg -cg BATCH_FILES -dr TESTSUITE_BATCH_DIR -var wix.TESTSUITE_BATCH_DIR -sreg -sfrag -srd' />
+    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\common&quot; -out CommonBatch.wxs -template fragment -gg -cg COMMON_BATCH_FILES -dr TESTSUITE_COMMON_SCRIPTS_DIR -var wix.TESTSUITE_COMMON_SCRIPTS_DIR -sreg -sfrag -srd" />
   </Target>
   <Import Project="$(WixTargetsPath)" />
   <Target Name="AfterBuild">
@@ -244,6 +247,7 @@
   <ItemGroup>
     <KerberosDataFiles Include="..\..\Setup\Data\*" />
     <KerberosScriptFiles Include="..\..\Setup\Scripts\*" />
+    <ClientControlScriptFiles Include="..\Adapter\IClientControlAdapter\*.ps1" />
   </ItemGroup>
   <Target Name="CopyFilesToBin" BeforeTargets="GenDeployWxsFile" >
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-Parameter.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
@@ -252,8 +256,25 @@
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\TurnOff-FileReadonly.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Write-Info.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-OSVersionNumber.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Change-DomainUserPassword.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-DomainControllerParameters.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\GetVMNameByComputerName.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\GetVmParameters.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\PromoteDomainController.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\RestartAndRun.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\RestartAndRunFinish.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-AutoLogon.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-ExecutionPolicy-Unrestricted.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-NetworkConfiguration.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Disable_Firewall.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Join-Domain.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Check-ReturnValue.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Install-ADDS.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Install-IIS.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Install-FSRM.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
     <Copy SourceFiles="@(KerberosDataFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
     <Copy SourceFiles="@(KerberosScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Scripts" />
+	  <Copy SourceFiles="@(ClientControlScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Bin\Adapter\IClientControlAdapter" />	
     <Copy SourceFiles="..\ServerLocalTestRun.testrunconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Bin" />
     <Copy SourceFiles="..\TestSuite\Kerberos_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Bin" />
     <Copy SourceFiles="..\TestSuite\Kerberos_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\Kerberos\Bin" />

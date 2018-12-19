@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?define SRCDIR=$(env.TestSuiteRoot)\drop\ProtocolTestManager?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="BRANCHCACHEDOCFOLDER">
+            <Component Id="cmp78671A98FC03470EB20A25EB8FDADAD2" Guid="{5081B4E0-07BF-4C29-9E03-C2B235A09634}">
+                <File Id="fil5D0CD313DCFA49BE8193E238A9841C19" Source="..\Plugins\BranchCachePlugin\BranchCachePlugin\Docs\index.html" />
+				<File Id="fil8B8AA542ADC643899E7E03F528B6C3A8" Source="..\Plugins\BranchCachePlugin\BranchCachePlugin\Docs\arrow_right.png" />
+				<File Id="fil9472005D0C124AEE92B3E8742956D1E3" Source="..\Plugins\BranchCachePlugin\BranchCachePlugin\Docs\deployment.html" />
+				<File Id="fil9618851F8A9E475EB22F5F46D09B7B18" Source="..\Plugins\BranchCachePlugin\BranchCachePlugin\Docs\domain.html" />
+				<File Id="fil87354620A068455F8382DBDFE5EFA48E" Source="..\Plugins\BranchCachePlugin\BranchCachePlugin\Docs\domain.png" />
+				<File Id="fil0237CDF0BB4A4FC7BA69F88D3B05EF29" Source="..\Plugins\BranchCachePlugin\BranchCachePlugin\Docs\domain_setupSUT.html" />
+				<File Id="fil95575AFF6F4C45F3A9EE1E3A3A4A44EE" Source="..\Plugins\BranchCachePlugin\BranchCachePlugin\Docs\note.png" />
+				<File Id="fil5762A4653FBC479A8920C3315219FD62" Source="..\Plugins\BranchCachePlugin\BranchCachePlugin\Icons\supported.png" />
+				<File Id="fil991A450FAD35407886225DBE6B57BF76" Source="..\Plugins\BranchCachePlugin\BranchCachePlugin\Icons\undetected.png" />
+				<File Id="fil2980D605381B4305B16FBC31578EC04F" Source="..\Plugins\BranchCachePlugin\BranchCachePlugin\Icons\unsupported.png" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="LIBFOLDER">
+	        <?if $(env.DEBUGVER) = 1?>
+                <Component Id="BranchCachePlugin.pdb" Guid="{15E37384-5DAC-4B67-916A-2CAE94A1F612}">
+                    <File Id="BranchCachePlugin.pdb" Source="$(var.SRCDIR)\lib\BranchCachePlugin.pdb" />
+                </Component>
+            <?endif ?>
+            <Component Id="BranchCachePlugin.dll" Guid="{92B4D3FB-D543-4BEA-BB72-A7195A910CAA}">
+                <File Id="BranchCachePlugin.dll" Source="$(var.SRCDIR)\lib\BranchCachePlugin.dll" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="BRANCHCACHECONFIGFOLDER">
+            <Component Id="BranchCacheConfigFile" Guid="{AA36A832-2FDE-4116-B459-6962FB7BBD1B}">
+                <File Id="BranchCacheConfigFile" Source="..\Plugins\BranchCachePlugin\BranchCachePlugin\config.xml" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="BRANCHCACHE_PLUGIN">
+            <ComponentRef Id="cmp78671A98FC03470EB20A25EB8FDADAD2" />
+            <ComponentRef Id="BranchCachePlugin.dll" />
+            <ComponentRef Id="BranchCacheConfigFile" />
+	        <?if $(env.DEBUGVER) = 1?>
+              <ComponentRef Id="BranchCachePlugin.pdb" />
+            <?endif ?>
+        </ComponentGroup>
+    </Fragment>
+</Wix>

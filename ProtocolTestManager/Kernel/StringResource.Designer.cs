@@ -19,7 +19,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class StringResource {
@@ -208,6 +208,16 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to load the feature mapping from the config.xml:
+        ///{0}.
+        /// </summary>
+        internal static string LoadFeatureMappingError {
+            get {
+                return ResourceManager.GetString("LoadFeatureMappingError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to load the filter definitions from the config.xml:
         ///{0}.
         /// </summary>
@@ -293,7 +303,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to \d\.\d\.\d{1,4}\.\d.
+        ///   Looks up a localized string similar to \d+\.\d+\.\d+\.\d+.
         /// </summary>
         internal static string VersionRegex {
             get {
@@ -302,7 +312,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ..\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe.
+        ///   Looks up a localized string similar to Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe.
         /// </summary>
         internal static string VSTestLocation {
             get {
@@ -316,6 +326,24 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         internal static string VSTestNotInstalled {
             get {
                 return ResourceManager.GetString("VSTestNotInstalled", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to \SOFTWARE\Microsoft\VisualStudio\\SxS\VS7.
+        /// </summary>
+        internal static string Vs2017RegPath32 {
+            get {
+                return ResourceManager.GetString("Vs2017RegPath32", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to \SOFTWARE\WOW6432Node\Microsoft\VisualStudio\SxS\VS7.
+        /// </summary>
+        internal static string Vs2017RegPath64 {
+            get {
+                return ResourceManager.GetString("Vs2017RegPath64", resourceCulture);
             }
         }
         

@@ -61,9 +61,7 @@ namespace Microsoft.Protocols.TestManager.ADFSPIPPlugin
         [PtfConfig("ADFS.EncryptCert")]
         public string AdfsEncryptCert { get; set; }
 
-        // FIXME: should determine ADFS is 2016
-        // change this once Test Suite is updated
-        [PtfConfig("SUT.IsWin2016")]
+        [PtfConfig("ADFS.IsWin2016")]
         public string AdfsIsWin2016 { get; set; }
 
         [PtfConfig("ADFS.StoreEntryKey_2012R2")]

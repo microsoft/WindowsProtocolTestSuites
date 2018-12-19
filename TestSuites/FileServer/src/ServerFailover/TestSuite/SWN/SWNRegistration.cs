@@ -101,6 +101,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Swn)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("Register with WitnessrRegister and invalid netname.")]
         public void SWNRegistration_InvalidNetName()
@@ -110,6 +111,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Swn)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("Register with WitnessrRegister and invalid version.")]
         public void SWNRegistration_InvalidVersion()
@@ -119,6 +121,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Swn)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("Register with WitnessrRegister and invalid IpAddress.")]
         public void SWNRegistration_InvalidIpAddress()
@@ -128,6 +131,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Swn)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("Register with WitnessrRegister and Unregister the client twice.")]
         public void SWNRegistration_InvalidUnRegister()
@@ -137,6 +141,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Swn)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedContext)]
         [Description("Assure that server responses correctly with invalid context.")]
         public void SWNAsyncNotification_InvalidRequest()
@@ -146,6 +151,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Swn)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("Register with WitnessrRegisterEx and invalid NetName.")]
         public void SWNRegistrationEx_InvalidNetName()
@@ -155,6 +161,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Swn)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("Register with WitnessrRegisterEx and invalid version.")]
         public void SWNRegistrationEx_InvalidVersion()
@@ -164,6 +171,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Swn)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("Register with WitnessrRegisterEx and invalid IpAddress.")]
         public void SWNRegistrationEx_InvalidIpAddress()
@@ -173,6 +181,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Swn)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("Register with WitnessrRegisterEx and Unregister the client twice.")]
         public void SWNRegistrationEx_InvalidUnRegister()
@@ -182,6 +191,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Swn)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("Register with invalid sharename.")]
         public void SWNRegistrationEx_InvalidShareName()
@@ -191,6 +201,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Swn)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Compatibility)]
         [Description("Get Timeout notification on scaleout cluster server.")]
         public void WitnessrRegisterEx_SWNAsyncNotification_Timeout()

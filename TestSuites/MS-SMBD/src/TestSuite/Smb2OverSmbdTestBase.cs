@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Protocols.TestSuites.Smbd.Adapter;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
@@ -9,46 +8,12 @@ using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
-using System.Threading;
 
 namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
 {
     [TestClass]
-    public class Smb2OverSmbdTestBase : TestClassBase
+    public class Smb2OverSmbdTestBase : SmbdTestBase
     {
-        #region Fileds
-        protected SmbdAdapter smbdAdapter;
-        #endregion
-
-        #region Test Initialization and Cleanup
-        protected override void TestInitialize()
-        {
-            base.TestInitialize();
-
-            this.smbdAdapter = new SmbdAdapter(BaseTestSite, LogSmbdEndpointEvent);
-        }
-
-        protected override void TestCleanup()
-        {
-            try
-            {
-                smbdAdapter.DisconnectRdma();
-            }
-            catch
-            {
-            }
-
-            smbdAdapter = null;
-
-            base.TestCleanup();
-        }
-        #endregion
-
-        protected virtual void LogSmbdEndpointEvent(string log)
-        {
-            BaseTestSite.Log.Add(LogEntryKind.Debug, string.Format("Thread 0x{0:X} - {1}", Thread.CurrentThread.ManagedThreadId, log));
-        }
-
         /// <summary>
         /// Establish SMB2 connection over RDMA and open file
         /// 1. Connect to server over RDMA
@@ -56,8 +21,8 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         /// 3. Establish SMB2 session and open file with specific dialect
         /// </summary>
         /// <param name="fileName">File name to open</param>
-        /// <param name="negotiatedDialect">Optional to set the SMB2 dialect used for SMB2 connection</param>
-        protected virtual void EstablishConnectionAndOpenFile(string fileName, DialectRevision negotiatedDialect = DialectRevision.Smb30)
+        /// <param name="negotiatedDialects">Optional to set the SMB2 dialects used for SMB2 connection</param>
+        protected virtual void EstablishConnectionAndOpenFile(string fileName, DialectRevision[] negotiatedDialects = null)
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Establish SMB2 connection over RDMA and open file " + fileName);
 
@@ -67,9 +32,13 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
 
             // SMBD Negotiate
             status = smbdAdapter.SmbdNegotiate();
+            if (status == NtStatus.STATUS_NOT_SUPPORTED)
+            {
+                BaseTestSite.Assert.Inconclusive("Requested SMB dialects are not supported.");
+            }
             BaseTestSite.Assert.AreEqual<NtStatus>(NtStatus.STATUS_SUCCESS, status, "Status of SMBD negotiate is {0}", status);
-            
-            status = smbdAdapter.Smb2EstablishSessionAndOpenFile(fileName, negotiatedDialect);
+
+            status = smbdAdapter.Smb2EstablishSessionAndOpenFile(fileName, negotiatedDialects);
             BaseTestSite.Assert.AreEqual<NtStatus>(NtStatus.STATUS_SUCCESS, status, "Status of SMB2 establish session and open file is {0}", status);
         }
 

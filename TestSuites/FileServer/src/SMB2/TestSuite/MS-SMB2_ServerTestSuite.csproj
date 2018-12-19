@@ -11,8 +11,9 @@
     <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite</RootNamespace>
     <AssemblyName>MS-SMB2_ServerTestSuite</AssemblyName>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -133,13 +136,14 @@
     <Compile Include="Compound\Compound.cs" />
     <Compile Include="CreateClose\CreateClose.cs" />
     <Compile Include="DurableHandle\SMB2DurableHandleTestBase.cs" />
+    <Compile Include="HVRS\MS-FSA_Clarification.cs" />
+    <Compile Include="HVRS\MS-SMB2_Clarification.cs" />
     <Compile Include="IOCTL\EnumerateSnapshots.cs" />
     <Compile Include="Negotiate\Negotiation.cs" />
     <Compile Include="DurableHandle\DurableHandle.cs" />
     <Compile Include="DurableHandle\DurableHandleV2.cs" />
     <Compile Include="Encryption\Encryption.cs" />
     <Compile Include="IOCTL\CopyOffload.cs" />
-    <Compile Include="IOCTL\FileLevelTrim.cs" />
     <Compile Include="IOCTL\SetGetIntegrityInformation.cs" />
     <Compile Include="IOCTL\ValidateNegotiateInfo.cs" />
     <Compile Include="Leasing\FileLeasing.cs" />
@@ -163,7 +167,9 @@
     <Compile Include="Signing\Signing.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MS-SMB2_ServerTestSuite.deployment.ptfconfig" />
+    <Content Include="MS-SMB2_ServerTestSuite.deployment.ptfconfig">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="MS-SMB2_ServerTestSuite.ptfconfig" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

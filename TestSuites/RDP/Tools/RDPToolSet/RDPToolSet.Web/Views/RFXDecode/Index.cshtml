@@ -1,0 +1,215 @@
+﻿@model RFXDecodeViewModel
+
+<div class="container">
+
+    <div id="intro">@Html.Partial("_Intro") </div>
+
+    <div id="main">
+
+        <div class="text-left">
+            <h2>Decoding Steps</h2>
+        </div>
+
+        <div class="panel-group">
+
+            @using (Html.BeginPanel(Model.Panels[Model.Steps.EncodedInput].Id, Model.Panels[Model.Steps.EncodedInput].Title))
+            {
+                <div class="content">
+                    @Html.Partial("_Tabs", Model.Panels[Model.Steps.EncodedInput].Tabs)
+                </div>
+                <!-- Parameters -->
+                <div style="display: inline-block; text-align: left; float: left">
+                    @Html.Partial("_Entropy", Model.Params)
+                    @Html.Partial("_QuantsSetting", Model.Params)
+                    @Html.Partial("_UseDecOrHex")
+                    <div class="text-right" style="float: right">
+                        @Html.ButtonFor(name: "Decode", id: "rfxdecode")
+                    </div>
+                </div>
+                
+            }
+
+            @using (Html.BeginPanel(Model.Panels[Model.Steps.EntropyDecoding].Id, Model.Panels[Model.Steps.EntropyDecoding].Title))
+            {
+                using (Html.BeginInOutTabs(Model.InPanels[Model.Steps.EntropyDecoding].Id, Model.Panels[Model.Steps.EntropyDecoding].Id + "-out"))
+                {
+                <div class="tab-pane" id="@(Model.InPanels[Model.Steps.EntropyDecoding].Id)">
+                    <div class="content input-tab-pane">
+                        @Html.Partial("_Tabs", Model.InPanels[Model.Steps.EntropyDecoding].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDecOrHex")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Clear", @class: "btn-clear")
+                        @Html.ButtonFor(name: "Recompute", @class: "btn-recompute")
+                    </div>
+                </div>
+                <div class="tab-pane active" id="@(Model.Panels[Model.Steps.EntropyDecoding].Id + "-out")">
+                    <div class="content output-tab-pane">
+                        @Html.Partial("_Tabs", Model.Panels[Model.Steps.EntropyDecoding].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDataFormatOut")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Copy", id: "btn-copy-" + Model.Panels[Model.Steps.EntropyDecoding].Id, @class: "btn-copy")
+                        @Html.ButtonFor(name: "Code", @class: "btn-source-code")
+                        @Html.ButtonFor(name: "Compare", @class: "btn-compare")
+                        <input type="hidden" name="srcUrl" value="/Static/RemoteFXCodec/RemoteFXDecoder.cs.html#RLGRDecode">
+                    </div>
+                </div>
+                }
+            }
+
+            @using (Html.BeginPanel(Model.Panels[Model.Steps.SubBandReconstruction].Id, Model.Panels[Model.Steps.SubBandReconstruction].Title))
+            {
+                using (Html.BeginInOutTabs(Model.InPanels[Model.Steps.SubBandReconstruction].Id, Model.Panels[Model.Steps.SubBandReconstruction].Id + "-out"))
+                {
+                <div class="tab-pane" id="@(Model.InPanels[Model.Steps.SubBandReconstruction].Id)">
+                    <div class="content input-tab-pane">
+                        @Html.Partial("_Tabs", Model.InPanels[Model.Steps.SubBandReconstruction].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDataFormatIn")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Clear", @class: "btn-clear")
+                        @Html.ButtonFor(name: "Recompute", @class: "btn-recompute")
+                    </div>
+                </div>
+                <div class="tab-pane active" id="@(Model.Panels[Model.Steps.SubBandReconstruction].Id + "-out")">
+                    <div class="content output-tab-pane">
+                        @Html.Partial("_Tabs", Model.Panels[Model.Steps.SubBandReconstruction].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDataFormatOut")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Copy", id: "btn-copy-" + Model.Panels[Model.Steps.SubBandReconstruction].Id, @class: "btn-copy")
+                        @Html.ButtonFor(name: "Code", @class: "btn-source-code")
+                        @Html.ButtonFor(name: "Compare", @class: "btn-compare")
+                        <input type="hidden" name="srcUrl" value="/Static/RemoteFXCodec/RemoteFXDecoder.cs.html#SubBandReconstruction">
+                    </div>
+                </div>
+                }
+            }
+
+            @using (Html.BeginPanel(Model.Panels[Model.Steps.Dequantization].Id, Model.Panels[Model.Steps.Dequantization].Title))
+            {
+                using (Html.BeginInOutTabs(Model.InPanels[Model.Steps.Dequantization].Id, Model.Panels[Model.Steps.Dequantization].Id + "-out"))
+                {
+                <div class="tab-pane" id="@(Model.InPanels[Model.Steps.Dequantization].Id)">
+                    <div class="content input-tab-pane">
+                        @Html.Partial("_Tabs", Model.InPanels[Model.Steps.Dequantization].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDataFormatIn")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Clear", @class: "btn-clear")
+                        @Html.ButtonFor(name: "Recompute", @class: "btn-recompute")
+                    </div>
+                </div>
+                <div class="tab-pane active" id="@(Model.Panels[Model.Steps.Dequantization].Id + "-out")">
+                    <div class="content output-tab-pane">
+                        @Html.Partial("_Tabs", Model.Panels[Model.Steps.Dequantization].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDataFormatOut")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Copy", id: "btn-copy-" + Model.Panels[Model.Steps.Dequantization].Id, @class: "btn-copy")
+                        @Html.ButtonFor(name: "Code", @class: "btn-source-code")
+                        @Html.ButtonFor(name: "Compare", @class: "btn-compare")
+                        <input type="hidden" name="srcUrl" value="/Static/RemoteFXCodec/RemoteFXDecoder.cs.html#Dequantization">
+                    </div>
+                </div>
+                }
+            }
+
+            @using (Html.BeginPanel(Model.Panels[Model.Steps.InverseDWT].Id, Model.Panels[Model.Steps.InverseDWT].Title))
+            {
+                using (Html.BeginInOutTabs(Model.InPanels[Model.Steps.InverseDWT].Id, Model.Panels[Model.Steps.InverseDWT].Id + "-out"))
+                {
+                <div class="tab-pane" id="@(Model.InPanels[Model.Steps.InverseDWT].Id)">
+                    <div class="content input-tab-pane">
+                        @Html.Partial("_Tabs", Model.InPanels[Model.Steps.InverseDWT].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDataFormatIn")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Clear", @class: "btn-clear")
+                        @Html.ButtonFor(name: "Recompute", @class: "btn-recompute")
+                    </div>
+                </div>
+                <div class="tab-pane active" id="@(Model.Panels[Model.Steps.InverseDWT].Id + "-out")">
+                    <div class="content output-tab-pane">
+                        @Html.Partial("_Tabs", Model.Panels[Model.Steps.InverseDWT].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDataFormatOut")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Copy", id: "btn-copy-" + Model.Panels[Model.Steps.InverseDWT].Id, @class: "btn-copy")
+                        @Html.ButtonFor(name: "Code", @class: "btn-source-code")
+                        @Html.ButtonFor(name: "Compare", @class: "btn-compare")
+                        <input type="hidden" name="srcUrl" value="/Static/RemoteFXCodec/RemoteFXDecoder.cs.html#InverseDWT">
+                    </div>
+                </div>
+                }
+            }
+
+            @using (Html.BeginPanel(Model.Panels[Model.Steps.YCbCrToRGB].Id, Model.Panels[Model.Steps.YCbCrToRGB].Title))
+            {
+                using (Html.BeginInOutTabs(Model.InPanels[Model.Steps.YCbCrToRGB].Id, Model.Panels[Model.Steps.YCbCrToRGB].Id + "-out"))
+                {
+                <div class="tab-pane" id="@(Model.InPanels[Model.Steps.YCbCrToRGB].Id)">
+                    <div class="content input-tab-pane">
+                        @Html.Partial("_Tabs", Model.InPanels[Model.Steps.YCbCrToRGB].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDataFormatIn")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Clear", @class: "btn-clear")
+                        @Html.ButtonFor(name: "Recompute", @class: "btn-recompute")
+                    </div>
+                </div>
+                <div class="tab-pane active" id="@(Model.Panels[Model.Steps.YCbCrToRGB].Id + "-out")">
+                    <div class="content output-tab-pane">
+                        @Html.Partial("_Tabs", Model.Panels[Model.Steps.YCbCrToRGB].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDecOrHex")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Copy", id: "btn-copy-" + Model.Panels[Model.Steps.YCbCrToRGB].Id, @class: "btn-copy")
+                        @Html.ButtonFor(name: "Code", @class: "btn-source-code")
+                        @Html.ButtonFor(name: "Compare", @class: "btn-compare")
+                        <input type="hidden" name="srcUrl" value="/Static/RemoteFXCodec/RemoteFXDecoder.cs.html#YCbCrToRGB1">
+                    </div>
+                </div>
+                }
+            }
+
+            @using (Html.BeginPanel(Model.Panels[Model.Steps.ReconstructedFrame].Id, Model.Panels[Model.Steps.ReconstructedFrame].Title))
+            {
+                <div class="content  output-tab-pane">
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+    <div id="dialogs">
+        @Html.Partial("_Input")
+        @Html.Partial("_Compare")
+        @Html.Partial("_QuantsModal", Model.Params)
+    </div>
+
+    <div id="help">@Html.Partial("_Help") </div>
+
+</div>

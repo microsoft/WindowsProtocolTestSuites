@@ -143,9 +143,20 @@ namespace Microsoft.Protocols.TestManager.ADODPlugin
         {
             Ping ping = new Ping();
             IPAddress[] ipAddr = null;
+            uint actualIpIndex = 0;
             try
             {
                 ipAddr = Dns.GetHostAddresses(hostname);
+                foreach (var ip in ipAddr)
+                {
+                    // Break if current IP is not loopback addr (127.0.0.1 or ::1)
+                    // Otherwise increment actualIpIndex
+                    if (!IPAddress.IsLoopback(ip))
+                    {
+                        break;
+                    }
+                    actualIpIndex += 1;
+                }
             }
             catch (SocketException e)
             {
@@ -154,7 +165,7 @@ namespace Microsoft.Protocols.TestManager.ADODPlugin
             }
             try
             {
-                ping.Send(ipAddr[0]);
+                ping.Send(ipAddr[actualIpIndex]);
             }
             catch (PingException e)
             {
@@ -163,7 +174,7 @@ namespace Microsoft.Protocols.TestManager.ADODPlugin
             }
 
             DetectorUtil.WriteLog(stepname + " successful.", false, LogStyle.StepPassed);
-            return ipAddr[0].ToString();
+            return ipAddr[actualIpIndex].ToString();
         }
 
         private void IsMessageAnalyzerInstalled()

@@ -213,6 +213,10 @@ namespace Microsoft.Protocols.TestManager.Detector
         /// <summary>
         /// The status means an error occurs in the detection. The detection cannot proceed.
         /// </summary>
-        Error
+        Error,
+        /// <summary>
+        /// The status means user cancelled the detection.
+        /// </summary>
+        Canceling
     }
 }

@@ -1,0 +1,47 @@
+<Config>
+  <PtfFileNames>
+	<PtfFileName>BranchCache_TestSuite.deployment.ptfconfig</PtfFileName>   
+  </PtfFileNames>
+  <DllFileNames>
+    <DllFileName>Bin\BranchCache_TestSuite.dll</DllFileName>
+  </DllFileNames>
+  <AutoDetectionDllName>BranchCachePlugin.dll</AutoDetectionDllName>
+  <ConfigFileInSourceCode>
+	<PtfFileName>Source\Server\TestCode\TestSuite\BranchCache_TestSuite.deployment.ptfconfig</PtfFileName>
+  </ConfigFileInSourceCode>
+  <ConfigCaseRule>
+    <Group name ="SUT">
+      <Rule name = "ContentServer">
+        <Category name = "ContentServer"/>
+      </Rule>
+      <Rule name = "HostedCacheServer">
+        <Category name = "HostedCacheServer"/>
+      </Rule>
+    </Group>
+    <Group name ="BranchCacheVersion">
+      <Rule name = "BranchCacheV1">
+        <Category name = "BranchCacheV1"/>
+      </Rule>
+      <Rule name = "BranchCacheV2">
+        <Category name = "BranchCacheV2"/>
+      </Rule>
+    </Group>
+    <Group name ="Transport">
+      <Rule name = "PCCRTP">
+        <Category name = "PCCRTP"/>
+      </Rule>
+      <Rule name = "SMB2">
+        <Category name = "SMB2"/>
+      </Rule>
+    </Group>
+    <Group name ="Priority">
+      <Rule name = "BVT">
+        <Category name = "BVT"/>
+      </Rule>
+    <Rule name = "Non-BVT">
+      <Category name = "!BVT"/>
+    </Rule>
+    </Group>
+  </ConfigCaseRule>
+  <TestSetting>Bin\LocalTestRun.testsettings</TestSetting>
+</Config>

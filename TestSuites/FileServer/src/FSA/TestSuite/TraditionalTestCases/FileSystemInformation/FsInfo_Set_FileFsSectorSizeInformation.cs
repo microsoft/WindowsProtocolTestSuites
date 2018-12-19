@@ -17,6 +17,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Try to set FileFsSectorSizeInformation to a file and expect failed with STATUS_INVALID_INFO_CLASS.")]
         public void FsInfo_Set_FileFsSectorSizeInformation_File_InvalidInfoClass()
         {
@@ -26,6 +28,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Try to set FileFsSectorSizeInformation to a directory and expect failed with STATUS_INVALID_INFO_CLASS.")]
         public void FsInfo_Set_FileFsSectorSizeInformation_Dir_InvalidInfoClass()
         {

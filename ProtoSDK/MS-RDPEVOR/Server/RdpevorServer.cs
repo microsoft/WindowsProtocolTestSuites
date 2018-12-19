@@ -52,7 +52,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpevor
         /// <returns>true if client supports this protocol; otherwise, return false.</returns>
         public bool CreateRdpevorDvc(TimeSpan timeout, DynamicVC_TransportType transportType = DynamicVC_TransportType.RDP_TCP)
         {
-
             const ushort priority = 0;
             
             rdpevorControlDVC = rdpedycServer.CreateChannel(timeout, priority, RdpevorControlChannelName, transportType, OnDataReceived);

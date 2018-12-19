@@ -7,7 +7,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.Protocols.TestSuites.ActiveDirectory.Common</RootNamespace>
     <AssemblyName>AD_ServerAdapter</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <ResolveComReferenceSilent>True</ResolveComReferenceSilent>
   </PropertyGroup>
@@ -300,6 +300,7 @@
     <Content Include="MS-APDS\SUTControlAdapter\SetProtectedUser.ps1" />
     <Content Include="MS-APDS\SUTControlAdapter\ConfigNTLMRegistryKey.ps1" />
     <Content Include="MS-APDS\SUTControlAdapter\RestoreNTLMRegistryKey.ps1" />
+    <Content Include="MS-APDS\SUTControlAdapter\SetA2AFServiceAccount.ps1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\MessageAnalyzerLibrary\MessageAnalyzerLibrary.csproj">

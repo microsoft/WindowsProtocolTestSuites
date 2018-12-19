@@ -1,0 +1,98 @@
+protocol RDPEGFXTest;
+
+using Etw;
+using EtwEvent;
+using WindowsReference;
+using Utility;
+using RDPEGFX;
+using Protocol_Test_Suite;
+
+public autostart actor RDPEGFXEncActor (Protocol_Test_Suite.ep_Protocol_Test_Suite node)
+{
+   	process node accepts
+  		m:Event_2 where (Contains(m.MessageName, "RDPEGFX:"))
+  	{
+   	    RDPEGFX.Server RDPEGFXEndpoint = endpoint RDPEGFX.Server;
+        if(m.MessageName == "RDPEGFX:DecompressedData")
+        {
+            int offset = 0;
+            while(offset + 8 < m.Payload.Count)
+            {
+                uint pduLength = ((m.Payload[offset + 7] as uint) << 24) + ((m.Payload[offset + 6] as uint) << 16) + ((m.Payload[offset + 5] as uint) << 8) + (m.Payload[offset + 4] as uint);
+                if(offset + pduLength <= m.Payload.Count)
+                {
+                    ushort cmdId = (m.Payload[offset+1] << 8) + m.Payload[offset] as ushort;
+                    switch(cmdId)
+               	    { 
+                   	    case cmdIdEnum.RDPGFX_CMDID_WIRETOSURFACE_1 => 
+                            RDPGFX_WIRE_TO_SURFACE_PDU_1 msg = BinaryDecoder<RDPGFX_WIRE_TO_SURFACE_PDU_1>(m.Payload.Segment(offset, pduLength as int)) as RDPGFX_WIRE_TO_SURFACE_PDU_1;
+                            dispatch RDPEGFXEndpoint issues msg;
+                        case cmdIdEnum.RDPGFX_CMDID_WIRETOSURFACE_2 =>
+                            RDPGFX_WIRE_TO_SURFACE_PDU_2 msg = BinaryDecoder<RDPGFX_WIRE_TO_SURFACE_PDU_2>(m.Payload.Segment(offset, pduLength as int)) as RDPGFX_WIRE_TO_SURFACE_PDU_2;
+                            dispatch RDPEGFXEndpoint issues msg;
+                        case cmdIdEnum.RDPGFX_CMDID_DELETEENCODINGCONTEXT =>
+                            RDPGFX_DELETE_ENCODING_CONTEXT_PDU msg = BinaryDecoder<RDPGFX_DELETE_ENCODING_CONTEXT_PDU>(m.Payload.Segment(offset, pduLength as int)) as RDPGFX_DELETE_ENCODING_CONTEXT_PDU;
+                            dispatch RDPEGFXEndpoint issues msg;
+                        case cmdIdEnum.RDPGFX_CMDID_SOLIDFILL =>
+                            RDPGFX_SOLIDFILL_PDU msg = BinaryDecoder<RDPGFX_SOLIDFILL_PDU>(m.Payload.Segment(offset, pduLength as int)) as RDPGFX_SOLIDFILL_PDU;
+                            dispatch RDPEGFXEndpoint issues msg;
+                        case cmdIdEnum.RDPGFX_CMDID_SURFACETOSURFACE =>
+                            RDPGFX_SURFACE_TO_SURFACE_PDU msg = BinaryDecoder<RDPGFX_SURFACE_TO_SURFACE_PDU>(m.Payload.Segment(offset, pduLength as int)) as RDPGFX_SURFACE_TO_SURFACE_PDU;
+                            dispatch RDPEGFXEndpoint issues msg;
+                        case cmdIdEnum.RDPGFX_CMDID_SURFACETOCACHE =>
+                            RDPGFX_SURFACE_TO_CACHE_PDU msg = BinaryDecoder<RDPGFX_SURFACE_TO_CACHE_PDU>(m.Payload.Segment(offset, pduLength as int)) as RDPGFX_SURFACE_TO_CACHE_PDU;
+                            dispatch RDPEGFXEndpoint issues msg;
+                        case cmdIdEnum.RDPGFX_CMDID_CACHETOSURFACE =>
+                            RDPGFX_CACHE_TO_SURFACE_PDU msg = BinaryDecoder<RDPGFX_CACHE_TO_SURFACE_PDU>(m.Payload.Segment(offset, pduLength as int)) as RDPGFX_CACHE_TO_SURFACE_PDU;
+                            dispatch RDPEGFXEndpoint issues msg;
+                        case cmdIdEnum.RDPGFX_CMDID_EVICTCACHEENTRY =>
+                            RDPGFX_EVICT_CACHE_ENTRY_PDU msg = BinaryDecoder<RDPGFX_EVICT_CACHE_ENTRY_PDU>(m.Payload.Segment(offset, pduLength as int)) as RDPGFX_EVICT_CACHE_ENTRY_PDU;
+                            dispatch RDPEGFXEndpoint issues msg;
+                        case cmdIdEnum.RDPGFX_CMDID_CREATESURFACE =>
+                            RDPGFX_CREATE_SURFACE_PDU msg = BinaryDecoder<RDPGFX_CREATE_SURFACE_PDU>(m.Payload.Segment(offset, pduLength as int)) as RDPGFX_CREATE_SURFACE_PDU;
+                            dispatch RDPEGFXEndpoint issues msg;
+                        case cmdIdEnum.RDPGFX_CMDID_DELETESURFACE =>
+                            RDPGFX_DELETE_SURFACE_PDU msg = BinaryDecoder<RDPGFX_DELETE_SURFACE_PDU>(m.Payload.Segment(offset, pduLength as int)) as RDPGFX_DELETE_SURFACE_PDU;
+                            dispatch RDPEGFXEndpoint issues msg;
+                        case cmdIdEnum.RDPGFX_CMDID_STARTFRAME =>
+                            RDPGFX_START_FRAME_PDU msg = BinaryDecoder<RDPGFX_START_FRAME_PDU>(m.Payload.Segment(offset, pduLength as int)) as RDPGFX_START_FRAME_PDU;
+                            dispatch RDPEGFXEndpoint issues msg;
+                        case cmdIdEnum.RDPGFX_CMDID_ENDFRAME =>
+                            RDPGFX_END_FRAME_PDU msg = BinaryDecoder<RDPGFX_END_FRAME_PDU>(m.Payload.Segment(offset, pduLength as int)) as RDPGFX_END_FRAME_PDU;
+                            dispatch RDPEGFXEndpoint issues msg;
+                        case cmdIdEnum.RDPGFX_CMDID_FRAMEACKNOWLEDGE =>
+                            RDPGFX_FRAME_ACKNOWLEDGE_PDU msg = BinaryDecoder<RDPGFX_FRAME_ACKNOWLEDGE_PDU>(m.Payload.Segment(offset, pduLength as int)) as RDPGFX_FRAME_ACKNOWLEDGE_PDU;
+                            dispatch RDPEGFXEndpoint accepts msg;
+                        case cmdIdEnum.RDPGFX_CMDID_RESETGRAPHICS =>
+                            RDPGFX_RESET_GRAPHICS_PDU msg = BinaryDecoder<RDPGFX_RESET_GRAPHICS_PDU>(m.Payload.Segment(offset, pduLength as int)) as RDPGFX_RESET_GRAPHICS_PDU;
+                            dispatch RDPEGFXEndpoint issues msg;
+                        case cmdIdEnum.RDPGFX_CMDID_MAPSURFACETOOUTPUT =>
+                            RDPGFX_MAP_SURFACE_TO_OUTPUT_PDU msg = BinaryDecoder<RDPGFX_MAP_SURFACE_TO_OUTPUT_PDU>(m.Payload.Segment(offset, pduLength as int)) as RDPGFX_MAP_SURFACE_TO_OUTPUT_PDU;
+                            dispatch RDPEGFXEndpoint issues msg;
+                        case cmdIdEnum.RDPGFX_CMDID_CACHEIMPORTOFFER =>
+                            RDPGFX_CACHE_IMPORT_OFFER_PDU msg = BinaryDecoder<RDPGFX_CACHE_IMPORT_OFFER_PDU>(m.Payload.Segment(offset, pduLength as int)) as RDPGFX_CACHE_IMPORT_OFFER_PDU;
+                            dispatch RDPEGFXEndpoint issues msg;
+                        case cmdIdEnum.RDPGFX_CMDID_CACHEIMPORTREPLY =>
+                            RDPGFX_CACHE_IMPORT_REPLY_PDU msg = BinaryDecoder<RDPGFX_CACHE_IMPORT_REPLY_PDU>(m.Payload.Segment(offset, pduLength as int)) as RDPGFX_CACHE_IMPORT_REPLY_PDU;
+                            dispatch RDPEGFXEndpoint issues msg;
+                        case cmdIdEnum.RDPGFX_CMDID_CAPSADVERTISE =>
+                            RDPGFX_CAPS_ADVERTISE_PDU msg = BinaryDecoder<RDPGFX_CAPS_ADVERTISE_PDU>(m.Payload.Segment(offset, pduLength as int)) as RDPGFX_CAPS_ADVERTISE_PDU;
+                            dispatch RDPEGFXEndpoint accepts msg;
+                        case cmdIdEnum.RDPGFX_CMDID_CAPSCONFIRM =>
+                            RDPGFX_CAPS_CONFIRM_PDU msg = BinaryDecoder<RDPGFX_CAPS_CONFIRM_PDU>(m.Payload.Segment(offset, pduLength as int)) as RDPGFX_CAPS_CONFIRM_PDU;
+                            dispatch RDPEGFXEndpoint issues msg;
+                        default =>
+                            throw "RDPEGFX: Undefined message cmdId: " + Utility.DecToHexFormat(4, cmdId) + ".";
+                    }
+                    offset += (pduLength as int);
+                }
+                else
+                {
+                    throw "RDPEGFX: Invalid pduLength of graphic message; may be caused by contiguous message missing.";
+                }
+            }
+        }
+  	}
+}
+
+

@@ -42,6 +42,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         private int transportBufferSize;
         private StreamConfig transportConfig;
         private bool isAutoReactivate;
+        protected const ushort TS_UD_CS_SEC_SecurityDataSize = 12;
 
         /// <summary>
         /// A TCP transport instance, sending and receiving all the PDUs.
@@ -199,7 +200,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             clientIPAddress = clientIP;
             this.serverPort = serverPort;
             transportBufferSize = ConstValue.TRANSPORT_BUFFER_SIZE;
-            context = new RdpbcgrClientContext(this);            
+            context = new RdpbcgrClientContext(this);
             decoder = new RdpbcgrDecoder(this, context);
             updateSessionKeyEvent = new ManualResetEvent(false);
         }
@@ -563,28 +564,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 updateSessionKeyEvent.Reset();
             }
         }
-        
+
         /// <summary>
         /// Create a Standard or Enhanced RDP Security Layer transport.
         /// </summary>
         /// <param name="protocol">Specify which protocol is used.</param>
         private void CreateTransport(EncryptedProtocol protocol)
         {
-            // Enhanced RDP Security Direct Approach
-            if (protocol == EncryptedProtocol.DirectTls)
-            {
-                if (clientStream.GetType() == typeof(NetworkStream))
-                {
-                    clientStream = new SslStream(
-                        clientStream,
-                        false,
-                        new RemoteCertificateValidationCallback(ValidateServerCertificate),
-                        null
-                        );
-                    ((SslStream)clientStream).AuthenticateAsClient(serverName);
-                }
-            }
-            else if (protocol == EncryptedProtocol.DirectCredSsp)
+            if (protocol == EncryptedProtocol.DirectCredSsp)
             {
                 if (clientStream.GetType() == typeof(NetworkStream))
                 {
@@ -753,8 +740,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             #region default parameters
             requestedProtocols_Values requestProtocols;
-            if (encryptedProtocol == EncryptedProtocol.DirectTls
-                || encryptedProtocol == EncryptedProtocol.NegotiationTls)
+            if (encryptedProtocol == EncryptedProtocol.NegotiationTls)
             {
                 requestProtocols = requestedProtocols_Values.PROTOCOL_SSL_FLAG;
             }
@@ -1204,7 +1190,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             encryptedProtocol = protocol;
 #if !UT
-            tcpClient = new TcpClient(serverName, serverPort); //Initialize and synchronous connect
+            tcpClient = new TcpClient(serverName.ParseIPAddress().ToString(), serverPort); //Initialize and synchronous connect
             clientStream = tcpClient.GetStream();
 #endif
             // create a type of transport
@@ -1388,7 +1374,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                                                 | supportedColorDepths_Values.RNS_UD_32BPP_SUPPORT));
             coreDataSize += sizeof(ushort);
             clientCoreData.earlyCapabilityFlags =
-                new UInt16Class((ushort)(earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_ERRINFO_PDU | earlyCapabilityFlags_Values.RNS_UD_CS_VALID_CONNECTION_TYPE| earlyCapabilityFlags_Values.RNS_UD_CS_WANT_32BPP_SESSION | earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_STATUSINFO_PDU));
+                new UInt16Class((ushort)(earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_ERRINFO_PDU | earlyCapabilityFlags_Values.RNS_UD_CS_VALID_CONNECTION_TYPE | earlyCapabilityFlags_Values.RNS_UD_CS_WANT_32BPP_SESSION | earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_STATUSINFO_PDU));
             coreDataSize += sizeof(ushort);
             clientCoreData.clientDigProductId = clientDigProductId;
             coreDataSize += ConstValue.CLIENT_CORE_DATA_CLIENT_DIG_PRODUCT_ID_SIZE;
@@ -1416,10 +1402,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             clientSecurityData.header.type = TS_UD_HEADER_type_Values.CS_SECURITY;
             clientSecurityData.encryptionMethods = encryptionMethod;
             clientSecurityData.extEncryptionMethods = 0;
-            int securityDataSize = Marshal.SizeOf(clientSecurityData.header)
-                                 + Marshal.SizeOf((uint)clientSecurityData.encryptionMethods)
-                                 + Marshal.SizeOf(clientSecurityData.extEncryptionMethods);
-            clientSecurityData.header.length = (ushort)securityDataSize;
+            clientSecurityData.header.length = RdpbcgrClient.TS_UD_CS_SEC_SecurityDataSize;
             #endregion Filling clientSecurityData TS_UD_CS_SEC
 
             #region Filling clientNetworkData TS_UD_CS_NET
@@ -1514,7 +1497,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             gccPdu.clientClusterData = clientClusterData;
             gccPdu.clientMultitransportChannelData = clientMultitransportChannelData;
             gccPdu.clientMessageChannelData = clientMessageChannelData;
-            
+
             #endregion Filling ConnectGCC
 
             #region Filling MCSConnectInitial
@@ -2421,7 +2404,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             int eventFieldLength = Marshal.SizeOf(slowpathInputPdu.numberEvents)
                                  + Marshal.SizeOf(slowpathInputPdu.pad2Octets);
-            foreach(TS_INPUT_EVENT inputEvent in inputEvents)
+            foreach (TS_INPUT_EVENT inputEvent in inputEvents)
             {
                 slowpathInputPdu.slowPathInputEvents.Add(inputEvent);
                 eventFieldLength += (Marshal.SizeOf(inputEvent.eventTime) + Marshal.SizeOf((ushort)inputEvent.messageType) + Marshal.SizeOf(inputEvent.slowPathInputData));
@@ -2436,7 +2419,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                                         0);
 
             return slowpathInputPdu;
-        } 
+        }
 
         /// <summary>
         /// Create Fast Path Input Event PDU. This PDU includes 5 event, 
@@ -2585,11 +2568,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 fastpathInputPdu.fipsInformation.padlen = 0;
             }
 
-            foreach(TS_FP_INPUT_EVENT input in inputEvents)
+            foreach (TS_FP_INPUT_EVENT input in inputEvents)
             {
                 fastpathInputPdu.fpInputEvents.Add(input);
             }
-            
+
             return fastpathInputPdu;
         }
         #endregion Keyboard and Mouse Input
@@ -2825,7 +2808,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 throw new InvalidOperationException("MCS message channel should be created.");
             }
             Client_Auto_Detect_Response_PDU pdu = new Client_Auto_Detect_Response_PDU(context);
-            RdpbcgrUtility.FillCommonHeader(ref pdu.commonHeader, TS_SECURITY_HEADER_flags_Values.SEC_AUTODETECT_RSP, context, context.MessageChannelId.Value);           
+            RdpbcgrUtility.FillCommonHeader(ref pdu.commonHeader, TS_SECURITY_HEADER_flags_Values.SEC_AUTODETECT_RSP, context, context.MessageChannelId.Value);
             pdu.autodetectRspPduData = autodetectRspPduData;
             return pdu;
         }
@@ -2910,7 +2893,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             }
 
             TransportEvent eventPacket = null;
-            
+
             TimeSpan leftTime = timeout;
             DateTime endTime = DateTime.Now + timeout;
             while (leftTime.TotalMilliseconds > 0)
@@ -2955,7 +2938,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             while (leftTime.TotalMilliseconds > 0)
             {
-                TransportEvent eventPacket = transportStack.ExpectTransportEvent(leftTime);                
+                TransportEvent eventPacket = transportStack.ExpectTransportEvent(leftTime);
                 packet = (StackPacket)eventPacket.EventObject;
                 if (isAutoReactivate && (packet is Server_Deactivate_All_Pdu))
                 {

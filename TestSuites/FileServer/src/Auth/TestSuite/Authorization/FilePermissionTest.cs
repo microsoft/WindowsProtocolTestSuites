@@ -54,7 +54,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                 BaseTestSite.Assert.Inconclusive("Required share does not exist: {0}", FilePermissionTestShareUncPath);
             }
 
-            tempFileName = string.Format("{0}_{1}.txt", CurrentTestCaseName, Guid.NewGuid());
+            tempFileName = GetTestFileName(FilePermissionTestShareUncPath);
             CreateNewFile(FilePermissionTestShareUncPath, tempFileName);
             baseSD = QuerySecurityDescriptor(FilePermissionTestShareUncPath, tempFileName,
                 AdditionalInformation_Values.DACL_SECURITY_INFORMATION |
@@ -77,6 +77,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Auth)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.FileAccessCheck)]
         [Description("This test case is designed to test whether a user can read a file when " +
             "ACCESS_ALLOWED_ACE with user SID exists in file Security Descriptor.")]
@@ -95,6 +96,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.FileAccessCheck)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether a user can read a file when " +
             "ACCESS_ALLOWED_ACE with user's group SID exists in file Security Descriptor.")]
@@ -113,6 +115,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.FileAccessCheck)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether a user is denied to read a file when " +
             "ACCESS_DENIED_ACE with user SID exists in file Security Descriptor.")]
@@ -131,6 +134,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.FileAccessCheck)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether a user is denied to read a file when " +
             "ACCESS_DENIED_ACE with user's group SID exists in file Security Descriptor.")]
@@ -149,6 +153,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.FileAccessCheck)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether a user is denied to read a file when " +
             "user SID does not exist in file Security Descriptor.")]
@@ -165,6 +170,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.FileAccessCheck)]
+        [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether a user is denied to read a file when " +
             "ACCESS_ALLOWED_ACE associated with the user does not have READ permission in file Security Descriptor.")]

@@ -157,12 +157,12 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
             return client.SmbdNegotiate(
                 minVersion,
                 maxVersion,
-                0, 
-                creditsRequested, 
+                0,
+                creditsRequested,
                 receiveCreditsMax,
-                preferredSendSize, 
-                maxReceiveSize, 
-                maxFragmentSize, 
+                preferredSendSize,
+                maxReceiveSize,
+                maxFragmentSize,
                 out response
                 );
         }
@@ -208,8 +208,8 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
 
 
         public NtStatus SmbdRegisterBuffer(
-            uint length, 
-            SmbdBufferReadWrite flag, 
+            uint length,
+            SmbdBufferReadWrite flag,
             out SmbdBufferDescriptorV1 descriptor
             )
         {
@@ -241,11 +241,11 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
         }
 
         public NtStatus SmbdSendDataTransferMessage(
-            ushort creditsRequested, 
+            ushort creditsRequested,
             ushort creditsGranted,
             SmbdDataTransfer_Flags flags,
             ushort reserved,
-            uint remainingDataLength, 
+            uint remainingDataLength,
             uint dataOffset,
             uint dataLength,
             byte[] padding,
@@ -256,7 +256,7 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
                 creditsRequested,
                 creditsGranted,
                 flags,
-                reserved, 
+                reserved,
                 remainingDataLength,
                 dataOffset,
                 dataLength,
@@ -270,9 +270,9 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
             ushort creditsRequested,
             ushort creditsGranted,
             SmbdDataTransfer_Flags flags,
-            uint remainingDataLength, 
+            uint remainingDataLength,
             uint dataOffset,
-            uint dataLength, 
+            uint dataLength,
             byte[] buffer
             )
         {
@@ -291,13 +291,13 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
                 padding[i] = 0;
             }
             return SmbdSendDataTransferMessage(
-                creditsRequested, 
+                creditsRequested,
                 creditsGranted,
-                flags, 
-                0, 
+                flags,
+                0,
                 remainingDataLength,
                 dataOffset,
-                dataLength, 
+                dataLength,
                 padding,
                 buffer
                 );
@@ -305,7 +305,7 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
 
 
         public NtStatus SmbdReceivDataTransferMessage(
-            TimeSpan timeout, 
+            TimeSpan timeout,
             out SmbdDataTransferMessage transferMsg
             )
         {
@@ -327,9 +327,9 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
         {
             return client.Smb2SessionSetup(
                 testConfig.SecurityPackageForSmb2UserAuthentication,
-                testConfig.DomainName, 
-                testConfig.UserName, 
-                testConfig.Password, 
+                testConfig.DomainName,
+                testConfig.UserName,
+                testConfig.Password,
                 testConfig.ServerName);
         }
 
@@ -355,17 +355,17 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
         }
 
         public uint Smb2ReadOverRdmaChannel(
-            UInt64 offset, 
-            uint byteCount, 
-            byte[] channelBuffer, 
-            out READ_Response readResponse, 
+            UInt64 offset,
+            uint byteCount,
+            byte[] channelBuffer,
+            out READ_Response readResponse,
             out byte[] readData,
             Channel_Values channel = Channel_Values.CHANNEL_RDMA_V1)
         {
             return client.Smb2ReadOverRdmaChannel(
-                offset, 
-                byteCount, 
-                channelBuffer, 
+                offset,
+                byteCount,
+                channelBuffer,
                 out readResponse,
                 out readData,
                 channel);
@@ -373,7 +373,7 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
 
         public byte[] Smb2GetWriteRequest(UInt64 offset, byte[] writeData)
         {
-            byte[] writeRequest =  this.client.Smb2GetWriteRequestPackage(
+            byte[] writeRequest = this.client.Smb2GetWriteRequestPackage(
                 offset,
                 writeData
                 );
@@ -386,12 +386,12 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
         }
 
         public uint Smb2WriteOverRdmaChannel(
-            UInt64 offset, 
-            byte[] channelInfo, 
-            uint length, 
+            UInt64 offset,
+            byte[] channelInfo,
+            uint length,
             out WRITE_Response writeResponse,
             Channel_Values channel = Channel_Values.CHANNEL_RDMA_V1)
-        {            
+        {
             return client.Smb2WriteOverRdmaChannel(
                 offset,
                 channelInfo,
@@ -415,11 +415,17 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
             return client.Smb2LogOff();
         }
 
-        public NtStatus Smb2EstablishSessionAndOpenFile(string fileName, DialectRevision negotiatedDialect = DialectRevision.Smb30)
+        public NtStatus Smb2EstablishSessionAndOpenFile(string fileName, DialectRevision[] negotiatedDialects = null)
         {
+            if (negotiatedDialects == null)
+            {
+                // By default, use all SMB3 dialects for negotiate.
+                negotiatedDialects = new DialectRevision[] { DialectRevision.Smb30, DialectRevision.Smb302, DialectRevision.Smb311 };
+            }
+
             // SMB2 Negotiate
             DialectRevision selectedDialect;
-            NtStatus status = (NtStatus)Smb2Negotiate(new DialectRevision[] { negotiatedDialect }, out selectedDialect);
+            NtStatus status = (NtStatus)Smb2Negotiate(negotiatedDialects, out selectedDialect);
             if (status != NtStatus.STATUS_SUCCESS)
             {
                 return status;

@@ -15,17 +15,65 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
         public string Password { get; set; }
         public string AccountSalt { get; set; }
         public string IPAddress { get; set; }
-        public int Port { get; set; }
+        internal string Port_Str { get; set; }
+        public int Port
+        {
+            get
+            {
+                int value;
+                if (!int.TryParse(this.Port_Str, out value))
+                {
+                    TestClassBase.BaseTestSite.Assume.Fail("Value {0} for Port cannot be parsed.", this.Port_Str);
+                }
+                return value;
+            }
+            set
+            {
+                this.Port_Str = value.ToString();
+            }
+        }
         public string DefaultServiceName { get; set; }
         public string ServiceSalt { get; set; }
-        public bool IsWindows { get; set; }
+        internal string IsWindows_Str { get; set; }
+        public bool IsWindows
+        {
+            get
+            {
+                bool value;
+                if (!bool.TryParse(this.IsWindows_Str, out value))
+                {
+                    TestClassBase.BaseTestSite.Assume.Fail("Value {0} for IsWindows cannot be parsed.", this.IsWindows_Str);
+                }
+                return value;
+            }
+            set
+            {
+                this.IsWindows_Str = value.ToString();
+            }
+        }
 
         public Computer() { }
     }
 
     public class ApplicationServer : Computer
     {
-        public KerberosConstValue.GSSToken GssToken { get; set; }
+        internal string GssToken_Str { get; set; }
+        public KerberosConstValue.GSSToken GssToken
+        {
+            get
+            {
+                KerberosConstValue.GSSToken value;
+                if (!Enum.TryParse<KerberosConstValue.GSSToken>(this.GssToken_Str, out value))
+                {
+                    TestClassBase.BaseTestSite.Assume.Fail("Value {0} for GssToken cannot be parsed.", this.GssToken_Str);
+                }
+                return value;
+            }
+            set
+            {
+                this.GssToken_Str = value.ToString();
+            }
+        }
     }
     public class DomainController : Computer
     {
@@ -54,7 +102,23 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
     public class LdapServer : ApplicationServer
     {
         public string LdapServiceName { get; set; }
-        public int LdapPort { get; set; }
+        internal string LdapPort_Str { get; set; }
+        public int LdapPort
+        {
+            get
+            {
+                int value;
+                if (!int.TryParse(this.LdapPort_Str, out value))
+                {
+                    TestClassBase.BaseTestSite.Assume.Fail("Value {0} for LdapPort cannot be parsed.", this.LdapPort_Str);
+                }
+                return value;
+            }
+            set
+            {
+                this.LdapPort_Str = value.ToString();
+            }
+        }
 
         public LdapServer() { } 
     }
@@ -77,10 +141,74 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
         public string ProfilePath { get; set; }
         public string HomeDirectory { get; set; }
         public string HomeDrive { get; set; }
-        public uint UserID { get; set; }
-        public uint PrimaryGroupId { get; set; }
-        public uint UserAccountControl { get; set; }
-        public uint GroupCount { get; set; }        
+        internal string UserID_Str { get; set; }
+        public uint UserID
+        {
+            get
+            {
+                uint value;
+                if (!uint.TryParse(this.UserID_Str, out value))
+                {
+                    TestClassBase.BaseTestSite.Assume.Fail("Value {0} for UserID cannot be parsed.", this.UserID_Str);
+                }
+                return value;
+            }
+            set
+            {
+                this.UserID_Str = value.ToString();
+            }
+        }
+        internal string PrimaryGroupID_Str { get; set; }
+        public uint PrimaryGroupId
+        {
+            get
+            {
+                uint value;
+                if (!uint.TryParse(this.PrimaryGroupID_Str, out value))
+                {
+                    TestClassBase.BaseTestSite.Assume.Fail("Value {0} for PrimaryGroupId cannot be parsed.", this.PrimaryGroupID_Str);
+                }
+                return value;
+            }
+            set
+            {
+                this.PrimaryGroupID_Str = value.ToString();
+            }
+        }
+        internal string UserAccountControl_Str { get; set; }
+        public uint UserAccountControl
+        {
+            get
+            {
+                uint value;
+                if (!uint.TryParse(this.UserAccountControl_Str, out value))
+                {
+                    TestClassBase.BaseTestSite.Assume.Fail("Value {0} for UserAccountControl cannot be parsed.", this.UserAccountControl_Str);
+                }
+                return value;
+            }
+            set
+            {
+                this.UserAccountControl_Str = value.ToString();
+            }
+        }
+        internal string GroupCount_Str { get; set; }
+        public uint GroupCount
+        {
+            get
+            {
+                uint value;
+                if (!uint.TryParse(this.GroupCount_Str, out value))
+                {
+                    TestClassBase.BaseTestSite.Assume.Fail("Value {0} for GroupCount cannot be parsed.", this.GroupCount_Str);
+                }
+                return value;
+            }
+            set
+            {
+                this.GroupCount_Str = value.ToString();
+            }
+        }
 
         public DomainAccountInfo() { }
     }
@@ -111,7 +239,23 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
 
     public class ResourceGroups
     {
-        public uint GroupCount;
+        internal string GroupCount_Str { get; set; }
+        public uint GroupCount
+        {
+            get
+            {
+                uint value;
+                if (!uint.TryParse(this.GroupCount_Str, out value))
+                {
+                    TestClassBase.BaseTestSite.Assume.Fail("Value {0} for GroupCount cannot be parsed.", this.GroupCount_Str);
+                }
+                return value;
+            }
+            set
+            {
+                this.GroupCount_Str = value.ToString();
+            }
+        }
         public Group[] Groups;
 
     }
@@ -129,13 +273,109 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
         public ITestSite TestSite { get; set; }
 
         public TransportType TransportType { get; set; }
-        public int TransportBufferSize { get; set; }
-        public KerberosConstValue.OidPkt SupportedOid { get; set; }
-        public bool IsKileImplemented { get; set; }
-        public bool IsClaimSupported { get; set; }
-        public TrustType TrustType { get; set; }
+        internal string TransportBufferSize_Str { get; set; }
+        public int TransportBufferSize
+        {
+            get
+            {
+                int value;
+                if (!int.TryParse(this.TransportBufferSize_Str, out value))
+                {
+                    TestClassBase.BaseTestSite.Assume.Fail("Value {0} for TransportBufferSize cannot be parsed.", this.TransportBufferSize_Str);
+                }
+                return value;
+            }
+            set
+            {
+                this.TransportBufferSize_Str = value.ToString();
+            }
+        }
+        internal string SupportedOid_Str { get; set; }
+        public KerberosConstValue.OidPkt SupportedOid
+        {
+            get
+            {
+                KerberosConstValue.OidPkt value;
+                if (!Enum.TryParse<KerberosConstValue.OidPkt>(this.SupportedOid_Str, out value))
+                {
+                    TestClassBase.BaseTestSite.Assume.Fail("Value {0} for SupportedOid cannot be parsed.", this.SupportedOid_Str);
+                }
+                return value;
+            }
+            set
+            {
+                this.SupportedOid_Str = value.ToString();
+            }
+        }
+        internal string IsKileImplemented_Str { get; set; }
+        public bool IsKileImplemented
+        {
+            get
+            {
+                bool value;
+                if (!bool.TryParse(this.IsKileImplemented_Str, out value))
+                {
+                    TestClassBase.BaseTestSite.Assume.Fail("Value {0} for IsKileImplemented cannot be parsed.", this.IsKileImplemented_Str);
+                }
+                return value;
+            }
+            set
+            {
+                this.IsKileImplemented_Str = value.ToString();
+            }
+        }
+        internal string IsClaimSupported_Str { get; set; }
+        public bool IsClaimSupported
+        {
+            get
+            {
+                bool value;
+                if (!bool.TryParse(this.IsClaimSupported_Str, out value))
+                {
+                    TestClassBase.BaseTestSite.Assume.Fail("Value {0} for IsClaimSupported cannot be parsed.", this.IsClaimSupported_Str);
+                }
+                return value;
+            }
+            set
+            {
+                this.IsClaimSupported_Str = value.ToString();
+            }
+        }
+        internal string TrustType_Str { get; set; }
+        public TrustType TrustType
+        {
+            get
+            {
+                TrustType value;
+                if (!Enum.TryParse<TrustType>(this.TrustType_Str, out value))
+                {
+                    TestClassBase.BaseTestSite.Assume.Fail("Value {0} for TrustType cannot be parsed.", this.TrustType_Str);
+                }
+                return value;
+            }
+            set
+            {
+                this.TrustType_Str = value.ToString();
+            }
+        }
 
-        public bool UseProxy { get; set; }
+        internal string UseProxy_Str { get; set; }
+        public bool UseProxy
+        {
+            get
+            {
+                bool value;
+                if (!bool.TryParse(this.UseProxy_Str, out value))
+                {
+                    TestClassBase.BaseTestSite.Assume.Fail("Value {0} for UseProxy cannot be parsed.", this.UseProxy_Str);
+                }
+                return value;
+            }
+            set
+            {
+                this.UseProxy_Str = value.ToString();
+            }
+        }
         public string KKDCPServerUrl { get; set; }
         public string KKDCPClientCertPath { get; set; }
         public string KKDCPClientCertPassword { get; set; }
@@ -158,16 +398,16 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
             {
                 this.TransportType = TransportType.UDP;
             }
-            this.TransportBufferSize = int.Parse(this.TestSite.Properties.Get("TransportBufferSize"));
+            this.TransportBufferSize_Str = this.TestSite.Properties.Get("TransportBufferSize");
             string ipversion = this.TestSite.Properties.Get("IpVersion");
-            this.TrustType = (TrustType)Enum.Parse(typeof(TrustType), this.TestSite.Properties.Get("TrustType"));
-            this.SupportedOid = (KerberosConstValue.OidPkt)Enum.Parse(typeof(KerberosConstValue.OidPkt), this.TestSite.Properties.Get("SupportedOid"));
+            this.TrustType_Str = this.TestSite.Properties.Get("TrustType");
+            this.SupportedOid_Str = this.TestSite.Properties.Get("SupportedOid");
 
-            this.IsKileImplemented = bool.Parse(this.TestSite.Properties.Get("IsKileImplemented"));
-            this.IsClaimSupported = bool.Parse(this.TestSite.Properties.Get("IsClaimSupported"));
+            this.IsKileImplemented_Str = this.TestSite.Properties.Get("IsKileImplemented");
+            this.IsClaimSupported_Str = this.TestSite.Properties.Get("IsClaimSupported");
 
             //KKDCP configs
-            this.UseProxy = bool.Parse(this.TestSite.Properties.Get("UseProxy"));
+            this.UseProxy_Str = this.TestSite.Properties.Get("UseProxy");
             this.KKDCPServerUrl = this.TestSite.Properties.Get("KKDCPServerUrl");
             this.KKDCPClientCertPath = this.TestSite.Properties.Get("KKDCPClientCertPath");
             this.KKDCPClientCertPassword = this.TestSite.Properties.Get("KKDCPClientCertPassword");
@@ -180,7 +420,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
             //Local realm kdc
             this.LocalRealm.KDC = new DomainController[1];
             this.LocalRealm.KDC[0] = new DomainController();
-            this.LocalRealm.KDC[0].IsWindows = bool.Parse(this.TestSite.Properties.Get("LocalRealm.KDC01.IsWindows"));
+            this.LocalRealm.KDC[0].IsWindows_Str = this.TestSite.Properties.Get("LocalRealm.KDC01.IsWindows");
             this.LocalRealm.KDC[0].FQDN = this.TestSite.Properties.Get("LocalRealm.KDC01.FQDN");
             this.LocalRealm.KDC[0].NetBiosName = this.TestSite.Properties.Get("LocalRealm.KDC01.NetBiosName");
             this.LocalRealm.KDC[0].Password = this.TestSite.Properties.Get("LocalRealm.KDC01.Password");
@@ -196,7 +436,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
             {
                 this.LocalRealm.KDC[0].IPAddress = null;
             }
-            this.LocalRealm.KDC[0].Port = int.Parse(this.TestSite.Properties.Get("LocalRealm.KDC01.Port"));
+            this.LocalRealm.KDC[0].Port_Str = this.TestSite.Properties.Get("LocalRealm.KDC01.Port");
 
             //Local realm client computer
             this.LocalRealm.ClientComputer = new Computer();
@@ -215,7 +455,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
             {
                 this.LocalRealm.KDC[0].IPAddress = null;
             }
-            this.LocalRealm.ClientComputer.Port = int.Parse(this.TestSite.Properties.Get("LocalRealm.ClientComputer.Port"));
+            this.LocalRealm.ClientComputer.Port_Str = this.TestSite.Properties.Get("LocalRealm.ClientComputer.Port");
             this.LocalRealm.ClientComputer.DefaultServiceName = this.TestSite.Properties.Get("LocalRealm.ClientComputer.DefaultServiceName");
             this.LocalRealm.ClientComputer.ServiceSalt = this.TestSite.Properties.Get("LocalRealm.ClientComputer.ServiceSalt");
             this.LocalRealm.ClientComputer.AccountSalt = this.TestSite.Properties.Get("LocalRealm.ClientComputer.AccountSalt");
@@ -266,8 +506,8 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
             this.LocalRealm.LdapServer[0].DefaultServiceName = this.TestSite.Properties.Get("LocalRealm.LdapServer01.DefaultServiceName");
             this.LocalRealm.LdapServer[0].ServiceSalt = this.TestSite.Properties.Get("LocalRealm.LdapServer01.ServiceSalt");
             this.LocalRealm.LdapServer[0].LdapServiceName = this.TestSite.Properties.Get("LocalRealm.LdapServer01.LdapServiceName");
-            this.LocalRealm.LdapServer[0].LdapPort = int.Parse(this.TestSite.Properties.Get("LocalRealm.LdapServer01.LdapPort"));
-            this.LocalRealm.LdapServer[0].GssToken = (KerberosConstValue.GSSToken)Enum.Parse(typeof(KerberosConstValue.GSSToken), this.TestSite.Properties.Get("LocalRealm.LdapServer01.GssToken"));
+            this.LocalRealm.LdapServer[0].LdapPort_Str = this.TestSite.Properties.Get("LocalRealm.LdapServer01.LdapPort");
+            this.LocalRealm.LdapServer[0].GssToken_Str = this.TestSite.Properties.Get("LocalRealm.LdapServer01.GssToken");
 
             this.LocalRealm.WebServer = new WebServer[1];
             this.LocalRealm.WebServer[0] = new WebServer();
@@ -315,9 +555,9 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
 
             //ResourceGroups
             this.LocalRealm.ResourceGroups = new ResourceGroups();
-            if(uint.Parse(this.TestSite.Properties.Get("LocalRealm.resourceGroups.resourceGroupCount")) >0)
+            this.LocalRealm.ResourceGroups.GroupCount_Str = this.TestSite.Properties.Get("LocalRealm.resourceGroups.resourceGroupCount");
+            if (this.LocalRealm.ResourceGroups.GroupCount > 0)
             {
-                this.LocalRealm.ResourceGroups.GroupCount = uint.Parse(this.TestSite.Properties.Get("LocalRealm.resourceGroups.resourceGroupCount"));
                 this.LocalRealm.ResourceGroups.Groups = new Group[this.LocalRealm.ResourceGroups.GroupCount];
                 this.LocalRealm.ResourceGroups.Groups[0] = new Group();
                 this.LocalRealm.ResourceGroups.Groups[0].GroupName = this.TestSite.Properties.Get("LocalRealm.resourceGroups.resourceGroup01.GroupName");
@@ -344,13 +584,10 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
             this.LocalRealm.User[1].DomainAccountInfo.ProfilePath = this.TestSite.Properties.Get("LocalRealm.Users.User01.DomainAccountInfo.ProfilePath");
             this.LocalRealm.User[1].DomainAccountInfo.HomeDirectory = this.TestSite.Properties.Get("LocalRealm.Users.User01.DomainAccountInfo.HomeDirectory");
             this.LocalRealm.User[1].DomainAccountInfo.HomeDrive = this.TestSite.Properties.Get("LocalRealm.Users.User01.DomainAccountInfo.HomeDrive");
-            if(!this.LocalRealm.KDC[0].IsWindows)
-            {
-                this.LocalRealm.User[1].DomainAccountInfo.UserID = uint.Parse(this.TestSite.Properties.Get("LocalRealm.Users.User01.DomainAccountInfo.UserID"));
-                this.LocalRealm.User[1].DomainAccountInfo.PrimaryGroupId = uint.Parse(this.TestSite.Properties.Get("LocalRealm.Users.User01.DomainAccountInfo.PrimaryGroupId"));
-                this.LocalRealm.User[1].DomainAccountInfo.UserAccountControl = uint.Parse(this.TestSite.Properties.Get("LocalRealm.Users.User01.DomainAccountInfo.UserAccountControl"));
-                this.LocalRealm.User[1].DomainAccountInfo.GroupCount = uint.Parse(this.TestSite.Properties.Get("LocalRealm.Users.User01.DomainAccountInfo.GroupCount"));
-            }
+            this.LocalRealm.User[1].DomainAccountInfo.UserID_Str = this.TestSite.Properties.Get("LocalRealm.Users.User01.DomainAccountInfo.UserID");
+            this.LocalRealm.User[1].DomainAccountInfo.PrimaryGroupID_Str = this.TestSite.Properties.Get("LocalRealm.Users.User01.DomainAccountInfo.PrimaryGroupId");
+            this.LocalRealm.User[1].DomainAccountInfo.UserAccountControl_Str = this.TestSite.Properties.Get("LocalRealm.Users.User01.DomainAccountInfo.UserAccountControl");
+            this.LocalRealm.User[1].DomainAccountInfo.GroupCount_Str = this.TestSite.Properties.Get("LocalRealm.Users.User01.DomainAccountInfo.GroupCount");
 
             this.LocalRealm.User[2] = new User();
             this.LocalRealm.User[2].Username = this.TestSite.Properties.Get("LocalRealm.Users.User02.Username");
@@ -424,7 +661,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
 
             this.TrustedRealm.KDC = new DomainController[1];
             this.TrustedRealm.KDC[0] = new DomainController();
-            this.TrustedRealm.KDC[0].IsWindows = bool.Parse(this.TestSite.Properties.Get("TrustedRealm.KDC01.IsWindows"));            
+            this.TrustedRealm.KDC[0].IsWindows_Str = this.TestSite.Properties.Get("TrustedRealm.KDC01.IsWindows");            
             this.TrustedRealm.KDC[0].FQDN = this.TestSite.Properties.Get("TrustedRealm.KDC01.FQDN");
             this.TrustedRealm.KDC[0].NetBiosName = this.TestSite.Properties.Get("TrustedRealm.KDC01.NetBiosName");
             this.TrustedRealm.KDC[0].Password = this.TestSite.Properties.Get("TrustedRealm.KDC01.Password");
@@ -440,7 +677,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
             {
                 this.TrustedRealm.KDC[0].IPAddress = null;
             }
-            this.TrustedRealm.KDC[0].Port = int.Parse(this.TestSite.Properties.Get("TrustedRealm.KDC01.Port"));
+            this.TrustedRealm.KDC[0].Port_Str = this.TestSite.Properties.Get("TrustedRealm.KDC01.Port");
             this.TrustedRealm.KDC[0].DefaultServiceName = this.TestSite.Properties.Get("TrustedRealm.KDC01.DefaultServiceName");
 
             this.TrustedRealm.FileServer = new FileServer[1];
@@ -508,8 +745,8 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
             this.TrustedRealm.LdapServer[0].DefaultServiceName = this.TestSite.Properties.Get("TrustedRealm.LdapServer01.DefaultServiceName");
             this.TrustedRealm.LdapServer[0].ServiceSalt = this.TestSite.Properties.Get("TrustedRealm.LdapServer01.ServiceSalt");
             this.TrustedRealm.LdapServer[0].LdapServiceName = this.TestSite.Properties.Get("TrustedRealm.LdapServer01.LdapServiceName");
-            this.TrustedRealm.LdapServer[0].LdapPort = int.Parse(this.TestSite.Properties.Get("TrustedRealm.LdapServer01.LdapPort"));
-            this.TrustedRealm.LdapServer[0].GssToken = (KerberosConstValue.GSSToken)Enum.Parse(typeof(KerberosConstValue.GSSToken), this.TestSite.Properties.Get("TrustedRealm.LdapServer01.GssToken"));
+            this.TrustedRealm.LdapServer[0].LdapPort_Str = this.TestSite.Properties.Get("TrustedRealm.LdapServer01.LdapPort");
+            this.TrustedRealm.LdapServer[0].GssToken_Str = this.TestSite.Properties.Get("TrustedRealm.LdapServer01.GssToken");
 
             this.TrustedRealm.Admin = new User();
             this.TrustedRealm.Admin.Username = this.TestSite.Properties.Get("TrustedRealm.Users.Admin.Username");

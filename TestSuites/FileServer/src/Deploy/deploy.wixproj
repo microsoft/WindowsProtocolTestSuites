@@ -38,13 +38,16 @@
   <ItemGroup>
     <Compile Include="Batch.wxs" />
     <Compile Include="Bin.wxs" />
+    <Compile Include="CommonBatch.wxs" />
     <Compile Include="DependencyCheckWarningDlg.wxs" />
     <Compile Include="EndpointDlg.wxs" />
     <Compile Include="FileServer-TestSuite-ServerEP.wxs" />
     <Compile Include="TestSuiteMiscFiles.wxs" />
+    <Compile Include="TestSuitePtfconfigFiles.wxs" />
     <Compile Include="TestSuitePrivacyStatementDlg.wxs" />
     <Compile Include="TestSuitePrivacyStatementLowMsiVersionDlg.wxs" />
     <Compile Include="TestSuiteProduct.wxs" />
+    <Compile Include="TestSuiteScripts.wxs" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixVSExtension">
@@ -103,7 +106,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\ProtoSDK\KerberosLib\KerberosLib.csproj">
       <Name>KerberosLib</Name>
-      <Project>{3f0b2460-33f7-4a58-9cb5-bb38914c7845}</Project>
+      <Project>{F1EDA208-50B6-4501-A9D8-D18D3434D587}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
@@ -385,6 +388,8 @@
   <Target Name="GenDeployWxsFile" DependsOnTargets="ResolveWixExtensionReferences" BeforeTargets="Compile">
     <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" -out Bin.wxs -template fragment -gg -cg BIN_FILES -dr TESTSUITE_BIN_DIR -var wix.TESTSUITE_BIN_DIR -sreg -sfrag -srd' />
     <Exec Command='"$(WIX)\bin\heat.exe" dir "..\Batch" -out Batch.wxs -template fragment -gg -cg BATCH_FILES -dr TESTSUITE_BATCH_DIR -var wix.TESTSUITE_BATCH_DIR -sreg -sfrag -srd' />
+    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\common&quot; -out CommonBatch.wxs -template fragment -gg -cg COMMON_BATCH_FILES -dr TESTSUITE_COMMON_SCRIPTS_DIR -var wix.TESTSUITE_COMMON_SCRIPTS_DIR -sreg -sfrag -srd" />
+    <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\FileServer\Scripts" -out TestSuiteScripts.wxs -template fragment -gg -cg TESTSUITE_SCRIPTS_FILES -dr TESTSUITE_SCRIPTS_DIR -var wix.TESTSUITE_SCRIPTS_DIR -sreg -sfrag -srd' />
   </Target>
   <Import Project="$(WixTargetsPath)" />
   
@@ -394,10 +399,14 @@
   <ItemGroup>
 	<SutProtocolControlAdapterScriptFiles Include="..\Common\Adapter\SutProtocolControlAdapter\*" />
 	<SutControlAdapterScriptFiles Include="..\ServerFailover\Adapter\WindowsSutControlAdapter\*" />
+    <SetupScriptFiles Include="..\..\Setup\Scripts\*" />
 	<DataFiles Include="..\Data\*" />
   </ItemGroup>
 
   <Target Name="CopyFilesToBin" BeforeTargets="GenDeployWxsFile" >
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-OSVersionNumber.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Write-Error.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Write-Info.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Scripts" />
 	<Copy SourceFiles="..\Auth\TestSuite\Auth_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
 	<Copy SourceFiles="..\Auth\TestSuite\Auth_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
 	<Copy SourceFiles="..\Common\TestSuite\CommonTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
@@ -420,7 +429,8 @@
 	<Copy SourceFiles="..\SQOS\TestSuite\MS-SQOS_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
 	<Copy SourceFiles="..\ServerLocalTestRun.testrunconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
 	<Copy SourceFiles="@(SutProtocolControlAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\Common\Adapter\SutProtocolControlAdapter\" />	
-	<Copy SourceFiles="@(SutControlAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\ServerFailover\Adapter\WindowsSutControlAdapter\" />	
+	<Copy SourceFiles="@(SutControlAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\ServerFailover\Adapter\WindowsSutControlAdapter\" />
+    <Copy SourceFiles="@(SetupScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Scripts" />	
 	<Copy SourceFiles="@(DataFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\Data\" />
   </Target>    
 

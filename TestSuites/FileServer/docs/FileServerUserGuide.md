@@ -1,4 +1,4 @@
-# File Server Protocol Family Test Suite User Guide
+﻿# File Server Protocol Family Test Suite User Guide
 > This guide takes you through the fundamentals of using the **File Server Protocol Family Test Suite**. You will learn how to setup the test environment, how to install and configure the test suite, and how to run test cases.
 
 ## Table of Contents
@@ -268,27 +268,27 @@ The minimum requirements for the SAN storage server computer are as follows.
 
 All of the following software must be installed on the [**Driver Computer**](#3.2) before the test suite can be executed. There are some dependencies between each other, so it is truely recommended to install them sequentially in the order below.
 
-1.  Install **Microsoft® Visual Studio®** or **Test Agent for Visual Studio®**.
+1.  Install **Microsoft® Visual Studio®**.
 
-	-	The test execution requires the `vstest.console.exe` utility which is installed along with either Visual Studio or Test Agent.
+	-	The test execution requires the `vstest.console.exe` utility which is installed along with Visual Studio.
 
-	-	**Microsoft® Visual Studio®** provides you the capability to run test cases. Additionally it provides you the capability to update, build, debug and contribute to the test cases. You can download [Visual Studio Ultimate 2012 Trial (30 days)](http://www.microsoft.com/en-us/download/details.aspx?id=30678), [Visual Studio 2012 Update 4](http://www.microsoft.com/en-us/download/confirmation.aspx?id=39305), or later versions of the Visual Studio. The optional components of Visual Studio are not required to be installed.
-
-	-	**Test Agent for Visual Studio®** provides you the capability to run test cases without having to install the whole pack of Visual Studio. You can download [Agents for Visual Studio 2012 Update 4](http://www.microsoft.com/en-us/download/details.aspx?id=38186) or later versions of the Test Agent. This is recommended to be used when you only want to do some test against your own implementations and have no intention to make changes.
+	-	**Microsoft® Visual Studio®** provides you the capability to run test cases. Additionally it provides you the capability to update, build, debug and contribute to the test cases. You can download Visual Studio 2017 Community. The optional components of Visual Studio are not required to be installed.
 
 2.	Install **Spec Explorer** [3.5.3146.0](<http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/>) or later versions.
 
 	-	Spec Explorer is a model based testing tool used by the test suite to design models and generate test cases. It has some dependencies on [VC++ 9.0 redistributable package](https://www.microsoft.com/en-us/download/details.aspx?id=5582) which should also be installed.
 
-3. 	Install **Protocol Test Framework** [1.0](https://github.com/Microsoft/ProtocolTestFramework/releases/download/1.0/ProtocolTestFrameworkInstallerForModel.msi) or clone the [repository](https://github.com/Microsoft/ProtocolTestFramework.git) to build one msi package by yourself.
+3. 	Install **Protocol Test Framework** [1.0.6000.0](https://github.com/Microsoft/ProtocolTestFramework/releases/download/1.0.6000.0/ProtocolTestFrameworkInstaller.msi) or clone the [repository](https://github.com/Microsoft/ProtocolTestFramework.git) to build one msi package by yourself.
 
-4.	Install **File Server Test Suite** [1.0](https://github.com/Microsoft/WindowsProtocolTestSuites/releases/download/1.0/FileServer-TestSuite-ServerEP.msi) or clone the [repository](https://github.com/Microsoft/WindowsProtocolTestSuites.git) and build one msi package by yourself.
+4.	Install **File Server Test Suite** [3.18.9.0](https://github.com/Microsoft/WindowsProtocolTestSuites/releases/download/3.18.9.0/FileServer-TestSuite-ServerEP.msi) or clone the [repository](https://github.com/Microsoft/WindowsProtocolTestSuites.git) and build one msi package by yourself.
 
-5.	(Optional) Install **Protocol Test Manager** [1.0](https://github.com/Microsoft/WindowsProtocolTestSuites/releases/download/1.0/ProtocolTestManager.msi) or clone the [repository](https://github.com/Microsoft/WindowsProtocolTestSuites.git) and build one msi package by yourself.
+5.	(Optional) Install **Protocol Test Manager** [3.18.9.0](https://github.com/Microsoft/WindowsProtocolTestSuites/releases/download/3.18.9.0//ProtocolTestManager.msi) or clone the [repository](https://github.com/Microsoft/WindowsProtocolTestSuites.git) and build one msi package by yourself.
 
     -	**Protocol Test Manager** provides a graphical UI to facilitate your configuration and execution of the Microsoft® Windows Protocol Test Suites.
 
 6. 	(Optional) Install **Microsoft® Message Analyzer** [1.4](http://www.microsoft.com/en-us/download/details.aspx?id=44226) or later versions.
+
+    -	**Microsoft® Message Analyzer** is listed as an optional tool because our test cases won’t do live capture and capture verification during execution. MMA can be helpful with debugging when users want to look at any issues in the test results. In other words, these test suites don’t have dependencies on MMA. It is a useful tool that can help you view the network traces and ETW logs which could possibly be generated by Automatic Network Capturing feature in Protocol Test Framework.
 
 ##<a name="4"/> 4. Network Setup
 
@@ -1012,7 +1012,7 @@ Take the share named **SMBBasic** as an example:
 2.	If you want to create a directory symbolic link under e.g. share **SMBBasic**, type the following commands in the console windows, and press **Enter**.
 ```
 	cd %SystemDrive%\SMBBasic
-	mklink /D Symboliclink %SystemDrive%\
+	mklink /D Symboliclink %SystemDrive%\FileShare
 ```
 
 3.  If you want to create a file symbolic link under e.g. share **FileShare**, type the following commands in the console windows, and press **Enter**.
@@ -1746,8 +1746,7 @@ Take the share named **SMBBasic** as an example:
 >	![](./image/FileServerUserGuide/image1.png)Note
 
 >	&emsp;&emsp;Prior to creating the cluster, the shared storage needs to be created and added to the failover cluster nodes. For more information about how to do this, please see [5.3.11. Setup SAN Storage Server](#5.3.11)
-
-	![](./image/FileServerUserGuide/image117.png)
+        ![](./image/FileServerUserGuide/image117.png)
 
 4.	Type the computer name of failover cluster nodes.
 
@@ -2123,7 +2122,7 @@ This section explains how to configure the test suite and how to run test cases.
 
 There are two ways to configure your test suite: by **Protocol Test Manager** and **Manually**.
 
-There are three ways to run your test cases: by **Protocol Test Manager**, **Batch Script** and **Visual Studio or Test Agent**. 
+There are three ways to run your test cases: by **Protocol Test Manager**, **Batch Script** and **Visual Studio**. 
 
 ###<a name="7.1"/> 7.1 Configure and Run Test Cases Using Protocol Test Manager
 
@@ -2368,7 +2367,7 @@ You can use the Visual Studio solution (.sln) file included with this test suite
 
 >	![](./image/FileServerUserGuide/image1.png)Note
 
->	&emsp;&emsp;While using Microsoft® Visual Studio® 2012 or above to run test cases, test suite may throw exception with message of **Cannot get test site**. To solve this issue, navigate to **Test** -#&gt; **Test Settings** -#&gt; **Select Test Settings File**, and select a test settings file that you want to use.
+>	&emsp;&emsp;While using Microsoft® Visual Studio® 2017 or above to run test cases, test suite may throw exception with message of **Cannot get test site**. To solve this issue, navigate to **Test** -#&gt; **Test Settings** -#&gt; **Select Test Settings File**, and select a test settings file that you want to use.
 
 To debug a test case:
 
