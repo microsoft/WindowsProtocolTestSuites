@@ -17,7 +17,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="clientPdu"></param>
         public void VerifyPdu(Client_X_224_Connection_Request_Pdu clientPdu)
         {
-            //Site.Log.Add(TestTools.LogEntryKind.Debug, "CheckX224ConnectionRequestPdu", clientPdu);
+            site.Log.Add(TestTools.LogEntryKind.Debug, "CheckX224ConnectionRequestPdu", clientPdu);
             site.Assert.AreEqual<byte>(0, clientPdu.x224Crq.classOptions,
                @"[In Client X.224 Connection Request PDU] x224Crq (7 bytes): An X.224 Class 0 Connection Request "
                + @"transport protocol data unit (TPDU), as specified in [X224] section 13.3.");
@@ -70,14 +70,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="connectInitialPdu"></param>
         public void VerifyPdu(Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request connectInitialPdu)
         {
-            //Site.Log.Add(TestTools.LogEntryKind.Debug, "CheckMCSConnectInitialPdu");
-            //<?>
+            site.Log.Add(TestTools.LogEntryKind.Debug, "CheckMCSConnectInitialPdu");
+            
             CaptureRequirement(connectInitialPdu.mcsCi.gccPdu != null, 
                 @"[In RDP Negotiation Request] The RDP Negotiation Request structure is used by a client to advertise the security protocols which it supports.");
-            //<?>
-            //site.Assert.AreEqual<byte>(0, connectInitialPdu.x224Data.type,  
-            // @"[In Client MCS Connect Initial PDU with GCC Conference Create Request] x224Data (3 bytes): An X.224 Class 0 Data PDU, as specified in [X224] section 13.7.");
-
+            
             if (!serverConfig.isExtendedClientDataSupported)
             {               
                 site.Assert.IsNull(connectInitialPdu.mcsCi.gccPdu.clientMonitorData, 
@@ -164,17 +161,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// </summary>
         /// <param name="securityPdu"></param>
         public void VerifyPdu(Client_Security_Exchange_Pdu securityPdu)
-        {
-            //<?>
+        {            
             CaptureRequirement(securityPdu.securityExchangePduData.length != 0,
                 @"In Security Exchange PDU Data (TS_SECURITY_PACKET) the length field is a 32-bit, unsigned integer. The size in bytes of the buffer containing the encrypted client random value, not including the header length.");
             //Refer to test suite bug #8341151
-            //site.Assert.IsTrue((securityPdu.commonHeader.securityHeader.flags & TS_SECURITY_HEADER_flags_Values.SEC_EXCHANGE_PKT) == TS_SECURITY_HEADER_flags_Values.SEC_EXCHANGE_PKT, 
-            //  "In Security Exchange PDU Data (TS_SECURITY_PACKET) the flags field of the security header MUST contain the SEC_EXCHANGE_PKT flag (0x0001).");
+            site.Assert.IsTrue((securityPdu.commonHeader.securityHeader.flags & TS_SECURITY_HEADER_flags_Values.SEC_EXCHANGE_PKT) == TS_SECURITY_HEADER_flags_Values.SEC_EXCHANGE_PKT,
+              "In Security Exchange PDU Data (TS_SECURITY_PACKET) the flags field of the security header MUST contain the SEC_EXCHANGE_PKT flag (0x0001).");
 
-            //following capture is wrong, as after decoding the length would changed
-            //site.Assert.AreEqual<uint>((uint)securityPdu.securityExchangePduData.clientRandom.Length, securityPdu.securityExchangePduData.length, 
-            //"In Security Exchange PDU Data (TS_SECURITY_PACKET) the length field indicates the size in bytes of the buffer containing the encrypted client random value, not including the header length.");
         }
 
         /// <summary>
@@ -204,8 +197,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_128BIT)
             {
                 //<bug>sdk bug 
-                //site.Assert.IsInstanceOfType(clientInfo.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER1),
-                //    @"[In Client Info PDU Data (CLIENT_INFO_PDU)]securityHeader (variable):The securityHeader in CLIENT_INFO_PDU structure is a Non-FIPS Security Header (section 2.2.8.1.1.2.2) if the Encryption LevelMethod selected by the server (see sections 5.3.2 and 2.2.1.4.3) is ENCRYPTION_LEVEL_LOW (1METHOD_40BIT (0x00000001), ENCRYPTION_LEVEL_CLIENT_COMPATIBLE (2METHOD_56BIT (0x00000008), or ENCRYPTION_LEVEL_HIGH (3METHOD_128BIT (0x00000002).");
+                site.Assert.IsInstanceOfType(clientInfo.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER1),
+                    @"[In Client Info PDU Data (CLIENT_INFO_PDU)]securityHeader (variable):The securityHeader in CLIENT_INFO_PDU structure is a Non-FIPS Security Header (section 2.2.8.1.1.2.2) if the Encryption LevelMethod selected by the server (see sections 5.3.2 and 2.2.1.4.3) is ENCRYPTION_LEVEL_LOW (1METHOD_40BIT (0x00000001), ENCRYPTION_LEVEL_CLIENT_COMPATIBLE (2METHOD_56BIT (0x00000008), or ENCRYPTION_LEVEL_HIGH (3METHOD_128BIT (0x00000002).");
             }
             else if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_FIPS)
             {
@@ -218,9 +211,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             if (serverConfig.encryptedProtocol == EncryptedProtocol.Rdp)
             {
                 //SDK Bug, SecurityHeader.Flag is parsed incorrectly for Client Info PDU
-                //site.Assert.AreEqual<TS_SECURITY_HEADER_flags_Values>( TS_SECURITY_HEADER_flags_Values.SEC_INFO_PKT, (clientInfo.commonHeader.securityHeader.flags & TS_SECURITY_HEADER_flags_Values.SEC_INFO_PKT), 
-                //    @"[In Client Info PDU Data (CLIENT_INFO_PDU)]In CLIENT_INFO_PDU structure, the flags field of "
-                //    + @"the security header MUST contain the SEC_INFO_PKT flag (section 2.2.8.1.1.2.1).");
+                site.Assert.AreEqual<TS_SECURITY_HEADER_flags_Values>(TS_SECURITY_HEADER_flags_Values.SEC_INFO_PKT, (clientInfo.commonHeader.securityHeader.flags & TS_SECURITY_HEADER_flags_Values.SEC_INFO_PKT),
+                    @"[In Client Info PDU Data (CLIENT_INFO_PDU)]In CLIENT_INFO_PDU structure, the flags field of "
+                    + @"the security header MUST contain the SEC_INFO_PKT flag (section 2.2.8.1.1.2.1).");
 
                 site.Assert.IsNotNull(clientInfo.infoPacket, 
                     @"[In Info Packet (TS_INFO_PACKET)]The Info Packet  SHOULD be encrypted (see sections 5.3 and"
@@ -673,8 +666,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 CaptureRequirement(numberEvents >= 1 && numberEvents <= 15,
                     @"In fpInputHeader, numEvents is a 4-bit, unsigned integer that collapses the number of fast-path input events packed together in the fpInputEvents field into 4 bits if the number of events is in the range 1 to 15."
                     );
-            }
-            NumEntriesAndK
+            }            
             else
             {
                 CaptureRequirement(fpInputPdu.numberEvents != 0,
@@ -862,7 +854,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 || core.version == version_Values.V8
                 || core.version == version_Values.V9,
                 VersionDescribeFormat());
-            Site.Assert.IsTrue(core.desktopWidth >= 0,               
+            Site.Assert.IsTrue(core.desktopWidth >= 0,
                 "In Client Core Data, desktopWidth must be positive.");
             Site.Assert.IsTrue(core.desktopHeight >= 0,
                 "In Client Core Data, desktopHeight must be positive.");
@@ -1030,56 +1022,54 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="info"></param>
         public void VerifyStructure(TS_INFO_PACKET info)
         {
+            
             //Unicode = 2 * Ansi
-            site.Assert.AreEqual<int>(info.Domain.Length * 2, (int)info.cbDomain, 
+            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE? info.Domain.Length * 2: info.Domain.Length, (int)info.cbDomain, 
                 @"In the TS_INFO_PACKET structure, cbDomain represents the size in bytes of the character data in the Domain field."
                 + @" This size excludes the length of the mandatory null terminator.");
-            site.Assert.AreEqual<int>(info.UserName.Length * 2, (int)info.cbUserName, 
+            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE ? info.UserName.Length * 2: info.UserName.Length, (int)info.cbUserName, 
                 @"In the TS_INFO_PACKET structure, cbUserName represents the size in bytes of the character data in the UserName "
                 + @"field. This size excludes the length of the mandatory null terminator.");
-            site.Assert.AreEqual<int>(info.Password.Length * 2, (int)info.cbPassword, 
+            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE ? info.Password.Length * 2 : info.Password.Length, (int)info.cbPassword, 
                 @"In the TS_INFO_PACKET structure, cbPassword represents the size in bytes of the character data in the Password "
                 + @"field. This size excludes the length of the mandatory null terminator.");
-            site.Assert.AreEqual<int>(info.AlternateShell.Length * 2, (int)info.cbAlternateShell,
+            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE ? info.AlternateShell.Length * 2 : info.AlternateShell.Length, (int)info.cbAlternateShell,
                 @"In the TS_INFO_PACKET structure, cbAlternateShell represents the size in bytes of the character data in the "
                 + @"AlternateShell field. This size excludes the length of the mandatory null terminator.");
-            site.Assert.AreEqual<int>(info.WorkingDir.Length * 2, (int)info.cbWorkingDir, 
+            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE ? info.WorkingDir.Length * 2 : info.WorkingDir.Length, (int)info.cbWorkingDir, 
                 @"In the TS_INFO_PACKET structure, cbWorkingDir represents the size in bytes of the character data in the WorkingDir"
                 + @" field. This size excludes the length of the mandatory null terminator.");
-            //<bug> Domain not contains /0
-            //site.Assert.IsTrue(info.Domain.Contains("\0"), 
-            //    @"In the TS_INFO_PACKET structure, Domain field MUST contain at least a null terminator character in ANSI or Unicode"
-            //    + @" format (depending on the presence of the INFO_UNICODE flag)");
-            //site.Assert.IsTrue(info.UserName.Contains("\0"), 
-            //    @"In the TS_INFO_PACKET structure, UserName field MUST contain at least a null terminator character in ANSI or Unicode"
-            //    + @" format (depending on the presence of the INFO_UNICODE flag)");
-            //site.Assert.IsTrue(info.Password.Contains("\0"), 
-            //    @"In the TS_INFO_PACKET structure, Password field MUST contain at least a null terminator character in ANSI or Unicode"
-            //    + @" format (depending on the presence of the INFO_UNICODE flag)");
+
+            site.Assert.IsTrue(info.Domain.Contains("\0"),
+                @"In the TS_INFO_PACKET structure, Domain field MUST contain at least a null terminator character in ANSI or Unicode"
+                + @" format (depending on the presence of the INFO_UNICODE flag)");
+            site.Assert.IsTrue(info.UserName.Contains("\0"),
+                @"In the TS_INFO_PACKET structure, UserName field MUST contain at least a null terminator character in ANSI or Unicode"
+                + @" format (depending on the presence of the INFO_UNICODE flag)");
+            site.Assert.IsTrue(info.Password.Contains("\0"),
+                @"In the TS_INFO_PACKET structure, Password field MUST contain at least a null terminator character in ANSI or Unicode"
+                + @" format (depending on the presence of the INFO_UNICODE flag)");
             site.Assert.IsTrue(info.AlternateShell.Length <= 512, 
                 @"In the TS_INFO_PACKET structure, for AlternateShell, the maximum allowed length is 512 bytes (including the mandatory"
                 + @" null terminator).");
-            //site.Assert.IsTrue(info.AlternateShell.Contains("\0"), 
-            //    @"In the TS_INFO_PACKET structure, AlternateShell field MUST contain at least a null terminator character in ANSI or "
-            //    + @"Unicode format (depending on the presence of the INFO_UNICODE flag)");
-            //site.Assert.IsTrue(info.WorkingDir.Contains("\0"), 
-            //    @"In the TS_INFO_PACKET structure, WorkingDir field MUST contain at least a null terminator character in ANSI or "
-            //    + @"Unicode format (depending on the presence of the INFO_UNICODE flag)");
+            site.Assert.IsTrue(info.AlternateShell.Contains("\0"),
+                @"In the TS_INFO_PACKET structure, AlternateShell field MUST contain at least a null terminator character in ANSI or "
+                + @"Unicode format (depending on the presence of the INFO_UNICODE flag)");
+            site.Assert.IsTrue(info.WorkingDir.Contains("\0"),
+                @"In the TS_INFO_PACKET structure, WorkingDir field MUST contain at least a null terminator character in ANSI or "
+                + @"Unicode format (depending on the presence of the INFO_UNICODE flag)");
             if (info.extraInfo != null)
             {
-                //bugbug:
-                //AF_INET 0x00002
-                //AF_INET6 0x0017
-                //<hardcode>
+                
                 if (!this.Site.Properties["RDP.Version"].Equals("8.1"))
                 {
-                    site.Assert.IsTrue(info.extraInfo.clientAddressFamily == clientAddressFamily_Values.V1 || (int)info.extraInfo.clientAddressFamily == 0x17, 
+                    site.Assert.IsTrue(info.extraInfo.clientAddressFamily == clientAddressFamily_Values.V1 || info.extraInfo.clientAddressFamily == clientAddressFamily_Values.V2, 
                         @"[In Extended Info Packet (TS_EXTENDED_INFO_PACKET)]clientAddressFamily (2 bytes):clientAddressFamily can have the "
                         + @"following values: 1.AF_INET 0x00002 2.AF_INET6 0x0017");
                 }
 
-                Console.WriteLine("RS503, clientDir.Length = " + info.extraInfo.clientDir.Length);
-                Console.WriteLine("RS503, cbClientDir=" + info.extraInfo.cbClientDir);
+                Console.WriteLine("clientDir.Length = " + info.extraInfo.clientDir.Length);
+                Console.WriteLine("cbClientDir=" + info.extraInfo.cbClientDir);
 
                 bool isValidLen = info.extraInfo.cbClientDir <= 512;
                 site.Assert.IsTrue(isValidLen,
@@ -1362,9 +1352,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             String imeFileName = input.imeFileName;
             Console.WriteLine("imeFileName= " + imeFileName);
             Console.WriteLine("imeFileName.Length = " + imeFileName.Length.ToString());
-            //<?> should check is Unicode characters?
-            //site.Assert.IsTrue(input.imeFileName.Length <= 32,
-            //    @"In TS_INPUT_CAPABILITY_SET structure, the imeFileNamefield contains up to 31 Unicode characters plus a null terminator.");
+
+            site.Assert.IsTrue(input.imeFileName.Length <= 32,
+                @"In TS_INPUT_CAPABILITY_SET structure, the imeFileNamefield contains up to 31 Unicode characters plus a null terminator.");
         }
 
         /// <summary>

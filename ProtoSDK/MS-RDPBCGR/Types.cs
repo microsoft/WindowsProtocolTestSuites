@@ -3412,9 +3412,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         None = 0,
 
         /// <summary>
-        ///  Possible value.
+        ///  AF_INET 0x00002: The clientAddress field contains an IPv4 address.
         /// </summary>
         V1 = 0x0002,
+
+        /// <summary>
+        ///  AF_INET6 0x0017: The clientAddress field contains an IPv6 address.
+        /// </summary>
+        V2 = 0x0017
     }
 
     /// <summary>
