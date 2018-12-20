@@ -342,15 +342,19 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             #region File Server Failover
 
-            // Only Windows Server 2012 R2 supports asymmetric share
-            if (detectionInfo.platform != Platform.WindowsServer2012R2)
+            // Only Windows Server 2012 R2 and later supports asymmetric share
+            if (detectionInfo.platform == Platform.NonWindows || detectionInfo.platform >= Platform.WindowsServer2012R2)
             {
-                // For other Windows platform, the feature is not supported.
-                // For NonWindows platform, the items are suggested to be configured manually.
                 propertiesDic.Add("Cluster.AsymmetricShare", GetAsymmetricShare());
-                propertiesDic.Add("Cluster.OptimumNodeOfAsymmetricShare", new List<string>() { string.Empty });
-                propertiesDic.Add("Cluster.NonOptimumNodeOfAsymmetricShare", new List<string>() { string.Empty });
             }
+            else
+            {
+                propertiesDic.Add("Cluster.AsymmetricShare", new List<string>() { string.Empty });
+            }
+
+            // Let user input node information manually
+            propertiesDic.Add("Cluster.OptimumNodeOfAsymmetricShare", new List<string>() { string.Empty });
+            propertiesDic.Add("Cluster.NonOptimumNodeOfAsymmetricShare", new List<string>() { string.Empty });
 
             #endregion
 
@@ -557,8 +561,8 @@ namespace Microsoft.Protocols.TestManager.Detector
                 detectionInfo.F_CopyOffload[0] == DetectResult.Supported || detectionInfo.F_CopyOffload[1] == DetectResult.Supported));
 
             selectedRuleList.Add(CreateRule(
-                "Feature.Cluster Required.RSVD (Remote Shared Virtual Disk).RSVDVersion1", 
-                (detectionInfo.RsvdSupport == DetectResult.Supported) && 
+                "Feature.Cluster Required.RSVD (Remote Shared Virtual Disk).RSVDVersion1",
+                (detectionInfo.RsvdSupport == DetectResult.Supported) &&
                 (detectionInfo.RsvdVersion == RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1 || detectionInfo.RsvdVersion == RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_2)));
             selectedRuleList.Add(CreateRule(
                 "Feature.Cluster Required.RSVD (Remote Shared Virtual Disk).RSVDVersion2",

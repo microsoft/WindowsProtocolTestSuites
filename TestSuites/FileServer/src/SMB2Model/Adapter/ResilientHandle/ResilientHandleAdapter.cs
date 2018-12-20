@@ -60,14 +60,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Resilient
         #endregion
 
         #region Action
-        
+
         public void ReadConfig(out ResilientHandleServerConfig config)
         {
             resilientHandleConfig = new ResilientHandleServerConfig
             {
                 MaxSmbVersionSupported = ModelUtility.GetModelDialectRevision(testConfig.MaxSmbVersionSupported),
                 IsIoCtlCodeResiliencySupported = testConfig.IsIoCtlCodeSupported(CtlCode_Values.FSCTL_LMR_REQUEST_RESILIENCY),
-                Platform = testConfig.Platform
+                Platform = testConfig.Platform >= Platform.WindowsServer2016 ? Platform.WindowsServer2016 : testConfig.Platform
             };
             config = resilientHandleConfig;
 
@@ -159,7 +159,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Resilient
         public void IoCtlResiliencyRequest(IoCtlInputCount inputCount, ResilientTimeout timeout)
         {
             uint timeoutValue = 0;
-            switch(timeout)
+            switch (timeout)
             {
                 case ResilientTimeout.InvalidTimeout:
                     // if the requested Timeout in seconds is greater than MaxResiliencyTimeout in seconds
@@ -178,7 +178,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Resilient
             timeoutValue *= 1000;
 
             uint inputCountValue = 0;
-            switch(inputCount)
+            switch (inputCount)
             {
                 case IoCtlInputCount.InputCountGreaterThanRequestSize:
                     inputCountValue = NETWORK_RESILIENCY_REQUEST_SIZE + 1;
@@ -206,13 +206,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Resilient
                 out ioCtlResponse,
                 out inputInResponse,
                 out outputInResponse,
-                checker: (header, response)=>
+                checker: (header, response) =>
                     {
                     // do nothing, skip the exception
-                    }
+                }
                 );
             #region Verify IOCTL Response TD 3.3.5.15.9
-            if((NtStatus)status == NtStatus.STATUS_SUCCESS)
+            if ((NtStatus)status == NtStatus.STATUS_SUCCESS)
             {
                 Site.Assert.AreEqual<CtlCode_Values>(
                     CtlCode_Values.FSCTL_LMR_REQUEST_RESILIENCY,
@@ -274,7 +274,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Resilient
                 Site,
                 testConfig,
                 reconnectClient,
-                new DialectRevision[]{ dialect },
+                new DialectRevision[] { dialect },
                 clientGuid,
                 account,
                 out dialect,
@@ -293,7 +293,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Resilient
                 out fileId,
                 out createContextResponse,
                 createContexts: new Smb2CreateContextRequest[]
-                    { 
+                    {
                         new Smb2CreateDurableHandleReconnect()
                         {
                             Data = fileId
@@ -302,7 +302,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Resilient
                 checker: (header, response) =>
                     {
                     // do nothing, skip the exception 
-                    }
+                }
                 );
 
             ReEstablishResilientOpenResponse((ModelSmb2Status)status);
@@ -321,9 +321,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Resilient
             AccountCredential account,
             out DialectRevision responseDialect,
             out uint treeId)
-        {       
+        {
             client.ConnectToServer(testConfig.UnderlyingTransport, testConfig.SutComputerName, testConfig.SutIPAddress);
-            
+
             // Negotiate
             NEGOTIATE_Response? negotiateResponse = null;
             client.Negotiate(
