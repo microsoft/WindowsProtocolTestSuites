@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- Forces the IE browser the render at whatever the most recent version's standards are.  -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    
+    <title>@(ViewBag.model.Title)</title>
+    <link rel="icon" href="@Url.Content("~/Content/assets/favicon.ico")"/>
+
+    @Styles.Render("~/content/css")
+</head>
+<body>
+    <!-- this hidden element provides the current url to the javascripts -->
+    @Html.Hidden("HiddenCurrentUrl", Url.Content("~"))
+
+    <!-- Navigation Bar -->
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="static/index.html"><span class="glyphicon glyphicon-home"></span></a>
+                <a class="navbar-brand" href="@Url.Action(ViewBag.model.LinkName, ViewBag.model.LinkController)">@(ViewBag.model.Project)</a>
+            </div>
+            
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    @foreach (var menu in ViewBag.model.Menu)
+                    {
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">@(menu.Name)</a>
+                            <ul class="dropdown-menu collapse">
+                                @foreach(var sub in menu.SubMenu){
+                                    <li><a href="@Url.Action("index", sub.Controller)">@(sub.SubName)</a></li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </div>
+
+    <div class="maincontent">
+        @RenderBody()
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="container">
+            <div>
+                <p>@(ViewBag.model.Project) is developed and maintained by @(ViewBag.model.Author).</p>
+                <p>Copyright &copy Microsoft. All Right Reserved. </p>
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/js")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -41,10 +41,12 @@
     <Compile Include="TestSuiteDataFiles.wxs" />
     <Compile Include="TestSuiteImportMergeModules.wxs" />
     <Compile Include="TestSuiteMiscFiles.wxs" />
+    <Compile Include="TestSuitePtfconfigFiles.wxs" />
     <Compile Include="TestSuitePrivacyStatementDlg.wxs" />
     <Compile Include="TestSuitePrivacyStatementLowMsiVersionDlg.wxs" />
     <Compile Include="TestSuiteProduct.wxs" />
     <Compile Include="TestSuiteScripts.wxs" />
+    <Compile Include="CommonBatch.wxs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="UiText.wxl" />
@@ -189,8 +191,9 @@
   <Target Name="GenDeployWxsFile" DependsOnTargets="ResolveWixExtensionReferences" BeforeTargets="Compile">
     <Exec Command='"$(WIX)\bin\heat.exe" dir "..\Batch" -out TestSuiteBatchFiles.wxs -template fragment -gg -cg TESTSUITE_BATCH_FILES -dr TESTSUITE_BATCH_DIR -var wix.TESTSUITE_BATCH_DIR -sreg -sfrag -srd' />
     <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" -out TestSuiteBinFiles.wxs -template fragment -gg -cg TESTSUITE_BIN_FILES -dr TESTSUITE_BIN_DIR -var wix.TESTSUITE_BIN_DIR -sreg -sfrag -srd' />
-    <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\TestSuites\RDP\Client\Setup\Scripts" -out TestSuiteScripts.wxs -template fragment -gg -cg TESTSUITE_SCRIPTS_FILES -dr TESTSUITE_SCRIPTS_DIR -var wix.TESTSUITE_SCRIPTS_DIR -sreg -sfrag -srd' />
+    <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Scripts" -out TestSuiteScripts.wxs -template fragment -gg -cg TESTSUITE_SCRIPTS_FILES -dr TESTSUITE_SCRIPTS_DIR -var wix.TESTSUITE_SCRIPTS_DIR -sreg -sfrag -srd' />
     <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\TestSuites\RDP\Client\Setup\Data" -out TestSuiteDataFiles.wxs -template fragment -gg -cg TESTSUITE_DATA_FILES -dr TESTSUITE_DATA_DIR -var wix.TESTSUITE_DATA_DIR -sreg -sfrag -srd' />
+    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\common&quot; -out CommonBatch.wxs -template fragment -gg -cg COMMON_BATCH_FILES -dr TESTSUITE_COMMON_SCRIPTS_DIR -var wix.TESTSUITE_COMMON_SCRIPTS_DIR -sreg -sfrag -srd" />
   </Target>
   
   <Target Name="AfterBuild">
@@ -207,6 +210,7 @@
     <RdpeiSUTControlAdapter Include="..\Adapter\RdpeiSUTControlAdapter\*.ps1" />
     <NonWindowsSUTImplementation Include="..\Adapter\NonWindowsSUTImplementation\*.ps1" />
     <RdpedispSUTControlAdapter Include="..\Adapter\RdpedispSUTControlAdapter\*.ps1" />
+    <RDPClientScriptFiles Include="..\..\Setup\Scripts\*" />
   </ItemGroup>
   <Target Name="CopyFilesToBin" BeforeTargets="GenDeployWxsFile" >
     <Copy SourceFiles="..\ClientLocal.TestSettings" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
@@ -220,5 +224,12 @@
     <Copy SourceFiles="@(RdpeiSUTControlAdapter)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
     <Copy SourceFiles="@(NonWindowsSUTImplementation)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin\NonWindowsSUTImplementation" />
     <Copy SourceFiles="@(RdpedispSUTControlAdapter)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
+    <Copy SourceFiles="@(RDPClientScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Disable_Firewall.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-Parameter.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Modify-ConfigFileNode.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-Parameter.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\TurnOff-FileReadonly.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Enable-WinRM.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Scripts" />
   </Target>
 </Project>

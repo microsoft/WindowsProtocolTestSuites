@@ -44,6 +44,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             FileBasicInfoCreationTime
         }
 
+        /// <summary>
+        /// According to MS-SMB2 2.2.37.1
+        /// Specify the type of element in SidBuffer
+        /// </summary>
+        private enum SidBufferFormat
+        {
+            /// <summary>
+            /// Format 1 of SidBuffer
+            /// SidBuffer contains a list of FILE_GET_QUOTA_INFORMATION
+            /// </summary>
+            FILE_GET_QUOTA_INFORMATION,
+
+            /// <summary>
+            /// Format 2 of SidBuffer
+            /// SidBuffer contains a SID.
+            /// Please be noted that Windows-based clients never send a request using the SidBuffer format 2.
+            /// </summary>
+            SID
+        }
+
         #region Variables
         private Smb2FunctionalClient client1;
         private Smb2FunctionalClient client2;
@@ -194,7 +214,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends CREATE request with desired access set to GENERIC_READ and GENERIC_WRITE to create a file.");
             Smb2CreateContextResponse[] serverCreateContexts;
             CREATE_Response? createResponse = null;
-            string fileName = Guid.NewGuid().ToString() + ".txt";
+            string fileName = GetTestFileName(uncSharePath);
             FILEID fileId1;
             client1.Create(
                 treeId1,
@@ -294,6 +314,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.QueryInfo)]
+        [Description("This test case is designed to verify the behavior of querying quota information with FILE_GET_QUOTA_INFO in SidBuffer.")]
+        public void BVT_SMB2Basic_Query_Quota_Info()
+        {
+            QueryQuotaInfo(SidBufferFormat.FILE_GET_QUOTA_INFORMATION);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
         [TestCategory(TestCategories.LockUnlock)]
         [Description("This test case is designed to test whether server can handle WRITE of locking content correctly.")]
         public void BVT_SMB2Basic_LockAndUnLock()
@@ -321,7 +351,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             status = client1.TreeConnect(uncSharePath, out treeId1);
             Smb2CreateContextResponse[] serverCreateContexts;
             FILEID fileId1;
-            string fileName = Guid.NewGuid().ToString() + ".txt";
+            string fileName = GetTestFileName(uncSharePath);
             status = client1.Create(
                 treeId1,
                 fileName,
@@ -512,7 +542,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             uint treeId;
             status = client1.TreeConnect(uncSharePath, out treeId);
-            string fileName = "BVT_SMB2Basic_InvalidCreateRequestStructureSize" + Guid.NewGuid();
+            string fileName = GetTestFileName(uncSharePath);
 
             FILEID fileID;
             Smb2CreateContextResponse[] serverCreateContexts;
@@ -538,6 +568,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             client1.TreeDisconnect(treeId);
             client1.LogOff();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.QueryDir)]
+        [Description("This test case is designed to verify QUERY_DIRECTORY with flag SMB2_REOPEN to a directory is handled correctly.")]
+        public void BVT_SMB2Basic_QueryDir_Reopen_OnDir()
+        {
+            QueryDir_Reopen(FileType.DirectoryFile);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.QueryDir)]
+        [Description("This test case is designed to verify QUERY_DIRECTORY with flag SMB2_REOPEN to a file is handled correctly.")]
+        public void BVT_SMB2Basic_QueryDir_Reopen_OnFile()
+        {
+            QueryDir_Reopen(FileType.DataFile);
         }
 
         [TestMethod]
@@ -2119,6 +2169,168 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             if (request == null)
                 return;
             request.PayLoad.StructureSize += 1;
+        }
+
+        private void QueryDir_Reopen(FileType fileType)
+        {
+            string target = (fileType == FileType.DataFile) ? "file" : "directory";
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client to create a {0} by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE", target);
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+
+            uint status = client1.Negotiate(
+                TestConfig.RequestDialects,
+                TestConfig.IsSMB1NegotiateEnabled);
+
+            status = client1.SessionSetup(
+                TestConfig.DefaultSecurityPackage,
+                TestConfig.SutComputerName,
+                TestConfig.AccountCredential,
+                TestConfig.UseServerGssToken);
+
+            uint treeId;
+            status = client1.TreeConnect(uncSharePath, out treeId);
+
+            FILEID fileId;
+            Smb2CreateContextResponse[] serverCreateContexts;
+            CreateOptions_Values createOptions = (fileType == FileType.DataFile) ? CreateOptions_Values.FILE_NON_DIRECTORY_FILE : CreateOptions_Values.FILE_DIRECTORY_FILE;
+
+            string fileName = GetTestFileName(uncSharePath);
+            status = client1.Create(
+                treeId,
+                fileName,
+                createOptions | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
+                out fileId,
+                out serverCreateContexts);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends QUERY_DIRECTORY request with flag SMB2_REOPEN to query directory information on a {0}.", target);
+            byte[] outputBuffer;
+            status = client1.QueryDirectory(
+                treeId,
+                FileInformationClass_Values.FileDirectoryInformation,
+                QUERY_DIRECTORY_Request_Flags_Values.REOPEN,
+                0,
+                fileId,
+                out outputBuffer,
+                checker: (header, response) => { }
+                );
+
+            if (fileType == FileType.DataFile)
+            {
+                // MS-SMB2 section 3.3.5.18 Receiving an SMB2 QUERY_DIRECTORY Request
+                BaseTestSite.Log.Add(LogEntryKind.TestStep,
+                    "If the open is not an open to a directory, the server MUST process the request as follows:\n");
+
+                if (testConfig.Platform == Platform.WindowsServer2008 ||
+                    testConfig.Platform == Platform.WindowsServer2008R2 ||
+                    testConfig.Platform == Platform.WindowsServer2012 ||
+                    testConfig.Platform == Platform.WindowsServer2012R2)
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        Smb2Status.STATUS_NOT_SUPPORTED,
+                        status,
+                        "If SMB2_REOPEN is set in the Flags field of the SMB2 QUERY_DIRECTORY request, the request MUST be failed with an inplementation-specific error code:\n" +
+                        "Windows Server 2008, Windows Server 2008R2, Windows Server 2012 and Windows Server 2012 R2 fail the request with STATUS_NOT_SUPPORTED. " +
+                        "Actually server returns {0}.", Smb2Status.GetStatusCode(status));
+                }
+                else
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        Smb2Status.STATUS_INVALID_PARAMETER,
+                        status,
+                        "Otherwise, the request MUST be failed with STATUS_INVALID_PARAMETER." +
+                        "Actually server returns {0}.", Smb2Status.GetStatusCode(status));
+                }
+            }
+            else // FileType.DirectoryFile
+            {
+                BaseTestSite.Assert.AreEqual(
+                    Smb2Status.STATUS_SUCCESS,
+                    status,
+                    "QUERY_DIRECTORY is expected to success, actually server returns {0}.", Smb2Status.GetStatusCode(status));
+            }
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeId, fileId);
+            client1.TreeDisconnect(treeId);
+            client1.LogOff();
+        }
+
+        private void QueryQuotaInfo(SidBufferFormat type)
+        {
+            // MS-SMB2 2.2.37.1
+            BaseTestSite.Assert.IsFalse(
+                type == SidBufferFormat.SID,
+                "Windows-based clients never send a request using the SidBuffer format 2");
+
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client to create a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            uint status = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            status = client1.SessionSetup(
+                TestConfig.DefaultSecurityPackage,
+                TestConfig.SutComputerName,
+                TestConfig.AccountCredential,
+                TestConfig.UseServerGssToken);
+
+            uint treeId;
+            status = client1.TreeConnect(uncSharePath, out treeId);
+            Smb2CreateContextResponse[] serverCreateContexts;
+            FILEID fileId;
+            string fileName = GetTestFileName(uncSharePath);
+            status = client1.Create(
+                treeId,
+                fileName,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
+                out fileId,
+                out serverCreateContexts);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client queries quota information by sending QUERY_INFO request.");
+            byte[] inputBuffer = CreateSidBuffer(type);
+            byte[] outputBuffer;
+            status = client1.QueryFileQuotaInfo(
+                treeId,
+                QUERY_INFO_Request_Flags_Values.SL_RESTART_SCAN,
+                fileId,
+                inputBuffer,
+                out outputBuffer
+                );
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_SUCCESS,
+                status,
+                "QUERY_INFO is expected to success, actually server returns {0}.", Smb2Status.GetStatusCode(status));
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF.");
+            client1.Close(treeId, fileId);
+            client1.TreeDisconnect(treeId);
+            client1.LogOff();
+        }
+
+        /// <summary>
+        /// MS-SMB2 2.2.37.1
+        /// Create SidBuffer
+        /// </summary>
+        /// <param name="type">Indicate the type of element in SidBuffer</param>
+        /// <returns></returns>
+        private byte[] CreateSidBuffer(SidBufferFormat type)
+        {
+            QUERY_QUOTA_INFO quotaInfo = new QUERY_QUOTA_INFO();
+            // If the application provides a SidList,
+            // via one or more FILE_GET_QUOTA_INFORMATION structures linked by NextEntryOffset,
+            // they MUST be copied to the beginning of the SidBuffer,
+            // SidListLength MUST be set to their length in bytes,
+            // StartSidLength SHOULD be set to 0,
+            // and StartSidOffset SHOULD be set to 0.
+
+            FileGetQuotaInformation fileGetQuotaInfo = new FileGetQuotaInformation();
+            _SID curSid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, testConfig.UserName);
+            fileGetQuotaInfo.Sid = curSid;
+            fileGetQuotaInfo.SidLength = (uint)TypeMarshal.ToBytes<_SID>(curSid).Length;
+            quotaInfo.Buffer = TypeMarshal.ToBytes<FileGetQuotaInformation>(fileGetQuotaInfo);
+            quotaInfo.SidListLength = (uint)quotaInfo.Buffer.Length;
+            return TypeMarshal.ToBytes<QUERY_QUOTA_INFO>(quotaInfo);
         }
     }
 }

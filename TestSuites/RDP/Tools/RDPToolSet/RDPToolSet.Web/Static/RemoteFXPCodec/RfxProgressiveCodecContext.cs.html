@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>RfxProgressiveCodecContext.cs</title>
+    <link href="../../Content/csharp.css" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- code formatted by http://manoli.net/csharpformat/ -->
+<div class="csharpcode">
+<pre><span class="lnum">   1:  </span><span class="rem">//------------------------------------------------------------------------------</span></pre>
+<pre><span class="lnum">   2:  </span><span class="rem">// Copyright (c) Microsoft Corporation. All rights reserved.</span></pre>
+<pre><span class="lnum">   3:  </span><span class="rem">//------------------------------------------------------------------------------</span></pre>
+<pre><span class="lnum">   4:  </span>&nbsp;</pre>
+<pre><span class="lnum">   5:  </span>&nbsp;</pre>
+<pre><span class="lnum">   6:  </span><span class="kwrd">using</span> System;</pre>
+<pre><span class="lnum">   7:  </span><span class="kwrd">using</span> System.Collections.Generic;</pre>
+<pre><span class="lnum">   8:  </span><span class="kwrd">using</span> Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;</pre>
+<pre><span class="lnum">   9:  </span>&nbsp;</pre>
+<pre><span class="lnum">  10:  </span><span class="kwrd">namespace</span> Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx</pre>
+<pre><span class="lnum">  11:  </span>{</pre>
+<pre><span class="lnum">  12:  </span>    <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  13:  </span>    <span class="rem">/// The RemoteFX Progressive  Codec Context class</span></pre>
+<pre><span class="lnum">  14:  </span>    <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre id="RfxProgressiveCodecContext"><span class="lnum">  15:  </span>    <span class="kwrd">public</span> <span class="kwrd">class</span> RfxProgressiveCodecContext : RemoteFXCodecContext</pre>
+<pre><span class="lnum">  16:  </span>    {</pre>
+<pre><span class="lnum">  17:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  18:  </span>        <span class="rem">/// Indicates if the Discrete Wavelet Transform (DWT) uses the "Reduce Extrapolate" method.</span></pre>
+<pre><span class="lnum">  19:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  20:  </span>        <span class="kwrd">public</span> <span class="kwrd">bool</span> UseReduceExtrapolate;</pre>
+<pre><span class="lnum">  21:  </span>&nbsp;</pre>
+<pre><span class="lnum">  22:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  23:  </span>        <span class="rem">/// Indicates if use progressive techniques.</span></pre>
+<pre><span class="lnum">  24:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  25:  </span>        <span class="kwrd">public</span> <span class="kwrd">bool</span> UseProgressive;</pre>
+<pre><span class="lnum">  26:  </span>&nbsp;</pre>
+<pre><span class="lnum">  27:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  28:  </span>        <span class="rem">/// Indicates if allow to send difference tile</span></pre>
+<pre><span class="lnum">  29:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  30:  </span>        <span class="kwrd">public</span> <span class="kwrd">bool</span> UseDifferenceTile;</pre>
+<pre><span class="lnum">  31:  </span>&nbsp;</pre>
+<pre><span class="lnum">  32:  </span>        <span class="rem">//Data already sent</span></pre>
+<pre><span class="lnum">  33:  </span>        <span class="kwrd">public</span> DwtTile DAS;</pre>
+<pre><span class="lnum">  34:  </span>&nbsp;</pre>
+<pre><span class="lnum">  35:  </span>        <span class="rem">//Data remaining to be sent</span></pre>
+<pre><span class="lnum">  36:  </span>        <span class="kwrd">public</span> DwtTile DRS;</pre>
+<pre><span class="lnum">  37:  </span>&nbsp;</pre>
+<pre><span class="lnum">  38:  </span>        <span class="rem">//Data to be sent</span></pre>
+<pre><span class="lnum">  39:  </span>        <span class="kwrd">public</span> DwtTile DTS;</pre>
+<pre><span class="lnum">  40:  </span>&nbsp;</pre>
+<pre><span class="lnum">  41:  </span>        <span class="rem">//Data to be sent after progressive quantantian</span></pre>
+<pre><span class="lnum">  42:  </span>        <span class="kwrd">public</span> DwtTile ProgQ;</pre>
+<pre><span class="lnum">  43:  </span>&nbsp;</pre>
+<pre><span class="lnum">  44:  </span>        <span class="rem">//The tri-state</span></pre>
+<pre><span class="lnum">  45:  </span>        <span class="kwrd">public</span> DwtTile TriSignState;</pre>
+<pre><span class="lnum">  46:  </span>&nbsp;</pre>
+<pre><span class="lnum">  47:  </span>        <span class="rem">//the last chunk for progressive encoding</span></pre>
+<pre><span class="lnum">  48:  </span>        <span class="kwrd">public</span> RFX_PROGRESSIVE_CODEC_QUANT prevProgQuant;</pre>
+<pre><span class="lnum">  49:  </span>&nbsp;</pre>
+<pre><span class="lnum">  50:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  51:  </span>        <span class="rem">/// Consturctor</span></pre>
+<pre><span class="lnum">  52:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  53:  </span>        <span class="rem">/// &lt;param name="tsRfxCodecQuantVals"&gt;Codec quantity values array&lt;/param&gt;</span></pre>
+<pre><span class="lnum">  54:  </span>        <span class="rem">/// &lt;param name="quantIdxY"&gt;Index of Y component in quantity array&lt;/param&gt;</span></pre>
+<pre><span class="lnum">  55:  </span>        <span class="rem">/// &lt;param name="quantIdxCb"&gt;Index of Cb component in quantity array&lt;/param&gt;</span></pre>
+<pre><span class="lnum">  56:  </span>        <span class="rem">/// &lt;param name="quantIdxCr"&gt;Index of Cr component in quantity array&lt;/param&gt;</span></pre>
+<pre><span class="lnum">  57:  </span>        <span class="rem">/// &lt;param name="bProgressive"&gt;indicates if use progressive codec&lt;/param&gt;</span></pre>
+<pre><span class="lnum">  58:  </span>        <span class="rem">/// &lt;param name="bTileDiff"&gt;indicates if sub-diffing&lt;/param&gt;</span></pre>
+<pre><span class="lnum">  59:  </span>        <span class="rem">/// &lt;param name="bReduceExtrapolate"&gt;Indicates if use Reduce-Extrapolate method in DWT&lt;/param&gt;</span></pre>
+<pre><span class="lnum">  60:  </span>        <span class="kwrd">public</span> RfxProgressiveCodecContext(</pre>
+<pre><span class="lnum">  61:  </span>            TS_RFX_CODEC_QUANT[] tsRfxCodecQuantVals, </pre>
+<pre><span class="lnum">  62:  </span>            <span class="kwrd">byte</span> quantIdxY, </pre>
+<pre><span class="lnum">  63:  </span>            <span class="kwrd">byte</span> quantIdxCb, </pre>
+<pre><span class="lnum">  64:  </span>            <span class="kwrd">byte</span> quantIdxCr,</pre>
+<pre><span class="lnum">  65:  </span>            <span class="kwrd">bool</span> bProgressive = <span class="kwrd">false</span>, </pre>
+<pre><span class="lnum">  66:  </span>            <span class="kwrd">bool</span> bTileDiff = <span class="kwrd">true</span>,</pre>
+<pre><span class="lnum">  67:  </span>            <span class="kwrd">bool</span> bReduceExtrapolate = <span class="kwrd">true</span>)</pre>
+<pre><span class="lnum">  68:  </span>            : <span class="kwrd">base</span>(tsRfxCodecQuantVals, quantIdxY, quantIdxCb, quantIdxCr, EntropyAlgorithm.CLW_ENTROPY_RLGR1)</pre>
+<pre><span class="lnum">  69:  </span>        {</pre>
+<pre><span class="lnum">  70:  </span>            UseProgressive = bProgressive;</pre>
+<pre><span class="lnum">  71:  </span>            UseDifferenceTile = bTileDiff;</pre>
+<pre><span class="lnum">  72:  </span>            UseReduceExtrapolate = bReduceExtrapolate;</pre>
+<pre><span class="lnum">  73:  </span>            prevProgQuant = RdpegfxTileUtils.GetProgCodecQuant(ProgressiveChunk_Values.kChunk_None);</pre>
+<pre><span class="lnum">  74:  </span>        }</pre>
+<pre><span class="lnum">  75:  </span>&nbsp;</pre>
+<pre><span class="lnum">  76:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  77:  </span>        <span class="rem">/// Consturctor</span></pre>
+<pre><span class="lnum">  78:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  79:  </span>        <span class="rem">/// &lt;param name="tsRfxCodecQuantVals"&gt;Codec quantity values array&lt;/param&gt;</span></pre>
+<pre><span class="lnum">  80:  </span>        <span class="rem">/// &lt;param name="quantIdxY"&gt;Index of Y component in quantity array&lt;/param&gt;</span></pre>
+<pre><span class="lnum">  81:  </span>        <span class="rem">/// &lt;param name="quantIdxCb"&gt;Index of Cb component in quantity array&lt;/param&gt;</span></pre>
+<pre><span class="lnum">  82:  </span>        <span class="rem">/// &lt;param name="quantIdxCr"&gt;Index of Cr component in quantity array&lt;/param&gt;</span></pre>
+<pre><span class="lnum">  83:  </span>        <span class="rem">/// &lt;param name="useReduceExtrapolate"&gt;Indicates if used Reduce-Extrapolate method in DWT&lt;/param&gt;</span></pre>
+<pre><span class="lnum">  84:  </span>        <span class="kwrd">public</span> RfxProgressiveCodecContext(</pre>
+<pre><span class="lnum">  85:  </span>            TS_RFX_CODEC_QUANT[] tsRfxCodecQuantVals,</pre>
+<pre><span class="lnum">  86:  </span>            <span class="kwrd">byte</span> quantIdxY, </pre>
+<pre><span class="lnum">  87:  </span>            <span class="kwrd">byte</span> quantIdxCb, </pre>
+<pre><span class="lnum">  88:  </span>            <span class="kwrd">byte</span> quantIdxCr,</pre>
+<pre><span class="lnum">  89:  </span>            <span class="kwrd">bool</span> useReduceExtrapolate = <span class="kwrd">true</span>)</pre>
+<pre><span class="lnum">  90:  </span>            : <span class="kwrd">base</span>(tsRfxCodecQuantVals, quantIdxY, quantIdxCb, quantIdxCr, EntropyAlgorithm.CLW_ENTROPY_RLGR1)</pre>
+<pre><span class="lnum">  91:  </span>        {</pre>
+<pre><span class="lnum">  92:  </span>            UseReduceExtrapolate = useReduceExtrapolate;</pre>
+<pre><span class="lnum">  93:  </span>        }</pre>
+<pre><span class="lnum">  94:  </span>    }</pre>
+<pre><span class="lnum">  95:  </span>}</pre>
+</div>
+
+</body>
+</html>

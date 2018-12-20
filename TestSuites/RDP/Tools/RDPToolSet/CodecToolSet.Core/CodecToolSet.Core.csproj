@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A9B6EC9B-E389-4F7D-820C-3C76D491459F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CodecToolSet.Core</RootNamespace>
+    <AssemblyName>CodecToolSet.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Protocols.TestTools.ExtendedLogging, Version=1.0.6000.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Protocols.TestTools.Extension, Version=1.0.6000.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CodecFactory.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="CodecParam.cs" />
+    <Compile Include="ImageQualityAccessment\Downscaler.cs" />
+    <Compile Include="ImageQualityAccessment\FRIQAIndexBase.cs" />
+    <Compile Include="ImageQualityAccessment\Gssim.cs" />
+    <Compile Include="ImageQualityAccessment\Mse.cs" />
+    <Compile Include="ImageQualityAccessment\Msssim.cs" />
+    <Compile Include="ImageQualityAccessment\Psnr.cs" />
+    <Compile Include="ImageQualityAccessment\Ssim.cs" />
+    <Compile Include="RFXDecode\RFXDecodeBase.cs" />
+    <Compile Include="RFXDecode\RFXDecodeCodecs.cs" />
+    <Compile Include="RFXDecode\RFXDecoderWrapper.cs" />
+    <Compile Include="RFXEncode\RFXEncodeBase.cs" />
+    <Compile Include="RFXEncode\RFXEncodeCodecs.cs" />
+    <Compile Include="RFXEncode\RFXEncoderWrapper.cs" />
+    <Compile Include="RFXPDecode\RFXPDecodeBase.cs" />
+    <Compile Include="RFXPDecode\RFXPDecodeCodecs.cs" />
+    <Compile Include="RFXPDecode\RFXPDecoderWrapper.cs" />
+    <Compile Include="RFXPEncode\RFXPEncodeBase.cs" />
+    <Compile Include="RFXPEncode\RFXPEncodeCodecs.cs" />
+    <Compile Include="RFXPEncode\RFXPEncoderWrapper.cs" />
+    <Compile Include="TileSerializer.cs" />
+    <Compile Include="ICodecAction.cs" />
+    <Compile Include="TileType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Triplet.cs" />
+    <Compile Include="Utility.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEDYC\Rdpedyc.csproj">
+      <Project>{cfbafde2-f509-4ac8-817a-0c26c1b27653}</Project>
+      <Name>Rdpedyc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\TransportStack\TransportStack.csproj">
+      <Project>{967d976a-c792-4893-9235-14615ae1ff58}</Project>
+      <Name>TransportStack</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEGFX\Rdpegfx.csproj">
+      <Project>{c89ac3fb-7ffc-49d8-b99b-a76c9411aec6}</Project>
+      <Name>Rdpegfx</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPRFX\Rdprfx.csproj">
+      <Project>{9dd86de1-3231-4713-9b45-493f4fe4199c}</Project>
+      <Name>Rdprfx</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

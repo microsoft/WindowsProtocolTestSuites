@@ -1,0 +1,97 @@
+protocol RDPEDISP with
+    BinaryEncodingDefaults{Endian = Endian.Little};
+
+using Standard;
+using Utility;
+using RDPEDYC;
+
+endpoint Server over RDPEDYC.Server issues DISPLAYCONTROL_CAPS_PDU accepts DISPLAYCONTROL_MONITOR_LAYOUT_PDU;
+
+client endpoint Client connected to Server;
+
+autostart actor RdpedispOverRdpedyc(RDPEDYC.Server dycServer)
+{
+    process dycServer issues s:RDPEDYC.DVCDataPDU where (s#EDYCChannelName != nothing && ((s#EDYCChannelName as string) == "Microsoft::Windows::RDS::DisplayControl"))
+    {
+        switch (s.Data)
+        {
+            case m:DISPLAYCONTROL_CAPS_PDU from BinaryDecoder<DISPLAYCONTROL_CAPS_PDU> =>
+                
+                dispatch endpoint Server over dycServer issues m;
+            default =>
+                ThrowDecodingException("RDPEDISP", "DISPLAYCONTROL_CAPS_PDU");
+        }
+    }
+    
+    process dycServer accepts s:RDPEDYC.DVCDataPDU where (s#EDYCChannelName != nothing && ((s#EDYCChannelName as string) == "Microsoft::Windows::RDS::DisplayControl"))
+    {
+        switch (s.Data)
+        {
+            case m:DISPLAYCONTROL_MONITOR_LAYOUT_PDU from BinaryDecoder<DISPLAYCONTROL_MONITOR_LAYOUT_PDU> =>
+                
+                dispatch endpoint Server over dycServer accepts m;
+            default =>
+                ThrowDecodingException("RDPEDISP", "DISPLAYCONTROL_MONITOR_LAYOUT_PDU");
+        }
+    }
+}
+
+
+
+type DISPLAYCONTROL_HEADER
+{
+    DISPLAYCONTROL_TYPE Type;
+    uint Length;
+}
+
+pattern DISPLAYCONTROL_TYPE = enum uint
+{
+    DISPLAYCONTROL_PDU_TYPE_CAPS = 0x00000005,
+    DISPLAYCONTROL_PDU_TYPE_MONITOR_LAYOUT = 0x00000002,
+    ...
+};
+
+message DISPLAYCONTROL_CAPS_PDU
+{
+    DISPLAYCONTROL_HEADER Header where value.Type == DISPLAYCONTROL_TYPE.DISPLAYCONTROL_PDU_TYPE_CAPS;
+    uint MaxNumMonitors;
+    uint MaxMonitorAreaFactorA;
+    uint MaxMonitorAreaFactorB;
+}
+
+message DISPLAYCONTROL_MONITOR_LAYOUT_PDU
+{
+    DISPLAYCONTROL_HEADER Header where value.Type == DISPLAYCONTROL_TYPE.DISPLAYCONTROL_PDU_TYPE_MONITOR_LAYOUT;
+    uint MonitorLayoutSize;
+    uint NumMonitors;
+    array<DISPLAYCONTROL_MONITOR_LAYOUT> Monitors with BinaryEncoding{Length = NumMonitors};
+}
+
+type DISPLAYCONTROL_MONITOR_LAYOUT
+{
+    DISPLAYCONTROL_MONITOR_FLAG Flags;
+    uint Left;
+    uint Top;
+    uint Width;
+    uint Height;
+    uint PhysicalWidth;
+    uint PhysicalHeight;
+    DISPLAYCONTROL_MONITOR_ORIENTATION Orientation;
+    uint DesktopScaleFactor;
+    uint DeviceScaleFactor;
+}
+
+pattern DISPLAYCONTROL_MONITOR_FLAG = flags uint
+{
+    DISPLAYCONTROL_MONITOR_PRIMARY = 0x00000001,
+    ...
+};
+
+pattern DISPLAYCONTROL_MONITOR_ORIENTATION = enum uint
+{
+    ORIENTATION_LANDSCAPE = 0,
+    ORIENTATION_PORTRAIT  = 90,
+    ORIENTATION_LANDSCAPE_FLIPPED = 180,
+    ORIENTATION_PORTRAIT_FLIPPED = 270,
+    ...
+};

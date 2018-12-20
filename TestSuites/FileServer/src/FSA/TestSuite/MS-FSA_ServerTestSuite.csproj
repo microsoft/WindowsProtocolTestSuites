@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite</RootNamespace>
     <AssemblyName>MS-FSA_ServerTestSuite</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -31,6 +31,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,6 +42,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -50,6 +52,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <!--For CoReXT bcz fxcop settings-->
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'fxcop|AnyCPU' ">
@@ -61,6 +64,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Protocols.TestTools">
@@ -150,6 +154,7 @@
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileEaInformation.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileFullEaInformation.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileNetworkOpenInformation.cs" />
+    <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileNormalizedNameInformation.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Set_FileLinkInformation.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Set_FileEaInformation.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Set_FileFullEaInformation.cs" />

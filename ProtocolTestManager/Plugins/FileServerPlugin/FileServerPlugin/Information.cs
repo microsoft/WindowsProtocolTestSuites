@@ -57,6 +57,21 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         /// Windows Server 2016
         /// </summary>
         WindowsServer2016 = 0x10000008,
+
+        /// <summary>
+        /// Windows Server v1709
+        /// </summary>
+        WindowsServerV1709 = 0x10000009,
+
+        /// <summary>
+        /// Windows Server v1803
+        /// </summary>
+        WindowsServerV1803 = 0x1000000A,
+
+        /// <summary>
+        /// Windows Server 2019 
+        /// </summary>
+        WindowsServer2019 = 0x1000000B,
     }
 
     /// <summary>

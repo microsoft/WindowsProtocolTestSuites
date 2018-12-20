@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
 
@@ -104,9 +105,35 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             return originalPacket.ToBytes();
         }
 
-        public static byte[] Decrypt(byte[] bytes, Dictionary<ulong, Smb2CryptoInfo> cryptoInfoTable, Smb2Role role)
+        public static byte[] Decrypt(byte[] bytes, Dictionary<ulong, Smb2CryptoInfo> cryptoInfoTable, Smb2Role role, out Transform_Header transformHeader)
         {
-            Transform_Header transformHeader = Smb2Utility.UnmarshalStructure<Transform_Header>(bytes);
+            // For client: If the size of the message received from the server is not greater than the size of SMB2 TRANSFORM_HEADER, the client MUST discard the message.
+            // For server: If the size of the message received from the client is not greater than the size of the SMB2 TRANSFORM_HEADER, the server MUST disconnect the connection.
+            int minimumLength = Marshal.SizeOf(typeof(Transform_Header));
+            if (bytes.Length < minimumLength)
+            {
+                throw new InvalidOperationException(
+                    String.Format(
+                        "Too less data for encrypted message. Expected length more than {0}, actual {1}.",
+                        minimumLength,
+                        bytes.Length
+                    )
+                );
+            }
+
+            transformHeader = Smb2Utility.UnmarshalStructure<Transform_Header>(bytes);
+
+            // For client: If the Flags/EncryptionAlgorithm in the SMB2 TRANSFORM_HEADER is not 0x0001, the client MUST discard the message.
+            // For server: If the Flags/EncryptionAlgorithm in the SMB2 TRANSFORM_HEADER is not 0x0001, the server MUST disconnect the connection.
+            if (transformHeader.Flags != TransformHeaderFlags.Encrypted)
+            {
+                throw new InvalidOperationException(
+                    String.Format(
+                        "Flags/EncryptionAlgorithm field is invalid for encrypted message. Expected value 0x0001, actual {0}.",
+                        (ushort)transformHeader.Flags
+                    )
+                );
+            }
 
             if (transformHeader.SessionId == 0 || !cryptoInfoTable.ContainsKey(transformHeader.SessionId))
                 throw new InvalidOperationException("Invalid SessionId in TRANSFORM_HEADER.");

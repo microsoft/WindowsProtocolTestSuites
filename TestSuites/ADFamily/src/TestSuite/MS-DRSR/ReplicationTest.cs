@@ -1039,7 +1039,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
             //try to add a record just in case DCs have deleted them
             EnvironmentConfig.ExpectSuccess = false;
-            drsTestClient.DrsUpdateRefs(EnvironmentConfig.Machine.WritableDC1, (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2], DRS_OPTIONS.DRS_ADD_REF);
+            drsTestClient.DrsUpdateRefs(EnvironmentConfig.Machine.WritableDC1, DrsUpdateRefs_Versions.V1, (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC2], DRS_OPTIONS.DRS_ADD_REF);
             EnvironmentConfig.ExpectSuccess = true;
 
             REPS_TO[] rfs = ldapAdapter.GetRepsTo(dcMachine, specifiedNC);

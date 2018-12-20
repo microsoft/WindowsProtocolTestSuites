@@ -54,6 +54,8 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
                     return "DS_BEHAVIOR_WIN2012R2 (6)";
                 case 7:
                     return "DS_BEHAVIOR_WINTHRESHOLD (7)";
+                case 8:
+                    return "DS_BEHAVIOR_WINv1803 (8)";
             }
             return string.Format("Unknown ({0})", number);
         }

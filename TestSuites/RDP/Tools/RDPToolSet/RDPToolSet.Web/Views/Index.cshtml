@@ -1,0 +1,83 @@
+﻿@using CodecDebugTool.Web.Views.ViewHelpers
+@model RFXEncodeViewModel
+
+@{
+    ViewBag.RandomText =
+    @"Le député UMP Lionel Tardy presse néanmoins le président de son parti, " +
+    @"Jean-François Copé, de s'expliquer dès le lendemain des élections européennes " +
+    @"sur les affaires qui ont touché ces derniers jours la formation d'opposition. " +
+    @"Après de nouveaux soupçons de surfacturation visant la société Bygmalion, " +
+    @"dirigée par des proches du président de l'UMP, le groupe du parti au Sénat fait " +
+    @"l'objet selon Le Parisien d'une enquête pour détournement de fonds publics.";
+}
+
+<div class="container">
+
+    <div id="intro">
+        <div class="text-left">
+            <h2>RemoteFX Encode Codec</h2>
+            <p>@ViewBag.RandomText</p>
+        </div>
+    </div>
+
+    <div id="steps">
+        <div class="text-left">
+            <h2>Encoding Steps</h2>
+            <p>Click on each functional stage to view the output of each stage.</p>
+        </div>
+
+        <div class="panel-group" id="accordion">
+            <!-- Input panel -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion"
+                           href="#input-collapse">
+                            Image Input
+                        </a>
+                    </h4>
+                </div>
+
+                <div id="input-collapse" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        @Html.Partial("_Input", Model.CodecParameters)
+                    </div>
+                </div>
+            </div>
+            <!-- End of input panel -->
+
+            <!-- All functional stages -->
+            @foreach (var stage in Model.FunctionalStages)
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a class="functional-stage" data-toggle="collapse" data-parent="#accordion"
+                               href="#@Html.FormatId(stage.FunctionName, "collapse")">
+                                @stage.FunctionName
+                            </a>
+                        </h4>
+                    </div>
+
+                    <div id="@Html.FormatId(stage.FunctionName, "collapse")" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            @Html.Partial("_Stage", stage)
+                        </div>
+                    </div>
+                </div>
+            }
+            <!-- End of functional stages -->
+        </div>
+    </div>
+
+    <div style="clear: both"></div>
+
+    <div id="help">
+        <div class="text-left">
+            <h2>Help</h2>
+            <p>@ViewBag.RandomText</p>
+        </div>
+    </div>
+
+</div>
+

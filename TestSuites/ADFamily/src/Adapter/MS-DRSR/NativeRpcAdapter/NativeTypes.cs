@@ -4123,6 +4123,68 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
     }
 
     /// <summary>
+    ///  The DRS_MSG_REPADD_V3 structure defines a request message
+    ///  sent to the IDL_DRSReplicaAdd method. This request
+    ///  version is a superset of V2.
+    /// </summary>
+    public partial struct DRS_MSG_REPADD_V3
+    {
+
+        /// <summary>
+        ///  The NC root of the NC to replicate.
+        /// </summary>
+        [Indirect()]
+        public DSNAME? pNC;
+
+        /// <summary>
+        ///  The nTDSDSAobject for the DC from which to replicate
+        ///  changes.
+        /// </summary>
+        [Indirect()]
+        public DSNAME? pSourceDsaDN;
+
+        /// <summary>
+        ///  The interSiteTransportobject that identifies the network
+        ///  transport over which replication should be performed
+        ///   to be used in the server-to-server replication implementation
+        ///  with the specified DC .
+        /// </summary>
+        [Indirect()]
+        public DSNAME? pTransportDN;
+
+        /// <summary>
+        ///  The transport-specific NetworkAddress of the DC from
+        ///  which to replicate updates.
+        /// </summary>
+        [String(StringEncoding.ASCII)]
+        public string pszSourceDsaAddress;
+
+        /// <summary>
+        ///  The schedule used to perform periodic replication.
+        /// </summary>
+        public REPLTIMES rtSchedule;
+
+        /// <summary>
+        ///  Zero or more DRS_OPTIONS flags.
+        /// </summary>
+        [CLSCompliant(false)]
+        public uint ulOptions;
+
+        /// <summary>
+        /// An identifier for the operation that the DC can use for implementation-defined troubleshooting.
+        /// There are no normative constraints on this value,
+        /// nor does the value figure in any normative processing rules.
+        /// </summary>
+        public Guid correlationID;
+
+        /// <summary>
+        /// A pointer to a VAR_SIZE_BUFFER_WITH_VERSION structure (section 5.219).
+        /// MUST be a null pointer.
+        /// </summary>
+        public VAR_SIZE_BUFFER_WITH_VERSION pReservedBuffer;
+    }
+
+    /// <summary>
     ///  The DRS_MSG_ADDSIDREPLY union defines the response messages
     ///  received from the IDL_DRSAddSidHistory method. Only
     ///  one version, identified by pdwOutVersion^ = 1, is currently
@@ -5665,6 +5727,51 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
     }
 
     /// <summary>
+    ///  The DRS_MSG_REPSYNC_V2 structure defines a request message
+    ///  sent to the IDL_DRSReplicaSync method.
+    /// </summary>
+    public partial struct DRS_MSG_REPSYNC_V2
+    {
+
+        /// <summary>
+        ///  A pointer to DSName of the root of an NC replica on
+        ///  the server.
+        /// </summary>
+        [Indirect()]
+        public DSNAME? pNC;
+
+        /// <summary>
+        ///  The DSA GUID.
+        /// </summary>
+        public Guid uuidDsaSrc;
+
+        /// <summary>
+        ///  The transport-specific NetworkAddress of a DC.
+        /// </summary>
+        [String(StringEncoding.ASCII)]
+        public string pszDsaSrc;
+
+        /// <summary>
+        ///  The DRS_OPTIONS flags.
+        /// </summary>
+        [CLSCompliant(false)]
+        public uint ulOptions;
+
+        /// <summary>
+        /// An identifier for the operation that the DC can use for implementation-defined troubleshooting.
+        /// There are no normative constraints on this value,
+        /// nor does the value figure in any normative processing rules.
+        /// </summary>
+        public Guid correlationID;
+
+        /// <summary>
+        /// A pointer to a VAR_SIZE_BUFFER_WITH_VERSION structure (section 5.219).
+        /// MUST be a null pointer.
+        /// </summary>
+        public VAR_SIZE_BUFFER_WITH_VERSION pReservedBuffer;
+    }
+
+    /// <summary>
     ///  The UPTODATE_CURSOR_V2 structure defines a concrete
     ///  type for the replication state relative to a given
     ///  DC.
@@ -5715,6 +5822,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
         /// </summary>
         [Case("2")]
         public DRS_MSG_REPADD_V2 V2;
+
+        /// <summary>
+        ///  The version 3 request (a superset of V2).
+        /// </summary>
+        [Case("3")]
+        public DRS_MSG_REPADD_V3 V3;
     }
 
     /// <summary>
@@ -5957,6 +6070,51 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
         /// </summary>
         [CLSCompliant(false)]
         public uint ulOptions;
+    }
+
+    /// <summary>
+    ///  The DRS_MSG_UPDREFS_V2 structure defines a request message
+    ///  sent to the IDL_DRSUpdateRefs method.
+    /// </summary>
+    public partial struct DRS_MSG_UPDREFS_V2
+    {
+
+        /// <summary>
+        ///  A pointer to the DSName of the root of an NC replica
+        ///  on the server.
+        /// </summary>
+        [Indirect()]
+        public DSNAME? pNC;
+
+        /// <summary>
+        ///  The transport-specific NetworkAddress of a DC.
+        /// </summary>
+        [String(StringEncoding.ASCII)]
+        public string pszDsaDest;
+
+        /// <summary>
+        ///  The DSA GUID.
+        /// </summary>
+        public Guid uuidDsaObjDest;
+
+        /// <summary>
+        ///  The DRS_OPTIONS that control the update.
+        /// </summary>
+        [CLSCompliant(false)]
+        public uint ulOptions;
+
+        /// <summary>
+        /// An identifier for the operation that the DC can use for implementation-defined troubleshooting.
+        /// There are no normative constraints on this value,
+        /// nor does the value figure in any normative processing rules.
+        /// </summary>
+        public Guid correlationID;
+
+        /// <summary>
+        /// A pointer to a VAR_SIZE_BUFFER_WITH_VERSION structure (section 5.219).
+        /// MUST be a null pointer.
+        /// </summary>
+        public VAR_SIZE_BUFFER_WITH_VERSION pReservedBuffer;
     }
 
     /// <summary>
@@ -6276,6 +6434,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
         /// </summary>
         [Case("1")]
         public DRS_MSG_UPDREFS_V1 V1;
+
+        /// <summary>
+        ///  The version 2 request.
+        /// </summary>
+        [Case("2")]
+        public DRS_MSG_UPDREFS_V2 V2;
     }
 
     /// <summary>
@@ -7308,6 +7472,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
         /// </summary>
         [Case("1")]
         public DRS_MSG_REPSYNC_V1 V1;
+
+        /// <summary>
+        ///  The version 2 request.
+        /// </summary>
+        [Case("2")]
+        public DRS_MSG_REPSYNC_V2 V2;
     }
 
     /// <summary>
@@ -8108,6 +8278,116 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
     }
 
     /// <summary>
+    ///  The DRS_MSG_GETCHGREQ_V11 structure defines the request
+    ///  message sent to the IDL_DRSGetNCChanges method.
+    ///  This message version is a superset of DRS_MSG_GETCHGREQ_V10.
+    /// </summary>
+    public partial struct DRS_MSG_GETCHGREQ_V11
+    {
+
+        /// <summary>
+        ///  DSA GUID of the client DC.
+        /// </summary>
+        public Guid uuidDsaObjDest;
+
+        /// <summary>
+        ///  Invocation ID of the server DC.
+        /// </summary>
+        public Guid uuidInvocIdSrc;
+
+        /// <summary>
+        ///  NC root of the replica to replicate or the FSMO role
+        ///  object for an extended operation.
+        /// </summary>
+        [Indirect()]
+        public DSNAME? pNC;
+
+        /// <summary>
+        ///  Data used to correlate calls to IDL_DRSGetNCChanges.
+        /// </summary>
+        public USN_VECTOR usnvecFrom;
+
+        /// <summary>
+        ///  Stamp filter describing updates the client has already
+        ///  applied.
+        /// </summary>
+        [StaticSize(1, StaticSizeMode.Elements)]
+        public UPTODATE_VECTOR_V1_EXT[] pUpToDateVecDest;
+
+        /// <summary>
+        ///  A DRS_OPTIONS bit field.
+        /// </summary>
+        [CLSCompliant(false)]
+        public uint ulFlags;
+
+        /// <summary>
+        ///  Approximate cap on the number of objects to include
+        ///  in the reply.
+        /// </summary>
+        [CLSCompliant(false)]
+        public uint cMaxObjects;
+
+        /// <summary>
+        ///  Approximate cap on the number of bytes to include in
+        ///  the reply.
+        /// </summary>
+        [CLSCompliant(false)]
+        public uint cMaxBytes;
+
+        /// <summary>
+        ///  0 or an extended operation request code (section ).
+        /// </summary>
+        [CLSCompliant(false)]
+        public uint ulExtendedOp;
+
+        /// <summary>
+        ///  0 or a value specific to the requested extended operation.
+        /// </summary>
+        public ULARGE_INTEGER liFsmoInfo;
+
+        /// <summary>
+        ///  A set of one or more attributes whose values are to
+        ///  be replicated to the client's partial replica, or null
+        ///  if the client has a full replica.
+        /// </summary>
+        [Indirect()]
+        public PARTIAL_ATTR_VECTOR_V1_EXT? pPartialAttrSet;
+
+        /// <summary>
+        ///  A set of one or more attributes whose values are to
+        ///  be added to the client's existing partial replica,
+        ///  or null.
+        /// </summary>
+        [Indirect()]
+        public PARTIAL_ATTR_VECTOR_V1_EXT? pPartialAttrSetEx;
+
+        /// <summary>
+        ///  Prefix table with which to convert the ATTRTYP values
+        ///  in pPartialAttrSet and pPartialAttrSetEx to OIDs.
+        /// </summary>
+        public SCHEMA_PREFIX_TABLE PrefixTableDest;
+
+        /// <summary>
+        ///  A DRS_MORE_GETCHGREQ_OPTIONS bit field.
+        /// </summary>
+        [CLSCompliant(false)]
+        public uint ulMoreFlags;
+
+        /// <summary>
+        /// An identifier for the operation that the DC can use for implementation-defined troubleshooting.
+        /// There are no normative constraints on this value,
+        /// nor does the value figure in any normative processing rules.
+        /// </summary>
+        public Guid correlationID;
+
+        /// <summary>
+        /// A pointer to a VAR_SIZE_BUFFER_WITH_VERSION structure (section 5.219).
+        /// MUST be a null pointer.
+        /// </summary>
+        public VAR_SIZE_BUFFER_WITH_VERSION pReservedBuffer;
+    }
+
+    /// <summary>
     ///  The DRS_MSG_GETCHGREQ_V4 structure defines the request
     ///  message sent to the IDL_DRSGetNCChanges method. This
     ///  message version is a superset of DRS_MSG_GETCHGREQ_V3.Although
@@ -8846,6 +9126,39 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
     }
 
     /// <summary>
+    /// Used to pass byte buffers to certain messages
+    /// </summary>
+    public partial struct VAR_SIZE_BUFFER_WITH_VERSION
+    {
+        /// <summary>
+        /// The version of the buffer that is being sent.
+        /// Handling of this field is performed by the specific message that is using this structure.
+        /// </summary>
+        [StaticSize(4)]
+        uint ulVersion;
+
+        /// <summary>
+        /// The size, in bytes, of the data in the rgbBuffer field.
+        /// </summary>
+        [StaticSize(4)]
+        uint cbByteBuffer;
+
+        /// <summary>
+        /// Used to align the array of bytes in the rgbBuffer field to an 8-byte boundary.
+        /// </summary>
+        [StaticSize(8)]
+        ulong ullPadding;
+
+        /// <summary>
+        /// An array of bytes.
+        /// The content of the array depends on the specific message that is using this structure.
+        /// Starts on an 8-byte boundary.
+        /// </summary>
+        [Size("cbByteBuffer")]
+        byte[] rgbBuffer;
+    }
+
+    /// <summary>
     ///  The DRS_MSG_GETCHGREQ union defines request messages
     ///  that are sent to the IDL_DRSGetNCChanges method. There
     ///  are no V1, V2, V3, or V6V6, or V9 messages.
@@ -8886,6 +9199,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
         /// </summary>
         [Case("10")]
         public DRS_MSG_GETCHGREQ_V10 V10;
+
+        /// <summary>
+        /// Version 11 request (Windows Server v1803 operating system RPC replication).
+        /// </summary>
+        [Case("11")]
+        public DRS_MSG_GETCHGREQ_V11 V11;
     }
 
     /// <summary>

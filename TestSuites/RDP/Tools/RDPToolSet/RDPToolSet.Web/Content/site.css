@@ -1,0 +1,192 @@
+﻿/* Styles for validation helpers */
+.field-validation-error {
+    color: #f00;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+.input-validation-error {
+    border: 1px solid #f00;
+    background-color: #fee;
+}
+
+.validation-summary-errors {
+    font-weight: bold;
+    color: #f00;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+/* Customized Styles */
+body {
+    padding-top: 50px;
+    text-align:center;
+}
+
+.container {
+    margin-left:auto;
+    margin-right:auto;
+    max-width: 720px;
+}
+.maincontent {
+    padding-top: 40px;
+}
+
+.footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    background-color: #f5f5f5;
+    text-align:center;
+    color:#808080;
+}
+
+.footer div {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+.footer p {
+        margin-bottom: 5px;
+    }
+
+
+#rfxpdecode-layer-tabs
+{
+    margin-bottom: 10px;
+}
+
+.output-as-input-modal .modal-content, .prog-output-as-input-modal .modal-content
+{
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+}
+
+.nav-layer
+{
+    padding: 1px;
+}
+
+.content-layer
+{
+    padding-left: 1px;
+}
+
+
+table.diff-table tr td.line-number
+{
+    padding-right: 5px;
+    border-right-style: dotted;
+    border-right-width: 1px;
+    text-align: right;
+    background: #F5F5F5;
+    color: #008080;
+}
+
+table.diff-table tr.column-number
+{
+    border-bottom-style: dotted;
+    border-bottom-width: 1px;
+    background: #F5F5F5;
+    color: #008080;
+}
+
+table.diff-table tr td.original-line
+{
+    background: #fff;
+}
+
+table.diff-table tr.different-original-line
+{
+    background: #FF8080;
+}
+
+table.diff-table tr.different-user-line
+{
+    background: #FFFFB4;
+}
+
+table.diff-table tr.different-original-line.complete-different
+{
+    background: #f00;
+}
+
+table.diff-table tr.different-user-line.complete-different
+{
+    background: #ff0;
+}
+
+table.diff-table tr.different-original-line span.different-element
+{
+    background: #f00;
+}
+
+table.diff-table tr.different-user-line span.different-element
+{
+    background: #ff0;
+}
+
+/* image uploader */
+.dropzone .imageuploader1.dz-message {
+  left: 0px;
+  width: 145px;
+  height: 45px;
+  margin-left: 68px;
+  margin-top: 133px;
+  background: url('images/DropzoneImages.gif') 0 0;
+}
+
+.dropzone .imageuploader1.dz-message span {
+  display: none;
+}
+
+.dropzone.dz-square .imageuploader2.dz-message {
+  left: 0px;
+  width: 145px;
+  height: 45px;
+  margin-left: 68px;
+  margin-top: 133px;
+  background: url('images/DropzoneImages.gif') -160px 0;
+}
+
+.dropzone .imageuploader2.dz-message span {
+  display: none;
+}
+
+/* diff style */
+
+
+/*#params {
+    padding-top: 20px;
+    text-align: left;
+}
+
+    #params div {
+        float: left;
+        margin-right: 20px;
+        margin-bottom: 5px;
+    }
+
+    #params label {
+        float: left;
+        padding-top: 5px;
+        margin-right: 20px;
+    }
+
+    #params .popover {
+        float: none;
+    }
+
+#action {
+    float: right;
+}
+
+.diff-input {
+    margin-top: 20px;
+    margin-bottom: -20px;
+}*/

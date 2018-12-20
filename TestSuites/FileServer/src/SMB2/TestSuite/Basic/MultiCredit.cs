@@ -61,7 +61,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             TestConfig.CheckCapabilities(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LARGE_MTU);            
 
             Guid clientGuid = Guid.NewGuid();
-            string fileName = "MultiCredit_" + clientGuid.ToString() + ".txt";
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT");
             Smb2FunctionalClient client = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
@@ -86,7 +85,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends CREATE request with {0} credits", client.Credits);
             client.Create(
                 treeId,
-                fileName,
+                GetTestFileName(uncSharePath),
                 CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                 out fileId,
                 out serverCreateContexts,

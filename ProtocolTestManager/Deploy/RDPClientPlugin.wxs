@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?define SRCDIR=$(env.TestSuiteRoot)\drop\ProtocolTestManager?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="RDPCLIENTDOCFOLDER">
+            <Component Id="cmp76C61BFA93CD4C2786C8D2B8B8A7BA8B" Guid="{D7C04853-2AFE-4DD7-AD4F-3F34AD25789E}">
+                <File Id="filBBB71CEBB5A1456196BBFF64AFF7B632" Source="..\Plugins\RDPClientPlugin\RDPClientPlugin\Docs\arrow_right.png" />
+            </Component>
+            <Component Id="cmpFFFFF21340334D99B993CB6C6C7123B7" Guid="{EA4F4F09-0023-4AC3-A78E-710B68543689}">
+                <File Id="filE6D2ECB6DD0248569BF01C7DD35553CE" Source="..\Plugins\RDPClientPlugin\RDPClientPlugin\Docs\index.html" />
+            </Component>
+            <Component Id="cmp694BFFB553C04157868A8A65226E5608" Guid="{36860F54-D910-457B-8962-3157ABA4277C}">
+                <File Id="fil7B437B2F60224CD789AD6B491AC3738A" Source="..\Plugins\RDPClientPlugin\RDPClientPlugin\Docs\note.png" />
+            </Component>
+            <Component Id="cmpB3B1B79FA01B4E94AC1F7BE9FAE1A1C9" Guid="{43A86DE2-58B9-428A-9596-36FC9B4CF394}">
+                <File Id="filB6F7DEDC09A2478E80C1D0111A9DF78F" Source="..\Plugins\RDPClientPlugin\RDPClientPlugin\Docs\configure.html" />
+            </Component>
+            <Component Id="cmp9EAB68E197FC4BFEBF3AD093D2332544" Guid="{87EC50DA-EC87-469F-98CD-339E310C4953}">
+                <File Id="fil46324261C0064A4BAE47E5432D7E115A" Source="..\Plugins\RDPClientPlugin\RDPClientPlugin\Docs\workgroup.png" />
+            </Component>
+            <Component Id="cmp1A0BCE98C274477483E1AA296D0B1CAB" Guid="{BDAF9D20-AF76-4DB9-BC9E-EAF20A0FC9E9}">
+                <File Id="filFFD53BA41639486F99DB6CB93317D4D0" Source="..\Plugins\RDPClientPlugin\RDPClientPlugin\Docs\network.html" />
+            </Component>
+            <Component Id="cmpA7E67BE352CF462F8E420E79BBE890AF" Guid="{BAE29309-4722-4BD0-9C28-B0608F0B2E96}">
+                <File Id="filA291294DE1304CF4816B21AA375AB5EB" Source="..\Plugins\RDPClientPlugin\RDPClientPlugin\Docs\domain.png" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="LIBFOLDER">
+            <?if $(env.DEBUGVER) = 1?>
+              <Component Id="RDPClientPlugin.pdb" Guid="*">
+                <File Id="RDPClientPlugin.pdb" Source="$(var.SRCDIR)\lib\RDPClientPlugin.pdb" />
+              </Component>
+            <?endif ?>
+            <Component Id="RDPClientPlugin.dll" Guid="{1D6934A3-0657-4B24-9CB9-D70AEE816791}">
+                <File Id="RDPClientPlugin.dll" Source="$(var.SRCDIR)\lib\RDPClientPlugin.dll" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="RDPCLIENTCONFIG">
+            <Component Id="RDPClientConfigFile" Guid="{A914A9E6-8FE5-4406-9211-C327257E5533}">
+                <File Id="RDPClientConfigFile" Source="..\Plugins\RDPClientPlugin\RDPClientPlugin\config.xml" />
+            </Component>
+          <Directory Id="dirEDE390724EA84B74801DA990077AA5DF" Name="SUTControlAdapter">
+            <Component Id="cmpFB946ECE9D0B41F78DE203C02BC23F40" Guid="{BE7BF9EB-15A8-4C94-BB0A-331CC9366A37}">
+              <File Id="filCDF2FA834FF54CB49B0B9A48531F8C87" Source="..\Plugins\RDPClientPlugin\RDPClientPlugin\SUTControlAdapter\Check-PSRemoting.ps1" />
+            </Component>
+            <Component Id="cmp58E4BD68F2564E50B5DBD676C11E8FE4" Guid="{69C38D27-E508-46B1-B202-18B633FF1971}">
+              <File Id="filBCE6C8A212DA41C29FA870EE1DC67B39" Source="..\Plugins\RDPClientPlugin\RDPClientPlugin\SUTControlAdapter\RDPConnectWithNegotiationApproach.ps1" />
+            </Component>
+            <Component Id="cmp86675A4CCAB34FE49AF8470276FD7046" Guid="{6EB208CA-BAEF-4796-A8F4-FC98602F4D1C}">
+              <File Id="fil23BEEED56E6A432781E0ABD1831B86B4" Source="..\Plugins\RDPClientPlugin\RDPClientPlugin\SUTControlAdapter\Run-TaskWithPSRemoting.ps1" />
+            </Component>
+            <Component Id="cmpE33ABD3C9FC64AB29CE375FFD400ED3C" Guid="{3DAA674C-5CD0-4BF4-8667-84C9287C7354}">
+              <File Id="fil2064AF90A3974DEE9990E7DDE1305F97" Source="..\Plugins\RDPClientPlugin\RDPClientPlugin\SUTControlAdapter\TriggerClientDisconnectAll.ps1" />
+            </Component>
+          </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="RDPCLIENT_PLUGIN">
+            <ComponentRef Id="cmp76C61BFA93CD4C2786C8D2B8B8A7BA8B" />
+            <ComponentRef Id="cmpFFFFF21340334D99B993CB6C6C7123B7" />
+            <ComponentRef Id="cmp694BFFB553C04157868A8A65226E5608" />
+            <ComponentRef Id="cmpB3B1B79FA01B4E94AC1F7BE9FAE1A1C9" />
+            <ComponentRef Id="cmp9EAB68E197FC4BFEBF3AD093D2332544" />
+            <ComponentRef Id="cmp1A0BCE98C274477483E1AA296D0B1CAB" />
+            <ComponentRef Id="cmpA7E67BE352CF462F8E420E79BBE890AF" />
+            <ComponentRef Id="cmpFB946ECE9D0B41F78DE203C02BC23F40" />
+            <ComponentRef Id="cmp58E4BD68F2564E50B5DBD676C11E8FE4" />
+            <ComponentRef Id="cmp86675A4CCAB34FE49AF8470276FD7046" />
+            <ComponentRef Id="cmpE33ABD3C9FC64AB29CE375FFD400ED3C" />
+            <ComponentRef Id="RDPClientPlugin.dll" />
+            <ComponentRef Id="RDPClientConfigFile" />
+            <?if $(env.DEBUGVER) = 1?>
+              <ComponentRef Id="RDPClientPlugin.pdb" />
+            <?endif ?>
+        </ComponentGroup>
+    </Fragment>
+</Wix>

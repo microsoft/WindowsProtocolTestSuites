@@ -1,14 +1,13 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
-using System.IO;
 
 namespace Microsoft.Protocols.TestManager.Kernel
 {
@@ -103,7 +102,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <summary>
         /// PTMConfig files in bin folder
         /// </summary>
-        public List<string> PtfConfigFiles{get; private set;}
+        public List<string> PtfConfigFiles { get; private set; }
 
         /// <summary>
         /// The PTMConfig files used as the default values
@@ -239,7 +238,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 config.PropertyGroupOrder = new Dictionary<string, int>();
                 foreach (XmlNode xn in groupOrder.SelectNodes("PropertyGroup"))
-                {                    
+                {
                     string name = xn.Attributes["name"].Value;
                     int order = int.Parse(xn.Attributes["order"].Value);
                     config.PropertyGroupOrder.Add(name, order);
@@ -263,26 +262,56 @@ namespace Microsoft.Protocols.TestManager.Kernel
             config.TestSetting = doc.DocumentElement.SelectSingleNode("TestSetting").InnerText.Trim();
 
             //Config Test Engine
-            string vspath;
-            if (Environment.GetEnvironmentVariable("VS110COMNTOOLS") != null &&
-                File.Exists(vspath = Path.Combine(Environment.GetEnvironmentVariable("VS110COMNTOOLS"), StringResource.VSTestLocation)))
+            RegistryKey HKLM = Registry.LocalMachine;
+            RegistryKey[] vsRegPathList;
+            if (Environment.Is64BitProcess)
             {
-                config.VSTestPath = vspath;
-            }
-            else if (Environment.GetEnvironmentVariable("VS120COMNTOOLS") != null &&
-                File.Exists(vspath = Path.Combine(Environment.GetEnvironmentVariable("VS120COMNTOOLS"), StringResource.VSTestLocation)))
-            {
-                config.VSTestPath = vspath;
-            }
-            else if (Environment.GetEnvironmentVariable("VS140COMNTOOLS") != null &&
-                File.Exists(vspath = Path.Combine(Environment.GetEnvironmentVariable("VS140COMNTOOLS"), StringResource.VSTestLocation)))
-            {
-                config.VSTestPath = vspath;
+                // 32-bit and 64-bit
+                vsRegPathList = new RegistryKey[]
+                {
+                    HKLM.OpenSubKey(StringResource.Vs2017RegPath32),
+                    HKLM.OpenSubKey(StringResource.Vs2017RegPath64)
+                };
             }
             else
             {
+                // 32-bit only
+                vsRegPathList = new RegistryKey[]
+                {
+                    HKLM.OpenSubKey(StringResource.Vs2017RegPath32),
+                };
+            }
+            foreach (var vsRegPath in vsRegPathList)
+            {
+                if (vsRegPath != null)
+                {
+                    var vs2017Path = vsRegPath.GetValue("15.0");
+                    if (vs2017Path != null)
+                    {
+                        string registryKeyName = vs2017Path.ToString();
+                        if (String.IsNullOrEmpty(registryKeyName))
+                        {
+                            // no match entry
+                            continue;
+                        }
+                        string vspath;
+                        if (File.Exists(vspath = Path.Combine(registryKeyName, StringResource.VSTestLocation)))
+                        {
+                            config.VSTestPath = vspath;
+                        }
+                        else
+                        {
+                            throw new Exception(StringResource.VSTestNotInstalled);
+                        }
+                    }
+                }
+            }
+
+            if (config.VSTestPath == null)
+            {
                 throw new Exception(StringResource.VSTestNotInstalled);
             }
+
             config.VSTestArguments = "";
             foreach (string singleDllpath in config.TestSuiteAssembly)
             {
@@ -466,7 +495,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             doc.Load(xmlReader);
 
             AppConfigTestCategory testCategory = new AppConfigTestCategory();
-            var testCaseNodes = doc.DocumentElement.SelectNodes("TestCase");            
+            var testCaseNodes = doc.DocumentElement.SelectNodes("TestCase");
 
             foreach (XmlNode testCaseNode in testCaseNodes)
             {

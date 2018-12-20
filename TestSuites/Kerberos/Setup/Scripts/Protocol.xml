@@ -1,0 +1,195 @@
+<lab>
+  <core>
+    <username>Administrator</username>
+    <password>Password01!</password>
+    <legacyclient>true</legacyclient>
+    <basecpu>1</basecpu>
+    <Description>DC x 2 and Member x 4(NIC x 1), Kerberos sample setup static ip address</Description>
+  </core>
+
+  <network>
+    <vnet>
+      <hostisgateway>true</hostisgateway>
+      <name>Kerberos-Internal</name>
+      <networktype>Internal</networktype>
+      <ip>192.168.21.254</ip>
+      <subnet>255.255.255.0</subnet>
+    </vnet>
+  </network>
+
+  <Parameters>
+    <Parameter Name="DriverVMName" Value="Kerberos-ENDPOINT01" Comment="The name of the driver VM" />
+  </Parameters>
+
+  <servers>
+    <vm>
+      <installorder>1</installorder>
+      <sku>server</sku>
+      <role>PDC01</role>
+      <hypervname>Kerberos-DC01</hypervname>
+      <name>DC01</name>
+      <username>Administrator</username>
+      <password>Password01@</password>
+      <domain>contoso.com</domain>
+      <isdc>true</isdc>
+      <vnet>Kerberos-Internal</vnet>
+      <ip>192.168.21.1</ip>
+      <subnet>255.255.255.0</subnet>
+      <gateway></gateway>
+      <dns>127.0.0.1;192.168.21.2</dns>
+      <cpu>1</cpu>
+      <memory>2048</memory>
+	  <configscript>Configure-DC01.ps1</configscript>
+	  <postscript>Kerberos-DC01-Postscript.ps1</postscript>
+      <restartinpostscript>true</restartinpostscript>
+      <skipwaitingforpostscript>false</skipwaitingforpostscript>
+      <trusttargetdomain>kerb.com</trusttargetdomain>
+      <trustpassword>Password01!</trustpassword>
+    </vm>
+
+    <vm>
+      <installorder>2</installorder>
+      <sku>server</sku>
+      <role>TDC01</role>
+      <hypervname>Kerberos-DC02</hypervname>
+      <name>DC02</name>
+      <username>Administrator</username>
+      <password>Password01#</password>
+      <domain>kerb.com</domain>
+      <isdc>true</isdc>
+      <vnet>Kerberos-Internal</vnet>
+      <ip>192.168.21.2</ip>
+      <subnet>255.255.255.0</subnet>
+      <gateway></gateway>
+      <dns>127.0.0.1;192.168.21.1</dns>
+      <cpu>1</cpu>
+      <memory>2048</memory>
+
+      <postscript>Kerberos-DC02-Postscript.ps1</postscript>
+	  <configscript>Configure-DC02.ps1</configscript>
+      <restartinpostscript>true</restartinpostscript>
+      <skipwaitingforpostscript>false</skipwaitingforpostscript>
+
+      <trusttargetdomain>contoso.com</trusttargetdomain>
+      <trustpassword>Password01!</trustpassword>
+      <trusttargetserver>DC01.contoso.com</trusttargetserver>
+      <trusttargetuser>CONTOSO\Administrator</trusttargetuser>
+      <trusttargetpwd>Password01@</trusttargetpwd>
+    </vm>
+
+    <vm>
+      <installorder>3</installorder>
+      <sku>server</sku>
+      <role>AP01</role>
+      <hypervname>Kerberos-AP01</hypervname>
+      <name>AP01</name>
+      <username>Administrator</username>
+      <password>Password01!</password>
+      <domain>contoso.com</domain>
+      <vnet>Kerberos-Internal</vnet>
+      <ip>192.168.21.10</ip>
+      <subnet>255.255.255.0</subnet>
+      <gateway></gateway>
+      <dns>192.168.21.1</dns>
+      <cpu>1</cpu>
+      <memory>2048</memory>
+
+      <installfeaturescript>Install-FSRM.ps1;Install-IIS.ps1;Install-ADDS.ps1</installfeaturescript>
+      <postscript>Kerberos-AP01-Postscript.ps1</postscript>
+      <configscript>Configure-AP01.ps1</configscript>
+      <restartinpostscript>true</restartinpostscript>
+      <skipwaitingforpostscript>false</skipwaitingforpostscript>
+
+      <dcserver>DC01.contoso.com</dcserver>
+      <dcuser>CONTOSO\Administrator</dcuser>
+      <dcpwd>Password01@</dcpwd>
+    </vm>
+
+    <vm>
+      <installorder>4</installorder>
+      <sku>server</sku>
+      <role>AP02</role>
+      <hypervname>Kerberos-AP02</hypervname>
+      <name>AP02</name>
+      <username>Administrator</username>
+      <password>Password01!</password>
+      <domain>kerb.com</domain>
+      <vnet>Kerberos-Internal</vnet>
+      <ip>192.168.21.20</ip>
+      <subnet>255.255.255.0</subnet>
+      <gateway></gateway>
+      <dns>192.168.21.2</dns>
+      <cpu>1</cpu>
+      <memory>2048</memory>
+
+      <installfeaturescript>Install-FSRM.ps1;Install-IIS.ps1;Install-ADDS.ps1</installfeaturescript>
+      <postscript>Kerberos-AP02-Postscript.ps1</postscript>
+      <configscript>Configure-AP02.ps1</configscript>
+      <restartinpostscript>true</restartinpostscript>
+      <skipwaitingforpostscript>false</skipwaitingforpostscript>
+
+      <dcserver>DC02.kerb.com</dcserver>
+      <dcuser>KERB\Administrator</dcuser>
+      <dcpwd>Password01#</dcpwd>
+    </vm>
+
+    <vm>
+      <installorder>5</installorder>
+      <sku>server</sku>
+      <role>PROXY01</role>
+      <hypervname>Kerberos-PROXY01</hypervname>
+      <name>PROXY01</name>
+      <username>Administrator</username>
+      <password>Password01!</password>
+      <domain>contoso.com</domain>
+      <vnet>Kerberos-Internal</vnet>
+      <ip>192.168.21.3</ip>
+      <subnet>255.255.255.0</subnet>
+      <gateway></gateway>
+      <dns>192.168.21.1;192.168.21.2</dns>
+      <cpu>1</cpu>
+      <memory>2048</memory>
+
+      <installfeaturescript>Install-IIS.ps1</installfeaturescript>
+      <postscript>Kerberos-PROXY01-Postscript.ps1</postscript>
+      <configscript>Configure-PROXY.ps1</configscript>
+      <restartinpostscript>true</restartinpostscript>
+      <skipwaitingforpostscript>false</skipwaitingforpostscript>
+    </vm>
+
+    <vm>
+      <installorder>6</installorder>
+      <sku>client</sku>
+      <role>DriverComputer</role>
+      <hypervname>Kerberos-ENDPOINT01</hypervname>
+      <name>ENDPOINT01</name>
+      <username>Administrator</username>
+      <password>Password01!</password>
+      <domain>contoso.com</domain>
+      <vnet>Kerberos-Internal</vnet>
+      <ip>192.168.21.101</ip>
+      <subnet>255.255.255.0</subnet>
+      <gateway></gateway>
+      <dns>192.168.21.1;192.168.21.2</dns>
+      <cpu>1</cpu>
+      <memory>4096</memory>
+      <localdcserver>DC01.contoso.com</localdcserver>
+      <localapserver>AP01.contoso.com</localapserver>
+      <localdcuser>CONTOSO\Administrator</localdcuser>
+      <localdcpwd>Password01@</localdcpwd>
+      <trustdcserver>DC02.kerb.com</trustdcserver>
+      <trustapserver>AP02.kerb.com</trustapserver>
+      <trustdcuser>KERB\Administrator</trustdcuser>
+      <trustdcpwd>Password01#</trustdcpwd>
+      <postscript>Kerberos-ENDPOINT01-Postscript.ps1</postscript>
+	    <configscript>Configure-ENDPOINT.ps1</configscript>
+      <restartinpostscript>true</restartinpostscript>
+      <skipwaitingforpostscript>false</skipwaitingforpostscript>
+      <tools>
+        <tool name="SE" MSIName="SpecExplorer.msi" version="3.5.3146.0" CPUArchitecture="x86" />
+        <tool name="PTF" MSIName="ProtocolTestFrameworkInstaller.msi" version="1.0.6000.0" CPUArchitecture="x86" />
+        <TestsuiteMSI MSIName="Kerberos-TestSuite-ServerEP.msi" targetEndpoint="" />
+      </tools>
+    </vm>
+  </servers>
+</lab>

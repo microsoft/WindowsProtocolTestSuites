@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>RemoteFXCodecContext.cs</title>
+    <link href="../../Content/csharp.css" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- code formatted by http://manoli.net/csharpformat/ -->
+<div class="csharpcode">
+<pre><span class="lnum">   1:  </span><span class="rem">// ------------------------------------------------------------------------------</span></pre>
+<pre><span class="lnum">   2:  </span><span class="rem">// Copyright (c) Microsoft Corporation. All rights reserved.</span></pre>
+<pre><span class="lnum">   3:  </span><span class="rem">// ------------------------------------------------------------------------------</span></pre>
+<pre><span class="lnum">   4:  </span>&nbsp;</pre>
+<pre><span class="lnum">   5:  </span><span class="kwrd">using</span> System;</pre>
+<pre><span class="lnum">   6:  </span>&nbsp;</pre>
+<pre><span class="lnum">   7:  </span><span class="kwrd">namespace</span> Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx</pre>
+<pre><span class="lnum">   8:  </span>{</pre>
+<pre><span class="lnum">   9:  </span>    <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  10:  </span>    <span class="rem">/// RomoteFX context class</span></pre>
+<pre><span class="lnum">  11:  </span>    <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre id="RemoteFXCodecContext"><span class="lnum">  12:  </span>    <span class="kwrd">public</span> <span class="kwrd">class</span> RemoteFXCodecContext</pre>
+<pre><span class="lnum">  13:  </span>    {</pre>
+<pre><span class="lnum">  14:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  15:  </span>        <span class="rem">/// RLGR entropy algorithm</span></pre>
+<pre><span class="lnum">  16:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  17:  </span>        <span class="kwrd">public</span> EntropyAlgorithm Mode;</pre>
+<pre><span class="lnum">  18:  </span>&nbsp;</pre>
+<pre><span class="lnum">  19:  </span>        <span class="preproc">#region</span> RGB data</pre>
+<pre><span class="lnum">  20:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  21:  </span>        <span class="rem">/// Red component</span></pre>
+<pre><span class="lnum">  22:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  23:  </span>        <span class="kwrd">public</span> <span class="kwrd">byte</span>[,] RSet;</pre>
+<pre><span class="lnum">  24:  </span>&nbsp;</pre>
+<pre><span class="lnum">  25:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  26:  </span>        <span class="rem">/// Green component</span></pre>
+<pre><span class="lnum">  27:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  28:  </span>        <span class="kwrd">public</span> <span class="kwrd">byte</span>[,] GSet;</pre>
+<pre><span class="lnum">  29:  </span>&nbsp;</pre>
+<pre><span class="lnum">  30:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  31:  </span>        <span class="rem">/// Blue component</span></pre>
+<pre><span class="lnum">  32:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  33:  </span>        <span class="kwrd">public</span> <span class="kwrd">byte</span>[,] BSet; </pre>
+<pre><span class="lnum">  34:  </span>        <span class="preproc">#endregion</span></pre>
+<pre><span class="lnum">  35:  </span>&nbsp;</pre>
+<pre><span class="lnum">  36:  </span>        <span class="preproc">#region</span> YUV data</pre>
+<pre><span class="lnum">  37:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  38:  </span>        <span class="rem">/// Y component</span></pre>
+<pre><span class="lnum">  39:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  40:  </span>        <span class="kwrd">public</span> <span class="kwrd">short</span>[,] YSet;</pre>
+<pre><span class="lnum">  41:  </span>&nbsp;</pre>
+<pre><span class="lnum">  42:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  43:  </span>        <span class="rem">/// Cb component</span></pre>
+<pre><span class="lnum">  44:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  45:  </span>        <span class="kwrd">public</span> <span class="kwrd">short</span>[,] CbSet;</pre>
+<pre><span class="lnum">  46:  </span>&nbsp;</pre>
+<pre><span class="lnum">  47:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  48:  </span>        <span class="rem">/// Cr component</span></pre>
+<pre><span class="lnum">  49:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  50:  </span>        <span class="kwrd">public</span> <span class="kwrd">short</span>[,] CrSet; </pre>
+<pre><span class="lnum">  51:  </span>        <span class="preproc">#endregion</span></pre>
+<pre><span class="lnum">  52:  </span>&nbsp;</pre>
+<pre><span class="lnum">  53:  </span>        <span class="preproc">#region</span> Linearized YUV component</pre>
+<pre><span class="lnum">  54:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  55:  </span>        <span class="rem">/// Linearized Y component</span></pre>
+<pre><span class="lnum">  56:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  57:  </span>        <span class="kwrd">public</span> <span class="kwrd">short</span>[] YComponent;</pre>
+<pre><span class="lnum">  58:  </span>&nbsp;</pre>
+<pre><span class="lnum">  59:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  60:  </span>        <span class="rem">/// Linearized U component</span></pre>
+<pre><span class="lnum">  61:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  62:  </span>        <span class="kwrd">public</span> <span class="kwrd">short</span>[] CbComponent;</pre>
+<pre><span class="lnum">  63:  </span>&nbsp;</pre>
+<pre><span class="lnum">  64:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  65:  </span>        <span class="rem">/// Linearized V component</span></pre>
+<pre><span class="lnum">  66:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  67:  </span>        <span class="kwrd">public</span> <span class="kwrd">short</span>[] CrComponent; </pre>
+<pre><span class="lnum">  68:  </span>        <span class="preproc">#endregion</span></pre>
+<pre><span class="lnum">  69:  </span>&nbsp;</pre>
+<pre><span class="lnum">  70:  </span>        <span class="preproc">#region</span> RLGR encoded YUV data</pre>
+<pre><span class="lnum">  71:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  72:  </span>        <span class="rem">/// RLGR encoded Y data</span></pre>
+<pre><span class="lnum">  73:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  74:  </span>        <span class="kwrd">public</span> <span class="kwrd">byte</span>[] YData;</pre>
+<pre><span class="lnum">  75:  </span>&nbsp;</pre>
+<pre><span class="lnum">  76:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  77:  </span>        <span class="rem">/// RLGR encoded U data</span></pre>
+<pre><span class="lnum">  78:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  79:  </span>        <span class="kwrd">public</span> <span class="kwrd">byte</span>[] CbData;</pre>
+<pre><span class="lnum">  80:  </span>&nbsp;</pre>
+<pre><span class="lnum">  81:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  82:  </span>        <span class="rem">/// RLGR encoded V data</span></pre>
+<pre><span class="lnum">  83:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  84:  </span>        <span class="kwrd">public</span> <span class="kwrd">byte</span>[] CrData; </pre>
+<pre><span class="lnum">  85:  </span>        <span class="preproc">#endregion</span></pre>
+<pre><span class="lnum">  86:  </span>&nbsp;</pre>
+<pre><span class="lnum">  87:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  88:  </span>        <span class="rem">/// The scalar quantization values for the ten sub-bands in the 3-level DWT decomposition.</span></pre>
+<pre><span class="lnum">  89:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  90:  </span>        <span class="kwrd">public</span> TS_RFX_CODEC_QUANT[] CodecQuantVals;</pre>
+<pre><span class="lnum">  91:  </span>&nbsp;</pre>
+<pre><span class="lnum">  92:  </span>        <span class="kwrd">public</span> <span class="kwrd">byte</span> QuantIdxY;</pre>
+<pre><span class="lnum">  93:  </span>&nbsp;</pre>
+<pre><span class="lnum">  94:  </span>        <span class="kwrd">public</span> <span class="kwrd">byte</span> QuantIdxCb;</pre>
+<pre><span class="lnum">  95:  </span>&nbsp;</pre>
+<pre><span class="lnum">  96:  </span>        <span class="kwrd">public</span> <span class="kwrd">byte</span> QuantIdxCr;</pre>
+<pre><span class="lnum">  97:  </span>&nbsp;</pre>
+<pre><span class="lnum">  98:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  99:  </span>        <span class="rem">/// Constructor</span></pre>
+<pre><span class="lnum"> 100:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum"> 101:  </span>        <span class="rem">/// &lt;param name="tsRfxCodecQuant"&gt;&lt;/param&gt;</span></pre>
+<pre><span class="lnum"> 102:  </span>        <span class="rem">/// &lt;param name="mode"&gt;&lt;/param&gt;</span></pre>
+<pre><span class="lnum"> 103:  </span>        <span class="kwrd">public</span> RemoteFXCodecContext(TS_RFX_CODEC_QUANT tsRfxCodecQuant, EntropyAlgorithm mode)</pre>
+<pre><span class="lnum"> 104:  </span>        {</pre>
+<pre><span class="lnum"> 105:  </span>            <span class="kwrd">this</span>.CodecQuantVals = <span class="kwrd">new</span> TS_RFX_CODEC_QUANT[] { tsRfxCodecQuant };</pre>
+<pre><span class="lnum"> 106:  </span>            <span class="kwrd">this</span>.QuantIdxY = 0;</pre>
+<pre><span class="lnum"> 107:  </span>            <span class="kwrd">this</span>.QuantIdxCb = 0;</pre>
+<pre><span class="lnum"> 108:  </span>            <span class="kwrd">this</span>.QuantIdxCr = 0;</pre>
+<pre><span class="lnum"> 109:  </span>            <span class="kwrd">this</span>.Mode = mode;</pre>
+<pre><span class="lnum"> 110:  </span>        }</pre>
+<pre><span class="lnum"> 111:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 112:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum"> 113:  </span>        <span class="rem">/// Constructor</span></pre>
+<pre><span class="lnum"> 114:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum"> 115:  </span>        <span class="rem">/// &lt;param name="tsRfxCodecQuantVals"&gt;&lt;/param&gt;</span></pre>
+<pre><span class="lnum"> 116:  </span>        <span class="rem">/// &lt;param name="quantIdxY"&gt;&lt;/param&gt;</span></pre>
+<pre><span class="lnum"> 117:  </span>        <span class="rem">/// &lt;param name="quantIdxCb"&gt;&lt;/param&gt;</span></pre>
+<pre><span class="lnum"> 118:  </span>        <span class="rem">/// &lt;param name="quantIdxCr"&gt;&lt;/param&gt;</span></pre>
+<pre><span class="lnum"> 119:  </span>        <span class="rem">/// &lt;param name="mode"&gt;&lt;/param&gt;</span></pre>
+<pre><span class="lnum"> 120:  </span>        <span class="kwrd">public</span> RemoteFXCodecContext(TS_RFX_CODEC_QUANT[] tsRfxCodecQuantVals, <span class="kwrd">byte</span> quantIdxY, <span class="kwrd">byte</span> quantIdxCb, <span class="kwrd">byte</span> quantIdxCr, EntropyAlgorithm mode)</pre>
+<pre><span class="lnum"> 121:  </span>        {</pre>
+<pre><span class="lnum"> 122:  </span>            <span class="kwrd">if</span>(tsRfxCodecQuantVals == <span class="kwrd">null</span> || tsRfxCodecQuantVals.Length == 0)</pre>
+<pre><span class="lnum"> 123:  </span>            {</pre>
+<pre><span class="lnum"> 124:  </span>                <span class="kwrd">throw</span> <span class="kwrd">new</span> ArgumentException(<span class="str">"Parameter tsRfxCodecQuantVals cannot be null and its length must larger than 0."</span>);</pre>
+<pre><span class="lnum"> 125:  </span>            }</pre>
+<pre><span class="lnum"> 126:  </span>            <span class="kwrd">int</span> maxIndex = tsRfxCodecQuantVals.Length -1;</pre>
+<pre><span class="lnum"> 127:  </span>            <span class="kwrd">if</span> (quantIdxY &gt; maxIndex || quantIdxCb &gt; maxIndex || quantIdxCr &gt; maxIndex)</pre>
+<pre><span class="lnum"> 128:  </span>            {</pre>
+<pre><span class="lnum"> 129:  </span>                <span class="kwrd">throw</span> <span class="kwrd">new</span> ArgumentException(<span class="str">"Quant index for Y , Cb or Cr is/are larger than the size of tsRfxCodecQuantVals."</span>);</pre>
+<pre><span class="lnum"> 130:  </span>            }</pre>
+<pre><span class="lnum"> 131:  </span>            <span class="kwrd">this</span>.CodecQuantVals = tsRfxCodecQuantVals;</pre>
+<pre><span class="lnum"> 132:  </span>            <span class="kwrd">this</span>.QuantIdxY = quantIdxY;</pre>
+<pre><span class="lnum"> 133:  </span>            <span class="kwrd">this</span>.QuantIdxCb = quantIdxCb;</pre>
+<pre><span class="lnum"> 134:  </span>            <span class="kwrd">this</span>.QuantIdxCr = quantIdxCr;</pre>
+<pre><span class="lnum"> 135:  </span>            <span class="kwrd">this</span>.Mode = mode;</pre>
+<pre><span class="lnum"> 136:  </span>        }</pre>
+<pre><span class="lnum"> 137:  </span>    }</pre>
+<pre><span class="lnum"> 138:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 139:  </span>    <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum"> 140:  </span>    <span class="rem">/// DWT direction enumeration</span></pre>
+<pre><span class="lnum"> 141:  </span>    <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum"> 142:  </span>    <span class="kwrd">enum</span> ArrayDirection</pre>
+<pre><span class="lnum"> 143:  </span>    {</pre>
+<pre><span class="lnum"> 144:  </span>        Vertical,</pre>
+<pre><span class="lnum"> 145:  </span>        Horizontal</pre>
+<pre><span class="lnum"> 146:  </span>    }</pre>
+<pre><span class="lnum"> 147:  </span>}</pre>
+</div>
+
+</body>
+</html>

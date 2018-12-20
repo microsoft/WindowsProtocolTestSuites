@@ -59,7 +59,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
 
         public event OplockBreakNotificationEventHandler OplockBreakNotification;
         public event OplockBreakResponseEventHandler OplockBreakResponse;
-        
+
         #endregion
 
         #region Actions
@@ -119,15 +119,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
                 dialects,
                 testConfig.IsSMB1NegotiateEnabled,
                 checker: (header, response) =>
-                    {
-                        Site.Assert.AreEqual(
-                            Smb2Status.STATUS_SUCCESS,
-                            header.Status,
-                            "{0} should succeed", header.Command);
-                        
-                        negotiateResponse = response;
-                    });
-            
+                {
+                    Site.Assert.AreEqual(
+                        Smb2Status.STATUS_SUCCESS,
+                        header.Status,
+                        "{0} should succeed", header.Command);
+
+                    negotiateResponse = response;
+                });
+
             negotiatedDialect = negotiateResponse.Value.DialectRevision;
 
             testClient.SessionSetup(
@@ -161,7 +161,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
                             shareType == ModelShareType.STYPE_CLUSTER_SOFS ? " " : " not ");
                     }
                 });
-                
+
         }
 
         public void RequestOplockAndOperateFileRequest(
@@ -171,7 +171,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
             out OplockConfig c)
         {
             Smb2CreateContextResponse[] serverCreateContexts;
-            string fileName = "OplockMBT_"+ Guid.NewGuid().ToString();
+            string fileName = GetTestFileName(uncSharePath);
 
             OplockLevel_Values grantedTmp = OplockLevel_Values.OPLOCK_LEVEL_NONE;
             testClient.Create(
@@ -208,12 +208,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
             bool persistentMatchesDurableFileId = persistentPortion == OplockPersistentPortion.PersistentMatchesDurableFileId;
             FILEID fileIdRequest = fileId;
 
-            if(!volatilePortionFound)
+            if (!volatilePortionFound)
             {
                 fileIdRequest.Volatile = FILEID.Invalid.Volatile;
             }
 
-            if(!persistentMatchesDurableFileId)
+            if (!persistentMatchesDurableFileId)
             {
                 fileIdRequest.Persistent = FILEID.Invalid.Persistent;
             }
@@ -227,7 +227,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
         #endregion
 
         #region Private methods
-        
+
         private void OnOplockBreakNotificationReceived(Packet_Header header, OPLOCK_BREAK_Notification_Packet packet)
         {
             Site.Log.Add(LogEntryKind.Debug, "OplockBreakNotification was received from server");
@@ -268,7 +268,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
             Smb2FunctionalClient clientForAnotherOpen = new Smb2FunctionalClient(testConfig.Timeout, testConfig, this.Site);
             clientForAnotherOpen.ConnectToServer(testConfig.UnderlyingTransport, testConfig.SutComputerName, testConfig.SutIPAddress, testConfig.ClientNic1IPAddress);
 
-            clientForAnotherOpen.Negotiate(new DialectRevision[]{negotiatedDialect}, testConfig.IsSMB1NegotiateEnabled);
+            clientForAnotherOpen.Negotiate(new DialectRevision[] { negotiatedDialect }, testConfig.IsSMB1NegotiateEnabled);
 
             clientForAnotherOpen.SessionSetup(
                 testConfig.DefaultSecurityPackage,
@@ -297,7 +297,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
 
                 clientForAnotherOpen.Write(treeIdForAnotherOpen, fileIdForAnotherOpen, writeContent);
             }
-            
+
         }
 
         #endregion

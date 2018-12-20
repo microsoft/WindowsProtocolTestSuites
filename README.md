@@ -12,12 +12,12 @@ Windows Protocol Test Suites provide interoperability testing against the implem
 * **RDP Client Family Test Suite**. It provides interoperability testing for client implementation of RDP family protocols including [MS-RDPBCGR], [MS-RDPEDISP], [MS-RDPEDYC], [MS-RDPEGFX], [MS-RDPEGT], [MS-RDPEI], [MS-RDPEMT], [MS-RDPEUDP], [MS-RDPEUSB], [MS-RDPEVOR] and [MS-RDPRFX].
 * **RDP Server Family Test Suite**. It provides interoperability testing for server implementation of RDP family protocols including [MS-RDPBCGR] and [MS-RDPEMT].  
 * **Kerberos Server Test Suite**. It is designed to test server implementations of Kerberos protocols including [MS-KILE], [MS-KKDCP] and [MS-PAC].
-* **SMBD Server Test Suite**. It is designed to test the implementations of SMB2&3 direct (RDMA) protocol, as specified in [MS-SMBD].
-* **Branch Cache Test Suite**. It is designed to test the implementations of MS-PCCRTP, MS-PCCRR, MS-PCHC and MS-PCCRC protocol.
-* **AZOD Test Suite**. It is designed to test the implementations of MS-AZOD protocol.
+* **SMBD Server Test Suite**. It is designed to test the implementations of SMB2&3 direct (RDMA) protocol, as specified in [MS-SMBD] and [MS-SMB2].
+* **Branch Cache Test Suite**. It is designed to test the implementations of [MS-PCCRTP], [MS-PCCRR], [MS-PCHC] and [MS-PCCRC] protocol.
+* **AZOD Test Suite**. It is designed to test the implementations of [MS-AZOD] protocol.
 * **ADFamily Test Suite**. It is designed to test the implementations of the Active Directory protocols including [MS-ADTS], [MS-APDS], [MS-DRSR] [MS-FRS2], [MS-LSAD], [MS-LSAT], [MS-SAMR] and [MS-NRPC]. 
 * **ADFSPIP Client Test Suite**. It is designed to test the implementations of ADFS Proxy and Web Application Proxy integration, as described in [MS-ADFSPIP].
-* **ADOD Test Suite**. It is designed to test the implementations of MS-ADOD protocol.
+* **ADOD Test Suite**. It is designed to test the implementations of [MS-ADOD] protocol.
 
 ## Components
 Windows Protocol Test Suites contain 4 components:
@@ -30,15 +30,33 @@ Windows Protocol Test Suites contain 4 components:
 
 ## Prerequisites
 The Test Suites are developed and must be installed on a Windows platform.
-You should install the following list of software in order to build Test Suites from source code.
-You can use the script in **InstallPrerequisites** folder to automatically download and install these software.
+You should install the software listed below based on your testing purpose, including their own dependencies.
+* [Visual Studio 2017](https://visualstudio.microsoft.com/downloads/) with some individual components required by installing in Visual Studio Installer:
+ 
+    |Individual Component\Purpose|Run Windows Protocol Test Suites|Build Windows Protocol Test Suites from source code|
+    |---|---|---|
+    |.NET Framework 4.7.1 targeting pack|Required|Required|
+    |Testing tools core features|Required|Required|
+    |.NET Framework 4.7.1 SDK||Required|
+    |C# and Visual Basic Roslyn compilers||Required|
+    |Visual C++ 2017 Redistributable Update|Required<sup>1</sup>|Required<sup>1</sup>|
+    |Visual Studio C++ core features||Required<sup>1</sup>|
+    |VC++ 2017 version 15.8 v14.15 latest v141 tools||Required<sup>1</sup>|
+    |Windows 10 SDK (10.0.16299.0) for Desktop C++ [x86 and x64]||Required<sup>1</sup>|
+   
+    <small>Note:</small>
 
-* .NET Framework 3.5
-* .Net framework 4.0 or higher
-* [Wix toolset](http://wixtoolset.org/) v3.10 or higher
-* Visual Studio or Visual Studio Agent, version 2012 or higher
-* [Protocol Test Framework](https://github.com/microsoft/protocoltestframework). You can use a released MSI file or build it from source code.
-* [Spec Explorer](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/). It is only required for the test suites that contain Model-Based Test cases. If you want to regenerate Model-Based Test cases, you must install Visual Studio 2012, otherwise higher versions of Visual Studio are supported.
+    <small><1> These individual components are required by ADFamily, MS-SMBD or Protocol Test Manager which have C++ code.</small>
+
+* [Protocol Test Framework build 1.0 (build 1.0.6000.0)](https://github.com/Microsoft/ProtocolTestFramework/releases/tag/1.0.6000.0). You can use a released MSI file or build it from source code.
+* [Spec Explorer 2010 v3.5.3146.0](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/). It is only required if you want to build or run the test suites that contain Model-Based Test cases. If you want to regenerate Model-Based Test cases, you must install Visual Studio 2012.
+* [Wix Toolset v3.11](https://github.com/wixtoolset/wix3/releases/tag/wix3111rtm) and [Wix Toolset Visual Studio 2017 Extension](https://marketplace.visualstudio.com/items?itemName=RobMensching.WixToolsetVisualStudio2017Extension). It is required if your want to build test suites or Protocol Test Manager from source code.
+* [Microsoft Message Analyzer](https://www.microsoft.com/en-us/download/details.aspx?id=44226). It is required if your want to build or run ADFamily, ADOD and AZOD test suites.
+* [Open XML SDK](https://www.microsoft.com/en-us/download/details.aspx?id=30425). It is required if your want to build or run ADFamily test suite.
+* [Network Direct DDK](https://www.microsoft.com/en-us/download/details.aspx?id=26645). Make sure to extract ndspi.h and ndstatus.h in archive to ProtoSDK\RDMA\include folder, in order to build SMBD test suite.
+
+
+You can use the script in **InstallPrerequisites** folder to automatically download and install these software.
 
 Tips when using the script in **InstallPrerequisites** folder:
 
@@ -79,7 +97,7 @@ Some test suites use [Model-Based Testing](https://msdn.microsoft.com/en-us/libr
 
 ## Build
 
-After you [clone a copy](https://help.github.com/articles/cloning-a-repository/) of this repo, you can run **build.cmd** for Protocol Test Manager and each test suite separately.
+After you [clone a copy](https://help.github.com/articles/cloning-a-repository/) of this repo, you can run **build.cmd** for Protocol Test Manager and each test suite separately after you have installed all the softwares required for build listed in [Prerequisites](#prerequisites)
 
 ### Build Protocol Test Manager
 
@@ -90,16 +108,6 @@ build.cmd
 
 ### Build a test suite
 
-If the test suite contains Model-Based test cases, you should follow the steps below before building it. 
-
-* Install [Spec Explorer](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/), 
-* Install the **formodel** version of [Protocol Test Framework](https://github.com/microsoft/protocoltestframework). You can use a released MSI file or build it from source code by **formodel** option.
-
-If the test suite does not contain Model-Based test cases, you should follow the step below before building it.
-
-* Install the **nomodel** version of [Protocol Test Framework](https://github.com/microsoft/protocoltestframework). You can use a released MSI file or build it from source code without any options.
-
-After that, take SMB test suite as an example
 ```
 cd WindowsProtocolTestSuites\TestSuites\MS-SMB\src
 build.cmd

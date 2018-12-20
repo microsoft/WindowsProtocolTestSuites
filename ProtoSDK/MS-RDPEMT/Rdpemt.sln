@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2036
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rdpemt", "Rdpemt.csproj", "{BC76FE5C-537E-4F29-9B2A-DA7F196A5024}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rdpeudp", "..\MS-RDPEUDP\Rdpeudp.csproj", "{A8243614-5C27-4115-A150-582B411011DC}"

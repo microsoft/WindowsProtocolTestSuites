@@ -325,6 +325,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  of the share. This flag is only valid for the SMB 3.02 dialect.
         /// </summary>
         SHARE_CAP_ASYMMETRIC = 0x00000080,
+
+        /// <summary>
+        /// The specified share is present on a server configuration that supports synchronous share level redirection
+        /// via a Share Redirect error context response (section 2.2.2.2.2).
+        /// This flag is not valid for SMB 2.0.2, 2.1, 3.0, and 3.0.2 dialects.
+        /// </summary>
+        SHARE_CAP_REDIRECT_TO_OWNER = 0x00000100,
     }
 
     /// <summary>
@@ -3185,7 +3192,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// An identifier for the error context
         /// </summary>        
         [StaticSize(4)]
-        public uint ErrorId;
+        public Error_Id ErrorId;
 
         /// <summary>
         /// Variable-length error data
@@ -3195,19 +3202,43 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
     }
 
     /// <summary>
-    /// Error Data format struct (when ErrorContextCount ==0)
+    /// An identifier for the error context.
     /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
+    public enum Error_Id : uint
+    {
+        /// <summary>
+        /// Unless otherwise specified, all errors defined in the [MS-SMB2] protocol use this error ID.
+        /// </summary>
+        ERROR_ID_DEFAULT = 0x00000000,
+
+        /// <summary>
+        /// The ErrorContextData field contains a share redirect message described in section 2.2.2.2.2.
+        /// </summary>
+        ERROR_ID_SHARE_REDIRECT = 0x72645253,
+    }
+
+    /// <summary>
+    /// Error Data format struct (when ErrorContextCount !=0)
+    /// </summary>
     public struct ErrorData_Format
     {
         /// <summary>
         /// If the error code in the header of the response is set to STATUS_STOPPED_ON_SYMLINK,
         /// this field MUST contain a Symbolic Link Error Response as specified in section 2.2.2.2.1.
         /// </summary>
-        [FieldOffset(0)]
         public Symbolic_Link_Error_Response SymbolicLinkErrorResponse;
 
-        [FieldOffset(0)]
+        /// <summary>
+        /// If the error code in the header of the response is set to STATUS_BAD_NETWORK_NAME,
+        /// and the ErrorId in the SMB2 Error Context response is set to SMB2_ERROR_ID_SHARE_REDIRECT,
+        /// this field MUST contain a Share Redirect Error Response as specified in section 2.2.2.2.2.
+        /// </summary>
+        public Share_Redirect_Error_Context_Response ShareRedirectErrorContextResponse;
+
+        /// <summary>
+        /// If the error code in the header of the response is STATUS_BUFFER_TOO_SMALL,
+        /// this field MUST be set to a 4-byte value indicating the minimum required buffer length.
+        /// </summary>
         public byte[] BufferTooSmallErrorResponse;
     }
 
@@ -4362,6 +4393,115 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  Possible value.
         /// </summary>
         V1 = 0xa000000c,
+    }
+
+    /// <summary>
+    /// Servers which negotiate SMB 3.1.1 or higher can return this error context
+    /// to a client in response to a tree connect request
+    /// with the SMB2_TREE_CONNECT_FLAG_REDIRECT_TO_OWNER bit set
+    /// in the Flags field of the SMB2 TREE_CONNECT request.
+    /// </summary>
+    public partial struct Share_Redirect_Error_Context_Response
+    {
+        /// <summary>
+        /// This field MUST be set to the size of the structure.
+        /// </summary>
+        [StaticSize(4)]
+        public uint StructureSize;
+
+        /// <summary>
+        /// This field MUST be set to 3.
+        /// </summary>
+        [StaticSize(4)]
+        public uint NotificationType;
+
+        /// <summary>
+        /// The offset from the start of this structure to the ResourceName field.
+        /// </summary>
+        [StaticSize(4)]
+        public uint ResourceNameOffset;
+
+        /// <summary>
+        /// The length of the share name provided in the ResourceName field, in bytes.
+        /// </summary>
+        [StaticSize(4)]
+        public uint ResourceNameLength;
+
+        /// <summary>
+        /// This field MUST be set to zero.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort Flags;
+
+        /// <summary>
+        /// This field MUST be set to zero.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort TargetType;
+
+        /// <summary>
+        /// The number of MOVE_DST_IPADDR structures in the IPAddrMoveList field.
+        /// </summary>
+        [StaticSize(4)]
+        public uint IPAddrCount;
+
+        /// <summary>
+        /// Array of MOVE_DST_IPADDR structures, as specified in section 2.2.2.2.2.1.
+        /// </summary>
+        [Size("IPAddrCount")]
+        public Move_Dst_IpAddr[] IPAddrMoveList;
+
+        /// <summary>
+        /// Name of the share as a counted Unicode string, as specified in [MS-DTYP] section 2.3.10.
+        /// </summary>
+        [Size("ResourceNameLength")]
+        public byte[] ResourceName;
+    }
+
+    /// <summary>
+    /// The MOVE_DST_IPADDR structure is used in Share Redirect Error Context Response
+    /// to indicate the destination IP address.
+    /// </summary>
+    public struct Move_Dst_IpAddr
+    {
+        /// <summary>
+        /// This field indicates the type of destination IP address.
+        /// </summary>
+        [StaticSize(4)]
+        public Move_Dst_IpAddr_Type Type;
+
+        /// <summary>
+        /// This field MUST NOT be used and MUST be reserved.
+        /// The server SHOULD set this field to zero, and the client MUST ignore it on receipt.
+        /// </summary>
+        [StaticSize(4)]
+        public uint Reserved;
+
+        /// <summary>
+        /// This field is interpreted in different ways depending on the type of IP address passed in.
+        /// If the value of the Type field is MOVE_DST_IPADDR_V4, this field is the IPv4Address field followed by Reserved2 fields.
+        /// If the value of the Type field is MOVE_DST_IPADDR_V6, this field is the IPv6Address field.
+        /// </summary>
+        [StaticSize(16)]
+        public byte[] IPv6Address;
+    }
+
+    /// <summary>
+    /// Enum of Type field in Move_Dst_IpAddr
+    /// </summary>
+    public enum Move_Dst_IpAddr_Type : uint
+    {
+        /// <summary>
+        /// The type of destination IP address in this structure is IPv4 address.
+        /// The fields after Reserved field in this structure are interpreted as IPv4Address
+        /// followed by Reserved2 as described below.
+        /// </summary>
+        MOVE_DST_IPADDR_V4 = 0x00000001,
+
+        /// <summary>
+        /// The type of destination IP address in this structure is IPv6 address.
+        /// </summary>
+        MOVE_DST_IPADDR_V6 = 0x00000002
     }
 
     /// <summary>
@@ -5816,8 +5956,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <summary>
         ///  The server MUST restart the enumeration from the beginning,
         ///  and the search pattern MUST be changed to the provided
-        ///  value. This often involves silently closing and reopening
-        ///  the directory on the server side.
+        ///  value.
         /// </summary>
         REOPEN = 0x10,
     }
@@ -6372,7 +6511,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  maximum output size that is indicated in the request.
         /// </summary>
         [StaticSize(1)]
-        public bool ReturnSingle;
+        public byte ReturnSingle;
 
         /// <summary>
         ///  A Boolean value.  If set, the quota information MUST
@@ -6381,7 +6520,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  that was executed on this open.
         /// </summary>
         [StaticSize(1)]
-        public bool RestartScan;
+        public byte RestartScan;
 
         /// <summary>
         ///  Unused at present and MUST be treated as reserved. 

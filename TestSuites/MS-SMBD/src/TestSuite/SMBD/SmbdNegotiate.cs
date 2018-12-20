@@ -13,12 +13,8 @@ using System.Threading;
 namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
 {
     [TestClass]
-    public class SmbdNegotiate : TestClassBase
+    public class SmbdNegotiate : SmbdTestBase
     {
-        #region Variables
-        private SmbdAdapter smbdAdapter;
-        #endregion
-
         #region Class Initialization and Cleanup
         [ClassInitializeAttribute()]
         public static void ClassInitialize(TestContext context)
@@ -30,21 +26,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         public static void ClassCleanup()
         {
             TestClassBase.Cleanup();
-        }
-        #endregion
-
-        #region Test Initialization and Cleanup
-        protected override void TestInitialize()
-        {
-            this.smbdAdapter = new SmbdAdapter(BaseTestSite, LogSmbdEndpointEvent);
-            SmbdUtilities.LogTestCaseDescription(BaseTestSite);
-        }
-
-        protected override void TestCleanup()
-        {
-            base.TestCleanup();
-
-            smbdAdapter.DisconnectRdma();
         }
         #endregion
 
@@ -150,10 +131,10 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             uint preferredSendSize;
             SmbdNegotiateResponse response;
 
-            if (smbdAdapter.TestConfig.Platform == Platform.WindowsServer2012R2)
+            if (smbdAdapter.TestConfig.Platform == Platform.WindowsServer2012R2 || smbdAdapter.TestConfig.Platform == Platform.WindowsServer2016)
             {
-                // for WS2012R2, server will check preferredSendSize does not exceed 8136   
-                // [MS-SMBD]: <5> Section 3.1.5.6:  Windows Server 2012 R2 fails the request with STATUS_INSUFFICIENT_RESOURCES if the PreferredSendSize field is greater than 8136.
+                // Windows Server 2012 R2, Windows Server 2016, and Windows Server operating system fail the request 
+                // with STATUS_INSUFFICIENT_RESOURCES if the PreferredSendSize field is greater than 8136.
                 preferredSendSize = 8136;
             }
             else
@@ -653,9 +634,9 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
                 );
 
             // try to negotiate on SMB2
-            string fileName = SmbdUtilities.CreateRandomFileName();
+            string fileName = CreateRandomFileName();
 
-            // "<3> Section 3.1.5.6:  Windows Server 2012 fails the Negotiate Request Message with STATUS_NOT_SUPPORTED if MinVersion or MaxVersion is not 0x0100"
+            // Windows Server 2012 fails the Negotiate Request Message with STATUS_NOT_SUPPORTED if MinVersion or MaxVersion is not 0x0100.
             if (smbdAdapter.TestConfig.Platform == Platform.WindowsServer2012)
             {
                 if (minVer == SmbdVersion.V1
@@ -788,13 +769,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             BaseTestSite.Assert.IsTrue(
                 response.MaxFragmentedSize >= SmbdConnection.FLOOR_MAX_FRAGMENTED_SIZE,
                 "MaxFragmentedSize in negotiate response is {0}", response.MaxFragmentedSize);
-        }
-
-        public void LogSmbdEndpointEvent(string log)
-        {
-            BaseTestSite.Log.Add(
-                LogEntryKind.Debug,
-                log);
         }
 
         #endregion

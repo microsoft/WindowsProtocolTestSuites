@@ -34,7 +34,29 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         /// <summary>
         /// V1 request.
         /// </summary>
-        V1 = 1
+        V1 = 1,
+
+        /// <summary>
+        /// V2 request.
+        /// </summary>
+        V2 = 2
+    }
+
+    /// <summary>
+    /// Enumeration to specify the request versions of IDL_DRSUpdateRefs.
+    /// </summary>
+    public enum DrsUpdateRefs_Versions : uint
+    {
+
+        /// <summary>
+        /// V1 request.
+        /// </summary>
+        V1 = 1,
+
+        /// <summary>
+        /// V2 request.
+        /// </summary>
+        V2 = 2
     }
 
     /// <summary>
@@ -65,7 +87,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         /// <summary>
         /// V10 request.
         /// </summary>
-        V10 = 10
+        V10 = 10,
+
+        /// <summary>
+        /// V11 request.
+        /// </summary>
+        V11 = 11
     }
 
     /// <summary>
@@ -125,7 +152,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         /// <summary>
         /// V2 request
         /// </summary>
-        V2 = 2
+        V2 = 2,
+
+        /// <summary>
+        /// V3 request
+        /// </summary>
+        V3 = 3
     }
 
     /// <summary>

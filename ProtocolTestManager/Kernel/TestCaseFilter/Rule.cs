@@ -188,7 +188,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             Rule rule = new Rule()
             {
-                Name = node.Attributes["name"].Value
+                // Normalize rule name by removing dot since FindRuleByName will use dot as split delimiter
+                Name = node.Attributes["name"].Value.Replace(".", string.Empty)
             };
             foreach (XmlNode n in node.SelectNodes("Category"))
             {

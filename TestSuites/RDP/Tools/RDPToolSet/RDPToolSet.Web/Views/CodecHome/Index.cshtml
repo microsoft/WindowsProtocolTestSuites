@@ -1,0 +1,35 @@
+﻿<div class="container text-left">
+    <h2 class="text-center">RDP Codec Algorithms</h2>
+    <p>
+        One of the core requirements of desktop remoting is the ability to efficiently
+         compress server-side screen images so that they can be transported over a network
+         and displayed on a client screen. Any codec used for this purpose needs to be able
+         to deliver effective compression (to reduce network bandwidth requirements) and
+         operate with low-latency (to enable efficient interactions with remoted content).
+         A typical desktop screen contains textual content (synthetic images) along with
+         video and photographic content (natural images). Given the sensitivity of the
+         human eye to the sharp features present in textual content, any applied compression
+         has to be visually lossless; otherwise the text will appear blurred.
+    </p>
+
+    <dl style="padding: 10px">
+        <dt>RemoteFX Encoding/Decoding Codec</dt>
+        <dd>RemoteFX is a tile-based transform codec. It has the same functional stages as those found
+             in most structured compression systems. At the encode endpoint, these stages are transform,
+             quantization, and entropy encoding. The inverse of these operations (in the reverse order)
+             takes place at the decode endpoint. RemoteFX uses DWTs and Run-Length Golomb-Rice Coding
+             (RLGR) for transformation and entropy encoding respectively.
+        </dd>
+    </dl>
+
+    <dl style="padding: 10px">
+        <dt>RemoteFX Progressive Encoding/Decoding Codec</dt>
+        <dd>The RemoteFX Progressive Codec extends the RemoteFX Codec ([MS-RDPRFX]) by adding sub-band
+             diffing and the ability to progressively encode an image. Sub-band diffing is a compression
+             technique that entails transmitting the differences between the DWT coefficients of consecutive
+             frames, while progressive encoding involves the transmission of low-quality images that are
+             gradually refined and improved in quality.
+        </dd>
+    </dl>
+
+</div>

@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Protocols.TestManager.RDPClientPlugin</RootNamespace>
+    <AssemblyName>RDPClientPlugin</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="DetectionResultControl.xaml.cs">
+      <DependentUpon>DetectionResultControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Detector\RDPBCGRCapSet.cs" />
+    <Compile Include="Detector\RDPDetector.cs" />
+    <Compile Include="Detector\SUTControlMessage.cs" />
+    <Compile Include="Detector\SUTControlMessageExRDP.cs" />
+    <Compile Include="Detector\TCPSUTControlTransport.cs" />
+    <Compile Include="RDPValueDetector.cs" />
+    <Compile Include="Types.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Common\Common.csproj">
+      <Project>{fe653643-6342-4300-871e-683c7ba31494}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\CryptoLib\CryptoLib.csproj">
+      <Project>{bf6afaf0-7592-467f-ad5c-18429d854057}</Project>
+      <Name>CryptoLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Messages\Messages.csproj">
+      <Project>{75544419-3f4e-4308-a676-165f45c1462e}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-RDPBCGR\Rdpbcgr.csproj">
+      <Project>{fa218cab-320c-45e9-b641-04622418988e}</Project>
+      <Name>Rdpbcgr</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-RDPEDISP\Rdpedisp.csproj">
+      <Project>{37f00834-1559-42c8-a137-cc4e963d4b82}</Project>
+      <Name>Rdpedisp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-RDPEDYC\Rdpedyc.csproj">
+      <Project>{cfbafde2-f509-4ac8-817a-0c26c1b27653}</Project>
+      <Name>Rdpedyc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-RDPEGFX\Rdpegfx.csproj">
+      <Project>{c89ac3fb-7ffc-49d8-b99b-a76c9411aec6}</Project>
+      <Name>Rdpegfx</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-RDPEGT\Rdpegt.csproj">
+      <Project>{80264e7b-a9dd-4c8a-ab1e-86c1b80466d9}</Project>
+      <Name>Rdpegt</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-RDPEI\Rdpei.csproj">
+      <Project>{6ee0bb46-e1a0-42d5-85aa-e4f0b3a8c5ca}</Project>
+      <Name>Rdpei</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-RDPEMT\Rdpemt.csproj">
+      <Project>{9e44ed93-d10d-42e3-a8bf-ad1923859857}</Project>
+      <Name>Rdpemt</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-RDPEUDP\Rdpeudp.csproj">
+      <Project>{b6f8eb97-b6a5-4092-9ed0-12c0487da124}</Project>
+      <Name>Rdpeudp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-RDPEUSB\Rdpeusb.csproj">
+      <Project>{698f6802-be9f-4483-a5c7-b4bbfa51d47b}</Project>
+      <Name>Rdpeusb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-RDPEVOR\Rdpevor.csproj">
+      <Project>{2467a7e3-8e85-4f7b-80bb-effe8d48b3de}</Project>
+      <Name>Rdpevor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-RDPRFX\Rdprfx.csproj">
+      <Project>{9dd86de1-3231-4713-9b45-493f4fe4199c}</Project>
+      <Name>Rdprfx</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Sspi\Sspi.csproj">
+      <Project>{d0cb354b-2cd3-49c1-8eca-2f6ebadbccee}</Project>
+      <Name>Sspi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\TransportStack\TransportStack.csproj">
+      <Project>{967d976a-c792-4893-9235-14615ae1ff58}</Project>
+      <Name>TransportStack</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\PropertyValueDetector\PropertyValueDetector.csproj">
+      <Project>{7982acf0-f1a4-4996-a339-641cafa093ce}</Project>
+      <Name>PropertyValueDetector</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="config.xml" />
+    <Resource Include="Docs\arrow_right.png" />
+    <Content Include="Docs\configure.html" />
+    <Resource Include="Docs\domain.png" />
+    <Content Include="Docs\index.html" />
+    <Content Include="Docs\network.html" />
+    <Resource Include="Docs\note.png" />
+    <Resource Include="Docs\workgroup.png" />
+    <Resource Include="Icons\supported.png" />
+    <Resource Include="Icons\undetected.png" />
+    <Resource Include="Icons\unsupported.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="DetectionResultControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SUTControlAdapter\Check-PSRemoting.ps1" />
+    <None Include="SUTControlAdapter\RDPConnectWithNegotiationApproach.ps1" />
+    <None Include="SUTControlAdapter\Run-TaskWithPSRemoting.ps1" />
+    <None Include="SUTControlAdapter\TriggerClientDisconnectAll.ps1" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\lib\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\lib\" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

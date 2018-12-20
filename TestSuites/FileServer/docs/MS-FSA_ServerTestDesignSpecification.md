@@ -134,6 +134,9 @@
     * [IsZeroDataSupported](#_Toc427488765)
 		* [FsCtl_Set_ZeroData_File_IsSetZeroDataSupported](#_Toc427488766)
 		* [FsCtl_Set_ZeroData_Dir_IsZeroDataSupported](#_Toc427488767)
+    * [FileNormalizedNameInformation](#_Toc427488831)
+        * [FileInfo_Query_FileNormalizedNameInfo_File](#_Toc427488832)
+     	* [FileInfo_Query_FileNormalizedNameInfo_Dir](#_Toc427488833)
 * [Test cases for Alternate Data Stream](#_Toc427488768)
 		* [AlternateDataStream_CreateStream](#_Toc427488769)
 			* [BVT_AlternateDataStream_CreateStream_File (BVT)](#_Toc427488770)
@@ -2795,6 +2798,50 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
 
+
+
+
+
+### <a name="_Toc427488831"/> FileNormalizedNameInformation
+
+#### <a name="_Toc427488832"/>FileInfo_Query_FileNormalizedNameInfo_File
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if query FileNormalizedNameInformation on file is supported for different file systems.
+| | Note: Windows 10 v1709, Windows Server v1709 operating system and prior do not support the FileNormalizedNameInformation information class.
+| | File information class: FileNormalizedNameInformation
+| Message Sequence| CreateFile (DataFile)
+| | QUERY_INFO request with FileNormalizedNameInformation
+| | If (status == **STATUS_NOT_SUPPORTED**) {
+| | Assert.Inconclusive();
+| | } Else If (status == **STATUS_SUCCESS**) {
+| | // Verify outputBuffer as FileNameInformation.
+| | }
+| | Else {
+| | Assert.Fail();
+| | }
+
+
+
+
+#### <a name="_Toc427488833"/>FileInfo_Query_FileNormalizedNameInfo_Dir
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if query FileNormalizedNameInformation on directory is supported for different file systems.
+| | Note: Windows 10 v1709, Windows Server v1709 operating system and prior do not support the FileNormalizedNameInformation information class.
+| | File information class: FileNormalizedNameInformation
+| Message Sequence| CreateFile (DirectoryFile)
+| | QUERY_INFO request with FileNormalizedNameInformation
+| | If (status == **STATUS_NOT_SUPPORTED**) {
+| | Assert.Inconclusive();
+| | } Else If (status == **STATUS_SUCCESS**) {
+| | // Verify outputBuffer as FileNameInformation.
+| | }
+| | Else {
+| | Assert.Fail();
+| | }
 
 
 
