@@ -23,7 +23,7 @@ if(!(Test-Path "$workingDir"))
 if(!(Test-Path "$protocolConfigFile"))
 {
     $protocolConfigFile = "$workingDir\Protocol.xml"
-    if(!(Test-Path "$protocolConfigFile")) 
+    if(!(Test-Path "$protocolConfigFile"))
     {
         Write-Error.ps1 "No protocol.xml found."
         exit ExitCode
@@ -40,8 +40,8 @@ Start-Transcript -Path "$logFile" -Append -Force
 # Define common functions
 #----------------------------------------------------------------------------
 function ExitCode()
-{ 
-    return $MyInvocation.ScriptLineNumber 
+{
+    return $MyInvocation.ScriptLineNumber
 }
 
 function Write-ConfigFailureSignal()
@@ -67,13 +67,13 @@ function CheckConnectivity($computerName)
         {
 		    Write-Info.ps1 "Test TCP connection to computer: $computerName"
             Test-Connection -ComputerName $computerName -ErrorAction Stop
-			
+
 			Write-Info.ps1 "Test WMI connection to computer: $computerName"
             $wmiObj = Get-WmiObject Win32_ComputerSystem -Computername $computerName -ErrorAction Stop
             break
         }
         catch
-        {			
+        {
             Write-Info.ps1 "Get exception: $_"
             Start-Sleep 15
         }
@@ -151,7 +151,7 @@ if($diskCount -lt 3)
     Write-Info.ps1 "Cluster environment requires at least 3 disks."
     Write-ConfigFailureSignal
     exit ExitCode
-} 
+}
 
 Write-Info.ps1 "Format 3 disks for cluster"
 for($i=0; $i -lt 3;$i++)
@@ -169,15 +169,15 @@ for($i=0; $i -lt 3;$i++)
     if($partition -eq $null)
     {
         $diskpartscript=@()
-        
+
         Write-Info.ps1 "Online and format Disk $diskNumber"
         $diskpartscript += "select disk $diskNumber"
         $diskpartscript += "ATTRIBUTES DISK CLEAR READONLY"
-        $diskpartscript += "online disk noerr" 
+        $diskpartscript += "online disk noerr"
         $diskpartscript += "convert mbr noerr"
-        $diskpartscript += "crea part prim noerr" 
+        $diskpartscript += "crea part prim noerr"
         $diskpartscript += "format fs=NTFS label=$volumeLabel quick noerr"
-        
+
         $diskpartscript | diskpart.exe
     }
 }
@@ -194,14 +194,14 @@ if($cluster -eq $null)
     {
         CheckConnectivity $node
     }
-	
+
     # Create cluster
     $osVersion = Get-OSVersionNumber.ps1
     if ([double]$osVersion -ge [double]"10.0")
     {
         # Failed to create cluster in Threshold if let New-Cluster cmdlet auto add cluster disks
         # So create a cluster without cluster disks, then add cluster disks separately.
-        
+
         Write-Info.ps1 "Create cluster with current node without storage"
         New-Cluster -Name $clusterName -Node $env:COMPUTERNAME -StaticAddress $clusterIps -NoStorage
         Start-Sleep 20
@@ -251,7 +251,7 @@ if($cluster -eq $null)
             Write-ConfigFailureSignal
             exit ExitCode
         }
-    }    
+    }
 }
 
 #----------------------------------------------------------------------------
@@ -275,7 +275,7 @@ if($SMBGeneralDisk -eq $null)
     Write-Info.ps1 "Pick one disk from available storage for general disk"
     $clusterResources = Get-ClusterResource | where {$_.OwnerGroup -eq "Available Storage" -and $_.ResourceType -eq "Physical Disk"}
     $SMBGeneralDisk = $clusterResources | Select-Object -First 1
-    $SMBGeneralDisk.Name = "SMBGeneralDisk"    
+    $SMBGeneralDisk.Name = "SMBGeneralDisk"
 }
 
 Write-Info.ps1 "Adding Scaleout disk"
@@ -289,6 +289,20 @@ if($csv -eq $null)
     $scaleoutDisk | Add-ClusterSharedVolume
     sleep 10
     $csv = Get-ClusterSharedVolume
+}
+
+#----------------------------------------------------------------------------
+# Create InfrastructureFS role before adding csv
+#----------------------------------------------------------------------------
+$build = [environment]::OSVersion.Version.Build
+if ($build -ge 17609)
+{
+    Write-Info.ps1 "Create InfrastructureFS role"
+    $InfrastructureGroup = Get-ClusterGroup | where {$_.Name -eq "InfrastructureFS"}
+    if($InfrastructureGroup -eq $null)
+    {
+        Add-ClusterScaleOutFileServerRole -Infrastructure -Name "InfrastructureFS"
+    }
 }
 
 Write-Info.ps1 "Update SMBScaleOutDisk name"
@@ -315,12 +329,12 @@ $fileServerShare = Get-SmbShare | where {$_.Name -eq "SMBClustered" -and $_.Scop
 if($fileServerShare -eq $null)
 {
     Write-Info.ps1 "Get general disk volume"
-    # Note: 
+    # Note:
     # There are 2 disks with label "CLUSTER_DATA" for general disk and cluster shared volume.
     # The general disk's FileSystem is NTFS
     # The cluster shared volume's FileSystem is CSVFS
     # Retry 5 minutes (30 * 10 s) in case the disk is not ready due to change cluster owner node.
-    $retryTime = 30 
+    $retryTime = 30
     do
     {
         $drive = gwmi -Class Win32_volume | where {$_.FileSystem -eq "NTFS" -and $_.Label -eq "CLUSTER_DATA"}
@@ -341,15 +355,15 @@ if($fileServerShare -eq $null)
 
     Write-Info.ps1 "Ger available drive letter"
 	$driveLetter = ""
-	foreach ($letter in [char[]]([char]'F'..[char]'Z')) 
-    { 
+	foreach ($letter in [char[]]([char]'F'..[char]'Z'))
+    {
       	$driveLetter = $letter + ":"
         $logicaldisk = get-wmiobject win32_logicaldisk | where {$_.DeviceID -eq $driveLetter}
         if ($logicaldisk -eq $null -and (Test-Path -path $driveLetter) -eq $false)
-        { 
+        {
             break
-        } 
-    } 
+        }
+    }
 	Write-Info.ps1 "The available drive letter is: $driveLetter"
 
     Write-Info.ps1 "Assign drive letter to general disk volume"
