@@ -20,6 +20,8 @@ using System.Security.Principal;
 using System.Text;
 using Smb2 = Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
+
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 {
@@ -80,6 +82,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private FileAccess gOpenGrantedAccess;
         private StreamType gStreamType;
         private List<string> activeTDIs;
+
+        // Used to clean up the generated test files.
+        protected ISutProtocolControlAdapter sutProtocolController;
+        protected List<string> testFiles = new List<string>();
+        protected List<string> testDirectories = new List<string>();
         # endregion
 
         #region Properties
@@ -225,6 +232,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             }
         }
 
+        protected string CurrentTestCaseName
+        {
+            get
+            {
+                string fullName = (string)Site.TestProperties["CurrentTestCaseName"];
+                return fullName.Split('.').LastOrDefault();
+            }
+        }
         #endregion
 
         #region Initialize
@@ -319,6 +334,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             //Other Configurations
             this.transBufferSize = uint.Parse(testConfig.GetProperty("BufferSize"));
 
+            sutProtocolController = Site.GetAdapter<ISutProtocolControlAdapter>();
+
             this.Reset();
         }
 
@@ -340,6 +357,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.transAdapter.UserName = testConfig.UserName;
             this.transAdapter.Timeout = testConfig.Timeout;
             this.transAdapter.Reset();
+
+            CleanTestFiles();
         }
 
         /// <summary>
@@ -354,6 +373,60 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             {
                 transAdapter.Dispose();
                 this.transAdapter = null;
+            }
+
+            CleanTestFiles();
+        }
+
+        protected void CleanTestFiles()
+        {
+            foreach (var fileName in testFiles)
+            {
+                try
+                {
+                    // Remove the appendix. e.g. "::$DATA", ":$I30"
+                    int i = fileName.IndexOf(":");
+                    string temp = fileName;
+                    if (i != -1)
+                    {
+                        temp = fileName.Substring(0, i);
+                    }
+                    sutProtocolController.DeleteFile("\\\\" + testConfig.SutComputerName + "\\" + this.shareName, temp);
+                }
+                catch
+                {
+                }
+            }
+            testFiles.Clear();
+
+            foreach (var directory in testDirectories)
+            {
+                try
+                {
+                    int i = directory.IndexOf(":");
+                    string temp = directory;
+                    if (i != -1)
+                    {
+                        temp = directory.Substring(0, i);
+                    }
+                    sutProtocolController.DeleteDirectory("\\\\" + testConfig.SutComputerName + "\\" + this.shareName, temp);
+                }
+                catch
+                {
+                }
+            }
+            testDirectories.Clear();
+        }
+
+        protected void AddTestFileName(CreateOptions createOptions, string fileName)
+        {
+            if (createOptions.HasFlag(CreateOptions.DIRECTORY_FILE))
+            {
+                testDirectories.Add(fileName);
+            }
+            else
+            {
+                testFiles.Add(fileName);
             }
         }
 
@@ -563,6 +636,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 }
             }
 
+            AddTestFileName(createOption, randomFile);
             MessageStatus returnedStatus = transAdapter.CreateFile(
                 randomFile,
                 (uint)desiredFileAttribute,
@@ -701,6 +775,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
                         // Remove the complex name suffixes and try to create the file again.
                         randomFile = randomFile.Remove(randomFile.IndexOf(":"));
+                        AddTestFileName(createOption, randomFile);
                         returnedStatus = transAdapter.CreateFile(
                             randomFile,
                             (uint)desiredFileAttribute,
@@ -755,6 +830,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
                     // Remove the complex name suffixes and try to create the file again.
                     randomFile = randomFile.Remove(randomFile.IndexOf(":"));
+                    AddTestFileName(createOption, randomFile);
                     returnedStatus = transAdapter.CreateFile(
                         randomFile,
                         (uint)desiredFileAttribute,
@@ -789,6 +865,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             CreateDisposition createDisposition)
         {
             uint createAction = 0;
+            AddTestFileName(createOption, fileName);
             return transAdapter.CreateFile(
                 fileName,
                 (uint)desiredFileAttribute,
@@ -945,6 +1022,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             if (isSymbolicLink)
             {
                 randomFile = testConfig.GetProperty("SymbolicLinkFile");
+                AddTestFileName(createOption, randomFile);
                 returnedStatus = transAdapter.CreateFile(
                     randomFile,
                     (uint)desiredFileAttribute,
@@ -1000,6 +1078,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             if (streamFound)
             {
+                AddTestFileName(createOption, randomFile);
                 returnedStatus = transAdapter.CreateFile(
                     randomFile,
                     (uint)fileAttribute,
@@ -1019,6 +1098,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 }
             }
 
+            AddTestFileName(createOption, randomFile);
             returnedStatus = transAdapter.CreateFile(
                 randomFile,
                 (uint)desiredFileAttribute,
@@ -1326,6 +1406,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     break;
             }
 
+            AddTestFileName(CreateOptions.NON_DIRECTORY_FILE, ramdomFileName);
             MessageStatus returnedStatus = this.transAdapter.CreateFile(
                 ramdomFileName,
                 (uint)FileAttribute.NORMAL,
@@ -1409,6 +1490,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     break;
             }
 
+            AddTestFileName(CreateOptions.NON_DIRECTORY_FILE, randomFileName);
             MessageStatus returnedStatus = this.transAdapter.CreateFile(
                 randomFileName,
                 (uint)FileAttribute.NORMAL,
@@ -1465,6 +1547,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             uint maxOutputSize = this.transBufferSize;
             uint fileIndex = 0;
 
+            AddTestFileName(CreateOptions.DIRECTORY_FILE, testConfig.GetProperty("ExistingFolder"));
             MessageStatus returnedStatus = this.transAdapter.CreateFile(
                 testConfig.GetProperty("ExistingFolder"),
                 (uint)FileAttribute.NORMAL,
@@ -4281,6 +4364,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             byteList.AddRange(BitConverter.GetBytes(fileInfo.FileNameLength));
             byteList.AddRange(fileInfo.FileName);
 
+            AddTestFileName(gOpenMode, Encoding.Unicode.GetString(fileLinkInformation.FileName));
             MessageStatus returnedStatus = transAdapter.SetFileInformation((uint)FileInfoClass.FILE_LINK_INFORMATION, byteList.ToArray());
 
             //If no exception is thrown in SetFileInformation, server response status.
@@ -4305,6 +4389,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <returns></returns>
         public MessageStatus SetFileLinkInformation(FILE_LINK_INFORMATION_TYPE_SMB fileLinkInformation)
         {
+            AddTestFileName(gOpenMode, Encoding.Unicode.GetString(fileLinkInformation.FileName));
             if (fileLinkInformation.Reserved == null || fileLinkInformation.Reserved.Length <= 0)
             {
                 fileLinkInformation.Reserved = new byte[3];
@@ -4325,6 +4410,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 fileLinkInformation.Reserved = new byte[7];
             }
             byte[] inputBuffer = TypeMarshal.ToBytes<FILE_LINK_INFORMATION_TYPE_SMB2>(fileLinkInformation);
+
+            AddTestFileName(gOpenMode, Encoding.Unicode.GetString(fileLinkInformation.FileName));
             return SetFileInformation(FileInfoClass.FILE_LINK_INFORMATION, inputBuffer);
         }
 
@@ -4986,6 +5073,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 EmptyPattern = false;
             }
 
+            AddTestFileName(CreateOptions.NON_DIRECTORY_FILE, randomFile);
             MessageStatus returnedStatus = this.transAdapter.CreateFile(
                 randomFile,
                 (uint)FileAttribute.NORMAL,
@@ -5153,7 +5241,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 ramdomFileName = ramdomFileName + fileNameLetter.ToString(); ;
             }
 
-            return ramdomFileName;
+            return CurrentTestCaseName + "_" + ramdomFileName;
         }
 
         /// <summary>
