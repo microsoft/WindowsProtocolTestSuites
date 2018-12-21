@@ -1024,19 +1024,19 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             
             //Unicode = 2 * Ansi
-            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE? info.Domain.Trim('\0').Length * 2: info.Domain.Length, (int)info.cbDomain, 
+            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE? info.Domain.Trim('\0').Length * 2: info.Domain.Trim('\0').Length, (int)info.cbDomain, 
                 @"In the TS_INFO_PACKET structure, cbDomain represents the size in bytes of the character data in the Domain field."
                 + @" This size excludes the length of the mandatory null terminator.");
-            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE ? info.UserName.Trim('\0').Length * 2: info.UserName.Length, (int)info.cbUserName, 
+            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE ? info.UserName.Trim('\0').Length * 2: info.UserName.Trim('\0').Length, (int)info.cbUserName, 
                 @"In the TS_INFO_PACKET structure, cbUserName represents the size in bytes of the character data in the UserName "
                 + @"field. This size excludes the length of the mandatory null terminator.");
-            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE ? info.Password.Trim('\0').Length * 2 : info.Password.Length, (int)info.cbPassword, 
+            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE ? info.Password.Trim('\0').Length * 2 : info.Password.Trim('\0').Length, (int)info.cbPassword, 
                 @"In the TS_INFO_PACKET structure, cbPassword represents the size in bytes of the character data in the Password "
                 + @"field. This size excludes the length of the mandatory null terminator.");
-            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE ? info.AlternateShell.Trim('\0').Length * 2 : info.AlternateShell.Length, (int)info.cbAlternateShell,
+            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE ? info.AlternateShell.Trim('\0').Length * 2 : info.AlternateShell.Trim('\0').Length, (int)info.cbAlternateShell,
                 @"In the TS_INFO_PACKET structure, cbAlternateShell represents the size in bytes of the character data in the "
                 + @"AlternateShell field. This size excludes the length of the mandatory null terminator.");
-            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE ? info.WorkingDir.Trim('\0').Length * 2 : info.WorkingDir.Length, (int)info.cbWorkingDir, 
+            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE ? info.WorkingDir.Trim('\0').Length * 2 : info.WorkingDir.Trim('\0').Length, (int)info.cbWorkingDir, 
                 @"In the TS_INFO_PACKET structure, cbWorkingDir represents the size in bytes of the character data in the WorkingDir"
                 + @" field. This size excludes the length of the mandatory null terminator.");
 
