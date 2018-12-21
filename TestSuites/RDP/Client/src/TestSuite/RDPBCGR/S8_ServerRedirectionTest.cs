@@ -237,9 +237,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void S8_ServerRedirection_PositiveTest_WithRoutingToken_VerifyClientInfoPdu(Client_Info_Pdu clientInfoPdu)
         {
-            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_UserName.ToUpper(), clientInfoPdu.infoPacket.UserName.ToUpper(), "Verify if UserName in Client Info PDU equals that sent in Server Redirection PDU.");
-            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_Domain.ToUpper(), clientInfoPdu.infoPacket.Domain.ToUpper(), "Verify if Domain in Client Info PDU equals that sent in Server Redirection PDU.");
-            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_Password, clientInfoPdu.infoPacket.Password, "Verify if Password in Client Info PDU equals that sent in Server Redirection PDU.");
+            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_UserName.ToUpper(), clientInfoPdu.infoPacket.UserName.Trim('\0').ToUpper(), "Verify if UserName in Client Info PDU equals that sent in Server Redirection PDU.");
+            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_Domain.ToUpper(), clientInfoPdu.infoPacket.Domain.Trim('\0').ToUpper(), "Verify if Domain in Client Info PDU equals that sent in Server Redirection PDU.");
+            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_Password, clientInfoPdu.infoPacket.Password.Trim('\0'), "Verify if Password in Client Info PDU equals that sent in Server Redirection PDU.");
         }
         #endregion
 
