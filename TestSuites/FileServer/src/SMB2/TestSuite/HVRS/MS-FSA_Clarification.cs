@@ -47,7 +47,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
-        [TestCategory(TestCategories.Hvrs)]
+        [TestCategory(TestCategories.HvrsFsa)]
         [TestCategory(TestCategories.NonSmb)]
         [Description("This test case is designed to test whether the server supports the FSCTL_OFFLOAD_READ and FSCTL_OFFLOAD_WRITE.")]
         public void BVT_OffloadReadWrite()
@@ -195,7 +195,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
-        [TestCategory(TestCategories.Hvrs)]
+        [TestCategory(TestCategories.HvrsFsa)]
         [TestCategory(TestCategories.NonSmb)]
         [Description("This test case is designed to test whether the server supports the FSCTL_SET_ZERO_DATA.")]
         public void BVT_SetZeroData()
@@ -232,7 +232,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Smb30)]
         [TestCategory(TestCategories.Bvt)]
-        [TestCategory(TestCategories.Hvrs)]
+        [TestCategory(TestCategories.HvrsFsa)]
         [Description("This test case is designed to test whether the server supports the FSCTL_FILE_LEVEL_TRIM")]
         public void BVT_FileLevelTrim()
         {
@@ -287,8 +287,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         }
 
         [TestMethod]
-        [TestCategory(TestCategories.Smb30)]
-        [TestCategory(TestCategories.Hvrs)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.HvrsFsa)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("Test the server response when non-zero value is set to the Key field of FSCTL_FILE_LEVEL_TRIM request.")]
         public void FileLevelTrim_Negative_NonZeroKeyInRequest()
@@ -381,7 +381,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
-        [TestCategory(TestCategories.Hvrs)]
+        [TestCategory(TestCategories.HvrsFsa)]
         [TestCategory(TestCategories.NonSmb)]
         [Description("This test case is designed to test whether the server supports FSCTL_DUPLICATE_EXTENTS_TO_FILE")]
         public void BVT_DuplicateExtentsToFile()
