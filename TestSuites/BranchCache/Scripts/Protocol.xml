@@ -138,8 +138,8 @@
 
     <vm>
       <installorder>5</installorder>
-      <hypervname>BranchCache_Client1</hypervname>
-      <name>Client1</name>
+      <hypervname>BranchCache_Client</hypervname>
+      <name>Client</name>
       <role>DriverComputer</role>
       <domain>contoso.com</domain>
       <vnet>BranchCache_BranchNetwork</vnet>
