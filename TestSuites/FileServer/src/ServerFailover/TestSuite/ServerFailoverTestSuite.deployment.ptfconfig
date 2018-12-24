@@ -61,7 +61,7 @@
         </Description>
       </Property>
 
-      <Property name="ClusteredInfrastructureFileServerName" value="InfraStructureFS">
+      <Property name="ClusteredInfrastructureFileServerName" value="InfraFS">
         <Description>
           Computer name of infrastructure CA file server which hosts the CA share.
           This type of file server keeps online on all servers (nodes) which construct the file server.

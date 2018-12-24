@@ -145,16 +145,19 @@ Add-WindowsFeature RSAT-File-Services
 Write-Info.ps1 "Get disk ready for cluster"
 $disks = Get-Disk | where {$_.FriendlyName -match "MSFT Virtual HD"} | sort Size
 $diskCount = $disks.count
-if($diskCount -lt 3)
+# disk1, disk2, diskq, diskinfra
+$expectDiskCount = 4
+
+if($diskCount -lt $expectDiskCount)
 {
     Write-Info.ps1 "There are only $diskCount disks."
-    Write-Info.ps1 "Cluster environment requires at least 3 disks."
+    Write-Info.ps1 "Cluster environment requires at least $expectDiskCount disks."
     Write-ConfigFailureSignal
     exit ExitCode
 }
 
-Write-Info.ps1 "Format 3 disks for cluster"
-for($i=0; $i -lt 3;$i++)
+Write-Info.ps1 "Format $expectDiskCount disks for cluster"
+for($i=0; $i -lt $expectDiskCount; $i++)
 {
     if($i -eq 0)
     {
@@ -289,20 +292,6 @@ if($csv -eq $null)
     $scaleoutDisk | Add-ClusterSharedVolume
     sleep 10
     $csv = Get-ClusterSharedVolume
-}
-
-#----------------------------------------------------------------------------
-# Create InfrastructureFS role before adding csv
-#----------------------------------------------------------------------------
-$build = [environment]::OSVersion.Version.Build
-if ($build -ge 17609)
-{
-    Write-Info.ps1 "Create InfrastructureFS role"
-    $InfrastructureGroup = Get-ClusterGroup | where {$_.Name -eq "InfrastructureFS"}
-    if($InfrastructureGroup -eq $null)
-    {
-        Add-ClusterScaleOutFileServerRole -Infrastructure -Name "InfrastructureFS"
-    }
 }
 
 Write-Info.ps1 "Update SMBScaleOutDisk name"
@@ -447,6 +436,20 @@ if($retryTime -le 0)
     Write-Error.ps1 "Failed to add shared folders to ScaleoutFS role."
     Write-ConfigFailureSignal
     exit ExitCode
+}
+
+#----------------------------------------------------------------------------
+# Create infrastructure share
+#----------------------------------------------------------------------------
+$build = [environment]::OSVersion.Version.Build
+if ($build -ge 17609)
+{
+    Write-Info.ps1 "Create InfrastructureFS role"
+    $InfrastructureGroup = Get-ClusterGroup | where {$_.Name -eq "InfraFS"}
+    if($InfrastructureGroup -eq $null)
+    {
+        Add-ClusterScaleOutFileServerRole -Infrastructure -Name "InfraFS"
+    }
 }
 
 #----------------------------------------------------------------------------
