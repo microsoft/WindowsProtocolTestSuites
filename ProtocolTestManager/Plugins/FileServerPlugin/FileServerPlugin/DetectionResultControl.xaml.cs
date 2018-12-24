@@ -210,7 +210,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             }
             else if (info.RsvdSupport == DetectResult.UnSupported)
             {
-                AddResultItem(ref this.rsvdItems, "The server doesn't support RSVD", info.RsvdSupport);
+                AddResultItem(ref this.rsvdItems, "RSVD", info.RsvdSupport);
             }
             else
             {
@@ -235,7 +235,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             }
             else if (info.SqosSupport == DetectResult.UnSupported)
             {
-                AddResultItem(ref this.sqosItems, "The server doesn't support SQOS", info.SqosSupport);
+                AddResultItem(ref this.sqosItems, "SQOS", info.SqosSupport);
             }
             else
             {
