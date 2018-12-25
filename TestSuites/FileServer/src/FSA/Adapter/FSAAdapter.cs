@@ -4364,7 +4364,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             byteList.AddRange(BitConverter.GetBytes(fileInfo.FileNameLength));
             byteList.AddRange(fileInfo.FileName);
 
-            AddTestFileName(gOpenMode, Encoding.Unicode.GetString(fileLinkInformation.FileName));
+            AddTestFileName(gOpenMode, Encoding.Unicode.GetString(fileInfo.FileName));
             MessageStatus returnedStatus = transAdapter.SetFileInformation((uint)FileInfoClass.FILE_LINK_INFORMATION, byteList.ToArray());
 
             //If no exception is thrown in SetFileInformation, server response status.
