@@ -25,7 +25,7 @@
     * [Installed Files and Folders](#installed-files-and-folders)
 * [Configuration](#configuration)
     * [Configuring Windows-based Computers](#configuring-windows-based-computers)
-    * [Configuring Computers that are Not Based on Windows](#configuring-computers-that-are-not-based on Windows)
+    * [Configuring Computers that are Not Based on Windows](#configuring-computers-that-are-not-based-on-windows)
     * [Configuring the Test Suite](#configuring-the-test-suite)
 		* [Required Configuration Settings](#required-configuration-settings)
 		* [Optional Configuration Settings](#optional-configuration-settings)
@@ -66,7 +66,7 @@
     * [Most RDPEUDP RDPEMT Test Cases Failed](#most-rdpeudp-rdpemp-test-cases-failed)
     * [3 RDPBCGR Test Cases Must be Run Under interactive Mode](#3-rdpbcgr-test-cases-must-be-run-under-interactive-mode)
     * [3 RDPEGFX test cases require H264 enabled on SUT](#3-rdpegfx-test-cases-require-h264-enabled-on-sut)
-    * [Most Test Cases Failed When Using TLS/CredSSP protocol](#most-test-cases-failed-when-using-tls/credssp-protocol)
+    * [Most Test Cases Failed When Using TLS/CredSSP protocol](#most-test-cases-failed-when-using-tls\/credssp-protocol)
 
 ## Introduction
 
