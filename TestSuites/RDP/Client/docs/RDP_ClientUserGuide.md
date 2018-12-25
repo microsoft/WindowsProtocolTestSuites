@@ -686,11 +686,12 @@ Optionally, you can config Group policy for RDPEGFX AVC444 feature:
 
    When enabled on the RDP Server, the H.264/AVC 444 mode will be prioritized when the RDP 10 client and server both support AVC/H.264 and support the AVC 444 mode. Note: For Remote Desktop Session Host (RDSH) environments only full desktop sessions are supported with H.264/AVC 444, RemoteApp sessions still use the proprietary codecs for now.
 
- 2. Configure H.264/AVC hardware encoding for Remote Desktop connections
+  2. Configure H.264/AVC hardware encoding for Remote Desktop connections
 
    This policy lets you enable hardware encoding for AVC/H.264, when used in conjunction with the AVC444 mode. When enabled, each remote desktop monitor will use up one AVC/H.264 encoder on the server. If all AVC/H.264 encoders are in use, the RDP Server will automatically fallback to using Software.           
 
   Enable the 2 group policy will help you setup a AVC444 supported environment.
+  
 ### Configuring Computers that are Not Based on Windows
 
 This guide provides only basic information about configuring the test environment for computers that are not running Windows-based operating systems.
