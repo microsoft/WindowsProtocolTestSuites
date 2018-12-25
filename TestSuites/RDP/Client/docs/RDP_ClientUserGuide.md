@@ -6,11 +6,11 @@
 * [License Information](#license-information)
 * [Further Assistance](#further-assistance)
 * [Quick Start Checklist](#quick-start-checklist)
-* [How Do I?](#how-do-i?)
+* [How Do I](#how-do-i)
 * [Requirements](#requirements)
 * [Environment](#environment)
     * [Driver Computer](#driver-computer)
-    * [System Under Test (SUT)](#system-under-test-sut)
+    * [System Under Test](#system-under-test)
     * [Domain Controller](#domain-controller)
     * [Software](#software)
 * [Network Setup](#network-setup)
@@ -28,44 +28,45 @@
     * [Configuring Computers that are Not Based on Windows](#configuring-computers-that-are-not-based on Windows)
     * [Configuring the Test Suite](#configuring-the-test-suite)
 		* [Required Configuration Settings](#required-configuration-settings)
-		* [Optional Configuration Settings](#_Toc421010909)
-* [Running Test Cases](#_Toc421010910)
-    * [Configuring the Test Suite Mode](#_Toc421010911)
-		* [Common Configuration](#_Toc421010912)
-		* [Configuration for RDPEI](#_Toc421010913)
-		* [Configuration for RDPEDISP](#_Toc421010914)
-    * [Run the Smoke Test](#_Toc421010915)
-    * [Run All Test Cases](#_Toc421010916)
-    * [Run Specified Test Cases](#_Toc421010917)
-    * [Example of How to run test case under interactive mode](#_Toc421010918)
-    * [Example of How to run MS-RDPEI test case under enhanced interactive mode](#_Toc421010919)
-    * [Check Test Results](#_Toc421010920)
-* [Debugging Test Cases](#_Toc421010921)
-* [Using Protocol Test Manager](#_Toc421010922)
-    * [Install Protocol Test Manager](#_Toc421010923)
-    * [Start Protocol Test Manager](#_Toc421010924)
-    * [Test Suite Introduction](#_Toc421010925)
-    * [Configure the Test Suite](#_Toc421010926)
-		* [Configure the Test Suite with Auto-detection](#_Toc421010927)
-		* [Configure Test Suite Manually](#_Toc421010928)
-		* [Load Profile](#_Toc421010929)
-		* [Filter Test Cases](#_Toc421010930)
-		* [Configure Test Cases](#_Toc421010931)
-		* [Configure Adapter](#_Toc421010932)
-    * [Run Selected Test Cases](#_Toc421010933)
-    * [Export Results](#_Toc421010934)
-    * [Command Line Interface](#_Toc421010935)
-* [Using Super Log Viewer](#_Toc421010936)
-    * [Install and configure Microsoft Message Analyzer](#_Toc421010937)
-    * [Capture traffics using Microsoft Message Analyzer](#_Toc421010938)
-* [Troubleshooting](#_Toc421010939)
-    * [Ping Failure](#_Toc421010940)
-    * [Test Run Issues](#_Toc421010941)
-    * [Most MS-RDPEUSB Test Cases Failed](#_Toc421010942)
-    * [Most MS-RDPEUDP/MS-RDPEMT Test Cases Failed](#_Toc421010943)
-    * [3 RDPBCGR Test Cases Must be Run Under “interactive” Mode](#_Toc421010944)
-    * [3 RDPEGFX test cases require H264 enabled on SUT](#_Toc421010945)
-    * [Most Test Cases Failed When Using TLS/CredSSP protocol](#_Toc421010946)
+		* [Optional Configuration Settings](#optional-configuration-settings)
+* [Running Test Cases](#running-test-cases)
+    * [Configuring the Test Suite Mode](#configuring-the-test-suite-mode)
+		* [Common Configuration](#common-configuration)
+		* [Configuration for RDPEI](#configuration-for-rdpei)
+		* [Configuration for RDPEDISP](#configuration-for-rdpdisp)
+    * [Configuration for RDPEGFX AVC444](#configuration-for-rdpegfx-avc444)
+      * [Run the Smoke Test](#run-the-smoke-test)
+    * [Run All Test Cases](#run-all-test-cases)
+    * [Run Specified Test Cases](#run-specified-test-cases)
+    * [Example of How to run test case under interactive mode](#example-of-how-to-run-test-case-under-interactive-mode)
+    * [Example of How to run RDPEI test case under enhanced interactive mode](#example-of-how-to-run-rdpei-testicase-under-enhanced-interactive-mode)
+    * [Check Test Results](#check-test-results)
+* [Debugging Test Cases](#debugging-test-cases)
+* [Using Protocol Test Manager](#using-protocol-test-manager)
+    * [Install Protocol Test Manager](#install-protocol-test-manager)
+    * [Start Protocol Test Manager](#start-protocol-test-manager)
+    * [Test Suite Introduction](#test-suite-introduction)
+    * [Configure the Test Suite](#configure-the-test-suite)
+		* [Configure the Test Suite with Auto-detection](#configure-the-test-suite-with-auto-detection)
+		* [Configure Test Suite Manually](#configure-test-suite-manually)
+		* [Load Profile](#load-profile)
+		* [Filter Test Cases](#filter-test-cases)
+		* [Configure Test Cases](#configure-test-cases)
+		* [Configure Adapter](#configure-adapter)
+    * [Run Selected Test Cases](#run-selected-test-cases)
+    * [Export Results](#export-results)
+    * [Command Line Interface](#command-line-interface)
+* [Using Super Log Viewer](#using-super-log-viewer)
+    * [Install and configure Microsoft Message Analyzer](#install-and-configure-microsoft-message-analyzer)
+    * [Capture traffics using Microsoft Message Analyzer](#capture-traffics-using-microsoft-message-analyzer)
+* [Troubleshooting](#troubleshooting)
+    * [Ping Failure](#ping-failure)
+    * [Test Run Issues](#test-run-issues)
+    * [Most RDPEUSB Test Cases Failed](#most-rdpeusb-test-cases-failed)
+    * [Most RDPEUDP RDPEMT Test Cases Failed](#most-rdpeudp-rdpemp-test-cases-failed)
+    * [3 RDPBCGR Test Cases Must be Run Under interactive Mode](#3-rdpbcgr-test-cases-must-be-run-under-interactive-mode)
+    * [3 RDPEGFX test cases require H264 enabled on SUT](#3-rdpegfx-test-cases-require-h264-enabled-on-sut)
+    * [Most Test Cases Failed When Using TLS/CredSSP protocol](#most-test-cases-failed-when-using-tls/credssp-protocol)
 
 ## Introduction
 
@@ -716,7 +717,7 @@ You can define various options for the test suite, such as the following:
 
 To change configuration settings, edit the **RDP_ClientTestSuite.deployment.ptfconfig** file. You can find this file in the directory C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Bin.
 
-#### <a name="_Toc421010908"/>Required Configuration Settings
+#### Required Configuration Settings
 
 ##### Common Required Properties
 The following table describes the required properties for all the test cases.
@@ -860,7 +861,7 @@ The following table describes the properties which are only required for test ca
 |  **changedMonitorNumber**| The changed number of screens|
 | | Default value: **2**|
 
-#### <a name="_Toc421010909"/>Optional Configuration Settings
+#### Optional Configuration Settings
 
 The following table describes the optional configuration properties and provides sample values.
 
@@ -883,7 +884,7 @@ The following table describes the optional configuration properties and provides
 |  **WaitTime**| The maximum time in seconds to wait for one SUT message.|
 | | Default value: **40**|  
 
-## <a name="_Toc421010910"/>Running Test Cases
+## >Running Test Cases
 
 This test suite includes command files that you can use to complete some basic test cases. Each test case verifies the protocol implementation based on a given scenario.
 
@@ -893,9 +894,9 @@ You can find all command files for test cases in the following directories:
 
 You can run these command files at the command prompt or via the graphical user interface.
 
-### <a name="_Toc421010911"/>Configuring the Test Suite Mode
+### Configuring the Test Suite Mode
 
-#### <a name="_Toc421010912"/>Common Configuration
+#### Common Configuration
 
 Test cases control the remote desktop client on the SUT to generate events, such as connection, disconnection, and user input. There are three modes to control the client: **PowerShell,** **interactive** and **protocol-based**.
 
@@ -952,7 +953,7 @@ Note
 
 >	* S1\_ConnectionTest\_Disconnection\_PositiveTest_ClientInitiated
 
-#### <a name="_Toc421010913"/>Configuration for RDPEI
+#### Configuration for RDPEI
 
 Except common events, MS-RDPEI test cases need to control remote desktop client on SUT to generate different touch events. There are also several modes to control the client: **interactive, enhanced interactive** and **protocol-based**.
 
@@ -972,7 +973,7 @@ The remote desktop client must support RDPRFX if using **enhanced interactive** 
 
 When using the **protocol-based** mode, an agent is also need on SUT according to **SUT\_Remote\_Control_Protocol.pdf**, the agent is used to receive SUT control request from test suite and operate RDP client on SUT accordingly.
 
-#### <a name="_Toc421010914"/>Configuration for RDPEDISP
+#### Configuration for RDPEDISP
 
 For MS-RDPEDISP, test suite also need to control SUT to trigger some specific events. There are also three modes to control the client: **PowerShell, interactive,** and **protocol-based**.
 
@@ -992,7 +993,23 @@ When using the **interactive** mode, test cases pop up dialogs and guide you to 
 
 When using the **protocol-based** mode, an agent is also needed on SUT according to **SUT\_Remote\_Control\_Protocol.pdf**, the agent is used to receive SUT control request from test suite and operate RDP client on SUT accordingly.
 
-### <a name="_Toc421010915"/>Run the Smoke Test
+#### Configuration for RDPEGFX AVC444
+
+* To enable AVC444 mode in Win 10 and Windows Server 2016, two new group policies can be configured in the Group Policy Editor.
+
+* (gpedit.msc) under Computer Configuration -> Administrative Templates -> Windows Components -> Remote Desktop Services -> Remote Desktop Session Host -> Remote Session Environment:
+
+* 1. Prioritize H.264/AVC 444 Graphics mode for Remote Desktop connections
+
+* When enabled on the RDP Server, the H.264/AVC 444 mode will be prioritized when the RDP 10 client and server both support AVC/H.264 and support the AVC 444 mode. Note: For Remote Desktop Session Host (RDSH) environments only full desktop sessions are supported with H.264/AVC 444, RemoteApp sessions still use the proprietary codecs for now.
+
+* 2. Configure H.264/AVC hardware encoding for Remote Desktop connections
+
+* This policy lets you enable hardware encoding for AVC/H.264, when used in conjunction with the AVC444 mode. When enabled, each remote desktop monitor will use up one AVC/H.264 encoder on the server. If all AVC/H.264 encoders are in use, the RDP Server will automatically fallback to using Software.
+
+Enable the 2 group policy will help you setup a AVC444 supported environment.
+
+### Run the Smoke Test
 
 This test suite includes a set of basic tests called build verification tests (BVTs). Together these test cases perform a simple smoke test to confirm that the test suite is properly configured and ready to run. Use the steps below to run all scenario0 test cases.
 
@@ -1038,7 +1055,7 @@ Note: Desktop shortcuts referenced below are created during the installation pro
 
 * Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpedisp_RunBVTTestCases.cmd** file.
 
-### <a name="_Toc421010916"/>Run All Test Cases
+### Run All Test Cases
 
 Use the steps below to run all test cases.
 
@@ -1083,7 +1100,7 @@ Use the steps below to run all test cases.
 
 * Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpedisp_RunAllTestCases.cmd** file.
 
-### <a name="_Toc421010917"/>Run Specified Test Cases
+### Run Specified Test Cases
 
 Use the step below to run specific test cases.
 
@@ -1091,7 +1108,7 @@ Use the step below to run specific test cases.
 
 * From the command prompt, run C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\CommonRunSingleCase.cmd\ &#60; TestCaseName &#62; to run specific test case.
 
-### <a name="_Toc421010918"/>Example of How to run test case under interactive mode
+### Example of How to run test case under interactive mode
 The following example illustrates how to run test case under interactive mode.
 
 On the driver computer, configure the test suite mode to interactive mode. For the details, please refer to [Configuring the Test Suite Mode](#_Toc421010911).
@@ -1120,7 +1137,7 @@ According to the **Help Message**, you will do:
 
 	On the driver computer, fill a non-negative number (such as 0) in Return Value and click Succeed if you close all the RDP connections successfully. Otherwise, if you cannot stop any of the existing RDP connections, fill a negative number (such as -1) in Return Value field, and fill the error message in the Failure Message field, then click Fail.
 
-### <a name="_Toc421010919"/>Example of How to run MS-RDPEI test case under enhanced interactive mode
+### Example of How to run MS-RDPEI test case under enhanced interactive mode
 The following example illustrates how to run MS-RDPEI test case under **enhanced interactive** mode with **connection** under powershell mode.
 
 On the driver computer, configure the MS-RDPEI test suite mode to enhanced interactive mode. For the details, please refer to [Configuring the Test Suite Mode](#_Toc421010911).
@@ -1137,7 +1154,7 @@ On the driver computer, configure the MS-RDPEI test suite mode to enhanced inter
 
 * After the test finished, wait for the SUT to disconnect from the Driver Computer.
 
-### <a name="_Toc421010920"/>Check Test Results
+### Check Test Results
 Test suite generates test result files in different paths based on the way how test case is executed.
 
 * For running test case with batch: _C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ &#60; version &#35;  &#62; \Batch\TestResults_
@@ -1146,7 +1163,7 @@ Test suite generates test result files in different paths based on the way how t
 
 * For further information about test log settings, see the PTF User Guide in the PTF installation directory.
 
-## <a name="_Toc421010921"/>Debugging Test Cases
+## Debugging Test Cases
 You can use the Visual Studio solution (.sln) file included with this test suite to debug additional test cases that you create for your protocol implementation.
 
 Clone or download the WindowsProtocolTestSuites from https://github.com/Microsoft/WindowsProtocolTestSuites/ and save to Driver Computer local directory.
@@ -1166,17 +1183,17 @@ Note
 
 * Open the **Test Explorer** window in Visual Studio, select the names of the test cases that you want to debug.
 
-## <a name="_Toc421010922"/>Using Protocol Test Manager
+## Using Protocol Test Manager
 
 Protocol Test Manager (PTM) is a graphical front-end for Windows protocol test suites. You can configure and run this test suite from the Protocol Test Manager.
 
-### <a name="_Toc421010923"/>Install Protocol Test Manager
+### Install Protocol Test Manager
 
 Install the test suite and all its dependencies.
 
 Launch the ProtocolTestManager.msi and install the Protocol Test Manager.
 
-### <a name="_Toc421010924"/>Start Protocol Test Manager
+### Start Protocol Test Manager
 
 Open the Protocol Test Manager from the shortcut on the desktop.
 
@@ -1184,7 +1201,7 @@ Open the Protocol Test Manager from the shortcut on the desktop.
 
 Only the installed protocol test suite is usable. The first time you need to click “Configure Wizard” to configure the protocol test suite. Once the test suite is configured with PTM, you can click “Run” to run the test suite with last settings.
 
-### <a name="_Toc421010925"/>Test Suite Introduction
+### Test Suite Introduction
 
 The test suite introduction page provide you some general information about the test suite. You may click the hyperlinks in this page to see more details about the test environment.
 
@@ -1200,13 +1217,13 @@ For example: Alt+P for Previous, Alt+N for Next.
 
 This page is for your information. You may click Next to choose how to configure the test suite.
 
-### <a name="_Toc421010926"/>Configure the Test Suite
+### Configure the Test Suite
 
 Protocol Test Manager supports three ways to configure the test suite. Auto-detection, manual configuration and load a saved profile.
 
 ![image14.png](./image/RDP_ClientUserGuide/image14.png)
 
-#### <a name="_Toc421010927"/>Configure the Test Suite with Auto-detection
+#### Configure the Test Suite with Auto-detection
 
 * Choose Run Auto-Detection to begin auto-detection.
 
@@ -1224,7 +1241,7 @@ When the detection is finished, click Next to see the detection result.
 
 Click Next to filter the test cases.
 
-#### <a name="_Toc421010928"/>Configure Test Suite Manually
+#### Configure Test Suite Manually
 
 Click Do Manual Configuration on the Configure Method page to go to the Filter Test Cases page directly without using auto-detection.
 
@@ -1232,13 +1249,13 @@ You may select the test cases and configure the properties manually.
 
 ![image17.png](./image/RDP_ClientUserGuide/image17.png)
 
-#### <a name="_Toc421010929"/>Load Profile
+#### Load Profile
 
 A test profile contains all the test settings including the values of the properties and the test case selections.
 
 You can save all you settings in the Export / Import menu of the Run Selected Test Cases page.
 
-#### <a name="_Toc421010930"/>Filter Test Cases
+#### Filter Test Cases
 
 Filter the test cases.
 
@@ -1246,15 +1263,15 @@ Filter the test cases.
 
 Click Next to configure the properties of the test suite.
 
-#### <a name="_Toc421010931"/>Configure Test Cases
+#### Configure Test Cases
 
 ![image19.png](./image/RDP_ClientUserGuide/image19.png)
 
-#### <a name="_Toc421010932"/>Configure Adapter
+#### Configure Adapter
 
 ![image20.png](./image/RDP_ClientUserGuide/image20.png)
 
-### <a name="_Toc421010933"/>Run Selected Test Cases
+### Run Selected Test Cases
 
 You can run the selected test cases in the run page.
 
@@ -1288,7 +1305,7 @@ The keyword is case-insensitive.
 
 ![image25.png](./image/RDP_ClientUserGuide/image25.png)
 
-### <a name="_Toc421010934"/>Export Results
+### Export Results
 
 You can export the test cases from the Export / Import menu.
 
@@ -1300,7 +1317,7 @@ Profile is used for saving all your settings and case selections.
 
 You can also save the test case list in a text file.
 
-### <a name="_Toc421010935"/>Command Line Interface
+### Command Line Interface
 
 Protocol Test Manager has a command line interface (ptmcli.exe) which can be used for automation test run.
 
@@ -1310,10 +1327,10 @@ You can use ptmcli.exe –h to show more information.
 
 ![image27.png](./image/RDP_ClientUserGuide/image27.png)
 
-## <a name="_Toc421010936"/>Using Super Log Viewer
+## Using Super Log Viewer
 Super Log Viewer is a logging feature of RDP test suite which combines all test logs, data on the wire, decrypted data and decompressed data in Microsoft Message Analyzer. Using Super Log viewer it is much easier to debug test cases because all necessary informations dumped by test suite are all displayed in one window. This section describes how to use Super Log viewer.
 
-### <a name="_Toc421010937"/>Install and configure Microsoft Message Analyzer
+### Install and configure Microsoft Message Analyzer
 Microsoft Message Analyzer (MMA) is used to capture the data on wire and the data dumped by RDP test suite. You can follow below steps to configure MMA.
 
 * Install Micorsoft Message Analyzer v1.4 and PTF according to Section 7.4
@@ -1337,7 +1354,7 @@ Note
 
 	All color rules above should be selected when viewing logs in MMA except for the **RDP_Decrypted** and **TLS_Decrypted**. When the RDP test suite using Standard RDP Security **RDP_Decrypted** color rule should be selected and when Enhanced RDP Security (TLS) is used **TLS_Decrypted** should be selected.
 
-### <a name="_Toc421010938"/>Capture traffics using Microsoft Message Analyzer
+### >Capture traffics using Microsoft Message Analyzer
 After configuring Microsoft Message Analyzer, you can follow below steps to capture traffics.
 
 * Open **File****New SessionLive Trace**, in the **ETW Providers** add the **Protocol-Test-Suite** provider to capture messaged dumped by test suite. If you also want to capture data on the wire, **Microsoft-Windows-NDIS-PacketCapture** provider should also be selected. At last click start to capture traffics using that trace configuration.
@@ -1348,11 +1365,11 @@ After configuring Microsoft Message Analyzer, you can follow below steps to capt
 
 ![image30.png](./image/RDP_ClientUserGuide/image30.png)
 
-## <a name="_Toc421010939"/>Troubleshooting
+## Troubleshooting
 
 This section describes how to troubleshoot common test suite issues.
 
-### <a name="_Toc421010940"/>Ping Failure
+### Ping Failure
 
 | | |
 | -------------| -------------|
@@ -1360,7 +1377,7 @@ This section describes how to troubleshoot common test suite issues.
 | **CAUSE**| The driver computer was not in the same network segment as the SUT, or the SUT firewall is enabled. |
 | **RESOLUTION**| Move the driver computer and the SUT to the same network segment or disable the SUT firewall.|
 
-### <a name="_Toc421010941"/>Test Run Issues
+### Test Run Issues
 
 | | |
 | -------------| -------------|
@@ -1377,7 +1394,7 @@ This section describes how to troubleshoot common test suite issues.
 | **CAUSE**| The driver computer’s screen is locked when running test cases. |
 | **RESOLUTION**| Do not lock the screen of the driver computer when running test cases. |
 
-### <a name="_Toc421010942"/>Most MS-RDPEUSB Test Cases Failed
+### Most RDPEUSB Test Cases Failed
 
 | | |
 | -------------| -------------|
@@ -1385,7 +1402,7 @@ This section describes how to troubleshoot common test suite issues.
 | **CAUSE**| The OSR USB FX2 board is not plugged into the SUT or the USB Redirection is not enabled by the SUT. |
 | **RESOLUTION**| Plug OSR USB FX2 board into the SUT and enable the USB Redirection in the Local Group Policy Editor. For more details, please refer to [Configuring Windows-based Computers](#_Toc421010905).|
 
-### <a name="_Toc421010943"/>Most MS-RDPEUDP/MS-RDPEMT Test Cases Failed
+### Most RDPEUDP RDPEMT Test Cases Failed
 
 | | |
 | -------------| -------------|
@@ -1393,7 +1410,7 @@ This section describes how to troubleshoot common test suite issues.
 | **CAUSE**| Some MS-RDPEUDP and MS-RDPEMT test cases create RDP-UDP connection, which need to use TLS or CredSSP security protocol. |
 | **RESOLUTION**| In **RDP_ClientTestSuite.deployment.ptfconfig,** configure **RDP.Security.Protocol** to TLS or CredSSP. For more details, please refer to [Configuring the Test Suite](#_Toc421010907)|
 
-### <a name="_Toc421010944"/>3 RDPBCGR Test Cases Must be Run Under “interactive” Mode
+### 3 RDPBCGR Test Cases Must be Run Under interactive Mode
 
 | | |
 | -------------| -------------|
@@ -1404,7 +1421,7 @@ This section describes how to troubleshoot common test suite issues.
 | **CAUSE**| These test cases must be run under the “interactive” mode.|
 | **RESOLUTION**| Use the “interactive” mode when running these test cases. For more details, please refer to [Configuring the Test Suite Mode](#_Toc421010911).|
 
-### <a name="_Toc421010945"/>3 RDPEGFX test cases require H264 enabled on SUT
+### 3 RDPEGFX test cases require H264 enabled on SUT
 
 | | |
 | -------------| -------------|
@@ -1415,7 +1432,7 @@ This section describes how to troubleshoot common test suite issues.
 | **CAUSE**| These test cases are used to test H264 codec of RDPEGFX on thin client, so they are failed if H264 is not enabled.|
 | **RESOLUTION**| If the SUT is not a thin client which supports H264 codec of RDPEGFX, these failures are expected.|
 
-### <a name="_Toc421010946"/>Most Test Cases Failed When Using TLS/CredSSP protocol
+### Most Test Cases Failed When Using TLS/CredSSP protocol
 
 | | |
 | -------------| -------------|
