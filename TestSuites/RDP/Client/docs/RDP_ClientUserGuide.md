@@ -232,7 +232,7 @@ The minimum requirements for the SUT are as follows.
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
 
->If SUT computer is an implementation that is not based on Windows operating system or its version is below Windows 7, external work is need to execute test cases automatically, for more details, please refer to [Configuring the Test Suite Mode](#configuring-the-test-suite-mode).
+>If SUT computer is an implementation that is not based on Windows operating system or its version is below Windows 7, external work is needed to execute test cases automatically, for more details, please refer to [Configuring the Test Suite Mode](#configuring-the-test-suite-mode).
 
 |  **Requirement**|  **Description**|
 | -------------| ------------- |
@@ -549,7 +549,7 @@ Note
     * Reboot the SUT computer and plug in the OSR USB FX2 board.
     Optionally, you can config Group policy for RDPEGFX AVC444 feature:
 
-  * To enable AVC444 mode in Win 10 and Windows Server 2016, two new group policies can be configured in the Group Policy Editor.
+  * To enable AVC444 mode in Win 10 and Windows Server 2016, two new group policies need to be configured in the Group Policy Editor.
 
     * Open **Local Group Policy Editor** by typing gpedit.msc and press **Enter**.
 
@@ -563,9 +563,9 @@ Note
 
      2. Configure H.264/AVC hardware encoding for Remote Desktop connections
 
-       This policy lets you enable hardware encoding for AVC/H.264, when used in conjunction with the AVC444 mode. When enabled, each remote desktop monitor will use up one AVC/H.264 encoder on the server. If all AVC/H.264 encoders are in use, the RDP Server will automatically fallback to using Software.           
+       This policy lets you enable hardware encoding for AVC/H.264, when used in conjunction with the AVC444 mode. When enabled, each remote desktop monitor will use up to one AVC/H.264 encoder on the server. If all AVC/H.264 encoders are in use, the RDP Server will automatically fallback to using Software.           
 
-      Enable the 2 group policy will help you setup a AVC444 supported environment.
+      Enable the 2 group policy will help you set up an AVC444 supported environment.
 
 * Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Data, and edit **Negotiate.RDP**, **DirectTls.RDP** and **DirectCredSSP.RDP** files respectively:
 
@@ -693,7 +693,7 @@ Optionally, you can install this certificate on **SUT** as following to avoid wa
 
 Optionally, you can config Group policy for RDPEGFX AVC444 feature:
 
-* To enable AVC444 mode in Win 10 and Windows Server 2016, two new group policies can be configured in the Group Policy Editor.
+* To enable AVC444 mode in Win 10 and Windows Server 2016, two new group policies need to be configured in the Group Policy Editor.
 
 * Open **Local Group Policy Editor** by typing gpedit.msc and press **Enter**.
 
@@ -707,9 +707,9 @@ Optionally, you can config Group policy for RDPEGFX AVC444 feature:
 
  2. Configure H.264/AVC hardware encoding for Remote Desktop connections
 
-   This policy lets you enable hardware encoding for AVC/H.264, when used in conjunction with the AVC444 mode. When enabled, each remote desktop monitor will use up one AVC/H.264 encoder on the server. If all AVC/H.264 encoders are in use, the RDP Server will automatically fallback to using Software.           
+   This policy lets you enable hardware encoding for AVC/H.264, when used in conjunction with the AVC444 mode. When enabled, each remote desktop monitor will use up to one AVC/H.264 encoder on the server. If all AVC/H.264 encoders are in use, the RDP Server will automatically fallback to using Software.           
 
-  Enable the 2 group policy will help you setup a AVC444 supported environment.
+  Enable the 2 group policy will help you set up an AVC444 supported environment.
 
 ### Configuring Computers that are Not Based on Windows
 
