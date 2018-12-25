@@ -208,13 +208,10 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     AddResultItem(ref this.rsvdItems, "RSVD Protocol version 2", DetectResult.Supported);
                 }
             }
-            else if (info.RsvdSupport == DetectResult.UnSupported)
-            {
-                AddResultItem(ref this.rsvdItems, "RSVD", info.RsvdSupport);
-            }
+            // DetectResult.UnSupported and DetectResult.DetectFail
             else
             {
-                AddResultItem(ref this.rsvdItems, "Detection failed", this.info.RsvdSupport);
+                AddResultItem(ref this.rsvdItems, "RSVD", info.RsvdSupport);
             }
         }
 
@@ -233,13 +230,10 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     AddResultItem(ref this.sqosItems, "SQOS dialect 1.1", DetectResult.Supported);
                 }
             }
-            else if (info.SqosSupport == DetectResult.UnSupported)
-            {
-                AddResultItem(ref this.sqosItems, "SQOS", info.SqosSupport);
-            }
+            // DetectResult.UnSupported and DetectResult.DetectFail
             else
             {
-                AddResultItem(ref this.sqosItems, "Detection failed", this.info.SqosSupport);
+                AddResultItem(ref this.sqosItems, "SQOS", info.SqosSupport);
             }
         }
         #endregion
@@ -267,6 +261,11 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 if (tempItem.DetectedResult == DetectResult.UnSupported)
                 {
                     this.ItemDescription.Text = tempItem.Name + " is found not supported after detection";
+                    return;
+                }
+                else if (tempItem.DetectedResult == DetectResult.DetectFail)
+                {
+                    this.ItemDescription.Text = "Detection failed";
                     return;
                 }
                 if (!info.detectExceptions.ContainsKey(tempItem.Name))
