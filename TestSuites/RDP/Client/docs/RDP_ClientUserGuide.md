@@ -34,8 +34,7 @@
 		* [Common Configuration](#common-configuration)
 		* [Configuration for RDPEI](#configuration-for-rdpei)
 		* [Configuration for RDPEDISP](#configuration-for-rdpdisp)
-    * [Configuration for RDPEGFX AVC444](#configuration-for-rdpegfx-avc444)
-      * [Run the Smoke Test](#run-the-smoke-test)
+    * [Run the Smoke Test](#run-the-smoke-test)
     * [Run All Test Cases](#run-all-test-cases)
     * [Run Specified Test Cases](#run-specified-test-cases)
     * [Example of How to run test case under interactive mode](#example-of-how-to-run-test-case-under-interactive-mode)
@@ -540,11 +539,14 @@ Note
 
 * Type .\Config-TerminalClient.ps1 and press **Enter**.
 
-* Open **Local Group Policy Editor** by typing gpedit.msc and press **Enter**.
+* Config Group Policy:
 
-* Enable the policy "**Allow RDP redirection of other supported RemoteFX USB devices from this computer**", which can be found under Local Computer Policy\Computer Configuration\Administrative Templates\Windows Components\Remote Desktop Services\Remote Desktop Connection Client\RemoteFX USB Device Redirection.
+  * Group policy for RDP redirection
+    * Enable the policy "**Allow RDP redirection of other supported RemoteFX USB devices from this computer**" by opening **Local Group Policy Editor** by typing gpedit.msc and press **Enter**.
 
-* Reboot the SUT computer and plug in the OSR USB FX2 board.
+    * Explorer to the group policy: Local Computer Policy\Computer Configuration\Administrative Templates\Windows Components\Remote Desktop Services\Remote Desktop Connection Client\RemoteFX USB Device Redirection.
+
+    * Reboot the SUT computer and plug in the OSR USB FX2 board.
 
 * Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Data, and edit **Negotiate.RDP**, **DirectTls.RDP** and **DirectCredSSP.RDP** files respectively:
 
@@ -670,6 +672,25 @@ Optionally, you can install this certificate on **SUT** as following to avoid wa
 
 * On the **Completing the Certificate Import Wizard screen**, click **Finish**.
 
+Optionally, you can config Group policy for RDPEGFX AVC444 feature:
+
+* To enable AVC444 mode in Win 10 and Windows Server 2016, two new group policies can be configured in the Group Policy Editor.
+
+* Open **Local Group Policy Editor** by typing gpedit.msc and press **Enter**.
+
+* Explorer to the group policy: Computer Configuration -> Administrative Templates -> Windows Components -> Remote Desktop Services -> Remote Desktop Session Host -> Remote Session Environment
+
+* Enable the AVC444 by group policies configuration
+
+  1. Prioritize H.264/AVC 444 Graphics mode for Remote Desktop connections
+
+   When enabled on the RDP Server, the H.264/AVC 444 mode will be prioritized when the RDP 10 client and server both support AVC/H.264 and support the AVC 444 mode. Note: For Remote Desktop Session Host (RDSH) environments only full desktop sessions are supported with H.264/AVC 444, RemoteApp sessions still use the proprietary codecs for now.
+
+ 2. Configure H.264/AVC hardware encoding for Remote Desktop connections
+
+   This policy lets you enable hardware encoding for AVC/H.264, when used in conjunction with the AVC444 mode. When enabled, each remote desktop monitor will use up one AVC/H.264 encoder on the server. If all AVC/H.264 encoders are in use, the RDP Server will automatically fallback to using Software.           
+
+  Enable the 2 group policy will help you setup a AVC444 supported environment.
 ### Configuring Computers that are Not Based on Windows
 
 This guide provides only basic information about configuring the test environment for computers that are not running Windows-based operating systems.
@@ -884,7 +905,7 @@ The following table describes the optional configuration properties and provides
 |  **WaitTime**| The maximum time in seconds to wait for one SUT message.|
 | | Default value: **40**|  
 
-## >Running Test Cases
+## Running Test Cases
 
 This test suite includes command files that you can use to complete some basic test cases. Each test case verifies the protocol implementation based on a given scenario.
 
@@ -992,22 +1013,6 @@ When using the **powershell** mode, test cases automatically trigger SUT to conn
 When using the **interactive** mode, test cases pop up dialogs and guide you to perform testing steps manually.
 
 When using the **protocol-based** mode, an agent is also needed on SUT according to **SUT\_Remote\_Control\_Protocol.pdf**, the agent is used to receive SUT control request from test suite and operate RDP client on SUT accordingly.
-
-#### Configuration for RDPEGFX AVC444
-
-* To enable AVC444 mode in Win 10 and Windows Server 2016, two new group policies can be configured in the Group Policy Editor.
-
-* (gpedit.msc) under Computer Configuration -> Administrative Templates -> Windows Components -> Remote Desktop Services -> Remote Desktop Session Host -> Remote Session Environment:
-
-* 1. Prioritize H.264/AVC 444 Graphics mode for Remote Desktop connections
-
-* When enabled on the RDP Server, the H.264/AVC 444 mode will be prioritized when the RDP 10 client and server both support AVC/H.264 and support the AVC 444 mode. Note: For Remote Desktop Session Host (RDSH) environments only full desktop sessions are supported with H.264/AVC 444, RemoteApp sessions still use the proprietary codecs for now.
-
-* 2. Configure H.264/AVC hardware encoding for Remote Desktop connections
-
-* This policy lets you enable hardware encoding for AVC/H.264, when used in conjunction with the AVC444 mode. When enabled, each remote desktop monitor will use up one AVC/H.264 encoder on the server. If all AVC/H.264 encoders are in use, the RDP Server will automatically fallback to using Software.
-
-Enable the 2 group policy will help you setup a AVC444 supported environment.
 
 ### Run the Smoke Test
 
@@ -1354,7 +1359,7 @@ Note
 
 	All color rules above should be selected when viewing logs in MMA except for the **RDP_Decrypted** and **TLS_Decrypted**. When the RDP test suite using Standard RDP Security **RDP_Decrypted** color rule should be selected and when Enhanced RDP Security (TLS) is used **TLS_Decrypted** should be selected.
 
-### >Capture traffics using Microsoft Message Analyzer
+### Capture traffics using Microsoft Message Analyzer
 After configuring Microsoft Message Analyzer, you can follow below steps to capture traffics.
 
 * Open **File****New SessionLive Trace**, in the **ETW Providers** add the **Protocol-Test-Suite** provider to capture messaged dumped by test suite. If you also want to capture data on the wire, **Microsoft-Windows-NDIS-PacketCapture** provider should also be selected. At last click start to capture traffics using that trace configuration.
