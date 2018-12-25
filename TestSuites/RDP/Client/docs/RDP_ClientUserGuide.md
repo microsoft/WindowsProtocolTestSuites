@@ -6,12 +6,12 @@
 * [License Information](#license-information)
 * [Further Assistance](#further-assistance)
 * [Quick Start Checklist](#quick-start-checklist)
-* [How Do I?](#how-do-i)
+* [How Do I?](#how-do-i?)
 * [Requirements](#requirements)
 * [Environment](#environment)
     * [Driver Computer](#driver-computer)
     * [System Under Test (SUT)](#system-under-test-sut)
-    * [Domain Controller (DC)](#domain-controller-dc)
+    * [Domain Controller](#domain-controller)
     * [Software](#software)
 * [Network Setup](#network-setup)
     * [Network Setup](#network-setup)
@@ -20,14 +20,14 @@
     * [Verify Connectivity from the Driver Computer](#verify-connectivity-from-the-driver-computer)
 * [Computer Setup](#computer-setup)
     * [Set Up the Driver Computer](#set-up-the-driver-computer)
-    * [Set Up a Windows-Based SUT](#_Toc421010901)
-    * [Set Up a Windows-Based Domain Controller (DC)](#_Toc421010902)
-    * [Installed Files and Folders](#_Toc421010903)
-* [Configuration](#_Toc421010904)
-    * [Configuring Windows-based Computers](#_Toc421010905)
-    * [Configuring Computers that are Not Based on Windows](#_Toc421010906)
-    * [Configuring the Test Suite](#_Toc421010907)
-		* [Required Configuration Settings](#_Toc421010908)
+    * [Set Up a Windows-Based SUT](#set-up-a-windows-based-sut)
+    * [Set Up a Windows-Based Domain Controller](#set-up-a-windows-based-domain-controller)
+    * [Installed Files and Folders](#installed-files-and-folders)
+* [Configuration](#configuration)
+    * [Configuring Windows-based Computers](#configuring-windows-based-computers)
+    * [Configuring Computers that are Not Based on Windows](#configuring-computers-that-are-not-based on Windows)
+    * [Configuring the Test Suite](#configuring-the-test-suite)
+		* [Required Configuration Settings](#required-configuration-settings)
 		* [Optional Configuration Settings](#_Toc421010909)
 * [Running Test Cases](#_Toc421010910)
     * [Configuring the Test Suite Mode](#_Toc421010911)
@@ -101,11 +101,11 @@ This suite of tools tests only the protocol implementation behaviors that are ob
 
 For licensing information, see the End User License Agreement (EULA) that was provided with this test suite. The EULA is contained in the License.rtf file in the installation folder.
 
-## <a name="_Toc421010885"/>Further Assistance
+## Further Assistance
 
 If you need further information about this test suite or assistance in troubleshooting issues related to this test suite, contact dochelp@microsoft.com.
 
-## <a name="_Toc421010886"/>Quick Start Checklist
+## Quick Start Checklist
 
 The following checklist summarizes the steps required to get the test suite up and running. The checklist also provides references to documentation that can help you get started.
 
@@ -131,7 +131,7 @@ Note
 | | Configure the test suite settings.| See [Configuring the Test Suite](#_Toc421010907).|
 | | Run a smoke test to verify that the test suite is properly installed and configured| See [Run the Smoke Test](#_Toc421010915).|
 
-## <a name="_Toc421010887"/>How Do I?
+## How Do I?
 Use the following quick reference to learn how to complete common tasks.
 
 |  **How do I…?**|  **For more information…**|
@@ -148,7 +148,7 @@ Use the following quick reference to learn how to complete common tasks.
 | Get the results of test runs| [Check Test Results](#_Toc421010920)|
 | Troubleshoot problems| [Troubleshooting](#_Toc421010939)|
 
-## <a name="_Toc421010888"/>Requirements
+## Requirements
 
 This section describes the requirements for the test environment that are used to run this test suite.
 
@@ -167,7 +167,7 @@ Note
 
 >Workgroup environment does not require a domain controller.
 
-## <a name="_Toc421010889"/>Environment
+## Environment
 
 Run this test suite in a Domain environment that contains the following computers, physical or virtual:
 
@@ -215,7 +215,7 @@ Note
 
 >To run the MS-RDPEDISP test cases, the OS on SUT must support display configuration changes including the addition, removal and repositioning of monitors, resolution updates, and orientation updates.
 
-### <a name="_Toc421010890"/>Driver Computer
+### Driver Computer
 
 The minimum requirements for the driver computer are as follows.
 
@@ -225,7 +225,7 @@ The minimum requirements for the driver computer are as follows.
 | Memory| 2 GB RAM|
 | Disk space| 60 GB |
 
-### <a name="_Toc421010891"/>System Under Test (SUT)
+### System Under Test (SUT)
 
 The minimum requirements for the SUT are as follows.
 
@@ -240,7 +240,7 @@ Note
 | Memory| 1 GB RAM|
 | Disk space| 60 GB|
 
-### <a name="_Toc421010892"/>Domain Controller (DC)
+### Domain Controller
 
 The minimum requirements for the DC are as follows.
 
@@ -256,7 +256,7 @@ Note
 | Memory| 1 GB RAM|
 | Disk space| 60 GB|
 
-### <a name="_Toc421010893"/>Software
+### Software
 All of the following software must be installed on the driver computer _before_ the installation of this test suite.
 
 |  **Required Software**|
@@ -282,11 +282,11 @@ Note
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
 
-## <a name="_Toc421010894"/>Network Setup
+## Network Setup
 
 You can run this test suite in a workgroup or domain environment using either physical or virtual machines. This section describes the test environment using physical computers. For information about configuring a virtual machine, see [http://www.microsoft.com/virtualization/en/us/solution-appliance-test.aspx](http://www.microsoft.com/virtualization/en/us/solution-appliance-test.aspx).
 
-### <a name="_Toc421010895"/>Network Infrastructure
+### Network Infrastructure
 
 * A test network is required to connect the test computer systems
 
@@ -306,7 +306,7 @@ You can run this test suite in a workgroup or domain environment using either ph
 
 Refer to the Privacy Statement and EULA for further information.
 
-### <a name="_Toc421010896"/>Domain Environment
+### Domain Environment
 
 The domain environment requires interactions between the following computers and server roles. Note that the domain controller, required for a domain environment, can be installed on the SUT.
 
@@ -320,7 +320,7 @@ The following figure shows the domain environment.
 
 ![image4.png](./image/RDP_ClientUserGuide/image4.png)
 
-### <a name="_Toc421010897"/>Workgroup Environment
+### Workgroup Environment
 
 The workgroup environment requires interactions between the following computers:
 
@@ -332,7 +332,7 @@ The following figure shows the workgroup environment:
 
 ![image5.png](./image/RDP_ClientUserGuide/image5.png)
 
-### <a name="_Toc421010898"/>Verify Connectivity from the Driver Computer
+### Verify Connectivity from the Driver Computer
 
 After you prepare the environment, verify the connection from the driver computer to the SUT, and between all other computers in the test environment. The following provides a general list of steps that you can use to check for connectivity between two Windows-based computers. For further information, see the administration guide for your operating system.
 
@@ -354,7 +354,7 @@ To check the connection from the driver computer
 
 Do not proceed with the configuration of the test suite until connectivity is confirmed. Any issues with network connectivity must be resolved before you configure the test suite.
 
-## <a name="_Toc421010899"/>Computer Setup
+## Computer Setup
 
 This section explains how to set up the computers for the test environment.
 
@@ -363,7 +363,7 @@ Note
 
 >For workgroup environments, skip tasks that are related to the setup and configuration of DC.
 
-### <a name="_Toc421010900"/>Set Up the Driver Computer
+### Set Up the Driver Computer
 
 This section describes how to set up the driver computer.
 
@@ -384,7 +384,7 @@ To set up the driver computer
 
 * On the **Options** dialog box, select **Install Test Suite on Driver Computer**.
 
-### <a name="_Toc421010901"/>Set Up a Windows-Based SUT
+### Set Up a Windows-Based SUT
 This section provides information about how to set up a SUT for use with this test suite.
 
 To set up a Windows-based SUT
@@ -399,7 +399,7 @@ To set up a Windows-based SUT
 
 To set up a SUT that is not based on the Windows operating system, see [Configuring Computers that are Not Based on Windows](#_Toc421010906).
 
-### <a name="_Toc421010902"/>Set Up a Windows-Based Domain Controller (DC)
+### Set Up a Windows-Based Domain Controller
 This section provides information about how to set up a DC for use with this test suite.
 
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
@@ -413,7 +413,7 @@ To set up a Windows-based DC
 
 To set up a DC that is not based on the Windows operating system, see [Configuring Computers that are Not Based on Windows](#_Toc421010906).
 
-### <a name="_Toc421010903"/>Installed Files and Folders
+### Installed Files and Folders
 
 The installation process adds the following folders and files to the driver computer at C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \.
 
@@ -462,7 +462,7 @@ The installation process adds the following files and folders to the Windows-bas
 | Data| Data files that used to by scripts to set up and configure the driver computer, the Windows-based SUT, and the DC|
 | License.rtf| The End User License Agreement.|
 
-## <a name="_Toc421010904"/>Configuration
+## Configuration
 
 This section explains how to configure the test environment.
 
@@ -471,7 +471,7 @@ Note
 
 >For workgroup environments, skip tasks that are related to the setup and configuration of DC.
 
-### <a name="_Toc421010905"/>Configuring Windows-based Computers
+### Configuring Windows-based Computers
 
 This section explains how to configure computers for a Windows-based test environment. For general information about configuring computers that are not based on Windows, see [Configuring Computers that are Not Based on Windows](#_Toc421010906).
 
@@ -669,7 +669,7 @@ Optionally, you can install this certificate on **SUT** as following to avoid wa
 
 * On the **Completing the Certificate Import Wizard screen**, click **Finish**.
 
-### <a name="_Toc421010906"/>Configuring Computers that are Not Based on Windows
+### Configuring Computers that are Not Based on Windows
 
 This guide provides only basic information about configuring the test environment for computers that are not running Windows-based operating systems.
 
@@ -693,7 +693,7 @@ For detailed instructions about how to complete the tasks that this process requ
 
 * Install directory domain services.
 
-### <a name="_Toc421010907"/>Configuring the Test Suite
+### Configuring the Test Suite
 
 This test suite is installed with default configuration settings. You may need to change these settings if you use a customized test environment or if you customize your test runs.
 
