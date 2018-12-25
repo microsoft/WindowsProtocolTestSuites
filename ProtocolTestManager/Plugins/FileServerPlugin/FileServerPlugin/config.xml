@@ -276,7 +276,7 @@
             <Category name = "QueryAndSetFileInfo"/>
           </Rule>
           <Rule name = "HVRS (Hyper-V Remote Storage)">
-            <Category name = "HVRS"/>
+            <Category name = "HVRS-SMB"/>
           </Rule>
         </Rule>
         <Rule name = "FSRVP (File Server Remote VSS)">
