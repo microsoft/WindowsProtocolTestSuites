@@ -66,7 +66,7 @@
     * [Most RDPEUDP RDPEMT Test Cases Failed](#most-rdpeudp-rdpemp-test-cases-failed)
     * [3 RDPBCGR Test Cases Must be Run Under interactive Mode](#3-rdpbcgr-test-cases-must-be-run-under-interactive-mode)
     * [3 RDPEGFX test cases require H264 enabled on SUT](#3-rdpegfx-test-cases-require-h264-enabled-on-sut)
-    * [Most Test Cases Failed When Using TLS/CredSSP protocol](#most-test-cases-failed-when-using-tls\/credssp-protocol)
+    * [Most Test Cases Failed When Using TLS/CredSSP protocol](#most-test-cases-failed-when-using-tls&/credssp-protocol)
 
 ## Introduction
 
@@ -117,37 +117,37 @@ Note
 
 |  **Check**|  **Task**|  **Topic**|
 | -------------| -------------| ------------- |
-| | Download the test suite for the protocol implementation.| For a list of the files that the download package contains, see [Installed Files and Folders](#_Toc421010903).|
-| | Confirm that your test environment and computers meet the requirements of the test suite.| For information about the requirements of the test suite, see [Requirements](#_Toc421010888). |
-| | Install the software prerequisites.| For information about software that must be installed on the computers in your test environment before the test suite is installed, see [Software](#_Toc421010893).|
-| | Set up the driver computer.| See [Set Up the Driver Computer](#_Toc421010900).|
-| | Set up the system under test (SUT).| See [Set Up the SUT](#_Toc421010901).|
-| | Set up the Domain Controller (DC). (optional)| See [Set Up the DC](#_Toc421010902). |
-| | Set up the network.| See [Network Setup](#_Toc421010894).|
-| | Verify the connection from the driver computer to the SUT and other computers.| See [Verify Connectivity from the Driver Computer](#_Toc421010898).|
-| | Configure the SUT.| See [Configuring Windows-based Computers](#_Toc421010905) or |
-| | | [Configuring Computers that are Not Based on Windows](#_Toc421010906)|
-| | Configure the DC. (optional)| See [Configuring Computers that are Not Based on Windows](#_Toc421010906) |
-| | Configure the driver computer.| See [Configuring Windows-based Computers](#_Toc421010905)|
-| | Configure the test suite settings.| See [Configuring the Test Suite](#_Toc421010907).|
-| | Run a smoke test to verify that the test suite is properly installed and configured| See [Run the Smoke Test](#_Toc421010915).|
+| | Download the test suite for the protocol implementation.| For a list of the files that the download package contains, see [Installed Files and Folders](#installed-files-and-folders).|
+| | Confirm that your test environment and computers meet the requirements of the test suite.| For information about the requirements of the test suite, see [Requirements](#requirements). |
+| | Install the software prerequisites.| For information about software that must be installed on the computers in your test environment before the test suite is installed, see [Software](#software).|
+| | Set up the driver computer.| See [Set Up the Driver Computer](#set-up-the-driver-computer).|
+| | Set up the system under test (SUT).| See [Set Up the SUT](#set-up-the-sut).|
+| | Set up the Domain Controller (DC). (optional)| See [Set Up the DC](#set-up-the-dc). |
+| | Set up the network.| See [Network Setup](#network-setup).|
+| | Verify the connection from the driver computer to the SUT and other computers.| See [Verify Connectivity from the Driver Computer](#verify-connectivity-from-the-driver-computer).|
+| | Configure the SUT.| See [Configuring Windows based Computers](#configuring-windows-based-computers) or |
+| | | [Configuring Computers that are Not Based on Windows](#configuring-computers-that-are-not-based-on-windows)|
+| | Configure the DC. (optional)| See [Configuring Computers that are Not Based on Windows](#configuring-computers-that-are-not-based-on-windows) |
+| | Configure the driver computer.| See [Configuring Windows-based Computers](#configuring-windows-based-computers)|
+| | Configure the test suite settings.| See [Configuring the Test Suite](#configuring-the-test-suite).|
+| | Run a smoke test to verify that the test suite is properly installed and configured| See [Run the Smoke Test](#run-the-smoke-test).|
 
-## How Do I?
+## How Do I
 Use the following quick reference to learn how to complete common tasks.
 
 |  **How do I…?**|  **For more information…**|
 | -------------| ------------- |
-| Set up the test environment| [Network Setup](#_Toc421010894) and [Computer Setup](#_Toc421010899)|
-| Verify the connection from the driver computer to other computers in the test environment| [Verify Connectivity from the Driver Computer](#_Toc421010898)|
-| Configure a SUT| [Configure the SUT](#_Toc421010905) or [Configuring Computers that are Not Based on Windows](#_Toc421010906)|
-| Configure a DC| [Configuring Computers that are Not Based on Windows](#_Toc421010906)|
-| Configure the driver computer| [Configuring Windows-based Computers](#_Toc421010905)|
-| Configure the test suite settings| [Configuring the Test Suite](#_Toc421010907)|
-| Run a smoke test| [Run the Smoke Test](#_Toc421010915).|
-| Run test cases| [Run All Test Cases](#_Toc421010916), [Run Specified Test Cases](#_Toc421010917)|
-| Debug my own test cases| [Debugging Test Cases](#_Toc421010921)|
-| Get the results of test runs| [Check Test Results](#_Toc421010920)|
-| Troubleshoot problems| [Troubleshooting](#_Toc421010939)|
+| Set up the test environment| [Network Setup](#network-setup) and [Computer Setup](#computer-setup)|
+| Verify the connection from the driver computer to other computers in the test environment| [Verify Connectivity from the Driver Computer](#verify-connectivity-from-the-driver-computer)|
+| Configure a SUT| [Configure the SUT](#configure-the-sut) or [Configuring Computers that are Not Based on Windows](#configuring-computers-that-are-not-based-on-window)|
+| Configure a DC| [Configuring Computers that are Not Based on Windows](configuring-computers-that-are-not-based-on-window)|
+| Configure the driver computer| [Configuring Windows-based Computers](#configuring-windows-based-computers)|
+| Configure the test suite settings| [Configuring the Test Suite](#configuring-the-test-suite)|
+| Run a smoke test| [Run the Smoke Test](#run-the-smoke-test).|
+| Run test cases| [Run All Test Cases](#run-all-test-cases), [Run Specified Test Cases](#run-specified-test-cases)|
+| Debug my own test cases| [Debugging Test Cases](#debugging-test-cases)|
+| Get the results of test runs| [Check Test Results](#check-test-results)|
+| Troubleshoot problems| [Troubleshooting](#Troubleshooting)|
 
 ## Requirements
 
@@ -233,7 +233,7 @@ The minimum requirements for the SUT are as follows.
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
 
->If SUT computer is an implementation that is not based on Windows operating system or its version is below Windows 7, external work is need to execute test cases automatically, for more details, please refer to [Configuring the Test Suite Mode](#_Toc421010911).
+>If SUT computer is an implementation that is not based on Windows operating system or its version is below Windows 7, external work is need to execute test cases automatically, for more details, please refer to [Configuring the Test Suite Mode](#configuring-the-test-suite-mode).
 
 |  **Requirement**|  **Description**|
 | -------------| ------------- |
@@ -398,7 +398,7 @@ To set up a Windows-based SUT
 
 * On the **Options** dialog box, select **Install Configuration Scripts on System Under Test (SUT)**.
 
-To set up a SUT that is not based on the Windows operating system, see [Configuring Computers that are Not Based on Windows](#_Toc421010906).
+To set up a SUT that is not based on the Windows operating system, see [Configuring Computers that are Not Based on Windows](#configuring-computers-that-are-not-based-on-windows).
 
 ### Set Up a Windows-Based Domain Controller
 This section provides information about how to set up a DC for use with this test suite.
@@ -412,7 +412,7 @@ To set up a Windows-based DC
 
 * Install Active Directory Domain Services.
 
-To set up a DC that is not based on the Windows operating system, see [Configuring Computers that are Not Based on Windows](#_Toc421010906).
+To set up a DC that is not based on the Windows operating system, see [Configuring Computers that are Not Based on Windows](#configuring-computers-that-are-not-based-on-windows).
 
 ### Installed Files and Folders
 
@@ -474,7 +474,7 @@ Note
 
 ### Configuring Windows-based Computers
 
-This section explains how to configure computers for a Windows-based test environment. For general information about configuring computers that are not based on Windows, see [Configuring Computers that are Not Based on Windows](#_Toc421010906).
+This section explains how to configure computers for a Windows-based test environment. For general information about configuring computers that are not based on Windows, see [Configuring Computers that are Not Based on Windows](#configuring-computers-that-are-not-based-on-windows).
 
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
@@ -562,7 +562,7 @@ Note
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
 
->You must use the user Administrator logon if you run test cases with PowerShell mode. For more details, please refer to [Configuring the Test Suite Mode](#_Toc421010911).
+>You must use the user Administrator logon if you run test cases with PowerShell mode. For more details, please refer to [Configuring the Test Suite Mode](#configuring-the-test-suite-mode).
 
 **To configure the driver computer**
 
@@ -756,7 +756,7 @@ The following table describes the required properties for all the test cases.
 | | Default value: **Password01**!|
 |  **VerifyRdpbcgrMessage**| Enables or disables message verification as defined in MS-RDPBCGR. Set to **True** to enable, otherwise set to **False**. |
 | | Default value: **True**|
-|  **VerifySUTDisplay.Enable**| Enable or disable the verification of display on RDP Client (SUT). This function is only available when running test suite under protocol-based mode. For more details, Please refer to [Configuring the Test Suite Mode](#_Toc421010911).|
+|  **VerifySUTDisplay.Enable**| Enable or disable the verification of display on RDP Client (SUT). This function is only available when running test suite under protocol-based mode. For more details, Please refer to [Configuring the Test Suite Mode](#configuring-the-test-suite-mode).|
 | | Default value: **False**|
 |  **VerifySUTDisplay.BitmapSavePath**| Path used to save screenshot on SUT. If VerifySUTDisplay.Enable is false, this property should be ignored.|
 | | Default value: **..\..\ScreenShot\**|
@@ -1111,7 +1111,7 @@ Use the step below to run specific test cases.
 ### Example of How to run test case under interactive mode
 The following example illustrates how to run test case under interactive mode.
 
-On the driver computer, configure the test suite mode to interactive mode. For the details, please refer to [Configuring the Test Suite Mode](#_Toc421010911).
+On the driver computer, configure the test suite mode to interactive mode. For the details, please refer to [Configuring the Test Suite Mode](#configuring-the-test-suite-mode).
 
 * On the driver computer, from the directory C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\_RDPBCGR_\, double-click the **BVT_ConnectionTest_CapabilityExchange_PositiveTest.cmd** file to run this test case.
 
@@ -1140,7 +1140,7 @@ According to the **Help Message**, you will do:
 ### Example of How to run MS-RDPEI test case under enhanced interactive mode
 The following example illustrates how to run MS-RDPEI test case under **enhanced interactive** mode with **connection** under powershell mode.
 
-On the driver computer, configure the MS-RDPEI test suite mode to enhanced interactive mode. For the details, please refer to [Configuring the Test Suite Mode](#_Toc421010911).
+On the driver computer, configure the MS-RDPEI test suite mode to enhanced interactive mode. For the details, please refer to [Configuring the Test Suite Mode](#configuring-the-test-suite-mode).
 
 * On the driver computer, run the test case named **Rdpei_TouchInputTest_Positive_SingleTouchEvent**.
 
@@ -1385,7 +1385,7 @@ This section describes how to troubleshoot common test suite issues.
 | **CAUSE**| For Windows RDP client, the test suites must be run using the Administrator account.|
 | | For non-Windows RDP client, the SUT control adapter may be not implemented properly. |
 | **RESOLUTION**| For Windows RDP client, enable Administrator and log on.|
-| | For non-Windows RDP client, Please refer to [Configuring the Test Suite Mode](#_Toc421010911).|
+| | For non-Windows RDP client, Please refer to [Configuring the Test Suite Mode](#configuring-the-test-suite-mode).|
 
 
 | | |
@@ -1400,7 +1400,7 @@ This section describes how to troubleshoot common test suite issues.
 | -------------| -------------|
 | **PROBLEM**| Most MS-RDPEUSB test cases are failed.|
 | **CAUSE**| The OSR USB FX2 board is not plugged into the SUT or the USB Redirection is not enabled by the SUT. |
-| **RESOLUTION**| Plug OSR USB FX2 board into the SUT and enable the USB Redirection in the Local Group Policy Editor. For more details, please refer to [Configuring Windows-based Computers](#_Toc421010905).|
+| **RESOLUTION**| Plug OSR USB FX2 board into the SUT and enable the USB Redirection in the Local Group Policy Editor. For more details, please refer to [Configuring Windows-based Computers](#configuring-windows-based-computers).|
 
 ### Most RDPEUDP RDPEMT Test Cases Failed
 
@@ -1408,7 +1408,7 @@ This section describes how to troubleshoot common test suite issues.
 | -------------| -------------|
 | **PROBLEM**| Most MS-RDPEUDP/MS-RDPEMT test cases are failed.|
 | **CAUSE**| Some MS-RDPEUDP and MS-RDPEMT test cases create RDP-UDP connection, which need to use TLS or CredSSP security protocol. |
-| **RESOLUTION**| In **RDP_ClientTestSuite.deployment.ptfconfig,** configure **RDP.Security.Protocol** to TLS or CredSSP. For more details, please refer to [Configuring the Test Suite](#_Toc421010907)|
+| **RESOLUTION**| In **RDP_ClientTestSuite.deployment.ptfconfig,** configure **RDP.Security.Protocol** to TLS or CredSSP. For more details, please refer to [Configuring the Test Suite](#configuring-the-test-suite)|
 
 ### 3 RDPBCGR Test Cases Must be Run Under interactive Mode
 
@@ -1419,7 +1419,7 @@ This section describes how to troubleshoot common test suite issues.
 | | BVT_ClientInputTest_SlowPath |
 | | S1_ConnectionTest_Disconnection_PositiveTest_ClientInitiated|
 | **CAUSE**| These test cases must be run under the “interactive” mode.|
-| **RESOLUTION**| Use the “interactive” mode when running these test cases. For more details, please refer to [Configuring the Test Suite Mode](#_Toc421010911).|
+| **RESOLUTION**| Use the “interactive” mode when running these test cases. For more details, please refer to [Configuring the Test Suite Mode](#configuring-the-test-suite-mode).|
 
 ### 3 RDPEGFX test cases require H264 enabled on SUT
 
@@ -1438,10 +1438,10 @@ This section describes how to troubleshoot common test suite issues.
 | -------------| -------------|
 | **PROBLEM**| When using TLS or CredSSP protocol, test cases are failed with Timeout exception. |
 | **CAUSE**| TLS and CredSSP protocol need more time on encryption and decryption. |
-| **RESOLUTION**| In **RDP_ClientTestSuite.deployment.ptfconfig,** configure **WaitTime** to give more waiting time. For more details, please refer to [Configuring the Test Suite](#_Toc421010907)|
+| **RESOLUTION**| In **RDP_ClientTestSuite.deployment.ptfconfig,** configure **WaitTime** to give more waiting time. For more details, please refer to [Configuring the Test Suite](#configuring-the-test-suite)|
 
 | | |
 | -------------| -------------|
 | **PROBLEM**| When using TLS or CredSSP protocol, test cases are failed with exception: The system cannot find the file specified.|
 | **CAUSE**| The certificate files, which are used to secure TLS or CrepSSP transports, are not generated successfully. |
-| **RESOLUTION**| Re-run **Config-DriverComputer.ps1** on the driver computer. For more details, please refer to [Configuring Windows-based Computers](#_Toc421010905).|
+| **RESOLUTION**| Re-run **Config-DriverComputer.ps1** on the driver computer. For more details, please refer to [Configuring Windows-based Computers](#configuring-windows-based-computers).|
