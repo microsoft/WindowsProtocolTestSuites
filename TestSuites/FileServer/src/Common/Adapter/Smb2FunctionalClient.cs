@@ -125,7 +125,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             client.PacketSending += new Action<Smb2Packet>(client_PacketSent);
             client.PendingResponseReceived += new Action<Smb2SinglePacket>(client_PendingResponseReceived);
 
-            client.NotificationThreadExceptionHappened += new Action<Exception>(client_NotificationThreadExceptionHappened);
+            client.NotificationThreadExceptionHappened += client_NotificationThreadExceptionHappened;
 
             sessionChannelSequence = 0;
 
@@ -371,6 +371,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
         public void Disconnect()
         {
+            client.NotificationThreadExceptionHappened -= client_NotificationThreadExceptionHappened;
             client.Disconnect();
         }
 

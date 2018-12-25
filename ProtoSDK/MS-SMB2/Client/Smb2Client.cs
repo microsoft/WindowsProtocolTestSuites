@@ -442,6 +442,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     }
 
                 }
+                catch (ThreadAbortException)
+                {
+                    // Notification thread is aborted.
+                    // End the current thread.
+                    return;
+                }
                 catch (Exception exception)
                 {
                     // If throw the exception from this receive thread, QTAgent will crash.
@@ -449,7 +455,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     // End the current thread.
                     if (NotificationThreadExceptionHappened != null)
                     {
-                        NotificationThreadExceptionHappened(exception);
+                        try
+                        {
+                            NotificationThreadExceptionHappened(exception);
+                        }
+                        catch
+                        {
+                            // Exception happens when handling event.
+                            // Catch to avoid the exception crash QTAgent.
+                            // End the current thread.
+                            return;
+                        }
                     }
                     return;
                 }
