@@ -147,6 +147,8 @@
     <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_RenameStream.cs" />
     <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_FileInfo_Set_FileValidDataLengthInformation.cs" />
     <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_WriteAndRead.cs" />
+    <Compile Include="TraditionalTestCases\CreateFile\CreateFileTestCases.cs" />
+    <Compile Include="TraditionalTestCases\CreateFile\CreateFile_InvalidStreamName.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfoTestCases.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileAttributeTagInformation.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileBasicInformation.cs" />

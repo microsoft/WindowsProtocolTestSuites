@@ -1,0 +1,78 @@
+<lab>
+  <core>
+    <username>Administrator</username>
+    <password>Password01!1</password>
+    <legacyclient>true</legacyclient>
+    <basecpu>4</basecpu>
+    <Description>DC x 1 and Member x 2(NIC x 3), AD sample setup static ip address</Description>
+  </core>
+  <network>
+    <vnet>
+      <hostisgateway>true</hostisgateway>
+      <name>MS-ADOD-Internal</name>
+      <networktype>Internal</networktype>
+      <ip>192.168.2.254</ip>
+      <gateway>192.168.2.101</gateway>
+      <subnet>255.255.255.0</subnet>
+    </vnet>
+  </network>
+  <servers>
+    <vm>
+      <role>DriverComputer</role>
+      <installorder>1</installorder>
+      <hypervname>MS-ADOD-PDC</hypervname>
+      <name>ADOD-PDC</name>
+      <domain>ADODLocal.COM</domain>
+      <isdc>true</isdc>
+      <username>Administrator</username>
+      <password>Password01!1</password>
+      <cpu>1</cpu>
+      <vnet>MS-ADOD-Internal</vnet>
+      <ip>192.168.2.101</ip>
+      <subnet>255.255.255.0</subnet>
+      <gateway>192.168.2.101</gateway>	  
+      <dns>192.168.2.101</dns>
+      <memory>4096</memory>
+      <minimumram>2048</minimumram>
+      <maximumram>4096</maximumram>
+      <configscript>Config-DriverComputer.ps1</configscript>
+      <skipwaitingforpostscript>false</skipwaitingforpostscript>
+      <postscript>Disable_Firewall.ps1;SetPasswordNeverExpires.ps1;InstallMSIAndTools.ps1;Write-InstallDoneSignal.ps1;PostScript-PDC.ps1</postscript>
+      <tools>
+        <tool name="SE" MSIName="SpecExplorer.msi" version="3.5.3146.0" CPUArchitecture="x86" />
+        <tool name="PTF" MSIName="ProtocolTestFrameworkInstaller.msi" version="1.0.6000.0" CPUArchitecture="x86" />
+        <tool name="MMA" MSIName="MessageAnalyzer64.msi" version="4.0.8112.0" CPUArchitecture="x64" />        
+        <TestsuiteMSI MSIName="MS-ADOD-TestSuite-ODEP.msi" targetEndpoint="TESTSUITE" />
+      </tools>
+      <clientip>192.168.2.1</clientip>
+      <clientadmin>Administrator</clientadmin>
+      <clientpwd>Password01!1</clientpwd>
+    </vm>
+    <vm>
+      <role>Client</role>
+      <installorder>2</installorder>
+      <hypervname>MS-ADOD-Client</hypervname>
+      <name>ADOD-CLIENT</name>
+      <domain>Workgroup</domain>
+      <isdc>false</isdc>
+      <username>Administrator</username>
+      <password>Password01!1</password>
+      <cpu>2</cpu>
+      <vnet>MS-ADOD-Internal</vnet>
+      <ip>192.168.2.1</ip>
+      <subnet>255.255.255.0</subnet>
+      <gateway>192.168.2.101</gateway>
+      <dns>192.168.2.101</dns>
+      <memory>1024</memory>
+      <minimumram>1024</minimumram>
+      <maximumram>2048</maximumram>
+      <configscript>Config-ClientComputer.ps1</configscript>
+      <skipwaitingforpostscript>false</skipwaitingforpostscript>
+      <postscript>Disable_Firewall.ps1;SetPasswordNeverExpires.ps1;InstallMSIAndTools.ps1;Write-InstallDoneSignal.ps1;PostScript-Client.ps1</postscript>
+      <tools>
+        <TestsuiteMSI MSIName="MS-ADOD-TestSuite-ODEP.msi" targetEndpoint="SUT" />
+        <tool name="MMA" MSIName="MessageAnalyzer64.msi" version="4.0.8112.0" CPUArchitecture="x64" />
+      </tools>
+    </vm>
+  </servers>
+</lab>

@@ -2,17 +2,17 @@
   <Parameter Name="clientLogPath" Value="C:\Logs\Client" Comment="If no log file path specified, this value should be used." />
   <Parameter Name="driverLogPath" Value="C:\Logs\Driver" Comment="If no log file path specified, this value should be used." />
   <Parameter Name="localCapFilePath" Value="C:\Logs\Capture" Comment="If no log file path specified, this value should be used." />
-  <Parameter Name="fullDomainName" Value="contoso.com" Comment="Full Qualified Domain Name in test environment." />
+  <Parameter Name="fullDomainName" Value="ADODLocal.COM" Comment="Full Qualified Domain Name in test environment." />
   <Parameter Name="domainAdminUserName" Value="Administrator" Comment="User name for domain administrator." />
-  <Parameter Name="domainAdminUserPwd" Value="Password01!" Comment="User password for domain administrator." />
+  <Parameter Name="domainAdminUserPwd" Value="Password01!1" Comment="User password for domain administrator." />
   <Parameter Name="pdcOperatingSystem" Value="Windows" Comment="The operating system of the PDC Computer.(Windows/NonWindows)" />
-  <Parameter Name="pdcComputerName" Value="PDC" Comment="The machine name of PDC Computer." />
-  <Parameter Name="pdcIP" Value="192.168.1.201" Comment="The machine ip address of PDC computer." />
+  <Parameter Name="pdcComputerName" Value="ADOD-PDC" Comment="The machine name of PDC Computer." />
+  <Parameter Name="pdcIP" Value="192.168.2.101" Comment="The machine ip address of PDC computer." />
   <Parameter Name="clientOperatingSystem" Value="Windows" Comment="The operation system of the client computer.(Windows/NonWindows)" />
-  <Parameter Name="clientComputerName" Value="ENDPOINT01" Comment="The machine name of client computer." />
+  <Parameter Name="clientComputerName" Value="ADOD-CLIENT" Comment="The machine name of client computer." />
   <Parameter Name="clientIP" Value="192.168.2.1" Comment="The machine ip address of client computer." />
   <Parameter Name="clientAdminUserName" Value="Administrator" Comment="User name for the administrator of client computer." />
-  <Parameter Name="clientAdminUserPwd" Value="Password01!" Comment="User password for client computer." />
+  <Parameter Name="clientAdminUserPwd" Value="Password01!1" Comment="User password for client computer." />
   <Parameter Name="ipVersion" Value="IPv4" Comment="The ip version used in test enviornment, can be IPv4 or IPv6." />
   <Parameter Name="driverLogFile" Value="C:\Logs\Driver\Config-DriverComputer.ps1.log" Comment="If no log file path specified, this value should be used." />
 </Parameters>
