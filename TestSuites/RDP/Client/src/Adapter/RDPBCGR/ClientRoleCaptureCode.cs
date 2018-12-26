@@ -1040,22 +1040,22 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 @"In the TS_INFO_PACKET structure, cbWorkingDir represents the size in bytes of the character data in the WorkingDir"
                 + @" field. This size excludes the length of the mandatory null terminator.");
 
-            site.Assert.IsTrue(info.Domain.Contains("\0"),
+            site.Assert.IsTrue(info.Domain.EndsWith("\0"),
                 @"In the TS_INFO_PACKET structure, Domain field MUST contain at least a null terminator character in ANSI or Unicode"
                 + @" format (depending on the presence of the INFO_UNICODE flag)");
-            site.Assert.IsTrue(info.UserName.Contains("\0"),
+            site.Assert.IsTrue(info.UserName.EndsWith("\0"),
                 @"In the TS_INFO_PACKET structure, UserName field MUST contain at least a null terminator character in ANSI or Unicode"
                 + @" format (depending on the presence of the INFO_UNICODE flag)");
-            site.Assert.IsTrue(info.Password.Contains("\0"),
+            site.Assert.IsTrue(info.Password.EndsWith("\0"),
                 @"In the TS_INFO_PACKET structure, Password field MUST contain at least a null terminator character in ANSI or Unicode"
                 + @" format (depending on the presence of the INFO_UNICODE flag)");
             site.Assert.IsTrue(info.AlternateShell.Length <= 512, 
                 @"In the TS_INFO_PACKET structure, for AlternateShell, the maximum allowed length is 512 bytes (including the mandatory"
                 + @" null terminator).");
-            site.Assert.IsTrue(info.AlternateShell.Contains("\0"),
+            site.Assert.IsTrue(info.AlternateShell.EndsWith("\0"),
                 @"In the TS_INFO_PACKET structure, AlternateShell field MUST contain at least a null terminator character in ANSI or "
                 + @"Unicode format (depending on the presence of the INFO_UNICODE flag)");
-            site.Assert.IsTrue(info.WorkingDir.Contains("\0"),
+            site.Assert.IsTrue(info.WorkingDir.EndsWith("\0"),
                 @"In the TS_INFO_PACKET structure, WorkingDir field MUST contain at least a null terminator character in ANSI or "
                 + @"Unicode format (depending on the presence of the INFO_UNICODE flag)");
             if (info.extraInfo != null)
