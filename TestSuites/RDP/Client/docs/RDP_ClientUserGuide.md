@@ -547,9 +547,9 @@ Note
     * Explorer to the group policy: Local Computer Policy\Computer Configuration\Administrative Templates\Windows Components\Remote Desktop Services\Remote Desktop Connection Client\RemoteFX USB Device Redirection.
 
     * Reboot the SUT computer and plug in the OSR USB FX2 board.
-    Optionally, you can config Group policy for RDPEGFX AVC444 feature:
+  * Optionally, you can config Group policy for RDPEGFX AVC444 feature:
 
-  * To enable AVC444 mode in Win 10 and Windows Server 2016, two new group policies need to be configured in the Group Policy Editor.
+    * To enable AVC444 mode in Win 10 and Windows Server 2016, two new group policies need to be configured in the Group Policy Editor.
 
     * Open **Local Group Policy Editor** by typing gpedit.msc and press **Enter**.
 
@@ -661,7 +661,7 @@ Note
 
 >The certificate, **ComputerName**.cer, is generated for testing purpose, not from a trusted Certificate Authority. So when you run test cases, a dialog may be popped up with warning statements: "**The identity of the remote computer cannot be verified. Do you want to connect anyway?**", then you can selected the checkbox of "**Don't ask me again for connections to this computer**" before click **Yes** to avoid this dialog popped up again.
 
-Optionally, you can install this certificate on **SUT** as following to avoid warning dialog:
+* Optionally, you can install this certificate on **SUT** as following to avoid warning dialog:
 
 * Copy the ***ComputerName***.cer file to the **SUT**.
 
@@ -691,9 +691,9 @@ Optionally, you can install this certificate on **SUT** as following to avoid wa
 
 * On the **Completing the Certificate Import Wizard screen**, click **Finish**.
 
-Optionally, you can config Group policy for RDPEGFX AVC444 feature:
+* Optionally, you can config Group policy for RDPEGFX AVC444 feature:
 
-* To enable AVC444 mode in Win 10 and Windows Server 2016, two new group policies need to be configured in the Group Policy Editor.
+* To enable AVC444 mode in Win 10 and Windows Server 2016, group policy needs to be configured in the Group Policy Editor.
 
 * Open **Local Group Policy Editor** by typing gpedit.msc and press **Enter**.
 
@@ -701,15 +701,11 @@ Optionally, you can config Group policy for RDPEGFX AVC444 feature:
 
 * Enable the AVC444 by group policies configuration
 
-  1. Prioritize H.264/AVC 444 Graphics mode for Remote Desktop connections
+  * Configure H.264/AVC hardware encoding for Remote Desktop connections
 
-   When enabled on the RDP Server, the H.264/AVC 444 mode will be prioritized when the RDP 10 client and server both support AVC/H.264 and support the AVC 444 mode. Note: For Remote Desktop Session Host (RDSH) environments only full desktop sessions are supported with H.264/AVC 444, RemoteApp sessions still use the proprietary codecs for now.
+   This policy will let you enable hardware encoding for AVC/H.264, when used in conjunction with the AVC444 mode. When enabled, each remote desktop monitor will use up to one AVC/H.264 encoder on the server. If all AVC/H.264 encoders are in use, the RDP Server will automatically fallback to using Software.           
 
- 2. Configure H.264/AVC hardware encoding for Remote Desktop connections
-
-   This policy lets you enable hardware encoding for AVC/H.264, when used in conjunction with the AVC444 mode. When enabled, each remote desktop monitor will use up to one AVC/H.264 encoder on the server. If all AVC/H.264 encoders are in use, the RDP Server will automatically fallback to using Software.           
-
-  Enable the 2 group policy will help you set up an AVC444 supported environment.
+  Enable the group policy will help you set up an AVC444 supported environment.
 
 ### Configuring Computers that are Not Based on Windows
 
