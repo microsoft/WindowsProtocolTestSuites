@@ -14,7 +14,7 @@
     * [Domain Controller](#domain-controller)
     * [Software](#software)
 * [Network Setup](#network-setup)
-    * [Network Setup](#network-setup)
+    * [Network Infrastructure](#network-infrastructure)
     * [Domain Environment](#domain-environment)
     * [Workgroup Environment](#workgroup-environment)
     * [Verify Connectivity from the Driver Computer](#verify-connectivity-from-the-driver-computer)
@@ -24,21 +24,21 @@
     * [Set Up a Windows-Based Domain Controller](#set-up-a-windows-based-domain-controller)
     * [Installed Files and Folders](#installed-files-and-folders)
 * [Configuration](#configuration)
-    * [Configuring Windows-based Computers](#configuring-windows-based-computers)
-    * [Configuring Computers that are Not Based on Windows](#configuring-computers-that-are-not-based-on-windows)
-    * [Configuring the Test Suite](#configuring-the-test-suite)
+    * [Configure Windows-based Computers](#configure-windows-based-computers)
+    * [Configure Computers that are Not Based on Windows](#configure-computers-that-are-not-based-on-windows)
+    * [Configure the Test Suite](#configure-the-test-suite)
 		* [Required Configuration Settings](#required-configuration-settings)
 		* [Optional Configuration Settings](#optional-configuration-settings)
 * [Running Test Cases](#running-test-cases)
-    * [Configuring the Test Suite Mode](#configuring-the-test-suite-mode)
+    * [Configure the Test Suite Mode](#configure-the-test-suite-mode)
 		* [Common Configuration](#common-configuration)
 		* [Configuration for RDPEI](#configuration-for-rdpei)
 		* [Configuration for RDPEDISP](#configuration-for-rdpdisp)
     * [Run the Smoke Test](#run-the-smoke-test)
     * [Run All Test Cases](#run-all-test-cases)
     * [Run Specified Test Cases](#run-specified-test-cases)
-    * [Example of How to run test case under interactive mode](#example-of-how-to-run-test-case-under-interactive-mode)
-    * [Example of How to run RDPEI test case under enhanced interactive mode](#example-of-how-to-run-rdpei-testicase-under-enhanced-interactive-mode)
+    * [Example of How to Run Test Case under Interactive Mode](#example-of-how-to-run-test-case-under-interactive-mode)
+    * [Example of How to Run RDPEI Test Case under Enhanced Interactive Mode](#example-of-how-to-run-rdpei-test-case-under-enhanced-interactive-mode)
     * [Check Test Results](#check-test-results)
 * [Debugging Test Cases](#debugging-test-cases)
 * [Using Protocol Test Manager](#using-protocol-test-manager)
@@ -56,16 +56,16 @@
     * [Export Results](#export-results)
     * [Command Line Interface](#command-line-interface)
 * [Using Super Log Viewer](#using-super-log-viewer)
-    * [Install and configure Microsoft Message Analyzer](#install-and-configure-microsoft-message-analyzer)
-    * [Capture traffics using Microsoft Message Analyzer](#capture-traffics-using-microsoft-message-analyzer)
+    * [Install and Configure Microsoft Message Analyzer](#install-and-configure-microsoft-message-analyzer)
+    * [Capture Traffic Using Microsoft Message Analyzer](#capture-traffic-using-microsoft-message-analyzer)
 * [Troubleshooting](#troubleshooting)
     * [Ping Failure](#ping-failure)
     * [Test Run Issues](#test-run-issues)
     * [Most RDPEUSB Test Cases Failed](#most-rdpeusb-test-cases-failed)
-    * [Most RDPEUDP RDPEMT Test Cases Failed](#most-rdpeudp-rdpemp-test-cases-failed)
-    * [3 RDPBCGR Test Cases Must be Run Under interactive Mode](#3-rdpbcgr-test-cases-must-be-run-under-interactive-mode)
-    * [3 RDPEGFX test cases require H264 enabled on SUT](#3-rdpegfx-test-cases-require-h264-enabled-on-sut)
-    * [Most Test Cases Failed When Using TLS/CredSSP protocol](#most-test-cases-failed-when-using-tls&/credssp-protocol)
+    * [Most RDPEUDP and RDPEMT Test Cases Failed](#most-rdpeudp-and-rdpemt-test-cases-failed)
+    * [3 RDPBCGR Test Cases Must be Run Under Interactive Mode](#3-rdpbcgr-test-cases-must-be-run-under-interactive-mode)
+    * [3 RDPEGFX Test Cases Require H264 Enabled on SUT](#3-rdpegfx-test-cases-require-h264-enabled-on-sut)
+    * [Most Test Cases Failed When Using TLS/CredSSP protocol](#most-test-cases-failed-when-using-tlscredssp-protocol)
 
 ## Introduction
 
@@ -124,11 +124,11 @@ Note
 | | Set up the Domain Controller (DC). (optional)| See [Set Up the DC](#set-up-the-dc). |
 | | Set up the network.| See [Network Setup](#network-setup).|
 | | Verify the connection from the driver computer to the SUT and other computers.| See [Verify Connectivity from the Driver Computer](#verify-connectivity-from-the-driver-computer).|
-| | Configure the SUT.| See [Configuring Windows based Computers](#configuring-windows-based-computers) or |
-| | | [Configuring Computers that are Not Based on Windows](#configuring-computers-that-are-not-based-on-windows)|
-| | Configure the DC. (optional)| See [Configuring Computers that are Not Based on Windows](#configuring-computers-that-are-not-based-on-windows) |
-| | Configure the driver computer.| See [Configuring Windows-based Computers](#configuring-windows-based-computers)|
-| | Configure the test suite settings.| See [Configuring the Test Suite](#configuring-the-test-suite).|
+| | Configure the SUT.| See [Configure Windows based Computers](#configure-windows-based-computers) or |
+| | | [Configure Computers that are Not Based on Windows](#configure-computers-that-are-not-based-on-windows)|
+| | Configure the DC. (optional)| See [Configure Computers that are Not Based on Windows](#configure-computers-that-are-not-based-on-windows) |
+| | Configure the driver computer.| See [Configure Windows-based Computers](#configure-windows-based-computers)|
+| | Configure the test suite settings.| See [Configure the Test Suite](#configure-the-test-suite).|
 | | Run a smoke test to verify that the test suite is properly installed and configured| See [Run the Smoke Test](#run-the-smoke-test).|
 
 ## How Do I
@@ -138,10 +138,10 @@ Use the following quick reference to learn how to complete common tasks.
 | -------------| ------------- |
 | Set up the test environment| [Network Setup](#network-setup) and [Computer Setup](#computer-setup)|
 | Verify the connection from the driver computer to other computers in the test environment| [Verify Connectivity from the Driver Computer](#verify-connectivity-from-the-driver-computer)|
-| Configure a SUT| [Configure the SUT](#configure-the-sut) or [Configuring Computers that are Not Based on Windows](#configuring-computers-that-are-not-based-on-window)|
-| Configure a DC| [Configuring Computers that are Not Based on Windows](configuring-computers-that-are-not-based-on-window)|
-| Configure the driver computer| [Configuring Windows-based Computers](#configuring-windows-based-computers)|
-| Configure the test suite settings| [Configuring the Test Suite](#configuring-the-test-suite)|
+| Configure a SUT| [Configure the SUT](#configure-the-sut) or [Configure Computers that are Not Based on Windows](#configure-computers-that-are-not-based-on-window)|
+| Configure a DC| [Configure Computers that are Not Based on Windows](configure-computers-that-are-not-based-on-window)|
+| Configure the driver computer| [Configure Windows-based Computers](#configure-windows-based-computers)|
+| Configure the test suite settings| [Configure the Test Suite](#configure-the-test-suite)|
 | Run a smoke test| [Run the Smoke Test](#run-the-smoke-test).|
 | Run test cases| [Run All Test Cases](#run-all-test-cases), [Run Specified Test Cases](#run-specified-test-cases)|
 | Debug my own test cases| [Debugging Test Cases](#debugging-test-cases)|
@@ -225,14 +225,14 @@ The minimum requirements for the driver computer are as follows.
 | Memory| 2 GB RAM|
 | Disk space| 60 GB |
 
-### System Under Test (SUT)
+### System Under Test
 
 The minimum requirements for the SUT are as follows.
 
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
 
->If SUT computer is an implementation that is not based on Windows operating system or its version is below Windows 7, external work is needed to execute test cases automatically, for more details, please refer to [Configuring the Test Suite Mode](#configuring-the-test-suite-mode).
+>If SUT computer is an implementation that is not based on Windows operating system or its version is below Windows 7, external work is needed to execute test cases automatically, for more details, please refer to [Configure the Test Suite Mode](#configure-the-test-suite-mode).
 
 |  **Requirement**|  **Description**|
 | -------------| ------------- |
@@ -384,7 +384,7 @@ To set up the driver computer
 
 * On the **Options** dialog box, select **Install Test Suite on Driver Computer**.
 
-### Set Up a Windows-Based SUT
+### Set Up a Windows Based SUT
 This section provides information about how to set up a SUT for use with this test suite.
 
 To set up a Windows-based SUT
@@ -397,9 +397,9 @@ To set up a Windows-based SUT
 
 * On the **Options** dialog box, select **Install Configuration Scripts on System Under Test (SUT)**.
 
-To set up a SUT that is not based on the Windows operating system, see [Configuring Computers that are Not Based on Windows](#configuring-computers-that-are-not-based-on-windows).
+To set up a SUT that is not based on the Windows operating system, see [Configure Computers that are Not Based on Windows](#configure-computers-that-are-not-based-on-windows).
 
-### Set Up a Windows-Based Domain Controller
+### Set Up a Windows Based Domain Controller
 This section provides information about how to set up a DC for use with this test suite.
 
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
@@ -411,7 +411,7 @@ To set up a Windows-based DC
 
 * Install Active Directory Domain Services.
 
-To set up a DC that is not based on the Windows operating system, see [Configuring Computers that are Not Based on Windows](#configuring-computers-that-are-not-based-on-windows).
+To set up a DC that is not based on the Windows operating system, see [Configure Computers that are Not Based on Windows](#configure-computers-that-are-not-based-on-windows).
 
 ### Installed Files and Folders
 
@@ -471,9 +471,9 @@ Note
 
 >For workgroup environments, skip tasks that are related to the setup and configuration of DC.
 
-### Configuring Windows-based Computers
+### Configure Windows Based Computers
 
-This section explains how to configure computers for a Windows-based test environment. For general information about configuring computers that are not based on Windows, see [Configuring Computers that are Not Based on Windows](#configuring-computers-that-are-not-based-on-windows).
+This section explains how to configure computers for a Windows-based test environment. For general information about configuring computers that are not based on Windows, see [Configure Computers that are Not Based on Windows](#configure-computers-that-are-not-based-on-windows).
 
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
@@ -544,28 +544,28 @@ Note
   * Group policy for RDP redirection
     * Enable the policy "**Allow RDP redirection of other supported RemoteFX USB devices from this computer**" by opening **Local Group Policy Editor** by typing gpedit.msc and press **Enter**.
 
-    * Explorer to the group policy: Local Computer Policy\Computer Configuration\Administrative Templates\Windows Components\Remote Desktop Services\Remote Desktop Connection Client\RemoteFX USB Device Redirection.
+    * Explore to the group policy: Local Computer Policy\Computer Configuration\Administrative Templates\Windows Components\Remote Desktop Services\Remote Desktop Connection Client\RemoteFX USB Device Redirection.
 
     * Reboot the SUT computer and plug in the OSR USB FX2 board.
-  * Optionally, you can config Group policy for RDPEGFX AVC444 feature:
+  * Optionally, you can config group policy for RDPEGFX AVC 444 feature:
 
-    * To enable AVC444 mode in Win 10 and Windows Server 2016, two new group policies need to be configured in the Group Policy Editor.
+    * To enable AVC 444 mode in Windows 10,  Windows Server 2016 and later versions, two new group policies need to be configured in the Group Policy Editor.
 
     * Open **Local Group Policy Editor** by typing gpedit.msc and press **Enter**.
 
-    * Explorer to the group policy: Computer Configuration -> Administrative Templates -> Windows Components -> Remote Desktop Services -> Remote Desktop Session Host -> Remote Session Environment
+    * Explore to the group policy: Computer Configuration\Administrative Templates\Windows Components\Remote Desktop Services\Remote Desktop Session Host\Remote Session Environment
 
-    * Enable the AVC444 by group policies configuration
+    * Enable AVC 444 by group policy configuration
 
       1. Prioritize H.264/AVC 444 Graphics mode for Remote Desktop connections
 
-       When enabled on the RDP Server, the H.264/AVC 444 mode will be prioritized when the RDP 10 client and server both support AVC/H.264 and support the AVC 444 mode. Note: For Remote Desktop Session Host (RDSH) environments only full desktop sessions are supported with H.264/AVC 444, RemoteApp sessions still use the proprietary codecs for now.
+       When enabled on the RDP Server, H.264/AVC 444 mode will be prioritized when the RDP 10 client and server both support AVC/H.264 and support the AVC 444 mode. Note: For Remote Desktop Session Host (RDSH) environments only full desktop sessions are supported with H.264/AVC 444, RemoteApp sessions still use the proprietary codecs for now.
 
      2. Configure H.264/AVC hardware encoding for Remote Desktop connections
 
-       This policy lets you enable hardware encoding for AVC/H.264, when used in conjunction with the AVC444 mode. When enabled, each remote desktop monitor will use up to one AVC/H.264 encoder on the server. If all AVC/H.264 encoders are in use, the RDP Server will automatically fallback to using Software.           
+       This policy lets you enable hardware encoding for AVC/H.264, when used in conjunction with the AVC 444 mode. When enabled, each remote desktop monitor will use up to one AVC/H.264 encoder on the server. If all AVC/H.264 encoders are in use, the RDP server will automatically fallback to using software encoding.           
 
-      Enable the 2 group policy will help you set up an AVC444 supported environment.
+   * Enabling the 2 group policies will help you set up an AVC 444 supported environment.
 
 * Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Data, and edit **Negotiate.RDP**, **DirectTls.RDP** and **DirectCredSSP.RDP** files respectively:
 
@@ -583,7 +583,7 @@ Note
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
 
->You must use the user Administrator logon if you run test cases with PowerShell mode. For more details, please refer to [Configuring the Test Suite Mode](#configuring-the-test-suite-mode).
+>You must use the user Administrator logon if you run test cases with PowerShell mode. For more details, please refer to [Configure the Test Suite Mode](#configure-the-test-suite-mode).
 
 **To configure the driver computer**
 
@@ -691,23 +691,23 @@ Note
 
 * On the **Completing the Certificate Import Wizard screen**, click **Finish**.
 
-* Optionally, you can config Group policy for RDPEGFX AVC444 feature:
+* Optionally, you can config group policy for RDPEGFX AVC 444 feature:
 
-* To enable AVC444 mode in Win 10 and Windows Server 2016, group policy needs to be configured in the Group Policy Editor.
+* To enable AVC 444 mode in Windows 10, Windows Server 2016 and later versions, group policy needs to be configured in the Group Policy Editor.
 
 * Open **Local Group Policy Editor** by typing gpedit.msc and press **Enter**.
 
-* Explorer to the group policy: Computer Configuration -> Administrative Templates -> Windows Components -> Remote Desktop Services -> Remote Desktop Session Host -> Remote Session Environment
+* Explore to the group policy: Computer Configuration\Administrative Templates\Windows Components\Remote Desktop Services\Remote Desktop Session Host\Remote Session Environment
 
-* Enable the AVC444 by group policies configuration
+* Enable AVC 444 by group policy configuration
 
   * Configure H.264/AVC hardware encoding for Remote Desktop connections
 
-   This policy will let you enable hardware encoding for AVC/H.264, when used in conjunction with the AVC444 mode. When enabled, each remote desktop monitor will use up to one AVC/H.264 encoder on the server. If all AVC/H.264 encoders are in use, the RDP Server will automatically fallback to using Software.           
+   This policy will let you enable hardware encoding for AVC/H.264, when used in conjunction with the AVC 444 mode. When enabled, each remote desktop monitor will use up to one AVC/H.264 encoder on the server. If all AVC/H.264 encoders are in use, the RDP server will automatically fallback to using software encoding.           
 
-  Enable the group policy will help you set up an AVC444 supported environment.
+* Enabling the group policy will help you set up an AVC 444 supported environment.
 
-### Configuring Computers that are Not Based on Windows
+### Configure Computers that are Not Based on Windows
 
 This guide provides only basic information about configuring the test environment for computers that are not running Windows-based operating systems.
 
@@ -731,7 +731,7 @@ For detailed instructions about how to complete the tasks that this process requ
 
 * Install directory domain services.
 
-### Configuring the Test Suite
+### Configure the Test Suite
 
 This test suite is installed with default configuration settings. You may need to change these settings if you use a customized test environment or if you customize your test runs.
 
@@ -793,7 +793,7 @@ The following table describes the required properties for all the test cases.
 | | Default value: **Password01**!|
 |  **VerifyRdpbcgrMessage**| Enables or disables message verification as defined in MS-RDPBCGR. Set to **True** to enable, otherwise set to **False**. |
 | | Default value: **True**|
-|  **VerifySUTDisplay.Enable**| Enable or disable the verification of display on RDP Client (SUT). This function is only available when running test suite under protocol-based mode. For more details, Please refer to [Configuring the Test Suite Mode](#configuring-the-test-suite-mode).|
+|  **VerifySUTDisplay.Enable**| Enable or disable the verification of display on RDP Client (SUT). This function is only available when running test suite under protocol-based mode. For more details, Please refer to [Configure the Test Suite Mode](#configure-the-test-suite-mode).|
 | | Default value: **False**|
 |  **VerifySUTDisplay.BitmapSavePath**| Path used to save screenshot on SUT. If VerifySUTDisplay.Enable is false, this property should be ignored.|
 | | Default value: **..\..\ScreenShot\**|
@@ -931,7 +931,7 @@ You can find all command files for test cases in the following directories:
 
 You can run these command files at the command prompt or via the graphical user interface.
 
-### Configuring the Test Suite Mode
+### Configure the Test Suite Mode
 
 #### Common Configuration
 
@@ -1129,10 +1129,10 @@ Use the step below to run specific test cases.
 
 * From the command prompt, run C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\CommonRunSingleCase.cmd\ &#60; TestCaseName &#62; to run specific test case.
 
-### Example of How to run test case under interactive mode
+### Example of How to Run Test Case Under Interactive Mode
 The following example illustrates how to run test case under interactive mode.
 
-On the driver computer, configure the test suite mode to interactive mode. For the details, please refer to [Configuring the Test Suite Mode](#configuring-the-test-suite-mode).
+On the driver computer, configure the test suite mode to interactive mode. For the details, please refer to [Configure the Test Suite Mode](#configure-the-test-suite-mode).
 
 * On the driver computer, from the directory C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\_RDPBCGR_\, double-click the **BVT_ConnectionTest_CapabilityExchange_PositiveTest.cmd** file to run this test case.
 
@@ -1158,10 +1158,10 @@ According to the **Help Message**, you will do:
 
 	On the driver computer, fill a non-negative number (such as 0) in Return Value and click Succeed if you close all the RDP connections successfully. Otherwise, if you cannot stop any of the existing RDP connections, fill a negative number (such as -1) in Return Value field, and fill the error message in the Failure Message field, then click Fail.
 
-### Example of How to run MS-RDPEI test case under enhanced interactive mode
+### Example of How to Run MS-RDPEI Test Case Under Enhanced Interactive Mode
 The following example illustrates how to run MS-RDPEI test case under **enhanced interactive** mode with **connection** under powershell mode.
 
-On the driver computer, configure the MS-RDPEI test suite mode to enhanced interactive mode. For the details, please refer to [Configuring the Test Suite Mode](#configuring-the-test-suite-mode).
+On the driver computer, configure the MS-RDPEI test suite mode to enhanced interactive mode. For the details, please refer to [Configure the Test Suite Mode](#configure-the-test-suite-mode).
 
 * On the driver computer, run the test case named **Rdpei_TouchInputTest_Positive_SingleTouchEvent**.
 
@@ -1244,7 +1244,7 @@ Protocol Test Manager supports three ways to configure the test suite. Auto-dete
 
 ![image14.png](./image/RDP_ClientUserGuide/image14.png)
 
-#### Configure the Test Suite with Auto-detection
+#### Configure the Test Suite with Auto Detection
 
 * Choose Run Auto-Detection to begin auto-detection.
 
@@ -1351,7 +1351,7 @@ You can use ptmcli.exe –h to show more information.
 ## Using Super Log Viewer
 Super Log Viewer is a logging feature of RDP test suite which combines all test logs, data on the wire, decrypted data and decompressed data in Microsoft Message Analyzer. Using Super Log viewer it is much easier to debug test cases because all necessary informations dumped by test suite are all displayed in one window. This section describes how to use Super Log viewer.
 
-### Install and configure Microsoft Message Analyzer
+### Install and Configure Microsoft Message Analyzer
 Microsoft Message Analyzer (MMA) is used to capture the data on wire and the data dumped by RDP test suite. You can follow below steps to configure MMA.
 
 * Install Micorsoft Message Analyzer v1.4 and PTF according to Section 7.4
@@ -1375,7 +1375,7 @@ Note
 
 	All color rules above should be selected when viewing logs in MMA except for the **RDP_Decrypted** and **TLS_Decrypted**. When the RDP test suite using Standard RDP Security **RDP_Decrypted** color rule should be selected and when Enhanced RDP Security (TLS) is used **TLS_Decrypted** should be selected.
 
-### Capture traffics using Microsoft Message Analyzer
+### Capture Traffic using Microsoft Message Analyzer
 After configuring Microsoft Message Analyzer, you can follow below steps to capture traffics.
 
 * Open **File****New SessionLive Trace**, in the **ETW Providers** add the **Protocol-Test-Suite** provider to capture messaged dumped by test suite. If you also want to capture data on the wire, **Microsoft-Windows-NDIS-PacketCapture** provider should also be selected. At last click start to capture traffics using that trace configuration.
@@ -1406,7 +1406,7 @@ This section describes how to troubleshoot common test suite issues.
 | **CAUSE**| For Windows RDP client, the test suites must be run using the Administrator account.|
 | | For non-Windows RDP client, the SUT control adapter may be not implemented properly. |
 | **RESOLUTION**| For Windows RDP client, enable Administrator and log on.|
-| | For non-Windows RDP client, Please refer to [Configuring the Test Suite Mode](#configuring-the-test-suite-mode).|
+| | For non-Windows RDP client, Please refer to [Configure the Test Suite Mode](#configure-the-test-suite-mode).|
 
 
 | | |
@@ -1421,7 +1421,7 @@ This section describes how to troubleshoot common test suite issues.
 | -------------| -------------|
 | **PROBLEM**| Most MS-RDPEUSB test cases are failed.|
 | **CAUSE**| The OSR USB FX2 board is not plugged into the SUT or the USB Redirection is not enabled by the SUT. |
-| **RESOLUTION**| Plug OSR USB FX2 board into the SUT and enable the USB Redirection in the Local Group Policy Editor. For more details, please refer to [Configuring Windows-based Computers](#configuring-windows-based-computers).|
+| **RESOLUTION**| Plug OSR USB FX2 board into the SUT and enable the USB Redirection in the Local Group Policy Editor. For more details, please refer to [Configure Windows Based Computers](#configure-windows-based-computers).|
 
 ### Most RDPEUDP RDPEMT Test Cases Failed
 
@@ -1429,9 +1429,9 @@ This section describes how to troubleshoot common test suite issues.
 | -------------| -------------|
 | **PROBLEM**| Most MS-RDPEUDP/MS-RDPEMT test cases are failed.|
 | **CAUSE**| Some MS-RDPEUDP and MS-RDPEMT test cases create RDP-UDP connection, which need to use TLS or CredSSP security protocol. |
-| **RESOLUTION**| In **RDP_ClientTestSuite.deployment.ptfconfig,** configure **RDP.Security.Protocol** to TLS or CredSSP. For more details, please refer to [Configuring the Test Suite](#configuring-the-test-suite)|
+| **RESOLUTION**| In **RDP_ClientTestSuite.deployment.ptfconfig,** configure **RDP.Security.Protocol** to TLS or CredSSP. For more details, please refer to [Configure the Test Suite](#configure-the-test-suite)|
 
-### 3 RDPBCGR Test Cases Must be Run Under interactive Mode
+### 3 RDPBCGR Test Cases Must be Run Under Interactive Mode
 
 | | |
 | -------------| -------------|
@@ -1440,9 +1440,9 @@ This section describes how to troubleshoot common test suite issues.
 | | BVT_ClientInputTest_SlowPath |
 | | S1_ConnectionTest_Disconnection_PositiveTest_ClientInitiated|
 | **CAUSE**| These test cases must be run under the “interactive” mode.|
-| **RESOLUTION**| Use the “interactive” mode when running these test cases. For more details, please refer to [Configuring the Test Suite Mode](#configuring-the-test-suite-mode).|
+| **RESOLUTION**| Use the “interactive” mode when running these test cases. For more details, please refer to [Configure the Test Suite Mode](#configure-the-test-suite-mode).|
 
-### 3 RDPEGFX test cases require H264 enabled on SUT
+### 3 RDPEGFX Test Cases Require H264 Enabled on SUT
 
 | | |
 | -------------| -------------|
@@ -1451,7 +1451,7 @@ This section describes how to troubleshoot common test suite issues.
 | | RDPEGFX\_H264Codec\_PositiveTest_SendH264Stream|
 | | RDPEGFX\_H264Codec\_NegativeTest_IncorrectRegionRectsNum|
 | **CAUSE**| These test cases are used to test H264 codec of RDPEGFX on thin client, so they are failed if H264 is not enabled.|
-| **RESOLUTION**| If the SUT is not a thin client which supports H264 codec of RDPEGFX, these failures are expected.|
+| **RESOLUTION**| If the SUT is not a thin client which supports H264 codec of RDPEGFX, these failures are expected. You can enable H264 by configuring H.264/AVC hardware encoding for Remote Desktop connections.|
 
 ### Most Test Cases Failed When Using TLS/CredSSP protocol
 
@@ -1459,10 +1459,10 @@ This section describes how to troubleshoot common test suite issues.
 | -------------| -------------|
 | **PROBLEM**| When using TLS or CredSSP protocol, test cases are failed with Timeout exception. |
 | **CAUSE**| TLS and CredSSP protocol need more time on encryption and decryption. |
-| **RESOLUTION**| In **RDP_ClientTestSuite.deployment.ptfconfig,** configure **WaitTime** to give more waiting time. For more details, please refer to [Configuring the Test Suite](#configuring-the-test-suite)|
+| **RESOLUTION**| In **RDP_ClientTestSuite.deployment.ptfconfig,** configure **WaitTime** to give more waiting time. For more details, please refer to [Configure the Test Suite](#configure-the-test-suite)|
 
 | | |
 | -------------| -------------|
 | **PROBLEM**| When using TLS or CredSSP protocol, test cases are failed with exception: The system cannot find the file specified.|
 | **CAUSE**| The certificate files, which are used to secure TLS or CrepSSP transports, are not generated successfully. |
-| **RESOLUTION**| Re-run **Config-DriverComputer.ps1** on the driver computer. For more details, please refer to [Configuring Windows-based Computers](#configuring-windows-based-computers).|
+| **RESOLUTION**| Re-run **Config-DriverComputer.ps1** on the driver computer. For more details, please refer to [Configure Windows Based Computers](#configure-windows-based-computers).|
