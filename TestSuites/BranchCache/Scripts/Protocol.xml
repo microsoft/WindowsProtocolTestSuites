@@ -73,7 +73,7 @@
       <maximumram>2048</maximumram> 
       <installscript>createdc.ps1</installscript>
       <installfeaturescript>Install_RemoteAccess_Feature.ps1</installfeaturescript>
-      <postscript>Disable_Firewall.ps1;SetPasswordNeverExpires.ps1</postscript>
+      <postscript>Disable_Firewall.ps1</postscript>
     </vm>
 
     <vm>
@@ -94,7 +94,7 @@
       <cpu>1</cpu> 
       <minimumram>1024</minimumram> 
       <maximumram>2048</maximumram> 
-      <postscript>Disable_Firewall.ps1;SetPasswordNeverExpires.ps1;CreateRODC.ps1</postscript>
+      <postscript>Disable_Firewall.ps1;CreateRODC.ps1</postscript>
       <replicasourcedc>DC.contoso.com</replicasourcedc>
     </vm>
 
@@ -114,7 +114,7 @@
       <minimumram>1024</minimumram> 
       <maximumram>2048</maximumram> 
       <installscript>domainjoin.ps1</installscript>
-      <postscript>Disable_Firewall.ps1;ConfigContentServer.ps1;DeployTestFile.ps1;SetPasswordNeverExpires.ps1</postscript>
+      <postscript>Disable_Firewall.ps1;ConfigContentServer.ps1;DeployTestFile.ps1</postscript>
     </vm>
 
     <vm>
@@ -133,7 +133,7 @@
       <minimumram>1024</minimumram> 
       <maximumram>2048</maximumram> 
       <installscript>domainjoin.ps1</installscript>
-      <postscript>Disable_Firewall.ps1;ConfigHostedCacheServer.ps1;SetPasswordNeverExpires.ps1;BindSSLCert.ps1</postscript>
+      <postscript>Disable_Firewall.ps1;ConfigHostedCacheServer.ps1;BindSSLCert.ps1</postscript>
     </vm>
 
     <vm>
@@ -154,7 +154,7 @@
       <minimunram>1024</minimunram>
       <maximunram>4096</maximunram>
       <installscript>domainjoin.ps1</installscript>
-      <postscript>Disable_Firewall.ps1;SetPasswordNeverExpires.ps1;InstallMSIAndTools.ps1;TrustHostedCacheServer.ps1</postscript>
+      <postscript>Disable_Firewall.ps1;TrustHostedCacheServer.ps1</postscript>
       <skipwaitingforpostscript>false</skipwaitingforpostscript>
       <tools>
         <tool name="SE" MSIName="SpecExplorer.msi" version="3.5.3146.0" CPUArchitecture="x86" />
