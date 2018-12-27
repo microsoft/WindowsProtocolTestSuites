@@ -4,9 +4,6 @@
 #############################################################################
 # Script to joindomain
 # Install prereq -> Reboots -> Copies and joindomain
-#
-# Updated by qliu@microsoft.com
-# Last update 2011.12
 
 Param ($phase=0,[string]$install,$LClient,[switch]$noelevate)
 
