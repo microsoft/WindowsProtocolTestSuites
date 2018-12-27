@@ -975,7 +975,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 );
 
             Asn1OctetString octetString = new Asn1OctetString(token);
-            NegTokenInit init = new NegTokenInit(mechTypeList, null, new Asn1OctetString(octetString.ByteArrayValue), new Asn1OctetString((byte[])null));
+            NegTokenInit init = new NegTokenInit(mechTypeList, null, new Asn1OctetString(octetString.ByteArrayValue), null);
 
             NegotiationToken negToken = new NegotiationToken(NegotiationToken.negTokenInit, init);
 
