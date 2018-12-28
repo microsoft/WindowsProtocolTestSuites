@@ -33,7 +33,7 @@
     * [Configure the Test Suite Mode](#configure-the-test-suite-mode)
 		* [Common Configuration](#common-configuration)
 		* [Configuration for RDPEI](#configuration-for-rdpei)
-		* [Configuration for RDPEDISP](#configuration-for-rdpdisp)
+		* [Configuration for RDPEDISP](#configuration-for-rdpedisp)
     * [Run the Smoke Test](#run-the-smoke-test)
     * [Run All Test Cases](#run-all-test-cases)
     * [Run Specified Test Cases](#run-specified-test-cases)
@@ -1158,7 +1158,7 @@ According to the **Help Message**, you will do:
 
 	On the driver computer, fill a non-negative number (such as 0) in Return Value and click Succeed if you close all the RDP connections successfully. Otherwise, if you cannot stop any of the existing RDP connections, fill a negative number (such as -1) in Return Value field, and fill the error message in the Failure Message field, then click Fail.
 
-### Example of How to Run MS-RDPEI Test Case Under Enhanced Interactive Mode
+### Example of How to Run RDPEI Test Case Under Enhanced Interactive Mode
 The following example illustrates how to run MS-RDPEI test case under **enhanced interactive** mode with **connection** under powershell mode.
 
 On the driver computer, configure the MS-RDPEI test suite mode to enhanced interactive mode. For the details, please refer to [Configure the Test Suite Mode](#configure-the-test-suite-mode).
@@ -1423,7 +1423,7 @@ This section describes how to troubleshoot common test suite issues.
 | **CAUSE**| The OSR USB FX2 board is not plugged into the SUT or the USB Redirection is not enabled by the SUT. |
 | **RESOLUTION**| Plug OSR USB FX2 board into the SUT and enable the USB Redirection in the Local Group Policy Editor. For more details, please refer to [Configure Windows Based Computers](#configure-windows-based-computers).|
 
-### Most RDPEUDP RDPEMT Test Cases Failed
+### Most RDPEUDP and RDPEMT Test Cases Failed
 
 | | |
 | -------------| -------------|
