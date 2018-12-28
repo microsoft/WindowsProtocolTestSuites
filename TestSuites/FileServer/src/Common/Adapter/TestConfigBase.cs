@@ -578,6 +578,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
+        public void CheckPlatform(Platform platform)
+        {
+            if (Platform < platform)
+            {
+                Site.Assert.Inconclusive("The case is applicable in {0}.", platform);
+            }
+        }
+
         /// <summary>
         /// Validate IOCTL and Dialect compatibility 
         /// </summary>        

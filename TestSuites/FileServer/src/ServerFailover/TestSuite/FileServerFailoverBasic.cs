@@ -227,6 +227,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         public void Failover_SMB311_TREE_CONNECT_EXTENSION_PRESENT()
         {
             #region Check Applicability
+            TestConfig.CheckPlatform(Platform.WindowsServer2019);
             TestConfig.CheckDialect(DialectRevision.Smb311);
             #endregion
 
