@@ -1,7 +1,7 @@
-#############################################################################
-## Copyright (c) Microsoft. All rights reserved.
+##################################################################################
+## Copyright (c) Microsoft Corporation. All rights reserved.
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+##################################################################################
 
 #############################################################################
 ##
@@ -16,6 +16,7 @@
 #----------------------------------------------------------------------------
 # Start enabling windows remote management without user interaction
 #----------------------------------------------------------------------------
+#Set-itemproperty -path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -name LocalAccountTokenFilterPolicy -propertyType DWord -value 1
 Enable-PSRemoting -Force
 
-echo "Remote Session Server enabled successfully."|out-file "C:\MS-ADOD.log.txt" -append
+echo "Remote Session Server enabled successfully."|out-file "$env:HOMEDRIVE\MS-ADOD.log.txt" -append

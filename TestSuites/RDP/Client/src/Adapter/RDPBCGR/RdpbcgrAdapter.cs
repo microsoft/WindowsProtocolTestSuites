@@ -1425,9 +1425,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                             logonInfoVersion2.Size = 576;
                             logonInfoVersion2.SessionId = 0;
                             logonInfoVersion2.cbDomain = tsInfoPacket.cbDomain;
-                            logonInfoVersion2.Domain = tsInfoPacket.Domain;
+                            logonInfoVersion2.Domain = tsInfoPacket.Domain.Trim('\0');
                             logonInfoVersion2.cbUserName = tsInfoPacket.cbUserName;
-                            logonInfoVersion2.UserName = tsInfoPacket.UserName;
+                            logonInfoVersion2.UserName = tsInfoPacket.UserName.Trim('\0');
                             logonInfoVersion2.Pad = new byte[558];
 
                             saveSessionPdu = rdpbcgrServerStack.CreateSaveSessionInfoPdu(sessionContext, logonInfoVersion2);
@@ -1436,9 +1436,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                         else
                         {
                             logonInfoVersion1.cbDomain = tsInfoPacket.cbDomain;
-                            logonInfoVersion1.Domain = tsInfoPacket.Domain;
+                            logonInfoVersion1.Domain = tsInfoPacket.Domain.Trim('\0');
                             logonInfoVersion1.cbUserName = tsInfoPacket.cbUserName;
-                            logonInfoVersion1.UserName = tsInfoPacket.UserName;
+                            logonInfoVersion1.UserName = tsInfoPacket.UserName.Trim('\0');
                             logonInfoVersion1.SessionId = 0;
 
                             saveSessionPdu = rdpbcgrServerStack.CreateSaveSessionInfoPdu(sessionContext, logonInfoVersion1);

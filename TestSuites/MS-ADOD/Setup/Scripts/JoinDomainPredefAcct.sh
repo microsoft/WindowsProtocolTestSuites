@@ -1,14 +1,13 @@
 #!/bin/sh
-########################################################################################################
-## Copyright (c) Microsoft. All rights reserved.
+#############################################################################
+## Copyright (c) Microsoft Corporation. All rights reserved.
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-########################################################################################################
+#############################################################################
 
 #####################################################################################################################
 ##
 ##  File:     JoinDomainPredefAcct.sh
 ##  Purpose:  To trigger the machine join domain by a predefined account.
-##  Version:
 #####################################################################################################################
 
 # Check the argument number
