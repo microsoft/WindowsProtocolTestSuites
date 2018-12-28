@@ -107,7 +107,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
         [Description("This test case is used to test create surface, solid fill, map to output, update scale of output and delete surface command.")]
-        public void RDPEGFX_SurfaceToScreen_PositiveTest_ScaledWindow()
+        public void RDPEGFX_SurfaceToScreen_PositiveTest_ScaledOutput()
         {
             uint fid;
 
