@@ -5191,9 +5191,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         #region Utility methods
 
         /// <summary>
-        /// Create a random file name including 8 letters
+        /// Create a random file name with test case name and a random string of 8 letters.
         /// </summary>
-        /// <returns>String concluding 8 randomized letters</returns>
+        /// <returns>>A file name with test case name and a random string of 8 letters.</returns>
         protected string ComposeRandomFileName()
         {
             return ComposeRandomFileName(8);
@@ -5215,15 +5215,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             {
                 //Create a random fileNameLetter from 'a' to 'z'by range 1 to 52
                 randomNumber = randomRange.Next(1, 52);
-                if (randomNumber > 26)
-                {
-                    //Convert to char type
-                    fileNameLetter = (char)(97 + randomNumber % 26);
-                }
-                else
-                {
-                    fileNameLetter = (char)(97 + randomNumber % 26);
-                }
+                fileNameLetter = (char)(97 + randomNumber % 26);
                 ramdomFileName = ramdomFileName + fileNameLetter.ToString(); ;
             }
 
