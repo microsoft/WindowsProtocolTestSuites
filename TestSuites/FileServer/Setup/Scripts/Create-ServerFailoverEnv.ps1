@@ -145,7 +145,7 @@ Add-WindowsFeature RSAT-File-Services
 Write-Info.ps1 "Get disk ready for cluster"
 $disks = Get-Disk | where {$_.FriendlyName -match "MSFT Virtual HD"} | sort Size
 $diskCount = $disks.count
-# disk1, disk2, diskq, diskinfra
+# disk1, disk2, disk3, diskq
 $expectDiskCount = 4
 
 if($diskCount -lt $expectDiskCount)
@@ -264,9 +264,9 @@ Write-Info.ps1 "Adding storage disk to cluster"
 
 Write-Info.ps1 "Check available disk number"
 $Storages = Get-ClusterResource | where {$_.ResourceType -eq "Physical Disk"}
-if($Storages.Count -lt 2)
+if($Storages.Count -lt 3)
 {
-    Write-Error.ps1 "At lease 2 available storages are required for File Sharing Cluster ENV."
+    Write-Error.ps1 "At lease 3 available storages are required for File Sharing Cluster ENV."
     Write-ConfigFailureSignal
     exit ExitCode
 }
@@ -377,7 +377,6 @@ if($fileServerShare -eq $null)
     }
 }
 
-
 #----------------------------------------------------------------------------
 # Create ScaleoutFS role
 #----------------------------------------------------------------------------
@@ -386,6 +385,39 @@ $scaleOutGroup = Get-ClusterGroup | where {$_.Name -eq $config.lab.ha.scaleoutfs
 if($scaleOutGroup -eq $null)
 {
     Add-ClusterScaleOutFileServerRole -Name $config.lab.ha.scaleoutfs.name
+}
+
+#----------------------------------------------------------------------------
+# Create infrastructure share before adding cluster shared volume
+#----------------------------------------------------------------------------
+$build = [environment]::OSVersion.Version.Build
+if ($build -ge 17609)
+{
+    $InfrastructureGroup = Get-ClusterGroup | where {$_.Name -eq "InfraFS"}
+    if($InfrastructureGroup -eq $null)
+    {
+        Write-Info.ps1 "Create InfraFS role"
+        Add-ClusterScaleOutFileServerRole -Infrastructure -Name "InfraFS"
+
+        Write-Info.ps1 "Add infrastructure share"
+        $clusterAvailableResources = Get-ClusterResource | where {$_.OwnerGroup -eq "Available Storage" -and $_.ResourceType -eq "Physical Disk" -and $_.Name -ne "SMBGeneralDisk"}
+        if ($clusterAvailableResources.Count -lt 1)
+        {
+            Write-Error.ps1 "No available storage for infrastructure share."
+            Write-ConfigFailureSignal
+            exit ExitCode
+        }
+        $infraShare = $clusterAvailableResources | Select-Object -First 1
+        $infraShare | Add-ClusterSharedVolume
+
+        Write-Info.ps1 "Check the availability of infrastructure share. \\InfraFS\Volume2 should be available."
+        if (!(Test-Path "\\InfraFS\Volume2"))
+        {
+            Write-Error.ps1 "Failed to add infrastructure share."
+            Write-ConfigFailureSignal
+            exit ExitCode
+        }
+    }
 }
 
 #----------------------------------------------------------------------------
@@ -436,20 +468,6 @@ if($retryTime -le 0)
     Write-Error.ps1 "Failed to add shared folders to ScaleoutFS role."
     Write-ConfigFailureSignal
     exit ExitCode
-}
-
-#----------------------------------------------------------------------------
-# Create infrastructure share
-#----------------------------------------------------------------------------
-$build = [environment]::OSVersion.Version.Build
-if ($build -ge 17609)
-{
-    Write-Info.ps1 "Create InfrastructureFS role"
-    $InfrastructureGroup = Get-ClusterGroup | where {$_.Name -eq "InfraFS"}
-    if($InfrastructureGroup -eq $null)
-    {
-        Add-ClusterScaleOutFileServerRole -Infrastructure -Name "InfraFS"
-    }
 }
 
 #----------------------------------------------------------------------------

@@ -128,7 +128,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                         flags,
                         messageId,
                         sessionId,
-                        Encoding.Unicode.GetBytes(string.Format(@"\\{0}\{1}", server, share)),
+                        string.Format(@"\\{0}\{1}", server, share),
                         out treeId,
                         out header,
                         out response);

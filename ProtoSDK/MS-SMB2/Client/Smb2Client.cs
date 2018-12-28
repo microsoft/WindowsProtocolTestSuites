@@ -1212,6 +1212,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             Packet_Header_Flags_Values flags,
             ulong messageId,
             ulong sessionId,
+            int pathLength,
             byte[] buffer,
             out uint treeId,
             out Packet_Header responseHeader,
@@ -1230,8 +1231,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             request.Header.Status = channelSequence;
 
             request.Buffer = buffer;
-            request.PayLoad.PathLength = (ushort)buffer.Length;
-            request.PayLoad.Flags = treeConnectFlags;
             if (treeConnectFlags.HasFlag(TreeConnect_Flags.SMB2_SHAREFLAG_EXTENSION_PRESENT))
             {
                 request.PayLoad.PathOffset = (ushort)(request.BufferOffset +
@@ -1243,16 +1242,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             {
                 request.PayLoad.PathOffset = request.BufferOffset;
             }
-
-            request.Buffer = buffer;
-            request.PayLoad.PathOffset = request.BufferOffset;
-            request.PayLoad.PathLength = (ushort)buffer.Length;
+            request.PayLoad.PathLength = (ushort)pathLength;
             request.PayLoad.Flags = treeConnectFlags;
 
             var response = SendPacketAndExpectResponse<Smb2TreeConnectResponsePacket>(request);
 
             treeId = response.Header.TreeId;
-
             responseHeader = response.Header;
             responsePayload = response.PayLoad;
 
