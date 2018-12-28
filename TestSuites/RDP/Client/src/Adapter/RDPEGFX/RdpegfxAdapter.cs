@@ -210,6 +210,21 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             }
         }
 
+        void MakeMapSurfaceToScaledOutputPdu(ushort sid, uint x, uint y, uint width, uint height)
+        {
+            RDPGFX_MAP_SURFACE_TO_SCALED_OUTPUT_PDU surf2ScaledOutput = egfxServer.CreateMapSurfaceToScaledOutputPdu(sid, x, y, width, height);
+            // Change pdu based testtype. 
+            if (currentTestType == RdpegfxNegativeTypes.SurfaceManagement_MapInexistentSurfaceToOutput)
+                surf2ScaledOutput.surfaceId = 0xffff;  // Set the surface id to an inexsit surface's id 0xffff
+
+            AddPdusToBuffer(surf2ScaledOutput);
+
+            if (this.bcgrAdapter.SimulatedScreen != null)
+            {
+                this.bcgrAdapter.SimulatedScreen.MapSurfaceToScaledOutput(sid, x, y, width, height);
+            }
+        }
+
         /// <summary>
         /// Method to make a solid fill Pdu
         /// </summary>
@@ -813,6 +828,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public uint MapSurfaceToOutput(ushort surfaceId, uint outputOriginX, uint outputOriginY)
         {
             MakeMapSurfaceToOutputPdu(surfaceId, outputOriginX, outputOriginY);
+            uint fid = MakeStartFramePdu();
+            MakeEndFramePdu(fid);
+            PackAndSendServerPdu();
+            return fid;
+        }
+
+        public uint ScaleOutput(ushort surfaceId, uint outputOriginX, uint outputOriginY, uint targetWidth, uint targetHeight)
+        {
+            MakeMapSurfaceToScaledOutputPdu(surfaceId, outputOriginX, outputOriginY, targetWidth, targetHeight);
             uint fid = MakeStartFramePdu();
             MakeEndFramePdu(fid);
             PackAndSendServerPdu();

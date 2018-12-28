@@ -748,6 +748,22 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         }
 
         /// <summary>
+        /// Map a Surface to Scaled output screen 
+        /// </summary>
+        /// <param name="surfaceId"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="w"></param>
+        /// <param name="h"></param>
+        public void MapSurfaceToScaledOutput(ushort surfaceId, uint x, uint y, uint w, uint h)
+        {
+            if (this.surfaceDic.ContainsKey(surfaceId))
+            {
+                surfaceDic[surfaceId].MapToOutput((int)x, (int)y);
+            }
+        }
+
+        /// <summary>
         /// Copy bitmap data from a source surface to a destination surface 
         /// or to replicate bitmap data within the same surface.
         /// </summary>
