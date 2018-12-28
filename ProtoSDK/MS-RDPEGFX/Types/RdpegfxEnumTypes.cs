@@ -110,6 +110,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// </summary>
         RDPGFX_CMDID_MAPSURFACETOWINDOW = 0x0015,
 
+        /// <summary>
+        /// Indicates that this message should be interpreted as a RDPGFX_QOE_FRAME_ACKNOWLEDGE_PDU message
+        /// </summary>
+        RDPGFX_CMDID_QOEFRAMEACKNOWLEDGE = 0x0016,
+
+        /// <summary>
+        /// Indicates that this message should be interpreted as a RDPGFX_MAP_SURFACE_TO_SCALED_OUTPUT_PDU message
+        /// </summary>
+        RDPGFX_CMDID_MAPSURFACETOSCALEDOUTPUT = 0x0017,
+
+        /// <summary>
+        /// Indicates that this message should be interpreted as a RDPGFX_MAP_SURFACE_TO_SCALED_WINDOW_PDU message
+        /// </summary>
+        RDPGFX_CMDID_MAPSURFACETOSCALEDWINDOW = 0x0018,
+
     }
 
     /// <summary>
@@ -160,7 +175,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <summary>
         /// Specifies the version of the capability, which is supported in RDP 10.6
         /// </summary>
-        RDPGFX_CAPVERSION_106 = 0x000A0601
+        RDPGFX_CAPVERSION_106 = 0x000A0600
     }
 
     public enum MaxCacheSlotNumber : int
