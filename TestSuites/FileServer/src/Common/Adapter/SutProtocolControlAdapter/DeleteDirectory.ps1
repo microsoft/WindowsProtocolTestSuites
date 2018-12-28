@@ -19,12 +19,17 @@ else
     $account = "$NetBiosName\$UserName"
 }
 
-Try
+$exist = Test-Path -Path "$share\$directoryName"
+if ($exist -eq $true)
 {
-	CMD /C "net.exe use $share $password /user:$account"
-	Remove-Item "$share\$directoryName" -recurse -force
-}
-Finally
-{
-    CMD /C "net.exe use $share /delete /yes" | out-null	
+	Try
+	{
+		CMD /C "net.exe use $share $password /user:$account"
+		Get-ChildItem -Path "$share\$directoryName" -Recurse | Remove-Item -force -recurse
+		Remove-Item "$share\$directoryName" -force
+	}
+	Finally
+	{
+		CMD /C "net.exe use $share /delete /yes" | out-null	
+	}
 }
