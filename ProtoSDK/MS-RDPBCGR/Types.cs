@@ -3419,7 +3419,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         ///  AF_INET6 0x0017: The clientAddress field contains an IPv6 address.
         /// </summary>
-        V2 = 0x0017
+        V2 = 0x0017,
     }
 
     /// <summary>

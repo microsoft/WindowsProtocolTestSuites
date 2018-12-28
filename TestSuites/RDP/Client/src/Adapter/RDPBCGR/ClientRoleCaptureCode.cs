@@ -1024,38 +1024,38 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             
             //Unicode = 2 * Ansi
-            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE? info.Domain.Length * 2: info.Domain.Length, (int)info.cbDomain, 
+            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE? info.Domain.Trim('\0').Length * 2: info.Domain.Trim('\0').Length, (int)info.cbDomain, 
                 @"In the TS_INFO_PACKET structure, cbDomain represents the size in bytes of the character data in the Domain field."
                 + @" This size excludes the length of the mandatory null terminator.");
-            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE ? info.UserName.Length * 2: info.UserName.Length, (int)info.cbUserName, 
+            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE ? info.UserName.Trim('\0').Length * 2: info.UserName.Trim('\0').Length, (int)info.cbUserName, 
                 @"In the TS_INFO_PACKET structure, cbUserName represents the size in bytes of the character data in the UserName "
                 + @"field. This size excludes the length of the mandatory null terminator.");
-            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE ? info.Password.Length * 2 : info.Password.Length, (int)info.cbPassword, 
+            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE ? info.Password.Trim('\0').Length * 2 : info.Password.Trim('\0').Length, (int)info.cbPassword, 
                 @"In the TS_INFO_PACKET structure, cbPassword represents the size in bytes of the character data in the Password "
                 + @"field. This size excludes the length of the mandatory null terminator.");
-            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE ? info.AlternateShell.Length * 2 : info.AlternateShell.Length, (int)info.cbAlternateShell,
+            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE ? info.AlternateShell.Trim('\0').Length * 2 : info.AlternateShell.Trim('\0').Length, (int)info.cbAlternateShell,
                 @"In the TS_INFO_PACKET structure, cbAlternateShell represents the size in bytes of the character data in the "
                 + @"AlternateShell field. This size excludes the length of the mandatory null terminator.");
-            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE ? info.WorkingDir.Length * 2 : info.WorkingDir.Length, (int)info.cbWorkingDir, 
+            site.Assert.AreEqual<int>((info.flags & flags_Values.INFO_UNICODE) == flags_Values.INFO_UNICODE ? info.WorkingDir.Trim('\0').Length * 2 : info.WorkingDir.Trim('\0').Length, (int)info.cbWorkingDir, 
                 @"In the TS_INFO_PACKET structure, cbWorkingDir represents the size in bytes of the character data in the WorkingDir"
                 + @" field. This size excludes the length of the mandatory null terminator.");
 
-            site.Assert.IsTrue(info.Domain.Contains("\0"),
+            site.Assert.IsTrue(info.Domain.EndsWith("\0"),
                 @"In the TS_INFO_PACKET structure, Domain field MUST contain at least a null terminator character in ANSI or Unicode"
                 + @" format (depending on the presence of the INFO_UNICODE flag)");
-            site.Assert.IsTrue(info.UserName.Contains("\0"),
+            site.Assert.IsTrue(info.UserName.EndsWith("\0"),
                 @"In the TS_INFO_PACKET structure, UserName field MUST contain at least a null terminator character in ANSI or Unicode"
                 + @" format (depending on the presence of the INFO_UNICODE flag)");
-            site.Assert.IsTrue(info.Password.Contains("\0"),
+            site.Assert.IsTrue(info.Password.EndsWith("\0"),
                 @"In the TS_INFO_PACKET structure, Password field MUST contain at least a null terminator character in ANSI or Unicode"
                 + @" format (depending on the presence of the INFO_UNICODE flag)");
             site.Assert.IsTrue(info.AlternateShell.Length <= 512, 
                 @"In the TS_INFO_PACKET structure, for AlternateShell, the maximum allowed length is 512 bytes (including the mandatory"
                 + @" null terminator).");
-            site.Assert.IsTrue(info.AlternateShell.Contains("\0"),
+            site.Assert.IsTrue(info.AlternateShell.EndsWith("\0"),
                 @"In the TS_INFO_PACKET structure, AlternateShell field MUST contain at least a null terminator character in ANSI or "
                 + @"Unicode format (depending on the presence of the INFO_UNICODE flag)");
-            site.Assert.IsTrue(info.WorkingDir.Contains("\0"),
+            site.Assert.IsTrue(info.WorkingDir.EndsWith("\0"),
                 @"In the TS_INFO_PACKET structure, WorkingDir field MUST contain at least a null terminator character in ANSI or "
                 + @"Unicode format (depending on the presence of the INFO_UNICODE flag)");
             if (info.extraInfo != null)
