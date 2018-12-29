@@ -209,10 +209,18 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                 this.bcgrAdapter.SimulatedScreen.MapSurfaceToOutput(sid, x, y);
             }
         }
-
+        /// <summary>
+        /// Method to make a map Surface to scaled output Pdu
+        /// </summary>
+        /// <param name="sid">surface ID</param>
+        /// <param name="x">the top-left corner of the surface</param>
+        /// <param name="y">map the upper-left corner of the surface</param>
+        /// <param name="width">the width of the target surface</param>
+        /// <param name="height">the height of the target surface</param>
         void MakeMapSurfaceToScaledOutputPdu(ushort sid, uint x, uint y, uint width, uint height)
         {
             RDPGFX_MAP_SURFACE_TO_SCALED_OUTPUT_PDU surf2ScaledOutput = egfxServer.CreateMapSurfaceToScaledOutputPdu(sid, x, y, width, height);
+            
             // Change pdu based testtype. 
             if (currentTestType == RdpegfxNegativeTypes.SurfaceManagement_MapInexistentSurfaceToOutput)
                 surf2ScaledOutput.surfaceId = 0xffff;  // Set the surface id to an inexsit surface's id 0xffff
@@ -834,7 +842,16 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             return fid;
         }
 
-        public uint ScaleOutput(ushort surfaceId, uint outputOriginX, uint outputOriginY, uint targetWidth, uint targetHeight)
+        /// <summary>
+        /// Method to instruct scale output
+        /// </summary>
+        /// <param name="surfaceId">surface ID</param>
+        /// <param name="outputOriginX">x-coordinate of the scaled output point</param>
+        /// <param name="outputOriginY">y-coordinate of the scaled output point</param>
+        /// <param name="targetWidth">target width of the scaled output</param>
+        /// <param name="targetHeight">target height of the scaled output</param>
+        /// <returns></returns>
+        public uint ScaledOutput(ushort surfaceId, uint outputOriginX, uint outputOriginY, uint targetWidth, uint targetHeight)
         {
             MakeMapSurfaceToScaledOutputPdu(surfaceId, outputOriginX, outputOriginY, targetWidth, targetHeight);
             uint fid = MakeStartFramePdu();

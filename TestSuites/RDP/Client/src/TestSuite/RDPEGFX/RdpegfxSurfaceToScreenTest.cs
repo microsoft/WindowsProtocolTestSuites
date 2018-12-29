@@ -106,7 +106,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
-        [Description("This test case is used to test create surface, solid fill, map to output, update scale of output and delete surface command.")]
+        [Description("This test case is used to test create surface, solid fill, map to output, update scaled output and delete surface command.")]
         public void RDPEGFX_SurfaceToScreen_PositiveTest_ScaledOutput()
         {
             uint fid;
@@ -135,13 +135,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             fid = this.rdpegfxAdapter.MapSurfaceToOutput(surf.Id, RdpegfxTestUtility.surfPos.x, RdpegfxTestUtility.surfPos.y);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
-            // Scale Ouput
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Scale the windows of output");
+            // Scaled Ouput
+            // The output will be scaled as the new targetWidth and targetHeight fields specified
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Scale the output");
             RDPGFX_RECT16 newSurfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos4, RdpegfxTestUtility.largeSurfWidth, RdpegfxTestUtility.largeSurfHeight);
-            fid = this.rdpegfxAdapter.ScaleOutput(surf.Id, RdpegfxTestUtility.surfPos4.x, RdpegfxTestUtility.surfPos4.y, RdpegfxTestUtility.largeSurfWidth, RdpegfxTestUtility.largeSurfHeight);
-
-
-            // The output will be scaled as the targetWidth and targetHeight fields specified
+            fid = this.rdpegfxAdapter.ScaledOutput(surf.Id, RdpegfxTestUtility.surfPos4.x, RdpegfxTestUtility.surfPos4.y, RdpegfxTestUtility.largeSurfWidth, RdpegfxTestUtility.largeSurfHeight);
+            
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
             this.VerifySUTDisplay(false, newSurfRect);
 
