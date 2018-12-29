@@ -2969,7 +2969,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             ushort fileId = (ushort)this.fId[(uint)fid];
             ushort level = this.informationLevelBytes[(ushort)informationLevel];
 
-            this.smbClientStack.Capability.IsUsePathThrough = isUsePassthrough;
+            this.smbClientStack.Capability.IsUsePassThrough = isUsePassthrough;
             smbPacket = this.smbClientStack.CreateTrans2QueryFileInformationRequest(
                 fileId,
                 transactOptions,
@@ -3084,7 +3084,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
 
             ushort level = this.informationLevelBytes[(ushort)informationLevel];
 
-            this.smbClientStack.Capability.IsUsePathThrough = isUsePassthrough;
+            this.smbClientStack.Capability.IsUsePassThrough = isUsePassthrough;
             smbPacket = this.smbClientStack.CreateTrans2QueryPathInformationRequest(
                 requestedTid,
                 fileName,
@@ -3206,7 +3206,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
                 replaceIfExists++;
             }
 
-            this.smbClientStack.Capability.IsUsePathThrough = isUsePassthrough;
+            this.smbClientStack.Capability.IsUsePassThrough = isUsePassthrough;
 
             // Rename data
             NamespaceFscc.FileRenameInformation_SMB fileRenameInfor = new NamespaceFscc.FileRenameInformation_SMB();
@@ -3352,7 +3352,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
 
             ushort level = this.informationLevelBytes[(ushort)informationLevel];
             byte[] data = new byte[SizeOfInfoData];
-            this.smbClientStack.Capability.IsUsePathThrough = isUsePassthrough;
+            this.smbClientStack.Capability.IsUsePassThrough = isUsePassthrough;
 
             smbPacket = this.smbClientStack.CreateTrans2SetPathInformationRequest(
                 requestedTid,
@@ -3459,7 +3459,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             NamespaceCifs.Trans2SmbParametersFlags transactOptions = NamespaceCifs.Trans2SmbParametersFlags.NONE;
             ushort level = this.informationLevelBytes[(ushort)informationLevel];
 
-            this.smbClientStack.Capability.IsUsePathThrough = isUsePassthrough;
+            this.smbClientStack.Capability.IsUsePassThrough = isUsePassthrough;
 
             smbPacket = this.smbClientStack.CreateTrans2QueryFileSystemInformationRequest(
                 requestedTid,
@@ -5732,13 +5732,13 @@ namespace Microsoft.Protocol.TestSuites.Smb
             {
                 level = this.informationLevelBytes[(ushort)informationLevel];
                 //This field MUST be a pass-through Information Level
-                this.smbClientStack.Capability.IsUsePathThrough = true;
+                this.smbClientStack.Capability.IsUsePassThrough = true;
             }
             else
             {
                 level = this.informationLevelBytes[(ushort)InformationLevel.FileFsControlInformaiton];
                 //This field MUST be a pass-through Information Level
-                this.smbClientStack.Capability.IsUsePathThrough = false;
+                this.smbClientStack.Capability.IsUsePassThrough = false;
             }
 
             byte[] data = new byte[DataCount];
