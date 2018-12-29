@@ -232,6 +232,7 @@ if($cluster -eq $null)
         Write-Info.ps1 "Get available storages."
         $disks = Get-ClusterAvailableDisk
         $quorumDisk = $disks | sort Size | Select-Object -First 1
+        $expectDiskCount = $expectDiskCount - 1
 
         Write-Info.ps1 "Add cluster storages."
         $disks | Add-ClusterDisk
@@ -264,9 +265,9 @@ Write-Info.ps1 "Adding storage disk to cluster"
 
 Write-Info.ps1 "Check available disk number"
 $Storages = Get-ClusterResource | where {$_.ResourceType -eq "Physical Disk"}
-if($Storages.Count -lt 3)
+if($Storages.Count -lt $expectDiskCount)
 {
-    Write-Error.ps1 "At lease 3 available storages are required for File Sharing Cluster ENV."
+    Write-Error.ps1 "At lease $expectDiskCount available storages are required for File Sharing Cluster ENV."
     Write-ConfigFailureSignal
     exit ExitCode
 }
@@ -388,39 +389,6 @@ if($scaleOutGroup -eq $null)
 }
 
 #----------------------------------------------------------------------------
-# Create infrastructure share before adding cluster shared volume
-#----------------------------------------------------------------------------
-$build = [environment]::OSVersion.Version.Build
-if ($build -ge 17609)
-{
-    $InfrastructureGroup = Get-ClusterGroup | where {$_.Name -eq "InfraFS"}
-    if($InfrastructureGroup -eq $null)
-    {
-        Write-Info.ps1 "Create InfraFS role"
-        Add-ClusterScaleOutFileServerRole -Infrastructure -Name "InfraFS"
-
-        Write-Info.ps1 "Add infrastructure share"
-        $clusterAvailableResources = Get-ClusterResource | where {$_.OwnerGroup -eq "Available Storage" -and $_.ResourceType -eq "Physical Disk" -and $_.Name -ne "SMBGeneralDisk"}
-        if ($clusterAvailableResources.Count -lt 1)
-        {
-            Write-Error.ps1 "No available storage for infrastructure share."
-            Write-ConfigFailureSignal
-            exit ExitCode
-        }
-        $infraShare = $clusterAvailableResources | Select-Object -First 1
-        $infraShare | Add-ClusterSharedVolume
-
-        Write-Info.ps1 "Check the availability of infrastructure share. \\InfraFS\Volume2 should be available."
-        if (!(Test-Path "\\InfraFS\Volume2"))
-        {
-            Write-Error.ps1 "Failed to add infrastructure share."
-            Write-ConfigFailureSignal
-            exit ExitCode
-        }
-    }
-}
-
-#----------------------------------------------------------------------------
 # Add shared folders to ScaleoutFS role
 #----------------------------------------------------------------------------
 Write-Info.ps1 "Change the owner of ScaleOutFS and SMBScaleOutDisk to $env:ComputerName to access the local path of shares."
@@ -468,6 +436,39 @@ if($retryTime -le 0)
     Write-Error.ps1 "Failed to add shared folders to ScaleoutFS role."
     Write-ConfigFailureSignal
     exit ExitCode
+}
+
+#----------------------------------------------------------------------------
+# Create infrastructure share before adding cluster shared volume
+#----------------------------------------------------------------------------
+$build = [environment]::OSVersion.Version.Build
+if ($build -ge 17609)
+{
+    $InfrastructureGroup = Get-ClusterGroup | where {$_.Name -eq "InfraFS"}
+    if($InfrastructureGroup -eq $null)
+    {
+        Write-Info.ps1 "Create InfraFS role"
+        Add-ClusterScaleOutFileServerRole -Infrastructure -Name "InfraFS"
+
+        Write-Info.ps1 "Add infrastructure share"
+        $clusterAvailableResources = Get-ClusterResource | where {$_.OwnerGroup -eq "Available Storage" -and $_.ResourceType -eq "Physical Disk" -and $_.Name -ne "SMBGeneralDisk"}
+        if ($clusterAvailableResources.Count -lt 1)
+        {
+            Write-Error.ps1 "No available storage for infrastructure share."
+            Write-ConfigFailureSignal
+            exit ExitCode
+        }
+        $infraShare = $clusterAvailableResources | Select-Object -First 1
+        $infraShare | Add-ClusterSharedVolume
+
+        Write-Info.ps1 "Check the availability of infrastructure share. \\InfraFS\Volume2 should be available."
+        if (!(Test-Path "\\InfraFS\Volume2"))
+        {
+            Write-Error.ps1 "Failed to add infrastructure share."
+            Write-ConfigFailureSignal
+            exit ExitCode
+        }
+    }
 }
 
 #----------------------------------------------------------------------------
