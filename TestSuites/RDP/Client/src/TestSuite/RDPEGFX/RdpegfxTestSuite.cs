@@ -260,7 +260,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                     {
                         this.isH264AVC420Supported = true;
                     }
-                    else if (capSet.version >= CapsVersions.RDPGFX_CAPVERSION_10  //RDPGFX_CAPVERSION_10 and RDPGFX_CAPVERSION_102
+                    else if (capSet.version == CapsVersions.RDPGFX_CAPVERSION_10
+                        || capSet.version == CapsVersions.RDPGFX_CAPVERSION_102
+                        || capSet.version == CapsVersions.RDPGFX_CAPVERSION_103
+                        || capSet.version == CapsVersions.RDPGFX_CAPVERSION_104
+                        || capSet.version == CapsVersions.RDPGFX_CAPVERSION_105
+                        || capSet.version == CapsVersions.RDPGFX_CAPVERSION_106
+
                         && (flag & CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED) == 0)
                     {
                         this.isH264AVC420Supported = true;
@@ -268,6 +274,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                     }
 
                     if ((flag & CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE) == CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE)
+                    {
+                        this.isSmallCache = true;
+                    }
+
+                    /// The bitmap cache of RDPGFX_CAPSET_VERSION103 MUST be constrained to 16MB in size
+                    if (capSet.version == CapsVersions.RDPGFX_CAPVERSION_103)
                     {
                         this.isSmallCache = true;
                     }

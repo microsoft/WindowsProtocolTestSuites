@@ -163,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="LICENSE.rtf" />
+    <RDPServerScriptFiles Include="..\..\Setup\Scripts\*" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <Target Name="AfterBuild">
@@ -172,7 +173,7 @@
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Bin&quot; -out Bin.wxs -template fragment -gg -cg BIN_FILES -dr TESTSUITE_BIN_DIR -var wix.TESTSUITE_BIN_DIR -sreg -sfrag -srd" />
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;..\Batch&quot; -out Batch.wxs -template fragment -gg -cg BATCH_FILES -dr TESTSUITE_BATCH_DIR -var wix.TESTSUITE_BATCH_DIR -sreg -sfrag -srd" />
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\common&quot; -out CommonBatch.wxs -template fragment -gg -cg COMMON_BATCH_FILES -dr TESTSUITE_COMMON_SCRIPTS_DIR -var wix.TESTSUITE_COMMON_SCRIPTS_DIR -sreg -sfrag -srd" />
-    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\RDP\Server\Setup\Scripts&quot; -out Scripts.wxs -template fragment -gg -cg TESTSUITE_SCRIPTS_FILES -dr TESTSUITE_SCRIPTS_DIR -var wix.TESTSUITE_SCRIPTS_DIR -sreg -sfrag -srd" />
+    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Scripts&quot; -out Scripts.wxs -template fragment -gg -cg TESTSUITE_SCRIPTS_FILES -dr TESTSUITE_SCRIPTS_DIR -var wix.TESTSUITE_SCRIPTS_DIR -sreg -sfrag -srd" />
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\RDP\Server\Docs&quot; -out DOCS_FILES.wxs -template fragment -gg -cg DOCS_FILES -dr DOCS_FILES_DIR -var wix.DOCS_FILES_DIR -sreg -sfrag -srd" />
   </Target>
   
@@ -182,7 +183,10 @@
     <Copy SourceFiles="@(LSADAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Bin\Adapter\MS-LSAD\SUTControlAdapter" />	
     <Copy SourceFiles="@(NRPCAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Bin\Adapter\MS-NRPC\SUTControlAdapter" />	
     <Copy SourceFiles="..\ServerLocal.testsettings" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Bin" />
+    <Copy SourceFiles="@(RDPServerScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Scripts" />
     <Copy SourceFiles="..\TestSuite\RDP_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Bin" />
-    <Copy SourceFiles="..\TestSuite\RDP_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Bin" />
+    <Copy SourceFiles="..\TestSuite\RDP_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Bin" />    
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Disable_Firewall.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Enable-WinRM.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Scripts" />
   </Target>
 </Project>

@@ -8,6 +8,11 @@
 		<tool name="OpenXMLSDK" FileName="OpenXMLSDK.msi" AppName="Open XML SDK 2.5" version="2.5.5631" url="https://download.microsoft.com/download/5/5/3/553C731E-9333-40FB-ADE3-E02DC9643B31/OpenXMLSDKV25.msi" arguments="/q"/>
 		<tool name="VS2017Community" FileName="vs_community.exe" AppName="Visual Studio Community 2017" version="15.7.27703.2047" url="https://aka.ms/vs/15/release/vs_community.exe" arguments="" />        
 	</tools>
+	<PTF>
+	    <tool>VS2017Community</tool>
+		<tool>Wix311</tool>
+		<tool>SE</tool>
+	</PTF>
 	<FileServer>
         <tool>SE</tool>
 		<tool>PTF</tool>

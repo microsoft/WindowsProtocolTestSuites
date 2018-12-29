@@ -1653,7 +1653,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             // TS_INPUT_CAPABILITYSET: imeFileName
             byte[] imeFileName = GetBytes(data, ref currentIndex,
-                ConstValue.TS_INPUT_CAPABILITY_SET_IME_FILE_NAME_LENGTH);
+                ConstValue.TS_INPUT_CAPABILITYSET_IME_FILE_NAME_LENGTH);
             set.imeFileName = BitConverter.ToString(imeFileName);
 
             // Check if data length is consistent with the decoded struct length

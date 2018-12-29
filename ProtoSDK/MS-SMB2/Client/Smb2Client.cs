@@ -349,6 +349,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         public event Action<Packet_Header, OPLOCK_BREAK_Notification_Packet> OplockBreakNotificationReceived;
         public event Action<Packet_Header, LEASE_BREAK_Notification_Packet> LeaseBreakNotificationReceived;
 
+        public event Action<Exception> NotificationThreadExceptionHappened;
+
         #endregion
 
         #region Utility Functions
@@ -362,27 +364,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         {
             while (true)
             {
-                if (notificationReceivedEvent.WaitOne())
+                try
                 {
-                    if (serverDisconnected)
-                        break;
-
-                    do
+                    if (notificationReceivedEvent.WaitOne())
                     {
-                        Smb2SinglePacket packet = null;
+                        if (serverDisconnected)
+                            break;
 
-                        lock (receivedNotifications)
+                        do
                         {
-                            if (receivedNotifications.Count > 0)
+                            Smb2SinglePacket packet = null;
+
+                            lock (receivedNotifications)
                             {
-                                packet = receivedNotifications.Dequeue();
+                                if (receivedNotifications.Count > 0)
+                                {
+                                    packet = receivedNotifications.Dequeue();
+                                }
                             }
-                        }
 
-                        if (packet == null) break;
+                            if (packet == null) break;
 
-                        try
-                        {
                             if (packet.Header.Status == Smb2Status.STATUS_PENDING)
                             {
                                 if (PendingResponseReceived != null)
@@ -435,11 +437,37 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                             {
                                 throw new InvalidOperationException("Unknown notification: " + packet);
                             }
+
+                        } while (true);
+                    }
+
+                }
+                catch (ThreadAbortException)
+                {
+                    // Notification thread is aborted.
+                    // End the current thread.
+                    return;
+                }
+                catch (Exception exception)
+                {
+                    // If throw the exception from this receive thread, QTAgent will crash.
+                    // So pass the exception by NotificationThreadExceptionHappened event.
+                    // End the current thread.
+                    if (NotificationThreadExceptionHappened != null)
+                    {
+                        try
+                        {
+                            NotificationThreadExceptionHappened(exception);
                         }
                         catch
                         {
+                            // Exception happens when handling event.
+                            // Catch to avoid the exception crash QTAgent.
+                            // End the current thread.
+                            return;
                         }
-                    } while (true);
+                    }
+                    return;
                 }
             }
         }
@@ -455,67 +483,66 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 try
                 {
                     transEvent = transport.ExpectTransportEvent(timeout);
-                }
-                catch (Exception exception)
-                {
-                    transEvent = new TransportEvent(EventType.Exception, null, exception);
-                }
 
-                switch (transEvent.EventType)
-                {
-                    case EventType.ReceivedPacket:
-                        var packet = (Smb2Packet)transEvent.EventObject;
+                    switch (transEvent.EventType)
+                    {
+                        case EventType.ReceivedPacket:
+                            var packet = (Smb2Packet)transEvent.EventObject;
 
-                        if (PacketReceived != null)
-                            PacketReceived(packet);
+                            if (PacketReceived != null)
+                                PacketReceived(packet);
 
-                        if (packet is SmbNegotiateResponsePacket)
-                        {
-                            receivedPackets.SetReceivedPacket(packet);
-                            break;
-                        }
-
-                        var single = packet as Smb2SinglePacket;
-                        if (single != null)
-                        {
-                            if (single.Header.Status == Smb2Status.STATUS_PENDING
-                                || packet is Smb2ChangeNotifyResponsePacket
-                                || packet is Smb2OpLockBreakNotificationPacket
-                                || packet is Smb2LeaseBreakNotificationPacket)
+                            if (packet is SmbNegotiateResponsePacket)
                             {
-                                lock (receivedNotifications)
-                                {
-                                    receivedNotifications.Enqueue(single);
-                                }
-                                notificationReceivedEvent.Set();
+                                receivedPackets.SetReceivedPacket(packet);
+                                break;
                             }
-                            else
+
+                            var single = packet as Smb2SinglePacket;
+                            if (single != null)
+                            {
+                                if (single.Header.Status == Smb2Status.STATUS_PENDING
+                                    || packet is Smb2ChangeNotifyResponsePacket
+                                    || packet is Smb2OpLockBreakNotificationPacket
+                                    || packet is Smb2LeaseBreakNotificationPacket)
+                                {
+                                    lock (receivedNotifications)
+                                    {
+                                        receivedNotifications.Enqueue(single);
+                                    }
+                                    notificationReceivedEvent.Set();
+                                }
+                                else
+                                {
+                                    receivedPackets.SetReceivedPacket(packet);
+                                }
+                            }
+                            else // Compound
                             {
                                 receivedPackets.SetReceivedPacket(packet);
                             }
-                        }
-                        else // Compound
-                        {
-                            receivedPackets.SetReceivedPacket(packet);
-                        }
-                        break;
-                    case EventType.Exception:
-                        // If throw the exception from this receive thread, QTAgent will crash.
-                        // So save the exception to a member variable, and throw it when the case calls ExpectPacket.
-                        exceptionWhenReceivingPacket = (Exception)transEvent.EventObject;
-                        receivedPackets.Release();
-                        notificationReceivedEvent.Set();
-                        return;
-                    case EventType.Disconnected:
-                        serverDisconnected = true;
-                        if (Disconnected != null)
-                            Disconnected();
+                            break;
+                        case EventType.Disconnected:
+                            serverDisconnected = true;
+                            if (Disconnected != null)
+                                Disconnected();
 
-                        receivedPackets.Release();
+                            receivedPackets.Release();
 
-                        notificationReceivedEvent.Set();
+                            notificationReceivedEvent.Set();
 
-                        return;
+                            return;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    // If throw the exception from this receive thread, QTAgent will crash.
+                    // So save the exception to a member variable, and throw it when the case calls ExpectPacket.
+                    // End the current thread.
+                    exceptionWhenReceivingPacket = exception;
+                    receivedPackets.Release();
+                    notificationReceivedEvent.Set();
+                    return;
                 }
             }
         }
@@ -588,7 +615,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             if (packet == null && serverDisconnected)
                 throw new InvalidOperationException("Underlying connection has been closed.");
 
-            if (packet == null && exceptionWhenReceivingPacket != null)
+            if (exceptionWhenReceivingPacket != null)
                 throw exceptionWhenReceivingPacket;
 
             if (packet is T)
@@ -631,7 +658,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         public List<Smb2SinglePacket> ExpectPackets(List<ulong> messageIdList)
         {
             List<Smb2SinglePacket> packets = new List<Smb2SinglePacket>();
-            for (int i = 0; i < messageIdList.Count; )
+            for (int i = 0; i < messageIdList.Count;)
             {
                 Smb2Packet packet = receivedPackets.WaitPacket(messageIdList[i]);
 
@@ -644,7 +671,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 if (packet == null && serverDisconnected)
                     throw new InvalidOperationException("Underlying connection has been closed.");
 
-                if (packet == null && exceptionWhenReceivingPacket != null)
+                if (exceptionWhenReceivingPacket != null)
                     throw exceptionWhenReceivingPacket;
 
                 if (packet is Smb2CompoundPacket)
@@ -1148,7 +1175,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 preauthContext.UpdateSessionState(responseSessionId, request);
                 preauthContext.UpdateSessionState(responseSessionId, response);
             }
-                        
+
             return response.Header.Status;
         }
 

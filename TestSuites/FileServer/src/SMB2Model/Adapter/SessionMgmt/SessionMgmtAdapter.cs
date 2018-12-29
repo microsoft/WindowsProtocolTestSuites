@@ -93,7 +93,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMg
             {
                 MaxSmbVersionSupported = ModelUtility.GetModelDialectRevision(testConfig.MaxSmbVersionSupported),
                 IsMultiChannelCapable = testConfig.IsMultiChannelCapable,
-                Platform = testConfig.Platform == Platform.WindowsServer2016 ? Platform.WindowsServer2012R2 : testConfig.Platform
+                Platform = testConfig.Platform >= Platform.WindowsServer2016 ? Platform.WindowsServer2012R2 : testConfig.Platform
             };
 
             sessionMgmtConfig = c;

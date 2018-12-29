@@ -3,7 +3,7 @@
 
 :: First argument is the vs_community.exe full path
 :: Update vs installer
-%1 --update --quiet
+%1 --update
 
 :: Install vs_community with the following 
 %1 --installPath "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community" ^
@@ -15,5 +15,5 @@
 --add Microsoft.VisualStudio.Component.Windows10SDK.16299.Desktop ^
 --add Microsoft.VisualStudio.Component.TestTools.Core ^
 --add Microsoft.Component.MSBuild ^
---passive --norestart --quiet
+--passive --norestart
 

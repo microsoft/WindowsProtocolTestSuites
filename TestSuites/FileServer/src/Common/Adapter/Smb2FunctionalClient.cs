@@ -8,6 +8,7 @@ using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 
@@ -123,6 +124,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             client.PacketReceived += new Action<Smb2Packet>(client_PacketReceived);
             client.PacketSending += new Action<Smb2Packet>(client_PacketSent);
             client.PendingResponseReceived += new Action<Smb2SinglePacket>(client_PendingResponseReceived);
+
+            client.NotificationThreadExceptionHappened += client_NotificationThreadExceptionHappened;
 
             sessionChannelSequence = 0;
 
@@ -368,6 +371,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
         public void Disconnect()
         {
+            client.NotificationThreadExceptionHappened -= client_NotificationThreadExceptionHappened;
             client.Disconnect();
         }
 
@@ -572,11 +576,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             if (Array.IndexOf(dialects, DialectRevision.Smb311) >= 0)
             {
                 preauthHashAlgs = new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 };
-                encryptionAlgs = (capabilityValue & Capabilities_Values.GLOBAL_CAP_ENCRYPTION) > 0 ? 
-                    new EncryptionAlgorithm[] 
-                    { 
-                        EncryptionAlgorithm.ENCRYPTION_AES128_GCM, 
-                        EncryptionAlgorithm.ENCRYPTION_AES128_CCM 
+                encryptionAlgs = (capabilityValue & Capabilities_Values.GLOBAL_CAP_ENCRYPTION) > 0 ?
+                    new EncryptionAlgorithm[]
+                    {
+                        EncryptionAlgorithm.ENCRYPTION_AES128_GCM,
+                        EncryptionAlgorithm.ENCRYPTION_AES128_CCM
                     }
                     : null;
             }
@@ -2751,9 +2755,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// Send compounded request which contains a list of single packets.
         /// And expect to receive a compounded response which contains a list of packets or a list of separate packets
         /// </summary>
+        /// <param name="related">Indicate whether the compounded request are related or unrelated.</param>
         /// <param name="requestPackets">The list of packets contained in the compounded request</param>
         /// <returns>Return the list of response packets</returns>
-        public List<Smb2SinglePacket> SendAndReceiveCompoundPacket(List<Smb2SinglePacket> requestPackets)
+        public List<Smb2SinglePacket> SendAndReceiveCompoundPacket(bool related, List<Smb2SinglePacket> requestPackets)
         {
             Smb2CompoundPacket compoundRequest = new Smb2CompoundPacket();
             compoundRequest.Packets = requestPackets;
@@ -2792,7 +2797,47 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
 
             client.SendPacket(compoundRequest);
-            List<Smb2SinglePacket> responsePackets = client.ExpectPackets(messageIdList);
+
+            // response can come either compounded or not
+            var responsePackets = new List<Smb2SinglePacket>();
+
+            var firstPacket = client.ExpectPacket<Smb2Packet>(messageIdList[0]);
+
+            if (firstPacket is Smb2CompoundPacket)
+            {
+                var compoundedPacket = firstPacket as Smb2CompoundPacket;
+
+                if (related)
+                {
+                    // If the responses are compounded, the server MUST set SMB2_FLAGS_RELATED_OPERATIONS in the Flags field of the SMB2 header of all responses except the first one. 
+                    // This indicates that the response was part of a compounded chain.
+                    bool checkRelatedOperations = compoundedPacket.Packets.Skip(1).All(innerPacket => innerPacket.Header.Flags.HasFlag(Packet_Header_Flags_Values.FLAGS_RELATED_OPERATIONS));
+                    if (!checkRelatedOperations)
+                    {
+                        throw new InvalidOperationException("FLAGS_RELATED_OPERATIONS is not set for all compounded request except the first.");
+                    }
+                }
+
+                responsePackets.AddRange(compoundedPacket.Packets);
+            }
+            else if (firstPacket is Smb2SinglePacket)
+            {
+                // response is not compounded
+                responsePackets.Add(firstPacket as Smb2SinglePacket);
+
+                // expect the others by their MessageId
+                foreach (ulong messageId in messageIdList.Skip(1))
+                {
+                    var packetAfterFirst = client.ExpectPacket<Smb2SinglePacket>(messageId);
+                    responsePackets.Add(packetAfterFirst);
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("Unexpected packet type!");
+            }
+
+
             foreach (var response in responsePackets)
             {
                 ProduceCredit(response.Header.MessageId, response.Header);
@@ -3052,6 +3097,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             // Produce credit from interim response as
             // server will set the CreditResponse field to the number of credits the server chooses to grant for this request
             ProduceCredit(pendingResponse.Header.MessageId, pendingResponse.Header);
+        }
+
+        private void client_NotificationThreadExceptionHappened(Exception exception)
+        {
+            // Print the exception happened in notification thread.
+            baseTestSite.Log.Add(LogEntryKind.Debug, "Exception happened in notification thread: {0}.", exception);
         }
 
         private void SetCreditGoal()

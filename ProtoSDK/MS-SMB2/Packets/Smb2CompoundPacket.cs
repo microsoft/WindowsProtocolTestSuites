@@ -86,7 +86,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 singlePacket = decoder.DecodeSinglePacket(
                     temp,
                     decoder.DecodeRole,
-                    true,
                     GetRealSessionId(header),
                     GetRealTreeId(header),
                     out innerConsumedLen,
@@ -111,7 +110,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             singlePacket = decoder.DecodeSinglePacket(
                 temp,
                 decoder.DecodeRole,
-                true,
                 GetRealSessionId(header),
                 GetRealTreeId(header),
                 out innerConsumedLen,

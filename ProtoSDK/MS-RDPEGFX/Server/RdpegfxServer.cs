@@ -227,6 +227,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         }
 
         /// <summary>
+        /// Method to make a map Surface to scaled output Pdu.
+        /// </summary>
+        /// <param name="sid">This is used to indicate surface id.</param>
+        /// <param name="x">This is used to indicate x-coordinate of the upper-left corner of the surface.</param>
+        /// <param name="y">This is used to indicate y-coordinate of the upper-left corner of the surface.</param>
+        /// <param name="w">This is used to indicate targetWidth of the surface.</param>
+        /// <param name="h">This is used to indicate targeHeight of the surface.</param>
+        public RDPGFX_MAP_SURFACE_TO_SCALED_OUTPUT_PDU CreateMapSurfaceToScaledOutputPdu(ushort sid, uint x, uint y, uint w, uint h)
+        {
+            RDPGFX_MAP_SURFACE_TO_SCALED_OUTPUT_PDU surf2ScaledOutput = new RDPGFX_MAP_SURFACE_TO_SCALED_OUTPUT_PDU(sid, x, y, w, h);
+            return surf2ScaledOutput;
+
+        }
+
+        /// <summary>
         /// Create a solid fill Pdu.
         /// </summary>
         /// <param name="sid">This is used to indicate surface id to be filled.</param>

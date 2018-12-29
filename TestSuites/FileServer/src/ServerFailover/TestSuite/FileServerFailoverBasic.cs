@@ -322,9 +322,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             string testDirectory = CreateTestDirectory(uncSharePath);
             string file = Path.Combine(testDirectory, Guid.NewGuid().ToString());
             Guid clientGuid = Guid.NewGuid();
-            Guid createGuid = Guid.NewGuid();           
+            Guid createGuid = Guid.NewGuid();
 
-            DoUntilSucceed(() => WriteContentBeforeFailover(fsType, server, currentAccessIpAddr, uncSharePath, file, content, clientGuid, createGuid),
+            FILEID fileId = FILEID.Zero;
+            DoUntilSucceed(() => WriteContentBeforeFailover(fsType, server, currentAccessIpAddr, uncSharePath, file, content, clientGuid, createGuid, out fileId),
                     TestConfig.FailoverTimeout,
                     "Before failover, retry Write content until succeed within timeout span.");
             #endregion
@@ -460,7 +461,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             #endregion
 
             #region Read content and close the file
-            DoUntilSucceed(() => ReadContentAfterFailover(server, currentAccessIpAddr, uncSharePath, file, content, clientGuid, createGuid),
+            DoUntilSucceed(() => ReadContentAfterFailover(server, currentAccessIpAddr, uncSharePath, file, content, clientGuid, createGuid, fileId),
                     TestConfig.FailoverTimeout,
                     "After failover, retry Read content until succeed within timeout span.");
             #endregion
