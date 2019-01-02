@@ -18,6 +18,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
     {
         [TestMethod]
         [Priority(0)]
+        [TestCategory("BVT")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPBCGR")]
         [Description(@"This test case is used to verify SUT can send Heartbeat PDU periodically to notify the connection exist. ")]
