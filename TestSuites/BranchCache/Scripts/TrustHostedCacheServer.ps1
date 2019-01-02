@@ -32,6 +32,10 @@ Start-Transcript -Path "$logFile" -Append -Force
 #----------------------------------------------------------------------------
 function ImportPfxCert([string]$certPath,[string]$certRootStore,[string]$certStore,[string]$pfxPass)
 {
+	if(Test-Path -Path $certPath)
+	{
+		Remove-Item -Path $certPath
+	}
     $pfx=new-object System.Security.Cryptography.X509Certificates.X509Certificate2
 	$pfx.import($certPath,$pfxPass,"Exportable,PersistKeySet")
 	$store=new-object System.Security.Cryptography.X509Certificates.X509Store($certStore,$certRootStore)

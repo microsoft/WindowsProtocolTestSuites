@@ -58,9 +58,7 @@ Function Write-ConfigLog
         [Parameter(ValueFromPipeline=$true)] $text,
         $ForegroundColor = "Green"
     )
-
-    $date = Get-Date -f MM-dd-yyyy_HH_mm_ss
-    Write-Output "[$date] $text"
+    Write-Info.ps1 -logContent $text -ForegroundColor $ForegroundColor
 }
 
 #------------------------------------------------------------------------------------------
@@ -118,8 +116,6 @@ Function Init-Environment()
 # Configure the environment phase 1:
 # 1.  Set execution policy as unrestricted
 # 2.  Set network configurations, for example, ip addresses, subnet mask, gateway and dns
-# 3.  Set autologon
-# 4.  [MS-ADTS-Security] Turn off UAC
 #------------------------------------------------------------------------------------------
 Function Config-Phase1()
 {

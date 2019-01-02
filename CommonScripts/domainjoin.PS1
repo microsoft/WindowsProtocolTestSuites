@@ -5,8 +5,16 @@
 # Script to joindomain
 # Install prereq -> Reboots -> Copies and joindomain
 
-Param ($phase=0,[string]$install,$LClient,[switch]$noelevate)
+Param (
+	$phase=0,
+	[string]$install,
+	$LClient,
+	[switch]$noelevate,
+	# The name of the XML file, indicating which environment you want to configure
+	[string]$EnvXmlName = "protocol.xml"
+)
 
+$Path = Split-Path -Parent $MyInvocation.MyCommand.Definition
 # Function to setup for automatic login to the machine
 Function AutoLogin {
 	Param ($username,$domain,$password,$count)
@@ -75,15 +83,6 @@ Function DomainJoin {
 	}
 }
 
-# Eject the CD/DVD 
-Function Eject{
-    $sa = new-object -com Shell.Application
-    $sa.Namespace(17).ParseName("D:").InvokeVerb("Eject")
-    [System.Runtime.Interopservices.Marshal]::ReleaseComObject($sa)
-    Remove-Variable sa
-}
-
-
 # Reboot the computer
 Function RebootComputer {
 	Param ($time)
@@ -147,10 +146,10 @@ Function Phase0 {
 # ===================================================
 
 # Start Logging
-Start-Transcript -Path c:\Temp\DomainJoinInstall.log -Append -Force
+Start-Transcript -Path $Path\DomainJoinInstall.log -Append -Force
 
 # Get the XML file
-[xml]$setup = Get-Content c:\temp\protocol.xml
+[xml]$setup = Get-Content $Path\$EnvXmlName
 
 # Determine our Server
 $name = (Get-WmiObject Win32_computerSystem).Name
