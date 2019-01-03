@@ -116,6 +116,7 @@ Function Init-Environment()
 # Configure the environment phase 1:
 # 1.  Set execution policy as unrestricted
 # 2.  Set network configurations, for example, ip addresses, subnet mask, gateway and dns
+# 3.  Turn off UAC
 #------------------------------------------------------------------------------------------
 Function Config-Phase1()
 {
