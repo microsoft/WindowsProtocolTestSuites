@@ -122,6 +122,21 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 g.Dispose();
 
             }
+            /// <summary>
+            /// Map the surface to a scaled output
+            /// </summary>
+            /// <param name="x">origin x</param>
+            /// <param name="y">origin y</param>
+            /// <param name="w">target width</param>
+            /// <param name="h">target height</param>
+            public void MapToScaledOutput(int x, int y, int w, int h)
+            {
+                mapPoints.Add(new Point(x, y));
+                Graphics g = Graphics.FromImage(screen.BaseImage);
+                g.DrawImage(this.image, x, y, w, h);
+                // Clean up
+                g.Dispose();
+            }
 
             /// <summary>
             /// Set a pixel in the surface.
@@ -750,7 +765,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <summary>
         /// Map a Surface to Scaled output screen 
         /// </summary>
-        /// <param name="surfaceId"></param>
+        /// <param name="surfaceId">surface id</param>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="w"></param>
@@ -759,9 +774,9 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         {
             if (this.surfaceDic.ContainsKey(surfaceId))
             {
-                surfaceDic[surfaceId].MapToOutput((int)x, (int)y);
+                surfaceDic[surfaceId].MapToScaledOutput((int)x, (int)y, (int)w, (int)h);
             }
-        }
+        }       
 
         /// <summary>
         /// Copy bitmap data from a source surface to a destination surface 

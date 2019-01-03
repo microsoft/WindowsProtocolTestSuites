@@ -990,6 +990,104 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
     }
 
     /// <summary>
+    /// The RDPGFX_MAP_SURFACE_TO_WINDOW_PDU message is sent by the server to instruct the client to map a surface to a RAIL window on the client.
+    /// </summary>
+    public class RDPGFX_MAPSURFACE_TO_WINDOW : RdpegfxServerPdu
+    {
+        #region Message Fields
+        /// <summary>
+        /// A 16-bit unsigned integer that specifies the ID of the surface to be associated with the surface-to-window mapping.
+        /// </summary>
+        public ushort surfaceId;
+
+        /// <summary>
+        ///  A 64-bit unsigned integer that specifies the ID of the RAIL window to be associated with the surface-to-window mapping
+        /// </summary>
+        public ulong windowId;
+
+        /// <summary>
+        ///  A 32-bit unsigned integer that specifies the width of the rectangular region on the surface to which the window is mapped.
+        /// </summary>
+        public uint mappedWidth;
+
+        /// <summary>
+        ///  A 32-bit unsigned integer that specifies the height of the rectangular region on the surface to which the window is mapped.
+        /// </summary>
+        public uint mappedHeight;
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public RDPGFX_MAPSURFACE_TO_WINDOW()
+        {
+        }
+
+        /// <summary>
+        /// Constructor, create a map surface to window message.
+        /// </summary>
+        /// <param name="sid">This is used to indicate surface id.</param>
+        /// <param name="wid">Window ID to be mapped.</param>
+        /// <param name="w">The width of the rectangular region on the surface to which the window is mapped.</param>
+        /// <param name="h">The height of the rectangular region on the surface to which the window is mapped.</param>
+
+        public RDPGFX_MAPSURFACE_TO_WINDOW(ushort sid, ulong wid, uint w, uint h)
+        {
+            this.Header.cmdId = PacketTypeValues.RDPGFX_CMDID_MAPSURFACETOWINDOW;
+            this.Header.flags = 0x0;
+            this.Header.pduLength = (uint)Marshal.SizeOf(Header) + (uint) Marshal.SizeOf(windowId) + (uint) Marshal.SizeOf(mappedWidth) + (uint) Marshal.SizeOf(mappedHeight);
+            this.surfaceId = sid;
+            this.windowId = wid;
+            this.mappedWidth = w;
+            this.mappedHeight = h;
+        }
+
+        /// <summary>
+        /// Encode this PDU to the PduMarshaler.
+        /// </summary>
+        /// <param name="marshaler">This is used to encode the fields of this PDU.</param>
+        public override void Encode(PduMarshaler marshaler)
+        {
+            base.Encode(marshaler);
+            marshaler.WriteUInt16(this.surfaceId);
+            marshaler.WriteUInt64(this.windowId);
+            marshaler.WriteUInt32(this.mappedWidth);
+            marshaler.WriteUInt32(this.mappedHeight);
+        }
+
+        /// <summary>
+        /// Decode this PDU from the PduMarshaler.
+        /// </summary>
+        /// <param name="marshaler">This is used to encode the fields of this PDU.</param>
+        public override bool Decode(PduMarshaler marshaler)
+        {
+            try
+            {
+                base.Decode(marshaler);
+                this.surfaceId = marshaler.ReadUInt16();
+                pduLen += 2;
+                this.windowId = marshaler.ReadUInt64();
+                pduLen += 8;
+                this.mappedWidth = marshaler.ReadUInt32();
+                pduLen += 4;
+                this.mappedHeight = marshaler.ReadUInt32();
+                pduLen += 4;
+
+                return true;
+            }
+            catch
+            {
+                marshaler.Reset();
+                throw new PDUDecodeException(this.GetType(), marshaler.ReadToEnd());
+            }
+        }
+        #endregion
+    }
+
+    
+    /// <summary>
     /// The RDPGFX_SOLIDFILL message is to instruct the client to fill a collection of rectangles on a destination surface with a solid color.
     /// </summary>
     public class RDPGFX_SOLIDFILL : RdpegfxServerPdu
@@ -2028,7 +2126,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         {
             this.Header.cmdId = PacketTypeValues.RDPGFX_CMDID_MAPSURFACETOWINDOW;
             this.Header.flags = 0x0;
-            this.Header.pduLength = (uint)Marshal.SizeOf(Header) + 18;
+            this.Header.pduLength = (uint)Marshal.SizeOf(Header)
+                + (uint) Marshal.SizeOf(this.surfaceId)
+                + (uint)Marshal.SizeOf(this.windowId)
+                + (uint)Marshal.SizeOf(this.mappedWidth)
+                + (uint)Marshal.SizeOf(this.mappedHeight)
+                ;
 
             this.surfaceId = surfaceId;
             this.windowId = windowId;
@@ -2227,11 +2330,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="surfaceId"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="height"></param>
-        /// <param name="width"></param>
+        /// <param name="surfaceId">surface id</param>
+        /// <param name="x">output origin x</param>
+        /// <param name="y">output origin y</param>
+        /// <param name="width">target width</param>
+        /// <param name="height">target height</param>
         public RDPGFX_MAP_SURFACE_TO_SCALED_OUTPUT_PDU(ushort surfaceId, uint x, uint y, uint width, uint height)
         {            
             this.header.cmdId = PacketTypeValues.RDPGFX_CMDID_MAPSURFACETOSCALEDOUTPUT;
@@ -2348,13 +2451,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         {
             this.header.cmdId = PacketTypeValues.RDPGFX_CMDID_MAPSURFACETOSCALEDWINDOW;
             this.header.flags = 0x0;
-            this.header.pduLength = (uint)Marshal.SizeOf(header) + 26;
+            this.header.pduLength = (uint)Marshal.SizeOf(header) 
+                + (uint) Marshal.SizeOf(this.surfaceId)
+                + (uint)Marshal.SizeOf(this.windowId)
+                + (uint)Marshal.SizeOf(this.mappedWidth)
+                + (uint)Marshal.SizeOf(this.mappedHeight)
+                + (uint)Marshal.SizeOf(this.targetWidth)
+                + (uint)Marshal.SizeOf(this.targetHeight)
+                ;
 
             this.surfaceId = surfaceId;
             this.windowId = windowId;
-
-            this.mappedHeight = mappedHeight;
             this.mappedWidth = mappedWidth;
+            this.mappedHeight = mappedHeight;            
             this.targetWidth = targetWidth;
             this.targetHeight = targetHeight;            
         }
