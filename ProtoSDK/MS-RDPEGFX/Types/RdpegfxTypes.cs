@@ -2230,7 +2230,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         {
             this.header.cmdId = PacketTypeValues.RDPGFX_CMDID_QOEFRAMEACKNOWLEDGE;
             this.header.flags = 0x0;
-            this.header.pduLength = (uint)Marshal.SizeOf(header) + 12;
+            this.header.pduLength = (uint)Marshal.SizeOf(header) 
+                + (uint) Marshal.SizeOf(this.frameId)
+                + (uint) Marshal.SizeOf(this.timestamp)
+                + (uint) Marshal.SizeOf(this.timeDiffSE)
+                + (uint) Marshal.SizeOf(this.timeDiffEDR);
 
             this.frameId = frameId;
             this.timestamp = timestamp;
