@@ -689,10 +689,8 @@ namespace Microsoft.Protocols.TestManager.Detector
                 // If both FSA and HVRS are selected, show HVRS properties in Configure Test Cases
                 if (isFsaSelected && isHvrsSelected)
                 {
-                    hiddenPropertiesList.Remove("HVRS.SharePath");
-                    hiddenPropertiesList.Remove("HVRS.IsOffLoadImplemented");
-                    hiddenPropertiesList.Remove("HVRS.IsSetZeroDataImplemented");
-                    hiddenPropertiesList.Remove("HVRS.VolumnClusterSize");
+                    Predicate<string> HvrsProperties = delegate (string s) { return s.StartsWith("HVRS"); };
+                    hiddenPropertiesList.RemoveAll(HvrsProperties);
                 }
             }
             else
@@ -773,12 +771,8 @@ namespace Microsoft.Protocols.TestManager.Detector
                 if (isSMB2Selected)
                 {
                     hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("MS-SMB2_ServerTestSuite.deployment.ptfconfig"));
-                    hiddenPropertiesList.Remove("SMB2.WaitTimeoutInMilliseconds");
-                    hiddenPropertiesList.Remove("SMB2.SutAlternativeIPAddress");
-                    hiddenPropertiesList.Remove("SMB2.FileShareSupportingIntegrityInfo");
-                    hiddenPropertiesList.Remove("SMB2.Symboliclink");
-                    hiddenPropertiesList.Remove("SMB2.SymboliclinkInSubFolder");
-                    hiddenPropertiesList.Remove("SMB2.NumberOfPreviousVersions");
+                    Predicate<string> Smb2Properties = delegate (string s) { return s.StartsWith("SMB2"); };
+                    hiddenPropertiesList.RemoveAll(Smb2Properties);
                 }
             }
 
