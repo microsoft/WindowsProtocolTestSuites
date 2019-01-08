@@ -604,6 +604,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             bool isRsvdSelected = false;
             bool isSqosSelected = false;
             bool isAuthSelected = false;
+            bool isHvrsSelected = false;
             foreach (CaseSelectRule rule in rules)
             {
                 string ruleName = rule.Name;
@@ -617,11 +618,24 @@ namespace Microsoft.Protocols.TestManager.Detector
                     {
                         isSMB2Selected = true;
                     }
-
+                    if (ruleName.Contains("HVRS"))
+                    {
+                        if (rule.Status == RuleStatus.Selected)
+                        {
+                            isHvrsSelected = true;
+                        }
+                    }
                 }
                 else if (ruleName.StartsWith("Feature.Others.FSA (File System Algorithms)") && rule.Status == RuleStatus.Selected)
                 {
                     isFsaSelected = true;
+                    if (ruleName.Contains("HVRS"))
+                    {
+                        if (rule.Status == RuleStatus.Selected)
+                        {
+                            isHvrsSelected = true;
+                        }
+                    }
                 }
                 else if ((ruleName == "Feature.Cluster Required.File Server Failover"
                     || ruleName == "Feature.Cluster Required.SWN (Service Witness)"
@@ -670,6 +684,16 @@ namespace Microsoft.Protocols.TestManager.Detector
             {
                 hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("MS-SMB2_ServerTestSuite.deployment.ptfconfig"));
                 hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("MS-SMB2Model_ServerTestSuite.deployment.ptfconfig"));
+
+                // HVRS properties are located in MS-SMB2_ServerTestSuite.deployment.ptfconfig
+                // If both FSA and HVRS are selected, show HVRS properties in Configure Test Cases
+                if (isFsaSelected && isHvrsSelected)
+                {
+                    hiddenPropertiesList.Remove("HVRS.SharePath");
+                    hiddenPropertiesList.Remove("HVRS.IsOffLoadImplemented");
+                    hiddenPropertiesList.Remove("HVRS.IsSetZeroDataImplemented");
+                    hiddenPropertiesList.Remove("HVRS.VolumnClusterSize");
+                }
             }
             else
             {
@@ -740,6 +764,22 @@ namespace Microsoft.Protocols.TestManager.Detector
             if (!isClusterSwnFsrvpSelected)
             {
                 hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("ServerFailoverTestSuite.deployment.ptfconfig"));
+            }
+
+            if (!isHvrsSelected)
+            {
+                // HVRS properties are located in MS-SMB2_ServerTestSuite.deployment.ptfconfig
+                // If HVRS is not selected and SMB2 is selected, only show SMB2 properties in Configure Test Cases
+                if (isSMB2Selected)
+                {
+                    hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("MS-SMB2_ServerTestSuite.deployment.ptfconfig"));
+                    hiddenPropertiesList.Remove("SMB2.WaitTimeoutInMilliseconds");
+                    hiddenPropertiesList.Remove("SMB2.SutAlternativeIPAddress");
+                    hiddenPropertiesList.Remove("SMB2.FileShareSupportingIntegrityInfo");
+                    hiddenPropertiesList.Remove("SMB2.Symboliclink");
+                    hiddenPropertiesList.Remove("SMB2.SymboliclinkInSubFolder");
+                    hiddenPropertiesList.Remove("SMB2.NumberOfPreviousVersions");
+                }
             }
 
             // The two ptfconfig files is only used for configuring sut control adapter.
