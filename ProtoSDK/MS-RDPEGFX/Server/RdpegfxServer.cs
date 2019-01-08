@@ -258,10 +258,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// Method to make a map Surface to scaled output Pdu.
         /// </summary>
         /// <param name="sid">This is used to indicate surface id.</param>
-        /// <param name="x">This is used to indicate x-coordinate of the upper-left corner of the surface.</param>
-        /// <param name="y">This is used to indicate y-coordinate of the upper-left corner of the surface.</param>
-        /// <param name="w">This is used to indicate targetWidth of the surface.</param>
-        /// <param name="h">This is used to indicate targeHeight of the surface.</param>
+        /// <param name="wid">This is used to indicate the window id.</param>
+        /// <param name="mappedWidth">This is used to indicate mappedWidth of the surface.</param>
+        /// <param name="mappedHeight">This is used to indicate mappedHeight of the surface.</param>
+        /// <param name="targetdWidth">This is used to indicate targetWidth of the window.</param>
+        /// <param name="targetdHeight">This is used to indicate targeHeight of the window.</param>
         public RDPGFX_MAP_SURFACE_TO_SCALED_WINDOW_PDU CreateMapSurfaceToScaledWindowPdu(ushort sid, ulong wid, uint mappedWidth, uint mappedHeight, uint targetWidth, uint targetHeight)
         {
             RDPGFX_MAP_SURFACE_TO_SCALED_WINDOW_PDU surf2ScaledWindow = new RDPGFX_MAP_SURFACE_TO_SCALED_WINDOW_PDU(sid, wid, mappedWidth, mappedHeight,targetWidth,targetHeight);
