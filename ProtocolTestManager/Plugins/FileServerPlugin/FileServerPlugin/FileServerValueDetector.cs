@@ -740,6 +740,15 @@ namespace Microsoft.Protocols.TestManager.Detector
                     // Add the property whose value is false (false means the property should be hidden)
                     hiddenPropertiesList.AddRange(dependantProperties.Where(q => !q.Value).Select(q => q.Key));
                 }
+
+                // HVRS properties are located in MS-SMB2_ServerTestSuite.deployment.ptfconfig
+                // If SMB2 is selected but HVRS is not selected, only show SMB2 properties in Configure Test Cases
+                if (!isHvrsSelected)
+                {
+                    hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("MS-SMB2_ServerTestSuite.deployment.ptfconfig"));
+                    Predicate<string> Smb2Properties = delegate (string s) { return s.StartsWith("SMB2"); };
+                    hiddenPropertiesList.RemoveAll(Smb2Properties);
+                }
             }
 
             if (!isFsaSelected)
@@ -762,18 +771,6 @@ namespace Microsoft.Protocols.TestManager.Detector
             if (!isClusterSwnFsrvpSelected)
             {
                 hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("ServerFailoverTestSuite.deployment.ptfconfig"));
-            }
-
-            if (!isHvrsSelected)
-            {
-                // HVRS properties are located in MS-SMB2_ServerTestSuite.deployment.ptfconfig
-                // If HVRS is not selected and SMB2 is selected, only show SMB2 properties in Configure Test Cases
-                if (isSMB2Selected)
-                {
-                    hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("MS-SMB2_ServerTestSuite.deployment.ptfconfig"));
-                    Predicate<string> Smb2Properties = delegate (string s) { return s.StartsWith("SMB2"); };
-                    hiddenPropertiesList.RemoveAll(Smb2Properties);
-                }
             }
 
             // The two ptfconfig files is only used for configuring sut control adapter.
