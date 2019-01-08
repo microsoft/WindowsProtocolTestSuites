@@ -104,7 +104,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Non-BVT")]
         [TestCategory("Positive")]
-        [TestCategory("RDP8.0")]
+        [TestCategory("RDP10.6")]
         [TestCategory("RDPEGFX")]
         [Description("This test case is used to test create surface, solid fill, map to output, update scaled output and delete surface command.")]
         public void RDPEGFX_SurfaceToScreen_PositiveTest_ScaledOutput()
