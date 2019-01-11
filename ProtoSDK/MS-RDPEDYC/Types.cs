@@ -18,9 +18,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         private const byte cbChIdBitmask = 0x03;
 
         /// <summary>
-        ///  Indicates the PDU type and MUST be set to one of the
-        ///  following values.
-        ///  0x01, 0x02, 0x03, 0x04, 0x05  
+        ///  Indicates the PDU type and MUST be set to one of the following values.
+        ///  0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09
         /// </summary>
         public Cmd_Values Cmd { get; set; }
         /// <summary>
@@ -60,7 +59,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// Marshal constructor
         /// </summary>
         /// <param name="cmd">Cmd field</param>
-        /// <param name="sp">SP field</param>
+        /// <param name="sp">SP/Pri/Len field</param>
         /// <param name="cbChId">cbChId field</param>
         public Header(Cmd_Values cmd, int sp, cbChId_Values cbChId)
         {
@@ -68,6 +67,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             this.Sp = sp;
             this.CbChannelId = cbChId;
         }
+
     }
 
     public enum Cmd_Values : int {
@@ -345,6 +345,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             {
                 HeaderBits.CbChannelId = cbChId_Values.FourBytes;
             }
+            else
+            {
+                DynamicVCException.Throw("ChannelId is valid.");
+            }
         }
 
         protected uint ReadLength(PduMarshaler marshaler)
@@ -519,6 +523,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
         public CapsVer1ReqDvcPdu()
         {
+            HeaderBits = new Header(Cmd_Values.Capability, 0x00, cbChId_Values.OneByte);
+
             Pad = 0x00;
             Version = 0x0001;
         }
@@ -565,6 +571,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
         public CapsVer2ReqDvcPdu()
         {
+            HeaderBits = new Header(Cmd_Values.Capability, 0x00, cbChId_Values.OneByte);
+
+            Pad = 0x00;
+            Version = 0x0002;
         }
 
         public CapsVer2ReqDvcPdu(
@@ -574,6 +584,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             ushort priorityCharge3
             )
         {
+            HeaderBits = new Header(Cmd_Values.Capability, 0x00, cbChId_Values.OneByte);
+
             Pad = 0x00;
             Version = 0x0002;
 
@@ -633,6 +645,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
         public CapsVer3ReqDvcPdu()
         {
+            HeaderBits = new Header(Cmd_Values.Capability, 0x00, cbChId_Values.OneByte);
+
+            Pad = 0x00;
+            Version = 0x0003;
         }
 
         public CapsVer3ReqDvcPdu(
@@ -642,6 +658,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             ushort priorityCharge3
             )
         {
+            HeaderBits = new Header(Cmd_Values.Capability, 0x00, cbChId_Values.OneByte);
+
             Pad = 0x00;
             Version = 0x0003;
 
@@ -697,11 +715,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
         public CapsRespDvcPdu()
         {
+            HeaderBits = new Header(Cmd_Values.Capability, 0x00, cbChId_Values.OneByte);
+            Pad = 0x00;           
         }
 
         public CapsRespDvcPdu(ushort version)
         {
-            this.Version = version;
+            HeaderBits = new Header(Cmd_Values.Capability, 0x00, cbChId_Values.OneByte);            
+            Pad = 0x00;
+            Version = version;
         }
 
         protected override Cmd_Values Cmd
@@ -725,17 +747,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
     #endregion
 
     #region Opening Dynamic Virtual Channel PDUs
-
+    /// <summary>
+    /// The DYNVC_CREATE_REQ (section 2.2.2.1) PDU is sent by the DVC server manager to the DVC client manager to request that a channel be opened.
+    /// The header of DYNVC_CREATE_REQ contains fields: cbId, Pri and Cmd 
+    /// </summary>
     public class CreateReqDvcPdu : RequestDvcPDU
     {
         public string ChannelName;
 
         public CreateReqDvcPdu()
-        {
+        {            
         }
 
         public CreateReqDvcPdu(int priority, uint channelId, string channelName)
-        {
+        {           
             HeaderBits = new Header(Cmd, priority, cbChId_Values.Invalid);
 
             this.ChannelId = channelId;
@@ -762,6 +787,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         }
     }
 
+    /// <summary>
+    /// The DYNVC_CREATE_RSP (section 2.2.2.2) PDU is sent by the DVC client manager to indicate the status of the client DVC create operation.
+    /// The header of DYNVC_CREATE_REQ contains fields: cbId, Sp and Cmd 
+    /// </summary>
     public class CreateRespDvcPdu : ResponseDvcPDU
     {
         // A 32-bit, signed integer that specifies the NTSTATUS code that indicates success or 
@@ -776,7 +805,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
         public CreateRespDvcPdu(uint channelId, int creationStatus)
         {
-            HeaderBits = new Header(Cmd, 0, cbChId_Values.Invalid);
+            HeaderBits = new Header(Cmd_Values.Create, 0x00, cbChId_Values.Invalid);
 
             this.ChannelId = channelId;
             this.CreationStatus = creationStatus;
@@ -813,7 +842,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// <summary>
         /// Compute the Non Data size.
         /// </summary>
-        /// <param name="isSp">Indicates the 4-5 bits are Sp or Len</param>
+        /// <param name="isSp">Indicates the 3-4 bits are Sp or Len</param>
         /// <returns></returns>
         public int NonDataSize(bool isSp)
         {
@@ -834,14 +863,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
                     break;
                 case cbChId_Values.Invalid:
                 default:
-                    DynamicVCException.Throw("channelIdSize is invalid.");
+                    DynamicVCException.Throw("The length of the ChannelId field is invalid.");
                     break;
             }
 
             if(!isSp)
             {
-                // If the 4-5 bit is Len, this value indicates the Length of Length field.
-                // DYNVC_DATA_FIRST and DYNVC_DATA_FIRST_COMPRESSED have Length field.
+                // If the 3-4 bit is Len, this value indicates the length of Length field.
+                // Length field is applied to DYNVC_DATA_FIRST and DYNVC_DATA_FIRST_COMPRESSED structures.
                 switch ((Len_Values)this.HeaderBits.Sp)
                 {
                     case Len_Values.OneByte:
@@ -855,7 +884,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
                         break;
                     case Len_Values.Invalid:
                     default:
-                        DynamicVCException.Throw("lengthSize is invalid.");
+                        DynamicVCException.Throw("The length of Length field is invalid.");
                         break;
                 }
             }
@@ -1038,6 +1067,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
         public DataCompressedDvcPdu(uint channelId, byte[] data)
         {
+            HeaderBits.Cmd = Cmd_Values.DataCompressed;
+            HeaderBits.Sp = 0x00;
+
             this.ChannelId = channelId;
             this.Data = data;
             UpdateCbChannelId();
@@ -1076,8 +1108,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         }
 
         public CloseDvcPdu(uint channelId)
-        {
-            this.ChannelId = channelId;
+        {           
+            HeaderBits.Cmd = Cmd_Values.Close;
+            HeaderBits.Sp = 0x00;
+            ChannelId = channelId;
+
+            UpdateCbChannelId();            
         }
 
         protected override Cmd_Values Cmd
@@ -1134,14 +1170,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// </summary>
         public SoftSyncReqDvcPDU(SoftSyncReqFlags_Value flags, ushort numberOfTunnels, SoftSyncChannelList[] softSyncChannelLists)
         {
-            HeaderBits = new Header(Cmd_Values.SoftSyncReq, 0, 0);
-            this.Pad = 0;            
+            HeaderBits = new Header(Cmd_Values.SoftSyncReq, 0x00, 0x00);
+            this.Pad = 0x00;            
             this.Flags = flags;
             this.NumberOfTunnels = numberOfTunnels;
             this.SoftSyncChannelLists = softSyncChannelLists;
-            // Section 2.2.5.1, Length (4 bytes): A 32-bit, unsigned integer indicating the total size, in bytes, of SoftSyncChannelLists field.
-            // TDI: this length should also including the length of Length(4 bytes), Flags(2 bytes) and NumberOfTunnels(2 bytes) in DYNVC_SOFT_SYNC_REQUEST PDU.
-            // this length value is Length(4) + Flags(2) + NumberOfTunnels(2) = 8.  
+
+            // Section 2.2.5.1, Length (4 bytes): A 32-bit, unsigned integer indicating the total size, in bytes, of the Length, Flags, NumberOfTunnels, and SoftSyncChannelLists fields.
+
             this.Length = 8;
 
             if(flags.HasFlag(SoftSyncReqFlags_Value.SOFT_SYNC_CHANNEL_LIST_PRESENT))
@@ -1320,6 +1356,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         
         public SoftSyncResDvcPdu(uint numberOfTunnels, TunnelType_Value[] tunnelsToSwitch)
         {
+            HeaderBits = new Header(Cmd_Values.SoftSyncRes, 0x00, 0x00);
+            Pad = 0x00;
             NumberOfTunnels = numberOfTunnels;
             TunnelsToSwitch = tunnelsToSwitch;
         }
