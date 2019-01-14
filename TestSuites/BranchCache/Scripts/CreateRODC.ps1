@@ -58,7 +58,7 @@ Function Write-ConfigLog
         [Parameter(ValueFromPipeline=$true)] $text,
         $ForegroundColor = "Green"
     )
-    Write-Info.ps1 -logContent $text -ForegroundColor $ForegroundColor
+    .\Write-Info.ps1 -logContent $text -ForegroundColor $ForegroundColor
 }
 
 #------------------------------------------------------------------------------------------
