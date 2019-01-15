@@ -104,7 +104,7 @@ Function Config-Environment
     Write-ConfigLog "Turn off UAC..." -ForegroundColor Yellow
     Set-ItemProperty -path  HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -name "EnableLUA" -value "0"
 
-    Write-Host "Enable remoting"
+    Write-Host "Enable WinRM"
     .\Enable-WinRM.ps1
 }
 
