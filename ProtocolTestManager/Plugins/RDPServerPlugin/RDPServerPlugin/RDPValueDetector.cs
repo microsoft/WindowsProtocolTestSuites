@@ -212,7 +212,14 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         /// <returns>The list of properties whick will not be shown in the configure page.</returns>
         public List<string> GetHiddenProperties(List<CaseSelectRule> rules)
         {
-            return new List<string>();
+            List<string> hiddenPropertiesList = new List<string>();
+            
+            // Hidden the following properties in RDP_ServerTestSuite.ptfconfig:
+            // 1. TestName
+            // 2. ProtocolName
+            // 3. Version
+            hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("RDP_ServerTestSuite.ptfconfig"));
+            return hiddenPropertiesList;
         }
 
         /// <summary>
