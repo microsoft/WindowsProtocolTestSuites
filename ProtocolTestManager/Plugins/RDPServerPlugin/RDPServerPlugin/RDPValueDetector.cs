@@ -57,7 +57,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         #region Variables
 
         private EnvironmentType env = EnvironmentType.Workgroup;
-        private DetectionInfo detectionInfo = new DetectionInfo();       
+        private DetectionInfo detectionInfo = new DetectionInfo();
 
         #endregion Variables
 
@@ -105,8 +105,8 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         /// </summary>
         /// <param name="properties">Property name and values.</param>
         /// <returns>
-        /// Return true if no other property needed. Return false means there are 
-        /// other property required. PTF Tool will invoke GetPrerequisites and 
+        /// Return true if no other property needed. Return false means there are
+        /// other property required. PTF Tool will invoke GetPrerequisites and
         /// pop up a dialog to set the value of the properties.
         /// </returns>
         public bool SetPrerequisiteProperties(Dictionary<string, string> properties)
@@ -206,14 +206,14 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         }
 
         /// <summary>
-        /// Gets the list of properties that will be hidder in the configure page.
+        /// Gets the list of properties that will be hidden in the configure page.
         /// </summary>
         /// <param name="rules">Selected rules.</param>
         /// <returns>The list of properties whick will not be shown in the configure page.</returns>
         public List<string> GetHiddenProperties(List<CaseSelectRule> rules)
         {
             List<string> hiddenPropertiesList = new List<string>();
-            
+
             // Hidden the following properties in RDP_ServerTestSuite.ptfconfig:
             // 1. TestName
             // 2. ProtocolName
@@ -236,7 +236,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         /// Dispose
         /// </summary>
         public void Dispose()
-        {            
+        {
         }
 
         #endregion Implemented IValueDetector
@@ -288,8 +288,8 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             else
             {
                 DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
-                DetectorUtil.WriteLog("Taget SUT don't respond.");
-                return false;          
+                DetectorUtil.WriteLog("Target SUT don't respond.");
+                return false;
             }
 
         }
@@ -315,7 +315,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
             return rule;
         }
-        
+
         private string NullableBoolToString(bool? value)
         {
             if (value == null)
