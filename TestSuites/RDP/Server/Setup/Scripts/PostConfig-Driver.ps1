@@ -96,7 +96,7 @@ Function Config-Environment
 	[string] $domain = $driverComputerSetting.domain
 	[string] $userName = $coreSetting.username
 	[string] $userPwd = $coreSetting.password
-	
+
     Write-ConfigLog "Setting autologon..." -ForegroundColor Yellow
     Set-AutoLogon -Domain $domain -Username $userName -Password $userPwd -Count 999
 
@@ -104,8 +104,8 @@ Function Config-Environment
     Write-ConfigLog "Turn off UAC..." -ForegroundColor Yellow
     Set-ItemProperty -path  HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -name "EnableLUA" -value "0"
 
-    Write-Host "Enable remoting"
-    Enable-Remoting
+    Write-Host "Enable WinRM"
+    .\Enable-WinRM.ps1
 }
 
 
@@ -115,7 +115,7 @@ Function Config-Environment
 Function Main
 {
     # Initialize configure environment
-    Init-Environment    
+    Init-Environment
 
     # Start configure
     Config-Environment

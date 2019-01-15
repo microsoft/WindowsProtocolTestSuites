@@ -95,7 +95,7 @@ Function Config-Environment
 	[string] $domain = $sutSetting.domain
 	[string] $userName = $coreSetting.username
 	[string] $userPwd = $coreSetting.password
-	
+
     # Start configure
     Write-ConfigLog "Setting autologon..." -ForegroundColor Yellow
     Set-AutoLogon -Domain $domain -Username $userName -Password $userPwd -Count 999
@@ -104,14 +104,14 @@ Function Config-Environment
     Write-ConfigLog "Turn off UAC..." -ForegroundColor Yellow
     Set-ItemProperty -path  HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -name "EnableLUA" -value "0"
 
-    Write-Host "Enable remoting"
-    Enable-Remoting
-	
+    Write-Host "Enable WinRM"
+    .\Enable-WinRM.ps1
+
 	# Enable Remote Desktop
 	(Get-WmiObject Win32_TerminalServiceSetting -Namespace root\cimv2\TerminalServices).SetAllowTsConnections(1,1) | Out-Null
 	(Get-WmiObject -Class "Win32_TSGeneralSetting" -Namespace root\cimv2\TerminalServices -Filter "TerminalName='RDP-tcp'").SetUserAuthenticationRequired(0) | Out-Null
 	Get-NetFirewallRule -DisplayName "Remote Desktop*" | Set-NetFirewallRule -enabled true
-	
+
 	# Configure Network detection on RDP Server
 	Set-ItemProperty -path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -name "SelectNetworkDetect" -value "0"
 }
@@ -123,7 +123,7 @@ Function Config-Environment
 Function Main
 {
     # Initialize configure environment
-    Init-Environment    
+    Init-Environment
 
     # Start configure
     Config-Environment
