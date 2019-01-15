@@ -15,6 +15,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
     {
         [TestMethod]
         [Priority(0)]
+        [TestCategory("BVT")]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
         [Description(@"This test case is used to verify SUT can process slow-path input message correctly.")]
@@ -43,7 +44,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 false, // Is reconnect
                 true   // Is auto logon
                 );
-            
+
             this.Site.Log.Add(LogEntryKind.Comment, "Send several Client Input Event PDUs.");
             rdpbcgrAdapter.GenerateSlowPathInputs();
 
@@ -54,6 +55,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         [TestMethod]
         [Priority(0)]
+        [TestCategory("BVT")]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
         [Description(@"This test case is used to verify SUT can process fast-path input message correctly.")]

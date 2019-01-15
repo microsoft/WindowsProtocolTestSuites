@@ -15,6 +15,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
     {
         [TestMethod]
         [Priority(0)]
+        [TestCategory("BVT")]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
         [Description(@"This test case is used to verify the RDP server can send and process uncompressed Static Virtual Channel PDU.")]
@@ -23,7 +24,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Test Steps
             //1. Initiate and complete an RDP connection to RDP Server (SUT). Create a static virtual channel with name "drdynvc", In Capability Exchange phase, Test Suite sets the flags field to VCCAPS_NO_COMPR (0x00000000) flag in Virtual Channel Capability Set.
             //2. Expect SUT to send a Static virtual channel PDU, which contains a DVC Capabilities Request PDU
-            //3. Test suite responses a Static virtual channel PDU, which contains a DVC Capabilities Response PDU 
+            //3. Test suite responses a Static virtual channel PDU, which contains a DVC Capabilities Response PDU
             #endregion Test Steps
             #region Test Code
 
@@ -41,6 +42,5 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             #endregion Test Code
         }
-                
     }
 }

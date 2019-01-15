@@ -15,6 +15,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
     {
         [TestMethod]
         [Priority(0)]
+        [TestCategory("BVT")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPBCGR")]
         [Description(@"This test case is used to ensure SUT can send Initiate Multitransport Request PDU to bootstrap UDP connection.")]
@@ -25,7 +26,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             //2. Test Suite expects a Server Initiate Multitransport Request PDU with requestedProtocol set to INITITATE_REQUEST_PROTOCOL_UDPFECR (0x01). When received, Test Suite verifies this PDU.
             //3. Test Suite expects a Server Initiate Multitransport Request PDU with requestedProtocol set to INITITATE_REQUEST_PROTOCOL_UDPFECL (0x02). When received, Test Suite verifies this PDU.
             #endregion Test Steps
-            
+
             #region Test Code
 
             this.Site.Log.Add(LogEntryKind.Comment, "Establish transport connection with RDP Server, encrypted protocol is {0}.", transportProtocol.ToString());
@@ -67,7 +68,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 }
             }
             this.Site.Assume.IsTrue(serverSupportUDPFECR || serverSupportUDPFECL, "To run test case for multitransport, the RDP server should be configured to support RDP-UDP: reliable, lossy, or both.");
-            
+
             #endregion Basic Setting Exchange
 
             #region Channel Connection
@@ -98,7 +99,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             Server_License_Error_Pdu_Valid_Client licenseErrorPdu = rdpbcgrAdapter.ExpectPacket<Server_License_Error_Pdu_Valid_Client>(timeout);
             this.Site.Assert.IsNotNull(licenseErrorPdu, "RDP Server MUST send a Server License Error PDU during Licensing phase.");
-            
+
             bool receivedServerInitiateMultitransportRequestForReliable = false;
             bool receivedServerInitiateMultitransportRequestForLossy = false;
             int expectedServerInitiateMultitransportRequestNum = 1;
@@ -131,7 +132,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 Site.Assert.IsTrue(receivedServerInitiateMultitransportRequestForLossy,
                "RDP Server MUST send Server_Initiate_Multitransport_Request_PDU packets for lossy multitransport.");
             }
-           
+
             #endregion Test Code
         }
     }
