@@ -272,6 +272,12 @@
           <Rule name = "LockUnlock">
             <Category name = "LockUnlock"/>
           </Rule>
+          <Rule name = "QueryInfo">
+            <Category name = "QueryInfo"/>
+          </Rule>
+          <Rule name = "QueryDir">
+            <Category name = "QueryDir"/>
+          </Rule>
           <Rule name = "QueryAndSetFileInfo">
             <Category name = "QueryAndSetFileInfo"/>
           </Rule>
