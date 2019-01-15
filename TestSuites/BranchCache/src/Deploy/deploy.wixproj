@@ -31,9 +31,9 @@
   </ItemGroup>
   <ItemGroup>
 	<!-- Auto generated -->
-	<Compile Include="TestSuiteBatchFiles.wxs" />
-    <Compile Include="TestSuiteBinFiles.wxs" />
-	
+	  <Compile Include="TestSuiteBatchFiles.wxs" />
+    <Compile Include="TestSuiteBinFiles.wxs" />	
+    <Compile Include="Scripts_FILES.wxs" />
 	<!-- Manual input -->
     <Compile Include="EndpointDlg.wxs" />
     <Compile Include="BranchCache.wxs" />
@@ -58,6 +58,9 @@
       <HintPath>$(WIX)\WixUIExtension.dll</HintPath>
       <Name>WixUIExtension</Name>
     </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <BranchCacheScriptFiles Include="..\..\Scripts\*" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\ProtoSDK\Common\Common.csproj">
@@ -204,6 +207,7 @@
   <Target Name="GenDeployWxsFile" DependsOnTargets="ResolveWixExtensionReferences" BeforeTargets="Compile">
     <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin" -out TestSuiteBinFiles.wxs -template fragment -gg -cg BIN_FILES -dr TESTSUITE_BIN_DIR -var wix.TESTSUITE_BIN_DIR -sreg -sfrag -srd' />
     <Exec Command='"$(WIX)\bin\heat.exe" dir ..\Batch -out TestSuiteBatchFiles.wxs -template fragment -gg -cg BATCH_FILES -dr TESTSUITE_BATCH_DIR -var wix.TESTSUITE_BATCH_DIR -sreg -sfrag -srd' />
+    <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\BranchCache\Scripts" -out Scripts_FILES.wxs -template fragment -gg -cg Scripts_FILES -dr TESTSUITE_SCRIPTS_DIR -var wix.TESTSUITE_SCRIPTS_DIR -sreg -sfrag -srd' />
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\common&quot; -out CommonBatch.wxs -template fragment -gg -cg COMMON_BATCH_FILES -dr TESTSUITE_COMMON_SCRIPTS_DIR -var wix.TESTSUITE_COMMON_SCRIPTS_DIR -sreg -sfrag -srd" />
   </Target>
   
@@ -221,8 +225,24 @@
     <Copy SourceFiles="@(TestBMPFile)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin" />
     <Copy SourceFiles="@(TestSuiteXMLFile)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin" />
     <Copy SourceFiles="@(SUTControlAdapter)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin\WindowsSUTControlAdapter\" />
-	<Copy SourceFiles="..\LocalTestRun.testsettings" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin" />
-	<Copy SourceFiles="..\TestSuite\BranchCache_TestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin" />
-	<Copy SourceFiles="..\TestSuite\BranchCache_TestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin" />
+    <Copy SourceFiles="..\LocalTestRun.testsettings" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin" />
+    <Copy SourceFiles="..\TestSuite\BranchCache_TestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin" />
+    <Copy SourceFiles="..\TestSuite\BranchCache_TestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin" />
+    <Copy SourceFiles="@(BranchCacheScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\domainjoin.PS1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Check-ReturnValue.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Disable_Firewall.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\GetVMNameByComputerName.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\GetVmParameters.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\PromoteDomainController.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\PromoteRODC.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\RestartAndRun.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\RestartAndRunFinish.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-AutoLogon.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-ExecutionPolicy-Unrestricted.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-NetworkConfiguration.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Turnoff-UAC.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\WaitFor-ComputerReady.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Write-Info.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Scripts" />
   </Target>
 </Project>

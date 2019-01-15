@@ -211,9 +211,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void S8_ServerRedirection_PositiveTest_WithoutRoutingToken_VerifyClientInfoPdu(Client_Info_Pdu clientInfoPdu)
         {
-            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_UserName.ToUpper(), clientInfoPdu.infoPacket.UserName.ToUpper(), "Verify if UserName in Client Info PDU equals that sent in Server Redirection PDU.");
-            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_Domain.ToUpper(), clientInfoPdu.infoPacket.Domain.ToUpper(), "Verify if Domain in Client Info PDU equals that sent in Server Redirection PDU.");
-            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_Password, clientInfoPdu.infoPacket.Password, "Verify if Password in Client Info PDU equals that sent in Server Redirection PDU.");
+            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_UserName.ToUpper(), clientInfoPdu.infoPacket.UserName.Trim('\0').ToUpper(), "Verify if UserName in Client Info PDU equals that sent in Server Redirection PDU.");
+            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_Domain.ToUpper(), clientInfoPdu.infoPacket.Domain.Trim('\0').ToUpper(), "Verify if Domain in Client Info PDU equals that sent in Server Redirection PDU.");
+            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_Password, clientInfoPdu.infoPacket.Password.Trim('\0'), "Verify if Password in Client Info PDU equals that sent in Server Redirection PDU.");
         }
         #endregion
 
@@ -237,9 +237,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void S8_ServerRedirection_PositiveTest_WithRoutingToken_VerifyClientInfoPdu(Client_Info_Pdu clientInfoPdu)
         {
-            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_UserName.ToUpper(), clientInfoPdu.infoPacket.UserName.ToUpper(), "Verify if UserName in Client Info PDU equals that sent in Server Redirection PDU.");
-            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_Domain.ToUpper(), clientInfoPdu.infoPacket.Domain.ToUpper(), "Verify if Domain in Client Info PDU equals that sent in Server Redirection PDU.");
-            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_Password, clientInfoPdu.infoPacket.Password, "Verify if Password in Client Info PDU equals that sent in Server Redirection PDU.");
+            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_UserName.ToUpper(), clientInfoPdu.infoPacket.UserName.Trim('\0').ToUpper(), "Verify if UserName in Client Info PDU equals that sent in Server Redirection PDU.");
+            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_Domain.ToUpper(), clientInfoPdu.infoPacket.Domain.Trim('\0').ToUpper(), "Verify if Domain in Client Info PDU equals that sent in Server Redirection PDU.");
+            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_Password, clientInfoPdu.infoPacket.Password.Trim('\0'), "Verify if Password in Client Info PDU equals that sent in Server Redirection PDU.");
         }
         #endregion
 
@@ -346,10 +346,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         private void CheckRDSTLSAuthentication_VerifyClientInfoFields(Client_Info_Pdu clientInfoPdu)
         {
             // user name
-            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_UserName, clientInfoPdu.infoPacket.UserName, "User name should equal to that set in server redirection PDU.");
+            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_UserName, clientInfoPdu.infoPacket.UserName.Trim('\0'), "User name should equal to that set in server redirection PDU.");
 
             // domain
-            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_Domain, clientInfoPdu.infoPacket.Domain, "Domain should equal to that set in server redirection PDU.");
+            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_Domain, clientInfoPdu.infoPacket.Domain.Trim('\0'), "Domain should equal to that set in server redirection PDU.");
 
         }
 

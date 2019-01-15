@@ -105,10 +105,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             return originalPacket.ToBytes();
         }
 
-        public static byte[] Decrypt(byte[] bytes, Dictionary<ulong, Smb2CryptoInfo> cryptoInfoTable, Smb2Role role)
+        public static byte[] Decrypt(byte[] bytes, Dictionary<ulong, Smb2CryptoInfo> cryptoInfoTable, Smb2Role role, out Transform_Header transformHeader)
         {
-            // Client: If the size of the message received from the server is not greater than the size of SMB2 TRANSFORM_HEADER as specified, the client MUST discard the message.
-            // Server: If the size of the message received from the client is not greater than the size of the SMB2 TRANSFORM_HEADER, the server MUST disconnect the connection.
+            // For client: If the size of the message received from the server is not greater than the size of SMB2 TRANSFORM_HEADER, the client MUST discard the message.
+            // For server: If the size of the message received from the client is not greater than the size of the SMB2 TRANSFORM_HEADER, the server MUST disconnect the connection.
             int minimumLength = Marshal.SizeOf(typeof(Transform_Header));
             if (bytes.Length < minimumLength)
             {
@@ -121,10 +121,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
                 );
             }
 
-            Transform_Header transformHeader = Smb2Utility.UnmarshalStructure<Transform_Header>(bytes);
+            transformHeader = Smb2Utility.UnmarshalStructure<Transform_Header>(bytes);
 
-            // Client: If the Flags/EncryptionAlgorithm in the SMB2 TRANSFORM_HEADER is not 0x0001, the client MUST discard the message.
-            // Server: If the Flags/EncryptionAlgorithm in the SMB2 TRANSFORM_HEADER is not 0x0001, the server MUST disconnect the connection.
+            // For client: If the Flags/EncryptionAlgorithm in the SMB2 TRANSFORM_HEADER is not 0x0001, the client MUST discard the message.
+            // For server: If the Flags/EncryptionAlgorithm in the SMB2 TRANSFORM_HEADER is not 0x0001, the server MUST disconnect the connection.
             if (transformHeader.Flags != TransformHeaderFlags.Encrypted)
             {
                 throw new InvalidOperationException(

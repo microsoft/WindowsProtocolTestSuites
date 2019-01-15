@@ -19,7 +19,6 @@
             <StackPanel Orientation="Horizontal" Margin="0,1">
                 <Image Height="16" Width="16" Source="{Binding ImageUrl}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 <TextBlock x:Name="ItemName" Text="{Binding Name}" FontSize="14" FontWeight="Normal" HorizontalAlignment="Stretch"/>
-                <TextBlock x:Name="ItemValue" Text="{Binding Value}" FontSize="14" FontWeight="Normal" HorizontalAlignment="Stretch"/>
             </StackPanel>
         </HierarchicalDataTemplate>
     </Control.Resources>

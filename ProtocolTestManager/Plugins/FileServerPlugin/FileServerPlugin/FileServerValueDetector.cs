@@ -342,15 +342,19 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             #region File Server Failover
 
-            // Only Windows Server 2012 R2 supports asymmetric share
-            if (detectionInfo.platform != Platform.WindowsServer2012R2)
+            // Only Windows Server 2012 R2 and later supports asymmetric share
+            if (detectionInfo.platform == Platform.NonWindows || detectionInfo.platform >= Platform.WindowsServer2012R2)
             {
-                // For other Windows platform, the feature is not supported.
-                // For NonWindows platform, the items are suggested to be configured manually.
                 propertiesDic.Add("Cluster.AsymmetricShare", GetAsymmetricShare());
-                propertiesDic.Add("Cluster.OptimumNodeOfAsymmetricShare", new List<string>() { string.Empty });
-                propertiesDic.Add("Cluster.NonOptimumNodeOfAsymmetricShare", new List<string>() { string.Empty });
             }
+            else
+            {
+                propertiesDic.Add("Cluster.AsymmetricShare", new List<string>() { string.Empty });
+            }
+
+            // Let user input node information manually
+            propertiesDic.Add("Cluster.OptimumNodeOfAsymmetricShare", new List<string>() { string.Empty });
+            propertiesDic.Add("Cluster.NonOptimumNodeOfAsymmetricShare", new List<string>() { string.Empty });
 
             #endregion
 
@@ -557,8 +561,8 @@ namespace Microsoft.Protocols.TestManager.Detector
                 detectionInfo.F_CopyOffload[0] == DetectResult.Supported || detectionInfo.F_CopyOffload[1] == DetectResult.Supported));
 
             selectedRuleList.Add(CreateRule(
-                "Feature.Cluster Required.RSVD (Remote Shared Virtual Disk).RSVDVersion1", 
-                (detectionInfo.RsvdSupport == DetectResult.Supported) && 
+                "Feature.Cluster Required.RSVD (Remote Shared Virtual Disk).RSVDVersion1",
+                (detectionInfo.RsvdSupport == DetectResult.Supported) &&
                 (detectionInfo.RsvdVersion == RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1 || detectionInfo.RsvdVersion == RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_2)));
             selectedRuleList.Add(CreateRule(
                 "Feature.Cluster Required.RSVD (Remote Shared Virtual Disk).RSVDVersion2",
@@ -600,6 +604,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             bool isRsvdSelected = false;
             bool isSqosSelected = false;
             bool isAuthSelected = false;
+            bool isHvrsSelected = false;
             foreach (CaseSelectRule rule in rules)
             {
                 string ruleName = rule.Name;
@@ -613,11 +618,24 @@ namespace Microsoft.Protocols.TestManager.Detector
                     {
                         isSMB2Selected = true;
                     }
-
+                    if (ruleName.Contains("HVRS"))
+                    {
+                        if (rule.Status == RuleStatus.Selected)
+                        {
+                            isHvrsSelected = true;
+                        }
+                    }
                 }
                 else if (ruleName.StartsWith("Feature.Others.FSA (File System Algorithms)") && rule.Status == RuleStatus.Selected)
                 {
                     isFsaSelected = true;
+                    if (ruleName.Contains("HVRS"))
+                    {
+                        if (rule.Status == RuleStatus.Selected)
+                        {
+                            isHvrsSelected = true;
+                        }
+                    }
                 }
                 else if ((ruleName == "Feature.Cluster Required.File Server Failover"
                     || ruleName == "Feature.Cluster Required.SWN (Service Witness)"
@@ -666,6 +684,14 @@ namespace Microsoft.Protocols.TestManager.Detector
             {
                 hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("MS-SMB2_ServerTestSuite.deployment.ptfconfig"));
                 hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("MS-SMB2Model_ServerTestSuite.deployment.ptfconfig"));
+
+                // HVRS properties are located in MS-SMB2_ServerTestSuite.deployment.ptfconfig
+                // If both FSA and HVRS are selected, show HVRS properties in Configure Test Cases
+                if (isFsaSelected && isHvrsSelected)
+                {
+                    Predicate<string> HvrsProperties = delegate (string s) { return s.StartsWith("HVRS"); };
+                    hiddenPropertiesList.RemoveAll(HvrsProperties);
+                }
             }
             else
             {
@@ -713,6 +739,15 @@ namespace Microsoft.Protocols.TestManager.Detector
                 {
                     // Add the property whose value is false (false means the property should be hidden)
                     hiddenPropertiesList.AddRange(dependantProperties.Where(q => !q.Value).Select(q => q.Key));
+                }
+
+                // HVRS properties are located in MS-SMB2_ServerTestSuite.deployment.ptfconfig
+                // If SMB2 is selected but HVRS is not selected, only show SMB2 properties in Configure Test Cases
+                if (!isHvrsSelected)
+                {
+                    hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("MS-SMB2_ServerTestSuite.deployment.ptfconfig"));
+                    Predicate<string> Smb2Properties = delegate (string s) { return s.StartsWith("SMB2"); };
+                    hiddenPropertiesList.RemoveAll(Smb2Properties);
                 }
             }
 

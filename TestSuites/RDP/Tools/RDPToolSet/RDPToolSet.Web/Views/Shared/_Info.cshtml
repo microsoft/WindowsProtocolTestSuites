@@ -1,0 +1,9 @@
+﻿@model CodecDebugTool.Web.Models.ProjectInfoViewModel
+
+@{
+    ViewBag.Title   = Model.ProjectName;
+    ViewBag.Project = Model.ProjectName;
+    ViewBag.Version = Model.ProjectVersion;
+    ViewBag.Author  = Model.Author;   
+    ViewBag.Codecs  = Model.Codecs.Select(_ => _.DisplayName);
+}

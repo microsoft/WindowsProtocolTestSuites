@@ -20,6 +20,8 @@ using System.Security.Principal;
 using System.Text;
 using Smb2 = Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
+
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 {
@@ -80,6 +82,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private FileAccess gOpenGrantedAccess;
         private StreamType gStreamType;
         private List<string> activeTDIs;
+
+        // Used to clean up the generated test files.
+        protected ISutProtocolControlAdapter sutProtocolController;
+        protected List<string> testFiles = new List<string>();
+        protected List<string> testDirectories = new List<string>();
         # endregion
 
         #region Properties
@@ -88,8 +95,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             get { return testConfig; }
         }
 
-        public string FileName {
-            get { return fileName;  }
+        public string FileName
+        {
+            get { return fileName; }
         }
 
         public FileSystem FileSystem
@@ -225,6 +233,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             }
         }
 
+        protected string CurrentTestCaseName
+        {
+            get
+            {
+                string fullName = (string)Site.TestProperties["CurrentTestCaseName"];
+                return fullName.Split('.').LastOrDefault();
+            }
+        }
         #endregion
 
         #region Initialize
@@ -319,6 +335,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             //Other Configurations
             this.transBufferSize = uint.Parse(testConfig.GetProperty("BufferSize"));
 
+            sutProtocolController = Site.GetAdapter<ISutProtocolControlAdapter>();
+
             this.Reset();
         }
 
@@ -340,6 +358,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.transAdapter.UserName = testConfig.UserName;
             this.transAdapter.Timeout = testConfig.Timeout;
             this.transAdapter.Reset();
+
+            CleanTestFiles();
         }
 
         /// <summary>
@@ -354,6 +374,60 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             {
                 transAdapter.Dispose();
                 this.transAdapter = null;
+            }
+
+            CleanTestFiles();
+        }
+
+        protected void CleanTestFiles()
+        {
+            foreach (var fileName in testFiles)
+            {
+                try
+                {
+                    // Remove the appendix. e.g. "::$DATA", ":$I30"
+                    int i = fileName.IndexOf(":");
+                    string temp = fileName;
+                    if (i != -1)
+                    {
+                        temp = fileName.Substring(0, i);
+                    }
+                    sutProtocolController.DeleteFile("\\\\" + testConfig.SutComputerName + "\\" + this.shareName, temp);
+                }
+                catch
+                {
+                }
+            }
+            testFiles.Clear();
+
+            foreach (var directory in testDirectories)
+            {
+                try
+                {
+                    int i = directory.IndexOf(":");
+                    string temp = directory;
+                    if (i != -1)
+                    {
+                        temp = directory.Substring(0, i);
+                    }
+                    sutProtocolController.DeleteDirectory("\\\\" + testConfig.SutComputerName + "\\" + this.shareName, temp);
+                }
+                catch
+                {
+                }
+            }
+            testDirectories.Clear();
+        }
+
+        protected void AddTestFileName(CreateOptions createOptions, string fileName)
+        {
+            if (createOptions.HasFlag(CreateOptions.DIRECTORY_FILE))
+            {
+                testDirectories.Add(fileName);
+            }
+            else
+            {
+                testFiles.Add(fileName);
             }
         }
 
@@ -4325,6 +4399,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 fileLinkInformation.Reserved = new byte[7];
             }
             byte[] inputBuffer = TypeMarshal.ToBytes<FILE_LINK_INFORMATION_TYPE_SMB2>(fileLinkInformation);
+
             return SetFileInformation(FileInfoClass.FILE_LINK_INFORMATION, inputBuffer);
         }
 
@@ -5117,9 +5192,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         #region Utility methods
 
         /// <summary>
-        /// Create a random file name including 8 letters
+        /// Create a random file name a random string of 8 letters.
         /// </summary>
-        /// <returns>String concluding 8 randomized letters</returns>
+        /// <returns>>A file name with a random string of 8 letters.</returns>
         protected string ComposeRandomFileName()
         {
             return ComposeRandomFileName(8);
@@ -5129,7 +5204,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// Create a random file name
         /// </summary>
         /// <param name="fileNameLength">The length of the file name.</param>
-        /// <returns>A random string file name with given length.</returns>
+        /// <returns>A file name with a random string of the given length.</returns>
         public string ComposeRandomFileName(int fileNameLength)
         {
             int randomNumber = 0;
@@ -5141,18 +5216,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             {
                 //Create a random fileNameLetter from 'a' to 'z'by range 1 to 52
                 randomNumber = randomRange.Next(1, 52);
-                if (randomNumber > 26)
-                {
-                    //Convert to char type
-                    fileNameLetter = (char)(97 + randomNumber % 26);
-                }
-                else
-                {
-                    fileNameLetter = (char)(97 + randomNumber % 26);
-                }
+                fileNameLetter = (char)(97 + randomNumber % 26);
                 ramdomFileName = ramdomFileName + fileNameLetter.ToString(); ;
             }
 
+            AddTestFileName(gOpenMode, ramdomFileName);
             return ramdomFileName;
         }
 

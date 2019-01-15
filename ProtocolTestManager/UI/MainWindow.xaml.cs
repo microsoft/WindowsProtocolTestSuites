@@ -186,7 +186,7 @@ namespace Microsoft.Protocols.TestManager.UI
             SetButtonsStatus(false, true);
             this.ListBox_Step.IsEnabled = false;
             Pages.AutoDetectionPage.PropertyListBox.IsEnabled = false;
-            
+
             try
             {
                 if (util.SetPrerequisits() != true) throw new Exception(StringResources.InvalidValue);
@@ -321,6 +321,11 @@ namespace Microsoft.Protocols.TestManager.UI
                     this.ListBox_Step.IsEnabled = true;
                     Pages.RunPage.EnableControls = true;
                     Pages.AutoDetectionPage.PropertyListBox.IsEnabled = true;
+                    if (e.Exception.Count > 0)
+                    {
+                        Utility.LogException(e.Exception);
+                        MessageBox.Show("Some exception happened during executing!", "Error", MessageBoxButton.OK);
+                    }
                 }));
             };
             Pages.RunPage.TotalResults.Visibility = System.Windows.Visibility.Hidden;
@@ -464,7 +469,8 @@ namespace Microsoft.Protocols.TestManager.UI
                         SetButtonsStatus(false, false);
                         detectionFinished = false;
 
-                        Task.Factory.StartNew(() => {
+                        Task.Factory.StartNew(() =>
+                        {
                             util.StopDetection(() =>
                             {
                                 this.Dispatcher.Invoke((Action)(() =>

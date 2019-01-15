@@ -44,7 +44,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
-        [TestCategory(TestCategories.Hvrs)]
+        [TestCategory(TestCategories.HvrsSmb)]
         [TestCategory(TestCategories.Smb30)]
         [Description("This test case is designed to test whether the server supports the SMB 3.0 or higher dialect.")]
         public void BVT_SMBDialect()
@@ -72,7 +72,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
-        [TestCategory(TestCategories.Hvrs)]
+        [TestCategory(TestCategories.HvrsSmb)]
         [TestCategory(TestCategories.Smb30)]
         [Description("This test case is designed to test whether the server supports persistent handles.")]
         public void BVT_PersistentHandles()
@@ -119,7 +119,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
-        [TestCategory(TestCategories.Hvrs)]
+        [TestCategory(TestCategories.HvrsSmb)]
         [TestCategory(TestCategories.Smb30)]
         [Description("This test case is designed to test whether the server supports the FSCTL_LMR_REQUEST_RESILIENCY.")]
         public void BVT_Resiliency()

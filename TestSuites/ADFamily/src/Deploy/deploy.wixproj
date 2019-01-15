@@ -43,6 +43,10 @@
     <Compile Include="PlayLists.wxs" />
     <Compile Include="SCRIPT_FILES.wxs" />
     <Compile Include="Bin.wxs" />
+    <Compile Include="COMMON_TD_FILES.wxs" />
+    <Compile Include="WIN2016_TD_FILES.wxs" />
+    <Compile Include="WIN8_TD_FILES.wxs" />
+    <Compile Include="WINBLUE_TD_FILES.wxs" />
 
     <Compile Include="DependencyCheckWarningDlg.wxs" />
     <Compile Include="EndpointDlg.wxs" />
@@ -337,7 +341,11 @@
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\drop\TestSuites\ADFamily\Bin&quot; -out Bin.wxs -template fragment -gg -cg BIN_FILES -dr TESTSUITE_BIN_DIR -var wix.TESTSUITE_BIN_DIR -sreg -sfrag -srd" />
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;..\Batch&quot; -out Batch.wxs -template fragment -gg -cg BATCH_FILES -dr TESTSUITE_BATCH_DIR -var wix.TESTSUITE_BATCH_DIR -sreg -sfrag -srd" />
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;..\PlayLists&quot; -out PlayLists.wxs -template fragment -gg -cg PlayLists_FILES -dr TESTSUITE_PlayLists_DIR -var wix.TESTSUITE_PlayLists_DIR -sreg -sfrag -srd" />
-    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;..\Scripts&quot; -out SCRIPT_FILES.wxs -template fragment -gg -cg SCRIPT_FILES -dr SCRIPT_FILES_DIR -var wix.SCRIPT_FILES_DIR -sreg -sfrag -srd" />
+    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts&quot; -out SCRIPT_FILES.wxs -template fragment -gg -cg SCRIPT_FILES -dr SCRIPT_FILES_DIR -var wix.SCRIPT_FILES_DIR -sreg -sfrag -srd" />
+    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\ADFamily\docs\Common-TD-XML&quot; -out COMMON_TD_FILES.wxs -template fragment -gg -cg COMMON_TD_FILES -dr COMMON_TD_DIR -var wix.COMMON_TD_DIR -sreg -sfrag -srd" />
+    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\ADFamily\docs\Win2016-TD-XML&quot; -out WIN2016_TD_FILES.wxs -template fragment -gg -cg WIN2016_TD_FILES -dr WIN2016_TD_DIR -var wix.WIN2016_TD_DIR -sreg -sfrag -srd" />
+    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\ADFamily\docs\Win8-TD-XML&quot; -out WIN8_TD_FILES.wxs -template fragment -gg -cg WIN8_TD_FILES -dr WIN8_TD_DIR -var wix.WIN8_TD_DIR -sreg -sfrag -srd" />
+    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\ADFamily\docs\WinBlue-TD-XML&quot; -out WINBLUE_TD_FILES.wxs -template fragment -gg -cg WINBLUE_TD_FILES -dr WINBLUE_TD_DIR -var wix.WINBLUE_TD_DIR -sreg -sfrag -srd" />
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\common&quot; -out CommonBatch.wxs -template fragment -gg -cg COMMON_BATCH_FILES -dr TESTSUITE_COMMON_SCRIPTS_DIR -var wix.TESTSUITE_COMMON_SCRIPTS_DIR -sreg -sfrag -srd" />
   </Target>
   <ItemGroup>
@@ -345,12 +353,70 @@
     <DRSRAdapterScriptFiles Include="..\Adapter\MS-DRSR\SUTControlAdapter\*.ps1" />
     <LSADAdapterScriptFiles Include="..\Adapter\MS-LSAD\SUTControlAdapter\*.ps1" />
     <NRPCAdapterScriptFiles Include="..\Adapter\MS-NRPC\SUTControlAdapter\*.ps1" />
+    <SetupScriptFiles Include="..\..\Setup\Scripts\*" />
   </ItemGroup>
   <Target Name="CopyFilesToBin" BeforeTargets="GenDeployWxsFile">
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Add-AdRemoteUserToLocalGroup.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Check-ReturnValue.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Create-AdUserWithGroupMembership.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\CreateLocalSideForestTrust.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Create-ManagedServiceAccount.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Create-SelfSignedCert.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Disable_Firewall.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Enable-AdRecyleBin.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Execute-RemoteScript.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Find-PtfConfigFiles.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-AdLdsInstanceId.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-AvailablePort.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-CertHash.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-DomainGuid.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-DomainNetbiosName.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-DomainSid.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-ForestFuncLvl.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-OSVersion.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\GetVMNameByComputerName.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\GetVmParameters.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\GptTmpl.txt" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Install-AdCertificateService-Feature.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\InstallADLDS.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\InstallADLDSAnswerFile.txt" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Install-AdLds-Feature.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Install-AdLds-Instance.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Install-DfsManagement-Feature.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Install-Iis-Feature.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Install-SelfSignedCert.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Join-Domain.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Modify-PtfConfigFiles.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\PromoteChildDomain.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\PromoteDomainController.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\PromoteRODC.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Register-DbgSrv.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Replicate-DomainNc.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\RestartAndRun.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\RestartAndRunFinish.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-AdComputerPassword.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-AdComputerPasswordOnPDC.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-AdUserPwdPolicy.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-AlternateDns.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-AutoLogon.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-ExecutionPolicy-Unrestricted.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-IisSslBinding.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-KdcService.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-MsDSAdditonalDnsHostName.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-MsDsAllowToActOnBehalfOfOtherIdentity.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-MsDsBehaviorVersion.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-MsDsOtherSettings.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-NetlogonRegKeyAndPolicy.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-NetworkConfiguration.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-SecurityLevel.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Turnoff-UAC.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Verify-ForestTrust.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\WaitFor-ComputerReady.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
     <Copy SourceFiles="@(APDSAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Bin\Adapter\MS-APDS\SUTControlAdapter" />	
     <Copy SourceFiles="@(DRSRAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Bin\Adapter\MS-DRSR\SUTControlAdapter" />	
     <Copy SourceFiles="@(LSADAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Bin\Adapter\MS-LSAD\SUTControlAdapter" />	
-    <Copy SourceFiles="@(NRPCAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Bin\Adapter\MS-NRPC\SUTControlAdapter" />	
+    <Copy SourceFiles="@(NRPCAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Bin\Adapter\MS-NRPC\SUTControlAdapter" />
+    <Copy SourceFiles="@(SetupScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />	
     <Copy SourceFiles="..\ServerLocalTestRun.testrunconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Bin" />
     <Copy SourceFiles="..\TestSuite\AD_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Bin" />
     <Copy SourceFiles="..\TestSuite\AD_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Bin" />

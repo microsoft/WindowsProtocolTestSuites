@@ -55,7 +55,7 @@ namespace Microsoft.Protocols.TestManager.BranchCachePlugin
             AddResultItem(ref this.versionSupportedItems, version.ToString(), this.info.VersionInformation.branchCacheVersion.HasFlag(version)? DetectResult.Supported:DetectResult.UnSupported);
         }
 
-        private void AddResultItem(ref ResultItemMap resultItemMap, string value, DetectResult result)
+        private void AddResultItem(ref ResultItemMap resultItemMap, string name, DetectResult result)
         {
             string imagePath = string.Empty;
             switch (result)
@@ -72,8 +72,7 @@ namespace Microsoft.Protocols.TestManager.BranchCachePlugin
                 default:
                     break;
             }
-
-            ResultItem item = new ResultItem() { DetectedResult = result, ImageUrl = imagePath, Value = value };
+            ResultItem item = new ResultItem(result,imagePath,name);
             resultItemMap.ResultItemList.Add(item);
         }
 

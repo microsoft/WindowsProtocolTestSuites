@@ -30,7 +30,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// on the native Windows  NT information level requested. The specific format of the data block in the server 
         /// response is  based on the native Windows NT information level, as specified in [MS-FSCC] section 2.4. 
         /// </summary>
-        private bool isUsePathThrough;
+        private bool isUsePassThrough;
 
         /// <summary>
         /// the flags of smb header. 
@@ -326,15 +326,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
         /// on the native Windows  NT information level requested. The specific format of the data block in the server 
         /// response is  based on the native Windows NT information level, as specified in [MS-FSCC] section 2.4. 
         /// </summary>
-        public bool IsUsePathThrough
+        public bool IsUsePassThrough
         {
             get
             {
-                return this.isUsePathThrough;
+                return this.isUsePassThrough;
             }
             set
             {
-                this.isUsePathThrough = value;
+                this.isUsePassThrough = value;
             }
         }
 

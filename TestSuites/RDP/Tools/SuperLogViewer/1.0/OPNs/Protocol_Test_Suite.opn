@@ -1,0 +1,126 @@
+protocol Protocol_Test_Suite
+    with ImportInfo{ProviderId = {acb7c4c9-a810-498e-887c-1c0e0372bb58},
+                    EventsCount = 2,
+                    KeywordsCount = 0};
+using Etw;
+using EtwEvent;
+using WindowsReference;
+using Utility;
+
+type Keywords
+{
+    WindowsEtwKeywords StandardKeywords
+        with Standard.BinaryEncoding{LeadPadding = 48};
+}
+
+message Event_1 : EventTemplate_0
+{
+    string GetSummary()
+    {
+	    switch(EntryKind)
+		{
+			case "TestInProgress" =>
+				string name = Message.Segment(Message.LastIndexOf(".") + 1);
+				return "==== Test Case: " + name +" ====";
+			default =>
+				return "[" + (this.EntryKind as string) + "] " +
+					   (this.Message as string);
+		}
+    }
+    
+    public override string ToString()
+    {
+        return GetSummary();
+    }
+}
+
+message Event_2 : EventTemplate_1
+{
+    public override string ToString()
+    {
+        return this.MessageName + " - " + this.Comments;
+    }
+}
+
+message EventTemplate_0
+{
+    string TestSuite;
+    
+    string CaseName;
+    
+    string EntryKind;
+    
+    string Message;
+    
+    Keywords EtwKeywords with Standard.Encoding{Ignore = true};
+}
+
+message EventTemplate_1
+{
+    string TestSuite;
+    
+    string CaseName;
+    
+    string MessageName;
+    
+    ushort DumpLevel;
+    
+    string Comments;
+    
+    ushort Length;
+
+    binary Payload with BinaryEncoding{Length = Length};
+    
+    Keywords EtwKeywords with Standard.Encoding{Ignore = true};
+}
+
+endpoint ep_Protocol_Test_Suite accepts Event_1 accepts Event_2;
+
+public autostart actor actor_acb7c4c9a810498e887c1c0e0372bb58
+    (EtwEvent.Node node)
+{
+    process node accepts
+                m:EtwProviderMsg
+                    where (m.EventRecord.Header.ProviderId ==
+                           {acb7c4c9-a810-498e-887c-1c0e0372bb58})
+    {
+        switch(m.EventRecord.Header.Descriptor.Id)
+        {
+            case $ 1 =>
+                switch(m.Payload)
+                {
+                    case
+                        decodedMsg:Event_1 from BinaryDecoder<Event_1>
+                        => {
+                               decodedMsg.EtwKeywords =
+                                   DecodeEtwKeywords<Keywords>(m);
+                               ep_Protocol_Test_Suite ep =
+                                   endpoint  ep_Protocol_Test_Suite;
+                               dispatch ep accepts decodedMsg;
+                           }
+                    default =>
+                        ThrowDecodingException("Protocol_Test_Suite",
+                                               "Event_1");
+                }
+            case $ 2 =>
+                switch(m.Payload)
+                {
+                    case
+                        decodedMsg:Event_2 from BinaryDecoder<Event_2>
+                        => {
+
+
+                               ep_Protocol_Test_Suite ep =
+                                   endpoint  ep_Protocol_Test_Suite;
+                               dispatch ep accepts decodedMsg;
+                           }
+                    default =>
+                        ThrowDecodingException("Protocol_Test_Suite",
+                                               "Event_2");
+                }
+            default =>
+                ThrowDecodingException("Protocol_Test_Suite");
+        }
+    }
+}
+

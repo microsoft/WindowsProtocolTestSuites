@@ -1,0 +1,301 @@
+﻿@model RFXPEncodeViewModel
+
+<div class="container">
+
+    <div id="intro">@Html.Partial("_Intro") </div>
+
+    <div id="main">
+
+        <div class="text-left">
+            <h2>Encoding Steps</h2>
+        </div>
+
+        @using (Html.BeginPanel("upload-previous-frame", "Previous Frame"))
+        {
+            <div class="content" style="margin-bottom: 20px">
+                <div class="text-left" style="margin-bottom: 10px;">
+                    <p>Drag and drop your image here to upload. This image is regarded as the previous frame already encoded. </p>
+                </div>
+                <form action="@Url.Action("Upload")" class="dropzone" id="previousFrameUploader">
+                    <input type="hidden" name="imageType" value="PreviousFrameImage" />
+                </form>
+            </div>
+        }
+
+        <div class="panel-group">
+
+            @using (Html.BeginPanel(Model.Panels[Model.Steps.ImageInput].Id, Model.Panels[Model.Steps.ImageInput].Title))
+            {
+                <div class="content" style="margin-bottom: 20px">
+                    <div class="text-left" style="margin-bottom: 10px;">
+                        <p>Drag and drop your image here to upload: </p>
+                    </div>
+                    <form action="@Url.Action("Upload")" class="dropzone" id="dropUploader">
+                        <input type="hidden" name="imageType" value="EncodedImage" />
+                    </form>
+                </div>
+                <!-- Parameters -->
+                <div style="display: inline-block; text-align: left; float: left">
+                    @Html.Partial("_Entropy", Model.Params)
+                    @Html.Partial("_QuantsSetting", Model.Params)
+                    @Html.Partial("_ProgQuantsSetting", Model.Params)
+                    @Html.Partial("_UseReduceExtrapolate", Model.Params)
+                    <div class="text-right" style="float: right">
+                        @Html.ButtonFor(name: "Encode", id: "rfxpencode")
+                    </div>
+                </div>
+                
+            }
+
+            @using (Html.BeginPanel(Model.Panels[Model.Steps.RGBToYCbCr].Id, Model.Panels[Model.Steps.RGBToYCbCr].Title))
+            {
+                using (Html.BeginInOutTabs(Model.InPanels[Model.Steps.RGBToYCbCr].Id, Model.Panels[Model.Steps.RGBToYCbCr].Id + "-out"))
+                {
+                <div class="tab-pane" id="@(Model.InPanels[Model.Steps.RGBToYCbCr].Id)">
+                    <div class="content input-tab-pane">
+                        @Html.Partial("_Tabs", Model.InPanels[Model.Steps.RGBToYCbCr].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDecOrHex")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Clear", @class: "btn-clear")
+                        @Html.ButtonFor(name: "Recompute", @class: "btn-recompute")
+                    </div>
+                </div>
+                <div class="tab-pane active" id="@(Model.Panels[Model.Steps.RGBToYCbCr].Id + "-out")">
+                    <div class="content output-tab-pane">
+                        @Html.Partial("_Tabs", Model.Panels[Model.Steps.RGBToYCbCr].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDataFormatOut")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Copy", id: "btn-copy-" + Model.Panels[Model.Steps.RGBToYCbCr].Id, @class: "btn-copy")
+                        @Html.ButtonFor(name: "Code", @class: "btn-source-code")
+                        @Html.ButtonFor(name: "Compare", @class: "btn-compare")
+                        <input type="hidden" name="srcUrl" value="/Static/RemoteFXPCodec/RfxProgressiveEncoder.cs.html#step_RGBToYCbCr">
+                    </div>
+                </div>
+                }
+            }
+
+            @using (Html.BeginPanel(Model.Panels[Model.Steps.DWT].Id, Model.Panels[Model.Steps.DWT].Title))
+            {
+                using (Html.BeginInOutTabs(Model.InPanels[Model.Steps.DWT].Id, Model.Panels[Model.Steps.DWT].Id + "-out"))
+                {
+                <div class="tab-pane" id="@(Model.InPanels[Model.Steps.DWT].Id)">
+                    <div class="content input-tab-pane">
+                        @Html.Partial("_Tabs", Model.InPanels[Model.Steps.DWT].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDataFormatIn")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Clear", @class: "btn-clear")
+                        @Html.ButtonFor(name: "Recompute", @class: "btn-recompute")
+                    </div>
+                </div>
+                <div class="tab-pane active" id="@(Model.Panels[Model.Steps.DWT].Id + "-out")">
+                    <div class="content output-tab-pane">
+                        @Html.Partial("_Tabs", Model.Panels[Model.Steps.DWT].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDataFormatOut")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Copy", id: "btn-copy-" + Model.Panels[Model.Steps.DWT].Id, @class: "btn-copy")
+                        @Html.ButtonFor(name: "Code", @class: "btn-source-code")
+                        @Html.ButtonFor(name: "Compare", @class: "btn-compare")
+                        <input type="hidden" name="srcUrl" value="/Static/RemoteFXPCodec/RfxProgressiveEncoder.cs.html#step_DWT">
+                    </div>
+                </div>
+                }
+            }
+
+            @using (Html.BeginPanel(Model.Panels[Model.Steps.Quantization].Id, Model.Panels[Model.Steps.Quantization].Title))
+            {
+                using (Html.BeginInOutTabs(Model.InPanels[Model.Steps.Quantization].Id, Model.Panels[Model.Steps.Quantization].Id + "-out"))
+                {
+                <div class="tab-pane" id="@(Model.InPanels[Model.Steps.Quantization].Id)">
+                    <div class="content input-tab-pane">
+                        @Html.Partial("_Tabs", Model.InPanels[Model.Steps.Quantization].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDataFormatIn")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Clear", @class: "btn-clear")
+                        @Html.ButtonFor(name: "Recompute", @class: "btn-recompute")
+                    </div>
+                </div>
+                <div class="tab-pane active" id="@(Model.Panels[Model.Steps.Quantization].Id + "-out")">
+                    <div class="content output-tab-pane">
+                        @Html.Partial("_Tabs", Model.Panels[Model.Steps.Quantization].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDataFormatOut")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Copy", id: "btn-copy-" + Model.Panels[Model.Steps.Quantization].Id, @class: "btn-copy")
+                        @Html.ButtonFor(name: "Code", @class: "btn-source-code")
+                        @Html.ButtonFor(name: "Compare", @class: "btn-compare")
+                        <input type="hidden" name="srcUrl" value="/Static/RemoteFXPCodec/RfxProgressiveEncoder.cs.html#step_Quantization">
+                    </div>
+                </div>
+                }
+            }
+
+            @using (Html.BeginPanel(Model.Panels[Model.Steps.Linearization].Id, Model.Panels[Model.Steps.Linearization].Title))
+            {
+                using (Html.BeginInOutTabs(Model.InPanels[Model.Steps.Linearization].Id, Model.Panels[Model.Steps.Linearization].Id + "-out"))
+                {
+                <div class="tab-pane" id="@(Model.InPanels[Model.Steps.Linearization].Id)">
+                    <div class="content input-tab-pane">
+                        @Html.Partial("_Tabs", Model.InPanels[Model.Steps.Linearization].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDataFormatIn")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Clear", @class: "btn-clear")
+                        @Html.ButtonFor(name: "Recompute", @class: "btn-recompute")
+                    </div>
+                </div>
+                <div class="tab-pane active" id="@(Model.Panels[Model.Steps.Linearization].Id + "-out")">
+                    <div class="content output-tab-pane">
+                        @Html.Partial("_Tabs", Model.Panels[Model.Steps.Linearization].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDataFormatOut")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Copy", id: "btn-copy-" + Model.Panels[Model.Steps.Linearization].Id, @class: "btn-copy")
+                        @Html.ButtonFor(name: "Code", @class: "btn-source-code")
+                        @Html.ButtonFor(name: "Compare", @class: "btn-compare")
+                        <input type="hidden" name="srcUrl" value="/Static/RemoteFXPCodec/RfxProgressiveEncoder.cs.html#step_Linearization">
+                    </div>
+                </div>
+                }
+            }
+
+            @using (Html.BeginPanel(Model.Panels[Model.Steps.SubBandDiffing].Id, Model.Panels[Model.Steps.SubBandDiffing].Title))
+            {
+                using (Html.BeginInOutTabs(Model.InPanels[Model.Steps.SubBandDiffing].Id, Model.Panels[Model.Steps.SubBandDiffing].Id + "-out"))
+                {
+                <div class="tab-pane" id="@(Model.InPanels[Model.Steps.SubBandDiffing].Id)">
+                    <div class="content input-tab-pane">
+                        @Html.Partial("_Tabs", Model.InPanels[Model.Steps.SubBandDiffing].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDataFormatIn")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Clear", @class: "btn-clear")
+                        @Html.ButtonFor(name: "Recompute", @class: "btn-recompute")
+                    </div>
+                </div>
+                <div class="tab-pane active" id="@(Model.Panels[Model.Steps.SubBandDiffing].Id + "-out")">
+                    <div class="content output-tab-pane">
+                        @Html.Partial("_Tabs", Model.Panels[Model.Steps.SubBandDiffing].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDataFormatOut")
+                        <!-- TODO: for the recompute there sould be some bug -->
+                    </div>
+                    <div class="use-diffing" style="display: inline-block; text-align: left; float: left">
+                        <span class="glyphicon glyphicon-remove-sign" style="padding-right: 5px;"></span>Diffing Not Used.
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Copy", id: "btn-copy-" + Model.Panels[Model.Steps.SubBandDiffing].Id, @class: "btn-copy")
+                        @Html.ButtonFor(name: "Code", @class: "btn-source-code")
+                        @Html.ButtonFor(name: "Compare", @class: "btn-compare")
+                        <input type="hidden" name="srcUrl" value="/Static/RemoteFXPCodec/RfxProgressiveEncoder.cs.html#step_SubBandDiffing">
+                    </div>
+                </div>
+                }
+            }
+
+            @using (Html.BeginPanel(Model.Panels[Model.Steps.ProgQuantization].Id, Model.Panels[Model.Steps.ProgQuantization].Title))
+            {
+                using (Html.BeginInOutTabs(Model.InPanels[Model.Steps.ProgQuantization].Id, Model.Panels[Model.Steps.ProgQuantization].Id + "-out"))
+                {
+                <div class="tab-pane" id="@(Model.InPanels[Model.Steps.ProgQuantization].Id)">
+                    <div class="content input-tab-pane">
+                        @Html.Partial("_Tabs", Model.InPanels[Model.Steps.ProgQuantization].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDataFormatIn")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Clear", @class: "btn-clear")
+                        @Html.ButtonFor(name: "Recompute", @class: "btn-recompute")
+                    </div>
+                </div>
+                <div class="tab-pane active" id="@(Model.Panels[Model.Steps.ProgQuantization].Id + "-out")">
+                    <div class="content output-tab-pane">
+                        @Html.Partial("_Tabs", Model.Panels[Model.Steps.ProgQuantization].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDataFormatOut")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Copy", id: "btn-copy-" + Model.Panels[Model.Steps.ProgQuantization].Id, @class: "btn-copy")
+                        @Html.ButtonFor(name: "Code", @class: "btn-source-code")
+                        @Html.ButtonFor(name: "Compare", @class: "btn-compare")
+                        <input type="hidden" name="srcUrl" value="/Static/RemoteFXPCodec/RfxProgressiveEncoder.cs.html#step_ProgressiveQuantization">
+                    </div>
+                </div>
+                }
+            }
+
+            @using (Html.BeginPanel(Model.Panels[Model.Steps.EntropyEncoding].Id, Model.Panels[Model.Steps.EntropyEncoding].Title))
+            {
+                using (Html.BeginInOutTabs(Model.InPanels[Model.Steps.EntropyEncoding].Id, Model.Panels[Model.Steps.EntropyEncoding].Id + "-out"))
+                {
+                <div class="tab-pane" id="@(Model.InPanels[Model.Steps.EntropyEncoding].Id)">
+                    <div class="content input-tab-pane">
+                        @Html.Partial("_Tabs", Model.InPanels[Model.Steps.EntropyEncoding].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDataFormatIn")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Clear", @class: "btn-clear")
+                        @Html.ButtonFor(name: "Recompute", @class: "btn-recompute")
+                    </div>
+                </div>
+                <div class="tab-pane active" id="@(Model.Panels[Model.Steps.EntropyEncoding].Id + "-out")">
+                    <div class="content output-tab-pane">
+                        @Html.Partial("_Tabs", Model.Panels[Model.Steps.EntropyEncoding].Tabs)
+                    </div>
+                    <div style="display: inline-block; text-align: left; float: left">
+                        @Html.Partial("_UseDecOrHex")
+                    </div>
+                    <div class="text-right">
+                        @Html.ButtonFor(name: "Copy", id: "btn-copy-" + Model.Panels[Model.Steps.EntropyEncoding].Id, @class: "btn-copy")
+                        @Html.ButtonFor(name: "Code", @class: "btn-source-code")
+                        @Html.ButtonFor(name: "Compare", @class: "btn-compare")
+                        <input type="hidden" name="srcUrl" value="/Static/RemoteFXPCodec/RfxProgressiveEncoder.cs.html#step_SRLEncode">
+                        <button class="btn btn-link btn-prog-export" title="Use this output as the input of RemoteFX Progressive Decode.">
+                            <span style="font-size: 1.2em" class="glyphicon glyphicon-export"></span>
+                        </button>
+                        @Html.Partial("_ProgOutputAsInput")
+                    </div>
+
+                </div>
+                }
+            }
+        </div>
+
+    </div>
+
+    <div id="dialogs">
+        @Html.Partial("_Compare")
+        @Html.Partial("_ProgQuantsModal", Model.Params)
+        @Html.Partial("_QuantsModal", Model.Params)
+    </div>
+
+    <div id="help">@Html.Partial("_Help") </div>
+
+</div>

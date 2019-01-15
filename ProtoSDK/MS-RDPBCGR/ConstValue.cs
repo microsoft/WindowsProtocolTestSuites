@@ -1051,9 +1051,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         internal const UInt16 TS_GLYPHCACHE_CAPABILITYSET_GLYPHCACHE_LENGTH = 10;
 
         /// <summary>
-        /// (64 bytes) TS_INPUT_CAPABILITY_SET ime file name length
+        /// (64 bytes) TS_INPUT_CAPABILITYSET ime file name length
         /// </summary>
-        internal const UInt16 TS_INPUT_CAPABILITY_SET_IME_FILE_NAME_LENGTH = 64;
+        internal const UInt16 TS_INPUT_CAPABILITYSET_IME_FILE_NAME_LENGTH = 64;
 
         /// <summary>
         /// (12 bytes) TS_BITMAPCACHE_CAPABILITYSET_REV2 pad3 length
@@ -1069,7 +1069,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// (16 bytes) ARC_SC_PRIVATE_PACKET arc random bits length
         /// </summary>
         internal const UInt16 ARC_SC_PRIVATE_PACKET_ARC_RANDOM_BITS_LENGTH = 16;
-        
+
         /// <summary>
         /// (16 bytes) TS_ORDER_CAPABILITYSET terminal descriptor
         /// </summary>

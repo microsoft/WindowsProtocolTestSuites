@@ -1,7 +1,7 @@
 ﻿# MS-FSA Protocol Server Test Design Specification 
 
-# Contents
-* [Contents](#_Toc427488644)
+## Contents
+
 * [Introduction](#_Toc427488645)
 * [MS-FSA Overview](#_Toc427488646)
 * [Test Approach](#_Toc427488647)
@@ -13,183 +13,188 @@
     * [MBT Test cases](#_Toc427488653)
 * [Traditional Test Scenarios Design](#_Toc427488654)
     * [Scenarios for Win8 new added algorithm](#_Toc427488655)
-		* [FsCtl_Get_IntegrityInformation](#_Toc427488656)
-		* [FsCtl_Set_IntegrityInformation](#_Toc427488657)
-		* [FsCtl_Offload_Read](#_Toc427488658)
-		* [FsCtl_Offload_Write](#_Toc427488659)
-		* [FsInfo_Query_FileFsSectorSizeInformation](#_Toc427488660)
+        * [FsCtl_Get_IntegrityInformation](#_Toc427488656)
+        * [FsCtl_Set_IntegrityInformation](#_Toc427488657)
+        * [FsCtl_Offload_Read](#_Toc427488658)
+        * [FsCtl_Offload_Write](#_Toc427488659)
+        * [FsInfo_Query_FileFsSectorSizeInformation](#_Toc427488660)
     * [Scenarios for ReFS file system](#_Toc427488661)
-		* [FsInfo_FileFsAttributeInformation](#_Toc427488662)
-		* [FileInfo_IsShortNameSupported](#_Toc427488663)
-		* [FsInfo_IsObjectIdSupported](#_Toc427488664)
-		* [FileInfo_IsCompressionSupported](#_Toc427488665)
-		* [FileInfo_IsEASupported](#_Toc427488666)
-		* [FileInfo_IsIntegritySupported](#_Toc427488667)
-		* [FileInfo_IsFileLinkInfoSupported](#_Toc427488668)
-		* [FileInfo_IsFileValidDateLengthInfoSupported](#_Toc427488669)
-		* [FsInfo_FileFsSizeInformation_ClusterSize](#_Toc427488670)
-		* [QuotaInfo_IsQuotaInfoSupported](#_Toc427488671)
-		* [FsCtl_IsEncryptionSupported](#_Toc427488672)
-		* [FsCtl_IsAllocatedRangesSupported](#_Toc427488673)
-		* [FsCtl_IsReparsePointSupported](#_Toc427488674)
-		* [FsCtl_ IsSparseFileSupported](#_Toc427488675)
-		* [FsCtl_IsZeroDataSupported](#_Toc427488676)
-	* [Scenarios for Alternate Data Stream](#_Toc427488822)
-		* [AlternateDataStream_CreateStream](#_Toc427488823)
-		* [AlternateDataStream_ListStreams](#_Toc427488824)
-		* [AlternateDataStream_DeleteStream](#_Toc427488825)
-		* [AlternateDataStream_RenameStream](#_Toc427488826)
-		* [AlternateDataStream_WriteAndRead](#_Toc427488827)
-		* [AlternateDataStream_LockAndUnlock](#_Toc427488828)
-		* [AlternateDataStream_QueryAndSet_FileInformation](#_Toc427488829)
-		* [AlternateDataStream_FsControl](#_Toc427488830)
+        * [FsInfo_FileFsAttributeInformation](#_Toc427488662)
+        * [FileInfo_IsShortNameSupported](#_Toc427488663)
+        * [FsInfo_IsObjectIdSupported](#_Toc427488664)
+        * [FileInfo_IsCompressionSupported](#_Toc427488665)
+        * [FileInfo_IsEASupported](#_Toc427488666)
+        * [FileInfo_IsIntegritySupported](#_Toc427488667)
+        * [FileInfo_IsFileLinkInfoSupported](#_Toc427488668)
+        * [FileInfo_IsFileValidDateLengthInfoSupported](#_Toc427488669)
+        * [FsInfo_FileFsSizeInformation_ClusterSize](#_Toc427488670)
+        * [QuotaInfo_IsQuotaInfoSupported](#_Toc427488671)
+        * [FsCtl_IsEncryptionSupported](#_Toc427488672)
+        * [FsCtl_IsAllocatedRangesSupported](#_Toc427488673)
+        * [FsCtl_IsReparsePointSupported](#_Toc427488674)
+        * [FsCtl_IsSparseFileSupported](#_Toc427488675)
+        * [FsCtl_IsZeroDataSupported](#_Toc427488676)
+    * [Scenarios for Alternate Data Stream](#_Toc427488822)
+        * [AlternateDataStream_CreateStream](#_Toc427488823)
+        * [AlternateDataStream_ListStreams](#_Toc427488824)
+        * [AlternateDataStream_DeleteStream](#_Toc427488825)
+        * [AlternateDataStream_RenameStream](#_Toc427488826)
+        * [AlternateDataStream_WriteAndRead](#_Toc427488827)
+        * [AlternateDataStream_LockAndUnlock](#_Toc427488828)
+        * [AlternateDataStream_QueryAndSet_FileInformation](#_Toc427488829)
+        * [AlternateDataStream_FsControl](#_Toc427488830)
+    * [Other Scenarios](#other-scenarios)
+        * [CreateFile](#createfile)
 * [Traditional Test Case Design](#_Toc427488677)
     * [Test cases for Win8 new added algorithm](#_Toc427488678)
-		* [FsCtl_Get_IntegrityInformation_File_IsIntegritySupported (BVT)](#_Toc427488679)
-		* [FsCtl_Get_IntegrityInformation_Dir_IsIntegritySupported (BVT)](#_Toc427488680)
-		* [FsCtl_Get_IntegrityInformation_File_InvalidParameter(3TCs)](#_Toc427488681)
-		* [FsCtl_Get_IntegrityInformation_Dir_InvalidParameter(3TCs)](#_Toc427488682)
-		* [FsCtl_Get_IntegrityInformation_File_OutputValue(2TCs)](#_Toc427488683)
-		* [FsCtl_Get_IntegrityInformation_Dir_OutputValue(2TCs)](#_Toc427488684)
-		* [FsCtl_Set_IntegrityInformation_File_IsIntegritySupported (BVT)](#_Toc427488685)
-		* [FsCtl_Set_IntegrityInformation_Dir_IsIntegritySupported (BVT)](#_Toc427488686)
-		* [FsCtl_Set_IntegrityInformation_File_InvalidParameter(2TCs)](#_Toc427488687)
-		* [FsCtl_Set_IntegrityInformation_Dir_InvalidParameter(2TCs)](#_Toc427488688)
-		* [FsCtl_Set_IntegrityInformation_File_WriteProtected](#_Toc427488689)
-		* [FsCtl_Set_IntegrityInformation_Dir_WriteProtected](#_Toc427488690)
-		* [FsCtl_Set_IntegrityInformation_File_ChecksumAlgorithm(2TCs)](#_Toc427488691)
-		* [FsCtl_Set_IntegrityInformation_Dir_ChecksumAlgorithm(2TCs)](#_Toc427488692)
-		* [FsCtl_Offload_Read_File_IsOffloadSupported (BVT)](#_Toc427488693)
-		* [FsCtl_Offload_Write_File_IsOffloadSupported (BVT)](#_Toc427488694)
-		* [FsInfo_Query_FileFsSectorSizeInformation_File_OutputBufferSize(3TCs, 1BVT)](#_Toc427488695)
-		* [FsInfo_Query_FileFsSectorSizeInformation_Dir_OutputBufferSize(3TCs)](#_Toc427488696)
-		* [FsInfo_Query_FileFsSectorSizeInformation_File_OutputValue_Common](#_Toc427488697)
-		* [FsInfo_Query_FileFsSectorSizeInformation_Dir_OutputValue_Common](#_Toc427488698)
-		* [FsInfo_Set_FileFsSectorSizeInformation_File_InvalidInfoClass](#_Toc427488699)
-		* [FsInfo_Set_FileFsSectorSizeInformation_Dir_InvalidInfoClass](#_Toc427488700)
+        * [FsCtl_Get_IntegrityInformation_File_IsIntegritySupported (BVT)](#_Toc427488679)
+        * [FsCtl_Get_IntegrityInformation_Dir_IsIntegritySupported (BVT)](#_Toc427488680)
+        * [FsCtl_Get_IntegrityInformation_File_InvalidParameter(3TCs)](#_Toc427488681)
+        * [FsCtl_Get_IntegrityInformation_Dir_InvalidParameter(3TCs)](#_Toc427488682)
+        * [FsCtl_Get_IntegrityInformation_File_OutputValue(2TCs)](#_Toc427488683)
+        * [FsCtl_Get_IntegrityInformation_Dir_OutputValue(2TCs)](#_Toc427488684)
+        * [FsCtl_Set_IntegrityInformation_File_IsIntegritySupported (BVT)](#_Toc427488685)
+        * [FsCtl_Set_IntegrityInformation_Dir_IsIntegritySupported (BVT)](#_Toc427488686)
+        * [FsCtl_Set_IntegrityInformation_File_InvalidParameter(2TCs)](#_Toc427488687)
+        * [FsCtl_Set_IntegrityInformation_Dir_InvalidParameter(2TCs)](#_Toc427488688)
+        * [FsCtl_Set_IntegrityInformation_File_WriteProtected](#_Toc427488689)
+        * [FsCtl_Set_IntegrityInformation_Dir_WriteProtected](#_Toc427488690)
+        * [FsCtl_Set_IntegrityInformation_File_ChecksumAlgorithm(2TCs)](#_Toc427488691)
+        * [FsCtl_Set_IntegrityInformation_Dir_ChecksumAlgorithm(2TCs)](#_Toc427488692)
+        * [FsCtl_Offload_Read_File_IsOffloadSupported (BVT)](#_Toc427488693)
+        * [FsCtl_Offload_Write_File_IsOffloadSupported (BVT)](#_Toc427488694)
+        * [FsInfo_Query_FileFsSectorSizeInformation_File_OutputBufferSize(3TCs, 1BVT)](#_Toc427488695)
+        * [FsInfo_Query_FileFsSectorSizeInformation_Dir_OutputBufferSize(3TCs)](#_Toc427488696)
+        * [FsInfo_Query_FileFsSectorSizeInformation_File_OutputValue_Common](#_Toc427488697)
+        * [FsInfo_Query_FileFsSectorSizeInformation_Dir_OutputValue_Common](#_Toc427488698)
+        * [FsInfo_Set_FileFsSectorSizeInformation_File_InvalidInfoClass](#_Toc427488699)
+        * [FsInfo_Set_FileFsSectorSizeInformation_Dir_InvalidInfoClass](#_Toc427488700)
     * [Test cases for ReFS file system](#_Toc427488701)
-		* [IsShortNameSupported](#_Toc427488702)
-		* [FileInfo_Set_FileShortNameInfo_File_IsShortNameSupported](#_Toc427488703)
-		* [FileInfo_Set_FileShortNameInfo_Dir_IsShortNameSupported](#_Toc427488704)
+        * [IsShortNameSupported](#_Toc427488702)
+        * [FileInfo_Set_FileShortNameInfo_File_IsShortNameSupported](#_Toc427488703)
+        * [FileInfo_Set_FileShortNameInfo_Dir_IsShortNameSupported](#_Toc427488704)
     * [IsObjectIdSupported](#_Toc427488705)
-		* [FsInfo_Query_FileFsAttributeInformation_File_IsObjectIdSupported(BVT)](#_Toc427488706)
-		* [FsInfo_Query_FileFsAttributeInformation_Dir_IsObjectIdSupported](#_Toc427488707)
-		* [FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported (BVT)](#_Toc427488708)
-		* [FsInfo_Query_FileFsObjectIdInformation_Dir_IsObjectIdSupported](#_Toc427488709)
-		* [FsInfo_Set_FileFsObjectIdInformation_File_IsObjectIdSupported](#_Toc427488710)
-		* [FsInfo_Set_FileFsObjectIdInformation_Dir_IsObjectIdSupported](#_Toc427488711)
+        * [FsInfo_Query_FileFsAttributeInformation_File_IsObjectIdSupported(BVT)](#_Toc427488706)
+        * [FsInfo_Query_FileFsAttributeInformation_Dir_IsObjectIdSupported](#_Toc427488707)
+        * [FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported (BVT)](#_Toc427488708)
+        * [FsInfo_Query_FileFsObjectIdInformation_Dir_IsObjectIdSupported](#_Toc427488709)
+        * [FsInfo_Set_FileFsObjectIdInformation_File_IsObjectIdSupported](#_Toc427488710)
+        * [FsInfo_Set_FileFsObjectIdInformation_Dir_IsObjectIdSupported](#_Toc427488711)
     * [IsCompressionSupported](#_Toc427488712)
-		* [FsInfo_Query_FileFsAttributeInformation_File_IsCompressionSupported(BVT)](#_Toc427488713)
-		* [FsInfo_Query_FileFsAttributeInformation_Dir_IsCompressionSupported](#_Toc427488714)
-		* [FileInfo_Query_FileCompressionInfo_File_IsCompressionSupported](#_Toc427488715)
-		* [FileInfo_Query_FileCompressionInfo_Dir_IsCompressionSupported](#_Toc427488716)
-		* [FsCtl_Get_Compression_File_IsCompressionSupported](#_Toc427488717)
-		* [FsCtl_Get_Compression_Dir_IsCompressionSupported](#_Toc427488718)
-		* [FsCtl_Set_Compression_File_IsCompressionSupported](#_Toc427488719)
-		* [FsCtl_Set_Compression_Dir_IsCompressionSupported](#_Toc427488720)
+        * [FsInfo_Query_FileFsAttributeInformation_File_IsCompressionSupported(BVT)](#_Toc427488713)
+        * [FsInfo_Query_FileFsAttributeInformation_Dir_IsCompressionSupported](#_Toc427488714)
+        * [FileInfo_Query_FileCompressionInfo_File_IsCompressionSupported](#_Toc427488715)
+        * [FileInfo_Query_FileCompressionInfo_Dir_IsCompressionSupported](#_Toc427488716)
+        * [FsCtl_Get_Compression_File_IsCompressionSupported](#_Toc427488717)
+        * [FsCtl_Get_Compression_Dir_IsCompressionSupported](#_Toc427488718)
+        * [FsCtl_Set_Compression_File_IsCompressionSupported](#_Toc427488719)
+        * [FsCtl_Set_Compression_Dir_IsCompressionSupported](#_Toc427488720)
     * [IsEASupported](#_Toc427488721)
-		* [FileInfo_Set_FileFullEaInformation_File_IsEASupported](#_Toc427488722)
-		* [FileInfo_Set_FileFullEaInformation_Dir_IsEASupported](#_Toc427488723)
-		* [FileInfo_Query_FileFullEaInformation_File_IsEASupported](#_Toc427488724)
-		* [FileInfo_Query_FileFullEaInformation_Dir_IsEASupported](#_Toc427488725)
-		* [FileInfo_Set_FileEaInformation_File_IsEASupported](#_Toc427488726)
-		* [FileInfo_Set_FileEaInformation_Dir_IsEASupported](#_Toc427488727)
-		* [FileInfo_Query_FileEaInformation_File_IsEASupported](#_Toc427488728)
-		* [FileInfo_Query_FileEaInformation_Dir_IsEASupported](#_Toc427488729)
+        * [FileInfo_Set_FileFullEaInformation_File_IsEASupported](#_Toc427488722)
+        * [FileInfo_Set_FileFullEaInformation_Dir_IsEASupported](#_Toc427488723)
+        * [FileInfo_Query_FileFullEaInformation_File_IsEASupported](#_Toc427488724)
+        * [FileInfo_Query_FileFullEaInformation_Dir_IsEASupported](#_Toc427488725)
+        * [FileInfo_Set_FileEaInformation_File_IsEASupported](#_Toc427488726)
+        * [FileInfo_Set_FileEaInformation_Dir_IsEASupported](#_Toc427488727)
+        * [FileInfo_Query_FileEaInformation_File_IsEASupported](#_Toc427488728)
+        * [FileInfo_Query_FileEaInformation_Dir_IsEASupported](#_Toc427488729)
     * [IsIntegritySupported](#_Toc427488730)
-		* [FsInfo_Query_FileFsAttributeInformation_File_IsIntegritySupported(BVT)](#_Toc427488731)
-		* [FsInfo_Query_FileFsAttributeInformation_Dir_IsIntegritySupported](#_Toc427488732)
-		* [FileInfo_Query_FileBasicInfo_File_IsIntegritySupported (BVT)](#_Toc427488733)
-		* [FileInfo_Query_FileBasicInfo_Dir_IsIntegritySupported](#_Toc427488734)
-		* [FileInfo_Query_FileAttributeTagInfo_File_IsIntegritySupported](#_Toc427488735)
-		* [FileInfo_Query_FileAttributeTagInfo_Dir_IsIntegritySupported](#_Toc427488736)
-		* [FileInfo_Query_FileNetworkOpenInfo_File_IsIntegritySupported](#_Toc427488737)
-		* [FileInfo_Query_FileNetworkOpenInfo_Dir_IsIntegritySupported](#_Toc427488738)
+        * [FsInfo_Query_FileFsAttributeInformation_File_IsIntegritySupported(BVT)](#_Toc427488731)
+        * [FsInfo_Query_FileFsAttributeInformation_Dir_IsIntegritySupported](#_Toc427488732)
+        * [FileInfo_Query_FileBasicInfo_File_IsIntegritySupported (BVT)](#_Toc427488733)
+        * [FileInfo_Query_FileBasicInfo_Dir_IsIntegritySupported](#_Toc427488734)
+        * [FileInfo_Query_FileAttributeTagInfo_File_IsIntegritySupported](#_Toc427488735)
+        * [FileInfo_Query_FileAttributeTagInfo_Dir_IsIntegritySupported](#_Toc427488736)
+        * [FileInfo_Query_FileNetworkOpenInfo_File_IsIntegritySupported](#_Toc427488737)
+        * [FileInfo_Query_FileNetworkOpenInfo_Dir_IsIntegritySupported](#_Toc427488738)
     * [IsFileLinkInfoSupported](#_Toc427488739)
-		* [FileInfo_Set_FileLinkInfo_File_IsFileLinkInfoSupported](#_Toc427488740)
-		* [FileInfo_Set_FileLinkInfo_DIr_IsFileLinkInfoSupported](#_Toc427488741)
+        * [FileInfo_Set_FileLinkInfo_File_IsFileLinkInfoSupported](#_Toc427488740)
+        * [FileInfo_Set_FileLinkInfo_DIr_IsFileLinkInfoSupported](#_Toc427488741)
     * [IsFileValidDataLengthInfoSupported](#_Toc427488742)
-		* [FileInfo_Set_FileValidDataLengthInformation_File_IsSupported](#_Toc427488743)
-		* [FileInfo_Set_FileValidDataLengthInformation_Dir_IsSupported](#_Toc427488744)
+        * [FileInfo_Set_FileValidDataLengthInformation_File_IsSupported](#_Toc427488743)
+        * [FileInfo_Set_FileValidDataLengthInformation_Dir_IsSupported](#_Toc427488744)
     * [ClusterSize](#_Toc427488745)
-		* [FsInfo_Query_FileFsSizeInformation_File_SectorsPerAllocationUnit (BVT)](#_Toc427488746)
-		* [FsInfo_Query_FileFsSizeInformation_Dir_SectorsPerAllocationUnit](#_Toc427488747)
+        * [FsInfo_Query_FileFsSizeInformation_File_SectorsPerAllocationUnit (BVT)](#_Toc427488746)
+        * [FsInfo_Query_FileFsSizeInformation_Dir_SectorsPerAllocationUnit](#_Toc427488747)
     * [IsQuotaInfoSupported](#_Toc427488748)
-		* [QuotaInfo_Query_QuotaInformation_IsQuotaInfoSupported](#_Toc427488749)
-		* [QuotaInfo_Set_QuotaInformation_IsQuotaInfoSupported](#_Toc427488750)
+        * [QuotaInfo_Query_QuotaInformation_IsQuotaInfoSupported](#_Toc427488749)
+        * [QuotaInfo_Set_QuotaInformation_IsQuotaInfoSupported](#_Toc427488750)
     * [IsEncryptionSupported](#_Toc427488751)
-		* [FsInfo_Query_FileFsAttributeInformation_File_IsEncryptionSupported(BVT)](#_Toc427488752)
-		* [FsInfo_Query_FileFsAttributeInformation_Dir_IsEncryptionSupported](#_Toc427488753)
-		* [FsCtl_Set_Encryption_File_IsEncryptionSupported](#_Toc427488754)
-		* [FsCtl_Set_Encryption_Dir_IsEncryptionSupported](#_Toc427488755)
+        * [FsInfo_Query_FileFsAttributeInformation_File_IsEncryptionSupported(BVT)](#_Toc427488752)
+        * [FsInfo_Query_FileFsAttributeInformation_Dir_IsEncryptionSupported](#_Toc427488753)
+        * [FsCtl_Set_Encryption_File_IsEncryptionSupported](#_Toc427488754)
+        * [FsCtl_Set_Encryption_Dir_IsEncryptionSupported](#_Toc427488755)
     * [IsAllocatedRangesSupported](#_Toc427488756)
-		* [FsCtl_Query_AllocatedRanges_File_IsAllocatedRangesSupported](#_Toc427488757)
-		* [FsCtl_Query_AllocatedRanges_Dir_IsAllocatedRangesSupported](#_Toc427488758)
+        * [FsCtl_Query_AllocatedRanges_File_IsAllocatedRangesSupported](#_Toc427488757)
+        * [FsCtl_Query_AllocatedRanges_Dir_IsAllocatedRangesSupported](#_Toc427488758)
     * [IsReparsePointSupported](#_Toc427488759)
-		* [FsCtl_Set_ReparsePoint_File_IsReparsePointSupported](#_Toc427488760)
-		* [FsCtl_Set_ReparsePoint_Dir_IsReparsePointSupported](#_Toc427488761)
+        * [FsCtl_Set_ReparsePoint_File_IsReparsePointSupported](#_Toc427488760)
+        * [FsCtl_Set_ReparsePoint_Dir_IsReparsePointSupported](#_Toc427488761)
     * [IsSparseFileSupported](#_Toc427488762)
-		* [FsCtl_Set_Sparse_File_IsSparseFileSupported](#_Toc427488763)
-		* [FsCtl_Set_Sparse_Dir_IsSparseFileSupported](#_Toc427488764)
+        * [FsCtl_Set_Sparse_File_IsSparseFileSupported](#_Toc427488763)
+        * [FsCtl_Set_Sparse_Dir_IsSparseFileSupported](#_Toc427488764)
     * [IsZeroDataSupported](#_Toc427488765)
-		* [FsCtl_Set_ZeroData_File_IsSetZeroDataSupported](#_Toc427488766)
-		* [FsCtl_Set_ZeroData_Dir_IsZeroDataSupported](#_Toc427488767)
+        * [FsCtl_Set_ZeroData_File_IsSetZeroDataSupported](#_Toc427488766)
+        * [FsCtl_Set_ZeroData_Dir_IsZeroDataSupported](#_Toc427488767)
     * [FileNormalizedNameInformation](#_Toc427488831)
         * [FileInfo_Query_FileNormalizedNameInfo_File](#_Toc427488832)
-     	* [FileInfo_Query_FileNormalizedNameInfo_Dir](#_Toc427488833)
-* [Test cases for Alternate Data Stream](#_Toc427488768)
-		* [AlternateDataStream_CreateStream](#_Toc427488769)
-			* [BVT_AlternateDataStream_CreateStream_File (BVT)](#_Toc427488770)
-			* [BVT_AlternateDataStream_CreateStream_Dir (BVT)](#_Toc427488771)
-		* [AlternateDataStream_ListStreams](#_Toc427488772)
-			* [BVT_AlternateDataStream_ListStreams_File (BVT)](#_Toc427488773)
-			* [BVT_AlternateDataStream_ListStreams_Dir (BVT)](#_Toc427488774)		
-		* [AlternateDataStream_DeleteStream](#_Toc427488775)
-			* [BVT_AlternateDataStream_DeleteStream_File (BVT)](#_Toc427488776)
-			* [BVT_AlternateDataStream_DeleteStream_Dir (BVT)](#_Toc427488777)
-		* [AlternateDataStream_RenameStream](#_Toc427488778)
-			* [BVT_AlternateDataStream_RenameStream_File (BVT)](#_Toc427488779)
-			* [BVT_AlternateDataStream_RenameStream_Dir (BVT)](#_Toc427488780)
-		* [AlternateDataStream_WriteAndRead](#_Toc427488781)
-			* [BVT_AlternateDataStream_WriteAndRead_File (BVT)](#_Toc427488782)
-			* [BVT_AlternateDataStream_WriteAndRead_Dir (BVT)](#_Toc427488783)
-		* [AlternateDataStream_LockAndUnlock](#_Toc427488784)
-			* [BVT_AlternateDataStream_LockAndUnlock_File (BVT)](#_Toc427488785)
-			* [BVT_AlternateDataStream_LockAndUnlock_Dir (BVT)](#_Toc427488786)
-		* [AlternateDataStream_QueryAndSet_FileInformation](#_Toc427488787)
-			* [AlternateDataStream_Query_FileAccessInformation_File](#_Toc427488788)
-			* [AlternateDataStream_Query_FileAccessInformation_Dir](#_Toc427488789)
-			* [AlternateDataStream_Query_FileBasicInformation_File](#_Toc427488790)
-			* [AlternateDataStream_Query_FileBasicInformation_Dir](#_Toc427488791)
-			* [AlternateDataStream_Query_FileCompressionInformation_File](#_Toc427488792)
-			* [AlternateDataStream_Query_FileCompressionInformation_Dir](#_Toc427488793)
-			* [AlternateDataStream_Query_FileNetworkOpenInformation_File](#_Toc427488794)
-			* [AlternateDataStream_Query_FileNetworkOpenInformation_Dir](#_Toc427488795)
-			* [AlternateDataStream_Query_FileStandardInformation_File](#_Toc427488796)
-			* [AlternateDataStream_Query_FileStandardInformation_Dir](#_Toc427488797)
-			* [AlternateDataStream_Set_FileEaInformation_File](#_Toc427488798)
-			* [AlternateDataStream_Set_FileEaInformation_Dir](#_Toc427488799)
-			* [AlternateDataStream_Set_FileShortNameInformation_File](#_Toc427488800)
-			* [AlternateDataStream_Set_FileShortNameInformation_Dir](#_Toc427488801)
-			* [AlternateDataStream_Set_FileValidDataLengthInformation_File](#_Toc427488802)
-			* [AlternateDataStream_Set_FileValidDataLengthInformation_Dir](#_Toc427488803)
-		* [AlternateDataStream_FsControl](#_Toc427488804)
-			* [AlternateDataStream_FsCtl_Get_Compression_File](#_Toc427488805)
-			* [AlternateDataStream_FsCtl_Get_Compression_Dir](#_Toc427488806)
-			* [AlternateDataStream_FsCtl_Get_IntegrityInformation_File](#_Toc427488807)
-			* [AlternateDataStream_FsCtl_Get_IntegrityInformation_Dir](#_Toc427488808)
-			* [AlternateDataStream_FsCtl_Query_AllocatedRanges_File](#_Toc427488809)
-			* [AlternateDataStream_FsCtl_Query_AllocatedRanges_Dir](#_Toc427488810)
-			* [AlternateDataStream_FsCtl_Set_Compression_File](#_Toc427488811)
-			* [AlternateDataStream_FsCtl_Set_Compression_Dir](#_Toc427488812)
-			* [AlternateDataStream_FsCtl_Set_ZeroData_File](#_Toc427488813)
-			* [AlternateDataStream_FsCtl_Set_ZeroData_Dir](#_Toc427488814)
+        * [FileInfo_Query_FileNormalizedNameInfo_Dir](#_Toc427488833)
+    * [Test cases for Alternate Data Stream](#_Toc427488768)
+        * [AlternateDataStream_CreateStream](#_Toc427488769)
+            * [BVT_AlternateDataStream_CreateStream_File (BVT)](#_Toc427488770)
+            * [BVT_AlternateDataStream_CreateStream_Dir (BVT)](#_Toc427488771)
+        * [AlternateDataStream_ListStreams](#_Toc427488772)
+            * [BVT_AlternateDataStream_ListStreams_File (BVT)](#_Toc427488773)
+            * [BVT_AlternateDataStream_ListStreams_Dir (BVT)](#_Toc427488774)
+        * [AlternateDataStream_DeleteStream](#_Toc427488775)
+            * [BVT_AlternateDataStream_DeleteStream_File (BVT)](#_Toc427488776)
+            * [BVT_AlternateDataStream_DeleteStream_Dir (BVT)](#_Toc427488777)
+        * [AlternateDataStream_RenameStream](#_Toc427488778)
+            * [BVT_AlternateDataStream_RenameStream_File (BVT)](#_Toc427488779)
+            * [BVT_AlternateDataStream_RenameStream_Dir (BVT)](#_Toc427488780)
+        * [AlternateDataStream_WriteAndRead](#_Toc427488781)
+            * [BVT_AlternateDataStream_WriteAndRead_File (BVT)](#_Toc427488782)
+            * [BVT_AlternateDataStream_WriteAndRead_Dir (BVT)](#_Toc427488783)
+        * [AlternateDataStream_LockAndUnlock](#_Toc427488784)
+            * [BVT_AlternateDataStream_LockAndUnlock_File (BVT)](#_Toc427488785)
+            * [BVT_AlternateDataStream_LockAndUnlock_Dir (BVT)](#_Toc427488786)
+        * [AlternateDataStream_QueryAndSet_FileInformation](#_Toc427488787)
+            * [AlternateDataStream_Query_FileAccessInformation_File](#_Toc427488788)
+            * [AlternateDataStream_Query_FileAccessInformation_Dir](#_Toc427488789)
+            * [AlternateDataStream_Query_FileBasicInformation_File](#_Toc427488790)
+            * [AlternateDataStream_Query_FileBasicInformation_Dir](#_Toc427488791)
+            * [AlternateDataStream_Query_FileCompressionInformation_File](#_Toc427488792)
+            * [AlternateDataStream_Query_FileCompressionInformation_Dir](#_Toc427488793)
+            * [AlternateDataStream_Query_FileNetworkOpenInformation_File](#_Toc427488794)
+            * [AlternateDataStream_Query_FileNetworkOpenInformation_Dir](#_Toc427488795)
+            * [AlternateDataStream_Query_FileStandardInformation_File](#_Toc427488796)
+            * [AlternateDataStream_Query_FileStandardInformation_Dir](#_Toc427488797)
+            * [AlternateDataStream_Set_FileEaInformation_File](#_Toc427488798)
+            * [AlternateDataStream_Set_FileEaInformation_Dir](#_Toc427488799)
+            * [AlternateDataStream_Set_FileShortNameInformation_File](#_Toc427488800)
+            * [AlternateDataStream_Set_FileShortNameInformation_Dir](#_Toc427488801)
+            * [AlternateDataStream_Set_FileValidDataLengthInformation_File](#_Toc427488802)
+            * [AlternateDataStream_Set_FileValidDataLengthInformation_Dir](#_Toc427488803)
+        * [AlternateDataStream_FsControl](#_Toc427488804)
+            * [AlternateDataStream_FsCtl_Get_Compression_File](#_Toc427488805)
+            * [AlternateDataStream_FsCtl_Get_Compression_Dir](#_Toc427488806)
+            * [AlternateDataStream_FsCtl_Get_IntegrityInformation_File](#_Toc427488807)
+            * [AlternateDataStream_FsCtl_Get_IntegrityInformation_Dir](#_Toc427488808)
+            * [AlternateDataStream_FsCtl_Query_AllocatedRanges_File](#_Toc427488809)
+            * [AlternateDataStream_FsCtl_Query_AllocatedRanges_Dir](#_Toc427488810)
+            * [AlternateDataStream_FsCtl_Set_Compression_File](#_Toc427488811)
+            * [AlternateDataStream_FsCtl_Set_Compression_Dir](#_Toc427488812)
+            * [AlternateDataStream_FsCtl_Set_ZeroData_File](#_Toc427488813)
+            * [AlternateDataStream_FsCtl_Set_ZeroData_Dir](#_Toc427488814)
+    * [Test cases for Other Scenarios](#test-cases-for-other-scenarios)
+        * [CreateFile](#_Toc427488834)
+            * [CreateFile_InvalidStreamName](#_Toc427488835)
 * [MBT Test Design](#_Toc427488815)
     * [Model Design](#_Toc427488816)
     * [Adapter Design](#_Toc427488817)
-		* [Protocol Adapter](#_Toc427488818)
-		* [Transport Adapter](#_Toc427488819)
-		* [Message Sequence](#_Toc427488820)
+        * [Protocol Adapter](#_Toc427488818)
+        * [Transport Adapter](#_Toc427488819)
+        * [Message Sequence](#_Toc427488820)
     * [Scenarios](#_Toc427488821)
 
 ## <a name="_Toc427488645"/>Introduction
@@ -252,7 +257,7 @@ There are 126 test cases in total:
 | Scenarios for Win8 new added algorithm| 5| 37 (7)| 
 | Scenarios for ReFS file system| 15| 51 (7)| 
 | Scenarios for Alternate Data Stream| 19|38 (12)| 
-
+| Other Scenarios| 1| 1|
 
 
 
@@ -263,36 +268,32 @@ There are 126 test cases in total:
 
 ### <a name="_Toc427488653"/>MBT Test cases
 Model-based test cases are designed to cover most of algorithm details.
-There are 400 test cases in total:
+There are 344 test cases in total:
 
 
-|  **Category**|  **Test Cases**| 
-| -------------| ------------- |
-| Create| 39| 
-| Open| 40| 
-| Read| 5| 
-| Write| 5| 
-| Flush Cache| 2| 
-| Query Directory| 14| 
-| ByteRangeLock| 4| 
-| oplocl/Break| 0| 
-| FsCtl Request| 103| 
-| Change Notification| 2| 
-| Query FileInfo| 44| 
-| Set FileInfo| 96| 
-| Query FsInfo| 13| 
-| Set FsInfo| 0| 
-| Query QuotaInfo| 7| 
-| Set Quotainfo| 0| 
-| Query SecurityInfo| 7| 
-| Set SecurityInfo| 18| 
-| CloseAnOpen| 1| 
+| **Category** | **Test Cases** | 
+| ------------ | -------------- |
+| Open | 31 | 
+| Create | 25 | 
+| Read | 3 | 
+| Write | 1 | 
+| Close | 1 | 
+| Flush Cached Data | 1 | 
+| Lock and Unlock | 2 | 
+| Change Notification | 2 | 
+| IoCtl Request | 71 | 
+| Query Directory | 20 | 
+| Query FileInfo | 44 | 
+| Query FsInfo | 24 | 
+| Query SecurityInfo | 12 | 
+| Set FileInfo | 89 | 
+| Set SecurityInfo | 18 | 
 
 
 ## <a name="_Toc427488654"/>Traditional Test Scenarios Design
 
 ### <a name="_Toc427488655"/>Scenarios for Win8 new added algorithm
-Here is a list for Win8 new added algorithms, the designed scenarios are based on them.
+Here is a list for Win8 newly added algorithms, the designed scenarios are based on them.
 
 * [FsCtl] 3.1.5.9.7   FSCTL_GET_INTEGRITY_INFORMATION
 
@@ -725,7 +726,7 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 
 
 
-#### <a name="_Toc427488675"/> FsCtl_ IsSparseFileSupported
+#### <a name="_Toc427488675"/> FsCtl_IsSparseFileSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -916,6 +917,18 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | Request a FsControl on this Alternate Data Stream created on this file|
 | | Verify server return with **STATUS_SUCCESS** for supported file system|
 
+
+### Other Scenarios
+
+#### CreateFile
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To create a file in the file system.| 
+| | Test environment: NTFS, ReFS, FAT32| 
+| | Test object: DataFile, DirectoryFile| 
+| Message Sequence| CreateFile | 
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
 
 
 
@@ -3398,12 +3411,29 @@ Parameter combination
 
 
 
-		
+        
 
 
 
 
 
+
+
+### Test cases for Other Scenarios
+
+#### <a name="_Toc427488835"/> CreateFile_InvalidStreamName
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Try to create a directory with invalid stream name and expect failure.
+| | Note: Only the NTFS and ReFS file systems support complex name suffixes and StreamTypeNames. File systems that do not support this return STATUS_OBJECT_NAME_INVALID.
+| | Test object: DirectoryFile
+| Message Sequence| CreateFile (DirectoryFile)
+| | If (FileSystem == NTFS \|\| FileSystem == REFS) {
+| | Assert.AreEqual(STATUS_INVALID_PARAMETER,ActualResult);
+| | } Else {
+| | Assert.AreEqual(STATUS_OBJECT_NAME_INVALID,ActualResult);
+| | }
 
 
 
@@ -3415,7 +3445,7 @@ Parameter combination
 ## <a name="_Toc427488815"/>MBT Test Design
 
 ### <a name="_Toc427488816"/>Model Design
-Here is a list for Win8 new added algorithms, the designed scenarios are based on them.
+Here is a list for Win8 newly added algorithms, the designed scenarios are based on them.
 
 
 

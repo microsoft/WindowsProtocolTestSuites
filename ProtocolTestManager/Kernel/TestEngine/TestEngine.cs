@@ -143,18 +143,22 @@ namespace Microsoft.Protocols.TestManager.Kernel
             htmlResultChecker.UpdateCase = logger.UpdateCaseFromHtmlLog;
             htmlResultChecker.Start(this.WorkingDirectory);
 
-            Exception exception = null;
+            var exception = new List<Exception>();
             try
             {
                 while (caseStack != null && caseStack.Count > 0)
                 {
                     StringBuilder args = ConstructVstestArgs(caseStack);
-                    Run(args.ToString());
+                    var innerException = Run(args.ToString());
+                    if (innerException != null)
+                    {
+                        exception.Add(innerException);
+                    }
                 }
             }
             catch (Exception e)
             {
-                exception = e;
+                exception.Add(e);
             }
             ExecutionFinished(exception);
         }
@@ -192,9 +196,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
         private void ParseLogMessage(string message)
         {
 
-            if (message.IndexOf(StringResource.InprogressTag) != -1 || 
-                message.IndexOf(StringResource.PassedTag) != -1 || 
-                message.IndexOf(StringResource.FailedTag) != -1 || 
+            if (message.IndexOf(StringResource.InprogressTag) != -1 ||
+                message.IndexOf(StringResource.PassedTag) != -1 ||
+                message.IndexOf(StringResource.FailedTag) != -1 ||
                 message.IndexOf(StringResource.InconclusiveTag) != -1)
             {
                 string[] strings = message.Split('.');
@@ -227,7 +231,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <param name="filterExpr"></param>
         public void RunByFilter(string filterExpr)
         {
-            Exception exception = null;
+            var exception = new List<Exception>();
             try
             {
                 htmlResultChecker = HtmlResultChecker.GetHtmlResultChecker();
@@ -236,17 +240,20 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
                 StringBuilder args = ConstructVstestArgs();
                 args.AppendFormat("/TestCaseFilter:\"{0}\" ", filterExpr);
-                Run(args.ToString());
-
+                var innerException = Run(args.ToString());
+                if (innerException != null)
+                {
+                    exception.Add(innerException);
+                }
             }
             catch (Exception e)
             {
-                exception = e;
+                exception.Add(e);
             }
             ExecutionFinished(exception);
         }
 
-        private void ExecutionFinished(Exception e)
+        private void ExecutionFinished(List<Exception> e)
         {
             if (TestFinished != null)
             {
@@ -287,9 +294,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public int Passed { get; set; }
         public int Failed { get; set; }
         public int Inconclusive { get; set; }
-        public Exception Exception { get; set; }
+        public List<Exception> Exception { get; set; }
 
-        public TestFinishedEventArgs(int pass, int fail, int inconclusive, Exception e)
+        public TestFinishedEventArgs(int pass, int fail, int inconclusive, List<Exception> e)
         {
             Passed = pass;
             Failed = fail;

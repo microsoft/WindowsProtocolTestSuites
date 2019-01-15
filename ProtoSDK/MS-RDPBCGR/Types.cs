@@ -3412,9 +3412,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         None = 0,
 
         /// <summary>
-        ///  Possible value.
+        ///  AF_INET 0x00002: The clientAddress field contains an IPv4 address.
         /// </summary>
         V1 = 0x0002,
+
+        /// <summary>
+        ///  AF_INET6 0x0017: The clientAddress field contains an IPv6 address.
+        /// </summary>
+        V2 = 0x0017,
     }
 
     /// <summary>
@@ -6950,7 +6955,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         ///  RDP 10.5 clients
         /// </summary>
-        V8 = 0x0008000A
+        V8 = 0x0008000A,
+
+        /// <summary>
+        ///  RDP 10.6 clients
+        /// </summary>
+        V9 = 0x0008000B
     }
 
     /// <summary>
@@ -7879,7 +7889,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// RDP 10.5 servers
         /// </summary>
-        V8 = 0x0008000A
+        V8 = 0x0008000A,
+
+        /// <summary>
+        /// RDP 10.6 servers
+        /// </summary>
+        V9 = 0x0008000B
     }
 
     /// <summary>

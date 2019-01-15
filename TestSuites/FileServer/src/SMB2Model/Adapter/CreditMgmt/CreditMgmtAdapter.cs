@@ -75,7 +75,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreditMgm
             c = new CreditMgmtConfig
             {
                 MaxSmbVersionSupported = ModelUtility.GetModelDialectRevision(testConfig.MaxSmbVersionSupported),
-                Platform = testConfig.Platform == Platform.WindowsServer2016 ? Platform.WindowsServer2012R2 : testConfig.Platform,
+                Platform = testConfig.Platform >= Platform.WindowsServer2016 ? Platform.WindowsServer2012R2 : testConfig.Platform,
                 IsMultiCreditSupportedOnServer = testConfig.IsMultiCreditSupported
             };
 

@@ -2363,7 +2363,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             updatePalette.paletteData.pad2Octets = 0;
             updatePalette.paletteData.numberColors = ConstValue.NUMBER_COLORS;
             updatePalette.paletteData.paletteEntries = new TS_PALETTE_ENTRY[ConstValue.NUMBER_COLORS];
-                    
+
             for (int i = 0; i < updatePalette.paletteData.paletteEntries.Length; i++)
             {
                 updatePalette.paletteData.paletteEntries[i] = paletteEntry;
@@ -2699,11 +2699,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             paletteEntry.green = ConstValue.PALETTE_ENTRY_GREEN;
 
             paletteUpdate.paletteUpdateData.paletteEntries = new TS_PALETTE_ENTRY[ConstValue.NUMBER_COLORS];
-            for (int i =0; i< paletteUpdate.paletteUpdateData.paletteEntries.Length; i++)
+            for (int i = 0; i < paletteUpdate.paletteUpdateData.paletteEntries.Length; i++)
             {
                 paletteUpdate.paletteUpdateData.paletteEntries[i] = paletteEntry;
-            }               
-            
+            }
+
 
             paletteUpdate.size = (ushort)(Marshal.SizeOf((ushort)paletteUpdate.paletteUpdateData.updateType)
                                 + Marshal.SizeOf(paletteUpdate.paletteUpdateData.pad2Octets)

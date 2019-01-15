@@ -1,35 +1,36 @@
 Protocol Test Manager Command Line Interface
 Description:
-ptmcli.exe <-p|-profile profileName> [-s|-selected] [-r|-report reportfile]
+ptmcli.exe <-p|-profile profileName>
+           [-s|-selected] [-r|-report reportFile]
            [-categories categories] [-outcome pass,fail,inconclusive,notrun]
-		   [-sortby name|outcome] [-separator comma|space]
+           [-sortby name|outcome] [-separator comma|space]
 
 Options:
--p | -profile profileName   Specifies the file name of profile of the test 
-                            suite to run.
+-p|-profile profileName     Specifies the path of the test profile to run.
 
--s | -selected              Turn this switch on to run only the test cases
-                            selected in the Run Page of PTM. Otherwise, run
-                            all the test cases in the profile.
+-s|-selected                When specified, only the selected test cases will
+                            run. Otherwise, all the test cases in the profile
+                            will run.
 
--r | -report reportfile     Specifies the file name of the plain text report.
+-r|-report reportFile       Specifies the result file which will be written to.
+                            If not specified, test results will be written to
+                            stdout.
 
--categories                 Specifies the categories of test cases to run.
-                            This parameter overrides the test cases in
-							profile.
-							Separate by comma without space.
+-categories                 Specifies the categories of test cases to run. This
+                            parameter overrides the test cases in profile.
+                            Value should be separated by comma without space.
 
 -outcome                    Specifies the outcome of the test cases to be
-                            included in the plain text report.
-                            Separate using comma without space.
-                            Possible values: pass,fail,inconclusive,notrun
-                            Default value: pass,fail.
+                            included in the report file.
+                            Value should be separated by comma without space.
+                            Valid values are: pass, fail, inconclusive, notrun.
+                            Default value is pass,fail.
 
 -sortby                     Specifies the way to sort the test cases in the
                             report.
-                            Possible values: name outcome.
-                            Default value: name
+                            Valid values are: name, outcome.
+                            Default value is name.
 
--separator                  Specifies the separator in the plain text report.
-                            Possible values: space comma
-                            Default value: space
+-separator                  Specifies the separator used in the report file.
+                            Valid values are: space, comma.
+                            Default value is space.

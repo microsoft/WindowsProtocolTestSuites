@@ -54,6 +54,7 @@
   <ItemGroup>
     <Content Include="LICENSE.rtf" />
     <Content Include="readme.txt" />
+    <ADODScriptFiles Include="..\..\Setup\Scripts\*" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixVSExtension">
@@ -108,18 +109,33 @@
   <Target Name="GenDeployWxsFile" DependsOnTargets="ResolveWixExtensionReferences" BeforeTargets="Compile">
     <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Bin" -out TestSuiteBinFiles.wxs -template fragment -gg -cg BIN_FILES -dr TESTSUITE_BIN_DIR -var wix.TESTSUITE_BIN_DIR -sreg -sfrag -srd' />
     <Exec Command='"$(WIX)\bin\heat.exe" dir ..\Batch -out TestSuiteBatchFiles.wxs -template fragment -gg -cg BATCH_FILES -dr TESTSUITE_BATCH_DIR -var wix.TESTSUITE_BATCH_DIR -sreg -sfrag -srd' />
-    <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\TestSuites\MS-ADOD\Setup\Scripts" -out Scripts_FILES.wxs -template fragment -gg -cg Scripts_FILES -dr TESTSUITE_SCRIPTS_DIR -var wix.TESTSUITE_SCRIPTS_DIR -sreg -sfrag -srd' />
+    <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" -out Scripts_FILES.wxs -template fragment -gg -cg Scripts_FILES -dr TESTSUITE_SCRIPTS_DIR -var wix.TESTSUITE_SCRIPTS_DIR -sreg -sfrag -srd' />
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\common&quot; -out CommonBatch.wxs -template fragment -gg -cg COMMON_BATCH_FILES -dr TESTSUITE_COMMON_SCRIPTS_DIR -var wix.TESTSUITE_COMMON_SCRIPTS_DIR -sreg -sfrag -srd" />
   </Target>
   <Target Name="CopyFilesToBin" BeforeTargets="GenDeployWxsFile">
     <Copy SourceFiles="..\ODLocalTestRun.testrunconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Bin" />
     <Copy SourceFiles="..\TestSuite\MS-ADOD_ODTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Bin" />
     <Copy SourceFiles="..\TestSuite\MS-ADOD_ODTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Bin" />
-	<Copy SourceFiles="@(ExpectFrameFiles_MA)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Bin" />
-	<Copy SourceFiles="@(ClientControlAdapterFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Bin" />
-	<Copy SourceFiles="@(CommonAdapterFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Bin" />
+  	<Copy SourceFiles="@(ExpectFrameFiles_MA)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Bin" />
+    <Copy SourceFiles="@(ClientControlAdapterFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Bin" />
+    <Copy SourceFiles="@(CommonAdapterFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Bin" />
+    <Copy SourceFiles="@(ADODScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Disable_Firewall.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Modify-TestRunConfig.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\PromoteDomainController.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\EnableRemoteAccess.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\RestartAndRun.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\RestartAndRunFinish.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\GetVMNameByComputerName.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-NetworkLocation.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-NetworkConfiguration.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Disable-ICMPRedirect.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Disable-IPv6.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-InstalledScriptPath.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\SetStartupScript.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\GetVmParameters.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\Scripts" />
   </Target>
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)en-us\$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADOD\deploy\" />
-  </Target>
+     </Target>
 </Project>

@@ -76,13 +76,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         }
         #endregion
 
-        #region Test Initialization and Cleanup
-        protected override void TestInitialize()
-        {
-            base.TestInitialize();
-            this.rdpbcgrAdapter.TurnVerificationOff(!bVerifyRdpbcgrMessage);
-        }
-
+        #region Test Cleanup
+       
         protected override void TestCleanup()
         {
             base.TestCleanup();

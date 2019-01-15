@@ -888,7 +888,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     name = CreateContextNames.SMB2_CREATE_APP_INSTANCE_VERSION;
                     var createAppInstanceVersionStruct = new CREATE_APP_INSTANCE_VERSION
                     {
-                        StructureSize = 20,
+                        StructureSize = 24,
                         Reserved = 0,
                         AppInstanceVersionHigh = createAppInstanceVersion.AppInstanceVersionHigh,
                         AppInstanceVersionLow = createAppInstanceVersion.AppInstanceVersionLow

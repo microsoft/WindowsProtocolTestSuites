@@ -1207,48 +1207,41 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 converter = new UnicodeEncoding();
 
-
-                byte[] domain = GetBytes(data, ref currentIndex, (int)infoData.cbDomain);
+                //Include the null terminator
+                byte[] domain = GetBytes(data, ref currentIndex, (int)infoData.cbDomain + 2);
                 infoData.Domain = converter.GetString(domain);
-                currentIndex += 2;
-                byte[] userName = GetBytes(data, ref currentIndex, (int)infoData.cbUserName);
-                infoData.UserName = converter.GetString(userName);
-                currentIndex += 2;
 
-                byte[] password = GetBytes(data, ref currentIndex, (int)infoData.cbPassword);
+                byte[] userName = GetBytes(data, ref currentIndex, (int)infoData.cbUserName + 2);
+                infoData.UserName = converter.GetString(userName);
+
+                byte[] password = GetBytes(data, ref currentIndex, (int)infoData.cbPassword + 2);
                 infoData.Password = converter.GetString(password);
-                currentIndex += 2;
-                byte[] alternateShell = GetBytes(data, ref currentIndex, (int)infoData.cbAlternateShell);
+
+                byte[] alternateShell = GetBytes(data, ref currentIndex, (int)infoData.cbAlternateShell + 2);
                 infoData.AlternateShell = converter.GetString(alternateShell);
-                currentIndex += 2;
-                byte[] workingDir = GetBytes(data, ref currentIndex, (int)infoData.cbWorkingDir);
+
+                byte[] workingDir = GetBytes(data, ref currentIndex, (int)infoData.cbWorkingDir + 2);
                 infoData.WorkingDir = converter.GetString(workingDir);
-                currentIndex += 2;
             }
 
             else
             {
                 converter = new ASCIIEncoding();
 
-                byte[] domain = GetBytes(data, ref currentIndex, (int)infoData.cbDomain);
+                byte[] domain = GetBytes(data, ref currentIndex, (int)infoData.cbDomain + 1);
                 infoData.Domain = converter.GetString(domain);
-                currentIndex += 1;
 
-                byte[] userName = GetBytes(data, ref currentIndex, (int)infoData.cbUserName);
+                byte[] userName = GetBytes(data, ref currentIndex, (int)infoData.cbUserName + 1);
                 infoData.UserName = converter.GetString(userName);
-                currentIndex += 1;
 
-                byte[] password = GetBytes(data, ref currentIndex, (int)infoData.cbPassword);
+                byte[] password = GetBytes(data, ref currentIndex, (int)infoData.cbPassword + 1);
                 infoData.Password = converter.GetString(password);
-                currentIndex += 1;
 
-                byte[] alternateShell = GetBytes(data, ref currentIndex, (int)infoData.cbAlternateShell);
+                byte[] alternateShell = GetBytes(data, ref currentIndex, (int)infoData.cbAlternateShell + 1);
                 infoData.AlternateShell = converter.GetString(alternateShell);
-                currentIndex += 1;
 
-                byte[] workingDir = GetBytes(data, ref currentIndex, (int)infoData.cbWorkingDir);
+                byte[] workingDir = GetBytes(data, ref currentIndex, (int)infoData.cbWorkingDir + 1);
                 infoData.WorkingDir = converter.GetString(workingDir);
-                currentIndex += 1;
             }
 
             if (currentIndex < data.Length)
@@ -1783,8 +1776,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             // TS_INPUT_CAPABILITYSET: imeFileName
             byte[] imeFileName = GetBytes(data, ref currentIndex,
-                ConstValue.TS_INPUT_CAPABILITY_SET_IME_FILE_NAME_LENGTH);
-            set.imeFileName = BitConverter.ToString(imeFileName);
+                ConstValue.TS_INPUT_CAPABILITYSET_IME_FILE_NAME_LENGTH);
+            set.imeFileName = Encoding.Unicode.GetString(imeFileName);
 
             // Check if data length is consistent with the decoded struct length
             VerifyDataLength(data.Length, currentIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_INCONSISTENT);
