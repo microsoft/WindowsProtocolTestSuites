@@ -167,7 +167,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite.KILE
             AdIfRelevent adIfRelevent = new AdIfRelevent(new AD_IF_RELEVANT(new AuthorizationDataElement[] { krbAuthDataTokenRestictions.AuthDataElement }));
             AuthorizationData data = new AuthorizationData(new AuthorizationDataElement[] { adIfRelevent.AuthDataElement });
 
-            client.SendTgsRequest(this.testConfig.LocalRealm.WebServer[0].HttpServiceName, options, null, null, null, data);
+            client.SendTgsRequest(this.testConfig.LocalRealm.WebServer[0].HttpServiceName, options, null, null, data);
             BaseTestSite.Log.Add(LogEntryKind.Comment, "Create and send TGS request");
             KerberosTgsResponse tgsResponse = client.ExpectTgsResponse();
             BaseTestSite.Log.Add(LogEntryKind.Comment, "Recieve a TGS response.");
@@ -279,7 +279,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite.KILE
             AdIfRelevent adIfRelevent = new AdIfRelevent(new AD_IF_RELEVANT(new AuthorizationDataElement[] { krbAuthDataTokenRestictions.AuthDataElement }));
             AuthorizationData data = new AuthorizationData(new AuthorizationDataElement[] { adIfRelevent.AuthDataElement });
 
-            client.SendTgsRequest(this.testConfig.LocalRealm.WebServer[0].HttpServiceName, options, null, null, null, data);
+            client.SendTgsRequest(this.testConfig.LocalRealm.WebServer[0].HttpServiceName, options, null, null, data);
             BaseTestSite.Log.Add(LogEntryKind.Comment, "Create and send TGS request");
             KerberosTgsResponse tgsResponse = client.ExpectTgsResponse();
             BaseTestSite.Log.Add(LogEntryKind.Comment, "Recieve a TGS response.");
