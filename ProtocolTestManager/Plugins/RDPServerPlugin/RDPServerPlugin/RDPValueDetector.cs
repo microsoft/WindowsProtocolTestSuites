@@ -57,14 +57,14 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         #region Variables
 
         private EnvironmentType env = EnvironmentType.Workgroup;
-        private DetectionInfo detectionInfo = new DetectionInfo();       
+        private DetectionInfo detectionInfo = new DetectionInfo();
 
         #endregion Variables
 
         #region Implemented IValueDetector
 
         /// <summary>
-        /// Sets selected test environment.
+        /// Set selected test environment.
         /// </summary>
         /// <param name="Environment"></param>
         public void SelectEnvironment(string NetworkEnvironment)
@@ -73,7 +73,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         }
 
         /// <summary>
-        /// Gets the prerequisites for auto-detection.
+        /// Get the prerequisites for auto-detection.
         /// </summary>
         /// <returns>A instance of Prerequisites class.</returns>
         public Prerequisites GetPrerequisites()
@@ -101,12 +101,12 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
         private Dictionary<string, string> properties;
         /// <summary>
-        /// Sets the values for the required properties.
+        /// Set the values for the required properties.
         /// </summary>
         /// <param name="properties">Property name and values.</param>
         /// <returns>
-        /// Return true if no other property needed. Return false means there are 
-        /// other property required. PTF Tool will invoke GetPrerequisites and 
+        /// Return true if no property is needed. Return false means there are
+        /// other property required. PTF Tool will invoke GetPrerequisites and
         /// pop up a dialog to set the value of the properties.
         /// </returns>
         public bool SetPrerequisiteProperties(Dictionary<string, string> properties)
@@ -116,7 +116,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         }
 
         /// <summary>
-        /// Adds Detection steps to the log shown when detecting
+        /// Add Detection steps to the log when detecting
         /// </summary>
         public List<DetectingItem> GetDetectionSteps()
         {
@@ -129,9 +129,9 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         }
 
         /// <summary>
-        /// Runs property autodetection.
+        /// Run auto detection properly.
         /// </summary>
-        /// <returns>Return true if the function is succeeded.</returns>
+        /// <returns>Return true if the function succeeded.</returns>
         public bool RunDetection()
         {
             // set config if properties changed
@@ -160,11 +160,10 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         }
 
         /// <summary>
-        /// Gets the detect result.
+        /// Get the detection result.
         /// </summary>
-        /// <param name="name">Property name</param>
-        /// <param name="value">Property value</param>
-        /// <returns>Return true if the property value is successfully got.</returns>
+        /// <param name="propertiesDic">Dictionary which contains property information</param>
+        /// <returns>Return true if the property information is successfully obtained.</returns>
         public bool GetDetectedProperty(out Dictionary<string, List<string>> propertiesDic)
         {
             propertiesDic = config.ToDictionary();
@@ -172,7 +171,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         }
 
         /// <summary>
-        /// Gets selected rules
+        /// Get selected rules
         /// </summary>
         /// <returns>Selected rules</returns>
         public List<CaseSelectRule> GetSelectedRules()
@@ -195,9 +194,9 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         }
 
         /// <summary>
-        /// Gets a summary of the detect result.
+        /// Get a summary of the detection result.
         /// </summary>
-        /// <returns>Detect result.</returns>
+        /// <returns>Detection result.</returns>
         public object GetSUTSummary()
         {
             DetectionResultControl SUTSummaryControl = new DetectionResultControl();
@@ -206,17 +205,24 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         }
 
         /// <summary>
-        /// Gets the list of properties that will be hidder in the configure page.
+        /// Get the list of properties that will be hidden in the configure page.
         /// </summary>
         /// <param name="rules">Selected rules.</param>
-        /// <returns>The list of properties whick will not be shown in the configure page.</returns>
+        /// <returns>The list of properties which will not be shown in the configure page.</returns>
         public List<string> GetHiddenProperties(List<CaseSelectRule> rules)
         {
-            return new List<string>();
+            List<string> hiddenPropertiesList = new List<string>();
+
+            // Hidden the following properties in RDP_ServerTestSuite.ptfconfig:
+            // 1. TestName
+            // 2. ProtocolName
+            // 3. Version
+            hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("RDP_ServerTestSuite.ptfconfig"));
+            return hiddenPropertiesList;
         }
 
         /// <summary>
-        /// Returns false if check failed and set failed property in dictionary
+        /// Return false if check failed and set failed property in dictionary
         /// </summary>
         /// <param name="properties"></param>
         /// <returns></returns>
@@ -229,7 +235,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         /// Dispose
         /// </summary>
         public void Dispose()
-        {            
+        {
         }
 
         #endregion Implemented IValueDetector
@@ -281,8 +287,8 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             else
             {
                 DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
-                DetectorUtil.WriteLog("Taget SUT don't respond.");
-                return false;          
+                DetectorUtil.WriteLog("Target SUT has no response.");
+                return false;
             }
 
         }
@@ -308,7 +314,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
             return rule;
         }
-        
+
         private string NullableBoolToString(bool? value)
         {
             if (value == null)
