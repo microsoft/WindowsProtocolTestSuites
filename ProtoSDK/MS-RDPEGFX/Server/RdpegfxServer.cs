@@ -227,6 +227,49 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         }
 
         /// <summary>
+        /// Method to make a map Surface to scaled output Pdu.
+        /// </summary>
+        /// <param name="sid">This is used to indicate surface id.</param>
+        /// <param name="x">This is used to indicate x-coordinate of the upper-left corner of the surface.</param>
+        /// <param name="y">This is used to indicate y-coordinate of the upper-left corner of the surface.</param>
+        /// <param name="w">This is used to indicate targetWidth of the surface.</param>
+        /// <param name="h">This is used to indicate targeHeight of the surface.</param>
+        public RDPGFX_MAP_SURFACE_TO_SCALED_OUTPUT_PDU CreateMapSurfaceToScaledOutputPdu(ushort sid, uint x, uint y, uint w, uint h)
+        {
+            RDPGFX_MAP_SURFACE_TO_SCALED_OUTPUT_PDU surf2ScaledOutput = new RDPGFX_MAP_SURFACE_TO_SCALED_OUTPUT_PDU(sid, x, y, w, h);
+            return surf2ScaledOutput;
+
+        }
+
+        /// <summary>
+        /// Method to make a map Surface to Window Pdu.
+        /// </summary>
+        /// <param name="sid">This is used to indicate surface id.</param>
+        /// <param name="wid">This is used to indicate window id.</param>
+        /// <param name="w">This is used to indicate mapped width.</param>
+        /// <param name="h">This is used to indicate mapped height.</param>
+        public RDPGFX_MAPSURFACE_TO_WINDOW CreateMapSurfaceToWindowPdu(ushort sid, ulong wid, uint w, uint h)
+        {
+            RDPGFX_MAPSURFACE_TO_WINDOW surf2Window = new RDPGFX_MAPSURFACE_TO_WINDOW(sid, wid, w, h);
+            return surf2Window;
+        }
+
+        /// <summary>
+        /// Method to make a map Surface to scaled output Pdu.
+        /// </summary>
+        /// <param name="sid">This is used to indicate surface id.</param>
+        /// <param name="wid">This is used to indicate the window id.</param>
+        /// <param name="mappedWidth">This is used to indicate mappedWidth of the surface.</param>
+        /// <param name="mappedHeight">This is used to indicate mappedHeight of the surface.</param>
+        /// <param name="targetdWidth">This is used to indicate targetWidth of the window.</param>
+        /// <param name="targetdHeight">This is used to indicate targeHeight of the window.</param>
+        public RDPGFX_MAP_SURFACE_TO_SCALED_WINDOW_PDU CreateMapSurfaceToScaledWindowPdu(ushort sid, ulong wid, uint mappedWidth, uint mappedHeight, uint targetWidth, uint targetHeight)
+        {
+            RDPGFX_MAP_SURFACE_TO_SCALED_WINDOW_PDU surf2ScaledWindow = new RDPGFX_MAP_SURFACE_TO_SCALED_WINDOW_PDU(sid, wid, mappedWidth, mappedHeight,targetWidth,targetHeight);
+            return surf2ScaledWindow;
+        }
+
+        /// <summary>
         /// Create a solid fill Pdu.
         /// </summary>
         /// <param name="sid">This is used to indicate surface id to be filled.</param>
