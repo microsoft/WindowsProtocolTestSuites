@@ -1,481 +1,311 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-using System.Collections.Generic;
-
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
 
 namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 {
+    /// <summary>
+    /// Creates capability set collect to fill Client Confirm Active PDU
+    /// </summary>
     public class RdpbcgrCapSet
     {
-
-        #region Methods to convert cap set structure to byte array.
-        //copy the functions from sdk as this func is internal
-        //as some types are not implemented in SDK, we have to temporarily copy this funcs here
-        //for future, we should add miss types to sdk and remove this region
-
-        /// <summary>
-        /// Encode a structure to a byte list.
-        /// </summary>
-        /// <param name="buffer">The buffer list to contain the structure. 
-        /// This argument cannot be null. It may throw ArgumentNullException if it is null.</param>
-        /// <param name="structure">The structure to be added to buffer list.
-        /// This argument cannot be null. It may throw ArgumentNullException if it is null.</param>
-        internal static void EncodeStructure(List<byte> buffer, object structure)
-        {
-            byte[] structBuffer = StructToBytes(structure);
-            buffer.AddRange(structBuffer);
-        }
-        /// <summary>
-        /// Method to covert struct to byte[]
-        /// </summary>
-        /// <param name="structp">The struct prepare to covert</param>
-        /// <returns>the got byte array converted from struct</returns>
-        internal static byte[] StructToBytes(object structp)
-        {
-            IntPtr ptr = IntPtr.Zero;
-            byte[] buffer = null;
-
-            try
-            {
-                int size = Marshal.SizeOf(structp.GetType());
-                ptr = Marshal.AllocHGlobal(size);
-                buffer = new byte[size];
-                Marshal.StructureToPtr(structp, ptr, false);
-                Marshal.Copy(ptr, buffer, 0, size);
-            }
-            finally
-            {
-                if (ptr != IntPtr.Zero)
-                {
-                    Marshal.FreeHGlobal(ptr);
-                }
-            }
-
-            return buffer;
-        }
-        #endregion "SDK Subset"
-
-        #region Variables
-        public ushort DesktopWidth = 800;
-        public ushort DesktopHeight = 600;
-        public uint MultifragmentUpdateCapabilitySet_maxRequestSize = 38055;
-        public uint FrameAcknowledgeCapabilitySet_maxUnacknowledgedFrameCount = 1;
-        public CmdFlags_Values SurfaceCommandsCapabilitySet_cmdFlag = CmdFlags_Values.SURFCMDS_FRAMEMARKER | CmdFlags_Values.SURFCMDS_SETSURFACEBITS | CmdFlags_Values.SURFCMDS_STREAMSURFACEBITS;
-        #endregion Variables
-
-        private Collection<ITsCapsSet> m_arrCapSet = new Collection<ITsCapsSet>();
+        private const ushort BITMAP_CAP_BITS_PER_PIXEL_DEFAULT = 32;
+        private const ushort BITMAP_CAP_SUPPORT_FEATURE = 0x0001;
+        private const ushort DESKTOP_WIDTH_DEFAULT = 0x0400;
+        private const ushort DESKTOP_HEIGHT_DEFAULT = 0x0300;
+        private const int ORDER_CAP_TERMINAL_DESCRIPTOR = 16;
+        private const ushort ORDER_CAP_DESKTOP_X = 1;
+        private const ushort ORDER_CAP_DESKTOP_Y = 20;
+        private const ushort ORD_LEVEL_1_ORDERS = 1;
+        private static byte[] ORDER_CAP_ORDER_SUPPORT_DEFAULT =
+            new byte[] { 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01,
+                         0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x01,
+                         0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00,
+                         0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00};
+        private const uint ORDER_CAP_DESKTOP_SIZE_DEFAULT = 230400;
+        private const uint ORDER_CAP_USHORT_COUNT = 14;
+        private const uint ORDER_CAP_UINT_COUNT = 3;
+        private const byte BITMAP_CACHE_NUM_CELL_DEFAULT = 3;
+        private const uint BITMAP_CACHE_CELL1_VALUE = 120;
+        private const uint BITMAP_CACHE_CELL2_VALUE = 120;
+        private const uint BITMAP_CACHE_CELL3_VALUE = 0x800009FC;
+        private static byte[] BITMAP_CACHE_PAD3 =
+            new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+        private const ushort POINTER_CAP_COLOR_SIZE_DEFAULT = 20;
+        private const ushort POINTER_CAP_POINTER_SIZE_DEFAULT = 21;
+        private const ushort LOCALE_ENGLISH_UNITED_STATES = 0x0409;
+        private const uint KEYBOARD_FUNCTION_KEY_NUMBER_DEFAULT = 0x0C;
+        private const uint INPUT_CAP_IME_FLIENAME_SIZE = 64;
+        private const uint CLYPH_CACHE_CAP_CLYPH_CACHE_NUM = 10;
+        private const ushort CLYPH_CACHE_CAP_CACHE_ENTRY_NUM_64 = 64;
+        private const ushort CLYPH_CACHE_CAP_CACHE_ENTRY_NUM_254 = 254;
+        private const ushort CLYPH_CACHE_CAP_CACHE_ENTRY_NUM_256 = 256;
+        private const ushort CLYPH_CACHE_CAP_CACHE_CELL_SIZE_4 = 4;
+        private const ushort CLYPH_CACHE_CAP_CACHE_CELL_SIZE_8 = 8;
+        private const ushort CLYPH_CACHE_CAP_CACHE_CELL_SIZE_16 = 16;
+        private const ushort CLYPH_CACHE_CAP_CACHE_CELL_SIZE_32 = 32;
+        private const ushort CLYPH_CACHE_CAP_CACHE_CELL_SIZE_64 = 64;
+        private const ushort CLYPH_CACHE_CAP_CACHE_CELL_SIZE_128 = 128;
+        private const ushort CLYPH_CACHE_CAP_CACHE_CELL_SIZE_256 = 256;
+        private const uint CLYPH_CACHE_CAP_USHORT_COUNT = 26;
+        private const ushort OFFSCREEN_CAP_MAX_CACHE_SIZE = 10240;
+        private const ushort OFFSCREEN_CAP_CACHE_ENTRY_NUM = 64;
+        private const ushort CONTROLPRIORITY_NEVER = 0x0002;
+        private const ushort FONTSUPPORT_FONTLIST = 0x0001;
+        private const uint MULTIFRAGMENT_CAP_MAX_REQUEST_SIZE = 0x000094A7;
 
         /// <summary>
-        /// Capability Sets collection
+        /// Creates a collection which contains all mandatory and optional capability sets
         /// </summary>
-        public Collection<ITsCapsSet> CapabilitySets
+        /// <returns>collection fo Capability sets.</returns>
+        public Collection<ITsCapsSet> CreateCapabilitySets(
+            bool supportAutoReconnect,
+            bool supportFastPathInput,
+            bool supportFastPathOutput,
+            bool supportSurfaceCommands,
+            bool supportSVCCompression,
+            bool supportRemoteFXCodec)
         {
-            get { return m_arrCapSet; }
-            set { m_arrCapSet = value; }
-        }
+            Collection<ITsCapsSet> capabilitySets = new Collection<ITsCapsSet>();
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public RdpbcgrCapSet()
-        {
-        }
-        
-        /// <summary>
-        /// Generate CapabilitySets
-        /// </summary>
-        public void GenerateCapabilitySets()
-        {
-            m_arrCapSet.Add(CreateGeneralCapSet(true, true, true, true, true, true, true, osMajorType_Values.OSMAJORTYPE_WINDOWS, osMinorType_Values.OSMINORTYPE_WINDOWS_NT));
-            m_arrCapSet.Add(CreateBitmapCapSet(DesktopWidth, DesktopHeight, desktopResizeFlag_Values.TRUE, true, true, true));
-            m_arrCapSet.Add(CreateOrderCapSet(new byte[] { 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01, 
-                         0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 
-                         0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 
-                         0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00}, true, true, true, false, true, true, true));
-            m_arrCapSet.Add(CreatePointerCapSet(colorPointerFlag_Values.TRUE, 25, 25));
-            m_arrCapSet.Add(CreateInputCapSet(true, true, true, true, true));
-            m_arrCapSet.Add(CreateVirtualChannelCapSet(true, true));
-            m_arrCapSet.Add(CreateTSWindowCapSet(2, 3, 12));
+            #region Mandatory Capability Sets
 
-            
-            m_arrCapSet.Add(CreateShareCapSet());   
-            m_arrCapSet.Add(CreateTSRailCapSet(true, true));
-            m_arrCapSet.Add(CreateBitmapCacheHostSupportCapSet());
-            m_arrCapSet.Add(CreateDesktopCompositionCapSet(CompDeskSupportLevel_Values.COMPDESK_SUPPORTED));
-            m_arrCapSet.Add(CreateMultiFragmentUpdateCapSet(MultifragmentUpdateCapabilitySet_maxRequestSize));
-            m_arrCapSet.Add(CreateFontCapSet());
-            m_arrCapSet.Add(CreateLargePointerCapSet(largePointerSupportFlags_Values.LARGE_POINTER_FLAG_96x96));
-            m_arrCapSet.Add(CreateFrameAcknowledgeCapSet(FrameAcknowledgeCapabilitySet_maxUnacknowledgedFrameCount));
-            m_arrCapSet.Add(CreateSurfaceCmdCapSet(SurfaceCommandsCapabilitySet_cmdFlag));
-            m_arrCapSet.Add(CreateBitmapCodecsCapSet(true, true));
-            m_arrCapSet.Add(CreateColorTableCapSet());
-        }
-
-        /// <summary>
-        /// Search a cap set with type value.
-        /// </summary>
-        /// <param name="capType">Type of the cap set</param>
-        /// <returns>The cap set with the specified type; if not find, return null;</returns>
-        public ITsCapsSet FindCapSet(capabilitySetType_Values capType)
-        {
-            foreach (ITsCapsSet cap in m_arrCapSet)
-            {
-                if (cap.GetCapabilityType() == capType)
-                    return cap;
-            }
-
-            return null;
-        }
-
-        #region "Mandatory Cap Sets"
-        /// <summary>
-        /// Create a TS_GENERAL_CAPABILITYSET type Capability, 2.2.7.1.1   
-        /// </summary>
-        /// <param name="fpOutput">Advertiser supports fast-path output.</param>
-        /// <param name="noBitmapCompHdr">Advertiser supports excluding the 8-byte Compressed Data Header (section 2.2.9.1.1.3.1.2.3) 
-        /// from the Bitmap Data (section 2.2.9.1.1.3.1.2.2) structure 
-        /// or the Cache Bitmap (Revision 2) Secondary Drawing Order ([MS-RDPEGDI] section 2.2.2.2.1.2.3).</param>
-        /// <param name="longCreds">Advertiser supports long-length credentials for the user name, password, 
-        /// or domain name in the Save Session Info PDU (section 2.2.10.1).</param>
-        /// <param name="autoReconnect">Advertiser supports auto-reconnection (section 5.5).</param>
-        /// <param name="mac">Advertiser supports salted MAC generation (see section 5.3.6.1.1).</param>
-        /// <param name="refreshRect">Server supports Refresh Rect PDU or not</param>
-        /// <param name="suppressOutput">Server supports Suppress Output PDU or not</param>
-        /// <param name="osMajorType">The type of platform</param>
-        /// <param name="osMinorType">The version of the platform specified in the osMajorType field</param>
-        /// <returns>TS_GENERAL_CAPABILITYSET type Capability</returns>
-        public static TS_GENERAL_CAPABILITYSET CreateGeneralCapSet(
-            bool fpOutput,
-            bool noBitmapCompHdr,
-            bool longCreds,
-            bool autoReconnect,
-            bool mac,
-            bool refreshRect,
-            bool suppressOutput,
-            osMajorType_Values osMajorType,
-            osMinorType_Values osMinorType
-            )
-        {
+            #region Populating general Capability Set, set auto-reconnect and fast-path output support
             TS_GENERAL_CAPABILITYSET generalCapabilitySet = new TS_GENERAL_CAPABILITYSET();
-
             generalCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSTYPE_GENERAL;
             generalCapabilitySet.lengthCapability = (ushort)Marshal.SizeOf(generalCapabilitySet);
-            generalCapabilitySet.osMajorType = osMajorType;
-            generalCapabilitySet.osMinorType = osMinorType;
+            generalCapabilitySet.osMajorType = osMajorType_Values.OSMAJORTYPE_WINDOWS;
+            generalCapabilitySet.osMinorType = osMinorType_Values.OSMINORTYPE_WINDOWS_NT;
             generalCapabilitySet.protocolVersion = protocolVersion_Values.V1;
             generalCapabilitySet.pad2octetsA = 0;
             generalCapabilitySet.generalCompressionTypes = generalCompressionTypes_Values.V1;
-
-            if (fpOutput)
-                generalCapabilitySet.extraFlags |= extraFlags_Values.FASTPATH_OUTPUT_SUPPORTED;
-            if (noBitmapCompHdr)
-                generalCapabilitySet.extraFlags |= extraFlags_Values.NO_BITMAP_COMPRESSION_HDR;
-            if (longCreds)
-                generalCapabilitySet.extraFlags |= extraFlags_Values.LONG_CREDENTIALS_SUPPORTED;
-            if (autoReconnect)
+            generalCapabilitySet.extraFlags = extraFlags_Values.NO_BITMAP_COMPRESSION_HDR
+                                            | extraFlags_Values.ENC_SALTED_CHECKSUM
+                                            | extraFlags_Values.LONG_CREDENTIALS_SUPPORTED;
+            // Add more flags according to parameters.
+            if (supportAutoReconnect)
+            {
                 generalCapabilitySet.extraFlags |= extraFlags_Values.AUTORECONNECT_SUPPORTED;
-            if (mac)
-                generalCapabilitySet.extraFlags |= extraFlags_Values.ENC_SALTED_CHECKSUM;
-
+            }
+            if (supportFastPathOutput)
+            {
+                generalCapabilitySet.extraFlags |= extraFlags_Values.FASTPATH_OUTPUT_SUPPORTED;
+            }
             generalCapabilitySet.updateCapabilityFlag = updateCapabilityFlag_Values.V1;
             generalCapabilitySet.remoteUnshareFlag = remoteUnshareFlag_Values.V1;
             generalCapabilitySet.generalCompressionLevel = generalCompressionLevel_Values.V1;
-
-            generalCapabilitySet.refreshRectSupport = refreshRect ? refreshRectSupport_Values.TRUE : refreshRectSupport_Values.FALSE;
-            generalCapabilitySet.suppressOutputSupport = suppressOutput ? suppressOutputSupport_Values.TRUE : suppressOutputSupport_Values.FALSE;
-
+            generalCapabilitySet.refreshRectSupport = refreshRectSupport_Values.TRUE;
+            generalCapabilitySet.suppressOutputSupport = suppressOutputSupport_Values.TRUE;
             generalCapabilitySet.lengthCapability = (ushort)Marshal.SizeOf(generalCapabilitySet);
 
-            return generalCapabilitySet;
-        }
+            capabilitySets.Add(generalCapabilitySet);
+            #endregion  Populating general Capability Set
 
-        /// <summary>
-        /// Create a TS_BITMAP_CAPABILITYSET type Capability, 2.2.7.1.2    
-        /// </summary>
-        /// <param name="desktopWidth">The width of the desktop in the session.</param>
-        /// <param name="desktopHeight">The height of the desktop in the session.</param>
-        /// <param name="desktopResizeFlag">Desktop resizing is supported or not</param>
-        /// <param name="colorSubsampling">Indicates support for chroma subsampling when compressing 32 bpp bitmaps 
-        /// ([MS-RDPEGDI] section 3.1.9.1.3).</param>
-        /// <param name="dyColorFidelity">Indicates support for lossy compression of 32 bpp bitmaps by reducing color-fidelity
-        /// on a per-pixel basis ([MS-RDPEGDI] section 3.1.9.1.4).</param>
-        /// <param name="skipAlpha">Indicates that the client supports the removal of the alpha-channel when compressing 
-        /// 32 bpp bitmaps. In this case the alpha is assumed to be 0xFF, meaning the bitmap is opaque.</param>
-        /// <returns>TS_BITMAP_CAPABILITYSET type Capability</returns>
-        public static TS_BITMAP_CAPABILITYSET CreateBitmapCapSet(ushort desktopWidth, ushort desktopHeight,
-            desktopResizeFlag_Values desktopResizeFlag,
-            bool colorSubsampling,
-            bool dyColorFidelity,
-            bool skipAlpha)
-        {
+            #region Populating Bitmap Capability Set
             TS_BITMAP_CAPABILITYSET bitmapCapabilitySet = new TS_BITMAP_CAPABILITYSET();
             bitmapCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSTYPE_BITMAP;
             bitmapCapabilitySet.lengthCapability = (ushort)Marshal.SizeOf(bitmapCapabilitySet);
-            //A 16-bit, unsigned integer. The server MUST set this field to the color depth of the session, 
-            //while the client SHOULD set this field to the color depth requested in the Client Core Data (section 2.2.1.3.2).
-            bitmapCapabilitySet.preferredBitsPerPixel = 32;
-            //A 16-bit, unsigned integer. Indicates whether the client can receive 1 bpp. 
-            //This field is ignored and SHOULD be set to TRUE (0x0001).
-            bitmapCapabilitySet.receive1BitPerPixel = 1;
-            //A 16-bit, unsigned integer. Indicates whether the client can receive 4 bpp. 
-            //This field is ignored and SHOULD be set to TRUE (0x0001).
-            bitmapCapabilitySet.receive4BitsPerPixel = 1;
-            //A 16-bit, unsigned integer. Indicates whether the client can receive 8 bpp. 
-            //This field is ignored and SHOULD be set to TRUE (0x0001).
-            bitmapCapabilitySet.receive8BitsPerPixel = 1;
-            bitmapCapabilitySet.desktopWidth = desktopWidth;
-            bitmapCapabilitySet.desktopHeight = desktopHeight;
+            bitmapCapabilitySet.preferredBitsPerPixel = BITMAP_CAP_BITS_PER_PIXEL_DEFAULT;
+            bitmapCapabilitySet.receive1BitPerPixel = BITMAP_CAP_SUPPORT_FEATURE;
+            bitmapCapabilitySet.receive4BitsPerPixel = BITMAP_CAP_SUPPORT_FEATURE;
+            bitmapCapabilitySet.receive8BitsPerPixel = BITMAP_CAP_SUPPORT_FEATURE;
+            bitmapCapabilitySet.desktopWidth = DESKTOP_WIDTH_DEFAULT;
+            bitmapCapabilitySet.desktopHeight = DESKTOP_HEIGHT_DEFAULT;
             bitmapCapabilitySet.pad2octets = 0;
-            bitmapCapabilitySet.desktopResizeFlag = desktopResizeFlag;
-            //A 16-bit, unsigned integer. Indicates whether bitmap compression is supported. 
-            //This field MUST be set to TRUE (0x0001) because support for compressed bitmaps is required for a connection to proceed.
-            bitmapCapabilitySet.bitmapCompressionFlag = 1;
-            //An 8-bit, unsigned integer. Client support for 16 bpp color modes. 
-            //This field is ignored and SHOULD be set to 0.
+            bitmapCapabilitySet.desktopResizeFlag = desktopResizeFlag_Values.TRUE;
+            bitmapCapabilitySet.bitmapCompressionFlag = BITMAP_CAP_SUPPORT_FEATURE;
             bitmapCapabilitySet.highColorFlags = 0;
-            if (colorSubsampling)
-                bitmapCapabilitySet.drawingFlags |= drawingFlags_Values.DRAW_ALLOW_COLOR_SUBSAMPLING;
-            if (dyColorFidelity)
-                bitmapCapabilitySet.drawingFlags |= drawingFlags_Values.DRAW_ALLOW_DYNAMIC_COLOR_FIDELITY;
-            if (skipAlpha)
-                bitmapCapabilitySet.drawingFlags |= drawingFlags_Values.DRAW_ALLOW_SKIP_ALPHA;
-
-            bitmapCapabilitySet.drawingFlags |= (drawingFlags_Values)0x10;
-            //A 16-bit, unsigned integer. Indicates whether the use of multiple bitmap rectangles is supported in the Bitmap Update (section 2.2.9.1.1.3.1.2). 
-            //This field MUST be set to TRUE (0x0001) because multiple rectangle support is required for a connection to proceed.
-            bitmapCapabilitySet.multipleRectangleSupport = 1;
+            bitmapCapabilitySet.drawingFlags = drawingFlags_Values.DRAW_ALLOW_COLOR_SUBSAMPLING
+                                             | drawingFlags_Values.DRAW_ALLOW_DYNAMIC_COLOR_FIDELITY
+                                             | drawingFlags_Values.DRAW_ALLOW_SKIP_ALPHA
+                                             | drawingFlags_Values.DRAW_UNUSED_FLAG;
+            bitmapCapabilitySet.multipleRectangleSupport = BITMAP_CAP_SUPPORT_FEATURE;
             bitmapCapabilitySet.pad2octetsB = 0;
-            return bitmapCapabilitySet;
-        }
 
-        /// <summary>
-        /// Create a TS_ORDER_CAPABILITYSET type Capability, 2.2.7.1.3   
-        /// Problem: contain hardCode as SDK bug(miss member)
-        /// </summary>
-        /// <param name="orderSupport">An array of 32 bytes indicating support for various primary drawing orders. 
-        /// The indices of this array are the negotiation indices for the primary orders specified in [MS-RDPEGDI] section 2.2.2.2.1.1.2.</param>
-        /// <param name="negoOrdSupport">Indicates support for specifying supported drawing orders in the orderSupport field. 
-        /// This flag MUST be set.</param>
-        /// <param name="zbSDELT">Indicates support for the TS_ZERO_BOUNDS_DELTAS (0x20) flag (see [MS-RDPEGDI] 
-        /// section 2.2.2.2.1.1.2). The client MUST set this flag.</param>
-        /// <param name="colorIdx">Indicates support for sending color indices (not RGB values) in orders.</param>
-        /// <param name="spBrush">Indicates that this party can receive only solid and pattern brushes.</param>
-        /// <param name="ordFlagsExFlags">Indicates that the orderSupportExFlags field contains valid data.</param>
-        /// <param name="cbRev3">The Cache Bitmap (Revision 3) Secondary Drawing Order ([MS-RDPEGDI] section 2.2.2.2.1.2.8) 
-        /// is supported.</param>
-        /// <param name="afmSupport">The Frame Marker Alternate Secondary Drawing Order ([MS-RDPEGDI] section 2.2.2.2.1.3.7)
-        /// is supported.</param>
-        /// <returns>TS_ORDER_CAPABILITYSET type Capability</returns>
-        public static TS_ORDER_CAPABILITYSET CreateOrderCapSet(byte[] orderSupport, bool negoOrdSupport, bool zbSDELT, bool colorIdx, bool spBrush, bool ordFlagsExFlags,
-            bool cbRev3, bool afmSupport)
-        {
+            capabilitySets.Add(bitmapCapabilitySet);
+            #endregion Populating Bitmap Capability Set
+
+            #region Populating Order Capability Set
             TS_ORDER_CAPABILITYSET orderCapabilitySet = new TS_ORDER_CAPABILITYSET();
-
             orderCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSTYPE_ORDER;
-            //A 16-element array of 8-bit, unsigned integers. Terminal descriptor. 
-            //This field is ignored and SHOULD be set to all zeros.
-            orderCapabilitySet.terminalDescriptor = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-            orderCapabilitySet.pad4octetsA = 1000000;
-            //A 16-bit, unsigned integer. X granularity used in conjunction with the SaveBitmap Primary Drawing Order (see [MS-RDPEGDI] section 2.2.2.2.1.1.2.12). 
-            //This value is ignored and assumed to be 1.
-            orderCapabilitySet.desktopSaveXGranularity = 1;
-            //A 16-bit, unsigned integer. Y granularity used in conjunction with the SaveBitmap Primary Drawing Order (see [MS-RDPEGDI] section 2.2.2.2.1.1.2.12). 
-            //This value is ignored and assumed to be 20.
-            orderCapabilitySet.desktopSaveYGranularity = 20;
+            orderCapabilitySet.terminalDescriptor = new byte[ORDER_CAP_TERMINAL_DESCRIPTOR];
+            orderCapabilitySet.pad4octetsA = 0;
+            orderCapabilitySet.desktopSaveXGranularity = ORDER_CAP_DESKTOP_X;
+            orderCapabilitySet.desktopSaveYGranularity = ORDER_CAP_DESKTOP_Y;
             orderCapabilitySet.pad2octetsA = 0;
-            //A 16-bit, unsigned integer. Maximum order level. This value is ignored and SHOULD be set to ORD_LEVEL_1_ORDERS (1).
-            orderCapabilitySet.maximumOrderLevel = 1;
-            //A 16-bit, unsigned integer. Number of fonts. This value is ignored and SHOULD be set to 0.
+            orderCapabilitySet.maximumOrderLevel = ORD_LEVEL_1_ORDERS;
             orderCapabilitySet.numberFonts = 0;
-            if (negoOrdSupport)
-                orderCapabilitySet.orderFlags |= orderFlags_Values.NEGOTIATEORDERSUPPORT;
-            if (zbSDELT)
-                orderCapabilitySet.orderFlags |= orderFlags_Values.ZEROBOUNDSDELTASSUPPORT;
-            if (colorIdx)
-                orderCapabilitySet.orderFlags |= orderFlags_Values.COLORINDEXSUPPORT;
-            if (spBrush)
-                orderCapabilitySet.orderFlags |= orderFlags_Values.SOLIDPATTERNBRUSHONLY;
-            if (ordFlagsExFlags)
-                orderCapabilitySet.orderFlags |= (orderFlags_Values)0x0080;//<hardcode>
-
-            orderCapabilitySet.orderSupport = orderSupport;
-
-            //A 16-bit, unsigned integer. Values in this field MUST be ignored.<?>
-            orderCapabilitySet.textFlags = 1697;
-
-            if (cbRev3)
-                orderCapabilitySet.orderSupportExFlags |= orderSupportExFlags_values.ORDERFLAGS_EX_CACHE_BITMAP_REV3_SUPPORT;
-            if (afmSupport)
-                orderCapabilitySet.orderSupportExFlags |= orderSupportExFlags_values.ORDERFLAGS_EX_ALTSEC_FRAME_MARKER_SUPPORT;
-
-            orderCapabilitySet.pad4octetsB = 1000000;
-            //A 32-bit, unsigned integer. The maximum usable size of bitmap space for bitmap packing in the SaveBitmap Primary Drawing Order (see [MS-RDPEGDI] section 2.2.2.2.1.1.2.12). 
-            //This field is ignored by the client and assumed to be 230400 bytes (480 * 480).<?>
-            orderCapabilitySet.desktopSaveSize = 1000000;
-            orderCapabilitySet.pad2octetsC = 1;
+            orderCapabilitySet.orderFlags = orderFlags_Values.COLORINDEXSUPPORT
+                                          | orderFlags_Values.ZEROBOUNDSDELTASSUPPORT
+                                          | orderFlags_Values.NEGOTIATEORDERSUPPORT
+                                          | orderFlags_Values.ORDERFLAGS_EXTRA_FLAGS; // If not set ORDERFLAGS_EXTRA_FLAGS flag when EGFX not supported, will get Server Set Error Info PDU with ErrInfoGraphicSubsystemFailed(4399)
+            orderCapabilitySet.orderSupport = ORDER_CAP_ORDER_SUPPORT_DEFAULT;
+            orderCapabilitySet.textFlags = 0;
+            orderCapabilitySet.orderSupportExFlags =
+                orderSupportExFlags_values.ORDERFLAGS_EX_CACHE_BITMAP_REV3_SUPPORT | orderSupportExFlags_values.ORDERFLAGS_EX_ALTSEC_FRAME_MARKER_SUPPORT;
+            orderCapabilitySet.pad4octetsB = 0;
+            orderCapabilitySet.desktopSaveSize = ORDER_CAP_DESKTOP_SIZE_DEFAULT;
+            orderCapabilitySet.pad2octetsC = 0;
             orderCapabilitySet.pad2octetsD = 0;
-            //A 16-bit, unsigned integer. ANSI code page descriptor being used by the client (for a list of code pages, see [MSDN-CP]). 
-            //This field is ignored by the client and SHOULD be set to 0 by the server.
             orderCapabilitySet.textANSICodePage = 0;
             orderCapabilitySet.pad2octetsE = 0;
-            orderCapabilitySet.lengthCapability = (ushort)(sizeof(ushort) * 14
-                                                + sizeof(uint) * 3
+            orderCapabilitySet.lengthCapability = (ushort)(sizeof(ushort) * ORDER_CAP_USHORT_COUNT
+                                                + sizeof(uint) * ORDER_CAP_UINT_COUNT
                                                 + orderCapabilitySet.terminalDescriptor.Length
                                                 + orderCapabilitySet.orderSupport.Length);
-            return orderCapabilitySet;
-        }
 
-        /// <summary>
-        /// Create a TS_POINTER_CAPABILITYSET type Capability, 2.2.7.1.5    
-        /// </summary>
-        /// <param name="colorPointer">false:Monochrome mouse cursors are supported. true:Color mouse cursors are supported.</param>
-        /// <param name="colorPointerCacheSize">A 16-bit, unsigned integer. The number of available slots in the 
-        /// 24 bpp color pointer cache used to store data received in the Color Pointer Update (section 2.2.9.1.1.4.4).</param>
-        /// <param name="pointerCacheSize">A 16-bit, unsigned integer. The number of available slots in the 
-        /// pointer cache used to store pointer data of arbitrary bit depth received in the New Pointer Update 
-        /// (section 2.2.9.1.1.4.5). If the value contained in this field is zero or the Pointer Capability 
-        /// Set sent from the client does not include this field, the server will not use the New Pointer Update.</param>
-        /// <returns>TS_POINTER_CAPABILITYSET type Capability</returns>
-        public static TS_POINTER_CAPABILITYSET CreatePointerCapSet(colorPointerFlag_Values colorPointerFlag, ushort colorPointerCacheSize, ushort pointerCacheSize)
-        {
+            capabilitySets.Add(orderCapabilitySet);
+            #endregion Populating Order Capability Set
+
+            #region Populating BitmapCache Capability Set
+            TS_BITMAPCACHE_CAPABILITYSET_REV2 bitmapCacheCapabilitySet = new TS_BITMAPCACHE_CAPABILITYSET_REV2();
+            bitmapCacheCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSTYPE_BITMAPCACHE_REV2;
+            bitmapCacheCapabilitySet.CacheFlags = CacheFlags_Values.ALLOW_CACHE_WAITING_LIST_FLAG
+                                                | CacheFlags_Values.PERSISTENT_KEYS_EXPECTED_FLAG;
+            bitmapCacheCapabilitySet.pad2 = 0;
+            bitmapCacheCapabilitySet.NumCellCaches = BITMAP_CACHE_NUM_CELL_DEFAULT;
+            bitmapCacheCapabilitySet.BitmapCache1CellInfo.NumEntriesAndK = BITMAP_CACHE_CELL1_VALUE;
+            bitmapCacheCapabilitySet.BitmapCache2CellInfo.NumEntriesAndK = BITMAP_CACHE_CELL2_VALUE;
+            bitmapCacheCapabilitySet.BitmapCache3CellInfo.NumEntriesAndK = BITMAP_CACHE_CELL3_VALUE;
+            bitmapCacheCapabilitySet.BitmapCache4CellInfo.NumEntriesAndK = 0;
+            bitmapCacheCapabilitySet.BitmapCache5CellInfo.NumEntriesAndK = 0;
+            bitmapCacheCapabilitySet.Pad3 = BITMAP_CACHE_PAD3;
+            bitmapCacheCapabilitySet.lengthCapability = (ushort)(Marshal.SizeOf(bitmapCacheCapabilitySet)
+                                                      + bitmapCacheCapabilitySet.Pad3.Length
+                                                      - sizeof(int));
+
+            capabilitySets.Add(bitmapCacheCapabilitySet);
+            #endregion Populating BitmapCache Capability Set
+
+            #region Populating Pointer Capability Set
             TS_POINTER_CAPABILITYSET pointerCapabilitySet = new TS_POINTER_CAPABILITYSET();
             pointerCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSTYPE_POINTER;
-
-            pointerCapabilitySet.colorPointerFlag = colorPointerFlag;
-
-            pointerCapabilitySet.colorPointerCacheSize = colorPointerCacheSize;
-            pointerCapabilitySet.pointerCacheSize = pointerCacheSize;
+            pointerCapabilitySet.colorPointerFlag = colorPointerFlag_Values.TRUE;
+            pointerCapabilitySet.colorPointerCacheSize = POINTER_CAP_COLOR_SIZE_DEFAULT;
+            pointerCapabilitySet.pointerCacheSize = POINTER_CAP_POINTER_SIZE_DEFAULT;
             pointerCapabilitySet.lengthCapability = (ushort)Marshal.SizeOf(pointerCapabilitySet);
-            return pointerCapabilitySet;
-        }
 
-        /// <summary>
-        /// Create a TS_INPUT_CAPABILITYSET type Capability, 2.2.7.1.6
-        /// Problem: not implement client-end parameters, and we can modify this func in the future
-        /// </summary>
-        /// <param name="scanCodes">Indicates support for using scancodes in the Keyboard Event notifications 
-        /// (see sections 2.2.8.1.1.3.1.1.1 and 2.2.8.1.2.2.1).</param>
-        /// <param name="mouseX">Indicates support for Extended Mouse Event notifications (see sections 2.2.8.1.1.3.1.1.4 
-        /// and 2.2.8.1.2.2.4).</param>
-        /// <param name="fpInput">Advertised by RDP 5.0 and 5.1 servers. RDP 5.2, 6.0, 6.1, and 7.0 servers advertise the
-        /// INPUT_FLAG_FASTPATH_INPUT2 flag to indicate support for fast-path input.</param>
-        /// <param name="unicode">Indicates support for Unicode Keyboard Event notifications (see sections 2.2.8.1.1.3.1.1.2
-        /// and 2.2.8.1.2.2.2).</param>
-        /// <param name="fpInput2">Advertised by RDP 5.2, 6.0, 6.1, and 7.0 servers. Clients that do not support 
-        /// this flag will not be able to use fast-path input when connecting to RDP 5.2, 6.0, 6.1, and 7.0 servers.</param>
-        /// <returns>TS_INPUT_CAPABILITYSET type Capability</returns>
-        public static TS_INPUT_CAPABILITYSET CreateInputCapSet(bool scanCodes, bool mouseX, bool fpInput, bool unicode, bool fpInput2)
-        {
+            capabilitySets.Add(pointerCapabilitySet);
+            #endregion Populating Pointer Capability Set
+
+            #region Populating Input Capability Set, set fast-path input support
             TS_INPUT_CAPABILITYSET inputCapabilitySet = new TS_INPUT_CAPABILITYSET();
             inputCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSTYPE_INPUT;
-
-            if (scanCodes)
-                inputCapabilitySet.inputFlags |= inputFlags_Values.INPUT_FLAG_SCANCODES;
-            if (mouseX)
-                inputCapabilitySet.inputFlags |= inputFlags_Values.INPUT_FLAG_MOUSEX;
-            if (fpInput)
-                inputCapabilitySet.inputFlags |= inputFlags_Values.INPUT_FLAG_FASTPATH_INPUT;
-            if (unicode)
-                inputCapabilitySet.inputFlags |= inputFlags_Values.INPUT_FLAG_UNICODE;
-            if (fpInput2)
+            inputCapabilitySet.inputFlags = inputFlags_Values.INPUT_FLAG_UNICODE
+                                          | inputFlags_Values.INPUT_FLAG_MOUSEX
+                                          | inputFlags_Values.INPUT_FLAG_SCANCODES;
+            if (supportFastPathInput)
+            {
                 inputCapabilitySet.inputFlags |= inputFlags_Values.INPUT_FLAG_FASTPATH_INPUT2;
-
+            }
             inputCapabilitySet.pad2octetsA = 0;
-
-            //Only set by Client
-            inputCapabilitySet.keyboardLayout = 0;
-            //Only set by Client
-            inputCapabilitySet.keyboardType = TS_INPUT_CAPABILITYSET_keyboardType_Values.None;
-            //Only set by Client
+            inputCapabilitySet.keyboardLayout = LOCALE_ENGLISH_UNITED_STATES;
+            inputCapabilitySet.keyboardType = TS_INPUT_CAPABILITYSET_keyboardType_Values.V4;
             inputCapabilitySet.keyboardSubType = 0;
-            //Only set by Client
-            inputCapabilitySet.keyboardFunctionKey = 0;
-            //Only set by Client
-            inputCapabilitySet.imeFileName = "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-" +
-                    "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-" +
-                    "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-" +
-                    "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00";
-            inputCapabilitySet.lengthCapability = (ushort)(24 + 64); // the other fields(except imeFileName field) totoal length is 24
-            return inputCapabilitySet;
-        }
+            inputCapabilitySet.keyboardFunctionKey = KEYBOARD_FUNCTION_KEY_NUMBER_DEFAULT;
+            inputCapabilitySet.imeFileName = string.Empty;
+            inputCapabilitySet.lengthCapability = (ushort)(Marshal.SizeOf(inputCapabilitySet)
+                                                - sizeof(int)
+                                                + INPUT_CAP_IME_FLIENAME_SIZE);
 
-        /// <summary>
-        /// Create a TS_VIRTUALCHANNEL_CAPABILITYSET type Capability, 2.2.7.1.10
-        /// </summary>
-        /// <param name="supportCompression"></param>
-        /// <param name="presentChunkSize"></param>
-        public static TS_VIRTUALCHANNEL_CAPABILITYSET CreateVirtualChannelCapSet(bool supportCompression, bool presentChunkSize)
-        {
-            TS_VIRTUALCHANNEL_CAPABILITYSET virtualChannelSet = new TS_VIRTUALCHANNEL_CAPABILITYSET();
-            virtualChannelSet.capabilitySetType = capabilitySetType_Values.CAPSTYPE_VIRTUALCHANNEL;
+            capabilitySets.Add(inputCapabilitySet);
+            #endregion Populating Input Capability Set
 
-            if (supportCompression)
+            #region Populating Brush Capability Set
+            TS_BRUSH_CAPABILITYSET brushCapabilitySet = new TS_BRUSH_CAPABILITYSET();
+            brushCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSTYPE_BRUSH;
+            brushCapabilitySet.brushSupportLevel = brushSupportLevel_Values.BRUSH_COLOR_8x8;
+            brushCapabilitySet.lengthCapability = (ushort)Marshal.SizeOf(brushCapabilitySet);
+
+            capabilitySets.Add(brushCapabilitySet);
+            #endregion Populating Brush Capability Set
+
+            #region Populating Glyph Cache Capability Set
+            TS_GLYPHCACHE_CAPABILITYSET glyphCacheCapabilitySet = new TS_GLYPHCACHE_CAPABILITYSET();
+            glyphCacheCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSTYPE_GLYPHCACHE;
+            glyphCacheCapabilitySet.GlyphCache = new TS_CACHE_DEFINITION[CLYPH_CACHE_CAP_CLYPH_CACHE_NUM];
+            glyphCacheCapabilitySet.GlyphCache[0].CacheEntries = CLYPH_CACHE_CAP_CACHE_ENTRY_NUM_254;
+            glyphCacheCapabilitySet.GlyphCache[0].CacheMaximumCellSize = CLYPH_CACHE_CAP_CACHE_CELL_SIZE_4;
+            glyphCacheCapabilitySet.GlyphCache[1].CacheEntries = CLYPH_CACHE_CAP_CACHE_ENTRY_NUM_254;
+            glyphCacheCapabilitySet.GlyphCache[1].CacheMaximumCellSize = CLYPH_CACHE_CAP_CACHE_CELL_SIZE_8;
+            glyphCacheCapabilitySet.GlyphCache[2].CacheEntries = CLYPH_CACHE_CAP_CACHE_ENTRY_NUM_254;
+            glyphCacheCapabilitySet.GlyphCache[2].CacheMaximumCellSize = CLYPH_CACHE_CAP_CACHE_CELL_SIZE_8;
+            glyphCacheCapabilitySet.GlyphCache[3].CacheEntries = CLYPH_CACHE_CAP_CACHE_ENTRY_NUM_254;
+            glyphCacheCapabilitySet.GlyphCache[3].CacheMaximumCellSize = CLYPH_CACHE_CAP_CACHE_CELL_SIZE_4;
+            glyphCacheCapabilitySet.GlyphCache[4].CacheEntries = CLYPH_CACHE_CAP_CACHE_ENTRY_NUM_254;
+            glyphCacheCapabilitySet.GlyphCache[4].CacheMaximumCellSize = CLYPH_CACHE_CAP_CACHE_CELL_SIZE_16;
+            glyphCacheCapabilitySet.GlyphCache[5].CacheEntries = CLYPH_CACHE_CAP_CACHE_ENTRY_NUM_254;
+            glyphCacheCapabilitySet.GlyphCache[5].CacheMaximumCellSize = CLYPH_CACHE_CAP_CACHE_CELL_SIZE_32;
+            glyphCacheCapabilitySet.GlyphCache[6].CacheEntries = CLYPH_CACHE_CAP_CACHE_ENTRY_NUM_254;
+            glyphCacheCapabilitySet.GlyphCache[6].CacheMaximumCellSize = CLYPH_CACHE_CAP_CACHE_CELL_SIZE_64;
+            glyphCacheCapabilitySet.GlyphCache[7].CacheEntries = CLYPH_CACHE_CAP_CACHE_ENTRY_NUM_254;
+            glyphCacheCapabilitySet.GlyphCache[7].CacheMaximumCellSize =
+                CLYPH_CACHE_CAP_CACHE_CELL_SIZE_128;
+            glyphCacheCapabilitySet.GlyphCache[8].CacheEntries = CLYPH_CACHE_CAP_CACHE_ENTRY_NUM_254;
+            glyphCacheCapabilitySet.GlyphCache[8].CacheMaximumCellSize =
+                CLYPH_CACHE_CAP_CACHE_CELL_SIZE_256;
+            glyphCacheCapabilitySet.GlyphCache[9].CacheEntries = CLYPH_CACHE_CAP_CACHE_ENTRY_NUM_64;
+            glyphCacheCapabilitySet.GlyphCache[9].CacheMaximumCellSize = 2048;
+
+            glyphCacheCapabilitySet.FragCache = new TS_CACHE_DEFINITION();
+            glyphCacheCapabilitySet.FragCache.CacheEntries = CLYPH_CACHE_CAP_CACHE_ENTRY_NUM_256;
+            glyphCacheCapabilitySet.FragCache.CacheMaximumCellSize = CLYPH_CACHE_CAP_CACHE_CELL_SIZE_256;
+            glyphCacheCapabilitySet.GlyphSupportLevel = GlyphSupportLevel_Values.GLYPH_SUPPORT_ENCODE;
+            glyphCacheCapabilitySet.pad2octets = 0;
+            glyphCacheCapabilitySet.lengthCapability = (ushort)(sizeof(ushort)
+                                                     * CLYPH_CACHE_CAP_USHORT_COUNT);
+
+            capabilitySets.Add(glyphCacheCapabilitySet);
+            #endregion Populating Glyph Cache Capability Set
+
+            #region Populating Offscreen Bitmap Cache Capability Set
+            TS_OFFSCREEN_CAPABILITYSET offscreenCapabilitySet = new TS_OFFSCREEN_CAPABILITYSET();
+            offscreenCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSTYPE_OFFSCREENCACHE;
+            offscreenCapabilitySet.offscreenSupportLevel = offscreenSupportLevel_Values.TRUE;
+            offscreenCapabilitySet.offscreenCacheSize = OFFSCREEN_CAP_MAX_CACHE_SIZE;
+            offscreenCapabilitySet.offscreenCacheEntries = OFFSCREEN_CAP_CACHE_ENTRY_NUM;
+            offscreenCapabilitySet.lengthCapability = (ushort)Marshal.SizeOf(offscreenCapabilitySet);
+
+            capabilitySets.Add(offscreenCapabilitySet);
+            #endregion Populating Offscreen Bitmap Cache Capability Set
+
+            #region Populating Virtual Channel Capability Set, set SVC compression support
+            TS_VIRTUALCHANNEL_CAPABILITYSET virtualCapabilitySet = new TS_VIRTUALCHANNEL_CAPABILITYSET();
+            virtualCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSTYPE_VIRTUALCHANNEL;
+            if (supportSVCCompression)
             {
-                virtualChannelSet.flags = TS_VIRTUALCHANNEL_CAPABILITYSET_flags_Values.VCCAPS_COMPR_CS_8K;
+                virtualCapabilitySet.flags = TS_VIRTUALCHANNEL_CAPABILITYSET_flags_Values.VCCAPS_COMPR_SC;
             }
             else
             {
-                virtualChannelSet.flags = TS_VIRTUALCHANNEL_CAPABILITYSET_flags_Values.VCCAPS_NO_COMPR;
+                virtualCapabilitySet.flags = TS_VIRTUALCHANNEL_CAPABILITYSET_flags_Values.VCCAPS_NO_COMPR;
             }
+            virtualCapabilitySet.lengthCapability = (ushort)Marshal.SizeOf(virtualCapabilitySet);
+            virtualCapabilitySet.VCChunkSize = 0;
 
-            if (presentChunkSize)
-            {
-                virtualChannelSet.VCChunkSize = 1600;//CHANNEL_CHUNK_LENGTH 
-                virtualChannelSet.lengthCapability = 12;
-            }
-            else
-            {
-                virtualChannelSet.lengthCapability = 8;//it should be 8, SDK bug, VCChunkSize is optional.
-                virtualChannelSet.VCChunkSize = 0;
-            }
-            return virtualChannelSet;
-        }
+            capabilitySets.Add(virtualCapabilitySet);
+            #endregion Populating Virtual Channel Capability Set
 
+            #region Populating Sound Capability Set
+            TS_SOUND_CAPABILITYSET soundCapabilitySet = new TS_SOUND_CAPABILITYSET();
+            soundCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSTYPE_SOUND;
+            soundCapabilitySet.soundFlags = soundFlags_Values.SOUND_BEEPS_FLAG;
+            soundCapabilitySet.pad2octetsA = 0;
+            soundCapabilitySet.lengthCapability = (ushort)Marshal.SizeOf(soundCapabilitySet);
 
+            capabilitySets.Add(soundCapabilitySet);
+            #endregion Populating Sound Capability Set
 
-        public void AddBitmapCacheCapSet()
-        {
+            #endregion
 
-        }
+            #region Optional Capability Sets
 
-        public void AddBrushCapSet()
-        {
-
-        }
-
-        public void AddGlyphCacheCapSet()
-        {
-        }
-
-        public void AddOffscreenBitmapCacheCapSet()
-        {
-        }
-
-        public void AddSoundCapSet()
-        {
-            TS_SOUND_CAPABILITYSET soundCapSet = new TS_SOUND_CAPABILITYSET();
-
-            soundCapSet.capabilitySetType = capabilitySetType_Values.CAPSTYPE_SOUND;
-            soundCapSet.lengthCapability = (ushort)Marshal.SizeOf(soundCapSet);
-            soundCapSet.soundFlags = soundFlags_Values.SOUND_BEEPS_FLAG;
-            m_arrCapSet.Add(soundCapSet);
-        }
-
-        #endregion "Mandatory Cap Sets"
-
-        #region "Optional Cap Sets"
-
-        /// <summary>
-        /// Create a TS_BITMAPCACHE_HOSTSUPPORT_CAPABILITYSET type Capability, 2.2.7.2.1   
-        /// </summary>
-        /// <returns>TS_BITMAPCACHE_HOSTSUPPORT_CAPABILITYSET type Capability</returns>
-        public static TS_BITMAPCACHE_HOSTSUPPORT_CAPABILITYSET CreateBitmapCacheHostSupportCapSet()
-        {
+            #region Populating Bitmap Cache Host Support Capability Set
             TS_BITMAPCACHE_HOSTSUPPORT_CAPABILITYSET bitmapHostsupprot =
                 new TS_BITMAPCACHE_HOSTSUPPORT_CAPABILITYSET();
             bitmapHostsupprot.capabilitySetType = capabilitySetType_Values.CAPSTYPE_BITMAPCACHE_HOSTSUPPORT;
@@ -483,120 +313,148 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             bitmapHostsupprot.pad1 = 0;
             bitmapHostsupprot.pad2 = 0;
             bitmapHostsupprot.lengthCapability = (ushort)Marshal.SizeOf(bitmapHostsupprot);
-            return bitmapHostsupprot;
-        }
 
-        public void AddControlCapSet()
-        {
-            TS_CONTROL_CAPABILITYSET control = new TS_CONTROL_CAPABILITYSET();
-            control.capabilitySetType = capabilitySetType_Values.CAPSTYPE_CONTROL;
-            control.lengthCapability = (ushort)Marshal.SizeOf(control);
-            control.controlFlags = 0;
-            control.remoteDetachFlag = 0;
-            control.controlInterest = 2;
-            control.detachInterest = 2;
+            capabilitySets.Add(bitmapHostsupprot);
+            #endregion Populating Bitmap Cache Host Support Capability Set
 
-            m_arrCapSet.Add(control);
-        }
+            #region Populating Control Capability Set
+            TS_CONTROL_CAPABILITYSET controlCapabilitySet = new TS_CONTROL_CAPABILITYSET();
+            controlCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSTYPE_CONTROL;
+            controlCapabilitySet.controlFlags = 0;
+            controlCapabilitySet.remoteDetachFlag = 0;
+            controlCapabilitySet.controlInterest = CONTROLPRIORITY_NEVER;
+            controlCapabilitySet.detachInterest = CONTROLPRIORITY_NEVER;
+            controlCapabilitySet.lengthCapability = (ushort)Marshal.SizeOf(controlCapabilitySet);
 
-        public void AddWindowActivationCapSet()
-        {
-        }
+            capabilitySets.Add(controlCapabilitySet);
+            #endregion Populating Control Capability Set
 
-        /// <summary>
-        /// Create a TS_SHARE_CAPABILITYSET type Capability, 2.2.7.2.4
-        /// </summary>
-        /// <returns>TS_SHARE_CAPABILITYSET type Capability</returns>
-        public static TS_SHARE_CAPABILITYSET CreateShareCapSet()
-        {
+
+            #region Populating Windows Capability Set
+            TS_WINDOWACTIVATION_CAPABILITYSET windowsCapabilitySet = new TS_WINDOWACTIVATION_CAPABILITYSET();
+            windowsCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSTYPE_ACTIVATION;
+            windowsCapabilitySet.helpKeyFlag = 0;
+            windowsCapabilitySet.helpKeyIndexFlag = 0;
+            windowsCapabilitySet.helpExtendedKeyFlag = 0;
+            windowsCapabilitySet.windowManagerKeyFlag = 0;
+            windowsCapabilitySet.lengthCapability = (ushort)Marshal.SizeOf(windowsCapabilitySet);
+
+            capabilitySets.Add(windowsCapabilitySet);
+            #endregion Populating Windows Capability Set
+
+
+            #region Populating Share Capability Set
             TS_SHARE_CAPABILITYSET shareCapabilitySet = new TS_SHARE_CAPABILITYSET();
             shareCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSTYPE_SHARE;
-            //A 16-bit, unsigned integer. This field SHOULD be set to 0 by the client and to the server channel ID by the server (0x03EA).
-            shareCapabilitySet.nodeId = 1002;
+            shareCapabilitySet.nodeId = 0;
             shareCapabilitySet.pad2octets = 0;
             shareCapabilitySet.lengthCapability = (ushort)Marshal.SizeOf(shareCapabilitySet);
-            return shareCapabilitySet;
-        }
 
-        /// <summary>
-        /// Create a TS_FONT_CAPABILITYSET type Capability, 2.2.7.2.5  
-        /// </summary>
-        /// <returns>TS_FONT_CAPABILITYSET type Capability</returns>
-        public static TS_FONT_CAPABILITYSET CreateFontCapSet()
-        {
+            capabilitySets.Add(shareCapabilitySet);
+            #endregion Populating Share Capability Set
+
+            #region Populating Font Capability Set
             TS_FONT_CAPABILITYSET fontCapabilitySet = new TS_FONT_CAPABILITYSET();
             fontCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSTYPE_FONT;
-            //A 16-bit, unsigned integer. The font support options. This field SHOULD be set to FONTSUPPORT_FONTLIST (0x0001).
-            fontCapabilitySet.fontSupportFlags = 0x0001;
+            fontCapabilitySet.fontSupportFlags = FONTSUPPORT_FONTLIST;
             fontCapabilitySet.pad2octets = 0;
             fontCapabilitySet.lengthCapability = (ushort)Marshal.SizeOf(fontCapabilitySet);
 
-            return fontCapabilitySet;
-        }
+            capabilitySets.Add(fontCapabilitySet);
+            #endregion Populating Font Capability Set
 
-        /// <summary>
-        /// Create a TS_MULTIFRAGMENTUPDATE_CAPABILITYSET type Capability, 2.2.7.2.6   
-        /// </summary>
-        /// <returns>TS_MULTIFRAGMENTUPDATE_CAPABILITYSET type Capability</returns>
-        public static TS_MULTIFRAGMENTUPDATE_CAPABILITYSET CreateMultiFragmentUpdateCapSet(UInt32 maxRequestSize)
-        {
-            TS_MULTIFRAGMENTUPDATE_CAPABILITYSET multiFragmentCapabilitySet = new TS_MULTIFRAGMENTUPDATE_CAPABILITYSET();
+            #region Populating Multifragment Update Capability Set
+            TS_MULTIFRAGMENTUPDATE_CAPABILITYSET multiFragmentCapabilitySet =
+                new TS_MULTIFRAGMENTUPDATE_CAPABILITYSET();
             multiFragmentCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSETTYPE_MULTIFRAGMENTUPDATE;
-            multiFragmentCapabilitySet.MaxRequestSize = maxRequestSize;
+            multiFragmentCapabilitySet.MaxRequestSize = MULTIFRAGMENT_CAP_MAX_REQUEST_SIZE;
             multiFragmentCapabilitySet.lengthCapability = (ushort)Marshal.SizeOf(multiFragmentCapabilitySet);
 
-            return multiFragmentCapabilitySet;
-        }
+            capabilitySets.Add(multiFragmentCapabilitySet);
+            #endregion Populating Multifragment Update Capability Set
 
-        /// <summary>
-        /// Create a TS_LARGE_POINTER_CAPABILITYSET type Capability, 2.2.7.2.7   
-        /// <param name="largePointerSupportFlags">96-pixel by 96-pixel mouse pointer shapes are supported or not.</param>
-        /// </summary>
-        /// <returns>TS_LARGE_POINTER_CAPABILITYSET type Capability</returns>
-        public static TS_LARGE_POINTER_CAPABILITYSET CreateLargePointerCapSet(largePointerSupportFlags_Values largePointerSupportFlags)
-        {
-            TS_LARGE_POINTER_CAPABILITYSET large = new TS_LARGE_POINTER_CAPABILITYSET();
-            large.capabilitySetType = capabilitySetType_Values.CAPSETTYPE_LARGE_POINTER;
-            large.lengthCapability = (ushort)Marshal.SizeOf(large);
-            large.largePointerSupportFlags = largePointerSupportFlags;
-            return large;
-        }
-        /// <summary>
-        /// Create a TS_COMPDESK_CAPABILITYSET type Capability, 2.2.7.2.8   
-        /// </summary>
-        /// <param name="compDeskSupportLevel">Desktop composition services are supported or not.</param>
-        /// <returns>TS_COMPDESK_CAPABILITYSET type Capability</returns>
-        public static TS_COMPDESK_CAPABILITYSET CreateDesktopCompositionCapSet(CompDeskSupportLevel_Values compDeskSupportLevel)
-        {
+            #region Populating Large Pointer Capability Set
+            TS_LARGE_POINTER_CAPABILITYSET largePointerCapabilitySet = new TS_LARGE_POINTER_CAPABILITYSET();
+            largePointerCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSETTYPE_LARGE_POINTER;
+            largePointerCapabilitySet.largePointerSupportFlags =
+                largePointerSupportFlags_Values.LARGE_POINTER_FLAG_96x96;
+            largePointerCapabilitySet.lengthCapability = sizeof(ushort) + sizeof(ushort) + sizeof(ushort);
+
+            capabilitySets.Add(largePointerCapabilitySet);
+            #endregion Populating Large Pointer Capability Set
+
+            #region Populating Desktop Composition Capability Set
             TS_COMPDESK_CAPABILITYSET desktopCapabilitySet = new TS_COMPDESK_CAPABILITYSET();
-
             desktopCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSETTYPE_COMPDESK;
-            desktopCapabilitySet.CompDeskSupportLevel = compDeskSupportLevel;
+            desktopCapabilitySet.CompDeskSupportLevel = CompDeskSupportLevel_Values.COMPDESK_SUPPORTED;
             desktopCapabilitySet.lengthCapability = sizeof(ushort) + sizeof(ushort) + sizeof(ushort);
 
-            return desktopCapabilitySet;
+            capabilitySets.Add(desktopCapabilitySet);
+            #endregion Populating Desktop Composition Capability Set
+
+            #region Surface Commands Capability Set, set surface commands support
+            TS_SURFCMDS_CAPABILITYSET surfCmdsCapSet = new TS_SURFCMDS_CAPABILITYSET();
+            surfCmdsCapSet.capabilitySetType = capabilitySetType_Values.CAPSETTYPE_SURFACE_COMMANDS;
+            if (supportSurfaceCommands)
+            {
+                surfCmdsCapSet.cmdFlags = CmdFlags_Values.SURFCMDS_FRAMEMARKER | CmdFlags_Values.SURFCMDS_SETSURFACEBITS | CmdFlags_Values.SURFCMDS_STREAMSURFACEBITS;
+            }
+            else
+            {
+                surfCmdsCapSet.cmdFlags = CmdFlags_Values.None;
+            }
+            surfCmdsCapSet.lengthCapability = sizeof(ushort) + sizeof(ushort) + sizeof(uint) + sizeof(uint);
+
+            capabilitySets.Add(surfCmdsCapSet);
+            #endregion
+
+            #region Bitmap Codecs Capability Set
+            TS_BITMAPCODECS_CAPABILITYSET codecsCapSet = new TS_BITMAPCODECS_CAPABILITYSET();
+            codecsCapSet.capabilitySetType = capabilitySetType_Values.CAPSETTYPE_BITMAP_CODECS;
+            codecsCapSet.supportedBitmapCodecs = new TS_BITMAPCODECS();
+            if (supportRemoteFXCodec)
+            {
+                codecsCapSet.supportedBitmapCodecs.bitmapCodecCount = 3;
+                codecsCapSet.supportedBitmapCodecs.bitmapCodecArray = new TS_BITMAPCODEC[3];
+                codecsCapSet.supportedBitmapCodecs.bitmapCodecArray[0] = this.CreateTS_BITMAPCODEC_NSCodec();
+                codecsCapSet.supportedBitmapCodecs.bitmapCodecArray[1] = this.CreateTS_BITMAPCODEC_RemoteFX();
+                codecsCapSet.supportedBitmapCodecs.bitmapCodecArray[2] = this.CreateTS_BITMAPCODEC_Image_RemoteFX();
+            }
+            else
+            {
+                codecsCapSet.supportedBitmapCodecs.bitmapCodecCount = 1;
+                codecsCapSet.supportedBitmapCodecs.bitmapCodecArray = new TS_BITMAPCODEC[1];
+                codecsCapSet.supportedBitmapCodecs.bitmapCodecArray[0] = this.CreateTS_BITMAPCODEC_NSCodec();
+            }
+            codecsCapSet.lengthCapability = (ushort)(sizeof(ushort) + sizeof(ushort) + sizeof(byte));
+            foreach (TS_BITMAPCODEC codec in codecsCapSet.supportedBitmapCodecs.bitmapCodecArray)
+            {
+                codecsCapSet.lengthCapability += (ushort)(19 + codec.codecPropertiesLength);
+            }
+
+            capabilitySets.Add(codecsCapSet);
+            #endregion
+
+            #region TS_FRAME_ACKNOWLEDGE_CAPABILITYSET
+            TS_FRAME_ACKNOWLEDGE_CAPABILITYSET frameAckCapSet = new TS_FRAME_ACKNOWLEDGE_CAPABILITYSET();
+            frameAckCapSet.capabilitySetType = capabilitySetType_Values.CAPSETTYPE_FRAME_ACKNOWLEDGE;
+            frameAckCapSet.lengthCapability = 8;
+            frameAckCapSet.maxUnacknowledgedFrameCount = 2;
+
+            capabilitySets.Add(frameAckCapSet);
+            #endregion
+
+            #endregion
+
+            return capabilitySets;
         }
 
+        #region private methods
         /// <summary>
-        /// Create a TS_COMPDESK_CAPABILITYSET type Capability, 2.2.7.2.9 
-        /// Problem: hardcode as SDK bug (miss member)
+        /// Creates Bitmap Codec structure which contains a NSCodec Capability Set
         /// </summary>
-        /// <param name="setSurfBits">The Set Surface Bits Command (section 2.2.9.2.1) is supported or not.</param>
-        /// <param name="frameMarker">The Frame Marker Command (section 2.2.9.2.3) is supported or not.</param>
-        /// <param name="streamSurfBits">The Stream Surface Bits Command (section 2.2.9.2.2) is supported or not.</param>
-        /// <returns>TS_SURFCMDS_CAPABILITYSET type Capability</returns>
-        public static TS_SURFCMDS_CAPABILITYSET CreateSurfaceCmdCapSet(CmdFlags_Values cmdFlags)
-        {
-            TS_SURFCMDS_CAPABILITYSET surfCmds = new TS_SURFCMDS_CAPABILITYSET();
-
-            surfCmds.capabilitySetType = capabilitySetType_Values.CAPSETTYPE_SURFACE_COMMANDS;
-            surfCmds.lengthCapability = (ushort)Marshal.SizeOf(surfCmds);
-            surfCmds.cmdFlags = cmdFlags;
-
-            return surfCmds;
-        }
-
-        private static TS_BITMAPCODEC CreateTS_BITMAPCODEC_NSCodec()
+        /// <returns></returns>
+        private TS_BITMAPCODEC CreateTS_BITMAPCODEC_NSCodec()
         {
             TS_BITMAPCODEC bitmapCodec = new TS_BITMAPCODEC();
             bitmapCodec.codecGUID.codecGUID1 = 0xCA8D1BB9;
@@ -610,7 +468,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             bitmapCodec.codecGUID.codecGUID9 = 0x87;
             bitmapCodec.codecGUID.codecGUID10 = 0xE2;
             bitmapCodec.codecGUID.codecGUID11 = 0xD6;
-            bitmapCodec.codecID = 0;
+            bitmapCodec.codecID = 1;
             bitmapCodec.codecPropertiesLength = 3;
             bitmapCodec.codecProperties = new byte[3];
             bitmapCodec.codecProperties[0] = 0x01; //fAllowDynamicFidelity 
@@ -619,8 +477,34 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             return bitmapCodec;
         }
 
-        private static TS_BITMAPCODEC CreateTS_BITMAPCODEC_RemoteFX()
+        /// <summary>
+        /// Create Bitmap Codec structure which contains a TS_RFX_CLNT_CAPS_CONTAINER structure
+        /// </summary>
+        /// <returns></returns>
+        private TS_BITMAPCODEC CreateTS_BITMAPCODEC_RemoteFX()
         {
+            TS_RFX_ICAP rfxIcapRLGR1 = new TS_RFX_ICAP();
+            rfxIcapRLGR1.version = version_Value.CLW_VERSION_1_0;
+            rfxIcapRLGR1.flags = 0x00;
+            rfxIcapRLGR1.entropyBits = entropyBits_Value.CLW_ENTROPY_RLGR1;
+
+            TS_RFX_ICAP rfxIcapRLGR3 = new TS_RFX_ICAP();
+            rfxIcapRLGR3.version = version_Value.CLW_VERSION_1_0;
+            rfxIcapRLGR3.flags = 0x00;
+            rfxIcapRLGR3.entropyBits = entropyBits_Value.CLW_ENTROPY_RLGR3;
+
+            TS_RFX_CAPSET rfxCapSet = new TS_RFX_CAPSET();
+            rfxCapSet.numIcaps = 2;
+            rfxCapSet.icapsData = new TS_RFX_ICAP[] { rfxIcapRLGR1, rfxIcapRLGR3 };
+
+            TS_RFX_CAPS rfxCaps = new TS_RFX_CAPS();
+            rfxCaps.capsetsData = new TS_RFX_CAPSET[] { rfxCapSet };
+
+            TS_RFX_CLNT_CAPS_CONTAINER rfxClnCaps = new TS_RFX_CLNT_CAPS_CONTAINER();
+            rfxClnCaps.captureFlags = 0x00000001;
+            rfxClnCaps.capsData = rfxCaps;
+
+
             TS_BITMAPCODEC bitmapCodec = new TS_BITMAPCODEC();
             bitmapCodec.codecGUID.codecGUID1 = 0x76772F12;
             bitmapCodec.codecGUID.codecGUID2 = 0xBD72;
@@ -633,229 +517,57 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             bitmapCodec.codecGUID.codecGUID9 = 0x6F;
             bitmapCodec.codecGUID.codecGUID10 = 0x78;
             bitmapCodec.codecGUID.codecGUID11 = 0x86;
-            bitmapCodec.codecID = 0;
-            bitmapCodec.codecPropertiesLength = 4;
-            bitmapCodec.codecProperties = new byte[4];//TS_RFX_SRVR_CAPS_CONTAINER, reserved, 4 bytes, all zero.
+            bitmapCodec.codecID = 2;
+            bitmapCodec.codecProperties = rfxClnCaps.ToBytes();
+            bitmapCodec.codecPropertiesLength = (ushort)bitmapCodec.codecProperties.Length;
             return bitmapCodec;
         }
 
         /// <summary>
-        /// Create a TS_BITMAPCODECS_CAPABILITYSET type Capability, 2.2.7.2.10   
-        /// Problem: lengthCapability may be wrong, as different from previous value
+        /// Create Bitmap Codec structure which contains a TS_RFX_CLNT_CAPS_CONTAINER structure
         /// </summary>
-        ///<param name="isNSCodecPresent">Indicates if present NS codec.</param>
-        ///<param name="isRemoteFxCodecPresent">Indicates if present RemoteFX codec.</param>
-        /// <returns>TS_BITMAPCODECS_CAPABILITYSET type Capability</returns>
-        public static TS_BITMAPCODECS_CAPABILITYSET CreateBitmapCodecsCapSet(bool isNSCodecPresent, bool isRemoteFxCodecPresent)
+        /// <returns></returns>
+        private TS_BITMAPCODEC CreateTS_BITMAPCODEC_Image_RemoteFX()
         {
-            TS_BITMAPCODEC[] codecArr;
-            if (isNSCodecPresent && isRemoteFxCodecPresent)
-            {
-                codecArr = new TS_BITMAPCODEC[2];
-                codecArr[0] = CreateTS_BITMAPCODEC_NSCodec();
-                codecArr[1] = CreateTS_BITMAPCODEC_RemoteFX();
-            }
-            else if (isRemoteFxCodecPresent)
-            {
-                codecArr = new TS_BITMAPCODEC[1];
-                codecArr[0] = CreateTS_BITMAPCODEC_RemoteFX();
-            }
-            else
-            {
-                codecArr = new TS_BITMAPCODEC[1];
-                codecArr[0] = CreateTS_BITMAPCODEC_NSCodec();
-            }
+            TS_RFX_ICAP rfxIcapRLGR1 = new TS_RFX_ICAP();
+            rfxIcapRLGR1.version = version_Value.CLW_VERSION_1_0;
+            rfxIcapRLGR1.flags = 0x02;
+            rfxIcapRLGR1.entropyBits = entropyBits_Value.CLW_ENTROPY_RLGR1;
 
-            TS_BITMAPCODECS_CAPABILITYSET codecCapSet = new TS_BITMAPCODECS_CAPABILITYSET();
-            codecCapSet.capabilitySetType = capabilitySetType_Values.CAPSETTYPE_BITMAP_CODECS;
-            codecCapSet.supportedBitmapCodecs.bitmapCodecCount = (byte)codecArr.Length;
-            codecCapSet.supportedBitmapCodecs.bitmapCodecArray = codecArr;
+            TS_RFX_ICAP rfxIcapRLGR3 = new TS_RFX_ICAP();
+            rfxIcapRLGR3.version = version_Value.CLW_VERSION_1_0;
+            rfxIcapRLGR3.flags = 0x02;
+            rfxIcapRLGR3.entropyBits = entropyBits_Value.CLW_ENTROPY_RLGR3;
 
-            //<needcheck>
-            // capabilitySetType (2 bytes) + lengthCapability (2 bytes) + bitmapCodecCount (1 byte)
-            codecCapSet.lengthCapability = (ushort)(2 + 2 + 1);
-            for (int index = 0; index < codecCapSet.supportedBitmapCodecs.bitmapCodecCount; ++index)
-            {
-                //codecGUID (16 bytes) + codecID (1 byte) + codecPropertiesLength (2 bytes) + codecProperties (variable)
-                codecCapSet.lengthCapability += (ushort)(16 + 1 + 2 + codecCapSet.supportedBitmapCodecs.bitmapCodecArray[index].codecPropertiesLength);
-            }
+            TS_RFX_CAPSET rfxCapSet = new TS_RFX_CAPSET();
+            rfxCapSet.numIcaps = 2;
+            rfxCapSet.icapsData = new TS_RFX_ICAP[] { rfxIcapRLGR1, rfxIcapRLGR3 };
 
-            return codecCapSet;
+            TS_RFX_CAPS rfxCaps = new TS_RFX_CAPS();
+            rfxCaps.capsetsData = new TS_RFX_CAPSET[] { rfxCapSet };
+
+            TS_RFX_CLNT_CAPS_CONTAINER rfxClnCaps = new TS_RFX_CLNT_CAPS_CONTAINER();
+            rfxClnCaps.captureFlags = 0x00000001;
+            rfxClnCaps.capsData = rfxCaps;
+
+
+            TS_BITMAPCODEC bitmapCodec = new TS_BITMAPCODEC();
+            bitmapCodec.codecGUID.codecGUID1 = 0x2744CCD4;
+            bitmapCodec.codecGUID.codecGUID2 = 0x9D8A;
+            bitmapCodec.codecGUID.codecGUID3 = 0x4E74;
+            bitmapCodec.codecGUID.codecGUID4 = 0x80;
+            bitmapCodec.codecGUID.codecGUID5 = 0x3C;
+            bitmapCodec.codecGUID.codecGUID6 = 0x0E;
+            bitmapCodec.codecGUID.codecGUID7 = 0xCB;
+            bitmapCodec.codecGUID.codecGUID8 = 0xEE;
+            bitmapCodec.codecGUID.codecGUID9 = 0xA1;
+            bitmapCodec.codecGUID.codecGUID10 = 0x9C;
+            bitmapCodec.codecGUID.codecGUID11 = 0x54;
+            bitmapCodec.codecID = 3;
+            bitmapCodec.codecProperties = rfxClnCaps.ToBytes();
+            bitmapCodec.codecPropertiesLength = (ushort)bitmapCodec.codecProperties.Length;
+            return bitmapCodec;
         }
-
-        public static TS_FRAME_ACKNOWLEDGE_CAPABILITYSET CreateFrameAcknowledgeCapSet(uint maxUnacknowledgedFrameCount)
-        {
-            TS_FRAME_ACKNOWLEDGE_CAPABILITYSET capSet = new TS_FRAME_ACKNOWLEDGE_CAPABILITYSET();
-            capSet.capabilitySetType = capabilitySetType_Values.CAPSETTYPE_FRAME_ACKNOWLEDGE;
-            capSet.lengthCapability = 8;
-            capSet.maxUnacknowledgedFrameCount = maxUnacknowledgedFrameCount;
-            return capSet;
-        }
-
-        #endregion "Optional Cap Sets"
-
-        #region "MISC Cap Sets"
-        /// <summary>
-        /// Create a TS_WINDOW_CAPABILITYSET type Capability, 2.2.1.1.2 in RDPERP
-        /// Problem: field not implemented in SDK
-        /// Problem: contain hardCode as SDK bug(miss member)
-        /// </summary>
-        /// <param name="wndSupportLevel">0x00000000:The client or server is not capable of supporting Windowing Alternate 
-        /// Secondary Drawing Orders.0x00000001: The client or server is capable of supporting Windowing Alternate Secondary
-        /// Drawing Orders. 0x00000002: The client or server is capable of supporting Windowing Alternate Secondary Drawing 
-        /// Orders and the following flags: WINDOW_ORDER_FIELD_CLIENTAREASIZE WINDOW_ORDER_FIELD_RPCONTENTWINDOW_ORDER_FIELD_ROOTPARENT</param>
-        /// <param name="numIconCaches">An unsigned 8-bit integer. The number of icon caches requested by the server 
-        /// (Demand Active PDU) or supported by the client (Confirm Active PDU).The server maintains an icon cache and refers 
-        /// to it to avoid sending duplicate icon information (see section 2.2.1.3.1.2.3). The client also maintains an icon 
-        /// cache and refers to it when the server sends across a Cached Icon Window Information Order. </param>
-        /// <param name="numIconCacheEntries">An unsigned 16-bit integer. The number of entries within each icon cache 
-        /// requested by the server (Demand Active PDU) or supported by the client (Confirm Active PDU).The server maintains 
-        /// an icon cache and refers to it to avoid sending duplicate icon information (see section 2.2.1.3.1.2.3). 
-        /// The client also maintains an icon cache and refers to it when the server sends across a Cached Icon Window Information Order.</param>
-        /// <returns>TS_WINDOW_CAPABILITYSET type Capability</returns>
-        public static TS_WINDOW_CAPABILITYSET CreateTSWindowCapSet(UInt32 wndSupportLevel, byte numIconCaches, ushort numIconCacheEntries)
-        {
-            TS_WINDOW_CAPABILITYSET winSet = new TS_WINDOW_CAPABILITYSET();
-            winSet.rawData = new byte[] { 24, 0, 11, 0, 0, 0, 0, 0, 3, 12, 0 };
-            //winSet.rawData = new byte[] { 24, 0, 11, 0, 2, 0, 0, 0, 3, 12, 0 };
-            //CapabilitySetType (2 bytes)
-            //LengthCapability (2 bytes)
-            //WndSupportLevel (4 bytes)
-            if (wndSupportLevel == 1)
-                winSet.rawData[4] = 0x01;
-            if (wndSupportLevel == 2)
-                winSet.rawData[4] = 0x02;
-            //NumIconCaches (1 byte)
-            winSet.rawData[8] = numIconCaches;
-            //NumIconCacheEntries (2 bytes)
-            winSet.rawData[9] = (byte)(numIconCacheEntries & 0xff);
-            winSet.rawData[10] = (byte)(numIconCacheEntries >> 8);
-            return winSet;
-        }
-
-        /// <summary>
-        /// Create a TS_DRAWGRIDPLUS_CAPABILITYSET type Capability, 2.2.1.3 in MS-RDPEGDI
-        /// Problem: field not implemented in SDK
-        /// </summary>
-        /// <param name="gdiSupport">0x00000000:GDI+ 1.1 is not supported 0x00000001: GDI+ 1.1 is supported</param>
-        /// <param name="version ">A 32-bit, unsigned integer. The build number of the underlying GDI+ 1.1 subsystem. 
-        /// Only the client-to-server instance of the GDI+ Capability Set MUST contain a valid value for this field.</param>
-        /// <param name="crpSupport">A 32-bit, unsigned integer. The level of support for the caching of GDI+ 1.1 
-        /// rendering primitives. </param>
-        /// <param name="gdipGraphicsCacheEntries">Only the client-to-server instance of the GDI+ Capability Set MUST 
-        /// contain a valid value for this field. A 16-bit, unsigned integer. The total number of entries allowed in the 
-        /// GDI+ Graphics cache. The maximum allowed value is 10 entries.</param>
-        /// <param name="gdipBrushCacheEntries">Only the client-to-server instance of the GDI+ Capability Set MUST 
-        /// contain a valid value for this field. A 16-bit, unsigned integer. The total number of entries allowed 
-        /// in the GDI+ Brush cache. The maximum allowed value is 5 entries.</param>
-        /// <param name="gdipPenCacheEntries">Only the client-to-server instance of the GDI+ Capability Set MUST 
-        /// contain a valid value for this field. A 16-bit, unsigned integer. The total number of entries allowed 
-        /// in the GDI+ Pen cache. The maximum allowed value is 5 entries.</param>
-        /// <param name="gdipImageCacheEntries">Only the client-to-server instance of the GDI+ Capability Set MUST 
-        /// contain a valid value for this field. A 16-bit, unsigned integer. The total number of entries allowed in the 
-        /// GDI+ Image cache. The maximum allowed value is 10 entries.</param>
-        /// <param name="gdipImageAttributesCacheEntries">Only the client-to-server instance of the GDI+ Capability 
-        /// Set MUST contain a valid value for this field. A 16-bit, unsigned integer. The total number of entries 
-        /// allowed in the GDI+ Image Attributes cache. The maximum allowed value is 2 entries.</param>
-        /// <param name="gdipGraphicsCacheChunkSize">Only the client-to-server instance of the GDI+ Capability Set 
-        /// MUST contain a valid value for this field.A 16-bit, unsigned integer. The maximum size in bytes of a GDI+ 
-        /// Graphics cache entry. The maximum allowed value is 512 bytes.</param>
-        /// <param name="gdipObjectBrushCacheChunkSize">Only the client-to-server instance of the GDI+ Capability Set
-        /// MUST contain a valid value for this field.A 16-bit, unsigned integer. The maximum size in bytes of a GDI+ 
-        /// Brush cache entry. The maximum allowed value is 2,048 bytes.</param>
-        /// <param name="gdipObjectPenCacheChunkSize">Only the client-to-server instance of the GDI+ Capability Set 
-        /// MUST contain a valid value for this field. A 16-bit, unsigned integer. The maximum size in bytes of a GDI+ 
-        /// Pen cache entry. The maximum allowed value is 1,024 bytes.</param>
-        /// <param name="gdipObjectImageAttributesCacheChunkSize">Only the client-to-server instance of the GDI+ Capability 
-        /// Set MUST contain a valid value for this field. ):  A 16-bit, unsigned integer. The maximum size in bytes of a 
-        /// GDI+ Image Attributes cache entry. The maximum allowed value is 64 bytes.</param>
-        /// <param name="gdipObjectImageCacheChunkSize">Only the client-to-server instance of the GDI+ Capability Set 
-        /// MUST contain a valid value for this field.A 16-bit, unsigned integer. The maximum size in bytes of a chunk 
-        /// in the GDI+ Image cache. The maximum allowed value is 4,096 bytes.</param>
-        /// <param name="gdipObjectImageCacheTotalSize">Only the client-to-server instance of the GDI+ Capability Set 
-        /// MUST contain a valid value for this field.A 16-bit, unsigned integer. The total number of chunks in the GDI+ 
-        /// Image cache. The maximum allowed value is 256 chunks.</param>
-        /// <param name="gdipObjectImageCacheMaxSize">Only the client-to-server instance of the GDI+ Capability Set MUST 
-        /// contain a valid value for this field.A 16-bit, unsigned integer. The total number of chunks that can be used
-        /// by an entry in the GDI+ Image cache. The maximum allowed value is 128 chunks.</param>
-        /// <returns>TS_DRAWGRIDPLUS_CAPABILITYSET type Capability</returns>
-        public static TS_DRAWGRIDPLUS_CAPABILITYSET CreateDrawGdiPlusCapSet(UInt32 gdiSupport, UInt32 version, UInt32 crpSupport,
-            ushort gdipGraphicsCacheEntries, ushort gdipBrushCacheEntries, ushort gdipPenCacheEntries, ushort gdipImageCacheEntries, ushort gdipImageAttributesCacheEntries,
-            ushort gdipGraphicsCacheChunkSize, ushort gdipObjectBrushCacheChunkSize, ushort gdipObjectPenCacheChunkSize, ushort gdipObjectImageAttributesCacheChunkSize,
-            ushort gdipObjectImageCacheChunkSize, ushort gdipObjectImageCacheTotalSize, ushort gdipObjectImageCacheMaxSize)
-        {
-            TS_DRAWGRIDPLUS_CAPABILITYSET gridplusSet = new TS_DRAWGRIDPLUS_CAPABILITYSET();
-
-            capabilitySetType_Values capabilitySetType = capabilitySetType_Values.CAPSTYPE_DRAWGDIPLUS;
-            ushort lengthCapability = 40;
-
-            List<byte> encodeBuffer = new List<byte>();
-            EncodeStructure(encodeBuffer, (ushort)capabilitySetType);
-            EncodeStructure(encodeBuffer, lengthCapability);
-            EncodeStructure(encodeBuffer, gdiSupport);
-            EncodeStructure(encodeBuffer, version);
-            EncodeStructure(encodeBuffer, crpSupport);
-            //GdipCacheEntries, Only set by Client
-            EncodeStructure(encodeBuffer, gdipGraphicsCacheEntries);
-            EncodeStructure(encodeBuffer, gdipBrushCacheEntries);
-            EncodeStructure(encodeBuffer, gdipPenCacheEntries);
-            EncodeStructure(encodeBuffer, gdipImageCacheEntries);
-            EncodeStructure(encodeBuffer, gdipImageAttributesCacheEntries);
-            //GdipCacheChunkSize, Only set by Client
-            EncodeStructure(encodeBuffer, gdipGraphicsCacheChunkSize);
-            EncodeStructure(encodeBuffer, gdipObjectBrushCacheChunkSize);
-            EncodeStructure(encodeBuffer, gdipObjectPenCacheChunkSize);
-            EncodeStructure(encodeBuffer, gdipObjectImageAttributesCacheChunkSize);
-            //GdipImageCacheProperties, Only set by Client
-            EncodeStructure(encodeBuffer, gdipObjectImageCacheChunkSize);
-            EncodeStructure(encodeBuffer, gdipObjectImageCacheTotalSize);
-            EncodeStructure(encodeBuffer, gdipObjectImageCacheMaxSize);
-
-            gridplusSet.rawData = encodeBuffer.ToArray();
-            return gridplusSet;
-        }
-
-        /// <summary>
-        /// Create a TS_COLORCACHE_CAPABILITYSET type Capability, 2.2.1.1 in RDPGDI
-        /// Problem: but in TD TS_COLORCACHE_CAPABILITYSET name TS_COLORTABLE_CAPABILITYSET
-        /// Problem: field not implemented in SDK
-        /// </summary>
-        /// <returns>TS_COLORCACHE_CAPABILITYSET type Capability</returns>
-        public TS_COLORCACHE_CAPABILITYSET CreateColorTableCapSet()
-        {
-            TS_COLORCACHE_CAPABILITYSET colorSet = new TS_COLORCACHE_CAPABILITYSET();
-            //rawData[4:5]colorTableCacheSize (2 bytes):  A 16-bit, unsigned integer. 
-            //The number of entries in the color table cache (each entry stores a color table). 
-            //This value MUST be ignored during capability exchange and is assumed to be 0x0006.
-            colorSet.rawData = new byte[] { 10, 0, 8, 0, 6, 0, 0, 0 };
-            return colorSet;
-        }
-
-        /// <summary>
-        /// Create a TS_RAIL_CAPABILITYSET type Capability, 2.2.1.1.2 in RDPERP
-        /// Problem: field not implemented in SDK
-        /// </summary>
-        /// <param name="programSupport">Set to 1 if the client/server is capable of supporting Remote Programs; 
-        /// set to 0 otherwise.</param>
-        /// <param name="dlbSupport">Set to 1 if the client/server is capable of supporting Docked Language Bar for 
-        /// Remote Programs; set to 0 otherwise. This flag MUST be set to 0 if TS_RAIL_LEVEL_SUPPORTED is 0.</param>
-        /// <returns>TS_RAIL_CAPABILITYSET type Capability</returns>
-        public TS_RAIL_CAPABILITYSET CreateTSRailCapSet(bool programSupport, bool dlbSupport)
-        {
-            TS_RAIL_CAPABILITYSET railSet = new TS_RAIL_CAPABILITYSET();
-            railSet.rawData = new byte[] { 23, 0, 8, 0, 3, 0, 0, 0 };//<err>
-            //railSet.rawData = new byte[] { 23, 0, 8, 0, 0, 0, 0, 0 };
-            //CapabilitySetType (2 bytes)
-            //LengthCapability (2 bytes)
-            //RailSupportLevel (4 bytes)
-            if (programSupport)//<err>
-                railSet.rawData[4] |= 0x80;//TS_RAIL_LEVEL_SUPPORTED
-            if (dlbSupport)
-                railSet.rawData[4] |= 0x40;//TS_RAIL_LEVEL_DOCKED_LANGBAR_SUPPORTED
-            return railSet;
-        }
-
-        #endregion "
-
+        #endregion
     }
 }

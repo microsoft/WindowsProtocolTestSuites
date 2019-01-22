@@ -1,59 +1,73 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
-using System.Reflection;
-using System.Windows;
 using System.Net;
-using System.Net.NetworkInformation;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Text;
 using Microsoft.Protocols.TestManager.Detector;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
-using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 {
+    public class RdpbcgrTestData
+    {
+        public const string DefaultX224ConnectReqCookie = "Cookie: mstshash=IDENTIFIER\r\n";
+        public const string DefaultX224ConnectReqRoutingToken = "TestRoutingToken\r\n";
+        public const uint DefaultClientBuild = 0x0A28;
+        public const flags_Values DefaultClientInfoPduFlags = flags_Values.INFO_MOUSE
+                               | flags_Values.INFO_DISABLECTRLALTDEL
+                               | flags_Values.INFO_UNICODE
+                               | flags_Values.INFO_MAXIMIZESHELL
+                               | flags_Values.INFO_ENABLEWINDOWSKEY
+                               | flags_Values.INFO_FORCE_ENCRYPTED_CS_PDU
+                               | flags_Values.INFO_LOGONNOTIFY
+                               | flags_Values.INFO_LOGONERRORS;
+        public const int ClientRandomSize = 32;
+        public const ushort RN_USER_REQUESTED = 3;
+
+        public static byte[] GetDefaultX224ConnectReqCorrelationId()
+        {
+            byte[] returnArray = new byte[16];
+            new System.Random().NextBytes(returnArray);
+
+            if (returnArray[0] == 0x00 || returnArray[0] == 0xF4)
+            {
+                returnArray[0] = 0x01;
+            }
+            for (int i = 1; i < returnArray.Length; i++)
+            {
+                if (returnArray[i] == 0x0D)
+                {
+                    returnArray[i] = 0x01;
+                }
+            }
+            return returnArray;
+        }
+    }
+
     public class RDPDetector : IDisposable
     {
         #region Variables
-
         private DetectionInfo detectInfo;
-        private RdpbcgrServer rdpbcgrServerStack;
-        private RdpbcgrServerSessionContext sessionContext;
-        private RdpedycServer rdpedycServer;
-
-        private int port = 3389;
-        private EncryptedProtocol encryptedProtocol = EncryptedProtocol.Rdp;
-        private TimeSpan timeout = new TimeSpan(0, 0, 20);
-
-        #region Received Packets
-
-        Client_X_224_Connection_Request_Pdu x224ConnectionRequest = null;
-        Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request mscConnectionInitialPDU = null;
-        Client_Security_Exchange_Pdu securityExchangePDU = null;
-        Client_Info_Pdu clientInfoPDU = null;
-        Client_Confirm_Active_Pdu confirmActivePDU = null;
-        RdpbcgrCapSet clientCapSet = null;
-        ushort requestId = 0;
-
-        #endregion Received Packets
-
-        private const string RdpedispChannelName = "Microsoft::Windows::RDS::DisplayControl";
-       
-        public const string SystemManagementAutomationAssemblyNameV1 =
-           "System.Management.Automation, Version=1.0.0.0, Culture=neutral, " +
-           "PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL";
-        public const string SystemManagementAutomationAssemblyNameV3 =
-            "System.Management.Automation, Version=3.0.0.0, Culture=neutral, " +
-            "PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL";        
-        public const string SUTControlScriptLocation = @"..\etc\RDP-Server\SUTControlAdapter\";
+        private List<StackPacket> receiveBuffer = null;
+        private RdpbcgrClient rdpbcgrClient = null;
+        private string[] SVCNames;
+        private int defaultPort = 3389;
+        private IPAddress clientAddress;
+        private EncryptedProtocol encryptedProtocol;
+        private requestedProtocols_Values requestedProtocol;
+        private TimeSpan timeout;
         #endregion Variables
-        #region Constructor
 
+        private const string SVCNAME_RDPEDYC = "drdynvc";
+
+        #region Constructor
         public RDPDetector(DetectionInfo detectInfo)
         {
             this.detectInfo = detectInfo;
@@ -65,20 +79,33 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         /// <summary>
         /// Establish a RDP connection to detect RDP feature
         /// </summary>
-        /// <returns></returns>
-        public bool DetectRDPFeature()
-        {           
-            // Establish a RDP connection with RDP client
+        /// <returns>Return true if detection succeeded.</returns>
+        public bool DetectRDPFeature(Configs config)
+        {
             try
             {
-                StartRDPListening();
-                triggerClientRDPConnect(detectInfo.TriggerMethod);
-                EstablishRDPConnection();
+                initialize(config);
+                connectRDPServer();
+
+                bool status = EstablishRDPConnection(
+                    config, requestedProtocol, SVCNames,
+                    CompressionType.PACKET_COMPR_TYPE_NONE,
+                    false,
+                    true);
+                if (status == false)
+                {
+                    DetectorUtil.WriteLog("Failed", false, LogStyle.StepPassed);
+                }
+                else
+                {
+                    DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
+                }
+                clientInitiatedDisconnect();
             }
             catch (Exception e)
             {
                 DetectorUtil.WriteLog("Exception occured when establishing RDP connection: " + e.Message);
-                DetectorUtil.WriteLog(""+e.StackTrace);
+                DetectorUtil.WriteLog("" + e.StackTrace);
                 if (e.InnerException != null)
                 {
                     DetectorUtil.WriteLog("**" + e.InnerException.Message);
@@ -87,262 +114,501 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
                 return false;
             }
+            checkSupportedFeatures();
+            checkSupportedProtocols();
+            return true;
+        }
 
-            // Notify the UI for establishing RDP connection successfully.
-            DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
+        private void clientInitiatedDisconnect()
+        {
+            SendClientShutdownRequestPDU();
+            Server_Shutdown_Request_Denied_Pdu shutDownReqDeniedPdu = ExpectPacket<Server_Shutdown_Request_Denied_Pdu>(timeout);
+            ExpectPacket<Server_Shutdown_Request_Denied_Pdu>(timeout);
+            MCS_Disconnect_Provider_Ultimatum_Pdu ultimatumPdu = rdpbcgrClient.CreateMCSDisconnectProviderUltimatumPdu(RdpbcgrTestData.RN_USER_REQUESTED);
+            rdpbcgrClient.SendPdu(ultimatumPdu);
+            rdpbcgrClient.Disconnect();
+        }
 
-            // Set result according to messages during connection
-            if (mscConnectionInitialPDU.mcsCi.gccPdu.clientCoreData != null && mscConnectionInitialPDU.mcsCi.gccPdu.clientCoreData.earlyCapabilityFlags != null)
+        private void SendClientShutdownRequestPDU()
+        {
+            Client_Shutdown_Request_Pdu request = rdpbcgrClient.CreateShutdownRequestPdu();
+            rdpbcgrClient.SendPdu(request);
+        }
+
+        private void initialize(Configs config)
+        {
+            receiveBuffer = new List<StackPacket>();
+            SVCNames = new string[] { SVCNAME_RDPEDYC };
+            loadConfig();
+
+            int port;
+            rdpbcgrClient = new RdpbcgrClient(
+                config.ServerDomain,
+                config.ServerName,
+                config.ServerUserName,
+                config.ServerUserPassword,
+                clientAddress.ToString(),
+                Int32.TryParse(config.ServerPort, out port) ? port : defaultPort
+                );
+        }
+
+        private bool loadConfig()
+        {
+            string clientName = DetectorUtil.GetPropertyValue("RDP.ClientName");
+            if (!IPAddress.TryParse(clientName, out clientAddress))
             {
-                detectInfo.IsSupportNetcharAutoDetect = ((mscConnectionInitialPDU.mcsCi.gccPdu.clientCoreData.earlyCapabilityFlags.actualData & (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_NETWORK_AUTODETECT)
-                    == (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_NETWORK_AUTODETECT);
+                clientAddress = Dns.GetHostEntry(clientName).AddressList.First();
+            }
 
-                detectInfo.IsSupportHeartbeatPdu = ((mscConnectionInitialPDU.mcsCi.gccPdu.clientCoreData.earlyCapabilityFlags.actualData & (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_HEARTBEAT_PDU)
-                    == (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_HEARTBEAT_PDU);
+            bool isNegotiationBased = true;
+            string negotiation = DetectorUtil.GetPropertyValue("RDP.Security.Negotiation");
+            if (negotiation.Equals("true", StringComparison.CurrentCultureIgnoreCase))
+            {
+                isNegotiationBased = true;
+            }
+            else if (negotiation.Equals("false", StringComparison.CurrentCultureIgnoreCase))
+            {
+                isNegotiationBased = false;
             }
             else
             {
-                detectInfo.IsSupportNetcharAutoDetect = false;
-                detectInfo.IsSupportHeartbeatPdu = false;
+                return false;
             }
-            
-            // Trigger client to close the RDP connection
-            TriggerClientDisconnectAll(detectInfo.TriggerMethod);
 
-            if (detectInfo.IsSupportStaticVirtualChannel != null && detectInfo.IsSupportStaticVirtualChannel.Value)
+            string protocol = DetectorUtil.GetPropertyValue("RDP.Security.Protocol");
+            if (protocol.Equals("TLS", StringComparison.CurrentCultureIgnoreCase))
             {
-                detectInfo.IsSupportRDPEUDP = true;
+                requestedProtocol = requestedProtocols_Values.PROTOCOL_SSL_FLAG;
+                if (!isNegotiationBased)
+                {
+                    return false;
+                }
+                encryptedProtocol = EncryptedProtocol.NegotiationTls;
+            }
+            else if (protocol.Equals("CredSSP", StringComparison.CurrentCultureIgnoreCase))
+            {
+                requestedProtocol = requestedProtocols_Values.PROTOCOL_HYBRID_FLAG;
+                if (isNegotiationBased)
+                {
+                    encryptedProtocol = EncryptedProtocol.NegotiationCredSsp;
+                }
+                else
+                {
+                    encryptedProtocol = EncryptedProtocol.NegotiationTls;
+                }
+            }
+            else if (protocol.Equals("RDP", StringComparison.CurrentCultureIgnoreCase))
+            {
+                requestedProtocol = requestedProtocols_Values.PROTOCOL_RDP_FLAG;
+                encryptedProtocol = EncryptedProtocol.Rdp;
             }
             else
             {
-                detectInfo.IsSupportRDPEUDP = false;
+                return false;
             }
-            // Notify the UI for detecting protocol supported finished
-            DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
 
-            if (this.rdpedycServer != null)
+            string strWaitTime = DetectorUtil.GetPropertyValue("WaitTime");
+            if (strWaitTime != null)
             {
-                this.rdpedycServer.Dispose();
-                this.rdpedycServer = null;
+                int waitTime = Int32.Parse(strWaitTime);
+                timeout = new TimeSpan(0, 0, waitTime);
             }
-            if (this.rdpbcgrServerStack != null)
+            else
             {
-                this.rdpbcgrServerStack.Dispose();
-                this.rdpbcgrServerStack = null;
+                timeout = new TimeSpan(0, 0, 10);
             }
 
             return true;
         }
 
-        /// <summary>
-        /// Trigger the client to init a RDP connection
-        /// </summary>
-        /// <param name="triggerMethod"></param>
-        /// <returns></returns>
-        private bool triggerClientRDPConnect(TriggerMethod triggerMethod)
+        private void connectRDPServer()
         {
-            if (triggerMethod == TriggerMethod.Powershell)
-            {
-                ExecutePowerShellCommand("RDPConnectWithNegotiationApproach");
-            }
-            else if (triggerMethod == TriggerMethod.Manual)
-            {
-                MessageBox.Show("Please Trigger Client RDP Connetion Manually.");
-            }
-            else
-            {
-                TriggerRDPConnectionByProtocol();
-            }
-
-            return true;
+            rdpbcgrClient.Connect(encryptedProtocol);
         }
-
-        /// <summary>
-        /// Trigger the client to disconnect all RDP connection
-        /// </summary>
-        /// <param name="triggerMethod"></param>
-        /// <returns></returns>
-        private bool TriggerClientDisconnectAll(TriggerMethod triggerMethod)
-        {
-            if (triggerMethod == TriggerMethod.Powershell)
-            {
-                int iResult = 0;
-                iResult = ExecutePowerShellCommand("TriggerClientDisconnectAll");
-                if (iResult <= 0) return false;
-            }
-            else if (triggerMethod == TriggerMethod.Manual)
-            {
-                MessageBox.Show("Please Close All RDP Connetion Manually on SUT.");
-            }
-            else
-            {
-                TriggerRDPDisconnectAllByProtocol();
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// Start RDP listening.
-        /// </summary>
-        private void StartRDPListening()
-        {
-            rdpbcgrServerStack = new RdpbcgrServer(port, encryptedProtocol, null);            
-            rdpbcgrServerStack.Start(IPAddress.Any);            
-        }               
         
         /// <summary>
         /// Establish RDP Connection
         /// </summary>
-        private void EstablishRDPConnection()
+        private bool EstablishRDPConnection(
+            Configs config,
+            requestedProtocols_Values requestedProtocols,
+            string[] SVCNames,
+            CompressionType highestCompressionTypeSupported,
+            bool isReconnect = false,
+            bool autoLogon = false,
+            bool supportEGFX = false,
+            bool supportAutoDetect = false,
+            bool supportHeartbeatPDU = false,
+            bool supportMultitransportReliable = false,
+            bool supportMultitransportLossy = false,
+            bool supportAutoReconnect = false,
+            bool supportFastPathInput = false,
+            bool supportFastPathOutput = false,
+            bool supportSurfaceCommands = false,
+            bool supportSVCCompression = false,
+            bool supportRemoteFXCodec = false)
         {
-            sessionContext = rdpbcgrServerStack.ExpectConnect(timeout);
-
-            #region Connection Initial
-            x224ConnectionRequest = ExpectPacket<Client_X_224_Connection_Request_Pdu>(sessionContext, timeout);
-            Server_X_224_Connection_Confirm_Pdu confirmPdu
-               = rdpbcgrServerStack.CreateX224ConnectionConfirmPdu(sessionContext, selectedProtocols_Values.PROTOCOL_RDP_FLAG, RDP_NEG_RSP_flags_Values.DYNVC_GFX_PROTOCOL_SUPPORTED | RDP_NEG_RSP_flags_Values.EXTENDED_CLIENT_DATA_SUPPORTED);
-
-            SendPdu(confirmPdu);
-
-            if (bool.Parse(detectInfo.IsWindowsImplementation))
+            // Connection Initiation
+            SendClientX224ConnectionRequest(requestedProtocols);
+            Server_X_224_Connection_Confirm_Pdu connectionConfirmPdu = ExpectPacket<Server_X_224_Connection_Confirm_Pdu>(timeout);
+            if (connectionConfirmPdu == null)
             {
-                RdpbcgrServerSessionContext orgSession = sessionContext;
-                sessionContext = rdpbcgrServerStack.ExpectConnect(timeout);
-                if (sessionContext.Identity == orgSession.Identity)
+                return false;
+            }
+
+            // Basic Settings Exchange
+            SendClientMCSConnectInitialPDU(
+                SVCNames,
+                supportEGFX,
+                supportAutoDetect,
+                supportHeartbeatPDU,
+                supportMultitransportReliable,
+                supportMultitransportLossy,
+                false);
+            Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response connectResponsePdu = ExpectPacket<Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response>(timeout);
+            if (connectResponsePdu == null)
+            {
+                return false;
+            }
+
+            // Channel Connection
+            SendClientMCSErectDomainRequest();
+            SendClientMCSAttachUserRequest();
+            Server_MCS_Attach_User_Confirm_Pdu userConfirmPdu = ExpectPacket<Server_MCS_Attach_User_Confirm_Pdu>(timeout);
+            if (userConfirmPdu == null)
+            {
+                return false;
+            }
+            ChannelJoinRequestAndConfirm();
+
+            // RDP Security Commencement
+            if (rdpbcgrClient.Context.ServerSelectedProtocol == (uint)selectedProtocols_Values.PROTOCOL_RDP_FLAG)
+            {
+                SendClientSecurityExchangePDU();
+            }
+
+            // Secure Settings Exchange
+            SendClientInfoPDU(config, highestCompressionTypeSupported, isReconnect, autoLogon);
+
+            // Licensing
+            Server_License_Error_Pdu_Valid_Client licenseErrorPdu = ExpectPacket<Server_License_Error_Pdu_Valid_Client>(timeout);
+            if (licenseErrorPdu == null)
+            {
+                return false;
+            }
+
+            // Capabilities Exchange
+            Server_Demand_Active_Pdu demandActivePdu = ExpectPacket<Server_Demand_Active_Pdu>(timeout);
+            if (demandActivePdu == null)
+            {
+                return false;
+            }
+            SendClientConfirmActivePDU(
+                supportAutoReconnect,
+                supportFastPathInput,
+                supportFastPathOutput,
+                supportSurfaceCommands,
+                supportSVCCompression,
+                supportRemoteFXCodec);
+
+            // Connection Finalization
+            SendClientSynchronizePDU();
+            Server_Synchronize_Pdu syncPdu = ExpectPacket<Server_Synchronize_Pdu>(timeout);
+            if (syncPdu == null)
+            {
+                return false;
+            }
+            Server_Control_Pdu_Cooperate CoopControlPdu = ExpectPacket<Server_Control_Pdu_Cooperate>(timeout);
+            if (CoopControlPdu == null)
+            {
+                return false;
+            }
+            SendClientControlCooperatePDU();
+            SendClientControlRequestPDU();
+            Server_Control_Pdu_Granted_Control grantedControlPdu = ExpectPacket<Server_Control_Pdu_Granted_Control>(timeout);
+            if (grantedControlPdu == null)
+            {
+                return false;
+            }
+            SendClientFontListPDU();
+            Server_Font_Map_Pdu fontMapPdu = ExpectPacket<Server_Font_Map_Pdu>(timeout);
+            if (fontMapPdu == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private void checkSupportedFeatures()
+        {
+            detectInfo.IsSupportAutoReconnect = supportAutoReconnect();
+            detectInfo.IsSupportFastPathInput = supportFastPathInput();
+
+            // Notify the UI for detecting feature supported finished
+            DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
+        }
+
+        private bool supportAutoReconnect()
+        {
+            ITsCapsSet capset = GetServerCapSet(capabilitySetType_Values.CAPSTYPE_GENERAL);
+            if (capset != null)
+            {
+                TS_GENERAL_CAPABILITYSET generalCap = (TS_GENERAL_CAPABILITYSET)capset;
+                if (generalCap.extraFlags.HasFlag(extraFlags_Values.AUTORECONNECT_SUPPORTED))
                 {
-                    sessionContext = rdpbcgrServerStack.ExpectConnect(timeout);
+                    return true;
                 }
-                x224ConnectionRequest = ExpectPacket<Client_X_224_Connection_Request_Pdu>(sessionContext, timeout);
-                confirmPdu = rdpbcgrServerStack.CreateX224ConnectionConfirmPdu(sessionContext, selectedProtocols_Values.PROTOCOL_RDP_FLAG, RDP_NEG_RSP_flags_Values.DYNVC_GFX_PROTOCOL_SUPPORTED | RDP_NEG_RSP_flags_Values.EXTENDED_CLIENT_DATA_SUPPORTED);
-
-                SendPdu(confirmPdu);
             }
-            #endregion Connection Initial
+            return false;
+        }
 
-            #region Basic Setting Exchange
-
-            mscConnectionInitialPDU = ExpectPacket<Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request>(sessionContext, timeout);
-
-            SERVER_CERTIFICATE cert = null;
-            int certLen = 0;
-            int dwKeysize = 2048;
-
-            byte[] privateExp, publicExp, modulus;
-            cert = rdpbcgrServerStack.GenerateCertificate(dwKeysize, out privateExp, out publicExp, out modulus);            
-            certLen = 120 + dwKeysize / 8;
-
-            Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response connectRespPdu = rdpbcgrServerStack.CreateMCSConnectResponsePduWithGCCConferenceCreateResponsePdu(
-                    sessionContext, 
-                    EncryptionMethods.ENCRYPTION_METHOD_128BIT, 
-                    EncryptionLevel.ENCRYPTION_LEVEL_LOW,
-                    cert,
-                    certLen,
-                    MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECL | MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECR);
-            SendPdu(connectRespPdu);
-
-            sessionContext.ServerPrivateExponent = new byte[privateExp.Length];
-            Array.Copy(privateExp, sessionContext.ServerPrivateExponent, privateExp.Length);
-
-            #endregion Basic Setting Exchange
-
-            #region Channel Connection
-
-            ExpectPacket<Client_MCS_Erect_Domain_Request>(sessionContext, timeout);
-            ExpectPacket<Client_MCS_Attach_User_Request>(sessionContext, timeout);
-
-            Server_MCS_Attach_User_Confirm_Pdu attachUserConfirmPdu = rdpbcgrServerStack.CreateMCSAttachUserConfirmPdu(sessionContext);
-            SendPdu(attachUserConfirmPdu);
-
-            //Join Channel
-            int channelNum = 2;
-            if (sessionContext.VirtualChannelIdStore != null)
+        private bool supportFastPathInput()
+        {
+            ITsCapsSet capset = GetServerCapSet(capabilitySetType_Values.CAPSTYPE_INPUT);
+            if (capset != null)
             {
-                channelNum += sessionContext.VirtualChannelIdStore.Length;
+                TS_INPUT_CAPABILITYSET inputCap = (TS_INPUT_CAPABILITYSET)capset;
+                if (inputCap.inputFlags.HasFlag(inputFlags_Values.INPUT_FLAG_FASTPATH_INPUT)
+                    || inputCap.inputFlags.HasFlag(inputFlags_Values.INPUT_FLAG_FASTPATH_INPUT2))
+                {
+                    return true;
+                }
             }
-            if (sessionContext.IsServerMessageChannelDataSend)
-                channelNum++;
-            for (int i = 0; i < channelNum; i++)
+            return false;
+        }
+
+        private ITsCapsSet GetServerCapSet(capabilitySetType_Values capsetType)
+        {
+            Collection<ITsCapsSet> capsets = this.rdpbcgrClient.Context.demandActivemCapabilitySets;
+            if (capsets != null)
             {
-                Client_MCS_Channel_Join_Request channelJoinPdu = ExpectPacket<Client_MCS_Channel_Join_Request>(sessionContext, timeout);
-                Server_MCS_Channel_Join_Confirm_Pdu channelJoinResponse = rdpbcgrServerStack.CreateMCSChannelJoinConfirmPdu(
-                        sessionContext,
-                        channelJoinPdu.mcsChannelId);
-                SendPdu(channelJoinResponse);
+                foreach (ITsCapsSet capSet in capsets)
+                {
+                    if (capSet.GetCapabilityType() == capsetType)
+                    {
+                        return capSet;
+                    }
+                }
             }
-            #endregion Channel Connection
+            return null;
+        }
 
-            #region RDP Security Commencement
-            
-            securityExchangePDU =  ExpectPacket<Client_Security_Exchange_Pdu>(sessionContext, timeout);
+        private void checkSupportedProtocols()
+        {
+            // Notify the UI for detecting protocol supported finished
+            DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
+        }
 
-            #endregion RDP Security Commencement
+        private void SendClientX224ConnectionRequest(
+            requestedProtocols_Values requestedProtocols,
+            bool isRdpNegReqPresent = true,
+            bool isRoutingTokenPresent = false,
+            bool isCookiePresent = false,
+            bool isRdpCorrelationInfoPresent = false)
+        {
+            Client_X_224_Connection_Request_Pdu x224ConnectReqPdu = rdpbcgrClient.CreateX224ConnectionRequestPdu(requestedProtocols);
 
-            #region Secure Setting Exchange
-            clientInfoPDU = ExpectPacket<Client_Info_Pdu>(sessionContext, timeout);
-            #endregion Secure Setting Exchange
+            if (isRoutingTokenPresent)
+            {
+                // Present the routingToken
+                x224ConnectReqPdu.routingToken = ASCIIEncoding.ASCII.GetBytes(RdpbcgrTestData.DefaultX224ConnectReqRoutingToken);
+                x224ConnectReqPdu.tpktHeader.length += (ushort)x224ConnectReqPdu.routingToken.Length;
+                x224ConnectReqPdu.x224Crq.lengthIndicator += (byte)x224ConnectReqPdu.routingToken.Length;
+            }
+            if (isCookiePresent)
+            {
+                // Present the cookie
+                x224ConnectReqPdu.cookie = RdpbcgrTestData.DefaultX224ConnectReqCookie;
+                x224ConnectReqPdu.tpktHeader.length += (ushort)x224ConnectReqPdu.cookie.Length;
+                x224ConnectReqPdu.x224Crq.lengthIndicator += (byte)x224ConnectReqPdu.cookie.Length;
+            }
+            if (!isRdpNegReqPresent)
+            {
+                // RdpNegReq is already present, remove it if isRdpNegReqPresent is false
+                x224ConnectReqPdu.rdpNegData = null;
+                int rdpNegDataSize = sizeof(byte) + sizeof(byte) + sizeof(ushort) + sizeof(uint);
+                x224ConnectReqPdu.tpktHeader.length -= (ushort)rdpNegDataSize;
+                x224ConnectReqPdu.x224Crq.lengthIndicator -= (byte)rdpNegDataSize;
+            }
+            if (isRdpCorrelationInfoPresent)
+            {
+                // Present the RdpCorrelationInfo
+                x224ConnectReqPdu.rdpCorrelationInfo = new RDP_NEG_CORRELATION_INFO();
+                x224ConnectReqPdu.rdpCorrelationInfo.type = RDP_NEG_CORRELATION_INFO_Type.TYPE_RDP_CORRELATION_INFO;
+                x224ConnectReqPdu.rdpCorrelationInfo.flags = 0;
+                x224ConnectReqPdu.rdpCorrelationInfo.length = 36;
+                x224ConnectReqPdu.rdpCorrelationInfo.correlationId = RdpbcgrTestData.GetDefaultX224ConnectReqCorrelationId();
+                x224ConnectReqPdu.rdpCorrelationInfo.reserved = new byte[16];
+                x224ConnectReqPdu.tpktHeader.length += (ushort)x224ConnectReqPdu.rdpCorrelationInfo.length;
+                x224ConnectReqPdu.x224Crq.lengthIndicator += (byte)x224ConnectReqPdu.rdpCorrelationInfo.length;
+            }
+            rdpbcgrClient.SendPdu(x224ConnectReqPdu);
+        }
 
-            #region Licensing
-            Server_License_Error_Pdu_Valid_Client licensePdu = rdpbcgrServerStack.CreateLicenseErrorMessage(sessionContext);
-            SendPdu(licensePdu);
-            #endregion Licensing
+        private void SendClientMCSConnectInitialPDU(
+            string[] SVCNames,
+            bool supportEGFX,
+            bool supportAutoDetect,
+            bool supportHeartbeatPDU,
+            bool supportMultitransportReliable,
+            bool supportMultitransportLossy,
+            bool isMonitorDataPresent)
+        {
+            Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request request = rdpbcgrClient.CreateMCSConnectInitialPduWithGCCConferenceCreateRequestPdu(
+                clientAddress.ToString(),
+                RdpbcgrTestData.DefaultClientBuild,
+                System.Guid.NewGuid().ToString(),
+                encryptionMethod_Values._128BIT_ENCRYPTION_FLAG,
+                SVCNames,
+                supportMultitransportReliable,
+                supportMultitransportLossy,
+                isMonitorDataPresent);
 
-            #region Capabilities Exchange
+            if (supportEGFX)
+            {
+                // If support RDPEGFX, set flag: RNS_UD_CS_SUPPORT_DYNVC_GFX_PROTOCOL in clientCoreData.earlyCapabilityFlags
+                request.mcsCi.gccPdu.clientCoreData.earlyCapabilityFlags.actualData |= (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_DYNVC_GFX_PROTOCOL;
+            }
 
+            if (supportAutoDetect)
+            {
+                // If support auto-detect, set flag: RNS_UD_CS_SUPPORT_NETWORK_AUTODETECT in clientCoreData.earlyCapabilityFlags
+                request.mcsCi.gccPdu.clientCoreData.earlyCapabilityFlags.actualData |= (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_NETWORK_AUTODETECT;
+                request.mcsCi.gccPdu.clientCoreData.connnectionType = new ByteClass((byte)ConnnectionType.CONNECTION_TYPE_AUTODETECT);
+            }
+
+            if (supportHeartbeatPDU)
+            {
+                // If support Heartbeat PDU, set flag: RNS_UD_CS_SUPPORT_HEARTBEAT_PDU in clientCoreData.earlyCapabilityFlags
+                request.mcsCi.gccPdu.clientCoreData.earlyCapabilityFlags.actualData |= (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_HEARTBEAT_PDU;
+            }
+
+            rdpbcgrClient.SendPdu(request);
+        }
+
+        private void SendClientMCSErectDomainRequest()
+        {
+            Client_MCS_Erect_Domain_Request request = rdpbcgrClient.CreateMCSErectDomainRequestPdu();
+            rdpbcgrClient.SendPdu(request);
+        }
+
+        private void SendClientMCSAttachUserRequest()
+        {
+            Client_MCS_Attach_User_Request request = rdpbcgrClient.CreateMCSAttachUserRequestPdu();
+            rdpbcgrClient.SendPdu(request);
+        }
+
+        private void SendClientMCSChannelJoinRequest(long channelId)
+        {
+            Client_MCS_Channel_Join_Request request = rdpbcgrClient.CreateMCSChannelJoinRequestPdu(channelId);
+            rdpbcgrClient.SendPdu(request);
+        }
+
+        private void ChannelJoinRequestAndConfirm()
+        {
+            // Add all SVC ids in a List
+            List<long> chIdList = new List<long>();
+            // Add User channel
+            chIdList.Add(rdpbcgrClient.Context.UserChannelId);
+            // Add IO channel
+            chIdList.Add(rdpbcgrClient.Context.IOChannelId);
+            // Add message channel if exist
+            long? msgChId = rdpbcgrClient.Context.MessageChannelId;
+            if (msgChId != null)
+            {
+                chIdList.Add(msgChId.Value);
+            }
+            // Add the other channels from server network data
+            if (rdpbcgrClient.Context.VirtualChannelIdStore != null)
+            {
+                for (int i = 0; i < rdpbcgrClient.Context.VirtualChannelIdStore.Length; i++)
+                {
+                    chIdList.Add((long)rdpbcgrClient.Context.VirtualChannelIdStore[i]);
+                }
+            }
+
+            // Start join request and confirm sequence
+            foreach (long channelId in chIdList)
+            {
+                SendClientMCSChannelJoinRequest(channelId);
+                Server_MCS_Channel_Join_Confirm_Pdu confirm = ExpectPacket<Server_MCS_Channel_Join_Confirm_Pdu>(timeout);
+            }
+        }
+
+        private void SendClientSecurityExchangePDU()
+        {
+            // Create random data
+            byte[] clientRandom = RdpbcgrUtility.GenerateRandom(RdpbcgrTestData.ClientRandomSize);
+            Client_Security_Exchange_Pdu exchangePdu = rdpbcgrClient.CreateSecurityExchangePdu(clientRandom);
+            rdpbcgrClient.SendPdu(exchangePdu);
+        }
+
+        private void SendClientInfoPDU(Configs config, CompressionType highestCompressionTypeSupported, bool isReconnect = false, bool autoLogon = true)
+        {
+            Client_Info_Pdu pdu = rdpbcgrClient.CreateClientInfoPdu(RdpbcgrTestData.DefaultClientInfoPduFlags, config.ServerDomain, config.ServerUserName, config.ServerUserPassword, clientAddress.ToString(), null, null, isReconnect);
+            if (autoLogon)
+            {
+                pdu.infoPacket.flags |= flags_Values.INFO_AUTOLOGON;
+            }
+            if (highestCompressionTypeSupported != CompressionType.PACKET_COMPR_TYPE_NONE)
+            {
+                // Set the compression flag
+                uint compressionFlag = ((uint)highestCompressionTypeSupported) << 9;
+                pdu.infoPacket.flags |= (flags_Values)((uint)pdu.infoPacket.flags | compressionFlag);
+            }
+            rdpbcgrClient.SendPdu(pdu);
+        }
+
+        private void SendClientConfirmActivePDU(
+            bool supportAutoReconnect,
+            bool supportFastPathInput,
+            bool supportFastPathOutput,
+            bool supportSurfaceCommands,
+            bool supportSVCCompression,
+            bool supportRemoteFXCodec)
+        {
+            // Create capability sets
             RdpbcgrCapSet capSet = new RdpbcgrCapSet();
-            capSet.GenerateCapabilitySets();
-            Server_Demand_Active_Pdu demandActivePdu = rdpbcgrServerStack.CreateDemandActivePdu(sessionContext, capSet.CapabilitySets);
-            SendPdu(demandActivePdu);
+            Collection<ITsCapsSet> caps = capSet.CreateCapabilitySets(
+                supportAutoReconnect,
+                supportFastPathInput,
+                supportFastPathOutput,
+                supportSurfaceCommands,
+                supportSVCCompression,
+                supportRemoteFXCodec);
 
-            confirmActivePDU = ExpectPacket<Client_Confirm_Active_Pdu>(sessionContext, timeout);
-            clientCapSet = new RdpbcgrCapSet();
-            clientCapSet.CapabilitySets = confirmActivePDU.confirmActivePduData.capabilitySets;
-            #endregion Capabilities Exchange
+            Client_Confirm_Active_Pdu pdu = rdpbcgrClient.CreateConfirmActivePdu(caps);
+            rdpbcgrClient.SendPdu(pdu);
+        }
 
-            #region Connection Finalization
-            ExpectPacket<Client_Synchronize_Pdu>(sessionContext, timeout);
+        private void SendClientSynchronizePDU()
+        {
+            Client_Synchronize_Pdu syncPdu = rdpbcgrClient.CreateSynchronizePdu();
+            rdpbcgrClient.SendPdu(syncPdu);
+        }
 
-            Server_Synchronize_Pdu synchronizePdu = rdpbcgrServerStack.CreateSynchronizePdu(sessionContext);
-            SendPdu(synchronizePdu);
+        private void SendClientControlCooperatePDU()
+        {
+            Client_Control_Pdu_Cooperate controlCooperatePdu = rdpbcgrClient.CreateControlCooperatePdu();
+            rdpbcgrClient.SendPdu(controlCooperatePdu);
+        }
 
-            Server_Control_Pdu controlCooperatePdu = rdpbcgrServerStack.CreateControlCooperatePdu(sessionContext);
-            SendPdu(controlCooperatePdu);
+        private void SendClientControlRequestPDU()
+        {
+            Client_Control_Pdu_Request_Control requestControlPdu = rdpbcgrClient.CreateControlRequestPdu();
+            rdpbcgrClient.SendPdu(requestControlPdu);
+        }
 
-            ExpectPacket<Client_Control_Pdu_Cooperate>(sessionContext, timeout);
+        private void SendClientPersistentKeyListPDU()
+        {
+            Client_Persistent_Key_List_Pdu persistentKeyListPdu = rdpbcgrClient.CreatePersistentKeyListPdu();
+            rdpbcgrClient.SendPdu(persistentKeyListPdu);
+        }
 
-            ExpectPacket<Client_Control_Pdu_Request_Control>(sessionContext, timeout);
-
-            Server_Control_Pdu controlGrantedPdu = rdpbcgrServerStack.CreateControlGrantedPdu(sessionContext);
-            SendPdu(controlGrantedPdu);
-
-
-            ITsCapsSet cap = this.clientCapSet.FindCapSet(capabilitySetType_Values.CAPSTYPE_BITMAPCACHE_REV2);
-            if (cap != null)
-            {
-                TS_BITMAPCACHE_CAPABILITYSET_REV2 bitmapCacheV2 = (TS_BITMAPCACHE_CAPABILITYSET_REV2)cap;
-                if ((bitmapCacheV2.CacheFlags & CacheFlags_Values.PERSISTENT_KEYS_EXPECTED_FLAG) != 0)
-                {
-                    ExpectPacket<Client_Persistent_Key_List_Pdu>(sessionContext, timeout);
-                }
-            }
-            
-            ExpectPacket<Client_Font_List_Pdu>(sessionContext, timeout);
-
-            Server_Font_Map_Pdu fontMapPdu = rdpbcgrServerStack.CreateFontMapPdu(sessionContext);
-            SendPdu(fontMapPdu);
-
-            #endregion Connection Finalization
-
-            // Init for RDPEDYC
-            try
-            {
-                rdpedycServer = new RdpedycServer(rdpbcgrServerStack, sessionContext);
-                rdpedycServer.ExchangeCapabilities(timeout);
-            }
-            catch (Exception)
-            {
-                rdpedycServer = null;
-            }
-
+        private void SendClientFontListPDU()
+        {
+            Client_Font_List_Pdu fontListPdu = rdpbcgrClient.CreateFontListPdu();
+            rdpbcgrClient.SendPdu(fontListPdu);
         }
 
         /// <summary>
@@ -350,280 +616,73 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         /// </summary>
         public void Dispose()
         {
-            if (this.rdpedycServer != null)
+            if (rdpbcgrClient != null)
             {
-                this.rdpedycServer.Dispose();
-                this.rdpedycServer = null;
-            }
-            if (this.rdpbcgrServerStack != null)
-            {             
-                this.rdpbcgrServerStack.Dispose();
-                this.rdpbcgrServerStack = null;
+                rdpbcgrClient.Dispose();
+                rdpbcgrClient = null;
             }
         }
 
-        /// <summary>
-        /// Create RDPEDYC channel
-        /// </summary>
-        /// <param name="channelName"></param>
-        /// <returns></returns>
-        private bool CreateEDYCChannel(string channelName)
+        T ExpectPacket<T>(TimeSpan timeout) where T : StackPacket
         {
-            try
+            T receivedPacket = null;
+            // Firstly, go through the receive buffer, if have packet with type T, return it.
+            if (receiveBuffer.Count > 0)
             {
-                if (rdpedycServer == null)
+                lock (receiveBuffer)
                 {
-                    return false;
-                }
-                rdpedycServer.CreateChannel(timeout, 0, channelName, DynamicVC_TransportType.RDP_TCP);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Expect a packet
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="session"></param>
-        /// <param name="waitTimeSpan"></param>
-        /// <returns></returns>
-        private T ExpectPacket<T>(RdpbcgrServerSessionContext session, TimeSpan waitTimeSpan) where T: StackPacket
-        {
-            DateTime endTime = DateTime.Now + waitTimeSpan;
-            object receivedPdu = null;
-            while (waitTimeSpan.TotalMilliseconds > 0)
-            { 
-                try
-                {
-                    receivedPdu = this.rdpbcgrServerStack.ExpectPdu(session, waitTimeSpan);
-                }
-                catch (TimeoutException)
-                {
-                }
-                if (receivedPdu is T)
-                {
-                    return (T)receivedPdu;
-                }
-                waitTimeSpan = endTime - DateTime.Now;
-            }
-            throw new TimeoutException("Timeout when expecting "+typeof(T).Name +" message.");
-        }
-
-        /// <summary>
-        /// Send a packet
-        /// </summary>
-        /// <param name="packet"></param>
-        private void SendPdu(RdpbcgrServerPdu packet)
-        {
-            rdpbcgrServerStack.SendPdu(sessionContext, packet);
-        }
-
-        /// <summary>
-        /// Construct a Parameter structure for Start_RDP_Connection command
-        /// </summary>
-        /// <param name="localAddress">Local address</param>
-        /// <param name="RDPPort">Port for RDP test suite listening</param>
-        /// <param name="DirectApproach">true for direct, false for negotiate</param>
-        /// <param name="fullScreen">true for full screen, otherwise false</param>
-        /// <returns>RDP_Connection_Configure_Parameters structure</returns>
-        private RDP_Connection_Configure_Parameters GenerateRDPConnectionConfigParameters(string localAddress, int RDPPort, bool DirectApproach, bool fullScreen)
-        {
-            RDP_Connection_Configure_Parameters config = new RDP_Connection_Configure_Parameters();
-            config.port = (ushort)RDPPort;
-            config.address = localAddress;
-
-            config.screenType = RDP_Screen_Type.NORMAL;
-            if (fullScreen)
-            {
-                config.screenType = RDP_Screen_Type.FULL_SCREEN;
-            }
-
-            config.connectApproach = RDP_Connect_Approach.Negotiate;
-            if (DirectApproach)
-            {
-                config.connectApproach = RDP_Connect_Approach.Direct;
-            }
-
-            config.desktopWidth = 1024;
-            config.desktopHeight = 768;
-
-            return config;
-
-        }
-
-        private string LocalIPAddress()
-        {
-            IPHostEntry host;
-            string localIp = "";
-            host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (IPAddress ip in host.AddressList)
-            {
-                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                {
-                    localIp = ip.ToString();
-                    break;
+                    for (int i = 0; i < receiveBuffer.Count; i++)
+                    {
+                        if (receiveBuffer[i] is T)
+                        {
+                            receivedPacket = receiveBuffer[i] as T;
+                            receiveBuffer.RemoveAt(i);
+                            return receivedPacket;
+                        }
+                    }
                 }
             }
 
-            return localIp;
-        }
-
-        private void TriggerRDPConnectionByProtocol()
-        {
-            RDP_Connection_Payload payLoad = new RDP_Connection_Payload();
-            payLoad.type = RDP_Connect_Payload_Type.PARAMETERS_STRUCT;
-            payLoad.configureParameters = GenerateRDPConnectionConfigParameters(LocalIPAddress(), port, false, false);
-            byte[] payload = payLoad.Encode();
-
-            ushort reqId = ++requestId;
-            string helpMessage = "Trigger RDP client to start an RDP connection by SUT Remote Control Protocol.";
-            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.START_RDP_CONNECTION,
-                        reqId, helpMessage, payload);
-
-            TCPSUTControlTransport transport = new TCPSUTControlTransport();
-            IPEndPoint agentEndpoint = new IPEndPoint(IPAddress.Parse(detectInfo.SUTName), detectInfo.AgentListenPort);
-            
-            transport.Connect(timeout, agentEndpoint);
-            transport.SendSUTControlRequestMessage(requestMessage);
-            transport.Disconnect();
-        }
-
-        private void TriggerRDPDisconnectAllByProtocol()
-        {
-            string helpMessage = "Trigger RDP client to disconnect all connections.";
-            byte[] payload = null;
-            ushort reqId = ++requestId;
-            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.CLOSE_RDP_CONNECTION,
-               reqId, helpMessage, payload);
-            TCPSUTControlTransport transport = new TCPSUTControlTransport();
-            IPEndPoint agentEndpoint = new IPEndPoint(IPAddress.Parse(detectInfo.SUTName), detectInfo.AgentListenPort);
-            
-            transport.Connect(timeout, agentEndpoint); 
-            transport.SendSUTControlRequestMessage(requestMessage);
-            transport.Disconnect();
-        }
-
-        private bool is_REMOTEFX_CODEC_GUID(TS_BITMAPCODEC_GUID guidObj)
-        {
-            //CODEC_GUID_REMOTEFX
-            //0x76772F12 BD72 4463 AF B3 B7 3C 9C 6F 78 86
-            bool rtnValue;
-            rtnValue = (guidObj.codecGUID1 == 0x76772F12) &&
-                (guidObj.codecGUID2 == 0xBD72) &&
-                (guidObj.codecGUID3 == 0x4463) &&
-                (guidObj.codecGUID4 == 0xAF) &&
-                (guidObj.codecGUID5 == 0xB3) &&
-                (guidObj.codecGUID6 == 0xB7) &&
-                (guidObj.codecGUID7 == 0x3C) &&
-                (guidObj.codecGUID8 == 0x9C) &&
-                (guidObj.codecGUID9 == 0x6F) &&
-                (guidObj.codecGUID10 == 0x78) &&
-                (guidObj.codecGUID11 == 0x86);
-
-            return rtnValue;
-        }
-
-        /// <summary>
-        /// Execute a powershell script file
-        /// </summary>
-        /// <param name="scriptFile"></param>
-        /// <returns></returns>
-        private int ExecutePowerShellCommand(string scriptFile)
-        {
-            string scriptPath = SUTControlScriptLocation + scriptFile;
-
-            Assembly sysMgmtAutoAssembly = null;
-            BindingFlags flag = BindingFlags.Public | BindingFlags.Instance | BindingFlags.InvokeMethod;
-            try
+            // Then, expect new packet from lower level transport
+            DateTime endTime = DateTime.Now + timeout;
+            while (DateTime.Now < endTime)
             {
-                sysMgmtAutoAssembly = Assembly.Load(SystemManagementAutomationAssemblyNameV3);
-            }
-            catch { }
-            // If loading System.Management.Automation, Version=3.0.0.0 failed, try Version=1.0.0.0
-            if (sysMgmtAutoAssembly == null)
-            {
-                try
+                timeout = endTime - DateTime.Now;
+                if (timeout.TotalMilliseconds > 0)
                 {
-                    sysMgmtAutoAssembly = Assembly.Load(SystemManagementAutomationAssemblyNameV1);
-                }
-                catch
-                {
-                    throw new InvalidOperationException("Can not find system management automation assembly from GAC." +
-                                                        "Please make sure your PowerShell installation is valid." +
-                                                        "Or you need to reinstall PowerShell.");
+                    StackPacket packet = null;
+                    try
+                    {
+                        packet = this.ExpectPdu(timeout);
+                    }
+                    catch (TimeoutException)
+                    {
+                        packet = null;
+                    }
+
+                    if (packet != null)
+                    {
+                        if (packet is T)
+                        {
+                            return packet as T;
+                        }
+                        else
+                        {
+                            // If the type of received packet is not T, add it into receive buffer
+                            lock (receiveBuffer)
+                            {
+                                receiveBuffer.Add(packet);
+                            }
+                        }
+                    }
                 }
             }
+            return null;
+        }
 
-            Type runspaceConfigurationType = sysMgmtAutoAssembly.GetType("System.Management.Automation.Runspaces.RunspaceConfiguration");
-            object runspaceConfigurationInstance = runspaceConfigurationType.InvokeMember("Create", BindingFlags.InvokeMethod, null, null, null);
-
-            Type runspaceFactoryType = sysMgmtAutoAssembly.GetType("System.Management.Automation.Runspaces.RunspaceFactory");
-            Type runspaceType = sysMgmtAutoAssembly.GetType("System.Management.Automation.Runspaces.Runspace");
-
-            object runspaceInstance = runspaceFactoryType.InvokeMember("CreateRunspace", BindingFlags.InvokeMethod, null, null, new object[] { runspaceConfigurationInstance });
-
-            runspaceType.InvokeMember("Open", flag, null, runspaceInstance, null);
-
-            Type sessionStateProxyType = sysMgmtAutoAssembly.GetType("System.Management.Automation.Runspaces.SessionStateProxy");
-            object proxyInstance = runspaceType.InvokeMember(
-                    "SessionStateProxy",
-                    BindingFlags.GetProperty,
-                    null,
-                    runspaceInstance,
-                    null);
-
-            // Set Variables
-            MethodInfo methodSetVariable = sessionStateProxyType.GetMethod(
-                "SetVariable",
-                BindingFlags.Public | BindingFlags.Instance | BindingFlags.InvokeMethod,
-                null,
-                new Type[] { typeof(string), typeof(object) },
-                null
-                );
-
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropSUTName", detectInfo.SUTName });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropSUTUserName", detectInfo.UserNameInTC });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropSUTUserPassword", detectInfo.UserPwdInTC });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropRDPConnectWithNegotiationAppoachFullScreen_Task", DetectorUtil.GetPropertyValue("RDPConnectWithNegotiationAppoachFullScreen_Task") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropRDPConnectWithDrectCredSSPFullScreen_Task", DetectorUtil.GetPropertyValue("RDPConnectWithDrectCredSSPFullScreen_Task") }); methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropRDPConnectWithDrectCredSSP_Task", DetectorUtil.GetPropertyValue("RDPConnectWithDrectCredSSP_Task") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropRDPConnectWithDrectTLS_Task", DetectorUtil.GetPropertyValue("RDPConnectWithDrectTLS_Task") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropRDPConnectWithDrectTLSFullScreen_Task", DetectorUtil.GetPropertyValue("RDPConnectWithDrectTLSFullScreen_Task") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropRDPConnectWithNegotiationApproach_Task", DetectorUtil.GetPropertyValue("RDPConnectWithNegotiationApproach_Task") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropTriggerClientDisconnectAll_Task", DetectorUtil.GetPropertyValue("TriggerClientDisconnectAll_Task") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropTriggerClientAutoReconnect_Task", DetectorUtil.GetPropertyValue("TriggerClientAutoReconnect_Task") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropSUTSystemDrive", DetectorUtil.GetPropertyValue("SUTSystemDrive") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropTriggerInputEvents_Task", DetectorUtil.GetPropertyValue("TriggerInputEvents_Task") });
-
-            Type pipelineType = sysMgmtAutoAssembly.GetType("System.Management.Automation.Runspaces.Pipeline");
-            object pipelineInstance = runspaceType.InvokeMember(
-                    "CreatePipeline", flag, null, runspaceInstance, null);
-
-            Type RunspaceInvokeType = sysMgmtAutoAssembly.GetType("System.Management.Automation.RunspaceInvoke");
-            object scriptInvoker = Activator.CreateInstance(RunspaceInvokeType);
-            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            RunspaceInvokeType.InvokeMember("Invoke", flag, null, scriptInvoker, new object[] { "Set-ExecutionPolicy Unrestricted" });
-
-            object CommandCollectionInstance = pipelineType.InvokeMember("Commands", BindingFlags.GetProperty, null, pipelineInstance, null);
-            Type CommandCollectionType = sysMgmtAutoAssembly.GetType("System.Management.Automation.Runspaces.CommandCollection");
-
-            CommandCollectionType.InvokeMember(
-                "AddScript", flag, null, CommandCollectionInstance, new object[] { "cd " + SUTControlScriptLocation });
-
-            Type CommandType = sysMgmtAutoAssembly.GetType("System.Management.Automation.Runspaces.Command");
-            object myCommand = Activator.CreateInstance(CommandType, scriptPath);
-            CommandCollectionType.InvokeMember(
-                "Add", flag, null, CommandCollectionInstance, new object[] { myCommand });
-            
-            pipelineType.InvokeMember("Invoke", flag, null, pipelineInstance, null);
-
-            runspaceType.InvokeMember("Close", flag, null, runspaceInstance, null);
-
-
-            return 0;
+        private StackPacket ExpectPdu(TimeSpan timeout)
+        {
+            return rdpbcgrClient.ExpectPdu(timeout);
         }
 
         #endregion Methods

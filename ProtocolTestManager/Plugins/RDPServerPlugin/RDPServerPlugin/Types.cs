@@ -30,12 +30,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 
         // Detect Result
         public bool? IsSupportAutoReconnect;
-        public bool? IsSupportServerRedirection;
-        public bool? IsSupportNetcharAutoDetect;
-        public bool? IsSupportHeartbeatPdu;
-        public bool? IsSupportStaticVirtualChannel;
-        
-        public bool? IsSupportRDPEUDP;
+        public bool? IsSupportFastPathInput;
     }
 
     public class ResultItemMap

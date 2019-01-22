@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
+using System.Net;
 
 namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 {
@@ -49,8 +50,6 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         private const string ServerPort = "Server Port";
         private const string ServerUserName = "Server User Name";
         private const string ServerUserPassword = "Server User Password";
-        private const string ClientName = "Client Name";
-        private const string RDPVersion = "RDP Version";
 
         #endregion Private Types
 
@@ -90,12 +89,8 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             prereq.AddProperty(RDPValueDetector.ServerDomain, config.ServerDomain);
             prereq.AddProperty(RDPValueDetector.ServerName, config.ServerName);
             prereq.AddProperty(RDPValueDetector.ServerPort, config.ServerPort);
-
             prereq.AddProperty(RDPValueDetector.ServerUserName, config.ServerUserName);
             prereq.AddProperty(RDPValueDetector.ServerUserPassword, config.ServerUserPassword);
-            prereq.AddProperty(RDPValueDetector.ClientName, config.ClientName);
-            prereq.AddProperty(RDPValueDetector.RDPVersion, config.Version);
-
             return prereq;
         }
 
@@ -138,11 +133,8 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             config.ServerDomain = properties[RDPValueDetector.ServerDomain];
             config.ServerName = properties[RDPValueDetector.ServerName];
             config.ServerPort = properties[RDPValueDetector.ServerPort];
-
             config.ServerUserName = properties[RDPValueDetector.ServerUserName];
             config.ServerUserPassword = properties[RDPValueDetector.ServerUserPassword];
-            config.ClientName = properties[RDPValueDetector.ClientName];
-            config.Version = properties[RDPValueDetector.RDPVersion];
 
             if (!PingSUT())
             {
@@ -150,7 +142,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             }
 
             RDPDetector detector = new RDPDetector(detectionInfo);
-            if (!detector.DetectRDPFeature())
+            if (!detector.DetectRDPFeature(config))
             {
                 detector.Dispose();
                 return false;
@@ -187,9 +179,6 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             caseList.Add(CreateRule("Protocol.RDPBCGR", true));
 
             #endregion Protocols
-
-            caseList.Add(CreateRule("Specific Requirements.DeviceNeeded", false));
-            caseList.Add(CreateRule("Specific Requirements.Interactive", false));
 
             return caseList;
         }
@@ -250,14 +239,19 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             // Create a buffer of 32 bytes of data to be transmitted.
             string data = "0123456789ABCDEF0123456789ABCDEF";
             byte[] buffer = Encoding.ASCII.GetBytes(data);
+            IPAddress address;
+            if (!IPAddress.TryParse(config.ServerName, out address))
+            {
+                address = Dns.GetHostEntry(config.ServerName).AddressList.First();
+            }
             int timeout = 5000;
             bool result = false;
-            List<PingReply> replys = new List<PingReply>();
+            List<PingReply> replies = new List<PingReply>();
             try
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    replys.Add(pingSender.Send(config.ServerName, timeout, buffer, options));
+                    replies.Add(pingSender.Send(address, timeout, buffer, options));
                 }
 
             }
@@ -268,7 +262,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 //return false;
                 throw;
             }
-            foreach (var reply in replys)
+            foreach (var reply in replies)
             {
 
                 result |= (reply.Status == IPStatus.Success);
