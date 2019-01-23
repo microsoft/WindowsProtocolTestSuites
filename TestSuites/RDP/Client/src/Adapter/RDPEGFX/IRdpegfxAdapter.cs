@@ -102,6 +102,16 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         uint MapSurfaceToOutput(ushort surfaceId, uint outputOriginX, uint outputOriginY);
 
         /// <summary>
+        /// Method to instruct client to map a surface to scaled output
+        /// </summary>
+        /// <param name="surfaceId">Surface Id</param>
+        /// <param name="outputOriginX">x-coordinate of the map point</param>
+        /// <param name="outputOriginY">Y-coordinate of the map point</param>
+        /// <param name="targetWidth">targetWidth of the output </param>
+        /// <param name="targetHeight">targetHeight of the output</param>
+        uint ScaledOutput(ushort surfaceId, uint outputOriginX, uint outputOriginY, uint targetWidth, uint targetHeight);
+
+        /// <summary>
         /// Method to create a surface and map the surface to output.
         /// </summary>
         /// <param name="rect">The left-top, right-bottom position of the surface.</param>
@@ -109,7 +119,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="surfaceId">Specify a Surface ID</param>
         /// <returns>The created surface.</returns>
         Surface CreateAndOutputSurface(RDPGFX_RECT16 rect, PixelFormat pixFormat, ushort? surfaceId = null);
-
+              
         /// <summary>
         /// Method to solidfill a surface with color.
         /// </summary>

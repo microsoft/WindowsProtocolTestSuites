@@ -333,6 +333,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             // to indicate that it supports version 2 of the Remote Desktop Protocol: Dynamic 
             // Channel Virtual Channel Extension.<3>
             regsiteredPDUs.Add(new CapsVer2ReqDvcPdu());
+            // The DYNVC_CAPS_VERSION3(section 2.2.1.1.3) PDU is sent by the DVC server manager 
+            // to indicate that it supports version 3 of the Remote Desktop Protocol: Dynamic 
+            // Channel Virtual Channel Extension.<5>
+            regsiteredPDUs.Add(new CapsVer3ReqDvcPdu());
             // The DYNVC_CREATE_REQ (section 2.2.2.1) PDU is sent by the DVC server manager 
             // to the DVC client manager to request that a channel be opened.
             regsiteredPDUs.Add(new CreateReqDvcPdu());

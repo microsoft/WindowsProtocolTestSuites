@@ -99,6 +99,56 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Debug, "Surface {0} is deleted", surf.Id);
         }
 
+
+        [TestMethod]
+        [Priority(1)]
+        [TestCategory("Non-BVT")]
+        [TestCategory("Positive")]
+        [TestCategory("RDP10.6")]
+        [TestCategory("RDPEGFX")]
+        [Description("This test case is used to test create surface, solid fill, map to output, update scaled output and delete surface command.")]
+        public void RDPEGFX_SurfaceToScreen_PositiveTest_ScaledOutput()
+        {
+            uint fid;
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Do capability exchange.");
+            // Init for capability exchange
+            RDPEGFX_CapabilityExchange();
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Create a surface.");
+            // Create a surface 
+            Surface surf = this.rdpegfxAdapter.CreateSurface(RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight, PixelFormat.PIXEL_FORMAT_XRGB_8888);
+            this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf.Id);
+
+            // Send solid fill request to client to fill surface with green color
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Fill the surface to solid green color.");
+            RDPGFX_RECT16 fillSurfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
+            RDPGFX_RECT16[] fillRects = { fillSurfRect };  // Relative to surface
+            fid = this.rdpegfxAdapter.SolidFillSurface(surf, RdpegfxTestUtility.fillColorGreen, fillRects);
+            this.TestSite.Log.Add(LogEntryKind.Debug, "Surface is filled with solid color in frame: {0}", fid);
+
+            // Expect the client to send a frame acknowledge pdu
+            this.rdpegfxAdapter.ExpectFrameAck(fid);
+
+            // Map surface to Output
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Map surface to output.");
+            fid = this.rdpegfxAdapter.MapSurfaceToOutput(surf.Id, RdpegfxTestUtility.surfPos.x, RdpegfxTestUtility.surfPos.y);
+            this.rdpegfxAdapter.ExpectFrameAck(fid);
+
+            // Scaled Ouput
+            // The output will be scaled as the new targetWidth and targetHeight fields specified
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Scale the output");
+            RDPGFX_RECT16 newSurfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos4, RdpegfxTestUtility.largeSurfWidth, RdpegfxTestUtility.largeSurfHeight);
+            fid = this.rdpegfxAdapter.ScaledOutput(surf.Id, RdpegfxTestUtility.surfPos4.x, RdpegfxTestUtility.surfPos4.y, RdpegfxTestUtility.largeSurfWidth, RdpegfxTestUtility.largeSurfHeight);
+            
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
+            this.VerifySUTDisplay(false, newSurfRect);
+
+            // Delete the surface
+            this.rdpegfxAdapter.DeleteSurface(surf.Id);
+            this.TestSite.Log.Add(LogEntryKind.Debug, "Surface {0} is deleted", surf.Id);
+        }
+                
         [TestMethod]
         [Priority(1)]
         [TestCategory("Non-BVT")]
@@ -168,6 +218,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Assert.IsNotNull(surf, "Surface with max ID: {0} is created", surf.Id);
 
             // Send solid fill request to client to fill surface with green color
+
             RDPGFX_RECT16 fillSurfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, (ushort)(RdpegfxTestUtility.surfWidth), RdpegfxTestUtility.surfHeight);
             RDPGFX_RECT16[] fillRects = { fillSurfRect };  // Relative to surface
             fid = this.rdpegfxAdapter.SolidFillSurface(surf, RdpegfxTestUtility.fillColorGreen, fillRects);
