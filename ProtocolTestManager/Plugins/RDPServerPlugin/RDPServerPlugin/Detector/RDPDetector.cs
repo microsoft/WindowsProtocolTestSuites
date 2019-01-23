@@ -445,7 +445,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             bool isMonitorDataPresent)
         {
             Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request request = rdpbcgrClient.CreateMCSConnectInitialPduWithGCCConferenceCreateRequestPdu(
-                clientAddress.ToString(),
+                Dns.GetHostName(),
                 RdpbcgrTestData.DefaultClientBuild,
                 System.Guid.NewGuid().ToString(),
                 encryptionMethod_Values._128BIT_ENCRYPTION_FLAG,

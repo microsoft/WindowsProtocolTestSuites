@@ -136,6 +136,11 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             config.ServerUserName = properties[RDPValueDetector.ServerUserName];
             config.ServerUserPassword = properties[RDPValueDetector.ServerUserPassword];
 
+            if (config.ServerDomain == null)
+            {
+                config.ServerDomain = config.ServerName;
+            }
+
             if (!PingSUT())
             {
                 return false;

@@ -58,6 +58,8 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         private const ushort CONTROLPRIORITY_NEVER = 0x0002;
         private const ushort FONTSUPPORT_FONTLIST = 0x0001;
         private const uint MULTIFRAGMENT_CAP_MAX_REQUEST_SIZE = 0x000094A7;
+        private const ushort BITMAP_CACHE_CAPSET_SIZE = 0x20;
+        private const ushort INPUT_CAPSET_SIZE = 0x1c;
 
         /// <summary>
         /// Creates a collection which contains all mandatory and optional capability sets
@@ -175,7 +177,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             bitmapCacheCapabilitySet.BitmapCache4CellInfo.NumEntriesAndK = 0;
             bitmapCacheCapabilitySet.BitmapCache5CellInfo.NumEntriesAndK = 0;
             bitmapCacheCapabilitySet.Pad3 = BITMAP_CACHE_PAD3;
-            bitmapCacheCapabilitySet.lengthCapability = (ushort)(Marshal.SizeOf(bitmapCacheCapabilitySet)
+            bitmapCacheCapabilitySet.lengthCapability = (ushort)(BITMAP_CACHE_CAPSET_SIZE
                                                       + bitmapCacheCapabilitySet.Pad3.Length
                                                       - sizeof(int));
 
@@ -209,7 +211,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             inputCapabilitySet.keyboardSubType = 0;
             inputCapabilitySet.keyboardFunctionKey = KEYBOARD_FUNCTION_KEY_NUMBER_DEFAULT;
             inputCapabilitySet.imeFileName = string.Empty;
-            inputCapabilitySet.lengthCapability = (ushort)(Marshal.SizeOf(inputCapabilitySet)
+            inputCapabilitySet.lengthCapability = (ushort)(INPUT_CAPSET_SIZE
                                                 - sizeof(int)
                                                 + INPUT_CAP_IME_FLIENAME_SIZE);
 
