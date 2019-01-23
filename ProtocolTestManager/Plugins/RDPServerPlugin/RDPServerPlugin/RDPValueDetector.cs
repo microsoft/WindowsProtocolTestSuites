@@ -130,16 +130,15 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         public bool RunDetection()
         {
             // set config if properties changed
-            config.ServerDomain = properties[RDPValueDetector.ServerDomain];
             config.ServerName = properties[RDPValueDetector.ServerName];
-            config.ServerPort = properties[RDPValueDetector.ServerPort];
-            config.ServerUserName = properties[RDPValueDetector.ServerUserName];
-            config.ServerUserPassword = properties[RDPValueDetector.ServerUserPassword];
-
-            if (config.ServerDomain == null)
+            config.ServerDomain = properties[RDPValueDetector.ServerDomain];
+            if (config.ServerDomain.Length == 0)
             {
                 config.ServerDomain = config.ServerName;
             }
+            config.ServerPort = properties[RDPValueDetector.ServerPort];
+            config.ServerUserName = properties[RDPValueDetector.ServerUserName];
+            config.ServerUserPassword = properties[RDPValueDetector.ServerUserPassword];
 
             if (!PingSUT())
             {
