@@ -21,12 +21,6 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
     {
         // Parameters for Detecting
         public string SUTName;
-        public string UserNameInTC;
-        public string UserPwdInTC;
-        public string IsWindowsImplementation;
-        public string DropConnectionForInvalidRequest;
-        public int AgentListenPort;
-        public TriggerMethod TriggerMethod;
                 
         // Detect Result
         public bool? IsSupportAutoReconnect;

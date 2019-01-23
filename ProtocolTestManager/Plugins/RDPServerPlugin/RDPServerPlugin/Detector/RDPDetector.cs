@@ -100,7 +100,6 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 {
                     DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
                 }
-                clientInitiatedDisconnect();
             }
             catch (Exception e)
             {
@@ -116,6 +115,11 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             }
             checkSupportedFeatures();
             checkSupportedProtocols();
+            if (rdpbcgrClient != null)
+            {
+                rdpbcgrClient.Disconnect();
+                rdpbcgrClient = null;
+            }
             return true;
         }
 
