@@ -82,6 +82,19 @@
         <Rule kind="TestAborted" sink="TextLog" delete="false" />
         <Rule kind="EnterMethod" sink="TextLog" delete="false" />
         <Rule kind="ExitMethod" sink="TextLog" delete="false" />
+
+        <!-- Show for CommandlineConsole -->
+        <Rule kind="TestStep" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="Checkpoint" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="CheckSucceeded" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="CheckFailed" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="CheckInconclusive" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="Comment" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="Warning" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="Debug" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="TestFailed" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="TestInconclusive" sink="CommandLineConsole" delete="false"/>
+        <Rule kind="TestPassed" sink="CommandLineConsole" delete="false"/>
       </Profile>
     </Profiles>
   </TestLog>
