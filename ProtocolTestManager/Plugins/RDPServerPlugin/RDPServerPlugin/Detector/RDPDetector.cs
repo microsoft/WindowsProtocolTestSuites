@@ -115,28 +115,8 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             }
             checkSupportedFeatures();
             checkSupportedProtocols();
-            if (rdpbcgrClient != null)
-            {
-                rdpbcgrClient.Disconnect();
-                rdpbcgrClient = null;
-            }
+            Disconnect();
             return true;
-        }
-
-        private void clientInitiatedDisconnect()
-        {
-            SendClientShutdownRequestPDU();
-            Server_Shutdown_Request_Denied_Pdu shutDownReqDeniedPdu = ExpectPacket<Server_Shutdown_Request_Denied_Pdu>(timeout);
-            ExpectPacket<Server_Shutdown_Request_Denied_Pdu>(timeout);
-            MCS_Disconnect_Provider_Ultimatum_Pdu ultimatumPdu = rdpbcgrClient.CreateMCSDisconnectProviderUltimatumPdu(RdpbcgrTestData.RN_USER_REQUESTED);
-            rdpbcgrClient.SendPdu(ultimatumPdu);
-            rdpbcgrClient.Disconnect();
-        }
-
-        private void SendClientShutdownRequestPDU()
-        {
-            Client_Shutdown_Request_Pdu request = rdpbcgrClient.CreateShutdownRequestPdu();
-            rdpbcgrClient.SendPdu(request);
         }
 
         private void initialize(Configs config)
@@ -229,10 +209,16 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         {
             rdpbcgrClient.Connect(encryptedProtocol);
         }
-        
-        /// <summary>
-        /// Establish RDP Connection
-        /// </summary>
+
+        private void Disconnect()
+        {
+            if (rdpbcgrClient != null)
+            {
+                rdpbcgrClient.Disconnect();
+                rdpbcgrClient = null;
+            }
+        }
+
         private bool EstablishRDPConnection(
             Configs config,
             requestedProtocols_Values requestedProtocols,
@@ -613,6 +599,22 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         {
             Client_Font_List_Pdu fontListPdu = rdpbcgrClient.CreateFontListPdu();
             rdpbcgrClient.SendPdu(fontListPdu);
+        }
+
+        private void clientInitiatedDisconnect()
+        {
+            SendClientShutdownRequestPDU();
+            Server_Shutdown_Request_Denied_Pdu shutDownReqDeniedPdu = ExpectPacket<Server_Shutdown_Request_Denied_Pdu>(timeout);
+            ExpectPacket<Server_Shutdown_Request_Denied_Pdu>(timeout);
+            MCS_Disconnect_Provider_Ultimatum_Pdu ultimatumPdu = rdpbcgrClient.CreateMCSDisconnectProviderUltimatumPdu(RdpbcgrTestData.RN_USER_REQUESTED);
+            rdpbcgrClient.SendPdu(ultimatumPdu);
+            rdpbcgrClient.Disconnect();
+        }
+
+        private void SendClientShutdownRequestPDU()
+        {
+            Client_Shutdown_Request_Pdu request = rdpbcgrClient.CreateShutdownRequestPdu();
+            rdpbcgrClient.SendPdu(request);
         }
 
         /// <summary>
