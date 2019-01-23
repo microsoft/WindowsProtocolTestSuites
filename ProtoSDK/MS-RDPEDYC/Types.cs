@@ -7,6 +7,24 @@ using System.Collections.Generic;
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 {
     #region Basic Types
+    public class Constants
+    {
+        //According to section 2.2.3.3 of MS-RDPEDYC, 
+        //the max length of Data filed of DYNVC_DATA_FIRST_COMPRESSED is:
+        // 1600(max chunk len) -1(descriptor) - 1(header)-1(cmd,sp, cbid)- 1( channelid) -2 (length) = 1594.
+        public const uint MAX_FIRST_COMPRESSED_DATA_LENGTH = 1594;
+
+        //According to section 2.2.3.4 of MS-RDPEDYC, 
+        //the max length of Data filed of DYNVC_DATA_COMPRESSED is:
+        // 1600(max chunk len) -1(descriptor) - 1(header)-1(cmd,sp, cbid)- 1( channelid) = 1596.
+        public const uint MAX_COMPRESSED_DATA_LENGTH = 1596;
+
+        /// <summary>
+        /// Max length of a Data PDU
+        /// </summary>
+        public const int MAX_CHUNK_LEN = 1600;
+
+    }
 
     /// <summary>
     /// Header bitmask fields
@@ -1041,11 +1059,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// uncompressedSize, and segmentArray fields MUST be present, and the segment field MUST NOT be present. 
         /// </summary>
         MULTIPART = 0xE1
-    }
+    }   
 
     public enum SEGMENT_PART_SISE : uint
     {
-        MAX_PACKET_COMPR_TYPE_RDP8_SEGMENT_PART_SIZE = 10000,  // EGFX: Maximum number of uncompressed bytes in a single segment is 65535
+        MAX_PACKET_COMPR_TYPE_RDP8_SEGMENT_PART_SIZE = 65535,  // EGFX: Maximum number of uncompressed bytes in a single segment is 65535
         MAX_PACKET_COMPR_TYPE_RDP8_LITE_SEGMENT_PART_SIZE = 8192,  //EDYC: Maximum number of uncompressed bytes in a single segment: 8,192 for DYNVC_DATA_FIRST_COMPRESSED
         MAX_PACKET_COMPR_TYPE_RDP8_MATCH_DISTANCE = 2500000, //EGFX: Maximum match distance / minimum history size: 2,500,000 bytes.
         MAX_PACKET_COMPR_TYPE_RDP8_LITE_MATCH_DISTANCE = 8192 //EDYC: Maximum match distance / minimum history size: 8,192 bytes instead of 2,500,000 bytes.
