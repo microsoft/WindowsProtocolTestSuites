@@ -132,7 +132,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             // set config if properties changed
             config.ServerName = properties[RDPValueDetector.ServerName];
             config.ServerDomain = properties[RDPValueDetector.ServerDomain];
-            if (config.ServerDomain.Length == 0)
+            if (config.ServerDomain != null && config.ServerDomain.Length == 0)
             {
                 config.ServerDomain = config.ServerName;
             }
