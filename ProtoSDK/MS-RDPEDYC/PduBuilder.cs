@@ -167,7 +167,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         {
             DataFirstCompressedDvcPdu firstCompressedPdu = null;
            
-            if (data.Length <= Constants.MaxUncompressedDataBlockLen - 2)
+            if (data.Length <= ConstLength.MAX_FIRST_COMPRESSED_DATA_LENGTH)
             {
                 firstCompressedPdu = new DataFirstCompressedDvcPdu(channelId, (uint)data.Length, data);
             }

@@ -132,7 +132,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             }
             else
             {
-                dataPdus = pduBuilder.CreateDataPdu(channelId, data, Constants.MAX_CHUNK_LEN);
+                dataPdus = pduBuilder.CreateDataPdu(channelId, data, ConstLength.MAX_CHUNK_LEN);
             }
 
             if (dataPdus != null)

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 {
     #region Basic Types
-    public class Constants
+    public class ConstLength
     {
         //According to section 2.2.3.3 of MS-RDPEDYC, 
         //the max length of Data filed of DYNVC_DATA_FIRST_COMPRESSED is:
