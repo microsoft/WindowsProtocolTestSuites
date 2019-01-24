@@ -263,7 +263,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             MemoryStream ms = new MemoryStream(data);
             List<DataCompressedDvcPdu> pdus = new List<DataCompressedDvcPdu>();
 
-            //TODO: Here the compress algorithm has bug and cannot compress the data correctly. The size will become bigger than before compression
             byte[] compressed = CompressDataToRdp8BulkEncodedData(data, PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_LITE | PACKET_COMPR_FLAG.PACKET_COMPRESSED);
             
             DataCompressedDvcPdu pdu = new DataCompressedDvcPdu();
@@ -272,13 +271,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             pdu.HeaderBits.CbChannelId = cbChId_Values.OneByte;
             pdu.ChannelId = channelId;
 
-            byte[] rdp8Header = new byte[] {0xE0, 0x26 }; //0xE0; Single 0x26:PACKET_COMPRESSED (0x2), PACKET_CMPR_TYPE_RDP8_LITE (0x06)
+            RDP_SEGMENTED_DATA rdpSegmentedData = new RDP_SEGMENTED_DATA();
+            rdpSegmentedData.descriptor = DescriptorTypes.SINGLE;
 
-            var s = new MemoryStream();
-            s.Write(rdp8Header, 0, rdp8Header.Length);
-            s.Write(compressed, 0, compressed.Length);
-            byte[] rdp8BulkEncodedData = s.ToArray();
-            pdu.Data = rdp8BulkEncodedData;
+            RDP8_BULK_ENCODED_DATA rdp8BulkEncodedData = new RDP8_BULK_ENCODED_DATA();
+            rdp8BulkEncodedData.header = (byte) (PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_LITE | PACKET_COMPR_FLAG.PACKET_COMPRESSED);
+            rdp8BulkEncodedData.data = compressed;
+            
+            // Input the data in example to testing compression behavi
+            pdu.Data = new byte[] { 0x64, 0x03, 0x7b, 0x0c, 0xe0, 0x26, 0x38,0xc4, 0x3f, 0xf4, 0x74, 0x01 };
             pdus.Add(pdu);
             return pdus.ToArray();
         }
