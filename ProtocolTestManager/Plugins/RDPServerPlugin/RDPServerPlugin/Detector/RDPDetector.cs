@@ -95,11 +95,9 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 if (status == false)
                 {
                     DetectorUtil.WriteLog("Failed", false, LogStyle.StepPassed);
+                    return false;
                 }
-                else
-                {
-                    DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
-                }
+                DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
             }
             catch (Exception e)
             {
@@ -115,6 +113,9 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             }
             checkSupportedFeatures();
             checkSupportedProtocols();
+
+            // Disconnect
+            clientInitiatedDisconnect();
             Disconnect();
             return true;
         }
@@ -212,11 +213,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
         private void Disconnect()
         {
-            if (rdpbcgrClient != null)
-            {
-                rdpbcgrClient.Disconnect();
-                rdpbcgrClient = null;
-            }
+            rdpbcgrClient.Disconnect();
         }
 
         private bool EstablishRDPConnection(
@@ -297,9 +294,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 supportAutoReconnect,
                 supportFastPathInput,
                 supportFastPathOutput,
-                supportSurfaceCommands,
-                supportSVCCompression,
-                supportRemoteFXCodec);
+                supportSVCCompression);
 
             // Connection Finalization
             SendClientSynchronizePDU();
@@ -553,20 +548,13 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             bool supportAutoReconnect,
             bool supportFastPathInput,
             bool supportFastPathOutput,
-            bool supportSurfaceCommands,
-            bool supportSVCCompression,
-            bool supportRemoteFXCodec)
+            bool supportSVCCompression)
         {
-            // Create capability sets
-            RdpbcgrCapSet capSet = new RdpbcgrCapSet();
-            Collection<ITsCapsSet> caps = capSet.CreateCapabilitySets(
+            Collection<ITsCapsSet> caps = rdpbcgrClient.CreateCapabilitySets(
                 supportAutoReconnect,
                 supportFastPathInput,
                 supportFastPathOutput,
-                supportSurfaceCommands,
-                supportSVCCompression,
-                supportRemoteFXCodec);
-
+                supportSVCCompression);
             Client_Confirm_Active_Pdu pdu = rdpbcgrClient.CreateConfirmActivePdu(caps);
             rdpbcgrClient.SendPdu(pdu);
         }
@@ -603,18 +591,13 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
         private void clientInitiatedDisconnect()
         {
-            SendClientShutdownRequestPDU();
-            Server_Shutdown_Request_Denied_Pdu shutDownReqDeniedPdu = ExpectPacket<Server_Shutdown_Request_Denied_Pdu>(timeout);
-            ExpectPacket<Server_Shutdown_Request_Denied_Pdu>(timeout);
-            MCS_Disconnect_Provider_Ultimatum_Pdu ultimatumPdu = rdpbcgrClient.CreateMCSDisconnectProviderUltimatumPdu(RdpbcgrTestData.RN_USER_REQUESTED);
-            rdpbcgrClient.SendPdu(ultimatumPdu);
-            rdpbcgrClient.Disconnect();
+            SendMCSDisconnectProviderUltimatumPDU();
         }
 
-        private void SendClientShutdownRequestPDU()
+        private void SendMCSDisconnectProviderUltimatumPDU()
         {
-            Client_Shutdown_Request_Pdu request = rdpbcgrClient.CreateShutdownRequestPdu();
-            rdpbcgrClient.SendPdu(request);
+            MCS_Disconnect_Provider_Ultimatum_Pdu ultimatumPdu = rdpbcgrClient.CreateMCSDisconnectProviderUltimatumPdu(RdpbcgrTestData.RN_USER_REQUESTED);
+            rdpbcgrClient.SendPdu(ultimatumPdu);
         }
 
         /// <summary>
