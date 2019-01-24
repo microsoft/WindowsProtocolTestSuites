@@ -3757,7 +3757,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             attribute.andMaskData = GetBytes(data, ref currentIndex, (int)attribute.lengthAndMask);
 
             // TS_COLORPOINTERATTRIBUTE: pad
-            attribute.pad = ParseByte(data, ref currentIndex);
+            if (currentIndex < data.Length)
+            {
+                attribute.pad = ParseByte(data, ref currentIndex);
+            }
 
             return attribute;
         }
@@ -4421,7 +4424,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     client.UpdateTransport();
                 }
             }
-            catch (FormatException e)
+            catch (Exception e)
             {
                 pdu = new ErrorPdu(e);
             }

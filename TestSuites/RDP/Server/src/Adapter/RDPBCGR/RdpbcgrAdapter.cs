@@ -1249,7 +1249,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         }
 
         #endregion Multitransport Bootstrapping
-                
+
         #region Expect Methods
 
         /// <summary>
@@ -1302,6 +1302,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                         {
                             return packet as T;
                         }
+                        else if (packet is ErrorPdu)
+                        {
+                            // Print out the error message if there is an exception when expecting the pdu.
+                            this.Site.Assert.Fail("An Exception happened when expecting the packet: {0}", ((ErrorPdu)packet).ErrorMessage);
+                        }
                         else
                         {
                             // If the type of received packet is not T, add it into receive buffer
@@ -1312,7 +1317,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                         }
                     }
                 }
-            }
+            } 
             this.Site.Log.Add(LogEntryKind.Debug, "Timeout when expecting a {0}.", typeof(T).Name);
             return null;
         }
