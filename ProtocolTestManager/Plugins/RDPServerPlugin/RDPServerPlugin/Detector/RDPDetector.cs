@@ -657,7 +657,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                         }
                         else if (packet is ErrorPdu)
                         {
-
+                            throw new Exception(string.Format(((ErrorPdu)packet).ErrorMessage));
                         }
                         else
                         {
