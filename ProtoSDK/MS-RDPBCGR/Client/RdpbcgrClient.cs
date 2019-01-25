@@ -319,18 +319,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             bitmapCacheCapabilitySet.BitmapCache4CellInfo.NumEntriesAndK = 0;
             bitmapCacheCapabilitySet.BitmapCache5CellInfo.NumEntriesAndK = 0;
             bitmapCacheCapabilitySet.Pad3 = ConstValue.BITMAP_CACHE_PAD3;
-            bitmapCacheCapabilitySet.lengthCapability = (ushort)(
-                                                            2 + // capabilitySetType
-                                                            2 + // lengthCapability
-                                                            2 + // CacheFlags
-                                                            1 + // pad2
-                                                            1 + // NumCellCaches
-                                                            4 + // BitmapCache0CellInfo
-                                                            4 + // BitmapCache1CellInfo
-                                                            4 + // BitmapCache2CellInfo
-                                                            4 + // BitmapCache3CellInfo
-                                                            4 + // BitmapCache4CellInfo
-                                                            12);// Pad3
+            bitmapCacheCapabilitySet.lengthCapability = (ushort)(TypeMarshal.ToBytes(bitmapCacheCapabilitySet).Length);
             capabilitySets.Add(bitmapCacheCapabilitySet);
             #endregion Populating BitmapCache Capability Set
 
@@ -362,16 +351,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             inputCapabilitySet.keyboardFunctionKey = ConstValue.KEYBOARD_FUNCTION_KEY_NUMBER_DEFAULT;
             inputCapabilitySet.imeFileName = string.Empty;
             inputCapabilitySet.lengthCapability = (ushort)(
-                                                    2 + // capabilitySetType
-                                                    2 + // lengthCapability
-                                                    2 + // inputFlags
-                                                    2 + // pad2octetsA
-                                                    4 + // keyboardLayout
-                                                    4 + // keyboardType
-                                                    4 + // keyboardSubType
-                                                    4 + // keyboardFunctionKey
-                                                    64);// imeFileName
-
+                                                    TypeMarshal.ToBytes(inputCapabilitySet).Length -
+                                                    2 * (inputCapabilitySet.imeFileName.Length + 1) + // length of (inputCapabilitySet.imeFileName + null terminator) in bytes[]
+                                                    ConstValue.INPUT_CAP_IME_FILENAME_SIZE);
             capabilitySets.Add(inputCapabilitySet);
             #endregion Populating Input Capability Set
 

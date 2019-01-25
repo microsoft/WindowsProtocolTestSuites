@@ -84,15 +84,15 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         {
             try
             {
-                initialize(config);
-                connectRDPServer();
+                Initialize(config);
+                ConnectRDPServer();
 
                 bool status = EstablishRDPConnection(
                     config, requestedProtocol, SVCNames,
                     CompressionType.PACKET_COMPR_TYPE_NONE,
                     false,
                     true);
-                if (status == false)
+                if (!status)
                 {
                     DetectorUtil.WriteLog("Failed", false, LogStyle.StepPassed);
                     return false;
@@ -111,20 +111,20 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
                 return false;
             }
-            checkSupportedFeatures();
-            checkSupportedProtocols();
+            CheckSupportedFeatures();
+            CheckSupportedProtocols();
 
             // Disconnect
-            clientInitiatedDisconnect();
+            ClientInitiatedDisconnect();
             Disconnect();
             return true;
         }
 
-        private void initialize(Configs config)
+        private void Initialize(Configs config)
         {
             receiveBuffer = new List<StackPacket>();
             SVCNames = new string[] { SVCNAME_RDPEDYC };
-            loadConfig();
+            LoadConfig();
 
             int port;
             rdpbcgrClient = new RdpbcgrClient(
@@ -137,7 +137,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 );
         }
 
-        private bool loadConfig()
+        private bool LoadConfig()
         {
             string clientName = DetectorUtil.GetPropertyValue("RDP.ClientName");
             if (!IPAddress.TryParse(clientName, out clientAddress))
@@ -206,7 +206,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             return true;
         }
 
-        private void connectRDPServer()
+        private void ConnectRDPServer()
         {
             rdpbcgrClient.Connect(encryptedProtocol);
         }
@@ -324,16 +324,16 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             return true;
         }
 
-        private void checkSupportedFeatures()
+        private void CheckSupportedFeatures()
         {
-            detectInfo.IsSupportAutoReconnect = supportAutoReconnect();
-            detectInfo.IsSupportFastPathInput = supportFastPathInput();
+            detectInfo.IsSupportAutoReconnect = SupportAutoReconnect();
+            detectInfo.IsSupportFastPathInput = SupportFastPathInput();
 
             // Notify the UI for detecting feature supported finished
             DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
         }
 
-        private bool supportAutoReconnect()
+        private bool SupportAutoReconnect()
         {
             ITsCapsSet capset = GetServerCapSet(capabilitySetType_Values.CAPSTYPE_GENERAL);
             if (capset != null)
@@ -347,7 +347,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             return false;
         }
 
-        private bool supportFastPathInput()
+        private bool SupportFastPathInput()
         {
             ITsCapsSet capset = GetServerCapSet(capabilitySetType_Values.CAPSTYPE_INPUT);
             if (capset != null)
@@ -378,7 +378,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             return null;
         }
 
-        private void checkSupportedProtocols()
+        private void CheckSupportedProtocols()
         {
             // Notify the UI for detecting protocol supported finished
             DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
@@ -589,7 +589,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             rdpbcgrClient.SendPdu(fontListPdu);
         }
 
-        private void clientInitiatedDisconnect()
+        private void ClientInitiatedDisconnect()
         {
             SendMCSDisconnectProviderUltimatumPDU();
         }
@@ -612,7 +612,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             }
         }
 
-        T ExpectPacket<T>(TimeSpan timeout) where T : StackPacket
+        private T ExpectPacket<T>(TimeSpan timeout) where T : StackPacket
         {
             T receivedPacket = null;
             // Firstly, go through the receive buffer, if have packet with type T, return it.
@@ -654,6 +654,10 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                         if (packet is T)
                         {
                             return packet as T;
+                        }
+                        else if (packet is ErrorPdu)
+                        {
+
                         }
                         else
                         {

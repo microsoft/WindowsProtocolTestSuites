@@ -12128,9 +12128,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         public TS_BITMAPCACHE_CELL_CACHE_INFO BitmapCache5CellInfo;
 
         /// <summary>
-        ///  Padding. An array of 8-bit unsigned integers. Values
-        ///  in this field are ignored.
+        ///  A 12-element array of 8-bit, unsigned integers. Paddings.
+        ///  Values in this field are ignored.
         /// </summary>
+        [StaticSize(12)]
         public byte[] Pad3;
 
         /// <summary>
@@ -12398,7 +12399,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrEncoder.EncodeStructure(encodeBuffer, (uint)keyboardType);
             RdpbcgrEncoder.EncodeStructure(encodeBuffer, keyboardSubType);
             RdpbcgrEncoder.EncodeStructure(encodeBuffer, keyboardFunctionKey);
-            RdpbcgrEncoder.EncodeUnicodeString(encodeBuffer, imeFileName, ConstValue.INPUT_CAP_IME_FLIENAME_SIZE);
+            RdpbcgrEncoder.EncodeUnicodeString(encodeBuffer, imeFileName, ConstValue.INPUT_CAP_IME_FILENAME_SIZE);
             return encodeBuffer.ToArray();
         }
 
