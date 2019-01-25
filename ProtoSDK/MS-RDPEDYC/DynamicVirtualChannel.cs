@@ -121,7 +121,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// Send data using this DVC
         /// </summary>
         /// <param name="data"></param>
-        public void Send(byte[] data, bool isCompressed = true)
+        public void Send(byte[] data, bool isCompressed = false)
         {
             DataDvcBasePdu[] dataPdus = null;
             if (isCompressed)
