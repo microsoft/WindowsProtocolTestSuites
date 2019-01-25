@@ -9,6 +9,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
     #region Basic Types
     public class ConstLength
     {
+        //According to section 3.1.5.1.4 of MS-RDPEDYC,
+        //If the total uncompressed length of the message exceeds 1,590 bytes, 
+        //the DYNVC_DATA_FIRST_COMPRESSED (section 2.2.3.3) PDU is sent as the first data PDU, 
+        //followed by DYNVC_DATA_COMPRESSED (section 2.2.3.4) PDUs until all the data has been sent.
+        public const uint MAX_UNCOMPRESSED_DATA_LENGTH = 1590;
+
         //According to section 2.2.3.3 of MS-RDPEDYC, 
         //the max length of Data filed of DYNVC_DATA_FIRST_COMPRESSED is:
         // 1600(max chunk len) -1(descriptor) - 1(header)-1(cmd,sp, cbid)- 1( channelid) -2 (length) = 1594.

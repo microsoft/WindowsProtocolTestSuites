@@ -228,18 +228,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
         public void SendDataCompressedReqPdu(uint channelId, byte[] data)
         {
-            DataCompressedDvcPdu pdu =  pduBuilder.CreateDataCompressedReqPdu(channelId, data);
+            DataCompressedDvcPdu pdu = pduBuilder.CreateDataCompressedReqPdu(channelId, data);
             Send(pdu, DynamicVC_TransportType.RDP_UDP_Reliable);
         }
         public void SendFirstCompressedDataPdu(uint channelId, byte[] data)
         {
-            // The maximum length of the data block, before compression,
-            // is 1,598 bytes minus the space taken for the Cmd, Len, cbId, ChannelId, and Length fields.
-            // Cmd:4 bits, Len: 2 bits, cbId:2 bits, ChannelId: 8 bit, Length: 2 bytes by the section 4.3.3
-            if (data.Length <= ConstLength.MAX_FIRST_COMPRESSED_DATA_LENGTH)
+            //According to section 3.1.5.1.4 of MS-RDPEDYC,
+            //If the total uncompressed length of the message exceeds 1,590 bytes, 
+            //the DYNVC_DATA_FIRST_COMPRESSED (section 2.2.3.3) PDU is sent as the first data PDU, 
+            //followed by DYNVC_DATA_COMPRESSED (section 2.2.3.4) PDUs until all the data has been sent.
+            if (data.Length <= ConstLength.MAX_UNCOMPRESSED_DATA_LENGTH)
             {
-                //byte[] compressedData = pduBuilder.CompressDataToRdp8BulkEncodedData(data, PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_LITE | PACKET_COMPR_FLAG.PACKET_COMPRESSED);
-                byte[] compressedData = new byte[] { 0xe0, 0x26, 0x38, 0xc4, 0x3f, 0xf4, 0x74, 0x01 };
+                byte[] compressedData = pduBuilder.CompressDataToRdp8BulkEncodedData(data, PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_LITE | PACKET_COMPR_FLAG.PACKET_COMPRESSED);
                 DataFirstCompressedDvcPdu firstCompressedPdu = new DataFirstCompressedDvcPdu(channelId, (uint)data.Length, compressedData);
                 firstCompressedPdu.GetNonDataSize();
                 Send(firstCompressedPdu, DynamicVC_TransportType.RDP_UDP_Reliable);
@@ -253,49 +253,43 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
                 Array.Copy(data, uncompressedData, ConstLength.MAX_FIRST_COMPRESSED_DATA_LENGTH);
                 byte[] compressedData = pduBuilder.CompressDataToRdp8BulkEncodedData(uncompressedData, PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_LITE | PACKET_COMPR_FLAG.PACKET_COMPRESSED);
 
-                byte[] testData = new byte[] { 0xe0, 0x26, 0x38, 0xc4, 0x3f, 0xf4, 0x74, 0x01 };
-                DataFirstCompressedDvcPdu firstCompressedPdu = new DataFirstCompressedDvcPdu(channelId, (uint)data.Length, testData);
+                DataFirstCompressedDvcPdu firstCompressedPdu = new DataFirstCompressedDvcPdu(channelId, (uint)data.Length, compressedData);
                 firstCompressedPdu.GetNonDataSize();
                 Send(firstCompressedPdu, DynamicVC_TransportType.RDP_UDP_Reliable);
 
-                testData = new byte[] { 0xe0, 0x26, 0x88, 0x7f, 0xe8, 0xf4, 0x02 };
+                int leftBytes = uncompressedData.Length - (int)ConstLength.MAX_FIRST_COMPRESSED_DATA_LENGTH;
+                int followingMsgCount = 0;
 
-                DynamicVCPDU followingCompressedPDU = pduBuilder.CreateDataCompressedReqPdu(channelId, testData);
-                Send(followingCompressedPDU, DynamicVC_TransportType.RDP_UDP_Reliable);
+                if (leftBytes > 0)
+                {
+                    int followingLen = data.Length - (int)ConstLength.MAX_FIRST_COMPRESSED_DATA_LENGTH;
+                    followingMsgCount = (followingLen / (int)ConstLength.MAX_COMPRESSED_DATA_LENGTH);
+                    followingMsgCount = (followingLen % (int)ConstLength.MAX_COMPRESSED_DATA_LENGTH == 0) ? followingMsgCount : ++followingMsgCount;
+                    for (int i = 0; i < followingMsgCount; i++)
+                    {
+                        if (i != followingMsgCount)
+                        {
+                            byte[] followingUnCompressedData = new byte[ConstLength.MAX_COMPRESSED_DATA_LENGTH];
+                            Array.Copy(data, i * ConstLength.MAX_COMPRESSED_DATA_LENGTH + ConstLength.MAX_FIRST_COMPRESSED_DATA_LENGTH, followingUnCompressedData, 0, ConstLength.MAX_COMPRESSED_DATA_LENGTH);
+                            byte[] followingCompressedData = pduBuilder.CompressDataToRdp8BulkEncodedData(followingUnCompressedData, PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_LITE | PACKET_COMPR_FLAG.PACKET_COMPRESSED);
 
-                //int leftBytes = uncompressedData.Length - (int)ConstLength.MAX_FIRST_COMPRESSED_DATA_LENGTH;
-                //int followingMsgCount = 0;
-                
-                //if (leftBytes > 0)
-                //{
-                //    int followingLen = data.Length - (int)ConstLength.MAX_FIRST_COMPRESSED_DATA_LENGTH;
-                //    followingMsgCount = (followingLen / (int)ConstLength.MAX_COMPRESSED_DATA_LENGTH);
-                //    followingMsgCount = (followingLen % (int)ConstLength.MAX_COMPRESSED_DATA_LENGTH == 0)? followingMsgCount: ++ followingMsgCount ;
-                //    for (int i = 0; i < followingMsgCount; i++)
-                //    {
-                //        if (i != followingMsgCount)
-                //        {
-                //            byte[] followingUnCompressedData = new byte[ConstLength.MAX_COMPRESSED_DATA_LENGTH];
-                //            Array.Copy(data, i * ConstLength.MAX_COMPRESSED_DATA_LENGTH + ConstLength.MAX_FIRST_COMPRESSED_DATA_LENGTH, followingUnCompressedData, 0, ConstLength.MAX_COMPRESSED_DATA_LENGTH);
-                //            byte[] followingCompressedData = pduBuilder.CompressDataToRdp8BulkEncodedData(followingUnCompressedData, PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_LITE | PACKET_COMPR_FLAG.PACKET_COMPRESSED);
+                            DynamicVCPDU followingCompressedPDU = pduBuilder.CreateDataCompressedReqPdu(channelId, followingCompressedData);
+                            Send(followingCompressedPDU, DynamicVC_TransportType.RDP_UDP_Reliable);
+                        }
+                        else //Last message
+                        {
+                            byte[] lastUnCompressedData = new byte[data.Length - i * ConstLength.MAX_COMPRESSED_DATA_LENGTH];
+                            Array.Copy(data, i * ConstLength.MAX_COMPRESSED_DATA_LENGTH + ConstLength.MAX_FIRST_COMPRESSED_DATA_LENGTH, lastUnCompressedData, 0, followingLen - i * ConstLength.MAX_COMPRESSED_DATA_LENGTH);
+                            byte[] lastCompressedData = pduBuilder.CompressDataToRdp8BulkEncodedData(lastUnCompressedData, PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_LITE | PACKET_COMPR_FLAG.PACKET_COMPRESSED);
 
-                //            DynamicVCPDU followingCompressedPDU = pduBuilder.CreateDataCompressedReqPdu(channelId, followingCompressedData);
-                //            Send(followingCompressedPDU, DynamicVC_TransportType.RDP_UDP_Reliable);
-                //        }
-                //        else //Last message
-                //        {                            
-                //            byte[] lastUnCompressedData = new byte[data.Length - i * ConstLength.MAX_COMPRESSED_DATA_LENGTH];
-                //            Array.Copy(data, i * ConstLength.MAX_COMPRESSED_DATA_LENGTH + ConstLength.MAX_FIRST_COMPRESSED_DATA_LENGTH, lastUnCompressedData, 0, followingLen - i * ConstLength.MAX_COMPRESSED_DATA_LENGTH);
-                //            byte[] lastCompressedData = pduBuilder.CompressDataToRdp8BulkEncodedData(lastUnCompressedData, PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_LITE | PACKET_COMPR_FLAG.PACKET_COMPRESSED);
-
-                //            DynamicVCPDU followingPdu = pduBuilder.CreateDataCompressedReqPdu(channelId, lastCompressedData);
-                //            Send(followingPdu, DynamicVC_TransportType.RDP_UDP_Reliable);
-                //        }                       
-                //    }
-                //}
+                            DynamicVCPDU followingPdu = pduBuilder.CreateDataCompressedReqPdu(channelId, lastCompressedData);
+                            Send(followingPdu, DynamicVC_TransportType.RDP_UDP_Reliable);
+                        }
+                    }
+                }
             }
         }
-        
+
         /// <summary>
         /// Close a DVC
         /// </summary>
@@ -313,7 +307,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
             // Remove the channel from dictionary
             channelDicbyId.Remove(channelId);
-        }     
+        }
 
         /// <summary>
         /// Send a PDU using a specific transport
@@ -327,7 +321,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
                 throw new InvalidOperationException("Not create DVC transport:" + transportType);
             }
             transportDic[transportType].Send(pdu);
-        }                                                     
+        }
 
         /// <summary>
         /// Dispose
@@ -335,11 +329,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         public void Dispose()
         {
             //Try to close all opening Dynamic Virtual Channels before disconect SUT.
-            if (channelDicbyId !=null)
+            if (channelDicbyId != null)
             {
                 uint[] channelIds = new uint[channelDicbyId.Keys.Count];
                 channelDicbyId.Keys.CopyTo(channelIds, 0);
-                for(int i =0; i< channelIds.Length; i++)
+                for (int i = 0; i < channelIds.Length; i++)
                 {
                     try
                     {
@@ -858,7 +852,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
         public void SegmentAndCompressFrame(byte[] rawSvrData, byte compressFlag, uint segmentPartSize)
         {
-            
+
             // Set descriptor type based on data length
             if (rawSvrData.Length <= segmentPartSize)
             {
@@ -868,7 +862,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
                 segHeader.bulkData.header = compressFlag;
 
                 // RDP 8.0 compression here. 
-                if (compressFlag == ((byte)PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_RDP8 | (byte)PACKET_COMPR_FLAG.PACKET_COMPRESSED))                  
+                if (compressFlag == ((byte)PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_RDP8 | (byte)PACKET_COMPR_FLAG.PACKET_COMPRESSED))
                 {
                     CompressFactory cpf = new CompressFactory();
                     byte[] compressedData = cpf.Compress(rawSvrData);
@@ -953,7 +947,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             foreach (RDP_SEGMENTED_DATA segHead in segHeadList)
             {
                 List<byte> dataBuffer = new List<byte>();
-                
+
                 if (segHead.descriptor == DescriptorTypes.SINGLE)
                 {
                     segHead.bulkData.header = (byte)PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_RDP8 | (byte)PACKET_COMPR_FLAG.PACKET_COMPRESSED;
