@@ -49,10 +49,10 @@
     <Property name="DropConnectionForInvalidRequest" value="true">
       <Choice>true, false</Choice>
       <Description>Indicates if SUT drops the connection when an invalid request received.</Description>
-    </Property>  
+    </Property>
     <!--The version of the RDP intends to test. It should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6-->
     <!--The seperator between the RDP.Version is required to be ".".-->
-    <Property name="RDP.Version" value="8.1">
+    <Property name="RDP.Version" value="10.6">
       <Choice>7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6</Choice>
       <Description>The version of the RDP intends to test, it should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6</Description>
     </Property>
@@ -60,7 +60,7 @@
 
     <!--Block Begin: Properties that required to be set when TLS or CredSSP security protocol is in effect ***-->
     <!--The domain name of local host (RDP server). If local host doesn't in domain, then fill this field with the computer name of local host. -->
-    <Property name="RDP.ServerDomain" value="contoso.com">
+    <Property name="RDP.ServerDomain" value="RDPServer">
       <Description>The domain name of local host (RDP server). If local host doesn't in domain, then fill this field with the computer name of local host.</Description>
     </Property>
     <!--The user name of local host (RDP server). -->
@@ -72,7 +72,7 @@
       <Description>The logon password of "RDP.ServerUserName".</Description>
     </Property>
     <!--The pfx format certificate with private key, which used to secure TLS or CredSSP transport.  -->
-    <Property name="CertificatePath" value="C:\DriverComputer.pfx">
+    <Property name="CertificatePath" value="C:\RDPServer.pfx">
       <Description>The pfx format certificate with private key, which used to secure TLS or CredSSP transport.</Description>
     </Property>
     <!--The password of the pfx certificate-->
@@ -83,7 +83,7 @@
 
     <!-- Block Begin: Properties that only used when the SUT is Windows OS-->
     <!-- The host name or IP address of SUT machine (RDP Client). -->
-    <Property name="SUTName" value="SUT01">
+    <Property name="SUTName" value="RDPClient">
       <Description>The host name or IP address of SUT machine (RDP Client).</Description>
     </Property>
     <!-- The User Id of SUT which should have administrator privileges. -->

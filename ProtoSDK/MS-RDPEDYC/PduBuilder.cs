@@ -277,9 +277,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             RDP8_BULK_ENCODED_DATA rdp8BulkEncodedData = new RDP8_BULK_ENCODED_DATA();
             rdp8BulkEncodedData.header = (byte) (PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_LITE | PACKET_COMPR_FLAG.PACKET_COMPRESSED);
             rdp8BulkEncodedData.data = compressed;
-            
-            // Input the data in example to testing compression behavi
-            pdu.Data = new byte[] { 0x64, 0x03, 0x7b, 0x0c, 0xe0, 0x26, 0x38,0xc4, 0x3f, 0xf4, 0x74, 0x01 };
+
+            pdu.Data = PduMarshaler.Marshal(rdpSegmentedData);
             pdus.Add(pdu);
             return pdus.ToArray();
         }
