@@ -149,7 +149,7 @@ Function Config-Environment
     Write-Host "Install Web Application Proxy"
     Install-WebApplicationProxy -ErrorAction Stop
 
-    $certDir = "..\Data\Certificates"
+    $certDir = ".\Data\Certificates"
     #Check certificates path exists or not.
     if(!(Test-Path -Path $certDir))
     {
