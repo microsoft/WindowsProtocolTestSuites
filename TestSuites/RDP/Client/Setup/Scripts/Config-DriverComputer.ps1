@@ -2,37 +2,39 @@
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 Param(
-[String]$scriptsPath  = [System.IO.Path]::GetDirectoryName($myInvocation.MyCommand.Definition)
+    [String]$workFolder  = (split-path -parent ([System.IO.Path]::GetDirectoryName($myInvocation.MyCommand.Definition)))
 )
 
-Write-Host "Put current dir as $scriptsPath."
-pushd $scriptsPath
+Write-Host "Put current dir as $workFolder."
+Push-Location $workFolder
 
 #----------------------------------------------------------------------------
 # Starting script
 #----------------------------------------------------------------------------
 
+[string]$tsScriptsPath = [System.IO.Directory]::GetDirectories("$env:HOMEDRIVE\MicrosoftProtocolTests\RDP\Client-Endpoint", "Scripts",[System.IO.SearchOption]::AllDirectories)
 
-$settingFile = "$scriptsPath\ParamConfig.xml"
+$settingFile = "$tsScriptsPath\ParamConfig.xml"
+
 if(Test-Path -Path $settingFile)
 {    
-    $logPath            = .\Get-Parameter.ps1 $settingFile logPath
+    $logPath            = .\Scripts\Get-Parameter.ps1 $settingFile logPath
     $logFile            = $logPath + "\Config-DriverComputer.ps1.log"
-    $userNameInTC       = .\Get-Parameter.ps1 $settingFile userNameInTC
-    $userPwdInTC        = .\Get-Parameter.ps1 $settingFile userPwdInTC
-    $CredSSPUser        = .\Get-Parameter.ps1 $settingFile CredSSPUser
-    $CredSSPPwd         = .\Get-Parameter.ps1 $settingFile CredSSPPwd
-    $domainName         = .\Get-Parameter.ps1 $settingFile domainName
-    $dcComputerName     = .\Get-Parameter.ps1 $settingFile dcComputerName
-    $tcComputerName     = .\Get-Parameter.ps1 $settingFile tcComputerName
-    $driverComputerName = .\Get-Parameter.ps1 $settingFile driverComputerName
-    $listeningPort      = .\Get-Parameter.ps1 $settingFile RDPListeningPort
-    $ipVersion          = .\Get-Parameter.ps1 $settingFile ipVersion
-    $osVersion          = .\Get-Parameter.ps1 $settingFile osVersion
-	$RDPVersion          = .\Get-Parameter.ps1 $settingFile RDPVersion
-    $workgroupDomain    = .\Get-Parameter.ps1 $settingFile workgroupDomain
-    $tcSystemDrive      = .\Get-Parameter.ps1 $settingFile tcSystemDrive
-    .\Set-Parameter.ps1 $settingFile LogFile $logFile "If no log file path specified, this value should be used."
+    $userNameInTC       = .\Scripts\Get-Parameter.ps1 $settingFile userNameInTC
+    $userPwdInTC        = .\Scripts\Get-Parameter.ps1 $settingFile userPwdInTC
+    $CredSSPUser        = .\Scripts\Get-Parameter.ps1 $settingFile CredSSPUser
+    $CredSSPPwd         = .\Scripts\Get-Parameter.ps1 $settingFile CredSSPPwd
+    $domainName         = .\Scripts\Get-Parameter.ps1 $settingFile domainName
+    $dcComputerName     = .\Scripts\Get-Parameter.ps1 $settingFile dcComputerName
+    $tcComputerName     = .\Scripts\Get-Parameter.ps1 $settingFile tcComputerName
+    $driverComputerName = .\Scripts\Get-Parameter.ps1 $settingFile driverComputerName
+    $listeningPort      = .\Scripts\Get-Parameter.ps1 $settingFile RDPListeningPort
+    $ipVersion          = .\Scripts\Get-Parameter.ps1 $settingFile ipVersion
+    $osVersion          = .\Scripts\Get-Parameter.ps1 $settingFile osVersion
+	$RDPVersion          = .\Scripts\Get-Parameter.ps1 $settingFile RDPVersion
+    $workgroupDomain    = .\Scripts\Get-Parameter.ps1 $settingFile workgroupDomain
+    $tcSystemDrive      = .\Scripts\Get-Parameter.ps1 $settingFile tcSystemDrive
+    .\Scripts\Set-Parameter.ps1 $settingFile LogFile $logFile "If no log file path specified, this value should be used."
 }
 else
 {
@@ -43,20 +45,42 @@ $DropConnectionForInvalidRequest = "true"
 $SutOsVersion = Invoke-Command -ComputerName $tcComputerName -ScriptBlock {""+[System.Environment]::OSVersion.Version.Major.ToString() + "." + [System.Environment]::OSVersion.Version.Minor.ToString()}
 $SutOsBuildNumber = Invoke-Command -ComputerName $tcComputerName -ScriptBlock {[System.Environment]::OSVersion.Version.Build}
 
-if([double]$SutOSVersion -ge "10.0")
+if([double]$SutOSVersion -eq "6.0"){
+    $RDPVersion = "7.0"
+}elseif([double]$SutOSVersion -eq "6.1"){
+    $RDPVersion = "7.1"
+}elseif([double]$SutOSVersion -eq "6.2"){
+    $RDPVersion = "8.0"
+}elseif([double]$SutOSVersion -eq "6.3"){
+    $RDPVersion = "8.1"
+}
+elseif([double]$SutOSVersion -ge "10.0")
 {
-    
-    if([double] $SutOsBuildNumber -eq "15063")
+    switch -Wildcard ($SutOsBuildNumber)
     {
-        $RDPVersion = "10.3"
-    }
-
-    if([double] $SutOsBuildNumber -ge "15063")
-    {
-        $DropConnectionForInvalidRequest = "false"
+        "14393"
+        {
+            $rdpVersion = "10.0"
+        }
+        "15063"
+        {
+            $rdpVersion = "10.3"
+        }
+        "17134"
+        {
+            $rdpVersion = "10.5"
+        }
+        "17763"
+        {
+            $rdpVersion = "10.6"
+        }
     }
 }
 
+if([double] $SutOsBuildNumber -ge "15063")
+{
+    $DropConnectionForInvalidRequest = "false"
+}
 
 #-----------------------------------------------------
 # Create $logPath if not exist
@@ -79,7 +103,7 @@ Start-Transcript $logFile -Append
 # Write value for all the parameters
 #-----------------------------------------------------
 Write-Host "EXECUTING [Config-DriverComputer.ps1] ..." -foregroundcolor cyan
-Write-Host "`$scriptsPath        = $scriptsPath"
+Write-Host "`$tsScriptsPath        = $tsScriptsPath"
 Write-Host "`$logPath            = $logPath"       
 Write-Host "`$logFile            = $logFile"
 Write-Host "`$userNameInTC       = $userNameInTC" 
@@ -146,24 +170,22 @@ $securePwd = (ConvertTo-SecureString -string "$certPwd" -Force -AsPlainText)
 Export-PfxCertificate -Cert $cert -Force -Password $securePwd -FilePath "$env:HOMEDRIVE\$certFileName.pfx"
 Export-Certificate -Cert $cert -FilePath "$env:HOMEDRIVE\$certFileName.cer" -Type CERT
 
-
 #-----------------------------------------------------
 # If listening port of test suite is 3389 and the Remote Desktop Service is running, edit registry to change Windows RDP service port and restart TermService
 #-----------------------------------------------------
 if($listeningPort -eq "3389")
 {   
-   if(Get-Service | Where-Object{$_.name -eq "TermService"} | where-object{$_.status -eq "Running"})
-   {
-       Set-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Control\"Terminal Server"\Winstations\RDP-Tcp PortNumber -value 4488 -Type DWORD
-       Restart-Service TermService -F
-   }
+    if(Get-Service | Where-Object{$_.name -eq "TermService"} | where-object{$_.status -eq "Running"})
+    {
+        Set-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Control\"Terminal Server"\Winstations\RDP-Tcp PortNumber -value 4488 -Type DWORD
+        Restart-Service TermService -F
+    }
 }
 
 #-----------------------------------------------------
 # Modify PTF Config File
 #-----------------------------------------------------
-$binPath         = $scriptsPath + "\..\Bin"
-$dataPath        = $scriptsPath + "\..\Data"
+$binPath         = $tsScriptsPath + "\..\Bin"
 $DepPtfConfig    = "$binPath\RDP_ClientTestSuite.deployment.ptfconfig"
 
 Write-Host  "TurnOff FileReadonly for $DepPtfConfig..."
@@ -181,6 +203,7 @@ Write-Host "Begin to update RDP_ClientTestSuite.deployment.ptfconfig..."
 .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.ServerUserName"     $CredSSPUser
 .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.ServerUserPassword" $CredSSPPwd
 .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Version"            $RDPVersion
+.\Modify-ConfigFileNode.ps1 $DepPtfConfig "DriverComputerNetBiosName"            $driverComputerName
 
 if ($osVersion.ToUpper() -eq "NONWINDOWS")
 {
@@ -233,13 +256,13 @@ $settingXml.Save("$settingFile")
 # Create task to detect whether the SUT Adapter works
 #-----------------------------------------------------
 Write-Host "Creating task to detect whether the SUT Adapter works and try 10 times if fails ..."
-$batchPath = "$scriptsPath\..\Batch"
-cmd /c schtasks /Create /SC Weekly /TN WaitForSUTControlAdapterReady /TR "powershell $scriptsPath\WaitForSUTControlAdapterReady.ps1 $tcComputerName $userNameInTC $userPwdInTC $batchPath" /IT /F
+$batchPath = "$tsScriptsPath\..\Batch"
+cmd /c schtasks /Create /SC Weekly /TN WaitForSUTControlAdapterReady /TR "powershell $tsScriptsPath\WaitForSUTControlAdapterReady.ps1 $tcComputerName $userNameInTC $userPwdInTC $batchPath" /IT /F
 
 #-----------------------------------------------------
 # Finished to config driver computer
 #-----------------------------------------------------
-popd
+Pop-Location
 Write-Host "Write signal file: config.finished.signal to system drive."
 cmd /C ECHO CONFIG FINISHED>$env:HOMEDRIVE\config.finished.signal
 
