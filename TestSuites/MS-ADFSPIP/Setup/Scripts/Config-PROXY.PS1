@@ -13,7 +13,7 @@
 ##############################################################################
 Param
 (
-    [string]$WorkingPath = "C:\temp"                                    # Script working path
+    [string]$WorkingPath = "C:\temp\Scripts"                                    # Script working path
 )
 
 $param                   = @{}
@@ -62,7 +62,7 @@ Function Prepare()
 #------------------------------------------------------------------------------------------
 Function Read-ConfigParameters()
 {
-    $protocolXMLPath = $WorkingPath + "\Protocol.xml"
+    $protocolXMLPath ="..\Protocol.xml"
     $VMName =  .\GetVMNameByComputerName.ps1 -ConfigFile $protocolXMLPath
     Write-ConfigLog "Getting the parameters from config file..." -ForegroundColor Yellow
     .\GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$param) -ConfigFile $protocolXMLPath
@@ -122,10 +122,6 @@ Function Init-Environment()
     # Start executing the script
     Write-ConfigLog "Executing [$ScriptName]..." -ForegroundColor Cyan
 
-    # Switch to the script path
-    Write-ConfigLog "Switching to $ScriptPath..." -ForegroundColor Yellow
-    Push-Location $ScriptPath
-
     Import-Module .\ADFSLib.PSM1
 
     # Read the config parameters
@@ -149,7 +145,7 @@ Function Config-Environment
     Write-Host "Install Web Application Proxy"
     Install-WebApplicationProxy -ErrorAction Stop
 
-    $certDir = ".\Data\Certificates"
+    $certDir = "..\Data\Certificates"
     #Check certificates path exists or not.
     if(!(Test-Path -Path $certDir))
     {

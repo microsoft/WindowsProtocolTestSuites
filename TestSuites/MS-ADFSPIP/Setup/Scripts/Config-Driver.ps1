@@ -14,7 +14,7 @@
 
 Param
 (
-    [string]$WorkingPath = "C:\temp"                                    # Script working path
+    [string]$WorkingPath = "C:\temp\Scripts"                                    # Script working path
 )
 
 $param                   = @{}
@@ -63,7 +63,7 @@ Function Prepare()
 #------------------------------------------------------------------------------------------
 Function Read-ConfigParameters()
 {
-    $protocolXMLPath = $WorkingPath + "\Protocol.xml"
+    $protocolXMLPath ="..\Protocol.xml"
     $VMName =  .\GetVMNameByComputerName.ps1 -ConfigFile $protocolXMLPath
     Write-ConfigLog "Getting the parameters from config file..." -ForegroundColor Yellow
     .\GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$param) -ConfigFile $protocolXMLPath
@@ -123,10 +123,6 @@ Function Init-Environment()
     # Start executing the script
     Write-ConfigLog "Executing [$ScriptName]..." -ForegroundColor Cyan
 
-    # Switch to the script path
-    Write-ConfigLog "Switching to $ScriptPath..." -ForegroundColor Yellow
-    Push-Location $ScriptPath
-
     Import-Module .\ADFSLib.PSM1
 
     # Read the config parameters
@@ -148,7 +144,7 @@ Function Config-Environment
     Set-ItemProperty -path  HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -name "EnableLUA" -value "0"
 
     Write-Host "Join the computer to domain"
-    .\Join-Domain.ps1 -domainWorkgroup "Domain" -domainName $param["domain"] -userName $param["username"] -userPassword $param["password"] -testResultsPath $ScriptPath 2>&1 | Write-Output
+    .\Join-Domain.ps1 -domainWorkgroup "Domain" -domainName $param["domain"] -userName $param["username"] -userPassword $param["password"] -testResultsPath $WorkingPath 2>&1 | Write-Output
 
     Write-Host "Enable remoting"
     Enable-Remoting
