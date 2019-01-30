@@ -22,7 +22,7 @@ $ScriptFileFullPath      = $MyInvocation.MyCommand.Definition
 $ScriptName              = [System.IO.Path]::GetFileName($ScriptFileFullPath)
 $ScriptPath              = Split-Path $ScriptFileFullPath
 $LogFileFullPath         = "$ScriptFileFullPath.log"
-$SignalFileFullPath      = "$WorkingPath\post.finished.signal"
+$SignalFileFullPath      = "..\post.finished.signal"
 
 #-----------------------------------------------------------------------------
 # Function: Prepare
