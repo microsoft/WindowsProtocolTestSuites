@@ -13,7 +13,7 @@
 ##############################################################################
 Param
 (
-    [string]$WorkingPath = "C:\Temp",                                    # Script working path
+    [string]$WorkingPath = "C:\temp",                                    # Script working path
     [string]$certDir="$WorkingPath\Data\Certificates"
 
 )

@@ -14,7 +14,7 @@
 
 Param
 (
-    [string]$WorkingPath = "C:\Temp"                                   # Script working path
+    [string]$WorkingPath = "C:\temp"                                   # Script working path
 )
 
 $param                   = @{}
