@@ -14,7 +14,7 @@
 
 Param
 (
-    [string]$WorkingPath = "C:\temp"                                    # Script working path
+    [string]$WorkingPath = "C:\temp"                                   # Script working path
 )
 
 $param                   = @{}
@@ -23,6 +23,9 @@ $ScriptName              = [System.IO.Path]::GetFileName($ScriptFileFullPath)
 $ScriptPath              = Split-Path $ScriptFileFullPath
 $LogFileFullPath         = "$ScriptFileFullPath.log"
 $SignalFileFullPath      = "$WorkingPath\post.finished.signal"
+
+Write-Host "Put current dir as $WorkingPath" -ForegroundColor Yellow
+Push-Location $WorkingPath
 
 #-----------------------------------------------------------------------------
 # Function: Prepare
@@ -48,13 +51,6 @@ Function Prepare()
     Write-Host "Warning:This script was not executed completely because of the error above." -foregroundcolor Yellow
     exit 0
     }
-
-    # Change to absolute path
-    Write-Host "Current path is $ScriptFileFullPath" -ForegroundColor Cyan
-    $WorkingPath = (Get-Item $WorkingPath).FullName
-
-    Write-Host "Put current dir as $WorkingPath" -ForegroundColor Yellow
-    Push-Location $WorkingPath
 }
 
 #------------------------------------------------------------------------------------------
@@ -63,10 +59,10 @@ Function Prepare()
 #------------------------------------------------------------------------------------------
 Function Read-ConfigParameters()
 {
-    $protocolXMLPath = $WorkingPath + "\Protocol.xml"
-    $VMName =  .\GetVMNameByComputerName.ps1 -ConfigFile $protocolXMLPath
+    $protocolXMLPath = "$WorkingPath\Scripts\Protocol.xml"
+    $VMName =  .\Scripts\GetVMNameByComputerName.ps1 -ConfigFile $protocolXMLPath
     Write-ConfigLog "Getting the parameters from config file..." -ForegroundColor Yellow
-	.\GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$param) -ConfigFile $protocolXMLPath
+	.\Scripts\GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$param) -ConfigFile $protocolXMLPath
     $param
 }
 
@@ -123,11 +119,7 @@ Function Init-Environment()
     # Start executing the script
     Write-ConfigLog "Executing [$ScriptName]..." -ForegroundColor Cyan
 
-    # Switch to the script path
-    Write-ConfigLog "Switching to $ScriptPath..." -ForegroundColor Yellow
-    Push-Location $ScriptPath
-
-    Import-Module .\ADFSLib.PSM1
+    Import-Module .\Scripts\ADFSLib.PSM1
 
     # Read the config parameters
     Read-ConfigParameters
@@ -156,7 +148,7 @@ Function Config-Environment
     Install-DomainController -DomainName $param["domain"] -AdminPassword $param["password"] -ErrorAction Stop
 
     # read driver computer information
-    $protocolXMLPath = $WorkingPath + "\Protocol.xml"
+    $protocolXMLPath = "$WorkingPath\Protocol.xml"
     [XML]$vmConfig = Get-Content $protocolXMLPath
 	$driver = $vmConfig.lab.servers.vm | where {$_.role -eq "driver"}
 	
