@@ -4,38 +4,32 @@
 #############################################################################
 
 Param(
-    [String]$workFolder  = split-path -parent ([System.IO.Path]::GetDirectoryName($myInvocation.MyCommand.Definition))
+[String]$scriptsPath  = [System.IO.Path]::GetDirectoryName($myInvocation.MyCommand.Definition)
 )
 
-Write-Host "Put current dir as $workFolder."
-Push-Location $workFolder
-
-$dataPath = "$workFolder\Data"
-$toolPath = "$workFolder\Tools" #For Temporarily use, will be removed in released version.
+Push-Location $scriptsPath
+$dataPath = "$scriptsPath\..\Data"
 
 #----------------------------------------------------------------------------
 # Starting script
 #----------------------------------------------------------------------------
-[string]$tsScriptsPath = [System.IO.Directory]::GetDirectories("$env:HOMEDRIVE\MicrosoftProtocolTests", "Scripts",[System.IO.SearchOption]::AllDirectories)
-
-$settingFile = "$tsScriptsPath\ParamConfig.xml"
-
+$settingFile = "$scriptsPath\ParamConfig.xml"
 if(Test-Path -Path $settingFile)
 {    
-    $logPath            = .\Scripts\Get-Parameter.ps1 $settingFile logPath
+    $logPath            = .\Get-Parameter.ps1 $settingFile logPath
     $logFile            = $logPath + "\Config-TerminalClient.ps1.log"
-    $userNameInTC       = .\Scripts\Get-Parameter.ps1 $settingFile userNameInTC
-    $userPwdInTC        = .\Scripts\Get-Parameter.ps1 $settingFile userPwdInTC
-    $domainName         = .\Scripts\Get-Parameter.ps1 $settingFile domainName
-    $dcComputerName     = .\Scripts\Get-Parameter.ps1 $settingFile dcComputerName
-    $tcComputerName     = .\Scripts\Get-Parameter.ps1 $settingFile tcComputerName
-    $driverComputerName = .\Scripts\Get-Parameter.ps1 $settingFile driverComputerName
-    $listeningPort      = .\Scripts\Get-Parameter.ps1 $settingFile RDPListeningPort
-    $ipVersion          = .\Scripts\Get-Parameter.ps1 $settingFile ipVersion
-    $osVersion          = .\Scripts\Get-Parameter.ps1 $settingFile osVersion
-    $workgroupDomain    = .\Scripts\Get-Parameter.ps1 $settingFile workgroupDomain
-    $compressionInTC    = .\Scripts\Get-Parameter.ps1 $settingFile compressionInTC
-    .\Scripts\Set-Parameter.ps1 $settingFile LogFile $logFile "If no log file path specified, this value should be used."
+    $userNameInTC       = .\Get-Parameter.ps1 $settingFile userNameInTC
+    $userPwdInTC        = .\Get-Parameter.ps1 $settingFile userPwdInTC
+    $domainName         = .\Get-Parameter.ps1 $settingFile domainName
+    $dcComputerName     = .\Get-Parameter.ps1 $settingFile dcComputerName
+    $tcComputerName     = .\Get-Parameter.ps1 $settingFile tcComputerName
+    $driverComputerName = .\Get-Parameter.ps1 $settingFile driverComputerName
+    $listeningPort      = .\Get-Parameter.ps1 $settingFile RDPListeningPort
+    $ipVersion          = .\Get-Parameter.ps1 $settingFile ipVersion
+    $osVersion          = .\Get-Parameter.ps1 $settingFile osVersion
+    $workgroupDomain    = .\Get-Parameter.ps1 $settingFile workgroupDomain
+    $compressionInTC    = .\Get-Parameter.ps1 $settingFile compressionInTC
+    .\Set-Parameter.ps1 $settingFile LogFile $logFile "If no log file path specified, this value should be used."
 }
 else
 {
@@ -62,8 +56,8 @@ Start-Transcript $logFile -Append
 #-----------------------------------------------------
 # Write value for all the parameters
 #-----------------------------------------------------
-Write-Host "EXECUTING [Config-TerminalClient.ps1] ..." -foregroundcolor cyan
-Write-Host "`$tsScriptsPath        = $tsScriptsPath"
+Write-Host "EXECUTING [Config-DriverComputer.ps1] ..." -foregroundcolor cyan
+Write-Host "`$scriptsPath        = $scriptsPath"
 Write-Host "`$logPath            = $logPath"       
 Write-Host "`$logFile            = $logFile"
 Write-Host "`$userNameInTC       = $userNameInTC" 
@@ -87,22 +81,24 @@ Write-Host "`$compressionInTC    = $compressionInTC"
 #-------------------------------------
 Write-Host "Turn off firewall"
 cmd /c netsh advfirewall set allprofile state off 2>&1 | Write-Host
-Write-Host "Start set TrustHost"
+
 #-----------------------------------------------------
 # Enable Powershell Remoting
 #-----------------------------------------------------
-# Set-NetConnectionProfile -NetworkCategory Private -ErrorAction Ignore
-# Enable-PSRemoting -Force
-Set-Item wsman:\localhost\client\trustedhosts *  -Force
-# Write-Host "Restart service WinRM"
-# Restart-Service WinRM
+if(Test-WSMan -ComputerName $sutSetting.ip){
+    Write-Host "WinRM is running"
+}else{
+    Set-NetConnectionProfile -NetworkCategory Private -ErrorAction Ignore
+    Enable-PSRemoting -Force
+    Set-Item wsman:\localhost\client\trustedhosts *  -Force
+    Restart-Service WinRM
+}
 
 #-----------------------------------------------------
 # Modify ChangeResolution.ps1 and ChangeOrientation.ps1
 #-----------------------------------------------------
-Write-Host "Modify ChangeResolution.ps1 and ChangeOrientation.ps1"
-(Get-Content .\Scripts\ChangeResolution_Template.ps1) | ForEach-Object {$_ -replace "ScriptPath", $tsScriptsPath} | Set-Content .\Scripts\ChangeResolution.ps1
-(Get-Content .\Scripts\ChangeOrientation_Template.ps1) | ForEach-Object {$_ -replace "ScriptPath", $tsScriptsPath} | Set-Content .\Scripts\ChangeOrientation.ps1
+(Get-Content .\ChangeResolution_Template.ps1) | ForEach-Object {$_ -replace "ScriptPath", $scriptsPath} | Set-Content .\ChangeResolution.ps1
+(Get-Content .\ChangeOrientation_Template.ps1) | ForEach-Object {$_ -replace "ScriptPath", $scriptsPath} | Set-Content .\ChangeOrientation.ps1
 
 #-----------------------------------------------------
 # Create Windows Tasks for SUT control adapter
@@ -131,61 +127,49 @@ if(!(Test-Path -Path "$dataPath\Base"))
 if (Test-Path -Path "$dataPath\Base\Negotiate.RDP")
 {
     Copy-Item $dataPath\Base\Negotiate.RDP $dataPath\Negotiate.RDP -Force
-}elseif(Test-Path -Path $dataPath\Negotiate.RDP)
+}else
 {
     Copy-Item $dataPath\Negotiate.RDP $dataPath\Base\Negotiate.RDP -Force
-}else{
-    Write-Error "Negotiate.RDP does not exist under $dataPath"
 }
 
 if (Test-Path -Path "$dataPath\Base\NegotiateFullScreen.RDP")
 {
     Copy-Item $dataPath\Base\NegotiateFullScreen.RDP $dataPath\NegotiateFullScreen.RDP -Force
-}elseif(Test-Path -Path $dataPath\NegotiateFullScreen.RDP)
+}else
 {
     Copy-Item $dataPath\NegotiateFullScreen.RDP $dataPath\Base\NegotiateFullScreen.RDP -Force
-}else{
-    Write-Error "NegotiateFullScreen.RDP does not exist under $dataPath"
 }
 
 if (Test-Path -Path "$dataPath\Base\DirectCredSSP.RDP")
 {
     Copy-Item $dataPath\Base\DirectCredSSP.RDP $dataPath\DirectCredSSP.RDP -Force
-}elseif(Test-Path -Path $dataPath\DirectCredSSP.RDP)
+}else
 {
     Copy-Item $dataPath\DirectCredSSP.RDP $dataPath\Base\DirectCredSSP.RDP -Force
-}else{
-    Write-Error "DirectCredSSP.RDP does not exist under $dataPath"
 }
 
 if (Test-Path -Path "$dataPath\Base\DirectCredSSPFullScreen.RDP")
 {
     Copy-Item $dataPath\Base\DirectCredSSPFullScreen.RDP $dataPath\DirectCredSSPFullScreen.RDP -Force
-}elseif(Test-Path -Path $dataPath\DirectCredSSPFullScreen.RDP)
+}else
 {
     Copy-Item $dataPath\DirectCredSSPFullScreen.RDP $dataPath\Base\DirectCredSSPFullScreen.RDP -Force
-}else{
-    Write-Error "DirectCredSSP.RDP does not exist under $dataPath"
 }
 
 if (Test-Path -Path "$dataPath\Base\DirectTls.RDP")
 {
     Copy-Item $dataPath\Base\DirectTls.RDP $dataPath\DirectTls.RDP -Force
-}elseif(Test-Path -Path $dataPath\DirectTls.RDP)
+}else
 {
     Copy-Item $dataPath\DirectTls.RDP $dataPath\Base\DirectTls.RDP -Force
-}else{
-    Write-Error "DirectTls.RDP does not exist under $dataPath"
 }
 
 if (Test-Path -Path "$dataPath\Base\DirectTlsFullScreen.RDP")
 {
     Copy-Item $dataPath\Base\DirectTlsFullScreen.RDP $dataPath\DirectTlsFullScreen.RDP -Force
-}elseif(Test-Path -Path $dataPath\DirectTlsFullScreen.RDP)
+}else
 {
     Copy-Item $dataPath\DirectTlsFullScreen.RDP $dataPath\Base\DirectTlsFullScreen.RDP -Force
-}else{
-    Write-Error "DirectTlsFullScreen.RDP does not exist under $dataPath"
 }
 
 "`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\Negotiate.RDP" -Append -Encoding Unicode
@@ -231,7 +215,7 @@ Write-Host "Creating task to trigger client to initiate a full screen RDP connec
 cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN DirectTls_FullScreen_RDPConnect /TR "$dataPath\DirectTlsFullScreen.RDP" /IT /F
 
 Write-Host "Creating task to maximize mstsc window..."
-cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN MaximizeMstsc /TR "powershell $tsScriptsPath\MaximizeMstsc.ps1" /IT /F
+cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN MaximizeMstsc /TR "powershell $scriptsPath\MaximizeMstsc.ps1" /IT /F
 
 Write-Host "Creating task to trigger RDP client to start a Auto-Reconnect sequence after a network interruption..."
 cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN TriggerNetworkFailure /TR "powershell $dataPath\TriggerNetworkFailure.ps1" /IT /F
@@ -272,7 +256,7 @@ New-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANN
 #-----------------------------------------------------
 # Finished to config Terminal Client
 #-----------------------------------------------------
-popd
+Pop-Location
 Write-Host "Write signal file: config.finished.signal to system drive."
 cmd /C ECHO CONFIG FINISHED>$env:HOMEDRIVE\config.finished.signal
 
