@@ -158,7 +158,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             else
             {
                 throw new Exception(
-                    String.Format("The property \"{0}\" is invalid or not present in RDP.Security.Negotiation in ptfconfig", negotiation));
+                    String.Format("The property value \"{0}\" is invalid or not present in RDP.Security.Negotiation in ptfconfig", negotiation));
             }
 
             string protocol = DetectorUtil.GetPropertyValue("RDP.Security.Protocol");
@@ -193,7 +193,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             else
             {
                 throw new Exception(
-                    String.Format("The property \"{0}\" is invalid or not present in RDP.Security.Protocol in ptfconfig", protocol));
+                    String.Format("The property value \"{0}\" is invalid or not present in RDP.Security.Protocol in ptfconfig", protocol));
             }
 
             string strWaitTime = DetectorUtil.GetPropertyValue("WaitTime");
