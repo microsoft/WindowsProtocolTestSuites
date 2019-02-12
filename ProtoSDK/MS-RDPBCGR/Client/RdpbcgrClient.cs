@@ -213,7 +213,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// User can add, remove or update the capability sets with the return value.
         /// </summary>
         /// <returns>The capability sets created.</returns>
-        public Collection<ITsCapsSet> CreateCapabilitySets()
+        public Collection<ITsCapsSet> CreateCapabilitySets(
+            bool supportAutoReconnect = true,
+            bool supportFastPathInput = false,
+            bool supportFastPathOutput = false,
+            bool supportSVCCompression = false)
         {
             Collection<ITsCapsSet> capabilitySets = new Collection<ITsCapsSet>();
 
@@ -229,8 +233,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             generalCapabilitySet.generalCompressionTypes = generalCompressionTypes_Values.V1;
             generalCapabilitySet.extraFlags = extraFlags_Values.NO_BITMAP_COMPRESSION_HDR
                                             | extraFlags_Values.ENC_SALTED_CHECKSUM
-                                            | extraFlags_Values.AUTORECONNECT_SUPPORTED
                                             | extraFlags_Values.LONG_CREDENTIALS_SUPPORTED;
+            if (supportAutoReconnect)
+            {
+                generalCapabilitySet.extraFlags |= extraFlags_Values.AUTORECONNECT_SUPPORTED;
+            }
+            if (supportFastPathOutput)
+            {
+                generalCapabilitySet.extraFlags |= extraFlags_Values.FASTPATH_OUTPUT_SUPPORTED;
+            }
             generalCapabilitySet.updateCapabilityFlag = updateCapabilityFlag_Values.V1;
             generalCapabilitySet.remoteUnshareFlag = remoteUnshareFlag_Values.V1;
             generalCapabilitySet.generalCompressionLevel = generalCompressionLevel_Values.V1;
@@ -308,10 +319,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             bitmapCacheCapabilitySet.BitmapCache4CellInfo.NumEntriesAndK = 0;
             bitmapCacheCapabilitySet.BitmapCache5CellInfo.NumEntriesAndK = 0;
             bitmapCacheCapabilitySet.Pad3 = ConstValue.BITMAP_CACHE_PAD3;
-            bitmapCacheCapabilitySet.lengthCapability = (ushort)(Marshal.SizeOf(bitmapCacheCapabilitySet)
-                                                      + bitmapCacheCapabilitySet.Pad3.Length
-                                                      - sizeof(int));
-
+            bitmapCacheCapabilitySet.lengthCapability = (ushort)(TypeMarshal.ToBytes(bitmapCacheCapabilitySet).Length);
             capabilitySets.Add(bitmapCacheCapabilitySet);
             #endregion Populating BitmapCache Capability Set
 
@@ -331,18 +339,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             inputCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSTYPE_INPUT;
             inputCapabilitySet.inputFlags = inputFlags_Values.INPUT_FLAG_UNICODE
                                           | inputFlags_Values.INPUT_FLAG_MOUSEX
-                                          | inputFlags_Values.INPUT_FLAG_SCANCODES
-                                          | inputFlags_Values.INPUT_FLAG_FASTPATH_INPUT2;
+                                          | inputFlags_Values.INPUT_FLAG_SCANCODES;
+            if (supportFastPathInput)
+            {
+                inputCapabilitySet.inputFlags |= inputFlags_Values.INPUT_FLAG_FASTPATH_INPUT2;
+            }
             inputCapabilitySet.pad2octetsA = 0;
             inputCapabilitySet.keyboardLayout = ConstValue.LOCALE_ENGLISH_UNITED_STATES;
             inputCapabilitySet.keyboardType = TS_INPUT_CAPABILITYSET_keyboardType_Values.V4;
             inputCapabilitySet.keyboardSubType = 0;
             inputCapabilitySet.keyboardFunctionKey = ConstValue.KEYBOARD_FUNCTION_KEY_NUMBER_DEFAULT;
             inputCapabilitySet.imeFileName = string.Empty;
-            inputCapabilitySet.lengthCapability = (ushort)(Marshal.SizeOf(inputCapabilitySet)
-                                                - sizeof(int)
-                                                + ConstValue.INPUT_CAP_IME_FLIENAME_SIZE);
-
+            inputCapabilitySet.lengthCapability = (ushort)(
+                                                    TypeMarshal.ToBytes(inputCapabilitySet).Length -
+                                                    2 * (inputCapabilitySet.imeFileName.Length + 1) + // length of (inputCapabilitySet.imeFileName + null terminator) in bytes[]
+                                                    ConstValue.INPUT_CAP_IME_FILENAME_SIZE);
             capabilitySets.Add(inputCapabilitySet);
             #endregion Populating Input Capability Set
 
@@ -408,7 +419,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             #region Populating Virtual Channel Capability Set
             TS_VIRTUALCHANNEL_CAPABILITYSET virtualCapabilitySet = new TS_VIRTUALCHANNEL_CAPABILITYSET();
             virtualCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSTYPE_VIRTUALCHANNEL;
-            virtualCapabilitySet.flags = TS_VIRTUALCHANNEL_CAPABILITYSET_flags_Values.VCCAPS_COMPR_SC;
+            if (supportSVCCompression)
+            {
+                virtualCapabilitySet.flags = TS_VIRTUALCHANNEL_CAPABILITYSET_flags_Values.VCCAPS_COMPR_SC;
+            }
+            else
+            {
+                virtualCapabilitySet.flags = TS_VIRTUALCHANNEL_CAPABILITYSET_flags_Values.VCCAPS_NO_COMPR;
+            }
             virtualCapabilitySet.lengthCapability = (ushort)Marshal.SizeOf(virtualCapabilitySet);
             virtualCapabilitySet.VCChunkSize = 0;
 

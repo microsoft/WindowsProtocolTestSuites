@@ -74,11 +74,7 @@
     <Compile Include="DetectionResultControl.xaml.cs">
       <DependentUpon>DetectionResultControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Detector\RDPBCGRCapSet.cs" />
     <Compile Include="Detector\RDPDetector.cs" />
-    <Compile Include="Detector\SUTControlMessage.cs" />
-    <Compile Include="Detector\SUTControlMessageExRDP.cs" />
-    <Compile Include="Detector\TCPSUTControlTransport.cs" />
     <Compile Include="RDPValueDetector.cs" />
     <Compile Include="Types.cs" />
   </ItemGroup>

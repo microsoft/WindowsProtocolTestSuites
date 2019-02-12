@@ -547,7 +547,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// The size of imeFileName field of 2.2.7.1.6 Input Capability Set (TS_INPUT_CAPABILITYSET).
         /// </summary>
-        internal const uint INPUT_CAP_IME_FLIENAME_SIZE = 64;
+        internal const uint INPUT_CAP_IME_FILENAME_SIZE = 64;
 
         /// <summary>
         /// The number of GlyphCache field of 2.2.7.1.8 Glyph Cache Capability Set (TS_GLYPHCACHE_CAPABILITYSET).
