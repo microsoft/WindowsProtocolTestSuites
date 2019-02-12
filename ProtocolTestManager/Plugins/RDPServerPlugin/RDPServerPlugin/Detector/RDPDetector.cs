@@ -157,7 +157,8 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             }
             else
             {
-                return false;
+                throw new Exception(
+                    String.Format("The property \"{0}\" is invalid or not present in RDP.Security.Negotiation in ptfconfig", negotiation));
             }
 
             string protocol = DetectorUtil.GetPropertyValue("RDP.Security.Protocol");
@@ -166,7 +167,9 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 requestedProtocol = requestedProtocols_Values.PROTOCOL_SSL_FLAG;
                 if (!isNegotiationBased)
                 {
-                    return false;
+                    throw new Exception(
+                        String.Format("When TLS is used as the security protocol, RDP.Security.Negotiation must be true;" +
+                        "actually RDP.Security.Negotiation is set to \"{0}\".", negotiation));
                 }
                 encryptedProtocol = EncryptedProtocol.NegotiationTls;
             }
@@ -189,7 +192,8 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             }
             else
             {
-                return false;
+                throw new Exception(
+                    String.Format("The property \"{0}\" is invalid or not present in RDP.Security.Protocol in ptfconfig", protocol));
             }
 
             string strWaitTime = DetectorUtil.GetPropertyValue("WaitTime");
