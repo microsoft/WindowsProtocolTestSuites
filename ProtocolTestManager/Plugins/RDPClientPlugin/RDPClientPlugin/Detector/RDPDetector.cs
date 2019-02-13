@@ -99,6 +99,9 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             // Notify the UI for establishing RDP connection successfully.
             DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
 
+            // Set RDP Version
+            SetRdpVersion();
+
             // Set result according to messages during connection
             if (mscConnectionInitialPDU.mcsCi.gccPdu.clientCoreData != null && mscConnectionInitialPDU.mcsCi.gccPdu.clientCoreData.earlyCapabilityFlags != null)
             {
@@ -240,6 +243,51 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             }
 
             return true;
+        }
+
+        private void SetRdpVersion()
+        {
+            detectInfo.RdpVersion = DetectorUtil.GetPropertyValue("RDP.Version");
+            if (mscConnectionInitialPDU.mcsCi.gccPdu.clientCoreData != null)
+            {
+                version_Values rdpVersion = mscConnectionInitialPDU.mcsCi.gccPdu.clientCoreData.version;
+                if (rdpVersion == version_Values.V1)
+                {
+                    detectInfo.RdpVersion = "4.0";
+                }
+                else if (rdpVersion == version_Values.V2)
+                {
+                    detectInfo.RdpVersion = "8.1";
+                }
+                else if (rdpVersion == version_Values.V3)
+                {
+                    detectInfo.RdpVersion = "10.0";
+                }
+                else if (rdpVersion == version_Values.V4)
+                {
+                    detectInfo.RdpVersion = "10.1";
+                }
+                else if (rdpVersion == version_Values.V5)
+                {
+                    detectInfo.RdpVersion = "10.2";
+                }
+                else if (rdpVersion == version_Values.V6)
+                {
+                    detectInfo.RdpVersion = "10.3";
+                }
+                else if (rdpVersion == version_Values.V7)
+                {
+                    detectInfo.RdpVersion = "10.4";
+                }
+                else if (rdpVersion == version_Values.V8)
+                {
+                    detectInfo.RdpVersion = "10.5";
+                }
+                else if (rdpVersion == version_Values.V9)
+                {
+                    detectInfo.RdpVersion = "10.6";
+                }
+            }
         }
 
         /// <summary>
