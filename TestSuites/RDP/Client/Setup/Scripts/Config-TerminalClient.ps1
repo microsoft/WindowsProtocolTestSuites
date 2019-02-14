@@ -56,7 +56,7 @@ Start-Transcript $logFile -Append
 #-----------------------------------------------------
 # Write value for all the parameters
 #-----------------------------------------------------
-Write-Host "EXECUTING [Config-DriverComputer.ps1] ..." -foregroundcolor cyan
+Write-Host "EXECUTING [Config-TerminalClient.ps1] ..." -foregroundcolor cyan
 Write-Host "`$scriptsPath        = $scriptsPath"
 Write-Host "`$logPath            = $logPath"       
 Write-Host "`$logFile            = $logFile"
