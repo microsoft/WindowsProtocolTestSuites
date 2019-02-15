@@ -33,7 +33,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         private string localAddress;
         private bool verifyPduEnabled;
         private bool verifyShouldBehaviors;
-        private SslProtocols tlsVersion;
+        private SslProtocols tlsVersion = SslProtocols.None;
         private int sendInterval = 100;
 
         private List<StackPacket> receiveBuffer;
